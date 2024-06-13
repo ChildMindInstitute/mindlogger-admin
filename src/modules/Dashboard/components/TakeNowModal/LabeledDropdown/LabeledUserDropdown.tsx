@@ -13,6 +13,7 @@ import {
   variables,
 } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
 import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
@@ -37,6 +38,9 @@ export const LabeledUserDropdown = ({
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
+  const {
+    featureFlags: { enableParticipantMultiInformant },
+  } = useFeatureFlags();
 
   const debouncedSearchHandler = useCallback(
     (search: string) => {
@@ -69,7 +73,9 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && !value.userId;
+  const warningMessageValueCondition =
+    !!value && (enableParticipantMultiInformant ? !value.userId : value.tag !== 'Team');
+  const shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
 
   let groupBy: LabeledUserDropdownProps['groupBy'];
 
