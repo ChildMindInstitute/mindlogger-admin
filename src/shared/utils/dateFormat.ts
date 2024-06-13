@@ -17,3 +17,5 @@ export const getDayName = (date: Date) =>
 
 export const getMonthName = (date: Date, length?: NameLength) =>
   date.toLocaleString(i18n.language, { month: length || NameLength.Long });
+
+export const formatToNumberDate = (date: Date) => format(date, DateFormats.YearMonthDay);

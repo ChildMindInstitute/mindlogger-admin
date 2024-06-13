@@ -35,7 +35,8 @@ export const DatePicker = <T extends FieldValues>({
   control,
   name,
   uiType = UiType.OneDate,
-  inputSx = {},
+  inputWrapperSx = {},
+  inputSx,
   label,
   includeDates,
   minDate,
@@ -47,6 +48,9 @@ export const DatePicker = <T extends FieldValues>({
   isLoading,
   tooltip,
   'data-testid': dataTestid,
+  placeholder = '',
+  hideLabel = false,
+  skipMinDate = false,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -116,11 +120,14 @@ export const DatePicker = <T extends FieldValues>({
           const textFieldProps = {
             disabled,
             isOpen,
+            inputWrapperSx,
             inputSx,
             error,
             id,
             handlePickerShow,
             dataTestid,
+            placeholder,
+            hideLabel,
           };
 
           const handleCloseWithSelectedDate = () => handlePickerClose(getSelectedDate());
@@ -190,7 +197,7 @@ export const DatePicker = <T extends FieldValues>({
                     onChange={(date) => onChange(date)}
                     monthsShown={isStartEndingDate ? 2 : 1}
                     formatWeekDay={(nameOfDay) => nameOfDay[0]}
-                    minDate={minDate === undefined ? new Date() : minDate}
+                    {...(!skipMinDate && { minDate: minDate === undefined ? new Date() : minDate })}
                     maxDate={maxDate === undefined ? null : maxDate}
                     focusSelectedMonth
                     onMonthChange={onMonthChange}

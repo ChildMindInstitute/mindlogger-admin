@@ -8,4 +8,5 @@ export * from './SaveChangesPopup';
 export * from './DndDroppable';
 export * from './InsertItem';
 export * from './ToggleItemContainer';
+export * from './ConditionRow_old';
 export * from './ConditionRow';
