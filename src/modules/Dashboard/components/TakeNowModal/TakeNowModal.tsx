@@ -378,10 +378,23 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
-                  options={fullAccountParticipantsAndTeamMembers}
+                  options={
+                    enableParticipantMultiInformant
+                      ? fullAccountParticipantsAndTeamMembers
+                      : teamMembersOnly
+                  }
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team', 'full-participant'])}
+                  handleSearch={(query) => {
+                    const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = [
+                      'team',
+                    ];
+                    if (enableParticipantMultiInformant) {
+                      participantSearchTypes.push('full-participant');
+                    }
+
+                    return handleSearch(query, participantSearchTypes);
+                  }}
                   showGroups={true}
                 />
               )}
