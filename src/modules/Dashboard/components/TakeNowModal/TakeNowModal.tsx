@@ -29,7 +29,8 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.Manager,
 ] as const;
 
-type SearchType = 'team' | 'participant';
+type AnyTeamSearchType = 'team' | 'any-participant';
+type FullTeamSearchType = 'team' | 'full-participant';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
@@ -110,6 +111,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [allParticipants],
   );
 
+  const fullAccountParticipantsOnly = useMemo(
+    () => allParticipants.filter((participant) => !!participant.userId),
+    [allParticipants],
+  );
+
   const teamMembersOnly = useMemo(
     () =>
       allParticipants.filter(
@@ -123,6 +129,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const participantsAndTeamMembers = useMemo(
     () => [...teamMembersOnly, ...participantsOnly],
     [participantsOnly, teamMembersOnly],
+  );
+
+  const fullAccountParticipantsAndTeamMembers = useMemo(
+    () => [...teamMembersOnly, ...fullAccountParticipantsOnly],
+    [fullAccountParticipantsOnly, teamMembersOnly],
   );
 
   useEffect(() => {
@@ -210,12 +221,24 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       }
     }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
 
+    /**
+     * Handle participant search. It can be a combination of team members and any participants
+     * (full account, pending, and limited), or just team members and full account participants
+     */
     const handleSearch = useCallback(
       async (
         query: string,
-        types: [SearchType, ...SearchType[]],
+        types:
+          | [AnyTeamSearchType, ...AnyTeamSearchType[]]
+          | [FullTeamSearchType, ...FullTeamSearchType[]],
       ): Promise<ParticipantDropdownOption[]> => {
         const requests = [];
+
+        // @ts-expect-error Yes, the array can in fact contain this value
+        const isAnyParticipant = types.includes('any-participant');
+
+        // @ts-expect-error Yes, the array can in fact contain this value
+        const isFullParticipant = types.includes('full-participant');
 
         if (types.includes('team')) {
           requests.push(
@@ -230,7 +253,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           );
         }
 
-        if (types.includes('participant')) {
+        if (isAnyParticipant) {
           requests.push(
             getWorkspaceRespondentsApi({
               params: {
@@ -238,6 +261,18 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 appletId,
                 search: query,
                 limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        } else if (isFullParticipant) {
+          requests.push(
+            getWorkspaceRespondentsApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+                shell: isFullParticipant ? false : undefined,
               },
             }),
           );
@@ -255,13 +290,15 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           (participantsResponse?.data?.result as Respondent[]) ?? [];
 
         // If there are team members in the search results, we only want to show them if they are allowed
-        return participantsSearchResults
-          .map(participantToOption)
-          .filter(
-            (participant) =>
-              participant.tag !== 'Team' ||
-              allowedTeamMembersSearchResults.some((manager) => manager.id === participant.userId),
-          );
+        return participantsSearchResults.map(participantToOption).filter((participant) => {
+          if (participant.tag !== 'Team') {
+            return isAnyParticipant || !!participant.userId;
+          } else {
+            return allowedTeamMembersSearchResults.some(
+              (manager) => manager.id === participant.userId,
+            );
+          }
+        });
       },
       [],
     );
@@ -306,7 +343,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                     setIsSelfReporting(!option || !!option.userId);
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+                  handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
                   canShowWarningMessage={true}
                   showGroups={true}
                 />
@@ -326,10 +363,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
-                  options={teamMembersOnly}
+                  options={fullAccountParticipantsAndTeamMembers}
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team'])}
+                  handleSearch={(query) => handleSearch(query, ['team', 'full-participant'])}
                   showGroups={true}
                 />
               )}
@@ -342,7 +379,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               options={participantsAndTeamMembers}
               onChange={setTargetSubject}
               data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-              handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+              handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
           </StyledFlexColumn>
         </StyledFlexColumn>
