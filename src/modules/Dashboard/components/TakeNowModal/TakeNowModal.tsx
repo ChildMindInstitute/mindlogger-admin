@@ -304,7 +304,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   onChange={(option) => {
                     setSourceSubject(option);
                     if (option) {
-                      setIsSelfReporting(option.tag === 'Team');
+                      setIsSelfReporting(!!option.userId);
                     }
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
@@ -317,7 +317,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => setIsSelfReporting(checked)}
-                  disabled={sourceSubject?.tag !== 'Team'}
+                  disabled={!sourceSubject?.userId}
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>

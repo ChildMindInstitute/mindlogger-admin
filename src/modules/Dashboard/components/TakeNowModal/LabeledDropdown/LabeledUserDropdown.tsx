@@ -69,7 +69,7 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && value.tag !== 'Team';
+  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && !value.userId;
 
   let groupBy: LabeledUserDropdownProps['groupBy'];
 
