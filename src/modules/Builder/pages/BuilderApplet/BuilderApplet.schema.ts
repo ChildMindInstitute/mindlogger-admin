@@ -602,7 +602,9 @@ export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
           );
         },
       ),
-    conditions: yup.array().of(ItemFlowConditionSchema()),
+    conditions: yup
+      .array()
+      .of(enableItemFlowExtendedItems ? ItemFlowConditionSchema() : ConditionSchema()),
   });
 
 const getReportCommonFields = (isScoreReport = false) => ({

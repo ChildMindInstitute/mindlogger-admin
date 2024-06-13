@@ -14,6 +14,7 @@ import {
   ScoreConditionItem,
   SliderConditionItem,
 } from '../Condition.types';
+import { GetConditionMinMaxRangeValuesProps } from './SwitchCondition.types';
 
 const { t } = i18n;
 
@@ -66,11 +67,7 @@ export const getConditionMinMaxRangeValues = ({
   item,
   minValue,
   maxValue,
-}: {
-  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
-  minValue: number;
-  maxValue: number;
-}) => {
+}: GetConditionMinMaxRangeValuesProps) => {
   if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxRangeValues();
 
   switch (item.type) {

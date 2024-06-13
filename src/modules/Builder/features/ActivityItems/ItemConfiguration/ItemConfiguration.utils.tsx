@@ -19,7 +19,7 @@ import {
   DEFAULT_AUDIO_DURATION_SEC,
   SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
-import { getEmptyCondition } from '../../ActivityItemsFlow_old/ItemFlow/ItemFlow.utils';
+import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
 
 const { t } = i18n;
