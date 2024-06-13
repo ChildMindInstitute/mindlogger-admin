@@ -10,18 +10,16 @@ import { Spinner } from 'shared/components';
 import { StyledFlexColumn, StyledTitleLarge } from 'shared/styles';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions } from 'shared/hooks';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { checkIfCanAccessData } from 'shared/utils';
 
 import { mapResponseToQuickStatProps, mapResponseToSubmissionsTableProps } from './Overview.utils';
 import { StyledRoot } from './Overview.styles';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 
-const limit = DEFAULT_ROWS_PER_PAGE;
+const limit = 25;
 
 export const Overview = () => {
   const [addPopupOpen, setAddPopupOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [unlockAppletPopupOpen, setUnlockAppletPopupOpen] = useState(false);
   const [unlockedPath, setUnlockedPath] = useState<string>();
   const { appletId } = useParams();
@@ -35,9 +33,9 @@ export const Overview = () => {
   const canAccessData = checkIfCanAccessData(roles);
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
     if (appletId && canAccessData) {
-      return execute({ appletId, page, limit });
+      return execute({ appletId, limit });
     }
-  }, [page, limit, appletId]);
+  }, [appletId, limit]);
   const showContent = !isLoading || (isLoading && data);
 
   const handleViewSubmissionPopupOpen = useCallback(
@@ -91,16 +89,7 @@ export const Overview = () => {
           <StyledFlexColumn sx={{ gap: 1.6 }}>
             <StyledTitleLarge>{t('appletOverview.titleRecentSubmissions')}</StyledTitleLarge>
 
-            <DashboardTable
-              {...dashboardTableProps}
-              handleChangePage={(_, nextPage) => {
-                // DashboardTable passes it's `handleChangePage` prop a 0-based
-                // index value, but accepts its `page` prop as 1-based.
-                setPage(nextPage + 1);
-              }}
-              page={page}
-              rowsPerPage={limit}
-            />
+            <DashboardTable {...dashboardTableProps} enablePagination={false} />
           </StyledFlexColumn>
 
           {appletId && addPopupOpen && (
