@@ -303,9 +303,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   options={participantsAndTeamMembers}
                   onChange={(option) => {
                     setSourceSubject(option);
-                    if (option) {
-                      setIsSelfReporting(!!option.userId);
-                    }
+                    setIsSelfReporting(!option || !!option.userId);
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
                   handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
