@@ -79,24 +79,23 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     },
   );
 
-  const { execute: fetchLoggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const loggedInTeamMember = participantToOption(
-          (response.data as ParticipantsData).result[0],
-        );
-        setDefaultSourceSubject(loggedInTeamMember);
-        setAllParticipants((prev) => {
-          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-            return prev;
-          }
+  const {
+    execute: fetchLoggedInTeamMember,
+    isLoading: isFetchingLoggedInTeamMember,
+    value: loggedInTeamMemberResponse,
+  } = useAsync(getWorkspaceRespondentsApi, (response) => {
+    if (response?.data) {
+      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
+      // setDefaultSourceSubject(loggedInTeamMember);
+      setAllParticipants((prev) => {
+        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+          return prev;
+        }
 
-          return [loggedInTeamMember, ...prev];
-        });
-      }
-    },
-  );
+        return [loggedInTeamMember, ...prev];
+      });
+    }
+  });
 
   const allowedTeamMembers = useMemo(
     () =>
@@ -147,7 +146,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
       }
 
-      if (userData && defaultSourceSubject === null && !isFetchingLoggedInTeamMember) {
+      if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
         fetchLoggedInTeamMember({
           params: {
             ownerId,
