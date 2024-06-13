@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
-import { format, getYear } from 'date-fns';
+import { getYear } from 'date-fns';
 
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
 import { applets, calendarEvents } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
-import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import {
@@ -18,6 +17,7 @@ import {
   getFrequencyString,
   getCount,
   convertDateToYearMonthDay,
+  getEventStartDMYString,
 } from './Schedule.utils';
 
 export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
@@ -69,12 +69,9 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
                 : new Date(),
             );
             const isAlwaysAvailable = periodicityType === Periodicity.Always;
-            const selectedOrStartDate = isAlwaysAvailable
-              ? activityOrFlowCreatedAt
-              : selectedDate || startDate;
-            const date = format(
-              selectedOrStartDate ? new Date(selectedOrStartDate) : new Date(),
-              DateFormats.DayMonthYear,
+            const date = getEventStartDMYString(
+              isAlwaysAvailable,
+              isAlwaysAvailable ? currentActivityOrFlow?.createdAt : selectedDate || startDate,
             );
             const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
             const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
@@ -211,6 +208,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
     if (!conditionToCreateCalendarEvents) return;
 
     dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendarEventsArr]);
 
   useEffect(() => {
@@ -227,6 +225,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
         );
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventsDataArr]);
 
   return {

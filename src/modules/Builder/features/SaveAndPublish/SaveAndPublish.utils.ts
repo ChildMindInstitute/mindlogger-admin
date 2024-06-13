@@ -67,6 +67,7 @@ export const removeAppletExtraFields = (isNewApplet: boolean) => ({
   id: undefined,
   theme: undefined,
   version: undefined,
+  lorisIntegration: undefined,
   ...(!isNewApplet && { reportEmailBody: undefined }),
   //for the newly created activities/activityFlow to avoid { undefined: { items: [] }} problem
   //for the case when updated activityId/activityFlowId comes from the server but storage is still not updated

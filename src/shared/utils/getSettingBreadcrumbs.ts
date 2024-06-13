@@ -62,6 +62,10 @@ export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) 
       icon: 'live-response-streaming',
       label: t('liveResponseStreaming'),
     },
+    [SettingParam.LorisIntegration]: {
+      icon: 'data-collection',
+      label: t('loris.integration'),
+    },
   };
 
   return settingBreadcrumbs[param];
