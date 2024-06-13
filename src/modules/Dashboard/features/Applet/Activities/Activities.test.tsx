@@ -89,6 +89,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       featureFlags: {
         enableMultiInformant: true,
         enableMultiInformantTakeNow: true,
+        enableParticipantMultiInformant: true,
       },
     });
   });
@@ -261,6 +262,7 @@ describe('Dashboard > Applet > Activities screen', () => {
           featureFlags: {
             enableMultiInformant: true,
             enableMultiInformantTakeNow: false,
+            enableParticipantMultiInformant: false,
           },
         });
 

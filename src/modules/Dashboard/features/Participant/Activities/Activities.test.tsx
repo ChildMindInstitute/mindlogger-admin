@@ -115,6 +115,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       featureFlags: {
         enableMultiInformant: true,
         enableMultiInformantTakeNow: true,
+        enableParticipantMultiInformant: true,
       },
     });
   });
@@ -252,6 +253,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           featureFlags: {
             enableMultiInformant: true,
             enableMultiInformantTakeNow: false,
+            enableParticipantMultiInformant: false,
           },
         });
 
