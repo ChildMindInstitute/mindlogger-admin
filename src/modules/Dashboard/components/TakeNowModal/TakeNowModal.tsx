@@ -11,6 +11,8 @@ import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { checkIfFullAccess, joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
+import { Manager, Respondent } from 'modules/Dashboard/types';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   OpenTakeNowModalOptions,
@@ -21,7 +23,6 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
-import { Manager, Respondent } from '../../types';
 
 const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.SuperAdmin,
@@ -37,6 +38,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
+  const {
+    featureFlags: { enableParticipantMultiInformant },
+  } = useFeatureFlags();
 
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
@@ -87,7 +91,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   } = useAsync(getWorkspaceRespondentsApi, (response) => {
     if (response?.data) {
       const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
-      // setDefaultSourceSubject(loggedInTeamMember);
+      if (!enableParticipantMultiInformant) {
+        setDefaultSourceSubject(loggedInTeamMember);
+      }
       setAllParticipants((prev) => {
         if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
           return prev;
