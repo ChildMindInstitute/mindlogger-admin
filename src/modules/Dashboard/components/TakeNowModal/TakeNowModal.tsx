@@ -174,7 +174,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     userData,
     allParticipants,
     allTeamMembers,
-    defaultSourceSubject,
+    loggedInTeamMemberResponse,
     isFetchingParticipants,
     isFetchingManagers,
     isFetchingLoggedInTeamMember,
