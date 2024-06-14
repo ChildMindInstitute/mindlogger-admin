@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 
@@ -33,17 +33,30 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
       ),
   );
 
+  const commonApiParams = useMemo(
+    () =>
+      appletId && id
+        ? {
+            appletId,
+            ...(isFlow && submitId && { submitId, flowId: id }),
+            ...(!isFlow &&
+              answerId && {
+                answerId,
+                activityId: id,
+              }),
+          }
+        : null,
+    [appletId, isFlow, submitId, answerId, id],
+  );
+
   const updateListOfNotes = useCallback(() => {
-    if (!appletId || !id) return;
+    if (!commonApiParams) return;
 
-    const commonParams = { appletId, params: {} };
-
-    if (isFlow && submitId) {
-      getNotes({ ...commonParams, submitId, flowId: id });
-    } else if (answerId) {
-      getNotes({ ...commonParams, answerId, activityId: id });
-    }
-  }, [appletId, id, isFlow, submitId, answerId, getNotes]);
+    getNotes({
+      ...commonApiParams,
+      params: {},
+    });
+  }, [getNotes, commonApiParams]);
 
   const handleUpdateNote = () => {
     setValue('newNote', '');
@@ -66,47 +79,25 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
   const isLoading = getNotesLoading || editNoteLoading || deleteNoteLoading || createNoteLoading;
 
   const handleNoteEdit = (updatedNote: Pick<Note, 'id' | 'note'>) => {
-    if (!appletId || !id) return;
+    if (!commonApiParams) return;
 
-    const commonParams = {
-      appletId,
+    editNote({
+      ...commonApiParams,
       noteId: updatedNote.id,
       note: updatedNote.note,
-    };
-
-    if (isFlow && submitId) {
-      editNote({ ...commonParams, submitId, flowId: id });
-    } else if (answerId) {
-      editNote({
-        ...commonParams,
-        answerId,
-        activityId: id,
-      });
-    }
+    });
   };
 
   const handleNoteDelete = (noteId: string) => {
-    if (!appletId || !id) return;
+    if (!commonApiParams) return;
 
-    const commonParams = { appletId, noteId };
-
-    if (isFlow && submitId) {
-      deleteNote({ ...commonParams, submitId, flowId: id });
-    } else if (answerId) {
-      deleteNote({ ...commonParams, answerId, activityId: id });
-    }
+    deleteNote({ ...commonApiParams, noteId });
   };
 
   const addNewNote = ({ newNote }: FeedbackForm) => {
-    if (!newNote.trim() || !appletId || !id) return;
+    if (!newNote.trim() || !commonApiParams) return;
 
-    const commonParams = { appletId, note: newNote };
-
-    if (isFlow && submitId) {
-      createNote({ ...commonParams, submitId, flowId: id });
-    } else if (answerId) {
-      createNote({ ...commonParams, answerId, activityId: id });
-    }
+    createNote({ ...commonApiParams, note: newNote });
   };
 
   useEffect(() => {
