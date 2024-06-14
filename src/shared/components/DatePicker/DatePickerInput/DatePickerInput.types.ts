@@ -5,10 +5,13 @@ import { TextFieldProps, SxProps } from '@mui/material';
 export type DatePickerInputProps = {
   error?: FieldError;
   id?: string;
+  inputWrapperSx?: SxProps;
   inputSx?: SxProps;
   label?: string;
   disabled?: boolean;
   isOpen?: boolean;
   dataTestid?: string;
   handlePickerShow?: MouseEventHandler<HTMLDivElement>;
+  placeholder?: string;
+  hideLabel?: boolean;
 } & Pick<TextFieldProps, 'value'>;

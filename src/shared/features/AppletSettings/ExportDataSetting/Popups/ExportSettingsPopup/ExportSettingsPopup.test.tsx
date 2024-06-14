@@ -88,7 +88,7 @@ describe('ExportSettingsPopup', () => {
       },
     );
 
-    await userEvent.click(screen.getByText('Download CSV'));
+    await userEvent.click(screen.getByText('Download'));
 
     expect(mockOnExport).toBeCalled();
   });
@@ -113,7 +113,7 @@ describe('ExportSettingsPopup', () => {
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
 
-      await userEvent.click(screen.getByText('Download CSV'));
+      await userEvent.click(screen.getByText('Download'));
       expect(mockOnExport).toBeCalled();
     });
   });
@@ -149,7 +149,7 @@ describe('ExportSettingsPopup', () => {
       fromDateInput && fireEvent.change(fromDateInput, { target: { value: addDays(date, 1) } });
       toDateInput && fireEvent.change(toDateInput, { target: { value: addDays(date, -1) } });
 
-      await userEvent.click(screen.getByText('Download CSV'));
+      await userEvent.click(screen.getByText('Download'));
       expect(mockOnExport).toBeCalled();
     });
   });

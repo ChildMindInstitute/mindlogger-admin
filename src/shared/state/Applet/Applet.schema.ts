@@ -408,24 +408,43 @@ export type OptionCondition = BaseCondition & {
     optionValue: string | number;
   };
 };
+export type SingleMultiSelectionPerRowCondition = BaseCondition &
+  OptionCondition & {
+    payload: {
+      rowIndex: number;
+    };
+  };
 
-export type SingleValueCondition = BaseCondition & {
+export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
-    value: number;
+    value: T;
   };
 };
 
-export type RangeValueCondition = BaseCondition & {
+export type RangeValueCondition<T = number> = BaseCondition & {
   payload: {
-    minValue: number;
-    maxValue: number;
+    minValue: T;
+    maxValue: T;
   };
 };
 
-export type Condition =
+export const enum TimeRangeConditionType {
+  StartTime = 'startTime',
+  EndTime = 'endTime',
+}
+export type TimeRangeValueCondition<T = Date> = BaseCondition &
+  RangeValueCondition<T> & {
+    payload: {
+      type: TimeRangeConditionType;
+    };
+  };
+
+export type Condition<T = number> =
   | OptionCondition
-  | SingleValueCondition
-  | RangeValueCondition
+  | SingleValueCondition<T>
+  | RangeValueCondition<T>
+  | TimeRangeValueCondition
+  | SingleMultiSelectionPerRowCondition
   | ScoreCondition;
 
 export type ConditionalLogic = {

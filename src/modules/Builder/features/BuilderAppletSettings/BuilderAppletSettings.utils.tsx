@@ -15,6 +15,7 @@ import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
+import { LorisIntegrationSetting } from './LorisIntegrationSetting';
 
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
@@ -23,6 +24,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
+  enableLorisIntegration,
   appletId,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
@@ -48,6 +50,14 @@ export const getSettings = ({
           component: <LiveResponseStreamingSetting />,
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
+        },
+        {
+          icon: <Svg id="data-collection" />,
+          label: 'loris.integration',
+          component: <LorisIntegrationSetting />,
+          param: SettingParam.LorisIntegration,
+          isVisible: enableLorisIntegration,
+          'data-testid': `${dataTestid}-loris-integration`,
         },
       ],
     },
