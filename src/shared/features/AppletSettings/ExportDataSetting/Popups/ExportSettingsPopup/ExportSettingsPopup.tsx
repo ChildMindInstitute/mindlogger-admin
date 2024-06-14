@@ -153,7 +153,7 @@ export const ExportSettingsPopup = ({
               startIcon={<Svg width="18" height="18" id="export" />}
               data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-button`}
             >
-              {t('downloadCSV')}
+              {t('download')}
             </StyledAppletSettingsButton>
           </Box>
         </form>

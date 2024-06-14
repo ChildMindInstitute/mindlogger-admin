@@ -64,7 +64,7 @@ describe('ExportDataSetting', () => {
       expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByText('Download CSV'));
+    fireEvent.click(screen.getByText('Download'));
 
     await waitFor(() =>
       expect(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).toBeVisible(),
@@ -105,7 +105,7 @@ describe('ExportDataSetting', () => {
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportType } });
 
-      fireEvent.click(screen.getByText('Download CSV'));
+      fireEvent.click(screen.getByText('Download'));
 
       expect(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).toBeVisible();
 

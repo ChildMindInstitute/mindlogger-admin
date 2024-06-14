@@ -355,7 +355,6 @@
   "displayedContentRequired": "Displayed Content is required",
   "dontSave": "Don't Save",
   "download": "Download",
-  "downloadCSV": "Download CSV",
   "downloadDescription": "<0>Download the Applet content as JSON.</0><1>Please update URL of contexts in Applet schema, Activity schema and change Activity / Item paths in context files after uploading content to GitHub.</1>",
   "downloadLatestReport": "Download Latest Report",
   "downloadSchema": "Download Schema",
