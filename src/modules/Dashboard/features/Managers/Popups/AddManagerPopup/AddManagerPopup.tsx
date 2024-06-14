@@ -51,7 +51,7 @@ export const AddManagerPopup = ({
   });
 
   const defaults = {
-    ...defaultValues,
+    ...defaultValues(appletRoles),
     language: i18n.language as Languages,
     workspaceName: workspaceInfo?.name,
   };
