@@ -27,3 +27,16 @@ export type SingleOrRangeNumberConditionProps = {
   isRangeValueShown: boolean;
   dataTestid: ConditionProps['data-testid'];
 };
+
+export type GetConditionMinMaxRangeValuesProps = {
+  item?: SingleOrRangeNumberConditionProps['selectedItem'];
+  minValue: number;
+  maxValue: number;
+  rowIndex?: string;
+};
+
+export type GetConditionMinMaxValuesProps = {
+  item?: SingleOrRangeNumberConditionProps['selectedItem'];
+  state: ConditionType;
+  rowIndex?: string;
+};

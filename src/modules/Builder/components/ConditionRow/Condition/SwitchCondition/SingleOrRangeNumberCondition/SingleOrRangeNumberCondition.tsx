@@ -1,8 +1,11 @@
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledInputController } from '../SwitchCondition.styles';
-import { getConditionMinMaxValues, getConditionMinMaxRangeValues } from '../SwitchCondition.utils';
 import { SingleOrRangeNumberConditionProps } from './SingleOrRangeNumberCondition.types';
+import {
+  getConditionMinMaxValues,
+  getConditionMinMaxRangeValues,
+} from './SingleOrRangeNumberCondition.utils';
 
 export const SingleOrRangeNumberCondition = ({
   children,
