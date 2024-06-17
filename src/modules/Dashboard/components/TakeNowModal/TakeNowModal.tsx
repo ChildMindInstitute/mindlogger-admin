@@ -118,8 +118,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   );
 
   const fullAccountParticipantsOnly = useMemo(
-    () => allParticipants.filter((participant) => !!participant.userId),
-    [allParticipants],
+    () => participantsOnly.filter((participant) => !!participant.userId),
+    [participantsOnly],
   );
 
   const teamMembersOnly = useMemo(
