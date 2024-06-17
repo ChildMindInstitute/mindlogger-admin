@@ -10,6 +10,7 @@ import {
   TimeRangeValueCondition,
   SingleMultiSelectionPerRowCondition,
 } from 'shared/state';
+import { SliderRowsCondition } from 'shared/state/Applet/Applet.schema';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
@@ -37,6 +38,8 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.SingleSelectionPerRow;
     case ItemResponseType.MultipleSelectionPerRow:
       return ConditionItemType.MultipleSelectionPerRow;
+    case ItemResponseType.SliderRows:
+      return ConditionItemType.SliderRows;
     default:
       return ConditionItemType.SingleSelection;
   }
@@ -55,6 +58,7 @@ const itemFlowItemTypes = [
   ItemResponseType.TimeRange,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.MultipleSelectionPerRow,
+  ItemResponseType.SliderRows,
 ];
 const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
   (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
@@ -158,6 +162,18 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           value: selectedItem?.responseValues.minValue,
         };
       }
+      if (responseType === ItemResponseType.SliderRows) {
+        const payload = conditionPayload as SliderRowsCondition['payload'];
+        const rowIndex = payload?.rowIndex ?? '';
+        const minValue = rowIndex
+          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`)?.minValue
+          : '';
+
+        return {
+          value: payload?.value ?? minValue,
+          rowIndex,
+        };
+      }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
     case ConditionType.LessThan:
@@ -169,11 +185,34 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           value: selectedItem?.responseValues.maxValue,
         };
       }
+      if (responseType === ItemResponseType.SliderRows) {
+        const payload = conditionPayload as SliderRowsCondition['payload'];
+        const rowIndex = payload?.rowIndex ?? '';
+        const maxValue = rowIndex
+          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`)?.maxValue
+          : '';
+
+        return {
+          value: payload?.value ?? maxValue,
+          rowIndex,
+        };
+      }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
     case ConditionType.Equal:
-    case ConditionType.NotEqual:
+    case ConditionType.NotEqual: {
+      if (responseType === ItemResponseType.SliderRows) {
+        const payload = conditionPayload as SliderRowsCondition['payload'];
+        const rowIndex = payload?.rowIndex ?? '';
+
+        return {
+          value: payload?.value ?? '',
+          rowIndex,
+        };
+      }
+
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
+    }
     case ConditionType.Between:
     case ConditionType.OutsideOf:
       if (
@@ -198,6 +237,19 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           maxValue:
             (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.maxValue ?? null,
           type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+        };
+      }
+      if (responseType === ItemResponseType.SliderRows) {
+        const payload = conditionPayload as SliderRowsCondition<RangeValueCondition>['payload'];
+        const rowIndex = payload?.rowIndex ?? '';
+        const { maxValue = '', minValue = '' } = rowIndex
+          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`) ?? {}
+          : {};
+
+        return {
+          maxValue: payload?.maxValue ?? maxValue,
+          minValue: payload?.minValue ?? minValue,
+          rowIndex,
         };
       }
 

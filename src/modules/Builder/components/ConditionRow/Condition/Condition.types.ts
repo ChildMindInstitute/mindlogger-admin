@@ -6,6 +6,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 
 import { ConditionItemType } from './Condition.const';
@@ -48,6 +49,10 @@ export type MultipleSelectionPerRowConditionItem = ConditionItemGeneric<{
   type: ConditionItemType.MultipleSelectionPerRow;
   responseValues: SingleAndMultipleSelectRowsResponseValues;
 }>;
+export type SliderRowsConditionItem = ConditionItemGeneric<{
+  type: ConditionItemType.SliderRows;
+  responseValues: SliderRowsResponseValues;
+}>;
 export type ScoreConditionItem = ConditionItemGeneric<{
   type: ConditionItemType.Score;
 }>;
@@ -65,6 +70,7 @@ export type ConditionItem =
   | TimeRangeConditionItem
   | SingleSelectionPerRowConditionItem
   | MultipleSelectionPerRowConditionItem
+  | SliderRowsConditionItem
   | ScoreConditionItem
   | ScoreConditionConditionItem;
 
