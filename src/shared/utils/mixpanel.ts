@@ -1,15 +1,17 @@
 import { Dict } from 'mixpanel-browser';
 
-import { isProduction, isStaging, isUat } from './env';
+import { isProduction, isStaging, isUat, isDev } from './env';
 
 const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
-const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging || isUat);
+const shouldEnableMixpanel =
+  PROJECT_TOKEN &&
+  (isProduction || isStaging || isUat || process.env.REACT_APP_MIXPANEL_FORCE_ENABLE === 'true');
 
 export const Mixpanel = {
   async init() {
     if (shouldEnableMixpanel) {
       const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.init(PROJECT_TOKEN);
+      mixpanel.init(PROJECT_TOKEN, { ignore_dnt: isDev });
     }
   },
   async trackPageView(pageName: string) {
