@@ -8,6 +8,7 @@ import {
   NumberSelectionConditionItem,
   ScoreConditionItem,
   SliderConditionItem,
+  SliderRowsConditionItem,
 } from '../Condition.types';
 
 export type SwitchConditionProps = {
@@ -17,12 +18,22 @@ export type SwitchConditionProps = {
 } & Pick<ConditionProps, 'payloadName' | 'state' | 'valueOptions'>;
 
 export type GetConditionMinMaxRangeValuesProps = {
-  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
+  item?:
+    | SliderConditionItem
+    | NumberSelectionConditionItem
+    | SliderRowsConditionItem
+    | ScoreConditionItem;
   minValue: number;
   maxValue: number;
+  rowIndex?: string;
 };
 
 export type GetConditionMinMaxValuesProps = {
-  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
+  item?:
+    | SliderConditionItem
+    | NumberSelectionConditionItem
+    | SliderRowsConditionItem
+    | ScoreConditionItem;
   state: ConditionType;
+  rowIndex?: string;
 };

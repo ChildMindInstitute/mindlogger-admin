@@ -7,6 +7,11 @@ import {
 } from 'shared/state';
 import { ConditionType } from 'shared/consts';
 import { Option } from 'shared/components/FormComponents/SelectController/SelectController.types';
+import {
+  SingleAndMultipleSelectRow,
+  SliderRowsItemResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state/Applet/Applet.schema';
 
 import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../Condition.const';
 import {
@@ -20,12 +25,16 @@ const getDefaultMinMaxValues = (state: ConditionType) => ({
   minNumber: state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE,
   maxNumber: undefined,
 });
-export const getConditionMinMaxValues = ({ item, state }: GetConditionMinMaxValuesProps) => {
+export const getConditionMinMaxValues = ({
+  item,
+  state,
+  rowIndex,
+}: GetConditionMinMaxValuesProps) => {
   if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxValues(state);
 
   switch (item.type) {
     case ConditionItemType.Slider: {
-      const responseValues = item.responseValues as SliderItemResponseValues;
+      const responseValues = item.responseValues;
 
       return {
         minNumber: state ? +responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
@@ -33,11 +42,21 @@ export const getConditionMinMaxValues = ({ item, state }: GetConditionMinMaxValu
       };
     }
     case ConditionItemType.NumberSelection: {
-      const responseValues = item.responseValues as NumberItemResponseValues;
+      const responseValues = item.responseValues;
 
       return {
         minNumber: state ? responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
         maxNumber: state ? responseValues.maxValue : Number.MAX_SAFE_INTEGER,
+      };
+    }
+    case ConditionItemType.SliderRows: {
+      const responseValues = item.responseValues;
+
+      return {
+        minNumber:
+          state && rowIndex ? +responseValues.rows[+rowIndex].minValue : DEFAULT_NUMBER_MIN_VALUE,
+        maxNumber:
+          state && rowIndex ? +responseValues.rows[+rowIndex].maxValue : Number.MAX_SAFE_INTEGER,
       };
     }
     default:
@@ -101,8 +120,12 @@ export const getTimeRangeOptions = () => [
   { value: TimeRangeConditionType.EndTime, labelKey: t('endTime') },
 ];
 
-export const getRowOptions = (rows: SingleAndMultipleSelectRowsResponseValues['rows']): Option[] =>
-  (rows ?? []).map((row) => ({
-    value: row.id,
-    labelKey: `${t('row')}: ${row.rowName}`,
+export const getRowOptions = (
+  rows: SingleAndMultipleSelectRowsResponseValues['rows'] | SliderRowsResponseValues['rows'],
+): Option[] =>
+  (rows ?? []).map((row, index) => ({
+    value: String(index),
+    labelKey: (row as SingleAndMultipleSelectRow).rowName
+      ? `${t('row')}: ${(row as SingleAndMultipleSelectRow).rowName}`
+      : `${t('slider')}: ${(row as SliderRowsItemResponseValues).label}`,
   }));

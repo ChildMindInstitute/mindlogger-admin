@@ -415,6 +415,13 @@ export type SingleMultiSelectionPerRowCondition = BaseCondition &
     };
   };
 
+export type SliderRowsCondition<T = SingleValueCondition> = BaseCondition &
+  T & {
+    payload: {
+      rowIndex: number;
+    };
+  };
+
 export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
     value: T;
@@ -445,6 +452,8 @@ export type Condition<T = number> =
   | RangeValueCondition<T>
   | TimeRangeValueCondition
   | SingleMultiSelectionPerRowCondition
+  | SliderRowsCondition
+  | SliderRowsCondition<RangeValueCondition>
   | ScoreCondition;
 
 export type ConditionalLogic = {
