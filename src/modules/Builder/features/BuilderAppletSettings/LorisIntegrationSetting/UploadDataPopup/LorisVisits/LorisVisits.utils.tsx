@@ -1,4 +1,3 @@
-import { Control, FieldValues } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import i18n from 'i18n';
@@ -7,7 +6,7 @@ import { LorisUsersVisits } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
 
 import { StyledSelectController } from './LorisVisits.styles';
-import { VisitRow } from './LorisVisits.types';
+import { GetMatchOptions, VisitRow } from './LorisVisits.types';
 
 const { t } = i18n;
 
@@ -37,11 +36,7 @@ export const getHeadCells = (): HeadCell[] => [
 export const getMatchOptions = (visits: string[]) =>
   visits.map((visit) => ({ labelKey: visit, value: visit }));
 
-export const getLorisActivitiesRows = (
-  control: Control<FieldValues>,
-  visitsList: string[],
-  usersVisits: LorisUsersVisits,
-) =>
+export const getLorisActivitiesRows = ({ control, visitsList, usersVisits }: GetMatchOptions) =>
   Object.keys(usersVisits).reduce((rows: VisitRow, userId) => {
     const activities = usersVisits[userId] || [];
     const userActivities = activities.map(
@@ -79,9 +74,9 @@ export const getLorisActivitiesRows = (
     return rows.concat(userActivities);
   }, []);
 
-export const formatData = (activities: LorisUsersVisits) =>
-  Object.keys(activities).reduce((rows, userId) => {
-    const userActivities = activities[userId] || [];
+export const formatData = (usersVisits: LorisUsersVisits) =>
+  Object.keys(usersVisits).reduce((rows, userId) => {
+    const userActivities = usersVisits[userId] || [];
     const formattedActivities = userActivities.map((activity) => ({
       ...activity,
       visit: activity.visit || '',

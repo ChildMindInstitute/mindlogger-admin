@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { Table } from 'shared/components';
+import { Table } from 'shared/components/Table';
 import { SelectController } from 'shared/components/FormComponents';
 import { theme, variables } from 'shared/styles';
 

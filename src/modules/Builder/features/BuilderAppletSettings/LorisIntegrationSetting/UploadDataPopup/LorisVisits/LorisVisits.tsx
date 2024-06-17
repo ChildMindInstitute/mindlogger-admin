@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { UiType } from 'shared/components';
+import { UiType } from 'shared/components/Table';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { LorisUsersVisits, getLorisUsersVisitsApi, getLorisVisitsApi } from 'modules/Builder/api';
 
@@ -51,6 +51,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -63,7 +64,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
           <StyledTable
             maxHeight="34.4rem"
             columns={getHeadCells()}
-            rows={getLorisActivitiesRows(control, visitsList, usersVisits)}
+            rows={getLorisActivitiesRows({ control, visitsList, usersVisits })}
             orderBy={'activityName'}
             uiType={UiType.Secondary}
             tableHeadBg={variables.modalBackground}
