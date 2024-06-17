@@ -122,7 +122,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}/dataviz/summary`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}`,
     );
   });
 });

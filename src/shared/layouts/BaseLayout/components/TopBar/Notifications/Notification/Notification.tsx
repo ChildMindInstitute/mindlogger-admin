@@ -79,7 +79,7 @@ export const Notification = ({
 
   const navigateToResponseData = () => {
     navigate(
-      generatePath(page.appletParticipantDataSummary, {
+      generatePath(page.appletParticipantActivities, {
         appletId,
         subjectId,
       }),
