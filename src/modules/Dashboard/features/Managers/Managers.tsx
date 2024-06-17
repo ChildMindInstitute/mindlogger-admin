@@ -18,7 +18,12 @@ import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
-import { checkIfFullAccess, isManagerOrOwner, joinWihComma } from 'shared/utils';
+import {
+  checkIfCanManageParticipants,
+  checkIfFullAccess,
+  isManagerOrOwner,
+  joinWihComma,
+} from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
@@ -43,6 +48,8 @@ export const Managers = () => {
       ? rolesData?.data?.[appletId]
       : [...new Set(Object.values(rolesData.data || []).flat())];
   const canViewTeam = checkIfFullAccess(roles);
+  // Coordinators can add reviewers for other participants
+  const canAddReviewers = checkIfCanManageParticipants(roles);
 
   const { execute } = useAsync(
     getWorkspaceManagersApi,
@@ -57,6 +64,7 @@ export const Managers = () => {
   });
 
   const getWorkspaceManagers = (args?: GetAppletsParams) => {
+    if (!canViewTeam) return Promise.resolve();
     setIsLoading(true);
 
     const ordering = args?.params.ordering ?? '+lastName,+firstName';
@@ -234,7 +242,7 @@ export const Managers = () => {
   }, [ownerId, appletId, executeGetWorkspaceInfoApi]);
 
   // If there are no roles available we're looking at our own empty workspace
-  const showsForbiddenComponent = isForbidden || (roles.length && !canViewTeam);
+  const showsForbiddenComponent = isForbidden || (roles.length && !canViewTeam && !canAddReviewers);
   if (showsForbiddenComponent) return noPermissionsComponent;
 
   return (
@@ -245,13 +253,15 @@ export const Managers = () => {
         {/* TODO: Add sorting/filtering (https://mindlogger.atlassian.net/browse/M2-5608) */}
 
         <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>
-          <Search
-            withDebounce
-            placeholder={t('searchTeam')}
-            onSearch={handleSearch}
-            sx={{ width: '32rem' }}
-            data-testid={`${dataTestId}-search`}
-          />
+          {canViewTeam && (
+            <Search
+              withDebounce
+              placeholder={t('searchTeam')}
+              onSearch={handleSearch}
+              sx={{ width: '32rem' }}
+              data-testid={`${dataTestId}-search`}
+            />
+          )}
 
           {!!appletId && (
             <Button
@@ -265,15 +275,19 @@ export const Managers = () => {
         </StyledFlexWrap>
       </StyledFlexWrap>
 
-      <DashboardTable
-        columns={getHeadCells(managersData?.orderingFields, appletId)}
-        rows={rows}
-        keyExtractor={({ id }) => `row-${id.value}`}
-        emptyComponent={renderEmptyComponent()}
-        count={managersData?.count || 0}
-        data-testid={`${dataTestId}-table`}
-        {...tableProps}
-      />
+      {canViewTeam ? (
+        <DashboardTable
+          columns={getHeadCells(managersData?.orderingFields, appletId)}
+          rows={rows}
+          keyExtractor={({ id }) => `row-${id.value}`}
+          emptyComponent={renderEmptyComponent()}
+          count={managersData?.count || 0}
+          data-testid={`${dataTestId}-table`}
+          {...tableProps}
+        />
+      ) : (
+        noPermissionsComponent
+      )}
       {selectedManager && (
         <>
           {removeAccessPopupVisible && (
