@@ -166,7 +166,6 @@ describe('Respondents component tests', () => {
   describe('should appear popup when click on respondent action for ', () => {
     test.each`
       actionDataTestId                         | popupDataTestId                                       | description
-      ${'dashboard-respondents-view-data'}     | ${'dashboard-respondents-view-data-popup'}            | ${'view data'}
       ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}        | ${'view calendar'}
       ${'dashboard-respondents-export-data'}   | ${'dashboard-respondents-export-data-popup-password'} | ${'export data'}
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
@@ -182,6 +181,25 @@ describe('Respondents component tests', () => {
       await waitFor(() => {
         expect(screen.getByTestId(popupDataTestId)).toBeInTheDocument();
       });
+    });
+  });
+
+  test('shows view participant popup on the dashboard respondents page', async () => {
+    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    renderWithProviders(<Respondents />, {
+      preloadedState,
+      route: page.dashboardRespondents,
+      routePath: page.dashboardRespondents,
+    });
+
+    await clickActionDots();
+    const action = await waitFor(() => screen.getByTestId('dashboard-respondents-view-data'));
+    fireEvent.click(action);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('dashboard-respondents-view-participant-popup'),
+      ).toBeInTheDocument();
     });
   });
 

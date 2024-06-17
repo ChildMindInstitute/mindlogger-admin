@@ -1,4 +1,5 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -6,10 +7,20 @@ import {
   mockedRespondentId,
   mockedOwnerId,
   mockedSubjectId1,
+  mockedAppletId,
 } from 'shared/mock';
+import { page } from 'resources';
 
-import * as hooks from '../Popups.hooks';
-import { ViewDataPopup } from './ViewDataPopup';
+import { ViewParticipantPopup } from './ViewParticipantPopup';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+  generatePath: jest.fn(),
+}));
+
+const mockedUseNavigate = jest.mocked(useNavigate);
+const mockedGeneratePath = jest.mocked(generatePath);
 
 const setChosenAppletDataMock = jest.fn();
 const setPopupVisibleMock = jest.fn();
@@ -39,32 +50,37 @@ const tableRowsMock = [
   },
 ];
 
-const useCheckIfHasEncryptionMock = jest.spyOn(hooks, 'useCheckIfHasEncryption');
+describe('ViewParticipantPopup', () => {
+  const navigateMock = jest.fn();
 
-describe('ViewDataPopup', () => {
-  test('should render enter password popup', async () => {
-    useCheckIfHasEncryptionMock.mockReturnValueOnce(false);
-    renderWithProviders(
-      <ViewDataPopup
-        popupVisible={true}
-        setPopupVisible={setPopupVisibleMock}
-        tableRows={tableRowsMock}
-        chosenAppletData={chosenAppletDataMock}
-        setChosenAppletData={setChosenAppletDataMock}
-      />,
-    );
-
-    const popup = screen.getByTestId('dashboard-respondents-view-data-popup');
-    expect(popup).toBeInTheDocument();
-    expect(
-      screen.getByTestId('dashboard-respondents-view-data-popup-enter-password-password'),
-    ).toBeInTheDocument();
+  beforeEach(() => {
+    mockedUseNavigate.mockReturnValue(navigateMock);
   });
 
   test('should render table with applets', () => {
-    useCheckIfHasEncryptionMock.mockReturnValueOnce(true);
+    const { getByText } = renderWithProviders(
+      <ViewParticipantPopup
+        popupVisible={true}
+        setPopupVisible={setPopupVisibleMock}
+        tableRows={tableRowsMock}
+        chosenAppletData={null}
+        setChosenAppletData={setChosenAppletDataMock}
+      />,
+    );
+
+    expect(
+      getByText("Please select the Applet to view Respondent's data for:"),
+    ).toBeInTheDocument();
+
+    const tableRow = getByText('Mocked Applet');
+    fireEvent.click(tableRow);
+
+    expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
+  });
+
+  test('should navigate to the participant detail page', () => {
     renderWithProviders(
-      <ViewDataPopup
+      <ViewParticipantPopup
         popupVisible={true}
         setPopupVisible={setPopupVisibleMock}
         tableRows={tableRowsMock}
@@ -73,13 +89,10 @@ describe('ViewDataPopup', () => {
       />,
     );
 
-    expect(
-      screen.getByText("Please select the Applet to view Respondent's data for:"),
-    ).toBeInTheDocument();
-
-    const tableRow = screen.getByText('Mocked Applet');
-    fireEvent.click(tableRow);
-
-    expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
+    expect(mockedGeneratePath).toBeCalledWith(page.appletParticipantActivities, {
+      appletId: mockedAppletId,
+      subjectId: mockedSubjectId1,
+    });
+    expect(navigateMock).toBeCalledTimes(1);
   });
 });
