@@ -353,13 +353,18 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
                     setIsSelfReporting(selfReportingCondition);
                   }}
-                  data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
+                  data-testid={`${dataTestId}-take-now-modal-source-subject-dropdown`}
                   handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
                   canShowWarningMessage={true}
                   showGroups={true}
                 />
                 <FormControlLabel
-                  control={<Checkbox sx={{ margin: 0, width: 48, height: 48 }} />}
+                  control={
+                    <Checkbox
+                      sx={{ margin: 0, width: 48, height: 48 }}
+                      data-testid={`${dataTestId}-take-now-modal-participant-self-report-checkbox`}
+                    />
+                  }
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => setIsSelfReporting(checked)}
@@ -384,7 +389,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                       : teamMembersOnly
                   }
                   onChange={setLoggedInUser}
-                  data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+                  data-testid={`${dataTestId}-take-now-modal-logged-in-user-dropdown`}
                   handleSearch={(query) => {
                     const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = [
                       'team',
@@ -406,7 +411,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               value={targetSubject}
               options={participantsAndTeamMembers}
               onChange={setTargetSubject}
-              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+              data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
               handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
           </StyledFlexColumn>

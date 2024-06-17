@@ -147,6 +147,7 @@ export const LabeledUserDropdown = ({
               },
               ...props,
             }}
+            data-testid={`${rest['data-testid']}-option-${id}`}
           />
         )}
         isOptionEqualToValue={(option, value) => option.id === value.id}
