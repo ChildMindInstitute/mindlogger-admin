@@ -34,7 +34,7 @@ export const LabeledUserDropdown = ({
   showGroups,
   ...rest
 }: LabeledUserDropdownProps) => {
-  const { t } = useTranslation('app');
+  const { t, i18n } = useTranslation('app');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
@@ -173,13 +173,18 @@ export const LabeledUserDropdown = ({
           );
         }}
         getOptionLabel={(value) => {
-          if (value.tag === 'Team') {
-            return `${value.nickname} (${value.tag})`;
+          let translatedTag = '';
+          if (value.tag) {
+            translatedTag = i18n.exists(`participantTag.${value.tag}`)
+              ? ` (${t(`participantTag.${value.tag}`)})`
+              : ` (${value.tag})`;
           }
 
-          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${
-            value.tag ? ` (${value.tag})` : ''
-          }`;
+          if (value.tag === 'Team') {
+            return `${value.nickname}${translatedTag}`;
+          }
+
+          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${translatedTag}`;
         }}
         disabled={disabled}
         popupIcon={
