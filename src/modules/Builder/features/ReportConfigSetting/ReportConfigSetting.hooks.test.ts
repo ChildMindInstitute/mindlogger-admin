@@ -3,7 +3,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
 
-import { SingleApplet } from 'shared/state';
 import { authStorage } from 'shared/utils/authStorage';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
@@ -29,24 +28,45 @@ jest.mock('./ReportConfigSetting.utils', () => ({
   setPasswordReportServer: jest.fn(),
 }));
 
+const mockUrl = 'http://example.com';
+const mockPublicKey = 'mockPublicKey';
+const mockToken = 'mockToken';
+const mockPassword = 'mockPassword';
+
+const renderReportServerHook = (message: string) => {
+  (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
+  (verifyReportServer as jest.Mock).mockResolvedValue({
+    json: async () => ({ message }),
+  });
+  (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
+
+  return renderHook(() => useCheckReportServer({ url: mockUrl, publicKey: mockPublicKey }));
+};
+
+const renderDefaultValuesHook = (appletData = {}, params) => {
+  (useParams as jest.Mock).mockReturnValue(params);
+
+  return renderHook(() =>
+    useDefaultValues({
+      reportServerIp: '192.168.0.1',
+      reportPublicKey: 'publicKey',
+      reportRecipients: ['recipient@example.com'],
+      reportIncludeUserId: true,
+      reportEmailBody: 'Email Body',
+      activities: [{ id: 'activity1', key: 'key1', reportIncludedItemName: 'Item Name' }],
+      activityFlows: [],
+      ...appletData,
+    }),
+  );
+};
+
 describe('useCheckReportServer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('onVerify returns true when server responds with OK_MESSAGE', async () => {
-    const mockUrl = 'http://example.com';
-    const mockPublicKey = 'mockPublicKey';
-    const mockToken = 'mockToken';
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (verifyReportServer as jest.Mock).mockResolvedValue({
-      json: async () => ({ message: OK_MESSAGE }),
-    });
-    (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
-
-    const { result } = renderHook(() =>
-      useCheckReportServer({ url: mockUrl, publicKey: mockPublicKey }),
-    );
+    const { result } = renderReportServerHook(OK_MESSAGE);
 
     let verifyResult;
     await act(async () => {
@@ -63,18 +83,7 @@ describe('useCheckReportServer', () => {
   });
 
   test('onVerify returns false when server does not respond with OK_MESSAGE', async () => {
-    const mockUrl = 'http://example.com';
-    const mockPublicKey = 'mockPublicKey';
-    const mockToken = 'mockToken';
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (verifyReportServer as jest.Mock).mockResolvedValue({
-      json: async () => ({ message: 'OTHER_MESSAGE' }),
-    });
-    (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
-
-    const { result } = renderHook(() =>
-      useCheckReportServer({ url: mockUrl, publicKey: mockPublicKey }),
-    );
+    const { result } = renderReportServerHook('OTHER_MESSAGE');
 
     let verifyResult;
     await act(async () => {
@@ -91,9 +100,6 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns true when server responds with SUCCESS_MESSAGE', async () => {
-    const mockUrl = 'http://example.com';
-    const mockPassword = 'mockPassword';
-    const mockToken = 'mockToken';
     (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
     (setPasswordReportServer as jest.Mock).mockResolvedValue({
       json: async () => ({ message: SUCCESS_MESSAGE }),
@@ -121,9 +127,6 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns false when server does not respond with SUCCESS_MESSAGE', async () => {
-    const mockUrl = 'http://example.com';
-    const mockPassword = 'mockPassword';
-    const mockToken = 'mockToken';
     (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
     (setPasswordReportServer as jest.Mock).mockResolvedValue({
       json: async () => ({ message: 'OTHER_MESSAGE' }),
@@ -165,18 +168,7 @@ describe('useDefaultValues', () => {
   });
 
   test('returns correct values when appletData provided with activityId', () => {
-    const mockAppletData: SingleApplet = {
-      reportServerIp: '192.168.0.1',
-      reportPublicKey: 'publicKey',
-      reportRecipients: ['recipient@example.com'],
-      reportIncludeUserId: true,
-      reportEmailBody: 'Email Body',
-      activities: [{ id: 'activity1', key: 'key1', reportIncludedItemName: 'Item Name' }],
-      activityFlows: [],
-    };
-    (useParams as jest.Mock).mockReturnValue({ activityId: 'activity1' });
-
-    const { result } = renderHook(() => useDefaultValues(mockAppletData));
+    const { result } = renderDefaultValuesHook({}, { activityId: 'activity1' });
 
     expect(result.current).toEqual({
       ...initialValues,
@@ -192,26 +184,20 @@ describe('useDefaultValues', () => {
   });
 
   test('returns correct values when appletData provided with activityFlowId', () => {
-    const mockAppletData: SingleApplet = {
-      reportServerIp: '192.168.0.1',
-      reportPublicKey: 'publicKey',
-      reportRecipients: ['recipient@example.com'],
-      reportIncludeUserId: true,
-      reportEmailBody: 'Email Body',
-      activities: [],
-      activityFlows: [
-        {
-          id: 'flow1',
-          key: 'keyFlow1',
-          reportIncludedActivityName: 'Activity Name',
-          reportIncludedItemName: 'Item Name',
-        },
-      ],
-    };
-    (useParams as jest.Mock).mockReturnValue({ activityFlowId: 'flow1' });
-
-    const { result } = renderHook(() => useDefaultValues(mockAppletData));
-
+    const { result } = renderDefaultValuesHook(
+      {
+        activities: [],
+        activityFlows: [
+          {
+            id: 'flow1',
+            key: 'keyFlow1',
+            reportIncludedActivityName: 'Activity Name',
+            reportIncludedItemName: 'Item Name',
+          },
+        ],
+      },
+      { activityFlowId: 'flow1' },
+    );
     expect(result.current).toEqual({
       ...initialValues,
       reportServerIp: '192.168.0.1',

@@ -8,6 +8,20 @@ import {
   setSubjectData,
 } from './ReportConfigSetting.utils';
 
+const setValue = jest.fn();
+const getParams = (newParams = {}) => ({
+  setValue,
+  appletName: 'Test Applet',
+  activityName: 'Test Activity',
+  flowName: null,
+  flowActivityName: null,
+  respondentId: 'resp123',
+  hasActivityItemValue: false,
+  hasFlowItemValue: false,
+  itemName: null,
+  ...newParams,
+});
+
 describe('getActivitiesOptions', () => {
   test('should return empty array if no activities or activityFlowItems', () => {
     expect(getActivitiesOptions(undefined, undefined)).toEqual([]);
@@ -125,21 +139,7 @@ describe('setPasswordReportServer', () => {
 
 describe('setSubjectData', () => {
   test('should set the correct subject value', () => {
-    const setValue = jest.fn();
-    const params = {
-      setValue,
-      appletName: 'Test Applet',
-      activityName: 'Test Activity',
-      flowName: null,
-      flowActivityName: null,
-      respondentId: 'resp123',
-      hasActivityItemValue: false,
-      hasFlowItemValue: false,
-      itemName: null,
-    };
-
-    setSubjectData(params);
-
+    setSubjectData(getParams());
     expect(setValue).toHaveBeenCalledWith(
       'subject',
       'REPORT by [Respondent ID]: Test Applet / Test Activity',
@@ -147,21 +147,12 @@ describe('setSubjectData', () => {
   });
 
   test('should include item name in subject if hasActivityItemValue is true', () => {
-    const setValue = jest.fn();
-    const params = {
-      setValue,
-      appletName: 'Test Applet',
-      activityName: 'Test Activity',
-      flowName: null,
-      flowActivityName: null,
-      respondentId: 'resp123',
-      hasActivityItemValue: true,
-      hasFlowItemValue: false,
-      itemName: 'Test Item',
-    };
-
-    setSubjectData(params);
-
+    setSubjectData(
+      getParams({
+        hasActivityItemValue: true,
+        itemName: 'Test Item',
+      }),
+    );
     expect(setValue).toHaveBeenCalledWith(
       'subject',
       'REPORT by [Respondent ID]: Test Applet / Test Activity / [Test Item]',
@@ -169,21 +160,15 @@ describe('setSubjectData', () => {
   });
 
   test('should include flow and item names in subject if hasFlowItemValue is true', () => {
-    const setValue = jest.fn();
-    const params = {
-      setValue,
-      appletName: 'Test Applet',
-      activityName: null,
-      flowName: 'Test Flow',
-      flowActivityName: 'Flow Activity',
-      respondentId: 'resp123',
-      hasActivityItemValue: false,
-      hasFlowItemValue: true,
-      itemName: 'Test Item',
-    };
-
-    setSubjectData(params);
-
+    setSubjectData(
+      getParams({
+        activityName: null,
+        flowName: 'Test Flow',
+        flowActivityName: 'Flow Activity',
+        hasFlowItemValue: true,
+        itemName: 'Test Item',
+      }),
+    );
     expect(setValue).toHaveBeenCalledWith(
       'subject',
       'REPORT by [Respondent ID]: Test Applet / Test Flow / Flow Activity / [Test Item]',
