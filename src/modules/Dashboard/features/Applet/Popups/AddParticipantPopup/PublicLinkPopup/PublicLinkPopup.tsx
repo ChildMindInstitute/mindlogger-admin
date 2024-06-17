@@ -57,7 +57,7 @@ export const PublicLinkPopup = ({
           {hasPublicLink ? (
             <Button
               color="error"
-              data-testId={dataTestId && `${dataTestId}-delete-btn`}
+              data-testid={dataTestId && `${dataTestId}-delete-btn`}
               onClick={handleDeletePublicLink}
               variant="contained"
             >
@@ -66,7 +66,7 @@ export const PublicLinkPopup = ({
           ) : (
             <>
               <Button
-                data-testId={dataTestId && `${dataTestId}-no-account-btn`}
+                data-testid={dataTestId && `${dataTestId}-no-account-btn`}
                 disabled={isLoading}
                 onClick={() => {
                   handleCreatePublicLink(false);
@@ -77,7 +77,7 @@ export const PublicLinkPopup = ({
               </Button>
 
               <Button
-                data-testId={dataTestId && `${dataTestId}-account-btn`}
+                data-testid={dataTestId && `${dataTestId}-account-btn`}
                 disabled={isLoading}
                 onClick={() => {
                   handleCreatePublicLink(true);

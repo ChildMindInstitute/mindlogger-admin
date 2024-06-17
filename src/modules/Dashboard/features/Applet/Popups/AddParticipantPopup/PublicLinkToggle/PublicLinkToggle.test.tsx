@@ -11,7 +11,7 @@ const fakeRequest = jest.fn();
 
 const testId = 'public-link-toggle';
 const commonProps = {
-  'data-testId': testId,
+  'data-testid': testId,
   appletId: 'test-applet-id',
   onConfirmPublicLink: jest.fn(),
 };

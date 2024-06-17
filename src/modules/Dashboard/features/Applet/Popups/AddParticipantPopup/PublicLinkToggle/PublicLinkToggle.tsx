@@ -19,7 +19,7 @@ import { PublicLinkToggleProps } from './PublicLinkToggle.types';
 
 export const PublicLinkToggle = ({
   appletId,
-  'data-testId': dataTestId,
+  'data-testid': dataTestId,
   onConfirmPublicLink,
   sx,
   ...otherProps
@@ -42,7 +42,7 @@ export const PublicLinkToggle = ({
 
   return (
     <StyledFlexSpaceBetween
-      data-testId={dataTestId}
+      data-testid={dataTestId}
       sx={{ flexDirection: 'column', gap: 1.6, ...sx }}
       {...otherProps}
     >
@@ -57,7 +57,7 @@ export const PublicLinkToggle = ({
 
         <Button
           color={hasPublicLink ? 'error' : undefined}
-          data-testId={dataTestId && `${dataTestId}-confirm-btn`}
+          data-testid={dataTestId && `${dataTestId}-confirm-btn`}
           disabled={isLoading}
           onClick={() => {
             onConfirmPublicLink?.(hasPublicLink);
@@ -78,7 +78,7 @@ export const PublicLinkToggle = ({
         >
           <StyledFlexTopCenter>
             <StyledInput
-              data-testId={dataTestId && `${dataTestId}-input`}
+              data-testid={dataTestId && `${dataTestId}-input`}
               id={inputId}
               readOnly
               value={link}
@@ -86,7 +86,7 @@ export const PublicLinkToggle = ({
 
             <IconButton
               color="primary"
-              data-testId={dataTestId && `${dataTestId}-copy-btn`}
+              data-testid={dataTestId && `${dataTestId}-copy-btn`}
               onClick={handleCopyLink}
               sx={{ p: 1.6 }}
             >
