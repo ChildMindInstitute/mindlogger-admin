@@ -93,6 +93,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                   key={atTimeFieldName}
                   label={t('at')}
                   data-testid={`${dataTestid}-time`}
+                  defaultTime="00:00"
                 />
                 {getNextDayLabel(atTime)}
               </StyledColInner>
@@ -104,6 +105,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                     key={fromTimeFieldName}
                     label={t('from')}
                     data-testid={`${dataTestid}-from`}
+                    defaultTime="00:00"
                   />
                   {getNextDayLabel(fromTime)}
                 </StyledColInner>
@@ -113,6 +115,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                     key={toTimeFieldName}
                     label={t('to')}
                     data-testid={`${dataTestid}-to`}
+                    defaultTime="23:59"
                   />
                   {getNextDayLabel(toTime)}
                 </StyledColInner>

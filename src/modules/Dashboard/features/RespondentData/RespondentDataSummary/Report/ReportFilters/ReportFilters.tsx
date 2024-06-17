@@ -124,6 +124,7 @@ export const ReportFilters = ({
               onFiltersChange({ startTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-start-time`}
+            defaultTime="00:00"
           />
           <StyledTimeText>
             <Trans i18nKey="timeIsShownInUTC">
@@ -143,6 +144,7 @@ export const ReportFilters = ({
               onFiltersChange({ endTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-end-time`}
+            defaultTime="23:59"
           />
           <StyledMoreFilters
             onClick={moreFiltersHandler}

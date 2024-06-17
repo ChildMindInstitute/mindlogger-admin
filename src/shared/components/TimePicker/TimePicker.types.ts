@@ -12,6 +12,7 @@ type TimePicker = {
   maxTime?: Date;
   onCustomChange?: (time: string) => void;
   'data-testid'?: string;
+  defaultTime?: string;
 } & TextFieldProps;
 
 export type TimePickerProps<T extends FieldValues> = TimePicker & UseControllerProps<T>;

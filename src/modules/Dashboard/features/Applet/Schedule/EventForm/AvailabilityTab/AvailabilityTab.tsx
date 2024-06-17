@@ -195,6 +195,7 @@ export const AvailabilityTab = ({
                 label={t('from')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.FromTime)}
                 data-testid={`${dataTestid}-start-time`}
+                defaultTime="00:00"
               />
             </StyledTimeWrapper>
             <StyledTimeWrapper
@@ -207,6 +208,7 @@ export const AvailabilityTab = ({
                 label={t('to')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
+                defaultTime="23:59"
               />
               {hasNextDayLabel && (
                 <StyledTitleSmall
