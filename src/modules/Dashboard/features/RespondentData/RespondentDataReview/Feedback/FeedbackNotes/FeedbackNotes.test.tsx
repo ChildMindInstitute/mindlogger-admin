@@ -29,6 +29,7 @@ const mockedSubmitId = 'some-submit-id';
 const routeWithAnswerId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
 const routeWithSubmitId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&submitId=${mockedSubmitId}`;
 const routePath = page.appletRespondentDataReview;
+const firstUserId = 'user-id-1';
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -51,6 +52,21 @@ const preloadedState = {
       data: { result: mockedApplet },
     },
   },
+  auth: {
+    authentication: {
+      ...initialStateData,
+      data: {
+        user: {
+          email: 'test@test.com',
+          firstName: 'John',
+          lastName: 'Doe',
+          id: firstUserId,
+        },
+      },
+    },
+    isAuthorized: true,
+    isLogoutInProgress: false,
+  },
 };
 
 const mockedActivity = {
@@ -71,6 +87,7 @@ const mockedGetWithNotes = {
         user: {
           firstName: 'John',
           lastName: 'Doe',
+          id: firstUserId,
         },
         note: 'New note',
         createdAt: '2023-11-29T12:14:58.395686',
@@ -80,6 +97,7 @@ const mockedGetWithNotes = {
         user: {
           firstName: 'Jane',
           lastName: 'Doe',
+          id: 'user-id-2',
         },
         note: 'Note 1',
         createdAt: '2023-11-28T09:01:44.861355',
@@ -279,5 +297,23 @@ describe('FeedbackNotes', () => {
     await testNoteRemoving(
       `/answers/applet/${mockedAppletId}/submissions/${mockedSubmitId}/flows/${mockedFlow.id}/notes/950fe4cc-dddb-4b5f-bdb5-4f3966dbed7e`,
     );
+  });
+
+  test('should hide remove and edit options for notes not created by the current user', async () => {
+    mockGetWithNotes();
+    renderFeedbackNotes(mockedFlow, routeWithSubmitId);
+
+    await waitFor(async () => {
+      const noteHeader = screen.queryByTestId(`${noteTestId}-1-header`) as HTMLElement;
+
+      expect(noteHeader).toBeInTheDocument();
+
+      await userEvent.hover(noteHeader);
+      const editAction = screen.queryByTestId(`${noteTestId}-1-edit`) as HTMLElement;
+      const removeAction = screen.queryByTestId(`${noteTestId}-1-remove`) as HTMLElement;
+
+      expect(editAction).not.toBeInTheDocument();
+      expect(removeAction).not.toBeInTheDocument();
+    });
   });
 });

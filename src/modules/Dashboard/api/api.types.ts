@@ -3,6 +3,7 @@ import { Item, SingleApplet, SubscaleSetting } from 'shared/state';
 import { Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
+import { User } from 'modules/Auth/state';
 
 export type GetAppletsParams = {
   params: {
@@ -330,19 +331,13 @@ export type SaveFlowAssessmentParams = AppletId &
     assessmentVersionId: string;
   };
 
-export type Reviewer = {
-  firstName: string;
-  lastName: string;
-  id: string;
-};
-
 export type Review = {
   id: string;
   createdAt: string;
   updatedAt: string;
   items: Item[];
   itemIds: string[];
-  reviewer: Reviewer;
+  reviewer: Omit<User, 'email'>;
   /* "null" returns in case the user does not have access to the answer
   (a user with the role of reviewer only has access to their own review answers) */
   answer: string | null;
@@ -540,14 +535,9 @@ export type EncryptedFlowAnswers = {
   summary: AnswerSummary;
 };
 
-type FullName = {
-  firstName: string;
-  lastName: string;
-};
-
 export type FeedbackNote = {
   id: string;
-  user: FullName;
+  user: Omit<User, 'email'>;
   note: string;
   createdAt: string;
 };

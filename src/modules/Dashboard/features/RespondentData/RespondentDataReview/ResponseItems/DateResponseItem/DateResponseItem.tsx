@@ -12,7 +12,7 @@ export const DateResponseItem = ({ answer }: DateItemAnswer) => {
     <DatePickerInput
       value={value}
       disabled
-      inputSx={{
+      inputWrapperSx={{
         width: '20rem',
       }}
     />

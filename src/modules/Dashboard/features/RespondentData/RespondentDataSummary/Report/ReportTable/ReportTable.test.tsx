@@ -44,9 +44,7 @@ describe('ReportFilters', () => {
   test('renders empty state for report table when no answers', async () => {
     renderWithProviders(<ReportTable responseType={ItemResponseType.Text} />);
 
-    expect(
-      screen.getByText("No match was found for ''. Try a different search word or phrase."),
-    ).toBeInTheDocument();
+    expect(screen.getByText('No Data')).toBeInTheDocument();
   });
 
   test('renders proper header for report when type is time range', async () => {
@@ -61,7 +59,7 @@ describe('ReportFilters', () => {
     expect(screen.getByText('End Time Response')).toBeInTheDocument();
   });
 
-  test('search in the table', async () => {
+  test('search in the table (success)', async () => {
     renderWithProviders(
       <ReportTable
         responseType={ItemResponseType.Text}
@@ -87,6 +85,46 @@ describe('ReportFilters', () => {
     await waitFor(() => {
       expect(tableList).toHaveLength(1);
     });
+  });
+
+  test('search in the table (failure)', async () => {
+    renderWithProviders(
+      <ReportTable
+        responseType={ItemResponseType.Text}
+        data-testid="response-option"
+        answers={answers}
+      />,
+    );
+
+    const container = await screen.findByTestId('response-option-table');
+    const searchElement = container.querySelector('input');
+    expect(searchElement).toBeInTheDocument;
+    const tableBody = container.getElementsByTagName('tbody');
+    expect(tableBody).toHaveLength(1);
+    const tableList = tableBody[0].getElementsByTagName('tr');
+    expect(tableList).toHaveLength(2);
+
+    await userEvent.type(searchElement, 'Example');
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          "No match was found for 'Example'. Try a different search word or phrase.",
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('renders proper header for report when type is time range', async () => {
+    renderWithProviders(
+      <ReportTable responseType={ItemResponseType.TimeRange} answers={timeRangeAnswers} />,
+    );
+
+    // check table header
+    expect(screen.getByText('Date')).toBeInTheDocument();
+    expect(screen.getByText('Time')).toBeInTheDocument();
+    expect(screen.getByText('Start Time Response')).toBeInTheDocument();
+    expect(screen.getByText('End Time Response')).toBeInTheDocument();
   });
 
   test("filter out only 'undefined' value from the table", async () => {

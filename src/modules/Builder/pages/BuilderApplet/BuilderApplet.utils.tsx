@@ -1041,6 +1041,8 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
       nonReviewableKeys,
     }),
     streamEnabled: !!appletData.streamEnabled,
+    // TODO: Once the backend (the necessary endpoints to enable integration) is ready,
+    // make sure that the integrations property works correctly
   };
 
   return processedApplet;

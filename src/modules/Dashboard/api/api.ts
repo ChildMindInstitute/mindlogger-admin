@@ -489,12 +489,21 @@ export const getFlowAnswersApi = (
     },
   );
 
-export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetNotesParams,
+export const getNotesApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    params,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & GetNotesParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<FeedbackNote>>(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
     {
       params: {
         ...params,
@@ -504,86 +513,64 @@ export const getAnswersNotesApi = (
     },
   );
 
-export const getFlowNotesApi = (
-  { appletId, submitId, flowId, params }: FlowAnswersParams & GetNotesParams,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get<Response<FeedbackNote>>(
-    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
-    {
-      params: {
-        ...params,
-        limit: MAX_LIMIT,
-      },
-      signal,
-    },
-  );
-
-export const createAnswerNoteApi = (
-  { appletId, answerId, activityId, note }: ActivityAnswerParams & Note,
+export const createNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    note,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
     { note },
     {
       signal,
     },
   );
 
-export const createFlowNoteApi = (
-  { appletId, submitId, flowId, note }: FlowAnswersParams & Note,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
-    { note },
-    {
-      signal,
-    },
-  );
-
-export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, activityId, note }: ActivityAnswerParams & NoteId & Note,
+export const editNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    noteId,
+    note,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
     { note },
     {
       signal,
     },
   );
 
-export const editFlowNoteApi = (
-  { appletId, flowId, noteId, submitId, note }: FlowAnswersParams & NoteId & Note,
-  signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
-    { note },
-    {
-      signal,
-    },
-  );
-
-export const deleteAnswerNoteApi = (
-  { appletId, answerId, activityId, noteId }: ActivityAnswerParams & NoteId,
+export const deleteNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    noteId,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
-    {
-      signal,
-    },
-  );
-
-export const deleteFlowNoteApi = (
-  { appletId, flowId, noteId, submitId }: FlowAnswersParams & NoteId,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete(
-    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
     {
       signal,
     },
