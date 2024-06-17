@@ -1,7 +1,7 @@
-import { lazy, Suspense, useState, FocusEvent, ChangeEvent } from 'react';
+import { KeyboardEvent, lazy, Suspense, useState, ChangeEvent } from 'react';
 import { TextField } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
-import { parse } from 'date-fns';
+import { parse, format as dateFnsFormat } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { DateFormats } from 'shared/consts';
@@ -31,21 +31,38 @@ export const TimePicker = <T extends FieldValues>({
 }: TimePickerProps<T>) => {
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleBlur = (_: FocusEvent<HTMLInputElement>, onChange: (value: string) => void) => {
+  const updateInputValue = (value: string, onChange: (value: string) => void) => {
+    onCustomChange?.(value);
+    setInputValue(value);
+    onChange(value);
+  };
+
+  const handleInputValue = (onChange: (value: string) => void) => {
     const cleanedInput = cleanInput(inputValue);
     const validatedInput = validateInput(defaultTime, cleanedInput);
     const formattedInput = validatedInput.length === 4 ? formatInput(validatedInput) : defaultTime;
     updateInputValue(formattedInput, onChange);
   };
 
-  const handleChange = (_: Date, event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+  const handleKeyDownEnter = (
+    event: KeyboardEvent<HTMLDivElement>,
+    onChange: (value: string) => void,
+  ) => {
+    if (event.key !== 'Enter') return;
+    handleInputValue(onChange);
   };
 
-  const updateInputValue = (value: string, onChange: (value: string) => void) => {
-    onCustomChange?.(value);
-    setInputValue(value);
-    onChange(value);
+  const handleChange = (
+    date: Date | null,
+    event: ChangeEvent<HTMLInputElement>,
+    onChange: (value: string) => void,
+  ) => {
+    const isSelectedFromDropdown = !event?.target?.value;
+    if (isSelectedFromDropdown && date) {
+      return updateInputValue(dateFnsFormat(date, DateFormats.Time), onChange);
+    }
+
+    setInputValue(event.target.value);
   };
 
   return (
@@ -61,8 +78,11 @@ export const TimePicker = <T extends FieldValues>({
               <ReactDatePicker
                 className="date-picker"
                 selected={selected as Date | null | undefined}
-                onChange={handleChange}
-                onBlur={(event) => handleBlur(event, onChange)}
+                onChange={(date: Date | null, event: ChangeEvent<HTMLInputElement>) =>
+                  handleChange(date, event, onChange)
+                }
+                onBlur={() => handleInputValue(onChange)}
+                onKeyDown={(event) => handleKeyDownEnter(event, onChange)}
                 showTimeSelect
                 showTimeSelectOnly
                 timeIntervals={timeIntervals}
