@@ -21,7 +21,7 @@ import { getObjectFromList } from 'shared/utils/getObjectFromList';
 import { getFormattedResponses } from '../../utils/getFormattedResponses';
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { getDateISO, getIdentifiers, processIdentifiersChange } from './useRespondentAnswers.utils';
-import { useDataSummaryContext } from '../../DataSummaryContext';
+import { useRespondentDataContext } from '../../../RespondentDataContext';
 
 export const useRespondentAnswers = () => {
   const { appletId, respondentId } = useParams();
@@ -35,7 +35,7 @@ export const useRespondentAnswers = () => {
     setFlowSubmissions,
     setFlowResponseOptionsCount,
     identifiers,
-  } = useDataSummaryContext();
+  } = useRespondentDataContext();
 
   const getActivityDecryptedAnswers = async (encryptedAnswers: EncryptedActivityAnswers[]) => {
     const decryptedAnswers = await Promise.allSettled(
@@ -131,8 +131,8 @@ export const useRespondentAnswers = () => {
         targetSubjectId: respondentId,
         fromDatetime,
         toDatetime,
-        emptyIdentifiers: !filterByIdentifier,
-        identifiers: selectedIdentifiers,
+        emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
+        ...(selectedIdentifiers?.length && { identifiers: selectedIdentifiers }),
         versions: versions.map(({ id }) => id),
       };
 

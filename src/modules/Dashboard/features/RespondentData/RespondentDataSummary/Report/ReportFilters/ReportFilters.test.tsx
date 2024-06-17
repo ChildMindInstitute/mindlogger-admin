@@ -12,8 +12,8 @@ import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
 
-import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
 import { ReportFilters } from './ReportFilters';
 
 const identifiers = [
@@ -116,9 +116,9 @@ describe('ReportFilters', () => {
   test('check if the startDate is greater than the endDate, then the endDate should be updated', async () => {
     await act(async () => {
       renderWithProviders(
-        <DataSummaryContext.Provider value={{ selectedEntity: mockedActivity }}>
+        <RespondentDataContext.Provider value={{ selectedEntity: mockedActivity }}>
           <FormComponent />
-        </DataSummaryContext.Provider>,
+        </RespondentDataContext.Provider>,
       );
     });
 
@@ -173,9 +173,9 @@ describe('ReportFilters', () => {
 
     await act(async () => {
       renderWithProviders(
-        <DataSummaryContext.Provider value={{ selectedEntity: mockedActivity }}>
+        <RespondentDataContext.Provider value={{ selectedEntity: mockedActivity }}>
           <FormComponent />
-        </DataSummaryContext.Provider>,
+        </RespondentDataContext.Provider>,
         route,
         routePath,
       );
@@ -189,9 +189,8 @@ describe('ReportFilters', () => {
         `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
         {
           params: {
-            emptyIdentifiers: false,
+            emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
-            identifiers: '',
             targetSubjectId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
@@ -209,9 +208,9 @@ describe('ReportFilters', () => {
       .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
 
     renderWithProviders(
-      <DataSummaryContext.Provider value={{ selectedEntity: mockedFlow }}>
+      <RespondentDataContext.Provider value={{ selectedEntity: mockedFlow }}>
         <FormComponent />
-      </DataSummaryContext.Provider>,
+      </RespondentDataContext.Provider>,
       route,
       routePath,
     );
@@ -224,9 +223,8 @@ describe('ReportFilters', () => {
         `/answers/applet/${mockedAppletId}/flows/${mockedFlow.id}/submissions`,
         {
           params: {
-            emptyIdentifiers: false,
+            emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
-            identifiers: '',
             targetSubjectId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
