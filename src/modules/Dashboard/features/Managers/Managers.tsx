@@ -230,9 +230,6 @@ export const Managers = () => {
       if (searchValue) {
         return t('noMatchWasFound', { searchValue });
       }
-      if (!canViewTeam) {
-        return t('noPermissions');
-      }
 
       return appletId ? t('noManagersForApplet') : t('noManagers');
     }
@@ -256,13 +253,15 @@ export const Managers = () => {
         {/* TODO: Add sorting/filtering (https://mindlogger.atlassian.net/browse/M2-5608) */}
 
         <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>
-          <Search
-            withDebounce
-            placeholder={t('searchTeam')}
-            onSearch={handleSearch}
-            sx={{ width: '32rem' }}
-            data-testid={`${dataTestId}-search`}
-          />
+          {canViewTeam && (
+            <Search
+              withDebounce
+              placeholder={t('searchTeam')}
+              onSearch={handleSearch}
+              sx={{ width: '32rem' }}
+              data-testid={`${dataTestId}-search`}
+            />
+          )}
 
           {!!appletId && (
             <Button
@@ -276,15 +275,19 @@ export const Managers = () => {
         </StyledFlexWrap>
       </StyledFlexWrap>
 
-      <DashboardTable
-        columns={getHeadCells(managersData?.orderingFields, appletId)}
-        rows={rows}
-        keyExtractor={({ id }) => `row-${id.value}`}
-        emptyComponent={renderEmptyComponent()}
-        count={managersData?.count || 0}
-        data-testid={`${dataTestId}-table`}
-        {...tableProps}
-      />
+      {canViewTeam ? (
+        <DashboardTable
+          columns={getHeadCells(managersData?.orderingFields, appletId)}
+          rows={rows}
+          keyExtractor={({ id }) => `row-${id.value}`}
+          emptyComponent={renderEmptyComponent()}
+          count={managersData?.count || 0}
+          data-testid={`${dataTestId}-table`}
+          {...tableProps}
+        />
+      ) : (
+        noPermissionsComponent
+      )}
       {selectedManager && (
         <>
           {removeAccessPopupVisible && (
