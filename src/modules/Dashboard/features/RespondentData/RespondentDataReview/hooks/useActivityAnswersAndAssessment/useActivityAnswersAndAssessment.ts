@@ -135,12 +135,12 @@ export const useActivityAnswersAndAssessment = ({
       let assessmentResult;
       if (flowId && submitId) {
         await getFlowAnswers({ appletId, flowId, submitId });
-        const reponse = await getFlowAssessmentApi({ appletId, submitId });
-        assessmentResult = reponse?.data?.result;
+        const response = await getFlowAssessmentApi({ appletId, submitId });
+        assessmentResult = response?.data?.result;
       } else if (activityId && answerId) {
         await getActivityAnswer({ appletId, answerId, activityId });
-        const reponse = await getAssessmentApi({ appletId, answerId });
-        assessmentResult = reponse?.data?.result;
+        const response = await getAssessmentApi({ appletId, answerId });
+        assessmentResult = response?.data?.result;
       }
 
       if (!assessmentResult) {
