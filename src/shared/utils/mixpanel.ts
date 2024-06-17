@@ -30,7 +30,10 @@ export const Mixpanel = {
     if (shouldEnableMixpanel) {
       const { default: mixpanel } = await import('mixpanel-browser');
       mixpanel.identify(userId);
-      mixpanel.people.set({ 'User ID': userId });
+      mixpanel.people.set({
+        'User ID': userId,
+        'App Build Number': process.env.REACT_APP_DEVELOP_BUILD_VERSION,
+      });
     }
   },
   async logout() {
