@@ -73,9 +73,17 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const warningMessageValueCondition =
-    !!value && (enableParticipantMultiInformant ? !value.userId : value.tag !== 'Team');
-  const shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
+  let shouldShowWarningMessage = false;
+
+  // We only potentially show the warning when there is a value
+  if (value) {
+    const hasFullAccount = !!value.userId;
+    const isTeamMember = value.tag === 'Team';
+    const warningMessageValueCondition = enableParticipantMultiInformant
+      ? !hasFullAccount
+      : !isTeamMember;
+    shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
+  }
 
   let groupBy: LabeledUserDropdownProps['groupBy'];
 
@@ -193,7 +201,7 @@ export const LabeledUserDropdown = ({
         {...rest}
       />
       {shouldShowWarningMessage && (
-        <StyledWarningMessageContainer>
+        <StyledWarningMessageContainer data-testid={`${rest['data-testid']}-warning-message`}>
           <Box width={24} height={24}>
             <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
           </Box>
