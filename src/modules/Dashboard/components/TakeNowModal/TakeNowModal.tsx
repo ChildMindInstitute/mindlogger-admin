@@ -11,6 +11,8 @@ import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { checkIfFullAccess, joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
+import { Manager, Respondent } from 'modules/Dashboard/types';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   OpenTakeNowModalOptions,
@@ -21,7 +23,6 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
-import { Manager, Respondent } from '../../types';
 
 const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.SuperAdmin,
@@ -29,13 +30,17 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.Manager,
 ] as const;
 
-type SearchType = 'team' | 'participant';
+type AnyTeamSearchType = 'team' | 'any-participant';
+type FullTeamSearchType = 'team' | 'full-participant';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
+  const {
+    featureFlags: { enableParticipantMultiInformant },
+  } = useFeatureFlags();
 
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
@@ -79,24 +84,25 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     },
   );
 
-  const { execute: fetchLoggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const loggedInTeamMember = participantToOption(
-          (response.data as ParticipantsData).result[0],
-        );
+  const {
+    execute: fetchLoggedInTeamMember,
+    isLoading: isFetchingLoggedInTeamMember,
+    value: loggedInTeamMemberResponse,
+  } = useAsync(getWorkspaceRespondentsApi, (response) => {
+    if (response?.data) {
+      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
+      if (!enableParticipantMultiInformant) {
         setDefaultSourceSubject(loggedInTeamMember);
-        setAllParticipants((prev) => {
-          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-            return prev;
-          }
-
-          return [loggedInTeamMember, ...prev];
-        });
       }
-    },
-  );
+      setAllParticipants((prev) => {
+        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+          return prev;
+        }
+
+        return [loggedInTeamMember, ...prev];
+      });
+    }
+  });
 
   const allowedTeamMembers = useMemo(
     () =>
@@ -109,6 +115,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const participantsOnly = useMemo(
     () => allParticipants.filter((participant) => participant.tag !== 'Team'),
     [allParticipants],
+  );
+
+  const fullAccountParticipantsOnly = useMemo(
+    () => participantsOnly.filter((participant) => !!participant.userId),
+    [participantsOnly],
   );
 
   const teamMembersOnly = useMemo(
@@ -124,6 +135,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const participantsAndTeamMembers = useMemo(
     () => [...teamMembersOnly, ...participantsOnly],
     [participantsOnly, teamMembersOnly],
+  );
+
+  const fullAccountParticipantsAndTeamMembers = useMemo(
+    () => [...teamMembersOnly, ...fullAccountParticipantsOnly],
+    [fullAccountParticipantsOnly, teamMembersOnly],
   );
 
   useEffect(() => {
@@ -147,7 +163,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
       }
 
-      if (userData && defaultSourceSubject === null && !isFetchingLoggedInTeamMember) {
+      if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
         fetchLoggedInTeamMember({
           params: {
             ownerId,
@@ -164,7 +180,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     userData,
     allParticipants,
     allTeamMembers,
-    defaultSourceSubject,
+    loggedInTeamMemberResponse,
     isFetchingParticipants,
     isFetchingManagers,
     isFetchingLoggedInTeamMember,
@@ -211,12 +227,24 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       }
     }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
 
+    /**
+     * Handle participant search. It can be a combination of team members and any participants
+     * (full account, pending, and limited), or just team members and full account participants
+     */
     const handleSearch = useCallback(
       async (
         query: string,
-        types: [SearchType, ...SearchType[]],
+        types:
+          | [AnyTeamSearchType, ...AnyTeamSearchType[]]
+          | [FullTeamSearchType, ...FullTeamSearchType[]],
       ): Promise<ParticipantDropdownOption[]> => {
         const requests = [];
+
+        // @ts-expect-error Yes, the array can in fact contain this value
+        const isAnyParticipant = types.includes('any-participant');
+
+        // @ts-expect-error Yes, the array can in fact contain this value
+        const isFullParticipant = types.includes('full-participant');
 
         if (types.includes('team')) {
           requests.push(
@@ -231,7 +259,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           );
         }
 
-        if (types.includes('participant')) {
+        if (isAnyParticipant) {
           requests.push(
             getWorkspaceRespondentsApi({
               params: {
@@ -239,6 +267,18 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 appletId,
                 search: query,
                 limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        } else if (isFullParticipant) {
+          requests.push(
+            getWorkspaceRespondentsApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+                shell: isFullParticipant ? false : undefined,
               },
             }),
           );
@@ -256,13 +296,15 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           (participantsResponse?.data?.result as Respondent[]) ?? [];
 
         // If there are team members in the search results, we only want to show them if they are allowed
-        return participantsSearchResults
-          .map(participantToOption)
-          .filter(
-            (participant) =>
-              participant.tag !== 'Team' ||
-              allowedTeamMembersSearchResults.some((manager) => manager.id === participant.userId),
-          );
+        return participantsSearchResults.map(participantToOption).filter((participant) => {
+          if (participant.tag !== 'Team') {
+            return isAnyParticipant || !!participant.userId;
+          } else {
+            return allowedTeamMembersSearchResults.some(
+              (manager) => manager.id === participant.userId,
+            );
+          }
+        });
       },
       [],
     );
@@ -304,21 +346,33 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   options={participantsAndTeamMembers}
                   onChange={(option) => {
                     setSourceSubject(option);
-                    if (option) {
-                      setIsSelfReporting(option.tag === 'Team');
-                    }
+
+                    const selfReportingCondition =
+                      !option ||
+                      (enableParticipantMultiInformant ? !!option.userId : option.tag === 'Team');
+
+                    setIsSelfReporting(selfReportingCondition);
                   }}
-                  data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+                  data-testid={`${dataTestId}-take-now-modal-source-subject-dropdown`}
+                  handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
                   canShowWarningMessage={true}
                   showGroups={true}
                 />
                 <FormControlLabel
-                  control={<Checkbox sx={{ margin: 0, width: 48, height: 48 }} />}
+                  control={
+                    <Checkbox
+                      sx={{ margin: 0, width: 48, height: 48 }}
+                      data-testid={`${dataTestId}-take-now-modal-participant-self-report-checkbox`}
+                    />
+                  }
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => setIsSelfReporting(checked)}
-                  disabled={sourceSubject?.tag !== 'Team'}
+                  disabled={
+                    enableParticipantMultiInformant
+                      ? !sourceSubject?.userId
+                      : sourceSubject?.tag !== 'Team'
+                  }
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>
@@ -329,10 +383,23 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
-                  options={teamMembersOnly}
+                  options={
+                    enableParticipantMultiInformant
+                      ? fullAccountParticipantsAndTeamMembers
+                      : teamMembersOnly
+                  }
                   onChange={setLoggedInUser}
-                  data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team'])}
+                  data-testid={`${dataTestId}-take-now-modal-logged-in-user-dropdown`}
+                  handleSearch={(query) => {
+                    const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = [
+                      'team',
+                    ];
+                    if (enableParticipantMultiInformant) {
+                      participantSearchTypes.push('full-participant');
+                    }
+
+                    return handleSearch(query, participantSearchTypes);
+                  }}
                   showGroups={true}
                 />
               )}
@@ -344,8 +411,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               value={targetSubject}
               options={participantsAndTeamMembers}
               onChange={setTargetSubject}
-              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-              handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+              data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
+              handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
           </StyledFlexColumn>
         </StyledFlexColumn>

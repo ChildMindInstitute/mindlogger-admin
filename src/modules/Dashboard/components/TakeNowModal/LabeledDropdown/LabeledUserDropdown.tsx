@@ -13,6 +13,7 @@ import {
   variables,
 } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
 import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
@@ -33,10 +34,13 @@ export const LabeledUserDropdown = ({
   showGroups,
   ...rest
 }: LabeledUserDropdownProps) => {
-  const { t } = useTranslation('app');
+  const { t, i18n } = useTranslation('app');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
+  const {
+    featureFlags: { enableParticipantMultiInformant },
+  } = useFeatureFlags();
 
   const debouncedSearchHandler = useCallback(
     (search: string) => {
@@ -69,7 +73,17 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && value.tag !== 'Team';
+  let shouldShowWarningMessage = false;
+
+  // We only potentially show the warning when there is a value
+  if (value) {
+    const hasFullAccount = !!value.userId;
+    const isTeamMember = value.tag === 'Team';
+    const warningMessageValueCondition = enableParticipantMultiInformant
+      ? !hasFullAccount
+      : !isTeamMember;
+    shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
+  }
 
   let groupBy: LabeledUserDropdownProps['groupBy'];
 
@@ -133,6 +147,7 @@ export const LabeledUserDropdown = ({
               },
               ...props,
             }}
+            data-testid={`${rest['data-testid']}-option-${id}`}
           />
         )}
         isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -158,13 +173,18 @@ export const LabeledUserDropdown = ({
           );
         }}
         getOptionLabel={(value) => {
-          if (value.tag === 'Team') {
-            return `${value.nickname} (${value.tag})`;
+          let translatedTag = '';
+          if (value.tag) {
+            translatedTag = i18n.exists(`participantTag.${value.tag}`)
+              ? ` (${t(`participantTag.${value.tag}`)})`
+              : ` (${value.tag})`;
           }
 
-          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${
-            value.tag ? ` (${value.tag})` : ''
-          }`;
+          if (value.tag === 'Team') {
+            return `${value.nickname}${translatedTag}`;
+          }
+
+          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${translatedTag}`;
         }}
         disabled={disabled}
         popupIcon={
@@ -187,7 +207,7 @@ export const LabeledUserDropdown = ({
         {...rest}
       />
       {shouldShowWarningMessage && (
-        <StyledWarningMessageContainer>
+        <StyledWarningMessageContainer data-testid={`${rest['data-testid']}-warning-message`}>
           <Box width={24} height={24}>
             <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
           </Box>
