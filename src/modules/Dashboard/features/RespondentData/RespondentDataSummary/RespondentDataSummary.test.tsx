@@ -10,9 +10,9 @@ import { MAX_LIMIT } from 'shared/consts';
 
 import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
 import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
-import { InnerRespondentDataSummary } from './RespondentDataSummary';
-import { DataSummaryContext } from './DataSummaryContext/DataSummaryContext.context';
-import { DataSummaryContextType } from './DataSummaryContext/DataSummaryContext.types';
+import { RespondentDataSummary } from './RespondentDataSummary';
+import { RespondentDataContext } from '../RespondentDataContext/RespondentDataContext.context';
+import { RespondentDataContextType } from '../RespondentDataContext/RespondentDataContext.types';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
@@ -52,6 +52,7 @@ const mockedSummaryFlows = [
     lastAnswerDate: null,
   },
 ];
+const mockedSetSelectedEntity = jest.fn();
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
@@ -106,13 +107,13 @@ const emptyStateCases = [
   },
 ];
 
-const renderComponent = (context: Partial<DataSummaryContextType>) =>
+const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(
     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    <DataSummaryContext.Provider value={context}>
-      <InnerRespondentDataSummary />
-    </DataSummaryContext.Provider>,
+    <RespondentDataContext.Provider value={context}>
+      <RespondentDataSummary />
+    </RespondentDataContext.Provider>,
     {
       route,
       routePath,
@@ -145,24 +146,16 @@ describe('RespondentDataSummary component', () => {
         selectedEntity,
         summaryActivities: mockedSummaryActivities,
         summaryFlows: mockedSummaryFlows,
+        setSelectedEntity: mockedSetSelectedEntity,
       });
 
       testEmptyState(expectedEmptyStateMessage);
     },
   );
 
-  test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {
-    const mockGetIdentifiersVersions = jest.fn();
-    const mockFetchAnswers = jest.fn();
+  test('should fetch activities and flows', async () => {
     const mockedSetSummaryActivities = jest.fn();
     const mockedSetSummaryFlows = jest.fn();
-    const mockedSetSelectedEntity = jest.fn();
-    jest
-      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
-      .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
-    jest
-      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
-      .mockReturnValue({ fetchAnswers: mockFetchAnswers });
 
     mockAxios.get.mockResolvedValueOnce({
       data: {
@@ -212,13 +205,31 @@ describe('RespondentDataSummary component', () => {
     //set activities and flows
     expect(mockedSetSummaryFlows).toHaveBeenCalledWith(mockedSummaryFlows);
     expect(mockedSetSummaryActivities).toHaveBeenCalledWith(mockedSummaryActivities);
+  });
 
-    //select activity with the last answer date
-    const selectedActivity = {
-      ...mockedSummaryActivities[1],
-      isFlow: false,
+  test('should choose the activity or flow with latest answers and fetch answers for it', async () => {
+    const mockGetIdentifiersVersions = jest.fn();
+    const mockFetchAnswers = jest.fn();
+    jest
+      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
+      .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
+    jest
+      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
+      .mockReturnValue({ fetchAnswers: mockFetchAnswers });
+
+    renderComponent({
+      selectedEntity: null,
+      summaryActivities: mockedSummaryActivities,
+      summaryFlows: mockedSummaryFlows,
+      setSelectedEntity: mockedSetSelectedEntity,
+    });
+
+    //select entity with the last answer date
+    const selectedEntity = {
+      ...mockedSummaryFlows[0],
+      isFlow: true,
     };
-    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(selectedActivity);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(selectedEntity);
 
     //set startDate end endDate to 1 week from the most recent response
     const expectedEndDate = endOfDay(new Date('2023-10-27'));
@@ -226,9 +237,11 @@ describe('RespondentDataSummary component', () => {
     expect(mockedSetValue).toHaveBeenCalledWith('startDate', expectedStartDate);
     expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
 
-    expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
-      entity: selectedActivity,
+    await waitFor(() => {
+      expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
+        entity: selectedEntity,
+      });
+      expect(mockFetchAnswers).toHaveBeenCalledWith({ entity: selectedEntity });
     });
-    expect(mockFetchAnswers).toHaveBeenCalledWith({ entity: selectedActivity });
   });
 });

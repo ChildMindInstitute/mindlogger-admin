@@ -10,13 +10,13 @@ import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { setDateRangeFormValues } from './utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../RespondentData.types';
-import { getActivityWithLatestAnswer } from '../RespondentData.utils';
+import { getConcatenatedEntities, getEntityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
 import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
-import { DataSummaryContextProvider, useDataSummaryContext } from './DataSummaryContext';
+import { useRespondentDataContext } from '../RespondentDataContext';
 
-export const InnerRespondentDataSummary = () => {
+export const RespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();
   const {
     summaryActivities,
@@ -25,7 +25,7 @@ export const InnerRespondentDataSummary = () => {
     setSummaryFlows,
     selectedEntity,
     setSelectedEntity,
-  } = useDataSummaryContext();
+  } = useRespondentDataContext();
   const requestBody = useMemo(() => {
     if (!appletId || !respondentId) return null;
 
@@ -45,22 +45,6 @@ export const InnerRespondentDataSummary = () => {
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
     const summaryActivities = result?.data?.result || [];
     setSummaryActivities(summaryActivities);
-    if (selectedEntity) return;
-
-    const selectedActivityByDefault = {
-      ...(getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0]),
-      isFlow: false,
-    };
-
-    if (!selectedActivityByDefault) return;
-
-    setSelectedEntity(selectedActivityByDefault);
-    setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
-
-    setIsLoading(true);
-    await getIdentifiersVersions({ entity: selectedActivityByDefault });
-    await fetchAnswers({ entity: selectedActivityByDefault });
-    setIsLoading(false);
   });
 
   const { execute: getSummaryFlows } = useAsync(getSummaryFlowsApi, async (result) => {
@@ -79,6 +63,32 @@ export const InnerRespondentDataSummary = () => {
 
     getSummaryActivities(requestBody);
   }, [requestBody, summaryActivitiesLength, getSummaryActivities]);
+
+  useEffect(() => {
+    (async () => {
+      if (selectedEntity || !summaryActivitiesLength || !summaryFlowsLength) return;
+
+      const summaryEntities = getConcatenatedEntities({
+        activities: summaryActivities,
+        flows: summaryFlows,
+      });
+
+      const selectedEntityByDefault = {
+        ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
+      };
+
+      if (!selectedEntityByDefault) return;
+
+      setSelectedEntity(selectedEntityByDefault);
+      setDateRangeFormValues(setValue, selectedEntityByDefault.lastAnswerDate);
+
+      setIsLoading(true);
+      await getIdentifiersVersions({ entity: selectedEntityByDefault });
+      await fetchAnswers({ entity: selectedEntityByDefault });
+      setIsLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedEntity, summaryActivitiesLength, summaryFlowsLength]);
 
   return (
     <StyledContainer>
@@ -99,9 +109,3 @@ export const InnerRespondentDataSummary = () => {
     </StyledContainer>
   );
 };
-
-export const RespondentDataSummary = () => (
-  <DataSummaryContextProvider>
-    <InnerRespondentDataSummary />
-  </DataSummaryContextProvider>
-);
