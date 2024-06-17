@@ -5,10 +5,10 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
 import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
 import { MAX_LIMIT } from 'shared/consts';
 
 import { useRespondentAnswers } from './useRespondentAnswers';
-import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
 
 const mockedUseParams = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -65,7 +65,7 @@ const renderHookWithContext = () => {
     result: { current },
   } = renderHook(() => useRespondentAnswers(), {
     wrapper: ({ children }) => (
-      <DataSummaryContext.Provider
+      <RespondentDataContext.Provider
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         value={{
@@ -79,7 +79,7 @@ const renderHookWithContext = () => {
         }}
       >
         {children}
-      </DataSummaryContext.Provider>
+      </RespondentDataContext.Provider>
     ),
   });
 

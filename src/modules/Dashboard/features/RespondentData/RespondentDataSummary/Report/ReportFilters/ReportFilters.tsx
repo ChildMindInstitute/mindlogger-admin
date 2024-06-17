@@ -8,6 +8,7 @@ import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
@@ -19,7 +20,6 @@ import {
   ReportFiltersProps,
 } from './ReportFilters.types';
 import { MIN_DATE } from './ReportFilters.const';
-import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const ReportFilters = ({
   identifiers = [],
@@ -29,7 +29,7 @@ export const ReportFilters = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useFormContext();
   const { fetchAnswers } = useRespondentAnswers();
-  const { selectedEntity } = useDataSummaryContext();
+  const { selectedEntity } = useRespondentDataContext();
 
   const [moreFiltersVisible, filterByIdentifier, startDate, endDate]: [
     boolean,

@@ -10,16 +10,16 @@ import {
   Version,
 } from 'api';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 
 import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
 import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
-import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const useDatavizSummaryRequests = () => {
   const { appletId, respondentId } = useParams();
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const { setIdentifiers, setApiVersions } = useDataSummaryContext();
+  const { setIdentifiers, setApiVersions } = useRespondentDataContext();
 
   const setDecryptedIdentifiers = async (identifiers: Identifier[]) => {
     if (!getDecryptedIdentifiers) return;

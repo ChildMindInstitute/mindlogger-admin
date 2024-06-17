@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { StyledBodyLarge, variables } from 'shared/styles';
 
 import { StyledMenu } from '../../RespondentData.styles';
+import { useRespondentDataContext } from '../../RespondentDataContext';
 import { setDateRangeFormValues } from '../utils/setDateRangeValues';
 import { ActivityOrFlow, RespondentsDataFormValues } from '../../RespondentData.types';
 import { StyledContainer, StyledItem, StyledTitle } from './ReportMenu.styles';
 import { setDefaultFormValues } from './ReportMenu.utils';
 import { ReportMenuProps } from './ReportMenu.types';
 import { StickyHeader } from './StickyHeader';
-import { useDataSummaryContext } from '../DataSummaryContext';
 
 export const ReportMenu = ({
   activities,
@@ -23,7 +23,7 @@ export const ReportMenu = ({
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const { selectedEntity, setSelectedEntity } = useDataSummaryContext();
+  const { selectedEntity, setSelectedEntity } = useRespondentDataContext();
 
   const handleSelectEntity = async (entity: ActivityOrFlow) => {
     setSelectedEntity(entity);

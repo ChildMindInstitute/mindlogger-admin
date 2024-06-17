@@ -8,8 +8,8 @@ import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 
 import { Report } from './Report';
-import { DataSummaryContext } from '../DataSummaryContext/DataSummaryContext.context';
-import { DataSummaryContextType } from '../DataSummaryContext/DataSummaryContext.types';
+import { RespondentDataContext } from '../../RespondentDataContext/RespondentDataContext.context';
+import { RespondentDataContextType } from '../../RespondentDataContext/RespondentDataContext.types';
 import { ActivityCompletion, ResponseOption } from '../../RespondentData.types';
 
 const preloadedState = {
@@ -149,9 +149,9 @@ jest.mock('./ResponseOptions', () => ({
 
 jest.mock('downloadjs', () => jest.fn());
 
-const renderComponent = (context: Partial<DataSummaryContextType>) =>
+const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(
-    <DataSummaryContext.Provider
+    <RespondentDataContext.Provider
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       value={{
@@ -164,7 +164,7 @@ const renderComponent = (context: Partial<DataSummaryContextType>) =>
       }}
     >
       <Report />
-    </DataSummaryContext.Provider>,
+    </RespondentDataContext.Provider>,
     {
       route,
       routePath,
