@@ -23,14 +23,15 @@ export const ReportTable = ({
   const [orderBy, setOrderBy] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
-  const emptyState = t('noMatchWasFound', { searchValue });
+  const emptyState = searchValue ? t('noMatchWasFound', { searchValue }) : t('noData');
 
   const handleSearch = (searchValue: string) => {
+    setPage(1);
     setSearchValue(searchValue);
   };
 
   const handleChangePage = (_: unknown, page: number) => {
-    setPage(page);
+    setPage(page + 1);
   };
 
   const handleRequestSort = (_: unknown, property: string) => {
@@ -48,7 +49,7 @@ export const ReportTable = ({
     [t],
   );
 
-  const { visibleRows, columns } = useResponseData({
+  const { visibleRows, columns, count } = useResponseData({
     responseType,
     answers,
     searchValue,
@@ -70,7 +71,7 @@ export const ReportTable = ({
           columns={columns}
           handleRequestSort={handleRequestSort}
           handleChangePage={handleChangePage}
-          count={answers.length}
+          count={count}
           emptyComponent={visibleRows.length ? undefined : emptyState}
           maxHeight="37.5rem"
         />

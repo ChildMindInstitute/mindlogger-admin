@@ -12,7 +12,7 @@ import {
 } from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = <T = unknown,>({
+export const Actions = <T,>({
   items,
   context,
   visibleByDefault = false,

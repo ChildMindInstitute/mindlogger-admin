@@ -26,6 +26,8 @@ export const TimePicker = <T extends FieldValues>({
   onCustomChange,
   defaultTime = DEFAULT_TIME,
   'data-testid': dataTestid,
+  placeholder,
+  inputSx = {},
 }: TimePickerProps<T>) => {
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -51,7 +53,7 @@ export const TimePicker = <T extends FieldValues>({
       control={control}
       name={name}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const selected = value ? parse(value, DateFormats.Time, new Date()) : null;
+        const selected = value ? parse(value, DateFormats.Time, new Date()) : value;
 
         return (
           <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
@@ -69,6 +71,8 @@ export const TimePicker = <T extends FieldValues>({
                 timeFormat={format}
                 minTime={minTime}
                 maxTime={maxTime}
+                placeholderText={placeholder}
+                autoComplete="off"
                 customInput={
                   <TextField
                     variant="outlined"
@@ -84,6 +88,7 @@ export const TimePicker = <T extends FieldValues>({
                           <Svg id="clock" />
                         </StyledIcon>
                       ),
+                      sx: { ...inputSx },
                     }}
                   />
                 }

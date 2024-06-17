@@ -95,7 +95,7 @@ export const ReportFilters = ({
             minDate={MIN_DATE}
             name="startDate"
             control={control}
-            inputSx={{ width: '19rem' }}
+            inputWrapperSx={{ width: '19rem' }}
             onCloseCallback={() => onFiltersChange({ type: FiltersChangeType.StartDate })}
             label={t('startDate')}
             disabled={false}
@@ -106,7 +106,7 @@ export const ReportFilters = ({
             minDate={startDate}
             name="endDate"
             control={control}
-            inputSx={{ width: '19rem' }}
+            inputWrapperSx={{ width: '19rem' }}
             onCloseCallback={() => onFiltersChange({ type: FiltersChangeType.EndDate })}
             label={t('endDate')}
             disabled={false}
