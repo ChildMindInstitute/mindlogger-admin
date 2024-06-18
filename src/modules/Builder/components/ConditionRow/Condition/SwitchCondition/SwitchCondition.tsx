@@ -49,7 +49,7 @@ export const SwitchCondition = ({
     isRangeValueShown,
     dataTestid,
   };
-  const coomonSingleMultiScoreConditionProps = {
+  const commonSingleMultiScoreConditionProps = {
     children,
     payloadName,
     valueOptions,
@@ -76,7 +76,7 @@ export const SwitchCondition = ({
     case ConditionItemType.ScoreCondition: {
       return (
         <SingleMultiScoreCondition
-          {...coomonSingleMultiScoreConditionProps}
+          {...commonSingleMultiScoreConditionProps}
           selectedItem={selectedItem}
         />
       );
@@ -95,7 +95,7 @@ export const SwitchCondition = ({
             disabled={!isItemSelected}
           />
           <SingleMultiScoreCondition
-            {...coomonSingleMultiScoreConditionProps}
+            {...commonSingleMultiScoreConditionProps}
             selectedItem={selectedItem}
           />
         </>

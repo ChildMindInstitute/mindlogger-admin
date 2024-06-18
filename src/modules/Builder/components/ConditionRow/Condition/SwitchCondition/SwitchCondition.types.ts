@@ -1,10 +1,6 @@
 import { ReactNode } from 'react';
 
-
-import {
-  ConditionItem,
-  ConditionProps,
-} from '../Condition.types';
+import { ConditionItem, ConditionProps } from '../Condition.types';
 
 export type SwitchConditionProps = {
   selectedItem?: ConditionItem;
