@@ -15,7 +15,7 @@ import {
   Svg,
 } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
+import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
 import {
   GetAppletsParams,
@@ -60,7 +60,7 @@ import {
   RemoveRespondentPopup,
   ScheduleSetupPopup,
   SendInvitationPopup,
-  ViewDataPopup,
+  ViewParticipantPopup,
 } from './Popups';
 
 export const Respondents = () => {
@@ -131,9 +131,6 @@ export const Respondents = () => {
   const [invitationPopupVisible, setInvitationPopupVisible] = useState(false);
   const [respondentEmail, setRespondentEmail] = useState<null | string>(null);
 
-  const { getAppletPrivateKey } = useEncryptionStorage();
-  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
-
   const getChosenAppletData = ({
     respondentId = null,
     respondentOrSubjectId,
@@ -198,14 +195,14 @@ export const Respondents = () => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
-      if (hasEncryptionCheck && appletId) {
+      if (appletId) {
         const chosenAppletData = getChosenAppletData({
           respondentOrSubjectId,
           key: FilteredAppletsKey.Viewable,
         });
 
         navigate(
-          generatePath(page.appletParticipantDataSummary, {
+          generatePath(page.appletParticipantActivities, {
             appletId,
             subjectId: chosenAppletData?.subjectId,
           }),
@@ -518,7 +515,7 @@ export const Respondents = () => {
         />
       )}
       {viewDataPopupVisible && (
-        <ViewDataPopup
+        <ViewParticipantPopup
           popupVisible={viewDataPopupVisible}
           setPopupVisible={setViewDataPopupVisible}
           tableRows={viewableAppletsSmallTableRows}

@@ -75,7 +75,7 @@ describe('Notification', () => {
     fireEvent.click(screen.getByTestId(`notification-${mockedAlert.id}`));
     expect(mockedSetCurrentId).toBeCalledWith('');
   });
-  test('should navigate when click on response data button', async () => {
+  test('should navigate when click on response data button without existed encryption', async () => {
     const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('');
     jest
       .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
@@ -97,8 +97,11 @@ describe('Notification', () => {
     expect(button).toBeInTheDocument();
     await userEvent.click(button);
 
-    expect(screen.getByTestId('notification-password-popup')).toBeInTheDocument();
+    expect(mockedUseNavigate).toBeCalledWith(
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}`,
+    );
   });
+
   test('should navigate when click on response data button with existed encryption', async () => {
     const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('123');
     jest
@@ -122,7 +125,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}/dataviz/summary`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}`,
     );
   });
 });

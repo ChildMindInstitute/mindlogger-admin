@@ -4,7 +4,7 @@ import { Row } from 'shared/components';
 
 import { ChosenAppletData } from '../../Respondents.types';
 
-export type ViewDataPopupProps = {
+export type ViewParticipantPopupProps = {
   popupVisible: boolean;
   setPopupVisible: Dispatch<SetStateAction<boolean>>;
   tableRows: Row[] | undefined;
