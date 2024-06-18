@@ -145,16 +145,19 @@ export const Managers = () => {
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
+        const isPending = filteredManager.status === 'pending';
         const { applets, email, firstName, lastName, title, roles, id } = user;
         const stringRoles = joinWihComma(roles);
         const appletRole = applets.find(({ id }) => id === appletId);
-        const renderedRoles = appletRole?.roles.map(({ role }) => (
-          <Chip
-            color="secondary"
-            key={role}
-            title={`${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`}
-          />
-        ));
+        const renderedRoles = appletRole?.roles.map(({ role }) => {
+          const color = isPending ? 'warning' : 'secondary';
+          let title = `${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`;
+          if (isPending) {
+            title = `${title} (${t('pending')})`;
+          }
+
+          return <Chip color={color} key={role} title={title} />;
+        });
 
         return {
           id: {
@@ -222,7 +225,7 @@ export const Managers = () => {
           },
         };
       }),
-    [managersData],
+    [managersData, t],
   );
 
   const renderEmptyComponent = () => {
