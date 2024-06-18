@@ -23,7 +23,7 @@ import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
 import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowContent } from './ItemFlowContent';
 
-export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProps) => {
+export const ItemFlow = ({ name, index, isStaticActive, onDuplicate, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');
   const [isExpanded, setExpanded] = useState(true);
   const [isStatic, setStatic] = useState(isStaticActive);
@@ -83,6 +83,7 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
           <ItemFlowActions
             name={itemName}
             onAdd={handleAddCondition}
+            onDuplicate={() => onDuplicate?.(index)}
             onRemove={onRemove}
             data-testid={dataTestid}
             open={isExpanded}
