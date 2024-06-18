@@ -38,6 +38,7 @@ import {
 import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
 
 import {
   getActivityItems,
@@ -368,7 +369,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       'Applet ID': appletId,
     });
 
-    if (isLogoutInProgress) {
+    if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
       dispatch(auth.actions.endLogout());
     }
@@ -447,6 +448,20 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
   const handleAppletPasswordSubmit = async (password?: string) => {
     await sendRequest(password);
+  };
+
+  const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
+    await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
+      Mixpanel.track('Password added successfully', {
+        'Applet ID': appletId,
+      }),
+    );
+    setIsPasswordPopupOpened(false);
+
+    if (isLogoutInProgress) {
+      await handleLogout();
+      dispatch(auth.actions.endLogout());
+    }
   };
 
   const showSuccessBanner = (isUpdate?: boolean) => {
@@ -562,7 +577,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     appletEncryption,
     setIsPasswordPopupOpened,
     handleSaveAndPublishFirstClick,
-    handleAppletPasswordSubmit,
+    handleAppletPasswordSubmit: handlePasswordSubmit,
     handlePublishProcessOnClose,
     handlePublishProcessOnRetry: sendRequestWithPasswordCheck,
     handleSaveChangesDoNotSaveSubmit,

@@ -4,11 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Svg } from 'shared/components/Svg';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
-  AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton } from './SaveAndPublish.styles';
@@ -34,15 +32,6 @@ export const SaveAndPublish = () => {
   } = useSaveAndPublishSetup();
   const { appletId } = useParams();
 
-  const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
-    handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('Password added successfully', {
-        'Applet ID': appletId,
-      }),
-    );
-    setIsPasswordPopupOpened(false);
-  };
-
   return (
     <>
       <StyledButton
@@ -58,7 +47,7 @@ export const SaveAndPublish = () => {
         onClose={() => setIsPasswordPopupOpened(false)}
         popupType={AppletPasswordPopupType.Create}
         popupVisible={isPasswordPopupOpened}
-        submitCallback={handlePasswordSubmit}
+        submitCallback={handleAppletPasswordSubmit}
         encryption={appletEncryption}
         data-testid="builder-save-and-publish-password-popup"
       />
