@@ -84,7 +84,12 @@ export const AddParticipantPopup = ({
         },
       }),
     );
-    Mixpanel.track('Invitation sent successfully');
+
+    Mixpanel.track('Full Account invitation created successfully', {
+      applet_id: appletId,
+      tag: result.data?.result?.tag,
+    });
+
     handleClose(true);
   });
   const {
@@ -101,7 +106,12 @@ export const AddParticipantPopup = ({
         },
       }),
     );
-    Mixpanel.track('Shell account created successfully');
+
+    Mixpanel.track('Limited Account created successfully', {
+      applet_id: appletId,
+      tag: result.data?.result?.tag,
+    });
+
     handleClose(true);
   });
   const isLoading = isInvitationLoading || isShellAccountLoading;
@@ -114,10 +124,10 @@ export const AddParticipantPopup = ({
   const handleSubmitForm = (values: AddParticipantFormValues) => {
     if (!appletId) return;
 
-    const { email, nickname, ...rest } = values;
+    const { email, nickname, tag, ...rest } = values;
 
     if (isFullAccount) {
-      Mixpanel.track('Invitation submitted click');
+      Mixpanel.track('Full Account invitation form submitted', { applet_id: appletId, tag });
 
       createInvitation({
         url: 'respondent',
@@ -128,17 +138,19 @@ export const AddParticipantPopup = ({
           role: Roles.Respondent,
           workspacePrefix: '',
           subjects: [],
+          tag,
           ...rest,
         },
       });
     } else {
-      Mixpanel.track('Shell account submitted click');
+      Mixpanel.track('Add Limited Account form submitted', { applet_id: appletId, tag });
 
       createShellAccount({
         appletId,
         options: {
           email: email || null,
           nickname,
+          tag,
           ...rest,
         },
       });

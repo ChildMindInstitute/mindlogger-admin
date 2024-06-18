@@ -77,6 +77,11 @@ export const Participants = () => {
           return params;
         }
 
+        Mixpanel.track('Add Participant button clicked', {
+          applet_id: appletId,
+          via: 'Applet - Participants',
+        });
+
         return { ...params, showAddParticipant: true };
       },
       { replace: true },
