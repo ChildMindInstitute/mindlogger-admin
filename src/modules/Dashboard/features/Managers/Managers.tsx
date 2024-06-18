@@ -29,7 +29,7 @@ import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 
 import { AddManagerPopup, ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
-import { ManagersData } from './Managers.types';
+import { ManagersActions, ManagersData } from './Managers.types';
 import { getManagerActions, getHeadCells } from './Managers.utils';
 
 export const Managers = () => {
@@ -112,7 +112,7 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
-  const actions = {
+  const actions: ManagersActions = {
     removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setRemoveAccessPopupVisible(true);
@@ -120,6 +120,19 @@ export const Managers = () => {
     editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
+    },
+    copyEmailAddressAction: ({ context }: MenuActionProps<Manager>) => {
+      if (!context) return;
+      navigator.clipboard.writeText(context.email);
+    },
+    copyInvitationLinkAction: ({ context }: MenuActionProps<Manager>) => {
+      if (!context || !context.invitationKey) return;
+
+      const url = new URL(
+        `invitation/${context.invitationKey}`,
+        `${process.env.REACT_APP_WEB_URI}/`,
+      );
+      navigator.clipboard.writeText(url.toString());
     },
   };
 

@@ -4,6 +4,8 @@ import { MenuActionProps } from 'shared/components';
 export type ManagersActions = {
   removeAccessAction: ({ context }: MenuActionProps<Manager>) => void;
   editAccessAction: ({ context }: MenuActionProps<Manager>) => void;
+  copyEmailAddressAction: ({ context }: MenuActionProps<Manager>) => void;
+  copyInvitationLinkAction: ({ context }: MenuActionProps<Manager>) => void;
 };
 
 export type ManagersData = {

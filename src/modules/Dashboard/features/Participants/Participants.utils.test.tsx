@@ -228,7 +228,7 @@ describe('Participants utils tests', () => {
         summaryAction({
           email: mockedEmail,
           fullName: 'Jane Doe',
-          invitationDate: 'Oct 01, 2021, 00:00',
+          invitationDate: 'Oct 01, 2021 at 00:00',
         }),
         {
           type: MenuItemType.Divider,
@@ -256,7 +256,7 @@ describe('Participants utils tests', () => {
       const displayedActions = actions.filter((action) => action.isDisplayed);
 
       expect(displayedActions).toEqual([
-        summaryAction({ fullName: 'Jane Doe', dateAdded: 'Oct 01, 2021, 00:00' }),
+        summaryAction({ fullName: 'Jane Doe', dateAdded: 'Oct 01, 2021 at 00:00' }),
         {
           type: MenuItemType.Divider,
           isDisplayed: true,
@@ -305,7 +305,7 @@ describe('Participants utils tests', () => {
         summaryAction({
           email: mockedEmail,
           fullName: 'Jane Doe',
-          invitationDate: 'Oct 01, 2021, 00:00',
+          invitationDate: 'Oct 01, 2021 at 00:00',
         }),
         {
           type: MenuItemType.Divider,

@@ -188,6 +188,7 @@
   "assignActivity": "Attribuer l'activité",
   "assessment": "Évaluation",
   "at": "À",
+  "lowercaseAt": "à",
   "atTime": "À l'heure",
   "audio": "Audio",
   "audioExceedSize": "L'audio dépasse {{size}}",

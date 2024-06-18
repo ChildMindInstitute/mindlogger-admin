@@ -188,6 +188,7 @@
   "assignActivity": "Assign Activity",
   "assessment": "Assessment",
   "at": "At",
+  "lowercaseAt": "at",
   "atTime": "At time",
   "audio": "Audio",
   "audioExceedSize": "Audio is more than {{size}}",
