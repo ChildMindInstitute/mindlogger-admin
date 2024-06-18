@@ -12,13 +12,13 @@ import {
   SHOW_MORE_HEIGHT,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 import { FormattedResponses } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 
 import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from '../../RespondentDataSummary.const';
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
-import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const ResponseOptions = ({
   responseOptions,
@@ -26,7 +26,7 @@ export const ResponseOptions = ({
   flowResponsesIndex,
 }: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const { flowResponseOptionsCount } = useDataSummaryContext();
+  const { flowResponseOptionsCount } = useRespondentDataContext();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
   const isStaticActive =
     Object.values(responseOptions).length > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC ||

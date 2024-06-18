@@ -2,9 +2,9 @@ import { createContext } from 'react';
 
 import { nullReturnFunc } from 'shared/utils';
 
-import { DataSummaryContextType } from './DataSummaryContext.types';
+import { RespondentDataContextType } from './RespondentDataContext.types';
 
-export const DataSummaryContext = createContext<DataSummaryContextType>({
+export const RespondentDataContext = createContext<RespondentDataContextType>({
   identifiers: [],
   setIdentifiers: nullReturnFunc,
   apiVersions: [],

@@ -179,3 +179,10 @@ export type RespondentsDataFormValues = {
   versions: AutocompleteOption[];
   responseDate: null | Date;
 };
+
+export type GetConcatenatedEntities<T> = {
+  activities: T[];
+  flows: T[];
+};
+
+export type ConcatenatedEntitiesReturn<T> = Array<T & { isFlow: boolean }>;

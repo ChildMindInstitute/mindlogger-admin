@@ -5,7 +5,7 @@ import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/moc
 
 import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
-import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
+import { RespondentDataContext } from '../../../RespondentDataContext/RespondentDataContext.context';
 
 const mockedGetValues = jest.fn();
 const mockedSetValue = jest.fn();
@@ -30,7 +30,7 @@ const renderHookWithContext = () => {
     result: { current },
   } = renderHook(() => useDatavizSummaryRequests(), {
     wrapper: ({ children }) => (
-      <DataSummaryContext.Provider
+      <RespondentDataContext.Provider
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         value={{
@@ -39,7 +39,7 @@ const renderHookWithContext = () => {
         }}
       >
         {children}
-      </DataSummaryContext.Provider>
+      </RespondentDataContext.Provider>
     ),
   });
 

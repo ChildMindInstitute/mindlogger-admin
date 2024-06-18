@@ -5,8 +5,8 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { ReportMenu } from './ReportMenu';
 import { ReportMenuProps } from './ReportMenu.types';
-import { DataSummaryContext } from '../DataSummaryContext/DataSummaryContext.context';
-import { DataSummaryContextType } from '../DataSummaryContext/DataSummaryContext.types';
+import { RespondentDataContext } from '../../RespondentDataContext/RespondentDataContext.context';
+import { RespondentDataContextType } from '../../RespondentDataContext/RespondentDataContext.types';
 
 jest.mock('shared/hooks/useRespondentLabel', () => ({
   useRespondentLabel: () => 'user: Jane Doe',
@@ -84,10 +84,10 @@ const mockedSetSelectedEntity = jest.fn();
 
 const renderReportMenu = (
   props?: Partial<ReportMenuProps>,
-  context?: Partial<DataSummaryContextType>,
+  context?: Partial<RespondentDataContextType>,
 ) =>
   render(
-    <DataSummaryContext.Provider
+    <RespondentDataContext.Provider
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       value={{
@@ -104,7 +104,7 @@ const renderReportMenu = (
         {...props}
       />
       ,
-    </DataSummaryContext.Provider>,
+    </RespondentDataContext.Provider>,
   );
 
 const testActivities = () => {

@@ -1,5 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
+import { DatavizEntity, Version } from 'modules/Dashboard/api';
+
 import {
   FlowSubmission,
   FlowResponses,
@@ -7,10 +9,9 @@ import {
   ResponseOption,
   ActivityOrFlow,
   Identifier,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
-import { DatavizEntity, Version } from 'modules/Dashboard/api';
+} from '../RespondentData.types';
 
-export type DataSummaryContextType = {
+export type RespondentDataContextType = {
   identifiers: Identifier[];
   setIdentifiers: Dispatch<SetStateAction<Identifier[]>>;
   apiVersions: Version[];
@@ -35,4 +36,4 @@ export type DataSummaryContextType = {
   setFlowResponseOptionsCount: Dispatch<SetStateAction<number>>;
 };
 
-export type DataSummaryContextProviderProps = { children: ReactNode };
+export type RespondentDataContextProps = { children: ReactNode };

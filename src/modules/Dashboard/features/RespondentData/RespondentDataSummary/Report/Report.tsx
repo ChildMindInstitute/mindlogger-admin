@@ -24,7 +24,7 @@ import { StyledEmptyReview } from '../RespondentDataSummary.styles';
 import { ReportHeader } from './ReportHeader';
 import { NoData } from './NoData';
 import { EntityResponses } from './EntitiyResponses';
-import { useDataSummaryContext } from '../DataSummaryContext';
+import { useRespondentDataContext } from '../../RespondentDataContext';
 
 export const Report = () => {
   const { t } = useTranslation('app');
@@ -40,7 +40,7 @@ export const Report = () => {
     flowResponses,
     identifiers,
     apiVersions,
-  } = useDataSummaryContext();
+  } = useRespondentDataContext();
 
   const versions: AutocompleteOption[] = useWatch({
     name: 'versions',

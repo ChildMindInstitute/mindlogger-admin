@@ -5,6 +5,5 @@ export type ReviewActivitiesAndFlowsProps = {
   submitId: string | null;
   appletId?: string;
   respondentId?: string;
-  shouldSetLastAnswer: boolean;
   handleSelectAnswer: OnSelectAnswer;
 };

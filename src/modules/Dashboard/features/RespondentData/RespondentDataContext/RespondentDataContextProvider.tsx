@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { DatavizEntity, Version } from 'modules/Dashboard/api';
+
 import {
   FlowSubmission,
   FlowResponses,
@@ -7,13 +9,11 @@ import {
   ResponseOption,
   ActivityOrFlow,
   Identifier,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
-import { DatavizEntity, Version } from 'modules/Dashboard/api';
+} from '../RespondentData.types';
+import { RespondentDataContext } from './RespondentDataContext.context';
+import { RespondentDataContextProps } from './RespondentDataContext.types';
 
-import { DataSummaryContext } from './DataSummaryContext.context';
-import { DataSummaryContextProviderProps } from './DataSummaryContext.types';
-
-export const DataSummaryContextProvider = ({ children }: DataSummaryContextProviderProps) => {
+export const RespondentDataContextProvider = ({ children }: RespondentDataContextProps) => {
   const [summaryActivities, setSummaryActivities] = useState<DatavizEntity[]>([]);
   const [summaryFlows, setSummaryFlows] = useState<DatavizEntity[]>([]);
   const [selectedEntity, setSelectedEntity] = useState<ActivityOrFlow | null>(null);
@@ -27,7 +27,7 @@ export const DataSummaryContextProvider = ({ children }: DataSummaryContextProvi
   const [apiVersions, setApiVersions] = useState<Version[]>([]);
 
   return (
-    <DataSummaryContext.Provider
+    <RespondentDataContext.Provider
       value={{
         flowSubmissions,
         setFlowSubmissions,
@@ -54,6 +54,6 @@ export const DataSummaryContextProvider = ({ children }: DataSummaryContextProvi
       }}
     >
       {children}
-    </DataSummaryContext.Provider>
+    </RespondentDataContext.Provider>
   );
 };

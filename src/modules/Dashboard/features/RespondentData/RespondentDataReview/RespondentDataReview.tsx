@@ -44,12 +44,12 @@ import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || null;
   const submitId = searchParams.get('submitId') || null;
   const selectedDateParam = searchParams.get('selectedDate');
   const containerRef = useRef<HTMLElement | null>(null);
-  const shouldSetLastAnswer = useRef(false);
+  const prevSelectedDateRef = useRef<null | string>(null);
 
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
@@ -80,6 +80,8 @@ export const RespondentDataReview = () => {
   const {
     activities,
     flows,
+    setActivities,
+    setFlows,
     handleGetActivitiesAndFlows,
     selectedActivity,
     selectedFlow,
@@ -91,7 +93,6 @@ export const RespondentDataReview = () => {
     submitId,
     appletId,
     respondentId,
-    shouldSetLastAnswer: shouldSetLastAnswer.current,
     handleSelectAnswer,
   });
 
@@ -154,13 +155,30 @@ export const RespondentDataReview = () => {
 
   const handleSetInitialDate = (date: Date) => {
     setValue('responseDate', date);
-    handleGetActivitiesAndFlows(date);
+    const createdDate = format(date, DateFormats.YearMonthDay);
+    handleGetActivitiesAndFlows(createdDate);
     handleGetSubmitDates(date);
   };
 
   const handleResponseDateChange = (date?: Date | null) => {
-    shouldSetLastAnswer.current = true;
-    handleGetActivitiesAndFlows(date);
+    const createdDate = date && format(date, DateFormats.YearMonthDay);
+    // if the date hasn't changed, exit the function early
+    if (!createdDate || prevSelectedDateRef.current === createdDate) {
+      return;
+    }
+    // reset all state values to default
+    setActivities([]);
+    setFlows([]);
+    setSelectedActivity(null);
+    setSelectedFlow(null);
+    setSelectedAnswer(null);
+    setSearchParams(undefined);
+    setActivityAnswers(null);
+    setFlowAnswers(null);
+
+    handleGetActivitiesAndFlows(createdDate);
+
+    prevSelectedDateRef.current = createdDate;
   };
 
   const handleActivitySelect: OnSelectActivityOrFlow = (item) => {

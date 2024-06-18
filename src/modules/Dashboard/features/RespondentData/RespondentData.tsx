@@ -5,6 +5,7 @@ import { LinkedTabs } from 'shared/components';
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
 import { defaultRespondentDataFormValues } from './RespondentData.const';
+import { RespondentDataContextProvider } from './RespondentDataContext';
 
 export const RespondentData = () => {
   const { respondentDataTabs } = useRespondentDataSetup();
@@ -14,7 +15,9 @@ export const RespondentData = () => {
 
   return (
     <FormProvider {...methods}>
-      <LinkedTabs tabs={respondentDataTabs} />
+      <RespondentDataContextProvider>
+        <LinkedTabs tabs={respondentDataTabs} />
+      </RespondentDataContextProvider>
     </FormProvider>
   );
 };
