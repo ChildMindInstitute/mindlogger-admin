@@ -474,13 +474,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   };
 
   const sendRequest = async (password?: string) => {
-    let encryptionData: Encryption | undefined;
-
-    if (password && ownerId) {
-      encryptionData = await getEncryptionToServer(password, ownerId);
-    } else {
-      encryptionData = appletEncryption;
-    }
+    const encryptionData: Encryption | undefined =
+      password && ownerId ? await getEncryptionToServer(password, ownerId) : appletEncryption;
 
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
