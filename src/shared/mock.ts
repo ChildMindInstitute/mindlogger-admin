@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -411,7 +411,7 @@ export const mockedAppletData = {
 };
 
 export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
-export const mockedManager = {
+export const mockedManager: Manager = {
   id: mockedManagerId,
   firstName: 'TestFirstName',
   lastName: 'TestLastName',
@@ -435,6 +435,10 @@ export const mockedManager = {
       encryption: mockedEncryption,
     },
   ],
+  createdAt: new Date().toISOString(),
+  titles: [],
+  status: 'approved',
+  invitationKey: null,
 };
 
 export const mockedSingleSelectFormValues = {
