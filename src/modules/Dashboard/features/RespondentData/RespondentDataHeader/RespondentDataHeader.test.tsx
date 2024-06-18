@@ -30,7 +30,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: jest.fn(),
 }));
 
-const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 const mockedSubject: RespondentDetails = {
   nickname: mockedRespondent.nicknames[0],
@@ -59,6 +59,7 @@ describe('RespondentDataHeader component tests', () => {
         enableMultiInformantTakeNow: true,
         enableActivityAssign: true,
       },
+      resetLDContext: jest.fn(),
     });
   });
 
@@ -66,6 +67,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({});
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
+      resetLDContext: jest.fn(),
     });
 
     renderWithProviders(
@@ -87,6 +89,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({ activityId: mockedActivity.id });
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
+      resetLDContext: jest.fn(),
     });
 
     renderWithProviders(
@@ -138,6 +141,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableMultiInformantTakeNow: false,
       },
+      resetLDContext: jest.fn(),
     });
 
     renderWithProviders(
@@ -161,6 +165,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
+      resetLDContext: jest.fn(),
     });
 
     renderWithProviders(

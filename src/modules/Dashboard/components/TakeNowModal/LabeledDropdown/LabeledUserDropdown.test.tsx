@@ -19,6 +19,7 @@ describe('LabeledUserDropdown', () => {
       featureFlags: {
         enableParticipantMultiInformant: false,
       },
+      resetLDContext: jest.fn(),
     });
   });
 
@@ -239,6 +240,7 @@ describe('LabeledUserDropdown', () => {
         featureFlags: {
           enableParticipantMultiInformant: true,
         },
+        resetLDContext: jest.fn(),
       });
     });
 

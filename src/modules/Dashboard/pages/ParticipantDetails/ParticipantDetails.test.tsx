@@ -48,6 +48,7 @@ describe('Participant Details page', () => {
       featureFlags: {
         enableParticipantConnections: true,
       },
+      resetLDContext: jest.fn(),
     });
   });
 
@@ -127,6 +128,7 @@ describe('Participant Details page', () => {
       featureFlags: {
         enableParticipantConnections: false,
       },
+      resetLDContext: jest.fn(),
     });
 
     const { queryByTestId } = renderWithProviders(<ParticipantDetails />, {
