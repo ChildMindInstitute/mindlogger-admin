@@ -38,6 +38,7 @@ import {
 import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
 
 import {
   getActivityItems,
@@ -88,11 +89,11 @@ export const useAppletDataFromForm = () => {
       about: appletAbout,
       themeId: appletInfo.themeId || null,
       activityFlows: appletInfo?.activityFlows.map(
-        ({ key, ...flow }) =>
+        ({ key: _key, ...flow }) =>
           ({
             ...flow,
             description: getDictionaryObject(flow.description),
-            items: flow.items?.map(({ key, ...item }) => ({
+            items: flow.items?.map(({ key: _key, ...item }) => ({
               ...item,
               ...removeActivityFlowItemExtraFields(),
             })),
@@ -191,6 +192,7 @@ export const usePrompt = (isFormChanged: boolean) => {
       dispatch(auth.actions.endLogout());
       onLogout();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogoutInProgress, isFormChanged]);
 
   const handleBlockedNavigation = useCallback(
@@ -225,6 +227,7 @@ export const usePrompt = (isFormChanged: boolean) => {
 
       return true;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [confirmedNavigation, location, isFormChanged],
   );
 
@@ -358,15 +361,16 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     onCancelNavigation();
   };
 
-  const handleSaveChangesSaveSubmit = () => {
+  const handleSaveChangesSaveSubmit = async () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
-    handleSaveAndPublishFirstClick();
+    await handleSaveAndPublishFirstClick();
     Mixpanel.track('Applet Save click', {
       'Applet ID': appletId,
     });
 
-    if (isLogoutInProgress) {
+    if (isLogoutInProgress && !isNewApplet) {
+      await handleLogout();
       dispatch(auth.actions.endLogout());
     }
   };
@@ -446,6 +450,20 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     await sendRequest(password);
   };
 
+  const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
+    await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
+      Mixpanel.track('Password added successfully', {
+        'Applet ID': appletId,
+      }),
+    );
+    setIsPasswordPopupOpened(false);
+
+    if (isLogoutInProgress) {
+      await handleLogout();
+      dispatch(auth.actions.endLogout());
+    }
+  };
+
   const showSuccessBanner = (isUpdate?: boolean) => {
     // If there is any visible banner warning the user they haven't made changes,
     // remove it before showing the success banner.
@@ -471,9 +489,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   };
 
   const sendRequest = async (password?: string) => {
-    const encryptionData = password
-      ? await getEncryptionToServer(password, ownerId!)
-      : appletEncryption;
+    const encryptionData: Encryption | undefined =
+      password && ownerId ? await getEncryptionToServer(password, ownerId) : appletEncryption;
+
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
 
@@ -559,7 +577,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     appletEncryption,
     setIsPasswordPopupOpened,
     handleSaveAndPublishFirstClick,
-    handleAppletPasswordSubmit,
+    handleAppletPasswordSubmit: handlePasswordSubmit,
     handlePublishProcessOnClose,
     handlePublishProcessOnRetry: sendRequestWithPasswordCheck,
     handleSaveChangesDoNotSaveSubmit,
