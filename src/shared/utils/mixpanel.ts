@@ -3,8 +3,10 @@ import { Dict } from 'mixpanel-browser';
 import { isProduction, isStaging, isUat, isDev } from './env';
 
 const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
+const isJest = !!process.env.JEST_WORKER_ID;
 const shouldEnableMixpanel =
   PROJECT_TOKEN &&
+  !isJest &&
   (isProduction || isStaging || isUat || process.env.REACT_APP_MIXPANEL_FORCE_ENABLE === 'true');
 
 export const Mixpanel = {

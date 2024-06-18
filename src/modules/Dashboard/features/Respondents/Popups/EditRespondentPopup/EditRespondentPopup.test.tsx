@@ -1,17 +1,19 @@
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
+import mockAxios from 'jest-mock-axios';
 
-import { expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { mockedAppletId } from 'shared/mock';
+import { expectBanner } from 'shared/utils';
 
 import { EditRespondentPopup } from '.';
 
 const onCloseMock = jest.fn();
-const successFakeRequest = jest.fn();
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 const chosenAppletData = {
-  appletId: '12312',
+  appletId: mockedAppletId,
   respondentSecretId: '12312',
   respondentId: '12312',
   respondentNickname: 'respondentNickname',
@@ -26,19 +28,12 @@ const commonProps = {
   chosenAppletData,
 };
 
-const mockedAxios = axios.create();
-
 describe('EditRespondentPopup component tests', () => {
-  beforeEach(() => {
-    successFakeRequest.mockReturnValue(new Promise((res) => res(null)));
-    jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
-  });
-
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
-  test('EditRespondentPopup should appear with respondentSecretId and respondentNickname', async () => {
+  test('EditRespondentPopup should appear with respondentSecretId, respondentNickname, subjectTag', async () => {
     renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
     await waitFor(() => {
@@ -48,7 +43,58 @@ describe('EditRespondentPopup component tests', () => {
     });
   });
 
-  test('EditRespondentPopup should appear success text', async () => {
+  test('EditRespondentPopup submission of Limited Account should show success text', async () => {
+    const limitedAppletData = {
+      ...chosenAppletData,
+      respondentId: null,
+    };
+    const limitedProps = {
+      ...commonProps,
+      chosenAppletData: limitedAppletData,
+    };
+    mockAxios.put.mockResolvedValueOnce({
+      data: {
+        result: {
+          ...limitedAppletData,
+          tag: limitedAppletData.subjectTag,
+        },
+      },
+    });
+
+    const { store } = renderWithProviders(<EditRespondentPopup {...limitedProps} />);
+
+    const nicknameInput = screen
+      .getByTestId('dashboard-respondents-edit-popup-nickname')
+      .querySelector('input') as HTMLInputElement;
+    await userEvent.clear(nicknameInput);
+    await userEvent.type(nicknameInput, 'john');
+
+    const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
+    await userEvent.click(submitButton);
+
+    expect(mixpanelTrack).toBeCalledWith('Edit Limited Account form submitted', {
+      applet_id: mockedAppletId,
+      tag: 'Child',
+    });
+
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+
+    expect(mixpanelTrack).toBeCalledWith('Limited Account edited successfully', {
+      applet_id: mockedAppletId,
+      tag: 'Child',
+    });
+  });
+
+  test('EditRespondentPopup submission of Full Account should show success text', async () => {
+    mockAxios.put.mockResolvedValueOnce({
+      data: {
+        result: {
+          ...chosenAppletData,
+          tag: chosenAppletData.subjectTag,
+        },
+      },
+    });
+
     const { store } = renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
     const nicknameInput = screen
@@ -59,7 +105,18 @@ describe('EditRespondentPopup component tests', () => {
 
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
+
+    expect(mixpanelTrack).toBeCalledWith('Edit Full Account form submitted', {
+      applet_id: mockedAppletId,
+      tag: 'Child',
+    });
+
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+
+    expect(mixpanelTrack).toBeCalledWith('Full Account edited successfully', {
+      applet_id: mockedAppletId,
+      tag: 'Child',
+    });
   });
 
   describe("When the given subjectʼs tag is 'Team'", () => {
@@ -96,6 +153,15 @@ describe('EditRespondentPopup component tests', () => {
     });
 
     test('It accepts changes to the subjectʼs tag value', async () => {
+      mockAxios.put.mockResolvedValueOnce({
+        data: {
+          result: {
+            ...chosenAppletData,
+            tag: chosenAppletData.subjectTag,
+          },
+        },
+      });
+
       const selection = screen.getByTestId('dashboard-respondents-edit-popup-tag');
       const toggleBtn = selection.querySelector('[aria-haspopup="listbox"][role="button"]');
       const submitBtn = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
@@ -108,7 +174,7 @@ describe('EditRespondentPopup component tests', () => {
       await userEvent.click(dropdownOption as HTMLElement);
       await userEvent.click(submitBtn);
 
-      expect(successFakeRequest).toBeCalledWith(
+      expect(mockAxios.put).toBeCalledWith(
         `/subjects/${chosenAppletData.subjectId}`,
         {
           nickname: chosenAppletData.respondentNickname,
