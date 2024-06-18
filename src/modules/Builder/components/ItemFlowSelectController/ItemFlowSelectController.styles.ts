@@ -93,6 +93,7 @@ export const StyledMdPreview = styled(MdPreview)({
     '--md-theme-link-color': 'inherit',
     '--md-theme-link-hover-color': 'inherit',
     fontSize: theme.spacing(1.4),
+    wordBreak: 'unset',
   },
 
   '& p': {
