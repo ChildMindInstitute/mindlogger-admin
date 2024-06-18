@@ -15,13 +15,10 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { EventFormValues } from '../EventForm.types';
-import {
-  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
-  DEFAULT_END_TIME,
-  DEFAULT_START_TIME,
-} from '../EventForm.const';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,

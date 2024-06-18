@@ -6,8 +6,8 @@ import { ToggleButtonGroup, TimePicker } from 'shared/components';
 import { StyledFlexTopStart, StyledLabelLarge, StyledTitleSmall, theme } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { DEFAULT_START_TIME } from 'shared/consts';
 
-import { DEFAULT_START_TIME } from '../../EventForm.const';
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';

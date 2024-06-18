@@ -4,15 +4,14 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { parse, format as dateFnsFormat } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
-import { DateFormats } from 'shared/consts';
+import { DEFAULT_END_TIME, DateFormats } from 'shared/consts';
 
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
-import { TimePickerProps } from './TimePicker.types';
+import { HandleChange, InputOnChange, TimePickerProps } from './TimePicker.types';
 import { cleanInput, formatInput, validateInput } from './TimePicker.utils';
+import { TIME_PICKER_MAX_LENGTH } from './TimePicker.const';
 
 const ReactDatePicker = lazy(() => import('react-datepicker'));
-
-const DEFAULT_TIME = '23:59';
 
 export const TimePicker = <T extends FieldValues>({
   control,
@@ -24,39 +23,31 @@ export const TimePicker = <T extends FieldValues>({
   minTime,
   maxTime,
   onCustomChange,
-  defaultTime = DEFAULT_TIME,
+  defaultTime = DEFAULT_END_TIME,
   'data-testid': dataTestid,
   placeholder,
   inputSx = {},
 }: TimePickerProps<T>) => {
   const [inputValue, setInputValue] = useState<string>('');
 
-  const updateInputValue = (value: string, onChange: (value: string) => void) => {
+  const updateInputValue = (value: string, onChange: InputOnChange) => {
     onCustomChange?.(value);
     setInputValue(value);
     onChange(value);
   };
 
-  const handleInputValue = (onChange: (value: string) => void) => {
+  const handleInputValue = (onChange: InputOnChange) => {
     const cleanedInput = cleanInput(inputValue);
     const validatedInput = validateInput(defaultTime, cleanedInput);
-    const formattedInput = validatedInput.length === 4 ? formatInput(validatedInput) : defaultTime;
-    updateInputValue(formattedInput, onChange);
+    updateInputValue(formatInput(validatedInput), onChange);
   };
 
-  const handleKeyDownEnter = (
-    event: KeyboardEvent<HTMLDivElement>,
-    onChange: (value: string) => void,
-  ) => {
+  const handleKeyDownEnter = (event: KeyboardEvent<HTMLDivElement>, onChange: InputOnChange) => {
     if (event.key !== 'Enter') return;
     handleInputValue(onChange);
   };
 
-  const handleChange = (
-    date: Date | null,
-    event: ChangeEvent<HTMLInputElement>,
-    onChange: (value: string) => void,
-  ) => {
+  const handleChange = ({ date, event, onChange }: HandleChange) => {
     const isSelectedFromDropdown = !event?.target?.value;
     if (isSelectedFromDropdown && date) {
       return updateInputValue(dateFnsFormat(date, DateFormats.Time), onChange);
@@ -79,7 +70,7 @@ export const TimePicker = <T extends FieldValues>({
                 className="date-picker"
                 selected={selected as Date | null | undefined}
                 onChange={(date: Date | null, event: ChangeEvent<HTMLInputElement>) =>
-                  handleChange(date, event, onChange)
+                  handleChange({ date, event, onChange })
                 }
                 onBlur={() => handleInputValue(onChange)}
                 onKeyDown={(event) => handleKeyDownEnter(event, onChange)}
@@ -100,7 +91,7 @@ export const TimePicker = <T extends FieldValues>({
                     error={!!error}
                     helperText={error?.message || null}
                     inputProps={{
-                      maxLength: 5,
+                      maxLength: TIME_PICKER_MAX_LENGTH,
                     }}
                     InputProps={{
                       endAdornment: (

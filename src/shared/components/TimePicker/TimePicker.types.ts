@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 import { SxProps } from '@mui/material';
@@ -18,3 +19,11 @@ type TimePicker = {
 } & TextFieldProps;
 
 export type TimePickerProps<T extends FieldValues> = TimePicker & UseControllerProps<T>;
+
+export type InputOnChange = (value: string) => void;
+
+export type HandleChange = {
+  date: Date | null;
+  event: ChangeEvent<HTMLInputElement>;
+  onChange: InputOnChange;
+};
