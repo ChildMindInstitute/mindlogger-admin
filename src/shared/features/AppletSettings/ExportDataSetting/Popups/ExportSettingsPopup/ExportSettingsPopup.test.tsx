@@ -166,7 +166,7 @@ describe('ExportSettingsPopup', () => {
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
 
-      const downloadBtn = screen.getByText('Download CSV');
+      const downloadBtn = screen.getByText('Download');
 
       await userEvent.click(downloadBtn);
 
