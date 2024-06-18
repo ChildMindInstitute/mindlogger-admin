@@ -88,11 +88,11 @@ export const useAppletDataFromForm = () => {
       about: appletAbout,
       themeId: appletInfo.themeId || null,
       activityFlows: appletInfo?.activityFlows.map(
-        ({ key, ...flow }) =>
+        ({ key: _key, ...flow }) =>
           ({
             ...flow,
             description: getDictionaryObject(flow.description),
-            items: flow.items?.map(({ key, ...item }) => ({
+            items: flow.items?.map(({ key: _key, ...item }) => ({
               ...item,
               ...removeActivityFlowItemExtraFields(),
             })),
@@ -191,6 +191,7 @@ export const usePrompt = (isFormChanged: boolean) => {
       dispatch(auth.actions.endLogout());
       onLogout();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogoutInProgress, isFormChanged]);
 
   const handleBlockedNavigation = useCallback(
@@ -225,6 +226,7 @@ export const usePrompt = (isFormChanged: boolean) => {
 
       return true;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [confirmedNavigation, location, isFormChanged],
   );
 
@@ -358,15 +360,16 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     onCancelNavigation();
   };
 
-  const handleSaveChangesSaveSubmit = () => {
+  const handleSaveChangesSaveSubmit = async () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
-    handleSaveAndPublishFirstClick();
+    await handleSaveAndPublishFirstClick();
     Mixpanel.track('Applet Save click', {
       'Applet ID': appletId,
     });
 
     if (isLogoutInProgress) {
+      await handleLogout();
       dispatch(auth.actions.endLogout());
     }
   };
@@ -471,9 +474,14 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   };
 
   const sendRequest = async (password?: string) => {
-    const encryptionData = password
-      ? await getEncryptionToServer(password, ownerId!)
-      : appletEncryption;
+    let encryptionData: Encryption | undefined;
+
+    if (password && ownerId) {
+      encryptionData = await getEncryptionToServer(password, ownerId);
+    } else {
+      encryptionData = appletEncryption;
+    }
+
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
 
