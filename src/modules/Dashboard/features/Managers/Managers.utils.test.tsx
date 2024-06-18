@@ -13,8 +13,8 @@ import { Manager } from '../../types';
 import { Roles } from '../../../../shared/consts';
 
 const headCellProperties = ['avatar', 'firstName', 'lastName', 'title', 'email', 'actions'];
-const removeAccessAction = jest.fn();
-const editAccessAction = jest.fn();
+const removeTeamMemberAction = jest.fn();
+const editTeamMemberAction = jest.fn();
 const copyEmailAddressAction = jest.fn();
 const copyInvitationLinkAction = jest.fn();
 
@@ -38,22 +38,27 @@ describe('Managers utils tests', () => {
   describe('getManagerActions function', () => {
     test('should return the correct actions for an approved manager', () => {
       const actions = getManagerActions(
-        { removeAccessAction, editAccessAction, copyEmailAddressAction, copyInvitationLinkAction },
+        {
+          removeTeamMemberAction,
+          editTeamMemberAction,
+          copyEmailAddressAction,
+          copyInvitationLinkAction,
+        },
         mockedManager,
       );
 
       expect(actions).toEqual([
         {
           icon: <Svg id="edit-user" />,
-          action: editAccessAction,
-          title: 'Edit Access',
+          action: editTeamMemberAction,
+          title: 'Edit Team Member',
           context: mockedManager,
           'data-testid': 'dashboard-managers-edit-user',
         },
         {
           icon: <Svg id="remove-access" />,
-          action: removeAccessAction,
-          title: 'Remove Access',
+          action: removeTeamMemberAction,
+          title: 'Remove Team Member',
           context: mockedManager,
           customItemColor: variables.palette.dark_error_container,
           'data-testid': 'dashboard-managers-remove-access',
@@ -91,7 +96,12 @@ describe('Managers utils tests', () => {
         invitationKey: 'df3c8ab9-78fc-4dd1-8eba-63bef39e5805',
       };
       const actions = getManagerActions(
-        { removeAccessAction, editAccessAction, copyEmailAddressAction, copyInvitationLinkAction },
+        {
+          removeTeamMemberAction,
+          editTeamMemberAction,
+          copyEmailAddressAction,
+          copyInvitationLinkAction,
+        },
         pendingManager,
       );
 
@@ -117,15 +127,15 @@ describe('Managers utils tests', () => {
         { type: MenuItemType.Divider },
         {
           icon: <Svg id="edit-user" />,
-          action: editAccessAction,
-          title: 'Edit Access',
+          action: editTeamMemberAction,
+          title: 'Edit Team Member',
           context: pendingManager,
           'data-testid': 'dashboard-managers-edit-user',
         },
         {
           icon: <Svg id="remove-access" />,
-          action: removeAccessAction,
-          title: 'Remove Access',
+          action: removeTeamMemberAction,
+          title: 'Remove Team Member',
           context: pendingManager,
           customItemColor: variables.palette.dark_error_container,
           'data-testid': 'dashboard-managers-remove-access',

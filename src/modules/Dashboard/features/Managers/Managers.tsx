@@ -113,11 +113,11 @@ export const Managers = () => {
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
   const actions: ManagersActions = {
-    removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+    removeTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setRemoveAccessPopupVisible(true);
     },
-    editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+    editTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
     },

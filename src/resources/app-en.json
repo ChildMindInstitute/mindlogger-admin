@@ -423,6 +423,8 @@
   "duration": "Duration",
   "edit": "Edit",
   "editAccess": "Edit Access",
+  "editTeamMember": "Edit Team Member",
+  "removeTeamMember": "Remove Team Member",
   "editAccessNoRespondent": "Please add access to review the Data of at least one Respondent in the {{titles}} for the Reviewer role or remove the role.",
   "editActivity": "Edit Activity",
   "editActivitySchedule": "Edit Activity Schedule",

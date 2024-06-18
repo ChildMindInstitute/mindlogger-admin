@@ -93,15 +93,15 @@ export const getManagerActions = (
   menuItems.push(
     {
       icon: <Svg id="edit-user" />,
-      action: actions.editAccessAction,
-      title: t('editAccess'),
+      action: actions.editTeamMemberAction,
+      title: t('editTeamMember'),
       context: manager,
       'data-testid': 'dashboard-managers-edit-user',
     },
     {
       icon: <Svg id="remove-access" />,
-      action: actions.removeAccessAction,
-      title: t('removeAccess'),
+      action: actions.removeTeamMemberAction,
+      title: t('removeTeamMember'),
       context: manager,
       customItemColor: variables.palette.dark_error_container,
       'data-testid': 'dashboard-managers-remove-access',
