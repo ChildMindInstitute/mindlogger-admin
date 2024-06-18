@@ -74,20 +74,20 @@ export const AddParticipantPopup = ({
     error: invitationError,
     execute: createInvitation,
     isLoading: isInvitationLoading,
-  } = useAsync(postAppletInvitationApi, async (result) => {
+  } = useAsync(postAppletInvitationApi, async ({ data }) => {
     dispatch(
       banners.actions.addBanner({
         key: 'AddParticipantSuccessBanner',
         bannerProps: {
           accountType: AccountType.Full,
-          id: result.data?.result?.secretUserId,
+          id: data?.result?.secretUserId,
         },
       }),
     );
 
     Mixpanel.track('Full Account invitation created successfully', {
       applet_id: appletId,
-      tag: result.data?.result?.tag,
+      tag: data?.result?.tag || null, // Normalize empty string tag to null
     });
 
     handleClose(true);
@@ -96,20 +96,20 @@ export const AddParticipantPopup = ({
     error: shellAccountError,
     execute: createShellAccount,
     isLoading: isShellAccountLoading,
-  } = useAsync(postAppletShellAccountApi, async (result) => {
+  } = useAsync(postAppletShellAccountApi, async ({ data }) => {
     dispatch(
       banners.actions.addBanner({
         key: 'AddParticipantSuccessBanner',
         bannerProps: {
           accountType: AccountType.Limited,
-          id: result.data?.result?.secretUserId,
+          id: data?.result?.secretUserId,
         },
       }),
     );
 
     Mixpanel.track('Limited Account created successfully', {
       applet_id: appletId,
-      tag: result.data?.result?.tag,
+      tag: data?.result?.tag || null, // Normalize empty string tag to null
     });
 
     handleClose(true);
@@ -127,7 +127,10 @@ export const AddParticipantPopup = ({
     const { email, nickname, tag, ...rest } = values;
 
     if (isFullAccount) {
-      Mixpanel.track('Full Account invitation form submitted', { applet_id: appletId, tag });
+      Mixpanel.track('Full Account invitation form submitted', {
+        applet_id: appletId,
+        tag: tag || null, // Normalize empty string tag to null
+      });
 
       createInvitation({
         url: 'respondent',
@@ -143,7 +146,10 @@ export const AddParticipantPopup = ({
         },
       });
     } else {
-      Mixpanel.track('Add Limited Account form submitted', { applet_id: appletId, tag });
+      Mixpanel.track('Add Limited Account form submitted', {
+        applet_id: appletId,
+        tag: tag || null, // Normalize empty string tag to null
+      });
 
       createShellAccount({
         appletId,

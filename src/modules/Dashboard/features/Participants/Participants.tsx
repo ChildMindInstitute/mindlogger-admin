@@ -182,8 +182,14 @@ export const Participants = () => {
 
   const actions: ParticipantActions = {
     editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
+      const { respondentId, respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
+
+      const event = respondentId ? 'Edit Full Account clicked' : 'Edit Limited Account clicked';
+      Mixpanel.track(event, {
+        applet_id: appletId,
+        via: 'Applet - Participants',
+      });
 
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
