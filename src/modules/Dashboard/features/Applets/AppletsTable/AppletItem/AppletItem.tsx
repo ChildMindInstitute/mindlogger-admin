@@ -118,7 +118,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     });
     await fetchData();
     setPasswordPopupVisible(false);
-    Mixpanel.track('Applet Created Successfully');
+    Mixpanel.track('Applet Created Successfully', {
+      'Applet ID': appletId,
+    });
   };
 
   const checkAppletEncryption = (callback: () => void) =>
@@ -135,7 +137,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);
-        Mixpanel.track('View General calendar click');
+        Mixpanel.track('View General calendar click', {
+          'Applet ID': appletId,
+        });
       }),
     deleteAction: () =>
       checkAppletEncryption(() =>
@@ -187,7 +191,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
-        Mixpanel.track('Applet edit click');
+        Mixpanel.track('Applet edit click', {
+          'Applet ID': appletId,
+        });
       }),
   };
 

@@ -17,7 +17,7 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel } from 'shared/utils';
-import { getUniqueName } from 'modules/Builder/utils';
+import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
@@ -74,7 +74,9 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    Mixpanel.track('Add Activity click');
+    Mixpanel.track('Add Activity click', {
+      'Applet ID': appletId,
+    });
     const {
       index,
       performanceTaskName,
@@ -113,22 +115,7 @@ export const Activities = () => {
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
-    const newActivityFlows = activityFlows.reduce(
-      (acc: AppletFormValues['activityFlows'], flow) => {
-        if (flow.reportIncludedActivityName === activityKey) {
-          flow.reportIncludedActivityName = '';
-          flow.reportIncludedItemName = '';
-        }
-        const items = flow.items?.filter((item) => item.activityKey !== activityKey);
-        if (items && items.length > 0) {
-          acc.push({ ...flow, items });
-        }
-
-        return acc;
-      },
-      [],
-    );
-
+    const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
     removeActivity(index);
     setValue('activityFlows', newActivityFlows);
   };
@@ -152,7 +139,9 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
-    Mixpanel.track('Activity edit click');
+    Mixpanel.track('Activity edit click', {
+      'Applet ID': appletId,
+    });
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
     if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {

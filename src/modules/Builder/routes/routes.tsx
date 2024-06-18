@@ -22,7 +22,7 @@ const ActivityItems = lazy(() => import('../features/ActivityItems'));
 const ActivitySettings = lazy(() => import('modules/Builder/features/ActivitySettings'));
 const ActivityFlowSettings = lazy(() => import('../features/ActivityFlowSettings'));
 
-export const builderRoutes = () => (
+export const builderRoutes = (enableItemFlowExtendedItems: boolean) => (
   <Route path={page.builder}>
     <Route element={<BuilderApplet />} path=":appletId">
       <Route index element={<Navigate to={Path.About} replace />} />
@@ -60,7 +60,7 @@ export const builderRoutes = () => (
       <Route path={Path.Activities}>
         <Route element={<BuilderActivity />} path=":activityId">
           <Route index element={<Navigate to={Path.About} replace />} />
-          {appletActivityRoutes.map(({ path, Component }) => (
+          {appletActivityRoutes(enableItemFlowExtendedItems).map(({ path, Component }) => (
             <Route
               key={path}
               path={path}

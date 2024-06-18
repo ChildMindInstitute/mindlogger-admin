@@ -13,8 +13,9 @@ import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 export const TransferOwnershipSetting = () => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
-    useTransferOwnership();
+  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } = useTransferOwnership(
+    appletData?.id,
+  );
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
   const dataTestid = 'applet-settings-transfer-ownership';

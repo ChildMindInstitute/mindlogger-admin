@@ -114,7 +114,9 @@ export const DataExportPopup = ({
         }
 
         handlePopupClose();
-        Mixpanel.track('Export Data Successful');
+        Mixpanel.track('Export Data Successful', {
+          'Applet ID': appletId,
+        });
       } catch (e) {
         const error = e as TypeError;
         console.warn('Error while export data', error);

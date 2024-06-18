@@ -839,6 +839,7 @@ export const mockedAppletFormData = {
           ],
         },
       ],
+      isReviewable: false,
     },
   ],
   activityFlows: [

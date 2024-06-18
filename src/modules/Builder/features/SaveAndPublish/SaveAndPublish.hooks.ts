@@ -37,6 +37,7 @@ import {
 } from 'modules/Builder/utils/getEntityReportFields';
 import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   getActivityItems,
@@ -104,6 +105,8 @@ export const useAppletDataFromForm = () => {
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
+      // TODO: Once the backend (the necessary endpoints to enable integration) is ready,
+      // make sure that the integrations property works correctly
       ...removeAppletExtraFields(isNewApplet),
     };
   };
@@ -131,7 +134,8 @@ export const useCheckIfHasAtLeastOneItem = () => {
 
 export const useCheckIfHasEmptyRequiredFields = () => {
   const { getValues } = useCustomFormContext();
-  const appletSchema = AppletSchema();
+  const { featureFlags } = useFeatureFlags();
+  const appletSchema = AppletSchema(featureFlags.enableItemFlowExtendedItems);
 
   return async () => {
     const body = getValues();
@@ -148,7 +152,8 @@ export const useCheckIfHasEmptyRequiredFields = () => {
 
 export const useCheckIfHasErrorsInFields = () => {
   const { getValues } = useCustomFormContext();
-  const appletSchema = AppletSchema();
+  const { featureFlags } = useFeatureFlags();
+  const appletSchema = AppletSchema(featureFlags.enableItemFlowExtendedItems);
 
   return async () => {
     const body = getValues();
@@ -357,7 +362,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
-    Mixpanel.track('Applet Save click');
+    Mixpanel.track('Applet Save click', {
+      'Applet ID': appletId,
+    });
 
     if (isLogoutInProgress) {
       dispatch(auth.actions.endLogout());
@@ -407,7 +414,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track('Applet Save click');
+    Mixpanel.track('Applet Save click', {
+      'Applet ID': appletId,
+    });
 
     await sendRequestWithPasswordCheck();
   };
@@ -496,7 +505,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet edit successful');
+      Mixpanel.track('Applet edit successful', {
+        'Applet ID': appletId,
+      });
 
       showSuccessBanner(true);
 
@@ -512,7 +523,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully');
+      Mixpanel.track('Applet Created Successfully', {
+        'Applet ID': appletId,
+      });
 
       showSuccessBanner();
 

@@ -15,6 +15,7 @@ export const getActivitySettings = ({
   activity,
   activityFieldName,
   settingsErrors: { hasActivityReportsErrors, hasActivitySubscalesErrors },
+  appletId,
 }: GetActivitySettings): ItemNavigation[] => {
   const isNewActivity = !activity?.id;
   const dataTestid = 'builder-activity-settings';
@@ -30,7 +31,10 @@ export const getActivitySettings = ({
           param: SettingParam.ScoresAndReports,
           hasError: hasActivityReportsErrors,
           'data-testid': `${dataTestid}-scores-and-reports`,
-          onClick: () => Mixpanel.track('Scores and Report Button Click'),
+          onClick: () =>
+            Mixpanel.track('Scores and Report Button Click', {
+              'Applet ID': appletId,
+            }),
         },
         {
           label: 'reportConfiguration',
@@ -40,7 +44,10 @@ export const getActivitySettings = ({
           disabled: isNewActivity,
           tooltip: isNewActivity ? 'saveAndPublishFirst' : undefined,
           'data-testid': `${dataTestid}-report-config`,
-          onClick: () => Mixpanel.track('Activity - Report Configuration Click'),
+          onClick: () =>
+            Mixpanel.track('Activity - Report Configuration Click', {
+              'Applet ID': appletId,
+            }),
         },
       ],
     },

@@ -39,7 +39,12 @@ export const ActivitySettings = () => {
   return (
     <NavigationMenu
       title="activitySettings"
-      items={getActivitySettings({ activityFieldName: fieldName, activity, settingsErrors })}
+      items={getActivitySettings({
+        activityFieldName: fieldName,
+        activity,
+        settingsErrors,
+        appletId,
+      })}
       onClose={handleClose}
       onSetActiveItem={handleSetActiveSetting}
     />

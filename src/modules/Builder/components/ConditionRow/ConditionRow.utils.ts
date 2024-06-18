@@ -7,6 +7,8 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   ScoreReport,
+  TimeRangeValueCondition,
+  SingleMultiSelectionPerRowCondition,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -23,18 +25,47 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.SingleSelection;
     case ItemResponseType.MultipleSelection:
       return ConditionItemType.MultiSelection;
+    case ItemResponseType.Date:
+      return ConditionItemType.Date;
+    case ItemResponseType.NumberSelection:
+      return ConditionItemType.NumberSelection;
+    case ItemResponseType.Time:
+      return ConditionItemType.Time;
+    case ItemResponseType.TimeRange:
+      return ConditionItemType.TimeRange;
+    case ItemResponseType.SingleSelectionPerRow:
+      return ConditionItemType.SingleSelectionPerRow;
+    case ItemResponseType.MultipleSelectionPerRow:
+      return ConditionItemType.MultipleSelectionPerRow;
     default:
       return ConditionItemType.SingleSelection;
   }
 };
 
-export const getItemOptions = (items: ItemFormValues[], conditionRowType: ConditionRowType) =>
+const scoreItemTypes = [
+  ItemResponseType.Slider,
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+];
+const itemFlowItemTypes = [
+  ...scoreItemTypes,
+  ItemResponseType.Date,
+  ItemResponseType.NumberSelection,
+  ItemResponseType.Time,
+  ItemResponseType.TimeRange,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
+];
+const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
+  (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
+
+export const getItemOptions = (
+  items: ItemFormValues[],
+  conditionRowType: ConditionRowType,
+  isItemFlow = false,
+) =>
   items?.reduce((optionList: OptionListItem[], item) => {
-    if (
-      item.responseType === ItemResponseType.Slider ||
-      item.responseType === ItemResponseType.SingleSelection ||
-      item.responseType === ItemResponseType.MultipleSelection
-    ) {
+    if (checkIfShouldBeIncluded(item.responseType, isItemFlow)) {
       return [
         ...optionList,
         {
@@ -78,44 +109,95 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
     [],
   );
 
-const getDefaultPayload = (conditionPayload: SingleValueCondition['payload']) => ({
-  value: conditionPayload?.value ?? DEFAULT_PAYLOAD_MIN_VALUE,
-});
+const getDefaultPayload = (
+  conditionPayload: SingleValueCondition['payload'] | TimeRangeValueCondition['payload'],
+  type?: ItemResponseType,
+) => {
+  let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
+  if (type === ItemResponseType.TimeRange)
+    return {
+      value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
+      type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+    };
+  if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
+
+  return {
+    value: (conditionPayload as SingleValueCondition['payload'])?.value ?? defaultValue,
+  };
+};
 
 export const getPayload = ({ conditionType, conditionPayload, selectedItem }: GetPayload) => {
+  const responseType = selectedItem?.responseType;
+
   switch (conditionType) {
     case ConditionType.IncludesOption:
     case ConditionType.NotIncludesOption:
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
+      if (
+        responseType === ItemResponseType.SingleSelectionPerRow ||
+        responseType === ItemResponseType.MultipleSelectionPerRow
+      ) {
+        return {
+          optionValue:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.optionValue ?? '',
+          rowIndex:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.rowIndex ?? '',
+        };
+      }
+
       return {
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
         return {
-          value: selectedItem.responseValues.minValue,
+          value: selectedItem?.responseValues.minValue,
         };
       }
 
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
     case ConditionType.LessThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
         return {
-          value: selectedItem.responseValues.maxValue,
+          value: selectedItem?.responseValues.maxValue,
         };
       }
 
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
     case ConditionType.Equal:
     case ConditionType.NotEqual:
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
     case ConditionType.Between:
     case ConditionType.OutsideOf:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
         return {
-          minValue: selectedItem.responseValues.minValue,
-          maxValue: selectedItem.responseValues.maxValue,
+          minValue: selectedItem?.responseValues.minValue,
+          maxValue: selectedItem?.responseValues.maxValue,
+        };
+      }
+      if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
+        return {
+          minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
+          maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
+        };
+      }
+      if (responseType === ItemResponseType.TimeRange) {
+        return {
+          minValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.minValue ?? null,
+          maxValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.maxValue ?? null,
+          type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
         };
       }
 

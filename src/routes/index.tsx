@@ -44,7 +44,7 @@ export const AppRoutes = () => {
           <Routes>
             <Route element={<BaseLayout />}>
               {dashboardRoutes(featureFlags)}
-              {builderRoutes()}
+              {builderRoutes(featureFlags.enableItemFlowExtendedItems)}
               {libraryRoutes()}
             </Route>
             {!isAuthorized && (

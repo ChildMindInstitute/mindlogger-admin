@@ -65,7 +65,9 @@ export const Legend = ({
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track(`${analyticsPrefix} Schedule Import click`);
+    Mixpanel.track(`${analyticsPrefix} Schedule Import click`, {
+      'Applet ID': appletId,
+    });
   };
 
   return (
