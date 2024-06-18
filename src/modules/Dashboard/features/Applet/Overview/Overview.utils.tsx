@@ -51,7 +51,7 @@ export function mapResponseToQuickStatProps(
 }
 
 export function mapResponseToSubmissionsTableProps(
-  { submissions = [], submissionsCount = 0 }: GetAppletSubmissionsResponse,
+  { submissions = [] }: GetAppletSubmissionsResponse,
   {
     onViewSubmission,
   }: {
@@ -66,7 +66,6 @@ export function mapResponseToSubmissionsTableProps(
       { id: 'subject', label: i18n.t('appletOverview.columnSubject') },
       { id: 'submissionDate', label: i18n.t('appletOverview.columnSubmissionDate') },
     ],
-    count: submissionsCount ?? submissions?.length,
     handleRequestSort: () => {},
     order: 'desc' as const,
     orderBy: '',

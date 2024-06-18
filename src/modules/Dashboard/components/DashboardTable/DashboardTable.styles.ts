@@ -29,7 +29,10 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   }}
 `;
 
-export const StyledTableHead = styled(TableHead)({
-  '&& tr:nth-of-type(2) th': { padding: '1.2rem' },
-  '&& tr th:first-of-type': { paddingLeft: '2rem' },
-});
+export const StyledTableHead = styled(TableHead)(
+  ({ enablePagination = true }: { enablePagination?: boolean }) => ({
+    '&& tr:nth-of-type(2) th': { padding: '1.2rem' },
+    '&& tr th:first-of-type': { paddingLeft: '2rem' },
+    ...(enablePagination ? {} : { '&& th': { top: 0 } }),
+  }),
+);

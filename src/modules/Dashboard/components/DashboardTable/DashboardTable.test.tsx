@@ -4,7 +4,7 @@ import { createArray } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DashboardTable } from './DashboardTable';
-import { DashboardTableProps } from './DashboardTable.types';
+import { DashboardTablePropsWithPagination } from './DashboardTable.types';
 
 const mockColumns = [
   {
@@ -46,7 +46,7 @@ const mockSortFn = jest.fn();
 const mockChangePageFn = jest.fn();
 const mockDataTestId = 'mockDataTestId';
 
-const getTable = (props: Partial<DashboardTableProps> = {}) => (
+const getTable = (props?: Partial<DashboardTablePropsWithPagination>) => (
   <DashboardTable
     columns={mockColumns}
     order="asc"
@@ -65,6 +65,26 @@ const getTable = (props: Partial<DashboardTableProps> = {}) => (
 describe('DashboardTable component tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('When `enablePagination` is `false`', () => {
+    beforeEach(() => {
+      renderWithProviders(
+        <DashboardTable
+          data-testid={mockDataTestId}
+          columns={mockColumns}
+          rows={getMockRows()}
+          enablePagination={false}
+          handleRequestSort={() => {}}
+          order="desc"
+          orderBy=""
+        />,
+      );
+    });
+
+    test('should render without pagination controls', () => {
+      expect(screen.queryByTestId(`${mockDataTestId}-table-pagination`)).not.toBeInTheDocument();
+    });
   });
 
   test('should render empty component for empty table', () => {
