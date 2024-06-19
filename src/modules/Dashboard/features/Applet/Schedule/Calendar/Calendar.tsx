@@ -103,7 +103,6 @@ export const Calendar = () => {
     if (editEventPopupRef.current) {
       editEventPopupRef.current.saveForm();
       setSaveChangesPopupVisible(false);
-      setEditEventPopupVisible(false);
     }
   };
 
