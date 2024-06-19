@@ -6,4 +6,4 @@ export type SwitchConditionProps = {
   selectedItem?: ConditionItem;
   dataTestid: ConditionProps['data-testid'];
   children: ReactNode;
-} & Pick<ConditionProps, 'payloadName' | 'state' | 'valueOptions'>;
+} & Pick<ConditionProps, 'itemName' | 'payloadName' | 'state' | 'valueOptions'>;

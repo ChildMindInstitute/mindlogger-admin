@@ -165,12 +165,10 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
         const rowIndex = payload?.rowIndex ?? '';
-        const minValue = rowIndex
-          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`)?.minValue
-          : '';
+        const minValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.minValue : '';
 
         return {
-          value: payload?.value ?? minValue,
+          value: minValue,
           rowIndex,
         };
       }
@@ -188,12 +186,10 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
         const rowIndex = payload?.rowIndex ?? '';
-        const maxValue = rowIndex
-          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`)?.maxValue
-          : '';
+        const maxValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.maxValue : '';
 
         return {
-          value: payload?.value ?? maxValue,
+          value: maxValue,
           rowIndex,
         };
       }
@@ -204,9 +200,10 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
         const rowIndex = payload?.rowIndex ?? '';
+        const minValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.minValue : '';
 
         return {
-          value: payload?.value ?? '',
+          value: minValue,
           rowIndex,
         };
       }
@@ -243,12 +240,12 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         const payload = conditionPayload as SliderRowsCondition<RangeValueCondition>['payload'];
         const rowIndex = payload?.rowIndex ?? '';
         const { maxValue = '', minValue = '' } = rowIndex
-          ? selectedItem?.responseValues.rows.find((row) => row.id === `${rowIndex}`) ?? {}
+          ? selectedItem?.responseValues.rows[rowIndex] ?? {}
           : {};
 
         return {
-          maxValue: payload?.maxValue ?? maxValue,
-          minValue: payload?.minValue ?? minValue,
+          maxValue,
+          minValue,
           rowIndex,
         };
       }
