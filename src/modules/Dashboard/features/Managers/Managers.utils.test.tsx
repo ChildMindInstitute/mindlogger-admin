@@ -124,22 +124,6 @@ describe('Managers utils tests', () => {
           title: 'Copy Invitation Link',
           context: pendingManager,
         },
-        { type: MenuItemType.Divider },
-        {
-          icon: <Svg id="edit-user" />,
-          action: editTeamMemberAction,
-          title: 'Edit Team Member',
-          context: pendingManager,
-          'data-testid': 'dashboard-managers-edit-user',
-        },
-        {
-          icon: <Svg id="remove-access" />,
-          action: removeTeamMemberAction,
-          title: 'Remove Team Member',
-          context: pendingManager,
-          customItemColor: variables.palette.dark_error_container,
-          'data-testid': 'dashboard-managers-remove-access',
-        },
       ]);
     });
   });

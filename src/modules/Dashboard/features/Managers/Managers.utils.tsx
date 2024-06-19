@@ -86,27 +86,26 @@ export const getManagerActions = (
         title: t('copyInvitationLink'),
         context: manager,
       },
-      { type: MenuItemType.Divider },
+    );
+  } else if (manager.status === 'approved') {
+    menuItems.push(
+      {
+        icon: <Svg id="edit-user" />,
+        action: actions.editTeamMemberAction,
+        title: t('editTeamMember'),
+        context: manager,
+        'data-testid': 'dashboard-managers-edit-user',
+      },
+      {
+        icon: <Svg id="remove-access" />,
+        action: actions.removeTeamMemberAction,
+        title: t('removeTeamMember'),
+        context: manager,
+        customItemColor: variables.palette.dark_error_container,
+        'data-testid': 'dashboard-managers-remove-access',
+      },
     );
   }
-
-  menuItems.push(
-    {
-      icon: <Svg id="edit-user" />,
-      action: actions.editTeamMemberAction,
-      title: t('editTeamMember'),
-      context: manager,
-      'data-testid': 'dashboard-managers-edit-user',
-    },
-    {
-      icon: <Svg id="remove-access" />,
-      action: actions.removeTeamMemberAction,
-      title: t('removeTeamMember'),
-      context: manager,
-      customItemColor: variables.palette.dark_error_container,
-      'data-testid': 'dashboard-managers-remove-access',
-    },
-  );
 
   return menuItems;
 };
