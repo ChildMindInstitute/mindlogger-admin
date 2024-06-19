@@ -1,13 +1,11 @@
 import { BoxProps } from '@mui/material';
 
-import { Activity, ActivityFlow } from 'redux/modules';
 import { MenuItem } from 'shared/components';
+
+import { HydratedActivityFlow } from '../FlowGrid/FlowGrid.types';
 
 export interface FlowSummaryCardProps<T> extends BoxProps {
   appletId?: string;
-  description?: ActivityFlow['description'];
-  flowId?: string;
-  activities?: Activity[];
+  flow: HydratedActivityFlow;
   menuItems?: MenuItem<T>[];
-  name?: React.ReactNode;
 }

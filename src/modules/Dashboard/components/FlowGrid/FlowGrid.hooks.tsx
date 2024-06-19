@@ -3,7 +3,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
-import { Activity, ActivityFlow, workspaces } from 'redux/modules';
+import { workspaces } from 'redux/modules';
 import { page } from 'resources';
 import { MenuActionProps, MenuItemType, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -15,6 +15,7 @@ import {
 } from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
+import { HydratedActivityFlow } from './FlowGrid.types';
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
 
 type FlowsMenuActionParams = MenuActionProps<{ appletId?: string; flowId?: string }>;
@@ -47,7 +48,7 @@ export function useFlowGridMenu({
   const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
-    ({ flow }: { flow?: ActivityFlow }) => [
+    ({ flow }: { flow: HydratedActivityFlow }) => [
       {
         'data-testid': `${testId}-flow-edit`,
         action: ({ context }: FlowsMenuActionParams) => {
@@ -89,19 +90,16 @@ export function useFlowGridMenu({
       {
         'data-testid': `${testId}-flow-take-now`,
         action: () => {
-          if (flow) {
-            const options: OpenTakeNowModalOptions | undefined = subject
-              ? {
-                  targetSubject: {
-                    ...subject,
-                    secretId: subject.secretUserId,
-                    userId: subject.userId,
-                  },
-                }
-              : undefined;
-            // TODO: Fix this type :(
-            openTakeNowModal(flow as unknown as Partial<Activity>, options);
-          }
+          const options: OpenTakeNowModalOptions | undefined = subject
+            ? {
+                targetSubject: {
+                  ...subject,
+                  secretId: subject.secretUserId,
+                  userId: subject.userId,
+                },
+              }
+            : undefined;
+          openTakeNowModal(flow, options);
         },
         context: { appletId, flowId: flow?.id },
         icon: <Svg id="play-outline" />,

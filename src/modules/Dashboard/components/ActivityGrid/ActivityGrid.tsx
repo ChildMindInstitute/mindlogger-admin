@@ -32,9 +32,9 @@ export const ActivityGrid = ({
     <>
       {!!rows?.length && (
         <StyledFlexWrap sx={{ gap: 2.4 }} data-testid={`${dataTestId}-grid`}>
-          {rows.map((activity, index) => (
+          {rows.map((activity) => (
             <ActivitySummaryCard
-              key={index}
+              key={String(activity.id.value)}
               name={String(activity.name.value)}
               image={String(activity.image.value)}
               actionsMenu={activity.actions.content?.()}

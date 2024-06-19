@@ -31,20 +31,20 @@ export const FlowGrid = ({
     <>
       <StyledFlexColumn component="ul" sx={{ gap: 0.8, m: 0, p: 0 }} {...otherProps}>
         {flows.map((flow) => {
-          const { id, name, description, activityIds = [] } = flow;
+          const { id, activityIds = [] } = flow;
+          const hydratedFlow = {
+            ...flow,
+            activities: activityIds
+              .map((activityId) => activities.find(({ id }) => id === activityId))
+              .filter(Boolean) as Activity[],
+          };
 
           return (
             <FlowSummaryCard
-              activities={
-                activityIds
-                  .map((activityId) => activities.find(({ id }) => id === activityId))
-                  .filter(Boolean) as Activity[]
-              }
+              flow={hydratedFlow}
               component="li"
-              description={description}
-              menuItems={getActionsMenu({ flow })}
+              menuItems={getActionsMenu({ flow: hydratedFlow })}
               key={id}
-              name={name}
             />
           );
         })}

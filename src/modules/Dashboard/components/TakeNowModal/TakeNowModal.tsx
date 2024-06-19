@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -13,7 +13,9 @@ import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
 import { Manager, Respondent } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { FlowSummaryThumbnail } from 'modules/Dashboard/components/FlowSummaryCard/FlowSummaryThumbnail';
 
+import { HydratedActivityFlow } from '../FlowGrid/FlowGrid.types';
 import {
   OpenTakeNowModalOptions,
   TakeNowModalProps,
@@ -42,7 +44,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     featureFlags: { enableParticipantMultiInformant },
   } = useFeatureFlags();
 
-  const [activity, setActivity] = useState<BaseActivity | null>(null);
+  const [activityOrFlow, setActivityOrFlow] = useState<BaseActivity | HydratedActivityFlow | null>(
+    null,
+  );
   const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
   const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [defaultTargetSubject, setDefaultTargetSubject] =
@@ -192,7 +196,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
-      setActivity(null);
+      setActivityOrFlow(null);
       onClose?.();
     };
 
@@ -208,9 +212,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     );
 
     const handleSubmit = useCallback(() => {
-      if (targetSubject && sourceSubject && (isSelfReporting || loggedInUser) && activity?.id) {
+      if (
+        targetSubject &&
+        sourceSubject &&
+        (isSelfReporting || loggedInUser) &&
+        activityOrFlow?.id
+      ) {
         const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
-        url.searchParams.set('startActivityOrFlow', activity.id);
+        url.searchParams.set('startActivityOrFlow', activityOrFlow.id);
         url.searchParams.set('sourceSubjectId', sourceSubject.id);
         url.searchParams.set('targetSubjectId', targetSubject.id);
 
@@ -222,7 +231,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           url.searchParams.set('respondentId', loggedInUser.userId);
         }
 
-        setActivity(null);
+        setActivityOrFlow(null);
         window.open(url.toString(), '_blank');
       }
     }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
@@ -309,8 +318,15 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       [],
     );
 
-    if (!activity || !allParticipants || !participantsAndTeamMembers) {
+    if (!activityOrFlow || !allParticipants || !participantsAndTeamMembers) {
       return null;
+    }
+
+    let thumbnail: ReactNode = null;
+    if ('activities' in activityOrFlow) {
+      thumbnail = <FlowSummaryThumbnail activities={activityOrFlow.activities} />;
+    } else if ('image' in activityOrFlow) {
+      thumbnail = <StyledImg src={activityOrFlow.image} alt={activityOrFlow.name} />;
     }
 
     return (
@@ -330,10 +346,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       >
         <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
           <StyledFlexTopCenter gap={2.4}>
-            <StyledImageContainer>
-              {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
-            </StyledImageContainer>
-            <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
+            <StyledImageContainer>{thumbnail}</StyledImageContainer>
+            <StyledHeadline sx={{ flexGrow: 1 }}>{activityOrFlow.name}</StyledHeadline>
           </StyledFlexTopCenter>
           <StyledFlexColumn gap={2.4}>
             <StyledFlexColumn gap={0.8}>
@@ -420,8 +434,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     );
   };
 
-  const openTakeNowModal = (activity: BaseActivity, options?: OpenTakeNowModalOptions) => {
-    setActivity(activity);
+  const openTakeNowModal = (
+    activityOrFlow: BaseActivity | HydratedActivityFlow,
+    options?: OpenTakeNowModalOptions,
+  ) => {
+    setActivityOrFlow(activityOrFlow);
 
     if (options?.targetSubject) {
       setDefaultTargetSubject(options.targetSubject);
