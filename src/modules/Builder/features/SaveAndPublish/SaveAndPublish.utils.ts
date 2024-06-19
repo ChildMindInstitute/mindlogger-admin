@@ -17,7 +17,9 @@ import {
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
+  SingleMultiSelectionPerRowCondition,
   SingleValueCondition,
+  SliderRowsCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import {
@@ -376,6 +378,19 @@ export const processConditionPayload = (
 
       return {
         value,
+      };
+    }
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+    case ItemResponseType.SliderRows: {
+      const conditionData = condition as
+        | SingleMultiSelectionPerRowCondition
+        | SliderRowsCondition
+        | SliderRowsCondition<RangeValueCondition>;
+
+      return {
+        ...conditionData.payload,
+        rowIndex: Number(conditionData.payload.rowIndex),
       };
     }
     default:
