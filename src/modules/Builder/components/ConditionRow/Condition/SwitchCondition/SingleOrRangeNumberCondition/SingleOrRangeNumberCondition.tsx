@@ -1,3 +1,5 @@
+import { useWatch } from 'react-hook-form';
+
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledInputController } from '../SwitchCondition.styles';
@@ -14,6 +16,7 @@ export const SingleOrRangeNumberCondition = ({
   numberValueName,
   minValueName,
   maxValueName,
+  rowIndexName,
   minValue,
   maxValue,
   isSingleValueShown,
@@ -21,15 +24,18 @@ export const SingleOrRangeNumberCondition = ({
   dataTestid,
 }: SingleOrRangeNumberConditionProps) => {
   const { control } = useCustomFormContext();
+  const rowIndex = useWatch({ name: rowIndexName });
 
   const { minNumber, maxNumber } = getConditionMinMaxValues({
     item: selectedItem,
     state,
+    rowIndex,
   });
   const { leftRange, rightRange } = getConditionMinMaxRangeValues({
     item: selectedItem,
     minValue,
     maxValue,
+    rowIndex,
   });
 
   return (

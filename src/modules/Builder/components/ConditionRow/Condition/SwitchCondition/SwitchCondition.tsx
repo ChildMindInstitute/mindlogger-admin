@@ -61,6 +61,7 @@ export const SwitchCondition = ({
     numberValueName,
     minValueName,
     maxValueName,
+    rowIndexName,
     minValue,
     maxValue,
     isSingleValueShown,

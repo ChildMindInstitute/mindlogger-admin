@@ -20,6 +20,7 @@ export type SingleOrRangeNumberConditionProps = {
   numberValueName: string;
   minValueName: string;
   maxValueName: string;
+  rowIndexName: string;
   state: ConditionType;
   minValue: number;
   maxValue: number;
@@ -29,14 +30,14 @@ export type SingleOrRangeNumberConditionProps = {
 };
 
 export type GetConditionMinMaxRangeValuesProps = {
-  item?: SingleOrRangeNumberConditionProps['selectedItem'];
+  item: SingleOrRangeNumberConditionProps['selectedItem'];
   minValue: number;
   maxValue: number;
   rowIndex?: string;
 };
 
 export type GetConditionMinMaxValuesProps = {
-  item?: SingleOrRangeNumberConditionProps['selectedItem'];
+  item: SingleOrRangeNumberConditionProps['selectedItem'];
   state: ConditionType;
   rowIndex?: string;
 };

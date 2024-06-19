@@ -37,6 +37,13 @@ export const getConditionMinMaxValues = ({
     }
     case ConditionItemType.SliderRows: {
       const responseValues = item.responseValues;
+      console.log({
+        rowIndex,
+        minNumber:
+          state && rowIndex ? +responseValues.rows[+rowIndex].minValue : DEFAULT_NUMBER_MIN_VALUE,
+        maxNumber:
+          state && rowIndex ? +responseValues.rows[+rowIndex].maxValue : Number.MAX_SAFE_INTEGER,
+      });
 
       return {
         minNumber:
@@ -64,6 +71,7 @@ export const getConditionMinMaxRangeValues = ({
   item,
   minValue,
   maxValue,
+  rowIndex,
 }: GetConditionMinMaxRangeValuesProps) => {
   if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxRangeValues();
 
@@ -93,6 +101,26 @@ export const getConditionMinMaxRangeValues = ({
         rightRange: {
           minNumber: minValue,
           maxNumber: responseValues.maxValue,
+        },
+      };
+    }
+    case ConditionItemType.SliderRows: {
+      const responseValues = item.responseValues;
+      const minNumber = rowIndex
+        ? +responseValues.rows[+rowIndex].minValue
+        : DEFAULT_NUMBER_MIN_VALUE;
+      const maxNumber = rowIndex
+        ? +responseValues.rows[+rowIndex].maxValue
+        : Number.MAX_SAFE_INTEGER;
+
+      return {
+        leftRange: {
+          minNumber,
+          maxNumber: maxValue,
+        },
+        rightRange: {
+          minNumber: minValue,
+          maxNumber,
         },
       };
     }
