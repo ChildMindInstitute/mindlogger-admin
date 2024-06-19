@@ -1,7 +1,7 @@
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
-import { Invitation } from '../features/Applet/AddUser/AddUser.types';
+import { Invitation, InvitationStatus } from '../features/Applet/AddUser/AddUser.types';
 
 export type ManagerApplet = {
   id: string;
@@ -23,7 +23,11 @@ export type Manager = {
   roles: Roles[];
   lastSeen: string;
   isPinned?: boolean;
+  createdAt: string;
   applets: ManagerApplet[];
+  titles: string[];
+  status: InvitationStatus;
+  invitationKey: string | null;
 };
 
 export type RespondentDetail = {
@@ -40,6 +44,10 @@ export type RespondentDetail = {
   subjectFirstName: string;
   subjectLastName: string;
   subjectCreatedAt: string;
+
+  /**
+   * The `key` in `/invitations/{key}`. This is `null` after the invitation is approved
+   */
   invitation: Invitation | null;
 };
 

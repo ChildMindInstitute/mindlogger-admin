@@ -9,7 +9,7 @@ export type Invitation = {
   email: string;
   createdAt: string;
   key: string;
-  status: string;
+  status: InvitationStatus;
   meta: {
     subject_id?: string;
     secret_user_id?: string | null;
@@ -22,3 +22,5 @@ export type Invitations = {
   result: Invitation[];
   count: number;
 };
+
+export type InvitationStatus = 'pending' | 'approved';

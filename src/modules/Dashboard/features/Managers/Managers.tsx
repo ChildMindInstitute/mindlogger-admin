@@ -29,7 +29,7 @@ import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 
 import { AddManagerPopup, ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
-import { ManagersData } from './Managers.types';
+import { ManagersActions, ManagersData } from './Managers.types';
 import { getManagerActions, getHeadCells } from './Managers.utils';
 
 export const Managers = () => {
@@ -112,14 +112,27 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
-  const actions = {
-    removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+  const actions: ManagersActions = {
+    removeTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setRemoveAccessPopupVisible(true);
     },
-    editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+    editTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
+    },
+    copyEmailAddressAction: ({ context }: MenuActionProps<Manager>) => {
+      if (!context) return;
+      navigator.clipboard.writeText(context.email);
+    },
+    copyInvitationLinkAction: ({ context }: MenuActionProps<Manager>) => {
+      if (!context || !context.invitationKey) return;
+
+      const url = new URL(
+        `invitation/${context.invitationKey}`,
+        `${process.env.REACT_APP_WEB_URI}/`,
+      );
+      navigator.clipboard.writeText(url.toString());
     },
   };
 
@@ -145,16 +158,19 @@ export const Managers = () => {
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
+        const isPending = filteredManager.status === 'pending';
         const { applets, email, firstName, lastName, title, roles, id } = user;
         const stringRoles = joinWihComma(roles);
         const appletRole = applets.find(({ id }) => id === appletId);
-        const renderedRoles = appletRole?.roles.map(({ role }) => (
-          <Chip
-            color="secondary"
-            key={role}
-            title={`${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`}
-          />
-        ));
+        const renderedRoles = appletRole?.roles.map(({ role }) => {
+          const color = isPending ? 'warning' : 'secondary';
+          let title = `${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`;
+          if (isPending) {
+            title = `${title} (${t('pending')})`;
+          }
+
+          return <Chip color={color} key={role} title={title} />;
+        });
 
         return {
           id: {
@@ -222,7 +238,7 @@ export const Managers = () => {
           },
         };
       }),
-    [managersData],
+    [managersData, t],
   );
 
   const renderEmptyComponent = () => {

@@ -116,6 +116,7 @@ export const getParticipantActions = ({
   }
 
   const hasInvitation = !!invitation;
+  const dateFormat = `${DateFormats.MonthDayYear} '${t('lowercaseAt')}' ${DateFormats.Time}`;
 
   if (hasInvitation) {
     if (invitation.firstName && invitation.lastName) {
@@ -123,10 +124,7 @@ export const getParticipantActions = ({
     }
 
     titleArr.push(
-      `${i18n.t('invitationDate')}: ${format(
-        new Date(invitation.createdAt),
-        DateFormats.MonthDayYearTime,
-      )}`,
+      `${i18n.t('invitationDate')}: ${format(new Date(invitation.createdAt), dateFormat)}`,
     );
   } else {
     if (firstName && lastName) {
@@ -134,12 +132,7 @@ export const getParticipantActions = ({
     }
 
     if (subjectCreatedAt) {
-      titleArr.push(
-        `${i18n.t('dateAdded')}: ${format(
-          new Date(subjectCreatedAt),
-          DateFormats.MonthDayYearTime,
-        )}`,
-      );
+      titleArr.push(`${i18n.t('dateAdded')}: ${format(new Date(subjectCreatedAt), dateFormat)}`);
     }
   }
 
