@@ -132,6 +132,10 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
 const getConditions = ({ items, conditions, score }: GetConditions) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+    console.log({
+      relatedItem,
+      condition,
+    });
 
     return {
       type: condition.type,
@@ -403,8 +407,18 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
     return processConditionPayload(item.responseType, condition);
   }
 
-  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
   const optionId = (condition as OptionCondition).payload?.optionValue;
+  if (
+    item.responseType === ItemResponseType.SingleSelectionPerRow ||
+    item.responseType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    const options = item.responseValues?.options;
+
+    return {
+      optionValue: options?.find(({ id }) => id === optionId)?.text,
+    };
+  }
+  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
 
   return {
     optionValue: options?.find(({ id }) => id === optionId)?.value,
