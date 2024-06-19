@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { Integrations, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -24,8 +24,8 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
+  enableLorisIntegration,
   appletId,
-  integrations,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
@@ -56,8 +56,7 @@ export const getSettings = ({
           label: 'loris.integration',
           component: <LorisIntegrationSetting />,
           param: SettingParam.LorisIntegration,
-          isVisible:
-            integrations?.some((integration) => integration === Integrations.Loris) || false,
+          isVisible: enableLorisIntegration,
           'data-testid': `${dataTestid}-loris-integration`,
         },
       ],

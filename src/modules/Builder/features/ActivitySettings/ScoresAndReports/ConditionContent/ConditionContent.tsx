@@ -5,7 +5,7 @@ import { Svg } from 'shared/components/Svg';
 import { Condition, RangeValueCondition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionType } from 'shared/consts';
-import { ConditionRow } from 'modules/Builder/components';
+import { ConditionRow, ConditionRowOld } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -16,6 +16,7 @@ import {
   DEFAULT_PAYLOAD_MAX_VALUE,
   DEFAULT_PAYLOAD_MIN_VALUE,
 } from 'modules/Builder/components/ConditionRow/ConditionRow.const';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -32,7 +33,7 @@ export const ConditionContent = ({
 }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
-
+  const { featureFlags } = useFeatureFlags();
   const { control, getFieldState, setValue } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const {
@@ -78,19 +79,33 @@ export const ConditionContent = ({
 
   return (
     <>
-      {conditions?.map((condition: Condition, index: number) => (
-        <ConditionRow
-          key={`score-condition-${getEntityKey(condition) || index}-${index}`}
-          name={name}
-          activityName={fieldName}
-          index={index}
-          type={type}
-          scoreKey={type === ConditionRowType.Score ? score?.key : ''}
-          onRemove={() => removeCondition(index)}
-          onChangeConditionType={handleChangeConditionType}
-          data-testid={`${dataTestid}-condition-${index}`}
-        />
-      ))}
+      {conditions?.map((condition: Condition, index: number) =>
+        featureFlags.enableItemFlowExtendedItems ? (
+          <ConditionRow
+            key={`score-condition-${getEntityKey(condition) || index}-${index}`}
+            name={name}
+            activityName={fieldName}
+            index={index}
+            type={type}
+            scoreKey={type === ConditionRowType.Score ? score?.key : ''}
+            onRemove={() => removeCondition(index)}
+            onChangeConditionType={handleChangeConditionType}
+            data-testid={`${dataTestid}-condition-${index}`}
+          />
+        ) : (
+          <ConditionRowOld
+            key={`score-condition-${getEntityKey(condition) || index}-${index}`}
+            name={name}
+            activityName={fieldName}
+            index={index}
+            type={type}
+            scoreKey={type === ConditionRowType.Score ? score?.key : ''}
+            onRemove={() => removeCondition(index)}
+            onChangeConditionType={handleChangeConditionType}
+            data-testid={`${dataTestid}-condition-${index}`}
+          />
+        ),
+      )}
       {!!error && (
         <StyledBodyMedium color={variables.palette.semantic.error}>
           {error.message}

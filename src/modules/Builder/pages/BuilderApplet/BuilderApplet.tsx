@@ -13,6 +13,7 @@ import { applet, forbiddenState } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
 import { themes } from 'modules/Builder/state';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import {
@@ -64,9 +65,12 @@ export const BuilderApplet = () => {
     [appletData, defaultThemeId],
   );
 
+  const { featureFlags } = useFeatureFlags();
   const methods = useForm<AppletFormValues>({
     defaultValues,
-    resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
+    resolver: yupResolver(
+      AppletSchema(featureFlags.enableItemFlowExtendedItems) as ObjectSchema<AppletFormValues>,
+    ),
     mode: 'onChange',
   });
   const { reset, control, setValue, getValues } = methods;
