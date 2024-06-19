@@ -126,6 +126,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         enableMultiInformantTakeNow: true,
         enableParticipantMultiInformant: false,
       },
+      resetLDContext: jest.fn(),
     });
   });
 
@@ -264,6 +265,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
             enableMultiInformantTakeNow: false,
             enableParticipantMultiInformant: false,
           },
+          resetLDContext: jest.fn(),
         });
 
         renderWithProviders(<Activities />, {
@@ -671,6 +673,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
             enableMultiInformantTakeNow: true,
             enableParticipantMultiInformant: true,
           },
+          resetLDContext: jest.fn(),
         });
       });
 

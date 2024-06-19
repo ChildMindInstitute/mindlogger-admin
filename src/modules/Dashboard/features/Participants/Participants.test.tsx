@@ -57,7 +57,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: jest.fn(),
 }));
 
-const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 const getMockedGetWithParticipants = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
@@ -80,6 +80,7 @@ describe('Participants component tests', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
+      resetLDContext: jest.fn(),
     });
   });
 

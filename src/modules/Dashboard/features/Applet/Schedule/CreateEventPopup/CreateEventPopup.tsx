@@ -1,5 +1,6 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -19,6 +20,7 @@ export const CreateEventPopup = ({
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
+  const { appletId } = useParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
@@ -35,7 +37,9 @@ export const CreateEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`, {
+      'Applet ID': appletId,
+    });
   };
 
   const handleRemoveAlwaysAvailableClose = () => {

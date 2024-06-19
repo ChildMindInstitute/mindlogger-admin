@@ -12,6 +12,7 @@ import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 import { LocationStateKeys } from 'shared/types';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -37,7 +38,12 @@ export const LeftBar = () => {
     if (workspacesData?.length) {
       const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
       const storageWorkspace = authStorage.getWorkspace();
-      dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
+      const currentWorkspace = storageWorkspace || ownerWorkspace;
+      dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+
+      if (!currentWorkspace) return;
+
+      FeatureFlags.updateWorkspaces([currentWorkspace?.ownerId]);
     }
   }, [workspacesData]);
 
@@ -47,6 +53,10 @@ export const LeftBar = () => {
     if (workspace) {
       authStorage.setWorkspace(workspace);
       dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+
+      if (!workspace) return;
+
+      FeatureFlags.updateWorkspaces([workspace?.ownerId]);
     }
   }, [location.state]);
 

@@ -6,7 +6,7 @@ import { DatePickerInput } from './DatePickerInput';
 describe('DatePickerInput', () => {
   const mockedHandlePickerShow = jest.fn();
   const sharedProps = {
-    inputSx: {},
+    inputWrapperSx: {},
     id: 'icon_id',
     handlePickerShow: mockedHandlePickerShow,
     dataTestid: 'testId',

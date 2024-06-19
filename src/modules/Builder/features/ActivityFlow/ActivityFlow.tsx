@@ -13,7 +13,11 @@ import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/comp
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import {
+  ActivityFlowFormValues,
+  ActivityFlowItem,
+  ActivityFormValues,
+} from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
@@ -69,10 +73,17 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    const flowItems = activities.map((activity) => ({
-      key: uuidv4(),
-      activityKey: getEntityKey(activity),
-    }));
+    // remove Reviewer Assessment Activity from Flow Items list
+    const flowItems = activities.reduce((acc: ActivityFlowItem[], activity) => {
+      if (!activity.isReviewable) {
+        acc.push({
+          key: uuidv4(),
+          activityKey: getEntityKey(activity),
+        });
+      }
+
+      return acc;
+    }, []);
 
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 

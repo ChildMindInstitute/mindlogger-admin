@@ -12,6 +12,8 @@ export const FeatureFlagsKeys = {
   enableActivityAssign: 'enableActivityAssign',
   // TODO: https://mindlogger.atlassian.net/browse/M2-6523 Participant Connections flag cleanup
   enableParticipantConnections: 'enableParticipantConnections',
+  enableLorisIntegration: 'enableLorisIntegration',
+  enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

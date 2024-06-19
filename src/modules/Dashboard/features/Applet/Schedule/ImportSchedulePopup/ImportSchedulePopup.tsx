@@ -155,7 +155,9 @@ export const ImportSchedulePopup = ({
       await importSchedule({ appletId, body });
       onClose();
 
-      Mixpanel.track(`${analyticsPrefix} Schedule import successful`);
+      Mixpanel.track(`${analyticsPrefix} Schedule import successful`, {
+        'Applet ID': appletId,
+      });
     }
 
     setStep((prevStep) => ++prevStep as Steps);

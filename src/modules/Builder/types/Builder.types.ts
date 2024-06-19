@@ -93,6 +93,7 @@ export type AppletFormValues = {
   reportRecipients?: string[];
   reportIncludeUserId?: boolean;
   reportEmailBody?: string;
+  lorisIntegration?: boolean;
 };
 
 export type GetNewActivity = {

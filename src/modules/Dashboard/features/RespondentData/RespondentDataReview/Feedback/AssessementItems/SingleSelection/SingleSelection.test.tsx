@@ -67,13 +67,13 @@ describe('SingleSelection', () => {
     const tooltips = screen.queryAllByTestId(/^single-select-tooltip-\d+$/);
     expect(tooltips).toHaveLength(0);
 
-    userEvent.hover(screen.getByTestId('single-select-more-info-0'));
+    await userEvent.hover(screen.getByTestId('single-select-more-info-0'));
 
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent('Tooltip 1');
 
-    userEvent.unhover(screen.getByTestId('single-select-more-info-0'));
+    await userEvent.unhover(screen.getByTestId('single-select-more-info-0'));
 
     await waitFor(() => {
       const tooltip = screen.queryByRole('tooltip');

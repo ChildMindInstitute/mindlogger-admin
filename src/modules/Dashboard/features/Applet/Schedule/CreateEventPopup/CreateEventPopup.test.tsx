@@ -143,10 +143,10 @@ describe('CreateEventPopup', () => {
       expect(screen.getByText('Activity is required')).toBeInTheDocument();
 
       // select activity
-      const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
-      const activityInput = activityConteiner.querySelector('input');
+      const activityContainer = screen.getByTestId(`${dataTestid}-form-activity`);
+      const activityInput = activityContainer.querySelector('input');
       expect(activityInput).toHaveValue('');
-      const select = activityConteiner.querySelector('.MuiSelect-select');
+      const select = activityContainer.querySelector('.MuiSelect-select');
       await userEvent.click(select);
       const listbox = await screen.findByRole('listbox');
       expect(listbox).toBeInTheDocument();
@@ -223,10 +223,10 @@ describe('CreateEventPopup', () => {
       expect(await screen.findByTestId(dataTestid)).toBeInTheDocument();
 
       // select activity
-      const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
-      const activityInput = activityConteiner.querySelector('input');
+      const activityContainer = screen.getByTestId(`${dataTestid}-form-activity`);
+      const activityInput = activityContainer.querySelector('input');
       expect(activityInput).toHaveValue('');
-      const select = activityConteiner.querySelector('.MuiSelect-select');
+      const select = activityContainer.querySelector('.MuiSelect-select');
       expect(select).toBeInTheDocument();
       await userEvent.click(select);
 

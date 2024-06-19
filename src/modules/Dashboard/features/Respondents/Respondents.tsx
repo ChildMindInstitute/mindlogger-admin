@@ -189,7 +189,9 @@ export const Respondents = () => {
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
       setDataExportPopupVisible(true);
-      Mixpanel.track('Export Data click');
+      Mixpanel.track('Export Data click', {
+        'Applet ID': appletId,
+      });
     },
     viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
       const { respondentOrSubjectId } = context || {};

@@ -133,7 +133,9 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     onCloseCallback?.();
     duplicatePopupsClose();
 
-    Mixpanel.track('Applet Created Successfully');
+    Mixpanel.track('Applet Created Successfully', {
+      'Applet ID': currentAppletId,
+    });
 
     dispatch(
       banners.actions.addBanner({
