@@ -1,14 +1,22 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { Dict } from 'mixpanel-browser';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Modal } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
-import { checkIfFullAccess, joinWihComma } from 'shared/utils';
+import {
+  Mixpanel,
+  checkIfDashboardAppletActivitiesUrlPassed,
+  checkIfDashboardAppletParticipantDetailsUrlPassed,
+  checkIfFullAccess,
+  joinWihComma,
+} from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
 import { Manager, Respondent } from 'modules/Dashboard/types';
@@ -35,6 +43,18 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
 type AnyTeamSearchType = 'team' | 'any-participant';
 type FullTeamSearchType = 'team' | 'full-participant';
 
+const getAccountType = (subject: ParticipantDropdownOption | null) => {
+  if (!subject) return null;
+
+  if (subject.userId) {
+    if (subject.tag === 'Team') return 'Team';
+
+    return 'Full';
+  }
+
+  return 'Limited';
+};
+
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
   const { ownerId } = workspaces.useData() || {};
@@ -43,6 +63,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const {
     featureFlags: { enableParticipantMultiInformant },
   } = useFeatureFlags();
+  const { pathname } = useLocation();
 
   const [activityOrFlow, setActivityOrFlow] = useState<BaseActivity | HydratedActivityFlow | null>(
     null,
@@ -53,9 +74,29 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
     useState<ParticipantDropdownOption | null>(null);
+  const [multiInformantAssessmentId, setMultiInformantAssessmentId] = useState<string | null>(null);
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const canTakeNow = checkIfFullAccess(roles);
+
+  const track = useCallback(
+    (action: string, payload?: Dict, newActivityOrFlow?: BaseActivity | HydratedActivityFlow) => {
+      const props: Dict = {
+        feature: 'multi-informant',
+        multiinformant_assessment_id: multiInformantAssessmentId,
+        ...payload,
+      };
+      const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
+
+      if (trackedActivityOrFlow) {
+        const isFlow = 'activityIds' in trackedActivityOrFlow;
+        props[isFlow ? 'activity_flow_id' : 'activity_id'] = trackedActivityOrFlow.id;
+      }
+
+      Mixpanel.track(action, props);
+    },
+    [activityOrFlow, multiInformantAssessmentId],
+  );
 
   const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
     const stringNicknames = joinWihComma(participant.nicknames, true);
@@ -196,7 +237,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
+      track('Take Now dialogue closed');
+
       setActivityOrFlow(null);
+      setMultiInformantAssessmentId(null);
       onClose?.();
     };
 
@@ -222,6 +266,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         url.searchParams.set('startActivityOrFlow', activityOrFlow.id);
         url.searchParams.set('sourceSubjectId', sourceSubject.id);
         url.searchParams.set('targetSubjectId', targetSubject.id);
+        url.searchParams.set('multiInformantAssessmentId', String(multiInformantAssessmentId));
 
         // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
         // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
@@ -230,6 +275,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
           url.searchParams.set('respondentId', loggedInUser.userId);
         }
+
+        track('Multi-informant Start Activity click', {
+          target_account_type: getAccountType(targetSubject),
+          source_account_type: getAccountType(sourceSubject),
+          input_account_type: getAccountType(isSelfReporting ? sourceSubject : loggedInUser),
+          is_self_reporting: isSelfReporting,
+        });
 
         setActivityOrFlow(null);
         window.open(url.toString(), '_blank');
@@ -358,7 +410,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
                   value={sourceSubject}
                   options={participantsAndTeamMembers}
+                  onOpen={() => {
+                    track('"Who will be providing responses" dropdown opened');
+                  }}
                   onChange={(option) => {
+                    track('"Who will be providing responses" selection changed', {
+                      source_account_type: getAccountType(option),
+                    });
+
                     setSourceSubject(option);
 
                     const selfReportingCondition =
@@ -381,7 +440,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   }
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
-                  onChange={(_e, checked) => setIsSelfReporting(checked)}
+                  onChange={(_e, checked) => {
+                    track('Own responses checkbox toggled', { is_self_reporting: checked });
+                    setIsSelfReporting(checked);
+                  }}
                   disabled={
                     enableParticipantMultiInformant
                       ? !sourceSubject?.userId
@@ -402,7 +464,15 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                       ? fullAccountParticipantsAndTeamMembers
                       : teamMembersOnly
                   }
-                  onChange={setLoggedInUser}
+                  onOpen={() => {
+                    track('"Who will be inputting the responses" dropdown opened');
+                  }}
+                  onChange={(option) => {
+                    track('"Who will be inputting the responses" selection changed', {
+                      input_account_type: getAccountType(option),
+                    });
+                    setLoggedInUser(option);
+                  }}
                   data-testid={`${dataTestId}-take-now-modal-logged-in-user-dropdown`}
                   handleSearch={(query) => {
                     const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = [
@@ -424,7 +494,15 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
               value={targetSubject}
               options={participantsAndTeamMembers}
-              onChange={setTargetSubject}
+              onOpen={() => {
+                track('"Who are the responses about" dropdown opened');
+              }}
+              onChange={(option) => {
+                track('"Who are the responses about" selection changed', {
+                  target_account_type: getAccountType(option),
+                });
+                setTargetSubject(option);
+              }}
               data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
               handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
@@ -436,17 +514,33 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
   const openTakeNowModal = (
     activityOrFlow: BaseActivity | HydratedActivityFlow,
-    options?: OpenTakeNowModalOptions,
+    { targetSubject, sourceSubject }: OpenTakeNowModalOptions = {},
   ) => {
+    const uuid = uuidv4();
+    const analyticsPayload: Dict = {
+      multiinformant_assessment_id: uuid,
+    };
+
+    setMultiInformantAssessmentId(uuid);
     setActivityOrFlow(activityOrFlow);
 
-    if (options?.targetSubject) {
-      setDefaultTargetSubject(options.targetSubject);
+    if (targetSubject) {
+      setDefaultTargetSubject(targetSubject);
+      analyticsPayload.target_account_type = getAccountType(targetSubject);
     }
 
-    if (options?.sourceSubject) {
-      setDefaultSourceSubject(options.sourceSubject);
+    if (sourceSubject) {
+      setDefaultSourceSubject(sourceSubject);
+      analyticsPayload.source_account_type = getAccountType(sourceSubject);
     }
+
+    if (checkIfDashboardAppletActivitiesUrlPassed(pathname)) {
+      analyticsPayload.via = 'Applet - Activities';
+    } else if (checkIfDashboardAppletParticipantDetailsUrlPassed(pathname)) {
+      analyticsPayload.via = 'Applet - Participants - Activities';
+    }
+
+    track('Take Now click', analyticsPayload, activityOrFlow);
   };
 
   return { TakeNowModal, openTakeNowModal };

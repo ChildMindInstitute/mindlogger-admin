@@ -19,6 +19,7 @@ export const enum Path {
   PerformanceTask = 'performance-task',
   Gyroscope = 'gyroscope',
   Touch = 'touch',
+  Participants = 'participants',
 }
 
 export const enum SettingParam {
@@ -42,6 +43,8 @@ export const enum SettingParam {
 export const uuidRegexp =
   '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
 export const APPLET_DASHBOARD_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})`;
+export const DASHBOARD_APPLET_ACTIVITIES_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})/${Path.Activities}`;
+export const DASHBOARD_APPLET_PARTICIPANT_DETAILS_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})/${Path.Participants}\\/(${uuidRegexp})`;
 export const DASHBOARD_APPLETS_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/${Path.Applets}`;
 export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|${Path.NewApplet})`;
 export const APPLET_SETTINGS_PAGE_REGEXP_STRING = `(${APPLET_DASHBOARD_PAGE_REGEXP_STRING}|${APPLET_PAGE_REGEXP_STRING})\\/${Path.Settings}`;
@@ -97,6 +100,12 @@ export const checkIfAppletUrlPassed = (url: string) =>
 
 export const checkIfDashboardAppletsUrlPassed = (url: string) =>
   new RegExp(`^${DASHBOARD_APPLETS_PAGE_REGEXP_STRING}`).test(url);
+
+export const checkIfDashboardAppletActivitiesUrlPassed = (url: string) =>
+  new RegExp(`^${DASHBOARD_APPLET_ACTIVITIES_PAGE_REGEXP_STRING}`).test(url);
+
+export const checkIfDashboardAppletParticipantDetailsUrlPassed = (url: string) =>
+  new RegExp(`^${DASHBOARD_APPLET_PARTICIPANT_DETAILS_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfAppletSettingsUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_SETTINGS_PAGE_REGEXP_STRING}`).test(url);
