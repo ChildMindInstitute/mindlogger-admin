@@ -17,7 +17,7 @@ const applyMaxSize = {
       ...state.styles.popper,
       display: 'flex',
       placeItems: state.placement.includes('bottom') ? 'flex-start' : 'flex-end',
-      height: `${height - 24}px`,
+      height: state.placement.includes('bottom') ? `${height - 24}px` : undefined,
     };
   },
 };
