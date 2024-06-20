@@ -37,13 +37,6 @@ export const getConditionMinMaxValues = ({
     }
     case ConditionItemType.SliderRows: {
       const responseValues = item.responseValues;
-      console.log({
-        rowIndex,
-        minNumber:
-          state && rowIndex ? +responseValues.rows[+rowIndex].minValue : DEFAULT_NUMBER_MIN_VALUE,
-        maxNumber:
-          state && rowIndex ? +responseValues.rows[+rowIndex].maxValue : Number.MAX_SAFE_INTEGER,
-      });
 
       return {
         minNumber:

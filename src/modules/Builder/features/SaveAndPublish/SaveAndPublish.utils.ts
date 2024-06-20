@@ -132,10 +132,6 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
 const getConditions = ({ items, conditions, score }: GetConditions) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
-    console.log({
-      relatedItem,
-      condition,
-    });
 
     return {
       type: condition.type,
