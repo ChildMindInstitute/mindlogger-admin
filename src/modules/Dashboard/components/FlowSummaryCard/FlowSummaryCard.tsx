@@ -35,7 +35,7 @@ export const FlowSummaryCard = <T,>({
       <Box sx={{ display: 'flex', gap: 0.8 }}>
         <Chip
           color="primary"
-          icon={<Svg aria-hidden id="logic" height={18} width={18} />}
+          icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
           shape={ChipShape.Rectangular}
           title={t('flow')}
         />
