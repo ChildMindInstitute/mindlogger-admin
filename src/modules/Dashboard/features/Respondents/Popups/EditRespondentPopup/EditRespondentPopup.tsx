@@ -10,7 +10,7 @@ import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editSubjectApi } from 'api';
-import { Mixpanel, falseReturnFunc, getErrorMessage } from 'shared/utils';
+import { MixProperties, Mixpanel, falseReturnFunc, getErrorMessage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 
@@ -53,8 +53,8 @@ export const EditRespondentPopup = ({
         ? 'Full Account edited successfully'
         : 'Limited Account edited successfully';
       Mixpanel.track(event, {
-        applet_id: appletId,
-        tag: tag || null, // Normalize empty string tag to null
+        [MixProperties.AppletId]: appletId,
+        [MixProperties.Tag]: tag || null, // Normalize empty string tag to null
       });
 
       onCloseHandler(true);
@@ -76,8 +76,8 @@ export const EditRespondentPopup = ({
       ? 'Edit Full Account form submitted'
       : 'Edit Limited Account form submitted';
     Mixpanel.track(event, {
-      applet_id: appletId,
-      tag: tag || null, // Normalize empty string tag to null
+      [MixProperties.AppletId]: appletId,
+      [MixProperties.Tag]: tag || null, // Normalize empty string tag to null
     });
 
     editRespondent({

@@ -5,14 +5,14 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { MixProperties, Mixpanel } from 'shared/utils/mixpanel';
 import { ParticipantTag } from 'shared/consts';
 
 import { AddParticipantPopup } from './AddParticipantPopup';
 
 const dataTestId = 'test-id';
 const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,
@@ -93,8 +93,8 @@ describe('AddParticipantPopup component', () => {
     await userEvent.click(getByText('Send Invitation'));
 
     expect(mixpanelTrack).toBeCalledWith('Full Account invitation form submitted', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
 
     await waitFor(() => {
@@ -102,8 +102,8 @@ describe('AddParticipantPopup component', () => {
     });
 
     expect(mixpanelTrack).toBeCalledWith('Full Account invitation created successfully', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
   });
 
@@ -135,8 +135,8 @@ describe('AddParticipantPopup component', () => {
     await userEvent.click(getByText('Create'));
 
     expect(mixpanelTrack).toBeCalledWith('Add Limited Account form submitted', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
 
     await waitFor(() => {
@@ -144,8 +144,8 @@ describe('AddParticipantPopup component', () => {
     });
 
     expect(mixpanelTrack).toBeCalledWith('Limited Account created successfully', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
   });
 });

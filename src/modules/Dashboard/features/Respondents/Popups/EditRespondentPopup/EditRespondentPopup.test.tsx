@@ -3,14 +3,14 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { Mixpanel, MixProperties } from 'shared/utils/mixpanel';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
 
 import { EditRespondentPopup } from '.';
 
 const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const chosenAppletData = {
   appletId: mockedAppletId,
@@ -73,15 +73,15 @@ describe('EditRespondentPopup component tests', () => {
     await userEvent.click(submitButton);
 
     expect(mixpanelTrack).toBeCalledWith('Edit Limited Account form submitted', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mixpanelTrack).toBeCalledWith('Limited Account edited successfully', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
   });
 
@@ -107,15 +107,15 @@ describe('EditRespondentPopup component tests', () => {
     await userEvent.click(submitButton);
 
     expect(mixpanelTrack).toBeCalledWith('Edit Full Account form submitted', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mixpanelTrack).toBeCalledWith('Full Account edited successfully', {
-      applet_id: mockedAppletId,
-      tag: 'Child',
+      [MixProperties.AppletId]: mockedAppletId,
+      [MixProperties.Tag]: 'Child',
     });
   });
 

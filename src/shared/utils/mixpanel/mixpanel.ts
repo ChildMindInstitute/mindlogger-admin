@@ -1,6 +1,6 @@
-import { Dict } from 'mixpanel-browser';
+import { MixPayload } from 'shared/utils/mixpanel/mixpanel.types';
 
-import { isProduction, isStaging, isUat, isDev } from './env';
+import { isProduction, isStaging, isUat, isDev } from '../env';
 
 const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 const isJest = !!process.env.JEST_WORKER_ID;
@@ -22,7 +22,7 @@ export const Mixpanel = {
       mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
     }
   },
-  async track(action: string, payload?: Dict) {
+  async track(action: string, payload?: MixPayload) {
     if (shouldEnableMixpanel) {
       const { default: mixpanel } = await import('mixpanel-browser');
       mixpanel.track(`[Admin] ${action}`, payload);
