@@ -3,8 +3,9 @@ import { useRef, useState } from 'react';
 
 import { Tooltip } from 'shared/components';
 
-import { StyledMdPreview, StyledSelectController } from './ItemFlowSelectController.styles';
+import { StyledSelectController } from './ItemFlowSelectController.styles';
 import { ItemFlowSelectControllerProps } from './ItemFlowSelectController.types';
+import { StyledMdPreview } from './StyledMdPreview/StyledMdPreview.styles';
 
 export const ItemFlowSelectController = ({
   control,
