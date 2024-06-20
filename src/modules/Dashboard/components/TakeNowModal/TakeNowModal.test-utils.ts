@@ -1,10 +1,19 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Dict } from 'mixpanel-browser';
+
+import { mockedAppletData, mockedAppletId } from 'shared/mock';
+import { Mixpanel } from 'shared/utils';
+
+const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 export const takeNowModalTestId = (testId: string) => `${testId}-take-now-modal`;
 
 export const sourceSubjectDropdownTestId = (testId: string) =>
   `${takeNowModalTestId(testId)}-source-subject-dropdown`;
+
+export const loggedInUserDropdownTestId = (testId: string) =>
+  `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
 
 export const targetSubjectDropdownTestId = (testId: string) =>
   `${takeNowModalTestId(testId)}-target-subject-dropdown`;
@@ -26,22 +35,28 @@ export const openTakeNowModal = async (testId: string) => {
   await waitFor(() => expect(screen.getByTestId(`${takeNowModalTestId(testId)}`)).toBeVisible());
 };
 
-export const selectSourceSubject = async (testId: string, subjectId: string) => {
-  const participantInputElement = screen
-    .getByTestId(sourceSubjectDropdownTestId(testId))
-    .querySelector('input');
+export const selectParticipant = async (
+  testId: string,
+  dropdown: 'source' | 'target' | 'loggedin',
+  subjectId: string,
+) => {
+  const dropdownTestId = {
+    source: sourceSubjectDropdownTestId,
+    target: targetSubjectDropdownTestId,
+    loggedin: loggedInUserDropdownTestId,
+  }[dropdown](testId);
+
+  const participantInputElement = screen.getByTestId(dropdownTestId).querySelector('input');
 
   if (participantInputElement === null) {
-    throw new Error('Autocomplete source subject dropdown element not found');
+    throw new Error(`Autocomplete ${dropdown} dropdown element not found`);
   }
 
   fireEvent.mouseDown(participantInputElement);
 
-  const ownerParticipantOption = screen.getByTestId(
-    `${sourceSubjectDropdownTestId(testId)}-option-${subjectId}`,
-  );
+  const participantOption = screen.getByTestId(`${dropdownTestId}-option-${subjectId}`);
 
-  fireEvent.click(ownerParticipantOption);
+  fireEvent.click(participantOption);
 };
 
 export const toggleSelfReportCheckbox = async (testId: string) => {
@@ -52,4 +67,17 @@ export const toggleSelfReportCheckbox = async (testId: string) => {
   }
 
   fireEvent.click(checkbox);
+};
+
+export const expectMixpanelTrack = (action: string, payload?: Dict) => {
+  expect(spyMixpanelTrack).toHaveBeenCalledWith(
+    action,
+    expect.objectContaining({
+      feature: 'multi-informant',
+      applet_id: mockedAppletId,
+      multiinformant_assessment_id: expect.any(String),
+      activity_id: mockedAppletData.activities[0].id,
+      ...payload,
+    }),
+  );
 };

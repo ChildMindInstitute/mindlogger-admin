@@ -83,6 +83,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     (action: string, payload?: Dict, newActivityOrFlow?: BaseActivity | HydratedActivityFlow) => {
       const props: Dict = {
         feature: 'multi-informant',
+        applet_id: appletId,
         multiinformant_assessment_id: multiInformantAssessmentId,
         ...payload,
       };
@@ -95,7 +96,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
       Mixpanel.track(action, props);
     },
-    [activityOrFlow, multiInformantAssessmentId],
+    [activityOrFlow, appletId, multiInformantAssessmentId],
   );
 
   const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {

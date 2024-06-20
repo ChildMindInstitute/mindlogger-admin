@@ -28,8 +28,9 @@ import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { RespondentStatus } from 'modules/Dashboard/types';
 import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
+  expectMixpanelTrack,
   openTakeNowModal,
-  selectSourceSubject,
+  selectParticipant,
   selfReportCheckboxTestId,
   sourceSubjectDropdownTestId,
   takeNowModalTestId,
@@ -101,6 +102,10 @@ describe('Dashboard > Applet > Activities screen', () => {
       },
       resetLDContext: jest.fn(),
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   test('should render empty component', async () => {
@@ -292,7 +297,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       });
     });
 
-    test('should pre-populate admin in Take Now modal', async () => {
+    test('should pre-populate admin in Take Now modal and start assessment', async () => {
       const mockedOwnerRespondent = {
         id: mockedUserData.id,
         nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
@@ -397,13 +402,35 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      const inputElement = screen
+      expectMixpanelTrack('Take Now click', { via: 'Applet - Activities' });
+
+      const sourceInputElement = screen
         .getByTestId(sourceSubjectDropdownTestId(testId))
         .querySelector('input');
 
-      expect(inputElement).toHaveValue(
+      expect(sourceInputElement).toHaveValue(
         `${mockedUserData.firstName} ${mockedUserData.lastName} (Team)`,
       );
+
+      selectParticipant(testId, 'target', mockedRespondent.details[0].subjectId);
+
+      expectMixpanelTrack('"Who are the responses about" dropdown opened');
+      expectMixpanelTrack('"Who are the responses about" selection changed', {
+        target_account_type: 'Full',
+      });
+
+      const submitButton = screen.getByTestId(`${takeNowModalTestId(testId)}-submit-button`);
+
+      expect(submitButton).not.toBeDisabled();
+
+      fireEvent.click(submitButton);
+
+      expectMixpanelTrack('Multi-informant Start Activity click', {
+        source_account_type: 'Team',
+        target_account_type: 'Full',
+        input_account_type: 'Team',
+        is_self_reporting: true,
+      });
     });
 
     test('Full account participants cannot self-report', async () => {
@@ -511,19 +538,12 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      const inputElement = getByTestId(sourceSubjectDropdownTestId(testId)).querySelector('input');
+      selectParticipant(testId, 'source', mockedRespondent.details[0].subjectId);
 
-      if (inputElement === null) {
-        throw new Error('Autocomplete dropdown element not found');
-      }
-
-      fireEvent.mouseDown(inputElement);
-
-      const fullAccountParticipantOption = getByTestId(
-        `${sourceSubjectDropdownTestId(testId)}-option-${mockedRespondent.details[0].subjectId}`,
-      );
-
-      fireEvent.click(fullAccountParticipantOption);
+      expectMixpanelTrack('"Who will be providing responses" dropdown opened');
+      expectMixpanelTrack('"Who will be providing responses" selection changed', {
+        source_account_type: 'Full',
+      });
 
       const checkbox = getByTestId(selfReportCheckboxTestId(testId)).querySelector('input');
 
@@ -635,9 +655,18 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      await selectSourceSubject(testId, mockedOwnerRespondent.details[0].subjectId);
+      await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
+
+      expectMixpanelTrack('"Who will be providing responses" dropdown opened');
+      expectMixpanelTrack('"Who will be providing responses" selection changed', {
+        source_account_type: 'Team',
+      });
 
       await toggleSelfReportCheckbox(testId);
+
+      expectMixpanelTrack('Own responses checkbox toggled', {
+        is_self_reporting: false,
+      });
 
       const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
 
@@ -648,6 +677,8 @@ describe('Dashboard > Applet > Activities screen', () => {
       }
 
       fireEvent.mouseDown(inputElement);
+
+      expectMixpanelTrack('"Who will be inputting the responses" dropdown opened');
 
       const options = within(getByRole('listbox')).queryAllByRole('option');
 
@@ -661,6 +692,12 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       expect(optionsText).not.toContain(mockedRespondent.details[0].subjectId);
       expect(optionsText).not.toContain(mockedRespondent2.details[0].subjectId);
+
+      selectParticipant(testId, 'loggedin', mockedOwnerRespondent.details[0].subjectId);
+
+      expectMixpanelTrack('"Who will be inputting the responses" selection changed', {
+        input_account_type: 'Team',
+      });
     });
 
     describe('featureFlags.enableParticipantMultiInformant = true', () => {
@@ -780,7 +817,12 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         await openTakeNowModal(testId);
 
-        await selectSourceSubject(testId, mockedOwnerRespondent.details[0].subjectId);
+        await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
+
+        expectMixpanelTrack('"Who will be providing responses" dropdown opened');
+        expectMixpanelTrack('"Who will be providing responses" selection changed', {
+          source_account_type: 'Team',
+        });
 
         const checkbox = getByTestId(selfReportCheckboxTestId(testId)).querySelector('input');
 
@@ -892,9 +934,18 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         await openTakeNowModal(testId);
 
-        await selectSourceSubject(testId, mockedOwnerRespondent.details[0].subjectId);
+        await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
+
+        expectMixpanelTrack('"Who will be providing responses" dropdown opened');
+        expectMixpanelTrack('"Who will be providing responses" selection changed', {
+          source_account_type: 'Team',
+        });
 
         await toggleSelfReportCheckbox(testId);
+
+        expectMixpanelTrack('Own responses checkbox toggled', {
+          is_self_reporting: false,
+        });
 
         const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
 
@@ -905,6 +956,8 @@ describe('Dashboard > Applet > Activities screen', () => {
         }
 
         fireEvent.mouseDown(inputElement);
+
+        expectMixpanelTrack('"Who will be inputting the responses" dropdown opened');
 
         const options = within(getByRole('listbox')).queryAllByRole('option');
 
