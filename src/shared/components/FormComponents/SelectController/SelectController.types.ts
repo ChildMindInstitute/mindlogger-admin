@@ -10,9 +10,10 @@ export type Option = {
   labelKey: string;
   icon?: JSX.Element;
   disabled?: boolean;
-  tooltip?: string;
+  tooltip?: string | JSX.Element;
   hidden?: boolean;
   groupKey?: string;
+  tooltipPlacement?: 'bottom' | 'right';
 };
 
 export type GetMenuItem = {
@@ -20,8 +21,9 @@ export type GetMenuItem = {
   value: string | boolean;
   itemDisabled: boolean;
   icon?: JSX.Element;
-  withoutKey?: boolean;
   hidden?: boolean;
+  tooltip?: string | JSX.Element;
+  tooltipPlacement?: 'bottom' | 'right';
 };
 
 export enum SelectUiType {
@@ -51,3 +53,9 @@ export type SelectObserverTargetProps = Pick<
   SelectControllerProps<FieldValues>,
   'setTrigger' | 'targetSelector'
 >;
+
+export type StyledMenuItemProps = {
+  uiType: SelectUiType;
+  itemDisabled?: boolean;
+  component?: React.ElementType;
+};
