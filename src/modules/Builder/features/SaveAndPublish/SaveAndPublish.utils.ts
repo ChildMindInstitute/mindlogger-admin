@@ -359,9 +359,12 @@ export const processConditionPayload = (
 ) => {
   switch (itemType) {
     case ItemResponseType.Date: {
-      const conditionData = condition as Condition<Date>;
-      const conditionType = conditionData.type as ConditionType;
-      if ([ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)) {
+      const conditionData = condition as SingleValueCondition<Date> | RangeValueCondition<Date>;
+      const conditionType = conditionData.type;
+      if (
+        conditionType &&
+        [ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)
+      ) {
         const conditionPayload = conditionData.payload as RangeValueCondition<Date>['payload'];
         const minValue = formatToNumberDate(conditionPayload.minValue);
         const maxValue = formatToNumberDate(conditionPayload.maxValue);

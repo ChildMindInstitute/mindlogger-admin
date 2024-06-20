@@ -439,17 +439,17 @@ export const enum TimeRangeConditionType {
   StartTime = 'startTime',
   EndTime = 'endTime',
 }
-export type TimeRangeValueCondition<T = Date> = BaseCondition &
-  RangeValueCondition<T> & {
+export type TimeRangeValueCondition = BaseCondition &
+  RangeValueCondition<Date> & {
     payload: {
       type: TimeRangeConditionType;
     };
   };
 
-export type Condition<T = number> =
+export type Condition =
   | OptionCondition
-  | SingleValueCondition<T>
-  | RangeValueCondition<T>
+  | SingleValueCondition
+  | RangeValueCondition
   | TimeRangeValueCondition
   | SingleMultiSelectionPerRowCondition
   | SliderRowsCondition
@@ -461,7 +461,7 @@ export type ConditionalLogic = {
   //for frontend purposes only
   key?: string;
   itemKey?: string;
-  conditions: Array<Condition>;
+  conditions: Condition[];
 };
 
 export type Item<T = ItemCommonType> =
@@ -680,7 +680,6 @@ export type Activity = {
   performanceTaskType?: PerfTaskType;
   createdAt?: string;
   reportIncludedItemName?: string;
-  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {

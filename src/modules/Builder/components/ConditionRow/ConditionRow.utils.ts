@@ -121,7 +121,7 @@ const getDefaultPayload = (
   if (type === ItemResponseType.TimeRange)
     return {
       value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
-      type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+      type: (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
     };
   if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
 
@@ -229,11 +229,9 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       }
       if (responseType === ItemResponseType.TimeRange) {
         return {
-          minValue:
-            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.minValue ?? null,
-          maxValue:
-            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.maxValue ?? null,
-          type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+          minValue: (conditionPayload as TimeRangeValueCondition['payload'])?.minValue ?? null,
+          maxValue: (conditionPayload as TimeRangeValueCondition['payload'])?.maxValue ?? null,
+          type: (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
         };
       }
       if (responseType === ItemResponseType.SliderRows) {
