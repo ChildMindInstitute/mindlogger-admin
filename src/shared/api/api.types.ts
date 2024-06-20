@@ -54,3 +54,13 @@ export type RefreshResponse = {
   refreshToken: string;
   tokenType: string | null;
 };
+
+export enum TargetExtension {
+  MP3 = '.mp3',
+  MP4 = '.mp4',
+}
+
+export type FileUploadParams = {
+  fileName: string;
+  targetExtension?: TargetExtension;
+};

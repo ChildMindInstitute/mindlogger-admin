@@ -70,7 +70,7 @@ export const AudioUploadExtension = ({
                       hidden
                       accept={ALLOWED_AUDIO_FILE_TYPES}
                       type="file"
-                      onChange={onInputChange}
+                      onChange={() => onInputChange()}
                     />
                   </StyledTitleSmall>
                 </StyledMenuItem>
