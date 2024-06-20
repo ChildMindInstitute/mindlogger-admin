@@ -11,6 +11,8 @@ import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'sh
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import {
+  MixpanelPayload,
+  MixpanelProps,
   Mixpanel,
   checkIfDashboardAppletActivitiesUrlPassed,
   checkIfDashboardAppletParticipantDetailsUrlPassed,
@@ -80,18 +82,23 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const canTakeNow = checkIfFullAccess(roles);
 
   const track = useCallback(
-    (action: string, payload?: Dict, newActivityOrFlow?: BaseActivity | HydratedActivityFlow) => {
-      const props: Dict = {
-        feature: 'multi-informant',
-        applet_id: appletId,
-        multiinformant_assessment_id: multiInformantAssessmentId,
+    (
+      action: string,
+      payload?: MixpanelPayload,
+      newActivityOrFlow?: BaseActivity | HydratedActivityFlow,
+    ) => {
+      const props: MixpanelPayload = {
+        [MixpanelProps.Feature]: 'Multi-informant',
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.MultiInformantAssessmentId]: multiInformantAssessmentId,
         ...payload,
       };
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
 
       if (trackedActivityOrFlow) {
         const isFlow = 'activityIds' in trackedActivityOrFlow;
-        props[isFlow ? 'activity_flow_id' : 'activity_id'] = trackedActivityOrFlow.id;
+        props[isFlow ? MixpanelProps.ActivityFlowId : MixpanelProps.ActivityId] =
+          trackedActivityOrFlow.id;
       }
 
       Mixpanel.track(action, props);
@@ -278,10 +285,12 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         }
 
         track('Multi-informant Start Activity click', {
-          target_account_type: getAccountType(targetSubject),
-          source_account_type: getAccountType(sourceSubject),
-          input_account_type: getAccountType(isSelfReporting ? sourceSubject : loggedInUser),
-          is_self_reporting: isSelfReporting,
+          [MixpanelProps.SourceAccountType]: getAccountType(sourceSubject),
+          [MixpanelProps.TargetAccountType]: getAccountType(targetSubject),
+          [MixpanelProps.InputAccountType]: getAccountType(
+            isSelfReporting ? sourceSubject : loggedInUser,
+          ),
+          [MixpanelProps.IsSelfReporting]: isSelfReporting,
         });
 
         setActivityOrFlow(null);
@@ -416,7 +425,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   }}
                   onChange={(option) => {
                     track('"Who will be providing responses" selection changed', {
-                      source_account_type: getAccountType(option),
+                      [MixpanelProps.SourceAccountType]: getAccountType(option),
                     });
 
                     setSourceSubject(option);
@@ -442,7 +451,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => {
-                    track('Own responses checkbox toggled', { is_self_reporting: checked });
+                    track('Own responses checkbox toggled', {
+                      [MixpanelProps.IsSelfReporting]: checked,
+                    });
                     setIsSelfReporting(checked);
                   }}
                   disabled={
@@ -470,7 +481,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   }}
                   onChange={(option) => {
                     track('"Who will be inputting the responses" selection changed', {
-                      input_account_type: getAccountType(option),
+                      [MixpanelProps.InputAccountType]: getAccountType(option),
                     });
                     setLoggedInUser(option);
                   }}
@@ -500,7 +511,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               }}
               onChange={(option) => {
                 track('"Who are the responses about" selection changed', {
-                  target_account_type: getAccountType(option),
+                  [MixpanelProps.TargetAccountType]: getAccountType(option),
                 });
                 setTargetSubject(option);
               }}
@@ -519,7 +530,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   ) => {
     const uuid = uuidv4();
     const analyticsPayload: Dict = {
-      multiinformant_assessment_id: uuid,
+      [MixpanelProps.MultiInformantAssessmentId]: uuid,
     };
 
     setMultiInformantAssessmentId(uuid);
@@ -527,18 +538,18 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
     if (targetSubject) {
       setDefaultTargetSubject(targetSubject);
-      analyticsPayload.target_account_type = getAccountType(targetSubject);
+      analyticsPayload[MixpanelProps.TargetAccountType] = getAccountType(targetSubject);
     }
 
     if (sourceSubject) {
       setDefaultSourceSubject(sourceSubject);
-      analyticsPayload.source_account_type = getAccountType(sourceSubject);
+      analyticsPayload[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
     }
 
     if (checkIfDashboardAppletActivitiesUrlPassed(pathname)) {
-      analyticsPayload.via = 'Applet - Activities';
+      analyticsPayload[MixpanelProps.Via] = 'Applet - Activities';
     } else if (checkIfDashboardAppletParticipantDetailsUrlPassed(pathname)) {
-      analyticsPayload.via = 'Applet - Participants - Activities';
+      analyticsPayload[MixpanelProps.Via] = 'Applet - Participants - Activities';
     }
 
     track('Take Now click', analyticsPayload, activityOrFlow);

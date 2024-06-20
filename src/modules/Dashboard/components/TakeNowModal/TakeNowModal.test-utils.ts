@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Dict } from 'mixpanel-browser';
 
 import { mockedAppletData, mockedAppletId } from 'shared/mock';
-import { Mixpanel } from 'shared/utils';
+import { MixpanelProps, Mixpanel } from 'shared/utils';
 
 const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
@@ -73,10 +73,10 @@ export const expectMixpanelTrack = (action: string, payload?: Dict) => {
   expect(spyMixpanelTrack).toHaveBeenCalledWith(
     action,
     expect.objectContaining({
-      feature: 'multi-informant',
-      applet_id: mockedAppletId,
-      multiinformant_assessment_id: expect.any(String),
-      activity_id: mockedAppletData.activities[0].id,
+      [MixpanelProps.Feature]: 'Multi-informant',
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.MultiInformantAssessmentId]: expect.any(String),
+      [MixpanelProps.ActivityId]: mockedAppletData.activities[0].id,
       ...payload,
     }),
   );

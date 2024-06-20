@@ -36,6 +36,7 @@ import {
   takeNowModalTestId,
   toggleSelfReportCheckbox,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
+import { MixpanelProps } from 'shared/utils';
 
 import { Activities } from './Activities';
 
@@ -402,7 +403,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      expectMixpanelTrack('Take Now click', { via: 'Applet - Activities' });
+      expectMixpanelTrack('Take Now click', { [MixpanelProps.Via]: 'Applet - Activities' });
 
       const sourceInputElement = screen
         .getByTestId(sourceSubjectDropdownTestId(testId))
@@ -416,7 +417,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       expectMixpanelTrack('"Who are the responses about" dropdown opened');
       expectMixpanelTrack('"Who are the responses about" selection changed', {
-        target_account_type: 'Full',
+        [MixpanelProps.TargetAccountType]: 'Full',
       });
 
       const submitButton = screen.getByTestId(`${takeNowModalTestId(testId)}-submit-button`);
@@ -426,10 +427,10 @@ describe('Dashboard > Applet > Activities screen', () => {
       fireEvent.click(submitButton);
 
       expectMixpanelTrack('Multi-informant Start Activity click', {
-        source_account_type: 'Team',
-        target_account_type: 'Full',
-        input_account_type: 'Team',
-        is_self_reporting: true,
+        [MixpanelProps.SourceAccountType]: 'Team',
+        [MixpanelProps.TargetAccountType]: 'Full',
+        [MixpanelProps.InputAccountType]: 'Team',
+        [MixpanelProps.IsSelfReporting]: true,
       });
     });
 
@@ -542,7 +543,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       expectMixpanelTrack('"Who will be providing responses" dropdown opened');
       expectMixpanelTrack('"Who will be providing responses" selection changed', {
-        source_account_type: 'Full',
+        [MixpanelProps.SourceAccountType]: 'Full',
       });
 
       const checkbox = getByTestId(selfReportCheckboxTestId(testId)).querySelector('input');
@@ -659,13 +660,13 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       expectMixpanelTrack('"Who will be providing responses" dropdown opened');
       expectMixpanelTrack('"Who will be providing responses" selection changed', {
-        source_account_type: 'Team',
+        [MixpanelProps.SourceAccountType]: 'Team',
       });
 
       await toggleSelfReportCheckbox(testId);
 
       expectMixpanelTrack('Own responses checkbox toggled', {
-        is_self_reporting: false,
+        [MixpanelProps.IsSelfReporting]: false,
       });
 
       const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
@@ -696,7 +697,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       selectParticipant(testId, 'loggedin', mockedOwnerRespondent.details[0].subjectId);
 
       expectMixpanelTrack('"Who will be inputting the responses" selection changed', {
-        input_account_type: 'Team',
+        [MixpanelProps.InputAccountType]: 'Team',
       });
     });
 
@@ -821,7 +822,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         expectMixpanelTrack('"Who will be providing responses" dropdown opened');
         expectMixpanelTrack('"Who will be providing responses" selection changed', {
-          source_account_type: 'Team',
+          [MixpanelProps.SourceAccountType]: 'Team',
         });
 
         const checkbox = getByTestId(selfReportCheckboxTestId(testId)).querySelector('input');
@@ -938,13 +939,13 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         expectMixpanelTrack('"Who will be providing responses" dropdown opened');
         expectMixpanelTrack('"Who will be providing responses" selection changed', {
-          source_account_type: 'Team',
+          [MixpanelProps.SourceAccountType]: 'Team',
         });
 
         await toggleSelfReportCheckbox(testId);
 
         expectMixpanelTrack('Own responses checkbox toggled', {
-          is_self_reporting: false,
+          [MixpanelProps.IsSelfReporting]: false,
         });
 
         const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;

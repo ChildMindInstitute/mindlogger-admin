@@ -39,6 +39,7 @@ import {
   targetSubjectDropdownTestId,
   toggleSelfReportCheckbox,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
+import { MixpanelProps } from 'shared/utils';
 
 import { Activities } from './Activities';
 
@@ -638,19 +639,21 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      expectMixpanelTrack('Take Now click', { via: 'Applet - Participants - Activities' });
+      expectMixpanelTrack('Take Now click', {
+        [MixpanelProps.Via]: 'Applet - Participants - Activities',
+      });
 
       await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
 
       expectMixpanelTrack('"Who will be providing responses" dropdown opened');
       expectMixpanelTrack('"Who will be providing responses" selection changed', {
-        source_account_type: 'Team',
+        [MixpanelProps.SourceAccountType]: 'Team',
       });
 
       await toggleSelfReportCheckbox(testId);
 
       expectMixpanelTrack('Own responses checkbox toggled', {
-        is_self_reporting: false,
+        [MixpanelProps.IsSelfReporting]: false,
       });
 
       const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
@@ -919,7 +922,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         expectMixpanelTrack('"Who will be providing responses" dropdown opened');
         expectMixpanelTrack('"Who will be providing responses" selection changed', {
-          source_account_type: 'Full',
+          [MixpanelProps.SourceAccountType]: 'Full',
         });
 
         const checkbox = getByTestId(selfReportCheckboxTestId(testId)).querySelector('input');
@@ -1035,13 +1038,13 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         expectMixpanelTrack('"Who will be providing responses" dropdown opened');
         expectMixpanelTrack('"Who will be providing responses" selection changed', {
-          source_account_type: 'Team',
+          [MixpanelProps.SourceAccountType]: 'Team',
         });
 
         await toggleSelfReportCheckbox(testId);
 
         expectMixpanelTrack('Own responses checkbox toggled', {
-          is_self_reporting: false,
+          [MixpanelProps.IsSelfReporting]: false,
         });
 
         const dropdownTestId = `${takeNowModalTestId(testId)}-logged-in-user-dropdown`;
