@@ -1,9 +1,9 @@
-import { renderHook } from '@testing-library/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isValidElement } from 'react';
 
 import { mockedAppletFormData } from 'shared/mock';
 import { Activity } from 'redux/modules';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useActivityGrid } from './ActivityGrid.hooks';
 
@@ -41,7 +41,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { actions },
       },
-    } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
 
     expect(actions).toMatchObject({
       editActivity: expect.any(Function),
@@ -56,7 +56,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { formatRow },
       },
-    } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
 
     const activity = mockedActivities[0];
     const row = formatRow(activity);
@@ -101,7 +101,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { getActivityById },
       },
-    } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
 
     const activity = mockedActivities[0];
     expect(getActivityById(String(activity.id))).toEqual(activity);
@@ -118,7 +118,7 @@ describe('useActivityGrid', () => {
           actions: { editActivity },
         },
       },
-    } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
 
     const activity = mockedActivities[0];
     editActivity({

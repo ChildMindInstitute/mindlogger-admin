@@ -7,8 +7,8 @@ import { ExtendedRenderOptions, setupStore } from 'redux/store';
 import { page } from 'resources';
 import Login from 'modules/Auth/pages/Login';
 
-export const renderHookWithProviders = (
-  hook: () => unknown,
+export const renderHookWithProviders = <Result, Props>(
+  hook: (props: Props) => Result,
   {
     route = '/',
     routePath = '/',

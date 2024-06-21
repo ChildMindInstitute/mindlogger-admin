@@ -10,10 +10,8 @@ import { StyledRoot } from './FlowSummaryCard.styles';
 import { FlowSummaryThumbnail } from './FlowSummaryThumbnail';
 
 export const FlowSummaryCard = <T,>({
-  activities = [],
-  description,
+  flow: { activities, description, name },
   menuItems,
-  name,
   ...otherProps
 }: FlowSummaryCardProps<T>) => {
   const { t } = useTranslation('app');
