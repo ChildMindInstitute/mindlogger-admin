@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
@@ -710,10 +710,11 @@ export const enableIntegrationApi = (integrations: Integration[], signal?: Abort
     signal,
   });
 
-export const disableIntegrationApi = (integrations: string, signal?: AbortSignal) => {
-  const params = new URLSearchParams({ integrations });
-
-  return authApiClient.delete(`/integrations?${params.toString()}`, {
+export const disableIntegrationApi = (integrations: string[], signal?: AbortSignal) => {
+  const config: AxiosRequestConfig = {
+    data: integrations,
     signal,
-  });
+  };
+
+  return authApiClient.delete('/integrations', config);
 };

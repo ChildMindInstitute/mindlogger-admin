@@ -31,7 +31,7 @@ export const useIntegrationToggle = (
     if (!integration && integrationFeatureFlagValue) {
       enableIntegration([{ integrationType }]);
     } else if (integration && !integrationFeatureFlagValue) {
-      disableIntegration(integrationType);
+      disableIntegration([integrationType]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationFeatureFlagValue]);
