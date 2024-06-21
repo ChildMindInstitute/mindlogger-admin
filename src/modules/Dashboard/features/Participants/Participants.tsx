@@ -20,6 +20,7 @@ import {
   isManagerOrOwner,
   joinWihComma,
   Mixpanel,
+  MixpanelProps,
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
@@ -76,6 +77,11 @@ export const Participants = () => {
 
           return params;
         }
+
+        Mixpanel.track('Add Participant button clicked', {
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.Via]: 'Applet - Participants',
+        });
 
         return { ...params, showAddParticipant: true };
       },
@@ -177,8 +183,14 @@ export const Participants = () => {
 
   const actions: ParticipantActions = {
     editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
+      const { respondentId, respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
+
+      const event = respondentId ? 'Edit Full Account clicked' : 'Edit Limited Account clicked';
+      Mixpanel.track(event, {
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Via]: 'Applet - Participants',
+      });
 
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });

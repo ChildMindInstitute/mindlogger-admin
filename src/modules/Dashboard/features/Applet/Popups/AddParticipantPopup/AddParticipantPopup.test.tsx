@@ -5,13 +5,14 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { MixpanelProps, Mixpanel } from 'shared/utils/mixpanel';
 import { ParticipantTag } from 'shared/consts';
 
 import { AddParticipantPopup } from './AddParticipantPopup';
 
 const dataTestId = 'test-id';
 const onCloseMock = jest.fn();
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,
@@ -36,7 +37,7 @@ const testValues = {
 
 describe('AddParticipantPopup component', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   test('popup has buttons according to the account type', async () => {
@@ -60,7 +61,6 @@ describe('AddParticipantPopup component', () => {
   });
 
   test('should submit the Full Account form and show success banner', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: {
@@ -92,14 +92,22 @@ describe('AddParticipantPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
+    expect(mixpanelTrack).toBeCalledWith('Full Account invitation form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
+    });
+
     await waitFor(() => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
-    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully');
+
+    expect(mixpanelTrack).toBeCalledWith('Full Account invitation created successfully', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
+    });
   });
 
   test('should submit the Limited Account form and show success banner', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: testValues,
@@ -126,9 +134,18 @@ describe('AddParticipantPopup component', () => {
 
     await userEvent.click(getByText('Create'));
 
+    expect(mixpanelTrack).toBeCalledWith('Add Limited Account form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
+    });
+
     await waitFor(() => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
-    expect(mixpanelTrack).toBeCalledWith('Shell account created successfully');
+
+    expect(mixpanelTrack).toBeCalledWith('Limited Account created successfully', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
+    });
   });
 });

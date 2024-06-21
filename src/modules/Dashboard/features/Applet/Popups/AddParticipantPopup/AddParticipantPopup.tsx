@@ -8,7 +8,7 @@ import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/
 import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
-import { Mixpanel, getErrorMessage } from 'shared/utils';
+import { MixpanelProps, Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -74,34 +74,44 @@ export const AddParticipantPopup = ({
     error: invitationError,
     execute: createInvitation,
     isLoading: isInvitationLoading,
-  } = useAsync(postAppletInvitationApi, async (result) => {
+  } = useAsync(postAppletInvitationApi, async ({ data }) => {
     dispatch(
       banners.actions.addBanner({
         key: 'AddParticipantSuccessBanner',
         bannerProps: {
           accountType: AccountType.Full,
-          id: result.data?.result?.secretUserId,
+          id: data?.result?.secretUserId,
         },
       }),
     );
-    Mixpanel.track('Invitation sent successfully');
+
+    Mixpanel.track('Full Account invitation created successfully', {
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
+    });
+
     handleClose(true);
   });
   const {
     error: shellAccountError,
     execute: createShellAccount,
     isLoading: isShellAccountLoading,
-  } = useAsync(postAppletShellAccountApi, async (result) => {
+  } = useAsync(postAppletShellAccountApi, async ({ data }) => {
     dispatch(
       banners.actions.addBanner({
         key: 'AddParticipantSuccessBanner',
         bannerProps: {
           accountType: AccountType.Limited,
-          id: result.data?.result?.secretUserId,
+          id: data?.result?.secretUserId,
         },
       }),
     );
-    Mixpanel.track('Shell account created successfully');
+
+    Mixpanel.track('Limited Account created successfully', {
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
+    });
+
     handleClose(true);
   });
   const isLoading = isInvitationLoading || isShellAccountLoading;
@@ -114,10 +124,13 @@ export const AddParticipantPopup = ({
   const handleSubmitForm = (values: AddParticipantFormValues) => {
     if (!appletId) return;
 
-    const { email, nickname, ...rest } = values;
+    const { email, nickname, tag, ...rest } = values;
 
     if (isFullAccount) {
-      Mixpanel.track('Invitation submitted click');
+      Mixpanel.track('Full Account invitation form submitted', {
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
+      });
 
       createInvitation({
         url: 'respondent',
@@ -128,17 +141,22 @@ export const AddParticipantPopup = ({
           role: Roles.Respondent,
           workspacePrefix: '',
           subjects: [],
+          tag,
           ...rest,
         },
       });
     } else {
-      Mixpanel.track('Shell account submitted click');
+      Mixpanel.track('Add Limited Account form submitted', {
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
+      });
 
       createShellAccount({
         appletId,
         options: {
           email: email || null,
           nickname,
+          tag,
           ...rest,
         },
       });
