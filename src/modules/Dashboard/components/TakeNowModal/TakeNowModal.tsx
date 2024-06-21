@@ -290,7 +290,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           [MixpanelProps.InputAccountType]: getAccountType(
             isSelfReporting ? sourceSubject : loggedInUser,
           ),
-          [MixpanelProps.IsSelfReporting]: isSelfReporting,
+          [MixpanelProps.IsSelfReporting]: isSelfReporting || loggedInUser?.id === sourceSubject.id,
         });
 
         setActivityOrFlow(null);
@@ -387,7 +387,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     let thumbnail: ReactNode = null;
     if ('activities' in activityOrFlow) {
       thumbnail = <FlowSummaryThumbnail activities={activityOrFlow.activities} />;
-    } else if ('image' in activityOrFlow) {
+    } else if (activityOrFlow.image) {
       thumbnail = <StyledImg src={activityOrFlow.image} alt={activityOrFlow.name} />;
     }
 
