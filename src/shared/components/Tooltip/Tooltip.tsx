@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useId, useState } from 'react';
 import { State } from '@popperjs/core';
 import maxSize from 'popper-max-size-modifier';
 
@@ -21,17 +22,78 @@ const applyMaxSize = {
   },
 };
 
-export const Tooltip = ({ tooltipTitle = '', children, maxWidth, ...props }: TooltipProps) => (
-  <StyledTooltip
-    {...props}
-    PopperProps={{ ...props.PopperProps, modifiers: [maxSize, applyMaxSize] }}
-    title={tooltipTitle}
-    sx={{
-      '.MuiTooltip-tooltip': {
-        maxWidth: maxWidth ?? '24rem',
-      },
-    }}
-  >
-    {children}
-  </StyledTooltip>
-);
+export const Tooltip = ({
+  children,
+  maxWidth,
+  onClose,
+  onOpen,
+  open,
+  tooltipTitle = '',
+  ...props
+}: TooltipProps) => {
+  const tooltipId = useId();
+  const [innerOpen, setInnerOpen] = useState(open ?? false);
+
+  useEffect(() => {
+    setInnerOpen(open ?? false);
+  }, [open]);
+
+  const handleClose = useCallback(
+    (e: Event | React.SyntheticEvent) => {
+      onClose?.(e);
+
+      // Only set innerOpen value if Tooltip is uncontrolled.
+      // Otherwise wait for updated `open` prop.
+      if (typeof open !== 'boolean') {
+        setInnerOpen(false);
+      }
+    },
+    [onClose, open],
+  );
+
+  const handleOpen = (e: React.SyntheticEvent) => {
+    document.dispatchEvent(new CustomEvent('tooltipOpen', { detail: tooltipId }));
+
+    onOpen?.(e);
+
+    // Only set innerOpen value if Tooltip is uncontrolled.
+    if (typeof open !== 'boolean') {
+      setInnerOpen(true);
+    }
+  };
+
+  const handleTooltipOpenEvent = useCallback(
+    (e: Event) => {
+      if (innerOpen && (e as CustomEvent).detail !== tooltipId) {
+        handleClose(e);
+      }
+    },
+    [tooltipId, handleClose, innerOpen],
+  );
+
+  useEffect(() => {
+    document.addEventListener('tooltipOpen', handleTooltipOpenEvent);
+
+    return () => {
+      document.removeEventListener('tooltipOpen', handleTooltipOpenEvent);
+    };
+  }, [handleClose, handleTooltipOpenEvent, innerOpen, tooltipId]);
+
+  return (
+    <StyledTooltip
+      {...props}
+      open={innerOpen}
+      onOpen={handleOpen}
+      onClose={handleClose}
+      PopperProps={{ ...props.PopperProps, modifiers: [maxSize, applyMaxSize] }}
+      title={tooltipTitle}
+      sx={{
+        '.MuiTooltip-tooltip': {
+          maxWidth: maxWidth ?? '24rem',
+        },
+      }}
+    >
+      {children}
+    </StyledTooltip>
+  );
+};
