@@ -34,13 +34,17 @@ export const useMediaUpload = ({
     handleError(error);
   });
 
-  const executeMediaUpload = async ({ file, fileName }: ExecuteMediaUploadProps) => {
+  const executeMediaUpload = async ({
+    file,
+    fileName,
+    targetExtension,
+  }: ExecuteMediaUploadProps) => {
     try {
       setIsLoading(true);
       setMediaUrl(null);
       setError(null);
 
-      const uploadUrlResponse = await getMediaUploadUrl(fileName);
+      const uploadUrlResponse = await getMediaUploadUrl({ fileName, targetExtension });
       const uploadResult = uploadUrlResponse?.data?.result;
       if (!uploadResult) return;
 

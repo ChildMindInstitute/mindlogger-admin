@@ -1,5 +1,10 @@
 import { SingleApplet } from 'shared/state/Applet';
-import { AlertListParams, FileUploadUrlResult, RefreshResponse } from 'shared/api/api.types';
+import {
+  AlertListParams,
+  FileUploadParams,
+  FileUploadUrlResult,
+  RefreshResponse,
+} from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import {
@@ -63,10 +68,13 @@ export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-export const postFileUploadUrlApi = (fileName: string, signal?: AbortSignal) =>
+export const postFileUploadUrlApi = (
+  { fileName, targetExtension }: FileUploadParams,
+  signal?: AbortSignal,
+) =>
   authApiClient.post<ResponseWithObject<FileUploadUrlResult>>(
     '/file/upload-url',
-    { fileName },
+    { fileName, targetExtension },
     {
       signal,
     },
