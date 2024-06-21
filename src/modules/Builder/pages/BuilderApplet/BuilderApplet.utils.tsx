@@ -1045,10 +1045,8 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
       nonReviewableKeys,
     }),
     streamEnabled: !!appletData.streamEnabled,
-    // lorisIntegration: hasLorisIntegration,
-    // integrations: appletData.integrations,
-    // TODO: Once the backend (the necessary endpoints to enable integration) is ready,
-    // make sure that the integrations property works correctly
+    lorisIntegration: hasLorisIntegration,
+    integrations: appletData.integrations,
   };
 
   return processedApplet;

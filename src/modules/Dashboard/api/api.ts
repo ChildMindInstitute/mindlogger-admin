@@ -61,6 +61,7 @@ import {
   SubjectId,
   DeleteReview,
   EncryptedActivityAnswer,
+  Integration,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -703,3 +704,16 @@ export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSig
   authApiClient.get(`/subjects/${subjectId}`, {
     signal,
   });
+
+export const enableIntegrationApi = (integrations: Integration[], signal?: AbortSignal) =>
+  authApiClient.post('/integrations', integrations, {
+    signal,
+  });
+
+export const disableIntegrationApi = (integrations: string, signal?: AbortSignal) => {
+  const params = new URLSearchParams({ integrations });
+
+  return authApiClient.delete(`/integrations?${params.toString()}`, {
+    signal,
+  });
+};

@@ -16,6 +16,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
+import { useIntegrationToggle } from './useIntegrationToggle';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -30,8 +31,19 @@ export const LeftBar = () => {
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const dataTestid = 'left-bar';
 
+  const handleLinkClick = (key: string) => {
+    if (key === 'library') {
+      Mixpanel.track('Browse applet library click');
+    }
+  };
+
+  const handleChangeWorkspace = (workspace: Workspace) => {
+    navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
+  };
+
   useEffect(() => {
     dispatch(workspaces.thunk.getWorkspaces());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -45,6 +57,7 @@ export const LeftBar = () => {
 
       FeatureFlags.updateWorkspace(currentWorkspace?.ownerId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspacesData]);
 
   useEffect(() => {
@@ -58,17 +71,10 @@ export const LeftBar = () => {
 
       FeatureFlags.updateWorkspace(workspace?.ownerId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
 
-  const handleLinkClick = (key: string) => {
-    if (key === 'library') {
-      Mixpanel.track('Browse applet library click');
-    }
-  };
-
-  const handleChangeWorkspace = (workspace: Workspace) => {
-    navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
-  };
+  useIntegrationToggle('LORIS', currentWorkspaceData);
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>

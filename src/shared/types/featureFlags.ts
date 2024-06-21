@@ -6,4 +6,10 @@ export const FeatureFlagsKeys = {
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
 };
 
+export enum FeatureFlagsIntegrations {
+  LORIS = 'enableLorisIntegration',
+}
+
+export type FeatureFlagsIntegrationKeys = keyof typeof FeatureFlagsIntegrations;
+
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

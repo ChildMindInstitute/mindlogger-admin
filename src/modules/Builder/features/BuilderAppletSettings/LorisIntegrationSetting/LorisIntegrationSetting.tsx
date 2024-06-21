@@ -8,7 +8,7 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 import { StyledAppletSettingsDescription } from 'shared/features/AppletSettings/AppletSettings.styles';
 import { useIsServerConfigured } from 'shared/hooks';
-// import { Integrations } from 'shared/consts';
+import { Integrations } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { UploadDataPopup } from './UploadDataPopup';
@@ -20,13 +20,19 @@ export const LorisIntegrationSetting = () => {
   const isServerConfigured = useIsServerConfigured();
   const lorisIntegrationCheckboxName = 'lorisIntegration';
   const lorisIntegrationChecked = watch(lorisIntegrationCheckboxName);
-  // const integrationsField: Integrations[] = watch('integrations');
-  // const publishedLorisIntegration =
-  //   integrationsField?.some((integration) => integration === Integrations.Loris) || false;
-  // const hasLorisIntegration = lorisIntegrationChecked && publishedLorisIntegration;
+  const integrationsField: Integrations[] = watch('integrations');
+  const publishedLorisIntegration = integrationsField?.some(
+    (integration) => integration === Integrations.Loris,
+  );
 
   const { featureFlags } = useFeatureFlags();
-  const hasLorisIntegration = lorisIntegrationChecked && featureFlags.enableLorisIntegration;
+
+  const hasLorisIntegration =
+    isServerConfigured &&
+    lorisIntegrationChecked &&
+    featureFlags.enableLorisIntegration &&
+    publishedLorisIntegration;
+
   const dataTestid = 'applet-settings-loris-integration';
 
   const renderWithTooltip = (tooltipTitle: string | null, children: ReactElement) => (
