@@ -12,9 +12,11 @@ import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 import { LocationStateKeys } from 'shared/types';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
+import { useIntegrationToggle } from './useIntegrationToggle';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -29,27 +31,6 @@ export const LeftBar = () => {
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const dataTestid = 'left-bar';
 
-  useEffect(() => {
-    dispatch(workspaces.thunk.getWorkspaces());
-  }, []);
-
-  useEffect(() => {
-    if (workspacesData?.length) {
-      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-      const storageWorkspace = authStorage.getWorkspace();
-      dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
-    }
-  }, [workspacesData]);
-
-  useEffect(() => {
-    const { workspace } = location.state ?? {};
-
-    if (workspace) {
-      authStorage.setWorkspace(workspace);
-      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
-    }
-  }, [location.state]);
-
   const handleLinkClick = (key: string) => {
     if (key === 'library') {
       Mixpanel.track('Browse applet library click');
@@ -59,6 +40,41 @@ export const LeftBar = () => {
   const handleChangeWorkspace = (workspace: Workspace) => {
     navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
   };
+
+  useEffect(() => {
+    dispatch(workspaces.thunk.getWorkspaces());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (workspacesData?.length) {
+      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
+      const storageWorkspace = authStorage.getWorkspace();
+      const currentWorkspace = storageWorkspace || ownerWorkspace;
+      dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+
+      if (!currentWorkspace) return;
+
+      FeatureFlags.updateWorkspace(currentWorkspace?.ownerId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspacesData]);
+
+  useEffect(() => {
+    const { workspace } = location.state ?? {};
+
+    if (workspace) {
+      authStorage.setWorkspace(workspace);
+      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+
+      if (!workspace) return;
+
+      FeatureFlags.updateWorkspace(workspace?.ownerId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
+
+  useIntegrationToggle('LORIS', currentWorkspaceData);
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>

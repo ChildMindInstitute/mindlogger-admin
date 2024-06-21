@@ -22,11 +22,13 @@ type RenderWithAppletFormData = {
   formRef?: RefObject<ReturnType<typeof useForm>>;
 };
 
+export const ENABLE_ITEM_FLOW_EXTENDED_ITEMS = true;
+
 const FormComponent = forwardRef(({ defaultValues, children }: FormComponentProps, ref) => {
   const methods = useForm<AppletFormValues>({
     defaultValues: defaultValues ?? mockedAppletFormData,
     mode: 'onChange',
-    resolver: yupResolver(AppletSchema()),
+    resolver: yupResolver(AppletSchema(ENABLE_ITEM_FLOW_EXTENDED_ITEMS)),
   });
 
   useImperativeHandle(ref, () => methods, [ref]);

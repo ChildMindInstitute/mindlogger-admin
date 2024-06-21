@@ -14,6 +14,7 @@ import {
   signUpApi,
   SignUpArgs,
 } from 'api';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 
 export const signIn = createAsyncThunk(
   'auth/login',
@@ -27,6 +28,7 @@ export const signIn = createAsyncThunk(
         authStorage.setAccessToken(accessToken);
 
         Mixpanel.login(data.result.user.id);
+        FeatureFlags.login(data.result.user.id);
       }
 
       return data;
@@ -43,6 +45,11 @@ export const getUserDetails = createAsyncThunk(
   async (_: void, { rejectWithValue, signal }) => {
     try {
       const { data } = await getUserDetailsApi(signal);
+
+      if (data?.result) {
+        // Make sure to identify session with LD, e.g. when user is already logged in
+        FeatureFlags.login(data.result.id);
+      }
 
       return { data };
     } catch (exception) {

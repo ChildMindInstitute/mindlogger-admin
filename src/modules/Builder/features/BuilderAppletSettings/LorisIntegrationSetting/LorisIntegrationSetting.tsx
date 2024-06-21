@@ -7,7 +7,7 @@ import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 import { StyledAppletSettingsDescription } from 'shared/features/AppletSettings/AppletSettings.styles';
-import { useIsServerConfigured } from 'shared/hooks';
+import { useIsServerConfigured, useFeatureFlags } from 'shared/hooks';
 import { Integrations } from 'shared/consts';
 
 import { UploadDataPopup } from './UploadDataPopup';
@@ -20,9 +20,18 @@ export const LorisIntegrationSetting = () => {
   const lorisIntegrationCheckboxName = 'lorisIntegration';
   const lorisIntegrationChecked = watch(lorisIntegrationCheckboxName);
   const integrationsField: Integrations[] = watch('integrations');
-  const publishedLorisIntegration =
-    integrationsField?.some((integration) => integration === Integrations.Loris) || false;
-  const hasLorisIntegration = lorisIntegrationChecked && publishedLorisIntegration;
+  const publishedLorisIntegration = integrationsField?.some(
+    (integration) => integration === Integrations.Loris,
+  );
+
+  const { featureFlags } = useFeatureFlags();
+
+  const hasLorisIntegration =
+    isServerConfigured &&
+    lorisIntegrationChecked &&
+    featureFlags.enableLorisIntegration &&
+    publishedLorisIntegration;
+
   const dataTestid = 'applet-settings-loris-integration';
 
   const renderWithTooltip = (tooltipTitle: string | null, children: ReactElement) => (
@@ -49,7 +58,9 @@ export const LorisIntegrationSetting = () => {
       )}
       <StyledFlexTopCenter sx={{ pt: theme.spacing(1.4) }}>
         {renderWithTooltip(
-          lorisIntegrationChecked && !publishedLorisIntegration ? t('loris.publishTooltip') : null,
+          lorisIntegrationChecked && !featureFlags.enableLorisIntegration
+            ? t('loris.publishTooltip')
+            : null,
           <span>
             <Button
               sx={{ minWidth: '20rem', mr: theme.spacing(1.2) }}

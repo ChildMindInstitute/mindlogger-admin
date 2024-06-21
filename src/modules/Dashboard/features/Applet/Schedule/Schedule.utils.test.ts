@@ -1,4 +1,6 @@
-import { Roles } from 'shared/consts';
+import { format } from 'date-fns';
+
+import { DateFormats, Roles } from 'shared/consts';
 
 import {
   getCount,
@@ -7,6 +9,7 @@ import {
   getFrequencyString,
   checkIfHasAccessToSchedule,
   colorsArray,
+  getEventStartDMYString,
 } from './Schedule.utils';
 import { ActivitiesFlowsWithColors } from './Schedule.types';
 
@@ -81,5 +84,25 @@ describe('Schedule.utils.tsx', () => {
     `('roles=$roles, expected=$expected', ({ roles, expected }) => {
       expect(checkIfHasAccessToSchedule(roles)).toBe(expected);
     });
+  });
+
+  describe('getEventStartDMYString', () => {
+    test.each([
+      [true, '2023-12-21T15:12:34.842050', '21 Dec 2023'],
+      [false, '2023-12-21', '21 Dec 2023'],
+      [true, '2024-06-12T12:00:00Z', '12 Jun 2024'],
+      [false, '2024-06-12', '12 Jun 2024'],
+      [false, null, format(new Date(), DateFormats.DayMonthYear)],
+      [false, undefined, format(new Date(), DateFormats.DayMonthYear)],
+      [false, 'invalid-date', format(new Date(), DateFormats.DayMonthYear)],
+      [true, '2023-02-30', format(new Date(), DateFormats.DayMonthYear)],
+    ])(
+      'returns correct formatted date for isAlwaysAvailable=%s and dateString=%s',
+      (isAlwaysAvailable, dateString, expected) => {
+        const result = getEventStartDMYString(isAlwaysAvailable, dateString);
+
+        expect(result).toBe(expected);
+      },
+    );
   });
 });

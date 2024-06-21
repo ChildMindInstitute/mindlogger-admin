@@ -12,6 +12,7 @@ import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import history from './history';
 
@@ -22,6 +23,7 @@ export const AppRoutes = () => {
   const token = authStorage.getAccessToken();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
+  const { featureFlags } = useFeatureFlags();
 
   const status = auth.useStatus();
   const loaded = !token || status === 'error' || status === 'success';
@@ -42,7 +44,7 @@ export const AppRoutes = () => {
           <Routes>
             <Route element={<BaseLayout />}>
               {dashboardRoutes()}
-              {builderRoutes()}
+              {builderRoutes(featureFlags.enableItemFlowExtendedItems)}
               {libraryRoutes()}
             </Route>
             {!isAuthorized && (

@@ -454,3 +454,7 @@ export type EncryptedActivityAnswer = {
   answer: Omit<EncryptedAnswerSharedProps, 'items'> & ActivityAnswer & ActivityAnswerSummary;
   summary: ActivityAnswerSummary;
 };
+
+export type Integration = {
+  integrationType: string;
+};

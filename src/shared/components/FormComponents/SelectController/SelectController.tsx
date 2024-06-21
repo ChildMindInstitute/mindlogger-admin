@@ -149,7 +149,7 @@ export const SelectController = <T extends FieldValues>({
       {placeholder && !selectValue && (
         <>
           <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
-          <StyledPlaceholder>{placeholder}</StyledPlaceholder>
+          <StyledPlaceholder className="controller-placeholder">{placeholder}</StyledPlaceholder>
         </>
       )}
 
