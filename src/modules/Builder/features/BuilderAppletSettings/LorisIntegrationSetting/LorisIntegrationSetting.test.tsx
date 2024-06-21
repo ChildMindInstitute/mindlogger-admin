@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { useIsServerConfigured } from 'shared/hooks';
+import { useIsServerConfigured, useFeatureFlags } from 'shared/hooks';
 import { page } from 'resources';
 
 import { LorisIntegrationSetting } from './LorisIntegrationSetting';
@@ -14,6 +14,7 @@ import { LorisIntegrationSetting } from './LorisIntegrationSetting';
 jest.mock('shared/hooks', () => ({
   ...jest.requireActual('shared/hooks'),
   useIsServerConfigured: jest.fn(),
+  useFeatureFlags: jest.fn(),
 }));
 
 const LorisIntegrationSettingWrapper = ({ defaultValues }) => {
@@ -31,6 +32,11 @@ const LorisIntegrationSettingWrapper = ({ defaultValues }) => {
 describe('LorisIntegrationSetting', () => {
   test("server is not configured, lorisIntegration by default is false, integrations = ['loris']", async () => {
     (useIsServerConfigured as jest.Mock).mockReturnValue(false);
+    (useFeatureFlags as jest.Mock).mockReturnValue({
+      featureFlags: {
+        enableLorisIntegration: false,
+      },
+    });
     renderWithProviders(
       <LorisIntegrationSettingWrapper
         defaultValues={{
@@ -53,6 +59,11 @@ describe('LorisIntegrationSetting', () => {
 
   test('server is configured, lorisIntegration by default is false, integrations = []', async () => {
     (useIsServerConfigured as jest.Mock).mockReturnValue(true);
+    (useFeatureFlags as jest.Mock).mockReturnValue({
+      featureFlags: {
+        enableLorisIntegration: false,
+      },
+    });
     renderWithProviders(
       <LorisIntegrationSettingWrapper
         defaultValues={{
@@ -105,6 +116,72 @@ describe('LorisIntegrationSetting', () => {
     mockAxios.post.mockResolvedValueOnce({ data: {} });
 
     (useIsServerConfigured as jest.Mock).mockReturnValue(true);
+    (useFeatureFlags as jest.Mock).mockReturnValue({
+      featureFlags: {
+        enableLorisIntegration: false,
+      },
+    });
+    renderWithProviders(
+      <LorisIntegrationSettingWrapper
+        defaultValues={{
+          lorisIntegration: false,
+          integrations: ['loris'],
+        }}
+      />,
+      {
+        route: `/builder/123/settings/loris-integration`,
+        routePath: page.builderAppletSettingsItem,
+      },
+    );
+
+    const uploadButton = screen.getByTestId('applet-settings-loris-integration-upload');
+    expect(uploadButton).toBeInTheDocument();
+    expect(uploadButton).toBeDisabled();
+
+    const checkboxContainer = screen.getByTestId(
+      'applet-settings-loris-integration-checkbox',
+    ) as HTMLInputElement;
+    expect(checkboxContainer).toBeInTheDocument();
+
+    await userEvent.click(checkboxContainer);
+
+    expect(checkboxContainer.firstChild).toHaveClass('Mui-checked');
+    const checkboxLabel = screen.getByText('Activate data collection');
+    expect(checkboxLabel).toBeInTheDocument();
+    expect(uploadButton).toBeDisabled();
+  });
+
+  test("server is configured, lorisIntegration by default is true, integrations = ['loris']", async () => {
+    mockAxios.get.mockResolvedValueOnce({ data: { result: ['V1', 'V2', 'V3', 'V4', 'V5'] } });
+    mockAxios.get.mockResolvedValueOnce({
+      data: {
+        result: {
+          user_id_1: [
+            {
+              activityName: 'Activity 2',
+              completedDate: '2023-02-03T06:32:55.930074',
+              secretUserId: 'jane doe',
+            },
+          ],
+          user_id_2: [
+            {
+              activityName: 'Activity 4',
+              completedDate: '2023-02-03T06:32:55.930074',
+              secretUserId: 'sam winchester',
+              visit: 'V1',
+            },
+          ],
+        },
+      },
+    });
+    mockAxios.post.mockResolvedValueOnce({ data: {} });
+
+    (useIsServerConfigured as jest.Mock).mockReturnValue(true);
+    (useFeatureFlags as jest.Mock).mockReturnValue({
+      featureFlags: {
+        enableLorisIntegration: true,
+      },
+    });
     renderWithProviders(
       <LorisIntegrationSettingWrapper
         defaultValues={{
