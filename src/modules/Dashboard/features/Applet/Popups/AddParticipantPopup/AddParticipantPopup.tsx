@@ -8,7 +8,7 @@ import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/
 import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
-import { MixProperties, Mixpanel, getErrorMessage } from 'shared/utils';
+import { MixpanelProps, Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -86,8 +86,8 @@ export const AddParticipantPopup = ({
     );
 
     Mixpanel.track('Full Account invitation created successfully', {
-      [MixProperties.AppletId]: appletId,
-      [MixProperties.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
 
     handleClose(true);
@@ -108,8 +108,8 @@ export const AddParticipantPopup = ({
     );
 
     Mixpanel.track('Limited Account created successfully', {
-      [MixProperties.AppletId]: appletId,
-      [MixProperties.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
 
     handleClose(true);
@@ -128,8 +128,8 @@ export const AddParticipantPopup = ({
 
     if (isFullAccount) {
       Mixpanel.track('Full Account invitation form submitted', {
-        [MixProperties.AppletId]: appletId,
-        [MixProperties.Tag]: tag || null, // Normalize empty string tag to null
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
 
       createInvitation({
@@ -147,8 +147,8 @@ export const AddParticipantPopup = ({
       });
     } else {
       Mixpanel.track('Add Limited Account form submitted', {
-        [MixProperties.AppletId]: appletId,
-        [MixProperties.Tag]: tag || null, // Normalize empty string tag to null
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
 
       createShellAccount({

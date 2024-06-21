@@ -10,7 +10,7 @@ import { Spinner } from 'shared/components';
 import { StyledFlexColumn, StyledTitleLarge } from 'shared/styles';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions } from 'shared/hooks';
-import { MixProperties, Mixpanel, checkIfCanAccessData } from 'shared/utils';
+import { MixpanelProps, Mixpanel, checkIfCanAccessData } from 'shared/utils';
 
 import { mapResponseToQuickStatProps, mapResponseToSubmissionsTableProps } from './Overview.utils';
 import { StyledRoot } from './Overview.styles';
@@ -82,8 +82,8 @@ export const Overview = () => {
             {...mapResponseToQuickStatProps(data, {
               onPressAddParticipant: () => {
                 Mixpanel.track('Add Participant button clicked', {
-                  [MixProperties.AppletId]: appletId,
-                  [MixProperties.Via]: 'Applet - Overview',
+                  [MixpanelProps.AppletId]: appletId,
+                  [MixpanelProps.Via]: 'Applet - Overview',
                 });
                 setAddPopupOpen(true);
               },

@@ -5,7 +5,7 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
-import { MixProperties, Mixpanel } from 'shared/utils/mixpanel';
+import { MixpanelProps, Mixpanel } from 'shared/utils/mixpanel';
 import { ParticipantTag } from 'shared/consts';
 
 import { AddParticipantPopup } from './AddParticipantPopup';
@@ -93,8 +93,8 @@ describe('AddParticipantPopup component', () => {
     await userEvent.click(getByText('Send Invitation'));
 
     expect(mixpanelTrack).toBeCalledWith('Full Account invitation form submitted', {
-      [MixProperties.AppletId]: mockedAppletId,
-      [MixProperties.Tag]: 'Child',
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
     });
 
     await waitFor(() => {
@@ -102,8 +102,8 @@ describe('AddParticipantPopup component', () => {
     });
 
     expect(mixpanelTrack).toBeCalledWith('Full Account invitation created successfully', {
-      [MixProperties.AppletId]: mockedAppletId,
-      [MixProperties.Tag]: 'Child',
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
     });
   });
 
@@ -135,8 +135,8 @@ describe('AddParticipantPopup component', () => {
     await userEvent.click(getByText('Create'));
 
     expect(mixpanelTrack).toBeCalledWith('Add Limited Account form submitted', {
-      [MixProperties.AppletId]: mockedAppletId,
-      [MixProperties.Tag]: 'Child',
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
     });
 
     await waitFor(() => {
@@ -144,8 +144,8 @@ describe('AddParticipantPopup component', () => {
     });
 
     expect(mixpanelTrack).toBeCalledWith('Limited Account created successfully', {
-      [MixProperties.AppletId]: mockedAppletId,
-      [MixProperties.Tag]: 'Child',
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Tag]: 'Child',
     });
   });
 });

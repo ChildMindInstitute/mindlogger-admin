@@ -1,4 +1,4 @@
-export enum MixProperties {
+export enum MixpanelProps {
   Feature = 'Feature',
   AppletId = 'Applet ID',
   ActivityId = 'Activity ID',
@@ -12,4 +12,4 @@ export enum MixProperties {
   Via = 'Via',
 }
 
-export type MixPayload = Partial<Record<MixProperties, unknown>>;
+export type MixpanelPayload = Partial<Record<MixpanelProps, unknown>>;

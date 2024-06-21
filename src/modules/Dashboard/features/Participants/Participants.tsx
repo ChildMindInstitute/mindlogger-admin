@@ -20,7 +20,7 @@ import {
   isManagerOrOwner,
   joinWihComma,
   Mixpanel,
-  MixProperties,
+  MixpanelProps,
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
@@ -79,8 +79,8 @@ export const Participants = () => {
         }
 
         Mixpanel.track('Add Participant button clicked', {
-          [MixProperties.AppletId]: appletId,
-          [MixProperties.Via]: 'Applet - Participants',
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.Via]: 'Applet - Participants',
         });
 
         return { ...params, showAddParticipant: true };
@@ -188,8 +188,8 @@ export const Participants = () => {
 
       const event = respondentId ? 'Edit Full Account clicked' : 'Edit Limited Account clicked';
       Mixpanel.track(event, {
-        [MixProperties.AppletId]: appletId,
-        [MixProperties.Via]: 'Applet - Participants',
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Via]: 'Applet - Participants',
       });
 
       setRespondentKey(respondentOrSubjectId);

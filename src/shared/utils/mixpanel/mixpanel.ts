@@ -1,4 +1,4 @@
-import { MixPayload } from 'shared/utils/mixpanel/mixpanel.types';
+import { MixpanelPayload } from 'shared/utils/mixpanel/mixpanel.types';
 
 import { isProduction, isStaging, isUat, isDev } from '../env';
 
@@ -22,7 +22,7 @@ export const Mixpanel = {
       mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
     }
   },
-  async track(action: string, payload?: MixPayload) {
+  async track(action: string, payload?: MixpanelPayload) {
     if (shouldEnableMixpanel) {
       const { default: mixpanel } = await import('mixpanel-browser');
       mixpanel.track(`[Admin] ${action}`, payload);
