@@ -11,7 +11,7 @@ import {
   StyledModalWrapper,
 } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { Mixpanel, getErrorMessage } from 'shared/utils';
+import { Mixpanel, MixpanelProps, getErrorMessage } from 'shared/utils';
 import { Languages, postSubjectInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -79,13 +79,20 @@ export const UpgradeAccountPopup = ({
         },
       }),
     );
-    Mixpanel.track('Invitation sent successfully');
+
+    Mixpanel.track('Upgrade to Full Account invitation created successfully', {
+      [MixpanelProps.AppletId]: appletId,
+    });
+
     handleClose(true);
   });
 
   const handleSubmitForm = (values: UpgradeAccountFormValues) => {
     if (!appletId || !subjectId) return;
-    Mixpanel.track('Subject Invitation click');
+
+    Mixpanel.track('Upgrade to Full Account invitation form submitted', {
+      [MixpanelProps.AppletId]: appletId,
+    });
 
     createInvitation({
       appletId,
