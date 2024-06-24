@@ -7,7 +7,11 @@ export const getThemesApi = (params: GetThemesParams, signal?: AbortSignal) =>
   authApiClient.get<Response<Theme>>('/themes', { params, signal });
 
 export const setLorisIntegrationApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.post('/integrations/loris/publish', { appletId }, { signal });
+  authApiClient.post(
+    '/integrations/loris/publish',
+    {},
+    { params: { applet_id: appletId }, signal },
+  );
 
 // TODO: uncomment when the endpoints for visits are ready.
 // export const setLorisIntegrationApi = ({ appletId }: AppletId, signal?: AbortSignal) =>

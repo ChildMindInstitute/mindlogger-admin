@@ -6,11 +6,12 @@ export type UploadDataPopupProps = {
   'data-testid'?: string;
 };
 
+// TODO: uncomment when the endpoints for visits are ready.
 export enum Steps {
   Agreement,
-  Visits,
+  // Visits,
   Success,
-  Error,
+  // Error,
 }
 
 export type ScreenParams = {

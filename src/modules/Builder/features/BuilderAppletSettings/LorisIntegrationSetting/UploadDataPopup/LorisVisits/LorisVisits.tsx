@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-imports */
+/* eslint-disable unused-imports/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +46,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
         }
       } catch (error) {
         console.error(error);
-        setStep(Steps.Error);
+        // setStep(Steps.Error);
       } finally {
         onSetIsLoading(false);
       }
