@@ -4,14 +4,14 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
-import { expectBanner } from 'shared/utils';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
 import { ParticipantTag } from 'shared/consts';
 
 import { UpgradeAccountPopup } from './UpgradeAccountPopup';
 
 const dataTestid = 'test-id';
 const onCloseMock = jest.fn();
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,
@@ -31,11 +31,10 @@ const testValues = {
 
 describe('UpgradeAccountPopup component', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   test('should submit the form and show success banner', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: testValues,
@@ -51,9 +50,17 @@ describe('UpgradeAccountPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
+    expect(mixpanelTrack).toBeCalledWith('Upgrade to Full Account invitation form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+    });
+
     await waitFor(() => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
-    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully');
+
+    expect(mixpanelTrack).toBeCalledWith(
+      'Upgrade to Full Account invitation created successfully',
+      { [MixpanelProps.AppletId]: mockedAppletId },
+    );
   });
 });
