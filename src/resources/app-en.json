@@ -261,7 +261,8 @@
   "conditionalLogicValidation": {
     "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
     "summaryItemIsBeforeRuleItemInTheList": "This Item appears in the Activity before one of the Items involved in the conditional.",
-    "summaryItemIsTheSameAsRuleItem": "This Item already defines one of the conditions and cannot be its result at the same time."
+    "summaryItemIsTheSameAsRuleItem": "This Item already defines one of the conditions and cannot be its result at the same time.",
+    "impossibleToFulfillTheConditionsSimultaneously": "It's impossible to fulfill the specified conditions simultaneously."
   },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",

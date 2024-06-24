@@ -36,6 +36,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     [items, activityName, setValue],
   );
 
+  const matchOptions = useMemo(() => getMatchOptions({ conditions, items }), [conditions, items]);
   const itemsOptions = useMemo(
     () => getItemsOptions({ items, itemsInUsage, conditions }),
     [items, itemsInUsage, conditions],
@@ -48,7 +49,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <StyledSummarySelectController
           control={control}
           name={`${name}.match`}
-          options={getMatchOptions()}
+          options={matchOptions}
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
           isLabelNeedTranslation={false}
