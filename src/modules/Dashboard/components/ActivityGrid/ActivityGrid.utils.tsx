@@ -8,25 +8,31 @@ import {
   checkIfCanManageParticipants,
   checkIfFullAccess,
 } from 'shared/utils';
+import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
 export const getActivityActions = ({
   actions: { editActivity, exportData, assignActivity, takeNow },
   appletId,
-  activityId,
   dataTestId,
   roles,
   featureFlags,
   hasParticipants,
+  activity,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
-  const canEdit = checkIfCanEdit(roles);
+  const canEdit =
+    (checkIfCanEdit(roles) && !activity?.isPerformanceTask) ||
+    EditablePerformanceTasks.includes(activity?.performanceTaskType ?? '');
   const canAccessData = checkIfCanAccessData(roles);
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfFullAccess(roles);
   const canAssignActivity =
     checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
+  const { id: activityId } = activity;
+
+  if (!activityId) return [];
 
   return [
     {

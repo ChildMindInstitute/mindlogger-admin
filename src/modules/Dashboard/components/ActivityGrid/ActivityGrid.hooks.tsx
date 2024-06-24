@@ -17,6 +17,8 @@ import {
   StyledSvg,
 } from 'modules/Dashboard/components/ActivityGrid';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
+import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 
@@ -48,9 +50,20 @@ export const useActivityGrid = (
     () => ({
       editActivity: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || {};
+        if (!activityId || !appletId) return;
+        const activity = getActivityById(activityId);
 
-        navigate(
-          generatePath(page.builderAppletActivity, {
+        const navigateTo =
+          activity?.isPerformanceTask && activity?.performanceTaskType
+            ? // Additional validation for flanker, gyroscope and touch is done in getActivityActions as these are the only editable options
+              // Here it's safe to assume the task is EditablePerformanceTasksType
+              getPerformanceTaskPath(
+                activity?.performanceTaskType as unknown as EditablePerformanceTasksType,
+              )
+            : page.builderAppletActivity;
+
+        return navigate(
+          generatePath(navigateTo, {
             appletId,
             activityId,
           }),
@@ -75,7 +88,7 @@ export const useActivityGrid = (
         }
       },
     }),
-    [appletId, getActivityById, navigate, openTakeNowModal],
+    [appletId, getActivityById, navigate, onClickExportData, openTakeNowModal],
   );
 
   const formatRow = useCallback(
@@ -131,7 +144,7 @@ export const useActivityGrid = (
                 menuItems={getActivityActions({
                   actions: actions || defaultActions,
                   appletId,
-                  activityId,
+                  activity,
                   dataTestId,
                   roles,
                   featureFlags,
