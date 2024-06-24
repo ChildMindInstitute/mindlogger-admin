@@ -4,8 +4,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { expectBanner } from 'shared/utils';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
 import { initialStateData } from 'redux/modules';
 import { Roles } from 'shared/consts';
 
@@ -30,6 +29,7 @@ const preloadedState = {
 
 const dataTestId = 'test-id';
 const onCloseMock = jest.fn();
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const mockWorkspaceInfo = {
   name: 'test-workspace',
@@ -59,11 +59,10 @@ const mockSubmitValues = {
 
 describe('AddManagerPopup component', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   test('should submit the form and show success banner', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: mockSubmitValues,
@@ -93,10 +92,19 @@ describe('AddManagerPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
+    expect(mixpanelTrack).toBeCalledWith('Team Member account invitation form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: [mockSubmitValues.role],
+    });
+
     await waitFor(() => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
-    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully');
+
+    expect(mixpanelTrack).toBeCalledWith('Team Member account invitation created successfully', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: [mockSubmitValues.role],
+    });
   });
 
   test('should omit workspace name field if it has managers', async () => {

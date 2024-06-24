@@ -5,10 +5,11 @@ import { useParams } from 'react-router-dom';
 import { Modal, SpinnerUiType, Spinner } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
-import { workspaces } from 'redux/modules';
+import { banners, workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editManagerAccessApi, removeManagerAccessApi } from 'api';
 import { Mixpanel, MixpanelProps, getErrorMessage, pluck } from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
 
 import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
@@ -17,6 +18,7 @@ import { getRoleIcon } from './ManagersEditAccessPopup.utils';
 
 export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const { appletId } = useParams() || {};
   const { firstName, lastName, email, applets: userApplets, id } = user;
   const [applets, setApplets] = useState<AppletType[]>(userApplets);
@@ -37,6 +39,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
       });
     }
 
+    dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
     onClose(true);
   });
   const {
