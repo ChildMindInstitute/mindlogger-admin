@@ -259,7 +259,8 @@
   "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
   "conditionalLogicValidation": {
-    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions."
+    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
+    "summaryItemIsBeforeRuleItemInTheList": "This Item appears in the Activity before one of the Items involved in the conditional."
   },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
@@ -785,7 +786,7 @@
   "noMatchWasFoundShort": "No match was found for '{{searchValue}}'.",
   "noPendingInvitations": "No pending invitations",
   "noPermissions": "You have no permissions to view this tab.",
-  "noResponseData":"No response data provided.",
+  "noResponseData": "No response data provided.",
   "responseIdentifier": "Response Identifier",
   "noResponseIdentifier": "No response identifier yet.",
   "viewingResponsesSubmitted": "Viewing responses submitted on:",

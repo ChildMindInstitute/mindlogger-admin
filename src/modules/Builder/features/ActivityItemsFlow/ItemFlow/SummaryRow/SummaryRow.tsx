@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 
@@ -19,7 +19,9 @@ import { useItemsInUsage } from './SummaryRow.hooks';
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-  const items = useWatch({ name: `${activityName}.items` });
+  const [items, conditions] = useWatch({
+    name: [`${activityName}.items`, `${name}.conditions`],
+  });
   const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
@@ -32,6 +34,11 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
     },
     [items, activityName, setValue],
+  );
+
+  const itemsOptions = useMemo(
+    () => getItemsOptions({ items, itemsInUsage, conditions }),
+    [items, itemsInUsage, conditions],
   );
 
   return (
@@ -50,7 +57,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <StyledSummarySelectController
           control={control}
           name={`${name}.itemKey`}
-          options={getItemsOptions({ items, itemsInUsage })}
+          options={itemsOptions}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
