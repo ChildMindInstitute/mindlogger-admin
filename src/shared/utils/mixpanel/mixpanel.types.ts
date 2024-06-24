@@ -8,6 +8,7 @@ export enum MixpanelProps {
   TargetAccountType = 'Target Account Type',
   InputAccountType = 'Input Account Type',
   IsSelfReporting = 'Is Self Reporting',
+  Roles = 'Roles',
   Tag = 'Tag',
   Via = 'Via',
 }

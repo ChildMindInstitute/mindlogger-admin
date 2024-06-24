@@ -19,6 +19,9 @@ import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
 import {
+  Mixpanel,
+  MixpanelPayload,
+  MixpanelProps,
   checkIfCanManageParticipants,
   checkIfFullAccess,
   isManagerOrOwner,
@@ -118,6 +121,14 @@ export const Managers = () => {
       setRemoveAccessPopupVisible(true);
     },
     editTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
+      const analyticsPayload: MixpanelPayload = {
+        [MixpanelProps.Via]: appletId ? 'Applet - Team' : 'Team',
+      };
+      if (appletId) {
+        analyticsPayload[MixpanelProps.AppletId] = appletId;
+      }
+      Mixpanel.track('Edit Team Member clicked', analyticsPayload);
+
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
     },
@@ -134,6 +145,18 @@ export const Managers = () => {
       );
       navigator.clipboard.writeText(url.toString());
     },
+  };
+
+  const handleAddManagerClick = () => {
+    const analyticsPayload: MixpanelPayload = {
+      [MixpanelProps.Via]: appletId ? 'Applet - Team' : 'Team',
+    };
+    if (appletId) {
+      analyticsPayload[MixpanelProps.AppletId] = appletId;
+    }
+    Mixpanel.track('Add Team Member button clicked', analyticsPayload);
+
+    setAddManagerPopupVisible(true);
   };
 
   const addManagerOnClose = (shouldRefetch?: boolean) => {
@@ -282,7 +305,7 @@ export const Managers = () => {
           {!!appletId && (
             <Button
               variant="contained"
-              onClick={() => setAddManagerPopupVisible(true)}
+              onClick={handleAddManagerClick}
               data-testid={`${dataTestId}-add`}
             >
               {t('addTeamMember')}

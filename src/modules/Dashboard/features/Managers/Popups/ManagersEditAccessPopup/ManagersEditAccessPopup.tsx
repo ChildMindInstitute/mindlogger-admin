@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { Roles } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editManagerAccessApi, removeManagerAccessApi } from 'api';
-import { getErrorMessage, pluck } from 'shared/utils';
+import { Mixpanel, MixpanelProps, getErrorMessage, pluck } from 'shared/utils';
 
 import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
@@ -23,12 +23,22 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
   const [appletsWithoutRespondents, setAppletsWithoutRespondents] = useState<string[]>([]);
 
   const { ownerId } = workspaces.useData() || {};
+  const submittedAccessesRef = useRef<{ appletId: string; roles: Roles[] }[]>([]);
 
   const {
     execute: handleEditAccess,
     error: editAccessError,
     isLoading: isEditAccessLoading,
-  } = useAsync(editManagerAccessApi, () => onClose(true));
+  } = useAsync(editManagerAccessApi, () => {
+    for (const { appletId, roles } of submittedAccessesRef.current) {
+      Mixpanel.track('Team Member edited successfully', {
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Roles]: roles,
+      });
+    }
+
+    onClose(true);
+  });
   const {
     execute: handleRemoveAccess,
     error: removeAccessError,
@@ -89,6 +99,14 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
 
       if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {
         return;
+      }
+
+      submittedAccessesRef.current = accesses;
+      for (const { appletId, roles } of accesses) {
+        Mixpanel.track('Edit Team Member form submitted', {
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.Roles]: roles,
+        });
       }
 
       await handleRemoveAccess({ appletIds: pluck(applets, 'id'), userId: user.id });

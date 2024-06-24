@@ -7,7 +7,7 @@ import { EmptyState, Modal, Spinner } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { Roles } from 'shared/consts';
-import { Mixpanel, getErrorMessage, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, MixpanelProps, getErrorMessage, isManagerOrOwner } from 'shared/utils';
 import { Languages, postAppletInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -88,8 +88,9 @@ export const AddManagerPopup = ({
     error,
     execute: createInvitation,
     isLoading,
-  } = useAsync(postAppletInvitationApi, async (result) => {
-    const { firstName, lastName, title } = result.data?.result ?? {};
+  } = useAsync(postAppletInvitationApi, async ({ data }) => {
+    const { firstName, lastName, title, role } = data.result ?? {};
+
     dispatch(
       banners.actions.addBanner({
         key: 'AddParticipantSuccessBanner',
@@ -98,7 +99,12 @@ export const AddManagerPopup = ({
         },
       }),
     );
-    Mixpanel.track('Invitation sent successfully');
+
+    Mixpanel.track('Team Member account invitation created successfully', {
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Roles]: [role],
+    });
+
     handleClose(true);
   });
 
@@ -107,7 +113,10 @@ export const AddManagerPopup = ({
 
     const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
 
-    Mixpanel.track('Invitation submitted click');
+    Mixpanel.track('Team Member account invitation form submitted', {
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Roles]: [role],
+    });
 
     createInvitation({
       url: role === Roles.Reviewer ? 'reviewer' : 'managers',
