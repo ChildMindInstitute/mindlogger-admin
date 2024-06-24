@@ -9,6 +9,7 @@ import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/s
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
 import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
@@ -124,6 +125,7 @@ export const ReportFilters = ({
               onFiltersChange({ startTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-start-time`}
+            defaultTime={DEFAULT_START_TIME}
           />
           <StyledTimeText>
             <Trans i18nKey="timeIsShownInUTC">
@@ -143,6 +145,7 @@ export const ReportFilters = ({
               onFiltersChange({ endTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-end-time`}
+            defaultTime={DEFAULT_END_TIME}
           />
           <StyledMoreFilters
             onClick={moreFiltersHandler}
