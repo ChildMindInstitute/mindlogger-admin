@@ -1,16 +1,14 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
-import { LorisUsersVisits, uploadLorisUsersVisitsApi } from 'modules/Builder/api';
+import { Error, Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { StyledModalWrapper, StyledTitleMedium, theme, variables } from 'shared/styles';
+import { useAsync } from 'shared/hooks/useAsync';
+import { setLorisIntegrationApi } from 'modules/Builder/api';
 
-import { getScreens } from './UploadDataPopup.utils';
+import { getScreens } from './UploadDataPopup.const';
 import { Steps, UploadDataPopupProps } from './UploadDataPopup.types';
-import { StyledSpinnerWrapper } from './UploadDataPopup.styles';
 
 export const UploadDataPopup = ({
   open,
@@ -20,34 +18,15 @@ export const UploadDataPopup = ({
   const { t } = useTranslation();
   const { appletId } = useParams();
   const [step, setStep] = useState<Steps>(Steps.Agreement);
-  const [isLoading, setIsLoading] = useState(false);
+  const { execute, error, isLoading } = useAsync(setLorisIntegrationApi);
 
-  const { execute: uploadLorisUsersVisits } = useAsync(uploadLorisUsersVisitsApi, () => {
-    setStep(Steps.Success);
-  });
-
-  const methods = useForm({
-    mode: 'onChange',
-    defaultValues: {},
-  });
-
-  const { getValues } = methods;
-
-  const handleAcceptAgreement = useCallback(() => {
+  const onSubmit = async () => {
     if (!appletId) return;
+    await execute({ appletId });
+    setStep(Steps.Success);
+  };
 
-    setStep(Steps.Visits);
-  }, [appletId, setStep]);
-
-  const handleSubmitVisits = useCallback(() => {
-    const payload: LorisUsersVisits = getValues();
-    uploadLorisUsersVisits(payload);
-  }, [getValues, uploadLorisUsersVisits]);
-
-  const screens = useMemo(
-    () => getScreens({ handleAcceptAgreement, onClose, handleSubmitVisits, setIsLoading, setStep }),
-    [handleAcceptAgreement, onClose, handleSubmitVisits, setIsLoading, setStep],
-  );
+  const screens = getScreens({ onSubmit, onClose });
 
   return (
     <Modal
@@ -57,21 +36,17 @@ export const UploadDataPopup = ({
       onSubmit={screens[step].onSubmit}
       buttonText={t(screens[step].buttonText)}
       disabledSubmit={isLoading}
-      hasSecondBtn={screens[step]?.hasSecondBtn}
-      secondBtnText={screens[step]?.secondBtnText}
-      onSecondBtnSubmit={screens[step]?.onSecondBtnSubmit}
       data-testid={dataTestid}
     >
-      <FormProvider {...methods}>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
-          {isLoading && (
-            <StyledSpinnerWrapper>
-              <Spinner uiType={SpinnerUiType.Secondary} noBackground />
-            </StyledSpinnerWrapper>
-          )}
-          {screens[step].content}
+          <StyledTitleMedium color={variables.palette.on_surface}>
+            {screens[step].text}
+          </StyledTitleMedium>
+          {error && <Error sxProps={{ m: theme.spacing(1.5, 0, 1) }} error={error} />}
         </StyledModalWrapper>
-      </FormProvider>
+      </>
     </Modal>
   );
 };

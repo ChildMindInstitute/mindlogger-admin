@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+// import { Dispatch, SetStateAction } from 'react';
 
 export type UploadDataPopupProps = {
   open: boolean;
@@ -14,9 +14,15 @@ export enum Steps {
 }
 
 export type ScreenParams = {
-  handleAcceptAgreement: () => void;
+  onSubmit: () => void;
   onClose: () => void;
-  handleSubmitVisits: () => void;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-  setStep: Dispatch<SetStateAction<Steps>>;
 };
+
+// TODO: uncomment when the endpoints for visits are ready.
+// export type ScreenParams = {
+//   handleAcceptAgreement: () => void;
+//   onClose: () => void;
+//   handleSubmitVisits: () => void;
+//   setIsLoading: Dispatch<SetStateAction<boolean>>;
+//   setStep: Dispatch<SetStateAction<Steps>>;
+// };

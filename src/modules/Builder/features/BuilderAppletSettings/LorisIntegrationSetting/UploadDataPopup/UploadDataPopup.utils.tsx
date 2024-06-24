@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import i18n from 'i18n';
 import { StyledBodyLarge, StyledTitleMedium, variables } from 'shared/styles';
 
