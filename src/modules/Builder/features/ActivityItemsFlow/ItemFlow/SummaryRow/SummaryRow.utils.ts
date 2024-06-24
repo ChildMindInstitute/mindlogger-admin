@@ -21,23 +21,33 @@ export const getMatchOptions = () => [
 
 export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOptionsProps) => {
   const itemsObject = getObjectFromList(items, undefined, true);
-  const maxUsedItemIndex = [...new Set(conditions.map((condition) => condition.itemName))].reduce(
-    (maxIndex, itemKey) => {
-      const item = itemsObject[itemKey];
-      const itemIndex = item?.index ?? -1;
-      if (!item || (typeof itemIndex === 'number' && itemIndex <= maxIndex)) return maxIndex;
+  const conditionItemsInUsageSet = new Set(conditions.map((condition) => condition.itemName));
+  const maxUsedItemIndex = [...conditionItemsInUsageSet].reduce((maxIndex, itemKey) => {
+    const item = itemsObject[itemKey];
+    const itemIndex = item?.index ?? -1;
+    if (!item || (typeof itemIndex === 'number' && itemIndex <= maxIndex)) return maxIndex;
 
-      return itemIndex;
-    },
-    -1,
-  );
+    return itemIndex;
+  }, -1);
 
   return items?.reduce((optionList: { value: string; labelKey: string }[], item, index) => {
     if (!item.responseType || !ITEMS_RESPONSE_TYPES_TO_SHOW.includes(item.responseType))
       return optionList;
 
     const value = getEntityKey(item);
-    // 1# rule: summaryItemIsBeforeRuleItemInTheList
+    // 1# rule: summaryItemIsTheSameAsRuleItem
+    if (conditionItemsInUsageSet.has(value)) {
+      return [
+        ...optionList,
+        {
+          value,
+          labelKey: item.name,
+          disabled: true,
+          tooltip: t('conditionalLogicValidation.summaryItemIsTheSameAsRuleItem'),
+        },
+      ];
+    }
+    // 2# rule: summaryItemIsBeforeRuleItemInTheList
     if (index <= maxUsedItemIndex) {
       return [
         ...optionList,
@@ -50,7 +60,7 @@ export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOpt
       ];
     }
 
-    // usage in another conditions
+    // #last rule: usage in other conditionals
     const disabled = itemsInUsage.has(value);
     const tooltip = disabled ? t('conditionalLogicValidation.usageInSummaryRow') : undefined;
 
