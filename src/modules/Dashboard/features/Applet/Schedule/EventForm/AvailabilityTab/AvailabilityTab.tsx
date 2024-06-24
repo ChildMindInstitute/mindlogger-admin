@@ -192,7 +192,7 @@ export const AvailabilityTab = ({
                 label={t('from')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.FromTime)}
                 data-testid={`${dataTestid}-start-time`}
-                defaultTime="00:00"
+                defaultTime={DEFAULT_START_TIME}
               />
             </StyledTimeWrapper>
             <StyledTimeWrapper
@@ -205,7 +205,7 @@ export const AvailabilityTab = ({
                 label={t('to')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
-                defaultTime="23:59"
+                defaultTime={DEFAULT_END_TIME}
               />
               {hasNextDayLabel && (
                 <StyledTitleSmall
@@ -218,7 +218,7 @@ export const AvailabilityTab = ({
               )}
             </StyledTimeWrapper>
           </StyledTimeRow>
-          <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>
+          <StyledWrapper isCheckboxDisabled={startTime === DEFAULT_START_TIME}>
             <CheckboxController
               name="accessBeforeSchedule"
               control={control}

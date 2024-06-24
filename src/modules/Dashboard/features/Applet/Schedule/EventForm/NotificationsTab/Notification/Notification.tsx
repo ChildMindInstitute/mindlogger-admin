@@ -6,7 +6,7 @@ import { ToggleButtonGroup, TimePicker } from 'shared/components';
 import { StyledFlexTopStart, StyledLabelLarge, StyledTitleSmall, theme } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
-import { DEFAULT_START_TIME } from 'shared/consts';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
@@ -93,7 +93,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                   key={atTimeFieldName}
                   label={t('at')}
                   data-testid={`${dataTestid}-time`}
-                  defaultTime="00:00"
+                  defaultTime={DEFAULT_START_TIME}
                 />
                 {getNextDayLabel(atTime)}
               </StyledColInner>
@@ -105,7 +105,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                     key={fromTimeFieldName}
                     label={t('from')}
                     data-testid={`${dataTestid}-from`}
-                    defaultTime="00:00"
+                    defaultTime={DEFAULT_START_TIME}
                   />
                   {getNextDayLabel(fromTime)}
                 </StyledColInner>
@@ -115,7 +115,7 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                     key={toTimeFieldName}
                     label={t('to')}
                     data-testid={`${dataTestid}-to`}
-                    defaultTime="23:59"
+                    defaultTime={DEFAULT_END_TIME}
                   />
                   {getNextDayLabel(toTime)}
                 </StyledColInner>
