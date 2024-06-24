@@ -36,7 +36,11 @@ export const Tooltip = ({
 
   useEffect(() => {
     setInnerOpen(open ?? false);
-  }, [open]);
+
+    if (open) {
+      document.dispatchEvent(new CustomEvent('tooltipOpen', { detail: tooltipId }));
+    }
+  }, [open, tooltipId]);
 
   const handleClose = useCallback(
     (e: Event | React.SyntheticEvent) => {
@@ -52,13 +56,12 @@ export const Tooltip = ({
   );
 
   const handleOpen = (e: React.SyntheticEvent) => {
-    document.dispatchEvent(new CustomEvent('tooltipOpen', { detail: tooltipId }));
-
     onOpen?.(e);
 
     // Only set innerOpen value if Tooltip is uncontrolled.
     if (typeof open !== 'boolean') {
       setInnerOpen(true);
+      document.dispatchEvent(new CustomEvent('tooltipOpen', { detail: tooltipId }));
     }
   };
 
