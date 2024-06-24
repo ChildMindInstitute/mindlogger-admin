@@ -35,10 +35,10 @@ export type ActivityActions = {
   actions: ActionsObject;
   dataTestId: string;
   appletId: string;
-  activityId: string;
   roles?: Roles[];
   hasParticipants?: boolean;
   featureFlags: FeatureFlags;
+  activity: BaseActivity;
 };
 
 export type ActionsObject = {

@@ -71,7 +71,9 @@ describe('getActivityActions', () => {
     actions,
     dataTestId,
     appletId: mockedAppletId,
-    activityId: mockedActivityId,
+    activity: {
+      id: mockedActivityId,
+    },
     roles: [],
     featureFlags: {
       enableMultiInformant: true,

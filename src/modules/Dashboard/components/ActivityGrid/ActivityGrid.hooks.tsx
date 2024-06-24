@@ -144,7 +144,7 @@ export const useActivityGrid = (
                 menuItems={getActivityActions({
                   actions: actions || defaultActions,
                   appletId,
-                  activityId,
+                  activity,
                   dataTestId,
                   roles,
                   featureFlags,
