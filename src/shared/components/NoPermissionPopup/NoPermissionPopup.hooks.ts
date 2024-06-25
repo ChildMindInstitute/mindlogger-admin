@@ -24,6 +24,8 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
   const isBuilder = checkIfAppletUrlPassed(pathname);
   const userData = auth.useData();
   const { id } = userData?.user || {};
+  const currentWorkspaceData = workspaces.useData();
+  const isUserWorkspaceActive = currentWorkspaceData?.ownerId === id;
 
   const handleSubmit = async () => {
     dispatch(forbiddenState.actions.clearForbiddenError());
@@ -32,6 +34,19 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
     dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     dispatch(popups.actions.resetPopupsVisibility());
+
+    if (isUserWorkspaceActive) {
+      if (isDashboardApplets) {
+        window.location.reload();
+
+        return;
+      }
+
+      navigate(page.dashboardApplets);
+
+      return;
+    }
+
     const { getWorkspaces } = workspaces.thunk;
     const result = await dispatch(getWorkspaces());
 
@@ -45,17 +60,7 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
       ).then(() => {
         isBuilder && dispatch(forbiddenState.actions.resetRedirectedFromBuilder());
       });
-
-      return;
     }
-
-    if (isDashboardApplets) {
-      window.location.reload();
-
-      return;
-    }
-
-    navigate(page.dashboardApplets);
   };
 
   return {
