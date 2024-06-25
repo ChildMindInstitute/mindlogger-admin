@@ -103,7 +103,7 @@ export const DatePicker = <T extends FieldValues>({
               return startEndingValue[0];
             }
 
-            return singleDate;
+            return singleDate && new Date(singleDate);
           };
 
           const getValue = () => {

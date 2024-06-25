@@ -74,7 +74,7 @@ export const ImageUploadExtension = ({
                       hidden
                       accept={joinWihComma(VALID_IMAGE_TYPES)}
                       type="file"
-                      onChange={onInputChange}
+                      onChange={() => onInputChange()}
                     />
                   </StyledTitleSmall>
                 </StyledMenuItem>

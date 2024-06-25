@@ -2,6 +2,9 @@ import { enUS, fr } from 'date-fns/locale';
 
 import { Svg } from 'shared/components/Svg';
 
+export const DEFAULT_START_TIME = '00:00';
+export const DEFAULT_END_TIME = '23:59';
+
 export const DEFAULT_ROWS_PER_PAGE = 20;
 export const TABS_HEIGHT = '6.1rem';
 export const TOP_BAR_HEIGHT = '6rem';

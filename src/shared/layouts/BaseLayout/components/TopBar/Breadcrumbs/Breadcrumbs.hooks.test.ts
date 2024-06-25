@@ -130,6 +130,12 @@ jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(),
 }));
 
+const testCommonBuilderCrumbs = ({ dashboard, applet, activities }) => {
+  expect(dashboard).toEqual(expectedDashboard);
+  expect(applet).toEqual(expectedApplet);
+  expect(activities).toEqual(expectedActivities);
+};
+
 describe('useBreadcrumbs', () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -372,9 +378,7 @@ describe('useBreadcrumbs', () => {
     expect(result.current).toHaveLength(5);
     const [dashboard, applet, activities, newActivity, activityAbout] = result.current;
 
-    expect(dashboard).toEqual(expectedDashboard);
-    expect(applet).toEqual(expectedApplet);
-    expect(activities).toEqual(expectedActivities);
+    testCommonBuilderCrumbs({ dashboard, applet, activities });
     expect(newActivity).toEqual(expectedNewActivity);
     expect(activityAbout).toEqual({
       icon: 'more-info-outlined',
@@ -396,9 +400,7 @@ describe('useBreadcrumbs', () => {
     expect(result.current).toHaveLength(5);
     const [dashboard, applet, activities, newActivity, activitySettings] = result.current;
 
-    expect(dashboard).toEqual(expectedDashboard);
-    expect(applet).toEqual(expectedApplet);
-    expect(activities).toEqual(expectedActivities);
+    testCommonBuilderCrumbs({ dashboard, applet, activities });
     expect(newActivity).toEqual(expectedNewActivity);
     expect(activitySettings).toEqual({
       icon: 'settings',
@@ -408,33 +410,44 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for builder activity performance task (touch)', () => {
-    const route = `/builder/${appletId}/activities/performance-task/touch/${activityId}`;
-    const routePath = page.builderAppletTouch;
+  const perfRoute1 = `/builder/${appletId}/activities/performance-task/touch/${activityId}`;
+  const perfRoute2 = `/builder/${appletId}/activities/performance-task/gyroscope/${activityId}`;
+  const perfRoute3 = `/builder/${appletId}/activities/performance-task/flanker/${activityId}`;
+  const { builderAppletTouch, builderAppletGyroscope, builderAppletFlanker } = page;
+  const label1 = 'CST Touch';
+  const label2 = 'CST Gyroscope';
+  const label3 = 'Simple & Choice Reaction Time Task Builder';
 
-    const { result } = renderHookWithProviders(useBreadcrumbs, {
-      route,
-      routePath,
-      preloadedState,
-    });
+  test.each`
+    route         | routePath                 | label
+    ${perfRoute1} | ${builderAppletTouch}     | ${label1}
+    ${perfRoute2} | ${builderAppletGyroscope} | ${label2}
+    ${perfRoute3} | ${builderAppletFlanker}   | ${label3}
+  `(
+    'should generate correct breadcrumbs for builder performance task - $label',
+    ({ route, routePath, label }) => {
+      const { result } = renderHookWithProviders(useBreadcrumbs, {
+        route,
+        routePath,
+        preloadedState,
+      });
 
-    expect(result.current).toHaveLength(5);
-    const [dashboard, applet, activities, touch, configure] = result.current;
+      expect(result.current).toHaveLength(5);
+      const [dashboard, applet, activities, performanceTask, configure] = result.current;
 
-    expect(dashboard).toEqual(expectedDashboard);
-    expect(applet).toEqual(expectedApplet);
-    expect(activities).toEqual(expectedActivities);
-    expect(touch).toEqual({
-      label: 'touch',
-      disabledLink: true,
-      key: expect.any(String),
-    });
-    expect(configure).toEqual({
-      icon: 'configure',
-      label: 'Configure',
-      key: expect.any(String),
-    });
-  });
+      testCommonBuilderCrumbs({ dashboard, applet, activities });
+      expect(performanceTask).toEqual({
+        label,
+        disabledLink: true,
+        key: expect.any(String),
+      });
+      expect(configure).toEqual({
+        icon: 'configure',
+        label: 'Configure',
+        key: expect.any(String),
+      });
+    },
+  );
 
   test('should generate correct breadcrumbs for builder activity flows', () => {
     const route = `/builder/${appletId}/activity-flows`;

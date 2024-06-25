@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef, RefObject } from 'react';
 import {
   Calendar as ReactCalendar,
   dateFnsLocalizer,
@@ -14,6 +14,7 @@ import { Svg } from 'shared/components/Svg';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { locales } from 'shared/consts';
+import { SaveChangesPopup } from 'shared/components/SaveChangesPopup';
 
 import { CreateEventPopup } from '../CreateEventPopup';
 import { EditEventPopup } from '../EditEventPopup';
@@ -25,7 +26,12 @@ import {
   getHasWrapperMoreBtn,
 } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
-import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
+import {
+  AllDayEventsVisible,
+  CalendarViews,
+  EditEventPopupRef,
+  OnViewFunc,
+} from './Calendar.types';
 
 const dateFnsLocalize = dateFnsLocalizer({
   format,
@@ -45,8 +51,11 @@ export const Calendar = () => {
   const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
   const [editEventPopupVisible, setEditEventPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
+  const [saveChangesPopupVisible, setSaveChangesPopupVisible] = useState(false);
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
+
+  const editEventPopupRef = useRef(null) as RefObject<EditEventPopupRef>;
 
   const { setCalendarCurrentYear } = calendarEvents.actions;
   const { eventsToShow = null, allDayEventsSortedByDays = null } =
@@ -83,6 +92,18 @@ export const Calendar = () => {
       ),
     );
     setEditedEvent(calendarEvent);
+  };
+
+  const handleDontSave = () => {
+    setSaveChangesPopupVisible(false);
+    setEditEventPopupVisible(false);
+  };
+
+  const handleSaveChanges = () => {
+    if (editEventPopupRef.current) {
+      editEventPopupRef.current.saveForm();
+      setSaveChangesPopupVisible(false);
+    }
   };
 
   const hasWrapperMoreBtn = useMemo(() => {
@@ -184,11 +205,21 @@ export const Calendar = () => {
       )}
       {editedEvent && (
         <EditEventPopup
+          ref={editEventPopupRef}
           open={editEventPopupVisible}
           editedEvent={editedEvent}
           setEditEventPopupVisible={setEditEventPopupVisible}
           defaultStartDate={defaultStartDate}
+          setSaveChangesPopupVisible={setSaveChangesPopupVisible}
           data-testid={`${dataTestId}-edit-event-popup`}
+        />
+      )}
+      {saveChangesPopupVisible && (
+        <SaveChangesPopup
+          popupVisible={saveChangesPopupVisible}
+          onDontSave={handleDontSave}
+          onCancel={() => setSaveChangesPopupVisible(false)}
+          onSave={handleSaveChanges}
         />
       )}
     </>

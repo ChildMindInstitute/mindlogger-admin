@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 
-import { MediaUploadFields } from 'shared/api';
+import { MediaUploadFields, TargetExtension } from 'shared/api';
 
 export type UseMediaUploadProps = {
   callback?: (mediaUrl: string) => void;
@@ -9,11 +9,15 @@ export type UseMediaUploadProps = {
   onStopCallback?: () => void;
 };
 
-export type ExecuteMediaUploadProps = { file: File; fileName: string };
+export type ExecuteMediaUploadProps = {
+  file: File;
+  fileName: string;
+  targetExtension?: TargetExtension;
+};
 
 export type UseMediaUploadReturn = {
   error: null | AxiosError;
-  executeMediaUpload: ({ file, fileName }: ExecuteMediaUploadProps) => Promise<void>;
+  executeMediaUpload: (props: ExecuteMediaUploadProps) => Promise<void>;
   isLoading: boolean;
   mediaUrl: string | null;
   stopUpload: () => void;
