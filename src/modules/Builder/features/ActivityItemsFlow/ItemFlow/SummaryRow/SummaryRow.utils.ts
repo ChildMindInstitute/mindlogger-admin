@@ -11,9 +11,11 @@ import {
 
 import { ITEMS_RESPONSE_TYPES_TO_SHOW } from './SummaryRow.const';
 import {
+  CheckIfSelectionsIntersectionProps,
   GetMatchOptionsProps,
   GetItemsInUsageProps,
   GetItemsOptionsProps,
+  GroupedConditionsByRow,
   ConditionWithResponseType,
 } from './SummaryRow.types';
 
@@ -39,6 +41,67 @@ const getObjectFromListByResponseType = (conditions: ConditionWithResponseType[]
     },
     {} as Record<ItemResponseType, Condition[]>,
   );
+
+const checkIfSelectionPerRowHasIntersection = <T extends SingleMultiSelectionPerRowCondition>({
+  conditions,
+  sameOptionValue,
+  inverseOptionValue,
+}: CheckIfSelectionsIntersectionProps) => {
+  const groupedConditionsByRow = conditions.reduce((acc, condition) => {
+    const payload = (condition as T).payload;
+    const rowIndex = payload?.rowIndex;
+    if (rowIndex === undefined || rowIndex === '') return acc;
+
+    if (acc[+rowIndex])
+      return {
+        ...acc,
+        [+rowIndex]: acc[+rowIndex].concat(condition),
+      };
+
+    return {
+      ...acc,
+      [+rowIndex]: [condition],
+    };
+  }, {} as GroupedConditionsByRow);
+
+  return Object.entries(groupedConditionsByRow).some((entity) =>
+    checkIfSelectionsIntersection({
+      conditions: entity[1],
+      sameOptionValue,
+      inverseOptionValue,
+    }),
+  );
+};
+
+const checkIfSelectionsIntersection = <
+  T extends OptionCondition | SingleMultiSelectionPerRowCondition,
+>({
+  conditions,
+  sameOptionValue,
+  inverseOptionValue,
+}: CheckIfSelectionsIntersectionProps) => {
+  const sameOptionValues = conditions.reduce((acc, condition) => {
+    const conditionObject = condition as T;
+    if (conditionObject.type === sameOptionValue) {
+      return acc.add(conditionObject.payload.optionValue);
+    }
+
+    return acc;
+  }, new Set<T['payload']['optionValue']>());
+  const inverseOptionValues = conditions.reduce((acc, condition) => {
+    const conditionObject = condition as T;
+    if (conditionObject.type === inverseOptionValue) {
+      return acc.add(conditionObject.payload.optionValue);
+    }
+
+    return acc;
+  }, new Set<T['payload']['optionValue']>());
+  const intersect = [...sameOptionValues].filter((i) => inverseOptionValues.has(i));
+  if (intersect.length > 0) return true;
+
+  return false;
+};
+
 const checkIfHasContradiction = (
   conditionsByType: ReturnType<typeof getObjectFromListByResponseType>,
 ) => {
@@ -65,138 +128,31 @@ const checkIfHasContradiction = (
         //
         return true;
       }
-      case ItemResponseType.SingleSelection: {
-        const equalToOptionValues = groupedConditions.reduce((acc, condition) => {
-          const conditionObject = condition as OptionCondition;
-          if (conditionObject.type === ConditionType.EqualToOption) {
-            return acc.add(conditionObject.payload.optionValue);
-          }
-
-          return acc;
-        }, new Set<string | number>());
-        const notEqualToOptionValues = groupedConditions.reduce((acc, condition) => {
-          const conditionObject = condition as OptionCondition;
-          if (conditionObject.type === ConditionType.NotEqualToOption) {
-            return acc.add(conditionObject.payload.optionValue);
-          }
-
-          return acc;
-        }, new Set<string | number>());
-        const intersect = [...equalToOptionValues].filter((i) => notEqualToOptionValues.has(i));
-        if (intersect.length > 0) return true;
-
-        return false;
-      }
-      case ItemResponseType.SingleSelectionPerRow: {
-        const groupedConditionsByRow = groupedConditions.reduce(
-          (acc, condition) => {
-            const payload = (condition as SingleMultiSelectionPerRowCondition).payload;
-            if (typeof payload?.rowIndex !== 'string') return acc;
-
-            if (acc[payload?.rowIndex])
-              return {
-                ...acc,
-                [payload?.rowIndex]: acc[payload?.rowIndex].concat(condition),
-              };
-
-            return {
-              ...acc,
-              [payload?.rowIndex]: [condition],
-            };
-          },
-          {} as Record<string, Condition[]>,
-        );
-
-        return Object.entries(groupedConditionsByRow).some((entity) => {
-          const conditions = entity[1];
-          const includesOptionValues = conditions.reduce((acc, condition) => {
-            const conditionObject = condition as SingleMultiSelectionPerRowCondition;
-            if (conditionObject.type === ConditionType.EqualToOption) {
-              return acc.add(conditionObject.payload.optionValue);
-            }
-
-            return acc;
-          }, new Set<string | number>());
-          const notIncludesOptionValues = conditions.reduce((acc, condition) => {
-            const conditionObject = condition as SingleMultiSelectionPerRowCondition;
-            if (conditionObject.type === ConditionType.NotEqualToOption) {
-              return acc.add(conditionObject.payload.optionValue);
-            }
-
-            return acc;
-          }, new Set<string | number>());
-          const intersect = [...includesOptionValues].filter((i) => notIncludesOptionValues.has(i));
-          if (intersect.length > 0) return true;
-
-          return false;
+      case ItemResponseType.SingleSelection:
+        return checkIfSelectionsIntersection({
+          conditions: groupedConditions,
+          sameOptionValue: ConditionType.EqualToOption,
+          inverseOptionValue: ConditionType.NotEqualToOption,
         });
-      }
-      case ItemResponseType.MultipleSelection: {
-        const includesOptionValues = groupedConditions.reduce((acc, condition) => {
-          const conditionObject = condition as OptionCondition;
-          if (conditionObject.type === ConditionType.IncludesOption) {
-            return acc.add(conditionObject.payload.optionValue);
-          }
 
-          return acc;
-        }, new Set<string | number>());
-        const notIncludesOptionValues = groupedConditions.reduce((acc, condition) => {
-          const conditionObject = condition as OptionCondition;
-          if (conditionObject.type === ConditionType.NotIncludesOption) {
-            return acc.add(conditionObject.payload.optionValue);
-          }
-
-          return acc;
-        }, new Set<string | number>());
-        const intersect = [...includesOptionValues].filter((i) => notIncludesOptionValues.has(i));
-        if (intersect.length > 0) return true;
-
-        return false;
-      }
-      case ItemResponseType.MultipleSelectionPerRow: {
-        const groupedConditionsByRow = groupedConditions.reduce(
-          (acc, condition) => {
-            const payload = (condition as SingleMultiSelectionPerRowCondition).payload;
-            if (typeof payload?.rowIndex !== 'string') return acc;
-
-            if (acc[payload?.rowIndex])
-              return {
-                ...acc,
-                [payload?.rowIndex]: acc[payload?.rowIndex].concat(condition),
-              };
-
-            return {
-              ...acc,
-              [payload?.rowIndex]: [condition],
-            };
-          },
-          {} as Record<string, Condition[]>,
-        );
-
-        return Object.entries(groupedConditionsByRow).some((entity) => {
-          const conditions = entity[1];
-          const includesOptionValues = conditions.reduce((acc, condition) => {
-            const conditionObject = condition as SingleMultiSelectionPerRowCondition;
-            if (conditionObject.type === ConditionType.IncludesOption) {
-              return acc.add(conditionObject.payload.optionValue);
-            }
-
-            return acc;
-          }, new Set<string | number>());
-          const notIncludesOptionValues = conditions.reduce((acc, condition) => {
-            const conditionObject = condition as SingleMultiSelectionPerRowCondition;
-            if (conditionObject.type === ConditionType.NotIncludesOption) {
-              return acc.add(conditionObject.payload.optionValue);
-            }
-
-            return acc;
-          }, new Set<string | number>());
-          const intersect = [...includesOptionValues].filter((i) => notIncludesOptionValues.has(i));
-          if (intersect.length > 0) return true;
-
-          return false;
+      case ItemResponseType.SingleSelectionPerRow:
+        return checkIfSelectionPerRowHasIntersection({
+          conditions: groupedConditions,
+          sameOptionValue: ConditionType.EqualToOption,
+          inverseOptionValue: ConditionType.NotEqualToOption,
         });
-      }
+      case ItemResponseType.MultipleSelection:
+        return checkIfSelectionsIntersection({
+          conditions: groupedConditions,
+          sameOptionValue: ConditionType.IncludesOption,
+          inverseOptionValue: ConditionType.NotIncludesOption,
+        });
+      case ItemResponseType.MultipleSelectionPerRow:
+        return checkIfSelectionPerRowHasIntersection({
+          conditions: groupedConditions,
+          sameOptionValue: ConditionType.IncludesOption,
+          inverseOptionValue: ConditionType.NotIncludesOption,
+        });
       default:
         return false;
     }
@@ -230,7 +186,7 @@ export const getMatchOptions = ({ items, conditions }: GetMatchOptionsProps): Op
       disabled: hasContradiction,
       tooltip: hasContradiction
         ? t('conditionalLogicValidation.impossibleToFulfillTheConditionsSimultaneously')
-        : t('all'),
+        : undefined,
     },
   ];
 };

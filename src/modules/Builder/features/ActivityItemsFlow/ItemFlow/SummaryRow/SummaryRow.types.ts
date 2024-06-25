@@ -1,5 +1,5 @@
 import { ItemFormValues } from 'modules/Builder/types';
-import { ItemResponseType } from 'shared/consts';
+import { ConditionType, ItemResponseType } from 'shared/consts';
 import { ConditionalLogic, Condition } from 'shared/state/Applet';
 
 export type SummaryRowProps = {
@@ -25,3 +25,13 @@ export type GetItemsInUsageProps = {
 };
 
 export type ConditionWithResponseType = Condition & { responseType: ItemResponseType };
+export type GroupedConditionsByRow = Record<string, Condition[]>;
+
+export type CheckIfSelectionPerRowHasIntersectionProps = {
+  sameOptionValue: ConditionType.EqualToOption | ConditionType.IncludesOption;
+  inverseOptionValue: ConditionType.NotEqualToOption | ConditionType.NotIncludesOption;
+};
+
+export type CheckIfSelectionsIntersectionProps = CheckIfSelectionPerRowHasIntersectionProps & {
+  conditions: Condition[];
+};

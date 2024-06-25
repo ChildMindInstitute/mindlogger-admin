@@ -411,7 +411,7 @@ export type OptionCondition = BaseCondition & {
 export type SingleMultiSelectionPerRowCondition = BaseCondition &
   OptionCondition & {
     payload: {
-      rowIndex: number;
+      rowIndex?: string | number;
     };
   };
 
