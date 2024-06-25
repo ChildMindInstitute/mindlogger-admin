@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 
-import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import { ActivityFlowItem, ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 
 export enum GetMenuItemsType {
   AddActivity,
@@ -23,4 +23,9 @@ export type GetFlowBuilderActions = {
   removeItem: () => void;
   replaceItemActionActive: boolean;
   'data-testid'?: string;
+};
+
+export type NonReviewableActivities = {
+  activities: ActivityFormValues[];
+  activitiesIdsObjects: Record<string, ActivityFormValues>;
 };

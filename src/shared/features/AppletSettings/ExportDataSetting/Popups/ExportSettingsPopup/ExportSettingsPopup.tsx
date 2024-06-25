@@ -130,7 +130,7 @@ export const ExportSettingsPopup = ({
                 label={t('startDate')}
                 minDate={minDate}
                 data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`}
-                inputSx={{ width: '100%' }}
+                inputWrapperSx={{ width: '100%' }}
               />
               <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
                 {t('smallTo')}
@@ -142,7 +142,7 @@ export const ExportSettingsPopup = ({
                 minDate={fromDate}
                 label={t('endDate')}
                 data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`}
-                inputSx={{ width: '100%' }}
+                inputWrapperSx={{ width: '100%' }}
               />
             </StyledFlexTopCenter>
           )}
@@ -153,7 +153,7 @@ export const ExportSettingsPopup = ({
               startIcon={<Svg width="18" height="18" id="export" />}
               data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-button`}
             >
-              {t('downloadCSV')}
+              {t('download')}
             </StyledAppletSettingsButton>
           </Box>
         </form>

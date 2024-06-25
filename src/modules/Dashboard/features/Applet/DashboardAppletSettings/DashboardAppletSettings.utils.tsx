@@ -15,7 +15,7 @@ import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ isPublished, roles }: GetSettings): ItemNavigation[] => {
+export const getSettings = ({ isPublished, roles, appletId }: GetSettings): ItemNavigation[] => {
   const dataTestid = 'dashboard-applet-settings';
 
   return [
@@ -41,7 +41,10 @@ export const getSettings = ({ isPublished, roles }: GetSettings): ItemNavigation
           component: <EditAppletSetting />,
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
-          onClick: () => Mixpanel.track('Applet edit click'),
+          onClick: () =>
+            Mixpanel.track('Applet edit click', {
+              'Applet ID': appletId,
+            }),
         },
         // Description: "Download Schema" logic is hidden until it will be used in future features
         // {

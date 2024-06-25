@@ -56,4 +56,21 @@ describe('getEntityReportFields', () => {
       expect(result.reportIncludedActivityName).toBe(expected.reportIncludedActivityName);
     }
   });
+
+  test('should return empty reportIncludedActivityName and reportIncludedItemName for NameToKey type and reviewable activity', () => {
+    const nonReviewableKeys = ['activity-key-1'];
+
+    const result = getEntityReportFields({
+      reportActivity: 'Activity-2',
+      reportItem: 'Item-2',
+      activities,
+      type: Type.NameToKey,
+      nonReviewableKeys,
+    });
+
+    expect(result).toEqual({
+      reportIncludedActivityName: '',
+      reportIncludedItemName: '',
+    });
+  });
 });

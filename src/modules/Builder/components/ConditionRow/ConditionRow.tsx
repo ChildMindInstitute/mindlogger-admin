@@ -35,6 +35,7 @@ export const ConditionRow = ({
   autoTrigger,
   showError = true,
   'data-testid': dataTestid,
+  isItemFlow = false,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
@@ -52,9 +53,6 @@ export const ConditionRow = ({
   const conditionTypeName = `${conditionName}.type`;
   const conditionPayloadName = `${conditionName}.payload`;
   const conditionPayloadSelectionName = `${conditionPayloadName}.optionValue`;
-  const conditionPayloadValueName = `${conditionPayloadName}.value`;
-  const conditionPayloadMinValueName = `${conditionPayloadName}.minValue`;
-  const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
 
   const [conditions, items, reports, conditionItem, conditionType, conditionPayload] = useWatch({
     name: [
@@ -74,9 +72,9 @@ export const ConditionRow = ({
   const selectedScore =
     scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
-    [ConditionRowType.Item]: getItemOptions(items, type),
+    [ConditionRowType.Item]: getItemOptions(items, type, isItemFlow),
     [ConditionRowType.Section]: [
-      ...getItemOptions(items, type),
+      ...getItemOptions(items, type, isItemFlow),
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
@@ -150,10 +148,7 @@ export const ConditionRow = ({
       <Condition
         itemName={conditionItemName}
         stateName={conditionTypeName}
-        optionValueName={conditionPayloadSelectionName}
-        numberValueName={conditionPayloadValueName}
-        minValueName={conditionPayloadMinValueName}
-        maxValueName={conditionPayloadMaxValueName}
+        payloadName={conditionPayloadName}
         itemOptions={itemOptions}
         valueOptions={valueOptions}
         item={conditionItem}

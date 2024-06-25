@@ -32,7 +32,9 @@ export const LinkGenerator = () => {
   const onLinkCreated = (link: InviteLink | null) => {
     setInviteLink(link);
 
-    Mixpanel.track('Public Link generate click');
+    Mixpanel.track('Public Link generate click', {
+      'Applet ID': appletId,
+    });
   };
 
   useEffect(() => {

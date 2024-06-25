@@ -17,7 +17,9 @@ export const EditAppletSetting = () => {
 
   const handleClick = () => {
     navigate(getBuilderAppletUrl(appletId || ''));
-    Mixpanel.track('Applet edit click');
+    Mixpanel.track('Applet edit click', {
+      'Applet ID': appletId,
+    });
   };
 
   return (
