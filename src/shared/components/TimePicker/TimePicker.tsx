@@ -37,6 +37,7 @@ export const TimePicker = <T extends FieldValues>({
   };
 
   const handleInputValue = (onChange: InputOnChange) => {
+    if (!inputValue) return;
     const cleanedInput = cleanInput(inputValue);
     const validatedInput = validateInput(defaultTime, cleanedInput);
     updateInputValue(formatInput(validatedInput), onChange);

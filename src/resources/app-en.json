@@ -377,7 +377,7 @@
   "duplicate": "Duplicate",
   "duplicateApplet": "Duplicate Applet",
   "duplicateDescription": "The current Applet's content will be copied and saved as a separate Applet.",
-  "duration": "Duration",
+  "duration": "Duration (HH:MM)",
   "edit": "Edit",
   "editAccess": "Edit Access",
   "editAccessNoRespondent": "Please add access to review the Data of at least one Respondent in the {{titles}} for the Reviewer role or remove the role.",
