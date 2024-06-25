@@ -80,6 +80,7 @@ export const getItemOptions = (
           value: getEntityKey(item),
           type: getConditionItemType(item),
           responseValues: item.responseValues,
+          question: item.question,
         },
       ];
     }
