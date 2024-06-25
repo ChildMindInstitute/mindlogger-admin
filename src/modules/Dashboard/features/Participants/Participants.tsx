@@ -172,6 +172,11 @@ export const Participants = () => {
     nickname,
     tag,
   }: HandleUpgradeAccount) => {
+    Mixpanel.track('Upgrade to Full Account clicked', {
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Via]: 'Applet - Participants',
+    });
+
     setRespondentKey(respondentOrSubjectId);
     setParticipantDetails({ secretId, nickname, tag });
     handleSetDataForAppletPage({
