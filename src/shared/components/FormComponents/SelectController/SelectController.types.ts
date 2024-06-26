@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
-import { SxProps } from '@mui/material';
+import { SxProps, TooltipProps } from '@mui/material';
 
 import { SelectEvent } from 'shared/types/event';
 
@@ -13,7 +13,7 @@ export type Option = {
   tooltip?: string | JSX.Element;
   hidden?: boolean;
   groupKey?: string;
-  tooltipPlacement?: 'bottom' | 'right';
+  tooltipPlacement?: TooltipProps['placement'];
 };
 
 export type GetMenuItem = {
@@ -23,7 +23,7 @@ export type GetMenuItem = {
   icon?: JSX.Element;
   hidden?: boolean;
   tooltip?: string | JSX.Element;
-  tooltipPlacement?: 'bottom' | 'right';
+  tooltipPlacement?: TooltipProps['placement'];
 };
 
 export enum SelectUiType {
