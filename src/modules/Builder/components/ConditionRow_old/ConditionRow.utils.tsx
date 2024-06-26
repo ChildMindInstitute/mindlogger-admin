@@ -12,6 +12,7 @@ import {
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
+import { StyledMdPreview } from '../ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
 const { t } = i18n;
 
@@ -45,6 +46,9 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
           value: getEntityKey(item),
           type: getConditionItemType(item),
           responseValues: item.responseValues,
+          question: item.question,
+          tooltip: <StyledMdPreview modelValue={item.question ?? ''} />,
+          tooltipPlacement: 'right',
         },
       ];
     }
