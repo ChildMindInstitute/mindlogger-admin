@@ -253,7 +253,7 @@ describe('FeedbackReviewer', () => {
     await userEvent.click(
       screen.getByTestId('respondents-feedback-review-remove-popup-submit-button'),
     );
-    expect(mockedOnReviewAnswerRemove).toHaveBeenCalledWith({ assessmentId: 'review-id' });
+    expect(mockedOnReviewAnswerRemove).toHaveBeenCalledWith('review-id');
     expect(
       screen.queryByTestId('respondents-feedback-review-remove-popup'),
     ).not.toBeInTheDocument();

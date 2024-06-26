@@ -1,14 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
+import { AnswerDate, ReviewEntity } from 'modules/Dashboard/api';
 
-import { ReviewActivity } from 'api';
-
-import { Answer, SelectAnswerProps } from '../../RespondentDataReview.types';
+import { OnSelectActivityOrFlow, OnSelectAnswer } from '../../RespondentDataReview.types';
 
 export type ReviewMenuItemProps = {
-  activity: ReviewActivity;
+  item: ReviewEntity;
   isSelected: boolean;
-  selectedAnswer: Answer | null;
-  setSelectedActivity: Dispatch<SetStateAction<ReviewActivity | null>>;
-  onSelectAnswer: (props: SelectAnswerProps) => void;
+  selectedAnswer: AnswerDate | null;
+  onSelectItem: OnSelectActivityOrFlow;
+  onSelectAnswer: OnSelectAnswer;
   'data-testid'?: string;
 };

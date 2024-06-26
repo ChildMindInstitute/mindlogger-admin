@@ -1,71 +1,108 @@
-import { useEffect, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { StyledContainer } from 'shared/styles';
-import { DatavizActivity, getSummaryActivitiesApi } from 'api';
+import { getSummaryActivitiesApi, getSummaryFlowsApi } from 'modules/Dashboard/api';
 import { useAsync } from 'shared/hooks';
 
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { setDateRangeFormValues } from './utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../RespondentData.types';
-import { getActivityWithLatestAnswer } from '../RespondentData.utils';
+import { getConcatenatedEntities, getEntityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
 import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
+import { useRespondentDataContext } from '../RespondentDataContext';
 
 export const RespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();
-  const [selectedActivity, summaryActivities]: [DatavizActivity | null, DatavizActivity[]] =
-    useWatch({
-      name: ['selectedActivity', 'summaryActivities'],
-    });
+  const {
+    summaryActivities,
+    setSummaryActivities,
+    summaryFlows,
+    setSummaryFlows,
+    selectedEntity,
+    setSelectedEntity,
+  } = useRespondentDataContext();
+  const requestBody = useMemo(() => {
+    if (!appletId || !respondentId) return null;
+
+    return {
+      appletId,
+      targetSubjectId: respondentId,
+    };
+  }, [appletId, respondentId]);
   const [isLoading, setIsLoading] = useState(false);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const { getIdentifiersVersions } = useDatavizSummaryRequests();
   const { fetchAnswers } = useRespondentAnswers();
 
+  const summaryActivitiesLength = summaryActivities.length;
+  const summaryFlowsLength = summaryFlows.length;
+
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
     const summaryActivities = result?.data?.result || [];
-    setValue('summaryActivities', summaryActivities);
-    if (selectedActivity) return;
+    setSummaryActivities(summaryActivities);
+  });
 
-    const selectedActivityByDefault =
-      getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0];
-
-    if (!selectedActivityByDefault) return;
-
-    setValue('selectedActivity', selectedActivityByDefault);
-    setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
-
-    setIsLoading(true);
-    await getIdentifiersVersions({ activity: selectedActivityByDefault });
-    await fetchAnswers({ activity: selectedActivityByDefault });
-    setIsLoading(false);
+  const { execute: getSummaryFlows } = useAsync(getSummaryFlowsApi, async (result) => {
+    const summaryFlows = result?.data?.result || [];
+    setSummaryFlows(summaryFlows);
   });
 
   useEffect(() => {
-    if (!appletId || !respondentId || !!summaryActivities?.length) return;
+    if (!requestBody || summaryFlowsLength) return;
 
-    getSummaryActivities({
-      appletId,
-      targetSubjectId: respondentId,
-    });
-  }, [appletId, respondentId, summaryActivities, getSummaryActivities]);
+    getSummaryFlows(requestBody);
+  }, [requestBody, summaryFlowsLength, getSummaryFlows]);
+
+  useEffect(() => {
+    if (!requestBody || summaryActivitiesLength) return;
+
+    getSummaryActivities(requestBody);
+  }, [requestBody, summaryActivitiesLength, getSummaryActivities]);
+
+  useEffect(() => {
+    (async () => {
+      if (selectedEntity || !summaryActivitiesLength || !summaryFlowsLength) return;
+
+      const summaryEntities = getConcatenatedEntities({
+        activities: summaryActivities,
+        flows: summaryFlows,
+      });
+
+      const selectedEntityByDefault = {
+        ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
+      };
+
+      if (!selectedEntityByDefault) return;
+
+      setSelectedEntity(selectedEntityByDefault);
+      setDateRangeFormValues(setValue, selectedEntityByDefault.lastAnswerDate);
+
+      setIsLoading(true);
+      await getIdentifiersVersions({ entity: selectedEntityByDefault });
+      await fetchAnswers({ entity: selectedEntityByDefault });
+      setIsLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedEntity, summaryActivitiesLength, summaryFlowsLength]);
 
   return (
     <StyledContainer>
-      {!!summaryActivities?.length && (
+      {(!!summaryActivitiesLength || !!summaryFlowsLength) && (
         <>
           <ReportMenu
             activities={summaryActivities}
+            flows={summaryFlows}
             getIdentifiersVersions={getIdentifiersVersions}
             fetchAnswers={fetchAnswers}
             setIsLoading={setIsLoading}
           />
           <StyledReportContainer>
-            <ReportContent selectedActivity={selectedActivity} isLoading={isLoading} />
+            <ReportContent selectedEntity={selectedEntity} isLoading={isLoading} />
           </StyledReportContainer>
         </>
       )}

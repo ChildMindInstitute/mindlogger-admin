@@ -21,7 +21,7 @@ export type ProcessIdentifiersChange = {
   isIdentifiersChange?: boolean;
   adjustStartEndDates: boolean;
   setValue: UseFormSetValue<RespondentsDataFormValues>;
-  activityLastAnswerDate: string | null;
+  lastAnswerDate: string | null;
   recentIdentifiersAnswerDate?: string;
 };
 

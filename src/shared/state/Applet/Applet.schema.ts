@@ -787,6 +787,18 @@ export type SingleApplet = {
   streamPort: number | null;
 };
 
+export type RespondentMeta = {
+  nickname: string;
+};
+
+export type AppletMeta = {
+  hasAssessment: boolean;
+};
+
 export type AppletSchema = {
-  applet: BaseSchema<{ result: SingleApplet } | null>;
+  applet: BaseSchema<{
+    result: SingleApplet;
+    respondentMeta?: RespondentMeta;
+    appletMeta?: AppletMeta;
+  } | null>;
 };

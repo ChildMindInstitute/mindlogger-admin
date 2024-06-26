@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { DatavizActivity } from 'api';
 import {
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
@@ -9,11 +8,16 @@ import {
 
 import { FeedbackTabs } from '../RespondentDataReview.types';
 
+export type SelectedEntity = {
+  id: string;
+  isFlow: boolean;
+};
+
 export type FeedbackProps = {
   activeTab: FeedbackTabs;
   setActiveTab: Dispatch<SetStateAction<FeedbackTabs>>;
   onClose: () => void;
-  selectedActivity: DatavizActivity;
+  selectedEntity: SelectedEntity;
 };
 
 export type AssessmentFormItem = {

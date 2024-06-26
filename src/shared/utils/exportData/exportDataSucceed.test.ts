@@ -53,6 +53,7 @@ describe('exportDataSucceed', () => {
       data: [],
       defaultData: [
         'id',
+        'activity_flow_submission_id',
         'activity_scheduled_time',
         'activity_start_time',
         'activity_end_time',
@@ -77,6 +78,7 @@ describe('exportDataSucceed', () => {
       data: [],
       defaultData: [
         'id',
+        'activity_flow_submission_id',
         'activity_scheduled_time',
         'activity_start_time',
         'activity_end_time',

@@ -1,12 +1,12 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn, theme, variables } from 'shared/styles';
+import { StyledFlexColumn, StyledHeadlineLarge, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledActivity = styled(Box, shouldForwardProp)`
+export const StyledItem = styled(Box, shouldForwardProp)`
   padding: ${theme.spacing(1.2, 2.4)};
   border-radius: ${variables.borderRadius.lg2};
-  margin-bottom: ${theme.spacing(1.6)};
+  margin-bottom: ${theme.spacing(0.5)};
   cursor: pointer;
 
   &:hover {
@@ -27,6 +27,11 @@ export const StyledActivity = styled(Box, shouldForwardProp)`
   `}
 `;
 
-export const StyleContainer = styled(StyledFlexColumn)`
-  padding: ${theme.spacing(1.6, 1.6, 4.8)};
+export const StyledContainer = styled(StyledFlexColumn)`
+  padding: ${theme.spacing(0, 1.6, 1.5)};
+`;
+
+export const StyledTitle = styled(StyledHeadlineLarge)`
+  color: ${variables.palette.on_surface};
+  padding: ${theme.spacing(0, 2.4, 1)};
 `;

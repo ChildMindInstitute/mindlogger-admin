@@ -1,8 +1,9 @@
-import { AppletId } from 'shared/api';
-import { Item, SingleApplet } from 'shared/state';
+import { ActivityId, AppletId } from 'shared/api';
+import { Item, SingleApplet, SubscaleSetting } from 'shared/state';
 import { Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
+import { User } from 'modules/Auth/state';
 
 export type GetAppletsParams = {
   params: {
@@ -24,6 +25,8 @@ export type TargetSubjectId = { targetSubjectId: string };
 export type SubjectId = { subjectId: string };
 
 export type FolderId = { folderId: string };
+
+export type FlowId = { flowId: string };
 
 export type Event = {
   data: {
@@ -245,12 +248,12 @@ export type OwnerId = {
   ownerId: string;
 };
 
-export type DatavizActivity = {
+export type DatavizEntity = {
   id: string;
   name: string;
+  hasAnswer: boolean;
   lastAnswerDate: string | null;
   isPerformanceTask?: boolean;
-  hasAnswer?: boolean;
 };
 
 export type SubmitDates = {
@@ -258,32 +261,48 @@ export type SubmitDates = {
 };
 
 export type AnswerDate = {
-  answerId: string;
+  answerId?: string;
+  submitId?: string;
   createdAt: string;
   endDatetime?: string;
 };
 
-export type ReviewActivity = DatavizActivity & {
+export type ReviewEntity = Omit<DatavizEntity, 'hasAnswer' | 'isPerformanceTask'> & {
   answerDates: AnswerDate[];
 };
 
-export type DatavizAnswer = EncryptedAnswerSharedProps & {
+export type ReviewCount = {
+  mine: number;
+  other: number;
+};
+
+export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   answerId: string;
   endDatetime: string;
   events: string;
-  startDatetime: string;
+  startDatetime?: string;
+  subscaleSetting: SubscaleSetting;
   version: string;
+  reviewCount?: ReviewCount;
 };
+
+export type SubmitId = { submitId: string };
 
 export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
+export type FlowAnswersParams = AppletId & FlowId & SubmitId;
+
 export type AssessmentReview = AppletId & { answerId: string };
+
+export type AssessmentFlowReviewParams = AppletId & SubmitId;
 
 export type AssessmentId = { assessmentId: string };
 
 export type DeleteReview = AssessmentReview & AssessmentId;
+
+export type DeleteFlowReviewParams = AppletId & AssessmentId & SubmitId;
 
 export type AssessmentResult = {
   answer: string | null;
@@ -304,11 +323,13 @@ export type SaveAssessment = AppletId & {
   assessmentVersionId: string;
 };
 
-export type Reviewer = {
-  firstName: string;
-  lastName: string;
-  id: string;
-};
+export type SaveFlowAssessmentParams = AppletId &
+  SubmitId & {
+    answer: string;
+    itemIds: string[];
+    reviewerPublicKey: string;
+    assessmentVersionId: string;
+  };
 
 export type Review = {
   id: string;
@@ -316,15 +337,14 @@ export type Review = {
   updatedAt: string;
   items: Item[];
   itemIds: string[];
-  reviewer: Reviewer;
+  reviewer: Omit<User, 'email'>;
   /* "null" returns in case the user does not have access to the answer
   (a user with the role of reviewer only has access to their own review answers) */
   answer: string | null;
   reviewerPublicKey: string | null;
 };
 
-export type SummaryAnswers = AppletId & {
-  activityId: string;
+export type GetAnswersParams = {
   params: TargetSubjectId & {
     fromDatetime: string;
     toDatetime: string;
@@ -333,6 +353,10 @@ export type SummaryAnswers = AppletId & {
     versions?: string[];
   };
 };
+
+export type SummaryActivityAnswersParams = AppletId & ActivityId & GetAnswersParams;
+
+export type SummaryFlowAnswersParams = AppletId & FlowId & GetAnswersParams;
 
 export type Identifier = {
   identifier: string;
@@ -344,7 +368,7 @@ export type NoteId = { noteId: string };
 
 export type Note = { note: string };
 
-export type GetAnswersNotesParams = {
+export type GetNotesParams = {
   params: {
     search?: string;
     page?: number;
@@ -425,18 +449,22 @@ export type Version = {
   createdAt: string;
 };
 
-export type LatestReport = SubjectId & {
-  appletId: string;
-  activityId: string;
-};
+export type GetLatestReportParams = AppletId & SubjectId & { activityId?: string; flowId?: string };
 
-export type Identifiers = Omit<LatestReport, 'subjectId'> & TargetSubjectId;
+export type GetActivityIdentifiersParams = Omit<GetLatestReportParams, 'subjectId'> &
+  TargetSubjectId;
+
+export type GetFlowIdentifiersParams = AppletId & TargetSubjectId & FlowId;
+
+export type GetActivityVersionsParams = AppletId & ActivityId;
+
+export type GetFlowVersionsParams = AppletId & FlowId;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
 
-export type ActivityAnswerSummary = {
+export type AnswerSummary = {
   createdAt: string;
-  endDateTime: string | null;
+  endDatetime: string | null;
   version: string;
   identifier: Identifier | null;
 };
@@ -447,10 +475,69 @@ export type ActivityAnswer = {
   activityHistoryId: string;
   activityId: string | null;
   flowHistoryId: string | null;
+  identifier: string | null;
+  createdAt: string;
+  endDatetime: string;
+};
+
+export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask' | 'subscaleSetting'> & {
+  appletId: string;
+  order: number;
+  subscaleSetting: SubscaleSetting;
 };
 
 export type EncryptedActivityAnswer = {
-  activity: ExportActivity;
-  answer: Omit<EncryptedAnswerSharedProps, 'items'> & ActivityAnswer & ActivityAnswerSummary;
-  summary: ActivityAnswerSummary;
+  activity: ActivityHistoryFull;
+  answer: Omit<EncryptedAnswerSharedProps, 'items'> &
+    ActivityAnswer &
+    Omit<AnswerSummary, 'identifier'> & {
+      identifier: string | null;
+    };
+  summary: AnswerSummary;
+};
+
+export type FlowHistory = {
+  name: string;
+  description: string | Record<string, string>;
+  isSingleReport: boolean | null;
+  hideBadge: boolean | null;
+  reportIncludedActivityName: string | null;
+  reportIncludedItemName: string | null;
+  id: string;
+  idVersion: string;
+  order: number;
+  createdAt: string;
+  activities: ActivityHistoryFull[];
+};
+
+export type FlowSubmission = {
+  submitId: string;
+  flowHistoryId: string;
+  appletId: string;
+  isCompleted: boolean | null;
+  answers: (Omit<EncryptedAnswerSharedProps, 'items'> &
+    ActivityAnswer &
+    Omit<AnswerSummary, 'identifier'> & {
+      identifier: string | null;
+    })[];
+  endDatetime: string | null;
+  reviewCount?: ReviewCount;
+} & Omit<AnswerSummary, 'identifier'>;
+
+export type EncryptedFlowsAnswers = {
+  flows: FlowHistory[];
+  submissions: FlowSubmission[];
+};
+
+export type EncryptedFlowAnswers = {
+  flow: FlowHistory;
+  submission: FlowSubmission;
+  summary: AnswerSummary;
+};
+
+export type FeedbackNote = {
+  id: string;
+  user: Omit<User, 'email'>;
+  note: string;
+  createdAt: string;
 };
