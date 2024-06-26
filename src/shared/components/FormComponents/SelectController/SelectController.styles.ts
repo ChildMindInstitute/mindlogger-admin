@@ -1,9 +1,9 @@
 import { MenuItem, styled, TextField } from '@mui/material';
 
-import { StyledBodyLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
+import { StyledBodyLarge, variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-import { SelectUiType } from './SelectController.types';
+import { SelectUiType, StyledMenuItemProps } from './SelectController.types';
 
 export const StyledTextField = styled(TextField)`
   && {
@@ -39,39 +39,39 @@ export const StyledPlaceholderMask = styled(StyledBodyLarge)`
   opacity: 0;
 `;
 
-export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${({ itemDisabled, selectDisabled }: { itemDisabled: boolean; selectDisabled?: boolean }) => {
-    if (itemDisabled) {
-      return `
-        pointer-events: none;
-        opacity: ${variables.opacity.disabled};
-      `;
-    }
-    if (selectDisabled) {
-      return `
-        svg {
-          opacity: ${variables.opacity.disabled};
-        }
-      `;
-    }
-  }}
-`;
+export const StyledItem = styled('li')(
+  ({ itemDisabled, selectDisabled }: { itemDisabled?: boolean; selectDisabled?: boolean }) => ({
+    alignItems: 'center',
+    display: 'flex',
 
-export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
-  ${({ uiType }: { uiType: SelectUiType; itemDisabled?: boolean }) =>
-    uiType === SelectUiType.Secondary &&
-    `
-    && {
-      padding: ${theme.spacing(1, 1.6)};
-    }
-  `}
+    ...(itemDisabled && {
+      opacity: variables.opacity.disabled,
+      pointerEvents: 'none',
+    }),
 
-  ${({ itemDisabled }) =>
-    itemDisabled &&
-    `
-    pointer-events: none;
-  `}
-`;
+    ...(selectDisabled && {
+      '& svg': { opacity: variables.opacity.disabled },
+    }),
+  }),
+);
+
+export const StyledMenuItem = styled(MenuItem, {
+  shouldForwardProp: (prop: string) => {
+    if (['component', 'tooltip', 'tooltipPlacement', 'itemDisabled'].includes(prop)) {
+      return true;
+    }
+
+    return shouldForwardProp.shouldForwardProp(prop);
+  },
+})<StyledMenuItemProps>(({ uiType, itemDisabled }) => ({
+  ...(uiType === SelectUiType.Secondary && {
+    padding: theme.spacing(1, 1.6),
+  }),
+
+  ...(itemDisabled && {
+    pointerEvents: 'none',
+  }),
+}));
 
 export const selectDropdownStyles = {
   '.hidden-menu-item': {
