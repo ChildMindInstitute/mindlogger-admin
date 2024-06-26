@@ -126,7 +126,7 @@ const checkIfHasContradiction = (
         // ConditionType.Between
         // ConditionType.OutsideOf
         //
-        return true;
+        return false;
       }
       case ItemResponseType.SingleSelection:
         return checkIfSelectionsIntersection({
@@ -161,7 +161,7 @@ const checkIfHasContradiction = (
   return hasContradiction;
 };
 
-export const getMatchOptions = ({ items, conditions }: GetMatchOptionsProps): Option[] => {
+export const getMatchOptions = ({ items, conditions = [] }: GetMatchOptionsProps): Option[] => {
   const itemsObject = getObjectFromList(items);
   const conditionItems = conditions.reduce((acc, condition) => {
     const item = itemsObject[condition.itemName];
