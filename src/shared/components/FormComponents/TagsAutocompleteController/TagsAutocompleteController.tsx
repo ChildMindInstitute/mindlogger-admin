@@ -147,19 +147,7 @@ export const TagsAutocompleteController = <
                 </Paper>
               );
             }}
-            // ensure that the popper always stays at the bottom
-            slotProps={{
-              popper: {
-                modifiers: [
-                  {
-                    name: 'flip',
-                    options: {
-                      rootBoundary: 'document',
-                    },
-                  },
-                ],
-              },
-            }}
+            slotProps={{ popper: { placement: 'bottom' } }}
             data-testid={dataTestid}
           />
         );
