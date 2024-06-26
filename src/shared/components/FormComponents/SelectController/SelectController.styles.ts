@@ -57,7 +57,7 @@ export const StyledItem = styled('li')(
 
 export const StyledMenuItem = styled(MenuItem, {
   shouldForwardProp: (prop: string) => {
-    if (prop === 'component') {
+    if (['component', 'tooltip', 'tooltipPlacement', 'itemDisabled'].includes(prop)) {
       return true;
     }
 

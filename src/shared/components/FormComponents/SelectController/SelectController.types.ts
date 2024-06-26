@@ -58,4 +58,6 @@ export type StyledMenuItemProps = {
   uiType: SelectUiType;
   itemDisabled?: boolean;
   component?: React.ElementType;
+  tooltip?: string | JSX.Element;
+  tooltipPlacement?: TooltipProps['placement'];
 };

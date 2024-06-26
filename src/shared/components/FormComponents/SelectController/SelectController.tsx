@@ -1,7 +1,7 @@
 import { forwardRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
-import { Box } from '@mui/material';
+import { Box, TooltipProps } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -40,6 +40,36 @@ export const SelectObserverTarget = ({ targetSelector, setTrigger }: SelectObser
 
   return <StyledObserverTarget className={targetSelector} />;
 };
+
+const SelectControllerMenuItem = forwardRef<
+  HTMLLIElement,
+  {
+    itemDisabled?: boolean;
+    tooltip?: React.ReactNode;
+    tooltipPlacement?: TooltipProps['placement'];
+  } & React.ComponentPropsWithoutRef<'li'>
+>(({ itemDisabled: disabled, tooltip, tooltipPlacement, ...props }, ref) => {
+  const item = (
+    <StyledItem ref={ref} itemDisabled={disabled} selectDisabled={disabled} {...props} />
+  );
+
+  return (
+    <>
+      {tooltip ? (
+        <>
+          <Tooltip
+            tooltipTitle={tooltip}
+            placement={tooltipPlacement}
+            children={disabled ? <span children={item} /> : item}
+            enterNextDelay={200}
+          />
+        </>
+      ) : (
+        item
+      )}
+    </>
+  );
+});
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -81,27 +111,10 @@ export const SelectController = <T extends FieldValues>({
       value={value as string}
       disabled={itemDisabled}
       className={hidden ? 'hidden-menu-item' : ''}
-      component={forwardRef((props, ref) => {
-        const item = (
-          <StyledItem
-            itemDisabled={itemDisabled}
-            ref={ref}
-            selectDisabled={itemDisabled}
-            {...props}
-          />
-        );
-
-        return tooltip ? (
-          <Tooltip
-            tooltipTitle={tooltip}
-            placement={tooltipPlacement}
-            children={itemDisabled ? <span>{item}</span> : item}
-            enterNextDelay={200}
-          />
-        ) : (
-          item
-        );
-      })}
+      component={SelectControllerMenuItem}
+      tooltip={tooltip}
+      tooltipPlacement={tooltipPlacement}
+      itemDisabled={itemDisabled}
     >
       {icon && (
         <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
