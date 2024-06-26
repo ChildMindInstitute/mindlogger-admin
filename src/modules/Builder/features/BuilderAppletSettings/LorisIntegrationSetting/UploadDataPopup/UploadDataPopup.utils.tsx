@@ -26,6 +26,7 @@ export const getScreens = ({
   },
   {
     buttonText: t('upload'),
+    width: '80rem',
     content: <LorisVisits onSetIsLoading={setIsLoading} setStep={setStep} />,
     onSubmit: handleSubmitVisits,
   },
@@ -51,3 +52,8 @@ export const getScreens = ({
     onSecondBtnSubmit: onClose,
   },
 ];
+
+export const areAllVisitsFilled = (data: LorisUsersVisit<LorisActivityForm>[]) =>
+  data.every((user) =>
+    user.activities.every((activity) => activity.visit && activity.visit.trim() !== ''),
+  );

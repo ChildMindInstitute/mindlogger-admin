@@ -9,6 +9,20 @@ export const StyledLorisVisits = styled(Box)`
 `;
 
 export const StyledTable = styled(Table)`
+  .visits-select {
+    .MuiFormControl-root {
+      width: 100%;
+      max-width: 18rem;
+    }
+
+    .MuiSelect-select > :first-child {
+      display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+
   .controller-placeholder {
     top: 0;
     left: 0;

@@ -701,7 +701,8 @@
     "completed": "Terminé",
     "visits": "Visites LORIS",
     "visitsDescription": "Veuillez vérifier si les valeurs de Visite prédéfinies sont correctes: ",
-    "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès."
+    "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès.",
+    "visitsRequired": "Veuillez remplir toutes les visites."
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",

@@ -1,5 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports */
-/* eslint-disable unused-imports/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { UiType } from 'shared/components/Table';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
-import { LorisUsersVisits, getLorisUsersVisitsApi, getLorisVisitsApi } from 'modules/Builder/api';
+import { LorisUsersVisit, getLorisUsersVisitsApi, getLorisVisitsApi } from 'modules/Builder/api';
 
 import { getHeadCells, getLorisActivitiesRows, formatData } from './LorisVisits.utils';
 import { StyledLorisVisits, StyledTable } from './LorisVisits.styles';
@@ -17,7 +15,7 @@ import { Steps } from '../UploadDataPopup.types';
 export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
   const { appletId } = useParams();
 
-  const [usersVisits, setUsersVisits] = useState<LorisUsersVisits>();
+  const [usersVisits, setUsersVisits] = useState<LorisUsersVisit[]>([]);
   const [visitsList, setVisitsList] = useState<string[]>([]);
 
   const { t } = useTranslation();
@@ -31,22 +29,22 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
         onSetIsLoading(true);
         const [visitsResult, usersVisitsResult] = await Promise.all([
           getLorisVisitsApi(),
-          getLorisUsersVisitsApi(),
+          getLorisUsersVisitsApi({ appletId }),
         ]);
 
-        if (visitsResult?.data?.result) {
-          setVisitsList(visitsResult.data.result);
+        if (visitsResult?.data?.result?.visits) {
+          setVisitsList(visitsResult.data.result.visits);
         }
 
-        if (usersVisitsResult?.data?.result) {
-          const defaultValues = formatData(usersVisitsResult?.data?.result);
+        if (usersVisitsResult?.data?.result?.info) {
+          const defaultValues = formatData(usersVisitsResult?.data?.result?.info);
 
-          reset(defaultValues);
-          setUsersVisits(defaultValues);
+          reset({ visitsForm: defaultValues });
+          setUsersVisits(usersVisitsResult?.data?.result?.info);
         }
       } catch (error) {
         console.error(error);
-        // setStep(Steps.Error);
+        setStep(Steps.Error);
       } finally {
         onSetIsLoading(false);
       }
@@ -58,7 +56,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
 
   return (
     <>
-      {!!visitsList.length && usersVisits && (
+      {visitsList.length > 0 && usersVisits.length > 0 && (
         <StyledLorisVisits data-testid="loris-visits">
           <StyledTitleMedium sx={{ mb: theme.spacing(2.4), color: variables.palette.on_surface }}>
             {t('loris.visitsDescription')}

@@ -22,13 +22,24 @@ export type Theme = {
 
 export type Themes = Theme[];
 
-export type LorisActivity = {
+export type CommonLorisActivity = {
+  activityId: string;
   activityName: string;
+  answerId: string;
+  version: string;
   completedDate: string;
-  secretUserId: string;
-  visit?: string;
 };
 
-export type LorisUsersVisits = {
-  [userId: string]: LorisActivity[];
+export type LorisActivityResponse = CommonLorisActivity & {
+  visits: string[];
+};
+
+export type LorisActivityForm = CommonLorisActivity & {
+  visit: string;
+};
+
+export type LorisUsersVisit<T = LorisActivityResponse> = {
+  userId?: string;
+  secretUserId: string;
+  activities: T[];
 };
