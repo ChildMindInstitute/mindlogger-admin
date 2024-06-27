@@ -48,16 +48,16 @@ jobs:
           if [ $BRANCHES -eq 0 ]; then
             aws amplify create-branch --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --display-name ${{ inputs.env-name }} --stage PULL_REQUEST
           fi
-          sleep 10
+          sleep 20
       - name: Deploy branch
         id: deploy
         run: |
-          JOB_ID=$(aws amplify start-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-type RELEASE --query 'jobSummary.jobId')
+          JOB_ID=$(aws amplify start-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --job-type RELEASE --query 'jobSummary.jobId')
           echo "job-id=$JOB_ID" >> "$GITHUB_OUTPUT"
       - name: Wait for job
         run: |
           while true; do
-            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status' --output text)
+            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status' --output text)
             echo "Current job ${{ steps.deploy.outputs.job-id }} status: $JOB_STATUS"
             case "$JOB_STATUS" in
               "SUCCEED")
