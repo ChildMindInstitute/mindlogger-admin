@@ -44,7 +44,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
       - name: Create preview branch
         run: |
-          BRANCHES=$(aws amplify list-branches --app-id ${{ inputs.app-id }} --query 'length(branches[?branchName==`${{ inputs.env-name }}`])')
+          BRANCHES=$(aws amplify list-branches --app-id ${{ inputs.app-id }} --query 'length(branches[?branchName==`${{ inputs.branch-name }}`])')
           if [ $BRANCHES -eq 0 ]; then
             aws amplify create-branch --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --display-name ${{ inputs.env-name }} --stage PULL_REQUEST
           fi
