@@ -1,0 +1,76 @@
+on:
+  workflow_call:
+    outputs:
+      service-url:
+        value: "${{ jobs.create-preview-env.outputs.service-url }}"
+    inputs:
+      env-name:
+        type: string
+        description: Environment name
+        required: true
+      branch-name:
+        type: string
+        description: Branch to use to create preview env
+        required: true
+      app-id:
+        type: string
+        description: App Name (likely the GH repo)
+        required: true
+      aws-region:
+        type: string
+        default: us-east-1
+        required: false
+
+jobs:
+
+  create-preview-env:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    name: Create Preview Env
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+      discussions: write
+    env:
+      ENV_NAME: ${{ inputs.env-name }}
+      AWS_REGION: us-east-1
+    steps:
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::992382368072:role/cmiml-feature-oidc-github-role
+          role-session-name: gha-preview-env
+          aws-region: ${{ inputs.aws-region }}
+      - name: Create preview branch
+        run: |
+          BRANCHES=$(aws amplify list-branches --app-id ${{ inputs.app-id }} --query 'length(branches[?branchName==`${{ inputs.env-name }}`])')
+          if [ $BRANCHES -eq 0 ]; then
+            aws amplify create-branch --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --display-name ${{ inputs.env-name }} --stage PULL_REQUEST
+          fi
+          sleep 10
+      - name: Deploy branch
+        id: deploy
+        run: |
+          JOB_ID=$(aws amplify start-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-type RELEASE --query 'jobSummary.jobId')
+          echo "job-id=$JOB_ID" >> "$GITHUB_OUTPUT"
+      - name: Wait for job
+        run: |
+          while true; do
+            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status' --output text)
+            echo "Current job ${{ steps.deploy.outputs.job-id }} status: $JOB_STATUS"
+            case "$JOB_STATUS" in
+              "SUCCEED")
+                break
+              ;;
+              "FAILED" | "CANCELLED")
+                exit 1
+              ;;
+              *)
+                echo "Waiting..."
+              ;;
+            esac
+            sleep 2
+          done
+    outputs:
+      service-url: https://${{ inputs.env-name }}.${{ inputs.app-id }}.amplifyapp.com
