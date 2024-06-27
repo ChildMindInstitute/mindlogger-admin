@@ -63,8 +63,7 @@ export const useReviewActivitiesAndFlows = ({
       submitId ||
       selectedActivity ||
       selectedFlow ||
-      !activities.length ||
-      !flows.length ||
+      (!activities.length && !flows.length) ||
       !handleSelectAnswer
     ) {
       return;

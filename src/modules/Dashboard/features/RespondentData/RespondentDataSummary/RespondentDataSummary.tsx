@@ -66,7 +66,7 @@ export const RespondentDataSummary = () => {
 
   useEffect(() => {
     (async () => {
-      if (selectedEntity || !summaryActivitiesLength || !summaryFlowsLength) return;
+      if (selectedEntity || (!summaryActivitiesLength && !summaryFlowsLength)) return;
 
       const summaryEntities = getConcatenatedEntities({
         activities: summaryActivities,
