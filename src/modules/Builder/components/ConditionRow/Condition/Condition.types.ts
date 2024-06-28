@@ -14,6 +14,7 @@ import { ConditionItemType } from './Condition.const';
 type ConditionItemGeneric<T> = {
   value: string;
   labelKey: string;
+  question: string;
 } & T;
 
 export type SliderConditionItem = ConditionItemGeneric<{

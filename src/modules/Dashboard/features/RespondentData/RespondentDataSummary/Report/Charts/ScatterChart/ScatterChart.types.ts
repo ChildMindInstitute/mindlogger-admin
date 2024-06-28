@@ -1,14 +1,16 @@
 import { ChartDataset } from 'chart.js';
 
 import { Version } from 'api';
-import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+
+import { Completion } from '../../Report.types';
 
 export type ScatterChartProps = {
   height?: string;
   minDate: Date;
   maxDate: Date;
-  answers: ActivityCompletion[];
+  completions: Completion[];
   versions: Version[];
+  'data-testid'?: string;
 };
 
 export type ExtendedChartDataset = ChartDataset & {

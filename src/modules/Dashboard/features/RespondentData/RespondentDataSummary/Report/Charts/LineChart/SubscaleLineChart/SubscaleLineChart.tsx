@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Chart as ChartJS, Tooltip, TimeScale, Legend, ScriptableTooltipContext } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -11,7 +10,6 @@ import { Box } from '@mui/material';
 import { getOptionTextApi } from 'api';
 import { pluck } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
-import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 
 import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
@@ -39,8 +37,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
-  const { watch } = useFormContext<RespondentsDataFormValues>();
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
 
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const scores = pluck(responses.flat(), 'score');

@@ -1,10 +1,9 @@
 import { useMemo, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { createAssessmentApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { StyledErrorText, StyledTitleBoldMedium, theme } from 'shared/styles';
 
@@ -12,7 +11,7 @@ import { RespondentDataReviewContext } from '../../RespondentDataReview.context'
 import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
-import { formatAssessmentAnswers, getAssessmentVersion } from './FeedbackAssessment.utils';
+import { createAssessment, formatAssessmentAnswers } from './FeedbackAssessment.utils';
 import { ActivityCardItemList } from './ActivityCardItemList';
 
 export const FeedbackAssessment = ({
@@ -20,7 +19,6 @@ export const FeedbackAssessment = ({
   setAssessmentStep,
   submitCallback,
   setIsLoading,
-  answerId,
   setError,
   error,
   userName,
@@ -29,6 +27,9 @@ export const FeedbackAssessment = ({
     RespondentDataReviewContext,
   );
   const { appletId = '' } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId') || null;
+  const submitId = searchParams.get('submitId') || null;
   const userData = auth.useData();
   const getEncryptedAnswers = useEncryptedAnswers();
 
@@ -65,17 +66,19 @@ export const FeedbackAssessment = ({
 
       const answer = await getEncryptedAnswers(answersToEncrypt);
 
-      if (!appletId || !answerId) return;
+      if (!appletId) return;
 
       setItemIds(updatedItemIds);
 
-      await createAssessmentApi({
+      await createAssessment({
         appletId,
         answerId,
+        submitId,
         answer,
-        itemIds: updatedItemIds || [],
-        reviewerPublicKey: accountId,
-        assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
+        updatedItemIds,
+        accountId,
+        isLastVersion,
+        assessmentVersions,
       });
 
       reset({

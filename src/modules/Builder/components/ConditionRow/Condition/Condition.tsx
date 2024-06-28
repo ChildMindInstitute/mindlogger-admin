@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
+import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSelectController/ItemFlowSelectController';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
 
-import { StyledCondition, StyledSelectController } from './Condition.styles';
+import { StyledCondition } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
 import { SwitchCondition } from './SwitchCondition';
@@ -50,8 +51,11 @@ export const Condition = ({
   return (
     <StyledCondition data-testid={dataTestid}>
       <StyledTitleMedium>{t('if')}</StyledTitleMedium>
-      <StyledSelectController
+      <ItemFlowSelectController
         control={control}
+        customChange={onItemChange}
+        data-testid={`${dataTestid}-name`}
+        disabled={isRowTypeScore}
         name={itemName}
         options={itemOptions}
         placeholder={t(isRowTypeItem ? 'conditionItemNamePlaceholder' : 'select')}
@@ -65,15 +69,15 @@ export const Condition = ({
             return <span>{placeholder}</span>;
           },
         }}
-        customChange={onItemChange}
-        disabled={isRowTypeScore}
         shouldSkipIcon={isRowTypeScore}
-        isLabelNeedTranslation={false}
-        data-testid={`${dataTestid}-name`}
+        tooltipTitle={selectedItem?.question}
       />
       <SwitchCondition {...switchConditionProps}>
-        <StyledSelectController
+        <ItemFlowSelectController
           control={control}
+          customChange={onStateChange}
+          data-testid={`${dataTestid}-type`}
+          disabled={isStateSelectDisabled}
           name={stateName}
           options={getStateOptions(selectedItem?.type)}
           placeholder={
@@ -81,32 +85,26 @@ export const Condition = ({
               ? t('conditionDisabledPlaceholder')
               : t('conditionTypePlaceholder')
           }
-          customChange={onStateChange}
-          isLabelNeedTranslation={false}
-          data-testid={`${dataTestid}-type`}
-          disabled={isStateSelectDisabled}
         />
       </SwitchCondition>
       {isStateSelectDisabled && (
         <>
-          <StyledSelectController
+          <ItemFlowSelectController
             control={control}
+            customChange={onStateChange}
+            data-testid={`${dataTestid}-type`}
+            disabled
             name={stateName}
             options={getStateOptions()}
             placeholder={t('conditionDisabledPlaceholder')}
-            customChange={onStateChange}
-            isLabelNeedTranslation={false}
-            data-testid={`${dataTestid}-type`}
-            disabled
           />
-          <StyledSelectController
+          <ItemFlowSelectController
             control={control}
+            data-testid={`${dataTestid}-selection-value`}
+            disabled
             name={isItemScoreCondition ? numberValueName : optionValueName}
             options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
             placeholder={t('conditionDisabledPlaceholder')}
-            isLabelNeedTranslation={false}
-            data-testid={`${dataTestid}-selection-value`}
-            disabled
           />
         </>
       )}

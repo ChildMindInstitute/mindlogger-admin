@@ -97,6 +97,7 @@ export const getResponseItem = ({
           maxDate={maxDate}
           answers={activityItemAnswer.answers as TimeAnswer[]}
           versions={versions}
+          isStaticActive={isStaticActive}
           data-testid={`${activityItemAnswer.dataTestid}-time-picker-chart`}
         />
       );
@@ -112,6 +113,7 @@ export const getResponseItem = ({
           }
           answers={activityItemAnswer.answers as SingleMultiSelectionPerRowAnswer}
           versions={versions}
+          isStaticActive={isStaticActive}
           data-testid={activityItemAnswer.dataTestid}
         />
       );
@@ -126,6 +128,7 @@ export const getResponseItem = ({
           }
           answers={activityItemAnswer.answers as SliderRowsAnswer}
           versions={versions}
+          isStaticActive={isStaticActive}
           data-testid={activityItemAnswer.dataTestid}
         />
       );

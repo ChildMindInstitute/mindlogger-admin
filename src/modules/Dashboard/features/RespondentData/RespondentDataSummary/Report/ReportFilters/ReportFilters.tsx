@@ -7,8 +7,9 @@ import { addDays } from 'date-fns';
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
-import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
@@ -29,15 +30,15 @@ export const ReportFilters = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useFormContext();
   const { fetchAnswers } = useRespondentAnswers();
+  const { selectedEntity } = useRespondentDataContext();
 
-  const [moreFiltersVisible, filterByIdentifier, startDate, endDate, activity]: [
+  const [moreFiltersVisible, filterByIdentifier, startDate, endDate]: [
     boolean,
     boolean,
     Date,
     Date,
-    DatavizActivity,
   ] = useWatch({
-    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate', 'selectedActivity'],
+    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate'],
   });
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
@@ -56,8 +57,10 @@ export const ReportFilters = ({
     identifier,
     versions,
   }: OnFiltersChangeParams) => {
+    if (!selectedEntity) return;
+
     setIsLoading(true);
-    let fetchParams: FetchAnswers = { activity };
+    let fetchParams: FetchAnswers = { entity: selectedEntity };
 
     switch (type) {
       case FiltersChangeType.StartDate:
@@ -124,6 +127,7 @@ export const ReportFilters = ({
               onFiltersChange({ startTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-start-time`}
+            defaultTime={DEFAULT_START_TIME}
           />
           <StyledTimeText>
             <Trans i18nKey="timeIsShownInUTC">
@@ -143,6 +147,7 @@ export const ReportFilters = ({
               onFiltersChange({ endTime: newTime, type: FiltersChangeType.Time })
             }
             data-testid={`${dataTestid}-end-time`}
+            defaultTime={DEFAULT_END_TIME}
           />
           <StyledMoreFilters
             onClick={moreFiltersHandler}

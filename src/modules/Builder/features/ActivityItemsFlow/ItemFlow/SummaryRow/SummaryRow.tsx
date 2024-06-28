@@ -5,11 +5,9 @@ import { useWatch } from 'react-hook-form';
 import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
+import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSelectController/ItemFlowSelectController';
 import { ItemFormValues } from 'modules/Builder/types';
-import {
-  StyledSummaryRow,
-  StyledSummarySelectController,
-} from 'shared/styles/styledComponents/ConditionalSummary';
+import { StyledSummaryRow } from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SummaryRowProps } from './SummaryRow.types';
@@ -18,7 +16,7 @@ import { useItemsInUsage } from './SummaryRow.hooks';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useCustomFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
   const [items, conditions] = useWatch({
     name: [`${activityName}.items`, `${name}.conditions`],
   });
@@ -42,11 +40,15 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     [items, itemsInUsage, conditions],
   );
 
+  const { question } =
+    ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
+
   return (
     <>
       <StyledSummaryRow data-testid={dataTestid}>
         <StyledTitleMedium>{t('if')}</StyledTitleMedium>
-        <StyledSummarySelectController
+
+        <ItemFlowSelectController
           control={control}
           name={`${name}.match`}
           options={matchOptions}
@@ -54,8 +56,10 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           data-testid={`${dataTestid}-match`}
           isLabelNeedTranslation={false}
         />
+
         <StyledTitleMedium>{t('summaryRowDescription')}</StyledTitleMedium>
-        <StyledSummarySelectController
+
+        <ItemFlowSelectController
           control={control}
           name={`${name}.itemKey`}
           options={itemsOptions}
@@ -70,7 +74,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           }}
           customChange={handleChangeItemKey}
           data-testid={`${dataTestid}-item`}
-          isLabelNeedTranslation={false}
+          tooltipTitle={question}
         />
       </StyledSummaryRow>
     </>
