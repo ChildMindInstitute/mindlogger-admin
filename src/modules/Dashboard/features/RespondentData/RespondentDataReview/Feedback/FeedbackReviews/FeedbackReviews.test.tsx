@@ -303,7 +303,7 @@ const renderComponent = (
       value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}
     >
       <FormComponent assessment={assessment}>
-        <FeedbackReviews />{' '}
+        <FeedbackReviews />
       </FormComponent>
     </RespondentDataReviewContext.Provider>,
     {

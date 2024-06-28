@@ -39,7 +39,6 @@ export const ExportSettingsPopup = ({
     maxDate: getMaxDate(),
     control,
     inputSx: {
-      width: '19rem',
       '& .MuiInputLabel-outlined': {
         textTransform: 'capitalize',
       },

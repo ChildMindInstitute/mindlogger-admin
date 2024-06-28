@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { workspaces } from 'shared/state/Workspaces';
 import { EmptyState } from 'shared/components/EmptyState';
-import { getErrorMessage } from 'shared/utils/errors';
 import { ApiResponseCodes } from 'shared/api';
 import { ErrorResponseType } from 'shared/types';
+
+type FunctionResponse = {
+  response?: { status?: ApiResponseCodes };
+  status?: ApiResponseCodes;
+};
 
 export const usePermissions = (
   asyncFunc: () => Promise<any> | undefined,
@@ -16,6 +20,19 @@ export const usePermissions = (
   const [isLoading, setIsLoading] = useState(false);
   const { ownerId } = workspaces.useData() || {};
 
+  const handlePermissionCheck = (response: FunctionResponse) => {
+    if (
+      response?.response?.status === ApiResponseCodes.Forbidden ||
+      response?.status === ApiResponseCodes.Forbidden ||
+      (Array.isArray(response) &&
+        response.some((data) => data.type === ErrorResponseType.AccessDenied))
+    ) {
+      setIsForbidden(true);
+    } else {
+      setIsForbidden(false);
+    }
+  };
+
   useEffect(() => {
     if (!ownerId || !asyncFunc) return;
 
@@ -24,18 +41,9 @@ export const usePermissions = (
         setIsLoading(true);
         const { payload } = await asyncFunc();
 
-        if (
-          payload?.response?.status === ApiResponseCodes.Forbidden ||
-          payload?.status === ApiResponseCodes.Forbidden ||
-          (Array.isArray(payload) &&
-            payload.some((data) => data.type === ErrorResponseType.AccessDenied))
-        ) {
-          return setIsForbidden(true);
-        }
-
-        setIsForbidden(false);
-      } catch (e) {
-        getErrorMessage(e);
+        handlePermissionCheck(payload);
+      } catch (error) {
+        handlePermissionCheck(error as FunctionResponse);
       } finally {
         setIsLoading(false);
       }

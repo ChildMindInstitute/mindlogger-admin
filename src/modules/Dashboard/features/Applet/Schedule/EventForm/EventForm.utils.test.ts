@@ -3,6 +3,7 @@
 import { endOfYear } from 'date-fns';
 
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import {
   getBetweenStartEndNextDayComparison,
@@ -21,12 +22,7 @@ import {
   reminderTimeTest,
   getTimer,
 } from './EventForm.utils';
-import {
-  DEFAULT_END_TIME,
-  DEFAULT_IDLE_TIME,
-  DEFAULT_START_TIME,
-  DEFAULT_TIMER_DURATION,
-} from './EventForm.const';
+import { DEFAULT_IDLE_TIME, DEFAULT_TIMER_DURATION } from './EventForm.const';
 import { SecondsManipulation } from './EventForm.types';
 
 const mockedEvent = {

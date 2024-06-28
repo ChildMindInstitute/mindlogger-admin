@@ -257,6 +257,7 @@ describe('prepareData', () => {
       reportData: [
         {
           id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+          activity_flow_submission_id: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           activity_end_time: '1689764605250.957',
@@ -282,6 +283,7 @@ describe('prepareData', () => {
         },
         {
           id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+          activity_flow_submission_id: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           activity_end_time: '1689764605250.957',
@@ -307,6 +309,7 @@ describe('prepareData', () => {
         },
         {
           id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+          activity_flow_submission_id: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           activity_end_time: '1689764605250.957',

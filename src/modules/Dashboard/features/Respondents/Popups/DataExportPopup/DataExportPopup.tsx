@@ -25,7 +25,7 @@ import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './Dat
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
-import { getExportDataSuffix } from './DataExportPopup.utils';
+import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
@@ -74,10 +74,13 @@ export const DataExportPopup = ({
       try {
         dataExportingRef.current = true;
         setDataIsExporting(true);
-        const formFromDate = getValues?.().fromDate as Date;
-        const formToDate = getValues?.().toDate as Date;
+
+        const dateType = getValues?.().dateType;
+        const formFromDate = getValues?.().fromDate;
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = formToDate && format(formToDate, DateFormats.shortISO);
+        const formToDate = getValues?.().toDate;
+        const toDate = getFormattedToDate({ dateType, formToDate });
+
         const body = {
           appletId,
           targetSubjectIds,

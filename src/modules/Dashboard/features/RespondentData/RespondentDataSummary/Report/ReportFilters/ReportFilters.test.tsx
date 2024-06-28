@@ -9,8 +9,10 @@ import * as reactHookForm from 'react-hook-form';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
 
 import { ReportFilters } from './ReportFilters';
 
@@ -38,6 +40,14 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  isFlow: false,
+};
+
+const mockedFlow = {
+  id: 'flow-id',
+  name: 'Flow 1',
+  hasAnswer: true,
+  isFlow: true,
 };
 
 const FormComponent = () => {
@@ -105,7 +115,11 @@ describe('ReportFilters', () => {
 
   test('check if the startDate is greater than the endDate, then the endDate should be updated', async () => {
     await act(async () => {
-      renderWithProviders(<FormComponent />);
+      renderWithProviders(
+        <RespondentDataContext.Provider value={{ selectedEntity: mockedActivity }}>
+          <FormComponent />
+        </RespondentDataContext.Provider>,
+      );
     });
 
     const startDatePicker = screen.getByTestId(`${dataTestid}-start-date`);
@@ -155,16 +169,16 @@ describe('ReportFilters', () => {
     });
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([
-        true,
-        false,
-        new Date('2024-01-04'),
-        new Date('2024-01-10'),
-        mockedActivity,
-      ]);
+      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
 
     await act(async () => {
-      renderWithProviders(<FormComponent />, route, routePath);
+      renderWithProviders(
+        <RespondentDataContext.Provider value={{ selectedEntity: mockedActivity }}>
+          <FormComponent />
+        </RespondentDataContext.Provider>,
+        route,
+        routePath,
+      );
     });
 
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
@@ -177,10 +191,44 @@ describe('ReportFilters', () => {
           params: {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
-            identifiers: '',
             targetSubjectId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
+            limit: MAX_LIMIT,
+          },
+          signal: undefined,
+        },
+      );
+    });
+  });
+
+  test('fetch answers on filters change when the entity is Flow', async () => {
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
+
+    renderWithProviders(
+      <RespondentDataContext.Provider value={{ selectedEntity: mockedFlow }}>
+        <FormComponent />
+      </RespondentDataContext.Provider>,
+      route,
+      routePath,
+    );
+
+    await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
+
+    await waitFor(() => {
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/flows/${mockedFlow.id}/submissions`,
+        {
+          params: {
+            emptyIdentifiers: true,
+            fromDatetime: '2024-01-04T00:00:00',
+            targetSubjectId: mockedRespondentId,
+            toDatetime: '2024-01-10T23:59:00',
+            versions: '1.0.0,1.0.1',
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },

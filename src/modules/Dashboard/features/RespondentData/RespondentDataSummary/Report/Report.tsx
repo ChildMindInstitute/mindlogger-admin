@@ -1,119 +1,75 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import download from 'downloadjs';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import { Spinner, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
 import {
+  headerFullHeight,
   StyledFlexAllCenter,
   StyledTitleLarge,
-  headerFullHeight,
   theme,
   variables,
 } from 'shared/styles';
-import { DatavizActivity, getLatestReportApi, Version } from 'modules/Dashboard/api';
-import { getErrorMessage } from 'shared/utils/errors';
-import { applet } from 'shared/state/Applet';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
-import {
-  ActivityCompletion,
-  FormattedResponses,
-  Identifier,
-  RespondentsDataFormValues,
-} from '../../RespondentData.types';
 import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
-import { StyledEmptyState, StyledReport } from './Report.styles';
-import { Subscales } from './Subscales';
+import { StyledReport } from './Report.styles';
 import { CurrentActivityCompletionData } from './Report.types';
-import { ActivityCompleted } from './ActivityCompleted';
-import { ResponseOptions } from './ResponseOptions';
-import { getLatestReportUrl, sortResponseOptions } from './Report.utils';
+import { CompletedChart } from './CompletedChart';
+import { getCompletions } from './Report.utils';
 import { ReportContext } from './Report.context';
-import {
-  LATEST_REPORT_DEFAULT_NAME,
-  LATEST_REPORT_REGEX,
-  LATEST_REPORT_TYPE,
-} from './Report.const';
-import { ReportHeader } from './ReportHeader';
 import { StyledEmptyReview } from '../RespondentDataSummary.styles';
+import { ReportHeader } from './ReportHeader';
+import { NoData } from './NoData';
+import { EntityResponses } from './EntitiyResponses';
+import { useRespondentDataContext } from '../../RespondentDataContext';
 
 export const Report = () => {
   const { t } = useTranslation('app');
-  const { appletId, subjectId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
-  const { result: appletData } = applet.useAppletData() ?? {};
-
-  const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const [
+  const {
+    selectedEntity,
     answers,
     responseOptions,
+    setResponseOptions,
     subscalesFrequency,
-    selectedActivity,
+    setSubscalesFrequency,
+    flowSubmissions,
+    flowResponses,
     identifiers,
     apiVersions,
-    versions,
-  ]: [
-    ActivityCompletion[],
-    Record<string, FormattedResponses[]> | null,
-    number,
-    DatavizActivity,
-    Identifier[],
-    Version[],
-    AutocompleteOption[],
-  ] = useWatch({
-    name: [
-      'answers',
-      'responseOptions',
-      'subscalesFrequency',
-      'selectedActivity',
-      'identifiers',
-      'apiVersions',
-      'versions',
-    ],
-  });
+  } = useRespondentDataContext();
 
-  const currentActivity = appletData?.activities.find(({ id }) => id === selectedActivity.id);
-  const disabledLatestReport =
-    !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
+  const versions: AutocompleteOption[] = useWatch({
+    name: 'versions',
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
 
-  const {
-    execute: getLatestReport,
-    isLoading: latestReportLoading,
-    error: latestReportError,
-  } = useAsync(getLatestReportApi, (response) => {
-    const data = response?.data;
-    const headers = response?.headers;
+  const { isFlow = false, hasAnswer = false } = selectedEntity ?? {};
 
-    if (data) {
-      const contentDisposition = headers?.['content-disposition'];
-      const fileName =
-        (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
-        LATEST_REPORT_DEFAULT_NAME;
-      const base64Str = Buffer.from(data).toString('base64');
-      const linkSource = getLatestReportUrl(base64Str);
+  const completions = getCompletions({ isFlow, flowSubmissions, answers });
 
-      download(linkSource, fileName, LATEST_REPORT_TYPE);
-    }
-  });
+  const showNoDataForFilters =
+    !isLoading &&
+    !!versions.length &&
+    ((isFlow && !flowResponses.length) || (!isFlow && !answers.length));
 
-  const downloadLatestReportHandler = async () => {
-    if (!appletId || !subjectId) return;
+  const showNoDataForEmptyVersions =
+    !isLoading &&
+    !versions.length &&
+    ((isFlow && !flowResponses.length) || (!isFlow && !answers.length));
 
-    getLatestReport({
-      appletId,
-      activityId: selectedActivity.id,
-      subjectId,
-    });
+  const commonProps = {
+    isFlow,
+    versions: apiVersions,
   };
+
+  const dataTestId = 'respondents-summary-report';
 
   useEffect(() => {
     const responses = currentActivityCompletionData
@@ -122,23 +78,21 @@ export const Report = () => {
 
     const { subscalesFrequency, formattedResponses } = getFormattedResponses(responses);
 
-    setValue('subscalesFrequency', subscalesFrequency);
-    setValue('responseOptions', formattedResponses);
+    setResponseOptions(formattedResponses);
+    setSubscalesFrequency(subscalesFrequency);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentActivityCompletionData]);
 
   return (
     <>
-      {(latestReportLoading || isLoading) && <Spinner />}
-      <StyledReport ref={containerRef} data-testid="respondents-summary-report">
+      {isLoading && <Spinner />}
+      <StyledReport ref={containerRef} data-testid={dataTestId}>
         <ReportHeader
           containerRef={containerRef}
-          onButtonClick={downloadLatestReportHandler}
-          activityName={selectedActivity.name}
-          isButtonDisabled={disabledLatestReport}
-          error={latestReportError ? getErrorMessage(latestReportError) : null}
+          selectedEntity={selectedEntity}
+          data-testid={`${dataTestId}-header`}
         />
-        {selectedActivity.hasAnswer ? (
+        {hasAnswer ? (
           <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
             <ReportContext.Provider
               value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
@@ -148,46 +102,27 @@ export const Report = () => {
                 versions={apiVersions}
                 setIsLoading={setIsLoading}
               />
-              {!isLoading && answers.length > 0 && (
+              {!isLoading && (!!answers.length || !!flowSubmissions.length) && (
                 <>
-                  <ActivityCompleted answers={answers} versions={apiVersions} />
-                  {!!subscalesFrequency && (
-                    <Subscales
-                      answers={answers}
-                      versions={apiVersions}
-                      subscalesFrequency={subscalesFrequency}
-                    />
-                  )}
-                  {responseOptions && !!Object.values(responseOptions).length && (
-                    <ResponseOptions
-                      responseOptions={sortResponseOptions(responseOptions)}
-                      versions={apiVersions}
-                    />
-                  )}
+                  <CompletedChart
+                    {...commonProps}
+                    completions={completions}
+                    data-testid={`${dataTestId}-completions`}
+                  />
+                  <EntityResponses
+                    {...commonProps}
+                    flowResponses={flowResponses}
+                    answers={answers}
+                    responseOptions={responseOptions}
+                    subscalesFrequency={subscalesFrequency}
+                    data-testid={`${dataTestId}-entity-responses`}
+                  />
                 </>
               )}
-              {Boolean(!isLoading && !answers.length && versions.length) && (
-                <StyledEmptyState data-testid="report-empty-state">
-                  <Svg id="chart" width="80" height="80" />
-                  <StyledTitleLarge
-                    sx={{ mt: theme.spacing(1.6) }}
-                    color={variables.palette.outline}
-                  >
-                    {t('noDataForActivityFilters')}
-                  </StyledTitleLarge>
-                </StyledEmptyState>
-              )}
-              {Boolean(!isLoading && !answers.length && !versions.length) && (
-                <StyledEmptyState data-testid="report-with-empty-version-filter">
-                  <Svg id="not-found" width="80" height="80" />
-                  <StyledTitleLarge
-                    sx={{ mt: theme.spacing(1.6) }}
-                    color={variables.palette.outline}
-                  >
-                    {t('noDataForActivityWithEmptyVersionFilter')}
-                  </StyledTitleLarge>
-                </StyledEmptyState>
-              )}
+              <NoData
+                showNoDataForFilters={showNoDataForFilters}
+                showNoDataForEmptyVersions={showNoDataForEmptyVersions}
+              />
             </ReportContext.Provider>
           </Box>
         ) : (

@@ -7,39 +7,42 @@ import { StyledBodySmall, StyledFlexColumn, theme, variables } from 'shared/styl
 import { DateFormats } from 'shared/consts';
 import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
+import { applet } from 'shared/state/Applet';
 
 import { StyledIndent } from '../../Chart.styles';
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';
 import { getReviewOption } from './ChartTooltip.utils';
 
-export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipProps) => {
+export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletId, subjectId } = useParams();
+  const { appletMeta } = applet.useAppletData() ?? {};
 
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
-  const { answerId, areSubscalesVisible, reviewCount } = (data?.raw as ScatterTooltipRowData) || {};
+  const { id, areSubscalesVisible, reviewCount, isFlow } =
+    (data?.raw as ScatterTooltipRowData) || {};
   const { mine, other } = reviewCount ?? {};
 
   const navigateToReviewAnswer = (isFeedbackVisible = false) => {
     if (!data) return;
 
-    const selectedDate = format(new Date(data?.parsed.x), DateFormats.YearMonthDay);
+    const selectedDate = format(new Date(data.parsed.x), DateFormats.YearMonthDay);
     const pathname = generatePath(page.appletParticipantDataReview, { appletId, subjectId });
-    navigate({
-      pathname,
-      search: createSearchParams({
-        selectedDate,
-        answerId,
-        isFeedbackVisible: String(isFeedbackVisible),
-      }).toString(),
-    });
+    const search = createSearchParams({
+      selectedDate,
+      ...(isFlow ? { submitId: id } : { answerId: id }),
+      isFeedbackVisible: String(isFeedbackVisible),
+    }).toString();
+
+    navigate({ pathname, search });
   };
 
   const showSubscaleResultHandler = () => {
-    answerId && setCurrentActivityCompletionData({ answerId, date: data?.parsed.x });
+    if (!id || isFlow) return;
+    setCurrentActivityCompletionData({ answerId: id, date: data?.parsed.x });
   };
 
   return (
@@ -47,11 +50,11 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
       {data && (
         <>
           <StyledIndent />
-          <StyledTooltip data-testid={`${dataTestid}-tooltip`}>
+          <StyledTooltip data-testid={`${dataTestId}-tooltip`}>
             <StyledBodySmall
               sx={{ padding: theme.spacing(1.6, 2, 0.8) }}
               color={variables.palette.outline}
-              data-testid={`${dataTestid}-tooltip-date`}
+              data-testid={`${dataTestId}-tooltip-date`}
             >
               {format(data?.parsed.x, DateFormats.MonthDayTime)}
             </StyledBodySmall>
@@ -59,14 +62,14 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
             <StyledFlexColumn>
               <StyledListItemButton
                 onClick={() => navigateToReviewAnswer(false)}
-                data-testid={`${dataTestid}-tooltip-review-button`}
+                data-testid={`${dataTestId}-tooltip-view-response`}
               >
                 {t('viewResponse')}
               </StyledListItemButton>
-              {!!(mine || other) && (
+              {appletMeta?.hasAssessment && (
                 <StyledListItemButton
                   onClick={() => navigateToReviewAnswer(true)}
-                  data-testid={`${dataTestid}-tooltip-review-count`}
+                  data-testid={`${dataTestId}-tooltip-review-count`}
                 >
                   {getReviewOption(mine, other)}
                 </StyledListItemButton>
@@ -74,7 +77,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
               {areSubscalesVisible && (
                 <StyledListItemButton
                   onClick={showSubscaleResultHandler}
-                  data-testid={`${dataTestid}-tooltip-show-subscale-result-button`}
+                  data-testid={`${dataTestId}-tooltip-show-subscale-result-button`}
                 >
                   {t('showSubscaleResult')}
                 </StyledListItemButton>

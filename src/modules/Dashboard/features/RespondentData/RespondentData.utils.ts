@@ -4,6 +4,8 @@ import { DecryptedDateAnswer, DecryptedDateRangeAnswer } from 'shared/types';
 import { createArray, getNormalizeTimezoneData } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
 
+import { ConcatenatedEntitiesReturn, GetConcatenatedEntities } from './RespondentData.types';
+
 export const getDateFormattedResponse = (answer: DecryptedDateAnswer) => {
   if (!answer?.value) return '';
 
@@ -57,6 +59,36 @@ export const getTimeRangeResponse = (answer?: DecryptedDateRangeAnswer) => {
     from: answer.value.from ? format(dateFrom, DateFormats.Time) : '',
     to: answer.value.to ? format(dateTo, DateFormats.Time) : '',
   };
+};
+
+export const getEntityWithLatestAnswer = <T extends { lastAnswerDate: string | null }>(
+  entities: T[],
+): T | null =>
+  entities?.reduce((prev: null | T, current) => {
+    if (!current.lastAnswerDate) {
+      return prev;
+    }
+
+    if (!prev || (prev?.lastAnswerDate && prev.lastAnswerDate <= current.lastAnswerDate)) {
+      return current;
+    }
+
+    return prev;
+  }, null);
+
+export const getConcatenatedEntities = <T extends Record<string, unknown>>({
+  activities,
+  flows,
+}: GetConcatenatedEntities<T>): ConcatenatedEntitiesReturn<T> => {
+  const concatenatedEntities: ConcatenatedEntitiesReturn<T> = [];
+  activities.forEach((activity) => {
+    concatenatedEntities.push({ ...activity, isFlow: false });
+  });
+  flows.forEach((flow) => {
+    concatenatedEntities.push({ ...flow, isFlow: true });
+  });
+
+  return concatenatedEntities;
 };
 
 export const getActivityWithLatestAnswer = <T extends { lastAnswerDate: string | null }>(

@@ -3,6 +3,9 @@ import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
 
+export const DEFAULT_START_TIME = '00:00';
+export const DEFAULT_END_TIME = '23:59';
+
 export const DEFAULT_ROWS_PER_PAGE = 20;
 export const TABS_HEIGHT = '6.1rem';
 export const TOP_BAR_HEIGHT = '6rem';
@@ -250,6 +253,7 @@ export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
 export const reportHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',
@@ -271,6 +275,7 @@ export const reportHeader = [
 
 export const activityJourneyHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',

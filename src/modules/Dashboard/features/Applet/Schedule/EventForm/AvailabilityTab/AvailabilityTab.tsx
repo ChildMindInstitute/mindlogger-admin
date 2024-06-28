@@ -15,13 +15,10 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { EventFormValues } from '../EventForm.types';
-import {
-  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
-  DEFAULT_END_TIME,
-  DEFAULT_START_TIME,
-} from '../EventForm.const';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -195,6 +192,7 @@ export const AvailabilityTab = ({
                 label={t('from')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.FromTime)}
                 data-testid={`${dataTestid}-start-time`}
+                defaultTime={DEFAULT_START_TIME}
               />
             </StyledTimeWrapper>
             <StyledTimeWrapper
@@ -207,6 +205,7 @@ export const AvailabilityTab = ({
                 label={t('to')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
+                defaultTime={DEFAULT_END_TIME}
               />
               {hasNextDayLabel && (
                 <StyledTitleSmall
@@ -219,7 +218,7 @@ export const AvailabilityTab = ({
               )}
             </StyledTimeWrapper>
           </StyledTimeRow>
-          <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>
+          <StyledWrapper isCheckboxDisabled={startTime === DEFAULT_START_TIME}>
             <CheckboxController
               name="accessBeforeSchedule"
               control={control}
