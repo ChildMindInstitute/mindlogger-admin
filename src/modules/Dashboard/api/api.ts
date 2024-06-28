@@ -493,8 +493,8 @@ export const getAppletSubmissionsApi = (
     signal,
   }) as Promise<AxiosResponse<GetAppletSubmissionsResponse>>;
 
-export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
+export const getFlowAnswersApi = (
+  { appletId, submitId, flowId }: FlowAnswersParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<EncryptedFlowAnswers>>(

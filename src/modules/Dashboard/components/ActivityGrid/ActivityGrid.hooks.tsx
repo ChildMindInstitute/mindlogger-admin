@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { format } from 'date-fns';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { DatavizActivity } from 'api';
+import { DatavizEntity } from 'api';
 import { page } from 'resources';
 import { ActionsMenu, MenuActionProps, Row } from 'shared/components';
 import { DateFormats } from 'shared/consts';
@@ -92,7 +92,7 @@ export const useActivityGrid = (
   );
 
   const formatRow = useCallback(
-    (activity: Activity | DatavizActivity, actions?: ActionsObject): Row => {
+    (activity: Activity | DatavizEntity, actions?: ActionsObject): Row => {
       const activityId = String(activity.id);
       const name = activity.name;
       // TODO M2-6223: getSummaryActivitiesApi needs to be updated to return `image`
