@@ -107,8 +107,6 @@ const checkIfHasContradiction = (
   conditionsByType: ReturnType<typeof getObjectFromListByResponseType>,
 ) => {
   const groupedItemsByType = Object.entries(conditionsByType);
-  console.log(groupedItemsByType);
-
   const hasContradiction = groupedItemsByType.some((entity) => {
     const type = entity[0];
     const groupedConditions = entity[1];
