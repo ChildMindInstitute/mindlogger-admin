@@ -82,8 +82,6 @@ export const RespondentDataSummary = () => {
 
       if (!selectedEntityByDefault) return;
 
-      // TODO: M2:7189 Fix type error created while trying to resolve conflicts with
-      // https://github.com/ChildMindInstitute/mindlogger-admin/pull/1722/files#diff-acb81e61d7be612bdf3f074ba29363887c3e1afd19c4ba487068eb3e63cf7525
       setSelectedEntity(selectedEntityByDefault);
       setDateRangeFormValues(setValue, selectedEntityByDefault.lastAnswerDate);
 
