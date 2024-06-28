@@ -53,6 +53,7 @@ jobs:
           echo 'WEB_APP_BASE_URL=${{ inputs.service-url }}' >> .env
           sed -i 's/API_DOMAIN.*//' .env ;
           echo 'API_DOMAIN=https://api-dev.cmiml.net' >> .env
+          echo 'MAILINATOR_TOKEN=${{ secrets.MAILINATOR_TOKEN }}' >> .env
       - name: Validate Environment
         run: cat .env
       - name: Get Secrets by Name and by ARN
@@ -98,9 +99,6 @@ jobs:
         with:
           name: e2e-results
           path: test-results/ui
-      - name: debug
-        run: ls
-
       - name: Build test report
         uses: simple-elf/allure-report-action@master
         if: always()
@@ -108,7 +106,7 @@ jobs:
           # Where allure will write the generated report
           allure_report: e2e
           # Results dir
-          allure_results: test-results/ui/report-junit
+          allure_results: test-results/ui/allure/allure-results
           # Path to folder to be published
           allure_history: allure-history
           # Path to folder where gh-pages was checked out
