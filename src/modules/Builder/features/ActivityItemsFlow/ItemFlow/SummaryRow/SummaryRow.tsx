@@ -39,7 +39,6 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     () => getItemsOptions({ items, itemsInUsage, conditions }),
     [items, itemsInUsage, conditions],
   );
-
   const { question } =
     ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
 
