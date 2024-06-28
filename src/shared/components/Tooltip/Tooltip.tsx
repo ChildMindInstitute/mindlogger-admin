@@ -16,9 +16,15 @@ const applyMaxSize = {
     state.styles.popper = {
       ...state.styles.popper,
       display: 'flex',
-      placeItems: state.placement.includes('bottom') ? 'flex-start' : 'flex-end',
-      height: `${height - 24}px`,
+      maxHeight: `${height - 24}px`,
     };
+  },
+};
+
+const preventOverflow = {
+  name: 'preventOverflow' as const,
+  options: {
+    padding: { top: 24, bottom: 24 },
   },
 };
 
@@ -88,7 +94,10 @@ export const Tooltip = ({
       open={innerOpen}
       onOpen={handleOpen}
       onClose={handleClose}
-      PopperProps={{ ...props.PopperProps, modifiers: [maxSize, applyMaxSize] }}
+      PopperProps={{
+        ...props.PopperProps,
+        modifiers: [maxSize, applyMaxSize, preventOverflow],
+      }}
       title={tooltipTitle}
       sx={{
         '.MuiTooltip-tooltip': {
