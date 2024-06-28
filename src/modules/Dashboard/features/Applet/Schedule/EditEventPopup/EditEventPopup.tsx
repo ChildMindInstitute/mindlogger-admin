@@ -21,6 +21,7 @@ import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 export const EditEventPopup = ({
   open,
   editedEvent,
+  onClose,
   setEditEventPopupVisible,
   defaultStartDate,
   userId,
@@ -32,7 +33,6 @@ export const EditEventPopup = ({
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [isFormChanged, setIsFormChanged] = useState(false);
-  const [isClosable, setIsClosable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
@@ -71,17 +71,12 @@ export const EditEventPopup = ({
   };
 
   const handleEditEventClose = () => {
-    if (!isClosable) return;
-
-    setEditEventPopupVisible(false);
-    setIsClosable(false);
+    onClose?.(eventFormRef.current);
   };
-
-  const handleTransitionEntered = () => setIsClosable(true);
 
   const onRemoveEventClick = () => {
     setRemoveSingleScheduledPopupVisible(true);
-    handleEditEventClose();
+    setEditEventPopupVisible(false);
   };
 
   const onRemoveScheduledEventClose = () => {
@@ -103,7 +98,7 @@ export const EditEventPopup = ({
     if (eventFormRef?.current) {
       await eventFormRef.current.processEvent();
       setRemoveAllScheduledPopupVisible(false);
-      handleEditEventClose();
+      setEditEventPopupVisible(false);
     }
   };
 
@@ -111,7 +106,7 @@ export const EditEventPopup = ({
     if (eventFormRef?.current) {
       await eventFormRef.current.processEvent();
       setRemoveAlwaysAvailablePopupVisible(false);
-      handleEditEventClose();
+      setEditEventPopupVisible(false);
     }
   };
 
@@ -141,7 +136,6 @@ export const EditEventPopup = ({
           buttonText={t('save')}
           width="67.1"
           disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
-          onTransitionEntered={handleTransitionEntered}
           data-testid={`${dataTestid}-popup`}
         >
           {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (

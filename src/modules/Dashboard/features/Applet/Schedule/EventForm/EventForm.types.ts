@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { FormState } from 'react-hook-form';
 import * as yup from 'yup';
 
 import {
@@ -13,6 +14,7 @@ import { CalendarEvent } from 'modules/Dashboard/state';
 export type EventFormRef = {
   submitForm: () => void;
   processEvent: () => void;
+  formState: FormState<EventFormValues>;
 };
 
 export type EventFormProps = {
@@ -85,6 +87,7 @@ export type GetEventFromTabs = {
   hasNotificationsErrors?: boolean;
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
+  removeWarnings?: Warning;
 };
 
 export type GetDaysInPeriod = {

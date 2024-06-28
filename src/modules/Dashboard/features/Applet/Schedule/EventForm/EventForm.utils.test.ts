@@ -199,7 +199,6 @@ describe('EventForm.utils', () => {
         periodicity: Periodicity.Always,
         notifications: [],
         reminder: null,
-        removeWarning: {},
       });
     });
 
@@ -252,7 +251,6 @@ describe('EventForm.utils', () => {
           type: SecondsManipulation.RemoveSeconds,
           reminder: editedEvent.notification.reminder,
         }),
-        removeWarning: {},
       });
     });
   });
