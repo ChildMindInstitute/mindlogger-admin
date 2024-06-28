@@ -1,3 +1,5 @@
+import { TooltipProps } from '@mui/material';
+
 import i18n from 'i18n';
 import { ConditionalLogicMatch, ItemResponseType, ConditionType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -215,6 +217,7 @@ export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOpt
           labelKey: item.name,
           disabled: true,
           tooltip: t('conditionalLogicValidation.summaryItemIsTheSameAsRuleItem'),
+          tooltipPlacement: 'right' as TooltipProps['placement'],
         },
       ];
     }
@@ -227,19 +230,24 @@ export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOpt
           labelKey: item.name,
           disabled: true,
           tooltip: t('conditionalLogicValidation.summaryItemIsBeforeRuleItemInTheList'),
+          tooltipPlacement: 'right' as TooltipProps['placement'],
         },
       ];
     }
 
     // #last rule: usage in other conditionals
     const disabled = itemsInUsage.has(value);
+    const showTooltip = disabled || item.question;
+    const tooltipPlacement: TooltipProps['placement'] | undefined = showTooltip
+      ? 'right'
+      : undefined;
     const tooltip = disabled ? (
       t('conditionalLogicValidation.usageInSummaryRow')
     ) : (
       <StyledMdPreview modelValue={item.question ?? ''} />
     );
 
-    return [...optionList, { value, labelKey: item.name, disabled, tooltip }];
+    return [...optionList, { value, labelKey: item.name, disabled, tooltip, tooltipPlacement }];
   }, []);
 };
 
