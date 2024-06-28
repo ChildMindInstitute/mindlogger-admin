@@ -60,20 +60,6 @@ export const ReviewMenuItem = ({
     onSelectItem(item);
   }, [answerId, submitId, answerDates, selectedAnswer, onSelectItem, onSelectAnswer, item]);
 
-  useEffect(() => {
-    if (!answerId) return;
-
-    const answerByRoute = answerDates.find((answer) => answer.answerId === answerId);
-    if (!answerByRoute) return;
-
-    setIsOpen(true);
-
-    if (selectedAnswer) return;
-
-    onSelectAnswer({ answer: answerByRoute, isRouteCreated: true });
-    setSelectedActivity(activity);
-  }, [answerId, answerDates, selectedAnswer, setSelectedActivity, onSelectAnswer, activity]);
-
   return (
     <StyledItem isSelected={isSelected} data-testid={`${dataTestid}-item`}>
       <StyledHeader onClick={handleItemClick} data-testid={`${dataTestid}-select`}>

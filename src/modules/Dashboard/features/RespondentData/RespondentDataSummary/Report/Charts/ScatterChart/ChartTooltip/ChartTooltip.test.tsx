@@ -94,7 +94,7 @@ const testPositiveFlowWithNavigate = async (text: string, search: string) => {
   await userEvent.click(reviewButton);
 
   expect(mockedNavigate).toBeCalledWith({
-    pathname: `/dashboard/${mockedAppletId}/responde/${mockedRespondentId}/dataviz/responses`,
+    pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
     search,
   });
 };
