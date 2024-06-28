@@ -8,7 +8,7 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { useActivityGrid } from './ActivityGrid.hooks';
 
 const { activities: appletActivities } = mockedAppletFormData;
-const mockedActivities = appletActivities as Activity[];
+const mockedActivities = appletActivities as unknown as Activity[];
 const mockedActivitiesData = {
   result: mockedActivities,
   count: mockedActivities.length,
