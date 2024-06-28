@@ -53,21 +53,12 @@ const SelectControllerMenuItem = forwardRef<
     <StyledItem ref={ref} itemDisabled={disabled} selectDisabled={disabled} {...props} />
   );
 
-  return (
-    <>
-      {tooltip ? (
-        <>
-          <Tooltip
-            tooltipTitle={tooltip}
-            placement={tooltipPlacement}
-            children={disabled ? <span children={item} /> : item}
-            enterNextDelay={200}
-          />
-        </>
-      ) : (
-        item
-      )}
-    </>
+  return tooltip ? (
+    <Tooltip tooltipTitle={tooltip} placement={tooltipPlacement} enterNextDelay={200}>
+      {disabled ? <span>{item}</span> : item}
+    </Tooltip>
+  ) : (
+    item
   );
 });
 
@@ -112,19 +103,17 @@ export const SelectController = <T extends FieldValues>({
       tooltipPlacement={tooltipPlacement}
       itemDisabled={itemDisabled}
     >
-      <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
-        {icon && (
-          <StyledFlexTopCenter className="icon-wrapper" sx={{ mr: 1.8 }}>
-            {icon}
-          </StyledFlexTopCenter>
-        )}
-        {isLabelNeedTranslation ? t(labelKey) : labelKey}
-        {withChecked && (
-          <StyledFlexEnd className="icon-wrapper" sx={{ ml: 'auto', width: '4rem' }}>
-            {selectedValue === value && <Svg id="check" width={24} height={24} />}
-          </StyledFlexEnd>
-        )}
-      </StyledItem>
+      {icon && (
+        <StyledFlexTopCenter className="icon-wrapper" sx={{ mr: 1.8 }}>
+          {icon}
+        </StyledFlexTopCenter>
+      )}
+      {isLabelNeedTranslation ? t(labelKey) : labelKey}
+      {withChecked && (
+        <StyledFlexEnd className="icon-wrapper" sx={{ ml: 'auto', width: '4rem' }}>
+          {selectedValue === value && <Svg id="check" width={24} height={24} />}
+        </StyledFlexEnd>
+      )}
     </StyledMenuItem>
   );
 
