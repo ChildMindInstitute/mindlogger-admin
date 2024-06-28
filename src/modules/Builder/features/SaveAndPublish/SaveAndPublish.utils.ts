@@ -393,7 +393,7 @@ export const processConditionPayload = (
 
       return {
         ...conditionData.payload,
-        rowIndex: Number(conditionData.payload.rowIndex),
+        rowIndex: conditionData.payload.rowIndex,
       };
     }
     default:
