@@ -25,8 +25,7 @@ import {
 export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');
   const [itemIndexToDelete, setItemIndexToDelete] = useState(-1);
-
-  const { control } = useCustomFormContext();
+  const { control, getValues, setError } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   useRedirectIfNoMatchedActivity();
 
@@ -62,6 +61,26 @@ export const ActivityItemsFlow = () => {
     targetSelector: `.${ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}`,
   });
 
+  const handleDuplicate = async (index: number) => {
+    const emptyFlowItem = getEmptyFlowItem();
+    const currentFlowItems = getValues(`${fieldName}.conditionalLogic`);
+    const copiedFlowItem = currentFlowItems?.[index];
+
+    if (copiedFlowItem && emptyFlowItem) {
+      const newFlowItem = {
+        ...emptyFlowItem,
+        conditions: [...copiedFlowItem.conditions],
+        match: copiedFlowItem.match,
+      } as ConditionalLogic;
+
+      appendFlowItem(newFlowItem);
+
+      setError(`${fieldName}.conditionalLogic.${currentFlowItems.length}.itemKey`, {
+        type: 'required',
+      });
+    }
+  };
+
   const headerProps = {
     isAddItemFlowDisabled: items?.length < 2 || isPending,
     onAddItemFlow: handleAddItemFlow,
@@ -85,6 +104,7 @@ export const ActivityItemsFlow = () => {
             name={conditionalLogicName}
             index={index}
             isStaticActive={flowItemsData.length > ITEMS_COUNT_TO_ACTIVATE_STATIC}
+            onDuplicate={handleDuplicate}
             onRemove={() => handleRemoveItemFlow(index)}
           />
         ))}
