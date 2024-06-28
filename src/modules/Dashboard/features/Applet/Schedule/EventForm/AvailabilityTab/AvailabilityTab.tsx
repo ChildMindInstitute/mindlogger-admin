@@ -34,31 +34,24 @@ import { useNextDayLabel } from '../EventForm.hooks';
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
   'data-testid': dataTestid,
+  removeWarnings,
 }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, trigger } = useFormContext<EventFormValues>();
-  const [
-    alwaysAvailable,
-    periodicity,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    reminder,
-    removeWarning,
-  ] = useWatch({
-    control,
-    name: [
-      'alwaysAvailable',
-      'periodicity',
-      'startDate',
-      'endDate',
-      'startTime',
-      'endTime',
-      'reminder',
-      'removeWarning',
-    ],
-  });
+  const [alwaysAvailable, periodicity, startDate, endDate, startTime, endTime, reminder] = useWatch(
+    {
+      control,
+      name: [
+        'alwaysAvailable',
+        'periodicity',
+        'startDate',
+        'endDate',
+        'startTime',
+        'endTime',
+        'reminder',
+      ],
+    },
+  );
   const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
@@ -158,10 +151,10 @@ export const AvailabilityTab = ({
         customChange={handleAvailabilityCustomChange}
         data-testid={`${dataTestid}-always-available`}
       />
-      {Object.keys(removeWarning).length !== 0 && (
+      {Object.keys(removeWarnings ?? {}).length !== 0 && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
-          {removeWarning.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
-          {removeWarning.showRemoveAllScheduled && t('alwaysAvailableWarning')}
+          {removeWarnings?.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
+          {removeWarnings?.showRemoveAllScheduled && t('alwaysAvailableWarning')}
         </StyledBodyMedium>
       )}
       {alwaysAvailable ? (
