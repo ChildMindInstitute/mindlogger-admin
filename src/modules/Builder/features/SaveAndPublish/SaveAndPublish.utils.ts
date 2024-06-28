@@ -411,10 +411,12 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
     item.responseType === ItemResponseType.SingleSelectionPerRow ||
     item.responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
+    const rowIndex = (condition as SingleMultiSelectionPerRowCondition).payload?.rowIndex;
     const options = item.responseValues?.options;
 
     return {
       optionValue: options?.find(({ id }) => id === optionId)?.text,
+      rowIndex,
     };
   }
   const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
