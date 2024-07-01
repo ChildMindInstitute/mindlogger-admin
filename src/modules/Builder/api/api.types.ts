@@ -1,3 +1,5 @@
+import { AppletId } from 'shared/api/api.types';
+
 export type GetThemesParams = {
   search?: string;
   page?: number;
@@ -42,4 +44,8 @@ export type LorisUsersVisit<T = LorisActivityResponse> = {
   userId?: string;
   secretUserId: string;
   activities: T[];
+};
+
+export type UploadLorisUsersVisitsParams = AppletId & {
+  payload: LorisUsersVisit<LorisActivityForm>[];
 };

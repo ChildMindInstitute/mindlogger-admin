@@ -41,13 +41,15 @@ export const UploadDataPopup = ({
   }, [appletId, setStep]);
 
   const handleSubmitVisits = useCallback(() => {
+    if (!appletId) return;
+
     const payload: LorisUsersVisit<LorisActivityForm>[] = getValues('visitsForm');
-    if (!areAllVisitsFilled(payload)) {
+    if (!payload?.length || !areAllVisitsFilled(payload)) {
       return setError(t('loris.visitsRequired'));
     }
     setError('');
-    uploadLorisUsersVisits(payload);
-  }, [getValues, uploadLorisUsersVisits, t]);
+    uploadLorisUsersVisits({ appletId, payload });
+  }, [appletId, getValues, uploadLorisUsersVisits, t]);
 
   const screens = useMemo(
     () => getScreens({ handleAcceptAgreement, onClose, handleSubmitVisits, setIsLoading, setStep }),
