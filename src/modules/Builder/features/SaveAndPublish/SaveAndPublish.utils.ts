@@ -393,7 +393,7 @@ export const processConditionPayload = (
 
       return {
         ...conditionData.payload,
-        rowIndex: Number(conditionData.payload.rowIndex),
+        rowIndex: conditionData.payload.rowIndex,
       };
     }
     default:
@@ -411,10 +411,11 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
     item.responseType === ItemResponseType.SingleSelectionPerRow ||
     item.responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const options = item.responseValues?.options;
+    const rowIndex = (condition as SingleMultiSelectionPerRowCondition).payload?.rowIndex;
 
     return {
-      optionValue: options?.find(({ id }) => id === optionId)?.text,
+      optionValue: optionId,
+      rowIndex,
     };
   }
   const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;

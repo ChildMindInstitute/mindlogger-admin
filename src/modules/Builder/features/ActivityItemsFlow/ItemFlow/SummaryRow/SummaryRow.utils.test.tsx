@@ -54,71 +54,127 @@ describe('SummaryRow.utils', () => {
         id: 'item-5',
         name: 'Time',
         responseType: ItemResponseType.Time,
+        conditionalLogic: {
+          itemKey: 'item-4',
+        },
+        question: 'item-5',
       },
       {
         id: 'item-6',
         name: 'TimeRange',
         responseType: ItemResponseType.TimeRange,
+        conditionalLogic: {
+          itemKey: 'item-5',
+        },
+        question: 'item-6',
       },
       {
         id: 'item-7',
         name: 'Date',
         responseType: ItemResponseType.Date,
+        conditionalLogic: {
+          itemKey: 'item-6',
+        },
+        question: 'item-7',
       },
       {
         id: 'item-8',
         name: 'NumberSelection',
         responseType: ItemResponseType.NumberSelection,
+        conditionalLogic: {
+          itemKey: 'item-7',
+        },
+        question: 'item-8',
       },
       {
         id: 'item-9',
         name: 'item-not-included-in-the-options',
         responseType: ItemResponseType.SingleSelectionPerRow,
+        conditionalLogic: {
+          itemKey: 'item-8',
+        },
+        question: 'item-9',
       },
       {
         id: 'item-10',
         name: 'MultipleSelectionPerRow',
         responseType: ItemResponseType.MultipleSelectionPerRow,
+        conditionalLogic: {
+          itemKey: 'item-9',
+        },
+        question: 'item-10',
       },
       {
         id: 'item-11',
         name: 'SliderRows',
         responseType: ItemResponseType.SliderRows,
+        conditionalLogic: {
+          itemKey: 'item-10',
+        },
+        question: 'item-11',
       },
       {
         id: 'item-12',
         name: 'Drawing',
         responseType: ItemResponseType.Drawing,
+        conditionalLogic: {
+          itemKey: 'item-11',
+        },
+        question: 'item-12',
       },
       {
         id: 'item-13',
         name: 'Photo',
         responseType: ItemResponseType.Photo,
+        conditionalLogic: {
+          itemKey: 'item-12',
+        },
+        question: 'item-13',
       },
       {
         id: 'item-14',
         name: 'Video',
         responseType: ItemResponseType.Video,
+        conditionalLogic: {
+          itemKey: 'item-13',
+        },
+        question: 'item-14',
       },
       {
         id: 'item-15',
         name: 'Geolocation',
         responseType: ItemResponseType.Geolocation,
+        conditionalLogic: {
+          itemKey: 'item-14',
+        },
+        question: 'item-15',
       },
       {
         id: 'item-16',
         name: 'Audio',
         responseType: ItemResponseType.Audio,
+        conditionalLogic: {
+          itemKey: 'item-15',
+        },
+        question: 'item-16',
       },
       {
         id: 'item-17',
         name: 'Message',
         responseType: ItemResponseType.Message,
+        conditionalLogic: {
+          itemKey: 'item-16',
+        },
+        question: 'item-17',
       },
       {
         id: 'item-18',
         name: 'AudioPlayer',
         responseType: ItemResponseType.AudioPlayer,
+        conditionalLogic: {
+          itemKey: 'item-17',
+        },
+        question: 'item-18',
       },
       {
         id: 'item-19',
@@ -161,106 +217,106 @@ describe('SummaryRow.utils', () => {
       {
         disabled: false,
         labelKey: 'Time',
-        tooltip: undefined,
         value: 'item-5',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-5" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'TimeRange',
-        tooltip: undefined,
         value: 'item-6',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-6" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Date',
-        tooltip: undefined,
         value: 'item-7',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-7" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'NumberSelection',
-        tooltip: undefined,
         value: 'item-8',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-8" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'item-not-included-in-the-options',
-        tooltip: undefined,
         value: 'item-9',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-9" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'MultipleSelectionPerRow',
-        tooltip: undefined,
         value: 'item-10',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-10" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'SliderRows',
-        tooltip: undefined,
         value: 'item-11',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-11" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Drawing',
-        tooltip: undefined,
         value: 'item-12',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-12" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Photo',
-        tooltip: undefined,
         value: 'item-13',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-13" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Video',
-        tooltip: undefined,
         value: 'item-14',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-14" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Geolocation',
-        tooltip: undefined,
         value: 'item-15',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-15" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Audio',
-        tooltip: undefined,
         value: 'item-16',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-16" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'Message',
-        tooltip: undefined,
         value: 'item-17',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-17" />,
+        tooltipPlacement: 'right',
       },
       {
         disabled: false,
         labelKey: 'AudioPlayer',
-        tooltip: undefined,
         value: 'item-18',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-18" />,
+        tooltipPlacement: 'right',
       },
     ];
     test('should return options with tooltips and disable statuses for items in usage', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      expect(getItemsOptions({ items, itemsInUsage })).toStrictEqual(result);
+      expect(getItemsOptions({ items, itemsInUsage, conditions: [] })).toStrictEqual(result);
     });
   });
 

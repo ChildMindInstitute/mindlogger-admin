@@ -80,18 +80,29 @@ export const SwitchCondition = ({
     dataTestid,
   };
 
-  const handleChangeRowIndex = useCallback(
-    (_e: SelectEvent) => {
-      if (!selectedItem) return;
+  const handleChangeSubstate = useCallback(
+    (
+      selectType:
+        | ConditionItemType.SingleSelectionPerRow
+        | ConditionItemType.MultipleSelectionPerRow
+        | ConditionItemType.SliderRows
+        | ConditionItemType.TimeRange,
+    ) =>
+      (e: SelectEvent) => {
+        if (!selectedItem) return;
 
-      const payload = getPayload({
-        conditionType: state,
-        conditionPayload,
-        selectedItem: selectedItemForm,
-      });
+        const { value } = e.target;
+        const fieldName =
+          selectType === ConditionItemType.TimeRange ? 'formTimeType' : 'formRowIndex';
+        const payload = getPayload({
+          conditionType: state,
+          conditionPayload,
+          selectedItem: selectedItemForm,
+          [fieldName]: value,
+        });
 
-      setValue(payloadName, payload);
-    },
+        setValue(payloadName, payload);
+      },
     [setValue, selectedItem, conditionPayload, payloadName, state, selectedItemForm],
   );
 
@@ -120,7 +131,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-rowIndex`}
             disabled={!isItemSelected}
-            customChange={handleChangeRowIndex}
+            customChange={handleChangeSubstate(itemType)}
           />
           <SingleMultiScoreCondition
             {...commonSingleMultiScoreConditionProps}
@@ -140,7 +151,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-rowIndex`}
             disabled={!isItemSelected}
-            customChange={handleChangeRowIndex}
+            customChange={handleChangeSubstate(itemType)}
           />
           <SingleOrRangeNumberCondition
             {...commonSingleOrRangeNumberConditionProps}
@@ -236,6 +247,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-type-value`}
             disabled={!isItemSelected}
+            customChange={handleChangeSubstate(itemType)}
           />
           {children}
           <TimeCondition {...commonTimeConditionProps} />

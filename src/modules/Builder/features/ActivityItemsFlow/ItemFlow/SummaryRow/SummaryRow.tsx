@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 
@@ -17,7 +17,9 @@ import { useItemsInUsage } from './SummaryRow.hooks';
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
-  const items = useWatch({ name: `${activityName}.items` });
+  const [items, conditions] = useWatch({
+    name: [`${activityName}.items`, `${name}.conditions`],
+  });
   const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
@@ -32,6 +34,11 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     [items, activityName, setValue],
   );
 
+  const matchOptions = useMemo(() => getMatchOptions({ conditions, items }), [conditions, items]);
+  const itemsOptions = useMemo(
+    () => getItemsOptions({ items, itemsInUsage, conditions }),
+    [items, itemsInUsage, conditions],
+  );
   const { question } =
     ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
 
@@ -43,7 +50,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <ItemFlowSelectController
           control={control}
           name={`${name}.match`}
-          options={getMatchOptions()}
+          options={matchOptions}
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
           isLabelNeedTranslation={false}
@@ -54,7 +61,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <ItemFlowSelectController
           control={control}
           name={`${name}.itemKey`}
-          options={getItemsOptions({ items, itemsInUsage })}
+          options={itemsOptions}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
