@@ -13,7 +13,6 @@ concurrency:
   cancel-in-progress: true
   group: "preview-env-manage-${{ github.event.number }}"
 
-
 jobs:
   create-preview-env:
     uses: ./.github/workflows/create-preview-env.yaml
