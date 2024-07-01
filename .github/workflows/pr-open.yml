@@ -7,7 +7,6 @@ on:
       - reopened
       - synchronize
 
-
 # Only run the latest.  Cancel old runs in progress.
 concurrency:
   cancel-in-progress: true
