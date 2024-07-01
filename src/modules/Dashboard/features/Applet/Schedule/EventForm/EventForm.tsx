@@ -248,11 +248,11 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     }, [startTime, endTime, trigger]);
 
     useEffect(() => {
-      if (!hasAlwaysAvailableOption) {
+      if (!hasAlwaysAvailableOption && !getValues('oneTimeCompletion')) {
         setValue('alwaysAvailable', false);
         setValue('periodicity', Periodicity.Once);
       }
-    }, [hasAlwaysAvailableOption, setValue]);
+    }, [hasAlwaysAvailableOption, setValue, getValues]);
 
     return (
       <FormProvider {...methods}>
