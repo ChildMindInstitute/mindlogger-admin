@@ -77,7 +77,7 @@ export enum DateFormats {
   MonthDayYearTimeSeconds = 'MMM dd, yyyy HH:mm:ss',
 }
 
-export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w{2,}([-.]\w+)*\.\w{2,}([-.]\w+)*$/;
 
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
