@@ -151,44 +151,42 @@ describe('LorisIntegrationSetting', () => {
     expect(uploadButton).toBeDisabled();
   });
 
-  test("server is configured, lorisIntegration by default is true, integrations = ['loris']; all visits are fiiled", async () => {
+  test("server is configured, lorisIntegration by default is true, integrations = ['loris']; all visits are filled", async () => {
     mockAxios.get.mockResolvedValueOnce({
-      data: { result: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] } },
+      data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] },
     });
     mockAxios.get.mockResolvedValueOnce({
       data: {
-        result: {
-          info: [
-            {
-              userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
-              secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
-              activities: [
-                {
-                  activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                  activityName: 'Activity2 applet 20072024',
-                  answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
-                  version: '2.0.0',
-                  completedDate: '2024-06-24T16:14:00',
-                  visits: [],
-                },
-              ],
-            },
-            {
-              userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
-              secretUserId: 'lol_kek',
-              activities: [
-                {
-                  activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                  activityName: 'Activity2 applet 20072024',
-                  answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
-                  version: '2.0.0',
-                  completedDate: '2024-06-25T04:33:00',
-                  visits: [],
-                },
-              ],
-            },
-          ],
-        },
+        info: [
+          {
+            userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
+            secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
+            activities: [
+              {
+                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+                activityName: 'Activity2 applet 20072024',
+                answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
+                version: '2.0.0',
+                completedDate: '2024-06-24T16:14:00',
+                visits: [],
+              },
+            ],
+          },
+          {
+            userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
+            secretUserId: 'lol_kek',
+            activities: [
+              {
+                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+                activityName: 'Activity2 applet 20072024',
+                answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
+                version: '2.0.0',
+                completedDate: '2024-06-25T04:33:00',
+                visits: [],
+              },
+            ],
+          },
+        ],
       },
     });
     mockAxios.post.mockResolvedValueOnce({ data: {} });
@@ -313,7 +311,12 @@ describe('LorisIntegrationSetting', () => {
           userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
         },
       ],
-      { signal: undefined },
+      {
+        params: {
+          applet_id: '123',
+        },
+        signal: undefined,
+      },
     );
 
     expect(
@@ -326,44 +329,42 @@ describe('LorisIntegrationSetting', () => {
     expect(screen.queryByTestId('applet-settings-loris-integration-popup')).not.toBeInTheDocument();
   });
 
-  test("server is configured, lorisIntegration by default is true, integrations = ['loris']; not all visits are fiiled", async () => {
+  test("server is configured, lorisIntegration by default is true, integrations = ['loris']; not all visits are filled", async () => {
     mockAxios.get.mockResolvedValueOnce({
-      data: { result: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] } },
+      data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] },
     });
     mockAxios.get.mockResolvedValueOnce({
       data: {
-        result: {
-          info: [
-            {
-              userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
-              secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
-              activities: [
-                {
-                  activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                  activityName: 'Activity2 applet 20072024',
-                  answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
-                  version: '2.0.0',
-                  completedDate: '2024-06-24T16:14:00',
-                  visits: [],
-                },
-              ],
-            },
-            {
-              userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
-              secretUserId: 'lol_kek',
-              activities: [
-                {
-                  activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                  activityName: 'Activity2 applet 20072024',
-                  answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
-                  version: '2.0.0',
-                  completedDate: '2024-06-25T04:33:00',
-                  visits: [],
-                },
-              ],
-            },
-          ],
-        },
+        info: [
+          {
+            userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
+            secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
+            activities: [
+              {
+                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+                activityName: 'Activity2 applet 20072024',
+                answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
+                version: '2.0.0',
+                completedDate: '2024-06-24T16:14:00',
+                visits: [],
+              },
+            ],
+          },
+          {
+            userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
+            secretUserId: 'lol_kek',
+            activities: [
+              {
+                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+                activityName: 'Activity2 applet 20072024',
+                answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
+                version: '2.0.0',
+                completedDate: '2024-06-25T04:33:00',
+                visits: [],
+              },
+            ],
+          },
+        ],
       },
     });
 

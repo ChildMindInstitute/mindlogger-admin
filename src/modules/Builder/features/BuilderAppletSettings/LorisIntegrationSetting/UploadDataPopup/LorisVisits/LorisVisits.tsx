@@ -32,15 +32,15 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
           getLorisUsersVisitsApi({ appletId }),
         ]);
 
-        if (visitsResult?.data?.result?.visits) {
-          setVisitsList(visitsResult.data.result.visits);
+        if (visitsResult?.data?.visits) {
+          setVisitsList(visitsResult.data.visits);
         }
 
-        if (usersVisitsResult?.data?.result?.info) {
-          const defaultValues = formatData(usersVisitsResult?.data?.result?.info);
+        if (usersVisitsResult?.data?.info) {
+          const defaultValues = formatData(usersVisitsResult?.data?.info);
 
           reset({ visitsForm: defaultValues });
-          setUsersVisits(usersVisitsResult?.data?.result?.info);
+          setUsersVisits(usersVisitsResult?.data?.info);
         }
       } catch (error) {
         console.error(error);
