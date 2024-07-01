@@ -408,19 +408,17 @@ export type OptionCondition = BaseCondition & {
     optionValue: string | number;
   };
 };
-export type SingleMultiSelectionPerRowCondition = BaseCondition &
-  OptionCondition & {
-    payload: {
-      rowIndex?: string | number;
-    };
+export type SingleMultiSelectionPerRowCondition = OptionCondition & {
+  payload: {
+    rowIndex?: string | number;
   };
+};
 
-export type SliderRowsCondition<T = SingleValueCondition> = BaseCondition &
-  T & {
-    payload: {
-      rowIndex: number;
-    };
+export type SliderRowsCondition<T = SingleValueCondition> = T & {
+  payload: {
+    rowIndex: string;
   };
+};
 
 export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
@@ -439,18 +437,23 @@ export const enum TimeRangeConditionType {
   StartTime = 'startTime',
   EndTime = 'endTime',
 }
-export type TimeRangeValueCondition = BaseCondition &
-  RangeValueCondition<Date> & {
-    payload: {
-      type: TimeRangeConditionType;
-    };
+export type TimeRangeValueCondition<T = Date> = RangeValueCondition<T> & {
+  payload: {
+    type: TimeRangeConditionType;
   };
+};
+export type TimeRangeSingleValueCondition<T = Date> = SingleValueCondition<T> & {
+  payload: {
+    type: TimeRangeConditionType;
+  };
+};
 
 export type Condition =
   | OptionCondition
   | SingleValueCondition
   | RangeValueCondition
   | TimeRangeValueCondition
+  | TimeRangeSingleValueCondition
   | SingleMultiSelectionPerRowCondition
   | SliderRowsCondition
   | SliderRowsCondition<RangeValueCondition>
