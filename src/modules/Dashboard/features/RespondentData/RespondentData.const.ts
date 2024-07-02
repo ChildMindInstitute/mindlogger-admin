@@ -12,7 +12,6 @@ export const defaultRespondentDataFormValues = {
   filterByIdentifier: false,
   identifier: [],
   versions: [],
-  summaryActivities: [],
   selectedActivity: null,
   identifiers: [],
   apiVersions: [],
