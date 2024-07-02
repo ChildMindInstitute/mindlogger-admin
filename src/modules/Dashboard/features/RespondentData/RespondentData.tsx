@@ -1,13 +1,14 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getActivityApi } from 'api';
 import { EmptyState, LinkedTabs } from 'shared/components';
 import { applet as appletState } from 'shared/state';
 import { users, workspaces } from 'redux/modules';
-import { getEntityKey } from 'shared/utils';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
+import { useAsync } from 'shared/hooks';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
@@ -23,10 +24,6 @@ export const RespondentData = () => {
 
   const { useAppletData } = appletState;
   const { result: appletData } = useAppletData() ?? {};
-  const currentActivity = useMemo(
-    () => appletData?.activities?.find((activity) => getEntityKey(activity) === activityId),
-    [activityId, appletData?.activities],
-  );
   const { useSubject } = users;
   const { result: subject } = useSubject() ?? {};
 
@@ -34,8 +31,16 @@ export const RespondentData = () => {
   const methods = useForm<RespondentsDataFormValues>({
     defaultValues: defaultRespondentDataFormValues,
   });
+  const { execute, value } = useAsync(getActivityApi);
+  const { result: activity } = value?.data ?? {};
 
   const canViewData = hasPermissionToViewData(appletRoles);
+
+  useEffect(() => {
+    if (activityId) {
+      execute({ activityId });
+    }
+  }, [activityId, execute]);
 
   return (
     <FormProvider {...methods}>
@@ -44,7 +49,7 @@ export const RespondentData = () => {
           dataTestid={'respondents-summary-back-to-applet'}
           applet={appletData}
           subject={subject}
-          activity={currentActivity}
+          activity={activity}
         />
       )}
 
