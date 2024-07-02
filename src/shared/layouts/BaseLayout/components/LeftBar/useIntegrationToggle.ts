@@ -25,7 +25,8 @@ export const useIntegrationToggle = (
 
   useEffect(() => {
     const integration = currentWorkspaceData?.integrations?.find(
-      ({ integrationType: type }: Integration) => type === integrationType,
+      ({ integrationType: type }: Integration) =>
+        type.toLowerCase() === integrationType.toLowerCase(),
     );
 
     if (!integration && integrationFeatureFlagValue) {

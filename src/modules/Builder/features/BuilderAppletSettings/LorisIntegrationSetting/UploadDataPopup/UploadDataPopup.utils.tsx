@@ -26,7 +26,7 @@ export const getScreens = ({
   },
   {
     buttonText: t('upload'),
-    width: '80rem',
+    width: '88',
     content: <LorisVisits onSetIsLoading={setIsLoading} setStep={setStep} />,
     onSubmit: handleSubmitVisits,
   },

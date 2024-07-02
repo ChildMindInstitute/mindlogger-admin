@@ -51,14 +51,18 @@ export const getSettings = ({
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
-        {
-          icon: <Svg id="data-collection" />,
-          label: 'loris.integration',
-          component: <LorisIntegrationSetting />,
-          param: SettingParam.LorisIntegration,
-          isVisible: enableLorisIntegration,
-          'data-testid': `${dataTestid}-loris-integration`,
-        },
+        ...(enableLorisIntegration
+          ? [
+              {
+                icon: <Svg id="data-collection" />,
+                label: 'loris.integration',
+                component: <LorisIntegrationSetting />,
+                param: SettingParam.LorisIntegration,
+                isVisible: enableLorisIntegration,
+                'data-testid': `${dataTestid}-loris-integration`,
+              },
+            ]
+          : []),
       ],
     },
     {

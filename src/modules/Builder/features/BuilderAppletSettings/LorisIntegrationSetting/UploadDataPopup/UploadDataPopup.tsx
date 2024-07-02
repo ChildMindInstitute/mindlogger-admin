@@ -23,9 +23,13 @@ export const UploadDataPopup = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { execute: uploadLorisUsersVisits } = useAsync(uploadLorisUsersVisitsApi, () => {
-    setStep(Steps.Success);
-  });
+  const { execute: uploadLorisUsersVisits } = useAsync(
+    uploadLorisUsersVisitsApi,
+    () => {
+      setStep(Steps.Success);
+    },
+    () => setStep(Steps.Error),
+  );
 
   const methods = useForm({
     mode: 'onChange',
