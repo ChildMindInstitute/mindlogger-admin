@@ -1,5 +1,5 @@
 import { ActivityId, AppletId } from 'shared/api';
-import { Item, SingleApplet, SubscaleSetting } from 'shared/state';
+import { Activity, Item, SingleApplet, SubscaleSetting } from 'shared/state';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
@@ -311,6 +311,13 @@ export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
+export interface GetActivityParams {
+  activityId: string;
+}
+
+export interface GetActivityResponse {
+  result: Activity;
+}
 export interface GetAppletSubmissionsParams extends AppletId {
   page?: number;
   limit?: number;
