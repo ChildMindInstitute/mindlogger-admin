@@ -3,7 +3,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import mockAxios from 'jest-mock-axios';
 
 import { RootState } from 'redux/store';
-import { AlertType } from 'shared/state';
+import { AlertType, Workspace } from 'shared/state';
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { mockedAppletId, mockedApplet } from 'shared/mock';
@@ -32,7 +32,10 @@ const workspacesData = {
   ],
   count: 1,
 };
-const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> => ({
+const getPreloadedState = (
+  hasForbiddenError = true,
+  currentWorkspaceData: Workspace | null = null,
+): PreloadedState<RootState> => ({
   forbiddenState: {
     data: {
       hasForbiddenError,
@@ -51,7 +54,7 @@ const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> 
     currentWorkspace: {
       requestId: 'currentWorkspace-request-id',
       status: 'success',
-      data: null,
+      data: currentWorkspaceData,
     },
     roles: {
       requestId: 'roles-request-id',
@@ -186,9 +189,11 @@ describe('useNoPermissionPopup', () => {
     });
   });
 
-  test('should reload window when on dashboard applets page', async () => {
+  test('should reload window when on dashboard applets page if current user workspace is active', async () => {
     mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockRejectedValueOnce(new Error('Error'));
+    mockAxios.get.mockResolvedValueOnce({
+      data: workspacesData,
+    });
     const reloadSpy = jest.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: reloadSpy },
@@ -196,7 +201,10 @@ describe('useNoPermissionPopup', () => {
     });
 
     const { result } = renderHookWithProviders(useNoPermissionPopup, {
-      preloadedState: getPreloadedState(),
+      preloadedState: getPreloadedState(true, {
+        ownerId: userId,
+        workspaceName: 'current user workspace',
+      }),
       route: page.dashboardApplets,
       routePath: page.dashboardApplets,
     });

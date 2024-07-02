@@ -4,9 +4,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-import { getDefaultFormValues } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/utils/getDefaultValues';
+import { getDefaultFormValues } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/utils';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { ActivityCardItem } from './ActivityCardItem';
 

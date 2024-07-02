@@ -1,56 +1,79 @@
 import { useRef } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, variables } from 'shared/styles';
-import { DatavizActivity } from 'api';
 
 import { StyledMenu } from '../../RespondentData.styles';
+import { useRespondentDataContext } from '../../RespondentDataContext';
 import { setDateRangeFormValues } from '../utils/setDateRangeValues';
-import { RespondentsDataFormValues } from '../../RespondentData.types';
-import { StyleContainer, StyledActivity } from './ReportMenu.styles';
+import { ActivityOrFlow, RespondentsDataFormValues } from '../../RespondentData.types';
+import { StyledContainer, StyledItem, StyledTitle } from './ReportMenu.styles';
 import { setDefaultFormValues } from './ReportMenu.utils';
 import { ReportMenuProps } from './ReportMenu.types';
 import { StickyHeader } from './StickyHeader';
 
 export const ReportMenu = ({
   activities,
+  flows,
   getIdentifiersVersions,
   fetchAnswers,
   setIsLoading,
 }: ReportMenuProps) => {
+  const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const [selectedActivity] = useWatch({ name: ['selectedActivity'] });
+  const { selectedEntity, setSelectedEntity } = useRespondentDataContext();
 
-  const handleActivitySelect = async (activity: DatavizActivity) => {
-    setValue('selectedActivity', activity);
-    setDateRangeFormValues(setValue, activity.lastAnswerDate);
+  const handleSelectEntity = async (entity: ActivityOrFlow) => {
+    setSelectedEntity(entity);
+
+    const { hasAnswer, isPerformanceTask } = entity;
+    if (!hasAnswer || isPerformanceTask) return;
+
+    setDateRangeFormValues(setValue, entity.lastAnswerDate);
     setDefaultFormValues(setValue);
 
     setIsLoading(true);
-    await getIdentifiersVersions({ activity });
-    await fetchAnswers({ activity });
+    await getIdentifiersVersions({ entity });
+    await fetchAnswers({ entity });
     setIsLoading(false);
   };
 
   return (
     <StyledMenu ref={containerRef} data-testid="report-menu" sx={{ p: 0 }}>
       <StickyHeader containerRef={containerRef} />
-      {activities?.length && (
-        <StyleContainer>
+      {!!flows.length && (
+        <StyledContainer>
+          <StyledTitle>{t('activityFlows')}</StyledTitle>
+          {flows.map((flow, index) => (
+            <StyledItem
+              key={String(flow.id)}
+              isSelected={selectedEntity?.id === flow.id}
+              onClick={() => handleSelectEntity({ ...flow, isFlow: true })}
+              data-testid={`respondents-summary-flow-${index}`}
+            >
+              <StyledBodyLarge color={variables.palette.on_surface}>{flow.name}</StyledBodyLarge>
+            </StyledItem>
+          ))}
+        </StyledContainer>
+      )}
+      {!!activities.length && (
+        <StyledContainer>
+          <StyledTitle>{t('activities')}</StyledTitle>
           {activities?.map((activity, index) => (
-            <StyledActivity
+            <StyledItem
               key={String(activity.id)}
-              isSelected={selectedActivity?.id === activity.id}
-              onClick={() => handleActivitySelect(activity)}
+              isSelected={selectedEntity?.id === activity.id}
+              onClick={() => handleSelectEntity({ ...activity, isFlow: false })}
               data-testid={`respondents-summary-activity-${index}`}
             >
               <StyledBodyLarge color={variables.palette.on_surface}>
                 {activity.name}
               </StyledBodyLarge>
-            </StyledActivity>
+            </StyledItem>
           ))}
-        </StyleContainer>
+        </StyledContainer>
       )}
     </StyledMenu>
   );

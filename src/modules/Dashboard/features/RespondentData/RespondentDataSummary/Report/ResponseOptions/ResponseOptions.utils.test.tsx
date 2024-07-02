@@ -586,6 +586,7 @@ describe('ResponseOptions.utils', () => {
         { answer: { text: null, value: 139500000 }, date: '2024-03-14T16:53:24.055000' },
         { answer: { text: null, value: null }, date: '2024-03-15T13:35:27.961000' },
       ],
+      isStaticActive: false,
       'data-testid': 'response-option-4-0-time-picker-chart',
     };
     const dateItemResult = {
@@ -617,6 +618,7 @@ describe('ResponseOptions.utils', () => {
       ...sharedProps,
       activityItem: singleSelectRowsActivityItem,
       answers: singleSelectRowsAnswers,
+      isStaticActive: false,
       'data-testid': 'single-select-rows',
     };
     const {
@@ -629,6 +631,7 @@ describe('ResponseOptions.utils', () => {
       ...sharedProps,
       activityItem: multiSelectRowsActivityItem,
       answers: multiSelectRowsAnswers,
+      isStaticActive: false,
       'data-testid': 'multi-select-rows',
     };
     const sliderRowsItemResult = {
@@ -664,6 +667,7 @@ describe('ResponseOptions.utils', () => {
           { answer: { text: null, value: 8 }, date: '2024-03-27T15:44:46.674000' },
         ],
       },
+      isStaticActive: false,
       'data-testid': 'slider-rows',
     };
 

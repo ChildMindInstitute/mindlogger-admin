@@ -1,27 +1,29 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
+import { useCallback } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { DatePicker } from 'shared/components/DatePicker';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { ItemFormValues } from 'modules/Builder/types';
+import { getObjectFromList } from 'shared/utils';
+import { SelectEvent } from 'shared/types';
 
 import { ConditionItemType } from '../Condition.const';
-import { StyledInputController } from './SwitchCondition.styles';
 import { SwitchConditionProps } from './SwitchCondition.types';
-import {
-  getConditionMinMaxValues,
-  getConditionMinMaxRangeValues,
-  getTimeRangeOptions,
-  getRowOptions,
-} from './SwitchCondition.utils';
+import { getTimeRangeOptions, getRowOptions } from './SwitchCondition.utils';
 import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
 import { TimeCondition } from './TimeCondition';
 import { StyledSelectController } from '../Condition.styles';
 import { SingleMultiScoreCondition } from './SingleMultiScoreCondition';
+import { SingleOrRangeNumberCondition } from './SingleOrRangeNumberCondition';
+import { getPayload } from '../../ConditionRow.utils';
 
 export const SwitchCondition = ({
+  itemName,
   selectedItem,
   payloadName,
   state,
@@ -36,7 +38,13 @@ export const SwitchCondition = ({
   const rowIndexName = `${payloadName}.rowIndex`;
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-  const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+  const { fieldName: activityName } = useCurrentActivity();
+  const itemsName = `${activityName}.items`;
+  const [minValue, maxValue, conditionPayload, items, conditionItem] = useWatch({
+    name: [minValueName, maxValueName, payloadName, itemsName, itemName],
+  });
+  const groupedItems = getObjectFromList<ItemFormValues>(items);
+  const selectedItemForm = groupedItems[conditionItem];
 
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
@@ -52,6 +60,40 @@ export const SwitchCondition = ({
     isRangeValueShown,
     dataTestid,
   };
+  const commonSingleMultiScoreConditionProps = {
+    children,
+    payloadName,
+    valueOptions,
+    dataTestid,
+  };
+  const commonSingleOrRangeNumberConditionProps = {
+    children,
+    state,
+    numberValueName,
+    minValueName,
+    maxValueName,
+    rowIndexName,
+    minValue,
+    maxValue,
+    isSingleValueShown,
+    isRangeValueShown,
+    dataTestid,
+  };
+
+  const handleChangeRowIndex = useCallback(
+    (_e: SelectEvent) => {
+      if (!selectedItem) return;
+
+      const payload = getPayload({
+        conditionType: state,
+        conditionPayload,
+        selectedItem: selectedItemForm,
+      });
+
+      setValue(payloadName, payload);
+    },
+    [setValue, selectedItem, conditionPayload, payloadName, state, selectedItemForm],
+  );
 
   if (!itemType) return null;
 
@@ -59,26 +101,15 @@ export const SwitchCondition = ({
     case ConditionItemType.SingleSelection:
     case ConditionItemType.MultiSelection:
     case ConditionItemType.ScoreCondition: {
-      const props = {
-        children,
-        selectedItem,
-        payloadName,
-        valueOptions,
-        dataTestid,
-      };
-
-      return <SingleMultiScoreCondition {...props} />;
+      return (
+        <SingleMultiScoreCondition
+          {...commonSingleMultiScoreConditionProps}
+          selectedItem={selectedItem}
+        />
+      );
     }
     case ConditionItemType.SingleSelectionPerRow:
     case ConditionItemType.MultipleSelectionPerRow: {
-      const props = {
-        children,
-        selectedItem,
-        payloadName,
-        valueOptions,
-        dataTestid,
-      };
-
       return (
         <>
           <StyledSelectController
@@ -89,61 +120,43 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-rowIndex`}
             disabled={!isItemSelected}
+            customChange={handleChangeRowIndex}
           />
-          <SingleMultiScoreCondition {...props} />
+          <SingleMultiScoreCondition
+            {...commonSingleMultiScoreConditionProps}
+            selectedItem={selectedItem}
+          />
+        </>
+      );
+    }
+    case ConditionItemType.SliderRows: {
+      return (
+        <>
+          <StyledSelectController
+            control={control}
+            name={rowIndexName}
+            options={getRowOptions(selectedItem.responseValues.rows)}
+            placeholder={!isItemSelected ? t('conditionDisabledPlaceholder') : `${t('row')}`}
+            isLabelNeedTranslation={false}
+            data-testid={`${dataTestid}-payload-rowIndex`}
+            disabled={!isItemSelected}
+            customChange={handleChangeRowIndex}
+          />
+          <SingleOrRangeNumberCondition
+            {...commonSingleOrRangeNumberConditionProps}
+            selectedItem={selectedItem}
+          />
         </>
       );
     }
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
     case ConditionItemType.NumberSelection: {
-      const { minNumber, maxNumber } = getConditionMinMaxValues({
-        item: selectedItem,
-        state,
-      });
-
-      const { leftRange, rightRange } = getConditionMinMaxRangeValues({
-        item: selectedItem,
-        minValue,
-        maxValue,
-      });
-
       return (
-        <>
-          {children}
-          {isSingleValueShown && (
-            <StyledInputController
-              type="number"
-              control={control}
-              name={numberValueName}
-              minNumberValue={minNumber}
-              maxNumberValue={maxNumber}
-              data-testid={`${dataTestid}-slider-value`}
-            />
-          )}
-          {isRangeValueShown && (
-            <>
-              <StyledInputController
-                key={`min-value-${isRangeValueShown}`}
-                type="number"
-                control={control}
-                name={minValueName}
-                minNumberValue={leftRange.minNumber}
-                maxNumberValue={leftRange.maxNumber}
-                data-testid={`${dataTestid}-min-value`}
-              />
-              <StyledInputController
-                key={`max-value-${isRangeValueShown}`}
-                type="number"
-                control={control}
-                name={maxValueName}
-                minNumberValue={rightRange.minNumber}
-                maxNumberValue={rightRange.maxNumber}
-                data-testid={`${dataTestid}-max-value`}
-              />
-            </>
-          )}
-        </>
+        <SingleOrRangeNumberCondition
+          {...commonSingleOrRangeNumberConditionProps}
+          selectedItem={selectedItem}
+        />
       );
     }
     case ConditionItemType.Date: {

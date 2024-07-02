@@ -1,7 +1,4 @@
-import {
-  DEFAULT_END_TIME,
-  DEFAULT_START_TIME,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { setDefaultFormValues } from './ReportMenu.utils';
 

@@ -25,7 +25,7 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
         {t('subscaleScores')}
       </StyledHeadline>
       <StyledFlexTopStart>
-        {latestFinalScore && (
+        {!!latestFinalScore && (
           <>
             <StyledBodyMedium data-testid="latest-final-subscale-score">
               {t('latestFinalSubscaleScore')}: {latestFinalScore}
@@ -33,7 +33,7 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
             {StringDivider}
           </>
         )}
-        {frequency && (
+        {!!frequency && (
           <StyledBodyMedium data-testid="frequency">
             {t('frequency')}: {frequency}
           </StyledBodyMedium>

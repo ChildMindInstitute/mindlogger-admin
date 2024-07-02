@@ -5,7 +5,11 @@ import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
+
+import { useStaticContent } from 'shared/hooks/useStaticContent';
+import { observerStyles } from 'shared/consts';
+import { StyledObserverTarget } from 'shared/styles';
 
 import { locales } from '../../Charts.const';
 import { ChartType } from '../../Chart.types';
@@ -23,6 +27,7 @@ export const TimePickerLineChart = ({
   maxDate,
   answers,
   versions,
+  isStaticActive,
   'data-testid': dataTestid,
 }: TimePickerLineChartProps) => {
   const { i18n } = useTranslation('app');
@@ -30,6 +35,8 @@ export const TimePickerLineChart = ({
 
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
+  const targetSelector = `${dataTestid}-target`;
+  const { isStatic } = useStaticContent({ targetSelector, isStaticActive });
 
   const [tooltipData, setTooltipData] = useState<TimePickerDataPointRaw[] | null>(null);
 
@@ -84,22 +91,29 @@ export const TimePickerLineChart = ({
         height={120}
       />
     ),
-    [answers, lang],
+    [answers, lang, color, minDate, maxDate, versions],
   );
 
   return (
     <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
-      {renderChart}
-      <ChartTooltipContainer
-        ref={tooltipRef}
-        onMouseEnter={() => {
-          isHovered.current = true;
-        }}
-        onMouseLeave={hideTooltip}
-        data-testid={dataTestid}
-      >
-        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
-      </ChartTooltipContainer>
+      <StyledObserverTarget className={targetSelector} sx={observerStyles} />
+      {isStatic ? (
+        <Skeleton variant="rounded" height={chartRef.current?.height} />
+      ) : (
+        <>
+          {renderChart}
+          <ChartTooltipContainer
+            ref={tooltipRef}
+            onMouseEnter={() => {
+              isHovered.current = true;
+            }}
+            onMouseLeave={hideTooltip}
+            data-testid={dataTestid}
+          >
+            <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+          </ChartTooltipContainer>
+        </>
+      )}
     </Box>
   );
 };

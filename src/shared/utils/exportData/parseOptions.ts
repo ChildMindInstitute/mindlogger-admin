@@ -30,6 +30,13 @@ export const parseOptions = (
     );
   }
 
+  if (type === ItemResponseType.NumberSelection) {
+    const min = Number(responseValues?.minValue);
+    const max = Number(responseValues?.maxValue);
+
+    return `Min: ${min}, Max: ${max}`;
+  }
+
   if (!responseValues?.options?.length) return;
 
   return joinWihComma(

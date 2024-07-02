@@ -14,6 +14,7 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 import { EditEventPopup } from './EditEventPopup';
 
 const mockSetEditEventPopupVisible = jest.fn();
+const mockSetSaveChangesPopupVisible = jest.fn();
 const dataTestid = 'dashboard-calendar-edit-event';
 const mockDefaultStartDate = new Date('03-18-2024');
 const mockAppletId = 'a341e3d7-0170-4894-8823-798c58456130';
@@ -164,7 +165,7 @@ export const preloadedState = {
 
 describe('EditEventPopup', () => {
   test(
-    'update event periodicity (WEEKLY -> DAILY)',
+    'update event periodicity and test close edit event popup',
     async () => {
       renderWithProviders(
         <EditEventPopup
@@ -172,6 +173,7 @@ describe('EditEventPopup', () => {
           editedEvent={mockEditedEvent1}
           setEditEventPopupVisible={mockSetEditEventPopupVisible}
           defaultStartDate={mockDefaultStartDate}
+          setSaveChangesPopupVisible={mockSetSaveChangesPopupVisible}
         />,
         {
           preloadedState,
@@ -195,8 +197,43 @@ describe('EditEventPopup', () => {
       // test close edit event popup
       const closeButton = await screen.findByTestId(`${dataTestid}-popup-close-button`);
       expect(closeButton).toBeInTheDocument();
+
       await userEvent.click(closeButton);
-      expect(mockSetEditEventPopupVisible).toBeCalledWith(false);
+      expect(mockSetSaveChangesPopupVisible).toBeCalledWith(true);
+      expect(mockSetEditEventPopupVisible).not.toBeCalled();
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'update event periodicity (WEEKLY -> DAILY)',
+    async () => {
+      renderWithProviders(
+        <EditEventPopup
+          open
+          editedEvent={mockEditedEvent1}
+          setEditEventPopupVisible={mockSetEditEventPopupVisible}
+          defaultStartDate={mockDefaultStartDate}
+          setSaveChangesPopupVisible={mockSetSaveChangesPopupVisible}
+        />,
+        {
+          preloadedState,
+          route: `/dashboard/${mockAppletId}/schedule`,
+          routePath: page.appletSchedule,
+        },
+      );
+
+      expect(await screen.findByTestId(`${dataTestid}-popup`)).toBeInTheDocument();
+      const title = screen.getByTestId(`${dataTestid}-popup-title`);
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveTextContent('Edit Activity Schedule');
+
+      const submitButton = screen.getByTestId(`${dataTestid}-popup-submit-button`);
+      expect(submitButton).toBeDisabled();
+
+      // change event periodicity
+      const daily = screen.getByTestId(`${dataTestid}-popup-form-availability-periodicity-1`);
+      await userEvent.click(daily);
 
       expect(submitButton).not.toBeDisabled();
       await userEvent.click(submitButton);
@@ -218,7 +255,6 @@ describe('EditEventPopup', () => {
         },
         { signal: undefined },
       );
-      expect(mockSetEditEventPopupVisible).toBeCalledWith(false);
     },
     JEST_TEST_TIMEOUT,
   );

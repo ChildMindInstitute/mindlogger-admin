@@ -50,7 +50,7 @@ const renderComponent = (props?: Partial<ReviewsProps>) =>
       reviewsError={null}
       reviewersData={mockedReviewersData}
       removeReviewError={null}
-      removeReviewLoading={false}
+      removeReviewsLoading={false}
       onReviewerAnswersRemove={mockedOnReviewAnswerRemove}
       onReviewEdit={mockedOnReviewEdit}
       data-testid="reviews"

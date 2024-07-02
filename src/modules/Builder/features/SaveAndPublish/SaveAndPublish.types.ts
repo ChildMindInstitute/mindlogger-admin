@@ -10,6 +10,7 @@ import {
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 import { Encryption } from 'shared/utils';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
+import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
 
 export type GetItemCommonFields = {
   id?: string;
@@ -45,7 +46,7 @@ export type SaveAndPublishSetup = {
   appletEncryption: Encryption | undefined;
   setIsPasswordPopupOpened: Dispatch<SetStateAction<boolean>>;
   handleSaveAndPublishFirstClick: () => Promise<void>;
-  handleAppletPasswordSubmit: (password?: string) => Promise<void>;
+  handleAppletPasswordSubmit: (ref?: AppletPasswordRefType) => Promise<void>;
   handlePublishProcessOnClose: () => void;
   handlePublishProcessOnRetry: () => Promise<void>;
   handleSaveChangesDoNotSaveSubmit: () => Promise<void>;
