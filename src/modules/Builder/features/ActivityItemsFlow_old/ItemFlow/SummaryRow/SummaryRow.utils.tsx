@@ -1,6 +1,7 @@
 import i18n from 'i18n';
 import { ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
+import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
 import { ITEMS_RESPONSE_TYPES_TO_SHOW } from './SummaryRow.const';
 import { GetItemsInUsageProps, GetItemsOptionsProps } from './SummaryRow.types';
@@ -23,9 +24,18 @@ export const getItemsOptions = ({ items, itemsInUsage }: GetItemsOptionsProps) =
     if (item.responseType && ITEMS_RESPONSE_TYPES_TO_SHOW.includes(item.responseType)) {
       const value = getEntityKey(item);
       const disabled = itemsInUsage.has(value);
-      const tooltip = disabled ? t('conditionalLogicValidation.usageInSummaryRow') : undefined;
+      const showTooltip = disabled || item.question;
+      const tooltipPlacement: 'right' | undefined = showTooltip ? 'right' : undefined;
+      let tooltip;
+      if (showTooltip) {
+        tooltip = disabled ? (
+          t('conditionalLogicValidation.usageInSummaryRow')
+        ) : (
+          <StyledMdPreview modelValue={item.question ?? ''} />
+        );
+      }
 
-      return [...optionList, { value, labelKey: item.name, disabled, tooltip }];
+      return [...optionList, { value, labelKey: item.name, disabled, tooltip, tooltipPlacement }];
     }
 
     return optionList;
