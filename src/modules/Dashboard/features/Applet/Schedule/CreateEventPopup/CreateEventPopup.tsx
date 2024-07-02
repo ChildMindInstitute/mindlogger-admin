@@ -16,17 +16,18 @@ export const CreateEventPopup = ({
   setCreateEventPopupVisible,
   defaultStartDate,
   'data-testid': dataTestid,
+  userId,
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
-  const { respondentId, appletId } = useParams();
+  const { appletId } = useParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
 
-  const isIndividualCalendar = !!respondentId;
+  const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
@@ -99,6 +100,7 @@ export const CreateEventPopup = ({
               defaultStartDate={defaultStartDate}
               onFormIsLoading={handleFormIsLoading}
               data-testid={`${dataTestid}-form`}
+              userId={userId}
             />
           </>
         </Modal>

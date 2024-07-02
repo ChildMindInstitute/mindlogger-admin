@@ -64,7 +64,7 @@ export const SubscalesConfiguration = () => {
   const onTableDataUpdate = (data?: DataTableItem[]) => {
     setValue(totalScoresTableDataField, data, { shouldDirty: true });
   };
-  const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
+  const iconId = tableData?.length ? 'lookup-table-filled' : 'lookup-table';
   const dataTestid = 'builder-activity-settings-subscales';
 
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];

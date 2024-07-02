@@ -243,7 +243,7 @@ describe('FeedbackReviewer', () => {
     renderComponent({ isCurrentUserReviewer: true });
 
     expect(screen.getByText('John Doe (Me)')).toBeInTheDocument();
-    expect(screen.getByText('Submitted: Apr 04, 2024 12:49')).toBeInTheDocument();
+    expect(screen.getByText('Submitted: Apr 04, 2024, 12:49')).toBeInTheDocument();
     const removeButton = screen.getByTestId(`${dataTestid}-answers-remove`);
     expect(removeButton).toBeInTheDocument();
 
@@ -263,7 +263,7 @@ describe('FeedbackReviewer', () => {
     renderComponent();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Submitted: Apr 04, 2024 12:49')).toBeInTheDocument();
+    expect(screen.getByText('Submitted: Apr 04, 2024, 12:49')).toBeInTheDocument();
     expect(screen.queryByTestId(`${dataTestid}-answers-remove`)).not.toBeInTheDocument();
   });
 

@@ -1,8 +1,8 @@
-export type TabPanelProps = {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-  isMinHeightAuto?: boolean;
+import { BoxProps } from '@mui/material';
+
+export interface TabPanelProps extends BoxProps {
   hiddenHeader?: boolean;
-  id?: string;
-};
+  index: number;
+  isMinHeightAuto?: boolean;
+  value: number;
+}

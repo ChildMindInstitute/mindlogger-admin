@@ -33,8 +33,8 @@ const versions = [
 ];
 
 const dataTestid = 'respondents-summary-filters';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
-const routePath = page.appletRespondentDataSummary;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`;
+const routePath = page.appletParticipantDataSummary;
 const mockedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
   name: 'Activity 1',
@@ -78,7 +78,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('ReportFilters', () => {
   beforeEach(() => {
-    mockedUseParams.mockReturnValue({ appletId: mockedAppletId, respondentId: mockedRespondentId });
+    mockedUseParams.mockReturnValue({ appletId: mockedAppletId, subjectId: mockedRespondentId });
   });
 
   test('renders date pickers and time pickers', async () => {

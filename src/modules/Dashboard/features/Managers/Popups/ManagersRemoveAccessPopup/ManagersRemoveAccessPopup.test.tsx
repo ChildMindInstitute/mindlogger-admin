@@ -23,6 +23,7 @@ const user = {
   id: '1',
   firstName: 'firstName',
   lastName: 'lastName',
+  title: 'PhD',
   email: 'email@gmail.com',
   lastSeen: '',
   roles: [],

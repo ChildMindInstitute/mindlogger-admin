@@ -28,6 +28,8 @@ export const preloadedState = {
     },
   },
   calendarEvents: {
+    alwaysAvailableVisible: { data: true },
+    scheduledVisible: { data: true },
     createEventsData: {
       data: [
         {

@@ -125,35 +125,34 @@ export const getAppletsSmallTableRows = (
     };
   });
 
-export const getHeadCells = (id?: string): HeadCell[] => {
+export const getHeadCells = (sortableColumns?: string[], appletId?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
     {
       id: 'pin',
       label: '',
-      enableSort: true,
       width: RespondentsColumnsWidth.Pin,
     },
     {
       id: 'secretIds',
       label: t('secretUserId'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('secretIds') ?? true,
       width: RespondentsColumnsWidth.Default,
     },
     {
       id: 'nicknames',
       label: t('nickname'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('nicknames') ?? true,
       width: RespondentsColumnsWidth.Default,
     },
     {
       id: 'lastSeen',
       label: t('lastActive'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('lastSeen') ?? true,
       width: RespondentsColumnsWidth.Default,
     },
-    ...(id
+    ...(appletId
       ? [
           {
             id: 'schedule',
@@ -162,7 +161,12 @@ export const getHeadCells = (id?: string): HeadCell[] => {
           },
         ]
       : []),
-    { id: 'status', label: '', width: RespondentsColumnsWidth.Status },
+    {
+      id: 'status',
+      label: t('accountType'),
+      width: RespondentsColumnsWidth.Status,
+      enableSort: sortableColumns?.includes('status') ?? true,
+    },
     {
       id: 'actions',
       label: t('actions'),

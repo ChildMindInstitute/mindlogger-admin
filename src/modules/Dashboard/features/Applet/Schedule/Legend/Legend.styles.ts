@@ -1,36 +1,14 @@
 import { styled, Box } from '@mui/material';
 
-import { theme, variables, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledLegend = styled(Box)`
   padding: ${theme.spacing(1.2, 1.6, 0)};
   overflow: auto;
 `;
 
-export const StyledSelect = styled(Box)`
-  .MuiOutlinedInput-notchedOutline {
-    border: 0;
-  }
-
-  .MuiOutlinedInput-input.MuiInputBase-input {
-    font-size: ${variables.font.size.xl};
-    min-height: auto;
-    padding-left: 0;
-  }
-
-  .MuiBox-root {
-    .icon-wrapper {
-      display: none;
-    }
-  }
-
-  .MuiSelect-icon {
-    right: 0.1rem;
-    top: auto;
-  }
-`;
-
 export const StyledIndicator = styled(Box)`
+  flex-shrink: 0;
   width: 2rem;
   height: 2rem;
   position: relative;
@@ -62,37 +40,4 @@ export const StyledCreateBtn = styled(StyledFlexTopCenter)`
 
 export const StyledDeactivated = styled(StyledFlexTopCenter)`
   color: ${variables.palette.on_surface_alfa38};
-`;
-
-export const StyledBtnsRow = styled(StyledFlexTopCenter)`
-  justify-content: flex-end;
-  margin-bottom: ${theme.spacing(1.8)};
-`;
-
-export const StyledSelectRow = styled(StyledFlexTopCenter)`
-  justify-content: space-between;
-  margin-bottom: ${theme.spacing(1.5)};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
-`;
-
-export const StyledBtn = styled(StyledClearedButton)`
-  font-weight: ${variables.font.weight.regular};
-  padding: ${theme.spacing(0.9, 1.6)};
-
-  svg {
-    margin-right: ${theme.spacing(1)};
-    fill: ${variables.palette.primary};
-  }
-`;
-
-export const StyledSearchContainer = styled(Box)`
-  position: relative;
-  margin-bottom: ${theme.spacing(1.5)};
-`;
-
-export const StyledIconBtn = styled(StyledClearedButton)`
-  padding: ${theme.spacing(1)};
 `;

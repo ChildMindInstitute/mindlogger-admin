@@ -39,7 +39,7 @@ describe('FeedbackReviewerHeader', () => {
     expect(removeButton).toBeInTheDocument();
     expect(editButton).toBeInTheDocument();
     expect(screen.queryByTestId(`${dataTestid}-lock`)).not.toBeInTheDocument();
-    expect(screen.getByText('Submitted: Apr 08, 2024 10:00')).toBeInTheDocument();
+    expect(screen.getByText('Submitted: Apr 08, 2024, 10:00')).toBeInTheDocument();
 
     await userEvent.click(collapseButton);
     expect(mockedOnToggleVisibility).toHaveBeenCalled();

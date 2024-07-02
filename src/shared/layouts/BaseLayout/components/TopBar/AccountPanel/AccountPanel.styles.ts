@@ -61,10 +61,3 @@ export const StyledCloseWrapper = styled(Box)`
     fill: ${variables.palette.on_surface_variant};
   }
 `;
-
-export const StyledDivider = styled('hr')`
-  background-color: ${variables.palette.surface_variant};
-  height: 0.1rem;
-  border: 0;
-  margin: ${theme.spacing(0, 1.6)};
-`;

@@ -43,7 +43,7 @@ export const AppRoutes = () => {
         {loaded && (
           <Routes>
             <Route element={<BaseLayout />}>
-              {dashboardRoutes()}
+              {dashboardRoutes(featureFlags)}
               {builderRoutes(featureFlags.enableItemFlowExtendedItems)}
               {libraryRoutes()}
             </Route>

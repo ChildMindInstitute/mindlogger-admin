@@ -7,7 +7,6 @@ import { addDays } from 'date-fns';
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
-import { AutocompleteOption } from 'shared/components/FormComponents';
 import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
@@ -181,13 +180,13 @@ export const ReportFilters = ({
               <TagsAutocompleteController
                 name="identifier"
                 limitTags={2}
-                label={t('responseIdentifier')}
+                textFieldProps={{ label: t('responseIdentifier') }}
                 options={identifiersOptions}
                 control={control}
                 noOptionsText={t('noResponseIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
-                onCustomChange={(options: AutocompleteOption[]) =>
+                onCustomChange={(options) =>
                   onFiltersChange({
                     type: FiltersChangeType.Identifiers,
                     identifier: options,
@@ -200,13 +199,13 @@ export const ReportFilters = ({
               <TagsAutocompleteController
                 name="versions"
                 limitTags={2}
-                label={t('versions')}
+                textFieldProps={{ label: t('versions') }}
                 options={versionsOptions}
                 control={control}
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}
                 defaultSelectedAll
-                onCustomChange={(options: AutocompleteOption[]) =>
+                onCustomChange={(options) =>
                   onFiltersChange({
                     type: FiltersChangeType.Versions,
                     versions: options,

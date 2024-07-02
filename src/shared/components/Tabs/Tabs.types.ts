@@ -26,6 +26,10 @@ export type TabsProps = {
   setActiveTab?: Dispatch<SetStateAction<number>>;
   hiddenHeader?: boolean;
   isBuilder?: boolean;
+  isCentered?: boolean;
+  deepPathCompare?: boolean;
+  defaultToFirstTab?: boolean;
+  animateTabIndicator?: boolean;
   variant?: TabsOwnProps['variant'];
   animationDurationMs?: number;
 };

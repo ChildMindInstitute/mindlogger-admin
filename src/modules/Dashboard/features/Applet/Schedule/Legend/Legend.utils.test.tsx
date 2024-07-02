@@ -18,7 +18,7 @@ describe('getTitle', () => {
     renderWithProviders(title);
 
     const svg = document.querySelector('svg');
-    expect(svg?.getAttribute('class')).toBe('svg-flow ');
+    expect(svg?.classList.contains('svg-flow')).toBe(true);
     expect(screen.getByText(name)).toBeInTheDocument();
   });
 });

@@ -6,18 +6,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
   CalculationType,
   ConditionalLogicMatch,
   ItemResponseType,
+  ParticipantTag,
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
 } from './consts';
 import { Item, MultiSelectItem, SingleSelectItem } from './state';
+import { Invitations } from '../modules/Dashboard/features/Applet/AddUser/AddUser.types';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -98,18 +100,23 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedSubjectId1 = 'subject-id-987';
-export const mockedRespondentDetails = {
+export const mockedRespondentDetails: RespondentDetail = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
   appletImage: '',
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   respondentNickname: 'Mocked Respondent',
-  respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
+  respondentSecretId: 'mockedSecretId',
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
   subjectId: mockedSubjectId1,
+  subjectTag: 'Child' as ParticipantTag,
+  subjectFirstName: 'John',
+  subjectLastName: 'Doe',
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
 };
-export const mockedRespondent = {
+export const mockedRespondent: Respondent = {
   id: mockedRespondentId,
   nicknames: ['Mocked Respondent'],
   secretIds: ['mockedSecretId'],
@@ -124,7 +131,7 @@ export const mockedRespondent = {
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedSubjectId2 = 'subject-id-123';
-export const mockedRespondent2 = {
+export const mockedRespondent2: Respondent = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
   secretIds: ['testSecretId'],
@@ -142,10 +149,15 @@ export const mockedRespondent2 = {
       appletImage: '',
       accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
       respondentNickname: 'Test Respondent',
-      respondentSecretId: '39ff968c-3903-4872-8f30-a6e6a10cef36',
+      respondentSecretId: 'testSecretId',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
       subjectId: mockedSubjectId2,
+      subjectTag: 'Child' as ParticipantTag,
+      subjectFirstName: 'John',
+      subjectLastName: 'Doe',
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
     },
   ],
 };
@@ -399,10 +411,11 @@ export const mockedAppletData = {
 };
 
 export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
-export const mockedManager = {
+export const mockedManager: Manager = {
   id: mockedManagerId,
   firstName: 'TestFirstName',
   lastName: 'TestLastName',
+  title: 'PhD',
   email: mockedEmail,
   roles: [Roles.Reviewer],
   lastSeen: '2023-08-15T13:39:24.058402',
@@ -422,6 +435,10 @@ export const mockedManager = {
       encryption: mockedEncryption,
     },
   ],
+  createdAt: new Date().toISOString(),
+  titles: [],
+  status: 'approved',
+  invitationKey: null,
 };
 
 export const mockedSingleSelectFormValues = {
@@ -626,7 +643,7 @@ export const mockedSliderRowsFormValues = {
   order: 8,
 };
 
-export const mockedInvitation = {
+export const mockedInvitation: Invitations = {
   result: [
     {
       email: mockedEmail,
@@ -1382,6 +1399,10 @@ export const mockedExportContextItemData = {
   version: '2.0.0',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
   respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
   legacyProfileId: null,
   scheduledDatetime: null,
   startDatetime: 1689755822,
@@ -1636,6 +1657,10 @@ export const mockedParsedAnswers = [
         submitId: '9a3a04b9-a5e9-420b-9daf-17156523658d',
         version: '2.1.0',
         respondentId: '0e6d026f-b382-4022-9208-74a54768ea81',
+        sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+        sourceSecretId: 'source-secret-id',
+        targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+        targetSecretId: 'target-secret-id',
         respondentSecretId: '[admin account] (ml_test1_account@gmail.com)',
         legacyProfileId: null,
         scheduledDatetime: 1689764371.123,
@@ -1726,6 +1751,10 @@ export const mockedParsedAnswers = [
         submitId: '9a3a04b9-a5e9-420b-9daf-17156523658d',
         version: '2.1.0',
         respondentId: '0e6d026f-b382-4022-9208-74a54768ea81',
+        sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+        sourceSecretId: 'source-secret-id',
+        targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+        targetSecretId: 'target-secret-id',
         respondentSecretId: '[admin account] (ml_test1_account@gmail.com)',
         legacyProfileId: null,
         scheduledDatetime: 1689764371.123,
@@ -1787,6 +1816,10 @@ export const mockedParsedAnswers = [
         submitId: '9a3a04b9-a5e9-420b-9daf-17156523658d',
         version: '2.1.0',
         respondentId: '0e6d026f-b382-4022-9208-74a54768ea81',
+        sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+        sourceSecretId: 'source-secret-id',
+        targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+        targetSecretId: 'target-secret-id',
         respondentSecretId: '[admin account] (ml_test1_account@gmail.com)',
         legacyProfileId: null,
         scheduledDatetime: 1689764371.123,
@@ -2265,6 +2298,8 @@ export const mockedDecryptedAnswersWithSubscales = [
     submitId: '710aad0b-40c9-4145-8d0d-06f4e4fdf77e',
     version: '1.2.0',
     respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+    sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+    targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
     legacyProfileId: null,
     scheduledDatetime: null,
@@ -2355,6 +2390,8 @@ export const mockedDecryptedAnswersWithSubscales = [
     submitId: '710aad0b-40c9-4145-8d0d-06f4e4fdf77e',
     version: '1.2.0',
     respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+    sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+    targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
     legacyProfileId: null,
     scheduledDatetime: null,
@@ -2416,6 +2453,8 @@ export const mockedDecryptedAnswersWithSubscales = [
     submitId: '710aad0b-40c9-4145-8d0d-06f4e4fdf77e',
     version: '1.2.0',
     respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+    sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+    targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
     legacyProfileId: null,
     scheduledDatetime: null,
@@ -2496,6 +2535,8 @@ export const mockedDecryptedAnswersWithSubscales = [
     submitId: '710aad0b-40c9-4145-8d0d-06f4e4fdf77e',
     version: '1.2.0',
     respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+    sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+    targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
     legacyProfileId: null,
     scheduledDatetime: null,
@@ -2542,6 +2583,8 @@ export const mockedDecryptedAnswersWithSubscales = [
     submitId: '710aad0b-40c9-4145-8d0d-06f4e4fdf77e',
     version: '1.2.0',
     respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+    sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+    targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
     legacyProfileId: null,
     scheduledDatetime: null,
@@ -2668,6 +2711,10 @@ export const mockedDecryptedObjectForDrawing = {
   submitId: '6b0b8017-be4c-4dfe-836e-818c03ac562e',
   version: '1.1.1',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
   respondentSecretId: 'respondentSecretId',
   legacyProfileId: null,
   scheduledDatetime: null,
@@ -2733,6 +2780,10 @@ export const mockedDecryptedObjectForPhoto = {
   version: '2.0.0',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
   respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
   legacyProfileId: null,
   scheduledDatetime: null,
   startDatetime: 1689755822,
@@ -2783,6 +2834,10 @@ export const mockedDecryptedObjectForVideo = {
   version: '2.0.0',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
   respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
   legacyProfileId: null,
   scheduledDatetime: null,
   startDatetime: 1689755822,
@@ -2835,6 +2890,10 @@ export const mockedDecryptedObjectForAudio = {
   version: '2.0.0',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
   respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
   legacyProfileId: null,
   scheduledDatetime: null,
   startDatetime: 1689755822,
@@ -2873,6 +2932,21 @@ export const mockedAlert = {
   workspace: 'Test ML',
   subjectId: mockedSubjectId1,
 };
+
+export const mockedAppletSummaryData = [
+  {
+    id: mockedAppletId,
+    name: 'Existing Activity',
+    isPerformanceTask: false,
+    hasAnswer: false,
+  },
+  {
+    id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+    name: 'Newly added activity',
+    isPerformanceTask: false,
+    hasAnswer: false,
+  },
+];
 
 export const mockIntersectionObserver = () => {
   global.IntersectionObserver = jest.fn((_, options = {}) => {

@@ -1,0 +1,1 @@
+export const TABS_HORIZONTAL_PADDING = 2.4;

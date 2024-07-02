@@ -141,7 +141,7 @@ export type FormattedResponses =
   | SingleMultiSelectionPerRowFormattedResponses
   | SliderRowsFormattedResponses;
 
-export type ActivityOrFlow = DatavizEntity & { isFlow: boolean };
+export type ActivityOrFlow = DatavizEntity & { isFlow?: boolean };
 
 export type ResponseOption = Record<string, FormattedResponses[]>;
 

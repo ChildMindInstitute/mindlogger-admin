@@ -14,11 +14,7 @@ const props = {
   onClose: mockOnClose,
   'data-testid': dataTestid,
 };
-const mockedUseNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
 
@@ -30,6 +26,7 @@ describe('ShellAccountSuccessBanner', () => {
   test('should render', () => {
     const { getByTestId, getByText } = renderWithProviders(
       <ShellAccountSuccessBanner {...props} />,
+      { route, routePath },
     );
 
     expect(getByTestId(dataTestid)).toBeInTheDocument();
@@ -40,7 +37,10 @@ describe('ShellAccountSuccessBanner', () => {
   });
 
   test('clicking the close button hides the banner', () => {
-    const { getByTitle } = renderWithProviders(<ShellAccountSuccessBanner {...props} />);
+    const { getByTitle } = renderWithProviders(<ShellAccountSuccessBanner {...props} />, {
+      route,
+      routePath,
+    });
 
     const closeButton = getByTitle('Close');
     fireEvent.click(closeButton);
@@ -56,10 +56,10 @@ describe('ShellAccountSuccessBanner', () => {
       routePath,
     });
 
-    const button = getAllByRole('button');
-    fireEvent.click(button[0]);
+    const link = getAllByRole('link');
+    expect(link[0]).toHaveAttribute('href', `/dashboard/${mockedAppletId}/respondents`);
+    fireEvent.click(link[0]);
 
-    expect(mockedUseNavigate).toBeCalledWith(`/dashboard/${mockedAppletId}/respondents`);
     expect(mockDispatch).nthCalledWith(1, {
       payload: { key: 'ShellAccountSuccessBanner' },
       type: 'banners/removeBanner',

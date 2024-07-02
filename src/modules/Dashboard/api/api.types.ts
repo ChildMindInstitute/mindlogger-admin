@@ -1,6 +1,6 @@
 import { ActivityId, AppletId } from 'shared/api';
 import { Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
@@ -15,6 +15,20 @@ export type GetAppletsParams = {
     roles?: string;
     appletId?: string;
     shell?: boolean;
+  };
+};
+
+export type GetWorkspaceRespondentsParams = GetAppletsParams & {
+  params: {
+    userId?: string;
+  };
+};
+
+export type GetActivitiesParams = {
+  params: {
+    appletId: string;
+    hasScore?: boolean;
+    hasSubmitted?: boolean;
   };
 };
 
@@ -170,6 +184,7 @@ export type EditSubject = SubjectId & {
   values: {
     secretUserId: string;
     nickname?: string;
+    tag?: ParticipantTag;
   };
 };
 
@@ -178,15 +193,17 @@ export type DeleteSubject = SubjectId & {
 };
 
 export type AppletInvitationOptions = {
-  role: string;
-  firstName: string;
-  lastName: string;
-  nickname: string;
   email: string;
-  secretUserId: string;
-  workspacePrefix: string;
-  subjects: string[];
+  firstName: string;
   language: string;
+  lastName: string;
+  nickname?: string;
+  role: string;
+  secretUserId?: string;
+  subjects?: string[];
+  tag?: string;
+  title?: string;
+  workspacePrefix?: string;
 };
 
 export type AppletInvitationData = AppletId & {
@@ -197,15 +214,17 @@ export type AppletInvitationData = AppletId & {
 export type SubjectInvitationData = AppletId &
   SubjectId & {
     email: string;
+    language?: string;
   };
 
 export type AppletShellAccountOptions = {
-  secretUserId: string;
-  firstName: string;
-  lastName: string;
-  language: string;
   email: string | null;
+  firstName: string;
+  language: string;
+  lastName: string;
   nickname?: string;
+  secretUserId: string;
+  tag?: string;
 };
 
 export type AppletShellAccountData = AppletId & {
@@ -291,6 +310,28 @@ export type SubmitId = { submitId: string };
 export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
+
+export interface GetAppletSubmissionsParams extends AppletId {
+  page?: number;
+  limit?: number;
+}
+export interface GetAppletSubmissionsResponse {
+  participantsCount?: number;
+  submissions: {
+    activityId: string;
+    activityName: string;
+    appletId: string;
+    createdAt: string;
+    sourceNickname?: string | null;
+    sourceSubjectId: string;
+    sourceSubjectTag?: ParticipantTag | null;
+    targetNickname?: string | null;
+    targetSubjectId: string;
+    targetSubjectTag?: ParticipantTag | null;
+    updatedAt: string;
+  }[];
+  submissionsCount?: number;
+}
 
 export type FlowAnswersParams = AppletId & FlowId & SubmitId;
 

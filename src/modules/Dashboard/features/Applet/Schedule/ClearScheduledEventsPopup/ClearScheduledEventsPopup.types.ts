@@ -4,7 +4,7 @@ export type ClearScheduledEventsPopupProps = {
   appletName: string;
   appletId: string;
   name?: string;
-  isDefault?: boolean;
+  userId?: string;
   'data-testid'?: string;
 };
 

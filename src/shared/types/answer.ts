@@ -77,7 +77,11 @@ export type ExportAnswer = {
   version?: string;
   activityName: string;
   subscaleSetting: SubscaleSetting | null;
-  respondentId?: string;
+  respondentId: string | null;
+  sourceSubjectId: string | null;
+  sourceSecretId: string | null;
+  targetSubjectId: string | null;
+  targetSecretId: string | null;
   respondentSecretId?: string;
   activityHistoryId: string;
   flowHistoryId: null | string;
@@ -531,7 +535,9 @@ export type JourneyCSVReturnProps = {
   press_done_time: string;
   response_option_selection_time: string;
   secret_user_id?: string;
-  user_id?: string;
+  user_id: string | null;
+  source_subject_id: string | null;
+  target_subject_id: string | null;
   activity_id: string;
   activity_flow_id: string | null;
   activity_flow_name: string | null;

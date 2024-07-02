@@ -105,5 +105,6 @@ export const getRejectedData = <T extends Record<string, BaseSchema>, K>({
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'error';
       selectedProperty.error = action.payload;
+      selectedProperty.data = initialState[key].data;
     }
   });

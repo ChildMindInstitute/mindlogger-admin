@@ -1,12 +1,13 @@
+import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ListItemIcon, MenuItem } from '@mui/material';
+import { Box, Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
 import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledMenu, StyledMenuItemContent } from './Menu.styles';
-import { MenuProps } from './Menu.types';
+import { MenuItemType, MenuProps } from './Menu.types';
 import { MenuUiType } from './Menu.const';
 
 export const Menu = <T = unknown,>({
@@ -48,6 +49,7 @@ export const Menu = <T = unknown,>({
       {menuItems.map(
         (
           {
+            type = MenuItemType.Normal,
             icon,
             title,
             isDisplayed = true,
@@ -61,36 +63,54 @@ export const Menu = <T = unknown,>({
           index,
         ) => {
           if (!isDisplayed) return null;
-          const handleMenuItemClick = () => {
-            action({ title, context });
+          const handleMenuItemClick = (event: MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+            action?.({ title, context });
             onClose();
           };
+
+          const TooltipWrapper = ({ children }: { children: JSX.Element }) =>
+            tooltip ? <Tooltip tooltipTitle={tooltip}>{children}</Tooltip> : children;
+
           const menuItemContent = (
-            <StyledMenuItemContent customItemColor={customItemColor}>
-              {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              <StyledBodyLarge
-                color={customItemColor || variables.palette.on_surface}
-                letterSpacing="xxl"
-              >
-                {t(title)}
-              </StyledBodyLarge>
-            </StyledMenuItemContent>
+            <TooltipWrapper>
+              <StyledMenuItemContent customItemColor={customItemColor}>
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                {!!title && (
+                  <StyledBodyLarge
+                    color={customItemColor || variables.palette.on_surface}
+                    letterSpacing="xxl"
+                    whiteSpace="pre-line"
+                  >
+                    {t(title)}
+                  </StyledBodyLarge>
+                )}
+              </StyledMenuItemContent>
+            </TooltipWrapper>
           );
 
-          return (
-            <MenuItem
-              key={index}
-              disabled={disabled}
-              onClick={disabled ? undefined : handleMenuItemClick}
-              data-testid={dataTestId}
-            >
-              {tooltip ? (
-                <Tooltip tooltipTitle={tooltip}>{menuItemContent}</Tooltip>
-              ) : (
-                menuItemContent
-              )}
-            </MenuItem>
-          );
+          switch (type) {
+            case MenuItemType.Normal:
+            default:
+              return (
+                <MenuItem
+                  key={index}
+                  data-testid={dataTestId}
+                  disabled={disabled}
+                  onClick={disabled ? undefined : handleMenuItemClick}
+                >
+                  {menuItemContent}
+                </MenuItem>
+              );
+            case MenuItemType.Info:
+              return (
+                <Box data-testid={dataTestId} key={index} sx={{ px: 1.6, py: 0.8 }}>
+                  {menuItemContent}
+                </Box>
+              );
+            case MenuItemType.Divider:
+              return <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />;
+          }
         },
       )}
     </StyledMenu>

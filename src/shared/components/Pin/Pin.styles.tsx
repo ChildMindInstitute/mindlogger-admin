@@ -14,11 +14,13 @@ export const StyledPinButton = styled(Button, shouldForwardProp)`
     background-color: ${variables.palette.on_surface_variant_alfa12};
   }
 
-  :hover {
+  :hover,
+  :focus {
     background: ${variables.palette.on_surface_variant_alfa8};
 
     svg {
-      fill: ${variables.palette.on_surface_variant};
+      fill: ${({ isPinned = false }: { isPinned?: boolean }) =>
+        isPinned ? variables.palette.on_surface_variant : variables.palette.outline_variant};
     }
   }
 

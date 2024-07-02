@@ -22,8 +22,3 @@ export type AddUserFormProps = {
   getInvitationsHandler: () => void;
   roles?: Roles[];
 };
-
-export type WorkspaceInfo = {
-  hasManagers: boolean;
-  name: string;
-};

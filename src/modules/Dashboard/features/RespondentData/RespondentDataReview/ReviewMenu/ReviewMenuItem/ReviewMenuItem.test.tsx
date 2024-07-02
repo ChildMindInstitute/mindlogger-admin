@@ -11,9 +11,9 @@ import { ReviewMenuItem } from './ReviewMenuItem';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
 
 const preselectedAnswerId = 'answer-id-3';
-const routeWithAnswerId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?answerId=${preselectedAnswerId}`;
-const routeWithoutAnswerId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`;
-const routePath = page.appletRespondentDataReview;
+const routeWithAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?answerId=${preselectedAnswerId}`;
+const routeWithoutAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`;
+const routePath = page.appletParticipantDataReview;
 const preselectedAnswer = {
   createdAt: '2023-12-15T22:20:30.150182',
   endDatetime: '2023-12-15T22:20:30.150182',

@@ -10,6 +10,7 @@ import { page } from 'resources';
 import * as reduxHooks from 'redux/store/hooks';
 import { initialStateData } from 'shared/state';
 import { Periodicity } from 'modules/Dashboard/api';
+import * as scheduleProviderHooks from 'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks';
 
 import { dataTestId } from './Calendar.const';
 import { Calendar } from './Calendar';
@@ -59,9 +60,26 @@ const preloadedState = {
 
 describe('Calendar Component', () => {
   const mockDispatch = jest.fn();
+  const clickEditEventMock = jest.fn();
+  const clickCreateEventMock = jest.fn();
+
   jest.mock('redux/store/hooks', () => ({
     useAppDispatch: jest.fn(),
   }));
+
+  jest.mock(
+    'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
+    () => ({
+      useSchedule: jest.fn(),
+    }),
+  );
+
+  beforeEach(() => {
+    jest.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
+      onClickCreateEvent: clickCreateEventMock,
+      onClickEditEvent: clickEditEventMock,
+    });
+  });
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -97,8 +115,7 @@ describe('Calendar Component', () => {
     expect(addButton).toBeInTheDocument();
     fireEvent.click(addButton);
 
-    const createEventPopup = getByTestId(`${dataTestId}-create-event-popup`);
-    expect(createEventPopup).toBeInTheDocument();
+    expect(clickCreateEventMock).toBeCalled();
   });
 
   test('changes view on toolbar view button click', () => {
@@ -128,7 +145,7 @@ describe('Calendar Component', () => {
   });
 
   test('opens edit event popup on event click', async () => {
-    const { container, findByTestId } = renderWithProviders(
+    const { container } = renderWithProviders(
       <Suspense fallback={<></>}>
         <Calendar />
       </Suspense>,
@@ -146,8 +163,7 @@ describe('Calendar Component', () => {
       fireEvent.click(eventElement);
     });
 
-    const editEventPopup = await findByTestId(`${dataTestId}-edit-event-popup`);
-    expect(editEventPopup).toBeInTheDocument();
+    expect(clickEditEventMock).toBeCalled();
   });
 
   test('should dispatch setCalendarCurrentYear', async () => {

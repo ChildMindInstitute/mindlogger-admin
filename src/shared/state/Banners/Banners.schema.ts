@@ -9,6 +9,7 @@ export enum BannerType {
   VersionWarningBanner,
   PasswordResetSuccessfulBanner,
   ShellAccountSuccessBanner,
+  AddParticipantSuccessBanner,
 }
 
 export type BannerPayload = {

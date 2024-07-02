@@ -4,7 +4,7 @@ import { createArray } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DashboardTable } from './DashboardTable';
-import { DashboardTableProps } from './DashboardTable.types';
+import { DashboardTablePropsWithPagination } from './DashboardTable.types';
 
 const mockColumns = [
   {
@@ -23,6 +23,11 @@ const actionsContentFn = jest.fn();
 
 const getMockRows = (arrayLength = 15) =>
   createArray(arrayLength, (index) => ({
+    id: {
+      content: () => `id-should-be-hidden-${index}`,
+      value: `${index}`,
+      isHidden: true,
+    },
     firstName: {
       content: () => `John${index}`,
       value: `john-${index}`,
@@ -41,7 +46,7 @@ const mockSortFn = jest.fn();
 const mockChangePageFn = jest.fn();
 const mockDataTestId = 'mockDataTestId';
 
-const getTable = (props: Partial<DashboardTableProps> = {}) => (
+const getTable = (props?: Partial<DashboardTablePropsWithPagination>) => (
   <DashboardTable
     columns={mockColumns}
     order="asc"
@@ -62,6 +67,26 @@ describe('DashboardTable component tests', () => {
     jest.clearAllMocks();
   });
 
+  describe('When `enablePagination` is `false`', () => {
+    beforeEach(() => {
+      renderWithProviders(
+        <DashboardTable
+          data-testid={mockDataTestId}
+          columns={mockColumns}
+          rows={getMockRows()}
+          enablePagination={false}
+          handleRequestSort={() => {}}
+          order="desc"
+          orderBy=""
+        />,
+      );
+    });
+
+    test('should render without pagination controls', () => {
+      expect(screen.queryByTestId(`${mockDataTestId}-table-pagination`)).not.toBeInTheDocument();
+    });
+  });
+
   test('should render empty component for empty table', () => {
     const EmptyComponent = <>empty component</>;
     renderWithProviders(
@@ -71,7 +96,7 @@ describe('DashboardTable component tests', () => {
     expect(screen.getByText('empty component')).toBeInTheDocument();
   });
 
-  test('should render table with rows', () => {
+  test('should render table with rows with only visible columns', () => {
     renderWithProviders(getTable());
 
     const columns = ['First Name', 'Last Name'];
@@ -80,6 +105,7 @@ describe('DashboardTable component tests', () => {
     expect(screen.getByTestId(mockDataTestId)).toBeInTheDocument();
     columns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     row.forEach((rowItem) => expect(screen.getByText(rowItem)).toBeInTheDocument());
+    expect(screen.queryByText('id-should-be-hidden-1')).not.toBeInTheDocument();
   });
 
   test('should request table sort', () => {

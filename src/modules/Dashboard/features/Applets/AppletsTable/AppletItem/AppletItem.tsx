@@ -14,6 +14,7 @@ import {
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   Encryption,
   falseReturnFunc,
@@ -44,6 +45,14 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { id: accountId } = userData?.user || {};
   const workspaceRoles = workspaces.useRolesData();
   const appletId = item.id;
+  const {
+    featureFlags: { enableMultiInformant },
+  } = useFeatureFlags();
+  const participantPath = generatePath(
+    enableMultiInformant ? page.appletOverview : page.appletRespondents,
+    { appletId },
+  );
+
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const encryptionDataRef = useRef<{
     encryption?: Encryption;
@@ -72,11 +81,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
-  const [hasVisibleActions, setHasVisibleActions] = useState(false);
+  const [_, setHasVisibleActions] = useState(false);
 
-  const APPLET_RESPONDENTS = generatePath(page.appletRespondents, {
-    appletId,
-  });
   const APPLET_SCHEDULE = generatePath(page.appletSchedule, {
     appletId,
   });
@@ -92,7 +98,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     await fetchData();
   };
 
-  const handleAppletClick = () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS));
+  const handleAppletClick = () => checkAppletEncryption(() => navigate(participantPath));
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
@@ -127,7 +133,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       await setFolder({ appletId });
       await fetchData();
     },
-    viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
+    viewUsers: () => checkAppletEncryption(() => navigate(participantPath)),
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);

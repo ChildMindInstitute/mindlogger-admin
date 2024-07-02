@@ -16,7 +16,7 @@ import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
 import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
 
 export const useDatavizSummaryRequests = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const { setIdentifiers, setApiVersions } = useRespondentDataContext();
@@ -39,14 +39,14 @@ export const useDatavizSummaryRequests = () => {
 
   const getIdentifiersVersions = async ({ entity }: GetIdentifiersVersions) => {
     try {
-      if (!appletId || !respondentId || !entity?.hasAnswer) return;
+      if (!appletId || !subjectId || !entity?.hasAnswer) return;
 
       if (entity.isFlow) {
         const flowId = entity.id;
         const identifiers = await getFlowIdentifiersApi({
           appletId,
           flowId,
-          targetSubjectId: respondentId,
+          targetSubjectId: subjectId,
         });
         await setDecryptedIdentifiers(identifiers.data.result);
 
@@ -62,7 +62,7 @@ export const useDatavizSummaryRequests = () => {
       const identifiers = await getActivityIdentifiersApi({
         appletId,
         activityId,
-        targetSubjectId: respondentId,
+        targetSubjectId: subjectId,
       });
       await setDecryptedIdentifiers(identifiers.data.result);
 

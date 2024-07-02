@@ -56,7 +56,7 @@ describe('useRespondentLabel', () => {
     users.useSubject = jest.fn().mockReturnValue({ result: res });
     users.useRespondent = jest.fn().mockReturnValue({ details: undefined });
 
-    const { result } = renderHook(() => useRespondentLabel(true));
+    const { result } = renderHook(() => useRespondentLabel({ isSubject: true }));
 
     expect(result.current).toBe('Respondent: subject123');
   });

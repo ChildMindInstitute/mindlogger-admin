@@ -11,6 +11,11 @@ export const StyledFlexTopCenter = styled(Box)`
   align-items: center;
 `;
 
+export const StyledFlexTopBaseline = styled(Box)`
+  display: flex;
+  align-items: baseline;
+`;
+
 export const StyledFlexTopStart = styled(Box)`
   display: flex;
   align-items: flex-start;
@@ -29,4 +34,9 @@ export const StyledFlexColumn = styled(Box)`
 export const StyledFlexSpaceBetween = styled(Box)`
   display: flex;
   justify-content: space-between;
+`;
+
+export const StyledFlexEnd = styled(Box)`
+  display: flex;
+  justify-content: flex-end;
 `;

@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { generatePath, useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Trans, useTranslation } from 'react-i18next';
@@ -25,7 +25,8 @@ import { users, workspaces, banners } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { page } from 'resources';
+import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
+import { WorkspaceInfo } from 'modules/Dashboard/types';
 
 import { showAddWithoutInvitation } from '../AddUser';
 import { StyledRow, StyledTooltip, StyledLinkBtn, StyledGridContainer } from './AddUserForm.styles';
@@ -40,14 +41,14 @@ import {
   EMAIL_IN_USE,
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
+import { AddUserFormProps, AddUserFormValues } from './AddUserForm.types';
 import { getUrl, getRoles } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
+  const participantPath = useMultiInformantParticipantPath({ appletId });
 
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   const [hasCommonError, setHasCommonError] = useState(false);
@@ -166,13 +167,13 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     }
   };
 
-  const handleRedirectClick = () => navigate(generatePath(page.appletRespondents, { appletId }));
-
   const emailInUse = (
     <Trans i18nKey="emailAlreadyInUse">
       That email is
-      <StyledLinkBtn onClick={handleRedirectClick}>already in use</StyledLinkBtn>. Please enter
-      another one.
+      <StyledLinkBtn component={Link} to={participantPath}>
+        already in use
+      </StyledLinkBtn>
+      . Please enter another one.
     </Trans>
   );
 
@@ -278,12 +279,10 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               <TagsAutocompleteController
                 {...commonProps}
                 name={Fields.respondents}
-                options={respondents}
-                label={t('respondents')}
+                options={respondents ?? []}
+                textFieldProps={{ label: t('respondents') }}
                 labelAllSelect={t('all')}
-                noOptionsText={
-                  respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
-                }
+                noOptionsText={respondents ? t('noRespondentsToSelect') : t('noRespondentsYet')}
                 data-testid={`${dataTestId}-respondents`}
               />
             </Grid>

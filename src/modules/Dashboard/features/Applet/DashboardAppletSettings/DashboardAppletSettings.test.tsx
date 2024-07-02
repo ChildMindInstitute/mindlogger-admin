@@ -29,7 +29,9 @@ describe('DashboardAppletSettings component tests', () => {
       routePath,
     });
 
-    expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+    expect(
+      screen.getByText('You do not have permission to view this content.'),
+    ).toBeInTheDocument();
   });
 
   describe('should render no permission for', () => {
@@ -45,7 +47,9 @@ describe('DashboardAppletSettings component tests', () => {
         routePath,
       });
 
-      expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+      expect(
+        screen.getByText('You do not have permission to view this content.'),
+      ).toBeInTheDocument();
     });
   });
 });

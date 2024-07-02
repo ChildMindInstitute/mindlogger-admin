@@ -1,4 +1,4 @@
-import { StabilityTrackerPhaseType } from 'shared/types';
+import { DecryptedAnswerData, StabilityTrackerPhaseType } from 'shared/types';
 import { mockedExportContextItemData, mockedSingleActivityItem } from 'shared/mock';
 
 import { getFlankerCsvName } from './getReportName';
@@ -40,29 +40,39 @@ describe('getReportName', () => {
   });
   describe('getStabilityTrackerCsvName', () => {
     test.each`
-      id                                        | phaseType                              | expected                                                      | description
-      ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${StabilityTrackerPhaseType.Challenge} | ${'5bc795cf-7eea-4042-9c48-f83435f66639_challenge-phase.csv'} | ${'should return csv file name'}
-      ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${''}                                  | ${'5bc795cf-7eea-4042-9c48-f83435f66639_.csv'}                | ${'should return csv file with empty phaseType'}
-      ${''}                                     | ${StabilityTrackerPhaseType.Focus}     | ${'_focus-phase.csv'}                                         | ${'should return csv file with empty id'}
+      id                                        | phaseType                              | expected                                                                       | description
+      ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${StabilityTrackerPhaseType.Challenge} | ${'target-secret-id_5bc795cf-7eea-4042-9c48-f83435f66639_challenge-phase.csv'} | ${'should return csv file name'}
+      ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${''}                                  | ${'target-secret-id_5bc795cf-7eea-4042-9c48-f83435f66639_.csv'}                | ${'should return csv file with empty phaseType'}
+      ${''}                                     | ${StabilityTrackerPhaseType.Focus}     | ${'target-secret-id__focus-phase.csv'}                                         | ${'should return csv file with empty id'}
     `('$description', ({ id, phaseType, expected }) => {
-      expect(getStabilityTrackerCsvName(id, phaseType)).toBe(expected);
+      expect(
+        getStabilityTrackerCsvName(
+          { id, targetSecretId: 'target-secret-id' } as DecryptedAnswerData,
+          phaseType,
+        ),
+      ).toBe(expected);
     });
   });
   describe('getABTrailsCsvName', () => {
     test.each`
-      index | id                                        | expected                                             | description
-      ${0}  | ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${'5bc795cf-7eea-4042-9c48-f83435f66639-trail1.csv'} | ${'should return csv file name'}
-      ${1}  | ${''}                                     | ${'-trail2.csv'}                                     | ${'should return csv file with empty id'}
-      ${2}  | ${undefined}                              | ${'-trail3.csv'}                                     | ${'should return csv file with id=undefined'}
+      index | id                                        | expected                                                              | description
+      ${0}  | ${'5bc795cf-7eea-4042-9c48-f83435f66639'} | ${'target-secret-id-5bc795cf-7eea-4042-9c48-f83435f66639-trail1.csv'} | ${'should return csv file name'}
+      ${1}  | ${''}                                     | ${'target-secret-id--trail2.csv'}                                     | ${'should return csv file with empty id'}
+      ${2}  | ${undefined}                              | ${'target-secret-id--trail3.csv'}                                     | ${'should return csv file with id=undefined'}
     `('$description', ({ index, id, expected }) => {
-      expect(getABTrailsCsvName(index, id)).toBe(expected);
+      expect(
+        getABTrailsCsvName(index, {
+          id,
+          targetSecretId: 'target-secret-id',
+        } as DecryptedAnswerData),
+      ).toBe(expected);
     });
   });
   describe('getMediaFileName', () => {
     const expectedString =
-      '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-single_text_score.mp4';
+      'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-single_text_score.mp4';
     const expectedStringWithoutExtension =
-      '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-single_text_score.';
+      'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-single_text_score.';
     test.each`
       item          | extension | expected                          | description
       ${singleItem} | ${'mp4'}  | ${expectedString}                 | ${'should return media file name'}
@@ -90,8 +100,8 @@ describe('getReportName', () => {
   });
   describe('getFlankerCsvName', () => {
     test.each`
-      item          | expected                                                        | description
-      ${singleItem} | ${'949f248c-1a4b-4a35-a5a2-898dfef72050-single_text_score.csv'} | ${'should return csv file name'}
+      item          | expected                                                                         | description
+      ${singleItem} | ${'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-single_text_score.csv'} | ${'should return csv file name'}
     `('$description', ({ item, expected }) => {
       expect(getFlankerCsvName(item)).toBe(expected);
     });

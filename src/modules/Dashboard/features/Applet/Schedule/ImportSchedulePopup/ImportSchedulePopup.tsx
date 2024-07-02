@@ -32,6 +32,7 @@ import { prepareImportPayload } from './ImportSchedulePopup.utils';
 export const ImportSchedulePopup = ({
   isIndividual = false,
   appletName,
+  respondentId,
   respondentName,
   open,
   onClose,
@@ -40,7 +41,7 @@ export const ImportSchedulePopup = ({
   'data-testid': dataTestid,
 }: ImportSchedulePopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId, respondentId } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
   const getEvents = () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId }));

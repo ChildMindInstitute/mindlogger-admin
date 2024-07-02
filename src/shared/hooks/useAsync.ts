@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { ApiErrorResponse } from 'shared/state/Base';
@@ -11,6 +11,8 @@ export const useAsync = <T, K>(
   dependencies?: unknown[],
 ) => {
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
+  const refValue = useRef<AxiosResponse<K> | null>(null);
+  const refPrevValue = useRef(refValue.current);
   const [error, setError] = useState<AxiosError<ApiErrorResponse> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const deps = dependencies ?? [];
@@ -19,6 +21,10 @@ export const useAsync = <T, K>(
     (body: T) => {
       setIsLoading(true);
 
+      if (refValue.current !== null) {
+        refPrevValue.current = refValue.current;
+      }
+
       setValue(null);
       setError(null);
 
@@ -26,6 +32,7 @@ export const useAsync = <T, K>(
         ?.then((response) => {
           setValue(response);
           callback?.(response);
+          refValue.current = response;
 
           return response;
         })
@@ -43,5 +50,12 @@ export const useAsync = <T, K>(
     [asyncFunction, ...deps],
   );
 
-  return { execute, value, error, isLoading, setError };
+  return {
+    execute,
+    previousValue: refPrevValue.current,
+    value,
+    error,
+    isLoading,
+    setError,
+  };
 };

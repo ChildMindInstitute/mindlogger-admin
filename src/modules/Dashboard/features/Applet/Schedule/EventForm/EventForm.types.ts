@@ -25,6 +25,7 @@ export type EventFormProps = {
   editedEvent?: CalendarEvent;
   onFormChange?: (isChanged: boolean) => void;
   'data-testid'?: string;
+  userId?: string;
 };
 
 export type Warning = {

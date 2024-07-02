@@ -4,6 +4,7 @@ export const font = {
     xxl: '2.4rem', //24px
     xl: '2.2rem', //22px
     lrg: '2rem', //20px
+    lg2: '1.8rem', //18px
     lg: '1.6rem', //16px
     md: '1.4rem', //14px
     sm: '1.2rem', //12px

@@ -17,7 +17,8 @@ import { ReportContent } from './ReportContent';
 import { useRespondentDataContext } from '../RespondentDataContext';
 
 export const RespondentDataSummary = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
+  const viewSingleActivity = !!activityId;
   const {
     summaryActivities,
     setSummaryActivities,
@@ -27,13 +28,13 @@ export const RespondentDataSummary = () => {
     setSelectedEntity,
   } = useRespondentDataContext();
   const requestBody = useMemo(() => {
-    if (!appletId || !respondentId) return null;
+    if (!appletId || !subjectId) return null;
 
     return {
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
     };
-  }, [appletId, respondentId]);
+  }, [appletId, subjectId]);
   const [isLoading, setIsLoading] = useState(false);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const { getIdentifiersVersions } = useDatavizSummaryRequests();
@@ -73,9 +74,11 @@ export const RespondentDataSummary = () => {
         flows: summaryFlows,
       });
 
-      const selectedEntityByDefault = {
-        ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
-      };
+      const selectedEntityByDefault = viewSingleActivity
+        ? summaryActivities?.find((e) => e.id === activityId)
+        : {
+            ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
+          };
 
       if (!selectedEntityByDefault) return;
 
@@ -94,13 +97,15 @@ export const RespondentDataSummary = () => {
     <StyledContainer>
       {(!!summaryActivitiesLength || !!summaryFlowsLength) && (
         <>
-          <ReportMenu
-            activities={summaryActivities}
-            flows={summaryFlows}
-            getIdentifiersVersions={getIdentifiersVersions}
-            fetchAnswers={fetchAnswers}
-            setIsLoading={setIsLoading}
-          />
+          {!viewSingleActivity && (
+            <ReportMenu
+              activities={summaryActivities}
+              flows={summaryFlows}
+              getIdentifiersVersions={getIdentifiersVersions}
+              fetchAnswers={fetchAnswers}
+              setIsLoading={setIsLoading}
+            />
+          )}
           <StyledReportContainer>
             <ReportContent selectedEntity={selectedEntity} isLoading={isLoading} />
           </StyledReportContainer>

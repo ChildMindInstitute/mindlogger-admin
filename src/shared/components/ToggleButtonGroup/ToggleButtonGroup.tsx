@@ -1,14 +1,15 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
+import { StyledBodyLarge, StyledHeadline } from 'shared/styles';
 
-import { StyledIcon, StyledToggleBtn } from './ToggleButtonGroup.styles';
-import { ToggleButtonGroupProps } from './ToggleButtonGroup.types';
+import { StyledIcon, StyledToggleBtn, StyledToggleButtonGroup } from './ToggleButtonGroup.styles';
+import { ToggleButtonGroupProps, ToggleButtonVariants } from './ToggleButtonGroup.types';
 
 export const ToggleButtonGroup = ({
+  variant = ToggleButtonVariants.Default,
   toggleButtons,
   activeButton,
   setActiveButton,
@@ -24,33 +25,44 @@ export const ToggleButtonGroup = ({
     }
   };
 
+  const isDefaultVariant = variant === ToggleButtonVariants.Default;
+
   return (
-    <MuiToggleButtonGroup
+    <StyledToggleButtonGroup
       fullWidth
       value={activeButton}
       exclusive
       onChange={handleChange}
+      variant={variant}
       data-testid={dataTestid}
     >
-      {toggleButtons.map(({ value, label, tooltip, icon }, index) => (
+      {toggleButtons.map(({ value, label, tooltip, description, icon }, index) => (
         <StyledToggleBtn
-          sx={{ flex: `0 0 calc(100% / ${toggleButtons.length})` }}
+          sx={{
+            flex: isDefaultVariant ? `0 0 calc(100% / ${toggleButtons.length})` : '1',
+          }}
           withIcon={!!icon}
           key={value}
           value={value}
+          variant={variant}
           data-testid={`${dataTestid}-${index}`}
         >
           {activeButton === value && !icon && (
-            <StyledIcon>
+            <StyledIcon variant={variant}>
               <Svg id="check" />
             </StyledIcon>
           )}
-          {icon && <StyledIcon>{icon}</StyledIcon>}
+          {icon && <StyledIcon variant={variant}>{icon}</StyledIcon>}
           <Tooltip tooltipTitle={t(tooltip || '')}>
-            <span> {t(label)}</span>
+            {isDefaultVariant ? (
+              <span> {t(label)}</span>
+            ) : (
+              <StyledHeadline>{t(label)}</StyledHeadline>
+            )}
           </Tooltip>
+          {!isDefaultVariant && <StyledBodyLarge>{description}</StyledBodyLarge>}
         </StyledToggleBtn>
       ))}
-    </MuiToggleButtonGroup>
+    </StyledToggleButtonGroup>
   );
 };

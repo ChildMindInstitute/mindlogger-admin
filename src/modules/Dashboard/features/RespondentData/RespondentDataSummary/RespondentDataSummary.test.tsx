@@ -14,8 +14,8 @@ import { RespondentDataSummary } from './RespondentDataSummary';
 import { RespondentDataContext } from '../RespondentDataContext/RespondentDataContext.context';
 import { RespondentDataContextType } from '../RespondentDataContext/RespondentDataContext.types';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
-const routePath = page.appletRespondentDataSummary;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/dataviz/summary`;
+const routePath = page.appletParticipantDataSummary;
 const mockedSetValue = jest.fn();
 
 const mockedSelectedActivity = {
@@ -70,7 +70,7 @@ jest.mock('modules/Dashboard/hooks', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ respondentId: mockedSubjectId1, appletId: mockedAppletId }),
+  useParams: () => ({ subjectId: mockedSubjectId1, appletId: mockedAppletId }),
 }));
 
 jest.mock('./ReportMenu', () => ({

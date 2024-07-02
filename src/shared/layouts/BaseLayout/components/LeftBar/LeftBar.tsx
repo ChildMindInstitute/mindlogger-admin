@@ -43,7 +43,7 @@ export const LeftBar = () => {
 
       if (!currentWorkspace) return;
 
-      FeatureFlags.updateWorkspace(currentWorkspace?.ownerId);
+      FeatureFlags.updateWorkspaces([currentWorkspace?.ownerId]);
     }
   }, [workspacesData]);
 
@@ -56,7 +56,7 @@ export const LeftBar = () => {
 
       if (!workspace) return;
 
-      FeatureFlags.updateWorkspace(workspace?.ownerId);
+      FeatureFlags.updateWorkspaces([workspace?.ownerId]);
     }
   }, [location.state]);
 

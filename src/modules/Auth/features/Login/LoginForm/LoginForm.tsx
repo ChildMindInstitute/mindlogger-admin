@@ -39,7 +39,6 @@ export const LoginForm = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');
     const { signIn } = auth.thunk;

@@ -2,6 +2,7 @@ export type Order = 'asc' | 'desc';
 
 export type Cell = {
   align?: 'center' | 'inherit' | 'justify' | 'left' | 'right';
+  maxWidth?: string;
   width?: string;
 };
 

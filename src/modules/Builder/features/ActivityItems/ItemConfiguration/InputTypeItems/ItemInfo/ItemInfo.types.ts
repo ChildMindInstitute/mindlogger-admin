@@ -1,4 +1,6 @@
+import { Icons } from 'svgSprite';
+
 export type ItemInfoProps = {
-  svgId: string;
+  svgId: Icons;
   textKey: string;
 };

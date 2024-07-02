@@ -1,50 +1,62 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { AddIndividualSchedulePopup } from './AddIndividualSchedulePopup';
 
 const onCloseMock = jest.fn();
-const onSubmitMock = jest.fn();
 const dataTestid = 'add-individual-schedule-popup';
+const testAppletId = 'test-applet-id';
+const testUserId = 'test-user-id';
 
 const basicProps = {
-  open: true,
-  onClose: onCloseMock,
-  onSubmit: onSubmitMock,
   'data-testid': dataTestid,
-  respondentName: 'John Doe',
-  error: null,
-  isLoading: false,
+  appletId: testAppletId,
+  onClose: onCloseMock,
+  open: true,
+  userId: testUserId,
+  userName: 'John Doe',
 };
 
 describe('AddIndividualSchedulePopup', () => {
-  test('should render', () => {
+  beforeEach(() => {
     renderWithProviders(<AddIndividualSchedulePopup {...basicProps} />);
+  });
 
+  test('should render', () => {
     expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
   });
 
-  test('should show spinner', () => {
-    renderWithProviders(<AddIndividualSchedulePopup {...basicProps} isLoading={true} />);
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  describe('When pressing cancel', () => {
+    test('Should call onClose', () => {
+      fireEvent.click(screen.getByText('Cancel'));
+      expect(onCloseMock).toBeCalled();
+    });
   });
 
-  test('should show error', () => {
-    const error = 'Something is wrong';
-    renderWithProviders(<AddIndividualSchedulePopup {...basicProps} error={error} />);
+  describe('When pressing Confirm', () => {
+    beforeEach(() => {
+      mockAxios.post.mockResolvedValueOnce(null);
+    });
 
-    expect(screen.getByText(error)).toBeInTheDocument();
-  });
+    test('Should call the appropriate endpoint', () => {
+      fireEvent.click(screen.getByText('Confirm'));
 
-  test('should call onSubmit and onClose', () => {
-    renderWithProviders(<AddIndividualSchedulePopup {...basicProps} />);
+      expect(mockAxios.post).toBeCalledWith(
+        `/applets/${testAppletId}/events/individual/${testUserId}`,
+        {},
+        { signal: undefined },
+      );
+    });
 
-    fireEvent.click(screen.getByText('Confirm'));
-    expect(onSubmitMock).toBeCalled();
+    test('Renders the appropriate content', async () => {
+      fireEvent.click(screen.getByText('Confirm'));
 
-    fireEvent.click(screen.getByText('Cancel'));
-    expect(onCloseMock).toBeCalled();
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+        expect(onCloseMock).toBeCalled();
+      });
+    });
   });
 });

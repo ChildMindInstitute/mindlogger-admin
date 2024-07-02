@@ -11,15 +11,17 @@ import { exportTemplate } from '../exportTemplate';
 import { exportCsvZip } from './exportCsvZip';
 import { exportMediaZip } from './exportMediaZip';
 import { getReportZipName, ZipFile } from './getReportName';
-import { prepareData } from './prepareData';
+import { ExportDataFilters, prepareData } from './prepareData';
 
 export const exportDataSucceed =
   ({
     getDecryptedAnswers,
     suffix,
+    filters,
   }: {
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
     suffix: string;
+    filters?: ExportDataFilters;
   }) =>
   async (result: ExportDataResult) => {
     if (!result) return;
@@ -32,7 +34,7 @@ export const exportDataSucceed =
       stabilityTrackerItemsData,
       abTrailsItemsData,
       flankerItemsData,
-    } = await prepareData(result, getDecryptedAnswers);
+    } = await prepareData(result, getDecryptedAnswers, filters);
 
     await exportTemplate({
       data: reportData,

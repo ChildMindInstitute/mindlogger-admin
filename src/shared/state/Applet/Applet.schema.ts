@@ -38,7 +38,7 @@ export type ActivityFlow = {
   isSingleReport?: boolean;
   hideBadge?: boolean;
   order?: number;
-  activityIds?: number[];
+  activityIds?: string[];
   items?: ActivityFlowItem[];
   isHidden?: boolean;
   createdAt?: string;
@@ -677,7 +677,7 @@ export type Activity = {
   scoresAndReports?: ScoresAndReports;
   subscaleSetting?: SubscaleSetting | null;
   isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskType;
+  performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
 };

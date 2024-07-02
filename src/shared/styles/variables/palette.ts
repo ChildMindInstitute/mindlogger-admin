@@ -1,6 +1,8 @@
 export const palette = {
   primary: '#00639a',
   primary50: '#207cbb',
+  primary80: '#96ccff',
+  primary95: '#e8f2ff',
   primary_container: '#cee5ff',
   secondary: '#51606f',
   secondary60: '#8392a3',
@@ -14,6 +16,7 @@ export const palette = {
   on_surface_variant: '#42474e',
   outline: '#72777f',
   outline_variant: '#c4c9d0',
+  outline_variant2: '#c2c7cF',
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
@@ -38,9 +41,13 @@ export const palette = {
   contained_btn_focus: '#1f79ab',
   disabled: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',
+  light_alfa12: 'rgba(255, 255, 255, 0.12)',
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
   white_alfa50: 'rgb(255 255 255 / 50%)',
   dark_error_container: '#93000a',
+  neutral60: '#909194',
+  neutral90: '#e2e2e5',
+  yellow_light: '#f5e6b3',
 
   black: '#000',
   white: '#fff',
@@ -71,4 +78,4 @@ export const palette = {
   },
 };
 
-export const modalBackground = palette.surface1;
+export const modalBackground = palette.surface;

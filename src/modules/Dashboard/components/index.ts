@@ -1,3 +1,6 @@
 export * from './Accordion';
-export * from './DashboardTable';
+export * from './ActivitySummaryCard';
 export * from './Banners';
+export * from './DashboardTable';
+export * from './ParticipantSnippet';
+export * from './ParticipantTagChip';

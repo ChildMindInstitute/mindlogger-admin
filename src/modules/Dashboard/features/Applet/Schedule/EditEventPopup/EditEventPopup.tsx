@@ -1,4 +1,5 @@
-import { forwardRef, RefObject, useRef, useState, useImperativeHandle } from 'react';
+import { Button } from '@mui/material';
+import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -9,207 +10,189 @@ import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { StyledFlexSpaceBetween } from 'shared/styles';
 
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
-import { StyledButton, StyledContainer } from './EditEventPopup.styles';
 import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 
-export const EditEventPopup = forwardRef(
-  (
-    {
-      open,
-      editedEvent,
-      setEditEventPopupVisible,
-      defaultStartDate,
-      setSaveChangesPopupVisible,
-    }: EditEventPopupProps,
-    ref,
-  ) => {
-    const { t } = useTranslation('app');
-    const eventFormRef = useRef() as RefObject<EventFormRef>;
-    const [removeSingleScheduledPopupVisible, setRemoveSingleScheduledPopupVisible] =
-      useState(false);
-    const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
-    const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] =
-      useState(false);
-    const [currentActivityName, setCurrentActivityName] = useState('');
-    const [isFormChanged, setIsFormChanged] = useState(false);
-    const [isClosable, setIsClosable] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const { appletId, respondentId } = useParams();
-    const dispatch = useAppDispatch();
-    const dataTestid = 'dashboard-calendar-edit-event';
+export const EditEventPopup = ({
+  open,
+  editedEvent,
+  setEditEventPopupVisible,
+  defaultStartDate,
+  userId,
+}: EditEventPopupProps) => {
+  const { t } = useTranslation('app');
+  const eventFormRef = useRef() as RefObject<EventFormRef>;
+  const [removeSingleScheduledPopupVisible, setRemoveSingleScheduledPopupVisible] = useState(false);
+  const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
+  const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
+  const [currentActivityName, setCurrentActivityName] = useState('');
+  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [isClosable, setIsClosable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { appletId } = useParams();
+  const dispatch = useAppDispatch();
+  const dataTestid = 'dashboard-calendar-edit-event';
 
-    const isIndividualCalendar = !!respondentId;
-    const analyticsPrefix = isIndividualCalendar
-      ? AnalyticsCalendarPrefix.IndividualCalendar
-      : AnalyticsCalendarPrefix.GeneralCalendar;
+  const isIndividualCalendar = !!userId;
+  const analyticsPrefix = isIndividualCalendar
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
-    const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
-      deleteEventApi,
-      () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
-    );
+  const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
+    deleteEventApi,
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
+  );
 
-    const handleFormChanged = (isChanged: boolean) => {
-      setIsFormChanged(isChanged);
-    };
+  const handleFormChanged = (isChanged: boolean) => {
+    setIsFormChanged(isChanged);
+  };
 
-    const handleFormIsLoading = (isLoading: boolean) => {
-      setIsLoading(isLoading);
-    };
+  const handleFormIsLoading = (isLoading: boolean) => {
+    setIsLoading(isLoading);
+  };
 
-    const onSubmit = () => {
-      if (eventFormRef?.current) {
-        eventFormRef.current.submitForm();
-      }
+  const onSubmit = () => {
+    if (eventFormRef?.current) {
+      eventFormRef.current.submitForm();
+    }
 
-      Mixpanel.track(`${analyticsPrefix} Schedule save click`);
-    };
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
+  };
 
-    const saveForm = () => {
-      onSubmit();
-    };
+  const handleRemoveEvent = async () => {
+    if (!appletId) return;
+    await removeEvent({ appletId, eventId: editedEvent.eventId });
+    setRemoveSingleScheduledPopupVisible(false);
+  };
 
-    useImperativeHandle(ref, () => ({
-      saveForm,
-    }));
+  const handleEditEventClose = () => {
+    if (!isClosable) return;
 
-    const handleRemoveEvent = async () => {
-      if (!appletId) return;
-      await removeEvent({ appletId, eventId: editedEvent.eventId });
-      setRemoveSingleScheduledPopupVisible(false);
-    };
+    setEditEventPopupVisible(false);
+    setIsClosable(false);
+  };
 
-    const handleEditEventClose = (showSaveChangesPopup = false) => {
-      if (!isClosable) return;
+  const handleTransitionEntered = () => setIsClosable(true);
 
-      if (showSaveChangesPopup && isFormChanged) {
-        return setSaveChangesPopupVisible(true);
-      }
+  const onRemoveEventClick = () => {
+    setRemoveSingleScheduledPopupVisible(true);
+    handleEditEventClose();
+  };
 
-      setEditEventPopupVisible(false);
-      setIsClosable(false);
-    };
+  const onRemoveScheduledEventClose = () => {
+    setRemoveSingleScheduledPopupVisible(false);
+    setEditEventPopupVisible(true);
+  };
 
-    const handleTransitionEntered = () => setIsClosable(true);
+  const handleRemoveAlwaysAvailableClose = () => {
+    setRemoveAlwaysAvailablePopupVisible(false);
+    setEditEventPopupVisible(true);
+  };
 
-    const onRemoveEventClick = () => {
-      setRemoveSingleScheduledPopupVisible(true);
-      handleEditEventClose();
-    };
+  const handleRemoveAllScheduledClose = () => {
+    setRemoveAllScheduledPopupVisible(false);
+    setEditEventPopupVisible(true);
+  };
 
-    const onRemoveScheduledEventClose = () => {
-      setRemoveSingleScheduledPopupVisible(false);
-      setEditEventPopupVisible(true);
-    };
-
-    const handleRemoveAlwaysAvailableClose = () => {
-      setRemoveAlwaysAvailablePopupVisible(false);
-      setEditEventPopupVisible(true);
-    };
-
-    const handleRemoveAllScheduledClose = () => {
+  const handleRemoveAllScheduledSubmit = async () => {
+    if (eventFormRef?.current) {
+      await eventFormRef.current.processEvent();
       setRemoveAllScheduledPopupVisible(false);
-      setEditEventPopupVisible(true);
-    };
+      handleEditEventClose();
+    }
+  };
 
-    const handleRemoveAllScheduledSubmit = async () => {
-      if (eventFormRef?.current) {
-        await eventFormRef.current.processEvent();
-        setRemoveAllScheduledPopupVisible(false);
-        handleEditEventClose();
-      }
-    };
+  const handleRemoveAlwaysAvailableSubmit = async () => {
+    if (eventFormRef?.current) {
+      await eventFormRef.current.processEvent();
+      setRemoveAlwaysAvailablePopupVisible(false);
+      handleEditEventClose();
+    }
+  };
 
-    const handleRemoveAlwaysAvailableSubmit = async () => {
-      if (eventFormRef?.current) {
-        await eventFormRef.current.processEvent();
-        setRemoveAlwaysAvailablePopupVisible(false);
-        handleEditEventClose();
-      }
-    };
+  return (
+    <>
+      {open && (
+        <Modal
+          open={open}
+          onClose={handleEditEventClose}
+          onSubmit={onSubmit}
+          title={
+            <StyledFlexSpaceBetween sx={{ placeItems: 'center', width: '100%' }}>
+              {t('editActivitySchedule')}
 
-    return (
-      <>
-        {open && (
-          <Modal
-            open={open}
-            onClose={() => handleEditEventClose(true)}
-            onSubmit={onSubmit}
-            title={t('editActivitySchedule')}
-            buttonText={t('save')}
-            width="67.1"
-            disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
-            onTransitionEntered={handleTransitionEntered}
-            data-testid={`${dataTestid}-popup`}
-          >
-            <>
-              {isLoading &&
-                !removeAllScheduledPopupVisible &&
-                !removeAlwaysAvailablePopupVisible && (
-                  <Spinner uiType={SpinnerUiType.Secondary} noBackground />
-                )}
-              <StyledContainer>
-                <StyledButton
-                  variant="outlined"
-                  type="submit"
-                  onClick={onRemoveEventClick}
-                  startIcon={<Svg width="18" height="18" id="clear-calendar" />}
-                  disabled={editedEvent.alwaysAvailable}
-                  data-testid={`${dataTestid}-popup-remove`}
-                >
-                  {t('removeEvent')}
-                </StyledButton>
-              </StyledContainer>
-              <EventForm
-                ref={eventFormRef}
-                submitCallback={handleEditEventClose}
-                setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
-                setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
-                setActivityName={setCurrentActivityName}
-                editedEvent={editedEvent}
-                defaultStartDate={defaultStartDate}
-                onFormIsLoading={handleFormIsLoading}
-                onFormChange={handleFormChanged}
-                data-testid={`${dataTestid}-popup-form`}
-              />
-            </>
-          </Modal>
-        )}
-        {removeSingleScheduledPopupVisible && (
-          <RemoveScheduledEventPopup
-            open={removeSingleScheduledPopupVisible}
-            onClose={onRemoveScheduledEventClose}
-            onSubmit={handleRemoveEvent}
-            activityName={currentActivityName}
-            isLoading={removeEventIsLoading}
-            data-testid={`${dataTestid}-remove-scheduled-event-popup`}
+              <Button
+                variant="tonal"
+                type="submit"
+                onClick={onRemoveEventClick}
+                startIcon={<Svg width="18" height="18" id="clear-calendar" />}
+                disabled={editedEvent.alwaysAvailable}
+                data-testid={`${dataTestid}-popup-remove`}
+              >
+                {t('removeEvent')}
+              </Button>
+            </StyledFlexSpaceBetween>
+          }
+          buttonText={t('save')}
+          width="67.1"
+          disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
+          onTransitionEntered={handleTransitionEntered}
+          data-testid={`${dataTestid}-popup`}
+        >
+          {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
+            <Spinner uiType={SpinnerUiType.Secondary} noBackground />
+          )}
+
+          <EventForm
+            ref={eventFormRef}
+            submitCallback={handleEditEventClose}
+            setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+            setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+            setActivityName={setCurrentActivityName}
+            editedEvent={editedEvent}
+            defaultStartDate={defaultStartDate}
+            onFormIsLoading={handleFormIsLoading}
+            onFormChange={handleFormChanged}
+            data-testid={`${dataTestid}-popup-form`}
+            userId={userId}
           />
-        )}
-        {removeAllScheduledPopupVisible && (
-          <RemoveAllScheduledEventsPopup
-            open={removeAllScheduledPopupVisible}
-            onClose={handleRemoveAllScheduledClose}
-            onSubmit={handleRemoveAllScheduledSubmit}
-            activityName={currentActivityName}
-            isLoading={isLoading}
-            data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
-          />
-        )}
-        {removeAlwaysAvailablePopupVisible && (
-          <ConfirmScheduledAccessPopup
-            open={removeAlwaysAvailablePopupVisible}
-            onClose={handleRemoveAlwaysAvailableClose}
-            onSubmit={handleRemoveAlwaysAvailableSubmit}
-            activityName={currentActivityName}
-            isLoading={isLoading}
-            data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
-          />
-        )}
-      </>
-    );
-  },
-);
+        </Modal>
+      )}
+      {removeSingleScheduledPopupVisible && (
+        <RemoveScheduledEventPopup
+          open={removeSingleScheduledPopupVisible}
+          onClose={onRemoveScheduledEventClose}
+          onSubmit={handleRemoveEvent}
+          activityName={currentActivityName}
+          isLoading={removeEventIsLoading}
+          data-testid={`${dataTestid}-remove-scheduled-event-popup`}
+        />
+      )}
+      {removeAllScheduledPopupVisible && (
+        <RemoveAllScheduledEventsPopup
+          open={removeAllScheduledPopupVisible}
+          onClose={handleRemoveAllScheduledClose}
+          onSubmit={handleRemoveAllScheduledSubmit}
+          activityName={currentActivityName}
+          isLoading={isLoading}
+          data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
+        />
+      )}
+      {removeAlwaysAvailablePopupVisible && (
+        <ConfirmScheduledAccessPopup
+          open={removeAlwaysAvailablePopupVisible}
+          onClose={handleRemoveAlwaysAvailableClose}
+          onSubmit={handleRemoveAlwaysAvailableSubmit}
+          activityName={currentActivityName}
+          isLoading={isLoading}
+          data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
+        />
+      )}
+    </>
+  );
+};

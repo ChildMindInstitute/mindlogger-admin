@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 
 import { StyledClearedButton } from 'shared/styles';
 
@@ -16,4 +16,4 @@ export const StyledLinkBtn = styled(StyledClearedButton)`
   &.MuiButton-text:hover {
     background-color: transparent;
   }
-`;
+` as typeof Button;

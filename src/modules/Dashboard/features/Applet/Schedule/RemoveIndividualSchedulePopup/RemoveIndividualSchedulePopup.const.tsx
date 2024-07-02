@@ -58,14 +58,13 @@ export const getScreens = ({
   isEmpty,
   onSubmit,
   handleRemovedScheduleClose,
-  getNextStep,
 }: ScreensParams) => [
   {
     component: (isEmpty ? getFirstScreenForEmptySchedule : getFirstScreen)(name),
     buttonText: 'remove',
     title: 'removeIndividualSchedule',
     hasSecondBtn: true,
-    onSubmit: isEmpty ? getNextStep : onSubmit,
+    onSubmit,
     submitBtnColor: 'error',
   },
   {

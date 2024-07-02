@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { Box, ClickAwayListener } from '@mui/material';
+import { Box, ClickAwayListener, Divider } from '@mui/material';
 
 import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
@@ -25,7 +25,6 @@ import {
   StyledFooter,
   StyledLogOutBtn,
   StyledCloseWrapper,
-  StyledDivider,
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
@@ -86,7 +85,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
           </StyledHeader>
           <Notifications />
         </Box>
-        <StyledDivider />
+        <Divider />
         <StyledFooter>
           <StyledLogOutBtn
             startIcon={<Svg id="logout" width="16" height="20" />}

@@ -43,7 +43,7 @@ import { EmptyResponses } from './EmptyResponses';
 import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || null;
   const submitId = searchParams.get('submitId') || null;
@@ -66,7 +66,13 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    const pathname = generatePath(
+      activityId
+        ? page.appletParticipantActivityDetailsDataReview
+        : page.appletParticipantDataReview,
+      { appletId, subjectId, activityId },
+    );
+
     navigate({
       pathname,
       search: createSearchParams({
@@ -91,8 +97,9 @@ export const RespondentDataReview = () => {
   } = useReviewActivitiesAndFlows({
     answerId,
     submitId,
+    activityId,
     appletId,
-    respondentId,
+    subjectId,
     handleSelectAnswer,
   });
 
@@ -140,14 +147,14 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
 
     getAppletSubmitDateList({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       fromDate,
       toDate,
     });

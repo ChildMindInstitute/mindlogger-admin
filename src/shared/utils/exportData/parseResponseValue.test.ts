@@ -14,6 +14,10 @@ describe('parseResponseValue', () => {
       version: '1.0.5',
       respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
       respondentSecretId: 'respondentSecretId',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
       legacyProfileId: null,
       scheduledDatetime: null,
       startDatetime: 1686925181,
@@ -628,30 +632,30 @@ describe('parseResponseValue', () => {
       const isEvent = false;
 
       test.each`
-        activityItem        | answer                                         | expected                                                                                                       | description
-        ${single}           | ${singleAnswer}                                | ${'value: 1'}                                                                                                  | ${'single select'}
-        ${single}           | ${singleWithEditionAnswer}                     | ${'value: 2 | edited: time of edition'}                                                                        | ${'single select with edition'}
-        ${single}           | ${singleWithAdditionalTextAnswer}              | ${'value: 4 | text: description for answer'}                                                                   | ${'single select with additional text'}
-        ${single}           | ${singleWithAdditionalTextAndWrongOrderAnswer} | ${'value: 7 | text: single selection description'}                                                             | ${'single select with additional text with wrong property order'}
-        ${single}           | ${singleWithAdditionalTextWithNoAnswer}        | ${'text: single selection description'}                                                                        | ${'single select without answer with additional text'}
-        ${multi}            | ${multiAnswer}                                 | ${'value: 1'}                                                                                                  | ${'multi select'}
-        ${slider}           | ${sliderAnswer}                                | ${'value: 5'}                                                                                                  | ${'slider'}
-        ${date}             | ${dateAnswer}                                  | ${'date: 18/6/2023'}                                                                                           | ${'date'}
-        ${numberSelection}  | ${numberSelectionAnswer}                       | ${'value: 5'}                                                                                                  | ${'number selection'}
-        ${time}             | ${timeAnswer}                                  | ${'time: hr 13, min 19'}                                                                                       | ${'time'}
-        ${timeRange}        | ${timeRangeAnswer}                             | ${'time_range: from (hr 9, min 20) / to (hr 17, min 20)'}                                                      | ${'time range'}
-        ${timeRange}        | ${timeRangeWithToNullAnswer}                   | ${'time_range: from (hr 9, min 20) / to (empty)'}                                                              | ${'time range, to is skipped'}
-        ${timeRange}        | ${timeRangeWithFromNullAnswer}                 | ${'time_range: from (empty) / to (hr 17, min 20)'}                                                             | ${'time range, from is skipped'}
-        ${timeRange}        | ${timeRangeWithFromNullToNullAnswer}           | ${'time_range: from (empty) / to (empty)'}                                                                     | ${'time range, to and from are skipped'}
-        ${singleSelectRows} | ${singleSelectRowsAnswer}                      | ${'row1: opt1'}                                                                                                | ${'single select rows'}
-        ${multiSelectRows}  | ${multiSelectRowsAnswer}                       | ${'row1: opt1, opt1'}                                                                                          | ${'multi select rows'}
-        ${sliderRows}       | ${sliderRowsAnswer}                            | ${'slider: 5'}                                                                                                 | ${'slider rows'}
-        ${text}             | ${textAnswer}                                  | ${'Text'}                                                                                                      | ${'text'}
-        ${photo}            | ${photoAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg'}                  | ${'photo'}
-        ${video}            | ${videoAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4'}                  | ${'video'}
-        ${audio}            | ${audioAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a'}                  | ${'audio'}
-        ${drawing}          | ${drawingAnswer}                               | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg'}                     | ${'drawing'}
-        ${drawing}          | ${drawingAnswerWithText}                       | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg | text: description'} | ${'drawing with additional text'}
+        activityItem        | answer                                         | expected                                                                                   | description
+        ${single}           | ${singleAnswer}                                | ${'value: 1'}                                                                              | ${'single select'}
+        ${single}           | ${singleWithEditionAnswer}                     | ${'value: 2 | edited: time of edition'}                                                    | ${'single select with edition'}
+        ${single}           | ${singleWithAdditionalTextAnswer}              | ${'value: 4 | text: description for answer'}                                               | ${'single select with additional text'}
+        ${single}           | ${singleWithAdditionalTextAndWrongOrderAnswer} | ${'value: 7 | text: single selection description'}                                         | ${'single select with additional text with wrong property order'}
+        ${single}           | ${singleWithAdditionalTextWithNoAnswer}        | ${'text: single selection description'}                                                    | ${'single select without answer with additional text'}
+        ${multi}            | ${multiAnswer}                                 | ${'value: 1'}                                                                              | ${'multi select'}
+        ${slider}           | ${sliderAnswer}                                | ${'value: 5'}                                                                              | ${'slider'}
+        ${date}             | ${dateAnswer}                                  | ${'date: 18/6/2023'}                                                                       | ${'date'}
+        ${numberSelection}  | ${numberSelectionAnswer}                       | ${'value: 5'}                                                                              | ${'number selection'}
+        ${time}             | ${timeAnswer}                                  | ${'time: hr 13, min 19'}                                                                   | ${'time'}
+        ${timeRange}        | ${timeRangeAnswer}                             | ${'time_range: from (hr 9, min 20) / to (hr 17, min 20)'}                                  | ${'time range'}
+        ${timeRange}        | ${timeRangeWithToNullAnswer}                   | ${'time_range: from (hr 9, min 20) / to (empty)'}                                          | ${'time range, to is skipped'}
+        ${timeRange}        | ${timeRangeWithFromNullAnswer}                 | ${'time_range: from (empty) / to (hr 17, min 20)'}                                         | ${'time range, from is skipped'}
+        ${timeRange}        | ${timeRangeWithFromNullToNullAnswer}           | ${'time_range: from (empty) / to (empty)'}                                                 | ${'time range, to and from are skipped'}
+        ${singleSelectRows} | ${singleSelectRowsAnswer}                      | ${'row1: opt1'}                                                                            | ${'single select rows'}
+        ${multiSelectRows}  | ${multiSelectRowsAnswer}                       | ${'row1: opt1, opt1'}                                                                      | ${'multi select rows'}
+        ${sliderRows}       | ${sliderRowsAnswer}                            | ${'slider: 5'}                                                                             | ${'slider rows'}
+        ${text}             | ${textAnswer}                                  | ${'Text'}                                                                                  | ${'text'}
+        ${photo}            | ${photoAnswer}                                 | ${'target-secret-id-3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-photo_text.jpg'}                  | ${'photo'}
+        ${video}            | ${videoAnswer}                                 | ${'target-secret-id-3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-video_text.mp4'}                  | ${'video'}
+        ${audio}            | ${audioAnswer}                                 | ${'target-secret-id-3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-audio_text.m4a'}                  | ${'audio'}
+        ${drawing}          | ${drawingAnswer}                               | ${'target-secret-id-3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-drawing.svg'}                     | ${'drawing'}
+        ${drawing}          | ${drawingAnswerWithText}                       | ${'target-secret-id-3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-drawing.svg | text: description'} | ${'drawing with additional text'}
       `('$description: "$expected"', ({ activityItem, answer, expected }) => {
         const item = {
           ...mockedSharedDecryptedAnswerData,
@@ -733,6 +737,10 @@ describe('parseResponseValue', () => {
       version: '1.1.0',
       respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
       respondentSecretId: 'respondentSecretId',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
       legacyProfileId: null,
       scheduledDatetime: null,
       startDatetime: 1689145017,
@@ -833,9 +841,9 @@ describe('parseResponseValue', () => {
     };
 
     test.each`
-      activityItem         | answer                     | expected                                                      | description
-      ${gyroscopeTest}     | ${gyroscopeTestAnswer}     | ${'388b1c27-39da-454b-a31f-3cadf1893985_challenge-phase.csv'} | ${'gyroscope test'}
-      ${gyrospocePractice} | ${gyroscopePracticeAnswer} | ${'388b1c27-39da-454b-a31f-3cadf1893985_focus-phase.csv'}     | ${'gyroscope practice'}
+      activityItem         | answer                     | expected                                                                       | description
+      ${gyroscopeTest}     | ${gyroscopeTestAnswer}     | ${'target-secret-id_388b1c27-39da-454b-a31f-3cadf1893985_challenge-phase.csv'} | ${'gyroscope test'}
+      ${gyrospocePractice} | ${gyroscopePracticeAnswer} | ${'target-secret-id_388b1c27-39da-454b-a31f-3cadf1893985_focus-phase.csv'}     | ${'gyroscope practice'}
     `('$description: "$expected"', ({ activityItem, answer, expected }) => {
       const item = {
         ...mockedSharedDecryptedAnswerData,
@@ -861,6 +869,10 @@ describe('parseResponseValue', () => {
       version: '1.1.0',
       respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
       respondentSecretId: 'respondentSecretId',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
       legacyProfileId: null,
       scheduledDatetime: null,
       startDatetime: 1689145854,
@@ -961,9 +973,9 @@ describe('parseResponseValue', () => {
     };
 
     test.each`
-      activityItem     | answer                 | expected                                                      | description
-      ${touchTest}     | ${touchTestAnswer}     | ${'5bc795cf-7eea-4042-9c48-f83435f66639_challenge-phase.csv'} | ${'gyroscope test'}
-      ${touchPractice} | ${touchPracticeAnswer} | ${'5bc795cf-7eea-4042-9c48-f83435f66639_focus-phase.csv'}     | ${'gyroscope practice'}
+      activityItem     | answer                 | expected                                                                       | description
+      ${touchTest}     | ${touchTestAnswer}     | ${'target-secret-id_5bc795cf-7eea-4042-9c48-f83435f66639_challenge-phase.csv'} | ${'gyroscope test'}
+      ${touchPractice} | ${touchPracticeAnswer} | ${'target-secret-id_5bc795cf-7eea-4042-9c48-f83435f66639_focus-phase.csv'}     | ${'gyroscope practice'}
     `('$description: "$expected"', ({ activityItem, answer, expected }) => {
       const item = {
         ...mockedSharedDecryptedAnswerData,
@@ -988,6 +1000,10 @@ describe('parseResponseValue', () => {
       version: '1.1.0',
       respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
       respondentSecretId: 'ml_test1_account@gmail.com',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
       legacyProfileId: null,
       scheduledDatetime: null,
       startDatetime: 1689928691,
@@ -1284,11 +1300,11 @@ describe('parseResponseValue', () => {
     };
 
     test.each`
-      activityItem | answer             | index | expected                                             | description
-      ${abTrails1} | ${abTrails1Answer} | ${0}  | ${'4d3b9ef2-beff-4464-a567-088362a66238-trail1.csv'} | ${'ABTrails_mobile_1'}
-      ${abTrails2} | ${abTrails2Answer} | ${1}  | ${'4d3b9ef2-beff-4464-a567-088362a66238-trail2.csv'} | ${'ABTrails_mobile_2'}
-      ${abTrails3} | ${abTrails3Answer} | ${2}  | ${'4d3b9ef2-beff-4464-a567-088362a66238-trail3.csv'} | ${'ABTrails_mobile_3'}
-      ${abTrails4} | ${abTrails4Answer} | ${3}  | ${'4d3b9ef2-beff-4464-a567-088362a66238-trail4.csv'} | ${'ABTrails_mobile_4'}
+      activityItem | answer             | index | expected                                                              | description
+      ${abTrails1} | ${abTrails1Answer} | ${0}  | ${'target-secret-id-4d3b9ef2-beff-4464-a567-088362a66238-trail1.csv'} | ${'ABTrails_mobile_1'}
+      ${abTrails2} | ${abTrails2Answer} | ${1}  | ${'target-secret-id-4d3b9ef2-beff-4464-a567-088362a66238-trail2.csv'} | ${'ABTrails_mobile_2'}
+      ${abTrails3} | ${abTrails3Answer} | ${2}  | ${'target-secret-id-4d3b9ef2-beff-4464-a567-088362a66238-trail3.csv'} | ${'ABTrails_mobile_3'}
+      ${abTrails4} | ${abTrails4Answer} | ${3}  | ${'target-secret-id-4d3b9ef2-beff-4464-a567-088362a66238-trail4.csv'} | ${'ABTrails_mobile_4'}
     `('$description: "$expected"', ({ activityItem, answer, index, expected }) => {
       const item = {
         ...mockedSharedDecryptedAnswerData,
@@ -1314,6 +1330,10 @@ describe('parseResponseValue', () => {
       version: '1.1.0',
       respondentId: '37a9cb49-99aa-4d25-acbe-951ba5f8939b',
       respondentSecretId: 'respondentSecretId',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
       legacyProfileId: null,
       scheduledDatetime: null,
       startDatetime: 1689604761,
@@ -1626,11 +1646,11 @@ describe('parseResponseValue', () => {
     };
 
     test.each`
-      activityItem       | answer                   | expected                                                         | description
-      ${flankerPractice} | ${flankerPracticeAnswer} | ${'bce5d577-414f-482b-b5ba-e29004b66213-Flanker_Practice_1.csv'} | ${'Flanker_Practice_1'}
-      ${flankerTest1}    | ${flankerTest1Answer}    | ${'bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_1.csv'}     | ${'Flanker_test_1'}
-      ${flankerTest2}    | ${flankerTest2Answer}    | ${'bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_2.csv'}     | ${'Flanker_test_2'}
-      ${flankerTest3}    | ${flankerTest3Answer}    | ${'bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_3.csv'}     | ${'Flanker_test_3'}
+      activityItem       | answer                   | expected                                                                          | description
+      ${flankerPractice} | ${flankerPracticeAnswer} | ${'target-secret-id-bce5d577-414f-482b-b5ba-e29004b66213-Flanker_Practice_1.csv'} | ${'Flanker_Practice_1'}
+      ${flankerTest1}    | ${flankerTest1Answer}    | ${'target-secret-id-bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_1.csv'}     | ${'Flanker_test_1'}
+      ${flankerTest2}    | ${flankerTest2Answer}    | ${'target-secret-id-bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_2.csv'}     | ${'Flanker_test_2'}
+      ${flankerTest3}    | ${flankerTest3Answer}    | ${'target-secret-id-bce5d577-414f-482b-b5ba-e29004b66213-Flanker_test_3.csv'}     | ${'Flanker_test_3'}
     `('$description: "$expected"', ({ activityItem, answer, expected }) => {
       const item = {
         ...mockedSharedDecryptedAnswerData,

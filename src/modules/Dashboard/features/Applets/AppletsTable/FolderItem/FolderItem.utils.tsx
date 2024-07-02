@@ -22,7 +22,7 @@ export const getFolderActions = (
     action: onDeleteFolder,
     title: t('delete'),
     customItemColor: variables.palette.dark_error_container,
-    tooltip: folder.foldersAppletCount && t('deleteFolderWarning'),
+    tooltip: folder.foldersAppletCount ? t('deleteFolderWarning') : undefined,
     'data-testid': 'dashboard-applets-folder-delete',
   },
 ];

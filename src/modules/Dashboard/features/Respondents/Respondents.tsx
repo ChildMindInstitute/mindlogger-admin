@@ -1,14 +1,36 @@
+import { Button } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Link, generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
+import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
+import {
+  ActionsMenu,
+  Chip,
+  MenuActionProps,
+  Pin,
+  Row,
+  Search,
+  Spinner,
+  Svg,
+} from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
+import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
+import {
+  GetAppletsParams,
+  getWorkspaceRespondentsApi,
+  updateRespondentsPinApi,
+  updateSubjectsPinApi,
+} from 'api';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
+import {
+  checkIfCanViewParticipants,
+  getDateInUserTimezone,
+  isManagerOrOwner,
+  joinWihComma,
+  Mixpanel,
+} from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
@@ -38,9 +60,8 @@ import {
   RemoveRespondentPopup,
   ScheduleSetupPopup,
   SendInvitationPopup,
-  ViewDataPopup,
+  ViewParticipantPopup,
 } from './Popups';
-import { StatusFlag } from './StatusFlag';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -49,12 +70,17 @@ export const Respondents = () => {
   const timeAgo = useTimeAgo();
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
+  const roles =
+    appletId && rolesData?.data
+      ? rolesData?.data?.[appletId]
+      : [...new Set(Object.values(rolesData.data || []).flat())];
+  const canViewParticipants = checkIfCanViewParticipants(roles);
 
-  const { execute: getWorkspaceRespondents } = useAsync(
+  const { execute } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
@@ -63,30 +89,37 @@ export const Respondents = () => {
     () => setIsLoading(false),
   );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+  const getWorkspaceRespondents = (args?: GetAppletsParams) => {
     setIsLoading(true);
 
-    return getWorkspaceRespondents({
+    // Always sort by pinned first
+    const ordering = ['-isPinned'];
+    ordering.push(args?.params.ordering ?? '+tags,+secretIds');
+
+    return execute({
+      ...args,
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
+        ...args?.params,
+        ordering: ordering.join(','),
       },
     });
+  };
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewParticipants) return;
+
+    return getWorkspaceRespondents();
   });
 
-  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
-    setIsLoading(true);
-    const params = {
-      ...args,
-      params: {
-        ...args.params,
-        ...(appletId && { appletId }),
-      },
-    };
-
-    return getWorkspaceRespondents(params);
-  });
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(
+    getWorkspaceRespondents,
+    DEFAULT_ROWS_PER_PAGE,
+    'tags',
+    'asc',
+  );
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
@@ -97,9 +130,6 @@ export const Respondents = () => {
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
   const [invitationPopupVisible, setInvitationPopupVisible] = useState(false);
   const [respondentEmail, setRespondentEmail] = useState<null | string>(null);
-
-  const { getAppletPrivateKey } = useEncryptionStorage();
-  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
   const getChosenAppletData = ({
     respondentId = null,
@@ -167,16 +197,16 @@ export const Respondents = () => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
-      if (hasEncryptionCheck && appletId) {
+      if (appletId) {
         const chosenAppletData = getChosenAppletData({
           respondentOrSubjectId,
           key: FilteredAppletsKey.Viewable,
         });
 
         navigate(
-          generatePath(page.appletRespondentDataSummary, {
+          generatePath(page.appletParticipantActivities, {
             appletId,
-            respondentId: chosenAppletData?.subjectId,
+            subjectId: chosenAppletData?.subjectId,
           }),
         );
 
@@ -278,8 +308,18 @@ export const Respondents = () => {
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
+    const accountType = {
+      [RespondentStatus.Invited]: t('full'),
+      [RespondentStatus.NotInvited]: t('limited'),
+      [RespondentStatus.Pending]: t('pendingInvite'),
+    }[status];
+    const isPending = status === RespondentStatus.Pending;
 
     return {
+      id: {
+        value: respondentOrSubjectId,
+        isHidden: true,
+      },
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
@@ -309,14 +349,13 @@ export const Respondents = () => {
         },
       }),
       status: {
-        content: () =>
-          status !== RespondentStatus.Invited && (
-            <StatusFlag
-              status={status}
-              onInviteClick={() => handleInviteClick({ respondentOrSubjectId, email })}
-              isInviteDisabled={!filteredRespondents?.[respondentOrSubjectId]?.editable.length}
-            />
-          ),
+        content: () => (
+          <Chip
+            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
+            color={isPending ? 'warning' : 'secondary'}
+            title={accountType}
+          />
+        ),
         value: '',
         width: RespondentsColumnsWidth.Status,
       },
@@ -411,17 +450,9 @@ export const Respondents = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-respondents';
 
-  const renderEmptyComponent = () => {
-    if (!rows?.length && !isLoading) {
-      if (searchValue) {
-        return t('noMatchWasFound', { searchValue });
-      }
-
-      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
-    }
-  };
-
-  if (isForbidden) return noPermissionsComponent;
+  // If there are no roles available we're looking at our own empty workspace
+  const showsForbiddenComponent = isForbidden || (roles.length && !canViewParticipants);
+  if (showsForbiddenComponent) return noPermissionsComponent;
 
   return (
     <StyledBody>
@@ -448,9 +479,29 @@ export const Respondents = () => {
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
       <DashboardTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
-        emptyComponent={renderEmptyComponent()}
+        keyExtractor={({ id }) => `row-${id.value}`}
+        emptyComponent={
+          !rows?.length && !isLoading ? (
+            <EmptyDashboardTable isLoading={isLoading} searchValue={searchValue}>
+              {appletId ? (
+                <>
+                  {t('noRespondentsForApplet')}
+                  <Button
+                    component={Link}
+                    to={generatePath(page.appletAddUser, { appletId })}
+                    variant="contained"
+                  >
+                    {t('addRespondent')}
+                  </Button>
+                </>
+              ) : (
+                t('noRespondents')
+              )}
+            </EmptyDashboardTable>
+          ) : undefined
+        }
         count={respondentsData?.count || 0}
         hasColFixedWidth
         data-testid={`${dataTestid}-table`}
@@ -466,7 +517,7 @@ export const Respondents = () => {
         />
       )}
       {viewDataPopupVisible && (
-        <ViewDataPopup
+        <ViewParticipantPopup
           popupVisible={viewDataPopupVisible}
           setPopupVisible={setViewDataPopupVisible}
           tableRows={viewableAppletsSmallTableRows}

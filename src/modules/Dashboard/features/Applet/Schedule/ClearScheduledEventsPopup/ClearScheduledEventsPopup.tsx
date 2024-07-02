@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
@@ -19,11 +18,10 @@ export const ClearScheduledEventsPopup = ({
   name,
   appletName,
   appletId,
-  isDefault = true,
   'data-testid': dataTestid,
+  userId,
 }: ClearScheduledEventsPopupProps) => {
   const { t } = useTranslation();
-  const { respondentId } = useParams();
   const dispatch = useAppDispatch();
   const [step, setStep] = useState<Steps>(0);
   const {
@@ -36,7 +34,7 @@ export const ClearScheduledEventsPopup = ({
     error: deleteIndividualScheduledError,
     isLoading: deleteIndividualScheduledLoading,
   } = useAsync(deleteIndividualEventsApi, () =>
-    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
   );
 
   const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
@@ -48,13 +46,10 @@ export const ClearScheduledEventsPopup = ({
       return newStep as Steps;
     });
 
-  const handleScheduledEventsDelete = async () => {
-    if (isDefault) {
-      return await deleteScheduledEvents({ appletId });
-    }
-
-    return respondentId && (await deleteIndividualScheduledEvents({ appletId, respondentId }));
-  };
+  const handleScheduledEventsDelete = async () =>
+    userId
+      ? await deleteIndividualScheduledEvents({ appletId, respondentId: userId })
+      : await deleteScheduledEvents({ appletId });
 
   const onSubmit = async () => {
     await handleScheduledEventsDelete();
@@ -62,7 +57,7 @@ export const ClearScheduledEventsPopup = ({
     return getNextStep();
   };
 
-  const screens = getScreens({ appletName, name, isDefault, onSubmit, onClose });
+  const screens = getScreens({ appletName, name, isDefault: !userId, onSubmit, onClose });
 
   return (
     <Modal

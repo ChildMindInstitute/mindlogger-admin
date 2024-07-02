@@ -1,6 +1,7 @@
 import { Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
+import { ParticipantTag } from 'shared/consts';
 
 import { getRespondentActions, getHeadCells } from './Respondents.utils';
 
@@ -13,6 +14,11 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-1',
+    subjectTag: 'Child' as ParticipantTag,
+    subjectFirstName: 'John',
+    subjectLastName: 'Doe',
+    subjectCreatedAt: '2023-09-26T12:11:46.162083',
+    invitation: null,
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -22,6 +28,11 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-2',
+    subjectTag: 'Child' as ParticipantTag,
+    subjectFirstName: 'John',
+    subjectLastName: 'Doe',
+    subjectCreatedAt: '2023-09-26T12:11:46.162083',
+    invitation: null,
   },
 ];
 
@@ -179,7 +190,7 @@ describe('Respondents utils tests', () => {
     });
 
     test('returns the correct array of head cells with an id', () => {
-      const headCells = getHeadCells(mockedAppletId);
+      const headCells = getHeadCells(undefined, mockedAppletId);
       expect(headCells).toHaveLength(7);
       expect(headCells[4]).toHaveProperty('id', 'schedule');
       expect(headCells[5]).toHaveProperty('id', 'status');

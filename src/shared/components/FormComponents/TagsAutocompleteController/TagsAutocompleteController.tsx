@@ -1,35 +1,35 @@
 import { useState, MouseEvent, SyntheticEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import {
-  TextField,
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  Divider,
-  Paper,
-  ListItem,
-} from '@mui/material';
+import { Checkbox, FormControlLabel, Divider, Paper, ListItem, Autocomplete } from '@mui/material';
 
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
+import { Chip, ChipShape } from 'shared/components/Chip';
+import { Svg } from 'shared/components/Svg';
 
 import {
   AutocompleteOption,
   TagsAutocompleteControllerProps,
 } from './TagsAutocompleteController.types';
+import { StyledTagsContainer, StyledTextField } from './TagsAutocompleteController.styles';
 
-export const TagsAutocompleteController = <T extends FieldValues>({
+export const TagsAutocompleteController = <
+  FormType extends FieldValues,
+  Value extends AutocompleteOption,
+>({
   name,
   control,
   options,
   labelAllSelect,
   noOptionsText,
   disabled,
+  limitTagRows,
   limitTags,
   defaultSelectedAll = false,
   onCustomChange,
+  renderOption,
   'data-testid': dataTestid,
-  ...props
-}: TagsAutocompleteControllerProps<T>) => {
+  textFieldProps,
+}: TagsAutocompleteControllerProps<FormType, Value>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(defaultSelectedAll);
 
   return (
@@ -44,8 +44,8 @@ export const TagsAutocompleteController = <T extends FieldValues>({
               onChange([]);
               onCustomChange?.([]);
             } else {
-              onChange(options || []);
-              onCustomChange?.(options || []);
+              onChange(options);
+              onCustomChange?.(options);
             }
 
             return !prev;
@@ -54,7 +54,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
 
         const handleChange = (
           _e: SyntheticEvent<Element, Event>,
-          value: AutocompleteOption[],
+          value: Value[],
           reason: string,
         ) => {
           if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
@@ -68,7 +68,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
             id="autocomplete"
             multiple
             limitTags={limitTags}
-            options={options || []}
+            options={options}
             fullWidth
             disableCloseOnSelect
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -77,14 +77,49 @@ export const TagsAutocompleteController = <T extends FieldValues>({
             value={value || []}
             onChange={handleChange}
             disabled={disabled}
-            // eslint-disable-next-line unused-imports/no-unused-vars
-            renderInput={({ InputLabelProps, ...params }) => <TextField {...params} {...props} />}
-            renderOption={(props, option, { selected }) => (
+            popupIcon={
+              <Svg
+                id="navigate-down"
+                width={24}
+                height={24}
+                fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+              />
+            }
+            renderInput={({ InputLabelProps: _InputLabelProps, ...params }) => (
+              <StyledTextField
+                limitRows={value?.length && limitTagRows}
+                {...params}
+                {...textFieldProps}
+              />
+            )}
+            renderOption={(props, option, state, ownerState) => (
               <ListItem {...props}>
-                <Checkbox checked={selected} />
-                {option.label}
+                <Checkbox checked={state.selected} />
+                {renderOption ? renderOption(option, state, ownerState) : option.label}
               </ListItem>
             )}
+            renderTags={(value, getTagProps) => {
+              const tags = value.map((option, index) => {
+                const { onDelete, ...rest } = getTagProps({ index });
+
+                return (
+                  <Chip
+                    title={option.label}
+                    canRemove
+                    onRemove={() => onDelete(null)}
+                    shape={ChipShape.Rectangular}
+                    sx={{ py: 0.5, height: 'auto' }}
+                    {...rest}
+                  />
+                );
+              });
+
+              return limitTagRows ? (
+                <StyledTagsContainer limitRows={limitTagRows}>{tags}</StyledTagsContainer>
+              ) : (
+                tags
+              );
+            }}
             PaperComponent={(paperProps) => {
               const { children, ...restPaperProps } = paperProps;
 
@@ -112,19 +147,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
                 </Paper>
               );
             }}
-            // ensure that the popper always stays at the bottom
-            slotProps={{
-              popper: {
-                modifiers: [
-                  {
-                    name: 'flip',
-                    options: {
-                      rootBoundary: 'document',
-                    },
-                  },
-                ],
-              },
-            }}
+            slotProps={{ popper: { placement: 'bottom' } }}
             data-testid={dataTestid}
           />
         );

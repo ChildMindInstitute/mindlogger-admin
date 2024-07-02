@@ -26,7 +26,7 @@ export const SubscaleHeaderContent = ({
   const subscaleName = watch(`${name}.name`);
   const subscaleTableData = watch(`${name}.subscaleTableData`) ?? [];
   const [isSubscaleLookupTableOpened, setIsSubscaleLookupTableOpened] = useState(false);
-  const iconId = `lookup-table${subscaleTableData?.length ? '-filled' : ''}`;
+  const iconId = subscaleTableData?.length ? 'lookup-table-filled' : 'lookup-table';
 
   return (
     <>
