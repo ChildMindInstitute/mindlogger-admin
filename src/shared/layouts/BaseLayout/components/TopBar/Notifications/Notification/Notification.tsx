@@ -43,8 +43,8 @@ export const Notification = ({
   timeAgo,
   isWatched,
   subjectId,
+  type,
   encryption,
-  alert,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -63,7 +63,7 @@ export const Notification = ({
 
     await dispatch(
       alerts.actions.updateAlertWatchedState({
-        id: alert.id,
+        id,
         isWatched: true,
       }),
     );
@@ -71,7 +71,7 @@ export const Notification = ({
     !setAlertWatched.fulfilled.match(result) &&
       (await dispatch(
         alerts.actions.updateAlertWatchedState({
-          id: alert.id,
+          id,
           isWatched: false,
         }),
       ));
@@ -151,7 +151,7 @@ export const Notification = ({
           <StyledRightSection>{!isWatched ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
         </StyledTopSection>
         <StyledBottomSection>
-          {isActive && (
+          {isActive && type !== 'integration' && (
             <StyledBtn
               variant="contained"
               startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}

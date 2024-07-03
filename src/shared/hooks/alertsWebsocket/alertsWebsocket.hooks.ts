@@ -21,6 +21,7 @@ export const useAlertsWebsocket = () => {
 
     return webSocket;
   };
+
   const closeWebsocket = () => {
     webSocketRef.current?.close();
     webSocketRef.current = null;
@@ -31,6 +32,7 @@ export const useAlertsWebsocket = () => {
     if (!isAuthorized || (isAuthorized && webSocketRef.current)) return;
 
     webSocketRef.current = startWebsocket();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthorized]);
 
   useEffect(() => closeWebsocket, []);

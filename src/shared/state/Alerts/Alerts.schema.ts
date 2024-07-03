@@ -16,6 +16,8 @@ export type AlertType = {
   answerId: string;
   subjectId: string;
   workspace: string;
+  respondentId: string;
+  type: 'answer' | 'integration';
   encryption: Encryption;
 };
 
