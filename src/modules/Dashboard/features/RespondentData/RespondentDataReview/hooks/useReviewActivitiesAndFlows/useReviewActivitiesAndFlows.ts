@@ -14,8 +14,9 @@ export const useReviewActivitiesAndFlows = ({
   answerId,
   submitId,
   appletId,
+  activityId,
   handleSelectAnswer,
-  respondentId,
+  subjectId,
 }: ReviewActivitiesAndFlowsProps) => {
   const [activities, setActivities] = useState<ReviewEntity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<ReviewEntity | null>(null);
@@ -28,7 +29,13 @@ export const useReviewActivitiesAndFlows = ({
       const activities = data?.result;
 
       if (!activities?.length) return;
-      setActivities(activities);
+      let selectedActivityByDefault;
+      if (activityId) {
+        selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
+        setActivities([selectedActivityByDefault]);
+      } else {
+        setActivities(activities);
+      }
     },
   );
 
@@ -43,13 +50,13 @@ export const useReviewActivitiesAndFlows = ({
   );
 
   const handleGetActivitiesAndFlows = (createdDate: string) => {
-    if (!appletId || !respondentId) {
+    if (!appletId || !subjectId) {
       return;
     }
 
     const requestBody = {
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       createdDate,
     };
 
@@ -69,12 +76,18 @@ export const useReviewActivitiesAndFlows = ({
       return;
     }
 
-    const reviewEntities = getConcatenatedEntities({ activities, flows });
-    const selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
+    let selectedEntityByDefault;
+    if (activityId) {
+      selectedEntityByDefault = activities.filter((e) => e.id === activityId)[0];
+      setSelectedActivity(selectedEntityByDefault);
+    } else {
+      const reviewEntities = getConcatenatedEntities({ activities, flows });
+      selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
 
-    selectedEntityByDefault.isFlow
-      ? setSelectedFlow(selectedEntityByDefault)
-      : setSelectedActivity(selectedEntityByDefault);
+      selectedEntityByDefault.isFlow
+        ? setSelectedFlow(selectedEntityByDefault)
+        : setSelectedActivity(selectedEntityByDefault);
+    }
 
     const { answerDates } = selectedEntityByDefault;
 
@@ -84,7 +97,16 @@ export const useReviewActivitiesAndFlows = ({
     handleSelectAnswer({
       answer: { ...sortedAnswerDates[answerDates.length - 1] },
     });
-  }, [answerId, submitId, activities, flows, handleSelectAnswer, selectedFlow, selectedActivity]);
+  }, [
+    answerId,
+    activityId,
+    submitId,
+    activities,
+    flows,
+    handleSelectAnswer,
+    selectedFlow,
+    selectedActivity,
+  ]);
 
   return {
     activities,

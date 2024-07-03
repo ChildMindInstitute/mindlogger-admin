@@ -6,6 +6,7 @@ import { StyledTableCell, StyledTableHead } from './TableHead.styles';
 import { TableHeadProps } from './TableHead.types';
 
 export const TableHead = ({
+  className,
   tableHeader,
   headCells,
   order,
@@ -19,7 +20,12 @@ export const TableHead = ({
     onRequestSort(event, property);
 
   return (
-    <StyledTableHead uiType={uiType} hasColFixedWidth={hasColFixedWidth} tableHeadBg={tableHeadBg}>
+    <StyledTableHead
+      className={className}
+      uiType={uiType}
+      hasColFixedWidth={hasColFixedWidth}
+      tableHeadBg={tableHeadBg}
+    >
       {(uiType === UiType.Primary || uiType === UiType.Quaternary) && (
         <TableRow>
           <TableCell sx={{ flexGrow: 1 }} colSpan={headCells.length}>
@@ -28,7 +34,7 @@ export const TableHead = ({
         </TableRow>
       )}
       <TableRow>
-        {headCells.map(({ id, label, align, enableSort, width }) => (
+        {headCells.map(({ id, label, align, enableSort, maxWidth, width }) => (
           <StyledTableCell
             uiType={uiType}
             key={id}
@@ -36,6 +42,7 @@ export const TableHead = ({
             align={align}
             sortDirection={orderBy === id ? order : false}
             hasColFixedWidth={hasColFixedWidth}
+            sx={{ maxWidth }}
           >
             {enableSort ? (
               <TableSortLabel

@@ -24,7 +24,7 @@ import { getDateISO, getIdentifiers, processIdentifiersChange } from './useRespo
 import { useRespondentDataContext } from '../../../RespondentDataContext';
 
 export const useRespondentAnswers = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const getDecryptedActivityData = useDecryptedActivityData();
   const { getValues, setValue } = useFormContext<RespondentsDataFormValues>();
   const {
@@ -76,7 +76,7 @@ export const useRespondentAnswers = () => {
     versions: providedVersions,
     isIdentifiersChange = false,
   }: FetchAnswers) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     try {
       const {
@@ -128,7 +128,7 @@ export const useRespondentAnswers = () => {
       const toDatetime = getDateISO(endDate, endTime);
 
       const params = {
-        targetSubjectId: respondentId,
+        targetSubjectId: subjectId,
         fromDatetime,
         toDatetime,
         emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,

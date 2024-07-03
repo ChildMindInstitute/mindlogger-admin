@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
-import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
 
 import {
@@ -54,8 +54,12 @@ import {
   DeleteSubject,
   TargetSubjectId,
   SubjectId,
+  GetActivitiesParams,
   DeleteReview,
   EncryptedActivityAnswer,
+  GetWorkspaceRespondentsParams,
+  GetAppletSubmissionsParams,
+  GetAppletSubmissionsResponse,
   ReviewEntity,
   FlowAnswersParams,
   EncryptedFlowAnswers,
@@ -125,7 +129,10 @@ export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: A
   );
 };
 
-export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+export const getWorkspaceRespondentsApi = (
+  { params }: GetWorkspaceRespondentsParams,
+  signal?: AbortSignal,
+) => {
   const { ownerId, appletId, ...restParams } = params;
 
   return authApiClient.get(
@@ -281,12 +288,12 @@ export const postAppletShellAccountApi = (
   );
 
 export const postSubjectInvitationApi = (
-  { appletId, subjectId, email }: SubjectInvitationData,
+  { appletId, subjectId, email, language }: SubjectInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/invitations/${appletId}/subject`,
-    { subjectId, email },
+    { subjectId, email, language },
     {
       signal,
     },
@@ -476,6 +483,15 @@ export const getActivityAnswerApi = (
       signal,
     },
   );
+
+export const getAppletSubmissionsApi = (
+  { appletId, page = 1, limit = SHARED_DEFAULT_ROWS_PER_PAGE }: GetAppletSubmissionsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/submissions`, {
+    params: { page, limit: Math.min(limit, MAX_LIMIT) },
+    signal,
+  }) as Promise<AxiosResponse<GetAppletSubmissionsResponse>>;
 
 export const getFlowAnswersApi = (
   { appletId, submitId, flowId }: FlowAnswersParams,
@@ -876,5 +892,14 @@ export const getRespondentDetailsApi = (
 
 export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSignal) =>
   authApiClient.get(`/subjects/${subjectId}`, {
+    signal,
+  });
+
+export const getAppletActivitiesApi = (
+  { params: { appletId, ...params } }: GetActivitiesParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/activities/applet/${appletId}`, {
+    params,
     signal,
   });

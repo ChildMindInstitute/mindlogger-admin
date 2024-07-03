@@ -11,7 +11,10 @@ type FunctionResponse = {
   status?: ApiResponseCodes;
 };
 
-export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
+export const usePermissions = (
+  asyncFunc: () => Promise<any> | undefined,
+  dependencies: unknown[] = [],
+) => {
   const { t } = useTranslation('app');
   const [isForbidden, setIsForbidden] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +49,7 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ownerId]);
+  }, [ownerId, ...dependencies]);
 
   return {
     isForbidden,

@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material';
+
 export type SearchProps = {
   withDebounce?: boolean;
   placeholder: string;
@@ -7,5 +9,6 @@ export type SearchProps = {
   endAdornment?: JSX.Element;
   value?: string;
   onSearch?: (value: string) => void;
+  sx?: SxProps;
   'data-testid'?: string;
 };
