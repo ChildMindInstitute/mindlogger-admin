@@ -15,7 +15,6 @@ import {
   signUpApi,
   SignUpArgs,
 } from 'api';
-import { FeatureFlags } from 'shared/utils/featureFlags';
 
 export const signIn = createAsyncThunk(
   'auth/login',
