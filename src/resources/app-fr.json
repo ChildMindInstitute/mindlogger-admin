@@ -1207,6 +1207,7 @@
   "sliderRows": "Lignes de curseurs",
   "sliderRowsHint": "Lignes d'échelles numériques avec une seule réponse",
   "smallTo": "à",
+  "softLockWarningBanner":  "<0>Pour assurer la sécurité de votre compte, vous avez été automatiquement déconnecté.</0> <1>Veuillez entrer votre mot de passe ci-dessous pour reprendre là où vous vous étiez arrêté.</1>",
   "sortBy": "Trier Par",
   "startDate": "Date de début",
   "startEndDate": "Date de début / Date de fin",

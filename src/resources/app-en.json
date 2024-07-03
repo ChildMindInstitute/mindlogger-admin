@@ -1209,6 +1209,7 @@
   "sliderRows": "Slider Rows",
   "sliderRowsHint": "Rows of numerical scales with a single answer",
   "smallTo": "to",
+  "softLockWarningBanner": "<0>To keep your account secure, you were automatically logged out.</0> <1>Please enter your password below to resume where you left off.</1>",
   "sortBy": "Sort By",
   "startDate": "Start date",
   "startEndDate": "Start Date / End Date",
