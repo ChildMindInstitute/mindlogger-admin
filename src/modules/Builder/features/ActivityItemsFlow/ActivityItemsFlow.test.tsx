@@ -74,6 +74,7 @@ const mockedOrderedConditionNameItems = [
   mockedTimeActivityItem,
   mockedSliderActivityItem,
   mockedTimeRangeActivityItem,
+  mockedSliderRowsActivityItem,
   mockedNumberSelectActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
@@ -164,6 +165,23 @@ describe('Activity Items Flow', () => {
     expect(addItemFlow).not.toBeDisabled();
   });
 
+  describe('Duplicate ItemFlow', () => {
+    beforeEach(() => {
+      renderActivityItemsFlow(mockedAppletWithAllItemTypes);
+    });
+
+    test('Duplicates ItemFlow successfully', async () => {
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+
+      expect(screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`))).toHaveLength(1);
+
+      fireEvent.click(screen.getByTestId(`builder-activity-item-flow-0-condition-0-name`));
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-duplicate`));
+
+      expect(screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`))).toHaveLength(2);
+    });
+  });
+
   test('Add/Remove Conditional works correctly', async () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
@@ -220,6 +238,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getAllByTestId(new RegExp(`^${mockedTestid}-0-summary$`))).toHaveLength(1);
     expect(screen.getByTestId(`${mockedTestid}-0-title`)).toHaveTextContent('Conditional 1');
     expect(screen.getByTestId(`${mockedTestid}-0-add`)).toBeVisible();
+    expect(screen.getByTestId(`${mockedTestid}-0-duplicate`)).toBeVisible();
     expect(screen.getByTestId(`${mockedTestid}-0-remove`)).toBeVisible();
     expect(screen.getByTestId(`${mockedTestid}-0-condition-0-name`)).toBeVisible();
 
@@ -234,7 +253,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getByTestId(`${mockedTestid}-0-summary-item`)).toBeVisible();
   });
 
-  test('Condition Item: all items except SliderRows/Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
+  test('Condition Item: all items except Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -246,7 +265,7 @@ describe('Activity Items Flow', () => {
     expect(nameDropdown).toBeVisible();
 
     const items = nameDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(9);
+    expect(items).toHaveLength(10);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
@@ -25,9 +25,10 @@ import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './Dat
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
-import { getExportDataSuffix } from './DataExportPopup.utils';
+import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
+  filters = {},
   popupVisible,
   isAppletSetting,
   setPopupVisible,
@@ -36,6 +37,7 @@ export const DataExportPopup = ({
   setChosenAppletData,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
+  const dataExportingRef = useRef(false);
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -51,7 +53,7 @@ export const DataExportPopup = ({
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
-    if (dataIsExporting || !appletId) {
+    if (dataIsExporting || dataExportingRef.current || !appletId) {
       return;
     }
 
@@ -70,11 +72,15 @@ export const DataExportPopup = ({
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
+        dataExportingRef.current = true;
         setDataIsExporting(true);
-        const formFromDate = getValues?.().fromDate as Date;
-        const formToDate = getValues?.().toDate as Date;
+
+        const dateType = getValues?.().dateType;
+        const formFromDate = getValues?.().fromDate;
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = formToDate && format(formToDate, DateFormats.shortISO);
+        const formToDate = getValues?.().toDate;
+        const toDate = getFormattedToDate({ dateType, formToDate });
+
         const body = {
           appletId,
           targetSubjectIds,
@@ -88,6 +94,7 @@ export const DataExportPopup = ({
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
+          filters,
         })(firstPageData);
 
         if (pageLimit > 1) {
@@ -104,6 +111,7 @@ export const DataExportPopup = ({
             await exportDataSucceed({
               getDecryptedAnswers,
               suffix: getExportDataSuffix(page),
+              filters,
             })(nextPageData);
           }
         }
@@ -118,6 +126,7 @@ export const DataExportPopup = ({
         setActiveModal(Modals.ExportError);
         await sendLogFile({ error });
       } finally {
+        dataExportingRef.current = false;
         setDataIsExporting(false);
       }
     },

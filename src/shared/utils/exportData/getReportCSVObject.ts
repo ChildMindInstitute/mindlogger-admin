@@ -26,21 +26,26 @@ export const getReportCSVObject = <T>({
     endDatetime,
     respondentSecretId,
     respondentId,
+    sourceSubjectId,
+    targetSubjectId,
     activityId,
     activityName,
     flowId,
     flowName,
     version,
     reviewedAnswerId,
+    reviewedFlowSubmitId,
     legacyProfileId,
     scheduledEventId,
     tzOffset,
+    submitId,
   } = item;
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
 
   return {
     id: item.id,
+    activity_flow_submission_id: flowId && !reviewedFlowSubmitId ? submitId : '',
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
@@ -49,6 +54,8 @@ export const getReportCSVObject = <T>({
     flag: getFlag(item),
     secret_user_id: respondentSecretId ?? '',
     userId: respondentId ?? '',
+    source_subject_id: sourceSubjectId ?? '',
+    target_subject_id: targetSubjectId ?? '',
     activity_id: activityId,
     activity_name: activityName,
     activity_flow_id: flowId ?? '',
@@ -68,7 +75,7 @@ export const getReportCSVObject = <T>({
     }),
     version: version ?? '',
     rawScore: getRawScores(responseValues) || '',
-    reviewing_id: reviewedAnswerId ?? '',
+    reviewing_id: reviewedFlowSubmitId ?? reviewedAnswerId ?? '',
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: scheduledEventId ?? '',
     timezone_offset: tzOffset ?? '',

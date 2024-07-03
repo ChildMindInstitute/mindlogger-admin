@@ -76,6 +76,8 @@ const decryptedSingleSelection = {
   submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
   version: '2.0.0',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
   respondentSecretId: 'secretUserId',
   legacyProfileId: null,
   scheduledDatetime: null,
@@ -127,6 +129,7 @@ const result = {
   activity_scheduled_time: 'not scheduled',
   activity_start_time: '1689755822000',
   id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
+  activity_flow_submission_id: '',
   item: 'single_text_score',
   item_id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
   options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
@@ -142,6 +145,8 @@ const result = {
   response_option_selection_time: '1689755869391',
   secret_user_id: 'secretUserId',
   user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+  source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
   version: '2.0.0',
   event_id: null,
   timezone_offset: '',
@@ -252,7 +257,7 @@ describe('getJourneyCSVObject', () => {
     });
   });
 
-  test('returns object with activity name and activity flow id', () => {
+  test('returns object with activity name, activity flow id, and activity flow submission id', () => {
     expect(
       getJourneyCSVObject({
         ...getPreparedProperties({
@@ -271,6 +276,7 @@ describe('getJourneyCSVObject', () => {
       }),
     ).toStrictEqual({
       ...result,
+      activity_flow_submission_id: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
       activity_flow_id: 'some flow ID 222',
       activity_flow_name: 'test flow name',
     });

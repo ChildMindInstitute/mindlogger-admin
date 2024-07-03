@@ -77,7 +77,11 @@ export type ExportAnswer = {
   version?: string;
   activityName: string;
   subscaleSetting: SubscaleSetting | null;
-  respondentId?: string;
+  respondentId: string | null;
+  sourceSubjectId: string | null;
+  sourceSecretId: string | null;
+  targetSubjectId: string | null;
+  targetSecretId: string | null;
   respondentSecretId?: string;
   activityHistoryId: string;
   flowHistoryId: null | string;
@@ -87,6 +91,7 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  reviewedFlowSubmitId: string | null;
   scheduledDatetime: string | number | null;
   startDatetime: string | number;
   endDatetime: string | number;
@@ -98,6 +103,7 @@ export type ExportAnswer = {
   };
   scheduledEventId?: null | string;
   tzOffset?: null | number;
+  submitId: string;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
@@ -516,6 +522,7 @@ export const enum ElementType {
 
 export type JourneyCSVReturnProps = {
   id: string;
+  activity_flow_submission_id: string;
   activity_scheduled_time: string;
   activity_start_time: string;
   activity_end_time: string;
@@ -528,7 +535,9 @@ export type JourneyCSVReturnProps = {
   press_done_time: string;
   response_option_selection_time: string;
   secret_user_id?: string;
-  user_id?: string;
+  user_id: string | null;
+  source_subject_id: string | null;
+  target_subject_id: string | null;
   activity_id: string;
   activity_flow_id: string | null;
   activity_flow_name: string | null;

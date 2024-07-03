@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Link } from '@mui/material';
 
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
@@ -32,7 +32,11 @@ import { getUpdatedActivityFlows } from 'modules/Builder/utils';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
-import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
+import {
+  itemsForReviewableActivity,
+  commonUploaderProps,
+  SUPPORT_LINK,
+} from './ActivityAbout.const';
 import {
   useCheckIfItemsHaveRequiredItems,
   useCheckIfItemsHaveVariables,
@@ -147,7 +151,20 @@ export const ActivityAbout = () => {
           <Tooltip tooltipTitle={isReviewableUnsupportedTooltip}>
             <span>{t('onlyAdminPanelActivity')}</span>
           </Tooltip>
-          <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
+          <Tooltip
+            tooltipTitle={
+              <>
+                {`${t('onlyAdminPanelActivityTooltip')} `}
+                <Link
+                  sx={{ color: variables.palette.inverse_on_surface }}
+                  target="_blank"
+                  href={SUPPORT_LINK}
+                >
+                  {SUPPORT_LINK}
+                </Link>
+              </>
+            }
+          >
             <span>
               <StyledCheckboxTooltipSvg id="more-info-outlined" />
             </span>

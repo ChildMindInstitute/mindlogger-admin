@@ -4,10 +4,10 @@ import { Context } from 'chartjs-plugin-datalabels';
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 import { Version } from 'api';
-import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { getTimelineStepSize, getTimeConfig } from '../Charts.utils';
 import { POINT_RADIUS_DEFAULT } from '../Charts.const';
+import { Completion } from '../../Report.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -118,19 +118,20 @@ export const getOptions = (
   };
 };
 
-export const getData = (answers: ActivityCompletion[], versions: Version[]) => ({
+export const getData = (completions: Completion[], versions: Version[]) => ({
   datasets: [
     {
       borderWidth: 1,
       pointRadius: POINT_RADIUS_DEFAULT,
       pointBorderColor: variables.palette.white,
       xAxisID: 'x',
-      data: answers.map(({ endDatetime, answerId, subscaleSetting, reviewCount }) => ({
+      data: completions.map(({ id, endDatetime, areSubscalesVisible, reviewCount, isFlow }) => ({
         x: new Date(endDatetime),
         y: 0,
-        answerId,
-        areSubscalesVisible: !!subscaleSetting?.subscales?.length,
+        id,
+        areSubscalesVisible,
         reviewCount,
+        isFlow,
       })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,

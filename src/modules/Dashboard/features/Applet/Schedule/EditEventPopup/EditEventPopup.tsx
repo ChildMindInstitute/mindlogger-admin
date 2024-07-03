@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -9,10 +10,10 @@ import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { StyledFlexSpaceBetween } from 'shared/styles';
 
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
-import { StyledButton, StyledContainer } from './EditEventPopup.styles';
 import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
@@ -22,6 +23,7 @@ export const EditEventPopup = ({
   editedEvent,
   setEditEventPopupVisible,
   defaultStartDate,
+  userId,
 }: EditEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
@@ -32,18 +34,18 @@ export const EditEventPopup = ({
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [isClosable, setIsClosable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { appletId, respondentId } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
 
-  const isIndividualCalendar = !!respondentId;
+  const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
     deleteEventApi,
-    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
   );
 
   const handleFormChanged = (isChanged: boolean) => {
@@ -120,20 +122,12 @@ export const EditEventPopup = ({
           open={open}
           onClose={handleEditEventClose}
           onSubmit={onSubmit}
-          title={t('editActivitySchedule')}
-          buttonText={t('save')}
-          width="67.1"
-          disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
-          onTransitionEntered={handleTransitionEntered}
-          data-testid={`${dataTestid}-popup`}
-        >
-          <>
-            {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
-              <Spinner uiType={SpinnerUiType.Secondary} noBackground />
-            )}
-            <StyledContainer>
-              <StyledButton
-                variant="outlined"
+          title={
+            <StyledFlexSpaceBetween sx={{ placeItems: 'center', width: '100%' }}>
+              {t('editActivitySchedule')}
+
+              <Button
+                variant="tonal"
                 type="submit"
                 onClick={onRemoveEventClick}
                 startIcon={<Svg width="18" height="18" id="clear-calendar" />}
@@ -141,21 +135,32 @@ export const EditEventPopup = ({
                 data-testid={`${dataTestid}-popup-remove`}
               >
                 {t('removeEvent')}
-              </StyledButton>
-            </StyledContainer>
-            <EventForm
-              ref={eventFormRef}
-              submitCallback={handleEditEventClose}
-              setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
-              setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
-              setActivityName={setCurrentActivityName}
-              editedEvent={editedEvent}
-              defaultStartDate={defaultStartDate}
-              onFormIsLoading={handleFormIsLoading}
-              onFormChange={handleFormChanged}
-              data-testid={`${dataTestid}-popup-form`}
-            />
-          </>
+              </Button>
+            </StyledFlexSpaceBetween>
+          }
+          buttonText={t('save')}
+          width="67.1"
+          disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
+          onTransitionEntered={handleTransitionEntered}
+          data-testid={`${dataTestid}-popup`}
+        >
+          {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
+            <Spinner uiType={SpinnerUiType.Secondary} noBackground />
+          )}
+
+          <EventForm
+            ref={eventFormRef}
+            submitCallback={handleEditEventClose}
+            setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+            setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+            setActivityName={setCurrentActivityName}
+            editedEvent={editedEvent}
+            defaultStartDate={defaultStartDate}
+            onFormIsLoading={handleFormIsLoading}
+            onFormChange={handleFormChanged}
+            data-testid={`${dataTestid}-popup-form`}
+            userId={userId}
+          />
         </Modal>
       )}
       {removeSingleScheduledPopupVisible && (

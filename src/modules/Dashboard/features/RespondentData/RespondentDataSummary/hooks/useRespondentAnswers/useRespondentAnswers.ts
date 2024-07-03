@@ -3,23 +3,71 @@ import { addDays } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { getAnswersApi } from 'modules/Dashboard/api';
+import {
+  ActivityHistoryFull,
+  EncryptedActivityAnswers,
+  getActivityAnswersApi,
+  getSummaryFlowAnswersApi,
+} from 'modules/Dashboard/api';
 import {
   ActivityCompletion,
+  FlowSubmission,
+  FlowActivityAnswers,
   RespondentsDataFormValues,
+  FlowResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { getObjectFromList } from 'shared/utils/getObjectFromList';
 
 import { getFormattedResponses } from '../../utils/getFormattedResponses';
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { getDateISO, getIdentifiers, processIdentifiersChange } from './useRespondentAnswers.utils';
+import { useRespondentDataContext } from '../../../RespondentDataContext';
 
 export const useRespondentAnswers = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const getDecryptedActivityData = useDecryptedActivityData();
   const { getValues, setValue } = useFormContext<RespondentsDataFormValues>();
+  const {
+    setAnswers,
+    setResponseOptions,
+    setSubscalesFrequency,
+    setFlowResponses,
+    setFlowSubmissions,
+    setFlowResponseOptionsCount,
+    identifiers,
+  } = useRespondentDataContext();
+
+  const getActivityDecryptedAnswers = async (encryptedAnswers: EncryptedActivityAnswers[]) => {
+    const decryptedAnswers = await Promise.allSettled(
+      encryptedAnswers.map(async (encryptedAnswer) => {
+        const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+        const { decryptedAnswers } = await getDecryptedActivityData({
+          userPublicKey,
+          answer,
+          items,
+          itemIds,
+        });
+
+        return {
+          decryptedAnswer: decryptedAnswers,
+          ...rest,
+        };
+      }),
+    );
+
+    return decryptedAnswers
+      .reduce((acc: ActivityCompletion[], result) => {
+        if (result.status === 'fulfilled') {
+          acc.push(result.value);
+        }
+
+        return acc;
+      }, [])
+      .sort((a, b) => a.version.localeCompare(b.version));
+  };
 
   const fetchAnswers = async ({
-    activity,
+    entity,
     endDate: providedEndDate,
     startTime: providedStartTime,
     endTime: providedEndTime,
@@ -28,7 +76,7 @@ export const useRespondentAnswers = () => {
     versions: providedVersions,
     isIdentifiersChange = false,
   }: FetchAnswers) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     try {
       const {
@@ -39,7 +87,6 @@ export const useRespondentAnswers = () => {
         identifier: formIdentifier,
         filterByIdentifier: formFilterByIdentifier,
         versions: formVersions,
-        identifiers,
       } = getValues();
       const startTime = providedStartTime ?? formStartTime;
       const endTime = providedEndTime ?? formEndTime;
@@ -54,85 +101,140 @@ export const useRespondentAnswers = () => {
           identifiers,
         }) ?? {};
 
-      const {
-        identifierAnswerStartDate,
-        identifierAnswerEndDate,
-        activityAnswerStartDate,
-        activityAnswerEndDate,
-      } =
+      const { identifierAnswerStartDate, identifierAnswerEndDate, answerStartDate, answerEndDate } =
         processIdentifiersChange({
           setValue,
           isIdentifiersChange,
           adjustStartEndDates: !!(filterByIdentifier && identifier?.length),
           recentIdentifiersAnswerDate: recentAnswerDateString,
-          activityLastAnswerDate: activity.lastAnswerDate,
+          lastAnswerDate: entity.lastAnswerDate,
         }) ?? {};
 
       /*The start date for filters is computed based on the following criteria:
       1. If identifiers are selected, it's set to one week before the latest answer containing the chosen identifier(s).
       2. If identifiers were previously selected and then deselected, it's set to one week before the latest activity answer.*/
-      const startDate = identifierAnswerStartDate ?? activityAnswerStartDate ?? formStartDate;
+      const startDate = identifierAnswerStartDate ?? answerStartDate ?? formStartDate;
       /*The end date for filters is computed based on the following criteria:
         1. If identifiers are selected, it's set to the latest answer containing the chosen identifier(s).
         2. If identifiers were previously selected and then deselected, it's set to the latest activity answer.
         3. If no changes were made to the identifiers, it's set to the provided date (if available) or the date from the form.*/
       const endDate =
         identifierAnswerEndDate ??
-        activityAnswerEndDate ??
+        answerEndDate ??
         providedEndDate ??
         formEndDate ??
         addDays(startDate, 1);
       const fromDatetime = getDateISO(startDate, startTime);
       const toDatetime = getDateISO(endDate, endTime);
 
-      const {
-        data: { result: encryptedAnswers },
-      } = await getAnswersApi({
-        appletId,
-        activityId: activity.id,
-        params: {
-          targetSubjectId: respondentId,
-          fromDatetime,
-          toDatetime,
-          emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
-          identifiers: selectedIdentifiers,
-          versions: versions.map(({ id }) => id),
-        },
-      });
+      const params = {
+        targetSubjectId: subjectId,
+        fromDatetime,
+        toDatetime,
+        emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
+        ...(selectedIdentifiers?.length && { identifiers: selectedIdentifiers }),
+        versions: versions.map(({ id }) => id),
+      };
 
-      const decryptedAnswers = await Promise.allSettled(
-        encryptedAnswers.map(async (encryptedAnswer) => {
-          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-          const { decryptedAnswers } = await getDecryptedActivityData({
-            userPublicKey,
-            answer,
-            items,
-            itemIds,
-          });
+      if (entity.isFlow) {
+        const {
+          data: { result: encryptedFlowSubmissions },
+        } = await getSummaryFlowAnswersApi({
+          appletId,
+          flowId: entity.id,
+          params,
+        });
 
-          return {
-            decryptedAnswer: decryptedAnswers,
-            ...rest,
-          };
-        }),
-      );
+        const flowSubmissions: FlowSubmission[] = [];
+        const activityAnswersMap: Map<string, FlowActivityAnswers> = new Map();
 
-      const sortedDecryptedAnswers = decryptedAnswers
-        .reduce((acc: ActivityCompletion[], result) => {
-          if (result.status === 'fulfilled') {
-            acc.push(result.value);
+        for await (const {
+          flowHistoryId,
+          answers,
+          submitId,
+          endDatetime,
+          createdAt,
+          reviewCount,
+        } of encryptedFlowSubmissions.submissions) {
+          const currentFlow = encryptedFlowSubmissions.flows.find(
+            (flow) => flow.idVersion === flowHistoryId,
+          );
+          if (!currentFlow) return;
+          const activitiesObject = getObjectFromList(
+            currentFlow.activities,
+            (activity: ActivityHistoryFull) => activity.idVersion,
+          );
+
+          for await (const answer of answers) {
+            const { name, items, subscaleSetting, id, performanceTaskType } =
+              activitiesObject[answer.activityHistoryId];
+            const decryptedAnswers = await getActivityDecryptedAnswers([
+              {
+                ...answer,
+                items,
+                answerId: answer.id,
+                events: answer.events ?? '',
+                subscaleSetting,
+              },
+            ]);
+
+            const existingAnswer = activityAnswersMap.get(id);
+            if (existingAnswer) {
+              existingAnswer.answers.push(...decryptedAnswers);
+            } else {
+              activityAnswersMap.set(id, {
+                activityId: id,
+                activityName: name,
+                isPerformanceTask: !!performanceTaskType,
+                answers: decryptedAnswers,
+              });
+            }
           }
 
-          return acc;
-        }, [])
-        .sort((a, b) => a.version.localeCompare(b.version));
+          flowSubmissions.push({
+            submitId,
+            endDatetime,
+            createdAt,
+            reviewCount,
+          });
+        }
 
-      setValue('answers', sortedDecryptedAnswers);
-      const { subscalesFrequency, formattedResponses } =
-        getFormattedResponses(sortedDecryptedAnswers);
+        let responseOptionsCount = 0;
 
-      setValue('responseOptions', formattedResponses);
-      setValue('subscalesFrequency', subscalesFrequency);
+        const flowResponses: FlowResponses[] = Array.from(activityAnswersMap.values()).map(
+          (item) => {
+            const { subscalesFrequency, formattedResponses } = getFormattedResponses(item.answers);
+            responseOptionsCount += Object.values(formattedResponses).length;
+
+            return {
+              ...item,
+              subscalesFrequency,
+              responseOptions: formattedResponses,
+            };
+          },
+        );
+
+        setFlowSubmissions(flowSubmissions);
+        setFlowResponses(flowResponses);
+        setFlowResponseOptionsCount(responseOptionsCount);
+
+        return;
+      }
+
+      const {
+        data: { result: encryptedAnswers },
+      } = await getActivityAnswersApi({
+        appletId,
+        activityId: entity.id,
+        params,
+      });
+
+      const decryptedAnswers = await getActivityDecryptedAnswers(encryptedAnswers);
+      setAnswers(decryptedAnswers);
+
+      const { subscalesFrequency, formattedResponses } = getFormattedResponses(decryptedAnswers);
+      setResponseOptions(formattedResponses);
+      setSubscalesFrequency(subscalesFrequency);
     } catch (error) {
       console.warn(error);
     }

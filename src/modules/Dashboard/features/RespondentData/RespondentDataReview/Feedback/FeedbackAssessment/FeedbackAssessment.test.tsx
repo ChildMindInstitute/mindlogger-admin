@@ -17,15 +17,15 @@ import { page } from 'resources';
 import { assessment, assessmentVersions, itemIds, lastAssessment } from 'shared/mock';
 import * as useEncryptedAnswersHook from 'modules/Dashboard/hooks/useEncryptedAnswers';
 
-import { getDefaultFormValues } from '../utils/getDefaultValues';
-import { FeedbackAssessment } from './FeedbackAssessment';
+import { getDefaultFormValues } from '../utils';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 import { FeedbackForm } from '../Feedback.types';
+import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
-const routePath = page.appletRespondentDataReview;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -119,7 +119,6 @@ const getFeedbackAssessmentComponent = ({
         setAssessmentStep={mockedSetAssessmentStep}
         submitCallback={mockedSubmitCallback}
         setIsLoading={mockedSetIsLoading}
-        answerId="some-answer-id"
         setError={mockedSetError}
         userName={mockedUserName}
         error={null}

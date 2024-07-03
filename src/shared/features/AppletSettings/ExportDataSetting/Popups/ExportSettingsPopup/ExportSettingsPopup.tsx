@@ -8,7 +8,7 @@ import { applet } from 'shared/state';
 import { SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components/DatePicker';
 import { Modal } from 'shared/components/Modal';
-import { theme, StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper } from 'shared/styles';
+import { StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper, theme } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
@@ -39,7 +39,6 @@ export const ExportSettingsPopup = ({
     maxDate: getMaxDate(),
     control,
     inputSx: {
-      width: '19rem',
       '& .MuiInputLabel-outlined': {
         textTransform: 'capitalize',
       },
@@ -148,7 +147,13 @@ export const ExportSettingsPopup = ({
           )}
           <Box sx={{ textAlign: 'center' }}>
             <StyledAppletSettingsButton
-              onClick={onExport}
+              onClick={() => {
+                if (dateType !== 'chooseDates') {
+                  setValue('toDate', getMaxDate());
+                }
+
+                onExport();
+              }}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="export" />}
               data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-button`}

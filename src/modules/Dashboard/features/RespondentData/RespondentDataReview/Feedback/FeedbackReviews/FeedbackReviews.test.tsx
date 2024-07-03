@@ -22,11 +22,11 @@ import { FeedbackReviews } from './FeedbackReviews';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { FeedbackForm } from '../Feedback.types';
-import { getDefaultFormValues } from '../utils/getDefaultValues';
+import { getDefaultFormValues } from '../utils/getDefaultValues/getDefaultValues';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
-const routePath = page.appletRespondentDataReview;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -303,7 +303,7 @@ const renderComponent = (
       value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}
     >
       <FormComponent assessment={assessment}>
-        <FeedbackReviews />{' '}
+        <FeedbackReviews />
       </FormComponent>
     </RespondentDataReviewContext.Provider>,
     {

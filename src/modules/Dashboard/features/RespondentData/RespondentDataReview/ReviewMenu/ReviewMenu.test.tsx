@@ -12,7 +12,7 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
@@ -20,8 +20,8 @@ import { ReviewMenu } from './ReviewMenu';
 import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
-const routePath = page.appletRespondentDataReview;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -53,9 +53,12 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
+          id: 'test-id',
           nickname: 'Mocked Respondent',
           secretUserId: '3921968c-3903-4872-8f30-a6e6a10cef36',
           lastSeen: null,
+          tag: 'Child' as ParticipantTag,
+          userId: null,
         },
       },
     },
@@ -66,7 +69,8 @@ const dataTestid = 'respondents-review-menu';
 
 const selectedDate = new Date('2023-12-15');
 const onMonthChange = jest.fn();
-const setSelectedActivity = jest.fn();
+const onSelectActivity = jest.fn();
+const onSelectFlow = jest.fn();
 const onSelectAnswer = jest.fn();
 const onDateChange = jest.fn();
 
@@ -110,13 +114,17 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
         ],
       },
     ],
+    flows: null,
     selectedActivity: null,
-    selectedAnswer: null,
-    setSelectedActivity,
+    onSelectActivity,
+    selectedFlow: null,
+    onSelectFlow,
     onSelectAnswer,
+    selectedAnswer: null,
     isDatePickerLoading: false,
     onDateChange,
     lastActivityCompleted: '2023-12-15T16:39:11.509095',
+    isActivitiesFlowsLoading: false,
     ...compProps,
   };
 
@@ -141,14 +149,13 @@ describe('ReviewMenu', () => {
     expect(
       screen.getByText('Respondent: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Select activity and response')).toBeInTheDocument();
 
     const activityLength = screen.queryAllByTestId(/respondents-review-menu-activity-\d+-select$/);
     expect(activityLength).toHaveLength(2);
 
     const activity0 = screen.getByTestId(`${dataTestid}-activity-0-select`);
     await userEvent.click(activity0);
-    expect(setSelectedActivity).toBeCalledTimes(1);
+    expect(onSelectActivity).toBeCalledTimes(1);
 
     const timestampLength = screen.queryAllByTestId(
       /respondents-review-menu-activity-0-completion-time-\d+$/,

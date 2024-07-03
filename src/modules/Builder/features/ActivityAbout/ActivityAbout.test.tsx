@@ -121,7 +121,7 @@ describe('ActivityAbout', () => {
     );
     expect(isEditable).toBeChecked();
     const isReviewable = screen.getByLabelText(
-      "This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent's data. Only single selection, multiple selection, and slider items are supported.",
+      'This Activity is intended for reviewer assessment only',
     );
     expect(isReviewable).not.toBeDisabled();
   });
@@ -134,7 +134,7 @@ describe('ActivityAbout', () => {
     });
 
     expect(
-      screen.getByLabelText('Turn the Activity to the Reviewer dashboard assessment'),
+      screen.getByLabelText('This Activity is intended for reviewer assessment only'),
     ).toBeDisabled();
   });
 

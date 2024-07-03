@@ -11,9 +11,9 @@ import { ReviewMenuItem } from './ReviewMenuItem';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
 
 const preselectedAnswerId = 'answer-id-3';
-const routeWithAnswerId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?answerId=${preselectedAnswerId}`;
-const routeWithoutAnswerId = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`;
-const routePath = page.appletRespondentDataReview;
+const routeWithAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?answerId=${preselectedAnswerId}`;
+const routeWithoutAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`;
+const routePath = page.appletParticipantDataReview;
 const preselectedAnswer = {
   createdAt: '2023-12-15T22:20:30.150182',
   endDatetime: '2023-12-15T22:20:30.150182',
@@ -34,17 +34,17 @@ const mockedActivity = {
   lastAnswerDate: '2023-12-15T23:29:36.150182',
   answerDates: [firstAnswer, latestAnswer, preselectedAnswer],
 };
-const mockedSetSelectedActivity = jest.fn();
+const mockedOnSelectItem = jest.fn();
 const mockedOnSelectAnswer = jest.fn();
 const dataTestid = 'review-menu-item';
 
 const renderComponent = (route: string, props?: Partial<ReviewMenuItemProps>) =>
   renderWithProviders(
     <ReviewMenuItem
-      activity={mockedActivity}
+      item={mockedActivity}
       isSelected={false}
       selectedAnswer={null}
-      setSelectedActivity={mockedSetSelectedActivity}
+      onSelectItem={mockedOnSelectItem}
       onSelectAnswer={mockedOnSelectAnswer}
       data-testid={dataTestid}
       {...props}
@@ -79,7 +79,7 @@ describe('Review Menu Item component', () => {
 
     await userEvent.click(activityHeader);
 
-    expect(mockedSetSelectedActivity).toHaveBeenCalledWith(mockedActivity);
+    expect(mockedOnSelectItem).toHaveBeenCalledWith(mockedActivity);
     expect(mockedOnSelectAnswer).toHaveBeenNthCalledWith(1, { answer: null });
     expect(activityHeader.querySelector('.svg-navigate-up')).toBeInTheDocument();
     expect(screen.getByTestId(`${dataTestid}-completion-wrapper`)).toBeInTheDocument();
@@ -108,7 +108,7 @@ describe('Review Menu Item component', () => {
       answer: preselectedAnswer,
       isRouteCreated: true,
     });
-    expect(mockedSetSelectedActivity).toHaveBeenCalledWith(mockedActivity);
+    expect(mockedOnSelectItem).toHaveBeenCalledWith(mockedActivity);
 
     await waitFor(() => {
       const activityHeader = screen.getByTestId(`${dataTestid}-select`);

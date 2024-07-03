@@ -7,4 +7,5 @@ export type EditEventPopupProps = {
   editedEvent: CalendarEvent;
   setEditEventPopupVisible: Dispatch<SetStateAction<boolean>>;
   defaultStartDate: Date;
+  userId?: string;
 };

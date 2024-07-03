@@ -13,7 +13,7 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { DateFormats, Roles, JEST_TEST_TIMEOUT } from 'shared/consts';
+import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
@@ -23,10 +23,10 @@ import { RespondentDataReview } from './RespondentDataReview';
 const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
-const route1 = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
-const route2 = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
-const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`;
-const routePath = page.appletRespondentDataReview;
+const route1 = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
+const route2 = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -61,9 +61,12 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
+          id: '1',
           nickname: 'Mocked Respondent',
           secretUserId: mockedRespondentId,
           lastSeen: '2023-12-15T23:29:36.150182',
+          tag: 'Child' as ParticipantTag,
+          userId: mockedRespondentId,
         },
       },
     },
@@ -135,6 +138,18 @@ const mockedGetWithActivities1 = {
       {
         id: '951145fa-3053-4428-a970-70531e383d89',
         name: 'Activity 1',
+        answerDates: [],
+      },
+    ],
+  },
+};
+
+const mockedGetWithFlows1 = {
+  data: {
+    result: [
+      {
+        id: 'flow-id-1',
+        name: 'flow 1',
         answerDates: [],
       },
     ],
@@ -278,6 +293,19 @@ const mockDecryptedActivityData = {
   ],
 };
 
+const mockAssessment = {
+  data: {
+    result: {
+      answer: null,
+      itemIds: [],
+      items: [],
+      itemsLast: null,
+      reviewerPublicKey: null,
+      versions: [],
+    },
+  },
+};
+
 const RespondentDataReviewWithForm = () => {
   const methods = useForm({
     defaultValues: {
@@ -296,10 +324,15 @@ describe('RespondentDataReview', () => {
   test(
     'renders component correctly with all child components when isFeedbackVisible param is false',
     async () => {
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
+      mockAxios.get.mockResolvedValueOnce(mockAssessment);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
+      mockAxios.get.mockResolvedValueOnce(mockAssessment);
 
       const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
@@ -318,11 +351,11 @@ describe('RespondentDataReview', () => {
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           1,
-          `/answers/applet/${mockedAppletId}/review/activities`,
+          `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
@@ -331,6 +364,19 @@ describe('RespondentDataReview', () => {
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           2,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: format(date, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedRespondentId,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
@@ -348,7 +394,11 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
-      expect(screen.getByText('No available Data yet')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Select the date, Activity Flow or Activity, and response time to review the response data.',
+        ),
+      ).toBeInTheDocument();
 
       // the activity list in the review menu child component is rendered correctly
       const activityLength = screen.queryAllByTestId(
@@ -398,13 +448,27 @@ describe('RespondentDataReview', () => {
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
+
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
+          4,
+          `/answers/applet/${mockedAppletId}/review/flows`,
+          {
+            params: {
+              createdDate: format(selectedDate, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedRespondentId,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          5,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
@@ -412,17 +476,18 @@ describe('RespondentDataReview', () => {
         );
         // get the answer with the latest completion date
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          4,
+          6,
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-2`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
         );
+
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          5,
+          7,
           `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
           {
             signal: undefined,
@@ -447,18 +512,18 @@ describe('RespondentDataReview', () => {
 
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          6,
+          8,
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-1`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
         );
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          7,
+          9,
           `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
           {
             signal: undefined,
@@ -466,7 +531,7 @@ describe('RespondentDataReview', () => {
         );
       });
 
-      // check answer description render
+      // check answer summary render
       expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
 
       // check question render
@@ -499,6 +564,7 @@ describe('RespondentDataReview', () => {
   test(
     'renders component correctly with all child components when isFeedbackVisible param is true',
     async () => {
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
@@ -525,11 +591,11 @@ describe('RespondentDataReview', () => {
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           1,
-          `/answers/applet/${mockedAppletId}/review/activities`,
+          `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
               createdDate: '2023-12-15',
-              limit: 10000,
+              limit: MAX_LIMIT,
               targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
@@ -538,6 +604,19 @@ describe('RespondentDataReview', () => {
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           2,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: '2023-12-15',
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedRespondentId,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
@@ -550,11 +629,11 @@ describe('RespondentDataReview', () => {
         );
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
+          4,
           `/answers/applet/${mockedAppletId}/activities/2/answers/answer-id-2-2`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
@@ -562,7 +641,7 @@ describe('RespondentDataReview', () => {
       });
 
       expect(mockAxios.get).toHaveBeenNthCalledWith(
-        4,
+        5,
         `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
         {
           signal: undefined,
@@ -576,6 +655,7 @@ describe('RespondentDataReview', () => {
   );
 
   test('renders component with chosen last answer date', async () => {
+    mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
     mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
 
     renderWithProviders(<RespondentDataReviewWithForm />, {
@@ -589,11 +669,24 @@ describe('RespondentDataReview', () => {
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(
         1,
+        `/answers/applet/${mockedAppletId}/review/flows`,
+        {
+          params: {
+            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+            limit: MAX_LIMIT,
+            targetSubjectId: mockedRespondentId,
+          },
+          signal: undefined,
+        },
+      );
+
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        2,
         `/answers/applet/${mockedAppletId}/review/activities`,
         {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
-            limit: 10000,
+            limit: MAX_LIMIT,
             targetSubjectId: mockedRespondentId,
           },
           signal: undefined,

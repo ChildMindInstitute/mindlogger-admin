@@ -1,6 +1,10 @@
 import { enUS, fr } from 'date-fns/locale';
+import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
+
+export const DEFAULT_START_TIME = '00:00';
+export const DEFAULT_END_TIME = '23:59';
 
 export const DEFAULT_ROWS_PER_PAGE = 20;
 export const TABS_HEIGHT = '6.1rem';
@@ -35,6 +39,7 @@ export enum UploadFileError {
 
 export const SEARCH_DEBOUNCE_VALUE = 700;
 export const CHANGE_DEBOUNCE_VALUE = 500;
+export const VALIDATION_DEBOUNCE_VALUE = 1000;
 
 export const DEFAULT_MILLISECONDS_DURATION = 3000;
 export const MIN_MILLISECONDS_DURATION = 1;
@@ -70,7 +75,8 @@ export enum DateFormats {
   shortISO = "yyyy-MM-dd'T'HH:mm:ss",
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
-  MonthDayYearTime = 'MMM dd, yyyy HH:mm',
+  MonthDayYearTime = 'MMM dd, yyyy, HH:mm',
+  MonthDayYear = 'MMM dd, yyyy',
   MonthDayYearTimeSeconds = 'MMM dd, yyyy HH:mm:ss',
 }
 
@@ -247,6 +253,7 @@ export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
 export const reportHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',
@@ -268,6 +275,7 @@ export const reportHeader = [
 
 export const activityJourneyHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',
@@ -279,6 +287,8 @@ export const activityJourneyHeader = [
   'response_option_selection_time',
   'secret_user_id',
   'user_id',
+  'source_subject_id',
+  'target_subject_id',
   'activity_id',
   'activity_flow_id',
   'activity_flow_name',
@@ -338,6 +348,20 @@ export const JEST_TEST_TIMEOUT = 15000;
 export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
+
+export const USER_SELECTABLE_PARTICIPANT_TAGS = ['', 'Child', 'Parent', 'Teacher'] as const;
+export type UserSelectableParticipantTag = (typeof USER_SELECTABLE_PARTICIPANT_TAGS)[number];
+
+export const PARTICIPANT_TAGS = [...USER_SELECTABLE_PARTICIPANT_TAGS, 'Team'] as const;
+export type ParticipantTag = (typeof PARTICIPANT_TAGS)[number];
+
+export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
+  '': 'close',
+  Child: 'account',
+  Parent: 'users-outlined',
+  Teacher: 'teacher',
+  Team: 'team-outlined',
+};
 
 export const observerStyles = {
   position: 'absolute',

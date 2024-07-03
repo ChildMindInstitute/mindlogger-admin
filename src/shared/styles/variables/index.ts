@@ -24,10 +24,14 @@ export const variables = {
     md: '0.1rem', //1px
   },
   opacity: {
+    noOpacity: 1,
     hover: 0.85,
+    halfDisabled: 0.64,
     disabled: 0.38,
   },
   boxShadow: {
+    buttonElevation1: '0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24)',
+    buttonElevation2: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
     light0: '0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px 1px rgba(0, 0, 0, 0.05)',
     light1: '0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',
     light2: '0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15)',
@@ -39,6 +43,8 @@ export const variables = {
     dark3: '0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3)',
     dark4: '0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3)',
     dark5: '0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3)',
+    soft: '0 0 8px rgba(0, 0, 0, 0.08)',
+    soft2: '0 0 16px rgba(0, 0, 0, 0.08)',
   },
   transitions: {
     all: 'all 0.3s',

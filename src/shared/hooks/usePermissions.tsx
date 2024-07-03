@@ -3,15 +3,35 @@ import { useTranslation } from 'react-i18next';
 
 import { workspaces } from 'shared/state/Workspaces';
 import { EmptyState } from 'shared/components/EmptyState';
-import { getErrorMessage } from 'shared/utils/errors';
 import { ApiResponseCodes } from 'shared/api';
 import { ErrorResponseType } from 'shared/types';
 
-export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
+type FunctionResponse = {
+  response?: { status?: ApiResponseCodes };
+  status?: ApiResponseCodes;
+};
+
+export const usePermissions = (
+  asyncFunc: () => Promise<any> | undefined,
+  dependencies: unknown[] = [],
+) => {
   const { t } = useTranslation('app');
   const [isForbidden, setIsForbidden] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { ownerId } = workspaces.useData() || {};
+
+  const handlePermissionCheck = (response: FunctionResponse) => {
+    if (
+      response?.response?.status === ApiResponseCodes.Forbidden ||
+      response?.status === ApiResponseCodes.Forbidden ||
+      (Array.isArray(response) &&
+        response.some((data) => data.type === ErrorResponseType.AccessDenied))
+    ) {
+      setIsForbidden(true);
+    } else {
+      setIsForbidden(false);
+    }
+  };
 
   useEffect(() => {
     if (!ownerId || !asyncFunc) return;
@@ -21,24 +41,15 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         setIsLoading(true);
         const { payload } = await asyncFunc();
 
-        if (
-          payload?.response?.status === ApiResponseCodes.Forbidden ||
-          payload?.status === ApiResponseCodes.Forbidden ||
-          (Array.isArray(payload) &&
-            payload.some((data) => data.type === ErrorResponseType.AccessDenied))
-        ) {
-          return setIsForbidden(true);
-        }
-
-        setIsForbidden(false);
-      } catch (e) {
-        getErrorMessage(e);
+        handlePermissionCheck(payload);
+      } catch (error) {
+        handlePermissionCheck(error as FunctionResponse);
       } finally {
         setIsLoading(false);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ownerId]);
+  }, [ownerId, ...dependencies]);
 
   return {
     isForbidden,

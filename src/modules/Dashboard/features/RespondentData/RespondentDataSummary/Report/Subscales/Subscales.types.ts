@@ -1,6 +1,6 @@
 import { ActivityItemAnswer } from 'shared/types';
 import { ActivitySettingsSubscale } from 'shared/state';
-import { Version } from 'api';
+import { Version } from 'modules/Dashboard/api';
 import {
   ActivityCompletion,
   SingleMultiSelectionSliderFormattedResponses,
@@ -24,6 +24,7 @@ export type SubscalesProps = {
   answers: ActivityCompletion[];
   versions: Version[];
   subscalesFrequency: number;
+  flowResponsesIndex?: number;
 };
 
 export type ParsedSubscale = {

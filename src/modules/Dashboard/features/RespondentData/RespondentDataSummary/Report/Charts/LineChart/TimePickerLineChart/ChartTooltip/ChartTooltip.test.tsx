@@ -40,6 +40,7 @@ describe('ChartTooltip', () => {
     const tooltipItems = screen.queryAllByTestId(regex);
     expect(tooltipItems).toHaveLength(2);
 
+    expect(screen.getByText('2 responses')).toBeInTheDocument();
     expect(screen.getByText('15:40')).toBeInTheDocument();
     expect(screen.getByText('Dec 20, 14:55')).toBeInTheDocument();
     expect(screen.getByText('07:35')).toBeInTheDocument();

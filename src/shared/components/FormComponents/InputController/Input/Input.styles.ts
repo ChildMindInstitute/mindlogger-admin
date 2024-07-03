@@ -5,7 +5,6 @@ import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
-import { commonEllipsisStyles } from 'shared/styles/stylesConsts';
 
 const commonHintProps = `
   position: absolute;
@@ -35,14 +34,13 @@ export const StyledTextFieldContainer = styled(Box, shouldForwardProp)`
   position: relative;
   width: 100%;
 
+  /* Mimics absolute positioning if error is 1 line, but word-wraps & expands if needed */
   .MuiFormHelperText-root {
-    position: absolute;
-    left: 0;
-    bottom: -2.1rem;
-    max-width: calc(100% - 1.4rem);
-    width: ${({ hasCounter }: { hasCounter: boolean }) =>
-      hasCounter ? 'calc(100% - 16.5rem)' : '100%'};
-    ${commonEllipsisStyles};
+    margin-top: 0;
+    position: relative;
+    top: ${theme.spacing(0.3)};
+    min-height: ${variables.font.lineHeight.sm};
+    margin-bottom: -${variables.font.lineHeight.sm};
   }
 `;
 

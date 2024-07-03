@@ -15,6 +15,7 @@ const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
 export const getJourneyCSVReturn = ({
   id,
+  activity_flow_submission_id,
   activity_scheduled_time,
   activity_start_time,
   activity_end_time,
@@ -26,6 +27,8 @@ export const getJourneyCSVReturn = ({
   press_skip_time,
   press_done_time,
   response_option_selection_time,
+  source_subject_id = '',
+  target_subject_id = '',
   secret_user_id = '',
   user_id = '',
   activity_id,
@@ -43,6 +46,7 @@ export const getJourneyCSVReturn = ({
   timezone_offset,
 }: JourneyCSVReturnProps) => ({
   id,
+  activity_flow_submission_id,
   activity_scheduled_time,
   activity_start_time,
   activity_end_time,
@@ -56,6 +60,8 @@ export const getJourneyCSVReturn = ({
   response_option_selection_time,
   secret_user_id,
   user_id,
+  source_subject_id,
+  target_subject_id,
   activity_id,
   activity_flow_id,
   activity_flow_name,
@@ -79,17 +85,21 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     endDatetime,
     respondentSecretId,
     respondentId,
+    sourceSubjectId,
+    targetSubjectId,
     activityId,
     activityName,
     flowName,
     flowId,
     version,
     legacyProfileId,
+    submitId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
   return getJourneyCSVReturn({
     id,
+    activity_flow_submission_id: flowId ? submitId : '',
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
@@ -105,6 +115,8 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     response_option_selection_time: getTime(event.type === UserActionType.SetAnswer),
     secret_user_id: respondentSecretId,
     user_id: respondentId,
+    source_subject_id: sourceSubjectId,
+    target_subject_id: targetSubjectId,
     activity_id: activityId,
     activity_flow_id: flowId,
     activity_flow_name: flowName,
@@ -137,6 +149,8 @@ export const getJourneyCSVObject = <T>({
     endDatetime,
     respondentSecretId,
     respondentId,
+    sourceSubjectId,
+    targetSubjectId,
     activityId,
     activityName,
     flowName,
@@ -145,6 +159,7 @@ export const getJourneyCSVObject = <T>({
     legacyProfileId,
     scheduledEventId,
     tzOffset,
+    submitId,
   } = event;
   if (!activityItem) return;
 
@@ -154,6 +169,7 @@ export const getJourneyCSVObject = <T>({
 
   return getJourneyCSVReturn({
     id: event.id,
+    activity_flow_submission_id: flowId ? submitId : '',
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
@@ -169,6 +185,8 @@ export const getJourneyCSVObject = <T>({
     response_option_selection_time: getTime(event.type === UserActionType.SetAnswer),
     secret_user_id: respondentSecretId,
     user_id: respondentId,
+    source_subject_id: sourceSubjectId,
+    target_subject_id: targetSubjectId,
     activity_id: activityId,
     activity_flow_id: flowId,
     activity_flow_name: flowName,

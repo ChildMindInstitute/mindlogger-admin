@@ -5,6 +5,7 @@ import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 import {
   getUserDetailsApi,
   ResetPassword,
@@ -45,6 +46,15 @@ export const getUserDetails = createAsyncThunk(
   async (_: void, { rejectWithValue, signal }) => {
     try {
       const { data } = await getUserDetailsApi(signal);
+      if (data?.result) {
+        // Make sure to identify session with LD, e.g. when user is already logged in
+        FeatureFlags.login(data.result.id);
+      }
+
+      if (data?.result) {
+        // Make sure to identify session with LD, e.g. when user is already logged in
+        FeatureFlags.login(data.result.id);
+      }
 
       if (data?.result) {
         // Make sure to identify session with LD, e.g. when user is already logged in

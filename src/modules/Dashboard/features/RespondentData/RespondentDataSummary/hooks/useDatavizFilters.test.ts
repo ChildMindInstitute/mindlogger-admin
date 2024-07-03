@@ -1,24 +1,21 @@
 import { renderHook } from '@testing-library/react';
+import * as reactHookForm from 'react-hook-form';
 
 import { Version } from 'api';
 
 import { useDatavizFilters } from './useDatavizFilters';
 
 describe('useDatavizFilters', () => {
-  const mockWatch = jest.fn();
-  const mockSummaryFiltersForm = {
-    startDate: new Date('2023-01-10'),
-    endDate: new Date('2023-01-15'),
-    moreFiltersVisible: false,
-    startTime: '00:00',
-    endTime: '23:59',
-  };
+  const mockFormReturnValues = [new Date('2023-01-10'), new Date('2023-01-15'), '00:00', '23:59'];
+
+  beforeEach(() => {
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(mockFormReturnValues);
+  });
 
   test('should calculate minDate, maxDate correctly and return empty versions', () => {
     const versions: Version[] = [];
 
-    mockWatch.mockReturnValue(mockSummaryFiltersForm);
-    const { result } = renderHook(() => useDatavizFilters(mockWatch, versions));
+    const { result } = renderHook(() => useDatavizFilters(versions));
 
     expect(result.current.minDate).toEqual(new Date('2023-01-10T00:00:00'));
     expect(result.current.maxDate).toEqual(new Date('2023-01-15T23:59:00'));
@@ -35,8 +32,7 @@ describe('useDatavizFilters', () => {
       { version: '1.1.0', createdAt: '2023-01-15T20:15:00' },
     ];
 
-    mockWatch.mockReturnValue(mockSummaryFiltersForm);
-    const { result } = renderHook(() => useDatavizFilters(mockWatch, versions));
+    const { result } = renderHook(() => useDatavizFilters(versions));
 
     expect(result.current.minDate).toEqual(new Date('2023-01-10T00:00:00'));
     expect(result.current.maxDate).toEqual(new Date('2023-01-15T23:59:00'));
@@ -60,8 +56,7 @@ describe('useDatavizFilters', () => {
       { version: '1.1.0', createdAt: '2023-01-17T20:15:00' },
     ];
 
-    mockWatch.mockReturnValue(mockSummaryFiltersForm);
-    const { result } = renderHook(() => useDatavizFilters(mockWatch, versions));
+    const { result } = renderHook(() => useDatavizFilters(versions));
 
     expect(result.current.minDate).toEqual(new Date('2023-01-10T00:00:00'));
     expect(result.current.maxDate).toEqual(new Date('2023-01-15T23:59:00'));

@@ -12,15 +12,15 @@ export const getReportZipName = (name: ZipFile, suffix: string) =>
   `${name}-responses-${new Date().toDateString()}${suffix}.zip`;
 
 export const getStabilityTrackerCsvName = (
-  id: string,
+  item: DecryptedAnswerData,
   phaseType: DecryptedStabilityTrackerAnswerObject['phaseType'],
-) => `${id}_${phaseType}.csv`;
+) => `${item.targetSecretId}_${item.id}_${phaseType}.csv`;
 
-export const getABTrailsCsvName = (index: number, id?: string) =>
-  `${id || ''}-trail${index + 1}.csv`;
+export const getABTrailsCsvName = (index: number, item: DecryptedAnswerData) =>
+  `${item.targetSecretId}-${item.id || ''}-trail${index + 1}.csv`;
 
 export const getMediaFileName = (item: DecryptedAnswerData, extension: string) =>
-  `${item.id}-${item.respondentId}-${item.activityItem.name}.${extension}`;
+  `${item.targetSecretId}-${item.id}-${item.activityItem.name}.${extension}`;
 
 export const getFileExtension = (fileUrl: string) => {
   const extension = (fileUrl.split('/').pop()?.split('.').pop() ?? '').split('?')[0] ?? '';
@@ -30,4 +30,4 @@ export const getFileExtension = (fileUrl: string) => {
 };
 
 export const getFlankerCsvName = (item: DecryptedAnswerData) =>
-  `${item.id}-${item.activityItem.name}.csv`;
+  `${item.targetSecretId}-${item.id}-${item.activityItem.name}.csv`;

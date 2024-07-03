@@ -45,18 +45,17 @@ export const ActivityFlowBuilder = () => {
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
   const currentActivityFlow = activityFlows[activityFlowIndex];
   const activityFlowName = `activityFlows.${activityFlowIndex}`;
-  const {
-    fields: activityFlowItems,
-    remove,
-    append,
-    insert,
-    update,
-    move,
-  } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  const { remove, append, insert, update, move } = useFieldArray<
+    Record<string, ActivityFlowItem[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: `${activityFlowName}.items`,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
+  const activityFlowItems = currentActivityFlow?.items;
+
   // remove Reviewer Assessment Activity from Activities list
   const { activities, activitiesIdsObjects } = useMemo(
     () => getNonReviewableActivities(formActivities),
@@ -78,7 +77,7 @@ export const ActivityFlowBuilder = () => {
   };
 
   const handleFlowActivityDelete = () => {
-    if (!flowActivityToDeleteData) return;
+    if (!flowActivityToDeleteData || !activityFlowItems) return;
     if (
       currentActivityFlow.reportIncludedActivityName &&
       flowActivityToDeleteData.activityKey === currentActivityFlow.reportIncludedActivityName &&
@@ -109,6 +108,7 @@ export const ActivityFlowBuilder = () => {
   };
 
   const handleFlowActivityUpdate = (index: number, obj: ActivityFlowItem) => {
+    if (!activityFlowItems) return;
     if (
       flowActivityToUpdateIndex !== null &&
       currentActivityFlow.reportIncludedActivityName &&

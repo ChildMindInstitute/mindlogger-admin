@@ -23,7 +23,14 @@ export const FeatureFlags = {
       workspaceId,
     });
   },
-  async identify(context: { userId?: string; workspaceId?: string }) {
+  async updateWorkspaces(workspaces: string[]) {
+    if (!_userId) return;
+    this.identify({
+      userId: _userId,
+      workspaces,
+    });
+  },
+  async identify(context: { userId?: string; workspaces?: string[]; workspaceId?: string }) {
     if (PROHIBITED_PII_KEYS.some((val) => Object.keys(context).includes(val))) {
       throw new Error('Context contains prohibited keys');
     }

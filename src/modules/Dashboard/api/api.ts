@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
-import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
 
 import {
@@ -20,7 +20,7 @@ import {
   CreateEventType,
   OwnerId,
   Answers,
-  GetAnswersNotesParams,
+  GetNotesParams,
   NoteId,
   Note,
   AppletSubmitDateList,
@@ -39,17 +39,12 @@ import {
   EditManagerAccess,
   ExportData,
   SaveAssessment,
-  DatavizActivity,
   Version,
-  SummaryAnswers,
-  DatavizAnswer,
+  EncryptedActivityAnswers,
   Identifier,
-  ReviewActivity,
   Review,
   AssessmentReview,
   AppletName,
-  LatestReport,
-  Identifiers,
   GetRespondentDetailsParams,
   AssessmentResult,
   SubmitDates,
@@ -59,9 +54,29 @@ import {
   DeleteSubject,
   TargetSubjectId,
   SubjectId,
+  GetActivitiesParams,
   DeleteReview,
   EncryptedActivityAnswer,
   Integration,
+  GetWorkspaceRespondentsParams,
+  GetAppletSubmissionsParams,
+  GetAppletSubmissionsResponse,
+  ReviewEntity,
+  FlowAnswersParams,
+  EncryptedFlowAnswers,
+  DatavizEntity,
+  GetFlowIdentifiersParams,
+  GetFlowVersionsParams,
+  GetActivityIdentifiersParams,
+  GetActivityVersionsParams,
+  SummaryActivityAnswersParams,
+  SummaryFlowAnswersParams,
+  GetLatestReportParams,
+  EncryptedFlowsAnswers,
+  SaveFlowAssessmentParams,
+  DeleteFlowReviewParams,
+  AssessmentFlowReviewParams,
+  FeedbackNote,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -115,7 +130,10 @@ export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: A
   );
 };
 
-export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+export const getWorkspaceRespondentsApi = (
+  { params }: GetWorkspaceRespondentsParams,
+  signal?: AbortSignal,
+) => {
   const { ownerId, appletId, ...restParams } = params;
 
   return authApiClient.get(
@@ -271,12 +289,12 @@ export const postAppletShellAccountApi = (
   );
 
 export const postSubjectInvitationApi = (
-  { appletId, subjectId, email }: SubjectInvitationData,
+  { appletId, subjectId, email, language }: SubjectInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/invitations/${appletId}/subject`,
-    { subjectId, email },
+    { subjectId, email, language },
     {
       signal,
     },
@@ -297,8 +315,7 @@ export const setAppletEncryptionApi = (
 ) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { ownerId, ...restParams } = params;
+  const { ownerId: _ownerId, ...restParams } = params;
 
   return authApiClient.get('/invitations', {
     params: restParams,
@@ -431,7 +448,20 @@ export const getReviewActivitiesApi = (
   { appletId, targetSubjectId, createdDate }: Answers,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<ReviewActivity>>(`/answers/applet/${appletId}/review/activities`, {
+  authApiClient.get<Response<ReviewEntity>>(`/answers/applet/${appletId}/review/activities`, {
+    params: {
+      targetSubjectId,
+      createdDate,
+      limit: MAX_LIMIT,
+    },
+    signal,
+  });
+
+export const getReviewFlowsApi = (
+  { appletId, targetSubjectId, createdDate }: Answers,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<ReviewEntity>>(`/answers/applet/${appletId}/review/flows`, {
     params: {
       targetSubjectId,
       createdDate,
@@ -455,12 +485,42 @@ export const getActivityAnswerApi = (
     },
   );
 
-export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
+export const getAppletSubmissionsApi = (
+  { appletId, page = 1, limit = SHARED_DEFAULT_ROWS_PER_PAGE }: GetAppletSubmissionsParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+  authApiClient.get(`/answers/applet/${appletId}/submissions`, {
+    params: { page, limit: Math.min(limit, MAX_LIMIT) },
+    signal,
+  }) as Promise<AxiosResponse<GetAppletSubmissionsResponse>>;
+
+export const getFlowAnswersApi = (
+  { appletId, submitId, flowId }: FlowAnswersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<EncryptedFlowAnswers>>(
+    `/answers/applet/${appletId}/flows/${flowId}/submissions/${submitId}`,
+    {
+      params: { limit: MAX_LIMIT },
+      signal,
+    },
+  );
+
+export const getNotesApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    params,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & GetNotesParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<FeedbackNote>>(
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
     {
       params: {
         ...params,
@@ -470,36 +530,64 @@ export const getAnswersNotesApi = (
     },
   );
 
-export const createAnswerNoteApi = (
-  { appletId, answerId, activityId, note }: ActivityAnswerParams & Note,
+export const createNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    note,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
     { note },
     {
       signal,
     },
   );
 
-export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, activityId, note }: ActivityAnswerParams & NoteId & Note,
+export const editNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    noteId,
+    note,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
     { note },
     {
       signal,
     },
   );
 
-export const deleteAnswerNoteApi = (
-  { appletId, answerId, activityId, noteId }: ActivityAnswerParams & NoteId,
+export const deleteNoteApi = (
+  {
+    appletId,
+    answerId,
+    activityId,
+    submitId,
+    flowId,
+    noteId,
+  }: Partial<ActivityAnswerParams> & Partial<FlowAnswersParams> & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
+    answerId && activityId
+      ? `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`
+      : `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
     {
       signal,
     },
@@ -522,12 +610,35 @@ export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signa
     },
   );
 
+export const getFlowAssessmentApi = (
+  { appletId, submitId }: AssessmentFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<AssessmentResult>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
+    {
+      signal,
+    },
+  );
+
 export const createAssessmentApi = (
   { appletId, answerId, ...assessment }: SaveAssessment,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const createFlowAssessmentApi = (
+  { appletId, submitId, ...assessment }: SaveFlowAssessmentParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
     { ...assessment },
     {
       signal,
@@ -545,16 +656,38 @@ export const deleteReviewApi = (
     },
   );
 
+export const deleteFlowReviewApi = (
+  { appletId, submitId, assessmentId }: DeleteFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments/${assessmentId}`,
+    {
+      signal,
+    },
+  );
+
 export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
   authApiClient.get<Response<Review>>(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
     signal,
   });
 
+export const getFlowReviewsApi = (
+  { appletId, submitId }: AssessmentFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Review>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/reviews`,
+    {
+      signal,
+    },
+  );
+
 export const getSummaryActivitiesApi = (
   { appletId, targetSubjectId }: AppletId & TargetSubjectId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
+  authApiClient.get<Response<DatavizEntity>>(`/answers/applet/${appletId}/summary/activities`, {
     params: {
       targetSubjectId,
       limit: MAX_LIMIT,
@@ -562,8 +695,20 @@ export const getSummaryActivitiesApi = (
     signal,
   });
 
-export const getIdentifiersApi = (
-  { appletId, activityId, targetSubjectId }: Identifiers,
+export const getSummaryFlowsApi = (
+  { appletId, targetSubjectId }: AppletId & TargetSubjectId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<DatavizEntity>>(`/answers/applet/${appletId}/summary/flows`, {
+    params: {
+      targetSubjectId,
+      limit: MAX_LIMIT,
+    },
+    signal,
+  });
+
+export const getActivityIdentifiersApi = (
+  { appletId, activityId, targetSubjectId }: GetActivityIdentifiersParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
@@ -576,8 +721,22 @@ export const getIdentifiersApi = (
     },
   );
 
-export const getVersionsApi = (
-  { appletId, activityId }: AppletId & { activityId: string },
+export const getFlowIdentifiersApi = (
+  { appletId, flowId, targetSubjectId }: GetFlowIdentifiersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Identifier>>(
+    `/answers/applet/${appletId}/flows/${flowId}/identifiers`,
+    {
+      params: {
+        targetSubjectId,
+      },
+      signal,
+    },
+  );
+
+export const getActivityVersionsApi = (
+  { appletId, activityId }: GetActivityVersionsParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Version>>(
@@ -587,12 +746,22 @@ export const getVersionsApi = (
     },
   );
 
+export const getFlowVersionsApi = (
+  { appletId, flowId }: GetFlowVersionsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Version>>(`/answers/applet/${appletId}/flows/${flowId}/versions`, {
+    signal,
+  });
+
 export const getLatestReportApi = (
-  { appletId, activityId, subjectId }: LatestReport,
+  { appletId, activityId, flowId, subjectId }: GetLatestReportParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/activities/${activityId}/subjects/${subjectId}/latest_report`,
+    `/answers/applet/${appletId}/${
+      activityId ? `activities/${activityId}` : `flows/${flowId}`
+    }/subjects/${subjectId}/latest_report`,
     {},
     {
       responseType: 'arraybuffer',
@@ -600,17 +769,39 @@ export const getLatestReportApi = (
     },
   );
 
-export const getAnswersApi = (
-  { appletId, activityId, params: { identifiers, versions, ...params } }: SummaryAnswers,
+export const getActivityAnswersApi = (
+  {
+    appletId,
+    activityId,
+    params: { identifiers, versions, ...params },
+  }: SummaryActivityAnswersParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<DatavizAnswer>>(
+  authApiClient.get<Response<EncryptedActivityAnswers>>(
     `/answers/applet/${appletId}/activities/${activityId}/answers`,
     {
       params: {
         ...params,
         identifiers: identifiers?.join(','),
         versions: versions?.join(','),
+        limit: MAX_LIMIT,
+      },
+      signal,
+    },
+  );
+
+export const getSummaryFlowAnswersApi = (
+  { appletId, flowId, params: { identifiers, versions, ...params } }: SummaryFlowAnswersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<EncryptedFlowsAnswers>>(
+    `/answers/applet/${appletId}/flows/${flowId}/submissions`,
+    {
+      params: {
+        ...params,
+        identifiers: identifiers?.join(','),
+        versions: versions?.join(','),
+        limit: MAX_LIMIT,
       },
       signal,
     },
@@ -702,6 +893,15 @@ export const getRespondentDetailsApi = (
 
 export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSignal) =>
   authApiClient.get(`/subjects/${subjectId}`, {
+    signal,
+  });
+
+export const getAppletActivitiesApi = (
+  { params: { appletId, ...params } }: GetActivitiesParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/activities/applet/${appletId}`, {
+    params,
     signal,
   });
 
