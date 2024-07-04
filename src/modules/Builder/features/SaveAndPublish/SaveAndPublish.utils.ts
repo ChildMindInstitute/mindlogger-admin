@@ -12,13 +12,14 @@ import {
   ItemAlert,
   OptionCondition,
   RangeValueCondition,
+  RangeValueConditionDate,
   ScoreConditionalLogic,
   ScoreReport,
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
   SingleMultiSelectionPerRowCondition,
-  SingleValueCondition,
+  SingleValueConditionDate,
   SliderRowsCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
@@ -359,13 +360,15 @@ export const processConditionPayload = (
 ) => {
   switch (itemType) {
     case ItemResponseType.Date: {
-      const conditionData = condition as SingleValueCondition<Date> | RangeValueCondition<Date>;
+      const conditionData = condition as unknown as
+        | SingleValueConditionDate
+        | RangeValueConditionDate;
       const conditionType = conditionData.type;
       if (
         conditionType &&
         [ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)
       ) {
-        const conditionPayload = conditionData.payload as RangeValueCondition<Date>['payload'];
+        const conditionPayload = conditionData.payload as RangeValueConditionDate['payload'];
         const minValue = formatToNumberDate(conditionPayload.minValue);
         const maxValue = formatToNumberDate(conditionPayload.maxValue);
 
@@ -376,7 +379,7 @@ export const processConditionPayload = (
         };
       }
 
-      const conditionPayload = conditionData.payload as SingleValueCondition<Date>['payload'];
+      const conditionPayload = conditionData.payload as SingleValueConditionDate['payload'];
       const value = formatToNumberDate(conditionPayload.value);
 
       return {

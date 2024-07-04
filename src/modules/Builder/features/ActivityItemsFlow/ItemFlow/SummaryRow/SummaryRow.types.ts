@@ -1,6 +1,6 @@
 import { ItemFormValues } from 'modules/Builder/types';
 import { ConditionType, ItemResponseType } from 'shared/consts';
-import { ConditionalLogic, Condition } from 'shared/state/Applet';
+import { ConditionalLogic, Condition, ResponseValues } from 'shared/state/Applet';
 
 export type SummaryRowProps = {
   name: string;
@@ -24,7 +24,10 @@ export type GetItemsInUsageProps = {
   itemKey: string;
 };
 
-export type ConditionWithResponseType = Condition & { responseType: ItemResponseType };
+export type ConditionWithResponseType = Condition & {
+  responseType: ItemResponseType;
+  responseValues: ResponseValues;
+};
 export type GroupedConditionsByRow = Record<string, Condition[]>;
 
 export type CheckIfSelectionPerRowHasIntersectionProps = {

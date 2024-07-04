@@ -11,9 +11,10 @@ import {
   SingleMultiSelectionPerRowCondition,
   SliderRowsCondition,
   TimeRangeConditionType,
+  RangeValueConditionDate,
 } from 'shared/state/Applet';
 
-import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { DEFAULT_PAYLOAD_MAX_VALUE, DEFAULT_PAYLOAD_MIN_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
 import { StyledMdPreview } from '../ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -145,6 +146,11 @@ export const getPayload = ({
 }: GetPayload) => {
   const responseType = selectedItem?.responseType;
 
+  // console.log('selected item +++++++++++++', selectedItem);
+  // console.log('condition type', conditionType);
+  // console.log('condition payload', conditionPayload);
+  // console.log('++++++++++++++++++++++++++++++++++++++++++++++');
+
   switch (conditionType) {
     case ConditionType.IncludesOption:
     case ConditionType.NotIncludesOption:
@@ -219,6 +225,14 @@ export const getPayload = ({
       );
     case ConditionType.Equal:
     case ConditionType.NotEqual: {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
+        return {
+          value: selectedItem?.responseValues?.minValue ?? DEFAULT_PAYLOAD_MIN_VALUE,
+        };
+      }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
         const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
@@ -249,8 +263,10 @@ export const getPayload = ({
       }
       if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
         return {
-          minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
-          maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
+          minValue:
+            (conditionPayload as unknown as RangeValueConditionDate['payload'])?.minValue ?? null,
+          maxValue:
+            (conditionPayload as unknown as RangeValueConditionDate['payload'])?.maxValue ?? null,
         };
       }
       if (responseType === ItemResponseType.TimeRange) {

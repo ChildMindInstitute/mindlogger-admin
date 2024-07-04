@@ -18,6 +18,10 @@ export const getConditionMinMaxValues = ({
 }: GetConditionMinMaxValuesProps) => {
   if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxValues(state);
 
+  // console.log('state', state);
+  // console.log('response values', item.responseValues);
+  // console.log('_________________');
+
   switch (item.type) {
     case ConditionItemType.Slider: {
       const responseValues = item.responseValues;
