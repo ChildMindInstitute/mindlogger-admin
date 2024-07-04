@@ -6,7 +6,7 @@ export type AddParticipantPopupProps = {
   popupVisible: boolean;
   appletId: string | null;
   onClose?: (shouldRefetch: boolean) => void;
-  'data-testid'?: string;
+  'data-testid': string;
 };
 
 export enum AddParticipantSteps {
