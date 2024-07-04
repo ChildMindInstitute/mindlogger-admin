@@ -17,7 +17,12 @@ import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
-import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
+import {
+  EventFormProps,
+  EventFormRef,
+  EventFormValues,
+  EventFormWarnings,
+} from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
 import {
   getActivitiesFlows,
@@ -57,26 +62,14 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       ? AnalyticsCalendarPrefix.IndividualCalendar
       : AnalyticsCalendarPrefix.GeneralCalendar;
 
-    const methods = useForm<EventFormValues>({
+    const form = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema() as ObjectSchema<EventFormValues>),
       defaultValues,
       mode: 'onChange',
     });
-
-    const {
-      handleSubmit,
-      control,
-      watch,
-      getValues,
-      setValue,
-      trigger,
-      formState: { isDirty },
-    } = methods;
-
-    const { errors } = useFormState({
-      control,
-    });
-
+    const { handleSubmit, control, watch, getValues, setValue, trigger, formState } = form;
+    const { isDirty } = formState;
+    const { errors } = useFormState({ control });
     const activityOrFlowId = watch('activityOrFlowId');
     const alwaysAvailable = watch('alwaysAvailable');
     const startTime = watch('startTime');
@@ -90,12 +83,28 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       );
     const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
 
+    const removeWarnings: EventFormWarnings = eventsData.reduce((acc, event) => {
+      const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
+      const { isAlwaysAvailable, activityOrFlowId: eventActivityOrFlowId } = event;
+
+      if (eventActivityOrFlowId !== idWithoutFlowRegex) {
+        return acc;
+      }
+
+      return {
+        ...acc,
+        showRemoveAlwaysAvailable: !alwaysAvailable && isAlwaysAvailable,
+        showRemoveAllScheduled: alwaysAvailable && !isAlwaysAvailable,
+      };
+    }, {});
+
     const eventFormConfig = {
       hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
       hasTimerErrors: !!errors.timerDuration,
       hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
       hasAlwaysAvailableOption,
       'data-testid': dataTestid,
+      removeWarnings,
     };
 
     const getEvents = () => {
@@ -127,21 +136,6 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
 
     const isLoading = createEventIsLoading || updateEventIsLoading;
 
-    const removeWarning: Warning = eventsData.reduce((acc, event) => {
-      const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
-      const { isAlwaysAvailable, activityOrFlowId: eventActivityOrFlowId } = event;
-
-      if (eventActivityOrFlowId !== idWithoutFlowRegex) {
-        return acc;
-      }
-
-      return {
-        ...acc,
-        showRemoveAlwaysAvailable: !alwaysAvailable && isAlwaysAvailable,
-        showRemoveAllScheduled: alwaysAvailable && !isAlwaysAvailable,
-      };
-    }, {});
-
     const handleProcessEvent = async () => {
       if (!appletId) {
         return;
@@ -170,16 +164,27 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     };
 
     const submitForm = async () => {
-      if (removeWarning.showRemoveAllScheduled) {
-        return setRemoveAllScheduledPopupVisible(true);
+      if (removeWarnings.showRemoveAllScheduled) {
+        setRemoveAllScheduledPopupVisible(true);
+
+        return false;
       }
 
-      if (removeWarning.showRemoveAlwaysAvailable) {
-        return setRemoveAlwaysAvailablePopupVisible(true);
+      if (removeWarnings.showRemoveAlwaysAvailable) {
+        setRemoveAlwaysAvailablePopupVisible(true);
+
+        return false;
       }
 
-      await handleProcessEvent();
-      submitCallback();
+      try {
+        await handleProcessEvent();
+        submitCallback();
+
+        return true;
+      } catch (e) {
+        // User-facing errors are handled via above useAsync hooks.
+        return false;
+      }
     };
 
     const apiError = createEventError || updateEventError;
@@ -200,8 +205,9 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const errorMessage = getError();
 
     useImperativeHandle(ref, () => ({
+      formState,
       submitForm() {
-        handleSubmit(submitForm)();
+        return handleSubmit(submitForm)();
       },
       processEvent: async () => {
         await handleProcessEvent();
@@ -238,11 +244,6 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     }, [isLoading]);
 
     useEffect(() => {
-      setValue('removeWarning', removeWarning);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [eventsData, activityOrFlowId, alwaysAvailable, setValue]);
-
-    useEffect(() => {
       trigger(['startTime', 'endTime', 'notifications', 'reminder']);
     }, [startTime, endTime, trigger]);
 
@@ -254,7 +255,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     }, [hasAlwaysAvailableOption, setValue, getValues]);
 
     return (
-      <FormProvider {...methods}>
+      <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
           <StyledModalWrapper sx={{ mb: theme.spacing(2) }}>
             {activitiesOrFlows && (
