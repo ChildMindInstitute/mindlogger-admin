@@ -1,7 +1,7 @@
-import { Warning } from '../EventForm.types';
+import { EventFormWarnings } from '../EventForm.types';
 
 export type AvailabilityTabProps = {
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
-  removeWarnings?: Warning;
+  removeWarnings?: EventFormWarnings;
 };

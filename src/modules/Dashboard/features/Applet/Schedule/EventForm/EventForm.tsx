@@ -17,7 +17,12 @@ import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
-import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
+import {
+  EventFormProps,
+  EventFormRef,
+  EventFormValues,
+  EventFormWarnings,
+} from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
 import {
   getActivitiesFlows,
@@ -78,7 +83,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       );
     const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
 
-    const removeWarnings: Warning = eventsData.reduce((acc, event) => {
+    const removeWarnings: EventFormWarnings = eventsData.reduce((acc, event) => {
       const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
       const { isAlwaysAvailable, activityOrFlowId: eventActivityOrFlowId } = event;
 

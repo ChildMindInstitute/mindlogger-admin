@@ -30,7 +30,7 @@ export type EventFormProps = {
   userId?: string;
 };
 
-export type Warning = {
+export type EventFormWarnings = {
   showRemoveAlwaysAvailable?: boolean;
   showRemoveAllScheduled?: boolean;
 };
@@ -53,7 +53,6 @@ export type EventFormValues = {
   idleTime: string;
   notifications: EventNotifications;
   reminder: FormReminder;
-  removeWarning: Warning;
 };
 
 export type NotificationTimeTestContext = {
@@ -87,7 +86,7 @@ export type GetEventFromTabs = {
   hasNotificationsErrors?: boolean;
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
-  removeWarnings?: Warning;
+  removeWarnings?: EventFormWarnings;
 };
 
 export type GetDaysInPeriod = {
