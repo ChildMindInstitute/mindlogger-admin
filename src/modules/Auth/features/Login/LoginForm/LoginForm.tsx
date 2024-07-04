@@ -118,7 +118,7 @@ export const LoginForm = () => {
         window.removeEventListener('focus', handleWindowFocus);
       };
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCreateAccountClick = () => {
     clearSoftLock();
