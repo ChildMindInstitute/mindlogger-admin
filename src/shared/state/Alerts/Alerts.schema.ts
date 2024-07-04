@@ -1,6 +1,8 @@
 import { BaseSchema } from 'shared/state/Base';
 import { Encryption } from 'shared/utils/encryption';
 
+export type AlertMessageType = 'answer' | 'integration';
+
 export type AlertType = {
   id: string;
   isWatched: boolean;
@@ -17,7 +19,7 @@ export type AlertType = {
   subjectId: string;
   workspace: string;
   respondentId: string;
-  type: 'answer' | 'integration';
+  type: AlertMessageType;
   encryption: Encryption;
 };
 

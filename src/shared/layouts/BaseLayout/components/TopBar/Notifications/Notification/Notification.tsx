@@ -26,6 +26,7 @@ import {
   StyledLogoPlug,
 } from './Notification.styles';
 import { NotificationProps } from './Notification.types';
+import { getMessageColor } from './Notification.utils';
 
 export const Notification = ({
   currentId,
@@ -123,12 +124,7 @@ export const Notification = ({
             >
               {secretId}
             </StyledTitle>
-            <StyledMessage
-              color={
-                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
-              }
-              isActive={isActive}
-            >
+            <StyledMessage color={getMessageColor(isActive, type)} isActive={isActive}>
               {message}
             </StyledMessage>
           </StyledInfo>
