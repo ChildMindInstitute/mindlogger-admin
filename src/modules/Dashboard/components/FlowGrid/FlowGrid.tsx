@@ -13,6 +13,7 @@ export const FlowGrid = ({
   activities = [],
   flows = [],
   subject,
+  'data-testid': dataTestId,
   ...otherProps
 }: FlowGridProps) => {
   const [showExportPopup, setShowExportPopup] = useState(false);
@@ -29,7 +30,12 @@ export const FlowGrid = ({
 
   return (
     <>
-      <StyledFlexColumn component="ul" sx={{ gap: 0.8, m: 0, p: 0 }} {...otherProps}>
+      <StyledFlexColumn
+        component="ul"
+        sx={{ gap: 0.8, m: 0, p: 0 }}
+        data-testid={`${dataTestId}-flow-grid`}
+        {...otherProps}
+      >
         {flows.map((flow) => {
           const { id, activityIds = [] } = flow;
           const hydratedFlow = {
@@ -45,6 +51,7 @@ export const FlowGrid = ({
               component="li"
               menuItems={getActionsMenu({ flow: hydratedFlow })}
               key={id}
+              data-testid={`${dataTestId}-flow-card`}
             />
           );
         })}

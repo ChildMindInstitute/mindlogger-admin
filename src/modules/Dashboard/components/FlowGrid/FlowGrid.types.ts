@@ -8,6 +8,7 @@ export interface FlowGridProps extends BoxProps {
   flows?: ActivityFlow[];
   activities?: Activity[];
   subject?: RespondentDetails;
+  'data-testid': string;
 }
 
 export type HydratedActivityFlow = ActivityFlow & {
