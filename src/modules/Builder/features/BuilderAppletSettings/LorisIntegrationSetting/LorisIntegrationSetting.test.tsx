@@ -453,7 +453,7 @@ describe('LorisIntegrationSetting', () => {
 
     expect(
       within(screen.getByTestId('upload-data-popup-error')).getByText(
-        'Visit is required when row is selected.',
+        'Selected rows require visits.',
       ),
     ).toBeInTheDocument();
     expect(mockAxios.post).not.toBeCalled();

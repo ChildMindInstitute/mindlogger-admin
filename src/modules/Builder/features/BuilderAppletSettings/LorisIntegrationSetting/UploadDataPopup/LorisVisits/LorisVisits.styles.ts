@@ -40,6 +40,12 @@ export const StyledSelectController = styled(SelectController)`
 
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.md};
+
+    &.Mui-error {
+      .MuiOutlinedInput-notchedOutline {
+        background-color: ${variables.palette.red_alfa8};
+      }
+    }
   }
 
   .MuiSelect-select {
