@@ -7,6 +7,7 @@ import {
   checkIfCanEdit,
   checkIfCanManageParticipants,
   checkIfFullAccess,
+  getIsWebSupported,
 } from 'shared/utils';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 
@@ -31,6 +32,7 @@ export const getActivityActions = ({
     checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
   const { id: activityId } = activity;
+  const isWebUnsupported = !getIsWebSupported(activity.items);
 
   if (!activityId) return [];
 
@@ -66,6 +68,8 @@ export const getActivityActions = ({
       title: t('takeNow.menuItem'),
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
+      disabled: isWebUnsupported,
+      tooltip: isWebUnsupported && t('activityIsMobileOnly'),
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];
