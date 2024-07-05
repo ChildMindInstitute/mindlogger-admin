@@ -74,7 +74,12 @@ export const useResponseData = ({
               {
                 date,
                 time,
-                answer: answer.value || '',
+                answer:
+                  // exception for MiResource answers for Text Item: in case of receiving an object instead of
+                  // string or null
+                  Object.prototype.toString.call(answer.value) === '[object Object]'
+                    ? ''
+                    : answer.value || '',
               },
             ];
           },
