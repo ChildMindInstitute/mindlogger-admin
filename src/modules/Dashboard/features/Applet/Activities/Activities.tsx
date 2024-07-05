@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi, getAppletApi } from 'api';
+import { getAppletActivitiesApi } from 'api';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
@@ -18,31 +18,22 @@ import { ActivitiesToolbar } from './ActivitiesToolbar';
 const dataTestId = 'dashboard-applet-activities';
 
 export const Activities = () => {
+  const [activityId, setActivityId] = useState<string>();
+  const [showExportPopup, setShowExportPopup] = useState(false);
   const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const { t } = useTranslation('app');
-  const {
-    execute: getActivities,
-    isLoading: isLoadingActivities,
-    value: activitiesResponse,
-    previousValue: previousActivitiesResponse,
-  } = useAsync(getAppletActivitiesApi);
-  const {
-    execute: getFlows,
-    isLoading: isLoadingFlows,
-    value: flowResponse,
-    previousValue: previousFlowResponse,
-  } = useAsync(getAppletApi);
-  const flows: ActivityFlow[] =
-    (flowResponse ?? previousFlowResponse)?.data?.result?.activityFlows ?? [];
-  const flowActivities: Activity[] =
-    (flowResponse ?? previousFlowResponse)?.data?.result?.activities ?? [];
+  const { execute, isLoading, value, previousValue } = useAsync(getAppletActivitiesApi);
+
   const activities: Activity[] = useMemo(
-    () => (activitiesResponse ?? previousActivitiesResponse)?.data?.result?.activitiesDetails ?? [],
-    [activitiesResponse, previousActivitiesResponse],
+    () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
+    [value, previousValue],
   );
-  const [activityId, setActivityId] = useState<string>();
-  const [showExportPopup, setShowExportPopup] = useState(false);
+  const flows: ActivityFlow[] =
+    (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
+  const showContent =
+    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
+
   const { formatRow, TakeNowModal } = useActivityGrid(
     dataTestId,
     {
@@ -54,21 +45,17 @@ export const Activities = () => {
       setShowExportPopup(true);
     }, []),
   );
+
   const formattedActivities = useMemo(
     () => activities.map((activity) => formatRow(activity)),
     [activities, formatRow],
   );
 
-  const isLoading = isLoadingActivities || isLoadingFlows;
-  const showContent =
-    (isLoading && previousActivitiesResponse?.data?.result?.activitiesDetails?.length > 0) ||
-    !isLoading;
-
   useEffect(() => {
     if (!appletId) return;
-    getFlows({ appletId });
-    getActivities({ params: { appletId } });
-  }, [appletId, getActivities, getFlows]);
+
+    execute({ params: { appletId } });
+  }, [appletId, execute]);
 
   return (
     <StyledFlexColumn sx={{ gap: 2.4, height: '100%' }}>
@@ -82,7 +69,7 @@ export const Activities = () => {
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
 
-              <FlowGrid applet={appletData} activities={flowActivities} flows={flows} />
+              <FlowGrid applet={appletData} activities={activities} flows={flows} />
             </StyledFlexColumn>
           )}
 

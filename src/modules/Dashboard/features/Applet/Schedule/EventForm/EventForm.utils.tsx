@@ -56,6 +56,7 @@ export const getEventFormTabs = ({
   hasNotificationsErrors,
   hasAlwaysAvailableOption,
   'data-testid': dataTestid,
+  removeWarnings,
 }: GetEventFromTabs) => [
   {
     labelKey: 'availability',
@@ -64,6 +65,7 @@ export const getEventFormTabs = ({
       <AvailabilityTab
         hasAlwaysAvailableOption={hasAlwaysAvailableOption}
         data-testid={`${dataTestid}-availability`}
+        removeWarnings={removeWarnings}
       />
     ),
     hasError: hasAvailabilityErrors,
@@ -412,7 +414,6 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     periodicity,
     notifications,
     reminder,
-    removeWarning: {},
   };
 };
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi, getAppletApi } from 'api';
+import { getAppletActivitiesApi } from 'api';
 import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import {
   ActivityActionProps,
@@ -42,27 +42,19 @@ export const Activities = () => {
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
-  // TODO M2-6223: Update these calls to include a `subject_id` param
+  // TODO M2-6223: Update this call to include a `subject_id` param
   const {
-    execute: getActivities,
+    execute,
     isLoading: isLoadingActivities,
-    value: activitiesResponse,
-    previousValue: previousActivitiesResponse,
+    value,
+    previousValue,
   } = useAsync(getAppletActivitiesApi);
-  const {
-    execute: getFlows,
-    isLoading: isLoadingFlows,
-    value: flowResponse,
-    previousValue: previousFlowResponse,
-  } = useAsync(getAppletApi);
-  const activities: Activity[] = useMemo(
-    () => (activitiesResponse ?? previousActivitiesResponse)?.data?.result?.activitiesDetails ?? [],
-    [activitiesResponse, previousActivitiesResponse],
-  );
   const flows: ActivityFlow[] =
-    (flowResponse ?? previousFlowResponse)?.data?.result?.activityFlows ?? [];
-  const flowActivities: Activity[] =
-    (flowResponse ?? previousFlowResponse)?.data?.result?.activities ?? [];
+    (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
+  const activities: Activity[] = useMemo(
+    () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
+    [value, previousValue],
+  );
 
   const {
     formatRow,
@@ -80,17 +72,15 @@ export const Activities = () => {
   );
 
   const isLoadingSubject = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
-  const isLoading = isLoadingActivities || isLoadingFlows || isLoadingSubject;
+  const isLoading = isLoadingActivities || isLoadingSubject;
   const showContent =
-    (isLoading && previousActivitiesResponse?.data?.result?.activitiesDetails?.length > 0) ||
-    !isLoading;
+    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
 
   useEffect(() => {
     if (!appletId) return;
 
-    getFlows({ appletId });
-    getActivities({ params: { appletId } });
-  }, [appletId, getActivities, getFlows]);
+    execute({ params: { appletId } });
+  }, [appletId, execute]);
 
   const formattedActivities = useMemo(
     () =>
@@ -120,7 +110,7 @@ export const Activities = () => {
 
         return formatRow(activity, actions);
       }),
-    [activities, formatRow],
+    [activities, formatRow, defaultActions, getActivityById, openTakeNowModal, subject, subjectId],
   );
 
   const canAccessData = checkIfCanAccessData(roles);
@@ -175,7 +165,7 @@ export const Activities = () => {
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
 
               <FlowGrid
-                activities={flowActivities}
+                activities={activities}
                 applet={appletData}
                 flows={flows}
                 subject={subject?.result}

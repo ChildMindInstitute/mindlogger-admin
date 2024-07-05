@@ -20,7 +20,7 @@ import {
   joinWihComma,
 } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useLogout } from 'shared/hooks';
 import { Manager, Respondent } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { FlowSummaryThumbnail } from 'modules/Dashboard/components/FlowSummaryCard/FlowSummaryThumbnail';
@@ -244,6 +244,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
+    const handleLogout = useLogout();
     const handleClose = () => {
       track('Take Now dialogue closed');
 
@@ -294,9 +295,25 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
 
         setActivityOrFlow(null);
-        window.open(url.toString(), '_blank');
+
+        const newTab = window.open(url.toString(), '_blank');
+        // message received from the TakeNowSuccessModal.tsx file from the web app
+        // it's needed to close the new tab after the user clicks the "Close" button
+        window.addEventListener('message', function messageHandler(event) {
+          if (event.origin === url.origin) {
+            const message = event.data;
+
+            if (message === 'close-me') {
+              newTab?.close();
+            }
+
+            this.removeEventListener('message', messageHandler);
+          }
+        });
+
+        handleLogout({ shouldSoftLock: true });
       }
-    }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
+    }, [targetSubject, sourceSubject, isSelfReporting, loggedInUser, handleLogout]);
 
     /**
      * Handle participant search. It can be a combination of team members and any participants

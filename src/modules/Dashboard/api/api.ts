@@ -77,6 +77,8 @@ import {
   DeleteFlowReviewParams,
   AssessmentFlowReviewParams,
   FeedbackNote,
+  GetActivityResponse,
+  GetActivityParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -472,6 +474,11 @@ export const getReviewFlowsApi = (
 
 export const getAnswerApi = ({ appletId, answerId }: ActivityAnswerParams, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
+
+export const getActivityApi = ({ activityId }: GetActivityParams, signal?: AbortSignal) =>
+  authApiClient.get(`activities/${activityId}`, { signal }) as Promise<
+    AxiosResponse<GetActivityResponse>
+  >;
 
 export const getActivityAnswerApi = (
   { appletId, answerId, activityId }: ActivityAnswerParams,

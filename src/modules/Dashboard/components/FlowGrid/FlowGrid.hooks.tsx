@@ -12,8 +12,10 @@ import {
   checkIfCanEdit,
   checkIfCanManageParticipants,
   checkIfFullAccess,
+  getIsWebSupported,
 } from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
+import { ItemResponseType } from 'shared/consts';
 
 import { HydratedActivityFlow } from './FlowGrid.types';
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
@@ -48,65 +50,75 @@ export function useFlowGridMenu({
   const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
-    ({ flow }: { flow: HydratedActivityFlow }) => [
-      {
-        'data-testid': `${testId}-flow-edit`,
-        action: ({ context }: FlowsMenuActionParams) => {
-          if (context?.appletId && context?.flowId) {
-            navigate(
-              generatePath(page.builderAppletActivityFlowItemAbout, {
-                appletId: context.appletId,
-                activityFlowId: context.flowId,
-              }),
-            );
-          }
+    ({ flow }: { flow: HydratedActivityFlow }) => {
+      const flowItems = flow.activities.reduce<{ responseType: ItemResponseType }[]>(
+        (items, activity) => [...items, ...activity.items],
+        [],
+      );
+      const isWebUnsupported = !getIsWebSupported(flowItems);
+
+      return [
+        {
+          'data-testid': `${testId}-flow-edit`,
+          action: ({ context }: FlowsMenuActionParams) => {
+            if (context?.appletId && context?.flowId) {
+              navigate(
+                generatePath(page.builderAppletActivityFlowItemAbout, {
+                  appletId: context.appletId,
+                  activityFlowId: context.flowId,
+                }),
+              );
+            }
+          },
+          context: { appletId, flowId: flow?.id },
+          icon: <Svg id="edit" />,
+          isDisplayed: canEdit,
+          title: t('editFlow'),
         },
-        context: { appletId, flowId: flow?.id },
-        icon: <Svg id="edit" />,
-        isDisplayed: canEdit,
-        title: t('editFlow'),
-      },
-      {
-        'data-testid': `${testId}-flow-export`,
-        action: () => {
-          if (flow?.id) {
-            onClickExportData?.(flow?.id);
-          }
+        {
+          'data-testid': `${testId}-flow-export`,
+          action: () => {
+            if (flow?.id) {
+              onClickExportData?.(flow?.id);
+            }
+          },
+          disabled: !flow?.id,
+          icon: <Svg id="export" />,
+          title: t('exportData'),
+          isDisplayed: canAccessData,
         },
-        disabled: !flow?.id,
-        icon: <Svg id="export" />,
-        title: t('exportData'),
-        isDisplayed: canAccessData,
-      },
-      { type: MenuItemType.Divider, isDisplayed: showDivider },
-      {
-        // TODO: Implement assign
-        // https://mindlogger.atlassian.net/browse/M2-5710
-        'data-testid': `${testId}-flow-assign`,
-        icon: <Svg id="add" />,
-        title: t('assignActivity'),
-        isDisplayed: canAssign,
-      },
-      {
-        'data-testid': `${testId}-flow-take-now`,
-        action: () => {
-          const options: OpenTakeNowModalOptions | undefined = subject
-            ? {
-                targetSubject: {
-                  ...subject,
-                  secretId: subject.secretUserId,
-                  userId: subject.userId,
-                },
-              }
-            : undefined;
-          openTakeNowModal(flow, options);
+        { type: MenuItemType.Divider, isDisplayed: showDivider },
+        {
+          // TODO: Implement assign
+          // https://mindlogger.atlassian.net/browse/M2-5710
+          'data-testid': `${testId}-flow-assign`,
+          icon: <Svg id="add" />,
+          title: t('assignActivity'),
+          isDisplayed: canAssign,
         },
-        context: { appletId, flowId: flow?.id },
-        icon: <Svg id="play-outline" />,
-        isDisplayed: canDoTakeNow,
-        title: t('takeNow.menuItem'),
-      },
-    ],
+        {
+          'data-testid': `${testId}-flow-take-now`,
+          action: () => {
+            const options: OpenTakeNowModalOptions | undefined = subject
+              ? {
+                  targetSubject: {
+                    ...subject,
+                    secretId: subject.secretUserId,
+                    userId: subject.userId,
+                  },
+                }
+              : undefined;
+            openTakeNowModal(flow, options);
+          },
+          context: { appletId, flowId: flow?.id },
+          icon: <Svg id="play-outline" />,
+          isDisplayed: canDoTakeNow,
+          title: t('takeNow.menuItem'),
+          disabled: isWebUnsupported,
+          tooltip: isWebUnsupported && t('activityIsMobileOnly'),
+        },
+      ];
+    },
     [
       appletId,
       canAccessData,

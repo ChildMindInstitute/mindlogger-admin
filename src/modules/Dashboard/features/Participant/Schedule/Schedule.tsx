@@ -25,6 +25,7 @@ export const ParticipantSchedule = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { result: respondentsData } = users.useAllRespondentsData() || {};
   const { result: subjectData } = users.useSubject() ?? {};
+
   const allRespondentsLoadingStatus = users.useAllRespondentsStatus();
   const dispatch = useAppDispatch();
   const preparedEvents = usePreparedEvents(appletData);
@@ -34,6 +35,7 @@ export const ParticipantSchedule = () => {
     allRespondentsLoadingStatus === 'loading' ||
     subjectLoadingStatus === 'idle' ||
     subjectLoadingStatus === 'loading';
+
   const selectedRespondent = useMemo(
     () =>
       respondentsData?.find(({ secretIds }) =>
@@ -41,6 +43,7 @@ export const ParticipantSchedule = () => {
       ) ?? ({} as Respondent),
     [respondentsData, subjectData],
   );
+
   const { details, id: userId } = selectedRespondent ?? {};
   const respondentDetails = details?.[0] ?? {};
   const { respondentSecretId, hasIndividualSchedule, respondentNickname } = respondentDetails;
@@ -89,7 +92,7 @@ export const ParticipantSchedule = () => {
         <ScheduleProvider
           appletId={appletId ?? 'Unknown applet ID'}
           appletName={appletData?.displayName ?? 'Unknown applet'}
-          canCreateIndividualSchedule={!!userId}
+          canCreateIndividualSchedule={!!userId && !selectedRespondent?.isAnonymousRespondent}
           hasIndividualSchedule={hasIndividualSchedule}
           showEditDefaultConfirmation={!hasIndividualSchedule}
           userId={userId ?? undefined}
@@ -98,7 +101,7 @@ export const ParticipantSchedule = () => {
         >
           <Legend
             legendEvents={preparedEvents}
-            showScheduleToggle
+            showScheduleToggle={!selectedRespondent?.isAnonymousRespondent}
             sx={{
               borderRight: `${theme.spacing(0.1)} solid ${variables.palette.surface_variant}`,
               width: theme.spacing(32),
