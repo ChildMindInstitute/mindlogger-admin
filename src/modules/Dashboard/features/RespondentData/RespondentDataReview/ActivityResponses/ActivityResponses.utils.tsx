@@ -5,6 +5,7 @@ import { DateFormats, ItemResponseType } from 'shared/consts';
 import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 import { StyledBodyLarge, variables } from 'shared/styles';
 import i18n from 'i18n';
+import { isObject } from 'shared/utils/isObject';
 
 import {
   MultiSelectItemAnswer,
@@ -49,7 +50,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
     // exception for MiResource answers for Text Item: in case of receiving an object instead of
     // string or null
     (activityItemAnswer.activityItem.responseType === ItemResponseType.Text &&
-      Object.prototype.toString.call(activityItemAnswer.answer) === '[object Object]')
+      isObject(activityItemAnswer.answer))
   ) {
     return (
       <StyledBodyLarge color={variables.palette.outline} data-testid="no-response-data">
