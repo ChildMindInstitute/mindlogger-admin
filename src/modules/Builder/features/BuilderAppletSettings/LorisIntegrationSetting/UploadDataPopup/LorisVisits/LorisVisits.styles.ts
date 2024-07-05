@@ -11,15 +11,19 @@ export const StyledLorisVisits = styled(Box)`
 export const StyledTable = styled(Table)`
   .visits-select {
     .MuiFormControl-root {
-      width: 100%;
-      max-width: 18rem;
+      width: 18rem;
     }
 
-    .MuiSelect-select > :first-child {
-      display: block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+    .MuiSelect-select {
+      padding: ${theme.spacing(0.65, 1.2)};
+      font-size: ${variables.font.size.md};
+
+      > :first-of-type {
+        display: block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
   }
 

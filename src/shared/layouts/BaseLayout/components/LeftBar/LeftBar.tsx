@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { LDFlagSet } from 'launchdarkly-react-client-sdk';
 
 import { page } from 'resources';
 import { StyledLabelMedium, variables } from 'shared/styles';
@@ -29,6 +30,8 @@ export const LeftBar = () => {
   const { result: workspacesData } = workspaces.useWorkspacesData() || {};
   const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const [areFeatureFlagsLoaded, setAreFeatureFlagsLoaded] = useState(false);
+  const [featureFlags, setFeatureFlags] = useState<LDFlagSet>();
   const dataTestid = 'left-bar';
 
   const handleLinkClick = (key: string) => {
@@ -39,6 +42,19 @@ export const LeftBar = () => {
 
   const handleChangeWorkspace = (workspace: Workspace) => {
     navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
+  };
+
+  const fetchFeatureFlags = async (ownerId: string) => {
+    try {
+      setAreFeatureFlagsLoaded(false);
+      setFeatureFlags(undefined);
+
+      const featureFlags = await FeatureFlags.updateWorkspace(ownerId);
+
+      setFeatureFlags(featureFlags);
+    } finally {
+      setAreFeatureFlagsLoaded(true);
+    }
   };
 
   useEffect(() => {
@@ -53,9 +69,9 @@ export const LeftBar = () => {
       const currentWorkspace = storageWorkspace || ownerWorkspace;
       dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
 
-      if (!currentWorkspace) return;
+      if (!currentWorkspace?.ownerId) return;
 
-      FeatureFlags.updateWorkspace(currentWorkspace?.ownerId);
+      fetchFeatureFlags(currentWorkspace.ownerId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspacesData]);
@@ -67,14 +83,19 @@ export const LeftBar = () => {
       authStorage.setWorkspace(workspace);
       dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 
-      if (!workspace) return;
+      if (!workspace?.ownerId) return;
 
-      FeatureFlags.updateWorkspace(workspace?.ownerId);
+      fetchFeatureFlags(workspace.ownerId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
 
-  useIntegrationToggle('LORIS', currentWorkspaceData);
+  useIntegrationToggle({
+    integrationType: 'LORIS',
+    currentWorkspaceData,
+    areFeatureFlagsLoaded,
+    featureFlags,
+  });
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>

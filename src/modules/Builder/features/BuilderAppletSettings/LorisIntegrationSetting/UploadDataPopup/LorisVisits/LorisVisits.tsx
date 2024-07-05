@@ -19,7 +19,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
   const [visitsList, setVisitsList] = useState<string[]>([]);
 
   const { t } = useTranslation();
-  const { control, reset } = useFormContext();
+  const { control, reset, trigger } = useFormContext();
 
   useEffect(() => {
     if (!appletId) return;
@@ -64,7 +64,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
           <StyledTable
             maxHeight="34.4rem"
             columns={getHeadCells()}
-            rows={getLorisActivitiesRows({ control, visitsList, usersVisits })}
+            rows={getLorisActivitiesRows({ control, trigger, visitsList, usersVisits })}
             orderBy={'activityName'}
             uiType={UiType.Secondary}
             tableHeadBg={variables.modalBackground}

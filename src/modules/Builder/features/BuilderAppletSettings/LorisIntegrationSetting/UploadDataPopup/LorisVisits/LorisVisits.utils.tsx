@@ -4,6 +4,7 @@ import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
 import { LorisUsersVisit } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
+import { CheckboxController } from 'shared/components/FormComponents';
 
 import { StyledSelectController } from './LorisVisits.styles';
 import { GetLorisActivitiesRows, VisitRow } from './LorisVisits.types';
@@ -11,6 +12,11 @@ import { GetLorisActivitiesRows, VisitRow } from './LorisVisits.types';
 const { t } = i18n;
 
 export const getHeadCells = (): HeadCell[] => [
+  {
+    id: 'selected',
+    label: '',
+    enableSort: false,
+  },
   {
     id: 'activityName',
     label: t('activityName'),
@@ -42,6 +48,7 @@ export const getMatchOptions = (visits: string[], itemsDisabled: string[]) =>
 
 export const getLorisActivitiesRows = ({
   control,
+  trigger,
   visitsList,
   usersVisits,
 }: GetLorisActivitiesRows) =>
@@ -49,6 +56,20 @@ export const getLorisActivitiesRows = ({
     (data: VisitRow[], { activities, secretUserId }: LorisUsersVisit, userIndex) => {
       const userActivities = (activities || []).map(
         ({ activityName, completedDate, visits }, activityIndex) => ({
+          selected: {
+            content: () => (
+              <CheckboxController
+                control={control}
+                name={`visitsForm[${userIndex}].activities[${activityIndex}].selected`}
+                label={<></>}
+                onCustomChange={() => {
+                  trigger(`visitsForm[${userIndex}].activities[${activityIndex}].visit`);
+                }}
+              />
+            ),
+            value: activityName,
+            maxWidth: '3.2rem',
+          },
           activityName: {
             content: () => <>{activityName}</>,
             value: activityName,
@@ -91,6 +112,7 @@ export const formatData = (usersVisits: LorisUsersVisit[]) =>
     const formattedActivities = activities.map(({ visits, ...activity }) => ({
       ...activity,
       visit: '',
+      selected: true,
     }));
 
     return {

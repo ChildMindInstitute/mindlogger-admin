@@ -28,7 +28,7 @@ export const getWorkspaces = createAsyncThunk(
       const { data } = await getWorkspacesApi(signal);
 
       const workspaceNames = data.result.map((obj: { workspaceName: string }) => obj.workspaceName);
-      FeatureFlags.updateWorkspaces(workspaceNames);
+      await FeatureFlags.updateWorkspaces(workspaceNames);
 
       return { data };
     } catch (exception) {

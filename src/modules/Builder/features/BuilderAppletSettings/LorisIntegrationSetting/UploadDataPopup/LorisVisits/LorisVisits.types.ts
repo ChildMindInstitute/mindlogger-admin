@@ -1,20 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Control, FieldValues } from 'react-hook-form';
+import { Control, FieldValues, UseFormTrigger } from 'react-hook-form';
 
 import { LorisUsersVisit } from 'modules/Builder/api';
+import { CellContent } from 'shared/components';
 
 import { Steps } from '../UploadDataPopup.types';
 
-export type VisitRowPayload = {
-  content: () => JSX.Element;
-  value: string;
-};
-
 export type VisitRow = {
-  activityName: VisitRowPayload;
-  completedDate: VisitRowPayload;
-  secretUserId: VisitRowPayload;
-  lorisVisits: VisitRowPayload;
+  activityName: CellContent;
+  completedDate: CellContent;
+  secretUserId: CellContent;
+  lorisVisits: CellContent;
 };
 
 export type LorisVisitsProps = {
@@ -24,6 +20,7 @@ export type LorisVisitsProps = {
 
 export type GetLorisActivitiesRows = {
   control: Control<FieldValues>;
+  trigger: UseFormTrigger<FieldValues>;
   visitsList: string[];
   usersVisits: LorisUsersVisit[];
 };

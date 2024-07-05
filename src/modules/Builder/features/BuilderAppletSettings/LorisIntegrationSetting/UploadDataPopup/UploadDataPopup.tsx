@@ -1,16 +1,18 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledBodyMedium, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { LorisActivityForm, LorisUsersVisit, uploadLorisUsersVisitsApi } from 'modules/Builder/api';
+import { uploadLorisUsersVisitsApi } from 'modules/Builder/api';
 
-import { areAllVisitsFilled, getScreens } from './UploadDataPopup.utils';
-import { Steps, UploadDataPopupProps } from './UploadDataPopup.types';
+import { filteredData, findVisitErrorMessage, getScreens } from './UploadDataPopup.utils';
+import { Steps, UploadDataForm, UploadDataPopupProps } from './UploadDataPopup.types';
 import { StyledSpinnerWrapper } from './UploadDataPopup.styles';
+import { uploadDataSchema } from './UploadDataPopup.schema';
 
 export const UploadDataPopup = ({
   open,
@@ -21,7 +23,6 @@ export const UploadDataPopup = ({
   const { appletId } = useParams();
   const [step, setStep] = useState<Steps>(Steps.Agreement);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const { execute: uploadLorisUsersVisits } = useAsync(
     uploadLorisUsersVisitsApi,
@@ -34,9 +35,13 @@ export const UploadDataPopup = ({
   const methods = useForm({
     mode: 'onChange',
     defaultValues: { visitsForm: [] },
+    resolver: yupResolver(uploadDataSchema()),
   });
 
-  const { getValues } = methods;
+  const {
+    formState: { errors },
+    handleSubmit,
+  } = methods;
 
   const handleAcceptAgreement = useCallback(() => {
     if (!appletId) return;
@@ -44,20 +49,24 @@ export const UploadDataPopup = ({
     setStep(Steps.Visits);
   }, [appletId, setStep]);
 
-  const handleSubmitVisits = useCallback(() => {
-    if (!appletId) return;
+  const onSubmit = useCallback(
+    (values: UploadDataForm) => {
+      if (!appletId) return;
+      uploadLorisUsersVisits({ appletId, payload: filteredData(values) });
+    },
+    [appletId, uploadLorisUsersVisits],
+  );
 
-    const payload: LorisUsersVisit<LorisActivityForm>[] = getValues('visitsForm');
-    if (!payload?.length || !areAllVisitsFilled(payload)) {
-      return setError(t('loris.visitsRequired'));
-    }
-    setError('');
-    uploadLorisUsersVisits({ appletId, payload });
-  }, [appletId, getValues, uploadLorisUsersVisits, t]);
+  const onSubmitVisits = useCallback(() => {
+    if (!appletId) return;
+    handleSubmit(onSubmit)();
+  }, [appletId, handleSubmit, onSubmit]);
+
+  const error = findVisitErrorMessage(errors);
 
   const screens = useMemo(
-    () => getScreens({ handleAcceptAgreement, onClose, handleSubmitVisits, setIsLoading, setStep }),
-    [handleAcceptAgreement, onClose, handleSubmitVisits, setIsLoading, setStep],
+    () => getScreens({ handleAcceptAgreement, onClose, onSubmitVisits, setIsLoading, setStep }),
+    [handleAcceptAgreement, onClose, onSubmitVisits, setIsLoading, setStep],
   );
 
   return (

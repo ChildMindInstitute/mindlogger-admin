@@ -12,20 +12,25 @@ export const FeatureFlags = {
   async login(userId: string) {
     if (!_ldClient) return;
     _userId = userId;
-    this.identify({
+
+    return this.identify({
       userId,
     });
   },
   async updateWorkspace(workspaceId: string) {
+    console.warn('updateWorkspace');
     if (!_userId) return;
-    this.identify({
+
+    return this.identify({
       userId: _userId,
       workspaceId,
     });
   },
   async updateWorkspaces(workspaces: string[]) {
+    console.error('updateWorkspaces');
     if (!_userId) return;
-    this.identify({
+
+    return this.identify({
       userId: _userId,
       workspaces,
     });
@@ -35,7 +40,8 @@ export const FeatureFlags = {
       throw new Error('Context contains prohibited keys');
     }
     if (!_ldClient) return;
-    _ldClient?.identify(
+
+    return _ldClient?.identify(
       {
         ...context,
         kind: 'admin-users',
@@ -47,7 +53,8 @@ export const FeatureFlags = {
   async logout() {
     _userId = '';
     if (!_ldClient) return;
-    _ldClient.identify({
+
+    return _ldClient.identify({
       kind: 'user',
       anonymous: true,
     });

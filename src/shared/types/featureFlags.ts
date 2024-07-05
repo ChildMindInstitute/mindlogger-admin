@@ -17,7 +17,7 @@ export const FeatureFlagsKeys = {
 };
 
 export enum FeatureFlagsIntegrations {
-  LORIS = 'enableLorisIntegration',
+  LORIS = 'enable-loris-integration',
 }
 
 export type FeatureFlagsIntegrationKeys = keyof typeof FeatureFlagsIntegrations;

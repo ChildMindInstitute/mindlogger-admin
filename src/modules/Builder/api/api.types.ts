@@ -37,11 +37,12 @@ export type LorisActivityResponse = CommonLorisActivity & {
 };
 
 export type LorisActivityForm = CommonLorisActivity & {
-  visit: string;
+  visit?: string;
+  selected?: boolean;
 };
 
 export type LorisUsersVisit<T = LorisActivityResponse> = {
-  userId?: string;
+  userId: string;
   secretUserId: string;
   activities: T[];
 };
