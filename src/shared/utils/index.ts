@@ -41,3 +41,4 @@ export * from './testUtils';
 export * from './toggleBooleanState';
 export * from './sortItemsByOrder';
 export * from './nullReturnFunc';
+export * from './isObject';
