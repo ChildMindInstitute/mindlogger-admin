@@ -4,6 +4,7 @@ describe('getHeadCells', () => {
   test('should return correct head cells', () => {
     const headCells = getHeadCells();
     expect(headCells).toEqual([
+      { id: 'selected', label: '', enableSort: false },
       { id: 'activityName', label: 'Activity Name', enableSort: false },
       { id: 'completed', label: 'Completed', enableSort: false },
       { id: 'secretUserId', label: 'ID', enableSort: false },

@@ -772,7 +772,7 @@
     "visits": "LORIS Visits",
     "visitsDescription": "Please check if predefined Visit values are correct: ",
     "successMessage": "If any new data has been collected, it has been uploaded successfully.",
-    "visitRequired": "Visit is required when row is selected"
+    "visitRequired": "Visit is required when row is selected."
   },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",

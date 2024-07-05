@@ -94,6 +94,7 @@ export const UploadDataPopup = ({
           {error && (
             <StyledBodyMedium
               sx={{ color: variables.palette.semantic.error, mt: theme.spacing(0.6) }}
+              data-testid="upload-data-popup-error"
             >
               {error}
             </StyledBodyMedium>

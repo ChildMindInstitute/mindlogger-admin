@@ -65,6 +65,7 @@ export const getLorisActivitiesRows = ({
                 onCustomChange={() => {
                   trigger(`visitsForm[${userIndex}].activities[${activityIndex}].visit`);
                 }}
+                data-testid={`loris-visits-checkbox-${userIndex}-${activityIndex}`}
               />
             ),
             value: activityName,

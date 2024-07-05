@@ -249,7 +249,7 @@ describe('LorisIntegrationSetting', () => {
       screen.getByText('Please check if predefined Visit values are correct:'),
     ).toBeInTheDocument();
 
-    expect(lorisVisits.querySelectorAll('th')).toHaveLength(4);
+    expect(lorisVisits.querySelectorAll('th')).toHaveLength(5);
     expect(lorisVisits.querySelectorAll('tbody tr')).toHaveLength(2);
 
     // change visit value for the first row
@@ -426,17 +426,22 @@ describe('LorisIntegrationSetting', () => {
       screen.getByText('Please check if predefined Visit values are correct:'),
     ).toBeInTheDocument();
 
-    expect(lorisVisits.querySelectorAll('th')).toHaveLength(4);
+    expect(lorisVisits.querySelectorAll('th')).toHaveLength(5);
     expect(lorisVisits.querySelectorAll('tbody tr')).toHaveLength(2);
 
-    // change visit value for the first row
     const firstRow = lorisVisits.querySelectorAll('tbody tr')[0] as HTMLElement;
-    const selectContainer = within(firstRow).getByTestId('loris-visits-select-0-0');
+    const selectedCheckboxContainer = within(firstRow).getByTestId('loris-visits-checkbox-0-0');
+    expect(selectedCheckboxContainer).toBeInTheDocument();
+    await userEvent.click(checkboxContainer);
+
+    // change visit value for the second row
+    const secondRow = lorisVisits.querySelectorAll('tbody tr')[1] as HTMLElement;
+    const selectContainer = within(secondRow).getByTestId('loris-visits-select-1-0');
     expect(selectContainer).toBeInTheDocument();
     const select = selectContainer.querySelector('.MuiSelect-select') as Element;
     await userEvent.click(select);
 
-    const dropdown = screen.getByTestId('loris-visits-select-0-0-dropdown');
+    const dropdown = screen.getByTestId('loris-visits-select-1-0-dropdown');
     expect(dropdown.querySelectorAll('li')).toHaveLength(5); // 5 mocked visits
     await userEvent.click(dropdown.querySelectorAll('li')[3]);
 
@@ -446,8 +451,11 @@ describe('LorisIntegrationSetting', () => {
     expect(submitButton).toBeInTheDocument();
     await userEvent.click(submitButton);
 
+    expect(
+      within(screen.getByTestId('upload-data-popup-error')).getByText(
+        'Visit is required when row is selected.',
+      ),
+    ).toBeInTheDocument();
     expect(mockAxios.post).not.toBeCalled();
-
-    expect(screen.getByText('Please fill in all the visits.')).toBeInTheDocument();
   });
 });
