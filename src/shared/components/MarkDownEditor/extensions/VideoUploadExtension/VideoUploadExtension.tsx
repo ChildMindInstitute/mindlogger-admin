@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
 import { ALLOWED_VIDEO_FILE_TYPES, MediaType } from 'shared/consts';
+import { TargetExtension } from 'shared/api';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
@@ -69,7 +70,7 @@ export const VideoUploadExtension = ({
                       hidden
                       accept={ALLOWED_VIDEO_FILE_TYPES}
                       type="file"
-                      onChange={onInputChange}
+                      onChange={() => onInputChange(TargetExtension.MP4)}
                     />
                   </StyledTitleSmall>
                 </StyledMenuItem>

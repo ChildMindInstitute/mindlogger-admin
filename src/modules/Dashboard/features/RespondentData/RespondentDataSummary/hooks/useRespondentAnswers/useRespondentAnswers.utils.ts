@@ -56,15 +56,15 @@ export const processIdentifiersChange = ({
   isIdentifiersChange,
   adjustStartEndDates,
   setValue,
-  activityLastAnswerDate,
+  lastAnswerDate,
   recentIdentifiersAnswerDate,
 }: ProcessIdentifiersChange) => {
   if (!isIdentifiersChange) return null;
 
   let identifierAnswerStartDate: DateOrNullOrUndefined;
   let identifierAnswerEndDate: DateOrNullOrUndefined;
-  let activityAnswerStartDate: DateOrNullOrUndefined;
-  let activityAnswerEndDate: DateOrNullOrUndefined;
+  let answerStartDate: DateOrNullOrUndefined;
+  let answerEndDate: DateOrNullOrUndefined;
 
   if (adjustStartEndDates) {
     const { startDate, endDate } = getOneWeekDateRange(recentIdentifiersAnswerDate);
@@ -79,22 +79,22 @@ export const processIdentifiersChange = ({
     }
   } else {
     const { startDate: rangeStartDate, endDate: rangeEndDate } =
-      getOneWeekDateRange(activityLastAnswerDate);
+      getOneWeekDateRange(lastAnswerDate);
 
     if (rangeStartDate) {
       setValue('startDate', rangeStartDate);
-      activityAnswerStartDate = rangeStartDate;
+      answerStartDate = rangeStartDate;
     }
     if (rangeEndDate) {
       setValue('endDate', rangeEndDate);
-      activityAnswerEndDate = rangeEndDate;
+      answerEndDate = rangeEndDate;
     }
   }
 
   return {
     identifierAnswerStartDate,
     identifierAnswerEndDate,
-    activityAnswerStartDate,
-    activityAnswerEndDate,
+    answerStartDate,
+    answerEndDate,
   };
 };

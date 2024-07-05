@@ -50,6 +50,11 @@ export const getUserDetails = createAsyncThunk(
         FeatureFlags.login(data.result.id);
       }
 
+      if (data?.result) {
+        // Make sure to identify session with LD, e.g. when user is already logged in
+        FeatureFlags.login(data.result.id);
+      }
+
       return { data };
     } catch (exception) {
       const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);

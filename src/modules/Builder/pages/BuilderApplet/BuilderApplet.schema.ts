@@ -513,6 +513,7 @@ export const ItemFlowConditionSchema = () =>
         foundItem?.responseType === ItemResponseType.SingleSelectionPerRow;
       const isMultipleSelectionPerRow =
         foundItem?.responseType === ItemResponseType.MultipleSelectionPerRow;
+      const isSliderRows = foundItem?.responseType === ItemResponseType.SliderRows;
       const typeShapeObject = { type: conditionValueSchema };
       const rowIndexShapeObject = { rowIndex: conditionValueSchema };
 
@@ -520,7 +521,7 @@ export const ItemFlowConditionSchema = () =>
         if (isTimeRange) {
           return schema.shape(typeShapeObject);
         }
-        if (isSingleSelectionPerRow || isMultipleSelectionPerRow) {
+        if (isSingleSelectionPerRow || isMultipleSelectionPerRow || isSliderRows) {
           return schema.shape(rowIndexShapeObject);
         }
       }
@@ -539,6 +540,9 @@ export const ItemFlowConditionSchema = () =>
           value: conditionValueSchema,
         });
         if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
+        if (isSliderRows) {
+          return baseSchema.concat(yup.object(rowIndexShapeObject));
+        }
 
         return baseSchema;
       }
@@ -548,6 +552,9 @@ export const ItemFlowConditionSchema = () =>
           maxValue: conditionValueSchema,
         });
         if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
+        if (isSliderRows) {
+          return baseSchema.concat(yup.object(rowIndexShapeObject));
+        }
 
         return baseSchema;
       }

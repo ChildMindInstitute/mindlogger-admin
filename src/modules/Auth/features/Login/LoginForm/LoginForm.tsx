@@ -33,9 +33,21 @@ export const LoginForm = () => {
   const { t } = useTranslation('app');
   const location = useLocation();
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<SignIn>({
+  const softLockData = auth.useSoftLockData();
+
+  const clearSoftLock = () => {
+    if (softLockData) {
+      dispatch(auth.actions.endSoftLock());
+      dispatch(banners.actions.removeBanner({ key: 'SoftLockWarningBanner' }));
+    }
+  };
+
+  const { handleSubmit, control, setFocus } = useForm<SignIn>({
     resolver: yupResolver(loginFormSchema()),
-    defaultValues: { email: '', password: '' },
+    defaultValues: {
+      email: softLockData?.email ?? '',
+      password: '',
+    },
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -43,12 +55,25 @@ export const LoginForm = () => {
     setErrorMessage('');
     const { signIn } = auth.thunk;
     const result = await dispatch(signIn(data));
-    const fromUrl = location?.state?.[LocationStateKeys.From];
 
     if (signIn.fulfilled.match(result)) {
-      if (fromUrl) navigate(fromUrl);
-      navigateToLibrary(navigate);
+      // If user logged in as the same user that was soft-locked, restore their nav state
+      if (data.email === softLockData?.email) {
+        navigate(softLockData?.redirectTo, {
+          state: { [LocationStateKeys.Workspace]: softLockData.workspace },
+        });
+      } else {
+        const fromUrl = location.state?.[LocationStateKeys.From];
+        if (fromUrl) {
+          navigate(fromUrl);
+        } else {
+          navigateToLibrary(navigate);
+        }
+      }
+
       Mixpanel.track('Login Successful');
+
+      clearSoftLock();
     }
 
     if (signIn.rejected.match(result)) {
@@ -57,6 +82,7 @@ export const LoginForm = () => {
   };
 
   useEffect(() => {
+    // Handle password reset success state
     if (location.state?.[LocationStateKeys.IsPasswordReset]) {
       // Shown for 5 seconds
       dispatch(
@@ -74,9 +100,28 @@ export const LoginForm = () => {
         replace: true,
       });
     }
-  }, []);
+
+    // Display soft-lock state
+    if (softLockData) {
+      dispatch(banners.actions.addBanner({ key: 'SoftLockWarningBanner' }));
+      setFocus('password');
+
+      // Refocus password field when window regains focus
+      const handleWindowFocus = () => {
+        setFocus('password');
+        window.removeEventListener('focus', handleWindowFocus);
+      };
+
+      window.addEventListener('focus', handleWindowFocus);
+
+      return () => {
+        window.removeEventListener('focus', handleWindowFocus);
+      };
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCreateAccountClick = () => {
+    clearSoftLock();
     navigate(page.signUp);
 
     Mixpanel.track('Create account button on login screen click');
@@ -84,6 +129,11 @@ export const LoginForm = () => {
 
   const handleLoginClick = () => {
     Mixpanel.track('Login Button click');
+  };
+
+  const handleResetPasswordClick = () => {
+    clearSoftLock();
+    navigate(page.passwordReset);
   };
 
   return (
@@ -121,7 +171,7 @@ export const LoginForm = () => {
         </StyledController>
         {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
         <StyledForgotPasswordLink
-          onClick={() => navigate(page.passwordReset)}
+          onClick={handleResetPasswordClick}
           data-testid="login-form-forgot-password"
         >
           {t('forgotPassword')}

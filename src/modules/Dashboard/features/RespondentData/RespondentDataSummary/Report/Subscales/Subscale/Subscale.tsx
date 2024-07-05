@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +11,6 @@ import { SingleMultiSelectionSliderFormattedResponses } from 'modules/Dashboard/
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
-import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 import {
   UNSUPPORTED_ITEMS,
   SHOW_MORE_HEIGHT,
@@ -28,13 +26,11 @@ export const Subscale = ({
   name,
   subscale,
   versions,
+  flowResponsesIndex,
   'data-testid': dataTestid,
 }: SubscaleProps) => {
   const { t } = useTranslation('app');
-
-  const { watch } = useFormContext<RespondentsDataFormValues>();
-
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
 
   const renderChart = (
     activityItemAnswer: SingleMultiSelectionSliderFormattedResponses,
@@ -86,16 +82,22 @@ export const Subscale = ({
             </Box>
           )}
           {!!subscale?.items?.length &&
-            subscale?.items?.map((item, index: number) => (
-              <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
-                <CollapsedMdText
-                  text={getDictionaryText(item.activityItem.question)}
-                  maxHeight={SHOW_MORE_HEIGHT}
-                  data-testid={`${dataTestid}-question-${index}`}
-                />
-                {renderChart(item, index)}
-              </Box>
-            ))}
+            subscale?.items?.map((item, index: number) => {
+              const itemTestid = `${dataTestid}-item-${
+                flowResponsesIndex ? `${flowResponsesIndex}-` : ''
+              }${index}`;
+
+              return (
+                <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
+                  <CollapsedMdText
+                    text={getDictionaryText(item.activityItem.question)}
+                    maxHeight={SHOW_MORE_HEIGHT}
+                    data-testid={`${dataTestid}-question-${index}`}
+                  />
+                  {renderChart({ ...item, dataTestid: itemTestid }, index)}
+                </Box>
+              );
+            })}
           {!!subscale?.restScores && (
             <Box sx={{ mt: theme.spacing(4.8) }}>
               {Object.keys(subscale?.restScores)?.map((restScore, index) => (

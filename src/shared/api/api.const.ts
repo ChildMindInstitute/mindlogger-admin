@@ -29,3 +29,10 @@ export enum ApiResponseCodes {
   UnprocessableEntity = 422,
   NoContent = 204,
 }
+
+//getWorkspaceManagersApi, getWorkspaceRespondentsApi, getInvitationsApi (Add Users Tab)
+export const apiRoutesToSkip = [
+  '^\\/workspaces\\/[0-9a-fA-F-]{36}\\/(managers|respondents)$',
+  '^\\/workspaces\\/[0-9a-fA-F-]{36}\\/applets\\/[0-9a-fA-F-]{36}\\/(managers|respondents)$',
+  '^\\/invitations$',
+];

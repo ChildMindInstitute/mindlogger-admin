@@ -31,6 +31,6 @@ export type OptionListItem = { labelKey: string; value: string; type: ConditionI
 
 export type GetPayload = {
   conditionType: ConditionType;
-  conditionPayload?: Condition<unknown>['payload'];
+  conditionPayload?: Condition['payload'];
   selectedItem?: ItemFormValues;
 };

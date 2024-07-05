@@ -256,14 +256,9 @@ const textTableRegExp = /response-option-\d+-\d+-table$/;
 const multiScatterChart = 'multi-scatter-chart';
 const timePickerLineChart = 'time-picker-line-chart';
 
-const mockedWatch = jest.fn();
-
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockedWatch(),
-    setValue: () => jest.fn(),
-  }),
+  useWatch: () => [],
 }));
 
 jest.mock('../Charts/LineChart/TimePickerLineChart', () => ({
@@ -285,10 +280,6 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
 }));
 
 describe('ResponseOptions', () => {
-  beforeEach(() => {
-    mockedWatch.mockReturnValue({});
-  });
-
   test('renders component and children correctly', async () => {
     renderWithProviders(<ResponseOptions responseOptions={mockedResponseOptions} versions={[]} />);
 

@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { MenuActionProps, Row } from 'shared/components';
 import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
-import { DatavizActivity } from 'api';
+import { DatavizEntity } from 'api';
 import { Order } from 'shared/types';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
@@ -25,7 +25,7 @@ export type ActivityActionProps = {
 };
 
 export type ActivitiesData = {
-  result: Activity[] | DatavizActivity[];
+  result: Activity[] | DatavizEntity[];
   count: number;
 };
 

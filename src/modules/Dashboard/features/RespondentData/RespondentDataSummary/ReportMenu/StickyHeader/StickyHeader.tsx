@@ -1,7 +1,5 @@
-import { useTranslation } from 'react-i18next';
-
 import { ContentWithTooltip, DataTableItem } from 'shared/components';
-import { StyledStickyHeader, theme, StyledStickyHeadline, variables } from 'shared/styles';
+import { StyledStickyHeader, theme } from 'shared/styles';
 import {
   useRespondentLabel,
   useHeaderSticky,
@@ -16,7 +14,6 @@ export const StickyHeader = ({
   containerRef,
   'data-testid': dataTestid = '',
 }: StickyHeaderProps) => {
-  const { t } = useTranslation();
   const respondentLabel = useRespondentLabel({ isSubject: true });
   const isHeaderSticky = useHeaderSticky(
     containerRef,
@@ -32,10 +29,7 @@ export const StickyHeader = ({
         p: theme.spacing(0, 4),
       }}
     >
-      <StyledHeaderContainer isSticky={isHeaderSticky}>
-        <StyledStickyHeadline isSticky={isHeaderSticky} color={variables.palette.on_surface}>
-          {t('activities')}
-        </StyledStickyHeadline>
+      <StyledHeaderContainer>
         <ContentWithTooltip
           value={respondentLabel}
           item={{ label: respondentLabel } as DataTableItem}

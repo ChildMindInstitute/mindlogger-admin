@@ -28,6 +28,8 @@ import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
 import { getObjectFromList } from '../getObjectFromList';
 
+const getRoundTo2Decimal = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
+
 export const getSubScaleScore = (
   subscalesSum: number,
   type: SubscaleTotalScore,
@@ -35,7 +37,7 @@ export const getSubScaleScore = (
 ) => {
   if (type === SubscaleTotalScore.Average && length === 0) return 0;
 
-  return type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
+  return type === SubscaleTotalScore.Sum ? subscalesSum : getRoundTo2Decimal(subscalesSum / length);
 };
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '0' : '1');
@@ -135,13 +137,13 @@ export const calcScores = <T>(
     return {
       ...result,
       [data.name]: {
-        score: Number(subscaleTableDataItem?.score) || calculatedScore,
+        score: Number(subscaleTableDataItem?.score) || getRoundTo2Decimal(calculatedScore),
         optionText: subscaleTableDataItem?.optionalText || '',
       },
     };
   }
 
-  return { ...result, [data.name]: { score: calculatedScore, optionText: '' } };
+  return { ...result, [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '' } };
 };
 
 export const calcTotalScore = (

@@ -8,6 +8,7 @@ import {
   getRequestTokenData,
   getRefreshTokenData,
   refreshTokenAndReattemptRequest,
+  shouldNotSkipRoute,
 } from './api.utils';
 import { ApiResponseCodes } from './api.const';
 import {
@@ -48,7 +49,10 @@ authApiClient.interceptors.response.use(
   async (error) => {
     if (error.response?.status === ApiResponseCodes.Unauthorized) {
       return refreshTokenAndReattemptRequest(error);
-    } else if (error.response?.status === ApiResponseCodes.Forbidden) {
+    } else if (
+      error.response?.status === ApiResponseCodes.Forbidden &&
+      shouldNotSkipRoute(error.config?.url ?? '')
+    ) {
       store.dispatch(forbiddenState.actions.addForbiddenError());
 
       return Promise.reject(error);

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { FormState } from 'react-hook-form';
 import * as yup from 'yup';
 
 import {
@@ -13,6 +14,7 @@ import { CalendarEvent } from 'modules/Dashboard/state';
 export type EventFormRef = {
   submitForm: () => void;
   processEvent: () => void;
+  formState: FormState<EventFormValues>;
 };
 
 export type EventFormProps = {
@@ -28,7 +30,7 @@ export type EventFormProps = {
   userId?: string;
 };
 
-export type Warning = {
+export type EventFormWarnings = {
   showRemoveAlwaysAvailable?: boolean;
   showRemoveAllScheduled?: boolean;
 };
@@ -51,7 +53,6 @@ export type EventFormValues = {
   idleTime: string;
   notifications: EventNotifications;
   reminder: FormReminder;
-  removeWarning: Warning;
 };
 
 export type NotificationTimeTestContext = {
@@ -85,6 +86,7 @@ export type GetEventFromTabs = {
   hasNotificationsErrors?: boolean;
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
+  removeWarnings?: EventFormWarnings;
 };
 
 export type GetDaysInPeriod = {

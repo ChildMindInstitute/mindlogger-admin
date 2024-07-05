@@ -1,36 +1,66 @@
-import { getLatestReportUrl, sortResponseOptions } from './Report.utils';
+import { getCompletions } from './Report.utils';
+import { ActivityCompletion } from '../../RespondentData.types';
 
-describe('getLatestReportUrl', () => {
-  test.each([
-    ['...', `data:application/pdf;base64,...`],
-    ['', 'data:application/pdf;base64,'],
-  ])(
-    'should return a valid data URL for a PDF with the given base64 string',
-    (base64Str, expectedUrl) => {
-      const result = getLatestReportUrl(base64Str);
-      expect(result).toEqual(expectedUrl);
-    },
-  );
-});
+describe('getCompletions', () => {
+  test('returns completions for Flow submissions', () => {
+    const flowSubmissions = [
+      {
+        submitId: '1',
+        endDatetime: '2022-01-01T00:00:00.000Z',
+        createdAt: '2022-01-01T00:00:00.000Z',
+      },
+      { submitId: '2', endDatetime: null, createdAt: '2022-01-02T00:00:00.000Z' },
+    ];
+    const completions = getCompletions({ isFlow: true, flowSubmissions, answers: [] });
 
-describe('sortResponseOptions', () => {
-  test('should sort response options by order, then by key', () => {
-    const mockResponseOptions = {
-      b: [{ activityItem: { order: 4 } }],
-      a: [{ activityItem: { order: 2 } }],
-      c: [{ activityItem: { order: 3 } }],
-      d: [{ activityItem: { order: 1 } }],
-    };
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const sorted = sortResponseOptions(mockResponseOptions);
-    const expectedKeysOrder = ['d', 'a', 'c', 'b'];
-    const actualKeysOrder = Object.keys(sorted);
-    expect(actualKeysOrder).toEqual(expectedKeysOrder);
+    expect(completions).toEqual([
+      {
+        id: '1',
+        endDatetime: '2022-01-01T00:00:00.000Z',
+        areSubscalesVisible: false,
+        isFlow: true,
+      },
+      {
+        id: '2',
+        endDatetime: '2022-01-02T00:00:00.000Z',
+        areSubscalesVisible: false,
+        isFlow: true,
+      },
+    ]);
   });
 
-  test('should handle an empty object', () => {
-    expect(sortResponseOptions({})).toEqual({});
+  test('returns completions for Activity answers', () => {
+    const answers = [
+      {
+        answerId: '1',
+        endDatetime: '2022-01-01T00:00:00.000Z',
+        subscaleSetting: null,
+        reviewCount: { mine: 1, other: 3 },
+      },
+      {
+        answerId: '2',
+        endDatetime: '2022-01-02T00:00:00.000Z',
+        subscaleSetting: { subscales: [{ id: '1', name: 'Subscale 1' }] },
+        reviewCount: { mine: 0, other: 0 },
+      },
+    ] as ActivityCompletion[];
+    const completions = getCompletions({ isFlow: false, flowSubmissions: [], answers });
+
+    expect(completions).toEqual([
+      {
+        id: '1',
+        endDatetime: '2022-01-01T00:00:00.000Z',
+        areSubscalesVisible: false,
+        reviewCount: { mine: 1, other: 3 },
+        isFlow: false,
+      },
+      {
+        id: '2',
+        endDatetime: '2022-01-02T00:00:00.000Z',
+        areSubscalesVisible: true,
+        reviewCount: { mine: 0, other: 0 },
+        isFlow: false,
+      },
+    ]);
   });
 });

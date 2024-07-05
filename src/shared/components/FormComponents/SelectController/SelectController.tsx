@@ -1,7 +1,7 @@
+import { forwardRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
-import { Box } from '@mui/material';
-import { useEffect } from 'react';
+import { Box, TooltipProps } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -41,6 +41,27 @@ export const SelectObserverTarget = ({ targetSelector, setTrigger }: SelectObser
   return <StyledObserverTarget className={targetSelector} />;
 };
 
+const SelectControllerMenuItem = forwardRef<
+  HTMLLIElement,
+  {
+    itemDisabled?: boolean;
+    tooltip?: React.ReactNode;
+    tooltipPlacement?: TooltipProps['placement'];
+  } & React.ComponentPropsWithoutRef<'li'>
+>(({ itemDisabled: disabled, tooltip, tooltipPlacement, ...props }, ref) => {
+  const item = (
+    <StyledItem ref={ref} itemDisabled={disabled} selectDisabled={disabled} {...props} />
+  );
+
+  return tooltip ? (
+    <Tooltip tooltipTitle={tooltip} placement={tooltipPlacement} enterNextDelay={200}>
+      {disabled ? <span>{item}</span> : item}
+    </Tooltip>
+  ) : (
+    item
+  );
+});
+
 export const SelectController = <T extends FieldValues>({
   name,
   control,
@@ -68,58 +89,50 @@ export const SelectController = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   const getMenuItem = (
-    { labelKey, value, itemDisabled, icon, withoutKey, hidden }: GetMenuItem,
+    { labelKey, value, itemDisabled, icon, hidden, tooltip, tooltipPlacement }: GetMenuItem,
     selectedValue?: string,
   ) => (
     <StyledMenuItem
-      {...(!withoutKey && { key: labelKey })}
+      key={labelKey}
       uiType={uiType}
       value={value as string}
       disabled={itemDisabled}
       className={hidden ? 'hidden-menu-item' : ''}
+      component={SelectControllerMenuItem}
+      tooltip={tooltip}
+      tooltipPlacement={tooltipPlacement}
+      itemDisabled={itemDisabled}
     >
-      <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
-        {icon && (
-          <StyledFlexTopCenter className="icon-wrapper" sx={{ mr: 1.8 }}>
-            {icon}
-          </StyledFlexTopCenter>
-        )}
-        {isLabelNeedTranslation ? t(labelKey) : labelKey}
-        {withChecked && (
-          <StyledFlexEnd className="icon-wrapper" sx={{ ml: 'auto', width: '4rem' }}>
-            {selectedValue === value && <Svg id="check" width={24} height={24} />}
-          </StyledFlexEnd>
-        )}
-      </StyledItem>
+      {icon && (
+        <StyledFlexTopCenter className="icon-wrapper" sx={{ mr: 1.8 }}>
+          {icon}
+        </StyledFlexTopCenter>
+      )}
+      {isLabelNeedTranslation ? t(labelKey) : labelKey}
+      {withChecked && (
+        <StyledFlexEnd className="icon-wrapper" sx={{ ml: 'auto', width: '4rem' }}>
+          {selectedValue === value && <Svg id="check" width={24} height={24} />}
+        </StyledFlexEnd>
+      )}
     </StyledMenuItem>
   );
 
   const renderOptions = (options?: Option[], selectedValue?: string) =>
-    options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }) => {
-      const commonProps = {
-        labelKey,
-        value,
-        itemDisabled: disabled,
-        icon,
-        hidden,
-      };
+    options?.map(
+      ({ labelKey, value, icon, disabled = false, tooltip, hidden, tooltipPlacement }) => {
+        const commonProps = {
+          labelKey,
+          value,
+          itemDisabled: disabled,
+          icon,
+          hidden,
+          tooltip,
+          tooltipPlacement,
+        };
 
-      return tooltip ? (
-        <Tooltip key={labelKey} tooltipTitle={tooltip}>
-          <span>
-            {getMenuItem(
-              {
-                ...commonProps,
-                withoutKey: true,
-              },
-              selectedValue,
-            )}
-          </span>
-        </Tooltip>
-      ) : (
-        getMenuItem(commonProps, selectedValue)
-      );
-    });
+        return getMenuItem(commonProps, selectedValue);
+      },
+    );
 
   const renderGroupedOptions = (selectedValue?: string) => {
     if (!withGroups) return renderOptions(options, selectedValue);

@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -12,10 +11,8 @@ import {
   UNSUPPORTED_ITEMS,
   SHOW_MORE_HEIGHT,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
-import {
-  RespondentsDataFormValues,
-  FormattedResponses,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { FormattedResponses } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 
 import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from '../../RespondentDataSummary.const';
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
@@ -23,12 +20,17 @@ import { COLORS } from '../Charts/Charts.const';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
 
-export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
+export const ResponseOptions = ({
+  responseOptions,
+  versions = [],
+  flowResponsesIndex,
+}: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<RespondentsDataFormValues>();
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const { flowResponseOptionsCount } = useRespondentDataContext();
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
   const isStaticActive =
-    Object.values(responseOptions).length > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC;
+    Object.values(responseOptions).length > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC ||
+    flowResponseOptionsCount > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC;
 
   const renderResponseOption = useCallback(
     (activityItemAnswer: FormattedResponses, index: number) => {
@@ -61,7 +63,9 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
       </StyledHeadline>
       {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
         responseOption.map((item, index) => {
-          const dataTestid = `response-option-${responseOptionIndex}-${index}`;
+          const dataTestid = `response-option-${
+            flowResponsesIndex ? `${flowResponsesIndex}-` : ''
+          }${responseOptionIndex}-${index}`;
 
           return (
             <Box

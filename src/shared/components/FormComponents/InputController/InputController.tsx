@@ -27,20 +27,24 @@ export const InputController = <T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-        <Input
-          inputRef={inputRef}
-          type={type}
-          onChange={onChange}
-          onBlur={onBlur}
-          value={value}
-          error={!!error || providedError}
-          helperText={isErrorVisible ? error?.message || helperText : ''}
-          onCustomChange={onCustomChange}
-          onWheel={handleOnWheel}
-          {...props}
-        />
-      )}
+      render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => {
+        ref(inputRef.current);
+
+        return (
+          <Input
+            inputRef={inputRef}
+            type={type}
+            onChange={onChange}
+            onBlur={onBlur}
+            value={value}
+            error={!!error || providedError}
+            helperText={isErrorVisible ? error?.message || helperText : ''}
+            onCustomChange={onCustomChange}
+            onWheel={handleOnWheel}
+            {...props}
+          />
+        );
+      }}
     />
   );
 };

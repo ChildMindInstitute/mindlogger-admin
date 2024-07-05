@@ -18,6 +18,9 @@ import {
 import { getObjectFromList } from '../getObjectFromList';
 
 const itemsAndSubscales = [mockedSubscale1, mockedSubscale2];
+const itemsAndSubscalesWithAverageCalculation = [
+  { ...mockedSubscale1, scoring: SubscaleTotalScore.Average },
+];
 const itemsOnly = [mockedSubscale1];
 
 const activityItems = getObjectFromList(
@@ -64,8 +67,15 @@ const subscaleObject = {
   'ss-2': mockedSubscale2,
 };
 
+const mockedSubscaleSettingWithAverageCalculation = {
+  ...mockedSubscaleSetting,
+  calculateTotalScore: SubscaleTotalScore.Average,
+};
 const itemsWithOptTextExpected = {
   [data.name]: { optionText: 'Description #2 for range 4~20', score: 5 },
+};
+const itemsWithOptTextWithAverageCalculationExpected = {
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 1.67 },
 };
 const itemsWithoutOptTextExpected = {
   [data.name]: { optionText: '', score: 5 },
@@ -93,6 +103,11 @@ const filledSubscaleScores = {
   'ss-1': 5,
   'ss-2': 6,
 };
+const filledSubscaleScoresWithAverageCalculation = {
+  'Final SubScale Score': 5,
+  'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
+  'ss-1': 1.67,
+};
 const itemsOnlyfilledSubscaleScores = {
   'Final SubScale Score': 5,
   'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
@@ -105,6 +120,7 @@ describe('getSubscales', () => {
       subscalesSum | type                          | length | expected
       ${5}         | ${SubscaleTotalScore.Sum}     | ${2}   | ${5}
       ${5}         | ${SubscaleTotalScore.Average} | ${2}   | ${2.5}
+      ${5}         | ${SubscaleTotalScore.Average} | ${3}   | ${1.67}
       ${5}         | ${SubscaleTotalScore.Average} | ${0}   | ${0}
     `(
       'returns "$expected" when subscalesSum="$subscalesSum", type="$type"',
@@ -162,12 +178,13 @@ describe('getSubscales', () => {
 
   describe('calcTotalScore', () => {
     test.each`
-      subscaleSetting          | activityItems    | expected                         | description
-      ${mockedSubscaleSetting} | ${activityItems} | ${itemsWithOptTextExpected}      | ${'should return score=5'}
-      ${mockedSubscaleSetting} | ${{}}            | ${emptyItemsWithOptTextExpected} | ${'should return score=0'}
-      ${{}}                    | ${activityItems} | ${{}}                            | ${'should return empty object'}
-      ${{}}                    | ${{}}            | ${{}}                            | ${'should return empty object'}
-      ${null}                  | ${null}          | ${{}}                            | ${'should return empty object'}
+      subscaleSetting                                | activityItems    | expected                                          | description
+      ${mockedSubscaleSetting}                       | ${activityItems} | ${itemsWithOptTextExpected}                       | ${'should return score=5'}
+      ${mockedSubscaleSettingWithAverageCalculation} | ${activityItems} | ${itemsWithOptTextWithAverageCalculationExpected} | ${'should return score=1.67'}
+      ${mockedSubscaleSetting}                       | ${{}}            | ${emptyItemsWithOptTextExpected}                  | ${'should return score=0'}
+      ${{}}                                          | ${activityItems} | ${{}}                                             | ${'should return empty object'}
+      ${{}}                                          | ${{}}            | ${{}}                                             | ${'should return empty object'}
+      ${null}                                        | ${null}          | ${{}}                                             | ${'should return empty object'}
     `('$description', ({ subscaleSetting, activityItems, expected }) => {
       expect(calcTotalScore(subscaleSetting, activityItems)).toEqual(expected);
     });
@@ -175,13 +192,14 @@ describe('getSubscales', () => {
 
   describe('getSubscales', () => {
     test.each`
-      subscales            | activityItems    | expected                         | description
-      ${itemsAndSubscales} | ${activityItems} | ${filledSubscaleScores}          | ${'should return filled scores: items and subscale'}
-      ${itemsOnly}         | ${activityItems} | ${itemsOnlyfilledSubscaleScores} | ${'should return filled scores: items only'}
-      ${itemsAndSubscales} | ${{}}            | ${{}}                            | ${'should return empty object'}
-      ${{}}                | ${activityItems} | ${{}}                            | ${'should return empty object'}
-      ${{}}                | ${{}}            | ${{}}                            | ${'should return empty object'}
-      ${null}              | ${null}          | ${{}}                            | ${'should return empty object'}
+      subscales                                  | activityItems    | expected                                      | description
+      ${itemsAndSubscales}                       | ${activityItems} | ${filledSubscaleScores}                       | ${'should return filled scores: items and subscale'}
+      ${itemsAndSubscalesWithAverageCalculation} | ${activityItems} | ${filledSubscaleScoresWithAverageCalculation} | ${'should return filled scores with average calculation: items and subscale'}
+      ${itemsOnly}                               | ${activityItems} | ${itemsOnlyfilledSubscaleScores}              | ${'should return filled scores: items only'}
+      ${itemsAndSubscales}                       | ${{}}            | ${{}}                                         | ${'should return empty object'}
+      ${{}}                                      | ${activityItems} | ${{}}                                         | ${'should return empty object'}
+      ${{}}                                      | ${{}}            | ${{}}                                         | ${'should return empty object'}
+      ${null}                                    | ${null}          | ${{}}                                         | ${'should return empty object'}
     `('$description', ({ subscales, activityItems, expected }) => {
       const settings = {
         ...mockedSubscaleSetting,

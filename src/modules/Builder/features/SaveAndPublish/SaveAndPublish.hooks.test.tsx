@@ -23,15 +23,6 @@ jest.mock('modules/Builder/hooks', () => ({
   useAppletPrivateKeySetter: jest.fn(),
 }));
 
-jest.mock('redux/modules', () => ({
-  auth: {
-    useLogoutInProgress: () => false,
-  },
-  workspaces: {
-    useData: () => ({ ownerId: 'mockOwnerId' }),
-  },
-}));
-
 describe('useSaveAndPublishSetup hook', () => {
   afterEach(() => {
     jest.resetAllMocks();
@@ -44,6 +35,7 @@ describe('useSaveAndPublishSetup hook', () => {
         mockAxios.post.mockResolvedValueOnce({ data: {} });
 
         const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
+          preloadedState: getPreloadedState(),
           route: '/builder/new-applet/about',
           routePath: '/builder/new-applet/about',
         });
@@ -57,6 +49,7 @@ describe('useSaveAndPublishSetup hook', () => {
         mockAxios.post.mockRejectedValueOnce({});
 
         const { result, rerender, store } = renderHookWithProviders(useSaveAndPublishSetup, {
+          preloadedState: getPreloadedState(),
           route: '/builder/new-applet/about',
           routePath: '/builder/new-applet/about',
         });

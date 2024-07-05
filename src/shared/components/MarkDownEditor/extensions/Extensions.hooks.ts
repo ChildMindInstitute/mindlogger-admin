@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { MediaType } from 'shared/consts';
 import { useMediaUpload } from 'shared/hooks/useMediaUpload';
 import { getMediaName } from 'shared/utils/getMediaName';
+import { TargetExtension } from 'shared/api';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
@@ -63,7 +64,7 @@ export const useUploadMethods = ({
     inputRef.current?.click();
   };
 
-  const onInputChange = () => {
+  const onInputChange = (targetExtension?: TargetExtension) => {
     if (!inputRef.current?.files?.length) return;
 
     const file = inputRef.current.files[0];
@@ -78,7 +79,7 @@ export const useUploadMethods = ({
       return setIncorrectFormat(type);
     }
 
-    executeMediaUpload({ file, fileName });
+    executeMediaUpload({ file, fileName, targetExtension });
   };
 
   useEffect(() => {

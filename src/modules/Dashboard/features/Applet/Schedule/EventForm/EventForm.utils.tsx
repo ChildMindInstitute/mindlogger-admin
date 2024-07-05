@@ -20,6 +20,7 @@ import {
   removeSecondsFromTime,
 } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 import { getDaysInPeriod, getWeeklyDays } from 'shared/utils/eventFormUtils';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
@@ -27,9 +28,7 @@ import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
 import {
   DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
-  DEFAULT_END_TIME,
   DEFAULT_IDLE_TIME,
-  DEFAULT_START_TIME,
   DEFAULT_TIMER_DURATION,
   ONCE_ACTIVITY_INCOMPLETE_LIMITATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
@@ -57,6 +56,7 @@ export const getEventFormTabs = ({
   hasNotificationsErrors,
   hasAlwaysAvailableOption,
   'data-testid': dataTestid,
+  removeWarnings,
 }: GetEventFromTabs) => [
   {
     labelKey: 'availability',
@@ -65,6 +65,7 @@ export const getEventFormTabs = ({
       <AvailabilityTab
         hasAlwaysAvailableOption={hasAlwaysAvailableOption}
         data-testid={`${dataTestid}-availability`}
+        removeWarnings={removeWarnings}
       />
     ),
     hasError: hasAvailabilityErrors,
@@ -413,7 +414,6 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     periodicity,
     notifications,
     reminder,
-    removeWarning: {},
   };
 };
 

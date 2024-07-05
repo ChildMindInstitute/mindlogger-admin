@@ -15,13 +15,10 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { EventFormValues } from '../EventForm.types';
-import {
-  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
-  DEFAULT_END_TIME,
-  DEFAULT_START_TIME,
-} from '../EventForm.const';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -37,31 +34,24 @@ import { useNextDayLabel } from '../EventForm.hooks';
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
   'data-testid': dataTestid,
+  removeWarnings,
 }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue, trigger } = useFormContext<EventFormValues>();
-  const [
-    alwaysAvailable,
-    periodicity,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    reminder,
-    removeWarning,
-  ] = useWatch({
-    control,
-    name: [
-      'alwaysAvailable',
-      'periodicity',
-      'startDate',
-      'endDate',
-      'startTime',
-      'endTime',
-      'reminder',
-      'removeWarning',
-    ],
-  });
+  const { control, setValue, trigger, formState } = useFormContext<EventFormValues>();
+  const [alwaysAvailable, periodicity, startDate, endDate, startTime, endTime, reminder] = useWatch(
+    {
+      control,
+      name: [
+        'alwaysAvailable',
+        'periodicity',
+        'startDate',
+        'endDate',
+        'startTime',
+        'endTime',
+        'reminder',
+      ],
+    },
+  );
   const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
@@ -101,6 +91,8 @@ export const AvailabilityTab = ({
 
   const handleAvailabilityCustomChange = (event: SelectEvent) => {
     const availability = event.target.value;
+    const { defaultValues } = formState;
+
     if (availability) {
       setValue('periodicity', Periodicity.Always);
       setValue('startTime', DEFAULT_START_TIME);
@@ -113,7 +105,16 @@ export const AvailabilityTab = ({
       return;
     }
 
-    setValue('periodicity', Periodicity.Once);
+    setValue(
+      'periodicity',
+      (defaultValues?.periodicity === Periodicity.Always
+        ? Periodicity.Once
+        : defaultValues?.periodicity) ?? Periodicity.Once,
+    );
+    setValue('startTime', defaultValues?.startTime ?? DEFAULT_START_TIME);
+    setValue('endTime', defaultValues?.endTime ?? DEFAULT_END_TIME);
+    setValue('accessBeforeSchedule', defaultValues?.accessBeforeSchedule ?? false);
+    setValue('oneTimeCompletion', defaultValues?.oneTimeCompletion ?? false);
   };
 
   const datePicker = (
@@ -161,10 +162,10 @@ export const AvailabilityTab = ({
         customChange={handleAvailabilityCustomChange}
         data-testid={`${dataTestid}-always-available`}
       />
-      {Object.keys(removeWarning).length !== 0 && (
+      {Object.keys(removeWarnings ?? {}).length !== 0 && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
-          {removeWarning.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
-          {removeWarning.showRemoveAllScheduled && t('alwaysAvailableWarning')}
+          {removeWarnings?.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
+          {removeWarnings?.showRemoveAllScheduled && t('alwaysAvailableWarning')}
         </StyledBodyMedium>
       )}
       {alwaysAvailable ? (
@@ -195,6 +196,7 @@ export const AvailabilityTab = ({
                 label={t('from')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.FromTime)}
                 data-testid={`${dataTestid}-start-time`}
+                defaultTime={DEFAULT_START_TIME}
               />
             </StyledTimeWrapper>
             <StyledTimeWrapper
@@ -207,6 +209,7 @@ export const AvailabilityTab = ({
                 label={t('to')}
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
+                defaultTime={DEFAULT_END_TIME}
               />
               {hasNextDayLabel && (
                 <StyledTitleSmall
@@ -219,7 +222,7 @@ export const AvailabilityTab = ({
               )}
             </StyledTimeWrapper>
           </StyledTimeRow>
-          <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>
+          <StyledWrapper isCheckboxDisabled={startTime === DEFAULT_START_TIME}>
             <CheckboxController
               name="accessBeforeSchedule"
               control={control}

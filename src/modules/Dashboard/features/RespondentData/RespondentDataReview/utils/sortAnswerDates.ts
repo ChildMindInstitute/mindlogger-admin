@@ -1,8 +1,8 @@
 import { compareAsc } from 'date-fns';
 
-import { AnswerDate } from 'modules/Dashboard/api';
-
-export const sortAnswerDates = (answerDates: AnswerDate[]) =>
+export const sortAnswerDates = <T extends { endDatetime?: string; createdAt: string }>(
+  answerDates: T[],
+) =>
   answerDates?.sort((a, b) =>
     compareAsc(new Date(a.endDatetime ?? a.createdAt), new Date(b.endDatetime ?? b.createdAt)),
   );

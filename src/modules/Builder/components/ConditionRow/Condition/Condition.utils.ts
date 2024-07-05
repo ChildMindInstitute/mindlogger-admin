@@ -13,6 +13,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
     case ConditionItemType.NumberSelection:
     case ConditionItemType.Time:
     case ConditionItemType.TimeRange:
+    case ConditionItemType.SliderRows:
       return [
         { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
         { value: ConditionType.LessThan, labelKey: t('lessThan') },

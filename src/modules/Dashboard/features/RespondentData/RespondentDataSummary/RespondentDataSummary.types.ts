@@ -1,9 +1,10 @@
-import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 
+import { ActivityOrFlow } from '../RespondentData.types';
+
 export type FetchAnswers = {
-  activity: DatavizActivity;
+  entity: ActivityOrFlow;
   endDate?: Date;
   startTime?: string;
   endTime?: string;
@@ -14,7 +15,7 @@ export type FetchAnswers = {
 };
 
 export type GetIdentifiersVersions = {
-  activity: DatavizActivity;
+  entity: ActivityOrFlow;
 };
 
 export type GetSingleMultiSelectionPerRowAnswers = {

@@ -33,18 +33,22 @@ export const FeedbackReviewer = ({
   const [isVisible, setIsVisible] = useState(true);
 
   const handleRemoveButtonClick = () => setRemovePopupVisible(true);
+
   const handleEditButtonClick = () => {
     setIsVisible(false);
     onReviewEdit();
   };
+
   const handleRemoveSubmit = async () => {
     setIsOpen(false);
-    await onReviewerAnswersRemove({ assessmentId: reviewId });
+    await onReviewerAnswersRemove(reviewId);
     setRemovePopupVisible(false);
   };
+
   const reviewerName = `${reviewer.firstName} ${reviewer.lastName}${
     isCurrentUserReviewer ? t('me') : ''
   }`;
+
   const reviewLength = review?.length ?? 0;
   const toggleShowReviews = () => {
     setShowAllAnswers((prevState) => {

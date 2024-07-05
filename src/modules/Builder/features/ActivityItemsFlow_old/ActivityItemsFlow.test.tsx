@@ -147,6 +147,23 @@ describe('Activity Items Flow', () => {
     expect(addItemFlow).not.toBeDisabled();
   });
 
+  describe('Duplicate ItemFlow', () => {
+    beforeEach(() => {
+      renderActivityItemsFlow(mockedAppletWithAllItemTypes);
+    });
+
+    test('Duplicates ItemFlow successfully', async () => {
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+
+      expect(screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`))).toHaveLength(1);
+
+      fireEvent.click(screen.getByTestId(`builder-activity-item-flow-0-condition-0-name`));
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-duplicate`));
+
+      expect(screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`))).toHaveLength(2);
+    });
+  });
+
   test('Add/Remove Conditional works correctly', async () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 

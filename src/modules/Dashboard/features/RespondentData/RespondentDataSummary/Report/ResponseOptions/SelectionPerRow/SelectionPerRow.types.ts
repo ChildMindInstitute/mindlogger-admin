@@ -12,5 +12,6 @@ export type SelectionPerRowProps = {
   activityItem: FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>;
   answers?: SingleMultiSelectionPerRowAnswer;
   versions: Version[];
-  dataTestid?: string;
+  isStaticActive?: boolean;
+  'data-testid'?: string;
 };

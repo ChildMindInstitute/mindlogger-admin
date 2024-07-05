@@ -29,15 +29,11 @@ import {
   DecryptedActivityData,
 } from 'shared/types';
 import {
-  ActivityAnswerSummary as ActivityAnswerSummaryApi,
+  AnswerDate,
+  AnswerSummary as AnswerSummaryApi,
   EncryptedActivityAnswer,
+  ReviewEntity,
 } from 'modules/Dashboard/api';
-
-export type Answer = {
-  createdAt: string;
-  answerId: string;
-  endDateTime?: string;
-};
 
 export type CreateItemAnswer<I, A> = {
   activityItem: I;
@@ -137,20 +133,32 @@ export type FormattedAssessmentAnswer = {
   itemId: string;
 };
 
-export type ActivityAnswerSummary = Omit<ActivityAnswerSummaryApi, 'identifier'> & {
+export type ResponsesSummary = Omit<AnswerSummaryApi, 'identifier'> & {
   identifier: string | null;
 };
 
 export type SelectAnswerProps = {
-  answer: Answer | null;
+  answer: AnswerDate | null;
   isRouteCreated?: boolean;
 };
+
+export type OnSelectAnswer = (props: SelectAnswerProps) => void;
 
 export const enum FeedbackTabs {
   Notes,
   Reviews,
 }
 
-export type ActivityItemAnswers =
-  | DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers']
-  | null;
+export type ActivityItemAnswers = DecryptedActivityData<
+  EncryptedActivityAnswer['answer']
+>['decryptedAnswers'];
+
+export type FlowActivityAnswers = {
+  answerId: string;
+  activityName: string;
+  answers: ActivityItemAnswers;
+};
+
+export type FlowAnswers = FlowActivityAnswers[];
+
+export type OnSelectActivityOrFlow = (item: ReviewEntity | null) => void;

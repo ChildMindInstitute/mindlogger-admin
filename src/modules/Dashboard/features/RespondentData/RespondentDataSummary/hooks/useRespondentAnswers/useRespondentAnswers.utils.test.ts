@@ -67,7 +67,7 @@ describe('respondent answers utils', () => {
       isIdentifiersChange: true,
       adjustStartEndDates: true,
       setValue,
-      activityLastAnswerDate: '2023-09-26T10:10:05.162083',
+      lastAnswerDate: '2023-09-26T10:10:05.162083',
       recentIdentifiersAnswerDate: '2023-08-15T10:01:07.1112536',
     };
 
@@ -98,20 +98,20 @@ describe('respondent answers utils', () => {
       expect(setValue).toHaveBeenCalledWith('endDate', identifierAnswerEndDate);
     });
 
-    test('should use activityLastAnswerDate if adjustStartEndDates is false', () => {
+    test('should use lastAnswerDate if adjustStartEndDates is false', () => {
       const result = processIdentifiersChange({ ...props, adjustStartEndDates: false });
-      const activityAnswerEndDate = endOfDay(new Date('2023-09-26'));
-      const activityAnswerStartDate = startOfDay(subDays(activityAnswerEndDate, 6));
+      const answerEndDate = endOfDay(new Date('2023-09-26'));
+      const answerStartDate = startOfDay(subDays(answerEndDate, 6));
 
       expect(result).toEqual({
         identifierAnswerStartDate: undefined,
         identifierAnswerEndDate: undefined,
-        activityAnswerStartDate,
-        activityAnswerEndDate,
+        answerStartDate,
+        answerEndDate,
       });
       expect(setValue).toHaveBeenCalledTimes(2);
-      expect(setValue).toHaveBeenCalledWith('startDate', activityAnswerStartDate);
-      expect(setValue).toHaveBeenCalledWith('endDate', activityAnswerEndDate);
+      expect(setValue).toHaveBeenCalledWith('startDate', answerStartDate);
+      expect(setValue).toHaveBeenCalledWith('endDate', answerEndDate);
     });
   });
 });

@@ -15,7 +15,8 @@ export const SliderRows = ({
   activityItem,
   versions,
   answers = {},
-  dataTestid,
+  isStaticActive,
+  'data-testid': dataTestid,
 }: SliderRowsProps) => (
   <StyledFlexColumn>
     {activityItem?.responseValues?.rows?.map((row, index) => {
@@ -43,7 +44,8 @@ export const SliderRows = ({
             responseType={activityItem.responseType}
             answers={answers[row.id]}
             versions={versions}
-            data-testid={`${dataTestid}-row-${index}-multi-scatter-chart`}
+            isStaticActive={isStaticActive}
+            data-testid={`${dataTestid}-slider-rows-${index}-multi-scatter-chart`}
           />
         </Box>
       );

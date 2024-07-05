@@ -8,6 +8,7 @@ import {
   DateAnswer,
   TimeRangeAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { isObject } from 'shared/utils/isObject';
 
 import {
   FormattedAnswers,
@@ -74,7 +75,10 @@ export const useResponseData = ({
               {
                 date,
                 time,
-                answer: answer.value || '',
+                answer:
+                  // exception for MiResource answers for Text Item: in case of receiving an object instead of
+                  // string or null
+                  isObject(answer.value) ? '' : answer.value || '',
               },
             ];
           },

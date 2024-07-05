@@ -233,6 +233,7 @@ describe('getReportAndMediaData', () => {
       expect(result).toEqual([
         {
           id: undefined,
+          activity_flow_submission_id: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: 'NaN',
           activity_end_time: 'NaN',
@@ -269,6 +270,7 @@ describe('getReportAndMediaData', () => {
       const result = getReportData([], rawAnswersObject, decryptedAnswers);
       expect(result).toEqual([
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1689764605250.957',
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
@@ -294,6 +296,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1689764605250.957',
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
@@ -319,6 +322,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1689764605250.957',
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
@@ -357,6 +361,7 @@ describe('getReportAndMediaData', () => {
         {
           'Final SubScale Score': 5,
           'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
+          activity_flow_submission_id: '',
           activity_end_time: '1698673935278',
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
@@ -384,6 +389,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1698673935278',
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
@@ -409,6 +415,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1698673935278',
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
@@ -435,6 +442,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1698673935278',
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
@@ -460,6 +468,7 @@ describe('getReportAndMediaData', () => {
           timezone_offset: '',
         },
         {
+          activity_flow_submission_id: '',
           activity_end_time: '1698673935278',
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
@@ -545,6 +554,7 @@ describe('getReportAndMediaData', () => {
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          activity_flow_submission_id: '',
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
@@ -575,6 +585,7 @@ describe('getReportAndMediaData', () => {
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          activity_flow_submission_id: '',
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
@@ -630,6 +641,7 @@ describe('getReportAndMediaData', () => {
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          activity_flow_submission_id: '',
           item: 'Splash Screen',
           item_id: '',
           options: '',
@@ -660,6 +672,7 @@ describe('getReportAndMediaData', () => {
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          activity_flow_submission_id: '',
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
@@ -690,6 +703,7 @@ describe('getReportAndMediaData', () => {
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          activity_flow_submission_id: '',
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',

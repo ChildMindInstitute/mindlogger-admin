@@ -94,7 +94,19 @@ export const MultiScatterChart = ({
         plugins={[ChartDataLabels]}
       />
     ),
-    [answers, lang],
+    [
+      answers,
+      lang,
+      color,
+      minDate,
+      maxDate,
+      versions,
+      maxY,
+      minY,
+      options,
+      responseType,
+      useCategory,
+    ],
   );
 
   return (

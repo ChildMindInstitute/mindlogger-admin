@@ -9,7 +9,7 @@ export const Reviews = ({
   reviewsError,
   reviewersData,
   removeReviewError,
-  removeReviewLoading,
+  removeReviewsLoading,
   onReviewerAnswersRemove,
   onReviewEdit,
   'data-testid': dataTestid,
@@ -36,7 +36,7 @@ export const Reviews = ({
                   </StyledErrorText>
                 ) : null
               }
-              isLoading={isCurrentUserReviewer && removeReviewLoading}
+              isLoading={isCurrentUserReviewer && removeReviewsLoading}
               onReviewerAnswersRemove={onReviewerAnswersRemove}
               onReviewEdit={onReviewEdit}
               key={reviewerData.reviewer.id}

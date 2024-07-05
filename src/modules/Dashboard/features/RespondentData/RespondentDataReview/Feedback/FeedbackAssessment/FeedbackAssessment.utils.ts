@@ -1,8 +1,10 @@
 import isEqual from 'lodash.isequal';
 
 import { FormattedAssessmentAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { createAssessmentApi, createFlowAssessmentApi } from 'api';
 
 import { AssessmentFormItem } from '../Feedback.types';
+import { CreateAssessment } from './FeedbackAssessment.types';
 
 export const formatToNumberArray = (stringArray: string[]) => stringArray.map((item) => +item);
 
@@ -97,3 +99,30 @@ export const formatAssessmentAnswers = (
 
 export const getAssessmentVersion = (isLastVersion: boolean, assessmentVersions: string[]) =>
   isLastVersion && assessmentVersions.length > 1 ? assessmentVersions[1] : assessmentVersions[0];
+
+export const createAssessment = async ({
+  appletId,
+  answerId,
+  submitId,
+  answer,
+  updatedItemIds = [],
+  accountId,
+  isLastVersion,
+  assessmentVersions,
+}: CreateAssessment) => {
+  if (!answerId && !submitId) return;
+
+  const commonParams = {
+    appletId,
+    answer,
+    itemIds: updatedItemIds,
+    reviewerPublicKey: accountId,
+    assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
+  };
+
+  if (answerId) {
+    await createAssessmentApi({ ...commonParams, answerId });
+  } else if (submitId) {
+    await createFlowAssessmentApi({ ...commonParams, submitId });
+  }
+};

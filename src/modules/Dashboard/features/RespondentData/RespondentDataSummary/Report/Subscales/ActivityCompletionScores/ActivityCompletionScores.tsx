@@ -48,7 +48,7 @@ export const ActivityCompletionScores = ({
           {StringDivider}
         </>
       )}
-      {finalSubscaleScore && (
+      {!!finalSubscaleScore && (
         <>
           <StyledBodyMedium data-testid={`${dataTestid}-final-subscale-score`}>
             {t('finalSubscaleScore')}: {finalSubscaleScore}
@@ -56,7 +56,7 @@ export const ActivityCompletionScores = ({
           {StringDivider}
         </>
       )}
-      {frequency && (
+      {!!frequency && (
         <StyledBodyMedium data-testid={`${dataTestid}-subscale-frequency`}>
           {t('frequency')}: {frequency}
         </StyledBodyMedium>

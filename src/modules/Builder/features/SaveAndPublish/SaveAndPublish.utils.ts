@@ -17,7 +17,9 @@ import {
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
+  SingleMultiSelectionPerRowCondition,
   SingleValueCondition,
+  SliderRowsCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import {
@@ -357,9 +359,12 @@ export const processConditionPayload = (
 ) => {
   switch (itemType) {
     case ItemResponseType.Date: {
-      const conditionData = condition as Condition<Date>;
-      const conditionType = conditionData.type as ConditionType;
-      if ([ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)) {
+      const conditionData = condition as SingleValueCondition<Date> | RangeValueCondition<Date>;
+      const conditionType = conditionData.type;
+      if (
+        conditionType &&
+        [ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)
+      ) {
         const conditionPayload = conditionData.payload as RangeValueCondition<Date>['payload'];
         const minValue = formatToNumberDate(conditionPayload.minValue);
         const maxValue = formatToNumberDate(conditionPayload.maxValue);
@@ -378,6 +383,19 @@ export const processConditionPayload = (
         value,
       };
     }
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+    case ItemResponseType.SliderRows: {
+      const conditionData = condition as
+        | SingleMultiSelectionPerRowCondition
+        | SliderRowsCondition
+        | SliderRowsCondition<RangeValueCondition>;
+
+      return {
+        ...conditionData.payload,
+        rowIndex: Number(conditionData.payload.rowIndex),
+      };
+    }
     default:
       return condition.payload;
   }
@@ -388,8 +406,18 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
     return processConditionPayload(item.responseType, condition);
   }
 
-  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
   const optionId = (condition as OptionCondition).payload?.optionValue;
+  if (
+    item.responseType === ItemResponseType.SingleSelectionPerRow ||
+    item.responseType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    const options = item.responseValues?.options;
+
+    return {
+      optionValue: options?.find(({ id }) => id === optionId)?.text,
+    };
+  }
+  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
 
   return {
     optionValue: options?.find(({ id }) => id === optionId)?.value,

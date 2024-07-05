@@ -1,6 +1,6 @@
-import { DatavizActivity } from 'modules/Dashboard/api';
+import { ActivityOrFlow } from '../../RespondentData.types';
 
 export type ReportContentProps = {
-  selectedActivity: DatavizActivity | null;
+  selectedEntity: ActivityOrFlow | null;
   isLoading: boolean;
 };

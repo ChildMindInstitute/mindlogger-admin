@@ -1,4 +1,4 @@
-import { DatavizActivity, Version } from 'api';
+import { DatavizEntity, ReviewCount } from 'modules/Dashboard/api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
@@ -85,18 +85,13 @@ export type Identifier = {
   lastAnswerDate: string;
 };
 
-export type ReviewCount = {
-  mine: number;
-  other: number;
-};
-
 export type ActivityCompletion = {
   decryptedAnswer: ActivityItemAnswer[];
   answerId: string;
   endDatetime: string;
-  startDatetime: string;
+  startDatetime?: string;
   version: string;
-  subscaleSetting?: SubscaleSetting;
+  subscaleSetting: SubscaleSetting;
   reviewCount?: ReviewCount;
 };
 
@@ -146,6 +141,33 @@ export type FormattedResponses =
   | SingleMultiSelectionPerRowFormattedResponses
   | SliderRowsFormattedResponses;
 
+export type ActivityOrFlow = DatavizEntity & { isFlow?: boolean };
+
+export type ResponseOption = Record<string, FormattedResponses[]>;
+
+export type FlowActivityAnswers = {
+  activityId: string;
+  activityName: string;
+  isPerformanceTask: boolean;
+  answers: ActivityCompletion[];
+};
+
+export type FlowSubmission = {
+  submitId: string;
+  createdAt: string;
+  endDatetime: string | null;
+  reviewCount?: ReviewCount;
+};
+
+export type FlowResponses = {
+  activityId: string;
+  activityName: string;
+  isPerformanceTask: boolean;
+  answers: ActivityCompletion[];
+  responseOptions: ResponseOption | null;
+  subscalesFrequency: number;
+};
+
 export type RespondentsDataFormValues = {
   startDate: Date;
   endDate: Date;
@@ -155,12 +177,12 @@ export type RespondentsDataFormValues = {
   filterByIdentifier?: boolean;
   identifier?: AutocompleteOption[];
   versions: AutocompleteOption[];
-  summaryActivities: DatavizActivity[];
-  selectedActivity: DatavizActivity | null;
-  identifiers: Identifier[];
-  apiVersions: Version[];
-  answers: ActivityCompletion[];
-  responseOptions: Record<string, FormattedResponses[]> | null;
-  subscalesFrequency: number;
   responseDate: null | Date;
 };
+
+export type GetConcatenatedEntities<T> = {
+  activities: T[];
+  flows: T[];
+};
+
+export type ConcatenatedEntitiesReturn<T> = Array<T & { isFlow: boolean }>;

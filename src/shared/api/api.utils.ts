@@ -3,7 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 
-import { BASE_API_URL, Languages, regionalLangFormats } from './api.const';
+import { apiRoutesToSkip, BASE_API_URL, Languages, regionalLangFormats } from './api.const';
 import { signInRefreshTokenApi } from './api';
 
 export const getCommonConfig = (config: InternalAxiosRequestConfig) => {
@@ -65,3 +65,6 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
     return Promise.reject(error);
   }
 };
+
+export const shouldNotSkipRoute = (url: string) =>
+  !apiRoutesToSkip.some((route) => new RegExp(route).test(url));

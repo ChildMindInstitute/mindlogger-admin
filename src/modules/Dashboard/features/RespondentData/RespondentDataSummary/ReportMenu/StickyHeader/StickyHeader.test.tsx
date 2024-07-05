@@ -51,14 +51,6 @@ describe('StickyHeader', () => {
       },
     );
 
-    const title = getByText('Activities');
-    expect(title).toBeInTheDocument();
-    expect(title.parentElement?.parentElement).toHaveStyle({
-      minHeight: '9.6rem',
-      boxShadow: 'none',
-    });
-    expect(title).toHaveStyle({ fontSize: '3.2rem' });
-
     const description = getByText(
       'Respondent: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
     );

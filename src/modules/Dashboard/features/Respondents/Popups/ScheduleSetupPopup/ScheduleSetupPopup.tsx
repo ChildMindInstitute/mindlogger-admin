@@ -50,7 +50,9 @@ export const ScheduleSetupPopup = ({
 
     setPopupVisible(false);
     navigate(generatePath(page.appletParticipantSchedule, { appletId: chosenAppletId, subjectId }));
-    Mixpanel.track('View Individual calendar click');
+    Mixpanel.track('View Individual calendar click', {
+      'Applet ID': appletId,
+    });
   }, [
     chosenAppletId,
     createIndividualEvents,
@@ -59,6 +61,7 @@ export const ScheduleSetupPopup = ({
     respondentId,
     setPopupVisible,
     subjectId,
+    appletId,
   ]);
 
   useEffect(() => {

@@ -1,15 +1,7 @@
-import { DatavizActivity } from 'modules/Dashboard/api';
+import { FeedbackNote } from 'modules/Dashboard/api';
 
-type FullName = {
-  firstName: string;
-  lastName: string;
-};
+import { SelectedEntity } from '../Feedback.types';
 
-export type FeedbackNote = {
-  id: string;
-  user: FullName;
-  note: string;
-  createdAt: string;
-};
+export type FeedbackNotesProps = { entity: SelectedEntity };
 
-export type FeedbackNotesProps = { activity: DatavizActivity };
+export type Note = FeedbackNote & { isCurrentUserNote: boolean };

@@ -27,14 +27,13 @@ import { StyledWrapper } from './ScatterChart.styles';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
-const dataTestid = 'scatter-chart';
-
 export const ScatterChart = ({
   height = '6rem',
-  answers,
+  completions,
   versions,
   minDate,
   maxDate,
+  'data-testid': dataTestId,
 }: ScatterChartProps) => {
   const { i18n } = useTranslation('app');
 
@@ -71,15 +70,15 @@ export const ScatterChart = ({
       <Scatter
         ref={chartRef}
         options={getOptions(lang, minDate, maxDate, tooltipHandler)}
-        data={getData(answers, versions)}
+        data={getData(completions, versions)}
         plugins={[ChartDataLabels]}
       />
     ),
-    [chartRef, minDate, maxDate, answers, versions, lang],
+    [chartRef, minDate, maxDate, completions, versions, lang],
   );
 
   return (
-    <StyledWrapper sx={{ height }} data-testid={dataTestid}>
+    <StyledWrapper sx={{ height }} data-testid={dataTestId}>
       {renderChart}
       <ChartTooltipContainer
         ref={tooltipRef}
@@ -87,9 +86,9 @@ export const ScatterChart = ({
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}
+        data-testid={dataTestId}
       >
-        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+        <ChartTooltip data={tooltipData} data-testid={dataTestId} />
       </ChartTooltipContainer>
     </StyledWrapper>
   );

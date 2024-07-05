@@ -90,7 +90,11 @@ export const LockForm = () => {
         <StyledButton variant="contained" type="submit" data-testid="lock-form-login">
           {t('login')}
         </StyledButton>
-        <StyledButton variant="outlined" onClick={handleLogout} data-testid="lock-form-logout">
+        <StyledButton
+          variant="outlined"
+          onClick={() => handleLogout()}
+          data-testid="lock-form-logout"
+        >
           {t('logOut')}
         </StyledButton>
       </StyledForm>

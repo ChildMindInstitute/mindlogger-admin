@@ -130,6 +130,7 @@ describe('parseOptions', () => {
     minValue: 0,
     maxValue: 7,
   };
+  const numberSelectExpected = 'Min: 0, Max: 7';
   const singleSelectRows = {
     rows: [
       {
@@ -255,7 +256,7 @@ describe('parseOptions', () => {
     ${ItemResponseType.Slider}                  | ${slider}                   | ${sliderExpected}                   | ${'slider'}
     ${ItemResponseType.Slider}                  | ${sliderWithoutScore}       | ${sliderWithoutScoreExpected}       | ${'slider without score'}
     ${ItemResponseType.Date}                    | ${null}                     | ${undefined}                        | ${'date'}
-    ${ItemResponseType.NumberSelection}         | ${numberSelect}             | ${undefined}                        | ${'numberSelect'}
+    ${ItemResponseType.NumberSelection}         | ${numberSelect}             | ${numberSelectExpected}             | ${'numberSelect'}
     ${ItemResponseType.Time}                    | ${null}                     | ${undefined}                        | ${'time'}
     ${ItemResponseType.TimeRange}               | ${null}                     | ${undefined}                        | ${'timeRange'}
     ${ItemResponseType.SingleSelectionPerRow}   | ${singleSelectRows}         | ${''}                               | ${'singleSelectRows'}

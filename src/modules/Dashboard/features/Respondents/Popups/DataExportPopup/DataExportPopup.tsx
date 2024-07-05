@@ -13,7 +13,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
+import { ExportDataFilters, exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
@@ -25,7 +25,7 @@ import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './Dat
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
-import { getExportDataSuffix } from './DataExportPopup.utils';
+import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
@@ -51,13 +51,17 @@ export const DataExportPopup = ({
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
+  const { targetSubjectId: subjectIdFilter, ...otherFilters } = filters ?? {};
 
   const handleDataExportSubmit = async () => {
     if (dataIsExporting || dataExportingRef.current || !appletId) {
       return;
     }
 
-    await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
+    await executeAllPagesOfExportData({
+      appletId,
+      targetSubjectIds: subjectId ?? subjectIdFilter,
+    });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -74,10 +78,13 @@ export const DataExportPopup = ({
       try {
         dataExportingRef.current = true;
         setDataIsExporting(true);
-        const formFromDate = getValues?.().fromDate as Date;
-        const formToDate = getValues?.().toDate as Date;
+
+        const dateType = getValues?.().dateType;
+        const formFromDate = getValues?.().fromDate;
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = formToDate && format(formToDate, DateFormats.shortISO);
+        const formToDate = getValues?.().toDate;
+        const toDate = getFormattedToDate({ dateType, formToDate });
+
         const body = {
           appletId,
           targetSubjectIds,
@@ -91,7 +98,7 @@ export const DataExportPopup = ({
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
-          filters,
+          filters: otherFilters as ExportDataFilters,
         })(firstPageData);
 
         if (pageLimit > 1) {

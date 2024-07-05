@@ -11,6 +11,7 @@ import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
+import { RespondentDataContextProvider } from './RespondentDataContext';
 import { defaultRespondentDataFormValues } from './RespondentData.const';
 import { RespondentDataHeader } from './RespondentDataHeader';
 
@@ -48,7 +49,9 @@ export const RespondentData = () => {
       )}
 
       {canViewData ? (
-        <LinkedTabs tabs={respondentDataTabs} isCentered={false} />
+        <RespondentDataContextProvider>
+          <LinkedTabs tabs={respondentDataTabs} isCentered={false} />
+        </RespondentDataContextProvider>
       ) : (
         <EmptyState width="25rem">{t('noPermissions')}</EmptyState>
       )}

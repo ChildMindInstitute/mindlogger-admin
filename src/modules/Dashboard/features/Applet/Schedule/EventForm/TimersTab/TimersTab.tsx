@@ -37,6 +37,8 @@ export const TimersTab = ({ 'data-testid': dataTestid }: TimersTabProps) => {
             name="timerDuration"
             label={t('duration')}
             data-testid={`${dataTestid}-duration`}
+            minTime={setHours(setMinutes(new Date(), 15), 0)}
+            maxTime={setHours(setMinutes(new Date(), 45), 23)}
           />
         </>
       )}

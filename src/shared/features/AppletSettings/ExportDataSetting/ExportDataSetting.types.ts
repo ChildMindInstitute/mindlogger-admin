@@ -1,3 +1,5 @@
+import { ExportDataFilters } from 'shared/utils';
+
 export const enum ExportDateType {
   AllTime = 'allTime',
   Last24h = 'last24h',
@@ -13,6 +15,7 @@ export type ExportDataFormValues = {
 };
 
 export type ExportDataSettingProps = {
+  filters?: ExportDataFilters;
   isExportSettingsOpen: boolean;
   onExportSettingsClose: () => void;
 };

@@ -70,7 +70,7 @@ describe('SliderRows component', () => {
         activityItem={mockActivityItem}
         answers={mockAnswers}
         versions={mockVersions}
-        dataTestid="test-slider-rows"
+        data-testid="test-slider-rows"
       />,
     );
 
@@ -78,7 +78,7 @@ describe('SliderRows component', () => {
     expect(rows).toHaveLength(2);
 
     rows.forEach((row, index) => {
-      const dataTestid = `test-slider-rows-row-${index}-multi-scatter-chart`;
+      const dataTestid = `test-slider-rows-slider-rows-${index}-multi-scatter-chart`;
       expect(
         within(row).getByText(mockActivityItem.responseValues.rows[index].label),
       ).toBeInTheDocument();

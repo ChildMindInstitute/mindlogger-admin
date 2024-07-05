@@ -23,7 +23,12 @@ import {
   formatCurrentSubscales,
 } from './Subscales.utils';
 
-export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesProps) => {
+export const Subscales = ({
+  answers,
+  versions,
+  subscalesFrequency,
+  flowResponsesIndex,
+}: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
@@ -197,7 +202,7 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
     );
 
     return groupSubscales(formattedSubscales, formattedSubscales);
-  }, [allSubscalesToRender, activityCompletionToRender]);
+  }, [allSubscalesToRender, activityCompletionToRender, currentActivityCompletion]);
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
@@ -217,6 +222,7 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
             name={name}
             subscale={subscales[name]}
             versions={versions}
+            flowResponsesIndex={flowResponsesIndex}
             isActivityCompletionSelected={!!currentActivityCompletion}
           />
         ))}

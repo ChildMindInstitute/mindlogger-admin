@@ -51,16 +51,30 @@ describe('SummaryRow.utils', () => {
         tooltip:
           "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
         value: 'item-1',
+        tooltipPlacement: 'right',
       },
-      { disabled: false, labelKey: 'ms1', tooltip: undefined, value: 'item-2' },
+      {
+        disabled: false,
+        labelKey: 'ms1',
+        tooltip: undefined,
+        value: 'item-2',
+        tooltipPlacement: undefined,
+      },
       {
         disabled: true,
         labelKey: 'sl1',
         tooltip:
           "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
         value: 'item-3',
+        tooltipPlacement: 'right',
       },
-      { disabled: false, labelKey: 't1', tooltip: undefined, value: 'item-4' },
+      {
+        disabled: false,
+        labelKey: 't1',
+        tooltip: undefined,
+        value: 'item-4',
+        tooltipPlacement: undefined,
+      },
     ];
     test('should return options with tooltips and disable statuses for items in usage', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment

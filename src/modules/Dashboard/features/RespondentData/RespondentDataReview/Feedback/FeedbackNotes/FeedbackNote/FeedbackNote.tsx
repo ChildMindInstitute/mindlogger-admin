@@ -41,11 +41,12 @@ export const FeedbackNote = ({
 
   const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
 
+  const { id, createdAt, isCurrentUserNote, user, note: noteText } = note;
   const { control, handleSubmit, setValue } = useForm({
-    defaultValues: { noteText: note.note || '' },
+    defaultValues: { noteText },
   });
 
-  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
+  const userName = `${user.firstName ?? ''} ${user.lastName ?? ''}`;
 
   const commonSvgProps = {
     width: '15',
@@ -55,22 +56,23 @@ export const FeedbackNote = ({
   const saveChanges = ({ noteText }: { noteText: string }) => {
     if (!noteText.trim()) return;
     onEdit({
-      id: note.id,
+      id,
       note: noteText,
     });
     setIsEditMode(false);
   };
 
   const handleNoteEdit = () => {
-    setValue('noteText', note.note);
+    setValue('noteText', noteText);
     setIsEditMode(true);
   };
 
   useEffect(() => {
     if (!isFeedbackOpen && isEditMode) {
-      setValue('noteText', note.note);
+      setValue('noteText', noteText);
       setIsEditMode(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFeedbackOpen]);
 
   return (
@@ -83,15 +85,15 @@ export const FeedbackNote = ({
         <StyledFlexTopStart>
           <StyledAuthorLabel color={variables.palette.outline}>{userName}</StyledAuthorLabel>
           <StyledBodyMedium color={variables.palette.outline}>
-            {timeAgo.format(getDateInUserTimezone(note.createdAt))}
+            {timeAgo.format(getDateInUserTimezone(createdAt))}
           </StyledBodyMedium>
         </StyledFlexTopStart>
-        {!isEditMode && isVisibleActions && (
+        {!isEditMode && isVisibleActions && isCurrentUserNote && (
           <StyledActions>
             <StyledButton onClick={handleNoteEdit} data-testid={`${dataTestid}-edit`}>
               <Svg id="edit" {...commonSvgProps} />
             </StyledButton>
-            <StyledButton onClick={() => onDelete(note.id)} data-testid={`${dataTestid}-remove`}>
+            <StyledButton onClick={() => onDelete(id)} data-testid={`${dataTestid}-remove`}>
               <Svg id="trash" {...commonSvgProps} />
             </StyledButton>
           </StyledActions>
@@ -124,7 +126,7 @@ export const FeedbackNote = ({
         </StyledForm>
       ) : (
         <StyledNote data-testid={`${dataTestid}-note`}>
-          <StyledBodyLarge>{note.note}</StyledBodyLarge>
+          <StyledBodyLarge>{noteText}</StyledBodyLarge>
         </StyledNote>
       )}
     </Box>

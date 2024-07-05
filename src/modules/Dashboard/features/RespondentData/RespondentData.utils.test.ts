@@ -2,7 +2,8 @@ import {
   createArrayForSlider,
   getDateFormattedResponse,
   getTimeRangeResponse,
-  getActivityWithLatestAnswer,
+  getEntityWithLatestAnswer,
+  getConcatenatedEntities,
 } from './RespondentData.utils';
 
 describe('Respondent Data utils', () => {
@@ -104,9 +105,9 @@ describe('Respondent Data utils', () => {
     });
   });
 
-  describe('getActivityWithLatestAnswer', () => {
+  describe('getEntityWithLatestAnswer', () => {
     const expected1 = { id: 3, lastAnswerDate: '2024-03-20T16:45:16.011110' };
-    const activities1 = [
+    const entities1 = [
       { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' },
       {
         id: 2,
@@ -118,17 +119,17 @@ describe('Respondent Data utils', () => {
         lastAnswerDate: '2024-01-20T10:40:16.011110',
       },
     ];
-    const expected2 = { id: 2, lastAnswerDate: '2024-03-20T16:44:10.099980' };
-    const activities2 = [
+    const sameAnswerDateEntity = { id: 2, lastAnswerDate: '2024-03-20T16:44:10.099980' };
+    const entities2 = [
       { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' },
-      expected2,
-      { id: 3, lastAnswerDate: '2024-03-20T16:44:10.099980' },
+      sameAnswerDateEntity,
+      { ...sameAnswerDateEntity, id: 3 },
       {
         id: 4,
         lastAnswerDate: '2024-01-20T10:40:16.011110',
       },
     ];
-    const activities3 = [
+    const entities3 = [
       { id: 1, lastAnswerDate: null },
       {
         id: 2,
@@ -136,17 +137,61 @@ describe('Respondent Data utils', () => {
       },
     ];
     const expected4 = { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' };
-    const activities4 = [expected4];
+    const entities4 = [expected4];
 
     test.each`
-      activities     | expected     | description
-      ${[]}          | ${null}      | ${'should return null when activities array is empty'}
-      ${activities1} | ${expected1} | ${'should return the activity with the latest answer date'}
-      ${activities2} | ${expected2} | ${'should return the first activity with the latest answer date if there are multiple'}
-      ${activities3} | ${null}      | ${'should return null if all activities have null lastAnswerDate'}
-      ${activities4} | ${expected4} | ${'should return the only activity if there is only one activity with a non-null lastAnswerDate'}
-    `('$description', ({ activities, expected }) => {
-      expect(getActivityWithLatestAnswer(activities)).toEqual(expected);
+      entities     | expected        | description
+      ${[]}        | ${null}         | ${'should return null when entities array is empty'}
+      ${entities1} | ${expected1}    | ${'should return the entity with the latest answer date'}
+      ${entities2} | ${entities2[2]} | ${'should return the last entity with the latest answer date if there are multiple'}
+      ${entities3} | ${null}         | ${'should return null if all entities have null lastAnswerDate'}
+      ${entities4} | ${expected4}    | ${'should return the only entity if there is only one entity with a non-null lastAnswerDate'}
+    `('$description', ({ entities, expected }) => {
+      expect(getEntityWithLatestAnswer(entities)).toEqual(expected);
+    });
+  });
+
+  describe('getConcatenatedEntities', () => {
+    const entities1 = {
+      activities: [{ id: 1, name: 'Activity 1' }],
+      flows: [{ id: 2, description: 'Flow 1' }],
+    };
+
+    const expected1 = [
+      { id: 1, name: 'Activity 1', isFlow: false },
+      { id: 2, description: 'Flow 1', isFlow: true },
+    ];
+
+    const entities2 = {
+      activities: [{ id: 3, name: 'Activity 3' }],
+      flows: [{ id: 4, description: 'Flow 2' }],
+    };
+
+    const expected2 = [
+      { id: 3, name: 'Activity 3', isFlow: false },
+      { id: 4, description: 'Flow 2', isFlow: true },
+    ];
+
+    const entities3 = {
+      activities: [],
+      flows: [],
+    };
+
+    const entities4 = {
+      activities: [{ id: 5, name: 'Activity 5' }],
+      flows: [],
+    };
+
+    const expected4 = [{ id: 5, name: 'Activity 5', isFlow: false }];
+
+    test.each`
+      input        | expected     | description
+      ${entities1} | ${expected1} | ${'should return concatenated entities with one activity and one flow'}
+      ${entities2} | ${expected2} | ${'should return concatenated entities with different activities and flows'}
+      ${entities3} | ${[]}        | ${'should return empty array if activities and flows are empty'}
+      ${entities4} | ${expected4} | ${'should return the only entity if there is only one activity'}
+    `('$description', ({ input, expected }) => {
+      expect(getConcatenatedEntities(input)).toEqual(expected);
     });
   });
 });

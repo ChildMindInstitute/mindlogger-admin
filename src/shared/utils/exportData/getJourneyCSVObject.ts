@@ -15,6 +15,7 @@ const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
 export const getJourneyCSVReturn = ({
   id,
+  activity_flow_submission_id,
   activity_scheduled_time,
   activity_start_time,
   activity_end_time,
@@ -45,6 +46,7 @@ export const getJourneyCSVReturn = ({
   timezone_offset,
 }: JourneyCSVReturnProps) => ({
   id,
+  activity_flow_submission_id,
   activity_scheduled_time,
   activity_start_time,
   activity_end_time,
@@ -91,11 +93,13 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     flowId,
     version,
     legacyProfileId,
+    submitId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
   return getJourneyCSVReturn({
     id,
+    activity_flow_submission_id: flowId ? submitId : '',
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
@@ -155,6 +159,7 @@ export const getJourneyCSVObject = <T>({
     legacyProfileId,
     scheduledEventId,
     tzOffset,
+    submitId,
   } = event;
   if (!activityItem) return;
 
@@ -164,6 +169,7 @@ export const getJourneyCSVObject = <T>({
 
   return getJourneyCSVReturn({
     id: event.id,
+    activity_flow_submission_id: flowId ? submitId : '',
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,

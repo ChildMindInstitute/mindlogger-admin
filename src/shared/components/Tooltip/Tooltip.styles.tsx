@@ -6,7 +6,7 @@ import { variables } from 'shared/styles/variables';
 export const StyledTooltip = styled(({ className, children, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} children={children} />
 ))(() => ({
-  [`& .${tooltipClasses.tooltip}`]: {
+  [`&& .${tooltipClasses.tooltip}`]: {
     backgroundColor: variables.palette.inverse_surface,
     color: variables.palette.inverse_on_surface,
     textAlign: 'left',
@@ -15,5 +15,8 @@ export const StyledTooltip = styled(({ className, children, ...props }: TooltipP
     padding: theme.spacing(0.4, 0.8),
     fontWeight: variables.font.weight.regular,
     letterSpacing: variables.font.letterSpacing.sm,
+    overflow: 'hidden',
+    maxHeight: '100%',
+    margin: 0,
   },
 }));

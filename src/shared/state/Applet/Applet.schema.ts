@@ -415,6 +415,13 @@ export type SingleMultiSelectionPerRowCondition = BaseCondition &
     };
   };
 
+export type SliderRowsCondition<T = SingleValueCondition> = BaseCondition &
+  T & {
+    payload: {
+      rowIndex: number;
+    };
+  };
+
 export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
     value: T;
@@ -432,19 +439,21 @@ export const enum TimeRangeConditionType {
   StartTime = 'startTime',
   EndTime = 'endTime',
 }
-export type TimeRangeValueCondition<T = Date> = BaseCondition &
-  RangeValueCondition<T> & {
+export type TimeRangeValueCondition = BaseCondition &
+  RangeValueCondition<Date> & {
     payload: {
       type: TimeRangeConditionType;
     };
   };
 
-export type Condition<T = number> =
+export type Condition =
   | OptionCondition
-  | SingleValueCondition<T>
-  | RangeValueCondition<T>
+  | SingleValueCondition
+  | RangeValueCondition
   | TimeRangeValueCondition
   | SingleMultiSelectionPerRowCondition
+  | SliderRowsCondition
+  | SliderRowsCondition<RangeValueCondition>
   | ScoreCondition;
 
 export type ConditionalLogic = {
@@ -452,7 +461,7 @@ export type ConditionalLogic = {
   //for frontend purposes only
   key?: string;
   itemKey?: string;
-  conditions: Array<Condition>;
+  conditions: Condition[];
 };
 
 export type Item<T = ItemCommonType> =
@@ -671,7 +680,6 @@ export type Activity = {
   performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
-  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {
@@ -779,6 +787,18 @@ export type SingleApplet = {
   streamPort: number | null;
 };
 
+export type RespondentMeta = {
+  nickname: string;
+};
+
+export type AppletMeta = {
+  hasAssessment: boolean;
+};
+
 export type AppletSchema = {
-  applet: BaseSchema<{ result: SingleApplet } | null>;
+  applet: BaseSchema<{
+    result: SingleApplet;
+    respondentMeta?: RespondentMeta;
+    appletMeta?: AppletMeta;
+  } | null>;
 };

@@ -8,145 +8,54 @@ import {
 } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
+import { Box } from '@mui/material';
 
 import {
-  ReviewActivity,
-  getActivityAnswerApi,
-  getAssessmentApi,
-  getReviewActivitiesApi,
   getAppletSubmitDateListApi,
-  Answers,
-  Response,
   AppletSubmitDateList,
-  ResponseWithObject,
   SubmitDates,
-} from 'api';
+  AnswerDate,
+} from 'modules/Dashboard/api';
+import { ResponseWithObject } from 'shared/api';
 import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { StyledContainer } from 'shared/styles';
-import { EncryptedAnswerSharedProps } from 'shared/types';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { Item } from 'shared/state';
+import { StyledContainer, theme } from 'shared/styles';
 import { users } from 'redux/modules';
 import { page } from 'resources';
-import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
 
 import { Feedback } from './Feedback';
-import { Review } from './Review';
+import { ActivityResponses } from './ActivityResponses';
 import { ReviewMenu } from './ReviewMenu';
-import { ReviewHeader } from './ReviewHeader';
+import { ResponsesHeader } from './ResponsesHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
 import {
-  Answer,
-  AssessmentActivityItem,
-  ActivityAnswerSummary,
   SelectAnswerProps,
-  ActivityItemAnswers,
   FeedbackTabs,
+  OnSelectActivityOrFlow,
 } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
-import { ReviewDescription } from './ReviewDescription';
-import { useDecryptedIdentifiers } from '../RespondentDataSummary/hooks';
-import { sortAnswerDates } from './utils/sortAnswerDates';
-import { getActivityWithLatestAnswer } from '../RespondentData.utils';
+import { ResponsesSummary } from './ResponsesSummary';
+import { useActivityAnswersAndAssessment } from './hooks/useActivityAnswersAndAssessment/useActivityAnswersAndAssessment';
+import { useReviewActivitiesAndFlows } from './hooks/useReviewActivitiesAndFlows/useReviewActivitiesAndFlows';
+import { EmptyResponses } from './EmptyResponses';
+import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
   const { appletId, subjectId, activityId } = useParams();
-  const [searchParams] = useSearchParams();
-  const answerId = searchParams.get('answerId') || '';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId') || null;
+  const submitId = searchParams.get('submitId') || null;
   const selectedDateParam = searchParams.get('selectedDate');
-  const isFeedbackVisible = searchParams.get('isFeedbackVisible') === 'true';
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
-  const shouldSetLastAnswer = useRef(false);
 
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
-  const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
-  const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
-  const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
-  const [lastAssessment, setLastAssessment] = useState<Item[] | null>(null);
-  const [assessmentVersions, setAssessmentVersions] = useState<string[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<AnswerDate | null>(null);
   const [isLastVersion, setIsLastVersion] = useState<boolean>(false);
-  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
-  const [itemIds, setItemIds] = useState<string[]>([]);
   const [responseDates, setResponseDates] = useState<Date[]>();
-  const [activities, setActivities] = useState<ReviewActivity[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswers>(null);
-  const [activityAnswerSummary, setActivityAnswerSummary] = useState<ActivityAnswerSummary | null>(
-    null,
-  );
-
-  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
-  const getDecryptedIdentifiers = useDecryptedIdentifiers();
-  const navigate = useNavigate();
-  const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
-
-  const dataTestid = 'respondents-review';
-
-  const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
-    AppletSubmitDateList,
-    ResponseWithObject<SubmitDates>
-  >(getAppletSubmitDateListApi, ({ data }) => {
-    const datesResult = data?.result;
-    if (!datesResult) return;
-
-    const submitDates = datesResult.dates.map((date: string) => new Date(date));
-    setResponseDates(submitDates);
-  });
-
-  const { execute: getReviewActivities } = useAsync<Answers, Response<ReviewActivity>>(
-    getReviewActivitiesApi,
-    ({ data }) => {
-      const activities = data?.result;
-
-      if (!activities?.length) return;
-
-      let selectedActivityByDefault;
-      if (activityId) {
-        selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
-        setActivities([selectedActivityByDefault]);
-        setSelectedActivity(selectedActivityByDefault);
-      } else {
-        setActivities(activities);
-        if (answerId && !shouldSetLastAnswer.current) return;
-        selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
-
-        setSelectedActivity(selectedActivityByDefault);
-      }
-
-      const { answerDates } = selectedActivityByDefault;
-
-      if (!answerDates.length) return;
-      const sortedAnswerDates = sortAnswerDates(answerDates);
-      handleSelectAnswer({
-        answer: sortedAnswerDates[answerDates.length - 1],
-      });
-    },
-  );
-
-  const getDecryptedActivityData = useDecryptedActivityData();
-
-  const { execute: getActivityAnswer } = useAsync(getActivityAnswerApi, async (res) => {
-    const result = res?.data?.result;
-    if (!result) return;
-
-    const decryptedActivityData = await getDecryptedActivityData({
-      ...result.answer,
-      items: result.activity.items,
-    });
-    setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
-
-    const { identifier } = result.summary;
-    const decryptedIdentifiers = identifier ? await getDecryptedIdentifiers?.([identifier]) : null;
-    setActivityAnswerSummary({
-      ...result.summary,
-      identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
-    });
-  });
 
   const handleSelectAnswer = ({ answer, isRouteCreated }: SelectAnswerProps) => {
     setIsFeedbackOpen(false);
@@ -168,10 +77,74 @@ export const RespondentDataReview = () => {
       pathname,
       search: createSearchParams({
         selectedDate: format(responseDate, DateFormats.YearMonthDay),
-        answerId: answer.answerId,
+        ...(answer.answerId && { answerId: answer.answerId }),
+        ...(answer.submitId && { submitId: answer.submitId }),
       }).toString(),
     });
   };
+
+  const {
+    activities,
+    flows,
+    setActivities,
+    setFlows,
+    handleGetActivitiesAndFlows,
+    selectedActivity,
+    selectedFlow,
+    isActivitiesFlowsLoading,
+    setSelectedActivity,
+    setSelectedFlow,
+  } = useReviewActivitiesAndFlows({
+    answerId,
+    submitId,
+    activityId,
+    appletId,
+    subjectId,
+    handleSelectAnswer,
+  });
+
+  const {
+    getAnswersAndAssessment,
+    isLoading,
+    lastAssessment,
+    assessmentVersions,
+    activityAnswers,
+    setActivityAnswers,
+    flowAnswers,
+    setFlowAnswers,
+    responsesSummary,
+    itemIds,
+    setItemIds,
+    assessment,
+    setAssessment,
+    isBannerVisible,
+    setIsBannerVisible,
+    error,
+  } = useActivityAnswersAndAssessment({
+    answerId,
+    submitId,
+    appletId,
+    setIsFeedbackOpen,
+    setActiveTab,
+    containerRef,
+  });
+
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
+  const navigate = useNavigate();
+  const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
+
+  const dataTestid = 'respondents-review';
+
+  const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
+    AppletSubmitDateList,
+    ResponseWithObject<SubmitDates>
+  >(getAppletSubmitDateListApi, ({ data }) => {
+    const datesResult = data?.result;
+    if (!datesResult) return;
+
+    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    setResponseDates(submitDates);
+  });
 
   const handleGetSubmitDates = (date: Date) => {
     if (!appletId || !subjectId) return;
@@ -187,70 +160,71 @@ export const RespondentDataReview = () => {
     });
   };
 
-  const handleGetActivities = (date?: Date | null) => {
-    const createdDate = date && format(date, DateFormats.YearMonthDay);
-
-    if (!appletId || !subjectId || !createdDate || prevSelectedDateRef.current === createdDate) {
-      return;
-    }
-
-    getReviewActivities({
-      appletId,
-      targetSubjectId: subjectId,
-      createdDate,
-    });
-
-    prevSelectedDateRef.current = createdDate;
-  };
-
   const handleSetInitialDate = (date: Date) => {
     setValue('responseDate', date);
-    handleGetActivities(date);
+    const createdDate = format(date, DateFormats.YearMonthDay);
+    handleGetActivitiesAndFlows(createdDate);
     handleGetSubmitDates(date);
   };
 
   const handleResponseDateChange = (date?: Date | null) => {
-    shouldSetLastAnswer.current = true;
-    handleGetActivities(date);
+    const createdDate = date && format(date, DateFormats.YearMonthDay);
+    // if the date hasn't changed, exit the function early
+    if (!createdDate || prevSelectedDateRef.current === createdDate) {
+      return;
+    }
+    // reset all state values to default
+    setActivities([]);
+    setFlows([]);
+    setSelectedActivity(null);
+    setSelectedFlow(null);
+    setSelectedAnswer(null);
+    setSearchParams(undefined);
+    setActivityAnswers(null);
+    setFlowAnswers(null);
+
+    handleGetActivitiesAndFlows(createdDate);
+
+    prevSelectedDateRef.current = createdDate;
   };
 
+  const handleActivitySelect: OnSelectActivityOrFlow = (item) => {
+    setSelectedActivity(item);
+    setSelectedFlow(null);
+    setFlowAnswers(null);
+  };
+
+  const handleFlowSelect: OnSelectActivityOrFlow = (item) => {
+    setSelectedFlow(item);
+    setSelectedActivity(null);
+    setActivityAnswers(null);
+  };
+
+  const hasAnswers = !!activityAnswers || !!flowAnswers;
+  const isAnswerSelected = !!selectedAnswer;
+  const isActivityOrFlowSelected = !!selectedActivity || !!selectedFlow;
+  const isAnswerSelectedAndNoError = isAnswerSelected && !error;
+  const hasActivityResponses =
+    selectedActivity &&
+    activityAnswers &&
+    !selectedFlow &&
+    !flowAnswers &&
+    isAnswerSelectedAndNoError;
+  const hasFlowResponses =
+    selectedFlow &&
+    flowAnswers &&
+    !selectedActivity &&
+    !activityAnswers &&
+    isAnswerSelectedAndNoError;
+
   useEffect(() => {
-    if (!appletId || !selectedActivity || !selectedAnswer || !answerId) return;
-    (async () => {
-      try {
-        setIsLoading(true);
-        await getActivityAnswer({ appletId, answerId, activityId: selectedActivity.id });
-        const result = await getAssessmentApi({ appletId, answerId });
-        const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } =
-          result.data.result;
-        const encryptedData = {
-          ...assessmentData,
-          // sorting in case the items received from the backend are in the wrong order
-          items: sortItemsByOrder(items),
-          userPublicKey: reviewerPublicKey,
-        } as EncryptedAnswerSharedProps;
-        const decryptedAssessment = await getDecryptedActivityData(encryptedData);
-        setItemIds(assessmentData.itemIds || []);
-        setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
-        // sorting in case the items received from the backend are in the wrong order
-        setLastAssessment(sortItemsByOrder(itemsLast));
-        setAssessmentVersions(versions);
-        setIsBannerVisible(!!(itemsLast?.length && versions));
-        if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
-          setIsFeedbackOpen(true);
-          setActiveTab(FeedbackTabs.Reviews);
-        }
-      } catch (error) {
-        console.warn(error);
-      } finally {
-        containerRef.current?.scrollTo({
-          top: 0,
-        });
-        setIsLoading(false);
-      }
-    })();
+    getAnswersAndAssessment({
+      hasSelectedAnswer: !!selectedAnswer,
+      activityId: selectedActivity?.id,
+      flowId: selectedFlow?.id,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appletId, answerId, selectedActivity, selectedAnswer]);
+  }, [appletId, answerId, submitId, selectedActivity, selectedFlow, selectedAnswer]);
 
   useEffect(() => {
     // avoid unnecessary rerender when last activity completed date state value is undefined
@@ -283,13 +257,17 @@ export const RespondentDataReview = () => {
         responseDates={responseDates}
         onMonthChange={handleGetSubmitDates}
         activities={activities}
-        selectedActivity={selectedActivity}
+        flows={flows}
+        selectedActivityId={selectedActivity?.id}
+        onSelectActivity={handleActivitySelect}
+        onSelectFlow={handleFlowSelect}
+        selectedFlowId={selectedFlow?.id}
         selectedAnswer={selectedAnswer}
-        setSelectedActivity={setSelectedActivity}
         onSelectAnswer={handleSelectAnswer}
         onDateChange={handleResponseDateChange}
         isDatePickerLoading={getSubmitDatesLoading}
         lastActivityCompleted={lastActivityCompleted}
+        isActivitiesFlowsLoading={isActivitiesFlowsLoading}
       />
       <RespondentDataReviewContext.Provider
         value={{
@@ -308,29 +286,50 @@ export const RespondentDataReview = () => {
       >
         <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-container`}>
           {isLoading && <Spinner />}
-          <ReviewHeader
+          <ResponsesHeader
             containerRef={containerRef}
             isAnswerSelected={!!selectedAnswer}
-            activityName={selectedActivity?.name ?? ''}
+            name={selectedActivity?.name ?? selectedFlow?.name ?? ''}
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
-          {selectedAnswer && activityAnswerSummary && !isLoading && (
-            <ReviewDescription {...activityAnswerSummary} data-testid={dataTestid} />
+          {!isLoading && (
+            <>
+              {selectedAnswer && responsesSummary && !error && (
+                <ResponsesSummary {...responsesSummary} data-testid={dataTestid} />
+              )}
+              <EmptyResponses
+                hasAnswers={hasAnswers}
+                isAnswerSelected={isAnswerSelected}
+                isActivityOrFlowSelected={isActivityOrFlowSelected}
+                error={error}
+                data-testid={`${dataTestid}-empty-review`}
+              />
+              {hasActivityResponses && (
+                <Box sx={{ m: theme.spacing(0, 6) }}>
+                  <ActivityResponses
+                    activityAnswers={activityAnswers}
+                    data-testid={`${dataTestid}-activity-answers`}
+                  />
+                </Box>
+              )}
+              {hasFlowResponses && (
+                <FlowResponses
+                  flowAnswers={flowAnswers}
+                  data-testid={`${dataTestid}-flow-answers`}
+                />
+              )}
+            </>
           )}
-          <Review
-            isLoading={isLoading}
-            selectedAnswer={selectedAnswer}
-            activityItemAnswers={activityItemAnswers}
-            isActivitySelected={!!selectedActivity}
-            data-testid={`${dataTestid}-activity-items`}
-          />
         </StyledReviewContainer>
-        {selectedActivity && selectedAnswer && !isLoading && (
+        {isActivityOrFlowSelected && selectedAnswer && !isLoading && (
           <Feedback
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            selectedActivity={selectedActivity}
+            selectedEntity={{
+              id: selectedActivity?.id || selectedFlow?.id || '',
+              isFlow: !!selectedFlow,
+            }}
             onClose={() => setIsFeedbackOpen(false)}
           />
         )}

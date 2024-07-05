@@ -5,16 +5,16 @@ import { StyledFlexAllCenter } from 'shared/styles';
 
 import { Report } from '../Report';
 import { StyledEmptyReview } from '../RespondentDataSummary.styles';
-import { getEmptyState } from './ReportContent.utils';
+import { ReportEmptyState } from './ReportEmptyState';
 import { ReportContentProps } from './ReportContent.types';
 
-export const ReportContent = memo(({ selectedActivity, isLoading }: ReportContentProps) => {
-  if (selectedActivity && isLoading) return <Spinner />;
-  if (!selectedActivity || selectedActivity.isPerformanceTask) {
+export const ReportContent = memo(({ selectedEntity, isLoading }: ReportContentProps) => {
+  if (selectedEntity && isLoading) return <Spinner />;
+  if (!selectedEntity || selectedEntity.isPerformanceTask) {
     return (
       <StyledFlexAllCenter sx={{ height: '100%' }}>
         <StyledEmptyReview data-testid="summary-empty-state">
-          {getEmptyState(selectedActivity)}
+          <ReportEmptyState selectedEntity={selectedEntity} />
         </StyledEmptyReview>
       </StyledFlexAllCenter>
     );
