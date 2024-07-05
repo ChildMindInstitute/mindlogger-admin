@@ -167,6 +167,7 @@ export const Activities = () => {
               <FlowGrid
                 activities={activities}
                 applet={appletData}
+                data-testid={dataTestId}
                 flows={flows}
                 subject={subject?.result}
               />
