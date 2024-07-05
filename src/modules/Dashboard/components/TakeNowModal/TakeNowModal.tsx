@@ -294,7 +294,21 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
 
         setActivityOrFlow(null);
-        window.open(url.toString(), '_blank');
+
+        const newTab = window.open(url.toString(), '_blank');
+        // message received from the TakeNowSuccessModal.tsx file from the web app
+        // it's needed to close the new tab after the user clicks the "Close" button
+        window.addEventListener('message', function messageHandler(event) {
+          if (event.origin === url.origin) {
+            const message = event.data;
+
+            if (message === 'close-me') {
+              newTab?.close();
+            }
+
+            this.removeEventListener('message', messageHandler);
+          }
+        });
       }
     }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
 
