@@ -1,8 +1,8 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
 import { ApiErrorReturn } from 'shared/state/Base';
 
-import { AuthSchema } from './Auth.schema';
+import { AuthSchema, SoftLockData } from './Auth.schema';
 import { signIn, getUserDetails } from './Auth.thunk';
 import {
   createAuthFulfilledData,
@@ -22,6 +22,12 @@ export const reducers = {
     sessionStorage.clear();
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
+  },
+  startSoftLock: (state: AuthSchema, { payload }: PayloadAction<SoftLockData>): void => {
+    state.softLockData = payload;
+  },
+  endSoftLock: (state: AuthSchema): void => {
+    delete state.softLockData;
   },
 };
 

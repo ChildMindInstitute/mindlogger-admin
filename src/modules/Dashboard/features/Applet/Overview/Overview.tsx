@@ -68,6 +68,8 @@ export const Overview = () => {
     [data, handleViewSubmissionPopupOpen],
   );
 
+  const dataTestId = 'dashboard-applet-overview';
+
   if (isForbidden || !canAccessData) {
     return noPermissionsComponent;
   }
@@ -101,6 +103,7 @@ export const Overview = () => {
               appletId={appletId}
               popupVisible={addPopupOpen}
               onClose={handleAddPopupClose}
+              data-testid={`${dataTestId}-add-participant-popup`}
             />
           )}
 

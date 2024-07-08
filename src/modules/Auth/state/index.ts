@@ -54,4 +54,6 @@ export const auth = {
     ),
   useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
     useAppSelector(({ auth: { isLogoutInProgress } }) => isLogoutInProgress),
+  useSoftLockData: (): AuthSchema['softLockData'] =>
+    useAppSelector(({ auth: { softLockData } }) => softLockData),
 };

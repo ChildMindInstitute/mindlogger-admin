@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
-import { Chip, ChipShape, Svg } from 'shared/components';
+import { Chip, ChipShape, Svg, Tooltip } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import {
   StyledFlexSpaceBetween,
@@ -14,7 +14,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel, checkIfFullAccess } from 'shared/utils';
+import { Mixpanel, checkIfFullAccess, getIsWebSupported } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
@@ -42,6 +42,7 @@ export const RespondentDataHeader = ({
   const [isExportOpen, setIsExportOpen] = useState(false);
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
   const navigate = useNavigate();
+  const isWebSupported = getIsWebSupported(activity?.items);
 
   const navigateUp = () =>
     navigate(
@@ -53,6 +54,7 @@ export const RespondentDataHeader = ({
 
   const handleTakeNow = () => {
     if (!activity) return;
+
     openTakeNowModal(activity, {
       targetSubject: {
         id: subject.id,
@@ -104,11 +106,7 @@ export const RespondentDataHeader = ({
           margin: theme.spacing(0, 3.2, 0.8),
         }}
       >
-        <StyledFlexTopCenter
-          sx={{
-            gap: theme.spacing(1.6),
-          }}
-        >
+        <StyledFlexTopCenter sx={{ gap: theme.spacing(1.6) }}>
           {!!headerElements.image && <StyledLogo src={headerElements.image} />}
           <StyledHeadlineLarge color={palette.on_surface}>
             {headerElements.name}
@@ -147,13 +145,18 @@ export const RespondentDataHeader = ({
               </Button>
             )}
             {canDoTakeNow && (
-              <Button
-                variant="contained"
-                onClick={handleTakeNow}
-                data-testid={`${dataTestid}-take-now`}
-              >
-                {t('takeNow.buttonLabel')}
-              </Button>
+              <Tooltip tooltipTitle={!isWebSupported && t('activityIsMobileOnly')}>
+                <span>
+                  <Button
+                    disabled={!isWebSupported}
+                    data-testid={`${dataTestid}-take-now`}
+                    onClick={handleTakeNow}
+                    variant="contained"
+                  >
+                    {t('takeNow.buttonLabel')}
+                  </Button>
+                </span>
+              </Tooltip>
             )}
           </StyledFlexTopCenter>
         )}

@@ -18,7 +18,7 @@ export type MenuItem<T = unknown> = {
   context?: T;
   isDisplayed?: boolean;
   disabled?: boolean;
-  tooltip?: string;
+  tooltip?: React.ReactNode;
   customItemColor?: string;
   'data-testid'?: string;
 };
