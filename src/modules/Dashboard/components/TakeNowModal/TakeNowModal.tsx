@@ -20,7 +20,7 @@ import {
   joinWihComma,
 } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { useAsync, useLogout } from 'shared/hooks';
+import { useAsync } from 'shared/hooks';
 import { Manager, Respondent } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { FlowSummaryThumbnail } from 'modules/Dashboard/components/FlowSummaryCard/FlowSummaryThumbnail';
@@ -244,7 +244,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
-    const handleLogout = useLogout();
+    // const handleLogout = useLogout();
     const handleClose = () => {
       track('Take Now dialogue closed');
 
@@ -311,9 +311,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           }
         });
 
-        handleLogout({ shouldSoftLock: true });
+        // handleLogout({ shouldSoftLock: true });
       }
-    }, [targetSubject, sourceSubject, isSelfReporting, loggedInUser, handleLogout]);
+    }, [targetSubject, sourceSubject, isSelfReporting, loggedInUser]);
 
     /**
      * Handle participant search. It can be a combination of team members and any participants
