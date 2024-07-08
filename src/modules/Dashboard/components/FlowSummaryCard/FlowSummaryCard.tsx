@@ -7,7 +7,7 @@ import { getDictionaryText } from 'shared/utils';
 
 import { FlowSummaryCardProps } from './FlowSummaryCard.types';
 import { StyledRoot } from './FlowSummaryCard.styles';
-import { FlowSummaryThumbnail } from './FlowSummaryThumbnail';
+import { ActivityFlowThumbnail } from '../ActivityFlowThumbnail';
 
 export const FlowSummaryCard = <T,>({
   flow: { activities, description, name },
@@ -18,7 +18,7 @@ export const FlowSummaryCard = <T,>({
 
   return (
     <StyledRoot {...otherProps}>
-      <FlowSummaryThumbnail activities={activities} />
+      <ActivityFlowThumbnail activities={activities} />
 
       <StyledFlexColumn sx={{ gap: 0.8, flexGrow: 1, overflow: 'hidden' }}>
         <StyledEllipsisText sx={{ fontSize: variables.font.size.xxl }}>{name}</StyledEllipsisText>

@@ -20,21 +20,6 @@ export const StyledContainer = styled(StyledFlexSpaceBetween)(
   }),
 );
 
-export const StyledImageContainer = styled(StyledFlexAllCenter)`
-  min-width: 8rem;
-  width: 8rem;
-  height: 8rem;
-  background-color: ${variables.palette.primary_container};
-  border-radius: ${variables.borderRadius.md};
-  overflow: hidden;
-`;
-
-export const StyledImg = styled('img')`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
 export const StyledActivityName = styled(StyledHeadline)`
   display: -webkit-box;
   -webkit-line-clamp: 2;
