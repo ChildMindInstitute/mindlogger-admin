@@ -62,6 +62,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
         textInputRequired: false,
       },
       autoAdvance: false,
+      portraitLayout: false,
     },
     responseType: ItemResponseType.SingleSelection,
     responseValues: {
@@ -114,6 +115,7 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
         textInputOption: false,
         textInputRequired: false,
       },
+      portraitLayout: false,
     },
     responseType: ItemResponseType.MultipleSelection,
     responseValues: {
