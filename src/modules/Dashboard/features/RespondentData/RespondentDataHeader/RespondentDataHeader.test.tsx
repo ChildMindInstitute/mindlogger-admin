@@ -46,6 +46,11 @@ const mockedActivity = {
   reportIncludedItemName: undefined,
 };
 
+const mockedActivityFlow = {
+  ...mockedAppletData.activityFlows[0],
+  activities: [mockedActivity],
+};
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),
@@ -85,7 +90,11 @@ describe('RespondentDataHeader component tests', () => {
     expect(screen.getByText(mockedSubject.secretUserId)).toBeInTheDocument();
   });
 
-  test('should render activity name', () => {
+  test.each`
+    entity                | description
+    ${mockedActivity}     | ${'should render activity name'}
+    ${mockedActivityFlow} | ${'should render activity flow name'}
+  `('$description', ({ entity }) => {
     mockedUseParams.mockReturnValue({ activityId: mockedActivity.id });
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
@@ -97,14 +106,14 @@ describe('RespondentDataHeader component tests', () => {
         dataTestid={dataTestid}
         applet={mockedApplet}
         subject={mockedSubject}
-        activity={mockedActivity}
+        activityOrFlow={entity}
       />,
       {
         preloadedState: getPreloadedState(Roles.SuperAdmin),
       },
     );
 
-    expect(screen.getByText(mockedActivity.name)).toBeInTheDocument();
+    expect(screen.getByText(entity.name)).toBeInTheDocument();
     expect(screen.getByText(mockedSubject.secretUserId)).toBeInTheDocument();
   });
 
@@ -124,7 +133,7 @@ describe('RespondentDataHeader component tests', () => {
           dataTestid={dataTestid}
           applet={mockedApplet}
           subject={mockedSubject}
-          activity={mockedActivity}
+          activityOrFlow={mockedActivity}
         />,
         {
           preloadedState: getPreloadedState(role),
@@ -149,7 +158,7 @@ describe('RespondentDataHeader component tests', () => {
         dataTestid={dataTestid}
         applet={mockedApplet}
         subject={mockedSubject}
-        activity={mockedActivity}
+        activityOrFlow={mockedActivity}
       />,
       {
         preloadedState: getPreloadedState(Roles.SuperAdmin),
@@ -173,7 +182,7 @@ describe('RespondentDataHeader component tests', () => {
         dataTestid={dataTestid}
         applet={mockedApplet}
         subject={mockedSubject}
-        activity={mockedActivity}
+        activityOrFlow={mockedActivity}
       />,
       {
         preloadedState: getPreloadedState(Roles.SuperAdmin),
@@ -199,7 +208,7 @@ describe('RespondentDataHeader component tests', () => {
           dataTestid={dataTestid}
           applet={mockedApplet}
           subject={mockedSubject}
-          activity={mockedActivity}
+          activityOrFlow={mockedActivity}
         />,
         {
           preloadedState: getPreloadedState(role),

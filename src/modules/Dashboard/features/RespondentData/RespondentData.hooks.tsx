@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store/hooks';
 import { applet as appletState } from 'shared/state';
 
 export const useRespondentDataSetup = () => {
-  const { appletId, subjectId, activityId } = useParams();
+  const { appletId, subjectId, activityId, activityFlowId } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,6 +29,21 @@ export const useRespondentDataSetup = () => {
     );
   }, [appletId, subjectId, dispatch]);
 
+  const routes: string[] = [];
+  if (activityId) {
+    routes.push(
+      page.appletParticipantActivityDetailsDataSummary,
+      page.appletParticipantActivityDetailsDataReview,
+    );
+  } else if (activityFlowId) {
+    routes.push(
+      page.appletParticipantActivityDetailsFlowDataSummary,
+      page.appletParticipantActivityDetailsFlowDataReview,
+    );
+  } else {
+    routes.push(page.appletParticipantDataSummary, page.appletParticipantDataReview);
+  }
+
   return {
     respondentDataTabs: [
       {
@@ -36,16 +51,12 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-summary',
         icon: <Svg id="chart" />,
         activeIcon: <Svg id="chart" />,
-        path: generatePath(
-          activityId
-            ? page.appletParticipantActivityDetailsDataSummary
-            : page.appletParticipantDataSummary,
-          {
-            appletId,
-            subjectId,
-            activityId,
-          },
-        ),
+        path: generatePath(routes[0], {
+          appletId,
+          subjectId,
+          activityId,
+          activityFlowId,
+        }),
         'data-testid': 'respondents-summary-tab-summary',
       },
       {
@@ -53,16 +64,12 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-responses',
         icon: <Svg id="checkbox-outlined" />,
         activeIcon: <Svg id="checkbox-filled" />,
-        path: generatePath(
-          activityId
-            ? page.appletParticipantActivityDetailsDataReview
-            : page.appletParticipantDataReview,
-          {
-            appletId,
-            subjectId,
-            activityId,
-          },
-        ),
+        path: generatePath(routes[1], {
+          appletId,
+          subjectId,
+          activityId,
+          activityFlowId,
+        }),
         'data-testid': 'respondents-summary-tab-review',
       },
     ],

@@ -1,14 +1,17 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { getActivityApi } from 'api';
-import { EmptyState, LinkedTabs } from 'shared/components';
+import { EmptyState, LinkedTabs, Spinner } from 'shared/components';
 import { applet as appletState } from 'shared/state';
-import { users, workspaces } from 'redux/modules';
+import { Activity, ActivityFlow, users, workspaces } from 'redux/modules';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
+import { getEntityKey } from 'shared/utils';
 import { useAsync } from 'shared/hooks';
+import { getAppletActivitiesApi } from 'api';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
@@ -18,12 +21,39 @@ import { RespondentDataHeader } from './RespondentDataHeader';
 
 export const RespondentData = () => {
   const { t } = useTranslation('app');
-  const { appletId, activityId } = useParams();
+  const { appletId, activityId, activityFlowId } = useParams();
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const { useAppletData } = appletState;
   const { result: appletData } = useAppletData() ?? {};
+
+  const { execute: getActivitiesAndFlows, isLoading, value } = useAsync(getAppletActivitiesApi);
+  const activityOrFlow = useMemo((): Activity | HydratedActivityFlow | undefined => {
+    const activities: Activity[] = value?.data?.result?.activitiesDetails ?? [];
+    const activityFlows: ActivityFlow[] = value?.data?.result?.appletDetail?.activityFlows ?? [];
+
+    if (activityId) {
+      return activities.find((activity) => getEntityKey(activity) === activityId);
+    } else if (activityFlowId) {
+      const flow = activityFlows.find(
+        (flow: ActivityFlow) => getEntityKey(flow) === activityFlowId,
+      );
+
+      // Hydrate flow with activities
+      if (flow) {
+        const { activityIds = [] } = flow;
+
+        return {
+          ...flow,
+          activities: activityIds
+            .map((activityId: string) => activities.find(({ id }) => id === activityId))
+            .filter(Boolean) as Activity[],
+        };
+      }
+    }
+  }, [value, activityId, activityFlowId]);
+
   const { useSubject } = users;
   const { result: subject } = useSubject() ?? {};
 
@@ -31,27 +61,29 @@ export const RespondentData = () => {
   const methods = useForm<RespondentsDataFormValues>({
     defaultValues: defaultRespondentDataFormValues,
   });
-  const { execute, value } = useAsync(getActivityApi);
-  const { result: activity } = value?.data ?? {};
 
   const canViewData = hasPermissionToViewData(appletRoles);
 
   useEffect(() => {
-    if (activityId) {
-      execute({ activityId });
+    if (appletId) {
+      getActivitiesAndFlows({ params: { appletId } });
     }
-  }, [activityId, execute]);
+  }, [appletId, getActivitiesAndFlows]);
 
   return (
     <FormProvider {...methods}>
-      {appletData && subject && (
-        <RespondentDataHeader
-          dataTestid={'respondents-summary-back-to-applet'}
-          applet={appletData}
-          subject={subject}
-          activity={activity}
-        />
-      )}
+      <Box sx={{ position: 'relative' }}>
+        {isLoading && <Spinner />}
+
+        {appletData && subject && activityOrFlow && (
+          <RespondentDataHeader
+            dataTestid={'respondents-summary-back-to-applet'}
+            applet={appletData}
+            subject={subject}
+            activityOrFlow={activityOrFlow}
+          />
+        )}
+      </Box>
 
       {canViewData ? (
         <RespondentDataContextProvider>
