@@ -1,0 +1,68 @@
+.........Console Logs.........
+
+2024-07-08T13:24:11.349Z INFO webdriver: COMMAND navigateTo("https://pr-1843.d2ojy049t6jawn.amplifyapp.com/login")
+2024-07-08T13:24:11.355Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/url
+2024-07-08T13:24:11.355Z INFO webdriver: DATA { url: 'https://pr-1843.d2ojy049t6jawn.amplifyapp.com/login' }
+2024-07-08T13:24:11.994Z INFO webdriver: RESULT null
+2024-07-08T13:24:11.995Z INFO webdriver: COMMAND isAlertOpen()
+2024-07-08T13:24:11.996Z INFO webdriver: [GET] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/alert
+2024-07-08T13:24:12.000Z INFO webdriver: RESULT false
+2024-07-08T13:24:12.001Z INFO webdriver: COMMAND findElement("xpath", ".//button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]")
+2024-07-08T13:24:12.002Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/element
+2024-07-08T13:24:12.002Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]'
+}
+2024-07-08T13:24:12.720Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.4BFDEAC9015367ACAA9C67B4DB89CD6F.d.2F22FE206D5EB3CE4ECAA88152FA4546.e.32'
+}
+2024-07-08T13:24:12.724Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-07-08T13:24:12.729Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/execute/sync
+2024-07-08T13:24:12.729Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.4BFDEAC9015367ACAA9C67B4DB89CD6F.d.2F22FE206D5EB3CE4ECAA88152FA4546.e.32',
+      ELEMENT: 'f.4BFDEAC9015367ACAA9C67B4DB89CD6F.d.2F22FE206D5EB3CE4ECAA88152FA4546.e.32'
+    }
+  ]
+}
+2024-07-08T13:24:12.738Z INFO webdriver: RESULT true
+2024-07-08T13:24:12.740Z INFO webdriver: COMMAND findElement("css selector", "input[name=email]")
+2024-07-08T13:24:12.749Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/element
+2024-07-08T13:24:12.751Z INFO webdriver: DATA { using: 'css selector', value: 'input[name=email]' }
+2024-07-08T13:24:15.300Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"input[name=email]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '#0 0x55b6870f5c7a <unknown>\n' +
+    '#1 0x55b686dd8e2c <unknown>\n' +
+    '#2 0x55b686e25661 <unknown>\n' +
+    '#3 0x55b686e25751 <unknown>\n' +
+    '#4 0x55b686e69f64 <unknown>\n' +
+    '#5 0x55b686e485ed <unknown>\n' +
+    '#6 0x55b686e67303 <unknown>\n' +
+    '#7 0x55b686e48363 <unknown>\n' +
+    '#8 0x55b686e18247 <unknown>\n' +
+    '#9 0x55b686e18b9e <unknown>\n' +
+    '#10 0x55b6870bc24b <unknown>\n' +
+    '#11 0x55b6870c02f1 <unknown>\n' +
+    '#12 0x55b6870a7afe <unknown>\n' +
+    '#13 0x55b6870c0e52 <unknown>\n' +
+    '#14 0x55b68708c79f <unknown>\n' +
+    '#15 0x55b6870e5638 <unknown>\n' +
+    '#16 0x55b6870e5810 <unknown>\n' +
+    '#17 0x55b6870f4dac <unknown>\n' +
+    '#18 0x7ff581294ac3 <unknown>\n'
+}
+2024-07-08T13:24:15.316Z INFO webdriver: COMMAND findElements("css selector", "input[name=email]")
+2024-07-08T13:24:15.317Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/elements
+2024-07-08T13:24:15.317Z INFO webdriver: DATA { using: 'css selector', value: 'input[name=email]' }
+2024-07-08T13:24:17.842Z INFO webdriver: RESULT []
+2024-07-08T13:24:17.848Z INFO webdriver: COMMAND findElements("css selector", "input[name=email]")
+2024-07-08T13:24:17.854Z INFO webdriver: [POST] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/elements
+2024-07-08T13:24:17.854Z INFO webdriver: DATA { using: 'css selector', value: 'input[name=email]' }
+2024-07-08T13:24:20.306Z INFO webdriver: COMMAND takeScreenshot()
+2024-07-08T13:24:20.307Z INFO webdriver: [GET] http://0.0.0.0:36993/session/5d9d061b99716e31b322c4f4025d5599/screenshot
+2024-07-08T13:24:20.399Z INFO webdriver: RESULT []
+2024-07-08T13:24:20.502Z INFO webdriver: RESULT iVBORw0KGgoAAAANSUhEUgAAB4AAAAQ4CAIAAABnsVYUAAAAAXNSR0IArs4c6...
