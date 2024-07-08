@@ -119,6 +119,7 @@ export enum ItemResponseType {
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
   ABTrails = 'ABTrails',
+  PhrasalTemplate = 'phrasalTemplate',
 }
 
 export const performanceTaskResponseTypes = [
@@ -185,6 +186,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
+  [ItemResponseType.PhrasalTemplate]: <Svg id="fileAlt" />,
 };
 
 export const enum SubscaleTotalScore {
