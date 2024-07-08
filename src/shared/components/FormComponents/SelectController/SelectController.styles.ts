@@ -49,6 +49,11 @@ export const StyledItem = styled('li')(
     alignItems: 'center',
     display: 'flex',
 
+    '&.MuiButtonBase-root.MuiMenuItem-root.Mui-disabled': {
+      opacity: variables.opacity.disabled,
+      pointerEvents: 'none',
+    },
+
     ...(itemDisabled && {
       opacity: variables.opacity.disabled,
       pointerEvents: 'none',
