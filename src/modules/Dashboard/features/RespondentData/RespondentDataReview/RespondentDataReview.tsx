@@ -43,7 +43,7 @@ import { EmptyResponses } from './EmptyResponses';
 import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
-  const { appletId, subjectId, activityId } = useParams();
+  const { appletId, subjectId, activityId, activityFlowId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || null;
   const submitId = searchParams.get('submitId') || null;
@@ -66,12 +66,12 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    const pathname = generatePath(
-      activityId
-        ? page.appletParticipantActivityDetailsDataReview
-        : page.appletParticipantDataReview,
-      { appletId, subjectId, activityId },
-    );
+    let route: string;
+    if (activityId) route = page.appletParticipantActivityDetailsDataReview;
+    else if (activityFlowId) route = page.appletParticipantActivityDetailsFlowDataReview;
+    else route = page.appletParticipantDataReview;
+
+    const pathname = generatePath(route, { appletId, subjectId, activityId, activityFlowId });
 
     navigate({
       pathname,
@@ -98,6 +98,7 @@ export const RespondentDataReview = () => {
     answerId,
     submitId,
     activityId,
+    activityFlowId,
     appletId,
     subjectId,
     handleSelectAnswer,
@@ -259,9 +260,9 @@ export const RespondentDataReview = () => {
         activities={activities}
         flows={flows}
         selectedActivityId={selectedActivity?.id}
+        selectedFlowId={selectedFlow?.id}
         onSelectActivity={handleActivitySelect}
         onSelectFlow={handleFlowSelect}
-        selectedFlowId={selectedFlow?.id}
         selectedAnswer={selectedAnswer}
         onSelectAnswer={handleSelectAnswer}
         onDateChange={handleResponseDateChange}
