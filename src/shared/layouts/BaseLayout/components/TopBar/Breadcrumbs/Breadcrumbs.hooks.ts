@@ -53,9 +53,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const performanceTaskLabel =
     currentActivityName ??
     t(
-      `performanceTasks.${
-        Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([, value]) => value)?.[0]
-      }`,
+      `performanceTasks.${Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(
+        ([, value]) => value,
+      )?.[0]}`,
     );
   const currentActivityFlow = appletData?.activityFlows?.find(
     (activityFlow) => getEntityKey(activityFlow) === activityFlowId,
