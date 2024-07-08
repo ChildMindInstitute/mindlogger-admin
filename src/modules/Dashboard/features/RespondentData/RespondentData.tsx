@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -10,8 +10,9 @@ import { Activity, ActivityFlow, users, workspaces } from 'redux/modules';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { getEntityKey } from 'shared/utils';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import { getAppletActivitiesApi } from 'api';
+import { UnlockAppletPopup } from 'modules/Dashboard/features/Respondents/Popups/UnlockAppletPopup';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
@@ -22,6 +23,11 @@ import { RespondentDataHeader } from './RespondentDataHeader';
 export const RespondentData = () => {
   const { t } = useTranslation('app');
   const { appletId, activityId, activityFlowId } = useParams();
+
+  const { getAppletPrivateKey } = useEncryptionStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
+  const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
+
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
@@ -62,13 +68,21 @@ export const RespondentData = () => {
     defaultValues: defaultRespondentDataFormValues,
   });
 
-  const canViewData = hasPermissionToViewData(appletRoles);
+  const canViewData = hasPermissionToViewData(appletRoles) && hasEncryptionCheck;
 
   useEffect(() => {
     if (appletId) {
       getActivitiesAndFlows({ params: { appletId } });
     }
   }, [appletId, getActivitiesAndFlows]);
+
+  useEffect(() => {
+    if (!hasEncryptionCheck) {
+      setViewDataPopupVisible(true);
+
+      return;
+    }
+  }, [hasEncryptionCheck]);
 
   return (
     <FormProvider {...methods}>
@@ -92,6 +106,11 @@ export const RespondentData = () => {
       ) : (
         <EmptyState width="25rem">{t('noPermissions')}</EmptyState>
       )}
+      <UnlockAppletPopup
+        appletId={appletId || ''}
+        popupVisible={viewDataPopupVisible}
+        setPopupVisible={setViewDataPopupVisible}
+      />
     </FormProvider>
   );
 };
