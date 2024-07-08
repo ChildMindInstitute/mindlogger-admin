@@ -8,4 +8,5 @@ export interface FlowGridProps extends BoxProps {
   flows?: ActivityFlow[];
   activities?: Activity[];
   subject?: RespondentDetails;
+  onClickItem?: (props: { activityFlowId: string }) => void;
 }

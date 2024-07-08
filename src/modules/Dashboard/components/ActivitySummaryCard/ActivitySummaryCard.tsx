@@ -14,11 +14,9 @@ import { StatBox } from './StatBox';
 import { StyledActivityName, StyledContainer } from './ActivitySummaryCard.styles';
 
 export const ActivitySummaryCard = ({
-  activityId,
+  activity: { id, name, image },
   actionsMenu,
   compliance,
-  image,
-  name,
   participantCount,
   latestActivity,
   showStats = false,
@@ -30,10 +28,7 @@ export const ActivitySummaryCard = ({
   return (
     <StyledContainer
       data-testid={dataTestId}
-      onClick={onClick ? () => onClick(activityId || '') : undefined}
-      sx={{
-        cursor: onClick ? 'pointer' : 'default',
-      }}
+      onClick={onClick && (() => onClick({ activityId: id ?? '' }))}
     >
       <StyledFlexSpaceBetween>
         <StyledActivityThumbnailContainer>
