@@ -22,6 +22,7 @@ export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
   ItemResponseType.Photo,
   ItemResponseType.Video,
 ];
+export const ITEMS_WITH_DOWNLOAD_HEADER = [ItemResponseType.PhrasalTemplate];
 
 export const defaultSingleAndMultiSelectionRowsConfig = {
   removeBackButton: false,
