@@ -15,8 +15,8 @@ describe('getHeadCells', () => {
 
 describe('getMatchOptions', () => {
   test('should return correct match options', () => {
-    const visits = ['visit1', 'visit2'];
-    const options = getMatchOptions(visits, ['visit1']);
+    const visitsList = ['visit1', 'visit2'];
+    const options = getMatchOptions({ visitsList, visits: ['visit1'] });
     expect(options).toEqual([
       { labelKey: 'visit1', value: 'visit1', disabled: true },
       { labelKey: 'visit2', value: 'visit2', disabled: false },

@@ -1,62 +1,76 @@
-import { useEffect, useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { UiType } from 'shared/components/Table';
+import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
-import { LorisUsersVisit, getLorisUsersVisitsApi, getLorisVisitsApi } from 'modules/Builder/api';
+import { UiType } from 'shared/components/Table';
 
-import { getHeadCells, getLorisActivitiesRows, formatData } from './LorisVisits.utils';
+import { getHeadCells, getLorisActivitiesRows } from './LorisVisits.utils';
 import { StyledLorisVisits, StyledTable } from './LorisVisits.styles';
-import { LorisVisitsProps } from './LorisVisits.types';
-import { Steps } from '../UploadDataPopup.types';
+import { HandleChangeVisitProps, LorisVisitsProps } from './LorisVisits.types';
+import { useFetchVisitsData } from './LorisVisits.hooks';
 
 export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
   const { appletId } = useParams();
-
-  const [usersVisits, setUsersVisits] = useState<LorisUsersVisit[]>([]);
-  const [visitsList, setVisitsList] = useState<string[]>([]);
-
   const { t } = useTranslation();
-  const { control, reset, trigger } = useFormContext();
+  const { control, reset, setValue, trigger } = useFormContext();
+  const [visitsList, setVisitsList] = useState<string[]>([]);
+  const visitsForm: LorisUsersVisit<LorisActivityForm>[] = useWatch({ name: 'visitsForm' });
 
-  useEffect(() => {
-    if (!appletId) return;
+  useFetchVisitsData({ appletId, onSetIsLoading, setVisitsList, reset, setStep });
 
-    const fetchData = async () => {
-      try {
-        onSetIsLoading(true);
-        const [visitsResult, usersVisitsResult] = await Promise.all([
-          getLorisVisitsApi(),
-          getLorisUsersVisitsApi({ appletId }),
-        ]);
+  const handleChangeVisit = useCallback(
+    ({ userIndex, activityIndex, value }: HandleChangeVisitProps) => {
+      const formData = [...visitsForm];
+      const currentActivity = formData[userIndex].activities[activityIndex];
 
-        if (visitsResult?.data?.visits) {
-          setVisitsList(visitsResult.data.visits);
+      formData[userIndex].activities = formData[userIndex].activities.map((activity, index) => {
+        // skip other activities
+        if (activity.activityId !== currentActivity.activityId) return activity;
+
+        // update the current activity
+        if (activityIndex === index) {
+          return {
+            ...activity,
+            visit: value,
+          };
         }
 
-        if (usersVisitsResult?.data?.info) {
-          const defaultValues = formatData(usersVisitsResult?.data?.info);
+        // update the same activities
+        const updatedVisits = [
+          ...(activity.visits || []).filter((visit) => visit !== currentActivity.visit), // remove the old value
+          value,
+        ];
 
-          reset({ visitsForm: defaultValues });
-          setUsersVisits(usersVisitsResult?.data?.info);
-        }
-      } catch (error) {
-        console.error(error);
-        setStep(Steps.Error);
-      } finally {
-        onSetIsLoading(false);
-      }
-    };
+        return {
+          ...activity,
+          visits: updatedVisits,
+        };
+      });
 
-    fetchData();
+      setValue('visitsForm', formData);
+    },
+    [setValue, visitsForm],
+  );
+
+  const tableRows = useMemo(
+    () =>
+      getLorisActivitiesRows({
+        control,
+        trigger,
+        visitsList,
+        visitsForm,
+        handleChangeVisit,
+      }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [control, trigger, visitsList, visitsForm],
+  );
 
   return (
     <>
-      {visitsList.length > 0 && usersVisits.length > 0 && (
+      {visitsList.length > 0 && visitsForm.length > 0 && (
         <StyledLorisVisits data-testid="loris-visits">
           <StyledTitleMedium sx={{ mb: theme.spacing(2.4), color: variables.palette.on_surface }}>
             {t('loris.visitsDescription')}
@@ -64,7 +78,7 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
           <StyledTable
             maxHeight="34.4rem"
             columns={getHeadCells()}
-            rows={getLorisActivitiesRows({ control, trigger, visitsList, usersVisits })}
+            rows={tableRows}
             orderBy={'activityName'}
             uiType={UiType.Secondary}
             tableHeadBg={variables.modalBackground}

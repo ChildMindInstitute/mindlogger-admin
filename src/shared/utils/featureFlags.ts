@@ -18,7 +18,6 @@ export const FeatureFlags = {
     });
   },
   async updateWorkspace(workspaceId: string) {
-    console.warn('updateWorkspace');
     if (!_userId) return;
 
     return this.identify({
@@ -27,7 +26,6 @@ export const FeatureFlags = {
     });
   },
   async updateWorkspaces(workspaces: string[]) {
-    console.error('updateWorkspaces');
     if (!_userId) return;
 
     return this.identify({

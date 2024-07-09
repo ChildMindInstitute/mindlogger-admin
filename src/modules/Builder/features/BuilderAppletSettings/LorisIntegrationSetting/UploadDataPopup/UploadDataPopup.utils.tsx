@@ -76,15 +76,17 @@ export const findVisitErrorMessage = (
 };
 
 export const filteredData = (form: UploadDataForm): LorisUsersVisit<LorisActivityForm>[] =>
-  form.visitsForm.map((userVisit) => ({
-    ...userVisit,
-    activities: userVisit.activities.reduce((acc: LorisActivityForm[], activity) => {
-      if (activity.selected) {
-        // eslint-disable-next-line unused-imports/no-unused-vars
-        const { selected, ...rest } = activity;
-        acc.push(rest);
-      }
+  form.visitsForm
+    .filter((userVisit) => userVisit.activities.some((activity) => activity.selected))
+    .map((userVisit) => ({
+      ...userVisit,
+      activities: userVisit.activities.reduce((acc: LorisActivityForm[], activity) => {
+        if (activity.selected) {
+          // eslint-disable-next-line unused-imports/no-unused-vars
+          const { selected, visits, ...rest } = activity;
+          acc.push(rest);
+        }
 
-      return acc;
-    }, []),
-  }));
+        return acc;
+      }, []),
+    }));

@@ -2,12 +2,12 @@ import { format } from 'date-fns';
 
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
-import { LorisUsersVisit } from 'modules/Builder/api';
+import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
 import { CheckboxController } from 'shared/components/FormComponents';
 
 import { StyledSelectController } from './LorisVisits.styles';
-import { GetLorisActivitiesRows, VisitRow } from './LorisVisits.types';
+import { GetLorisActivitiesRows, GetMatchOptionsProps, VisitRow } from './LorisVisits.types';
 
 const { t } = i18n;
 
@@ -39,21 +39,26 @@ export const getHeadCells = (): HeadCell[] => [
   },
 ];
 
-export const getMatchOptions = (visits: string[], itemsDisabled: string[]) =>
-  visits.map((visit) => ({
+export const getMatchOptions = ({ visitsList = [], visits = [] }: GetMatchOptionsProps) =>
+  visitsList.map((visit) => ({
     labelKey: visit,
     value: visit,
-    disabled: itemsDisabled.includes(visit),
+    disabled: visits.includes(visit),
   }));
 
 export const getLorisActivitiesRows = ({
   control,
   trigger,
   visitsList,
-  usersVisits,
+  visitsForm,
+  handleChangeVisit,
 }: GetLorisActivitiesRows) =>
-  usersVisits.reduce(
-    (data: VisitRow[], { activities, secretUserId }: LorisUsersVisit, userIndex) => {
+  visitsForm.reduce(
+    (
+      data: VisitRow[],
+      { activities, secretUserId }: LorisUsersVisit<LorisActivityForm>,
+      userIndex,
+    ) => {
       const userActivities = (activities || []).map(
         ({ activityName, completedDate, visits }, activityIndex) => ({
           selected: {
@@ -91,10 +96,13 @@ export const getLorisActivitiesRows = ({
                 className="visits-select"
                 control={control}
                 name={`visitsForm[${userIndex}].activities[${activityIndex}].visit`}
-                options={getMatchOptions(visitsList, visits)}
+                options={getMatchOptions({ visitsList, visits })}
                 placeholder={t('select')}
                 isLabelNeedTranslation={false}
                 data-testid={`loris-visits-select-${userIndex}-${activityIndex}`}
+                customChange={({ target: { value } }) =>
+                  handleChangeVisit({ userIndex, activityIndex, value })
+                }
               />
             ),
             value: '',
@@ -107,17 +115,38 @@ export const getLorisActivitiesRows = ({
     [],
   );
 
-export const formatData = (usersVisits: LorisUsersVisit[]) =>
-  usersVisits.map(({ activities, ...userData }) => {
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    const formattedActivities = activities.map(({ visits, ...activity }) => ({
-      ...activity,
-      visit: '',
-      selected: true,
-    }));
+export const formatData = (
+  usersVisits: LorisUsersVisit<LorisActivityResponse>[],
+): LorisUsersVisit<LorisActivityResponse>[] =>
+  usersVisits.reduce((acc: LorisUsersVisit[], { activities, ...userData }) => {
+    // TODO: move this logic to the backend
+    const allVisits = activities.reduce(
+      (visitsAcc, { activityId, visits }) => {
+        if (visits.length) {
+          visitsAcc[activityId] = visitsAcc[activityId]
+            ? visitsAcc[activityId].concat(visits)
+            : visits;
+        }
 
-    return {
-      ...userData,
-      activities: formattedActivities,
-    };
-  });
+        return visitsAcc;
+      },
+      {} as Record<string, string[]>,
+    );
+
+    const filteredActivities = activities
+      .filter(({ visits }) => !visits.length)
+      .map((activity) => ({
+        ...activity,
+        visits: allVisits[activity.activityId] || [],
+        visit: '',
+        selected: true,
+      }));
+
+    if (!filteredActivities.length) {
+      return acc;
+    }
+
+    acc.push({ ...userData, activities: filteredActivities });
+
+    return acc;
+  }, []);

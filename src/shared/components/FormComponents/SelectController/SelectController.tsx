@@ -214,8 +214,8 @@ export const SelectController = <T extends FieldValues>({
           render={({ field: { onChange, value }, fieldState: { error } }) =>
             renderSelect(
               (event) => {
-                customChange && customChange(event);
                 onChange(event);
+                customChange && customChange(event);
                 setTrigger?.(false);
               },
               value,

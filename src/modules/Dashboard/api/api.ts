@@ -913,7 +913,7 @@ export const getAppletActivitiesApi = (
   });
 
 export const enableIntegrationApi = (integrations: Integration[], signal?: AbortSignal) =>
-  authApiClient.post('/integrations', integrations, {
+  authApiClient.post('/integrations/', integrations, {
     signal,
   });
 
@@ -923,5 +923,5 @@ export const disableIntegrationApi = (integrations: string[], signal?: AbortSign
     signal,
   };
 
-  return authApiClient.delete('/integrations', config);
+  return authApiClient.delete('/integrations/', config);
 };
