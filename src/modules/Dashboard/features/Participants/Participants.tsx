@@ -383,7 +383,7 @@ export const Participants = () => {
               nickname,
               tag,
               status,
-              dataTestid,
+              dataTestid: dataTestId,
               showAssignActivity: featureFlags.enableActivityAssign,
               roles,
               invitation: detail.invitation,
@@ -391,7 +391,7 @@ export const Participants = () => {
               lastName: detail.subjectLastName,
               subjectCreatedAt: detail.subjectCreatedAt,
             })}
-            data-testid={`${dataTestid}-table-actions`}
+            data-testid={`${dataTestId}-table-actions`}
           />
         ),
         value: '',
@@ -461,7 +461,7 @@ export const Participants = () => {
 
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
-  const dataTestid = 'dashboard-participants';
+  const dataTestId = 'dashboard-participants';
   const canAddParticipant = appletId && checkIfCanManageParticipants(roles);
 
   if (isForbidden || !canViewParticipants) return noPermissionsComponent;
@@ -477,13 +477,13 @@ export const Participants = () => {
             placeholder={t('searchParticipants')}
             onSearch={handleSearch}
             sx={{ width: '32rem' }}
-            data-testid={`${dataTestid}-search`}
+            data-testid={`${dataTestId}-search`}
           />
           {canAddParticipant && (
             <AddParticipantButton
               variant="contained"
               onClick={handleToggleAddParticipant}
-              data-testid={`${dataTestid}-add`}
+              data-testid={`${dataTestId}-add`}
             >
               {t('addParticipant')}
             </AddParticipantButton>
@@ -508,7 +508,7 @@ export const Participants = () => {
           ) : undefined
         }
         count={respondentsData?.count || 0}
-        data-testid={`${dataTestid}-table`}
+        data-testid={`${dataTestId}-table`}
         {...tableProps}
       />
       {appletId && showAddParticipant && (
@@ -516,6 +516,7 @@ export const Participants = () => {
           popupVisible={showAddParticipant}
           appletId={appletId}
           onClose={addParticipantOnClose}
+          data-testid={`${dataTestId}-add-participant-popup`}
         />
       )}
       {removeAccessPopupVisible && (
@@ -533,7 +534,7 @@ export const Participants = () => {
           tableRows={viewableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          data-testid={`${dataTestid}-export-data-popup`}
+          data-testid={`${dataTestId}-export-data-popup`}
         />
       )}
       {editRespondentPopupVisible && (
