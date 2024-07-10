@@ -9,6 +9,7 @@ import { UiType } from '../Table.types';
 const HEAD_ROW_HEIGHT = '5.3rem';
 
 export const StyledTableHead = styled(TableHead, shouldForwardProp)`
+  background-color: ${variables.palette.surface};
   top: 0;
   position: sticky;
   z-index: ${theme.zIndex.fab};
@@ -17,7 +18,6 @@ export const StyledTableHead = styled(TableHead, shouldForwardProp)`
     hasColFixedWidth &&
     `
     display: block;
-    background-color: ${variables.palette.surface};
   `};
 
   && {
@@ -31,7 +31,7 @@ export const StyledTableHead = styled(TableHead, shouldForwardProp)`
           return `background-color: ${tableHeadBg || variables.palette.surface1}`;
         }
 
-        return `background-color: ${tableHeadBg || variables.palette.surface}`;
+        return `background-color: ${tableHeadBg || variables.palette.surface}; border-bottom: 0`;
       }};
     }
   }
@@ -57,13 +57,19 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   }};
 
   &.MuiTableCell-head {
-    ${({ uiType }) =>
-      uiType === UiType.Tertiary &&
-      `
-    color: ${variables.palette.outline};
-    font-size: ${variables.font.size.md};
-    line-height: ${variables.font.lineHeight.md};
-    letter-spacing: ${variables.font.letterSpacing.lg};
-  `}
-  }
+    ${({ uiType }) => {
+      switch (uiType) {
+        case UiType.Primary:
+          return { borderBottom: 0 };
+        case UiType.Tertiary:
+          return {
+            color: variables.palette.outline,
+            fontSize: variables.font.size.md,
+            letterSpacing: variables.font.letterSpacing.lg,
+            lineHeight: variables.font.lineHeight.md,
+          };
+        default:
+          return {};
+      }
+    }}
 `;

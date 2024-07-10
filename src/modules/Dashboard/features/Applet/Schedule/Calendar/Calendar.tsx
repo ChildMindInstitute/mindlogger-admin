@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef, RefObject } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Calendar as ReactCalendar,
   dateFnsLocalizer,
@@ -11,13 +11,11 @@ import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
+import { useSchedule } from 'modules/Dashboard/features/Applet/Schedule/ScheduleProvider';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { locales } from 'shared/consts';
-import { SaveChangesPopup } from 'shared/components/SaveChangesPopup';
 
-import { CreateEventPopup } from '../CreateEventPopup';
-import { EditEventPopup } from '../EditEventPopup';
 import { dataTestId } from './Calendar.const';
 import {
   eventPropGetter,
@@ -26,12 +24,7 @@ import {
   getHasWrapperMoreBtn,
 } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
-import {
-  AllDayEventsVisible,
-  CalendarViews,
-  EditEventPopupRef,
-  OnViewFunc,
-} from './Calendar.types';
+import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const dateFnsLocalize = dateFnsLocalizer({
   format,
@@ -48,14 +41,8 @@ export const Calendar = () => {
   const currentYear = getYear(new Date());
   const [currentCalendarYear, setCurrentCalendarYear] = useState(currentYear);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
-  const [editEventPopupVisible, setEditEventPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
-  const [saveChangesPopupVisible, setSaveChangesPopupVisible] = useState(false);
-  const [defaultStartDate, setDefaultStartDate] = useState(new Date());
-  const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
-
-  const editEventPopupRef = useRef(null) as RefObject<EditEventPopupRef>;
+  const { onClickEditEvent, onClickCreateEvent } = useSchedule();
 
   const { setCalendarCurrentYear } = calendarEvents.actions;
   const { eventsToShow = null, allDayEventsSortedByDays = null } =
@@ -74,36 +61,17 @@ export const Calendar = () => {
 
   const onNavigate = (newDate: Date) => setDate(newDate);
 
-  const handleAddClick = () => {
-    setCreateEventPopupVisible(true);
-    setDefaultStartDate(new Date());
-  };
-
   const onSelectSlot = (slotInfo: SlotInfo) => {
-    setCreateEventPopupVisible(true);
-    setDefaultStartDate(getDefaultStartDate(slotInfo.start));
+    onClickCreateEvent({ startDate: getDefaultStartDate(slotInfo.start) });
   };
 
-  const onSelectEvent = (calendarEvent: CalendarEvent) => {
-    setEditEventPopupVisible(true);
-    setDefaultStartDate(
-      getDefaultStartDate(
+  const handleSelectEvent = (calendarEvent: CalendarEvent) => {
+    onClickEditEvent({
+      event: calendarEvent,
+      startDate: getDefaultStartDate(
         calendarEvent.alwaysAvailable ? calendarEvent.eventStart : calendarEvent.start,
       ),
-    );
-    setEditedEvent(calendarEvent);
-  };
-
-  const handleDontSave = () => {
-    setSaveChangesPopupVisible(false);
-    setEditEventPopupVisible(false);
-  };
-
-  const handleSaveChanges = () => {
-    if (editEventPopupRef.current) {
-      editEventPopupRef.current.saveForm();
-      setSaveChangesPopupVisible(false);
-    }
+    });
   };
 
   const hasWrapperMoreBtn = useMemo(() => {
@@ -150,16 +118,18 @@ export const Calendar = () => {
     const chosenYear = getYear(date);
     if (chosenYear === currentCalendarYear) return;
     setCurrentCalendarYear(chosenYear);
-  }, [date]);
+  }, [currentCalendarYear, date]);
 
   useEffect(() => {
     dispatch(setCalendarCurrentYear({ calendarCurrentYear: currentCalendarYear }));
-  }, [currentCalendarYear]);
+  }, [currentCalendarYear, dispatch, setCalendarCurrentYear]);
 
   useEffect(
     () => () => {
       dispatch(calendarEvents.actions.resetCalendarEvents());
     },
+    // This hook's cleanup should only run when this component unmounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -182,7 +152,7 @@ export const Calendar = () => {
           views={views}
           selectable
           onSelectSlot={onSelectSlot}
-          onSelectEvent={onSelectEvent}
+          onSelectEvent={handleSelectEvent}
           eventPropGetter={(event) => eventPropGetter(event, activeView)}
           view={activeView as View}
           onView={setActiveView as OnViewFunc}
@@ -191,37 +161,15 @@ export const Calendar = () => {
           formats={formats as Formats}
           dayLayoutAlgorithm="no-overlap"
         />
-        <StyledAddBtn onClick={handleAddClick} data-testid={`${dataTestId}-create-event`}>
+        <StyledAddBtn
+          onClick={() => {
+            onClickCreateEvent();
+          }}
+          data-testid={`${dataTestId}-create-event`}
+        >
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
-      {createEventPopupVisible && (
-        <CreateEventPopup
-          open={createEventPopupVisible}
-          setCreateEventPopupVisible={setCreateEventPopupVisible}
-          defaultStartDate={defaultStartDate}
-          data-testid={`${dataTestId}-create-event-popup`}
-        />
-      )}
-      {editedEvent && (
-        <EditEventPopup
-          ref={editEventPopupRef}
-          open={editEventPopupVisible}
-          editedEvent={editedEvent}
-          setEditEventPopupVisible={setEditEventPopupVisible}
-          defaultStartDate={defaultStartDate}
-          setSaveChangesPopupVisible={setSaveChangesPopupVisible}
-          data-testid={`${dataTestId}-edit-event-popup`}
-        />
-      )}
-      {saveChangesPopupVisible && (
-        <SaveChangesPopup
-          popupVisible={saveChangesPopupVisible}
-          onDontSave={handleDontSave}
-          onCancel={() => setSaveChangesPopupVisible(false)}
-          onSave={handleSaveChanges}
-        />
-      )}
     </>
   );
 };

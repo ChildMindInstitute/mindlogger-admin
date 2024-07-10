@@ -14,6 +14,7 @@ export const ItemFlowActions = ({
   open,
   name,
   onAdd,
+  onDuplicate,
   onRemove,
   onToggle,
   'data-testid': dataTestid,
@@ -53,7 +54,12 @@ export const ItemFlowActions = ({
         </StyledTitleMedium>
       )}
       <Actions
-        items={getItemFlowActions({ onAdd: handleAdd, onRemove, 'data-testid': dataTestid })}
+        items={getItemFlowActions({
+          onAdd: handleAdd,
+          onDuplicate,
+          onRemove,
+          'data-testid': dataTestid,
+        })}
         context={name}
         visibleByDefault={open}
         sxProps={{ width: 'unset' }}

@@ -12,7 +12,7 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
@@ -20,8 +20,8 @@ import { ReviewMenu } from './ReviewMenu';
 import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
-const routePath = page.appletRespondentDataReview;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -53,9 +53,12 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
+          id: 'test-id',
           nickname: 'Mocked Respondent',
           secretUserId: '3921968c-3903-4872-8f30-a6e6a10cef36',
           lastSeen: null,
+          tag: 'Child' as ParticipantTag,
+          userId: null,
         },
       },
     },

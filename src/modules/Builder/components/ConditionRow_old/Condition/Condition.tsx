@@ -4,10 +4,11 @@ import { useWatch } from 'react-hook-form';
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
+import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSelectController/ItemFlowSelectController';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
 
-import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
+import { StyledCondition, StyledInputController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
 import {
@@ -70,7 +71,7 @@ export const Condition = ({
   return (
     <StyledCondition data-testid={dataTestid}>
       <StyledTitleMedium>{t('if')}</StyledTitleMedium>
-      <StyledSelectController
+      <ItemFlowSelectController
         control={control}
         name={itemName}
         options={itemOptions}
@@ -88,11 +89,11 @@ export const Condition = ({
         customChange={onItemChange}
         disabled={isRowTypeScore}
         shouldSkipIcon={isRowTypeScore}
-        isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-name`}
+        tooltipTitle={selectedItem?.question}
       />
       {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
-      <StyledSelectController
+      <ItemFlowSelectController
         control={control}
         name={stateName}
         options={getStateOptions(selectedItem?.type)}
@@ -100,17 +101,15 @@ export const Condition = ({
           isStateSelectDisabled ? t('conditionDisabledPlaceholder') : t('conditionTypePlaceholder')
         }
         customChange={onStateChange}
-        isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-type`}
         disabled={isStateSelectDisabled}
       />
       {isValueSelectShown && (
-        <StyledSelectController
+        <ItemFlowSelectController
           control={control}
           name={isItemScoreCondition ? numberValueName : optionValueName}
           options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
           placeholder={isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('value')}
-          isLabelNeedTranslation={false}
           data-testid={`${dataTestid}-selection-value`}
           disabled={isValueSelectDisabled}
         />

@@ -48,4 +48,4 @@ export const StyledLinkBtn = styled(StyledClearedButton)`
   &.MuiButton-text:hover {
     background-color: transparent;
   }
-`;
+` as typeof Button;

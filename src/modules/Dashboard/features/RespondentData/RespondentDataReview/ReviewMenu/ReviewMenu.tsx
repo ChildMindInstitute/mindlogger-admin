@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import { DatePicker, DatePickerUiType, Spinner, SpinnerUiType } from 'shared/components';
@@ -28,7 +29,8 @@ export const ReviewMenu = ({
   onSelectFlow,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
-  const respondentLabel = useRespondentLabel(true);
+  const { activityId, activityFlowId } = useParams();
+  const respondentLabel = useRespondentLabel({ isSubject: true });
 
   const dataTestid = 'respondents-review-menu';
 
@@ -59,7 +61,7 @@ export const ReviewMenu = ({
         {!!flows?.length && (
           <>
             <StyledHeadlineLarge sx={{ margin: theme.spacing(1.6) }}>
-              {t('activityFlows')}
+              {activityFlowId ? t('selectResponse') : t('selectActivityFlowAndResponse')}
             </StyledHeadlineLarge>
             {flows.map((flow, index) => (
               <ReviewMenuItem
@@ -77,7 +79,7 @@ export const ReviewMenu = ({
         {!!activities?.length && (
           <>
             <StyledHeadlineLarge sx={{ margin: theme.spacing(1.6) }}>
-              {t('activities')}
+              {activityId ? t('selectResponse') : t('selectActivityAndResponse')}
             </StyledHeadlineLarge>
             {activities.map((activity, index) => (
               <ReviewMenuItem

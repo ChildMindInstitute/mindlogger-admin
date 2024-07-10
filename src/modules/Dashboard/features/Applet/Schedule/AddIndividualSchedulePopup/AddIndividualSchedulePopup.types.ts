@@ -1,9 +1,8 @@
 export type AddIndividualSchedulePopupProps = {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: () => void;
-  respondentName: string;
-  error: string | null;
-  isLoading: boolean;
   'data-testid'?: string;
+  appletId?: string;
+  onClose: () => void;
+  open: boolean;
+  userId?: string;
+  userName: string;
 };

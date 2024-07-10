@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
+import { MenuItemType } from './Menu.types';
 import { Menu } from './Menu';
 
 const menuItems = [
@@ -19,6 +20,10 @@ const menuItems = [
     context: 'context-2',
     action: jest.fn(),
     'data-testid': 'test-menu-item-2',
+  },
+  {
+    type: MenuItemType.Divider,
+    'data-testid': 'test-menu-item-divider',
   },
   {
     title: 'Option 3',
@@ -60,7 +65,10 @@ describe('Menu component', () => {
         expect(menuItem).not.toBeInTheDocument();
       } else {
         expect(menuItem).toBeInTheDocument();
-        expect(screen.getByText(item.title)).toBeInTheDocument();
+        // Compare against title only if present (dividers lack titles)
+        if (item.title) {
+          expect(screen.getByText(item.title)).toBeInTheDocument();
+        }
       }
       if (item.disabled) {
         //check correct render of disabled items

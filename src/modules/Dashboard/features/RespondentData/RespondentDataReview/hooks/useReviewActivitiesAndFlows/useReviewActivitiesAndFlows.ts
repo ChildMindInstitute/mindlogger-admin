@@ -14,8 +14,10 @@ export const useReviewActivitiesAndFlows = ({
   answerId,
   submitId,
   appletId,
+  activityId,
+  activityFlowId,
   handleSelectAnswer,
-  respondentId,
+  subjectId,
 }: ReviewActivitiesAndFlowsProps) => {
   const [activities, setActivities] = useState<ReviewEntity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<ReviewEntity | null>(null);
@@ -28,7 +30,13 @@ export const useReviewActivitiesAndFlows = ({
       const activities = data?.result;
 
       if (!activities?.length) return;
-      setActivities(activities);
+      let selectedActivityByDefault;
+      if (activityId) {
+        selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
+        setActivities([selectedActivityByDefault]);
+      } else if (!activityFlowId) {
+        setActivities(activities);
+      }
     },
   );
 
@@ -38,18 +46,24 @@ export const useReviewActivitiesAndFlows = ({
       const flows = data?.result;
 
       if (!flows?.length) return;
-      setFlows(flows);
+      let selectedActivityFlowByDefault;
+      if (activityFlowId) {
+        selectedActivityFlowByDefault = flows.filter((e) => e.id === activityFlowId)[0];
+        setFlows([selectedActivityFlowByDefault]);
+      } else if (!activityId) {
+        setFlows(flows);
+      }
     },
   );
 
   const handleGetActivitiesAndFlows = (createdDate: string) => {
-    if (!appletId || !respondentId) {
+    if (!appletId || !subjectId) {
       return;
     }
 
     const requestBody = {
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       createdDate,
     };
 
@@ -63,18 +77,29 @@ export const useReviewActivitiesAndFlows = ({
       submitId ||
       selectedActivity ||
       selectedFlow ||
+      (activityId && !activities.length) ||
+      (activityFlowId && !flows.length) ||
       (!activities.length && !flows.length) ||
       !handleSelectAnswer
     ) {
       return;
     }
 
-    const reviewEntities = getConcatenatedEntities({ activities, flows });
-    const selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
+    let selectedEntityByDefault;
+    if (activityId) {
+      selectedEntityByDefault = activities.filter((e) => e.id === activityId)[0];
+      setSelectedActivity(selectedEntityByDefault);
+    } else if (activityFlowId) {
+      selectedEntityByDefault = flows.filter((e) => e.id === activityFlowId)[0];
+      setSelectedFlow(selectedEntityByDefault);
+    } else {
+      const reviewEntities = getConcatenatedEntities({ activities, flows });
+      selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
 
-    selectedEntityByDefault.isFlow
-      ? setSelectedFlow(selectedEntityByDefault)
-      : setSelectedActivity(selectedEntityByDefault);
+      selectedEntityByDefault.isFlow
+        ? setSelectedFlow(selectedEntityByDefault)
+        : setSelectedActivity(selectedEntityByDefault);
+    }
 
     const { answerDates } = selectedEntityByDefault;
 
@@ -84,7 +109,17 @@ export const useReviewActivitiesAndFlows = ({
     handleSelectAnswer({
       answer: { ...sortedAnswerDates[answerDates.length - 1] },
     });
-  }, [answerId, submitId, activities, flows, handleSelectAnswer, selectedFlow, selectedActivity]);
+  }, [
+    answerId,
+    activityId,
+    submitId,
+    activities,
+    flows,
+    handleSelectAnswer,
+    selectedFlow,
+    selectedActivity,
+    activityFlowId,
+  ]);
 
   return {
     activities,

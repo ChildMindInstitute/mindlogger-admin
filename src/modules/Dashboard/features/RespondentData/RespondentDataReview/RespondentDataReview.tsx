@@ -43,7 +43,7 @@ import { EmptyResponses } from './EmptyResponses';
 import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId, activityId, activityFlowId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || null;
   const submitId = searchParams.get('submitId') || null;
@@ -66,7 +66,13 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    let route: string;
+    if (activityId) route = page.appletParticipantActivityDetailsDataReview;
+    else if (activityFlowId) route = page.appletParticipantActivityDetailsFlowDataReview;
+    else route = page.appletParticipantDataReview;
+
+    const pathname = generatePath(route, { appletId, subjectId, activityId, activityFlowId });
+
     navigate({
       pathname,
       search: createSearchParams({
@@ -91,8 +97,10 @@ export const RespondentDataReview = () => {
   } = useReviewActivitiesAndFlows({
     answerId,
     submitId,
+    activityId,
+    activityFlowId,
     appletId,
-    respondentId,
+    subjectId,
     handleSelectAnswer,
   });
 
@@ -140,14 +148,14 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
 
     getAppletSubmitDateList({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       fromDate,
       toDate,
     });
@@ -252,9 +260,9 @@ export const RespondentDataReview = () => {
         activities={activities}
         flows={flows}
         selectedActivityId={selectedActivity?.id}
+        selectedFlowId={selectedFlow?.id}
         onSelectActivity={handleActivitySelect}
         onSelectFlow={handleFlowSelect}
-        selectedFlowId={selectedFlow?.id}
         selectedAnswer={selectedAnswer}
         onSelectAnswer={handleSelectAnswer}
         onDateChange={handleResponseDateChange}

@@ -1,83 +1,111 @@
+import { format } from 'date-fns';
+
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
 import { Manager } from 'modules/Dashboard/types';
 import { variables } from 'shared/styles';
+import { MenuItem, MenuItemType } from 'shared/components';
+import { DateFormats } from 'shared/consts';
 
 import { ManagersActions } from './Managers.types';
 
-export enum ManagersColumnsWidth {
-  Pin = '4.8rem',
-  Default = '22rem',
-  Email = '35rem',
-}
-
-export const getHeadCells = (id?: string): HeadCell[] => {
+export const getHeadCells = (sortableColumns?: string[], appletId?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
     {
-      id: 'pin',
+      id: 'avatar',
       label: '',
-      enableSort: true,
-      width: ManagersColumnsWidth.Pin,
+      width: '8rem',
     },
     {
       id: 'firstName',
       label: t('firstName'),
-      enableSort: true,
-      width: ManagersColumnsWidth.Default,
+      enableSort: sortableColumns?.includes('firstName') ?? false,
     },
     {
       id: 'lastName',
       label: t('lastName'),
-      enableSort: true,
-      width: ManagersColumnsWidth.Default,
+      enableSort: sortableColumns?.includes('lastName') ?? false,
     },
     {
-      id: 'email',
-      label: t('email'),
-      enableSort: true,
-      width: ManagersColumnsWidth.Email,
+      id: 'title',
+      label: 'Title',
     },
-    ...(id
+    ...(appletId
       ? [
           {
             id: 'roles',
-            label: t('roles'),
-            enableSort: true,
-            width: ManagersColumnsWidth.Default,
+            label: t('role'),
+            enableSort: sortableColumns?.includes('roles') ?? true,
           },
         ]
       : []),
     {
+      id: 'email',
+      label: t('email'),
+      enableSort: sortableColumns?.includes('email') ?? false,
+    },
+    {
       id: 'actions',
-      label: t('actions'),
+      label: '',
+      width: '8rem',
     },
   ];
 };
 
 export const getManagerActions = (
-  { removeAccessAction, editAccessAction }: ManagersActions,
+  actions: ManagersActions,
   manager: Manager,
-) => {
+): MenuItem<Manager>[] => {
   const { t } = i18n;
 
-  return [
-    {
-      icon: <Svg id="edit-user" />,
-      action: editAccessAction,
-      title: t('editAccess'),
-      context: manager,
-      'data-testid': 'dashboard-managers-edit-user',
-    },
-    {
-      icon: <Svg id="remove-access" />,
-      action: removeAccessAction,
-      title: t('removeAccess'),
-      context: manager,
-      customItemColor: variables.palette.dark_error_container,
-      'data-testid': 'dashboard-managers-remove-access',
-    },
-  ];
+  const menuItems: MenuItem<Manager>[] = [];
+
+  if (manager.status === 'pending') {
+    menuItems.push(
+      {
+        type: MenuItemType.Info,
+        title: `${t('invitationDate')}: ${format(
+          new Date(manager.createdAt),
+          `${DateFormats.MonthDayYear} '${t('lowercaseAt')}' ${DateFormats.Time}`,
+        )}`,
+      },
+      { type: MenuItemType.Divider },
+      {
+        icon: <Svg id="duplicate" width={24} height={24} />,
+        action: actions.copyEmailAddressAction,
+        title: t('copyEmailAddress'),
+        context: manager,
+      },
+      { type: MenuItemType.Divider },
+      {
+        icon: <Svg id="format-link" width={24} height={24} />,
+        action: actions.copyInvitationLinkAction,
+        title: t('copyInvitationLink'),
+        context: manager,
+      },
+    );
+  } else if (manager.status === 'approved') {
+    menuItems.push(
+      {
+        icon: <Svg id="edit-user" />,
+        action: actions.editTeamMemberAction,
+        title: t('editTeamMember'),
+        context: manager,
+        'data-testid': 'dashboard-managers-edit-user',
+      },
+      {
+        icon: <Svg id="remove-access" />,
+        action: actions.removeTeamMemberAction,
+        title: t('removeTeamMember'),
+        context: manager,
+        customItemColor: variables.palette.dark_error_container,
+        'data-testid': 'dashboard-managers-remove-access',
+      },
+    );
+  }
+
+  return menuItems;
 };

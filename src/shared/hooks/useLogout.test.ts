@@ -1,8 +1,10 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
 
 import { useLogout } from './useLogout';
 
@@ -23,8 +25,10 @@ const mockedUseAppDispatch = jest.fn();
 const mockedUseNavigate = jest.fn();
 
 jest.mock('redux/store', () => ({
+  ...jest.requireActual('redux/store'),
   useAppDispatch: () => mockedUseAppDispatch,
 }));
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUseNavigate,
@@ -36,7 +40,7 @@ describe('useLogout', () => {
   });
 
   test('deleting access token navigates to login', async () => {
-    const { result } = renderHook(useLogout);
+    const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
     mockAxios.post.mockResolvedValueOnce(null);
 
     await waitFor(() => {
@@ -47,7 +51,7 @@ describe('useLogout', () => {
   });
 
   test('deleting access token resets all data', async () => {
-    const { result } = renderHook(useLogout);
+    const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
     mockAxios.post.mockResolvedValueOnce(null);
 
     await waitFor(() => {
@@ -60,7 +64,7 @@ describe('useLogout', () => {
   });
 
   test('delete refresh token api is called if delete access token rejects with Unauthorized status code', async () => {
-    const { result } = renderHook(useLogout);
+    const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
     mockAxios.post.mockRejectedValueOnce({
       response: {
         status: ApiResponseCodes.Unauthorized,
