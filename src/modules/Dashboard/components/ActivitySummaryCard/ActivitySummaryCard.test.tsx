@@ -7,10 +7,9 @@ import { ActionsMenu } from 'shared/components';
 import { ActivitySummaryCard } from './ActivitySummaryCard';
 
 const props = {
+  activity: { id: '1', name: 'Test Activity', image: 'dummy-image.jpg' },
   actionsMenu: null,
   compliance: '88%',
-  image: 'dummy-image.jpg',
-  name: 'Test Activity',
   participantCount: '50',
   latestActivity: format(new Date('2024-01-01T00:00:00Z'), DateFormats.MonthDayYearTime),
 };
@@ -20,8 +19,8 @@ describe('ActivitySummaryCard', () => {
     test('should render activity summary card props', () => {
       render(<ActivitySummaryCard showStats {...props} />);
 
-      expect(screen.queryByAltText(props.name)).toBeInTheDocument();
-      expect(screen.queryByText(props.name)).toBeInTheDocument();
+      expect(screen.queryByAltText(props.activity.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.activity.name)).toBeInTheDocument();
       expect(screen.queryByText(props.compliance)).toBeInTheDocument();
       expect(screen.queryByText(props.participantCount)).toBeInTheDocument();
       expect(screen.queryByText(props.latestActivity)).toBeInTheDocument();
@@ -32,8 +31,8 @@ describe('ActivitySummaryCard', () => {
     test('should render activity summary card props', () => {
       render(<ActivitySummaryCard showStats={false} {...props} />);
 
-      expect(screen.queryByAltText(props.name)).toBeInTheDocument();
-      expect(screen.queryByText(props.name)).toBeInTheDocument();
+      expect(screen.queryByAltText(props.activity.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.activity.name)).toBeInTheDocument();
       expect(screen.queryByText(props.compliance)).not.toBeInTheDocument();
       expect(screen.queryByText(props.participantCount)).not.toBeInTheDocument();
       expect(screen.queryByText(props.latestActivity)).not.toBeInTheDocument();

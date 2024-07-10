@@ -7,18 +7,23 @@ import { getDictionaryText } from 'shared/utils';
 
 import { FlowSummaryCardProps } from './FlowSummaryCard.types';
 import { StyledRoot } from './FlowSummaryCard.styles';
-import { FlowSummaryThumbnail } from './FlowSummaryThumbnail';
+import { ActivityFlowThumbnail } from '../ActivityFlowThumbnail';
 
 export const FlowSummaryCard = <T,>({
-  flow: { activities, description, name },
+  flow: { id, activities, description, name },
   menuItems,
+  onClick,
   ...otherProps
 }: FlowSummaryCardProps<T>) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledRoot {...otherProps}>
-      <FlowSummaryThumbnail activities={activities} />
+    <StyledRoot
+      {...otherProps}
+      onClick={onClick && (() => onClick({ activityFlowId: id ?? '' }))}
+      sx={{ cursor: onClick ? 'pointer' : 'default' }}
+    >
+      <ActivityFlowThumbnail activities={activities} />
 
       <StyledFlexColumn sx={{ gap: 0.8, flexGrow: 1, overflow: 'hidden' }}>
         <StyledEllipsisText sx={{ fontSize: variables.font.size.xxl }}>{name}</StyledEllipsisText>

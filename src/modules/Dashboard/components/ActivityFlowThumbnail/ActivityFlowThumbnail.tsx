@@ -2,13 +2,13 @@ import {
   StyledActivityThumbnail,
   StyledItemCount,
   StyledRoot,
-} from './FlowSummaryThumbnail.styles';
-import { FlowSummaryThumbnailProps } from './FlowSummaryThumbnail.types';
+} from './ActivityFlowThumbnail.styles';
+import { ActivityFlowThumbnailProps } from './ActivityFlowThumbnail.types';
 
-export const FlowSummaryThumbnail = ({
+export const ActivityFlowThumbnail = ({
   activities = [],
   ...otherProps
-}: FlowSummaryThumbnailProps) => {
+}: ActivityFlowThumbnailProps) => {
   const itemsCount = activities?.length ?? 0;
 
   return (

@@ -13,6 +13,7 @@ export const FlowGrid = ({
   activities = [],
   flows = [],
   subject,
+  onClickItem,
   ...otherProps
 }: FlowGridProps) => {
   const [showExportPopup, setShowExportPopup] = useState(false);
@@ -45,6 +46,7 @@ export const FlowGrid = ({
               component="li"
               menuItems={getActionsMenu({ flow: hydratedFlow })}
               key={id}
+              onClick={onClickItem}
             />
           );
         })}
