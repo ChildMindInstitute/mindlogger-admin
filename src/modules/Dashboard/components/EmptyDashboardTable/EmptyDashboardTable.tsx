@@ -12,11 +12,11 @@ export const EmptyDashboardTable = ({
   const { t } = useTranslation('app');
 
   if (isLoading) {
-    return;
+    return null;
   }
 
   if (searchValue) {
-    return t('noMatchWasFound', { searchValue });
+    return <>{t('noMatchWasFound', { searchValue })}</>;
   }
 
   return (

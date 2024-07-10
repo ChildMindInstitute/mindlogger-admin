@@ -29,7 +29,7 @@ export const ReviewMenu = ({
   onSelectFlow,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
-  const { activityId } = useParams();
+  const { activityId, activityFlowId } = useParams();
   const respondentLabel = useRespondentLabel({ isSubject: true });
 
   const dataTestid = 'respondents-review-menu';
@@ -61,7 +61,7 @@ export const ReviewMenu = ({
         {!!flows?.length && (
           <>
             <StyledHeadlineLarge sx={{ margin: theme.spacing(1.6) }}>
-              {t('activityFlows')}
+              {activityFlowId ? t('selectResponse') : t('selectActivityFlowAndResponse')}
             </StyledHeadlineLarge>
             {flows.map((flow, index) => (
               <ReviewMenuItem

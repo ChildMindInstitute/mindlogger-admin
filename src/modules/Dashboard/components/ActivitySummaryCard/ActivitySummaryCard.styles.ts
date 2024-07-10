@@ -1,15 +1,16 @@
 import { styled } from '@mui/material';
+import { MouseEventHandler } from 'react';
 
-import {
-  StyledFlexAllCenter,
-  StyledFlexSpaceBetween,
-  StyledHeadline,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledFlexSpaceBetween, StyledHeadline, theme, variables } from 'shared/styles';
 
 export const StyledContainer = styled(StyledFlexSpaceBetween)(
-  ({ showStats = false }: { showStats?: boolean }) => ({
+  ({
+    showStats = false,
+    onClick = undefined,
+  }: {
+    showStats?: boolean;
+    onClick?: MouseEventHandler<HTMLDivElement>;
+  }) => ({
     flexDirection: 'column',
     gap: theme.spacing(3.2),
     padding: theme.spacing(2.4),
@@ -17,23 +18,14 @@ export const StyledContainer = styled(StyledFlexSpaceBetween)(
     height: showStats ? '44rem' : undefined,
     border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
     borderRadius: variables.borderRadius.lg2,
+    cursor: onClick ? 'pointer' : 'default',
+    transition: variables.transitions.bgColor,
+
+    '&:hover': {
+      background: onClick ? variables.palette.on_surface_variant_alfa8 : 'inherit',
+    },
   }),
 );
-
-export const StyledImageContainer = styled(StyledFlexAllCenter)`
-  min-width: 8rem;
-  width: 8rem;
-  height: 8rem;
-  background-color: ${variables.palette.primary_container};
-  border-radius: ${variables.borderRadius.md};
-  overflow: hidden;
-`;
-
-export const StyledImg = styled('img')`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
 
 export const StyledActivityName = styled(StyledHeadline)`
   display: -webkit-box;

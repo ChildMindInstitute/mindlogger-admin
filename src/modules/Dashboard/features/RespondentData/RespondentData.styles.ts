@@ -7,7 +7,7 @@ export const StyledMenu = styled(StyledFlexColumn)`
   height: 100%;
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  padding: ${theme.spacing(4.8, 1.6)};
+  padding: ${theme.spacing(2.4, 1.6)};
   overflow-y: auto;
 
   ${theme.breakpoints.down('xl')} {

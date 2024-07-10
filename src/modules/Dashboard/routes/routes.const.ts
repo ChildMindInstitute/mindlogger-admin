@@ -109,4 +109,12 @@ export const participantActivityDetailsRoutes = [
     path: page.appletParticipantActivityDetailsDataReview,
     Component: RespondentDataReview,
   },
+  {
+    path: page.appletParticipantActivityDetailsFlowDataSummary,
+    Component: RespondentDataSummary,
+  },
+  {
+    path: page.appletParticipantActivityDetailsFlowDataReview,
+    Component: RespondentDataReview,
+  },
 ];
