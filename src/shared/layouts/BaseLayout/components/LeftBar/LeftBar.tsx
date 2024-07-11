@@ -18,6 +18,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
 import { useIntegrationToggle } from './useIntegrationToggle';
+import { getWorkspaceNames } from './LeftBar.utils';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -44,12 +45,12 @@ export const LeftBar = () => {
     navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
   };
 
-  const fetchFeatureFlags = async (ownerId: string) => {
+  const fetchFeatureFlags = async (workspaceNames: string[], ownerId: string) => {
     try {
       setAreFeatureFlagsLoaded(false);
       setFeatureFlags(undefined);
 
-      const featureFlags = await FeatureFlags.updateWorkspace(ownerId);
+      const featureFlags = await FeatureFlags.updateWorkspace(workspaceNames, ownerId);
 
       setFeatureFlags(featureFlags);
     } finally {
@@ -58,23 +59,32 @@ export const LeftBar = () => {
   };
 
   useEffect(() => {
-    dispatch(workspaces.thunk.getWorkspaces());
+    const fetchWorkspaces = async () => {
+      const { getWorkspaces } = workspaces.thunk;
+      const workspacesResult = await dispatch(getWorkspaces());
+
+      if (getWorkspaces.fulfilled.match(workspacesResult)) {
+        const {
+          payload: { data },
+        } = workspacesResult;
+
+        const ownerWorkspace = (data?.result as Workspace[])?.find((item) => item.ownerId === id);
+        const storageWorkspace = authStorage.getWorkspace();
+        const currentWorkspace = storageWorkspace || ownerWorkspace;
+        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+
+        if (!currentWorkspace?.ownerId) return;
+
+        const workspaceNames = getWorkspaceNames(data.result);
+
+        await FeatureFlags.updateWorkspaces(workspaceNames, currentWorkspace.ownerId);
+        fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
+      }
+    };
+
+    fetchWorkspaces();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (workspacesData?.length) {
-      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-      const storageWorkspace = authStorage.getWorkspace();
-      const currentWorkspace = storageWorkspace || ownerWorkspace;
-      dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
-
-      if (!currentWorkspace?.ownerId) return;
-
-      fetchFeatureFlags(currentWorkspace.ownerId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspacesData]);
 
   useEffect(() => {
     const { workspace } = location.state ?? {};
@@ -83,9 +93,9 @@ export const LeftBar = () => {
       authStorage.setWorkspace(workspace);
       dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 
-      if (!workspace?.ownerId) return;
+      if (!workspace?.ownerId || !workspacesData) return;
 
-      fetchFeatureFlags(workspace.ownerId);
+      fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);

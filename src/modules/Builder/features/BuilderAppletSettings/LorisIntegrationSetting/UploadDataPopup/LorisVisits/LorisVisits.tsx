@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -55,18 +55,13 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
     [setValue, visitsForm],
   );
 
-  const tableRows = useMemo(
-    () =>
-      getLorisActivitiesRows({
-        control,
-        trigger,
-        visitsList,
-        visitsForm,
-        handleChangeVisit,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [control, trigger, visitsList, visitsForm],
-  );
+  const tableRows = getLorisActivitiesRows({
+    control,
+    trigger,
+    visitsList,
+    visitsForm,
+    handleChangeVisit,
+  });
 
   return (
     <>

@@ -17,20 +17,22 @@ export const FeatureFlags = {
       userId,
     });
   },
-  async updateWorkspace(workspaceId: string) {
-    if (!_userId) return;
-
-    return this.identify({
-      userId: _userId,
-      workspaceId,
-    });
-  },
-  async updateWorkspaces(workspaces: string[]) {
+  async updateWorkspace(workspaces: string[], workspaceId: string) {
     if (!_userId) return;
 
     return this.identify({
       userId: _userId,
       workspaces,
+      workspaceId,
+    });
+  },
+  async updateWorkspaces(workspaces: string[], workspaceId: string) {
+    if (!_userId) return;
+
+    return this.identify({
+      userId: _userId,
+      workspaces,
+      workspaceId,
     });
   },
   async identify(context: { userId?: string; workspaces?: string[]; workspaceId?: string }) {
