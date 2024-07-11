@@ -249,6 +249,7 @@ export const Uploader = ({
         disabled={disabled}
         onClick={() => uploadInputRef?.current?.click()}
         sx={{ ...wrapperStyles }}
+        type="button"
         {...dragEvents}
       >
         {isLoading && <Spinner uiType={spinnerUiType} />}
