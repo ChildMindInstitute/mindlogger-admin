@@ -3,13 +3,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Modal } from './Modal';
 
 const mockOnClose = jest.fn();
+const mockOnBackdropClick = jest.fn();
 const mockOnSubmit = jest.fn();
 const mockOnSecondBtnSubmit = jest.fn();
 const mockOnThirdBtnSubmit = jest.fn();
+const mockOnLeftBtnSubmit = jest.fn();
 
 const commonProps = {
   'data-testid': 'modal-test-id',
   onClose: mockOnClose,
+  onBackdropClick: mockOnBackdropClick,
   open: true,
   title: 'Modal Title',
   buttonText: 'Submit',
@@ -17,13 +20,20 @@ const commonProps = {
   onSubmit: mockOnSubmit,
   onSecondBtnSubmit: mockOnSecondBtnSubmit,
   onThirdBtnSubmit: mockOnThirdBtnSubmit,
+  onLeftBtnSubmit: mockOnLeftBtnSubmit,
   secondBtnText: 'secondBtnText',
   thirdBtnText: 'thirdBtnText',
+  leftBtnText: 'leftBtnText',
   hasSecondBtn: true,
   hasThirdBtn: true,
+  hasLeftBtn: true,
 };
 
 describe('Modal', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('should render the modal with all elements', () => {
     render(<Modal {...commonProps} />);
 
@@ -43,6 +53,15 @@ describe('Modal', () => {
     });
   });
 
+  test('clicking the overlay triggers onBackdropClick', async () => {
+    render(<Modal {...commonProps} />);
+
+    fireEvent.click(screen.getByTestId(`${commonProps['data-testid']}-backdrop`));
+    await waitFor(() => {
+      expect(mockOnBackdropClick).toHaveBeenCalled();
+    });
+  });
+
   test('clicking the submit button triggers onSubmit', async () => {
     render(<Modal {...commonProps} />);
 
@@ -52,7 +71,7 @@ describe('Modal', () => {
     });
   });
 
-  test('clicking the submit button2 triggers onSubmit2', async () => {
+  test('clicking the second submit button triggers onSecondBtnSubmit', async () => {
     render(<Modal {...commonProps} />);
 
     fireEvent.click(screen.getByText(commonProps.secondBtnText));
@@ -61,12 +80,21 @@ describe('Modal', () => {
     });
   });
 
-  test('clicking the submit button3 triggers onSubmit3', async () => {
+  test('clicking the third submit button triggers onThirdBtnSubmit', async () => {
     render(<Modal {...commonProps} />);
 
     fireEvent.click(screen.getByText(commonProps.thirdBtnText));
     await waitFor(() => {
       expect(mockOnThirdBtnSubmit).toHaveBeenCalled();
+    });
+  });
+
+  test('clicking the left submit button triggers onLeftBtnSubmit', async () => {
+    render(<Modal {...commonProps} />);
+
+    fireEvent.click(screen.getByText(commonProps.leftBtnText));
+    await waitFor(() => {
+      expect(mockOnLeftBtnSubmit).toHaveBeenCalled();
     });
   });
 });

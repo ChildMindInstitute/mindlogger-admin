@@ -10,8 +10,9 @@ const {
 } = variables;
 
 export const StyledGroupName = styled(ListItem, shouldForwardProp)`
-  padding: ${theme.spacing(1.6)};
-  border-top: ${borderWidth.md} solid ${palette.outline_variant};
+  margin-top: ${theme.spacing(0.8)};
+  padding: ${theme.spacing(2, 2, 1.2)};
+  border-top: ${borderWidth.md} solid ${palette.surface_variant};
   background-color: transparent;
   font-size: ${size.md};
   line-height: ${lineHeight.md};
@@ -60,7 +61,7 @@ export const StyledSelect = styled(Select)`
 `;
 
 export const StyledListSubheader = styled(ListItem)`
-  padding: ${theme.spacing(0, 1.6)};
+  padding: ${theme.spacing(0, 2)};
 
   form {
     width: 100%;

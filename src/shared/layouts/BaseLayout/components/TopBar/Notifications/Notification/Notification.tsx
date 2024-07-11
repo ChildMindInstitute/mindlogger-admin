@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
-import { useEncryptionStorage } from 'shared/hooks';
 import { Svg } from 'shared/components/Svg';
-import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
 import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
 import { alerts } from 'shared/state';
@@ -43,16 +40,12 @@ export const Notification = ({
   timeAgo,
   isWatched,
   subjectId,
-  encryption,
   alert,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const isActive = currentId === id;
-  const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const navigate = useNavigate();
-  const { getAppletPrivateKey } = useEncryptionStorage();
-  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const dataTestid = `notification-${id}`;
 
   const handleNotificationClick = async () => {
@@ -79,20 +72,11 @@ export const Notification = ({
 
   const navigateToResponseData = () => {
     navigate(
-      generatePath(page.appletRespondentDataSummary, {
+      generatePath(page.appletParticipantActivities, {
         appletId,
-        respondentId: subjectId,
+        subjectId,
       }),
     );
-  };
-  const handleToResponseDataClick = () => {
-    if (hasEncryptionCheck) return navigateToResponseData();
-    setPasswordPopupVisible(true);
-  };
-
-  const handleSubmit = () => {
-    setPasswordPopupVisible(false);
-    navigateToResponseData();
   };
 
   return (
@@ -155,7 +139,7 @@ export const Notification = ({
             <StyledBtn
               variant="contained"
               startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
-              onClick={handleToResponseDataClick}
+              onClick={navigateToResponseData}
               aria-label="takeMeToTheResponseData"
             >
               {t('takeMeToTheResponseData')}
@@ -171,16 +155,6 @@ export const Notification = ({
           </StyledTimeAgo>
         </StyledBottomSection>
       </StyledNotification>
-      {passwordPopupVisible && (
-        <AppletPasswordPopup
-          appletId={appletId ?? ''}
-          popupVisible={passwordPopupVisible}
-          onClose={() => setPasswordPopupVisible(false)}
-          encryption={encryption}
-          submitCallback={handleSubmit}
-          data-testid="notification-password-popup"
-        />
-      )}
     </>
   );
 };

@@ -1,17 +1,19 @@
+import { TableCellProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { Cell, HeadCell } from 'shared/types/table';
 
-export type RowContent = Cell & {
-  content: (item?: Row) => ReactNode;
-  value: string | number | boolean;
-  onClick?: () => void;
-  width?: string;
+export interface CellContent extends Omit<TableCellProps, 'content'>, Cell {
+  content?: (item?: Row) => ReactNode;
   contentWithTooltip?: ReactNode;
-};
+  isHidden?: boolean;
+  maxWidth?: string;
+  value: string | number | boolean;
+  width?: string;
+}
 
 export type Row = {
-  [name: string]: RowContent;
+  [name: string]: CellContent;
 };
 
 export enum UiType {
@@ -24,6 +26,7 @@ export enum UiType {
 export type TableProps = {
   columns: HeadCell[];
   rows: Row[] | undefined;
+  keyExtractor?: (row: Row, index: number) => string;
   orderBy: string;
   maxHeight?: string;
   uiType?: UiType;

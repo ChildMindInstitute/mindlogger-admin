@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import userEvent from '@testing-library/user-event';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -16,10 +16,13 @@ import {
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
+import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
 
 import { EditAccessPopup } from './ManagersEditAccessPopup';
 
 const onCloseMock = jest.fn();
+const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+
 const user = {
   ...mockedUserData,
   roles: ['manager'],
@@ -95,6 +98,10 @@ const preloadedState = {
 };
 
 describe('EditAccessPopup component', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   test('renders modal with correct content', () => {
     renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
       preloadedState,
@@ -120,14 +127,29 @@ describe('EditAccessPopup component', () => {
   });
 
   test('submits form when save button is clicked', async () => {
-    renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
-      preloadedState,
-      route,
-      routePath,
+    mockAxios.delete.mockResolvedValueOnce({
+      data: null,
     });
+    mockAxios.post.mockResolvedValueOnce({
+      data: null,
+    });
+
+    const { store } = renderWithProviders(
+      <EditAccessPopup user={user} popupVisible onClose={onCloseMock} />,
+      {
+        preloadedState,
+        route,
+        routePath,
+      },
+    );
 
     const saveButton = screen.getByTestId(`${dataTestid}-access-popup-submit-button`);
     await userEvent.click(saveButton);
+
+    expect(mixpanelTrack).toBeCalledWith('Edit Team Member form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: user.roles,
+    });
 
     expect(mockAxios.delete).toBeCalledWith('/workspaces/managers/removeAccess', {
       data: {
@@ -150,14 +172,31 @@ describe('EditAccessPopup component', () => {
       },
       { signal: undefined },
     );
+
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+
+    expect(mixpanelTrack).toBeCalledWith('Team Member edited successfully', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: user.roles,
+    });
   });
 
   test('changes the role to reviewer', async () => {
-    renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
-      preloadedState,
-      route,
-      routePath,
+    mockAxios.delete.mockResolvedValueOnce({
+      data: null,
     });
+    mockAxios.post.mockResolvedValueOnce({
+      data: null,
+    });
+
+    const { store } = renderWithProviders(
+      <EditAccessPopup user={user} popupVisible onClose={onCloseMock} />,
+      {
+        preloadedState,
+        route,
+        routePath,
+      },
+    );
 
     const removeRoleButton = screen.getByTestId('chip-close-button');
     await userEvent.click(removeRoleButton);
@@ -180,6 +219,8 @@ describe('EditAccessPopup component', () => {
       ),
     ).toBeInTheDocument();
 
+    mockAxios.get.mockResolvedValue(preloadedState.users.allRespondents);
+
     const editRole = screen.getByTestId(`${dataTestid}-access-edit-role`);
     expect(editRole).toBeInTheDocument();
     expect(editRole).toHaveTextContent('Edit Respondents');
@@ -200,6 +241,11 @@ describe('EditAccessPopup component', () => {
     await userEvent.click(selectRespondentsSaveButton);
 
     await userEvent.click(saveButton);
+
+    expect(mixpanelTrack).toBeCalledWith('Edit Team Member form submitted', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: [Roles.Reviewer],
+    });
 
     expect(mockAxios.delete).toBeCalledWith('/workspaces/managers/removeAccess', {
       data: {
@@ -222,5 +268,12 @@ describe('EditAccessPopup component', () => {
       },
       { signal: undefined },
     );
+
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+
+    expect(mixpanelTrack).toBeCalledWith('Team Member edited successfully', {
+      [MixpanelProps.AppletId]: mockedAppletId,
+      [MixpanelProps.Roles]: [Roles.Reviewer],
+    });
   });
 });

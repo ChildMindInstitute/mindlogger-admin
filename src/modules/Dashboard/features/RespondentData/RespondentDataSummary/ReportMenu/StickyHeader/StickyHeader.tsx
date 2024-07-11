@@ -14,7 +14,7 @@ export const StickyHeader = ({
   containerRef,
   'data-testid': dataTestid = '',
 }: StickyHeaderProps) => {
-  const respondentLabel = useRespondentLabel(true);
+  const respondentLabel = useRespondentLabel({ isSubject: true });
   const isHeaderSticky = useHeaderSticky(
     containerRef,
     OFFSET_TO_SET_STICKY / 2,

@@ -70,7 +70,7 @@ describe('Respondents component tests', () => {
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText(/No Respondents yet/)).toBeInTheDocument();
+      expect(screen.getByTestId('empty-dashboard-table')).toBeInTheDocument();
     });
   });
 
@@ -87,7 +87,9 @@ describe('Respondents component tests', () => {
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+      expect(
+        screen.getByText('You do not have permission to view this content.'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -164,7 +166,6 @@ describe('Respondents component tests', () => {
   describe('should appear popup when click on respondent action for ', () => {
     test.each`
       actionDataTestId                         | popupDataTestId                                       | description
-      ${'dashboard-respondents-view-data'}     | ${'dashboard-respondents-view-data-popup'}            | ${'view data'}
       ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}        | ${'view calendar'}
       ${'dashboard-respondents-export-data'}   | ${'dashboard-respondents-export-data-popup-password'} | ${'export data'}
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
@@ -183,6 +184,25 @@ describe('Respondents component tests', () => {
     });
   });
 
+  test('shows view participant popup on the dashboard respondents page', async () => {
+    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    renderWithProviders(<Respondents />, {
+      preloadedState,
+      route: page.dashboardRespondents,
+      routePath: page.dashboardRespondents,
+    });
+
+    await clickActionDots();
+    const action = await waitFor(() => screen.getByTestId('dashboard-respondents-view-data'));
+    fireEvent.click(action);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('dashboard-respondents-view-participant-popup'),
+      ).toBeInTheDocument();
+    });
+  });
+
   test('should search respondents', async () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
@@ -193,13 +213,14 @@ describe('Respondents component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toBeCalledWith(
+      expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
         {
           params: {
             limit: 20,
             page: 1,
             search: mockedSearchValue,
+            ordering: '-isPinned,+tags',
           },
           signal: undefined,
         },

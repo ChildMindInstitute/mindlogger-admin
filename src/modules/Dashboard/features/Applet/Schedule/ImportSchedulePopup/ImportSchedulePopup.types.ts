@@ -3,7 +3,8 @@ import { ScheduleExportCsv, ScheduleExportItem } from '../Schedule.types';
 export type ImportSchedulePopupProps = {
   isIndividual?: boolean;
   appletName: string;
-  respondentName: string;
+  respondentId?: string;
+  respondentName?: string;
   open: boolean;
   onClose: () => void;
   onDownloadTemplate: () => void;

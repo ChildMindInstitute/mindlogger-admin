@@ -10,6 +10,7 @@ export type ConditionItem = {
   value: string;
   labelKey: string;
   responseValues?: SingleAndMultipleSelectItemResponseValues | SliderItemResponseValues;
+  question: string;
 };
 
 export type ConditionProps = {

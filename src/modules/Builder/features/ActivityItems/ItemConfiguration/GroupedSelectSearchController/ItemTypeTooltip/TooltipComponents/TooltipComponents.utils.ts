@@ -3,7 +3,7 @@ export const getSelectionSvgId = (index: number, isSingleSelection: boolean) => 
     return index === 1 ? 'radio-button-outline' : 'radio-button-empty-outline';
   }
 
-  return index === 2 ? 'checkbox-empty-outline' : 'checkbox-filled';
+  return index === 2 ? 'checkbox-empty-outlined' : 'checkbox-filled';
 };
 
 export const getSelectionPerRowSvgId = (
@@ -23,5 +23,5 @@ export const getSelectionPerRowSvgId = (
     (rowIndex === 2 && (colIndex === 1 || colIndex === 2)) ||
     (rowIndex === 3 && colIndex === 1)
     ? 'checkbox-filled'
-    : 'checkbox-empty-outline';
+    : 'checkbox-empty-outlined';
 };

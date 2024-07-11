@@ -79,7 +79,7 @@ describe('useDatavizSummaryRequests', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      respondentId: mockedRespondentId,
+      subjectId: mockedRespondentId,
     });
     const mockedGetDecryptedIdentifiers = jest.spyOn(
       useDecryptedIdentifiersHook,
@@ -136,7 +136,7 @@ describe('useDatavizSummaryRequests', () => {
 
   test.each`
     activityProps                  | hasParams | description
-    ${{}}                          | ${false}  | ${'missing appletId or respondentId'}
+    ${{}}                          | ${false}  | ${'missing appletId or subjectId'}
     ${{ hasAnswer: false }}        | ${true}   | ${'activity without answers'}
     ${{ isPerformanceTask: true }} | ${true}   | ${'performance task activity'}
   `('should not fetch answers when $description', async ({ activityProps, hasParams }) => {

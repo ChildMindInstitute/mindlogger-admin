@@ -1,12 +1,10 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from './Schedule.const';
 
 export const StyledSchedule = styled(Box)`
-  margin: ${theme.spacing(-2.4, -2.1, -1.6)};
   display: flex;
   flex-grow: 1;
   height: 100%;
