@@ -55,7 +55,19 @@ describe('renderItemContent', () => {
 
     const itemTitle = screen.getByTestId('item-option-title');
     expect(itemTitle).toBeInTheDocument();
-    expect(itemTitle).toHaveTextContent('Text');
+    expect(itemTitle).toHaveTextContent('Short Text');
+  });
+
+  test('should render titles for paragraphText response type', () => {
+    const paragraphTextItem: Item = {
+      responseType: ItemResponseType.ParagraphText,
+    };
+
+    renderWithProviders(renderItemContent(paragraphTextItem, ''));
+
+    const itemTitle = screen.getByTestId('item-option-title');
+    expect(itemTitle).toBeInTheDocument();
+    expect(itemTitle).toHaveTextContent('Paragraph Text');
   });
 });
 

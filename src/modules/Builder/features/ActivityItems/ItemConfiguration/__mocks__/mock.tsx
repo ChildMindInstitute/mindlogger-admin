@@ -450,6 +450,22 @@ export const mockedEmptyText = {
   alerts: [],
   responseValues: {},
 };
+
+export const mockedEmptyParagraphText = {
+  responseType: 'paragraphText',
+  name: 'Item',
+  question: '',
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    maxResponseLength: 1000,
+    responseRequired: false,
+  },
+  isHidden: false,
+  allowEdit: true,
+  alerts: [],
+  responseValues: {},
+};
 export const mockedEmptyDrawing = {
   responseType: 'drawing',
   name: 'Item',

@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components/Svg';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, textLanguageKey } from 'shared/consts';
 
 export const ItemResponseTypes = {
   [ItemResponseType.SingleSelection]: {
@@ -38,7 +38,11 @@ export const ItemResponseTypes = {
     icon: <Svg id="slider-rows" />,
     title: ItemResponseType.SliderRows,
   },
-  [ItemResponseType.Text]: { icon: <Svg id="text" />, title: ItemResponseType.Text },
+  [ItemResponseType.Text]: { icon: <Svg id="text" />, title: textLanguageKey },
+  [ItemResponseType.ParagraphText]: {
+    icon: <Svg id="paragraph-text" />,
+    title: ItemResponseType.ParagraphText,
+  },
   [ItemResponseType.Drawing]: { icon: <Svg id="drawing" />, title: ItemResponseType.Drawing },
   [ItemResponseType.Photo]: { icon: <Svg id="camera-outline" />, title: ItemResponseType.Photo },
   [ItemResponseType.Video]: { icon: <Svg id="video" />, title: ItemResponseType.Video },
