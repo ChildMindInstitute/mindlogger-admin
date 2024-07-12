@@ -7,7 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Modal } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
-import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
+import {
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledHeadline,
+  theme,
+  StyledActivityThumbnailContainer,
+  StyledActivityThumbnailImg,
+} from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import {
@@ -21,17 +28,15 @@ import {
 } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync, useLogout } from 'shared/hooks';
-import { Manager, Respondent } from 'modules/Dashboard/types';
+import { Manager, Respondent, HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { FlowSummaryThumbnail } from 'modules/Dashboard/components/FlowSummaryCard/FlowSummaryThumbnail';
+import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
 
-import { HydratedActivityFlow } from '../FlowGrid/FlowGrid.types';
 import {
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
@@ -403,9 +408,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
     let thumbnail: ReactNode = null;
     if ('activities' in activityOrFlow) {
-      thumbnail = <FlowSummaryThumbnail activities={activityOrFlow.activities} />;
+      thumbnail = <ActivityFlowThumbnail activities={activityOrFlow.activities} />;
     } else if (activityOrFlow.image) {
-      thumbnail = <StyledImg src={activityOrFlow.image} alt={activityOrFlow.name} />;
+      thumbnail = (
+        <StyledActivityThumbnailImg src={activityOrFlow.image} alt={activityOrFlow.name} />
+      );
     }
 
     return (
@@ -425,7 +432,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       >
         <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
           <StyledFlexTopCenter gap={2.4}>
-            <StyledImageContainer>{thumbnail}</StyledImageContainer>
+            <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
             <StyledHeadline sx={{ flexGrow: 1 }}>{activityOrFlow.name}</StyledHeadline>
           </StyledFlexTopCenter>
           <StyledFlexColumn gap={2.4}>

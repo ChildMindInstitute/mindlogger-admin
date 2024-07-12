@@ -35,14 +35,16 @@ export const ActivityGrid = ({
           {rows.map((activity) => (
             <ActivitySummaryCard
               key={String(activity.id.value)}
-              name={String(activity.name.value)}
-              image={String(activity.image.value)}
+              activity={{
+                id: String(activity.id.value),
+                name: String(activity.name.value),
+                image: String(activity.image.value),
+              }}
               actionsMenu={activity.actions.content?.()}
               compliance={activity.compliance.content?.()}
               participantCount={activity.participantCount.content?.()}
               latestActivity={activity.latestActivity.content?.()}
               data-testid={`${dataTestId}-activity-card`}
-              activityId={String(activity.id.value)}
               onClick={onClickItem}
             />
           ))}

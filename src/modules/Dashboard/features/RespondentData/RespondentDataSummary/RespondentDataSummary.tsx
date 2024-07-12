@@ -9,7 +9,7 @@ import { useAsync } from 'shared/hooks';
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { setDateRangeFormValues } from './utils/setDateRangeValues';
-import { RespondentsDataFormValues } from '../RespondentData.types';
+import { ActivityOrFlow, RespondentsDataFormValues } from '../RespondentData.types';
 import { getConcatenatedEntities, getEntityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
 import { StyledReportContainer } from './RespondentDataSummary.styles';
@@ -17,8 +17,8 @@ import { ReportContent } from './ReportContent';
 import { useRespondentDataContext } from '../RespondentDataContext';
 
 export const RespondentDataSummary = () => {
-  const { appletId, subjectId, activityId } = useParams();
-  const viewSingleActivity = !!activityId;
+  const { appletId, subjectId, activityId, activityFlowId } = useParams();
+  const viewSingleEntity = !!activityId || !!activityFlowId;
   const {
     summaryActivities,
     setSummaryActivities,
@@ -74,11 +74,19 @@ export const RespondentDataSummary = () => {
         flows: summaryFlows,
       });
 
-      const selectedEntityByDefault = viewSingleActivity
-        ? summaryActivities?.find((e) => e.id === activityId)
-        : {
-            ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
-          };
+      let selectedEntityByDefault: ActivityOrFlow | undefined;
+      if (viewSingleEntity) {
+        if (activityId) {
+          selectedEntityByDefault = summaryActivities.find(({ id }) => id === activityId);
+        } else {
+          selectedEntityByDefault = summaryFlows.find(({ id }) => id === activityFlowId);
+          if (selectedEntityByDefault) selectedEntityByDefault.isFlow = true;
+        }
+      } else {
+        selectedEntityByDefault = {
+          ...(getEntityWithLatestAnswer(summaryEntities) || summaryEntities?.[0]),
+        };
+      }
 
       if (!selectedEntityByDefault) return;
 
@@ -97,7 +105,7 @@ export const RespondentDataSummary = () => {
     <StyledContainer>
       {(!!summaryActivitiesLength || !!summaryFlowsLength) && (
         <>
-          {!viewSingleActivity && (
+          {!viewSingleEntity && (
             <ReportMenu
               activities={summaryActivities}
               flows={summaryFlows}

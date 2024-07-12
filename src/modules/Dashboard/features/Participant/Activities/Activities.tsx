@@ -22,6 +22,7 @@ import { page } from 'resources';
 import { workspaces } from 'shared/state';
 import { checkIfCanAccessData } from 'shared/utils';
 
+import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 
 const dataTestId = 'dashboard-applet-participant-activities';
@@ -38,7 +39,7 @@ export const Activities = () => {
   const [activityId, setActivityId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
-  const [selectedActivityId, setSelectedActivityId] = useState<string | undefined>();
+  const [selectedActivityOrFlowId, setSelectedActivityOrFlowId] = useState<ActivityOrFlowId>();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
@@ -115,32 +116,38 @@ export const Activities = () => {
 
   const canAccessData = checkIfCanAccessData(roles);
 
-  const onClickItemHandler = (activityId: string) => {
-    setSelectedActivityId(activityId);
+  const handleClickActivity = (activityOrFlowId: ActivityOrFlowId) => {
+    setSelectedActivityOrFlowId(activityOrFlowId);
 
     if (!hasEncryptionCheck) {
       setViewDataPopupVisible(true);
 
       return;
     }
-    navigateToData(activityId);
+    navigateToData(activityOrFlowId);
   };
 
-  const navigateToData = (activityId?: string) => {
-    if (!subjectId || !appletId || !activityId) return;
+  const navigateToData = (activityOrFlowId: ActivityOrFlowId) => {
+    if (!subjectId || !appletId) return;
+
     navigate(
-      generatePath(page.appletParticipantActivityDetailsDataSummary, {
-        appletId,
-        subjectId,
-        activityId,
-      }),
+      generatePath(
+        activityOrFlowId.activityId
+          ? page.appletParticipantActivityDetailsDataSummary
+          : page.appletParticipantActivityDetailsFlowDataSummary,
+        {
+          appletId,
+          subjectId,
+          ...activityOrFlowId,
+        },
+      ),
     );
   };
 
   const getClickHandler = () => {
     if (!subjectId || !appletId || !canAccessData) return undefined;
 
-    return onClickItemHandler;
+    return handleClickActivity;
   };
 
   return (
@@ -167,8 +174,10 @@ export const Activities = () => {
               <FlowGrid
                 activities={activities}
                 applet={appletData}
+                data-testid={dataTestId}
                 flows={flows}
                 subject={subject?.result}
+                onClickItem={getClickHandler()}
               />
             </StyledFlexColumn>
           )}
@@ -184,15 +193,15 @@ export const Activities = () => {
               orderBy=""
               onClickItem={getClickHandler()}
             />
-            {viewDataPopupVisible && (
+            {viewDataPopupVisible && selectedActivityOrFlowId && (
               <UnlockAppletPopup
                 appletId={appletId || ''}
                 popupVisible={viewDataPopupVisible}
                 setPopupVisible={(value) => {
                   setViewDataPopupVisible(value);
-                  setSelectedActivityId(undefined);
+                  setSelectedActivityOrFlowId(undefined);
                 }}
-                onSubmitHandler={() => navigateToData(selectedActivityId)}
+                onSubmitHandler={() => navigateToData(selectedActivityOrFlowId)}
               />
             )}
 

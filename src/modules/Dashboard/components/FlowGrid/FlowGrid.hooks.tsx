@@ -14,10 +14,9 @@ import {
   checkIfFullAccess,
   getIsWebSupported,
 } from 'shared/utils';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { RespondentDetails, HydratedActivityFlow } from 'modules/Dashboard/types';
 import { ItemResponseType } from 'shared/consts';
 
-import { HydratedActivityFlow } from './FlowGrid.types';
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
 
 type FlowsMenuActionParams = MenuActionProps<{ appletId?: string; flowId?: string }>;

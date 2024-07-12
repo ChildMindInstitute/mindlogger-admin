@@ -1,23 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import { Divider } from '@mui/material';
 
-import { StyledFlexColumn, StyledFlexSpaceBetween, StyledFlexTopStart } from 'shared/styles';
+import {
+  StyledFlexColumn,
+  StyledFlexSpaceBetween,
+  StyledFlexTopStart,
+  StyledActivityThumbnailContainer,
+  StyledActivityThumbnailImg,
+} from 'shared/styles';
 
 import { ActivitySummaryCardProps } from './ActivitySummaryCard.types';
 import { StatBox } from './StatBox';
-import {
-  StyledActivityName,
-  StyledContainer,
-  StyledImageContainer,
-  StyledImg,
-} from './ActivitySummaryCard.styles';
+import { StyledActivityName, StyledContainer } from './ActivitySummaryCard.styles';
 
 export const ActivitySummaryCard = ({
-  activityId,
+  activity: { id, name, image },
   actionsMenu,
   compliance,
-  image,
-  name,
   participantCount,
   latestActivity,
   showStats = false,
@@ -29,15 +28,12 @@ export const ActivitySummaryCard = ({
   return (
     <StyledContainer
       data-testid={dataTestId}
-      onClick={onClick ? () => onClick(activityId || '') : undefined}
-      sx={{
-        cursor: onClick ? 'pointer' : 'default',
-      }}
+      onClick={onClick && (() => onClick({ activityId: id ?? '' }))}
     >
       <StyledFlexSpaceBetween>
-        <StyledImageContainer>
-          {!!image && <StyledImg src={image} alt={name} />}
-        </StyledImageContainer>
+        <StyledActivityThumbnailContainer>
+          {!!image && <StyledActivityThumbnailImg src={image} alt={name} />}
+        </StyledActivityThumbnailContainer>
 
         {actionsMenu}
       </StyledFlexSpaceBetween>
