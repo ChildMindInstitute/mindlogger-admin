@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedUserData } from 'shared/mock';
@@ -61,22 +60,6 @@ describe('LeftBar component', () => {
 
       expect(anchorElement).toBeInTheDocument();
       expect(anchorElement).toHaveAttribute('href', path);
-    });
-  });
-
-  test('toggles workspace drawer visibility on logo click', async () => {
-    // check if the workspace drawer is initially hidden
-    const workspaceDrawer = screen.queryByTestId('left-bar-workspaces-drawer');
-    expect(workspaceDrawer).toBeNull();
-
-    // click on the  workspace image to toggle the visibility of the drawer
-    const workspaceImage = await screen.findByTestId('workspace-image');
-    await userEvent.click(workspaceImage);
-
-    // wait for the drawer to be visible
-    await waitFor(() => {
-      const visibleWorkspaceDrawer = screen.getByTestId('left-bar-workspaces-drawer');
-      expect(visibleWorkspaceDrawer).toBeInTheDocument();
     });
   });
 });

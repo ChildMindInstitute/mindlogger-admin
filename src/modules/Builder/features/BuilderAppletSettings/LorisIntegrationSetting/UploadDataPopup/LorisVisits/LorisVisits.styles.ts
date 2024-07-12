@@ -1,12 +1,8 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
 import { Table } from 'shared/components/Table';
 import { SelectController } from 'shared/components/FormComponents';
 import { theme, variables } from 'shared/styles';
-
-export const StyledLorisVisits = styled(Box)`
-  min-height: 14rem;
-`;
 
 export const StyledTable = styled(Table)`
   .visits-select {

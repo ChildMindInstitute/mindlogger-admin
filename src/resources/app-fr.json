@@ -771,7 +771,8 @@
     "visits": "Visites LORIS",
     "visitsDescription": "Veuillez vérifier si les valeurs de Visite prédéfinies sont correctes: ",
     "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès.",
-    "visitRequired": "Les lignes sélectionnées nécessitent des visites."
+    "visitRequired": "Les lignes sélectionnées nécessitent des visites.",
+    "noDataToUpload": "Il n'y a actuellement aucune nouvelle donnée disponible.\nVeuillez revenir plus tard."
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
@@ -1213,7 +1214,7 @@
   "sliderRows": "Lignes de curseurs",
   "sliderRowsHint": "Lignes d'échelles numériques avec une seule réponse",
   "smallTo": "à",
-  "softLockWarningBanner":  "<0>Pour assurer la sécurité de votre compte, vous avez été automatiquement déconnecté.</0> <1>Veuillez entrer votre mot de passe ci-dessous pour reprendre là où vous vous étiez arrêté.</1>",
+  "softLockWarningBanner": "<0>Pour assurer la sécurité de votre compte, vous avez été automatiquement déconnecté.</0> <1>Veuillez entrer votre mot de passe ci-dessous pour reprendre là où vous vous étiez arrêté.</1>",
   "sortBy": "Trier Par",
   "startDate": "Date de début",
   "startEndDate": "Date de début / Date de fin",

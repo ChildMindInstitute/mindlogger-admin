@@ -15,6 +15,8 @@ export const getScreens = ({
   onClose,
   onSubmitVisits,
   setIsLoading,
+  visitsData,
+  setVisitsData,
   setStep,
 }: ScreenParams) => [
   {
@@ -27,10 +29,12 @@ export const getScreens = ({
     onSubmit: handleAcceptAgreement,
   },
   {
-    buttonText: t('upload'),
-    width: '88',
-    content: <LorisVisits onSetIsLoading={setIsLoading} setStep={setStep} />,
-    onSubmit: onSubmitVisits,
+    buttonText: visitsData?.length ? t('upload') : t('ok'),
+    width: visitsData?.length ? '88' : '66',
+    content: (
+      <LorisVisits onSetIsLoading={setIsLoading} setVisitsData={setVisitsData} setStep={setStep} />
+    ),
+    onSubmit: visitsData?.length ? onSubmitVisits : onClose,
   },
   {
     buttonText: t('ok'),

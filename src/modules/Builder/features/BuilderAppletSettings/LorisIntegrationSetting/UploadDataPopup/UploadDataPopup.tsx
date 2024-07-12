@@ -7,7 +7,11 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledBodyMedium, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { uploadLorisUsersVisitsApi } from 'modules/Builder/api';
+import {
+  LorisActivityResponse,
+  LorisUsersVisit,
+  uploadLorisUsersVisitsApi,
+} from 'modules/Builder/api';
 
 import { filteredData, findVisitErrorMessage, getScreens } from './UploadDataPopup.utils';
 import { Steps, UploadDataForm, UploadDataPopupProps } from './UploadDataPopup.types';
@@ -22,6 +26,7 @@ export const UploadDataPopup = ({
   const { t } = useTranslation();
   const { appletId } = useParams();
   const [step, setStep] = useState<Steps>(Steps.Agreement);
+  const [visitsData, setVisitsData] = useState<LorisUsersVisit<LorisActivityResponse>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { execute: uploadLorisUsersVisits } = useAsync(
@@ -65,8 +70,25 @@ export const UploadDataPopup = ({
   const error = findVisitErrorMessage(errors);
 
   const screens = useMemo(
-    () => getScreens({ handleAcceptAgreement, onClose, onSubmitVisits, setIsLoading, setStep }),
-    [handleAcceptAgreement, onClose, onSubmitVisits, setIsLoading, setStep],
+    () =>
+      getScreens({
+        handleAcceptAgreement,
+        onClose,
+        onSubmitVisits,
+        setIsLoading,
+        visitsData,
+        setVisitsData,
+        setStep,
+      }),
+    [
+      handleAcceptAgreement,
+      onClose,
+      onSubmitVisits,
+      setIsLoading,
+      visitsData,
+      setVisitsData,
+      setStep,
+    ],
   );
 
   return (

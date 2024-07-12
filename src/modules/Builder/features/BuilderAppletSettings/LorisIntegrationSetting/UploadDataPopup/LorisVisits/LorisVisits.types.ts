@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Control, FieldValues, UseFormTrigger } from 'react-hook-form';
 
 import { CellContent } from 'shared/components';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
 
 import { Steps } from '../UploadDataPopup.types';
 
@@ -15,6 +15,7 @@ export type VisitRow = {
 
 export type LorisVisitsProps = {
   onSetIsLoading: Dispatch<SetStateAction<boolean>>;
+  setVisitsData: Dispatch<LorisUsersVisit<LorisActivityResponse>[]>;
   setStep: Dispatch<SetStateAction<Steps>>;
 };
 
@@ -30,6 +31,7 @@ export type UseFetchVisitsDataProps = {
   appletId?: string;
   onSetIsLoading: Dispatch<SetStateAction<boolean>>;
   setVisitsList: Dispatch<SetStateAction<string[]>>;
+  setVisitsData: Dispatch<LorisUsersVisit<LorisActivityResponse>[]>;
   reset: (values?: Partial<FieldValues>) => void;
   setStep: Dispatch<SetStateAction<Steps>>;
 };
