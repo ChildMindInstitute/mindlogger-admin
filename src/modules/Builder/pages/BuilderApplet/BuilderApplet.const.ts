@@ -20,6 +20,7 @@ export const ALLOWED_TYPES_IN_VARIABLES = [
   ItemResponseType.NumberSelection,
   ItemResponseType.TimeRange,
   ItemResponseType.Text,
+  ItemResponseType.ParagraphText,
 ];
 
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];

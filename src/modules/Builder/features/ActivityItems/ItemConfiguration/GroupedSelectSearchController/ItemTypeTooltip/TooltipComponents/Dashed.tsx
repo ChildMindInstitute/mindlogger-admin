@@ -27,6 +27,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
 
   const getContent = () => ({
     [DashedUiType.Text]: <StyledEnterText>{t('enterText')}...</StyledEnterText>,
+    [DashedUiType.ParagraphText]: <StyledEnterText>{t('enterText')}...</StyledEnterText>,
     [DashedUiType.Drawing]: <Svg id="drawing-star" width="46" height="44" />,
     [DashedUiType.Photo]: (
       <>
@@ -82,6 +83,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
 
   const getText = () => ({
     [DashedUiType.Text]: t('textHint'),
+    [DashedUiType.ParagraphText]: t('paragraphTextHint'),
     [DashedUiType.Drawing]: t('drawingHint'),
     [DashedUiType.Photo]: t('photoHint'),
     [DashedUiType.Video]: t('videoHint'),

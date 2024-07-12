@@ -1,6 +1,10 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { DEFAULT_MAX_CHARACTERS, DEFAULT_DISABLED_TIMER_VALUE } from '../ItemConfiguration.const';
+import {
+  DEFAULT_MAX_CHARACTERS,
+  DEFAULT_DISABLED_TIMER_VALUE,
+  DEFAULT_MAX_CHARACTERS_PARAGRAPH,
+} from '../ItemConfiguration.const';
 
 export const DEFAULT_OPTION_VALUE = 0;
 export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
@@ -18,6 +22,7 @@ export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SliderRows,
   ItemResponseType.Text,
+  ItemResponseType.ParagraphText,
   ItemResponseType.Drawing,
   ItemResponseType.Photo,
   ItemResponseType.Video,
@@ -60,6 +65,13 @@ export const defaultTextConfig = {
   correctAnswer: '',
   numericalResponseRequired: false,
   responseDataIdentifier: false,
+  responseRequired: false,
+};
+
+export const defaultParagraphTextConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  maxResponseLength: DEFAULT_MAX_CHARACTERS_PARAGRAPH,
   responseRequired: false,
 };
 

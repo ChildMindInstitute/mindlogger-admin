@@ -24,6 +24,7 @@ import {
   getGroupValueText,
   getIsNotHaveSearchValue,
   getIsOnlyMobileValue,
+  getItemLanguageKey,
   handleSearchKeyDown,
 } from './GroupedSelectSearchController.utils';
 
@@ -122,7 +123,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                       <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
                         {itemsTypeIcons[value]}
                       </StyledFlexTopCenter>
-                      {t(value)}
+                      {t(getItemLanguageKey(value))}
                       {getIsOnlyMobileValue(value) && mobileOnly}
                     </StyledFlexTopCenter>
                   </StyledFlexTopCenter>

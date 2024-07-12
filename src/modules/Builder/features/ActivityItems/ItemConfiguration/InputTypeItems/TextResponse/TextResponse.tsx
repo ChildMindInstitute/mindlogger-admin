@@ -4,20 +4,22 @@ import get from 'lodash.get';
 
 import { InputController } from 'shared/components/FormComponents';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { TEXTAREA_ROWS_COUNT } from 'shared/consts';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import {
+  StyledInputWrapper,
   StyledMaxCharacters,
   StyledRow,
   StyledTextField,
-  StyledInputWrapper,
 } from './TextResponse.styles';
-import { TextResponseProps } from './TextResponse.types';
+import { TextResponseProps, TextResponseUiType } from './TextResponse.types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { MIN_TEXT_RESPONSE_LENGTH } from './TextResponse.const';
 
-export const TextResponse = ({ name }: TextResponseProps) => {
+export const TextResponse = ({ name, uiType }: TextResponseProps) => {
   const { t } = useTranslation('app');
+  const isShortTextUiType = uiType === TextResponseUiType.ShortText;
 
   const { control, watch, setValue, trigger } = useCustomFormContext();
   const responseLengthName = `${name}.config.maxResponseLength`;
@@ -25,7 +27,9 @@ export const TextResponse = ({ name }: TextResponseProps) => {
   const settings = watch(`${name}.config`);
   const maxResponseLength = watch(responseLengthName);
   const correctAnswer = watch(correctAnswerName);
-  const dataTestid = 'builder-activity-items-item-configuration-text-response';
+  const dataTestid = isShortTextUiType
+    ? 'builder-activity-items-item-configuration-text-response'
+    : 'builder-activity-items-item-configuration-paragraph-text-response';
 
   const handleResponseLengthChange = (value: number) => {
     setValue(responseLengthName, value);
@@ -42,12 +46,15 @@ export const TextResponse = ({ name }: TextResponseProps) => {
     handleResponseLengthChange(newValue);
   };
 
-  const isCorrectAnswerRequired = get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
+  const isCorrectAnswerRequired =
+    isShortTextUiType && get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
 
   return (
     <ItemOptionContainer
-      title={t('textResponseTitle')}
-      description={t('textResponseDescription')}
+      title={t(isShortTextUiType ? 'textResponse' : 'paragraphTextResponse')}
+      description={t(
+        isShortTextUiType ? 'textResponseDescription' : 'paragraphTextResponseDescription',
+      )}
       data-testid={dataTestid}
     >
       <StyledRow>
@@ -56,6 +63,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
           variant="outlined"
           value={t('text')}
           data-testid={`${dataTestid}-input`}
+          {...(!isShortTextUiType && { multiline: true, rows: TEXTAREA_ROWS_COUNT })}
         />
         <StyledMaxCharacters>
           <InputController

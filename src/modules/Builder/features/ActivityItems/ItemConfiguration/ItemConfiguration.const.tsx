@@ -35,6 +35,7 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 300;
+export const DEFAULT_MAX_CHARACTERS_PARAGRAPH = 1000;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 
 export const itemsTypeOptions: ItemsOptionGroup[] = [
@@ -89,6 +90,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
+      {
+        value: ItemResponseType.ParagraphText,
+        icon: itemsTypeIcons[ItemResponseType.ParagraphText],
+      },
       {
         value: ItemResponseType.Drawing,
         icon: itemsTypeIcons[ItemResponseType.Drawing],

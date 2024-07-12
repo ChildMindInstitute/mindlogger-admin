@@ -26,6 +26,7 @@ const tooltipTexts = {
   Time: 'Time selection in the format HH:MM.',
   TimeRange: 'Time Range selection in the format Start Time HH:MM - End Time HH:MM.',
   Text: 'Text input field.',
+  ParagraphText: 'Paragraph text input field.',
   Drawing: 'Drawing task.',
   Photo: 'Photo capture task.',
   Video: 'Video capture task.',

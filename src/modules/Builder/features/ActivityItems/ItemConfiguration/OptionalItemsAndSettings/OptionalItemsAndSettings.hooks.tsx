@@ -6,48 +6,50 @@ import { ItemResponseType } from 'shared/consts';
 import { Config } from 'shared/state';
 
 import {
-  TextResponse,
-  SliderRows,
   AudioPlayer,
   AudioRecord,
   Date,
   Drawing,
   Geolocation,
   NumberSelection,
-  VideoResponse,
   PhotoResponse,
   SelectionRows,
+  SliderRows,
+  TextResponse,
+  TextResponseUiType,
   Time,
+  VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import {
-  defaultTextConfig,
-  defaultSliderConfig,
-  defaultSliderRowsConfig,
   defaultAudioAndVideoConfig,
   defaultAudioPlayerConfig,
-  defaultSingleAndMultiSelectionRowsConfig,
-  defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
-  defaultTimeConfig,
-  defaultPhotoConfig,
   defaultGeolocationConfig,
   defaultMessageConfig,
-  defaultSingleSelectionConfig,
   defaultMultiSelectionConfig,
+  defaultNumberSelectionConfig,
+  defaultParagraphTextConfig,
+  defaultPhotoConfig,
+  defaultSingleAndMultiSelectionRowsConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultSliderRowsConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
 } from './OptionalItemsAndSettings.const';
 import {
-  getEmptySliderOption,
+  checkIfItemHasRequiredOptions,
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
   getEmptyNumberSelection,
-  checkIfItemHasRequiredOptions,
+  getEmptySliderOption,
 } from '../ItemConfiguration.utils';
 
-export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
-  const activeItem = useMemo(() => {
+export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
+  useMemo(() => {
     switch (responseType) {
       case ItemResponseType.NumberSelection:
         return <NumberSelection name={name} />;
@@ -74,7 +76,9 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Audio:
         return <AudioRecord name={name} />;
       case ItemResponseType.Text:
-        return <TextResponse name={name} />;
+        return <TextResponse name={name} uiType={TextResponseUiType.ShortText} />;
+      case ItemResponseType.ParagraphText:
+        return <TextResponse name={name} uiType={TextResponseUiType.ParagraphText} />;
       case ItemResponseType.Drawing:
         return <Drawing name={name} />;
       case ItemResponseType.AudioPlayer:
@@ -82,10 +86,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       default:
         return null;
     }
-  }, [responseType]);
-
-  return activeItem;
-};
+  }, [responseType, name]);
 
 export const useSettingsSetup = ({
   name,
@@ -122,6 +123,9 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Text:
             setConfig(defaultTextConfig);
+            break;
+          case ItemResponseType.ParagraphText:
+            setConfig(defaultParagraphTextConfig);
             break;
           case ItemResponseType.Slider:
             setConfig(defaultSliderConfig);

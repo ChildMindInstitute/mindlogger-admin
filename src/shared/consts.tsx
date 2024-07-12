@@ -106,6 +106,7 @@ export enum ItemResponseType {
   MultipleSelectionPerRow = 'multiSelectRows',
   SliderRows = 'sliderRows',
   Text = 'text',
+  ParagraphText = 'paragraphText',
   Drawing = 'drawing',
   Photo = 'photo',
   Video = 'video',
@@ -120,6 +121,8 @@ export enum ItemResponseType {
   TouchTest = 'touchTest',
   ABTrails = 'ABTrails',
 }
+
+export const textLanguageKey = 'shortText';
 
 export const performanceTaskResponseTypes = [
   ItemResponseType.Flanker,
@@ -172,6 +175,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.MultipleSelectionPerRow]: <Svg id="multiple-selection-per-row" />,
   [ItemResponseType.SliderRows]: <Svg id="slider-rows" />,
   [ItemResponseType.Text]: <Svg id="text" />,
+  [ItemResponseType.ParagraphText]: <Svg id="paragraph-text" />,
   [ItemResponseType.Drawing]: <Svg id="drawing" />,
   [ItemResponseType.Photo]: <Svg id="camera-outline" />,
   [ItemResponseType.Video]: <Svg id="video" />,

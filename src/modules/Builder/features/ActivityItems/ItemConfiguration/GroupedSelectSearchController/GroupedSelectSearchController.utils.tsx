@@ -1,7 +1,7 @@
 import { KeyboardEvent } from 'react';
 
 import i18n from 'i18n';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, textLanguageKey } from 'shared/consts';
 import { getHighlightedText } from 'shared/utils';
 
 import { ItemsOption } from '../ItemConfiguration.types';
@@ -19,12 +19,17 @@ export const handleSearchKeyDown = (event: KeyboardEvent) => {
   }
 };
 
+export const getItemLanguageKey = (value: string) =>
+  value === ItemResponseType.Text ? textLanguageKey : value;
+
 export const getIsNotHaveSearchValue = (value: string, searchTermLowercase: string) =>
-  t(value).toLowerCase().indexOf(searchTermLowercase) === -1;
+  t(getItemLanguageKey(value)).toLowerCase().indexOf(searchTermLowercase) === -1;
 
 export const getItemTypesNames = (): string[] =>
   Object.keys(ItemResponseType).map((key) =>
-    t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase(),
+    t(
+      key === 'Text' ? textLanguageKey : ItemResponseType[key as keyof typeof ItemResponseType],
+    ).toLowerCase(),
   );
 
 export const getEmptyComponent = (searchTerm: string) => {
@@ -49,7 +54,11 @@ export const getGroupName = (
   options: ItemsOption[],
   searchTermLowercase: string,
 ) => {
-  if (options.some(({ value }) => t(value).toLowerCase().includes(searchTermLowercase))) {
+  if (
+    options.some(({ value }) =>
+      t(getItemLanguageKey(value)).toLowerCase().includes(searchTermLowercase),
+    )
+  ) {
     return (
       <StyledGroupName
         key={groupName}
@@ -64,7 +73,7 @@ export const getGroupName = (
 };
 
 export const getGroupValueText = (searchTerm: string, groupValue: string) => {
-  const text = t(groupValue);
+  const text = t(getItemLanguageKey(groupValue));
 
   if (!searchTerm) return text;
 

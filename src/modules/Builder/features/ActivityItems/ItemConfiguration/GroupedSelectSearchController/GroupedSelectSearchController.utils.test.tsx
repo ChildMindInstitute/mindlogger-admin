@@ -75,6 +75,8 @@ describe('getIsOnlyMobileValue', () => {
     ${ItemResponseType.MultipleSelection}       | ${false}
     ${ItemResponseType.Slider}                  | ${false}
     ${ItemResponseType.Date}                    | ${false}
+    ${ItemResponseType.Text}                    | ${false}
+    ${ItemResponseType.ParagraphText}           | ${false}
   `('returns $expectedResult for value $value', ({ value, expectedResult }) => {
     const result = getIsOnlyMobileValue(value);
     expect(result).toBe(expectedResult);

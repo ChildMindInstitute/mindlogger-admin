@@ -46,10 +46,10 @@ import {
   testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
 import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  ItemTestFunctions,
   alphanumericAndHyphenRegexp,
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
   IP_ADDRESS_REGEXP,
+  ItemTestFunctions,
   PORT_REGEXP,
 } from './BuilderApplet.const';
 
@@ -380,7 +380,9 @@ export const ItemSchema = () =>
             ),
         })
         .when('responseType', {
-          is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
+          is: (responseType: ItemResponseType) =>
+            responseType === ItemResponseType.Text ||
+            responseType === ItemResponseType.ParagraphText,
           then: (schema) =>
             schema.shape({
               maxResponseLength: yup
