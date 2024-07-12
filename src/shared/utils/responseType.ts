@@ -2,6 +2,7 @@ import { ItemResponseType } from 'shared/consts';
 
 export const webSupportedResponseTypes = [
   ItemResponseType.Text,
+  ItemResponseType.ParagraphText,
   ItemResponseType.SingleSelection,
   ItemResponseType.MultipleSelection,
   ItemResponseType.Slider,
