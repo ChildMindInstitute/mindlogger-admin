@@ -387,7 +387,10 @@ export const ReportConfigSetting = ({
   };
 
   const handleChangeItemValue = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) setValue('reportIncludedItemName', '');
+    if (!event.target.checked) {
+      setValue('reportIncludedActivityName', '');
+      setValue('reportIncludedItemName', '');
+    }
   };
 
   const commonSelectProps = {
@@ -397,15 +400,16 @@ export const ReportConfigSetting = ({
 
   const handleActivityChange = () => {
     setValue('reportIncludedItemName', '');
-    isActivityFlow && setValue('reportIncludedActivityName', '');
   };
 
   useEffect(() => {
     reset(defaultValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletData]);
 
   useEffect(() => {
     setSubjectData(subjectDataProps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     appletFormValues,
     appletData,
@@ -417,6 +421,7 @@ export const ReportConfigSetting = ({
 
   useEffect(() => {
     dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDirty, hasErrors]);
 
   useEffect(() => {
@@ -424,6 +429,7 @@ export const ReportConfigSetting = ({
 
     handleSaveChanges();
     dispatch(resetReportConfigChanges());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saveChanges]);
 
   useEffect(() => {
@@ -431,6 +437,7 @@ export const ReportConfigSetting = ({
 
     handleDontSave();
     dispatch(resetReportConfigChanges());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doNotSaveChanges]);
 
   if (isActivityOrFlow && !isServerConfigured) {
