@@ -756,7 +756,7 @@ export const mockedSimpleAppletFormData = {
           config: {
             removeBackButton: false,
             skippableItem: false,
-            maxResponseLength: 300,
+            maxResponseLength: 72,
             correctAnswerRequired: false,
             correctAnswer: '',
             numericalResponseRequired: false,
@@ -1252,7 +1252,7 @@ export const mockedTextActivityItem = {
   config: {
     removeBackButton: false,
     skippableItem: false,
-    maxResponseLength: 300,
+    maxResponseLength: 72,
     correctAnswerRequired: false,
     correctAnswer: '',
     numericalResponseRequired: false,
@@ -2227,7 +2227,7 @@ export const mockedItemsSettingsForSubscale = [
     config: {
       removeBackButton: false,
       skippableItem: false,
-      maxResponseLength: 300,
+      maxResponseLength: 72,
       correctAnswerRequired: false,
       correctAnswer: '',
       numericalResponseRequired: false,
@@ -2581,7 +2581,7 @@ export const mockedDecryptedAnswersWithSubscales = [
       config: {
         removeBackButton: false,
         skippableItem: false,
-        maxResponseLength: 300,
+        maxResponseLength: 72,
         correctAnswerRequired: false,
         correctAnswer: '',
         numericalResponseRequired: false,

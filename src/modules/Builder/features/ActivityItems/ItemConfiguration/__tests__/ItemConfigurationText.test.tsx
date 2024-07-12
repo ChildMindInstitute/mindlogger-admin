@@ -31,11 +31,13 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
     });
 
     expect(title).toHaveTextContent('Text Response');
-    expect(description).toHaveTextContent('The respondent will be able to enter a text response');
+    expect(description).toHaveTextContent(
+      'The respondent will be able to enter a short text response',
+    );
 
     expect(textInput).toBeDisabled();
     expect(textInput).toHaveValue('Text');
-    expect(maxLength.querySelector('input')).toHaveValue(300);
+    expect(maxLength.querySelector('input')).toHaveValue(72);
   });
 
   test('Paragraph text Item is rendered correctly', () => {

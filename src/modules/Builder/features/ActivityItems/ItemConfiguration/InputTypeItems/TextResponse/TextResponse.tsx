@@ -51,7 +51,7 @@ export const TextResponse = ({ name, uiType }: TextResponseProps) => {
 
   return (
     <ItemOptionContainer
-      title={t(isShortTextUiType ? 'textResponse' : 'paragraphTextResponse')}
+      title={t(isShortTextUiType ? 'shortTextResponse' : 'paragraphTextResponse')}
       description={t(
         isShortTextUiType ? 'textResponseDescription' : 'paragraphTextResponseDescription',
       )}
