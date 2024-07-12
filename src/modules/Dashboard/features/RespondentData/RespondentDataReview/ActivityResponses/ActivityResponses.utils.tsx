@@ -12,6 +12,7 @@ import {
   SingleSelectItemAnswer,
   SliderItemAnswer,
   TextItemAnswer,
+  ParagraphTextItemAnswer,
   NumberSelectionItemAnswer,
   DateItemAnswer,
   TimeRangeItemAnswer,
@@ -45,11 +46,12 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
 };
 
 export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
+  const responseType = activityItemAnswer.activityItem.responseType;
   if (
     !activityItemAnswer.answer ||
     // exception for MiResource answers for Text Item: in case of receiving an object instead of
     // string or null
-    (activityItemAnswer.activityItem.responseType === ItemResponseType.Text &&
+    ((responseType === ItemResponseType.Text || responseType === ItemResponseType.ParagraphText) &&
       isObject(activityItemAnswer.answer))
   ) {
     return (
@@ -59,7 +61,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
     );
   }
 
-  switch (activityItemAnswer.activityItem.responseType) {
+  switch (responseType) {
     case ItemResponseType.SingleSelection:
       return <SingleSelectResponseItem {...(activityItemAnswer as SingleSelectItemAnswer)} />;
     case ItemResponseType.MultipleSelection:
@@ -67,7 +69,10 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
     case ItemResponseType.Slider:
       return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
     case ItemResponseType.Text:
-      return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
+    case ItemResponseType.ParagraphText:
+      return (
+        <TextResponseItem {...(activityItemAnswer as TextItemAnswer | ParagraphTextItemAnswer)} />
+      );
     case ItemResponseType.NumberSelection:
       return <NumberSelectionResponseItem {...(activityItemAnswer as NumberSelectionItemAnswer)} />;
     case ItemResponseType.Time: {
