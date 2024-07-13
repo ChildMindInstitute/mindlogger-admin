@@ -226,6 +226,49 @@ export const GyroscopeAndTouchConfigSchema = () => ({
   }),
 });
 
+export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
+  type: yup.mixed().oneOf(['sentence', 'itemResponse', 'lineBreak']).required(),
+  text: yup.string().when('type', {
+    is: 'sentence',
+    then: (schema) => schema.trim().required(t('fieldRequired')),
+  }),
+  id: yup.string().when('type', {
+    is: 'itemResponse',
+    then: (schema) => schema.trim().required(t('fieldRequired')),
+  }),
+  // displayMode: yup.string().when('type', {
+  //   is: 'itemResponse',
+  //   then: (schema) => schema.trim().required(t('fieldRequired')),
+  // }),
+});
+
+export const PhrasalTemplateResponseValuePhraseSchema = yup.object({
+  image: yup.string().nullable(),
+  fields: yup
+    .array()
+    .of(PhrasalTemplateResponseValuePhraseFieldSchema)
+    .min(2, t('validationMessages.phraseTemplateMinFields'))
+    .test(
+      'minSentenceFields',
+      t('validationMessages.phraseTemplateMinSentenceFields'),
+      (fields = []) => fields.filter(({ type }) => type === 'sentence').length > 0,
+    )
+    .test(
+      'minResponseFields',
+      t('validationMessages.phraseTemplateMinResponseFields'),
+      (fields = []) => fields.filter(({ type }) => type === 'itemResponse').length > 0,
+    ),
+});
+
+export const PhrasalTemplateResponseValue = {
+  title: yup
+    .string()
+    .trim()
+    .required(t('fieldRequired'))
+    .max(75, t('validationMessages.maxCharacters', { count: 75 })),
+  phrases: yup.array().of(PhrasalTemplateResponseValuePhraseSchema).min(1),
+};
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -302,6 +345,10 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
+
+        if (responseType === ItemResponseType.PhrasalTemplate) {
+          return schema.shape(PhrasalTemplateResponseValue);
+        }
 
         return schema.nullable();
       }),
