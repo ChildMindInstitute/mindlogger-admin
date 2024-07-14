@@ -18,6 +18,7 @@ import {
   PhotoResponse,
   SelectionRows,
   Time,
+  PhrasalTemplate,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -37,6 +38,7 @@ import {
   defaultMessageConfig,
   defaultSingleSelectionConfig,
   defaultMultiSelectionConfig,
+  defaultPhrasalTemplateConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   getEmptySliderOption,
@@ -45,6 +47,7 @@ import {
   getEmptyNumberSelection,
   checkIfItemHasRequiredOptions,
 } from '../ItemConfiguration.utils';
+import { getNewDefaultPhrase } from '../InputTypeItems/PhrasalTemplate/PhrasalTemplate.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
@@ -79,10 +82,12 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <Drawing name={name} />;
       case ItemResponseType.AudioPlayer:
         return <AudioPlayer name={name} />;
+      case ItemResponseType.PhrasalTemplate:
+        return <PhrasalTemplate name={name} />;
       default:
         return null;
     }
-  }, [responseType]);
+  }, [responseType, name]);
 
   return activeItem;
 };
@@ -173,6 +178,9 @@ export const useSettingsSetup = ({
             handleAddSingleOrMultipleRow?.();
             setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
+          case ItemResponseType.PhrasalTemplate:
+            setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], title: '' });
+            setConfig(defaultPhrasalTemplateConfig);
         }
       }
     });

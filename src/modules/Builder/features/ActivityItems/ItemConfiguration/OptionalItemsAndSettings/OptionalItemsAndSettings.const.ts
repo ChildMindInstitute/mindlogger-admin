@@ -173,3 +173,8 @@ export const defaultTimeConfig = {
   },
   timer: 0,
 };
+
+export const defaultPhrasalTemplateConfig = {
+  skippableItem: false,
+  timer: 0,
+};
