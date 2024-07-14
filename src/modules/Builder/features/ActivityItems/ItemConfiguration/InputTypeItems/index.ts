@@ -1,4 +1,5 @@
 export * from './NumberSelection';
+export * from './PhrasalTemplate';
 export * from './SelectionOption';
 export * from './SliderRows';
 export * from './Geolocation';
