@@ -235,6 +235,11 @@ type ABTrailsConfig = {
   removeBackButton?: boolean;
 };
 
+export interface PhrasalTemplateConfig {
+  skippableItem: boolean;
+  timer: number | null;
+}
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel?: string;
@@ -328,6 +333,20 @@ export type DrawingResponseValues = {
   } | null;
 };
 
+export type PhrasalTemplateField =
+  | { type: 'sentence'; text: string }
+  | { type: 'itemResponse'; id: string; displayMode: string }
+  | { type: 'lineBreak' };
+
+export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
+
+export interface PhrasalTemplateResponseValues {
+  phrases: {
+    image: string | null;
+    fields: PhrasalTemplateField[];
+  }[];
+}
+
 export type GyroscopeConfig = {
   userInputType: GyroscopeOrTouch;
   phase: RoundTypeEnum;
@@ -354,7 +373,8 @@ export type ResponseValues =
   | DrawingResponseValues
   | PhotoResponseValues
   | GeolocationResponseValues
-  | MessageResponseValues;
+  | MessageResponseValues
+  | PhrasalTemplateResponseValues;
 
 export type Config =
   | TextInputConfig
@@ -374,7 +394,8 @@ export type Config =
   | GyroscopeConfig
   | TouchConfig
   | FlankerConfig
-  | ABTrailsConfig;
+  | ABTrailsConfig
+  | PhrasalTemplateConfig;
 
 export type ItemAlert = {
   key?: string;
@@ -487,7 +508,8 @@ export type Item<T = ItemCommonType> =
   | SliderRowsItem<T>
   | StabilityTrackerItem<T>
   | TouchPracticeItem<T>
-  | TouchTestItem<T>;
+  | TouchTestItem<T>
+  | PhrasalTemplateItem<T>;
 
 export type ItemCommonType = {
   id?: string;
@@ -635,6 +657,12 @@ export type TouchPracticeItem<T = ItemCommonType> = T & {
 export type TouchTestItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.TouchTest;
   config: TouchConfig;
+  responseValues: null;
+};
+
+export type PhrasalTemplateItem<T = ItemCommonType> = T & {
+  config: PhrasalTemplateConfig;
+  responseType: ItemResponseType.PhrasalTemplate;
   responseValues: null;
 };
 

@@ -61,6 +61,10 @@ export const ItemResponseTypes = {
   [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
   [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },
   [ItemResponseType.TouchPractice]: { icon: null, title: ItemResponseType.TouchPractice },
+  [ItemResponseType.PhrasalTemplate]: {
+    icon: <Svg id="fileAlt" />,
+    title: ItemResponseType.PhrasalTemplate,
+  },
 };
 
 export const DEFAULT_PAGE = 1;
