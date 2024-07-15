@@ -15,6 +15,7 @@ import { ActivitiesToolbarProps } from './ActivitiesToolbar.types';
 export const ActivitiesToolbar = ({
   appletId,
   'data-testid': dataTestId,
+  onClickAssign,
   sx,
   ...otherProps
 }: ActivitiesToolbarProps) => {
@@ -70,12 +71,7 @@ export const ActivitiesToolbar = ({
               {canAssignActivity && (
                 <Button
                   data-testid={`${dataTestId}-assign`}
-                  onClick={() => {
-                    // TODO: Implement assign
-                    // https://mindlogger.atlassian.net/browse/M2-5710
-                    alert('TODO: Assign activity');
-                  }}
-                  sx={{ minWidth: theme.spacing(10) }}
+                  onClick={onClickAssign}
                   variant="tonal"
                 >
                   {t('assign')}

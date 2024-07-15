@@ -1,4 +1,5 @@
 export * from './Accordion';
+export * from './ActivityAssignDrawer';
 export * from './ActivitySummaryCard';
 export * from './ActivityFlowThumbnail';
 export * from './Banners';

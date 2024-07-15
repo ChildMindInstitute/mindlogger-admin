@@ -21,9 +21,11 @@ import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
 import { workspaces } from 'shared/state';
 import { checkIfCanAccessData } from 'shared/utils';
+import { ActivityAssignDrawer } from 'modules/Dashboard/components';
 
 import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
+import { ParticipantActivitiesToolbar } from './ParticipantActivitiesToolbar';
 
 const dataTestId = 'dashboard-applet-participant-activities';
 
@@ -37,7 +39,9 @@ export const Activities = () => {
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const [activityId, setActivityId] = useState<string>();
+  const [flowId, setFlowId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
+  const [showActivityAssign, setShowActivityAssign] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [selectedActivityOrFlowId, setSelectedActivityOrFlowId] = useState<ActivityOrFlowId>();
   const workspaceRoles = workspaces.useRolesData();
@@ -63,14 +67,18 @@ export const Activities = () => {
     actions: defaultActions,
     TakeNowModal,
     openTakeNowModal,
-  } = useActivityGrid(
+  } = useActivityGrid({
     dataTestId,
-    { result: activities, count: activities.length },
-    useCallback((activityId: string) => {
+    activitiesData: { result: activities, count: activities.length },
+    onClickExportData: useCallback((activityId) => {
       setActivityId(activityId);
       setShowExportPopup(true);
     }, []),
-  );
+    onClickAssign: useCallback((activityId) => {
+      setActivityId(activityId);
+      setShowActivityAssign(true);
+    }, []),
+  });
 
   const isLoadingSubject = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
   const isLoading = isLoadingActivities || isLoadingSubject;
@@ -154,16 +162,14 @@ export const Activities = () => {
     <StyledFlexColumn sx={{ gap: 2.4, maxHeight: '100%' }}>
       {isLoading && <Spinner />}
 
-      {/*
-        TODO: Re-enable when implementing toolbar functionality.
-        To be implemented in  M2-5530, M2-5445, and M2-5710.
-
+      {appletId && subject && (
         <ParticipantActivitiesToolbar
           appletId={appletId}
           data-testid={dataTestId}
-          sx={{ px: 3.2, pt: 3.2 }}
+          onClickAssign={() => setShowActivityAssign(true)}
+          sx={{ p: 3.2, pb: 0 }}
         />
-      */}
+      )}
 
       {showContent && (
         <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>
@@ -178,6 +184,10 @@ export const Activities = () => {
                 flows={flows}
                 subject={subject?.result}
                 onClickItem={getClickHandler()}
+                onClickAssign={(flowId) => {
+                  setFlowId(flowId);
+                  setShowActivityAssign(true);
+                }}
               />
             </StyledFlexColumn>
           )}
@@ -204,22 +214,36 @@ export const Activities = () => {
                 onSubmitHandler={() => navigateToData(selectedActivityOrFlowId)}
               />
             )}
-
-            {showExportPopup && (
-              <DataExportPopup
-                chosenAppletData={appletData ?? null}
-                filters={{ activityId, targetSubjectId: subjectId }}
-                isAppletSetting
-                popupVisible={showExportPopup}
-                setPopupVisible={() => {
-                  setShowExportPopup(false);
-                  setActivityId(undefined);
-                }}
-              />
-            )}
           </StyledFlexColumn>
         </StyledFlexColumn>
       )}
+
+      {showExportPopup && (
+        <DataExportPopup
+          chosenAppletData={appletData ?? null}
+          filters={{ activityId, targetSubjectId: subjectId }}
+          isAppletSetting
+          popupVisible={showExportPopup}
+          setPopupVisible={() => {
+            setShowExportPopup(false);
+            setActivityId(undefined);
+          }}
+        />
+      )}
+
+      <ActivityAssignDrawer
+        appletId={appletId}
+        activityId={activityId}
+        activityFlowId={flowId}
+        open={showActivityAssign}
+        sourceSubjectId={subject?.result.userId ? subject.result.id : undefined}
+        targetSubjectId={subject?.result.userId ? undefined : subject?.result.id}
+        onClose={() => {
+          setShowActivityAssign(false);
+          setActivityId(undefined);
+          setFlowId(undefined);
+        }}
+      />
     </StyledFlexColumn>
   );
 };

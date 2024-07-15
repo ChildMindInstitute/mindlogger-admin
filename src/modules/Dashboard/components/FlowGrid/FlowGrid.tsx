@@ -13,6 +13,7 @@ export const FlowGrid = ({
   activities = [],
   flows = [],
   subject,
+  onClickAssign,
   onClickItem,
   'data-testid': dataTestId,
   ...otherProps
@@ -23,10 +24,12 @@ export const FlowGrid = ({
     appletId: applet?.id,
     hasParticipants: true,
     subject,
+    testId: dataTestId,
     onClickExportData: useCallback((flowId: string) => {
       setFlowId(flowId);
       setShowExportPopup(true);
     }, []),
+    onClickAssign,
   });
 
   return (
