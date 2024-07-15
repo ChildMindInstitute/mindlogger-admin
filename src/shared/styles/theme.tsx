@@ -85,11 +85,6 @@ export const theme = createTheme({
           borderRadius: variables.borderRadius.lg2,
           boxShadow: 'none',
         },
-        root: {
-          '.MuiBackdrop-root': {
-            backgroundColor: 'rgba(0, 0, 0, 0.33)',
-          },
-        },
       },
     },
     MuiDialogTitle: {
@@ -767,6 +762,15 @@ export const theme = createTheme({
           height: variables.borderWidth.md,
           border: 0,
           margin: 0,
+        },
+      },
+    },
+    MuiModal: {
+      styleOverrides: {
+        root: {
+          '.MuiModal-backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+          },
         },
       },
     },

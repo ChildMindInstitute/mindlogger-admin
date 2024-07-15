@@ -12,6 +12,13 @@
   "activateInBuilder": "Activate in builder",
   "activities": "Activities",
   "activity": "Activity",
+  "activityAssign": {
+    "title": "Assign Activity",
+    "helpTitle": "Assign Activity Help",
+    "helpContent":
+      "<0>Activities</0> <1>Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</1> <2>Respondents</2> <3>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</3> <4>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</4> <5>FAQ</5> <6>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</6>",
+    "helpButton": "Got it"
+  },
   "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "activityCompleted": "Activity Completed",
   "activityCount_one": "{{count}} Activity",

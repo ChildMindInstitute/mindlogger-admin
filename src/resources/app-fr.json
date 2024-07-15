@@ -12,6 +12,13 @@
   "activateInBuilder": "Activer dans le créateur",
   "activities": "Activités",
   "activity": "Activité",
+  "activityAssign": {
+    "title": "Attribuer l'activité",
+    "helpTitle": "Aide sur attribution d'une activité",
+    "helpContent":
+      "<0>Activités</0> <1>Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier le calendrier d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</1> <2>Répondants</2> <3>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</3> <4>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</4> <5>FAQ</5> <6>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier la planification » en haut à droite de la liste.</6>",
+    "helpButton": "J'ai compris"
+  },
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page.",
   "activityCompleted": "Activité terminée",
   "activityCount_one": "{{count}} Activité",
