@@ -63,11 +63,14 @@ export const findVisitErrorMessage = (
   errors: FieldErrors<{ visitsForm: LorisUsersVisit<LorisActivityForm>[] }>,
 ): string | null => {
   if (errors?.visitsForm?.length) {
-    for (let i = 0; i < errors.visitsForm.length; i++) {
-      const activities = errors.visitsForm[i]?.activities;
+    for (let user = 0; user < errors.visitsForm.length; user++) {
+      const activities = errors.visitsForm[user]?.activities;
       if (activities?.length) {
-        for (let j = 0; j < activities.length; j++) {
-          const visitError = get(errors, `visitsForm[${i}].activities[${j}].visit.message`);
+        for (let activity = 0; activity < activities.length; activity++) {
+          const visitError = get(
+            errors,
+            `visitsForm[${user}].activities[${activity}].visit.message`,
+          );
           if (visitError) {
             return visitError;
           }

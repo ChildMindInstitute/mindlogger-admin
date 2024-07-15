@@ -17,7 +17,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
-import { useIntegrationToggle } from './useIntegrationToggle';
+import { useIntegrationToggle } from './LeftBar.hooks';
 import { getWorkspaceNames } from './LeftBar.utils';
 
 export const LeftBar = () => {
