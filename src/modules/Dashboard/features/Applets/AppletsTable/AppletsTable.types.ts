@@ -1,7 +1,7 @@
-import { DashboardTableProps } from 'modules/Dashboard/components';
+import { DashboardTablePropsWithPagination } from 'modules/Dashboard/components';
 import { Applet, Folder } from 'api';
 
-export type AppletsTableProps = Omit<DashboardTableProps, 'rows'> & {
+export type AppletsTableProps = Omit<DashboardTablePropsWithPagination, 'rows'> & {
   rows?: (Folder | Applet)[];
   headerContent: JSX.Element;
   handleReload: () => void;

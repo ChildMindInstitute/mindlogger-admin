@@ -3,13 +3,14 @@
 // @ts-nocheck
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
 const appletId = '71d90215-e4ae-41c5-8c30-776e69f5378b';
 const activityId = 'd65e8a64-a023-4830-9c84-7433c4b96440';
 const activityFlowId = '18637282-e179-4c05-9a8e-b1cbe592bccb';
-const respondentId = '62c234e3-ef32-43a7-9cc1-5b0c67a9f6ca';
+const participantId = '62c234e3-ef32-43a7-9cc1-5b0c67a9f6ca';
 
 const preloadedState = {
   workspaces: {
@@ -63,12 +64,11 @@ const expectedDashboard = {
 };
 
 const expectedApplet = {
-  icon: '',
+  image: '',
   useCustomIcon: true,
   label: '',
   chip: 'Editing',
   navPath: `/builder/${appletId}`,
-  hasUrl: false,
   key: expect.any(String),
 };
 const expectedActivities = {
@@ -98,25 +98,20 @@ const expectedNewActivityFlow = {
   key: expect.any(String),
 };
 
-const commonDataVizTest = ({ home, applet, respondents, user, viewData }) => {
+const commonDataVizTest = ({ home, applet, user, viewData }) => {
   expect(home).toEqual(expectedHome);
   expect(applet).toEqual({
     ...expectedApplet,
     label: 'Mocked Applet',
-    navPath: `/dashboard/${appletId}/respondents`,
+    navPath: `/dashboard/${appletId}/participants`,
     chip: undefined,
   });
-  expect(respondents).toEqual({
-    icon: 'respondent-outlined',
-    label: 'Respondents',
-    navPath: `/dashboard/${appletId}/respondents`,
-    key: expect.any(String),
-  });
   expect(user).toEqual({
-    icon: 'account',
-    label: 'Respondent: secretUserId (Jane Doe)',
+    icon: undefined,
+    label: 'secretUserId',
     disabledLink: true,
     key: expect.any(String),
+    navPath: undefined,
   });
   expect(viewData).toEqual({
     label: 'View Data',
@@ -130,6 +125,11 @@ jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(),
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  ...jest.requireActual('shared/hooks/useFeatureFlags'),
+  useFeatureFlags: jest.fn(),
+}));
+
 const testCommonBuilderCrumbs = ({ dashboard, applet, activities }) => {
   expect(dashboard).toEqual(expectedDashboard);
   expect(applet).toEqual(expectedApplet);
@@ -137,6 +137,13 @@ const testCommonBuilderCrumbs = ({ dashboard, applet, activities }) => {
 };
 
 describe('useBreadcrumbs', () => {
+  beforeEach(() => {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: false,
+      },
+    });
+  });
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -262,8 +269,14 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/summary', () => {
-    const route = `/dashboard/${appletId}/respondents/${respondentId}/dataviz/summary`;
-    const routePath = page.appletRespondentDataSummary;
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+
+    const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/summary`;
+    const routePath = page.appletParticipantDataSummary;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
       route,
@@ -274,21 +287,21 @@ describe('useBreadcrumbs', () => {
       },
     });
 
-    expect(result.current).toHaveLength(6);
-    const [home, applet, respondents, user, viewData, summary] = result.current;
+    expect(result.current).toHaveLength(4);
+    const [home, applet, user, viewData] = result.current;
 
-    commonDataVizTest({ home, applet, respondents, user, viewData });
-    expect(summary).toEqual({
-      icon: 'chart',
-      label: 'Summary',
-      disabledLink: true,
-      key: expect.any(String),
-    });
+    commonDataVizTest({ home, applet, user, viewData });
   });
 
   test('should generate correct breadcrumbs for applet dataviz/responses', () => {
-    const route = `/dashboard/${appletId}/respondents/${respondentId}/dataviz/responses`;
-    const routePath = page.appletRespondentDataReview;
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+
+    const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/responses`;
+    const routePath = page.appletParticipantDataReview;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
       route,
@@ -299,16 +312,10 @@ describe('useBreadcrumbs', () => {
       },
     });
 
-    expect(result.current).toHaveLength(6);
-    const [home, applet, respondents, user, viewData, responses] = result.current;
+    expect(result.current).toHaveLength(4);
+    const [home, applet, user, viewData] = result.current;
 
-    commonDataVizTest({ home, applet, respondents, user, viewData });
-    expect(responses).toEqual({
-      icon: 'checkbox-outlined',
-      label: 'Responses',
-      disabledLink: true,
-      key: expect.any(String),
-    });
+    commonDataVizTest({ home, applet, user, viewData });
   });
 
   test('should generate correct breadcrumbs for applet settings (export data)', () => {
@@ -542,6 +549,199 @@ describe('useBreadcrumbs', () => {
       label: 'Activity Flow Settings',
       navPath: `/builder/${appletId}/activity-flows/${activityFlowId}/settings`,
       key: expect.any(String),
+    });
+  });
+
+  test('should generate correct breadcrumbs for participant details using multi-informant', () => {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${participantId}`;
+    const routePath = page.appletParticipantActivities;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(3);
+
+    const [home, applet, participant] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      image: '',
+      key: expect.any(String),
+      label: 'Mocked Applet',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: true,
+      icon: undefined,
+      key: expect.any(String),
+      label: 'secretUserId',
+    });
+  });
+
+  test('should generate correct breadcrumbs for participant details schedule using multi-informant', () => {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${participantId}/schedule`;
+    const routePath = page.appletParticipantSchedule;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(3);
+
+    const [home, applet, participant] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      image: '',
+      key: expect.any(String),
+      label: 'Mocked Applet',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: true,
+      icon: undefined,
+      key: expect.any(String),
+      label: 'secretUserId',
+    });
+  });
+
+  test('should generate correct breadcrumbs for participant activity details using multi-informant', () => {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${participantId}/activities/${activityId}`;
+    const routePath = page.appletParticipantActivityDetails;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+                activities: [
+                  {
+                    id: activityId,
+                    name: 'Test Activity',
+                    image: 'https://admin.mindlogger.dev/image.png',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(4);
+
+    const [home, applet, participant, activityDetails] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      image: '',
+      key: expect.any(String),
+      label: 'Mocked Applet',
+      navPath: `/dashboard/${appletId}/participants`,
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: false,
+      icon: undefined,
+      key: expect.any(String),
+      label: 'secretUserId',
+      navPath: `/dashboard/${appletId}/participants/${participantId}`,
+    });
+    expect(activityDetails).toMatchObject({
+      disabledLink: true,
+      image: 'https://admin.mindlogger.dev/image.png',
+      label: 'Test Activity',
     });
   });
 });

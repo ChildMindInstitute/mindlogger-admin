@@ -4,19 +4,15 @@ import { ChipProps, ChipShape } from './Chip.types';
 import { StyledChip, StyledClearedButton } from './Chip.styles';
 
 export const Chip = ({
+  shape = ChipShape.Rounded,
   title,
-  icon,
-  color = 'primary',
-  shape = ChipShape.Rectangular,
   onRemove,
   canRemove = true,
-  onClick,
-  sxProps,
   'data-testid': dataTestid,
+  ...otherProps
 }: ChipProps) => (
   <StyledChip
     shape={shape}
-    color={color}
     deleteIcon={
       canRemove ? (
         <StyledClearedButton data-testid={`${dataTestid || 'chip'}-close-button`}>
@@ -25,10 +21,8 @@ export const Chip = ({
       ) : undefined
     }
     label={title}
-    icon={icon || undefined}
     onDelete={onRemove}
-    onClick={onClick}
-    sx={sxProps}
     data-testid={dataTestid}
+    {...otherProps}
   />
 );

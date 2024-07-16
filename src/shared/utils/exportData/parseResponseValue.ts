@@ -79,7 +79,7 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   if (isTextAnswer(answer)) return answer;
   if (isNullAnswer(answer)) return NULL_ANSWER;
 
-  const { activityItem, id: answerId } = item;
+  const { activityItem } = item;
   const inputType = activityItem.responseType;
   const answerKeys = Object.keys(answer ?? {});
   const key = answer && answer === Object(answer) ? (answerKeys[0] as keyof AnswerDTO) : undefined;
@@ -132,7 +132,7 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
-      return getABTrailsCsvName(index, item.id);
+      return getABTrailsCsvName(index, item);
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = activityItem?.responseValues.rows;
 
@@ -169,12 +169,12 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     }
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
-        answerId,
+        item,
         (value as DecryptedStabilityTrackerAnswerObject).phaseType,
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);
-    /* 
+    /*
       Item list as default case:
       - 'singleSelect',
       - 'multiSelect',

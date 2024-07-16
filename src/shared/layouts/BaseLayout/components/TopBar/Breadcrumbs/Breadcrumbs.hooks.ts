@@ -22,26 +22,34 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
+  const {
+    featureFlags: { enableMultiInformant },
+  } = useFeatureFlags();
+  const { appletId, activityId, activityFlowId, respondentId, subjectId, setting } = useParams();
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel();
-  const subjectLabel = useRespondentLabel(true);
+  const respondentLabel = useRespondentLabel({ hideNickname: !!enableMultiInformant });
+  const subjectLabel = useRespondentLabel({
+    hideNickname: !!enableMultiInformant,
+    isSubject: true,
+  });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
   const { getValues } = useFormContext() ?? {};
   const appletData = (getValues?.() ?? result) as SingleApplet;
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
-  const currentActivityName = appletData?.activities?.find(
+  const currentActivity = result?.activities?.find(
     (activity) => getEntityKey(activity) === activityId,
-  )?.name;
-  const activityLabel = currentActivityName ?? t('newActivity');
+  );
+  const currentActivityName = currentActivity?.name;
+  const activityLabel = currentActivity?.name ?? t('newActivity');
   const performanceTaskLabel =
     currentActivityName ??
     t(
@@ -49,13 +57,14 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         ([, value]) => value,
       )?.[0]}`,
     );
-  const activityFlowLabel =
-    appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
-      ?.name ?? t('newActivityFlow');
+  const currentActivityFlow = appletData?.activityFlows?.find(
+    (activityFlow) => getEntityKey(activityFlow) === activityFlowId,
+  );
+  const activityFlowLabel = currentActivityFlow?.name ?? t('newActivityFlow');
 
   return useMemo(() => {
     const activitiesBreadcrumb = {
-      icon: 'checklist-outlined',
+      icon: 'checklist-outlined' as const,
       label: t('activities'),
       navPath:
         appletId && activityId
@@ -96,15 +105,18 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     if (appletId && (isDashboard || isBuilder)) {
+      const participantsPath = enableMultiInformant
+        ? page.appletParticipants
+        : page.appletRespondents;
+
       newBreadcrumbs.push({
-        icon: appletData?.image || '',
         useCustomIcon: true,
+        image: appletData?.image || '',
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
-        navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
+        navPath: generatePath(isDashboard ? participantsPath : page.builderApplet, {
           appletId,
         }),
-        hasUrl: !!appletData?.image,
       });
     }
 
@@ -115,16 +127,16 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: page.dashboardApplets,
       });
     }
-    if (pathname.includes('managers')) {
+
+    if (pathname.includes('managers') && !appletId) {
       newBreadcrumbs.push({
         icon: 'manager-outlined',
         label: t('managers'),
-        navPath: appletId
-          ? generatePath(page.appletManagers, { appletId })
-          : page.dashboardManagers,
+        navPath: page.dashboardManagers,
       });
     }
-    if (pathname.includes('respondents')) {
+
+    if (pathname.includes('respondents') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
         label: t('respondents'),
@@ -133,13 +145,37 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           : page.dashboardRespondents,
       });
     }
-    if (respondentId) {
+
+    if (subjectId || respondentId) {
       newBreadcrumbs.push({
-        icon: 'account',
+        icon: enableMultiInformant ? undefined : 'account',
         label: respondentLabel || subjectLabel,
-        disabledLink: true,
+        disabledLink: !currentActivity,
+        navPath:
+          enableMultiInformant && !!currentActivity
+            ? generatePath(page.appletParticipantActivities, {
+                appletId,
+                subjectId: subjectId || respondentId,
+              })
+            : undefined,
       });
     }
+
+    if (enableMultiInformant) {
+      if (currentActivity) {
+        newBreadcrumbs.push({
+          image: currentActivity?.image || '',
+          label: currentActivity?.name ?? '',
+          disabledLink: true,
+        });
+      } else if (currentActivityFlow) {
+        newBreadcrumbs.push({
+          label: currentActivityFlow?.name ?? '',
+          disabledLink: true,
+        });
+      }
+    }
+
     if (pathname.includes('dataviz')) {
       newBreadcrumbs.push({
         label: t('viewData'),
@@ -147,7 +183,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('summary')) {
+    if (pathname.includes('summary') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'chart',
         label: t('summary'),
@@ -155,14 +191,14 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('responses')) {
+    if (pathname.includes('responses') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'checkbox-outlined',
         label: t('responses'),
         disabledLink: true,
       });
     }
-    if (pathname.includes('schedule')) {
+    if (pathname.includes('schedule') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'schedule-outlined',
         label: t('schedule'),

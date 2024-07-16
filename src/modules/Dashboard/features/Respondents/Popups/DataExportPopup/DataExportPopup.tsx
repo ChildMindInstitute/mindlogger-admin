@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
@@ -28,6 +28,7 @@ import { ChosenAppletData } from '../../Respondents.types';
 import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
+  filters = {},
   popupVisible,
   isAppletSetting,
   setPopupVisible,
@@ -36,6 +37,7 @@ export const DataExportPopup = ({
   setChosenAppletData,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
+  const dataExportingRef = useRef(false);
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -51,7 +53,7 @@ export const DataExportPopup = ({
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
-    if (dataIsExporting || !appletId) {
+    if (dataIsExporting || dataExportingRef.current || !appletId) {
       return;
     }
 
@@ -70,6 +72,7 @@ export const DataExportPopup = ({
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
+        dataExportingRef.current = true;
         setDataIsExporting(true);
 
         const dateType = getValues?.().dateType;
@@ -91,6 +94,7 @@ export const DataExportPopup = ({
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
+          filters,
         })(firstPageData);
 
         if (pageLimit > 1) {
@@ -107,6 +111,7 @@ export const DataExportPopup = ({
             await exportDataSucceed({
               getDecryptedAnswers,
               suffix: getExportDataSuffix(page),
+              filters,
             })(nextPageData);
           }
         }
@@ -121,6 +126,7 @@ export const DataExportPopup = ({
         setActiveModal(Modals.ExportError);
         await sendLogFile({ error });
       } finally {
+        dataExportingRef.current = false;
         setDataIsExporting(false);
       }
     },

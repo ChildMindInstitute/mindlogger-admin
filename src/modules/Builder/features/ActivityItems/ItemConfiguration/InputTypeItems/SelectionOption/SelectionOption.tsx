@@ -23,7 +23,10 @@ import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 
-import { SELECT_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
+import {
+  SELECT_OPTION_TEXT_MAX_LENGTH,
+  SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT,
+} from '../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { getPaletteColor } from '../../ItemConfiguration.utils';
 import { ColorPicker } from './ColorPicker';
@@ -67,6 +70,10 @@ export const SelectionOption = ({
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
+  const usePortraitLayout = get(settings, ItemConfigurationSettings.PortraitLayout);
+  const optionTextMaxLength = usePortraitLayout
+    ? SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT
+    : SELECT_OPTION_TEXT_MAX_LENGTH;
   const { text = '', isHidden = false, score, color, isNoneAbove = false } = option || {};
   const scoreString = score?.toString();
   const hasColor = color !== undefined;
@@ -253,10 +260,10 @@ export const SelectionOption = ({
                     handleOptionTextChange({
                       event,
                       fieldName: optionTextName,
-                      maxLength: SELECT_OPTION_TEXT_MAX_LENGTH,
+                      maxLength: optionTextMaxLength,
                     })
                   }
-                  maxLength={SELECT_OPTION_TEXT_MAX_LENGTH}
+                  maxLength={optionTextMaxLength}
                   data-testid={`${dataTestid}-text`}
                   InputLabelProps={{ shrink: true }}
                 />

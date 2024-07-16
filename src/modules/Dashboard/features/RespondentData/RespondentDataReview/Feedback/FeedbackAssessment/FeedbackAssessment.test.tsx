@@ -24,8 +24,8 @@ import { FeedbackForm } from '../Feedback.types';
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
-const routePath = page.appletRespondentDataReview;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
+const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,

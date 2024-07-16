@@ -1,4 +1,4 @@
-import { styled, Typography } from '@mui/material';
+import { styled, Typography, css } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -112,6 +112,13 @@ export const StyledLabelBoldSmall = styled(StyledLabelSmall)`
   font-weight: ${variables.font.weight.bold};
 `;
 
+export const StyledBodyLarger = styled(Typography)`
+  font-size: ${variables.font.size.lg2};
+  line-height: ${variables.font.lineHeight.xl};
+  font-weight: ${variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.black};
+`;
+
 export const StyledBodyLarge = styled(Typography)`
   font-size: ${variables.font.size.lg};
   line-height: ${variables.font.lineHeight.lg};
@@ -137,8 +144,10 @@ export const StyledBodySmall = styled(Typography)`
   letter-spacing: ${variables.font.letterSpacing.xl};
 `;
 
-export const StyledEllipsisText = styled(Typography)`
+export const ellipsisTextCss = css`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
+
+export const StyledEllipsisText = styled(Typography)(ellipsisTextCss);

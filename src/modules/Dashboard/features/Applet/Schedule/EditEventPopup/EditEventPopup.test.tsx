@@ -13,69 +13,9 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { EditEventPopup } from './EditEventPopup';
 
-const mockSetEditEventPopupVisible = jest.fn();
-const mockSetSaveChangesPopupVisible = jest.fn();
-const dataTestid = 'dashboard-calendar-edit-event';
-const mockDefaultStartDate = new Date('03-18-2024');
 const mockAppletId = 'a341e3d7-0170-4894-8823-798c58456130';
 const mockEventId1 = '8a0a2abd-d8e2-4fb6-91bb-65aecfc5396a';
 const mockEventId2 = 'ae1d9534-ad9b-4efc-a0c7-cd82addc44fc';
-const mockEditedEvent1 = {
-  activityOrFlowId: '96d889e2-2264-4e76-8c60-744600e770fe',
-  eventId: mockEventId1,
-  title: 'Mock Activity 1',
-  alwaysAvailable: false,
-  startFlowIcon: false,
-  isHidden: false,
-  backgroundColor: 'transparent',
-  periodicity: 'WEEKLY',
-  eventStart: new Date('2024-03-18T09:00:00.000Z'),
-  eventEnd: new Date('2024-12-31T11:00:00.000Z'),
-  oneTimeCompletion: null,
-  accessBeforeSchedule: false,
-  timerType: 'NOT_SET',
-  timer: null,
-  notification: null,
-  endAlertIcon: false,
-  allDay: false,
-  scheduledColor: '#0b6e99',
-  scheduledBackground: 'rgba(11, 110, 153, 0.3)',
-  startTime: '10:00',
-  endTime: '12:00',
-  id: 'event-4559',
-  start: new Date('2024-03-18T09:00:00.000Z'),
-  end: new Date('2024-03-18T11:00:00.000Z'),
-  eventCurrentDate: '18 Mar 2024',
-  isHiddenInTimeView: false,
-  isOffRange: false,
-};
-const mockEditedEvent2 = {
-  activityOrFlowId: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
-  eventId: mockEventId2,
-  title: 'Mock Activity 2',
-  alwaysAvailable: true,
-  startFlowIcon: false,
-  isHidden: false,
-  backgroundColor: '#0b6e99',
-  periodicity: 'ALWAYS',
-  eventStart: new Date('2023-11-05T23:00:00.000Z'),
-  eventEnd: null,
-  oneTimeCompletion: false,
-  accessBeforeSchedule: false,
-  timerType: 'NOT_SET',
-  timer: 0,
-  notification: null,
-  endAlertIcon: false,
-  allDay: true,
-  startTime: '00:00',
-  endTime: '23:59',
-  id: 'event-5837',
-  start: new Date('2024-03-18T23:00:00.000Z'),
-  end: new Date('2024-03-18T22:59:00.000Z'),
-  eventCurrentDate: '18 Mar 2024',
-  isHiddenInTimeView: false,
-  isOffRange: false,
-};
 
 export const preloadedState = {
   workspaces: {
@@ -164,6 +104,68 @@ export const preloadedState = {
 };
 
 describe('EditEventPopup', () => {
+  const mockSetEditEventPopupVisible = jest.fn();
+  const mockOnClose = jest.fn();
+
+  const dataTestid = 'dashboard-calendar-edit-event';
+  const mockDefaultStartDate = new Date('03-18-2024');
+  const mockEditedEvent1 = {
+    activityOrFlowId: '96d889e2-2264-4e76-8c60-744600e770fe',
+    eventId: mockEventId1,
+    title: 'Mock Activity 1',
+    alwaysAvailable: false,
+    startFlowIcon: false,
+    isHidden: false,
+    backgroundColor: 'transparent',
+    periodicity: 'WEEKLY',
+    eventStart: new Date('2024-03-18T09:00:00.000Z'),
+    eventEnd: new Date('2024-12-31T11:00:00.000Z'),
+    oneTimeCompletion: null,
+    accessBeforeSchedule: false,
+    timerType: 'NOT_SET',
+    timer: null,
+    notification: null,
+    endAlertIcon: false,
+    allDay: false,
+    scheduledColor: '#0b6e99',
+    scheduledBackground: 'rgba(11, 110, 153, 0.3)',
+    startTime: '10:00',
+    endTime: '12:00',
+    id: 'event-4559',
+    start: new Date('2024-03-18T09:00:00.000Z'),
+    end: new Date('2024-03-18T11:00:00.000Z'),
+    eventCurrentDate: '18 Mar 2024',
+    isHiddenInTimeView: false,
+    isOffRange: false,
+  };
+  const mockEditedEvent2 = {
+    activityOrFlowId: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
+    eventId: mockEventId2,
+    title: 'Mock Activity 2',
+    alwaysAvailable: true,
+    startFlowIcon: false,
+    isHidden: false,
+    backgroundColor: '#0b6e99',
+    periodicity: 'ALWAYS',
+    eventStart: new Date('2023-11-05T23:00:00.000Z'),
+    eventEnd: null,
+    oneTimeCompletion: false,
+    accessBeforeSchedule: false,
+    timerType: 'NOT_SET',
+    timer: 0,
+    notification: null,
+    endAlertIcon: false,
+    allDay: true,
+    startTime: '00:00',
+    endTime: '23:59',
+    id: 'event-5837',
+    start: new Date('2024-03-18T23:00:00.000Z'),
+    end: new Date('2024-03-18T22:59:00.000Z'),
+    eventCurrentDate: '18 Mar 2024',
+    isHiddenInTimeView: false,
+    isOffRange: false,
+  };
+
   test(
     'update event periodicity and test close edit event popup',
     async () => {
@@ -173,7 +175,7 @@ describe('EditEventPopup', () => {
           editedEvent={mockEditedEvent1}
           setEditEventPopupVisible={mockSetEditEventPopupVisible}
           defaultStartDate={mockDefaultStartDate}
-          setSaveChangesPopupVisible={mockSetSaveChangesPopupVisible}
+          onClose={mockOnClose}
         />,
         {
           preloadedState,
@@ -199,7 +201,12 @@ describe('EditEventPopup', () => {
       expect(closeButton).toBeInTheDocument();
 
       await userEvent.click(closeButton);
-      expect(mockSetSaveChangesPopupVisible).toBeCalledWith(true);
+
+      expect(mockOnClose).toBeCalled();
+
+      const isDirty = mockOnClose.mock.lastCall[0].formState.isDirty;
+
+      expect(isDirty).toBe(true);
       expect(mockSetEditEventPopupVisible).not.toBeCalled();
     },
     JEST_TEST_TIMEOUT,
@@ -214,7 +221,7 @@ describe('EditEventPopup', () => {
           editedEvent={mockEditedEvent1}
           setEditEventPopupVisible={mockSetEditEventPopupVisible}
           defaultStartDate={mockDefaultStartDate}
-          setSaveChangesPopupVisible={mockSetSaveChangesPopupVisible}
+          setSaveChangesPopupVisible={mockOnClose}
         />,
         {
           preloadedState,
@@ -255,6 +262,7 @@ describe('EditEventPopup', () => {
         },
         { signal: undefined },
       );
+      expect(mockSetEditEventPopupVisible).toBeCalledWith(false);
     },
     JEST_TEST_TIMEOUT,
   );

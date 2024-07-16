@@ -6,6 +6,7 @@ import { TABS_HEIGHT } from 'shared/consts';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { UiType } from './Tabs.types';
+import { TABS_HORIZONTAL_PADDING } from './Tabs.const';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
   height: ${({
@@ -15,6 +16,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     hiddenHeader?: boolean;
     defaultTabs?: boolean;
     isBuilder?: boolean;
+    isCentered?: boolean;
     variant?: TabsOwnProps['variant'];
   }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
   flex-shrink: 0;
@@ -24,8 +26,14 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     uiType === UiType.Primary &&
     `
       width: 90rem;
-      margin: 0 auto;
   `};
+
+  ${({ isCentered }) =>
+    isCentered
+      ? 'margin: 0 auto;'
+      : // If the tabs are not centered, use the same left/right spacing
+        // as TabPanel so they are horizontally aligned
+        `margin: 0; padding: ${theme.spacing(0, TABS_HORIZONTAL_PADDING)};`};
 
   ${({ isBuilder }) =>
     isBuilder &&
@@ -42,11 +50,13 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   `};
 
   .MuiTabs-flexContainer {
-    justify-content: center;
+    justify-content: ${({ isCentered }) => (isCentered ? 'center' : 'start')};
+    gap: 1rem;
   }
 
   .MuiTab-root {
     opacity: 1;
+    ${({ isCentered }) => (!isCentered && 'max-width: 180px;') || ''}
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${({ uiType }) =>
@@ -57,7 +67,6 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     ${({ uiType }) =>
       uiType === UiType.Primary &&
       `
-        margin: ${theme.spacing(0, 0.8)};
         flex-grow: 1;
     `};
 
@@ -74,7 +83,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
             left: 1.4rem;
             top: 49%;
             transform: translateY(-50%);
-            
+
             .MuiBadge-badge {
               min-width: 0.5rem;
               width: 0.5rem;

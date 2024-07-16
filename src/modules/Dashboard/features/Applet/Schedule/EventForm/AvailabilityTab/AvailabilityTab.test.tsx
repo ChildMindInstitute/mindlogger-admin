@@ -18,18 +18,21 @@ const defaultValues = {
   startTime: '00:00',
   endTime: '23:59',
   reminder: null,
-  removeWarning: {},
 };
 
-const FormWrapper = (props) => {
+const FormWrapper = ({ removeWarnings, ...otherProps }) => {
   const methods = useForm({
     mode: 'onChange',
-    defaultValues: { ...props },
+    defaultValues: otherProps,
   });
 
   return (
     <FormProvider {...methods}>
-      <AvailabilityTab hasAlwaysAvailableOption data-testid={dataTestid} />
+      <AvailabilityTab
+        hasAlwaysAvailableOption
+        data-testid={dataTestid}
+        removeWarnings={removeWarnings}
+      />
     </FormProvider>
   );
 };
@@ -113,7 +116,7 @@ describe('AvailabilityTab component', () => {
         activityIncomplete: 1,
         reminderTime: '11:00:00',
       },
-      removeWarning: {
+      removeWarnings: {
         showRemoveAlwaysAvailable: true,
         showRemoveAllScheduled: true,
       },

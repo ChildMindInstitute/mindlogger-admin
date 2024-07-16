@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Encryption } from 'shared/utils/encryption';
 import { AlertType } from 'shared/state';
 
 export type NotificationProps = {
@@ -16,6 +15,5 @@ export type NotificationProps = {
   timeAgo: string;
   isWatched: boolean;
   subjectId: string;
-  encryption: Encryption;
   alert: AlertType;
 };

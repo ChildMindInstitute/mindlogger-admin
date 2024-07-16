@@ -34,31 +34,24 @@ import { useNextDayLabel } from '../EventForm.hooks';
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
   'data-testid': dataTestid,
+  removeWarnings,
 }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue, trigger } = useFormContext<EventFormValues>();
-  const [
-    alwaysAvailable,
-    periodicity,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    reminder,
-    removeWarning,
-  ] = useWatch({
-    control,
-    name: [
-      'alwaysAvailable',
-      'periodicity',
-      'startDate',
-      'endDate',
-      'startTime',
-      'endTime',
-      'reminder',
-      'removeWarning',
-    ],
-  });
+  const { control, setValue, trigger, formState } = useFormContext<EventFormValues>();
+  const [alwaysAvailable, periodicity, startDate, endDate, startTime, endTime, reminder] = useWatch(
+    {
+      control,
+      name: [
+        'alwaysAvailable',
+        'periodicity',
+        'startDate',
+        'endDate',
+        'startTime',
+        'endTime',
+        'reminder',
+      ],
+    },
+  );
   const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
@@ -98,6 +91,8 @@ export const AvailabilityTab = ({
 
   const handleAvailabilityCustomChange = (event: SelectEvent) => {
     const availability = event.target.value;
+    const { defaultValues } = formState;
+
     if (availability) {
       setValue('periodicity', Periodicity.Always);
       setValue('startTime', DEFAULT_START_TIME);
@@ -110,7 +105,16 @@ export const AvailabilityTab = ({
       return;
     }
 
-    setValue('periodicity', Periodicity.Once);
+    setValue(
+      'periodicity',
+      (defaultValues?.periodicity === Periodicity.Always
+        ? Periodicity.Once
+        : defaultValues?.periodicity) ?? Periodicity.Once,
+    );
+    setValue('startTime', defaultValues?.startTime ?? DEFAULT_START_TIME);
+    setValue('endTime', defaultValues?.endTime ?? DEFAULT_END_TIME);
+    setValue('accessBeforeSchedule', defaultValues?.accessBeforeSchedule ?? false);
+    setValue('oneTimeCompletion', defaultValues?.oneTimeCompletion ?? false);
   };
 
   const datePicker = (
@@ -158,10 +162,10 @@ export const AvailabilityTab = ({
         customChange={handleAvailabilityCustomChange}
         data-testid={`${dataTestid}-always-available`}
       />
-      {Object.keys(removeWarning).length !== 0 && (
+      {Object.keys(removeWarnings ?? {}).length !== 0 && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
-          {removeWarning.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
-          {removeWarning.showRemoveAllScheduled && t('alwaysAvailableWarning')}
+          {removeWarnings?.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
+          {removeWarnings?.showRemoveAllScheduled && t('alwaysAvailableWarning')}
         </StyledBodyMedium>
       )}
       {alwaysAvailable ? (
