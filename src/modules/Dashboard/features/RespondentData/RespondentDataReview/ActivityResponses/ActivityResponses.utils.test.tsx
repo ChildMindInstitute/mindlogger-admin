@@ -16,7 +16,7 @@ const getActivityItemAnswer = (responseType: ItemResponseType) => ({
   activityItem: {
     responseType,
   },
-  answer: {},
+  answer: responseType === ItemResponseType.Text ? 'some answer' : {},
 });
 
 const singleSelectDataTestid = 'single-select-response-item';

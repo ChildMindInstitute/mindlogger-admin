@@ -6,7 +6,8 @@ import { EmptyResponses } from './EmptyResponses';
 import { EmptyResponsesProps } from './EmptyResponses.types';
 
 const dataTestid = 'empty-responses';
-const selectResponsesText =
+const emptyText1 = 'Select the date and response time to review the response data.';
+const emptyText2 =
   'Select the date, Activity Flow or Activity, and response time to review the response data.';
 const noAvailableData = 'No available Data yet';
 
@@ -34,32 +35,34 @@ describe('EmptyResponses', () => {
     {
       props: { isAnswerSelected: false },
       description: 'renders correct empty state when no answer selected',
+      result: emptyText1,
     },
     {
       props: { isActivityOrFlowSelected: false },
       description: 'renders correct empty state when no activity or flow selected',
+      result: emptyText2,
     },
     {
       props: { isActivityOrFlowSelected: false, isAnswerSelected: false },
       description: 'renders correct empty state when no answer, and no activity or flow selected',
+      result: emptyText2,
     },
     {
       props: { hasAnswers: false },
       description: 'renders correct empty state when no answer provided',
+      result: noAvailableData,
     },
-    { props: { error: 'some error' }, description: 'renders error if provided' },
-  ].forEach(({ props, description }) => {
+    {
+      props: { error: 'some error' },
+      description: 'renders error if provided',
+      result: 'some error',
+    },
+  ].forEach(({ props, description, result }) => {
     test(description, () => {
       renderComponent(props);
 
       expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
-      if (props.error) {
-        expect(screen.getByText(props.error)).toBeInTheDocument();
-      } else if (props.hasAnswers === false) {
-        expect(screen.getByText(noAvailableData)).toBeInTheDocument();
-      } else {
-        expect(screen.getByText(selectResponsesText)).toBeInTheDocument();
-      }
+      expect(screen.getByText(result)).toBeInTheDocument();
     });
   });
 });

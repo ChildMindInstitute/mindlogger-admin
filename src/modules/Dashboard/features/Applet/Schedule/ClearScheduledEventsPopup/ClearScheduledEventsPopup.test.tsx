@@ -3,7 +3,6 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
-import { page } from 'resources';
 
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
@@ -20,10 +19,9 @@ const basicProps = {
 
 describe('ClearScheduledEventsPopup', () => {
   test('should delete events for default schedule', async () => {
-    const route = `/dashboard/${mockedAppletId}/schedule`;
-    const routePath = page.appletSchedule;
     mockAxios.delete.mockResolvedValueOnce(null);
-    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} />, { route, routePath });
+
+    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} />);
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
     expect(popupText).toHaveTextContent(
@@ -46,13 +44,8 @@ describe('ClearScheduledEventsPopup', () => {
   });
 
   test('should delete events for individual schedule', async () => {
-    const route = `/dashboard/${mockedAppletId}/schedule/${mockedRespondentId}`;
-    const routePath = page.appletScheduleIndividual;
     mockAxios.delete.mockResolvedValueOnce(null);
-    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} isDefault={false} />, {
-      route,
-      routePath,
-    });
+    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} userId={mockedRespondentId} />);
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
     expect(popupText).toHaveTextContent(

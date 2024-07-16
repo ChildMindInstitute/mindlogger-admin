@@ -9,7 +9,6 @@ import {
   mockedOwnerId,
   mockedManager,
   mockedEmail,
-  mockedManagerId,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -69,7 +68,7 @@ describe('Managers component tests', () => {
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText(/No Managers yet/)).toBeInTheDocument();
+      expect(screen.getByText(/No Team Members yet/)).toBeInTheDocument();
     });
   });
 
@@ -86,38 +85,22 @@ describe('Managers component tests', () => {
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+      expect(
+        screen.getByText('You do not have permission to view this content.'),
+      ).toBeInTheDocument();
     });
   });
 
   test('should render table with managers', async () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
-    const tableColumnNames = ['First Name', 'Last Name', 'Email', 'Roles', 'Actions'];
-    const managersColumns = ['TestFirstName', 'TestLastName', mockedEmail, 'Reviewer'];
+    const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
+    const managersColumns = ['TestFirstName', 'TestLastName', 'PhD', 'Reviewer', mockedEmail];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
       tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
       managersColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-    });
-  });
-
-  test('should pin manager', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
-    mockAxios.post.mockResolvedValueOnce(null);
-    renderWithProviders(<Managers />, { preloadedState, route, routePath });
-
-    const managerPin = await waitFor(() => screen.getByTestId('dashboard-managers-pin'));
-    fireEvent.click(managerPin);
-
-    await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
-        1,
-        `/workspaces/${mockedOwnerId}/managers/${mockedManagerId}/pin`,
-        {},
-        { signal: undefined },
-      );
     });
   });
 
@@ -172,8 +155,13 @@ describe('Managers component tests', () => {
       },
     };
 
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
+    // executeGetWorkspaceInfoApi
+    mockAxios.get.mockResolvedValueOnce(null);
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(emptySearchGetMock);
+
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
@@ -182,13 +170,14 @@ describe('Managers component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toBeCalledWith(
+      expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`,
         {
           params: {
             limit: 20,
             page: 1,
             search: mockedSearchValue,
+            ordering: '+lastName',
           },
           signal: undefined,
         },

@@ -13,11 +13,11 @@ import { Legend } from './Legend';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
 import { usePreparedEvents } from './Schedule.hooks';
 import { checkIfHasAccessToSchedule } from './Schedule.utils';
+import { ScheduleProvider } from './ScheduleProvider';
 
 export const Schedule = () => {
   const dispatch = useAppDispatch();
-  const { respondentId, appletId } = useParams();
-
+  const { appletId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { ownerId } = workspaces.useData() || {};
@@ -25,28 +25,27 @@ export const Schedule = () => {
   const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
   const { getAllWorkspaceRespondents, getRespondentDetails } = users.thunk;
   const preparedEvents = usePreparedEvents(appletData);
-  const hasAccess = checkIfHasAccessToSchedule(workspaceRoles?.[appletId!]);
+  const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    dispatch(
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!appletId || !hasAccess) return;
+
+    return dispatch(
       getAllWorkspaceRespondents({
         params: { ownerId, appletId, shell: false },
       }),
-    ),
-  );
+    );
+  });
 
   useEffect(() => {
     if (!appletId || !hasAccess) return;
     const { getEvents } = applets.thunk;
-    dispatch(getEvents({ appletId, respondentId }));
-
-    if (!respondentId || !ownerId) return;
-    dispatch(getRespondentDetails({ ownerId, appletId, respondentId }));
+    dispatch(getEvents({ appletId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, respondentId, hasAccess, ownerId]);
+  }, [appletId, dispatch, getRespondentDetails, hasAccess, ownerId]);
 
   if (isForbidden || !hasAccess) return noPermissionsComponent;
 
@@ -55,15 +54,14 @@ export const Schedule = () => {
       <Spinner />
     </StyledBody>
   ) : (
-    <StyledSchedule>
-      <StyledLeftPanel>
-        <Legend
-          legendEvents={preparedEvents}
-          appletName={appletData?.displayName || ''}
-          appletId={appletId || ''}
-        />
-      </StyledLeftPanel>
-      <Calendar />
-    </StyledSchedule>
+    <ScheduleProvider appletId={appletId} appletName={appletData?.displayName}>
+      <StyledSchedule>
+        <StyledLeftPanel>
+          <Legend legendEvents={preparedEvents} />
+        </StyledLeftPanel>
+
+        <Calendar />
+      </StyledSchedule>
+    </ScheduleProvider>
   );
 };

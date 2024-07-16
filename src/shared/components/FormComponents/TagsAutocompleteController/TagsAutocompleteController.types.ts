@@ -1,3 +1,8 @@
+import {
+  AutocompleteOwnerState,
+  AutocompleteProps,
+  AutocompleteRenderOptionState,
+} from '@mui/material';
 import { TextFieldProps } from '@mui/material/TextField';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
@@ -6,15 +11,25 @@ export type AutocompleteOption = {
   id: string;
 };
 
-export type FormAutocompleteProps = {
-  options: AutocompleteOption[] | undefined;
+export type FormAutocompleteProps<Value> = Pick<
+  AutocompleteProps<Value, true, false, false>,
+  'limitTags' | 'noOptionsText' | 'renderOption' | 'disabled'
+> & {
+  options: Value[];
   labelAllSelect?: string;
-  noOptionsText?: string;
-  limitTags?: number;
+  limitTagRows?: number;
   defaultSelectedAll?: boolean;
-  onCustomChange?: (options: AutocompleteOption[]) => void;
+  onCustomChange?: (options: Value[]) => void;
+  renderOption?: (
+    option: Value,
+    state: AutocompleteRenderOptionState,
+    ownerState: AutocompleteOwnerState<Value, true, false, false>,
+  ) => React.ReactNode;
+  textFieldProps?: TextFieldProps;
   'data-testid'?: string;
-} & TextFieldProps;
+};
 
-export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps &
-  UseControllerProps<T>;
+export type TagsAutocompleteControllerProps<
+  FormType extends FieldValues,
+  Value extends AutocompleteOption,
+> = UseControllerProps<FormType> & FormAutocompleteProps<Value>;

@@ -20,6 +20,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasAutoAdvance,
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
+        ItemConfigurationSettings.PortraitLayout,
       ],
     },
     {
@@ -52,6 +53,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       groupOptions: [
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
+        ItemConfigurationSettings.PortraitLayout,
       ],
     },
     {

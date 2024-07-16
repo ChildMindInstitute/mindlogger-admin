@@ -10,11 +10,11 @@ import {
 } from 'shared/mock';
 
 import {
-  getDecryptedAnswersObject,
-  getReportData,
-  getMediaData,
-  getActivityJourneyData,
   checkIfHasGithubImportedEventScreen,
+  getActivityJourneyData,
+  getDecryptedAnswersObject,
+  getMediaData,
+  getReportData,
 } from './getReportAndMediaData';
 import { ItemResponseType } from '../../consts';
 import { getObjectFromList } from '../getObjectFromList';
@@ -129,6 +129,8 @@ describe('getReportAndMediaData', () => {
         responseType: ItemResponseType.Text,
       },
       answer: '1',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     };
     const textNullAnswerItem = {
       ...textItem,
@@ -138,6 +140,8 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-2',
         name: 'itemName-2',
       },
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     };
     const textUndefinedAnswerItem = {
       ...textItem,
@@ -147,6 +151,8 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-3',
         name: 'itemName-3',
       },
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     };
     const decryptedAnswers = [
       textItem,
@@ -234,6 +240,8 @@ describe('getReportAndMediaData', () => {
           flag: 'completed',
           secret_user_id: '',
           userId: '',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           activity_id: 'activityId-1',
           activity_name: 'activity_name',
           activity_flow_id: '',
@@ -281,6 +289,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
@@ -305,6 +315,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
@@ -329,6 +341,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
@@ -368,6 +382,8 @@ describe('getReportAndMediaData', () => {
           'ss-1': 5,
           'ss-2': 6,
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
@@ -392,6 +408,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
@@ -417,6 +435,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
@@ -441,6 +461,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
@@ -465,6 +487,8 @@ describe('getReportAndMediaData', () => {
           reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
@@ -475,23 +499,19 @@ describe('getReportAndMediaData', () => {
   describe('getMediaData', () => {
     const answersForRegularItems = mockedParsedAnswers[0].decryptedAnswers;
     const resultForDrawing = {
-      fileName:
-        'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+      fileName: 'target-secret-id-eabe2de0-9ea4-495b-a4d1-2966eece97f8-drawing.svg',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/023cf7e7-6083-443a-b74a-f32b75a711cd/e2e611df-02d5-4316-8406-c5d685b94090.svg',
     };
     const resultForPhoto = {
-      fileName:
-        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg',
+      fileName: 'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-photo_text.jpg',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/d595acfc-8322-4d45-8ba5-c2f793b5476e/rn_image_picker_lib_temp_46ecc18c-2c7d-4d72-8d27-636c37e2e6f3.jpg',
     };
     const resultForVideo = {
-      fileName:
-        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4',
+      fileName: 'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-video_text.mp4',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/4fc51edd-2dab-4048-836b-f1b9bf0270f6/rn_image_picker_lib_temp_9309b1eb-90b0-4908-a24d-be6fa06def10.mp4',
     };
     const resultForAudio = {
-      fileName:
-        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a',
+      fileName: 'target-secret-id-949f248c-1a4b-4a35-a5a2-898dfef72050-audio_text.m4a',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/73ef3a61-8053-4558-814e-05baafbbdc90/f01c225c-62df-4867-b282-66f585a65109.m4a',
     };
 
@@ -546,11 +566,12 @@ describe('getReportAndMediaData', () => {
           press_skip_time: '',
           press_undo_time: '',
           prompt: 'drawing\n',
-          response:
-            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response: 'target-secret-id-eabe2de0-9ea4-495b-a4d1-2966eece97f8-drawing.svg',
           response_option_selection_time: '1689770402756',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
@@ -580,6 +601,8 @@ describe('getReportAndMediaData', () => {
           response_option_selection_time: '',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
@@ -634,6 +657,8 @@ describe('getReportAndMediaData', () => {
           response_option_selection_time: '',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.1.1',
           event_id: null,
           timezone_offset: '',
@@ -659,11 +684,12 @@ describe('getReportAndMediaData', () => {
           press_skip_time: '',
           press_undo_time: '',
           prompt: 'drawing\n',
-          response:
-            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response: 'target-secret-id-eabe2de0-9ea4-495b-a4d1-2966eece97f8-drawing.svg',
           response_option_selection_time: '1689770402756',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
@@ -693,6 +719,8 @@ describe('getReportAndMediaData', () => {
           response_option_selection_time: '',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',

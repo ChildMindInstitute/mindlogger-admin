@@ -1,12 +1,11 @@
 import { MouseEvent } from 'react';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
 import { Menu } from 'shared/components/Menu';
-import { variables } from 'shared/styles';
 
-import { StyledButton } from './ButtonWithMenu.styles';
 import { ButtonWithMenuProps } from './ButtonWithMenu.types';
 
 export const ButtonWithMenu = ({
@@ -33,11 +32,7 @@ export const ButtonWithMenu = ({
     <>
       <Tooltip tooltipTitle={tooltip || null}>
         <span>
-          <StyledButton
-            sx={{
-              backgroundColor:
-                openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
-            }}
+          <Button
             disabled={disabled}
             variant={variant}
             aria-haspopup="true"
@@ -48,7 +43,7 @@ export const ButtonWithMenu = ({
             data-testid={dataTestid}
           >
             {t(label)}
-          </StyledButton>
+          </Button>
         </span>
       </Tooltip>
       <Menu
