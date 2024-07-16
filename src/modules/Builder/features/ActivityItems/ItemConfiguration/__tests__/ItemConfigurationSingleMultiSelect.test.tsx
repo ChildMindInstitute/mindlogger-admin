@@ -3,6 +3,7 @@
 import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
+import userEvent from '@testing-library/user-event';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
 import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
@@ -765,6 +766,41 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       const { error } = ref.current.getFieldState(`${mockedItemName}.alerts.0.${attribute}`);
       expect(error.type).toEqual('required');
+    });
+  });
+
+  describe('Use Portrait Layout Setting', () => {
+    test('Lower characters limit with Portrait Layout setting', async () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedSingleSelectFormValues),
+      });
+
+      //character recommendation is set to 75 chars
+      expect(screen.getByText('2/75 characters')).toBeInTheDocument();
+      expect(screen.getByText('9/75 characters')).toBeInTheDocument();
+
+      await setItemConfigSetting(ItemConfigurationSettings.PortraitLayout);
+
+      //character recommendation is set to 75 chars
+      expect(screen.getByText('2/24 characters')).toBeInTheDocument();
+      expect(screen.getByText('9/24 characters')).toBeInTheDocument();
+      expect(screen.queryByText('Visibility decreases over 24 characters')).not.toBeInTheDocument();
+
+      const optionTextInput = screen
+        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-text`)
+        .querySelector('input');
+
+      //set text input value to 30 chars
+      await userEvent.type(
+        optionTextInput,
+        'Praesent in mauris eu tortor porttitor accumsan. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Aenean fermentum risus id tortor. Integer',
+      );
+
+      //24 character recommendation warning is visible
+      await waitFor(() => {
+        expect(screen.getByText('Visibility decreases over 24 characters')).toBeInTheDocument();
+      });
     });
   });
 });

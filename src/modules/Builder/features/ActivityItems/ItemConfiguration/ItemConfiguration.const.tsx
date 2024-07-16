@@ -14,6 +14,7 @@ export const DEFAULT_DISABLED_TIMER_VALUE = 0;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MAX_NUMBER = 30;
 export const SELECT_OPTION_TEXT_MAX_LENGTH = 75;
+export const SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT = 24;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_SLIDER_ROWS_SCORE = createArray(
   DEFAULT_SLIDER_MAX_VALUE,
