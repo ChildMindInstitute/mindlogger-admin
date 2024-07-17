@@ -1,4 +1,13 @@
 import { t } from 'i18next';
+import {
+  isWithinInterval,
+  getDay,
+  getYear,
+  getMonth,
+  getHours,
+  getMinutes,
+  getSeconds,
+} from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
@@ -10,8 +19,50 @@ import {
   getIsWebSupported,
 } from 'shared/utils';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
+import { PeriodicityType } from 'shared/state/Applet/Applet.schema';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
+
+function datetimeIsWithinInterval(start: Date, end: Date) {
+  const today = new Date();
+
+  return isWithinInterval(today, { start, end });
+}
+
+function getDividedDateValues(date: Date) {
+  return {
+    day: getDay(date),
+    month: getMonth(date) + 1,
+    year: getYear(date),
+    hour: getHours(date),
+    minute: getMinutes(date),
+    second: getSeconds(date),
+    date,
+  };
+}
+
+/**
+ * this function validates if the date is in range based on the PeriodicityTypes object
+ * @param periodicity
+ * @returns boolean
+ */
+function validateIfDateIsInRange(periodicity: PeriodicityType) {
+  const currentDate = new Date();
+  const startDate = new Date(`${periodicity.start_date}T${periodicity.start_time}`);
+  const endDate = new Date(`${periodicity.end_date}T${periodicity.end_time}`);
+
+  const currentTimeValues = getDividedDateValues(currentDate);
+  const startTimeValues = getDividedDateValues(startDate);
+  const endTimeValues = getDividedDateValues(endDate);
+
+  // if ((periodicity?.type as string)?.toLowerCase === PeriodicityTypes.ALWAYS.toLowerCase) {
+  // }
+  return {
+    endTimeValues,
+    startTimeValues,
+    currentTimeValues,
+  };
+}
 
 export const getActivityActions = ({
   actions: { editActivity, exportData, assignActivity, takeNow },
@@ -34,7 +85,14 @@ export const getActivityActions = ({
   const { id: activityId } = activity;
   const isWebUnsupported = !getIsWebSupported(activity.items);
 
-  if (!activityId) return [];
+  if (!activityId || !activity?.periodicity) return [];
+
+  const bb = validateIfDateIsInRange(activity?.periodicity);
+
+  datetimeIsWithinInterval(bb.startTimeValues.date, bb.endTimeValues.date);
+
+  // console.log('activity.periodicity', activity.periodicity);
+  // console.log('bb', bb);
 
   return [
     {
