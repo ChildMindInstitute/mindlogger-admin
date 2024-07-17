@@ -78,6 +78,7 @@ import {
   FeedbackNote,
   GetActivityResponse,
   GetActivityParams,
+  CreateTemporaryMultiInformantRelation,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -910,3 +911,15 @@ export const getAppletActivitiesApi = (
     params,
     signal,
   });
+
+export const createTemporaryMultiInformantRelationApi = (
+  { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/subjects/${subjectId}/relations/${sourceSubjectId}/multiinformant-assessment`,
+    {},
+    {
+      signal,
+    },
+  );

@@ -5,7 +5,7 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Modal } from 'shared/components';
+import { Modal, Spinner } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
 import {
   StyledFlexColumn,
@@ -14,9 +14,14 @@ import {
   theme,
   StyledActivityThumbnailContainer,
   StyledActivityThumbnailImg,
+  StyledErrorText,
 } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
+import {
+  createTemporaryMultiInformantRelationApi,
+  getWorkspaceManagersApi,
+  getWorkspaceRespondentsApi,
+} from 'api';
 import {
   MixpanelPayload,
   MixpanelProps,
@@ -25,6 +30,7 @@ import {
   checkIfDashboardAppletParticipantDetailsUrlPassed,
   checkIfFullAccess,
   joinWihComma,
+  getErrorMessage,
 } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync, useLogout } from 'shared/hooks';
@@ -49,6 +55,13 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
 
 type AnyTeamSearchType = 'team' | 'any-participant';
 type FullTeamSearchType = 'team' | 'full-participant';
+
+type TakeNowData = {
+  url: URL;
+  respondent: ParticipantDropdownOption;
+  sourceSubjectId: string;
+  targetSubjectId: string;
+};
 
 const getAccountType = (subject: ParticipantDropdownOption | null) => {
   if (!subject) return null;
@@ -268,6 +281,86 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
       defaultSourceSubject?.userId ? defaultSourceSubject : null,
     );
+    const [takeNowData, setTakeNowData] = useState<TakeNowData | null>(null);
+
+    const launchWebApp = useCallback(() => {
+      if (takeNowData === null) {
+        return;
+      }
+
+      setActivityOrFlow(null);
+
+      const newTab = window.open(takeNowData.url, '_blank');
+      // message received from the TakeNowSuccessModal.tsx file from the web app
+      // it's needed to close the new tab after the user clicks the "Close" button
+      window.addEventListener('message', function messageHandler(event) {
+        if (event.origin === takeNowData.url.origin) {
+          const message = event.data;
+
+          if (message === 'close-me') {
+            newTab?.close();
+          }
+
+          this.removeEventListener('message', messageHandler);
+        }
+      });
+
+      handleLogout({ shouldSoftLock: true });
+    }, [handleLogout, takeNowData]);
+
+    const {
+      execute: createSourceRelation,
+      isLoading: isCreatingSourceRelation,
+      value: sourceRelationResponse,
+      error: sourceRelationError,
+    } = useAsync(createTemporaryMultiInformantRelationApi);
+
+    const {
+      execute: createTargetRelation,
+      isLoading: isCreatingTargetRelation,
+      value: targetRelationResponse,
+      error: targetRelationError,
+    } = useAsync(createTemporaryMultiInformantRelationApi);
+
+    useEffect(() => {
+      if (takeNowData !== null) {
+        const needSourceRelation =
+          takeNowData.respondent.tag !== 'Team' &&
+          takeNowData.respondent.id !== takeNowData.sourceSubjectId;
+        const needTargetRelation =
+          takeNowData.respondent.tag !== 'Team' &&
+          takeNowData.respondent.id !== takeNowData.targetSubjectId &&
+          takeNowData.sourceSubjectId !== takeNowData.targetSubjectId;
+
+        if (
+          (needSourceRelation && !sourceRelationResponse) ||
+          (needTargetRelation && !targetRelationResponse)
+        ) {
+          return;
+        }
+
+        if (needSourceRelation && sourceRelationResponse && sourceRelationResponse.status !== 200) {
+          console.error(sourceRelationError);
+
+          return;
+        }
+
+        if (needTargetRelation && targetRelationResponse && targetRelationResponse.status !== 200) {
+          console.error(targetRelationError);
+
+          return;
+        }
+
+        launchWebApp();
+      }
+    }, [
+      launchWebApp,
+      sourceRelationError,
+      sourceRelationResponse,
+      takeNowData,
+      targetRelationError,
+      targetRelationResponse,
+    ]);
 
     const handleSubmit = useCallback(() => {
       if (
@@ -282,12 +375,16 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         url.searchParams.set('targetSubjectId', targetSubject.id);
         url.searchParams.set('multiInformantAssessmentId', String(multiInformantAssessmentId));
 
+        let respondent: ParticipantDropdownOption = sourceSubject;
+
         // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
         // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
         if (isSelfReporting && sourceSubject.userId) {
           url.searchParams.set('respondentId', sourceSubject.userId);
+          respondent = sourceSubject;
         } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
           url.searchParams.set('respondentId', loggedInUser.userId);
+          respondent = loggedInUser;
         }
 
         track('Multi-informant Start Activity click', {
@@ -299,26 +396,45 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           [MixpanelProps.IsSelfReporting]: isSelfReporting || loggedInUser?.id === sourceSubject.id,
         });
 
-        setActivityOrFlow(null);
-
-        const newTab = window.open(url.toString(), '_blank');
-        // message received from the TakeNowSuccessModal.tsx file from the web app
-        // it's needed to close the new tab after the user clicks the "Close" button
-        window.addEventListener('message', function messageHandler(event) {
-          if (event.origin === url.origin) {
-            const message = event.data;
-
-            if (message === 'close-me') {
-              newTab?.close();
-            }
-
-            this.removeEventListener('message', messageHandler);
+        if (!isCreatingSourceRelation && !isCreatingTargetRelation) {
+          if (respondent.tag !== 'Team' && respondent.id !== sourceSubject.id) {
+            // Create a temporary multi-informant relation b/n the logged-in user and the source subject
+            createSourceRelation({
+              sourceSubjectId: respondent.id,
+              subjectId: sourceSubject.id,
+            });
           }
-        });
 
-        handleLogout({ shouldSoftLock: true });
+          if (
+            respondent.tag !== 'Team' &&
+            respondent.id !== targetSubject.id &&
+            sourceSubject.id !== targetSubject.id
+          ) {
+            // Create a temporary multi-informant relation b/n the logged-in user and the source subject
+            createTargetRelation({
+              sourceSubjectId: respondent.id,
+              subjectId: targetSubject.id,
+            });
+          }
+        }
+
+        setTakeNowData({
+          url,
+          respondent,
+          sourceSubjectId: sourceSubject.id,
+          targetSubjectId: targetSubject.id,
+        });
       }
-    }, [targetSubject, sourceSubject, isSelfReporting, loggedInUser, handleLogout]);
+    }, [
+      targetSubject,
+      sourceSubject,
+      isSelfReporting,
+      loggedInUser,
+      isCreatingSourceRelation,
+      isCreatingTargetRelation,
+      createSourceRelation,
+      createTargetRelation,
+    ]);
 
     /**
      * Handle participant search. It can be a combination of team members and any participants
@@ -415,6 +531,26 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       );
     }
 
+    const TakeNowSpinner = () => {
+      if (isCreatingSourceRelation || isCreatingTargetRelation) {
+        return <Spinner />;
+      }
+
+      return null;
+    };
+
+    const SubjectRelationError = () => {
+      if (sourceRelationError || targetRelationError) {
+        return (
+          <StyledErrorText sx={{ mt: 0, mb: 0 }}>
+            {getErrorMessage(t('takeNow.modal.relationErrorMessage'))}
+          </StyledErrorText>
+        );
+      }
+
+      return null;
+    };
+
     return (
       <Modal
         open={true}
@@ -426,10 +562,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         disabledSubmit={
           targetSubject === null ||
           sourceSubject === null ||
-          (!isSelfReporting && loggedInUser === null)
+          (!isSelfReporting && loggedInUser === null) ||
+          isCreatingTargetRelation ||
+          isCreatingTargetRelation
         }
         data-testid={`${dataTestId}-take-now-modal`}
       >
+        <TakeNowSpinner />
         <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
           <StyledFlexTopCenter gap={2.4}>
             <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
@@ -542,6 +681,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
               handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
+            <SubjectRelationError />
           </StyledFlexColumn>
         </StyledFlexColumn>
       </Modal>

@@ -589,3 +589,8 @@ export type FeedbackNote = {
   note: string;
   createdAt: string;
 };
+
+export type CreateTemporaryMultiInformantRelation = {
+  subjectId: string;
+  sourceSubjectId: string;
+};

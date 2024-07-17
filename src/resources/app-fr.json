@@ -1292,7 +1292,8 @@
         "teamMemberGrouping": "Membres de l'équipe",
         "participantGrouping": "Participants",
         "notFound": "Pas trouvé"
-      }
+      },
+      "relationErrorMessage": "Impossible de démarrer l'activité. Veuillez réessayer plus tard."
     }
   },
   "teamMemberAlreadyInvited": "Le membre de l'équipe a déjà été invité",
