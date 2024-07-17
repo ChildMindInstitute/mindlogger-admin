@@ -661,6 +661,7 @@ export type ScoresObject = {
   [key: string]: number;
 };
 
+// types from the BE repo defined in src/apps/schedule/domain/constants.py with the same name as the following:
 export type PeriodicityTypeValues = {
   ONCE: 'ONCE';
   DAILY: 'DAILY';
