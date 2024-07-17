@@ -563,7 +563,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           targetSubject === null ||
           sourceSubject === null ||
           (!isSelfReporting && loggedInUser === null) ||
-          isCreatingTargetRelation ||
+          isCreatingSourceRelation ||
           isCreatingTargetRelation
         }
         data-testid={`${dataTestId}-take-now-modal`}
