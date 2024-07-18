@@ -1306,6 +1306,7 @@
   "shortText": "Texte court",
   "paragraphText": "Texte du paragraphe",
   "textHint": "Champ de saisie de texte",
+  "shortTextHint": "Champ de saisie de texte court",
   "paragraphTextHint": "Champ de saisie du texte du paragraphe",
   "textInputOptionDescription": "Le participant pourra saisir une réponse textuelle supplémentaire",
   "textInputOptionDescription_required": "Le participant devra saisir une réponse textuelle supplémentaire",

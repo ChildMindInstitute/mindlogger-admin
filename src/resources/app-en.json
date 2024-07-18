@@ -1307,6 +1307,7 @@
   "shortText": "Short Text",
   "paragraphText": "Paragraph Text",
   "textHint": "Text input field",
+  "shortTextHint": "Short text input field",
   "paragraphTextHint": "Paragraph text input field",
   "textInputOptionDescription": "The respondent will be able to enter an additional text response",
   "textInputOptionDescription_required": "The respondent will be required to enter an additional text response",

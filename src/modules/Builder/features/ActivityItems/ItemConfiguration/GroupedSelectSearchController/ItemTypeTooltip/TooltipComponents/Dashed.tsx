@@ -7,6 +7,7 @@ import {
   StyledFlexAllCenter,
   StyledFlexColumn,
 } from 'shared/styles/styledComponents';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   StyledDashedWrapper,
@@ -18,6 +19,9 @@ import { DashedProps, DashedUiType } from './TooltipComponents.types';
 import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 export const Dashed = ({ uiType }: DashedProps) => {
+  const {
+    featureFlags: { enableParagraphTextItem },
+  } = useFeatureFlags();
   const { t } = useTranslation();
   const isTextUiType = uiType === DashedUiType.Text;
   const isDrawingUiType = uiType === DashedUiType.Drawing;
@@ -82,7 +86,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
   });
 
   const getText = () => ({
-    [DashedUiType.Text]: t('textHint'),
+    [DashedUiType.Text]: t(enableParagraphTextItem ? 'shortTextHint' : 'textHint'),
     [DashedUiType.ParagraphText]: t('paragraphTextHint'),
     [DashedUiType.Drawing]: t('drawingHint'),
     [DashedUiType.Photo]: t('photoHint'),
