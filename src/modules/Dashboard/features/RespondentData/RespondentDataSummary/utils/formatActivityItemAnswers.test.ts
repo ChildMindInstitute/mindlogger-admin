@@ -95,6 +95,8 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
       ${{ value: 'string' }}  | ${ItemResponseType.MultipleSelection} | ${false}       | ${'should return false for an incorrect multiple selection answer'}
       ${'string'}             | ${ItemResponseType.Text}              | ${true}        | ${'should return true for a correct text answer'}
       ${{ value: 'string' }}  | ${ItemResponseType.Text}              | ${false}       | ${'should return false for an incorrect text answer'}
+      ${'string'}             | ${ItemResponseType.ParagraphText}     | ${true}        | ${'should return true for a correct text answer'}
+      ${{ value: 'string' }}  | ${ItemResponseType.ParagraphText}     | ${false}       | ${'should return false for an incorrect text answer'}
     `('$description', ({ answer, responseType, expectedOutput }) => {
       const result = isAnswerTypeCorrect(answer, responseType);
       expect(result).toBe(expectedOutput);
@@ -401,7 +403,7 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
           config: {
             removeBackButton: false,
             skippableItem: false,
-            maxResponseLength: 300,
+            maxResponseLength: 72,
             correctAnswerRequired: false,
             correctAnswer: '',
             numericalResponseRequired: false,
@@ -430,6 +432,54 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
         },
         responseDataIdentifier: false,
         responseType: 'text',
+        responseValues: null,
+      },
+      answers: [
+        {
+          answer: {
+            text: null,
+            value: undefined,
+          },
+          date: '2024-03-14T10:03:01.345000',
+        },
+      ],
+    };
+
+    const paragraphTextProps = {
+      ...sharedProps,
+      currentAnswer: {
+        activityItem: {
+          question: {
+            en: 'text question',
+          },
+          responseType: 'paragraphText',
+          responseValues: null,
+          config: {
+            removeBackButton: false,
+            skippableItem: false,
+            maxResponseLength: 1000,
+            responseRequired: true,
+          },
+          name: 'paragraph_text_with_response',
+          isHidden: false,
+          conditionalLogic: null,
+          allowEdit: true,
+          id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
+          order: 10,
+        },
+        answers: 'Test',
+        items: [], // skip, no need for the test
+      },
+    };
+    const paragraphTextResult = {
+      activityItem: {
+        id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
+        name: 'paragraph_text_with_response',
+        order: 10,
+        question: {
+          en: 'text question',
+        },
+        responseType: 'paragraphText',
         responseValues: null,
       },
       answers: [
@@ -1003,6 +1053,7 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
       ${multipleSelectionProps}     | ${multipleSelectionResult}     | ${'multi selection'}
       ${sliderProps}                | ${sliderResult}                | ${'slider'}
       ${textProps}                  | ${textResult}                  | ${'text'}
+      ${paragraphTextProps}         | ${paragraphTextResult}         | ${'paragraph text'}
       ${timeProps}                  | ${timeResult}                  | ${'time'}
       ${numberSelectionProps}       | ${numberSelectionResult}       | ${'number selection'}
       ${dateProps}                  | ${dateResult}                  | ${'date'}

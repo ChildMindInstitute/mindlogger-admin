@@ -273,6 +273,20 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
+  [ItemResponseType.ParagraphText]: [
+    {
+      groupName: ItemSettingsGroupNames.ResponseOptions,
+      groupOptions: [ItemConfigurationSettings.IsResponseRequired],
+    },
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurations,
+      groupOptions: [
+        ItemConfigurationSettings.IsSkippable,
+        ItemConfigurationSettings.IsGoBackRemoved,
+      ],
+      collapsedByDefault: true,
+    },
+  ],
   [ItemResponseType.Drawing]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,

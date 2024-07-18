@@ -5,6 +5,7 @@ export enum SelectionUiType {
 
 export enum DashedUiType {
   Text = 'text',
+  ParagraphText = 'paragraphText',
   Drawing = 'drawing',
   Photo = 'photo',
   Video = 'video',
