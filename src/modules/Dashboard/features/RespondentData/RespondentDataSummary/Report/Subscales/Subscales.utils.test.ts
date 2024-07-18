@@ -123,7 +123,7 @@ const activityItems = {
       config: {
         removeBackButton: false,
         skippableItem: false,
-        maxResponseLength: 300,
+        maxResponseLength: 72,
         correctAnswerRequired: false,
         correctAnswer: '',
         numericalResponseRequired: false,
@@ -328,7 +328,7 @@ const item = {
         config: {
           removeBackButton: false,
           skippableItem: false,
-          maxResponseLength: 300,
+          maxResponseLength: 72,
           correctAnswerRequired: false,
           correctAnswer: '',
           numericalResponseRequired: false,
@@ -878,7 +878,7 @@ describe('Subscales.utils', () => {
         config: {
           removeBackButton: false,
           skippableItem: false,
-          maxResponseLength: 300,
+          maxResponseLength: 72,
           correctAnswerRequired: false,
           correctAnswer: '',
           numericalResponseRequired: false,

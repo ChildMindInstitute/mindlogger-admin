@@ -35,6 +35,7 @@ export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, strin
   [ItemResponseType.MultipleSelectionPerRow]: t('multipleSelectionPerRowHint'),
   [ItemResponseType.SliderRows]: t('sliderRowsHint'),
   [ItemResponseType.Text]: t('textHint'),
+  [ItemResponseType.ParagraphText]: t('textHint'),
   [ItemResponseType.Drawing]: t('drawingHint'),
   [ItemResponseType.Photo]: t('photoHint'),
   [ItemResponseType.Video]: t('videoHint'),

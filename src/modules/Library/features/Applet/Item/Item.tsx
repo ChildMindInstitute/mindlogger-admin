@@ -18,7 +18,8 @@ import {
   StyledMdPreview,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { getSelector, renderItemContent } from './Item.utils';
+import { getSelector } from './Item.utils';
+import { useItemContent } from './Item.hooks';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 export const Item = ({
@@ -34,6 +35,7 @@ export const Item = ({
   const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
   const selectedItems = getValues()[appletId];
+  const renderItemContent = useItemContent();
 
   const itemNamePlusActivityName = getSelector(item.name, activityName);
   const dictionaryText = getDictionaryText(item.question);

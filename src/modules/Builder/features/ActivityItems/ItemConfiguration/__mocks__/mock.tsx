@@ -440,11 +440,27 @@ export const mockedEmptyText = {
   config: {
     removeBackButton: false,
     skippableItem: false,
-    maxResponseLength: 300,
+    maxResponseLength: 72,
     correctAnswerRequired: false,
     correctAnswer: '',
     numericalResponseRequired: false,
     responseDataIdentifier: false,
+    responseRequired: false,
+  },
+  isHidden: false,
+  allowEdit: true,
+  alerts: [],
+  responseValues: {},
+};
+
+export const mockedEmptyParagraphText = {
+  responseType: 'paragraphText',
+  name: 'Item',
+  question: '',
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    maxResponseLength: 1000,
     responseRequired: false,
   },
   isHidden: false,
