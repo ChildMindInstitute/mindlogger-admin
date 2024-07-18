@@ -5,4 +5,5 @@ export const ItemTypesToPrint = [
   ItemResponseType.MultipleSelection,
   ItemResponseType.Slider,
   ItemResponseType.Text,
+  ItemResponseType.ParagraphText,
 ];

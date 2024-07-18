@@ -756,7 +756,7 @@ export const mockedSimpleAppletFormData = {
           config: {
             removeBackButton: false,
             skippableItem: false,
-            maxResponseLength: 300,
+            maxResponseLength: 72,
             correctAnswerRequired: false,
             correctAnswer: '',
             numericalResponseRequired: false,
@@ -1252,7 +1252,7 @@ export const mockedTextActivityItem = {
   config: {
     removeBackButton: false,
     skippableItem: false,
-    maxResponseLength: 300,
+    maxResponseLength: 72,
     correctAnswerRequired: false,
     correctAnswer: '',
     numericalResponseRequired: false,
@@ -1265,6 +1265,23 @@ export const mockedTextActivityItem = {
   conditionalLogic: null,
   allowEdit: true,
   id: '5bad6e4a-7035-4ddd-9c54-375604025a1f',
+};
+
+export const mockedParagraphTextActivityItem = {
+  question: 'paragraph text',
+  responseType: 'paragraphText',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    maxResponseLength: 1000,
+    responseRequired: false,
+  },
+  name: 'paragraphText',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '5bad6e4a-7035-4ddd-9c54-375604012345',
 };
 
 export const mockedDrawingActivityItem = {
@@ -2210,7 +2227,7 @@ export const mockedItemsSettingsForSubscale = [
     config: {
       removeBackButton: false,
       skippableItem: false,
-      maxResponseLength: 300,
+      maxResponseLength: 72,
       correctAnswerRequired: false,
       correctAnswer: '',
       numericalResponseRequired: false,
@@ -2564,7 +2581,7 @@ export const mockedDecryptedAnswersWithSubscales = [
       config: {
         removeBackButton: false,
         skippableItem: false,
-        maxResponseLength: 300,
+        maxResponseLength: 72,
         correctAnswerRequired: false,
         correctAnswer: '',
         numericalResponseRequired: false,
