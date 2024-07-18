@@ -11,7 +11,6 @@ import {
   SingleMultiSelectionPerRowCondition,
   SliderRowsCondition,
   TimeRangeConditionType,
-  RangeValueConditionDate,
 } from 'shared/state/Applet';
 
 import { DEFAULT_PAYLOAD_MAX_VALUE, DEFAULT_PAYLOAD_MIN_VALUE } from './ConditionRow.const';
@@ -146,11 +145,6 @@ export const getPayload = ({
 }: GetPayload) => {
   const responseType = selectedItem?.responseType;
 
-  // console.log('selected item +++++++++++++', selectedItem);
-  // console.log('condition type', conditionType);
-  // console.log('condition payload', conditionPayload);
-  // console.log('++++++++++++++++++++++++++++++++++++++++++++++');
-
   switch (conditionType) {
     case ConditionType.IncludesOption:
     case ConditionType.NotIncludesOption:
@@ -264,9 +258,9 @@ export const getPayload = ({
       if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
         return {
           minValue:
-            (conditionPayload as unknown as RangeValueConditionDate['payload'])?.minValue ?? null,
+            (conditionPayload as unknown as RangeValueCondition<Date>['payload'])?.minValue ?? null,
           maxValue:
-            (conditionPayload as unknown as RangeValueConditionDate['payload'])?.maxValue ?? null,
+            (conditionPayload as unknown as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
         };
       }
       if (responseType === ItemResponseType.TimeRange) {

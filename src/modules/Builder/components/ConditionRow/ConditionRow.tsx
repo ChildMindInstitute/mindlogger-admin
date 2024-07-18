@@ -123,8 +123,6 @@ export const ConditionRow = ({
 
       const payload = getPayload({ conditionType, conditionPayload, selectedItem });
 
-      // console.log('payload', payload);
-
       setValue(conditionPayloadName, payload);
     },
     [name, conditionPayload, selectedItem, onChangeConditionType],
