@@ -14,7 +14,7 @@ export const ActivityAssignDrawer = ({
   appletId,
   activityId,
   activityFlowId,
-  sourceSubjectId,
+  respondentId,
   targetSubjectId,
   onClose,
   ...rest

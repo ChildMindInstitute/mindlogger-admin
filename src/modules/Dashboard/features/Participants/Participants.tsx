@@ -579,7 +579,7 @@ export const Participants = () => {
       <ActivityAssignDrawer
         appletId={appletId}
         open={showActivityAssign}
-        sourceSubjectId={chosenAppletData?.respondentId ? chosenAppletData.subjectId : undefined}
+        respondentId={chosenAppletData?.respondentId ?? undefined}
         targetSubjectId={chosenAppletData?.respondentId ? undefined : chosenAppletData?.subjectId}
         onClose={() => {
           setShowActivityAssign(false);
