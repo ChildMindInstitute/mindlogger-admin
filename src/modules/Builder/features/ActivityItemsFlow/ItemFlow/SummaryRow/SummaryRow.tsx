@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 
@@ -9,16 +9,18 @@ import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSel
 import { ItemFormValues } from 'modules/Builder/types';
 import { StyledSummaryRow } from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { ConditionalLogicMatch } from 'shared/consts';
 
 import { SummaryRowProps } from './SummaryRow.types';
-import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
+import { getItemsOptions, getMatchOptions } from './utils';
 import { useItemsInUsage } from './SummaryRow.hooks';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
-  const [items, conditions] = useWatch({
-    name: [`${activityName}.items`, `${name}.conditions`],
+  const matchFieldName = `${name}.match`;
+  const [items, conditions, match] = useWatch({
+    name: [`${activityName}.items`, `${name}.conditions`, matchFieldName],
   });
   const itemsInUsage = useItemsInUsage(name);
 
@@ -42,6 +44,14 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
   const { question } =
     ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
 
+  useEffect(() => {
+    // If there are contradictory conditions, change the value of the match option from 'All' to 'Any'
+    const needMatchValueChange = matchOptions[1].disabled && match === ConditionalLogicMatch.All;
+    if (needMatchValueChange) {
+      setValue(matchFieldName, ConditionalLogicMatch.Any);
+    }
+  }, [matchOptions, match, matchFieldName, setValue]);
+
   return (
     <>
       <StyledSummaryRow data-testid={dataTestid}>
@@ -49,7 +59,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
 
         <ItemFlowSelectController
           control={control}
-          name={`${name}.match`}
+          name={matchFieldName}
           options={matchOptions}
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
