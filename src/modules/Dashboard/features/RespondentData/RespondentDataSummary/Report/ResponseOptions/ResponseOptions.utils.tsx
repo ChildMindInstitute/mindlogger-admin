@@ -82,6 +82,7 @@ export const getResponseItem = ({
     case ItemResponseType.TimeRange:
     case ItemResponseType.Date:
     case ItemResponseType.Text:
+    case ItemResponseType.ParagraphText:
       return (
         <ReportTable
           responseType={responseType}

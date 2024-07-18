@@ -1,8 +1,8 @@
 import { TextField, Box, styled } from '@mui/material';
 
-import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { StyledFlexTopCenter, StyledFlexTopStart, theme } from 'shared/styles';
 
-export const StyledRow = styled(StyledFlexTopCenter)`
+export const StyledRow = styled(StyledFlexTopStart)`
   width: 100%;
   margin-bottom: ${theme.spacing(1.6)};
 `;

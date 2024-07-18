@@ -26,6 +26,7 @@ import {
   mockedNumberSelectActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
+  mockedParagraphTextActivityItem,
 } from 'shared/mock';
 import { createArray, getEntityKey } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
@@ -61,6 +62,7 @@ const mockedAppletWithAllItemTypes = {
         mockedSliderRowsActivityItem,
         mockedAudioPlayerActivityItem,
         mockedNumberSelectActivityItem,
+        mockedParagraphTextActivityItem,
         mockedMultiSelectRowsActivityItem,
         mockedSingleSelectRowsActivityItem,
       ],
@@ -95,6 +97,7 @@ const mockedOrderedSummaryItemItems = [
   mockedSliderRowsActivityItem,
   mockedAudioPlayerActivityItem,
   mockedNumberSelectActivityItem,
+  mockedParagraphTextActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
 ];
@@ -253,7 +256,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getByTestId(`${mockedTestid}-0-summary-item`)).toBeVisible();
   });
 
-  test('Condition Item: all items except Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
+  test('Condition Item: all items except Text/ParagraphText/Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -285,7 +288,7 @@ describe('Activity Items Flow', () => {
     expect(itemDropdown).toBeVisible();
 
     const items = itemDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(17);
+    expect(items).toHaveLength(18);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedSummaryItemItems[index].id);
