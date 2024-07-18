@@ -398,23 +398,25 @@ export const theme = createTheme({
           padding: '1rem 2rem',
           textTransform: 'none',
 
-          '& svg': {
+          '& svg:not([fill])': {
             fill: 'currentColor',
           },
         },
       },
     },
     MuiChip: {
+      defaultProps: { size: 'small' },
       styleOverrides: {
-        root: ({ ownerState }) => ({
+        root: ({ ownerState: { color, variant, size } }) => ({
           borderRadius: variables.borderRadius.md,
-          fontSize: variables.font.size.md,
+          fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
           fontWeight: variables.font.weight.regular,
+          letterSpacing: size === 'small' ? 0 : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
-          height: '2.4rem',
-          lineHeight: variables.font.lineHeight.md,
-          padding: '0.2rem 0.8rem',
-          ...getChipStyleOverrides({ color: ownerState.color, variant: ownerState.variant }),
+          height: size === 'small' ? '2.4rem' : '3.2rem',
+          lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
+          padding: size === 'small' ? '0.2rem 0.8rem' : '0.4rem 0.8rem',
+          ...getChipStyleOverrides({ color, variant }),
 
           '.MuiChip-deleteIcon': { margin: 0 },
           '.MuiChip-icon': { fill: 'currentColor', margin: 0 },
@@ -771,6 +773,13 @@ export const theme = createTheme({
           '.MuiModal-backdrop': {
             backgroundColor: 'rgba(0, 0, 0, 0.25)',
           },
+        },
+      },
+    },
+    MuiListItemSecondaryAction: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
         },
       },
     },
