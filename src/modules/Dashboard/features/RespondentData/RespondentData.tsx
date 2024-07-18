@@ -13,6 +13,7 @@ import { getEntityKey } from 'shared/utils';
 import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import { getAppletActivitiesApi } from 'api';
 import { UnlockAppletPopup } from 'modules/Dashboard/features/Respondents/Popups/UnlockAppletPopup';
+import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
@@ -46,17 +47,7 @@ export const RespondentData = () => {
         (flow: ActivityFlow) => getEntityKey(flow) === activityFlowId,
       );
 
-      // Hydrate flow with activities
-      if (flow) {
-        const { activityIds = [] } = flow;
-
-        return {
-          ...flow,
-          activities: activityIds
-            .map((activityId: string) => activities.find(({ id }) => id === activityId))
-            .filter(Boolean) as Activity[],
-        };
-      }
+      return flow && hydrateActivityFlows([flow], activities)[0];
     }
   }, [value, activityId, activityFlowId]);
 
