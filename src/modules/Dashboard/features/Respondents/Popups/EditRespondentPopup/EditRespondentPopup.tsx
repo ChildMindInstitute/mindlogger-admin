@@ -48,8 +48,8 @@ export const EditRespondentPopup = ({
   } = useAsync(
     editSubjectApi,
     ({ data }) => {
-      const { respondentId, appletId, tag } = data?.result ?? {};
-      const event = respondentId
+      const { userId, appletId, tag } = data?.result ?? {};
+      const event = userId
         ? 'Full Account edited successfully'
         : 'Limited Account edited successfully';
       Mixpanel.track(event, {
