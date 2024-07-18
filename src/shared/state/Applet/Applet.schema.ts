@@ -422,42 +422,16 @@ export type SliderRowsCondition<T = SingleValueCondition> = T & {
   };
 };
 
-// export type SingleValueCondition<T = number> = BaseCondition & {
-//   payload: {
-//     value: T;
-//   };
-// };
-
-export type SingleValueCondition = BaseCondition & {
+export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
-    value: number;
+    value: T;
   };
 };
 
-export type SingleValueConditionDate = BaseCondition & {
+export type RangeValueCondition<T = number> = BaseCondition & {
   payload: {
-    value: Date;
-  };
-};
-
-// export type RangeValueCondition<T = number> = BaseCondition & {
-//   payload: {
-//     minValue: T;
-//     maxValue: T;
-//   };
-// };
-
-export type RangeValueCondition = BaseCondition & {
-  payload: {
-    minValue: number;
-    maxValue: number;
-  };
-};
-
-export type RangeValueConditionDate = BaseCondition & {
-  payload: {
-    minValue: Date;
-    maxValue: Date;
+    minValue: T;
+    maxValue: T;
   };
 };
 
@@ -466,27 +440,13 @@ export const enum TimeRangeConditionType {
   EndTime = 'endTime',
 }
 
-// export type TimeRangeValueCondition<T = Date> = RangeValueCondition<T> & {
-//   payload: {
-//     type: TimeRangeConditionType;
-//   };
-// };
-// export type TimeRangeSingleValueCondition<T = Date> = SingleValueCondition<T> & {
-//   payload: {
-//     type: TimeRangeConditionType;
-//   };
-// };
-
-export type TimeRangeValueCondition = BaseCondition & {
+export type TimeRangeValueCondition<T = Date> = RangeValueCondition<T> & {
   payload: {
-    minValue: number;
-    maxValue: number;
     type: TimeRangeConditionType;
   };
 };
-export type TimeRangeSingleValueCondition = BaseCondition & {
+export type TimeRangeSingleValueCondition<T = Date> = SingleValueCondition<T> & {
   payload: {
-    value: number;
     type: TimeRangeConditionType;
   };
 };
