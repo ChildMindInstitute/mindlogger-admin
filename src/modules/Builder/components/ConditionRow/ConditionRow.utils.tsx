@@ -257,10 +257,8 @@ export const getPayload = ({
       }
       if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
         return {
-          minValue:
-            (conditionPayload as unknown as RangeValueCondition<Date>['payload'])?.minValue ?? null,
-          maxValue:
-            (conditionPayload as unknown as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
+          minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
+          maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
         };
       }
       if (responseType === ItemResponseType.TimeRange) {
