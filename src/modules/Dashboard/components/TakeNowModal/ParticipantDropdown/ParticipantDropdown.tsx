@@ -15,10 +15,10 @@ import {
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
-import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
-import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
+import { ParticipantDropdownProps, ParticipantDropdownOption } from './ParticipantDropdown.types';
+import { StyledGroupLabel, StyledWarningMessageContainer } from './ParticipantDropdown.styles';
 
-export const LabeledUserDropdown = ({
+export const ParticipantDropdown = ({
   label,
   name,
   tooltip,
@@ -33,7 +33,7 @@ export const LabeledUserDropdown = ({
   sx,
   showGroups,
   ...rest
-}: LabeledUserDropdownProps) => {
+}: ParticipantDropdownProps) => {
   const { t, i18n } = useTranslation('app');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
@@ -85,7 +85,7 @@ export const LabeledUserDropdown = ({
     shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
   }
 
-  let groupBy: LabeledUserDropdownProps['groupBy'];
+  let groupBy: ParticipantDropdownProps['groupBy'];
 
   if (showGroups) {
     groupBy = (option: ParticipantDropdownOption) => {

@@ -1,17 +1,17 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { LabeledUserDropdown } from 'modules/Dashboard/components/TakeNowModal/LabeledDropdown/LabeledUserDropdown';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
-import { ParticipantDropdownOption } from './LabeledUserDropdown.types';
+import { ParticipantDropdownOption } from './ParticipantDropdown.types';
+import { ParticipantDropdown } from './ParticipantDropdown';
 
 jest.mock('shared/hooks/useFeatureFlags');
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-describe('LabeledUserDropdown', () => {
+describe('ParticipantDropdown', () => {
   const dataTestId = 'test';
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows label', () => {
     const { queryByText } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -42,7 +42,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows tooltip on hover', async () => {
     const { queryByText, getByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -62,7 +62,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows placeholder', () => {
     const { queryByPlaceholderText } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -86,7 +86,7 @@ describe('LabeledUserDropdown', () => {
     };
 
     const { queryByDisplayValue } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -107,7 +107,7 @@ describe('LabeledUserDropdown', () => {
     const testValue = { id: 'id', secretId: 'secretId', isLimitedAccount: true };
 
     const { queryByDisplayValue } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -124,7 +124,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Does not show warning message when the value is not present', () => {
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -148,7 +148,7 @@ describe('LabeledUserDropdown', () => {
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -172,7 +172,7 @@ describe('LabeledUserDropdown', () => {
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -195,7 +195,7 @@ describe('LabeledUserDropdown', () => {
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -218,7 +218,7 @@ describe('LabeledUserDropdown', () => {
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <ParticipantDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -252,7 +252,7 @@ describe('LabeledUserDropdown', () => {
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <ParticipantDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -276,7 +276,7 @@ describe('LabeledUserDropdown', () => {
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <ParticipantDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -299,7 +299,7 @@ describe('LabeledUserDropdown', () => {
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <ParticipantDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -322,7 +322,7 @@ describe('LabeledUserDropdown', () => {
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <ParticipantDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"

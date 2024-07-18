@@ -43,9 +43,8 @@ import {
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
+import { ParticipantDropdown, ParticipantDropdownOption } from './ParticipantDropdown';
 import { BaseActivity } from '../ActivityGrid';
-import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
 
 const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.SuperAdmin,
@@ -577,7 +576,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           <StyledFlexColumn gap={2.4}>
             <StyledFlexColumn gap={0.8}>
               <StyledFlexColumn gap={0.4}>
-                <LabeledUserDropdown
+                <ParticipantDropdown
                   label={t('takeNow.modal.sourceSubjectLabel')}
                   name={'participant'}
                   placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
@@ -628,7 +627,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 />
               </StyledFlexColumn>
               {!isSelfReporting && (
-                <LabeledUserDropdown
+                <ParticipantDropdown
                   label={t('takeNow.modal.loggedInUserLabel')}
                   name={'loggedInUser'}
                   sx={{ gap: 1, pl: 5.2 }}
@@ -663,7 +662,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 />
               )}
             </StyledFlexColumn>
-            <LabeledUserDropdown
+            <ParticipantDropdown
               label={t('takeNow.modal.targetSubjectLabel')}
               name={'subject'}
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}

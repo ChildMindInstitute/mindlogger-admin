@@ -11,7 +11,7 @@ export type ParticipantDropdownOption = ParticipantSnippetInfo & {
   userId?: string | null;
 };
 
-export type LabeledUserDropdownProps = Omit<
+export type ParticipantDropdownProps = Omit<
   AutocompleteProps<ParticipantDropdownOption, false, false, false>,
   'value' | 'onChange' | 'fullWidth' | 'options' | 'renderInput'
 > & {
