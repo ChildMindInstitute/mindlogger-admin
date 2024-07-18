@@ -57,9 +57,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         ([, value]) => value,
       )?.[0]}`,
     );
-  const activityFlowLabel =
-    appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
-      ?.name ?? t('newActivityFlow');
+  const currentActivityFlow = appletData?.activityFlows?.find(
+    (activityFlow) => getEntityKey(activityFlow) === activityFlowId,
+  );
+  const activityFlowLabel = currentActivityFlow?.name ?? t('newActivityFlow');
 
   return useMemo(() => {
     const activitiesBreadcrumb = {
@@ -160,12 +161,19 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (currentActivity && enableMultiInformant) {
-      newBreadcrumbs.push({
-        image: currentActivity?.image || '',
-        label: currentActivity?.name ?? '',
-        disabledLink: true,
-      });
+    if (enableMultiInformant) {
+      if (currentActivity) {
+        newBreadcrumbs.push({
+          image: currentActivity?.image || '',
+          label: currentActivity?.name ?? '',
+          disabledLink: true,
+        });
+      } else if (currentActivityFlow) {
+        newBreadcrumbs.push({
+          label: currentActivityFlow?.name ?? '',
+          disabledLink: true,
+        });
+      }
     }
 
     if (pathname.includes('dataviz')) {

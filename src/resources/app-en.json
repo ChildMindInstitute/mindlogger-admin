@@ -456,6 +456,7 @@
   "empty": "Empty",
   "emptyCart": "You have not added anything to your cart yet. Add Applets from the ",
   "emptyReview": "Select the date, Activity Flow or Activity, and response time to review the response data.",
+  "emptyReviewWithSelectedActivity": "Select the date and response time to review the response data.",
   "en": "English",
   "endDate": "End date",
   "endTime": "End time",
@@ -721,7 +722,10 @@
     "timer": "Set Timer",
     "timer_tooltip": "Time to complete the Item ",
     "autoAdvance": "Auto-advance",
-    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response"
+    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response",
+    "portraitLayout": "Use Portrait Layout",
+    "portraitLayout_tooltip": "Changes the layout of response options to a vertical rectangular card. The picture (if included) will be larger and sit on top of the text rather than to the left, but the option text will be truncated after approx. 24 characters.",
+    "portraitLayout_subtext": "Please note: In portrait layout, option text will be truncated after approximately 24 characters."
   },
   "itemType": "Item Type",
   "itemValue": "Item Value",
@@ -1136,6 +1140,7 @@
   "selectOne": "Select one…",
   "selectActivity": "Select Activity",
   "selectActivityAndResponse": "Select activity and response",
+  "selectActivityFlowAndResponse": "Select activity flow and response",
   "selectResponse": "Select response",
   "selectAll": "Select All",
   "selectApplet": "Select Applet",

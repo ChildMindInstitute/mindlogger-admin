@@ -456,6 +456,7 @@
   "empty": "Vide",
   "emptyCart": "Vous n'avez encore rien ajouté à votre panier. Ajoutez des Applets depuis le ",
   "emptyReview": "Sélectionnez la date, le flux d'activité ou l'activité, ainsi que le temps de réponse pour examiner les données de réponse.",
+  "emptyReviewWithSelectedActivity": "Sélectionnez la date et le temps de réponse pour examiner les données de réponse.",
   "en": "Anglais",
   "endDate": "Date de fin",
   "endTime": "Heure de fin",
@@ -721,7 +722,10 @@
     "timer": "Configurer la Minuterie",
     "timer_tooltip": "Temps pour compléter l'élément",
     "autoAdvance": "Avance automatique",
-    "autoAdvance_tooltip": "Le répondant sera automatiquement déplacé vers l'élément suivant après avoir sélectionné une réponse"
+    "autoAdvance_tooltip": "Le répondant sera automatiquement déplacé vers l'élément suivant après avoir sélectionné une réponse",
+    "portraitLayout": "Utiliser la disposition en mode portrait",
+    "portraitLayout_tooltip": "Change la disposition des options de réponse en une carte rectangulaire verticale. L'image (si incluse) sera plus grande et placée au-dessus du texte plutôt qu'à gauche, mais le texte de l'option sera tronqué après environ 24 caractères.",
+    "portraitLayout_subtext": "Veuillez noter : En mode portrait, le texte de l'option sera tronqué après environ 24 caractères."
   },
   "itemType": "Type d'Élément",
   "itemValue": "Valeur de l'Élément",
@@ -1134,6 +1138,7 @@
   "selectOne": "Sélectionner un…",
   "selectActivity": "Sélectionner une Activité",
   "selectActivityAndResponse": "Sélectionner une activité et une réponse",
+  "selectActivityFlowAndResponse": "Sélectionner un flux d'activité et une réponse",
   "selectResponse": "Sélectionner une réponse",
   "selectAll": "Sélectionner tout",
   "selectApplet": "Sélectionner une Applet",

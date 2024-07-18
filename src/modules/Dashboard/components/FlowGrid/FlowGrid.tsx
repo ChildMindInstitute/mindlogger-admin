@@ -13,6 +13,7 @@ export const FlowGrid = ({
   activities = [],
   flows = [],
   subject,
+  onClickItem,
   'data-testid': dataTestId,
   ...otherProps
 }: FlowGridProps) => {
@@ -51,6 +52,7 @@ export const FlowGrid = ({
               component="li"
               menuItems={getActionsMenu({ flow: hydratedFlow })}
               key={id}
+              onClick={onClickItem}
               data-testid={`${dataTestId}-flow-card`}
             />
           );

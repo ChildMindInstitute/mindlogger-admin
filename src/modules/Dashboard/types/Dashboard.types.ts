@@ -1,5 +1,6 @@
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
+import { ActivityFlow, Activity } from 'redux/modules';
 
 import { Invitation, InvitationStatus } from '../features/Applet/AddUser/AddUser.types';
 
@@ -87,4 +88,7 @@ export enum AccountType {
 export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
+};
+export type HydratedActivityFlow = ActivityFlow & {
+  activities: Activity[];
 };

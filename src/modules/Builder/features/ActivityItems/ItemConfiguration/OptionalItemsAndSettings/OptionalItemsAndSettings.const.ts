@@ -50,6 +50,7 @@ export const defaultMultiSelectionConfig = {
     textInputOption: false,
     textInputRequired: false,
   },
+  portraitLayout: false,
 };
 
 export const defaultSingleSelectionConfig = {

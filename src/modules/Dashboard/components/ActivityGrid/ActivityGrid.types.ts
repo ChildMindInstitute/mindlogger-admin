@@ -15,7 +15,7 @@ export type ActivityGridProps = {
   order: Order;
   orderBy: string;
   'data-testid': string;
-  onClickItem?: (activityId: string) => void;
+  onClickItem?: (props: { activityId: string }) => void;
 };
 
 export type ActivityActionProps = {

@@ -73,6 +73,7 @@ export type MultipleSelectionConfig = {
   addTooltip: boolean;
   setPalette: boolean;
   timer: number;
+  portraitLayout: boolean;
   additionalResponseOption: {
     textInputOption?: boolean;
     textInputRequired: boolean;

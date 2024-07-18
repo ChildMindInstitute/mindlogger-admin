@@ -15,6 +15,7 @@ export const useReviewActivitiesAndFlows = ({
   submitId,
   appletId,
   activityId,
+  activityFlowId,
   handleSelectAnswer,
   subjectId,
 }: ReviewActivitiesAndFlowsProps) => {
@@ -33,7 +34,7 @@ export const useReviewActivitiesAndFlows = ({
       if (activityId) {
         selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
         setActivities([selectedActivityByDefault]);
-      } else {
+      } else if (!activityFlowId) {
         setActivities(activities);
       }
     },
@@ -45,7 +46,13 @@ export const useReviewActivitiesAndFlows = ({
       const flows = data?.result;
 
       if (!flows?.length) return;
-      setFlows(flows);
+      let selectedActivityFlowByDefault;
+      if (activityFlowId) {
+        selectedActivityFlowByDefault = flows.filter((e) => e.id === activityFlowId)[0];
+        setFlows([selectedActivityFlowByDefault]);
+      } else if (!activityId) {
+        setFlows(flows);
+      }
     },
   );
 
@@ -70,6 +77,8 @@ export const useReviewActivitiesAndFlows = ({
       submitId ||
       selectedActivity ||
       selectedFlow ||
+      (activityId && !activities.length) ||
+      (activityFlowId && !flows.length) ||
       (!activities.length && !flows.length) ||
       !handleSelectAnswer
     ) {
@@ -80,6 +89,9 @@ export const useReviewActivitiesAndFlows = ({
     if (activityId) {
       selectedEntityByDefault = activities.filter((e) => e.id === activityId)[0];
       setSelectedActivity(selectedEntityByDefault);
+    } else if (activityFlowId) {
+      selectedEntityByDefault = flows.filter((e) => e.id === activityFlowId)[0];
+      setSelectedFlow(selectedEntityByDefault);
     } else {
       const reviewEntities = getConcatenatedEntities({ activities, flows });
       selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
@@ -106,6 +118,7 @@ export const useReviewActivitiesAndFlows = ({
     handleSelectAnswer,
     selectedFlow,
     selectedActivity,
+    activityFlowId,
   ]);
 
   return {

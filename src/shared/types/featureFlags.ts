@@ -14,6 +14,7 @@ export const FeatureFlagsKeys = {
   enableParticipantConnections: 'enableParticipantConnections',
   enableLorisIntegration: 'enableLorisIntegration',
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
+  enableAdminAppSoftLock: 'enableAdminAppSoftLock',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
