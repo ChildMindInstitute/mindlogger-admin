@@ -11,6 +11,9 @@ import {
   format,
   isWeekend,
   isAfter,
+  setDate,
+  setMonth,
+  setYear,
 } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
@@ -121,7 +124,7 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
     return false;
   }
 
-  if (periodicity.access_before_schedule) {
+  if (periodicity.access_before_schedule || periodicity.type === PERIODICITY_VALUES.ALWAYS) {
     return true;
   }
 
@@ -133,7 +136,7 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
     }`,
   );
   const endDate = new Date(
-    `${periodicity?.end_date ? periodicity.start_date : formatDateAsYYYYMMDD(currentDate)}T${
+    `${periodicity?.end_date ? periodicity.end_date : formatDateAsYYYYMMDD(currentDate)}T${
       periodicity.end_time
     }`,
   );
@@ -141,11 +144,15 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
   const startTimeValues = getDateValues(startDate);
 
   if (
-    periodicity.type === PERIODICITY_VALUES.ALWAYS ||
     periodicity.type === PERIODICITY_VALUES.ONCE ||
     periodicity.type === PERIODICITY_VALUES.DAILY
   ) {
-    return datetimeIsWithinInterval(startDate, endDate);
+    const todayEndDateWithEndTime = setYear(
+      setMonth(setDate(endDate, currentTimeValues.day), currentTimeValues.month - 1),
+      currentTimeValues.year,
+    );
+
+    return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
   } else if (periodicity.type === PERIODICITY_VALUES.WEEKLY) {
     if (currentTimeValues.dayInWeek !== startTimeValues.dayInWeek) {
       return false;
@@ -157,7 +164,12 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
       return false;
     }
 
-    return datetimeIsWithinInterval(startDate, endDate);
+    const todayEndDateWithEndTime = setYear(
+      setMonth(setDate(endDate, currentTimeValues.day), currentTimeValues.month - 1),
+      currentTimeValues.year,
+    );
+
+    return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
   } else if (
     periodicity.type === PERIODICITY_VALUES.MONTHLY &&
     currentTimeValues.day === startTimeValues.day
@@ -191,7 +203,7 @@ export const getActivityActions = ({
 
   if (!activityId || !activity?.periodicity) return [];
 
-  const isAValidDateRange = validateIfDateIsInRange(activity?.periodicity);
+  const isInRange = validateIfDateIsInRange(activity?.periodicity);
 
   return [
     {
@@ -225,8 +237,8 @@ export const getActivityActions = ({
       title: t('takeNow.menuItem'),
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
-      disabled: isWebUnsupported || isAValidDateRange,
-      tooltip: isAValidDateRange || (isWebUnsupported && t('activityIsMobileOnly')),
+      disabled: isWebUnsupported || !isInRange,
+      tooltip: (!isInRange && t('')) || (isWebUnsupported && t('activityIsMobileOnly')),
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];
