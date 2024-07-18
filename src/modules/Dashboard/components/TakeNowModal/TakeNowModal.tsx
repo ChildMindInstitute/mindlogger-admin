@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -6,7 +6,7 @@ import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Modal, Spinner } from 'shared/components';
-import { auth, workspaces } from 'redux/modules';
+import { workspaces } from 'redux/modules';
 import {
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -16,12 +16,7 @@ import {
   StyledActivityThumbnailImg,
   StyledErrorText,
 } from 'shared/styles';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import {
-  createTemporaryMultiInformantRelationApi,
-  getWorkspaceManagersApi,
-  getWorkspaceRespondentsApi,
-} from 'api';
+import { createTemporaryMultiInformantRelationApi } from 'api';
 import {
   MixpanelPayload,
   MixpanelProps,
@@ -29,12 +24,10 @@ import {
   checkIfDashboardAppletActivitiesUrlPassed,
   checkIfDashboardAppletParticipantDetailsUrlPassed,
   checkIfFullAccess,
-  joinWihComma,
   getErrorMessage,
 } from 'shared/utils';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync, useLogout } from 'shared/hooks';
-import { Manager, Respondent, HydratedActivityFlow } from 'modules/Dashboard/types';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
 
@@ -43,17 +36,13 @@ import {
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { ParticipantDropdown, ParticipantDropdownOption } from './ParticipantDropdown';
+import {
+  FullTeamSearchType,
+  ParticipantDropdown,
+  ParticipantDropdownOption,
+  useParticipantDropdown,
+} from './ParticipantDropdown';
 import { BaseActivity } from '../ActivityGrid';
-
-const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
-  Roles.SuperAdmin,
-  Roles.Owner,
-  Roles.Manager,
-] as const;
-
-type AnyTeamSearchType = 'team' | 'any-participant';
-type FullTeamSearchType = 'team' | 'full-participant';
 
 type TakeNowData = {
   url: URL;
@@ -76,8 +65,6 @@ const getAccountType = (subject: ParticipantDropdownOption | null) => {
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
-  const { ownerId } = workspaces.useData() || {};
-  const userData = auth.useData();
   const { appletId } = useParams();
   const {
     featureFlags: { enableParticipantMultiInformant },
@@ -87,8 +74,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const [activityOrFlow, setActivityOrFlow] = useState<BaseActivity | HydratedActivityFlow | null>(
     null,
   );
-  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
@@ -97,6 +82,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const canTakeNow = checkIfFullAccess(roles);
+  const {
+    allParticipants,
+    participantsAndTeamMembers,
+    fullAccountParticipantsAndTeamMembers,
+    teamMembersOnly,
+    loggedInTeamMember,
+    handleSearch,
+  } = useParticipantDropdown({ appletId, skip: !canTakeNow });
 
   const track = useCallback(
     (
@@ -122,143 +115,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     },
     [activityOrFlow, appletId, multiInformantAssessmentId],
   );
-
-  const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
-    const stringNicknames = joinWihComma(participant.nicknames, true);
-    const stringSecretIds = joinWihComma(participant.secretIds, true);
-
-    return {
-      id: participant.details[0].subjectId,
-      userId: participant.id,
-      secretId: stringSecretIds,
-      nickname: stringNicknames,
-      tag: participant.details[0].subjectTag,
-    };
-  }, []);
-
-  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const options = (response.data as ParticipantsData).result.map(participantToOption);
-
-        setAllParticipants(options);
-      }
-    },
-  );
-
-  const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
-    getWorkspaceManagersApi,
-    (response) => {
-      setAllTeamMembers(response?.data?.result || []);
-    },
-  );
-
-  const {
-    execute: fetchLoggedInTeamMember,
-    isLoading: isFetchingLoggedInTeamMember,
-    value: loggedInTeamMemberResponse,
-  } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
-      if (!enableParticipantMultiInformant) {
-        setDefaultSourceSubject(loggedInTeamMember);
-      }
-      setAllParticipants((prev) => {
-        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-          return prev;
-        }
-
-        return [loggedInTeamMember, ...prev];
-      });
-    }
-  });
-
-  const allowedTeamMembers = useMemo(
-    () =>
-      allTeamMembers.filter((manager) =>
-        manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-      ),
-    [allTeamMembers],
-  );
-
-  const participantsOnly = useMemo(
-    () => allParticipants.filter((participant) => participant.tag !== 'Team'),
-    [allParticipants],
-  );
-
-  const fullAccountParticipantsOnly = useMemo(
-    () => participantsOnly.filter((participant) => !!participant.userId),
-    [participantsOnly],
-  );
-
-  const teamMembersOnly = useMemo(
-    () =>
-      allParticipants.filter(
-        (participant) =>
-          participant.tag === 'Team' &&
-          allowedTeamMembers.some((manager) => manager.id === participant.userId),
-      ),
-    [allParticipants, allowedTeamMembers],
-  );
-
-  const participantsAndTeamMembers = useMemo(
-    () => [...teamMembersOnly, ...participantsOnly],
-    [participantsOnly, teamMembersOnly],
-  );
-
-  const fullAccountParticipantsAndTeamMembers = useMemo(
-    () => [...teamMembersOnly, ...fullAccountParticipantsOnly],
-    [fullAccountParticipantsOnly, teamMembersOnly],
-  );
-
-  useEffect(() => {
-    if (!canTakeNow) return;
-    if (appletId) {
-      if (allParticipants.length === 0 && !isFetchingParticipants) {
-        fetchParticipants({
-          params: {
-            ownerId,
-            appletId,
-            limit: 100,
-          },
-        });
-      } else if (allParticipants.length > 0 && allTeamMembers.length === 0 && !isFetchingManagers) {
-        fetchManagers({
-          params: {
-            ownerId,
-            appletId,
-            limit: 100,
-          },
-        });
-      }
-
-      if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
-        fetchLoggedInTeamMember({
-          params: {
-            ownerId,
-            appletId,
-            userId: userData.user.id,
-            limit: 1,
-          },
-        });
-      }
-    }
-  }, [
-    appletId,
-    ownerId,
-    userData,
-    allParticipants,
-    allTeamMembers,
-    loggedInTeamMemberResponse,
-    isFetchingParticipants,
-    isFetchingManagers,
-    isFetchingLoggedInTeamMember,
-    fetchParticipants,
-    fetchManagers,
-    fetchLoggedInTeamMember,
-    canTakeNow,
-  ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleLogout = useLogout();
@@ -434,88 +290,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       createSourceRelation,
       createTargetRelation,
     ]);
-
-    /**
-     * Handle participant search. It can be a combination of team members and any participants
-     * (full account, pending, and limited), or just team members and full account participants
-     */
-    const handleSearch = useCallback(
-      async (
-        query: string,
-        types:
-          | [AnyTeamSearchType, ...AnyTeamSearchType[]]
-          | [FullTeamSearchType, ...FullTeamSearchType[]],
-      ): Promise<ParticipantDropdownOption[]> => {
-        const requests = [];
-
-        // @ts-expect-error Yes, the array can in fact contain this value
-        const isAnyParticipant = types.includes('any-participant');
-
-        // @ts-expect-error Yes, the array can in fact contain this value
-        const isFullParticipant = types.includes('full-participant');
-
-        if (types.includes('team')) {
-          requests.push(
-            getWorkspaceManagersApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-              },
-            }),
-          );
-        }
-
-        if (isAnyParticipant) {
-          requests.push(
-            getWorkspaceRespondentsApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-              },
-            }),
-          );
-        } else if (isFullParticipant) {
-          requests.push(
-            getWorkspaceRespondentsApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-                shell: isFullParticipant ? false : undefined,
-              },
-            }),
-          );
-        }
-
-        const [teamMemberResponse, participantsResponse] = await Promise.all(requests);
-
-        // Filter the search results by allowed team members
-        const allowedTeamMembersSearchResults =
-          (teamMemberResponse?.data?.result as Manager[]).filter((manager) =>
-            manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-          ) ?? [];
-
-        const participantsSearchResults =
-          (participantsResponse?.data?.result as Respondent[]) ?? [];
-
-        // If there are team members in the search results, we only want to show them if they are allowed
-        return participantsSearchResults.map(participantToOption).filter((participant) => {
-          if (participant.tag !== 'Team') {
-            return isAnyParticipant || !!participant.userId;
-          } else {
-            return allowedTeamMembersSearchResults.some(
-              (manager) => manager.id === participant.userId,
-            );
-          }
-        });
-      },
-      [],
-    );
 
     if (!activityOrFlow || !allParticipants || !participantsAndTeamMembers) {
       return null;
@@ -707,6 +481,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     if (sourceSubject) {
       setDefaultSourceSubject(sourceSubject);
       analyticsPayload[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
+    } else {
+      setDefaultSourceSubject(enableParticipantMultiInformant ? null : loggedInTeamMember);
     }
 
     if (checkIfDashboardAppletActivitiesUrlPassed(pathname)) {

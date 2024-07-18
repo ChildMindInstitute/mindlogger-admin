@@ -30,3 +30,11 @@ export type ParticipantDropdownProps = Omit<
   'data-testid'?: string;
   showGroups?: boolean;
 };
+
+export type AnyTeamSearchType = 'team' | 'any-participant';
+export type FullTeamSearchType = 'team' | 'full-participant';
+
+export type UseParticipantDropdownProps = {
+  appletId?: string;
+  skip?: boolean;
+};
