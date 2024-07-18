@@ -25,7 +25,13 @@
     "selectAll": "Sélectionner tout",
     "addRespondents": "Ajouter des répondants",
     "next": "Suivant",
-    "sendInvitations": "Envoyer les invitations"
+    "sendInvitations": "Envoyer les invitations",
+    "activityAutofill": "Votre activité a été pré-remplie, ajoutez des répondants pour continuer.",
+    "respondentAutofill": "{{name}} a été ajouté dans le tableau, sélectionnez une activité pour continuer.",
+    "subjectAutofill": "{{name}} a été ajouté dans le tableau. Veuillez ajouter un répondant de compte complet pour continuer.",
+    "existingAssigments": "Une ou plusieurs de ces activités ont déjà été attribuées; aucune invitation ne sera envoyée.",
+    "duplicateRowsError": "Il y a des lignes en double dans le tableau, veuillez les modifier ou les supprimer pour continuer.",
+    "networkError": "Oops! Une erreur s'est produite, veuillez réessayer."
   },
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page.",
   "activityCompleted": "Activité terminée",

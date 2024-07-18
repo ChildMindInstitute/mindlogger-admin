@@ -32,6 +32,7 @@ import {
 } from './ActivityAssignDrawer.styles';
 import { HelpPopup } from './HelpPopup';
 import { ActivitiesList } from './ActivitiesList';
+import { useActivityAssignBanners } from './ActivityAssignDrawer.hooks';
 
 const dataTestId = 'applet-activity-assign';
 
@@ -47,16 +48,23 @@ export const ActivityAssignDrawer = ({
 }: ActivityAssignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
   const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const [step, setStep] = useState<1 | 2>(1);
+  const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
+    useActivityAssignBanners();
+
   const {
     execute: getActivities,
     isLoading: isLoadingActivities,
-    value,
-  } = useAsync(getAppletActivitiesApi);
-  const [step, setStep] = useState<1 | 2>(1);
+    value: activitiesData,
+  } = useAsync(
+    getAppletActivitiesApi,
+    () => removeBanner('NetworkErrorBanner'),
+    () => addBanner('NetworkErrorBanner'),
+  );
 
-  const activities: Activity[] = value?.data.result?.activitiesDetails ?? [];
+  const activities: Activity[] = activitiesData?.data.result?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
-    value?.data.result?.appletDetail?.activityFlows ?? [],
+    activitiesData?.data.result?.appletDetail?.activityFlows ?? [],
     activities,
   );
   const activitiesCount = activities.length + flows.length;
@@ -116,6 +124,7 @@ export const ActivityAssignDrawer = ({
 
   const handleClickNext = () => {
     if (step === 1) {
+      removeAllBanners();
       setStep(2);
     } else {
       // TODO: Submit to BE https://mindlogger.atlassian.net/browse/M2-7261
@@ -130,10 +139,26 @@ export const ActivityAssignDrawer = ({
     getActivities({ params: { appletId } });
   }, [appletId, getActivities]);
 
-  // Reinitialize drawer form state whenever revealed
+  // Reinitialize drawer form state whenever revealed, and clear banners when closed
   useEffect(() => {
     if (open) {
+      const { activityIds, flowIds, assignments } = defaultValues;
+
       reset(defaultValues);
+
+      setTimeout(() => {
+        if (activityIds.length || flowIds.length) {
+          addBanner('ActivityAutofillBanner');
+        }
+
+        if (assignments[0]?.respondentId) {
+          addBanner('RespondentAutofillBanner', { name: '[TODO populate respondent name]' });
+        } else if (assignments[0]?.targetSubjectId) {
+          addBanner('SubjectAutofillBanner', { name: '[TODO populate subject name]' });
+        }
+      }, 300);
+    } else {
+      removeAllBanners();
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -179,6 +204,8 @@ export const ActivityAssignDrawer = ({
           </IconButton>
         </StyledFlexTopCenter>
       </StyledHeader>
+
+      {bannersComponent}
 
       <StyledFlexColumn sx={{ position: 'relative', overflowY: 'auto', flex: 1 }}>
         <Fade in={step === 1}>

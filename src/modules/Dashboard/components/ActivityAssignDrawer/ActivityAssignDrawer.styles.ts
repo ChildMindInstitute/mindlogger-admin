@@ -18,6 +18,7 @@ export const StyledFooterWrapper = styled(Box)({
   position: 'sticky',
   overflow: 'hidden',
   bottom: 0,
+  flexShrink: 0,
 });
 
 export const StyledFooter = styled(StyledFlexColumn)(({ hidden }: { hidden?: boolean }) => ({
@@ -25,7 +26,7 @@ export const StyledFooter = styled(StyledFlexColumn)(({ hidden }: { hidden?: boo
   backgroundColor: variables.palette.surface,
   borderTop: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
   transition: variables.transitions.all,
-  transform: hidden ? 'translateY(100%)' : 'none',
+  marginBottom: hidden ? '-9.7rem' : 0,
 }));
 
 export const StyledFooterButtonWrapper = styled(StyledFlexAllCenter)(

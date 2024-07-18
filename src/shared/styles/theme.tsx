@@ -734,6 +734,7 @@ export const theme = createTheme({
             }),
           }),
           '.MuiAlert-action': {
+            marginLeft: 0,
             marginRight: 0,
             paddingTop: 0,
             alignItems: 'center',
@@ -744,6 +745,7 @@ export const theme = createTheme({
           '.MuiAlert-message': {
             padding: 0,
             maxWidth: theme.spacing(80),
+            marginRight: 'auto',
           },
           '.MuiLink-root:hover': {
             textDecorationColor: 'transparent',
