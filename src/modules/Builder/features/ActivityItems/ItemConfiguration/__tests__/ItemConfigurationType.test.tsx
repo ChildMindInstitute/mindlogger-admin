@@ -9,6 +9,7 @@ import {
   mockedSingleSelectFormValues,
 } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   mockedItemName,
@@ -44,9 +45,23 @@ import {
   mockedEmptyParagraphText,
 } from '../__mocks__';
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 describe('ItemConfiguration: Item Type', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableParagraphTextItem: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   test('is rendered with correct item types, groups and "mobile only"', () => {

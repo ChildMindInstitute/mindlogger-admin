@@ -1,7 +1,7 @@
 import { Svg } from 'shared/components/Svg';
 import { ItemResponseType, textLanguageKey } from 'shared/consts';
 
-export const ItemResponseTypes = {
+export const getItemResponseTypes = (enableParagraphTextItem: boolean) => ({
   [ItemResponseType.SingleSelection]: {
     icon: <Svg id="radio-button-outline" />,
     title: ItemResponseType.SingleSelection,
@@ -38,7 +38,10 @@ export const ItemResponseTypes = {
     icon: <Svg id="slider-rows" />,
     title: ItemResponseType.SliderRows,
   },
-  [ItemResponseType.Text]: { icon: <Svg id="text" />, title: textLanguageKey },
+  [ItemResponseType.Text]: {
+    icon: <Svg id="text" />,
+    title: enableParagraphTextItem ? textLanguageKey : ItemResponseType.Text,
+  },
   [ItemResponseType.ParagraphText]: {
     icon: <Svg id="paragraph-text" />,
     title: ItemResponseType.ParagraphText,
@@ -65,7 +68,4 @@ export const ItemResponseTypes = {
   [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
   [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },
   [ItemResponseType.TouchPractice]: { icon: null, title: ItemResponseType.TouchPractice },
-};
-
-export const DEFAULT_PAGE = 1;
-export const DEFAULT_APPLETS_PER_PAGE = 6;
+});

@@ -5,6 +5,7 @@ import get from 'lodash.get';
 import { InputController } from 'shared/components/FormComponents';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { TEXTAREA_ROWS_COUNT } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import {
@@ -19,6 +20,9 @@ import { MIN_TEXT_RESPONSE_LENGTH } from './TextResponse.const';
 
 export const TextResponse = ({ name, uiType }: TextResponseProps) => {
   const { t } = useTranslation('app');
+  const {
+    featureFlags: { enableParagraphTextItem },
+  } = useFeatureFlags();
   const isShortTextUiType = uiType === TextResponseUiType.ShortText;
 
   const { control, watch, setValue, trigger } = useCustomFormContext();
@@ -48,13 +52,25 @@ export const TextResponse = ({ name, uiType }: TextResponseProps) => {
 
   const isCorrectAnswerRequired =
     isShortTextUiType && get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
+  const getOptionTitleKey = () => {
+    if (isShortTextUiType) {
+      return enableParagraphTextItem ? 'shortTextResponse' : 'textResponse';
+    }
+
+    return 'paragraphTextResponse';
+  };
+  const getOptionDescriptionKey = () => {
+    if (isShortTextUiType) {
+      return enableParagraphTextItem ? 'shortTextResponseDescription' : 'textResponseDescription';
+    }
+
+    return 'paragraphTextResponseDescription';
+  };
 
   return (
     <ItemOptionContainer
-      title={t(isShortTextUiType ? 'shortTextResponse' : 'paragraphTextResponse')}
-      description={t(
-        isShortTextUiType ? 'textResponseDescription' : 'paragraphTextResponseDescription',
-      )}
+      title={t(getOptionTitleKey())}
+      description={t(getOptionDescriptionKey())}
       data-testid={dataTestid}
     >
       <StyledRow>

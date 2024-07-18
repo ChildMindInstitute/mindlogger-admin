@@ -35,8 +35,9 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
   label: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
-export const DEFAULT_MAX_CHARACTERS = 72;
-export const DEFAULT_MAX_CHARACTERS_PARAGRAPH = 1000;
+export const DEFAULT_MAX_CHARACTERS_SHORT_TEXT = 72;
+export const DEFAULT_MAX_CHARACTERS_TEXT = 300;
+export const DEFAULT_MAX_CHARACTERS_PARAGRAPH_TEXT = 1000;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 
 export const itemsTypeOptions: ItemsOptionGroup[] = [

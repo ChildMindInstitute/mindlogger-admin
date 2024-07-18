@@ -18,15 +18,8 @@ import {
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
-import {
-  getEmptyComponent,
-  getGroupName,
-  getGroupValueText,
-  getIsNotHaveSearchValue,
-  getIsOnlyMobileValue,
-  getItemLanguageKey,
-  handleSearchKeyDown,
-} from './GroupedSelectSearchController.utils';
+import { getIsOnlyMobileValue, handleSearchKeyDown } from './GroupedSelectSearchController.utils';
+import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
 
@@ -39,6 +32,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const {
+    getItemLanguageKey,
+    getIsNotHaveSearchValue,
+    getEmptyComponent,
+    getGroupName,
+    getGroupValueText,
+  } = useItemTypeSelectSetup();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectOpen, setSelectOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLLIElement | null>(null);

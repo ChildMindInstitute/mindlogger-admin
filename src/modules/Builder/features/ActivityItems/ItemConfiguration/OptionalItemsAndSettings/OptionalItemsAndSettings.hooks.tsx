@@ -4,6 +4,7 @@ import get from 'lodash.get';
 
 import { ItemResponseType } from 'shared/consts';
 import { Config } from 'shared/state';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   AudioPlayer,
@@ -47,6 +48,7 @@ import {
   getEmptyNumberSelection,
   getEmptySliderOption,
 } from '../ItemConfiguration.utils';
+import { DEFAULT_MAX_CHARACTERS_TEXT } from '../ItemConfiguration.const';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
   useMemo(() => {
@@ -95,6 +97,9 @@ export const useSettingsSetup = ({
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
 }: SettingsSetupProps) => {
+  const {
+    featureFlags: { enableParagraphTextItem },
+  } = useFeatureFlags();
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
@@ -122,7 +127,14 @@ export const useSettingsSetup = ({
             handleAddOption?.({ isAppendedOption: false });
             break;
           case ItemResponseType.Text:
-            setConfig(defaultTextConfig);
+            setConfig(
+              enableParagraphTextItem
+                ? defaultTextConfig
+                : {
+                    ...defaultTextConfig,
+                    maxResponseLength: DEFAULT_MAX_CHARACTERS_TEXT,
+                  },
+            );
             break;
           case ItemResponseType.ParagraphText:
             setConfig(defaultParagraphTextConfig);

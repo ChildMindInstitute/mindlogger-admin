@@ -3,6 +3,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { mockedTestid, renderItemConfigurationByType, setItemConfigSetting } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -13,8 +14,25 @@ const mockedParagraphTextTestid = `${mockedTestid}-paragraph-text-response`;
 const renderTextResponse = () => renderItemConfigurationByType(ItemResponseType.Text);
 const renderParagraphTextResponse = () =>
   renderItemConfigurationByType(ItemResponseType.ParagraphText);
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 describe('ItemConfiguration: Short Text, ParagraphText', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableParagraphTextItem: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   test('Short text Item is rendered correctly', () => {
     renderTextResponse();
 
