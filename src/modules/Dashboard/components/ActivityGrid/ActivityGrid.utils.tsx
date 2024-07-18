@@ -191,9 +191,7 @@ export const getActivityActions = ({
 
   if (!activityId || !activity?.periodicity) return [];
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const isAValidDateRange = validateIfDateIsInRange(activity?.periodicity);
-  // console.log('bb', bb);
 
   return [
     {
@@ -227,8 +225,8 @@ export const getActivityActions = ({
       title: t('takeNow.menuItem'),
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
-      disabled: isWebUnsupported,
-      tooltip: isWebUnsupported && t('activityIsMobileOnly'),
+      disabled: isWebUnsupported || isAValidDateRange,
+      tooltip: isAValidDateRange || (isWebUnsupported && t('activityIsMobileOnly')),
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];
