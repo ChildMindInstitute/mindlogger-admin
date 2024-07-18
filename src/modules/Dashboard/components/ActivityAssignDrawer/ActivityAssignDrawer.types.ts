@@ -9,3 +9,15 @@ export type ActivityAssignDrawerProps = Pick<DrawerProps, 'open'> & {
   respondentId?: string;
   targetSubjectId?: string;
 };
+
+export type ActivityAssignment = {
+  /** User ID */
+  respondentId?: string;
+  targetSubjectId?: string;
+};
+
+export type ActivityAssignFormValues = {
+  activityIds: string[];
+  flowIds: string[];
+  assignments: ActivityAssignment[];
+};

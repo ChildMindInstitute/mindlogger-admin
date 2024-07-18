@@ -397,6 +397,7 @@ export const theme = createTheme({
           minWidth: '10rem',
           padding: '1rem 2rem',
           textTransform: 'none',
+          gap: '0.8rem',
 
           '& svg:not([fill])': {
             fill: 'currentColor',
@@ -776,11 +777,31 @@ export const theme = createTheme({
         },
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          '.MuiDrawer-paper': {
+            maxWidth: '100%',
+          },
+        },
+      },
+    },
     MuiListItemSecondaryAction: {
       styleOverrides: {
         root: {
           display: 'flex',
         },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({ ownerState: { color } }) => ({
+          ...(color === 'outlined' && {
+            borderWidth: variables.borderWidth.md,
+            borderStyle: 'solid',
+            borderColor: variables.palette.outline_variant,
+          }),
+        }),
       },
     },
   },
@@ -815,6 +836,12 @@ declare module '@mui/material/Button' {
     elevated: true;
     tonal: true;
     textNeutral: true;
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    outlined: true;
   }
 }
 
