@@ -16,7 +16,8 @@ const getActivityItemAnswer = (responseType: ItemResponseType) => ({
   activityItem: {
     responseType,
   },
-  answer: responseType === ItemResponseType.Text ? 'some answer' : {},
+  answer:
+    responseType === ItemResponseType.Text || ItemResponseType.ParagraphText ? 'some answer' : {},
 });
 
 const singleSelectDataTestid = 'single-select-response-item';
@@ -95,6 +96,7 @@ describe('getResponseItem (supported response items), check rendering of child c
     ${ItemResponseType.MultipleSelection}       | ${multiSelectDataTestid}
     ${ItemResponseType.Slider}                  | ${sliderDataTestid}
     ${ItemResponseType.Text}                    | ${textDataTestid}
+    ${ItemResponseType.ParagraphText}           | ${textDataTestid}
     ${ItemResponseType.NumberSelection}         | ${numberSelectionDataTestid}
     ${ItemResponseType.Date}                    | ${dateDataTestid}
     ${ItemResponseType.SingleSelectionPerRow}   | ${selectionPerRowDataTestid}

@@ -11,6 +11,7 @@ import {
   MultipleSelectionPerRowItem,
   MultiSelectItem,
   NumberSelectionItem,
+  ParagraphTextItem,
   PhotoItem,
   ScoresAndReports,
   SingleSelectionPerRowItem,
@@ -394,6 +395,7 @@ export type ExtendedEvent = SuccessedEventDTO & DecryptedAnswerData;
 
 export type ActivityItemAnswer =
   | TextItemAnswer
+  | ParagraphTextItemAnswer
   | MultiSelectionItemAnswer
   | SingleSelectionItemAnswer
   | SliderItemAnswer
@@ -424,6 +426,10 @@ type ActivityItemAnswerCommonType = {
 
 export type TextItemAnswer = ActivityItemAnswerCommonType & {
   activityItem: TextItem;
+  answer: DecryptedTextAnswer;
+};
+export type ParagraphTextItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: ParagraphTextItem;
   answer: DecryptedTextAnswer;
 };
 export type MultiSelectionItemAnswer = ActivityItemAnswerCommonType & {

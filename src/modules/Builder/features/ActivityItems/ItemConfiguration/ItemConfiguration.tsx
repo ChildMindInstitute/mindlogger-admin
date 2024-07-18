@@ -18,6 +18,8 @@ import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilter
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
+import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import {
@@ -35,14 +37,13 @@ import { EditItemModal } from './EditItemModal';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
-
   const { control, getFieldState, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
-
   const [isReviewable, responseType, currentItem]: UseWatchItemConfiguration = useWatch({
     name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
   });
@@ -52,8 +53,9 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const availableItemsTypeOptions = isReviewable
-    ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
+  const availableItemsTypeOptions = itemsTypeOptions.reduce(
+    (options: ItemsOptionGroup[], { groupName, groupOptions }) => {
+      if (isReviewable) {
         if (groupName !== 'select') return options;
 
         return [
@@ -64,8 +66,25 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
             ),
           },
         ];
-      }, [])
-    : itemsTypeOptions;
+      }
+
+      if (groupName === 'input') {
+        return [
+          ...options,
+          {
+            groupName,
+            groupOptions: groupOptions.filter(
+              ({ value }) =>
+                value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
+            ),
+          },
+        ];
+      }
+
+      return [...options, { groupName, groupOptions }];
+    },
+    [],
+  );
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,

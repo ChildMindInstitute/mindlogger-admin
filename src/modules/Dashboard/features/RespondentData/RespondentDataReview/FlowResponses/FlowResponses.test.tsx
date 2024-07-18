@@ -192,7 +192,7 @@ const flowAnswers = [
             removeBackButton: false,
             skippableItem: false,
             type: 'text',
-            maxResponseLength: 300,
+            maxResponseLength: 72,
             correctAnswerRequired: false,
             correctAnswer: '',
             numericalResponseRequired: false,

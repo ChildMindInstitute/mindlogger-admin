@@ -64,7 +64,8 @@ export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemRespons
         (answer as DecryptedMultiSelectionAnswer)?.value.every((item) => typeof item === 'number')
       );
     }
-    case ItemResponseType.Text: {
+    case ItemResponseType.Text:
+    case ItemResponseType.ParagraphText: {
       return typeof (answer as DecryptedTextAnswer) === 'string';
     }
   }
@@ -125,7 +126,7 @@ export const formatActivityItemAnswers = (
     order,
   };
 
-  switch (currentActivityItem.responseType) {
+  switch (responseType) {
     case ItemResponseType.SingleSelection: {
       const optionsValuesMapper = getSingleMultiOptionsMapper(
         formattedActivityItem as FormattedActivityItem<SingleMultiSelectionSliderItemResponseValues>,
@@ -238,7 +239,8 @@ export const formatActivityItemAnswers = (
         answers,
       } as SingleMultiSelectionSliderFormattedResponses;
     }
-    case ItemResponseType.Text: {
+    case ItemResponseType.Text:
+    case ItemResponseType.ParagraphText: {
       const answers = [
         {
           answer: {
@@ -252,7 +254,9 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: {
           ...formattedActivityItem,
-          responseDataIdentifier: (currentActivityItem as TextItem).config.responseDataIdentifier,
+          ...(responseType === ItemResponseType.Text && {
+            responseDataIdentifier: (currentActivityItem as TextItem).config.responseDataIdentifier,
+          }),
         },
         answers,
       } as TextFormattedResponses;

@@ -9,6 +9,7 @@ import {
   mockedSingleSelectFormValues,
 } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   mockedItemName,
@@ -41,11 +42,26 @@ import {
   renderItemConfiguration,
   getAppletFormDataWithItem,
   removeUuidValues,
+  mockedEmptyParagraphText,
 } from '../__mocks__';
+
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 describe('ItemConfiguration: Item Type', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableParagraphTextItem: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   test('is rendered with correct item types, groups and "mobile only"', () => {
@@ -75,7 +91,7 @@ describe('ItemConfiguration: Item Type', () => {
 
   test.each`
     isReviewable | expected | description
-    ${false}     | ${18}    | ${'renders correct number of item types with isReviewable = false'}
+    ${false}     | ${19}    | ${'renders correct number of item types with isReviewable = false'}
     ${true}      | ${3}     | ${'renders correct number of item types with isReviewable = true'}
   `('$description', ({ isReviewable, expected }) => {
     renderWithAppletFormData({
@@ -161,6 +177,7 @@ describe('ItemConfiguration: Item Type', () => {
     ${ItemResponseType.MultipleSelectionPerRow} | ${mockedEmptyMultiSelectRows}  | ${'selecting MultipleSelectionPerRow sets correct data to the form'}
     ${ItemResponseType.SliderRows}              | ${mockedEmptySliderRows}       | ${'selecting SliderRows sets correct data to the form'}
     ${ItemResponseType.Text}                    | ${mockedEmptyText}             | ${'selecting Text sets correct data to the form'}
+    ${ItemResponseType.ParagraphText}           | ${mockedEmptyParagraphText}    | ${'selecting Paragraph Text sets correct data to the form'}
     ${ItemResponseType.Drawing}                 | ${mockedEmptyDrawing}          | ${'selecting Drawing sets correct data to the form'}
     ${ItemResponseType.Photo}                   | ${mockedEmptyPhoto}            | ${'selecting Photo sets correct data to the form'}
     ${ItemResponseType.Video}                   | ${mockedEmptyVideo}            | ${'selecting Video sets correct data to the form'}

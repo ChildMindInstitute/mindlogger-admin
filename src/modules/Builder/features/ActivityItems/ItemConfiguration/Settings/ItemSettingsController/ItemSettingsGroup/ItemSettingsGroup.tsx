@@ -7,7 +7,7 @@ import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks'
 import { Svg, Tooltip } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, StyledClearedButton, StyledTitleMedium, theme } from 'shared/styles';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, textLanguageKey } from 'shared/consts';
 import {
   SingleAndMultipleSelectMatrix,
   SingleAndMultipleSelectRow,
@@ -17,7 +17,8 @@ import {
 } from 'shared/state';
 import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
-import { toggleBooleanState, getMaxLengthValidationError } from 'shared/utils';
+import { getMaxLengthValidationError, toggleBooleanState } from 'shared/utils';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   StyledFormControl,
@@ -54,6 +55,9 @@ export const ItemSettingsGroup = ({
   collapsedByDefault,
 }: ItemSettingsGroupProps) => {
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
+  const {
+    featureFlags: { enableParagraphTextItem },
+  } = useFeatureFlags();
 
   const { t } = useTranslation('app');
   const { control, setValue, getValues, setError, clearErrors, getFieldState } =
@@ -70,6 +74,8 @@ export const ItemSettingsGroup = ({
       +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
     );
   };
+  const groupNameLangContext =
+    enableParagraphTextItem && inputType === ItemResponseType.Text ? textLanguageKey : inputType;
 
   return (
     <StyledItemSettingGroupContainer
@@ -81,7 +87,7 @@ export const ItemSettingsGroup = ({
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader onClick={toggleBooleanState(setIsExpanded)}>
-          <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
+          <StyledFormLabel>{t(groupName, { context: groupNameLangContext })}</StyledFormLabel>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
             data-testid="builder-activity-items-item-settings-group-collapse"
