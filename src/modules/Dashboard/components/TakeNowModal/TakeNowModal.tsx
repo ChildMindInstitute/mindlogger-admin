@@ -29,19 +29,19 @@ import {
 import { useAsync, useLogout } from 'shared/hooks';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
+import {
+  ActivityFlowThumbnail,
+  FullTeamSearchType,
+  ParticipantDropdown,
+  ParticipantDropdownOption,
+  useParticipantDropdown,
+} from 'modules/Dashboard/components';
 
 import {
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import {
-  FullTeamSearchType,
-  ParticipantDropdown,
-  ParticipantDropdownOption,
-  useParticipantDropdown,
-} from './ParticipantDropdown';
 import { BaseActivity } from '../ActivityGrid';
 
 type TakeNowData = {

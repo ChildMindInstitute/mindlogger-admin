@@ -1,6 +1,5 @@
 import { ModalProps } from 'shared/components';
-
-import { ParticipantDropdownOption } from './ParticipantDropdown';
+import { ParticipantDropdownOption } from 'modules/Dashboard/components';
 
 export type UseTakeNowModalProps = {
   dataTestId: string;
