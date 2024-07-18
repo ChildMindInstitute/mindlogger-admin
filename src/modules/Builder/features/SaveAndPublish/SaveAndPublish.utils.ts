@@ -359,9 +359,7 @@ export const processConditionPayload = (
 ) => {
   switch (itemType) {
     case ItemResponseType.Date: {
-      const conditionData = condition as unknown as
-        | SingleValueCondition<Date>
-        | RangeValueCondition<Date>;
+      const conditionData = condition as SingleValueCondition<Date> | RangeValueCondition<Date>;
       const conditionType = conditionData.type;
       if (
         conditionType &&
