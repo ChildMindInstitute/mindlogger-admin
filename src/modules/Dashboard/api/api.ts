@@ -920,7 +920,7 @@ export const getAppletActivitiesApi = (
 export const createTemporaryMultiInformantRelationApi = (
   { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
   signal?: AbortSignal,
-) =>
+): Promise<AxiosResponse<null>> =>
   authApiClient.post(
     `/subjects/${subjectId}/relations/${sourceSubjectId}/multiinformant-assessment`,
     {},
