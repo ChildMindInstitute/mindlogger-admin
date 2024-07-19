@@ -1,5 +1,6 @@
 import { Respondent } from 'modules/Dashboard/types';
 import { joinWihComma } from 'shared/utils';
+import i18n from 'i18n';
 
 import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 
@@ -14,4 +15,21 @@ export const participantToOption = (participant: Respondent): ParticipantDropdow
     nickname: stringNicknames,
     tag: participant.details[0].subjectTag,
   };
+};
+
+export const getParticipantLabel = (value: ParticipantDropdownOption) => {
+  const { t } = i18n;
+
+  let translatedTag = '';
+  if (value.tag) {
+    translatedTag = i18n.exists(`participantTag.${value.tag}`)
+      ? ` (${t(`participantTag.${value.tag}`)})`
+      : ` (${value.tag})`;
+  }
+
+  if (value.tag === 'Team') {
+    return `${value.nickname}${translatedTag}`;
+  }
+
+  return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${translatedTag}`;
 };

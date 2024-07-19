@@ -32,7 +32,6 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   ActivityFlowThumbnail,
   FullTeamSearchType,
-  ParticipantDropdown,
   ParticipantDropdownOption,
   useParticipantDropdown,
 } from 'modules/Dashboard/components';
@@ -43,6 +42,7 @@ import {
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
 import { BaseActivity } from '../ActivityGrid';
+import { TakeNowDropdown } from './TakeNowDropdown';
 
 type TakeNowData = {
   url: URL;
@@ -350,7 +350,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           <StyledFlexColumn gap={2.4}>
             <StyledFlexColumn gap={0.8}>
               <StyledFlexColumn gap={0.4}>
-                <ParticipantDropdown
+                <TakeNowDropdown
                   label={t('takeNow.modal.sourceSubjectLabel')}
                   name={'participant'}
                   placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
@@ -401,7 +401,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 />
               </StyledFlexColumn>
               {!isSelfReporting && (
-                <ParticipantDropdown
+                <TakeNowDropdown
                   label={t('takeNow.modal.loggedInUserLabel')}
                   name={'loggedInUser'}
                   sx={{ gap: 1, pl: 5.2 }}
@@ -436,7 +436,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 />
               )}
             </StyledFlexColumn>
-            <ParticipantDropdown
+            <TakeNowDropdown
               label={t('takeNow.modal.targetSubjectLabel')}
               name={'subject'}
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}

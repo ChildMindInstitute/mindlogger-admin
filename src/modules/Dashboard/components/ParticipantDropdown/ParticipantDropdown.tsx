@@ -3,25 +3,16 @@ import { Autocomplete, AutocompleteRenderInputParams, TextField, Box } from '@mu
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Tooltip } from 'shared/components';
-import {
-  StyledBodyMedium,
-  StyledFlexColumn,
-  StyledTitleMedium,
-  StyledTitleTooltipIcon,
-  theme,
-  variables,
-} from 'shared/styles';
+import { Svg } from 'shared/components';
+import { theme, variables } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ParticipantDropdownProps, ParticipantDropdownOption } from './ParticipantDropdown.types';
-import { StyledGroupLabel, StyledWarningMessageContainer } from './ParticipantDropdown.styles';
+import { StyledGroupLabel } from './ParticipantDropdown.styles';
+import { getParticipantLabel } from './ParticipantDropdown.utils';
 
 export const ParticipantDropdown = ({
-  label,
   name,
-  tooltip,
   options,
   value,
   placeholder,
@@ -29,18 +20,13 @@ export const ParticipantDropdown = ({
   handleSearch,
   debounce,
   disabled,
-  canShowWarningMessage,
-  sx,
   showGroups,
   ...rest
 }: ParticipantDropdownProps) => {
-  const { t, i18n } = useTranslation('app');
+  const { t } = useTranslation('app');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
-  const {
-    featureFlags: { enableParticipantMultiInformant },
-  } = useFeatureFlags();
 
   const debouncedSearchHandler = useCallback(
     (search: string) => {
@@ -73,18 +59,6 @@ export const ParticipantDropdown = ({
     [debounce, handleSearch],
   );
 
-  let shouldShowWarningMessage = false;
-
-  // We only potentially show the warning when there is a value
-  if (value) {
-    const hasFullAccount = !!value.userId;
-    const isTeamMember = value.tag === 'Team';
-    const warningMessageValueCondition = enableParticipantMultiInformant
-      ? !hasFullAccount
-      : !isTeamMember;
-    shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
-  }
-
   let groupBy: ParticipantDropdownProps['groupBy'];
 
   if (showGroups) {
@@ -98,122 +72,75 @@ export const ParticipantDropdown = ({
   }
 
   return (
-    <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>
-      <Box sx={{ display: 'flex', gap: 0.4 }}>
-        <StyledTitleMedium sx={{ fontWeight: 700, color: variables.palette.on_surface }}>
-          {label}
-        </StyledTitleMedium>
-        {!!tooltip && (
-          <Tooltip tooltipTitle={tooltip}>
-            <Box sx={{ height: 24 }}>
-              <StyledTitleTooltipIcon
-                sx={{ marginLeft: 0 }}
-                id="more-info-outlined"
-                width={24}
-                height={24}
-                data-testid={`${rest['data-testid']}-tooltip-icon`}
-              />
-            </Box>
-          </Tooltip>
-        )}
-      </Box>
-      <Autocomplete
-        renderInput={(params: AutocompleteRenderInputParams) => {
-          const { InputLabelProps: _InputLabelProps, ...rest } = params;
+    <Autocomplete
+      renderInput={(params: AutocompleteRenderInputParams) => {
+        const { InputLabelProps: _InputLabelProps, ...rest } = params;
 
-          return <TextField {...rest} placeholder={placeholder} name={name} />;
-        }}
-        sx={{
-          '& .MuiInputBase-root': {
-            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
-            borderBottomRightRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
-          },
-        }}
-        options={combinedOptions}
-        renderOption={(
-          { children: _children, ...props },
-          { id, tag, secretId, nickname, ...psProps },
-        ) => (
-          <ParticipantSnippet<'li'>
-            key={id}
-            tag={tag}
-            secretId={tag === 'Team' ? nickname : secretId}
-            nickname={tag === 'Team' ? null : nickname}
-            {...psProps}
-            boxProps={{
-              sx: {
-                p: theme.spacing(0.6, 1.6),
-                cursor: 'pointer',
-              },
-              ...props,
-            }}
-            data-testid={`${rest['data-testid']}-option-${id}`}
-          />
-        )}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        groupBy={groupBy}
-        renderGroup={(params) => {
-          const { key, group, children } = params;
-
-          return (
-            <Box
-              component="li"
-              key={key}
-              sx={{
-                '&:not(:last-child)': {
-                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
-                },
-              }}
-            >
-              <StyledGroupLabel>{group}</StyledGroupLabel>
-              <Box component="ul" sx={{ p: 0 }}>
-                {children}
-              </Box>
-            </Box>
-          );
-        }}
-        getOptionLabel={(value) => {
-          let translatedTag = '';
-          if (value.tag) {
-            translatedTag = i18n.exists(`participantTag.${value.tag}`)
-              ? ` (${t(`participantTag.${value.tag}`)})`
-              : ` (${value.tag})`;
-          }
-
-          if (value.tag === 'Team') {
-            return `${value.nickname}${translatedTag}`;
-          }
-
-          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${translatedTag}`;
-        }}
-        disabled={disabled}
-        popupIcon={
-          <Svg
-            id="navigate-down"
-            width={24}
-            height={24}
-            fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
-          />
-        }
-        fullWidth={true}
-        value={value}
-        onChange={(_e, newValue) => onChange(newValue)}
-        clearOnBlur={false}
-        handleHomeEndKeys
-        loading={isSearching}
-        loadingText={t('loadingEllipsis')}
-        noOptionsText={t('takeNow.modal.dropdown.notFound')}
-        onInputChange={(_e, search) => debouncedSearchHandler(search)}
-        {...rest}
-      />
-      {shouldShowWarningMessage && (
-        <StyledWarningMessageContainer data-testid={`${rest['data-testid']}-warning-message`}>
-          <Box width={24} height={24}>
-            <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
-          </Box>
-          <StyledBodyMedium>{t('takeNow.modal.dropdown.limitedAccountWarning')}</StyledBodyMedium>
-        </StyledWarningMessageContainer>
+        return <TextField {...rest} placeholder={placeholder} name={name} />;
+      }}
+      options={combinedOptions}
+      renderOption={(
+        { children: _children, ...props },
+        { id, tag, secretId, nickname, ...psProps },
+      ) => (
+        <ParticipantSnippet<'li'>
+          key={id}
+          tag={tag}
+          secretId={tag === 'Team' ? nickname : secretId}
+          nickname={tag === 'Team' ? null : nickname}
+          {...psProps}
+          boxProps={{
+            sx: {
+              p: theme.spacing(0.6, 1.6),
+              cursor: 'pointer',
+            },
+            ...props,
+          }}
+          data-testid={`${rest['data-testid']}-option-${id}`}
+        />
       )}
-    </StyledFlexColumn>
+      isOptionEqualToValue={(option, value) => option.id === value.id}
+      groupBy={groupBy}
+      renderGroup={(params) => {
+        const { key, group, children } = params;
+
+        return (
+          <Box
+            component="li"
+            key={key}
+            sx={{
+              '&:not(:last-child)': {
+                borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+              },
+            }}
+          >
+            <StyledGroupLabel>{group}</StyledGroupLabel>
+            <Box component="ul" sx={{ p: 0 }}>
+              {children}
+            </Box>
+          </Box>
+        );
+      }}
+      getOptionLabel={getParticipantLabel}
+      disabled={disabled}
+      popupIcon={
+        <Svg
+          id="navigate-down"
+          width={24}
+          height={24}
+          fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+        />
+      }
+      fullWidth={true}
+      value={value}
+      onChange={(_e, newValue) => onChange(newValue)}
+      clearOnBlur={false}
+      handleHomeEndKeys
+      loading={isSearching}
+      loadingText={t('loadingEllipsis')}
+      noOptionsText={t('takeNow.modal.dropdown.notFound')}
+      onInputChange={(_e, search) => debouncedSearchHandler(search)}
+      {...rest}
+    />
   );
 };

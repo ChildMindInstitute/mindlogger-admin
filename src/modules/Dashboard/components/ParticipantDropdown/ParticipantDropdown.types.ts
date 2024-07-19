@@ -15,9 +15,7 @@ export type ParticipantDropdownProps = Omit<
   AutocompleteProps<ParticipantDropdownOption, false, false, false>,
   'value' | 'onChange' | 'fullWidth' | 'options' | 'renderInput'
 > & {
-  label: string;
   name: string;
-  tooltip?: string;
   placeholder: string;
   options: ParticipantDropdownOption[];
   value: ParticipantDropdownOption | null;
@@ -26,8 +24,7 @@ export type ParticipantDropdownProps = Omit<
     search: string,
   ) => ParticipantDropdownOption[] | Promise<ParticipantDropdownOption[]>;
   debounce?: number;
-  canShowWarningMessage?: boolean;
-  'data-testid'?: string;
+  'data-testid': string;
   showGroups?: boolean;
 };
 
