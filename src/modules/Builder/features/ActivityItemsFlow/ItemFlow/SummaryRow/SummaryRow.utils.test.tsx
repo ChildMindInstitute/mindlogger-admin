@@ -185,6 +185,7 @@ describe('SummaryRow.utils', () => {
         id: 'item-20',
         name: 'ParagraphText',
         responseType: ItemResponseType.ParagraphText,
+        question: 'item-20',
       },
     ];
     const itemsInUsage = new Set(['item-1', 'item-3']);
@@ -321,8 +322,8 @@ describe('SummaryRow.utils', () => {
         disabled: false,
         labelKey: 'ParagraphText',
         value: 'item-20',
-        tooltip: undefined,
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-20" />,
+        tooltipPlacement: 'right',
       },
     ];
     test('should return options with tooltips and disable statuses for items in usage', () => {
