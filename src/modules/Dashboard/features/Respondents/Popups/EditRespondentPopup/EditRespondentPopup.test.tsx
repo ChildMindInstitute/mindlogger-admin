@@ -6,6 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Mixpanel, MixpanelProps } from 'shared/utils/mixpanel';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
+import { EditSubjectResponse } from 'api';
 
 import { EditRespondentPopup } from '.';
 
@@ -86,12 +87,19 @@ describe('EditRespondentPopup component tests', () => {
   });
 
   test('EditRespondentPopup submission of Full Account should show success text', async () => {
+    const result: EditSubjectResponse = {
+      id: 'subj-1',
+      appletId: mockedAppletId,
+      secretUserId: '12312',
+      userId: '12312',
+      nickname: 'respondentNickname',
+      lastSeen: null,
+      tag: chosenAppletData.subjectTag,
+    };
+
     mockAxios.put.mockResolvedValueOnce({
       data: {
-        result: {
-          ...chosenAppletData,
-          tag: chosenAppletData.subjectTag,
-        },
+        result,
       },
     });
 
