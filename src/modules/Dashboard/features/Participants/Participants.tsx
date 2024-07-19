@@ -198,7 +198,11 @@ export const Participants = () => {
       });
 
       setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
+      handleSetDataForAppletPage({
+        respondentId,
+        respondentOrSubjectId,
+        key: FilteredAppletsKey.Editable,
+      });
       setEditRespondentPopupVisible(true);
     },
     upgradeAccount: ({ context }: MenuActionProps<ParticipantActionProps>) => {
