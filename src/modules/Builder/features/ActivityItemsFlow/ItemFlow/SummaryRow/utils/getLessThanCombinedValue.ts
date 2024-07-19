@@ -66,7 +66,7 @@ export const getLessThanCombinedValue = (
       if (!conditions[0]) {
         return {
           isTimeRange: true,
-          [payloadType]: { value: nextValue },
+          [payloadType]: { value: convertToMinutes(nextValue) },
         };
       }
 
@@ -79,13 +79,13 @@ export const getLessThanCombinedValue = (
 
         return {
           ...accCondition,
-          [payloadType]: { value },
+          [payloadType]: { value: convertToMinutes(value) },
         };
       }
 
       return {
         ...accCondition,
-        [payloadType]: { value: nextValue },
+        [payloadType]: { value: convertToMinutes(nextValue) },
       };
     }
     case ItemResponseType.SliderRows: {

@@ -9,6 +9,7 @@ import {
   TimeRangeValueCondition,
   SliderRowsCondition,
   TimeRangeConditionType,
+  SliderRowsItemResponseValues,
 } from 'shared/state/Applet';
 
 export type SummaryRowProps = {
@@ -99,7 +100,7 @@ export type SliderRowsEqualValueType<T = number> = SliderRowsFlagType & {
 export type SliderRowsSingleValueType<T = number> = SliderRowsFlagType & {
   [k in number]?: SingleValueType<T>;
 };
-export type SliderRowsType<T = number> = SliderRowsFlagType & {
+export type SliderRowsRangeType<T = number> = SliderRowsFlagType & {
   [k in number]?: RangeType<T>;
 };
 export type SliderRowsFlagType = {
@@ -108,7 +109,26 @@ export type SliderRowsFlagType = {
 export type CombinedConditionType<T = unknown> =
   | RangeType<T>
   | TimeRangeType<T>
-  | SliderRowsType<T>
+  | SliderRowsRangeType<T>
   | SingleValueType<T>
   | TimeSingleValueType<T>
   | SliderRowsSingleValueType<T>;
+
+export type CheckAllNumericContradictions = {
+  lessThanValue?: number;
+  greaterThanValue?: number;
+  equalSetUnion?: number[];
+  notEqualSetUnion?: number[];
+  betweenUnion?: number[];
+  outsideOfUnion?: number[];
+  minValue: number;
+  maxValue: number;
+};
+
+export type GetCombinedConditionsByType = {
+  responseType: ResponseTypeForSetType;
+  conditions: ConditionWithSetType[];
+  minValue?: number;
+  maxValue?: number;
+  sliderRows?: SliderRowsItemResponseValues[];
+};

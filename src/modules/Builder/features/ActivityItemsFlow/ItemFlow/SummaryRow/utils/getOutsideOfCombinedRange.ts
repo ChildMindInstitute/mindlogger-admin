@@ -10,7 +10,7 @@ import {
   ConditionWithSetType,
   RangeType,
   ResponseTypeForSetType,
-  SliderRowsType,
+  SliderRowsRangeType,
   TimeRangeType,
 } from '../SummaryRow.types';
 import { convertToMinutes } from './convertToMinutes';
@@ -83,7 +83,9 @@ export const getOutsideOfCombinedRange = (
       if (!conditions[0]) {
         return {
           isTimeRange: true,
-          [payloadType]: { range: [nextMinValue, nextMaxValue] },
+          [payloadType]: {
+            range: [convertToMinutes(nextMinValue), convertToMinutes(nextMaxValue)],
+          },
         };
       }
 
@@ -98,13 +100,13 @@ export const getOutsideOfCombinedRange = (
 
         return {
           ...accCondition,
-          [payloadType]: { range: [leftValue, rightValue] },
+          [payloadType]: { range: [convertToMinutes(leftValue), convertToMinutes(rightValue)] },
         };
       }
 
       return {
         ...accCondition,
-        [payloadType]: { range: [nextMinValue, nextMaxValue] },
+        [payloadType]: { range: [convertToMinutes(nextMinValue), convertToMinutes(nextMaxValue)] },
       };
     }
     case ItemResponseType.SliderRows: {
@@ -119,7 +121,7 @@ export const getOutsideOfCombinedRange = (
         };
       }
 
-      const accCondition = conditions[0] as SliderRowsType;
+      const accCondition = conditions[0] as SliderRowsRangeType;
       const rowRange = accCondition[+rowIndex];
 
       if (rowRange?.range.length) {

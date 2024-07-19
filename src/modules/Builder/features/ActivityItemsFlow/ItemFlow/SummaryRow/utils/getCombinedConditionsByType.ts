@@ -4,30 +4,26 @@ import {
   CombinedConditionType,
   ConditionWithSetType,
   EqualValueType,
+  GetCombinedConditionsByType,
   RangeType,
-  ResponseTypeForSetType,
   SingleValueType,
+  SliderRowsEqualValueType,
+  SliderRowsSingleValueType,
+  SliderRowsRangeType,
+  TimeEqualValueType,
+  TimeRangeType,
+  TimeSingleValueType,
 } from '../SummaryRow.types';
 import { getCombinedRangeForCondition } from './getCombinedRangeForCondition';
-import {
-  checkBetweenOutside,
-  checkGreaterLessNotEqual,
-  checkGreaterLessOutside,
-  checkNotEqualBetween,
-  checkNotEqualOutside,
-} from './checkContradictionCases';
+import { checkAllNumericContradictions } from './checkAllNumericContradictions';
 
 export const getCombinedConditionsByType = <T extends ConditionWithSetType>({
   responseType,
   conditions,
   minValue,
   maxValue,
-}: {
-  responseType: ResponseTypeForSetType;
-  conditions: ConditionWithSetType[];
-  minValue: number;
-  maxValue: number;
-}) => {
+  sliderRows,
+}: GetCombinedConditionsByType) => {
   const groupedCondition = conditions.reduce(
     (acc, condition) => {
       const conditionObject = condition as T;
@@ -58,200 +54,133 @@ export const getCombinedConditionsByType = <T extends ConditionWithSetType>({
     case ItemResponseType.Date:
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection: {
-      const outsideOfUnion = (groupedCondition[ConditionType.OutsideOf] as RangeType | undefined)
-        ?.range;
-      const betweenUnion = (groupedCondition[ConditionType.Between] as RangeType | undefined)
-        ?.range;
-      const lessThanValue = (
-        groupedCondition[ConditionType.LessThan] as SingleValueType | undefined
-      )?.value;
+      if (minValue === undefined || maxValue === undefined) return false;
+
       const greaterThanValue = (
         groupedCondition[ConditionType.GreaterThan] as SingleValueType | undefined
+      )?.value;
+      const lessThanValue = (
+        groupedCondition[ConditionType.LessThan] as SingleValueType | undefined
       )?.value;
       const equalSetUnion = (groupedCondition[ConditionType.Equal] as EqualValueType | undefined)
         ?.value;
       const notEqualSetUnion = (
         groupedCondition[ConditionType.NotEqual] as EqualValueType | undefined
       )?.value;
+      const betweenUnion = (groupedCondition[ConditionType.Between] as RangeType | undefined)
+        ?.range;
+      const outsideOfUnion = (groupedCondition[ConditionType.OutsideOf] as RangeType | undefined)
+        ?.range;
 
-      console.log({
-        outsideOfUnion,
-        betweenUnion,
+      return checkAllNumericContradictions({
         lessThanValue,
         greaterThanValue,
         equalSetUnion,
         notEqualSetUnion,
+        betweenUnion,
+        outsideOfUnion,
         minValue,
         maxValue,
       });
-
-      if (
-        lessThanValue !== undefined &&
-        greaterThanValue !== undefined &&
-        lessThanValue - greaterThanValue <= 1
-      ) {
-        // Check "greaterThanValue" and "lessThanValue" contradiction
-        return true;
-      }
-
-      if (
-        greaterThanValue !== undefined &&
-        equalSetUnion !== undefined &&
-        equalSetUnion.some((value) => value <= greaterThanValue)
-      ) {
-        // Check "greaterThanValue" and "isEqualTo" contradiction
-        return true;
-      }
-
-      if (
-        greaterThanValue !== undefined &&
-        notEqualSetUnion !== undefined &&
-        checkGreaterLessNotEqual({
-          compareValue: greaterThanValue,
-          notEqualArray: notEqualSetUnion,
-          validRange: { min: minValue, max: maxValue },
-          comparisonType: ConditionType.GreaterThan,
-        })
-      ) {
-        // Check "greaterThanValue" and "isNotEqualTo" contradiction
-        return true;
-      }
-
-      if (
-        greaterThanValue !== undefined &&
-        betweenUnion?.length === 2 &&
-        greaterThanValue + 1 >= betweenUnion[1]
-      ) {
-        // Check "greaterThanValue" and "betweenValues" contradiction
-        return true;
-      }
-
-      if (
-        greaterThanValue !== undefined &&
-        outsideOfUnion?.length === 2 &&
-        checkGreaterLessOutside({
-          compareValue: greaterThanValue,
-          outsideRange: { min: outsideOfUnion[0], max: outsideOfUnion[1] },
-          validRange: { min: minValue, max: maxValue },
-          comparisonType: ConditionType.GreaterThan,
-        })
-      ) {
-        // Check "greaterThanValue" and "outsideOfValues" contradiction
-        return true;
-      }
-
-      if (
-        lessThanValue !== undefined &&
-        equalSetUnion !== undefined &&
-        equalSetUnion.some((value) => value >= lessThanValue)
-      ) {
-        // Check "lessThanValue" and "isEqualTo" contradiction
-        return true;
-      }
-
-      if (
-        lessThanValue !== undefined &&
-        notEqualSetUnion !== undefined &&
-        checkGreaterLessNotEqual({
-          compareValue: lessThanValue,
-          notEqualArray: notEqualSetUnion,
-          validRange: { min: minValue, max: maxValue },
-          comparisonType: ConditionType.LessThan,
-        })
-      ) {
-        // Check "lessThanValue" and "isNotEqualTo" contradiction
-        return true;
-      }
-
-      if (
-        lessThanValue !== undefined &&
-        betweenUnion?.length === 2 &&
-        lessThanValue - 1 <= betweenUnion[0]
-      ) {
-        // Check "lessThanValue" and "betweenValues" contradiction
-        return true;
-      }
-
-      if (
-        lessThanValue !== undefined &&
-        outsideOfUnion?.length === 2 &&
-        checkGreaterLessOutside({
-          compareValue: lessThanValue,
-          outsideRange: { min: outsideOfUnion[0], max: outsideOfUnion[1] },
-          validRange: { min: minValue, max: maxValue },
-          comparisonType: ConditionType.LessThan,
-        })
-      ) {
-        // Check "lessThanValue" and "outsideOfValues" contradiction
-        return true;
-      }
-
-      if (equalSetUnion !== undefined && Array.from(new Set(equalSetUnion)).length > 1) {
-        // Check "equalTo" contradiction
-        return true;
-      }
-
-      if (
-        equalSetUnion !== undefined &&
-        notEqualSetUnion !== undefined &&
-        equalSetUnion.some((value) => notEqualSetUnion.includes(value))
-      ) {
-        // Check "equalTo" and "isNotEqualTo" contradiction
-        return true;
-      }
-
-      if (
-        equalSetUnion !== undefined &&
-        betweenUnion?.length === 2 &&
-        equalSetUnion.some((value) => value <= betweenUnion[0] || value >= betweenUnion[1])
-      ) {
-        // Check "equalTo" and "betweenValues" contradiction
-        return true;
-      }
-
-      if (
-        equalSetUnion !== undefined &&
-        outsideOfUnion?.length === 2 &&
-        equalSetUnion.some((value) => value >= outsideOfUnion[0] && value <= outsideOfUnion[1])
-      ) {
-        // Check "equalTo" and "outsideValues" contradiction
-        return true;
-      }
-
-      if (
-        notEqualSetUnion !== undefined &&
-        betweenUnion?.length === 2 &&
-        checkNotEqualBetween({ betweenUnion, notEqualSetUnion })
-      ) {
-        // Check "inNotEqualTo" and "betweenValues" contradiction
-        return true;
-      }
-
-      if (
-        notEqualSetUnion !== undefined &&
-        outsideOfUnion?.length === 2 &&
-        checkNotEqualOutside({ outsideOfUnion, notEqualSetUnion, minValue, maxValue })
-      ) {
-        // Check "inNotEqualTo" and "outsideValues" contradiction
-        return true;
-      }
-
-      if (
-        betweenUnion?.length === 2 &&
-        outsideOfUnion?.length === 2 &&
-        checkBetweenOutside({ betweenUnion, outsideOfUnion })
-      ) {
-        // Check "between" and "outsideValues" contradiction
-        return true;
-      }
-
-      return false;
     }
     case ItemResponseType.TimeRange: {
-      return false;
+      if (minValue === undefined || maxValue === undefined) return false;
+
+      const lessThanCondition = groupedCondition[ConditionType.LessThan] as
+        | TimeSingleValueType<number>
+        | undefined;
+      const lessThanStartTime = lessThanCondition?.startTime?.value;
+      const lessThanEndTime = lessThanCondition?.endTime?.value;
+
+      const greaterThanCondition = groupedCondition[ConditionType.GreaterThan] as
+        | TimeSingleValueType<number>
+        | undefined;
+      const greaterThanStartTime = greaterThanCondition?.startTime?.value;
+      const greaterThanEndTime = greaterThanCondition?.endTime?.value;
+
+      const equalCondition = groupedCondition[ConditionType.Equal] as
+        | TimeEqualValueType<number>
+        | undefined;
+      const equalSetUnionStartTime = equalCondition?.startTime?.value;
+      const equalSetUnionEndTime = equalCondition?.endTime?.value;
+
+      const notEqualCondition = groupedCondition[ConditionType.NotEqual] as
+        | TimeEqualValueType<number>
+        | undefined;
+      const notEqualSetUnionStartTime = notEqualCondition?.startTime?.value;
+      const notEqualSetUnionEndTime = notEqualCondition?.endTime?.value;
+
+      const betweenCondition = groupedCondition[ConditionType.Between] as
+        | TimeRangeType<number>
+        | undefined;
+      const betweenUnionStartTime = betweenCondition?.startTime?.range;
+      const betweenUnionEndTime = betweenCondition?.endTime?.range;
+
+      const outsideOfCondition = groupedCondition[ConditionType.OutsideOf] as
+        | TimeRangeType<number>
+        | undefined;
+      const outsideOfUnionStartTime = outsideOfCondition?.startTime?.range;
+      const outsideOfUnionEndTime = outsideOfCondition?.endTime?.range;
+
+      return (
+        checkAllNumericContradictions({
+          lessThanValue: lessThanStartTime,
+          greaterThanValue: greaterThanStartTime,
+          equalSetUnion: equalSetUnionStartTime,
+          notEqualSetUnion: notEqualSetUnionStartTime,
+          betweenUnion: betweenUnionStartTime,
+          outsideOfUnion: outsideOfUnionStartTime,
+          minValue,
+          maxValue,
+        }) ||
+        checkAllNumericContradictions({
+          lessThanValue: lessThanEndTime,
+          greaterThanValue: greaterThanEndTime,
+          equalSetUnion: equalSetUnionEndTime,
+          notEqualSetUnion: notEqualSetUnionEndTime,
+          betweenUnion: betweenUnionEndTime,
+          outsideOfUnion: outsideOfUnionEndTime,
+          minValue,
+          maxValue,
+        })
+      );
     }
     case ItemResponseType.SliderRows: {
-      return false;
+      if (!sliderRows?.length) return false;
+
+      return sliderRows.some(({ minValue, maxValue }, index) => {
+        if (minValue === undefined || maxValue === undefined) return false;
+
+        const greaterThanValue = (
+          groupedCondition[ConditionType.GreaterThan] as SliderRowsSingleValueType | undefined
+        )?.[index]?.value;
+        const lessThanValue = (
+          groupedCondition[ConditionType.LessThan] as SliderRowsSingleValueType | undefined
+        )?.[index]?.value;
+        const equalSetUnion = (
+          groupedCondition[ConditionType.Equal] as SliderRowsEqualValueType | undefined
+        )?.[index]?.value;
+        const notEqualSetUnion = (
+          groupedCondition[ConditionType.NotEqual] as SliderRowsEqualValueType | undefined
+        )?.[index]?.value;
+        const betweenUnion = (
+          groupedCondition[ConditionType.Between] as SliderRowsRangeType | undefined
+        )?.[index]?.range;
+        const outsideOfUnion = (
+          groupedCondition[ConditionType.OutsideOf] as SliderRowsRangeType | undefined
+        )?.[index]?.range;
+
+        return checkAllNumericContradictions({
+          lessThanValue,
+          greaterThanValue,
+          equalSetUnion,
+          notEqualSetUnion,
+          betweenUnion,
+          outsideOfUnion,
+          minValue: minValue as number,
+          maxValue: maxValue as number,
+        });
+      });
     }
   }
 };

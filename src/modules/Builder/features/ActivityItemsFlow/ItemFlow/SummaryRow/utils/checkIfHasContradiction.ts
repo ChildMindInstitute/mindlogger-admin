@@ -4,7 +4,11 @@ import {
   DEFAULT_START_TIME,
   ItemResponseType,
 } from 'shared/consts';
-import { NumberItemResponseValues, SliderItemResponseValues } from 'shared/state/Applet';
+import {
+  NumberItemResponseValues,
+  SliderItemResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state/Applet';
 
 import { ConditionWithSetType } from '../SummaryRow.types';
 import { getObjectFromListByItemId } from './getObjectFromListByItemId';
@@ -19,10 +23,10 @@ export const checkIfHasContradiction = (
   const groupedItemsByItemId = Object.entries(conditionsByItemId);
 
   return groupedItemsByItemId.some((entity) => {
-    const type = entity[1].itemType;
+    const responseType = entity[1].itemType;
     const groupedConditions = entity[1].conditions;
 
-    switch (type) {
+    switch (responseType) {
       case ItemResponseType.Slider:
       case ItemResponseType.NumberSelection: {
         const responseValues = groupedConditions[0].responseValues as
@@ -30,7 +34,7 @@ export const checkIfHasContradiction = (
           | NumberItemResponseValues;
 
         return getCombinedConditionsByType({
-          responseType: type,
+          responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: responseValues.minValue as number,
           maxValue: responseValues.maxValue as number,
@@ -38,7 +42,7 @@ export const checkIfHasContradiction = (
       }
       case ItemResponseType.Time: {
         return getCombinedConditionsByType({
-          responseType: type,
+          responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: convertToMinutes(DEFAULT_START_TIME) || 0,
           maxValue: convertToMinutes(DEFAULT_END_TIME) || 0,
@@ -46,15 +50,28 @@ export const checkIfHasContradiction = (
       }
       case ItemResponseType.Date: {
         return getCombinedConditionsByType({
-          responseType: type,
+          responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: 0,
           maxValue: Number.MAX_SAFE_INTEGER,
         });
       }
-      case ItemResponseType.TimeRange:
+      case ItemResponseType.TimeRange: {
+        return getCombinedConditionsByType({
+          responseType,
+          conditions: groupedConditions as ConditionWithSetType[],
+          minValue: convertToMinutes(DEFAULT_START_TIME) || 0,
+          maxValue: convertToMinutes(DEFAULT_END_TIME) || 0,
+        });
+      }
       case ItemResponseType.SliderRows: {
-        return false;
+        const responseValues = groupedConditions[0].responseValues as SliderRowsResponseValues;
+
+        return getCombinedConditionsByType({
+          responseType,
+          conditions: groupedConditions as ConditionWithSetType[],
+          sliderRows: responseValues?.rows,
+        });
       }
       case ItemResponseType.SingleSelection:
         return checkIfSelectionsHasIntersection({

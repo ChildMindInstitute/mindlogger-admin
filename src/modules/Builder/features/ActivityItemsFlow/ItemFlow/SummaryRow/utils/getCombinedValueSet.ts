@@ -63,11 +63,11 @@ export const getCombinedValueSet = (
       if (!conditions[0]) {
         return {
           isTimeRange: true,
-          [payloadType]: { value: [nextValue] },
+          [payloadType]: { value: [convertToMinutes(nextValue)] },
         };
       }
 
-      const accCondition = conditions[0] as TimeEqualValueType<string>;
+      const accCondition = conditions[0] as TimeEqualValueType<number | null>;
       const timeRange = accCondition[payloadType];
 
       if (timeRange) {
@@ -75,13 +75,13 @@ export const getCombinedValueSet = (
 
         return {
           ...accCondition,
-          [payloadType]: { value: accValue.concat(nextValue) },
+          [payloadType]: { value: accValue.concat(convertToMinutes(nextValue)) },
         };
       }
 
       return {
         ...accCondition,
-        [payloadType]: { value: [nextValue] },
+        [payloadType]: { value: [convertToMinutes(nextValue)] },
       };
     }
     case ItemResponseType.SliderRows: {

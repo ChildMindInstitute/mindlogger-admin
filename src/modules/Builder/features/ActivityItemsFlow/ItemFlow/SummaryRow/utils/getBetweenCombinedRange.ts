@@ -10,7 +10,7 @@ import {
   ConditionWithSetType,
   RangeType,
   ResponseTypeForSetType,
-  SliderRowsType,
+  SliderRowsRangeType,
   TimeRangeType,
 } from '../SummaryRow.types';
 import { convertToMinutes } from './convertToMinutes';
@@ -89,7 +89,9 @@ export const getBetweenCombinedRange = (
       if (!conditions[0]) {
         return {
           isTimeRange: true,
-          [payloadType]: { range: [nextMinValue, nextMaxValue] },
+          [payloadType]: {
+            range: [convertToMinutes(nextMinValue), convertToMinutes(nextMaxValue)],
+          },
         };
       }
 
@@ -112,7 +114,7 @@ export const getBetweenCombinedRange = (
 
         return {
           ...accCondition,
-          [payloadType]: { range: [leftValue, rightValue] },
+          [payloadType]: { range: [convertToMinutes(leftValue), convertToMinutes(rightValue)] },
         };
       }
 
@@ -126,7 +128,7 @@ export const getBetweenCombinedRange = (
       return {
         ...accCondition,
         isTimeRange: true,
-        [payloadType]: { range: [nextMinValue, nextMaxValue] },
+        [payloadType]: { range: [convertToMinutes(nextMinValue), convertToMinutes(nextMaxValue)] },
       };
     }
     case ItemResponseType.SliderRows: {
@@ -141,7 +143,7 @@ export const getBetweenCombinedRange = (
         };
       }
 
-      const accCondition = conditions[0] as SliderRowsType;
+      const accCondition = conditions[0] as SliderRowsRangeType;
       const rowRange = accCondition[+rowIndex];
 
       if (rowRange?.range.length === 0) return accCondition;
