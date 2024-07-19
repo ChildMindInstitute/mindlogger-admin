@@ -6,8 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Mixpanel, MixpanelProps } from 'shared/utils/mixpanel';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
-
-import { EditSubjectResponse } from '../../../../api';
+import { EditSubjectResponse } from 'api';
 
 import { EditRespondentPopup } from '.';
 
