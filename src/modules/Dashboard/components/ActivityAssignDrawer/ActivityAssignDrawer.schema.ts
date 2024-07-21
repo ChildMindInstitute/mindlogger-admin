@@ -12,6 +12,33 @@ export const useActivityAssignFormSchema = () =>
             targetSubjectId: yup.string().nullable(),
           }),
         )
+        .test('DuplicateRowsError', (assignments) => {
+          const duplicates: string[] = [];
+          const unique: Set<string> = new Set();
+
+          assignments?.forEach(({ respondentSubjectId, targetSubjectId }) => {
+            if (!respondentSubjectId || !targetSubjectId) {
+              return;
+            }
+            const key = `${respondentSubjectId}_${targetSubjectId}`;
+            if (unique.has(key)) {
+              duplicates.push(key);
+            } else {
+              unique.add(key);
+            }
+          });
+
+          if (duplicates.length > 0) {
+            return new yup.ValidationError(
+              duplicates.join(','),
+              null,
+              'assignments',
+              'DuplicateRowsError',
+            );
+          }
+
+          return true;
+        })
         .required(),
     })
     .required();

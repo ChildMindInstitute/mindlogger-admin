@@ -13,7 +13,7 @@ export type ParticipantDropdownProps = Omit<
   AutocompleteProps<ParticipantDropdownOption, false, false, false>,
   'value' | 'onChange' | 'fullWidth' | 'options' | 'renderInput'
 > & {
-  name: string;
+  name?: string;
   placeholder: string;
   options: ParticipantDropdownOption[];
   value: ParticipantDropdownOption | null;
@@ -24,6 +24,7 @@ export type ParticipantDropdownProps = Omit<
   debounce?: number;
   'data-testid': string;
   showGroups?: boolean;
+  emptyValueError?: string;
 };
 
 export type AnyTeamSearchType = 'team' | 'any-participant';

@@ -1,10 +1,10 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Autocomplete, AutocompleteRenderInputParams, TextField, Box } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
-import { theme, variables } from 'shared/styles';
+import { Chip, Svg } from 'shared/components';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
 import { ParticipantDropdownProps, ParticipantDropdownOption } from './ParticipantDropdown.types';
@@ -21,6 +21,7 @@ export const ParticipantDropdown = ({
   debounce,
   disabled,
   showGroups,
+  emptyValueError,
   ...rest
 }: ParticipantDropdownProps) => {
   const { t } = useTranslation('app');
@@ -59,6 +60,10 @@ export const ParticipantDropdown = ({
     [debounce, handleSearch],
   );
 
+  useEffect(() => {
+    setCombinedOptions((prev) => unionBy(options, prev, 'id'));
+  }, [options]);
+
   let groupBy: ParticipantDropdownProps['groupBy'];
 
   if (showGroups) {
@@ -75,10 +80,28 @@ export const ParticipantDropdown = ({
     <Autocomplete
       renderInput={(params: AutocompleteRenderInputParams) => {
         const { InputLabelProps: _InputLabelProps, ...rest } = params;
+        const hasEmptyError = !value && emptyValueError;
 
-        return <TextField {...rest} placeholder={placeholder} name={name} />;
+        return (
+          <Box sx={{ position: 'relative' }}>
+            <TextField
+              {...rest}
+              placeholder={hasEmptyError ? undefined : placeholder}
+              name={name}
+            />
+            {hasEmptyError && (
+              <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                <Chip
+                  color="warning"
+                  icon={<Svg id="exclamation-outline" width={18} height={18} />}
+                  title={emptyValueError}
+                />
+              </StyledFlexTopCenter>
+            )}
+          </Box>
+        );
       }}
-      options={combinedOptions}
+      options={searchResults ?? options}
       renderOption={(
         { children: _children, ...props },
         { id, tag, secretId, nickname, isTeamMember, ...psProps },

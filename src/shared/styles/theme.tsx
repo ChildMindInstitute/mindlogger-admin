@@ -142,6 +142,25 @@ export const theme = createTheme({
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: `${variables.borderWidth.md} solid transparent}`,
           },
+          '&.MuiTableRow-error': {
+            position: 'relative',
+            '.MuiTableCell-root:first-child::before': {
+              content: '""',
+              position: 'absolute',
+              top: `-${variables.borderWidth.md2}`,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              border: `${variables.borderWidth.md2} solid ${variables.palette.red}`,
+            },
+          },
+          '&.MuiTableRow-error:first-child .MuiTableCell-root:first-child::before': {
+            top: 0,
+          },
+          '&.MuiTableRow-error:last-child .MuiTableCell-root:first-child::before': {
+            borderBottomLeftRadius: variables.borderRadius.lg2,
+            borderBottomRightRadius: variables.borderRadius.lg2,
+          },
         },
       },
     },
@@ -542,7 +561,7 @@ export const theme = createTheme({
           padding: 0,
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.outline_variant,
-          color: variables.palette.black,
+          color: variables.palette.on_surface,
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
@@ -784,6 +803,7 @@ export const theme = createTheme({
         root: {
           '.MuiDrawer-paper': {
             maxWidth: '100%',
+            backgroundColor: variables.palette.surface,
           },
         },
       },

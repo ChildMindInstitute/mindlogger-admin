@@ -232,6 +232,8 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
     skip,
   ]);
 
+  const isLoading = isFetchingParticipants || isFetchingManagers || isFetchingLoggedInTeamMember;
+
   return {
     allParticipants,
     teamMembersOnly,
@@ -240,5 +242,6 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
     fullAccountParticipantsAndTeamMembers,
     loggedInTeamMember,
     handleSearch,
+    isLoading,
   };
 };

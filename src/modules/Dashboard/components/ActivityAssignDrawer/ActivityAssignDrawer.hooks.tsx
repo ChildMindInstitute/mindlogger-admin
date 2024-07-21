@@ -1,5 +1,5 @@
 import { Collapse } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 
 import { BannerProps } from 'shared/components/Banners/Banner';
@@ -11,20 +11,20 @@ export const useActivityAssignBanners = () => {
     { key: keyof typeof ActivityAssignBannerComponents; bannerProps: BannerProps }[]
   >([]);
 
-  const addBanner = (
-    key: keyof typeof ActivityAssignBannerComponents,
-    bannerProps: BannerProps = {},
-  ) => {
-    setBanners((prevBanners) => [...prevBanners, { key, bannerProps }]);
-  };
+  const addBanner = useCallback(
+    (key: keyof typeof ActivityAssignBannerComponents, bannerProps: BannerProps = {}) => {
+      setBanners((prevBanners) => [...prevBanners, { key, bannerProps }]);
+    },
+    [],
+  );
 
-  const removeBanner = (key: keyof typeof ActivityAssignBannerComponents) => {
+  const removeBanner = useCallback((key: keyof typeof ActivityAssignBannerComponents) => {
     setBanners((prevBanners) => prevBanners.filter((banner) => banner.key !== key));
-  };
+  }, []);
 
-  const removeAllBanners = () => {
+  const removeAllBanners = useCallback(() => {
     setBanners([]);
-  };
+  }, []);
 
   const bannersComponent = (
     <TransitionGroup>

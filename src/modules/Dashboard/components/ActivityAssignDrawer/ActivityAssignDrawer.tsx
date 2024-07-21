@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
@@ -19,7 +19,9 @@ import { useAsync } from 'shared/hooks';
 import { getAppletActivitiesApi } from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
+import { useParticipantDropdown } from 'modules/Dashboard/components';
 
+import { AssignmentsTable } from './AssignmentsTable';
 import { ActivityCheckbox } from './ActivityCheckbox';
 import { ActivityAssignDrawerProps, ActivityAssignFormValues } from './ActivityAssignDrawer.types';
 import { useActivityAssignFormSchema } from './ActivityAssignDrawer.schema';
@@ -51,6 +53,9 @@ export const ActivityAssignDrawer = ({
   const [step, setStep] = useState<1 | 2>(1);
   const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
     useActivityAssignBanners();
+  const { isLoading: isLoadingParticipants, ...dropdownProps } = useParticipantDropdown({
+    appletId,
+  });
 
   const {
     execute: getActivities,
@@ -61,6 +66,8 @@ export const ActivityAssignDrawer = ({
     () => removeBanner('NetworkErrorBanner'),
     () => addBanner('NetworkErrorBanner'),
   );
+
+  const isLoading = isLoadingParticipants || isLoadingActivities;
 
   const activities: Activity[] = activitiesData?.data.result?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
@@ -78,20 +85,39 @@ export const ActivityAssignDrawer = ({
   const {
     handleSubmit,
     control,
-    setError,
     setValue,
     formState: { isValid, errors, isDirty },
     reset,
   } = useForm<ActivityAssignFormValues>({
     resolver: yupResolver(useActivityAssignFormSchema()),
     defaultValues,
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
-  const [activityIds, flowIds] = useWatch({ control, name: ['activityIds', 'flowIds'] });
+  const [activityIds, flowIds, assignments] = useWatch({
+    control,
+    name: ['activityIds', 'flowIds', 'assignments'],
+  });
   const selectionCount = activityIds.length + flowIds.length;
+  const assignmentCounts = useMemo(() => {
+    const counts = { completed: 0, selfReports: 0 };
+    for (const assignment of assignments) {
+      if (!assignment.respondentSubjectId || !assignment.targetSubjectId) continue;
 
-  const isComplete = !!selectionCount;
+      counts.completed++;
+      if (assignment.respondentSubjectId === assignment.targetSubjectId) {
+        counts.selfReports++;
+      }
+    }
+
+    return {
+      ...counts,
+      multiInformant: counts.completed - counts.selfReports,
+    };
+  }, [assignments]);
+
+  const isComplete =
+    !!selectionCount && assignments.length && assignments.length === assignmentCounts.completed;
 
   const handleSelectAll = () => {
     if (selectionCount === activitiesCount) {
@@ -112,6 +138,7 @@ export const ActivityAssignDrawer = ({
   };
 
   const handleClose = () => {
+    // TODO: Display confirmation popup https://mindlogger.atlassian.net/browse/M2-7399
     if (
       isDirty &&
       !window.confirm('[TODO: Replace me with popup]\nChanges will be lost, are you sure?')
@@ -125,7 +152,9 @@ export const ActivityAssignDrawer = ({
   const handleClickNext = () => {
     if (step === 1) {
       removeAllBanners();
-      setStep(2);
+      handleSubmit(() => {
+        setStep(2);
+      })();
     } else {
       // TODO: Submit to BE https://mindlogger.atlassian.net/browse/M2-7261
       handleSubmit(() => {})();
@@ -162,6 +191,14 @@ export const ActivityAssignDrawer = ({
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (errors.assignments?.type === 'DuplicateRowsError') {
+      addBanner('DuplicateRowsErrorBanner');
+    } else {
+      removeBanner('DuplicateRowsErrorBanner');
+    }
+  }, [addBanner, errors.assignments, removeBanner]);
+
   return (
     <Drawer
       anchor="right"
@@ -171,7 +208,7 @@ export const ActivityAssignDrawer = ({
       sx={{ '.MuiDrawer-paper': { width: '96rem' } }}
       {...rest}
     >
-      {isLoadingActivities && <Spinner />}
+      {isLoading && <Spinner />}
 
       <StyledHeader>
         <Box sx={{ position: 'relative', flex: 1 }}>
@@ -208,8 +245,10 @@ export const ActivityAssignDrawer = ({
       {bannersComponent}
 
       <StyledFlexColumn sx={{ position: 'relative', overflowY: 'auto', flex: 1 }}>
+        {/* Step 1 – Select activities and add respondents */}
         <Fade in={step === 1}>
           <StyledFlexColumn sx={{ p: 4, gap: 4.8 }}>
+            {/* Select activities */}
             <StyledFlexColumn sx={{ gap: 0.8 }}>
               <StyledFlexTopBaseline>
                 <StyledFlexTopBaseline sx={{ gap: 1.6, mr: 'auto' }}>
@@ -245,19 +284,56 @@ export const ActivityAssignDrawer = ({
               />
             </StyledFlexColumn>
 
+            {/* Add respondents */}
             <StyledFlexColumn sx={{ gap: 1.6 }}>
-              <StyledTitleLarge>{t('addRespondents')}</StyledTitleLarge>
+              <StyledFlexTopBaseline sx={{ gap: 1.6 }}>
+                <StyledTitleLarge>{t('addRespondents')}</StyledTitleLarge>
+                {!!assignmentCounts.selfReports && (
+                  <StyledLabelLarge color={variables.palette.on_surface_variant}>
+                    {t('selfReports', { count: assignmentCounts.selfReports })}
+                  </StyledLabelLarge>
+                )}
+                {!!assignmentCounts.multiInformant && (
+                  <StyledLabelLarge color={variables.palette.on_surface_variant}>
+                    {t('multiInformant', { count: assignmentCounts.multiInformant })}
+                  </StyledLabelLarge>
+                )}
+              </StyledFlexTopBaseline>
+
+              <Controller
+                control={control}
+                name="assignments"
+                render={({ field: { onChange, value }, fieldState: { error } }) => {
+                  const duplicateRows =
+                    errors.assignments?.type === 'DuplicateRowsError'
+                      ? (error?.message?.split(',') as `${string}_${string}`[])
+                      : undefined;
+
+                  return (
+                    <AssignmentsTable
+                      {...dropdownProps}
+                      assignments={value}
+                      onChange={onChange}
+                      errors={{ duplicateRows }}
+                      data-testid={`${dataTestId}-assignments-table`}
+                    />
+                  );
+                }}
+              />
             </StyledFlexColumn>
           </StyledFlexColumn>
         </Fade>
 
+        {/* Step 2 – Review and send notifications */}
         <Fade in={step === 2}>
           {/* TODO: Review step https://mindlogger.atlassian.net/browse/M2-7261 */}
           {/* When implementing Review step, the `position: 'absolute', inset: 0` props will
-          need to be moved from below to Step 1's StyledFlexColumn. With these Fade transitions as
-          implemented, the step whose content is guaranteed to be the tallest (which will be the
-          Review step when completed) needs to be the one with static positioning to ensure the
-          parent container accommodates both panes. */}
+          need to be attached to the step's topmost StyledFlexColumn that is guaranteed to be the
+          shortest for Fade transitions to preserve layout. It may be the case that when 1 activity
+          is selected, Step 2 is shortest, while 2+ selected activities makes Step 1 shortest. The
+          tallest component needs to be the one with static positioning to ensure the parent
+          container can accommodate both panes. A less fragile but not terribly complex approach
+          would be preferred. */}
           <StyledFlexColumn sx={{ position: 'absolute', inset: 0, p: 4, gap: 1.6 }}>
             TODO: Review step
           </StyledFlexColumn>
@@ -270,7 +346,7 @@ export const ActivityAssignDrawer = ({
                 step={step}
                 variant="contained"
                 onClick={handleClickNext}
-                disabled={!isComplete || !isValid}
+                disabled={step === 1 ? !isComplete : !isComplete || !isValid}
                 sx={{ minWidth: '19.7rem' }}
                 data-testid={`${dataTestId}-${step === 1 ? 'next' : 'send-invitations'}`}
               >

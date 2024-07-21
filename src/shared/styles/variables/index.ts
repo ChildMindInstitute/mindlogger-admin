@@ -21,6 +21,7 @@ export const variables = {
   borderWidth: {
     xl: '0.4rem', //4px
     lg: '0.2rem', //2px
+    md2: '0.15rem', //1.5px
     md: '0.1rem', //1px
   },
   opacity: {
