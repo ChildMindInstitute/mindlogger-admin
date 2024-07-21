@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Autocomplete, AutocompleteRenderInputParams, TextField, Box } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, Box } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
 import { Chip, Svg } from 'shared/components';
-import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
 import { ParticipantDropdownProps, ParticipantDropdownOption } from './ParticipantDropdown.types';
-import { StyledGroupLabel } from './ParticipantDropdown.styles';
+import { StyledEmptyError, StyledGroupLabel, StyledTextField } from './ParticipantDropdown.styles';
 import { getParticipantLabel } from './ParticipantDropdown.utils';
 
 export const ParticipantDropdown = ({
@@ -29,6 +29,7 @@ export const ParticipantDropdown = ({
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const debouncedSearchHandler = useCallback(
     (search: string) => {
@@ -83,23 +84,44 @@ export const ParticipantDropdown = ({
       renderInput={(params: AutocompleteRenderInputParams) => {
         const { InputLabelProps: _InputLabelProps, ...rest } = params;
         const hasEmptyError = !value && emptyValueError;
+        const isSnippetVisible = !!value && !isFocused;
 
         return (
           <Box sx={{ position: 'relative' }}>
-            <TextField
+            <StyledTextField
               {...rest}
               placeholder={hasEmptyError ? undefined : placeholder}
               name={name}
               inputRef={inputRef}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              isSnippetVisible={isSnippetVisible}
             />
+            {isSnippetVisible && (
+              <ParticipantSnippet
+                {...value}
+                boxProps={{
+                  sx: {
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                    transition: variables.transitions.all,
+                    p: theme.spacing(0, 5.6, 0, 1.6),
+                    '.MuiAutocomplete-root:hover &': {
+                      pr: 10.4,
+                    },
+                  },
+                }}
+              />
+            )}
             {hasEmptyError && (
-              <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+              <StyledEmptyError>
                 <Chip
                   color="warning"
                   icon={<Svg id="exclamation-outline" width={18} height={18} />}
                   title={emptyValueError}
                 />
-              </StyledFlexTopCenter>
+              </StyledEmptyError>
             )}
           </Box>
         );

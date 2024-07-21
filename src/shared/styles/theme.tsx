@@ -817,12 +817,40 @@ export const theme = createTheme({
     },
     MuiIconButton: {
       styleOverrides: {
-        root: ({ ownerState: { color } }) => ({
+        root: ({ ownerState: { color }, theme }) => ({
           ...(color === 'outlined' && {
             borderWidth: variables.borderWidth.md,
             borderStyle: 'solid',
             borderColor: variables.palette.outline_variant,
           }),
+          '&.MuiAutocomplete-popupIndicator': {
+            padding: theme.spacing(0.8),
+            margin: theme.spacing(-0.6, -0.4, -0.6, 0.8),
+            color: variables.palette.on_surface_variant,
+          },
+          '&.MuiAutocomplete-clearIndicator': {
+            padding: theme.spacing(1),
+            margin: theme.spacing(-0.6, 0),
+            color: variables.palette.on_surface_variant,
+          },
+        }),
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '&&': {
+            '&.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot': {
+              paddingRight: theme.spacing(5.6),
+            },
+            '&.MuiAutocomplete-hasPopupIcon .MuiAutocomplete-inputRoot': {
+              paddingRight: theme.spacing(5.6),
+            },
+            '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot':
+              {
+                paddingRight: theme.spacing(10.4),
+              },
+          },
         }),
       },
     },
