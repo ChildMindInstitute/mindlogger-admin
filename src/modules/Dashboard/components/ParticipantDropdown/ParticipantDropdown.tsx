@@ -7,8 +7,17 @@ import { Chip, Svg } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
-import { ParticipantDropdownProps, ParticipantDropdownOption } from './ParticipantDropdown.types';
-import { StyledEmptyError, StyledGroupLabel, StyledTextField } from './ParticipantDropdown.styles';
+import {
+  ParticipantDropdownProps,
+  ParticipantDropdownOption,
+  ParticipantDropdownVariant,
+} from './ParticipantDropdown.types';
+import {
+  StyledEmptyError,
+  StyledGroupLabel,
+  StyledTextField,
+  StyledTextFieldWrapper,
+} from './ParticipantDropdown.styles';
 import { getParticipantLabel } from './ParticipantDropdown.utils';
 
 export const ParticipantDropdown = ({
@@ -23,6 +32,7 @@ export const ParticipantDropdown = ({
   disabled,
   showGroups,
   emptyValueError,
+  variant = ParticipantDropdownVariant.Outlined,
   ...rest
 }: ParticipantDropdownProps) => {
   const { t } = useTranslation('app');
@@ -81,13 +91,16 @@ export const ParticipantDropdown = ({
 
   return (
     <Autocomplete
+      size={variant === ParticipantDropdownVariant.Full ? 'large' : 'medium'}
       renderInput={(params: AutocompleteRenderInputParams) => {
         const { InputLabelProps: _InputLabelProps, ...rest } = params;
-        const hasEmptyError = !value && emptyValueError;
+        const hasEmptyError = !value && !isFocused && emptyValueError;
         const isSnippetVisible = !!value && !isFocused;
+        const isFullVariant = variant === ParticipantDropdownVariant.Full;
+        const { isTeamMember, secretId, nickname } = value ?? {};
 
         return (
-          <Box sx={{ position: 'relative' }}>
+          <StyledTextFieldWrapper isShaded={isFullVariant && !isFocused}>
             <StyledTextField
               {...rest}
               placeholder={hasEmptyError ? undefined : placeholder}
@@ -96,17 +109,20 @@ export const ParticipantDropdown = ({
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               isSnippetVisible={isSnippetVisible}
+              isFullVariant={isFullVariant}
             />
             {isSnippetVisible && (
               <ParticipantSnippet
                 {...value}
+                secretId={isTeamMember ? nickname : secretId}
+                nickname={isTeamMember ? null : nickname}
                 boxProps={{
                   sx: {
                     position: 'absolute',
                     inset: 0,
                     pointerEvents: 'none',
                     transition: variables.transitions.all,
-                    p: theme.spacing(0, 5.6, 0, 1.6),
+                    p: theme.spacing(0, 5.6, 0, isFullVariant ? 3.2 : 1.6),
                     '.MuiAutocomplete-root:hover &': {
                       pr: 10.4,
                     },
@@ -115,7 +131,7 @@ export const ParticipantDropdown = ({
               />
             )}
             {hasEmptyError && (
-              <StyledEmptyError>
+              <StyledEmptyError isFullVariant={isFullVariant}>
                 <Chip
                   color="warning"
                   icon={<Svg id="exclamation-outline" width={18} height={18} />}
@@ -123,7 +139,7 @@ export const ParticipantDropdown = ({
                 />
               </StyledEmptyError>
             )}
-          </Box>
+          </StyledTextFieldWrapper>
         );
       }}
       options={combinedOptions ?? options}

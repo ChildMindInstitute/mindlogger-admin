@@ -2,6 +2,11 @@ import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
 
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
 
+export enum ParticipantDropdownVariant {
+  Outlined = 'outlined',
+  Full = 'full',
+}
+
 export type ParticipantDropdownOption = ParticipantSnippetInfo & {
   /** Subject ID */
   id: string;
@@ -25,6 +30,8 @@ export type ParticipantDropdownProps = Omit<
   'data-testid': string;
   showGroups?: boolean;
   emptyValueError?: string;
+  /** @default ParticipantDropdownVariant.Outlined */
+  variant?: ParticipantDropdownVariant;
 };
 
 export type AnyTeamSearchType = 'team' | 'any-participant';

@@ -140,7 +140,7 @@ export const theme = createTheme({
             letterSpacing: variables.font.letterSpacing.lg,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
-            borderLeft: `${variables.borderWidth.md} solid transparent}`,
+            borderLeft: 0,
           },
           '&.MuiTableRow-error': {
             position: 'relative',
@@ -825,7 +825,7 @@ export const theme = createTheme({
           }),
           '&.MuiAutocomplete-popupIndicator': {
             padding: theme.spacing(0.8),
-            margin: theme.spacing(-0.6, -0.4, -0.6, 0.8),
+            margin: theme.spacing(-0.6, -0.4, -0.6, 0.6),
             color: variables.palette.on_surface_variant,
           },
           '&.MuiAutocomplete-clearIndicator': {
@@ -838,18 +838,25 @@ export const theme = createTheme({
     },
     MuiAutocomplete: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme, ownerState: { size } }) => ({
           '&&': {
+            '.MuiAutocomplete-inputRoot': {
+              padding: theme.spacing(size === 'large' ? 1.2 : 0.9),
+              paddingLeft: theme.spacing(size === 'large' ? 2.7 : 1.2),
+            },
             '&.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot': {
-              paddingRight: theme.spacing(5.6),
+              paddingRight: theme.spacing(size === 'large' ? 8.8 : 5.6),
             },
             '&.MuiAutocomplete-hasPopupIcon .MuiAutocomplete-inputRoot': {
-              paddingRight: theme.spacing(5.6),
+              paddingRight: theme.spacing(size === 'large' ? 8.8 : 5.6),
             },
             '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot':
               {
-                paddingRight: theme.spacing(10.4),
+                paddingRight: theme.spacing(size === 'large' ? 13.6 : 10.4),
               },
+            '.MuiAutocomplete-endAdornment': {
+              right: theme.spacing(size === 'large' ? 1.6 : 0.9),
+            },
           },
         }),
       },
@@ -892,6 +899,12 @@ declare module '@mui/material/Button' {
 declare module '@mui/material/IconButton' {
   interface IconButtonPropsColorOverrides {
     outlined: true;
+  }
+}
+
+declare module '@mui/material/Autocomplete' {
+  interface AutocompletePropsSizeOverrides {
+    large: true;
   }
 }
 
