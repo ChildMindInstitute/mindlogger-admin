@@ -16,9 +16,10 @@ export const ParticipantDropdown = ({
   options,
   value,
   placeholder,
+  onOpen,
   onChange,
   handleSearch,
-  debounce,
+  debounce = 500,
   disabled,
   showGroups,
   emptyValueError,
@@ -32,12 +33,12 @@ export const ParticipantDropdown = ({
   const debouncedSearchHandler = useCallback(
     (search: string) => {
       const searchTrimmed = search.trim();
-      if (!handleSearch || !searchTrimmed) {
-        return;
-      }
-
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
+      }
+
+      if (!handleSearch || !searchTrimmed) {
+        return;
       }
 
       setIsSearching(true);
@@ -51,11 +52,10 @@ export const ParticipantDropdown = ({
           }
 
           setCombinedOptions((prev) => unionBy(prev, results as ParticipantDropdownOption[], 'id'));
-          setIsSearching(false);
-        } catch (_e) {
+        } finally {
           setIsSearching(false);
         }
-      }, debounce ?? 500);
+      }, debounce);
     },
     [debounce, handleSearch],
   );
@@ -76,6 +76,8 @@ export const ParticipantDropdown = ({
     };
   }
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <Autocomplete
       renderInput={(params: AutocompleteRenderInputParams) => {
@@ -88,6 +90,7 @@ export const ParticipantDropdown = ({
               {...rest}
               placeholder={hasEmptyError ? undefined : placeholder}
               name={name}
+              inputRef={inputRef}
             />
             {hasEmptyError && (
               <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
@@ -101,7 +104,7 @@ export const ParticipantDropdown = ({
           </Box>
         );
       }}
-      options={searchResults ?? options}
+      options={combinedOptions ?? options}
       renderOption={(
         { children: _children, ...props },
         { id, tag, secretId, nickname, isTeamMember, ...psProps },
@@ -157,12 +160,31 @@ export const ParticipantDropdown = ({
       fullWidth={true}
       value={value}
       onChange={(_e, newValue) => onChange(newValue)}
-      clearOnBlur={false}
+      onOpen={(event) => {
+        debouncedSearchHandler('');
+        onOpen?.(event);
+      }}
+      openOnFocus
+      clearOnBlur
       handleHomeEndKeys
       loading={isSearching}
       loadingText={t('loadingEllipsis')}
       noOptionsText={t('takeNow.modal.dropdown.notFound')}
       onInputChange={(_e, search) => debouncedSearchHandler(search)}
+      componentsProps={{
+        clearIndicator: {
+          onClick: () => {
+            onChange(null);
+            // Re-trigger opening dropdown after delay to account for Banner layout transition
+            if (!open) {
+              setTimeout(() => {
+                inputRef.current?.blur();
+                inputRef.current?.focus();
+              }, 300);
+            }
+          },
+        },
+      }}
       {...rest}
     />
   );
