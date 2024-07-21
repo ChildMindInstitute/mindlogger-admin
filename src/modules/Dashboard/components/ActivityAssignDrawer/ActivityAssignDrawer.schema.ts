@@ -8,8 +8,8 @@ export const useActivityAssignFormSchema = () =>
       assignments: yup
         .array(
           yup.object({
-            respondentId: yup.string(),
-            targetSubjectId: yup.string(),
+            respondentSubjectId: yup.string().nullable(),
+            targetSubjectId: yup.string().nullable(),
           }),
         )
         .required(),

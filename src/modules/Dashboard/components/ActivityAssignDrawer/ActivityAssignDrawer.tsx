@@ -40,8 +40,8 @@ export const ActivityAssignDrawer = ({
   appletId,
   activityId,
   activityFlowId,
-  respondentId,
-  targetSubjectId,
+  respondentSubjectId = null,
+  targetSubjectId = null,
   onClose,
   open,
   ...rest
@@ -72,7 +72,7 @@ export const ActivityAssignDrawer = ({
   const defaultValues = {
     activityIds: activityId ? [activityId] : [],
     flowIds: activityFlowId ? [activityFlowId] : [],
-    assignments: respondentId || targetSubjectId ? [{ respondentId, targetSubjectId }] : [],
+    assignments: [{ respondentSubjectId, targetSubjectId }],
   };
 
   const {
@@ -151,7 +151,7 @@ export const ActivityAssignDrawer = ({
           addBanner('ActivityAutofillBanner');
         }
 
-        if (assignments[0]?.respondentId) {
+        if (assignments[0]?.respondentSubjectId) {
           addBanner('RespondentAutofillBanner', { name: '[TODO populate respondent name]' });
         } else if (assignments[0]?.targetSubjectId) {
           addBanner('SubjectAutofillBanner', { name: '[TODO populate subject name]' });

@@ -6,14 +6,13 @@ export type ActivityAssignDrawerProps = Pick<DrawerProps, 'open'> & {
   activityId?: string;
   activityFlowId?: string;
   /** User ID */
-  respondentId?: string;
-  targetSubjectId?: string;
+  respondentSubjectId?: string | null;
+  targetSubjectId?: string | null;
 };
 
 export type ActivityAssignment = {
-  /** User ID */
-  respondentId?: string;
-  targetSubjectId?: string;
+  respondentSubjectId?: string | null;
+  targetSubjectId?: string | null;
 };
 
 export type ActivityAssignFormValues = {

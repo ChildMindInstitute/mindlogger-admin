@@ -192,8 +192,8 @@ export const RespondentDataHeader = ({
         activityId={activityId}
         activityFlowId={activityFlowId}
         open={showActivityAssign}
-        respondentId={subject.userId ?? undefined}
-        targetSubjectId={subject.userId ? undefined : subject.id}
+        respondentSubjectId={subject.userId ? subject.id : undefined}
+        targetSubjectId={subject.id}
         onClose={() => setShowActivityAssign(false)}
       />
 
