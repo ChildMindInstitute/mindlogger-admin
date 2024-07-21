@@ -100,24 +100,26 @@ export const ActivityAssignDrawer = ({
   });
   const selectionCount = activityIds.length + flowIds.length;
   const assignmentCounts = useMemo(() => {
-    const counts = { completed: 0, selfReports: 0 };
+    const counts = { incomplete: 0, selfReports: 0, multiInformant: 0 };
     for (const assignment of assignments) {
-      if (!assignment.respondentSubjectId || !assignment.targetSubjectId) continue;
+      if (!assignment.respondentSubjectId && !assignment.targetSubjectId) continue;
 
-      counts.completed++;
-      if (assignment.respondentSubjectId === assignment.targetSubjectId) {
+      if (!assignment.respondentSubjectId || !assignment.targetSubjectId) {
+        counts.incomplete++;
+      } else if (assignment.respondentSubjectId === assignment.targetSubjectId) {
         counts.selfReports++;
+      } else {
+        counts.multiInformant++;
       }
     }
 
     return {
       ...counts,
-      multiInformant: counts.completed - counts.selfReports,
+      complete: counts.selfReports + counts.multiInformant,
     };
   }, [assignments]);
 
-  const isComplete =
-    !!selectionCount && assignments.length && assignments.length === assignmentCounts.completed;
+  const isComplete = !!selectionCount && assignmentCounts.complete && !assignmentCounts.incomplete;
 
   const handleSelectAll = () => {
     if (selectionCount === activitiesCount) {
@@ -153,6 +155,11 @@ export const ActivityAssignDrawer = ({
     if (step === 1) {
       removeAllBanners();
       handleSubmit(() => {
+        // Delete incomplete assignments after validation
+        setValue(
+          'assignments',
+          assignments.filter((a) => a.respondentSubjectId || a.targetSubjectId),
+        );
         setStep(2);
       })();
     } else {
