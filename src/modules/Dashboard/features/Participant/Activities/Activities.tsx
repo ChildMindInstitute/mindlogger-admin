@@ -109,6 +109,7 @@ export const Activities = () => {
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
                   tag: subject.result.tag,
+                  isTeamMember: subject.result.tag === 'Team',
                 };
               }
 

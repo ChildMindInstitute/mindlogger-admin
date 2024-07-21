@@ -103,6 +103,7 @@ export function useFlowGridMenu({
                     ...subject,
                     secretId: subject.secretUserId,
                     userId: subject.userId,
+                    isTeamMember: subject.tag === 'Team',
                   },
                 }
               : undefined;

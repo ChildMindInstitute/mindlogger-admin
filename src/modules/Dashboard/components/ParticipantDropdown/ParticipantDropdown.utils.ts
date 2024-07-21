@@ -14,6 +14,7 @@ export const participantToOption = (participant: Respondent): ParticipantDropdow
     secretId: stringSecretIds,
     nickname: stringNicknames,
     tag: participant.details[0].subjectTag,
+    isTeamMember: !!participant.id && participant.details[0].subjectTag === 'Team',
   };
 };
 
@@ -27,7 +28,7 @@ export const getParticipantLabel = (value: ParticipantDropdownOption) => {
       : ` (${value.tag})`;
   }
 
-  if (value.tag === 'Team') {
+  if (value.isTeamMember) {
     return `${value.nickname}${translatedTag}`;
   }
 

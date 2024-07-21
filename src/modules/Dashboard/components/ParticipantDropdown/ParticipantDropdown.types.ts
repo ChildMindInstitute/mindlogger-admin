@@ -3,12 +3,10 @@ import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
 
 export type ParticipantDropdownOption = ParticipantSnippetInfo & {
-  /**
-   * Subject ID
-   */
+  /** Subject ID */
   id: string;
-
   userId?: string | null;
+  isTeamMember: boolean;
 };
 
 export type ParticipantDropdownProps = Omit<

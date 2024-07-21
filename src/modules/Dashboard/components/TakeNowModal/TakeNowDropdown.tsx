@@ -33,10 +33,9 @@ export const TakeNowDropdown = ({
   // We only potentially show the warning when there is a value
   if (value) {
     const hasFullAccount = !!value.userId;
-    const isTeamMember = value.tag === 'Team';
     const warningMessageValueCondition = enableParticipantMultiInformant
       ? !hasFullAccount
-      : !isTeamMember;
+      : !value.isTeamMember;
     shouldShowWarningMessage = !!canShowWarningMessage && warningMessageValueCondition;
   }
 

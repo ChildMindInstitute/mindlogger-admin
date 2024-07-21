@@ -75,7 +75,7 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
   );
 
   const participantsOnly = useMemo(
-    () => allParticipants.filter((participant) => participant.tag !== 'Team'),
+    () => allParticipants.filter(({ isTeamMember }) => !isTeamMember),
     [allParticipants],
   );
 
@@ -83,7 +83,7 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
     () =>
       allParticipants.filter(
         (participant) =>
-          participant.tag === 'Team' &&
+          participant.isTeamMember &&
           allowedTeamMembers.some((manager) => manager.id === participant.userId),
       ),
     [allParticipants, allowedTeamMembers],
@@ -165,15 +165,15 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
 
       // Filter the search results by allowed team members
       const allowedTeamMembersSearchResults =
-        (teamMemberResponse?.data?.result as Manager[]).filter((manager) =>
+        (teamMemberResponse?.data.result as Manager[]).filter((manager) =>
           manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
         ) ?? [];
 
-      const participantsSearchResults = (participantsResponse?.data?.result as Respondent[]) ?? [];
+      const participantsSearchResults = (participantsResponse?.data.result as Respondent[]) ?? [];
 
       // If there are team members in the search results, we only want to show them if they are allowed
       return participantsSearchResults.map(participantToOption).filter((participant) => {
-        if (participant.tag !== 'Team') {
+        if (!participant.isTeamMember) {
           return isAnyParticipant || !!participant.userId;
         } else {
           return allowedTeamMembersSearchResults.some(

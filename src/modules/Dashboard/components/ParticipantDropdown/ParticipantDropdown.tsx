@@ -63,7 +63,7 @@ export const ParticipantDropdown = ({
 
   if (showGroups) {
     groupBy = (option: ParticipantDropdownOption) => {
-      if (option.tag !== 'Team') {
+      if (!option.isTeamMember) {
         return t('takeNow.modal.dropdown.participantGrouping');
       } else {
         return t('takeNow.modal.dropdown.teamMemberGrouping');
@@ -81,13 +81,13 @@ export const ParticipantDropdown = ({
       options={combinedOptions}
       renderOption={(
         { children: _children, ...props },
-        { id, tag, secretId, nickname, ...psProps },
+        { id, tag, secretId, nickname, isTeamMember, ...psProps },
       ) => (
         <ParticipantSnippet<'li'>
           key={id}
           tag={tag}
-          secretId={tag === 'Team' ? nickname : secretId}
-          nickname={tag === 'Team' ? null : nickname}
+          secretId={isTeamMember ? nickname : secretId}
+          nickname={isTeamMember ? null : nickname}
           {...psProps}
           boxProps={{
             sx: {

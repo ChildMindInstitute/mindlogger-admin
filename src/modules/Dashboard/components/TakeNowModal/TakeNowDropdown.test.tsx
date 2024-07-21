@@ -82,7 +82,7 @@ describe('TakeNowDropdown', () => {
       id: 'id',
       nickname: 'nickname',
       secretId: 'secretId',
-      isLimitedAccount: true,
+      isTeamMember: false,
     };
 
     const { queryByDisplayValue } = renderWithProviders(
@@ -104,7 +104,11 @@ describe('TakeNowDropdown', () => {
   });
 
   test('Renders value correctly without nickname', () => {
-    const testValue = { id: 'id', secretId: 'secretId', isLimitedAccount: true };
+    const testValue = {
+      id: 'id',
+      secretId: 'secretId',
+      isTeamMember: false,
+    };
 
     const { queryByDisplayValue } = renderWithProviders(
       <TakeNowDropdown
@@ -145,6 +149,7 @@ describe('TakeNowDropdown', () => {
       id: 'subject-id',
       userId: 'user-id',
       tag: 'Team',
+      isTeamMember: true,
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -169,6 +174,7 @@ describe('TakeNowDropdown', () => {
       id: 'subject-id',
       userId: 'user-id',
       tag: 'Teacher',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -192,6 +198,7 @@ describe('TakeNowDropdown', () => {
     const option: ParticipantDropdownOption = {
       id: 'subject-id',
       tag: 'Child',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -215,6 +222,7 @@ describe('TakeNowDropdown', () => {
     const option: ParticipantDropdownOption = {
       id: 'subject-id',
       tag: 'Child',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -249,6 +257,7 @@ describe('TakeNowDropdown', () => {
         id: 'subject-id',
         userId: 'user-id',
         tag: 'Team',
+        isTeamMember: true,
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -273,6 +282,7 @@ describe('TakeNowDropdown', () => {
         id: 'subject-id',
         userId: 'user-id',
         tag: 'Teacher',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -296,6 +306,7 @@ describe('TakeNowDropdown', () => {
       const option: ParticipantDropdownOption = {
         id: 'subject-id',
         tag: 'Child',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -319,6 +330,7 @@ describe('TakeNowDropdown', () => {
       const option: ParticipantDropdownOption = {
         id: 'subject-id',
         tag: 'Child',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(

@@ -55,7 +55,7 @@ const getAccountType = (subject: ParticipantDropdownOption | null) => {
   if (!subject) return null;
 
   if (subject.userId) {
-    if (subject.tag === 'Team') return 'Team';
+    if (subject.isTeamMember) return 'Team';
 
     return 'Full';
   }
@@ -368,14 +368,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
                     const selfReportingCondition =
                       !option ||
-                      (enableParticipantMultiInformant ? !!option.userId : option.tag === 'Team');
+                      (enableParticipantMultiInformant ? !!option.userId : option.isTeamMember);
 
                     setIsSelfReporting(selfReportingCondition);
                   }}
                   data-testid={`${dataTestId}-take-now-modal-source-subject-dropdown`}
                   handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
                   canShowWarningMessage={true}
-                  showGroups={true}
+                  showGroups
                 />
                 <FormControlLabel
                   control={
@@ -395,7 +395,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   disabled={
                     enableParticipantMultiInformant
                       ? !sourceSubject?.userId
-                      : sourceSubject?.tag !== 'Team'
+                      : !sourceSubject?.isTeamMember
                   }
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
@@ -432,7 +432,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
                     return handleSearch(query, participantSearchTypes);
                   }}
-                  showGroups={true}
+                  showGroups
                 />
               )}
             </StyledFlexColumn>
