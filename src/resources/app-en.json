@@ -38,7 +38,6 @@
     "subjectSelf": "Self",
     "addRow": "Add Row",
     "addRespondent": "Add Respondent",
-    "addSubject": "Add Subject",
     "next": "Next",
     "sendInvitations": "Send Invitations",
     "activityAutofill": "Your activity was auto-filled, add respondents to continue.",
@@ -960,6 +959,11 @@
     "Teacher": "Teacher",
     "Team": "Team"
   },
+  "participantDropdown": {
+    "teamMemberGrouping": "Team Members",
+    "participantGrouping": "Participants",
+    "notFound": "Not Found"
+  },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
   "passwordCapitalLetter": "At least one capital letter must be included.",
@@ -1332,10 +1336,7 @@
       "loggedInUserLabel": "Who will be inputting the responses?",
       "loggedInUserPlaceholder": "Select from team members",
       "dropdown": {
-        "limitedAccountWarning": "The selected participant is unable to input their own answers. Please select a team member to continue.",
-        "teamMemberGrouping": "Team Members",
-        "participantGrouping": "Participants",
-        "notFound": "Not Found"
+        "limitedAccountWarning": "The selected participant is unable to input their own answers. Please select a team member to continue."
       },
       "relationErrorMessage": "Unable to start activity. Please try again later."
     }

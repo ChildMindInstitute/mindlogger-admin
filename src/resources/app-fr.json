@@ -38,7 +38,6 @@
     "subjectSelf": "Soi-même",
     "addRow": "Ajouter une ligne",
     "addRespondent": "Ajouter un répondant",
-    "addSubject": "Ajouter un sujet",
     "next": "Suivant",
     "sendInvitations": "Envoyer les invitations",
     "activityAutofill": "Votre activité a été pré-remplie, ajoutez des répondants pour continuer.",
@@ -959,6 +958,11 @@
     "Teacher": "Enseignant",
     "Team": "Équipe"
   },
+  "participantDropdown": {
+    "teamMemberGrouping": "Membres de l'équipe",
+    "participantGrouping": "Participants",
+    "notFound": "Pas trouvé"
+  },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
   "passwordCapitalLetter": "Au moins une lettre majuscule doit être incluse.",
@@ -1331,10 +1335,7 @@
       "loggedInUserLabel": "Qui saisira les réponses ?",
       "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe",
       "dropdown": {
-        "limitedAccountWarning": "Le participant sélectionné ne peut pas saisir ses propres réponses. Veuillez sélectionner un membre de l'équipe pour continuer.",
-        "teamMemberGrouping": "Membres de l'équipe",
-        "participantGrouping": "Participants",
-        "notFound": "Pas trouvé"
+        "limitedAccountWarning": "Le participant sélectionné ne peut pas saisir ses propres réponses. Veuillez sélectionner un membre de l'équipe pour continuer."
       },
       "relationErrorMessage": "Impossible de démarrer l'activité. Veuillez réessayer plus tard."
     }

@@ -7,6 +7,7 @@ export type ParticipantSnippetInfo = {
   secretId?: string | null;
   nickname?: string | null;
   tag?: ParticipantTag | null;
+  isTeamMember?: boolean;
 };
 
 export enum ParticipantSnippetVariant {

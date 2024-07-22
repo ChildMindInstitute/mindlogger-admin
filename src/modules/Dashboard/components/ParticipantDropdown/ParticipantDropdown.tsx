@@ -33,6 +33,7 @@ export const ParticipantDropdown = ({
   showGroups,
   emptyValueError,
   variant = ParticipantDropdownVariant.Outlined,
+  'data-testid': dataTestId,
   ...rest
 }: ParticipantDropdownProps) => {
   const { t } = useTranslation('app');
@@ -80,9 +81,9 @@ export const ParticipantDropdown = ({
   if (showGroups) {
     groupBy = (option: ParticipantDropdownOption) => {
       if (!option.isTeamMember) {
-        return t('takeNow.modal.dropdown.participantGrouping');
+        return t('participantDropdown.participantGrouping');
       } else {
-        return t('takeNow.modal.dropdown.teamMemberGrouping');
+        return t('participantDropdown.teamMemberGrouping');
       }
     };
   }
@@ -97,7 +98,6 @@ export const ParticipantDropdown = ({
         const hasEmptyError = !value && !isFocused && emptyValueError;
         const isSnippetVisible = !!value && !isFocused;
         const isFullVariant = variant === ParticipantDropdownVariant.Full;
-        const { isTeamMember, secretId, nickname } = value ?? {};
 
         return (
           <StyledTextFieldWrapper isShaded={isFullVariant && !isFocused}>
@@ -114,8 +114,6 @@ export const ParticipantDropdown = ({
             {isSnippetVisible && (
               <ParticipantSnippet
                 {...value}
-                secretId={isTeamMember ? nickname : secretId}
-                nickname={isTeamMember ? null : nickname}
                 boxProps={{
                   sx: {
                     position: 'absolute',
@@ -128,6 +126,7 @@ export const ParticipantDropdown = ({
                     },
                   },
                 }}
+                data-testid={`${dataTestId}-selected-option`}
               />
             )}
             {hasEmptyError && (
@@ -143,16 +142,10 @@ export const ParticipantDropdown = ({
         );
       }}
       options={combinedOptions ?? options}
-      renderOption={(
-        { children: _children, ...props },
-        { id, tag, secretId, nickname, isTeamMember, ...psProps },
-      ) => (
+      renderOption={({ children: _children, ...props }, value) => (
         <ParticipantSnippet<'li'>
-          key={id}
-          tag={tag}
-          secretId={isTeamMember ? nickname : secretId}
-          nickname={isTeamMember ? null : nickname}
-          {...psProps}
+          key={value.id}
+          {...value}
           boxProps={{
             sx: {
               p: theme.spacing(0.6, 1.6),
@@ -160,7 +153,7 @@ export const ParticipantDropdown = ({
             },
             ...props,
           }}
-          data-testid={`${rest['data-testid']}-option-${id}`}
+          data-testid={`${dataTestId}-option-${value.id}`}
         />
       )}
       isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -207,7 +200,7 @@ export const ParticipantDropdown = ({
       handleHomeEndKeys
       loading={isSearching}
       loadingText={t('loadingEllipsis')}
-      noOptionsText={t('takeNow.modal.dropdown.notFound')}
+      noOptionsText={t('participantDropdown.notFound')}
       onInputChange={(_e, search) => debouncedSearchHandler(search)}
       componentsProps={{
         clearIndicator: {
@@ -223,6 +216,7 @@ export const ParticipantDropdown = ({
           },
         },
       }}
+      data-testid={dataTestId}
       {...rest}
     />
   );

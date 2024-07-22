@@ -12,13 +12,21 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
   secretId,
   nickname,
   tag,
+  isTeamMember = tag === 'Team',
   boxProps,
   variant = ParticipantSnippetVariant.Default,
-  'data-testid': dataTestId,
+  'data-testid': dataTestId = 'participant-snippet',
 }: ParticipantSnippetProps<T>) => {
   const { sx, ...rest } = boxProps ?? {};
   const isDefaultVariant = variant === ParticipantSnippetVariant.Default;
   const TextComponent = isDefaultVariant ? StyledText : StyledTextLarge;
+
+  const components = isTeamMember
+    ? [{ name: 'nickname', value: nickname }]
+    : [
+        { name: 'secretId', value: secretId },
+        { name: 'nickname', value: nickname },
+      ];
 
   return (
     <StyledFlexTopCenter
@@ -26,13 +34,15 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
       {...rest}
       data-testid={dataTestId}
     >
-      <TextComponent data-testid={`${dataTestId}-secretId`}>{secretId}</TextComponent>
-      {!!nickname && (
+      <TextComponent data-testid={`${dataTestId}-${components[0].name}`} sx={{ maxWidth: '50%' }}>
+        {components[0].value}
+      </TextComponent>
+      {!!components[1] && (
         <TextComponent
           color={variables.palette[isDefaultVariant ? 'neutral60' : 'outline']}
-          data-testid={`${dataTestId}-nickname`}
+          data-testid={`${dataTestId}-${components[1].name}`}
         >
-          {nickname}
+          {components[1].value}
         </TextComponent>
       )}
       <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
