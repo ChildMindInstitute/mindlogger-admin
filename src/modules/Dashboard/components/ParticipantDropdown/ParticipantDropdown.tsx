@@ -114,6 +114,7 @@ export const ParticipantDropdown = ({
             {isSnippetVisible && (
               <ParticipantSnippet
                 {...value}
+                hasLimitedAccountIcon={!value.userId}
                 boxProps={{
                   sx: {
                     position: 'absolute',
@@ -145,6 +146,7 @@ export const ParticipantDropdown = ({
       renderOption={({ children: _children, ...props }, value) => (
         <ParticipantSnippet<'li'>
           key={value.id}
+          hasLimitedAccountIcon={!value.userId}
           {...value}
           boxProps={{
             sx: {

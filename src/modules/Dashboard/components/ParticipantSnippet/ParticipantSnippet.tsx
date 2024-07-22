@@ -1,8 +1,9 @@
 import { BoxTypeMap } from '@mui/system';
 import { ElementType } from 'react';
 
-import { StyledFlexTopCenter, variables } from 'shared/styles';
+import { StyledFlexAllCenter, StyledFlexTopCenter, variables } from 'shared/styles';
 import { ParticipantTagChip } from 'modules/Dashboard/components';
+import { Svg } from 'shared/components';
 
 import { ParticipantSnippetProps, ParticipantSnippetVariant } from './ParticipantSnippet.types';
 import { StyledText, StyledTextLarge } from './ParticipantSnippet.styles';
@@ -15,6 +16,7 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
   isTeamMember = tag === 'Team',
   boxProps,
   variant = ParticipantSnippetVariant.Default,
+  hasLimitedAccountIcon,
   'data-testid': dataTestId = 'participant-snippet',
 }: ParticipantSnippetProps<T>) => {
   const { sx, ...rest } = boxProps ?? {};
@@ -46,6 +48,12 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
         </TextComponent>
       )}
       <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
+      {hasLimitedAccountIcon && (
+        <StyledFlexAllCenter sx={{ ml: 'auto' }}>
+          <Svg id="coordinator" width={24} height={24} />
+        </StyledFlexAllCenter>
+      )}
+
       {children}
     </StyledFlexTopCenter>
   );
