@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCallback, useMemo } from 'react';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import {
   DashboardTableProps,
@@ -9,6 +9,7 @@ import {
 } from 'modules/Dashboard/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Svg } from 'shared/components';
+import { variables } from 'shared/styles';
 
 import { AssignmentsTableProps } from './AssignmentsTable.types';
 import { StyledTable, StyledTableContainer } from './AssignmentsTable.styles';
@@ -18,7 +19,7 @@ import { getHeadCells } from './AssignmentsTable.utils';
 
 export const AssignmentsTable = ({
   allParticipants,
-  participantsAndTeamMembers,
+  participantsOnly,
   fullAccountParticipantsAndTeamMembers,
   teamMembersOnly,
   handleSearch,
@@ -42,14 +43,17 @@ export const AssignmentsTable = ({
 
       if (respondentSubjectId !== undefined || targetSubjectId !== undefined) {
         if (respondentSubjectId !== undefined) {
-          // Set as self-assigned if:
+          // Set as self-assigned if selected respondent is a full account and:
           // - no target subject has been selected yet
           // - previous assignment was a self-assignment
-          if (
-            !assignments[index].targetSubjectId ||
-            assignments[index].targetSubjectId === assignments[index].respondentSubjectId
-          ) {
-            updatedAssignments[index].targetSubjectId = respondentSubjectId;
+          const respondent = allParticipants.find(({ id }) => id === respondentSubjectId);
+          if (respondent?.userId && !respondent.isTeamMember) {
+            if (
+              !assignments[index].targetSubjectId ||
+              assignments[index].targetSubjectId === assignments[index].respondentSubjectId
+            ) {
+              updatedAssignments[index].targetSubjectId = respondentSubjectId;
+            }
           }
 
           updatedAssignments[index].respondentSubjectId = respondentSubjectId;
@@ -81,25 +85,16 @@ export const AssignmentsTable = ({
 
   const handleSubjectSearch = useCallback(
     async (query: string, selfOption: ParticipantDropdownOption | null) => {
-      const results = await handleSearch(query, ['team', 'any-participant']);
+      const results = await handleSearch(query, ['any-participant']);
 
       if (selfOption) {
-        // Check search results for self option; if it's returned, make sure to replace
-        // it in the list.
-        const selfOptionIndex = results.findIndex(({ id }) => id === selfOption?.id);
-        if (selfOptionIndex > -1) {
-          results.splice(selfOptionIndex, 1, selfOption);
-        }
-        // If it wasn't found from the BE, but search text case-insentively matches
-        // localized "Self" text, add it to top of list.
-        else if (t('subjectSelf').toLowerCase().includes(query.toLowerCase())) {
-          results.unshift(selfOption);
-        }
+        // Filter out self option from search results as it's already included by the base options.
+        return results.filter(({ id }) => id !== selfOption?.id);
       }
 
       return results;
     },
-    [handleSearch, t],
+    [handleSearch],
   );
 
   const rows: DashboardTableProps['rows'] = useMemo(
@@ -111,18 +106,18 @@ export const AssignmentsTable = ({
         const subject =
           (targetSubjectId && allParticipants.find(({ id }) => id === targetSubjectId)) || null;
 
-        const selfOption: ParticipantDropdownOption | null = respondent && {
-          ...respondent,
-          nickname: undefined,
-          secretId: undefined,
-          tag: undefined,
-          [respondent.isTeamMember ? 'nickname' : 'secretId']: t('subjectSelf'),
-        };
+        const selfOption: ParticipantDropdownOption | null =
+          respondent && !respondent.isTeamMember
+            ? {
+                ...respondent,
+                nickname: undefined,
+                tag: undefined,
+                secretId: t('subjectSelf'),
+              }
+            : null;
         const subjectOptions = selfOption
-          ? participantsAndTeamMembers.map((option) =>
-              option.id === selfOption?.id ? selfOption : option,
-            )
-          : participantsAndTeamMembers;
+          ? [selfOption, ...participantsOnly.filter(({ id }) => id !== selfOption.id)]
+          : participantsOnly;
         const subjectValue = selfOption?.id === subject?.id ? selfOption : subject;
 
         const hasRowError = !!errors?.duplicateRows?.includes(
@@ -148,7 +143,7 @@ export const AssignmentsTable = ({
                 }
                 handleSearch={handleRespondentSearch}
                 showGroups
-                emptyValueError={subjectValue ? t('addRespondent') : undefined}
+                emptyValueError={subjectValue && !subject?.userId ? t('addRespondent') : undefined}
                 data-testid={`${dataTestId}-respondent-dropdown`}
               />
             ),
@@ -163,8 +158,20 @@ export const AssignmentsTable = ({
                 options={subjectOptions}
                 onChange={(value) => handleChange({ targetSubjectId: value && value.id }, index)}
                 handleSearch={(query) => handleSubjectSearch(query, selfOption)}
-                showGroups
-                emptyValueError={respondent ? t('addSubject') : undefined}
+                groupBy={(option) => (option.id === selfOption?.id ? 'self' : 'other')}
+                renderGroup={(params) => (
+                  <Box
+                    component="li"
+                    key={params.key}
+                    sx={{
+                      '&:not(:last-child)': {
+                        borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+                      },
+                    }}
+                  >
+                    <Box component="ul" sx={{ p: 0 }} {...params} />
+                  </Box>
+                )}
                 data-testid={`${dataTestId}-target-subject-dropdown`}
               />
             ),
@@ -182,7 +189,7 @@ export const AssignmentsTable = ({
       handleRespondentSearch,
       handleSubjectSearch,
       isReadOnly,
-      participantsAndTeamMembers,
+      participantsOnly,
       t,
       teamMembersOnly,
     ],

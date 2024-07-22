@@ -215,6 +215,7 @@ export const ParticipantDropdown = ({
             }
           },
         },
+        paper: variant === ParticipantDropdownVariant.Full ? { sx: { mx: -0.8 } } : undefined,
       }}
       data-testid={dataTestId}
       {...rest}

@@ -236,6 +236,7 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
 
   return {
     allParticipants,
+    participantsOnly,
     teamMembersOnly,
     participantsAndTeamMembers,
     fullAccountParticipantsOnly,

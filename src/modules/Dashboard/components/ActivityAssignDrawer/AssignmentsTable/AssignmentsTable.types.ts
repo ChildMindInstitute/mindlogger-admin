@@ -6,14 +6,7 @@ import {
 
 import { ActivityAssignment } from '../ActivityAssignDrawer.types';
 
-export type AssignmentsTableProps = Pick<
-  ReturnType<typeof useParticipantDropdown>,
-  | 'allParticipants'
-  | 'participantsAndTeamMembers'
-  | 'participantsAndTeamMembers'
-  | 'fullAccountParticipantsAndTeamMembers'
-  | 'handleSearch'
-> & {
+export type AssignmentsTableProps = Omit<ReturnType<typeof useParticipantDropdown>, 'isLoading'> & {
   teamMembersOnly: ParticipantDropdownOption[];
   assignments: ActivityAssignment[];
   onChange: (assignments: ActivityAssignment[]) => void;
