@@ -208,13 +208,6 @@ export const ParticipantDropdown = ({
         clearIndicator: {
           onClick: () => {
             onChange(null);
-            // Re-trigger opening dropdown after delay to account for Banner layout transition
-            if (!open) {
-              setTimeout(() => {
-                inputRef.current?.blur();
-                inputRef.current?.focus();
-              }, 300);
-            }
           },
         },
         paper: variant === ParticipantDropdownVariant.Full ? { sx: { mx: -0.8 } } : undefined,
