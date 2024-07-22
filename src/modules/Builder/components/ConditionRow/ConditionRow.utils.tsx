@@ -13,7 +13,7 @@ import {
   TimeRangeConditionType,
 } from 'shared/state/Applet';
 
-import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { DEFAULT_PAYLOAD_MAX_VALUE, DEFAULT_PAYLOAD_MIN_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
 import { StyledMdPreview } from '../ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -219,6 +219,14 @@ export const getPayload = ({
       );
     case ConditionType.Equal:
     case ConditionType.NotEqual: {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
+        return {
+          value: selectedItem?.responseValues?.minValue ?? DEFAULT_PAYLOAD_MIN_VALUE,
+        };
+      }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
         const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';

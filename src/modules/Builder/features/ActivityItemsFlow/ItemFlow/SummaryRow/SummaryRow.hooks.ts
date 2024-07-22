@@ -4,7 +4,7 @@ import { useWatch } from 'react-hook-form';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ConditionalLogic } from 'shared/state/Applet';
 
-import { getItemsInUsage } from './SummaryRow.utils';
+import { getItemsInUsage } from './utils';
 
 export const useItemsInUsage = (name: string) => {
   const { fieldName } = useCurrentActivity();

@@ -1,7 +1,7 @@
 import { ItemResponseType } from 'shared/consts';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
-import { getItemsOptions, getItemsInUsage } from './SummaryRow.utils';
+import { getItemsOptions, getItemsInUsage } from './utils';
 
 jest.mock(
   'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',

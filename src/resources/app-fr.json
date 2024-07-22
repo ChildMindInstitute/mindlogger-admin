@@ -1219,6 +1219,7 @@
   "sortBy": "Trier Par",
   "startDate": "Date de début",
   "startEndDate": "Date de début / Date de fin",
+  "startEndTime": "Heure de début / Heure de fin",
   "startTime": "Heure de début",
   "status": "Statut",
   "startTimeResponse": "Heure de démarrage de la réponse",

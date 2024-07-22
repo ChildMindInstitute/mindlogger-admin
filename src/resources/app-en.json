@@ -1224,6 +1224,7 @@
   "sortBy": "Sort By",
   "startDate": "Start date",
   "startEndDate": "Start Date / End Date",
+  "startEndTime": "Start Time / End Time",
   "startTime": "Start time",
   "status": "Status",
   "startTimeResponse": "Start Time Response",
