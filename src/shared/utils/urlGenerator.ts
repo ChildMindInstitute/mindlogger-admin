@@ -38,6 +38,7 @@ export const enum SettingParam {
   SubscalesConfiguration = 'subscales-configuration',
   LiveResponseStreaming = 'live-response-streaming',
   LorisIntegration = 'loris-integration',
+  Integrations = 'integrations',
 }
 
 export const uuidRegexp =

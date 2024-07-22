@@ -9,6 +9,7 @@ import {
   StyledDialogTitle,
   StyledCloseButton,
   StyledDialogActions,
+  StyledDialogHeader,
 } from './Modal.styles';
 import { Tooltip } from '../Tooltip';
 
@@ -100,23 +101,23 @@ export const Modal = ({
       }}
     >
       <StyledModalContent>
-        <StyledDialogTitle align={titleAlign} data-testid={`${dataTestid}-title`}>
-          {title}
+        <StyledDialogHeader>
+          <StyledDialogTitle align={titleAlign} data-testid={`${dataTestid}-title`}>
+            {title}
+          </StyledDialogTitle>
           {hasCloseIcon && (
             <StyledCloseButton onClick={onClose} data-testid={`${dataTestid}-close-button`}>
               <Svg id="cross" />
             </StyledCloseButton>
           )}
-        </StyledDialogTitle>
+        </StyledDialogHeader>
 
         {children}
-
         {footer && (
           <StyledFlexSpaceBetween sx={{ gap: 1.6, px: 3.2, py: 2.4, ...footerStyles }}>
             {footer}
           </StyledFlexSpaceBetween>
         )}
-
         {hasActions && (
           <StyledDialogActions actionsAlign={getActionsAlign()} sx={footerStyles}>
             {hasLeftBtn && (

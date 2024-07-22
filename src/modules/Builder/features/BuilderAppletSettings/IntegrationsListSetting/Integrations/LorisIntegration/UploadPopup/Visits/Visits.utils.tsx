@@ -1,13 +1,15 @@
+import { FieldErrors } from 'react-hook-form';
+import get from 'lodash.get';
 import { format } from 'date-fns';
 
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
-import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
 import { CheckboxController } from 'shared/components/FormComponents';
 
-import { StyledSelectController } from './LorisVisits.styles';
-import { GetLorisActivitiesRows, GetMatchOptionsProps, VisitRow } from './LorisVisits.types';
+import { StyledSelectController } from './Visits.styles';
+import { GetActivitiesRows, GetMatchOptionsProps, VisitRow } from './Visits.types';
 
 const { t } = i18n;
 
@@ -52,7 +54,7 @@ export const getLorisActivitiesRows = ({
   visitsList,
   visitsForm,
   handleChangeVisit,
-}: GetLorisActivitiesRows) =>
+}: GetActivitiesRows) =>
   visitsForm.reduce(
     (
       data: VisitRow[],
@@ -114,38 +116,25 @@ export const getLorisActivitiesRows = ({
     [],
   );
 
-export const formatData = (
-  usersVisits: LorisUsersVisit<LorisActivityResponse>[],
-): LorisUsersVisit<LorisActivityResponse>[] =>
-  usersVisits.reduce((acc: LorisUsersVisit[], { activities, ...userData }) => {
-    // TODO: move this logic to the backend
-    const allVisits = activities.reduce(
-      (visitsAcc, { activityId, visits }) => {
-        if (visits.length) {
-          visitsAcc[activityId] = visitsAcc[activityId]
-            ? visitsAcc[activityId].concat(visits)
-            : visits;
+export const findVisitErrorMessage = (
+  errors: FieldErrors<{ visitsForm: LorisUsersVisit<LorisActivityForm>[] }>,
+): string | null => {
+  if (errors?.visitsForm?.length) {
+    for (let user = 0; user < errors.visitsForm.length; user++) {
+      const activities = errors.visitsForm[user]?.activities;
+      if (activities?.length) {
+        for (let activity = 0; activity < activities.length; activity++) {
+          const visitError = get(
+            errors,
+            `visitsForm[${user}].activities[${activity}].visit.message`,
+          );
+          if (visitError) {
+            return visitError;
+          }
         }
-
-        return visitsAcc;
-      },
-      {} as Record<string, string[]>,
-    );
-
-    const filteredActivities = activities
-      .filter(({ visits }) => !visits.length)
-      .map((activity) => ({
-        ...activity,
-        visits: allVisits[activity.activityId] || [],
-        visit: '',
-        selected: true,
-      }));
-
-    if (!filteredActivities.length) {
-      return acc;
+      }
     }
+  }
 
-    acc.push({ ...userData, activities: filteredActivities });
-
-    return acc;
-  }, []);
+  return null;
+};

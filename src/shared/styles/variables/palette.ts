@@ -59,6 +59,7 @@ export const palette = {
   gray_alfa30: 'rgba(143, 142, 138, 0.3)',
   gray_alfa50: 'rgba(143, 142, 138, 0.5)',
   green: '#0f7b6c',
+  green_light: '#b7d7d3',
   green_alfa30: 'rgba(15, 123, 108, 0.3)',
   orange: '#d9730d',
   orange_alfa30: 'rgba(217, 115, 13, 0.3)',
@@ -69,6 +70,7 @@ export const palette = {
   purple: '#6940a5',
   purple_alfa30: 'rgba(105, 64, 165, 0.3)',
   red: '#e14646',
+  red_light: '#f6c7c7',
   red_alfa30: 'rgba(225, 70, 70, 0.3)',
   red_alfa8: 'rgba(225, 70, 70, 0.08)',
 

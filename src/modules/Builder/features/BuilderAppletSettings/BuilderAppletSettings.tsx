@@ -22,7 +22,9 @@ export const BuilderAppletSettings = () => {
     (integration) =>
       integration?.integrationType?.toLowerCase() === Integrations.Loris.toLowerCase(),
   );
-  const enableLorisIntegration = publishedLorisIntegration && featureFlags.enableLorisIntegration;
+
+  const isIntegrationsItemVisible =
+    publishedLorisIntegration && featureFlags.enableLorisIntegration;
 
   const handleReportConfigSubmit = (values: Record<string, unknown>) => {
     const keys = [
@@ -47,7 +49,7 @@ export const BuilderAppletSettings = () => {
             isPublished,
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
-            enableLorisIntegration,
+            isIntegrationsItemVisible,
             appletId: appletData?.id,
           })}
         />
