@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
@@ -13,6 +13,7 @@ import { HandleChangeVisitProps, VisitsProps } from './Visits.types';
 
 export const Visits = ({ visitsList }: VisitsProps) => {
   const { t } = useTranslation();
+  const [selectAllChecked, setSelectAllChecked] = useState(true);
   const {
     control,
     setValue,
@@ -52,13 +53,30 @@ export const Visits = ({ visitsList }: VisitsProps) => {
     [setValue, visitsForm],
   );
 
-  const tableRows = getLorisActivitiesRows({
-    control,
-    trigger,
-    visitsList,
-    visitsForm,
-    handleChangeVisit,
-  });
+  const onSelectAllClick = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setSelectAllChecked(checked);
+    const formData = [...visitsForm].map(({ activities, ...restUserData }) => ({
+      ...restUserData,
+      activities: activities.map((activityData) => ({
+        ...activityData,
+        selected: checked,
+      })),
+    }));
+    setValue('visitsForm', formData);
+    trigger('visitsForm');
+  };
+
+  const tableRows = useMemo(
+    () =>
+      getLorisActivitiesRows({
+        control,
+        trigger,
+        visitsList,
+        visitsForm,
+        handleChangeVisit,
+      }),
+    [control, trigger, handleChangeVisit, visitsForm, visitsList],
+  );
 
   const error = findVisitErrorMessage(errors);
 
@@ -72,7 +90,7 @@ export const Visits = ({ visitsList }: VisitsProps) => {
             </StyledTitleMedium>
             <StyledTable
               maxHeight="38rem"
-              columns={getHeadCells()}
+              columns={getHeadCells(selectAllChecked, onSelectAllClick)}
               rows={tableRows}
               orderBy={'activityName'}
               uiType={UiType.Secondary}

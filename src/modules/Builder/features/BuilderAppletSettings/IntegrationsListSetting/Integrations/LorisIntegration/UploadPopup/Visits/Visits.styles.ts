@@ -5,6 +5,12 @@ import { SelectController } from 'shared/components/FormComponents';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTable = styled(Table)`
+  tbody {
+    .MuiFormControlLabel-root {
+      margin: 0;
+    }
+  }
+
   .MuiFormControl-root {
     width: 18rem;
   }

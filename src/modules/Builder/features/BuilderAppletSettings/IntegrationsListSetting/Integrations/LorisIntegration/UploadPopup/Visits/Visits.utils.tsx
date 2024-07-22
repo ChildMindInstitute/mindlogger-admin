@@ -1,5 +1,7 @@
+import { ChangeEvent } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import get from 'lodash.get';
+import { Checkbox } from '@mui/material';
 import { format } from 'date-fns';
 
 import i18n from 'i18n';
@@ -13,10 +15,13 @@ import { GetActivitiesRows, GetMatchOptionsProps, VisitRow } from './Visits.type
 
 const { t } = i18n;
 
-export const getHeadCells = (): HeadCell[] => [
+export const getHeadCells = (
+  selectAllChecked: boolean,
+  onSelectAllClick: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void,
+): HeadCell[] => [
   {
     id: 'selected',
-    label: '',
+    label: <Checkbox checked={selectAllChecked} onChange={onSelectAllClick} />,
     enableSort: false,
   },
   {
@@ -67,15 +72,15 @@ export const getLorisActivitiesRows = ({
             content: () => (
               <CheckboxController
                 control={control}
-                name={`visitsForm[${userIndex}].activities[${activityIndex}].selected`}
+                name={`visitsForm.${userIndex}.activities.${activityIndex}.selected`}
                 label={<></>}
-                onCustomChange={() => {
-                  trigger(`visitsForm[${userIndex}].activities[${activityIndex}].visit`);
-                }}
+                onCustomChange={() =>
+                  trigger(`visitsForm.${userIndex}.activities.${activityIndex}.visit`)
+                }
                 data-testid={`loris-visits-checkbox-${userIndex}-${activityIndex}`}
               />
             ),
-            value: activityName,
+            value: '',
             maxWidth: '3.2rem',
           },
           activityName: {
@@ -96,7 +101,7 @@ export const getLorisActivitiesRows = ({
             content: () => (
               <StyledSelectController
                 control={control}
-                name={`visitsForm[${userIndex}].activities[${activityIndex}].visit`}
+                name={`visitsForm.${userIndex}.activities.${activityIndex}.visit`}
                 options={getMatchOptions({ visitsList, visits })}
                 placeholder={t('select')}
                 isLabelNeedTranslation={false}
@@ -124,10 +129,7 @@ export const findVisitErrorMessage = (
       const activities = errors.visitsForm[user]?.activities;
       if (activities?.length) {
         for (let activity = 0; activity < activities.length; activity++) {
-          const visitError = get(
-            errors,
-            `visitsForm[${user}].activities[${activity}].visit.message`,
-          );
+          const visitError = get(errors, `visitsForm.${user}.activities.${activity}.visit.message`);
           if (visitError) {
             return visitError;
           }
