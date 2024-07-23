@@ -1,9 +1,6 @@
-import { FieldErrors } from 'react-hook-form';
-import get from 'lodash.get';
-
 import i18n from 'i18n';
 import { StyledBodyLarge, StyledTitleMedium, variables } from 'shared/styles';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUsersVisit } from 'modules/Builder/api';
 
 import { ScreenParams, Steps, UploadDataForm } from './UploadDataPopup.types';
 import { LorisVisits } from './LorisVisits';
@@ -59,41 +56,49 @@ export const getScreens = ({
   },
 ];
 
-export const findVisitErrorMessage = (
-  errors: FieldErrors<{ visitsForm: LorisUsersVisit<LorisActivityForm>[] }>,
-): string | null => {
-  if (errors?.visitsForm?.length) {
-    for (let user = 0; user < errors.visitsForm.length; user++) {
-      const activities = errors.visitsForm[user]?.activities;
-      if (activities?.length) {
-        for (let activity = 0; activity < activities.length; activity++) {
-          const visitError = get(
-            errors,
-            `visitsForm[${user}].activities[${activity}].visit.message`,
-          );
-          if (visitError) {
-            return visitError;
-          }
-        }
+export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
+  const filteredData = form?.visitsForm.reduce(
+    (acc: { [key: string]: LorisUsersVisit }, activityAnswer) => {
+      if (!acc[activityAnswer.userId]) {
+        return {
+          ...acc,
+          [activityAnswer.userId]: {
+            userId: activityAnswer.userId,
+            secretUserId: activityAnswer.secretUserId,
+            activities: [
+              {
+                activityId: activityAnswer.activityId,
+                activityName: activityAnswer.activityName,
+                answerId: activityAnswer.answerId,
+                version: activityAnswer.version,
+                completedDate: activityAnswer.completedDate,
+                visit: activityAnswer.visit,
+              },
+            ],
+          },
+        };
       }
-    }
-  }
 
-  return null;
+      return {
+        ...acc,
+        [activityAnswer.userId]: {
+          ...acc[activityAnswer.userId],
+          activities: [
+            ...acc[activityAnswer.userId].activities,
+            {
+              activityId: activityAnswer.activityId,
+              activityName: activityAnswer.activityName,
+              answerId: activityAnswer.answerId,
+              version: activityAnswer.version,
+              completedDate: activityAnswer.completedDate,
+              visit: activityAnswer.visit,
+            },
+          ],
+        },
+      };
+    },
+    {},
+  );
+
+  return Object.values(filteredData);
 };
-
-export const filteredData = (form: UploadDataForm): LorisUsersVisit<LorisActivityForm>[] =>
-  form.visitsForm
-    .filter((userVisit) => userVisit.activities.some((activity) => activity.selected))
-    .map((userVisit) => ({
-      ...userVisit,
-      activities: userVisit.activities.reduce((acc: LorisActivityForm[], activity) => {
-        if (activity.selected) {
-          // eslint-disable-next-line unused-imports/no-unused-vars
-          const { selected, visits, ...rest } = activity;
-          acc.push(rest);
-        }
-
-        return acc;
-      }, []),
-    }));

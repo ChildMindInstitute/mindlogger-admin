@@ -32,8 +32,8 @@ export const useFetchVisitsData = ({
           setVisitsList(visitsResult.data.visits);
         }
 
-        if (usersVisitsResult?.data?.info) {
-          const visitsForm = formatData(usersVisitsResult?.data?.info);
+        if (usersVisitsResult?.data?.result) {
+          const visitsForm = formatData(usersVisitsResult?.data?.result);
           setVisitsData(visitsForm);
           reset({ visitsForm });
         }

@@ -5,15 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { StyledBodyMedium, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { StyledModalWrapper } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import {
-  LorisActivityResponse,
-  LorisUsersVisit,
-  uploadLorisUsersVisitsApi,
-} from 'modules/Builder/api';
+import { LorisUserAnswerVisit, uploadLorisUsersVisitsApi } from 'modules/Builder/api';
 
-import { filteredData, findVisitErrorMessage, getScreens } from './UploadDataPopup.utils';
+import { filteredData, getScreens } from './UploadDataPopup.utils';
 import { Steps, UploadDataForm, UploadDataPopupProps } from './UploadDataPopup.types';
 import { StyledSpinnerWrapper } from './UploadDataPopup.styles';
 import { uploadDataSchema } from './UploadDataPopup.schema';
@@ -26,7 +22,7 @@ export const UploadDataPopup = ({
   const { t } = useTranslation();
   const { appletId } = useParams();
   const [step, setStep] = useState<Steps>(Steps.Agreement);
-  const [visitsData, setVisitsData] = useState<LorisUsersVisit<LorisActivityResponse>[]>([]);
+  const [visitsData, setVisitsData] = useState<LorisUserAnswerVisit[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { execute: uploadLorisUsersVisits } = useAsync(
@@ -66,8 +62,6 @@ export const UploadDataPopup = ({
     if (!appletId) return;
     handleSubmit(onSubmit)();
   }, [appletId, handleSubmit, onSubmit]);
-
-  const error = findVisitErrorMessage(errors);
 
   const screens = useMemo(
     () =>
@@ -113,14 +107,14 @@ export const UploadDataPopup = ({
             </StyledSpinnerWrapper>
           )}
           {screens[step].content}
-          {error && (
+          {/* {error && (
             <StyledBodyMedium
               sx={{ color: variables.palette.semantic.error, mt: theme.spacing(0.6) }}
               data-testid="upload-data-popup-error"
             >
               {error}
             </StyledBodyMedium>
-          )}
+          )} */}
         </StyledModalWrapper>
       </FormProvider>
     </Modal>

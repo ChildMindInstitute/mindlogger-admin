@@ -24,7 +24,7 @@ export type Theme = {
 
 export type Themes = Theme[];
 
-export type CommonLorisActivity = {
+export type LorisActivity = {
   activityId: string;
   activityName: string;
   answerId: string;
@@ -32,22 +32,43 @@ export type CommonLorisActivity = {
   completedDate: string;
 };
 
-export type LorisActivityResponse = CommonLorisActivity & {
-  visits: string[];
-};
-
-export type LorisActivityForm = CommonLorisActivity &
-  Partial<LorisActivityResponse> & {
-    visit?: string;
-    selected?: boolean;
-  };
-
-export type LorisUsersVisit<T = LorisActivityResponse> = {
+export type LorisUsersVisit = {
   userId: string;
   secretUserId: string;
-  activities: T[];
+  activities: LorisActivity[];
 };
 
 export type UploadLorisUsersVisitsParams = AppletId & {
-  payload: LorisUsersVisit<LorisActivityForm>[];
+  payload: LorisUsersVisit[];
+};
+
+export type LorisUserVisits = {
+  userId: string;
+  visits: string[];
+};
+
+export type LorisActivityUsersVisits = {
+  [key: string]: LorisUserVisits[];
+};
+
+export type LorisAnswer = {
+  activityId: string;
+  activityHistoryId: string;
+  activityName: string;
+  userId: string;
+  secretUserId: string;
+  answerId: string;
+  version: string;
+  completedDate: string;
+};
+
+export type LorisUsersVisits = {
+  activityHistoryVisits: LorisActivityUsersVisits;
+  answers: LorisAnswer[];
+};
+
+export type LorisUserAnswerVisit = LorisAnswer & {
+  visits?: string[];
+  visit?: string;
+  selected?: boolean;
 };
