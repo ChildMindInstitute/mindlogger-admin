@@ -16,6 +16,7 @@ import {
   setYear,
 } from 'date-fns';
 
+import { Event } from 'modules/Dashboard/state';
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
 import {
@@ -26,7 +27,6 @@ import {
   getIsWebSupported,
 } from 'shared/utils';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
-import { PeriodicityType } from 'shared/state/Applet/Applet.schema';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
@@ -114,38 +114,45 @@ function formatDateAsYYYYMMDD(date: Date) {
  * - if the periodicity is weekdays, which means that the activity is available every weekday and not in weekends
  * - if the periodicity is monthly, which means that the activity is available every month at the same day
  * - if the periodicity is not set
- * @param periodicity PeriodicityType
+ * @param scheduleEvent PeriodicityType
  * @returns boolean
  */
-function validateIfDateIsInRange(periodicity: PeriodicityType) {
-  if (!periodicity) {
+function validateIfDateIsInRange(scheduleEvent: Event) {
+  if (!scheduleEvent) {
     console.error('The periodicity is not set, be sure to pass a valid periodicity');
 
     return false;
   }
 
-  if (periodicity.access_before_schedule || periodicity.type === PERIODICITY_VALUES.ALWAYS) {
+  if (
+    scheduleEvent.accessBeforeSchedule ||
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.ALWAYS
+  ) {
     return true;
   }
 
   const currentDate = new Date();
   const currentTimeValues = getDateValues(currentDate);
   const startDate = new Date(
-    `${periodicity.start_date ? periodicity.start_date : formatDateAsYYYYMMDD(currentDate)}T${
-      periodicity.start_time
-    }`,
+    `${
+      scheduleEvent.periodicity.startDate
+        ? scheduleEvent.periodicity.startDate
+        : formatDateAsYYYYMMDD(currentDate)
+    }T${scheduleEvent.startTime}`,
   );
   const endDate = new Date(
-    `${periodicity?.end_date ? periodicity.end_date : formatDateAsYYYYMMDD(currentDate)}T${
-      periodicity.end_time
-    }`,
+    `${
+      scheduleEvent?.periodicity.endDate
+        ? scheduleEvent.periodicity.endDate
+        : formatDateAsYYYYMMDD(currentDate)
+    }T${scheduleEvent.endTime}`,
   );
 
   const startTimeValues = getDateValues(startDate);
 
   if (
-    periodicity.type === PERIODICITY_VALUES.ONCE ||
-    periodicity.type === PERIODICITY_VALUES.DAILY
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.ONCE ||
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.DAILY
   ) {
     const todayEndDateWithEndTime = setYear(
       setMonth(setDate(endDate, currentTimeValues.day), currentTimeValues.month - 1),
@@ -153,13 +160,13 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
     );
 
     return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
-  } else if (periodicity.type === PERIODICITY_VALUES.WEEKLY) {
+  } else if (scheduleEvent.periodicity.type === PERIODICITY_VALUES.WEEKLY) {
     if (currentTimeValues.dayInWeek !== startTimeValues.dayInWeek) {
       return false;
     }
 
     return datetimeIsWithinInterval(startDate, endDate);
-  } else if (periodicity.type === PERIODICITY_VALUES.WEEKDAYS) {
+  } else if (scheduleEvent.periodicity.type === PERIODICITY_VALUES.WEEKDAYS) {
     if (isWeekend(currentDate)) {
       return false;
     }
@@ -171,7 +178,7 @@ function validateIfDateIsInRange(periodicity: PeriodicityType) {
 
     return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
   } else if (
-    periodicity.type === PERIODICITY_VALUES.MONTHLY &&
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.MONTHLY &&
     currentTimeValues.day === startTimeValues.day
   ) {
     return datetimeIsWithinInterval(startDate, endDate);
@@ -201,9 +208,9 @@ export const getActivityActions = ({
   const { id: activityId } = activity;
   const isWebUnsupported = !getIsWebSupported(activity.items);
 
-  if (!activityId || !activity?.periodicity) return [];
+  if (!activityId || !activity?.event) return [];
 
-  const isInRange = validateIfDateIsInRange(activity?.periodicity);
+  const isInRange = validateIfDateIsInRange(activity?.event);
 
   return [
     {
@@ -238,7 +245,9 @@ export const getActivityActions = ({
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
       disabled: isWebUnsupported || !isInRange,
-      tooltip: (!isInRange && t('')) || (isWebUnsupported && t('activityIsMobileOnly')),
+      tooltip:
+        (!isInRange && t('activityIsUnavailableAtThisTime')) ||
+        (isWebUnsupported && t('activityIsMobileOnly')),
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];

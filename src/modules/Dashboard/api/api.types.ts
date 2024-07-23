@@ -1,9 +1,9 @@
-import { ActivityId, AppletId } from 'shared/api';
-import { Activity, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, Roles } from 'shared/consts';
-import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
-import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
+import { ActivityId, AppletId } from 'shared/api';
+import { ParticipantTag, Roles } from 'shared/consts';
+import { Activity, Item, SingleApplet, SubscaleSetting } from 'shared/state';
+import { EncryptedAnswerSharedProps, ExportActivity, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils';
 
 export type GetAppletsParams = {
   params: {
@@ -273,6 +273,7 @@ export type DatavizEntity = {
   hasAnswer: boolean;
   lastAnswerDate: string | null;
   isPerformanceTask?: boolean;
+  periodicity?: string;
 };
 
 export type SubmitDates = {
