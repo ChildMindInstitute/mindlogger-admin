@@ -59,6 +59,7 @@ export const getScreens = ({
 export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
   const filteredData = form?.visitsForm.reduce(
     (acc: { [key: string]: LorisUsersVisit }, activityAnswer) => {
+      if (!activityAnswer.selected || !activityAnswer.visit) return acc;
       if (!acc[activityAnswer.userId]) {
         return {
           ...acc,
