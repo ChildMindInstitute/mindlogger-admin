@@ -115,6 +115,7 @@ export const UploadPopup = ({ open, onClose }: UploadPopupProps) => {
       leftBtnText={screens[step].leftButtonText}
       width={screens[step].width}
       disabledSubmit={isLoading}
+      data-testid="loris-upload-popup"
     >
       <StyledModalWrapper sx={{ mt: theme.spacing(1.2), minHeight: '14rem' }}>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}

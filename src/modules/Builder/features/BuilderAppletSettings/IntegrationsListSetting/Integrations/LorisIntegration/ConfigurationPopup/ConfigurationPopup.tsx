@@ -98,6 +98,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       hasLeftBtn
       onLeftBtnSubmit={screens[step].leftButtonClick}
       leftBtnText={screens[step].leftButtonText}
+      data-testid="loris-configuration-popup"
       height="60rem"
     >
       <StyledModalWrapper sx={{ mt: theme.spacing(1.2) }}>

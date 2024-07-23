@@ -42,6 +42,7 @@ export const DisconnectionPopup = ({ open, onClose }: DisconnectionPopupProps) =
       onLeftBtnSubmit={screens[step].leftButtonClick}
       leftBtnText={screens[step].leftButtonText}
       height={screens[step].height}
+      data-testid="loris-disconnection-popup"
     >
       <StyledModalWrapper sx={{ mt: theme.spacing(1.2) }}>
         {screens[step].content}

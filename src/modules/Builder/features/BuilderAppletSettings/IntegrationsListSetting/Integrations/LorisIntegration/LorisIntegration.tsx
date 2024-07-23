@@ -79,6 +79,7 @@ export const LorisIntegration = () => {
           </StyledTitleMedium>
           {!isServerConfigured && (
             <StyledTitleMedium
+              data-testid="loris-integration-description"
               sx={{
                 color: variables.palette.on_surface_variant,
               }}
@@ -94,6 +95,7 @@ export const LorisIntegration = () => {
             <StyledTitleMedium
               sx={{ color: variables.palette.primary, cursor: 'pointer' }}
               onClick={() => setIsDisconnectionPopupVisible(true)}
+              data-testid="loris-integration-disconnect-button"
             >
               {t('loris.disconnect')}
             </StyledTitleMedium>
@@ -105,6 +107,7 @@ export const LorisIntegration = () => {
               variant="outlined"
               sx={{ minWidth: '13rem' }}
               onClick={() => setIsUploadPopupVisible(true)}
+              data-testid="loris-integration-upload-button"
             >
               {t('upload')}
             </Button>
@@ -114,6 +117,7 @@ export const LorisIntegration = () => {
               disabled={!isServerConfigured}
               sx={{ minWidth: '13rem' }}
               onClick={handleConnect}
+              data-testid="loris-integration-connect-button"
             >
               {t('loris.connect')}
             </Button>

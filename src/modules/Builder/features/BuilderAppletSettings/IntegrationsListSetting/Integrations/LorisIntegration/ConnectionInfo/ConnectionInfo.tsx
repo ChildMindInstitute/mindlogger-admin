@@ -17,7 +17,7 @@ export const ConnectionInfo = () => {
   const { serverHostname, username, project } = mockedConnectionInfo;
 
   return (
-    <StyledConnectionInfo>
+    <StyledConnectionInfo data-testid="connection-info">
       <Box>
         <StyledLabelBoldLarge> {t('loris.serverHostname')}</StyledLabelBoldLarge>
         <StyledBodyLarge>{serverHostname}</StyledBodyLarge>
