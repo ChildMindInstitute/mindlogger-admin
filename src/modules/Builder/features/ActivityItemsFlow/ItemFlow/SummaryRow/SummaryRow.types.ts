@@ -1,5 +1,5 @@
 import { ItemFormValues } from 'modules/Builder/types';
-import { ConditionType, ItemResponseType } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import {
   ConditionalLogic,
   Condition,
@@ -18,11 +18,6 @@ export type SummaryRowProps = {
   'data-testid'?: string;
 };
 
-export type GetMatchOptionsProps = {
-  items: ItemFormValues[];
-  conditions: ConditionalLogic['conditions'];
-};
-
 export type GetItemsOptionsProps = {
   items: ItemFormValues[];
   itemsInUsage: Set<unknown>;
@@ -34,24 +29,8 @@ export type GetItemsInUsageProps = {
   itemKey: string;
 };
 
-export type ConditionWithResponseType = Condition & {
-  responseType: ItemResponseType;
-  responseValues: ResponseValues;
-};
-export type GroupedConditionsByRow = Record<string, Condition[]>;
-
-export type CheckIfSelectionPerRowHasIntersectionProps = {
-  sameOptionValue: ConditionType.EqualToOption | ConditionType.IncludesOption;
-  inverseOptionValue: ConditionType.NotEqualToOption | ConditionType.NotIncludesOption;
-};
-
-export type CheckIfSelectionsIntersectionProps = CheckIfSelectionPerRowHasIntersectionProps & {
-  conditions: Condition[];
-};
-
-export type Range = {
-  min: number;
-  max: number;
+export type ConditionWithResponseValues = Condition & {
+  responseValues?: ResponseValues;
 };
 
 export type ConditionWithSetType =
@@ -113,17 +92,6 @@ export type CombinedConditionType<T = unknown> =
   | SingleValueType<T>
   | TimeSingleValueType<T>
   | SliderRowsSingleValueType<T>;
-
-export type CheckAllNumericContradictions = {
-  lessThanValue?: number;
-  greaterThanValue?: number;
-  equalSetUnion?: number[];
-  notEqualSetUnion?: number[];
-  betweenUnion?: number[];
-  outsideOfUnion?: number[];
-  minValue: number;
-  maxValue: number;
-};
 
 export type GetCombinedConditionsByType = {
   responseType: ResponseTypeForSetType;

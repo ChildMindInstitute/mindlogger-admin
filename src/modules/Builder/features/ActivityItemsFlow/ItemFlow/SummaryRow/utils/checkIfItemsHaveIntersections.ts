@@ -14,10 +14,10 @@ import {
   TimeRangeType,
   TimeSingleValueType,
 } from '../SummaryRow.types';
-import { getCombinedRangeForCondition } from './getCombinedRangeForCondition';
-import { checkAllNumericContradictions } from './checkAllNumericContradictions';
+import { getCombinedRangeForConditions } from './getCombinedConditionsValues/getCombinedRangeForConditions';
+import { checkAllNumericContradictions } from './checkAllNumericContradictions/checkAllNumericContradictions';
 
-export const getCombinedConditionsByType = <T extends ConditionWithSetType>({
+export const checkIfItemsHaveIntersections = <T extends ConditionWithSetType>({
   responseType,
   conditions,
   minValue,
@@ -33,20 +33,20 @@ export const getCombinedConditionsByType = <T extends ConditionWithSetType>({
       if (!acc[conditionType])
         return {
           ...acc,
-          [conditionType]: getCombinedRangeForCondition(responseType, conditionType, [
+          [conditionType]: getCombinedRangeForConditions(responseType, conditionType, [
             undefined,
             condition,
           ]),
         };
 
-      const combinedCondition = getCombinedRangeForCondition(responseType, conditionType, [
+      const combinedCondition = getCombinedRangeForConditions(responseType, conditionType, [
         acc[conditionType],
         condition,
       ]);
 
       return { ...acc, [conditionType]: combinedCondition };
     },
-    {} as { [k in ConditionType]?: CombinedConditionType }, //Record<ConditionType, CombinedConditionType>
+    {} as { [k in ConditionType]?: CombinedConditionType },
   );
 
   switch (responseType) {

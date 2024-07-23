@@ -1,7 +1,7 @@
 import { ItemResponseType } from 'shared/consts';
-import { Condition, ResponseValues } from 'shared/state';
+import { Condition, ResponseValues } from 'shared/state/Applet';
 
-import { ConditionWithResponseType } from '../SummaryRow.types';
+import { ConditionWithResponseType } from './getMatchOptions.types';
 
 export const getObjectFromListByItemId = (conditions: ConditionWithResponseType[]) =>
   conditions.reduce(

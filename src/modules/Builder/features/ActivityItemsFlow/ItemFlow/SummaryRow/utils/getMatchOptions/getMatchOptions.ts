@@ -3,9 +3,9 @@ import { Option } from 'shared/components/FormComponents';
 import { getObjectFromList } from 'shared/utils/getObjectFromList';
 import { ConditionalLogicMatch } from 'shared/consts';
 
-import { ConditionWithResponseType, GetMatchOptionsProps } from '../SummaryRow.types';
 import { getObjectFromListByItemId } from './getObjectFromListByItemId';
-import { checkIfHasContradiction } from './checkIfHasContradiction';
+import { checkIfHasContradiction } from '../checkIfHasContradiction';
+import { ConditionWithResponseType, GetMatchOptionsProps } from './getMatchOptions.types';
 
 const { t } = i18n;
 

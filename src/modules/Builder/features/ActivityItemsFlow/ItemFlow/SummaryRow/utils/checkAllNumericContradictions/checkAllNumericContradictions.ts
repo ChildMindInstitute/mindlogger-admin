@@ -6,8 +6,8 @@ import {
   checkGreaterLessOutside,
   checkNotEqualBetween,
   checkNotEqualOutside,
-} from './checkContradictionCases';
-import { CheckAllNumericContradictions } from '../SummaryRow.types';
+} from '../checkContradictionCases/checkContradictionCases';
+import { CheckAllNumericContradictions } from './checkAllNumericContradictions.types';
 
 export const checkAllNumericContradictions = ({
   lessThanValue,
@@ -157,7 +157,7 @@ export const checkAllNumericContradictions = ({
     betweenUnion?.length === 2 &&
     checkNotEqualBetween({ betweenUnion, notEqualSetUnion })
   ) {
-    // Check "inNotEqualTo" and "betweenValues" contradiction
+    // Check "isNotEqualTo" and "betweenValues" contradiction
     return true;
   }
 
@@ -166,7 +166,7 @@ export const checkAllNumericContradictions = ({
     outsideOfUnion?.length === 2 &&
     checkNotEqualOutside({ outsideOfUnion, notEqualSetUnion, minValue, maxValue })
   ) {
-    // Check "inNotEqualTo" and "outsideValues" contradiction
+    // Check "isNotEqualTo" and "outsideValues" contradiction
     return true;
   }
 

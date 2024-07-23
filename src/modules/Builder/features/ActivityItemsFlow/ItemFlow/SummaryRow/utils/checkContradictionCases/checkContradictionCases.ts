@@ -1,18 +1,19 @@
 import { ConditionType } from 'shared/consts';
 
-import { Range } from '../SummaryRow.types';
+import {
+  CheckBetweenOutside,
+  CheckGreaterLessNotEqual,
+  CheckGreaterLessOutside,
+  CheckNotEqualBetween,
+  CheckNotEqualOutside,
+} from './checkContradictionCases.types';
 
 export const checkGreaterLessNotEqual = ({
   compareValue,
   notEqualArray,
   validRange,
   comparisonType,
-}: {
-  compareValue: number;
-  notEqualArray: number[];
-  validRange: Range;
-  comparisonType: ConditionType.LessThan | ConditionType.GreaterThan;
-}): boolean => {
+}: CheckGreaterLessNotEqual) => {
   const notEqualSet = new Set(notEqualArray);
   const { min, max } = validRange;
 
@@ -42,12 +43,7 @@ export const checkGreaterLessOutside = ({
   outsideRange,
   validRange,
   comparisonType,
-}: {
-  compareValue: number;
-  outsideRange: Range;
-  validRange: Range;
-  comparisonType: ConditionType.LessThan | ConditionType.GreaterThan;
-}): boolean => {
+}: CheckGreaterLessOutside) => {
   if (comparisonType === ConditionType.GreaterThan) {
     const greaterThanStart = compareValue + 1;
     const greaterThanEnd = validRange.max;
@@ -81,13 +77,7 @@ export const checkGreaterLessOutside = ({
   return false;
 };
 
-export const checkNotEqualBetween = ({
-  betweenUnion,
-  notEqualSetUnion,
-}: {
-  betweenUnion: number[];
-  notEqualSetUnion: number[];
-}) => {
+export const checkNotEqualBetween = ({ betweenUnion, notEqualSetUnion }: CheckNotEqualBetween) => {
   const [min, max] = betweenUnion;
 
   for (let value = min + 1; value < max; value++) {
@@ -104,12 +94,7 @@ export const checkNotEqualOutside = ({
   notEqualSetUnion,
   minValue,
   maxValue,
-}: {
-  outsideOfUnion: number[];
-  notEqualSetUnion: number[];
-  minValue: number;
-  maxValue: number;
-}) => {
+}: CheckNotEqualOutside) => {
   const [minRange, maxRange] = outsideOfUnion;
   const notEqualSet = new Set(notEqualSetUnion);
 
@@ -118,13 +103,7 @@ export const checkNotEqualOutside = ({
     .every((value) => notEqualSet.has(value));
 };
 
-export const checkBetweenOutside = ({
-  betweenUnion,
-  outsideOfUnion,
-}: {
-  betweenUnion: number[];
-  outsideOfUnion: number[];
-}) => {
+export const checkBetweenOutside = ({ betweenUnion, outsideOfUnion }: CheckBetweenOutside) => {
   const [minBetween, maxBetween] = betweenUnion;
   const [minOutside, maxOutside] = outsideOfUnion;
 

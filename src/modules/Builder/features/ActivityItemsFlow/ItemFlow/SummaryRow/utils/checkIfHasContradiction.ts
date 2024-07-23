@@ -6,16 +6,17 @@ import {
 } from 'shared/consts';
 import {
   NumberItemResponseValues,
+  SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
 } from 'shared/state/Applet';
 
 import { ConditionWithSetType } from '../SummaryRow.types';
-import { getObjectFromListByItemId } from './getObjectFromListByItemId';
-import { getCombinedConditionsByType } from './getCombinedConditionsByType';
+import { getObjectFromListByItemId } from './getMatchOptions/getObjectFromListByItemId';
+import { checkIfItemsHaveIntersections } from './checkIfItemsHaveIntersections';
 import { convertToMinutes } from './convertToMinutes';
-import { checkIfSelectionsHasIntersection } from './checkIfSelectionsHasIntersection';
-import { checkIfSelectionPerRowHasIntersection } from './checkIfSelectionPerRowHasIntersection';
+import { checkIfSelectionsHaveIntersections } from './checkIfSelectionsHasIntersection/checkIfSelectionsHaveIntersections';
+import { checkIfSelectionsPerRowHaveIntersections } from './checkIfSelectionsHasIntersection/checkIfSelectionsPerRowHaveIntersections';
 
 export const checkIfHasContradiction = (
   conditionsByItemId: ReturnType<typeof getObjectFromListByItemId>,
@@ -29,11 +30,11 @@ export const checkIfHasContradiction = (
     switch (responseType) {
       case ItemResponseType.Slider:
       case ItemResponseType.NumberSelection: {
-        const responseValues = groupedConditions[0].responseValues as
+        const responseValues = groupedConditions?.[0]?.responseValues as
           | SliderItemResponseValues
           | NumberItemResponseValues;
 
-        return getCombinedConditionsByType({
+        return checkIfItemsHaveIntersections({
           responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: responseValues.minValue as number,
@@ -41,7 +42,7 @@ export const checkIfHasContradiction = (
         });
       }
       case ItemResponseType.Time: {
-        return getCombinedConditionsByType({
+        return checkIfItemsHaveIntersections({
           responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: convertToMinutes(DEFAULT_START_TIME) || 0,
@@ -49,7 +50,7 @@ export const checkIfHasContradiction = (
         });
       }
       case ItemResponseType.Date: {
-        return getCombinedConditionsByType({
+        return checkIfItemsHaveIntersections({
           responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: 0,
@@ -57,7 +58,7 @@ export const checkIfHasContradiction = (
         });
       }
       case ItemResponseType.TimeRange: {
-        return getCombinedConditionsByType({
+        return checkIfItemsHaveIntersections({
           responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           minValue: convertToMinutes(DEFAULT_START_TIME) || 0,
@@ -65,35 +66,47 @@ export const checkIfHasContradiction = (
         });
       }
       case ItemResponseType.SliderRows: {
-        const responseValues = groupedConditions[0].responseValues as SliderRowsResponseValues;
+        const responseValues = groupedConditions?.[0]?.responseValues as SliderRowsResponseValues;
 
-        return getCombinedConditionsByType({
+        return checkIfItemsHaveIntersections({
           responseType,
           conditions: groupedConditions as ConditionWithSetType[],
           sliderRows: responseValues?.rows,
         });
       }
-      case ItemResponseType.SingleSelection:
-        return checkIfSelectionsHasIntersection({
-          conditions: groupedConditions,
-          sameOptionValue: ConditionType.EqualToOption,
-          inverseOptionValue: ConditionType.NotEqualToOption,
-        });
+      case ItemResponseType.SingleSelection: {
+        const responseValues = groupedConditions?.[0]
+          ?.responseValues as SingleAndMultipleSelectItemResponseValues;
 
-      case ItemResponseType.SingleSelectionPerRow:
-        return checkIfSelectionPerRowHasIntersection({
+        return checkIfSelectionsHaveIntersections({
           conditions: groupedConditions,
           sameOptionValue: ConditionType.EqualToOption,
           inverseOptionValue: ConditionType.NotEqualToOption,
+          optionsLength: responseValues?.options?.length,
+          isSingleSelect: true,
         });
-      case ItemResponseType.MultipleSelection:
-        return checkIfSelectionsHasIntersection({
+      }
+      case ItemResponseType.SingleSelectionPerRow:
+        return checkIfSelectionsPerRowHaveIntersections({
+          conditions: groupedConditions,
+          sameOptionValue: ConditionType.EqualToOption,
+          inverseOptionValue: ConditionType.NotEqualToOption,
+          isSingleSelect: true,
+        });
+      case ItemResponseType.MultipleSelection: {
+        const responseValues = groupedConditions?.[0]
+          ?.responseValues as SingleAndMultipleSelectItemResponseValues;
+
+        return checkIfSelectionsHaveIntersections({
           conditions: groupedConditions,
           sameOptionValue: ConditionType.IncludesOption,
           inverseOptionValue: ConditionType.NotIncludesOption,
+          optionsLength: responseValues?.options?.length,
+          noneAboveId: responseValues?.options?.find((option) => option?.isNoneAbove)?.id,
         });
+      }
       case ItemResponseType.MultipleSelectionPerRow:
-        return checkIfSelectionPerRowHasIntersection({
+        return checkIfSelectionsPerRowHaveIntersections({
           conditions: groupedConditions,
           sameOptionValue: ConditionType.IncludesOption,
           inverseOptionValue: ConditionType.NotIncludesOption,
