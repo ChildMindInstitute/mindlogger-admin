@@ -58,6 +58,7 @@ export const SwitchCondition = ({
     maxValue,
     isSingleValueShown,
     isRangeValueShown,
+    state,
     dataTestid,
   };
   const commonSingleMultiScoreConditionProps = {
