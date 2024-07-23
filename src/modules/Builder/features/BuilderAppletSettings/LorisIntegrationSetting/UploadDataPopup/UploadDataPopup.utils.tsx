@@ -1,3 +1,5 @@
+import { FieldErrors, get } from 'react-hook-form';
+
 import i18n from 'i18n';
 import { StyledBodyLarge, StyledTitleMedium, variables } from 'shared/styles';
 import { LorisUsersVisit } from 'modules/Builder/api';
@@ -55,6 +57,18 @@ export const getScreens = ({
     onSecondBtnSubmit: onClose,
   },
 ];
+
+export const findVisitErrorMessage = (errors: FieldErrors<UploadDataForm>): string | null => {
+  if (!errors?.visitsForm?.length) return null;
+  for (let i = 0; i < errors.visitsForm.length; i++) {
+    const visitError = get(errors, `visitsForm[${i}].visit.message`);
+    if (visitError) {
+      return visitError;
+    }
+  }
+
+  return null;
+};
 
 export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
   const filteredData = form?.visitsForm.reduce(

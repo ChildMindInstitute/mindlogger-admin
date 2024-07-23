@@ -59,10 +59,10 @@ export const getLorisActivitiesRows = ({
         content: () => (
           <CheckboxController
             control={control}
-            name={`visitsForm.${index}].selected`}
+            name={`visitsForm.${index}.selected`}
             label={<></>}
             onCustomChange={() => {
-              trigger(`visitsForm.${index}].visit`);
+              trigger(`visitsForm.${index}.visit`);
             }}
             data-testid={`loris-visits-checkbox-${index}`}
           />
@@ -87,7 +87,7 @@ export const getLorisActivitiesRows = ({
           <StyledSelectController
             className="visits-select"
             control={control}
-            name={`visitsForm.${index}].visit`}
+            name={`visitsForm.${index}.visit`}
             options={getMatchOptions({ visitsList, visits })}
             placeholder={t('select')}
             isLabelNeedTranslation={false}

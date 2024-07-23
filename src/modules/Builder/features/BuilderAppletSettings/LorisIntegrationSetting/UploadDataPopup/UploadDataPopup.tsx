@@ -5,11 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
+import { StyledBodyMedium, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { LorisUserAnswerVisit, uploadLorisUsersVisitsApi } from 'modules/Builder/api';
 
-import { filteredData, getScreens } from './UploadDataPopup.utils';
+import { filteredData, findVisitErrorMessage, getScreens } from './UploadDataPopup.utils';
 import { Steps, UploadDataForm, UploadDataPopupProps } from './UploadDataPopup.types';
 import { StyledSpinnerWrapper } from './UploadDataPopup.styles';
 import { uploadDataSchema } from './UploadDataPopup.schema';
@@ -85,6 +85,8 @@ export const UploadDataPopup = ({
     ],
   );
 
+  const error = findVisitErrorMessage(errors);
+
   return (
     <Modal
       open={open}
@@ -107,14 +109,14 @@ export const UploadDataPopup = ({
             </StyledSpinnerWrapper>
           )}
           {screens[step].content}
-          {/* {error && (
+          {error && (
             <StyledBodyMedium
               sx={{ color: variables.palette.semantic.error, mt: theme.spacing(0.6) }}
               data-testid="upload-data-popup-error"
             >
               {error}
             </StyledBodyMedium>
-          )} */}
+          )}
         </StyledModalWrapper>
       </FormProvider>
     </Modal>
