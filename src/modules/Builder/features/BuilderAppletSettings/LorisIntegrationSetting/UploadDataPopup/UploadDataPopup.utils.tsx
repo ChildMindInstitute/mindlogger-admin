@@ -75,42 +75,23 @@ export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
     (acc: { [key: string]: LorisUsersVisit }, activityAnswer) => {
       if (!activityAnswer.selected || !activityAnswer.visit) return acc;
       if (!acc[activityAnswer.userId]) {
-        return {
-          ...acc,
-          [activityAnswer.userId]: {
-            userId: activityAnswer.userId,
-            secretUserId: activityAnswer.secretUserId,
-            activities: [
-              {
-                activityId: activityAnswer.activityId,
-                activityName: activityAnswer.activityName,
-                answerId: activityAnswer.answerId,
-                version: activityAnswer.version,
-                completedDate: activityAnswer.completedDate,
-                visit: activityAnswer.visit,
-              },
-            ],
-          },
+        acc[activityAnswer.userId] = {
+          userId: activityAnswer.userId,
+          secretUserId: activityAnswer.secretUserId,
+          activities: [],
         };
       }
 
-      return {
-        ...acc,
-        [activityAnswer.userId]: {
-          ...acc[activityAnswer.userId],
-          activities: [
-            ...acc[activityAnswer.userId].activities,
-            {
-              activityId: activityAnswer.activityId,
-              activityName: activityAnswer.activityName,
-              answerId: activityAnswer.answerId,
-              version: activityAnswer.version,
-              completedDate: activityAnswer.completedDate,
-              visit: activityAnswer.visit,
-            },
-          ],
-        },
-      };
+      acc[activityAnswer.userId].activities.push({
+        activityId: activityAnswer.activityId,
+        activityName: activityAnswer.activityName,
+        answerId: activityAnswer.answerId,
+        version: activityAnswer.version,
+        completedDate: activityAnswer.completedDate,
+        visit: activityAnswer.visit,
+      });
+
+      return acc;
     },
     {},
   );
