@@ -12,8 +12,9 @@ import {
   ResponseTypeForSetType,
   SliderRowsRangeType,
   TimeRangeType,
-} from '../SummaryRow.types';
-import { convertToMinutes } from './convertToMinutes';
+} from '../../SummaryRow.types';
+import { convertToMinutes } from '../convertToMinutes';
+import { convertDateToNumber } from '../convertDateToNumber';
 
 export const getOutsideOfCombinedRange = (
   responseType: ResponseTypeForSetType,
@@ -44,7 +45,7 @@ export const getOutsideOfCombinedRange = (
       const nextMinValue = nextCondition.payload.minValue;
       const nextMaxValue = nextCondition.payload.maxValue;
       if (!conditions[0]) {
-        return { range: [nextMinValue?.getTime(), nextMaxValue?.getTime()] };
+        return { range: [convertDateToNumber(nextMaxValue), convertDateToNumber(nextMaxValue)] };
       }
 
       const accCondition = conditions[0] as RangeType<Date>;
@@ -55,7 +56,7 @@ export const getOutsideOfCombinedRange = (
       const leftValue = accMinValue < nextMinValue ? accMinValue : nextMinValue;
       const rightValue = accMaxValue > nextMaxValue ? accMaxValue : nextMaxValue;
 
-      return { range: [leftValue?.getTime(), rightValue?.getTime()] };
+      return { range: [convertDateToNumber(leftValue), convertDateToNumber(rightValue)] };
     }
     case ItemResponseType.Time: {
       const nextCondition = conditions[1] as RangeValueCondition<string>;

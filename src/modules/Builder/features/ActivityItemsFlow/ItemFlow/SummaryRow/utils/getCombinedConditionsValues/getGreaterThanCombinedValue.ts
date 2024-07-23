@@ -12,8 +12,9 @@ import {
   SingleValueType,
   SliderRowsSingleValueType,
   TimeSingleValueType,
-} from '../SummaryRow.types';
-import { convertToMinutes } from './convertToMinutes';
+} from '../../SummaryRow.types';
+import { convertToMinutes } from '../convertToMinutes';
+import { convertDateToNumber } from '../convertDateToNumber';
 
 export const getGreaterThanCombinedValue = (
   responseType: ResponseTypeForSetType,
@@ -38,14 +39,14 @@ export const getGreaterThanCombinedValue = (
       const nextCondition = conditions[1] as SingleValueCondition<Date>;
       const nextValue = nextCondition.payload.value;
       if (!conditions[0]) {
-        return { value: nextValue?.getTime() };
+        return { value: convertDateToNumber(nextValue) };
       }
 
       const accCondition = conditions[0] as SingleValueType<Date>;
       const accValue = accCondition.value;
       const value = accValue > nextValue ? accValue : nextValue;
 
-      return { value: value?.getTime() };
+      return { value: convertDateToNumber(value) };
     }
     case ItemResponseType.Time: {
       const nextCondition = conditions[1] as SingleValueCondition<string>;
