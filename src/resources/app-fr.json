@@ -292,7 +292,10 @@
   "conditionDisabledPlaceholder": "Sélectionnez d'abord un élément",
   "conditionValue": "Valeur",
   "conditionalLogicValidation": {
-    "usageInSummaryRow": "Cet élément est déjà sélectionné dans la ligne de résumé d'une autre carte conditionnelle. Si plusieurs conditions sont nécessaires pour cet élément, utilisez la même carte conditionnelle avec TOUTES ou N'IMPORTE QUELLE condition."
+    "usageInSummaryRow": "Cet élément est déjà sélectionné dans la ligne de résumé d'une autre carte conditionnelle. Si plusieurs conditions sont nécessaires pour cet élément, utilisez la même carte conditionnelle avec TOUTES ou N'IMPORTE QUELLE condition.",
+    "summaryItemIsBeforeRuleItemInTheList": "Cet élément apparaît dans l'activité avant l'un des éléments impliqués dans la condition.",
+    "summaryItemIsTheSameAsRuleItem": "Cet élément définit déjà l'une des conditions et ne peut pas en être le résultat en même temps.",
+    "impossibleToFulfillTheConditionsSimultaneously": "Il est impossible de satisfaire les conditions spécifiées simultanément."
   },
   "configure": "Configurer",
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
@@ -1219,6 +1222,7 @@
   "sortBy": "Trier Par",
   "startDate": "Date de début",
   "startEndDate": "Date de début / Date de fin",
+  "startEndTime": "Heure de début / Heure de fin",
   "startTime": "Heure de début",
   "status": "Statut",
   "startTimeResponse": "Heure de démarrage de la réponse",
