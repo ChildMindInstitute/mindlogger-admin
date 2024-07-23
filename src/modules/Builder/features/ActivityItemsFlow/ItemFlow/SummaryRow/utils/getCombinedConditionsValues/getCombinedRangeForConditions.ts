@@ -4,14 +4,14 @@ import {
   CombinedConditionType,
   ConditionWithSetType,
   ResponseTypeForSetType,
-} from '../SummaryRow.types';
+} from '../../SummaryRow.types';
 import { getOutsideOfCombinedRange } from './getOutsideOfCombinedRange';
 import { getBetweenCombinedRange } from './getBetweenCombinedRange';
 import { getLessThanCombinedValue } from './getLessThanCombinedValue';
 import { getGreaterThanCombinedValue } from './getGreaterThanCombinedValue';
 import { getCombinedValueSet } from './getCombinedValueSet';
 
-export const getCombinedRangeForCondition = (
+export const getCombinedRangeForConditions = (
   responseType: ResponseTypeForSetType,
   type: ConditionType,
   conditions: [CombinedConditionType | undefined, ConditionWithSetType],
