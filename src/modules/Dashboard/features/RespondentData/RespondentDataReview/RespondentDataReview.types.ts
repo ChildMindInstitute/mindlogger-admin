@@ -14,6 +14,7 @@ import {
   SingleAndMultiplePerRowConfig,
   SingleAndMultipleSelectRowsResponseValues,
   SliderRowsItem,
+  ParagraphTextItem,
 } from 'shared/state';
 import {
   DecryptedMultiSelectionAnswer,
@@ -51,6 +52,7 @@ export type MultiSelectItemAnswer = CreateItemAnswer<
 >;
 export type SliderItemAnswer = CreateItemAnswer<SliderActivityItem, DecryptedSliderAnswer>;
 export type TextItemAnswer = CreateItemAnswer<TextItem, DecryptedTextAnswer>;
+export type ParagraphTextItemAnswer = CreateItemAnswer<ParagraphTextItem, DecryptedTextAnswer>;
 export type NumberSelectionItemAnswer = CreateItemAnswer<
   NumberSelectionItem,
   DecryptedNumberSelectionAnswer

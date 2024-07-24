@@ -125,6 +125,11 @@ describe('SummaryRow.utils', () => {
         name: 'item-not-included-in-the-options',
         responseType: ItemResponseType.Flanker,
       },
+      {
+        id: 'item-20',
+        name: 'ParagraphText',
+        responseType: ItemResponseType.ParagraphText,
+      },
     ];
     const itemsInUsage = new Set(['item-1', 'item-3']);
     const result = [
@@ -254,6 +259,13 @@ describe('SummaryRow.utils', () => {
         labelKey: 'AudioPlayer',
         tooltip: undefined,
         value: 'item-18',
+        tooltipPlacement: undefined,
+      },
+      {
+        disabled: false,
+        labelKey: 'ParagraphText',
+        value: 'item-20',
+        tooltip: undefined,
         tooltipPlacement: undefined,
       },
     ];

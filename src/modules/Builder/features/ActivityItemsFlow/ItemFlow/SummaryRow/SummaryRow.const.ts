@@ -5,6 +5,7 @@ export const ITEMS_RESPONSE_TYPES_TO_SHOW = [
   ItemResponseType.SingleSelection,
   ItemResponseType.MultipleSelection,
   ItemResponseType.Text,
+  ItemResponseType.ParagraphText,
   ItemResponseType.Time,
   ItemResponseType.TimeRange,
   ItemResponseType.Date,

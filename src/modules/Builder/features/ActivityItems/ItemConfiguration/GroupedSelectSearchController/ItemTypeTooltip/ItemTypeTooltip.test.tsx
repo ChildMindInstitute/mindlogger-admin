@@ -4,6 +4,7 @@ import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { tooltipPresentationDataTestid } from './ItemTypeTooltip.const';
@@ -13,6 +14,10 @@ const renderWithExistenceCheck = (uiType) => {
   renderWithProviders(<ItemTypeTooltip uiType={uiType} anchorEl={anchorEl} />);
   expect(screen.getByTestId(tooltipPresentationDataTestid)).toBeInTheDocument();
 };
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 const tooltipTexts = {
   Date: 'Date selection in the format Month DD, YYYY.',
@@ -25,7 +30,8 @@ const tooltipTexts = {
   SliderRows: 'Rows of numerical scales with a single answer.',
   Time: 'Time selection in the format HH:MM.',
   TimeRange: 'Time Range selection in the format Start Time HH:MM - End Time HH:MM.',
-  Text: 'Text input field.',
+  Text: 'Short text input field.',
+  ParagraphText: 'Paragraph text input field.',
   Drawing: 'Drawing task.',
   Photo: 'Photo capture task.',
   Video: 'Video capture task.',
@@ -36,8 +42,17 @@ const tooltipTexts = {
 };
 
 describe('ItemTypeTooltip', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableParagraphTextItem: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   test.each(Object.entries(tooltipTexts))('renders %s component', (uiType, expectedText) => {

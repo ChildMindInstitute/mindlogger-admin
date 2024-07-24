@@ -56,7 +56,8 @@ export const useResponseData = ({
 
     switch (responseType) {
       case ItemResponseType.Date:
-      case ItemResponseType.Text: {
+      case ItemResponseType.Text:
+      case ItemResponseType.ParagraphText: {
         const answerList = answers as (DateAnswer | TextAnswer)[];
         formattedAnswers = answerList.reduce(
           (textItemAnswers: TextItemAnswer[], { answer, date: answerDate }) => {
@@ -147,7 +148,8 @@ export const useResponseData = ({
   const columns = useMemo(() => {
     switch (responseType) {
       case ItemResponseType.Date:
-      case ItemResponseType.Text: {
+      case ItemResponseType.Text:
+      case ItemResponseType.ParagraphText: {
         return getSimpleItemHeadCells();
       }
       case ItemResponseType.TimeRange: {

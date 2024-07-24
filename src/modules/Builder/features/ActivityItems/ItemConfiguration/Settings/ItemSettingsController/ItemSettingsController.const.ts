@@ -20,6 +20,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasAutoAdvance,
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
+        ItemConfigurationSettings.PortraitLayout,
       ],
     },
     {
@@ -52,6 +53,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       groupOptions: [
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
+        ItemConfigurationSettings.PortraitLayout,
       ],
     },
     {
@@ -261,6 +263,20 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasResponseDataIdentifier,
         ItemConfigurationSettings.IsResponseRequired,
       ],
+    },
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurations,
+      groupOptions: [
+        ItemConfigurationSettings.IsSkippable,
+        ItemConfigurationSettings.IsGoBackRemoved,
+      ],
+      collapsedByDefault: true,
+    },
+  ],
+  [ItemResponseType.ParagraphText]: [
+    {
+      groupName: ItemSettingsGroupNames.ResponseOptions,
+      groupOptions: [ItemConfigurationSettings.IsResponseRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurations,

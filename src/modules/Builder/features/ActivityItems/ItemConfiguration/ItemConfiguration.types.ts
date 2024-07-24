@@ -25,6 +25,7 @@ export enum ItemConfigurationSettings {
   IsTextInputRequired = 'additionalResponseOption.textInputRequired',
   IsUndoRemoved = 'removeUndoButton',
   IsNavigationMovedToTheTop = 'navigationToTop',
+  PortraitLayout = 'portraitLayout',
 }
 
 export type SelectionOption = {

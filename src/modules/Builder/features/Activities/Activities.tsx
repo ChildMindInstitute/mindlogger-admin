@@ -35,17 +35,18 @@ export const Activities = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const {
-    fields: activities,
+    fields,
     append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
     move: moveActivity,
-  } = useFieldArray<Record<string, ActivityFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  } = useFieldArray({
     control,
     name: 'activities',
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
+  const activities = fields as unknown as ActivityFormValues[];
 
   const activityNames = pluck(activities, 'name');
   const activityFlows: AppletFormValues['activityFlows'] = useWatch({ name: 'activityFlows' });

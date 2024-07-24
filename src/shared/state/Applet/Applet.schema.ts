@@ -57,6 +57,13 @@ export type TextInputConfig = {
   responseRequired: boolean;
 };
 
+export type ParagraphTextInputConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  maxResponseLength: number;
+  responseRequired: boolean;
+};
+
 export type MultipleSelectionConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -66,6 +73,7 @@ export type MultipleSelectionConfig = {
   addTooltip: boolean;
   setPalette: boolean;
   timer: number;
+  portraitLayout: boolean;
   additionalResponseOption: {
     textInputOption?: boolean;
     textInputRequired: boolean;
@@ -309,6 +317,7 @@ export type SliderRowsResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type ParagraphTextItemResponseValues = null;
 export type VideoResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
 export type PhotoResponseValues = null;
@@ -358,6 +367,7 @@ export type ResponseValues =
 
 export type Config =
   | TextInputConfig
+  | ParagraphTextInputConfig
   | SingleSelectionConfig
   | MultipleSelectionConfig
   | SliderConfig
@@ -439,6 +449,7 @@ export const enum TimeRangeConditionType {
   StartTime = 'startTime',
   EndTime = 'endTime',
 }
+
 export type TimeRangeValueCondition = BaseCondition &
   RangeValueCondition<Date> & {
     payload: {
@@ -466,6 +477,7 @@ export type ConditionalLogic = {
 
 export type Item<T = ItemCommonType> =
   | TextItem<T>
+  | ParagraphTextItem<T>
   | SingleSelectItem<T>
   | MultiSelectItem<T>
   | SliderItem<T>
@@ -505,6 +517,12 @@ export type TextItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.Text;
   config: TextInputConfig;
   responseValues: TextItemResponseValues;
+};
+
+export type ParagraphTextItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.ParagraphText;
+  config: ParagraphTextInputConfig;
+  responseValues: ParagraphTextItemResponseValues;
 };
 
 export type SingleSelectItem<T = ItemCommonType> = T & {

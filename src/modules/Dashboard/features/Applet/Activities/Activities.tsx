@@ -69,7 +69,12 @@ export const Activities = () => {
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
 
-              <FlowGrid applet={appletData} activities={activities} flows={flows} />
+              <FlowGrid
+                applet={appletData}
+                activities={activities}
+                data-testid={dataTestId}
+                flows={flows}
+              />
             </StyledFlexColumn>
           )}
 
