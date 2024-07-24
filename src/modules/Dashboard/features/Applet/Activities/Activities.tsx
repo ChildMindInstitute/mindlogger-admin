@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi } from 'api';
+import { getAppletActivitiesApi, getEventsApi } from 'api';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
@@ -17,6 +17,14 @@ import { ActivitiesToolbar } from './ActivitiesToolbar';
 
 const dataTestId = 'dashboard-applet-activities';
 
+function mergeInfo(activities: Activity[], valueEvents: any) {
+  return activities.map((activity) => {
+    const event = valueEvents?.data?.result?.find((event: any) => event.activityId === activity.id);
+
+    return { ...activity, event };
+  });
+}
+
 export const Activities = () => {
   const [activityId, setActivityId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
@@ -24,6 +32,11 @@ export const Activities = () => {
   const { appletId } = useParams();
   const { t } = useTranslation('app');
   const { execute, isLoading, value, previousValue } = useAsync(getAppletActivitiesApi);
+  const {
+    execute: executeEvents,
+    isLoading: loadingEvents,
+    value: valueEvents,
+  } = useAsync(getEventsApi);
 
   const activities: Activity[] = useMemo(
     () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
@@ -31,13 +44,21 @@ export const Activities = () => {
   );
   const flows: ActivityFlow[] =
     (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
+
   const showContent =
-    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
+    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) ||
+    !isLoading ||
+    !loadingEvents;
+
+  const useMemoizedActivities = useMemo(
+    () => mergeInfo(activities, valueEvents),
+    [activities, valueEvents],
+  );
 
   const { formatRow, TakeNowModal } = useActivityGrid(
     dataTestId,
     {
-      result: activities,
+      result: useMemoizedActivities,
       count: activities.length,
     },
     useCallback((activityId: string) => {
@@ -47,15 +68,16 @@ export const Activities = () => {
   );
 
   const formattedActivities = useMemo(
-    () => activities.map((activity) => formatRow(activity)),
-    [activities, formatRow],
+    () => useMemoizedActivities.map((activity) => formatRow(activity)),
+    [useMemoizedActivities, formatRow],
   );
 
   useEffect(() => {
     if (!appletId) return;
 
     execute({ params: { appletId } });
-  }, [appletId, execute]);
+    executeEvents({ appletId });
+  }, [appletId, execute, executeEvents]);
 
   return (
     <StyledFlexColumn sx={{ gap: 2.4, height: '100%' }}>

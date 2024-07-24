@@ -33,6 +33,7 @@
   "activityIncomplete": "Activité incomplète",
   "activityIsRequired": "Au moins 1 activité est requise.",
   "activityIsMobileOnly": "Cette activité doit être réalisée sur l'application mobile Mindlogger.",
+  "activityIsUnavailableAtThisTime" : "Cette activité est actuellement indisponible pour être complétée en fonction de son calendrier.",
   "activityItemsFlow": "Flux d'éléments",
   "activityItemsFlowDescription": "Pour déterminer l'ordre de transition d'un élément à un autre, un flux d'éléments peut être créé.",
   "activityItemsFlowItemTitle": "Conditionnel {{- index}}",

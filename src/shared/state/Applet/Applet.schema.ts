@@ -7,6 +7,7 @@ import {
   OrderName,
   RoundTypeEnum,
 } from 'modules/Builder/types';
+import { Event } from 'modules/Dashboard/state';
 import {
   CalculationType,
   ConditionType,
@@ -704,7 +705,7 @@ export type Activity = {
   name: string;
   order?: number;
   performanceTaskType?: PerfTaskType | null;
-  periodicity?: PeriodicityType;
+  event?: Event;
   reportIncludedItemName?: string;
   responseIsEditable?: boolean;
   scoresAndReports?: ScoresAndReports;

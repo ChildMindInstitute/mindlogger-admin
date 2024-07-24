@@ -3,11 +3,11 @@ import { FormState } from 'react-hook-form';
 import * as yup from 'yup';
 
 import {
-  TimerType,
-  Periodicity,
   EventNotifications,
   EventReminder,
   NotificationType,
+  Periodicity,
+  TimerType,
 } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
