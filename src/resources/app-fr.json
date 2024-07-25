@@ -143,6 +143,7 @@
   "appletHasEmptyRequiredFields": "Veuillez remplir tous les champs requis marqués en rouge",
   "appletHasErrorsInFields": "Veuillez corriger les erreurs dans tous les champs marqués en rouge",
   "appletHasItemFlowContradictions": "La position de l'élément sélectionnée dans la liste contredit le flux d'éléments",
+  "summaryItemSameAsRuleItem": "Cet élément est déjà sélectionné comme condition et ne peut pas être sélectionné simultanément comme résultat",
   "appletImageDescription": "Cette image est affichée à côté du nom de l'applet dans le panneau d'administration et dans l'interface du participant.",
   "appletImg": "Image de l'applet",
   "appletIsBeingCreated": "Votre applet est en cours de création. Veuillez patienter...",

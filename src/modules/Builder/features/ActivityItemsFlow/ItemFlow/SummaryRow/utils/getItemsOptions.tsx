@@ -12,13 +12,9 @@ const { t } = i18n;
 export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOptionsProps) => {
   const itemsObject = getObjectFromList(items, undefined, true);
   const conditionItemsInUsageSet = new Set(conditions.map((condition) => condition.itemName));
-  const maxUsedItemIndex = [...conditionItemsInUsageSet].reduce((maxIndex, itemKey) => {
-    const item = itemsObject[itemKey];
-    const itemIndex = item?.index ?? -1;
-    if (!item || (typeof itemIndex === 'number' && itemIndex <= maxIndex)) return maxIndex;
-
-    return itemIndex;
-  }, -1);
+  const maxUsedItemIndex = Math.max(
+    ...[...conditionItemsInUsageSet].map((key) => itemsObject[key]?.index ?? -1),
+  );
 
   return items?.reduce((optionList: { value: string; labelKey: string }[], item, index) => {
     if (!item.responseType || !ITEMS_RESPONSE_TYPES_TO_SHOW.includes(item.responseType))
