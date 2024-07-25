@@ -683,10 +683,8 @@ export const ScoreSchema = () => ({
       'unique-score-name',
       t('validationMessages.unique', { field: t('scoreName') }) as string,
       (scoreName, context) => {
-        const reports = get(context, 'from.1.value.reports') ?? [];
-        const scores = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Score,
-        );
+        const reports = (get(context, 'from.1.value.reports') ?? []) as ScoreOrSection[];
+        const scores = reports?.filter(({ type }) => type === ScoreReportType.Score);
 
         return testFunctionForUniqueness(scoreName ?? '', scores);
       },
