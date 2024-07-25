@@ -1,6 +1,17 @@
 import { ItemResponseType } from 'shared/consts';
+import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
 import { getItemsOptions, getItemsInUsage } from './SummaryRow.utils';
+
+jest.mock(
+  'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
+  () => ({
+    ...jest.requireActual(
+      'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
+    ),
+    StyledMdPreview: ({ modelValue }: { modelValue: string }) => <div>{modelValue}</div>,
+  }),
+);
 
 describe('SummaryRow.utils', () => {
   describe('getItemsOptions', () => {
@@ -20,6 +31,7 @@ describe('SummaryRow.utils', () => {
         conditionalLogic: {
           itemKey: 'item-1',
         },
+        question: 'item-2',
       },
       {
         id: 'item-3',
@@ -36,6 +48,7 @@ describe('SummaryRow.utils', () => {
         conditionalLogic: {
           itemKey: undefined,
         },
+        question: 'item-4',
       },
       {
         id: 'item-5',
@@ -44,21 +57,32 @@ describe('SummaryRow.utils', () => {
       },
     ];
     const itemsInUsage = new Set(['item-1', 'item-3']);
+    const conditions = [
+      {
+        key: 'key-1',
+        type: 'INCLUDES_OPTION',
+        itemName: 'item-2',
+        payload: {
+          optionValue: 'option-value-1',
+        },
+      },
+    ];
     const result = [
       {
         disabled: true,
         labelKey: 'ss1',
         tooltip:
-          "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
+          'This Item appears in the Activity before one of the Items involved in the conditional.',
         value: 'item-1',
         tooltipPlacement: 'right',
       },
       {
-        disabled: false,
+        disabled: true,
         labelKey: 'ms1',
-        tooltip: undefined,
         value: 'item-2',
-        tooltipPlacement: undefined,
+        tooltip:
+          'This Item already defines one of the conditions and cannot be its result at the same time.',
+        tooltipPlacement: 'right',
       },
       {
         disabled: true,
@@ -71,15 +95,15 @@ describe('SummaryRow.utils', () => {
       {
         disabled: false,
         labelKey: 't1',
-        tooltip: undefined,
         value: 'item-4',
-        tooltipPlacement: undefined,
+        tooltip: <StyledMdPreview modelValue="item-4" />,
+        tooltipPlacement: 'right',
       },
     ];
     test('should return options with tooltips and disable statuses for items in usage', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      expect(getItemsOptions({ items, itemsInUsage })).toStrictEqual(result);
+      expect(getItemsOptions({ items, itemsInUsage, conditions })).toStrictEqual(result);
     });
   });
 
