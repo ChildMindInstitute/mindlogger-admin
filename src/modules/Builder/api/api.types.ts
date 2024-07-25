@@ -42,13 +42,12 @@ export type CommonActivity = {
 };
 
 export type LorisAnswer = CommonActivity & {
-  activityHistoryId: string;
   userId: string;
   secretUserId: string;
 };
 
 export type LorisUsersVisits = {
-  activityHistoryVisits: LorisActivityUsersVisits;
+  activityVisits: LorisActivityUsersVisits;
   answers: LorisAnswer[];
 };
 

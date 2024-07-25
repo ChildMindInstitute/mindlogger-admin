@@ -78,7 +78,8 @@ export const LorisVisits = ({ onSetIsLoading, setVisitsData, setStep }: LorisVis
                 maxHeight="34.4rem"
                 columns={getHeadCells()}
                 rows={tableRows}
-                orderBy={'activityName'}
+                order="desc"
+                orderBy={'completedDate'}
                 uiType={UiType.Secondary}
                 tableHeadBg={variables.modalBackground}
               />

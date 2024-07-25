@@ -64,7 +64,7 @@ export const getLorisActivitiesRows = ({
             onCustomChange={() => {
               trigger(`visitsForm.${index}.visit`);
             }}
-            data-testid={`loris-visits-checkbox-${index}`}
+            data-testid="loris-visits-checkbox"
           />
         ),
         value: activityName,
@@ -91,7 +91,7 @@ export const getLorisActivitiesRows = ({
             options={getMatchOptions({ visitsList, visits })}
             placeholder={t('select')}
             isLabelNeedTranslation={false}
-            data-testid={`loris-visits-select-${index}`}
+            data-testid="loris-visits-select"
             customChange={({ target: { value } }) =>
               handleChangeVisit({ activityAnswer: visitsForm[index], value })
             }
@@ -104,17 +104,14 @@ export const getLorisActivitiesRows = ({
     [],
   );
 
-export const formatData = ({
-  activityHistoryVisits,
-  answers,
-}: LorisUsersVisits): LorisUserAnswerVisit[] =>
-  answers.map(({ activityHistoryId, userId, ...restAnswerData }) => {
-    const activityHistory = activityHistoryVisits[activityHistoryId];
+export const formatData = ({ activityVisits, answers }: LorisUsersVisits): LorisUserAnswerVisit[] =>
+  answers.map(({ activityId, userId, ...restAnswerData }) => {
+    const activityUsersVisits = activityVisits[activityId];
 
-    if (!activityHistory) {
+    if (!activityUsersVisits) {
       return {
         ...restAnswerData,
-        activityHistoryId,
+        activityId,
         userId,
         visits: [],
         visit: '',
@@ -122,11 +119,13 @@ export const formatData = ({
       };
     }
 
-    const userVisits = activityHistory.find((history) => history?.userId === userId);
+    const userVisits = activityUsersVisits.find(
+      (activityUserVisits) => activityUserVisits?.userId === userId,
+    );
 
     return {
       ...restAnswerData,
-      activityHistoryId,
+      activityId,
       userId,
       visits: userVisits?.visits ?? [],
       visit: '',

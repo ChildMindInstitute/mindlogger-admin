@@ -10,7 +10,6 @@ export const uploadDataSchema = () => {
     secretUserId: yup.string().required(),
     activityId: yup.string().required(),
     activityName: yup.string().required(),
-    activityHistoryId: yup.string().required(),
     answerId: yup.string().required(),
     version: yup.string().required(),
     completedDate: yup.string().required(),

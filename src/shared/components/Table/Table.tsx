@@ -14,6 +14,7 @@ export const Table = ({
   columns,
   rows,
   keyExtractor = (item: Row, index: number) => `row-${index}`,
+  order: orderProp = 'asc',
   orderBy: orderByProp,
   maxHeight = '100%',
   uiType = UiType.Primary,
@@ -22,7 +23,7 @@ export const Table = ({
   tableHeadBg,
   'data-testid': dataTestid,
 }: TableProps) => {
-  const [order, setOrder] = useState<Order>('asc');
+  const [order, setOrder] = useState<Order>(orderProp);
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
   const getRowsPerPage = () => {
@@ -33,22 +34,37 @@ export const Table = ({
   };
   const [rowsPerPage, setRowsPerPage] = useState(getRowsPerPage());
 
-  function descendingComparator(a: Row, b: Row, orderBy: string) {
-    if (b[orderBy]?.value < a[orderBy]?.value) {
-      return -1;
+  const descendingComparator = (a: Row, b: Row, orderBy: string) => {
+    const valueA = a[orderBy]?.value;
+    const valueB = b[orderBy]?.value;
+
+    if (valueB === undefined || valueA === undefined) return 0;
+
+    // check if values are valid dates (string or number)
+    const isValueADate = typeof valueA === 'string' || typeof valueA === 'number';
+    const isValueBDate = typeof valueB === 'string' || typeof valueB === 'number';
+
+    if (isValueADate && isValueBDate) {
+      const dateA = new Date(valueA).getTime();
+      const dateB = new Date(valueB).getTime();
+
+      // compare dates if both are valid
+      if (!isNaN(dateA) && !isNaN(dateB)) {
+        return dateA < dateB ? 1 : -1;
+      }
     }
-    if (b[orderBy]?.value > a[orderBy]?.value) {
-      return 1;
-    }
+
+    // fallback to string or number comparison
+    if (valueB < valueA) return -1;
+    if (valueB > valueA) return 1;
 
     return 0;
-  }
+  };
 
-  function getComparator(order: Order, orderBy: string): (a: Row, b: Row) => number {
-    return order === 'desc'
+  const getComparator = (order: Order, orderBy: string): ((a: Row, b: Row) => number) =>
+    order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
-  }
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -99,7 +115,7 @@ export const Table = ({
                 ?.sort(getComparator(order, orderBy))
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
-                  <TableRow key={keyExtractor(row, index)} data-testid="table-row">
+                  <TableRow key={keyExtractor(row, index)} data-testid={`table-row-${index}`}>
                     {Object.keys(row)?.map((key) =>
                       row[key].isHidden ? null : (
                         <TableCell
