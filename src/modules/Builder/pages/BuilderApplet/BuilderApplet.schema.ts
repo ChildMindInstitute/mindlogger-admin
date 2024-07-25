@@ -721,10 +721,8 @@ export const SectionSchema = () => ({
       'unique-section-name',
       t('validationMessages.unique', { field: t('sectionName') }) as string,
       (sectionName, context) => {
-        const reports = get(context, 'from.1.value.reports') ?? [];
-        const sections = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Section,
-        );
+        const reports = (get(context, 'from.1.value.reports') ?? []) as ScoreOrSection[];
+        const sections = reports?.filter(({ type }) => type === ScoreReportType.Section);
 
         return testFunctionForUniqueness(sectionName ?? '', sections);
       },

@@ -10,6 +10,7 @@ import { ItemFormValues } from 'modules/Builder/types';
 import { StyledSummaryRow } from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionalLogicMatch } from 'shared/consts';
+import { Condition } from 'shared/state/Applet';
 
 import { SummaryRowProps } from './SummaryRow.types';
 import { getItemsOptions, getMatchOptions } from './utils';
@@ -19,16 +20,16 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
   const matchFieldName = `${name}.match`;
-  const [items, conditions, match] = useWatch({
-    name: [`${activityName}.items`, `${name}.conditions`, matchFieldName],
-  });
+  const itemKeyFieldName = `${name}.itemKey`;
+  const [items, conditions, match]: [ItemFormValues[], Condition[], ConditionalLogicMatch] =
+    useWatch({
+      name: [`${activityName}.items`, `${name}.conditions`, matchFieldName],
+    });
   const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
     (event: SelectEvent) => {
-      const itemIndex = items?.findIndex(
-        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-      );
+      const itemIndex = items?.findIndex((item) => getEntityKey(item) === event.target.value);
 
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
@@ -41,8 +42,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     () => getItemsOptions({ items, itemsInUsage, conditions }),
     [items, itemsInUsage, conditions],
   );
-  const { question } =
-    ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
+  const { question } = (items ?? []).find(({ id }) => id === getValues(itemKeyFieldName)) ?? {};
 
   useEffect(() => {
     // If there are contradictory conditions, change the value of the match option from 'All' to 'Any'
@@ -70,7 +70,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
 
         <ItemFlowSelectController
           control={control}
-          name={`${name}.itemKey`}
+          name={itemKeyFieldName}
           options={itemsOptions}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
