@@ -15,7 +15,7 @@ import {
 import { DownloadReportProps } from './DownloadReport.types';
 
 export const useDownloadReport = ({ id, isFlow }: Omit<DownloadReportProps, 'data-testid'>) => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const currentActivity = isFlow
@@ -52,12 +52,12 @@ export const useDownloadReport = ({ id, isFlow }: Omit<DownloadReportProps, 'dat
   });
 
   const downloadReportHandler = async () => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     getReport({
       appletId,
       ...(isFlow ? { flowId: id } : { activityId: id }),
-      subjectId: respondentId,
+      subjectId,
     });
   };
 
