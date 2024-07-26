@@ -1,12 +1,10 @@
-import * as yup from 'yup';
 import get from 'lodash/get';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
-import {
-  getEntityKey,
-  getIsRequiredValidateMessage,
-  getMaxLengthValidationError,
-} from 'shared/utils';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { RoundTypeEnum } from 'modules/Builder/types';
 import {
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
@@ -22,12 +20,21 @@ import {
   PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import {
+  getEntityKey,
+  getIsRequiredValidateMessage,
+  getMaxLengthValidationError,
+} from 'shared/utils';
 
 import { ItemFormValues } from '../../types/Builder.types';
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  IP_ADDRESS_REGEXP,
+  ItemTestFunctions,
+  PORT_REGEXP,
+  alphanumericAndHyphenRegexp,
+} from './BuilderApplet.const';
 import {
   checkScoreRegexp,
   getCommonSliderValidationProps,
@@ -45,13 +52,6 @@ import {
   testFunctionForUniqueness,
   testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
-import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  ItemTestFunctions,
-  alphanumericAndHyphenRegexp,
-  IP_ADDRESS_REGEXP,
-  PORT_REGEXP,
-} from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -230,11 +230,77 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
   type: yup.mixed().oneOf(['sentence', 'itemResponse', 'lineBreak']).required(),
   text: yup.string().when('type', {
     is: 'sentence',
-    then: (schema) => schema.trim().required(t('fieldRequired')),
+    then(schema) {
+      return (
+        schema.trim()
+          .test("myvalid", t("fieldRequiredAddToContinue"), function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+
+
+            const isMoreThanOneSentence = fields?.filter(({ type }: { type: string }) => type === 'sentence').length > 1;
+
+            if (!value && !isMoreThanOneSentence) {
+              return false
+            }
+
+
+            return true
+          })
+          .test("my valid 2", t("fieldAddContentOrRemove"), function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+
+
+            const isMoreThanOneSentence = fields?.filter(({ type }: { type: string }) => type === 'sentence').length > 1;
+
+            if (!value && isMoreThanOneSentence) {
+              return false
+            }
+
+
+            return true
+          }
+          )
+      )
+    }
   }),
   id: yup.string().when('type', {
     is: 'itemResponse',
-    then: (schema) => schema.trim().required(t('fieldRequired')),
+    then: (schema) => schema.trim()
+      .test("validate required only one field", t('fieldRequiredMakeASelection'),
+        function (value, textContext) {
+          const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+          const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+
+
+          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'itemResponse').length > 1;
+
+          if (!value && !isMoreThanOneItemResponse) {
+            return false
+          }
+
+
+          return true
+        }
+      )
+      .test("validate required only one field", t('fieldMakeSelectionOrRemove'),
+        function (value, textContext) {
+          const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+          const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+
+
+          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'itemResponse').length > 1;
+
+          if (!value && isMoreThanOneItemResponse) {
+            return false
+          }
+
+
+          return true
+        }
+      )
+
   }),
   // displayMode: yup.string().when('type', {
   //   is: 'itemResponse',

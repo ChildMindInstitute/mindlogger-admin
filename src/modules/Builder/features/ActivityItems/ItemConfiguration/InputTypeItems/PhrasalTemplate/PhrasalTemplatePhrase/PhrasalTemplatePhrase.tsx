@@ -42,8 +42,8 @@ export const PhrasalTemplatePhrase = ({
   const { fields, append, remove } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
-    rules: { minLength: 2 },
   });
+
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
 
