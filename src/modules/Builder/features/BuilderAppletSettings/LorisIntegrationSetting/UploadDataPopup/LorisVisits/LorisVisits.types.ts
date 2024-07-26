@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Control, FieldValues, UseFormTrigger } from 'react-hook-form';
 
 import { CellContent } from 'shared/components';
-import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 
 import { Steps } from '../UploadDataPopup.types';
 
@@ -15,7 +15,7 @@ export type VisitRow = {
 
 export type LorisVisitsProps = {
   onSetIsLoading: Dispatch<SetStateAction<boolean>>;
-  setVisitsData: Dispatch<LorisUsersVisit<LorisActivityResponse>[]>;
+  setVisitsData: Dispatch<LorisUserAnswerVisit[]>;
   setStep: Dispatch<SetStateAction<Steps>>;
 };
 
@@ -23,22 +23,21 @@ export type GetLorisActivitiesRows = {
   control: Control<FieldValues>;
   trigger: UseFormTrigger<FieldValues>;
   visitsList: string[];
-  visitsForm: LorisUsersVisit<LorisActivityForm>[];
-  handleChangeVisit: ({ userIndex, activityIndex, value }: HandleChangeVisitProps) => void;
+  visitsForm: LorisUserAnswerVisit[];
+  handleChangeVisit: ({ activityAnswer, value }: HandleChangeVisitProps) => void;
 };
 
 export type UseFetchVisitsDataProps = {
   appletId?: string;
   onSetIsLoading: Dispatch<SetStateAction<boolean>>;
   setVisitsList: Dispatch<SetStateAction<string[]>>;
-  setVisitsData: Dispatch<LorisUsersVisit<LorisActivityResponse>[]>;
+  setVisitsData: Dispatch<LorisUserAnswerVisit[]>;
   reset: (values?: Partial<FieldValues>) => void;
   setStep: Dispatch<SetStateAction<Steps>>;
 };
 
 export type HandleChangeVisitProps = {
-  userIndex: number;
-  activityIndex: number;
+  activityAnswer: LorisUserAnswerVisit;
   value: string;
 };
 

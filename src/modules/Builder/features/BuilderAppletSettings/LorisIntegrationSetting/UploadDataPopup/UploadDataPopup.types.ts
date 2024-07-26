@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 
 export type UploadDataPopupProps = {
   open: boolean;
@@ -20,11 +20,11 @@ export type ScreenParams = {
   onClose: () => void;
   onSubmitVisits: () => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
-  visitsData: LorisUsersVisit<LorisActivityResponse>[];
-  setVisitsData: Dispatch<LorisUsersVisit<LorisActivityResponse>[]>;
+  visitsData: LorisUserAnswerVisit[];
+  setVisitsData: Dispatch<LorisUserAnswerVisit[]>;
   setStep: Dispatch<SetStateAction<Steps>>;
 };
 
 export type UploadDataForm = {
-  visitsForm: LorisUsersVisit<LorisActivityForm>[];
+  visitsForm: LorisUserAnswerVisit[];
 };

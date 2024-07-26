@@ -1,9 +1,8 @@
-import { FieldErrors } from 'react-hook-form';
-import get from 'lodash.get';
+import { FieldErrors, get } from 'react-hook-form';
 
 import i18n from 'i18n';
 import { StyledBodyLarge, StyledTitleMedium, variables } from 'shared/styles';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUsersVisit } from 'modules/Builder/api';
 
 import { ScreenParams, Steps, UploadDataForm } from './UploadDataPopup.types';
 import { LorisVisits } from './LorisVisits';
@@ -59,41 +58,43 @@ export const getScreens = ({
   },
 ];
 
-export const findVisitErrorMessage = (
-  errors: FieldErrors<{ visitsForm: LorisUsersVisit<LorisActivityForm>[] }>,
-): string | null => {
-  if (errors?.visitsForm?.length) {
-    for (let user = 0; user < errors.visitsForm.length; user++) {
-      const activities = errors.visitsForm[user]?.activities;
-      if (activities?.length) {
-        for (let activity = 0; activity < activities.length; activity++) {
-          const visitError = get(
-            errors,
-            `visitsForm[${user}].activities[${activity}].visit.message`,
-          );
-          if (visitError) {
-            return visitError;
-          }
-        }
-      }
+export const findVisitErrorMessage = (errors: FieldErrors<UploadDataForm>): string | null => {
+  if (!errors?.visitsForm?.length) return null;
+  for (let i = 0; i < errors.visitsForm.length; i++) {
+    const visitError = get(errors, `visitsForm[${i}].visit.message`);
+    if (visitError) {
+      return visitError;
     }
   }
 
   return null;
 };
 
-export const filteredData = (form: UploadDataForm): LorisUsersVisit<LorisActivityForm>[] =>
-  form.visitsForm
-    .filter((userVisit) => userVisit.activities.some((activity) => activity.selected))
-    .map((userVisit) => ({
-      ...userVisit,
-      activities: userVisit.activities.reduce((acc: LorisActivityForm[], activity) => {
-        if (activity.selected) {
-          // eslint-disable-next-line unused-imports/no-unused-vars
-          const { selected, visits, ...rest } = activity;
-          acc.push(rest);
-        }
+export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
+  const filteredData = form?.visitsForm.reduce(
+    (acc: { [key: string]: LorisUsersVisit }, activityAnswer) => {
+      if (!activityAnswer.selected || !activityAnswer.visit) return acc;
+      if (!acc[activityAnswer.userId]) {
+        acc[activityAnswer.userId] = {
+          userId: activityAnswer.userId,
+          secretUserId: activityAnswer.secretUserId,
+          activities: [],
+        };
+      }
 
-        return acc;
-      }, []),
-    }));
+      acc[activityAnswer.userId].activities.push({
+        activityId: activityAnswer.activityId,
+        activityName: activityAnswer.activityName,
+        answerId: activityAnswer.answerId,
+        version: activityAnswer.version,
+        completedDate: activityAnswer.completedDate,
+        visit: activityAnswer.visit,
+      });
+
+      return acc;
+    },
+    {},
+  );
+
+  return Object.values(filteredData);
+};

@@ -39,7 +39,7 @@ describe('useFetchVisitsData', () => {
 
   test('should fetch data and set visits and visits data on success', async () => {
     const visitsData = { data: { visits: ['visit1', 'visit2'] } };
-    const usersVisitsData = { data: { info: 'usersVisitsInfo' } };
+    const usersVisitsData = { data: { result: 'usersVisitsInfo' } };
     (getLorisVisitsApi as jest.Mock).mockResolvedValue(visitsData);
     (getLorisUsersVisitsApi as jest.Mock).mockResolvedValue(usersVisitsData);
     (formatData as jest.Mock).mockReturnValue('formattedData');
@@ -52,7 +52,7 @@ describe('useFetchVisitsData', () => {
     await waitFor(() => expect(result.current.isLoadingCompleted).toBe(true));
 
     expect(mockSetVisitsList).toHaveBeenCalledWith(visitsData.data.visits);
-    expect(formatData).toHaveBeenCalledWith(usersVisitsData.data.info);
+    expect(formatData).toHaveBeenCalledWith(usersVisitsData.data.result);
     expect(mockSetVisitsData).toHaveBeenCalledWith('formattedData');
     expect(mockReset).toHaveBeenCalledWith({ visitsForm: 'formattedData' });
     expect(mockSetIsLoading).toHaveBeenCalledWith(false);

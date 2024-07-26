@@ -17,6 +17,35 @@ jest.mock('shared/hooks', () => ({
   useFeatureFlags: jest.fn(),
 }));
 
+const visitsResponse = { data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] } };
+const usersVisitsResponse = {
+  data: {
+    result: {
+      activityVisits: {},
+      answers: [
+        {
+          userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
+          secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
+          activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+          activityName: 'Activity2 applet 20072024',
+          answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
+          version: '2.0.0',
+          completedDate: '2024-06-24T16:14:00',
+        },
+        {
+          userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
+          secretUserId: 'lol_kek',
+          activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
+          activityName: 'Activity2 applet 20072024',
+          answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
+          version: '2.0.0',
+          completedDate: '2024-06-25T04:33:00',
+        },
+      ],
+    },
+  },
+};
+
 const LorisIntegrationSettingWrapper = ({ defaultValues }) => {
   const methods = useForm({
     defaultValues,
@@ -91,7 +120,7 @@ describe('LorisIntegrationSetting', () => {
   });
 
   test("server is configured, lorisIntegration by default is false, integrations = ['loris']", async () => {
-    mockAxios.get.mockResolvedValueOnce({ data: { result: ['V1', 'V2', 'V3', 'V4', 'V5'] } });
+    mockAxios.get.mockResolvedValueOnce(visitsResponse);
     mockAxios.get.mockResolvedValueOnce({
       data: {
         result: {
@@ -152,43 +181,8 @@ describe('LorisIntegrationSetting', () => {
   });
 
   test("server is configured, lorisIntegration by default is true, integrations = ['loris']; all visits are filled", async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] },
-    });
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        info: [
-          {
-            userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
-            secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
-            activities: [
-              {
-                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                activityName: 'Activity2 applet 20072024',
-                answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
-                version: '2.0.0',
-                completedDate: '2024-06-24T16:14:00',
-                visits: [],
-              },
-            ],
-          },
-          {
-            userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
-            secretUserId: 'lol_kek',
-            activities: [
-              {
-                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                activityName: 'Activity2 applet 20072024',
-                answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
-                version: '2.0.0',
-                completedDate: '2024-06-25T04:33:00',
-                visits: [],
-              },
-            ],
-          },
-        ],
-      },
-    });
+    mockAxios.get.mockResolvedValueOnce(visitsResponse);
+    mockAxios.get.mockResolvedValueOnce(usersVisitsResponse);
     mockAxios.post.mockResolvedValueOnce({ data: {} });
 
     (useIsServerConfigured as jest.Mock).mockReturnValue(true);
@@ -254,23 +248,23 @@ describe('LorisIntegrationSetting', () => {
 
     // change visit value for the first row
     const firstRow = lorisVisits.querySelectorAll('tbody tr')[0] as HTMLElement;
-    const selectContainer1 = within(firstRow).getByTestId('loris-visits-select-0-0');
+    const selectContainer1 = within(firstRow).getByTestId('loris-visits-select');
     expect(selectContainer1).toBeInTheDocument();
     const select1 = selectContainer1.querySelector('.MuiSelect-select') as Element;
     await userEvent.click(select1);
 
-    const dropdown1 = screen.getByTestId('loris-visits-select-0-0-dropdown');
+    const dropdown1 = screen.getByTestId('loris-visits-select-dropdown');
     expect(dropdown1.querySelectorAll('li')).toHaveLength(5); // 5 mocked visits
     await userEvent.click(dropdown1.querySelectorAll('li')[3]);
 
     // change visit value for the second row
     const secondRow = lorisVisits.querySelectorAll('tbody tr')[1] as HTMLElement;
-    const selectContainer2 = within(secondRow).getByTestId('loris-visits-select-1-0');
+    const selectContainer2 = within(secondRow).getByTestId('loris-visits-select');
     expect(selectContainer2).toBeInTheDocument();
     const select2 = selectContainer2.querySelector('.MuiSelect-select') as Element;
     await userEvent.click(select2);
 
-    const dropdown2 = screen.getByTestId('loris-visits-select-1-0-dropdown');
+    const dropdown2 = screen.getByTestId('loris-visits-select-dropdown');
     await userEvent.click(dropdown2.querySelectorAll('li')[3]);
 
     const submitButton = screen.getByTestId(
@@ -311,12 +305,7 @@ describe('LorisIntegrationSetting', () => {
           userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
         },
       ],
-      {
-        params: {
-          applet_id: '123',
-        },
-        signal: undefined,
-      },
+      { params: { applet_id: '123' }, signal: undefined },
     );
 
     expect(
@@ -330,43 +319,8 @@ describe('LorisIntegrationSetting', () => {
   });
 
   test("server is configured, lorisIntegration by default is true, integrations = ['loris']; not all visits are filled", async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] },
-    });
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        info: [
-          {
-            userId: 'a1792f7c-6b4f-409a-a231-97ce531cb66d',
-            secretUserId: '7ad7d1b5-87ed-46ee-ba9c-94524885d132',
-            activities: [
-              {
-                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                activityName: 'Activity2 applet 20072024',
-                answerId: 'a69eedae-d1fa-4e17-bf73-a811b4865dbe',
-                version: '2.0.0',
-                completedDate: '2024-06-24T16:14:00',
-                visits: [],
-              },
-            ],
-          },
-          {
-            userId: '814de763-4ea0-48d8-8d94-16fd639325d1',
-            secretUserId: 'lol_kek',
-            activities: [
-              {
-                activityId: '9b1af6f9-8880-473f-8697-ef86a3166b4e',
-                activityName: 'Activity2 applet 20072024',
-                answerId: '2081e58f-d459-4ddd-8bef-34bb6746b8e7',
-                version: '2.0.0',
-                completedDate: '2024-06-25T04:33:00',
-                visits: [],
-              },
-            ],
-          },
-        ],
-      },
-    });
+    mockAxios.get.mockResolvedValueOnce(visitsResponse);
+    mockAxios.get.mockResolvedValueOnce(usersVisitsResponse);
 
     (useIsServerConfigured as jest.Mock).mockReturnValue(true);
     (useFeatureFlags as jest.Mock).mockReturnValue({
@@ -430,18 +384,18 @@ describe('LorisIntegrationSetting', () => {
     expect(lorisVisits.querySelectorAll('tbody tr')).toHaveLength(2);
 
     const firstRow = lorisVisits.querySelectorAll('tbody tr')[0] as HTMLElement;
-    const selectedCheckboxContainer = within(firstRow).getByTestId('loris-visits-checkbox-0-0');
+    const selectedCheckboxContainer = within(firstRow).getByTestId('loris-visits-checkbox');
     expect(selectedCheckboxContainer).toBeInTheDocument();
     await userEvent.click(checkboxContainer);
 
     // change visit value for the second row
     const secondRow = lorisVisits.querySelectorAll('tbody tr')[1] as HTMLElement;
-    const selectContainer = within(secondRow).getByTestId('loris-visits-select-1-0');
+    const selectContainer = within(secondRow).getByTestId('loris-visits-select');
     expect(selectContainer).toBeInTheDocument();
     const select = selectContainer.querySelector('.MuiSelect-select') as Element;
     await userEvent.click(select);
 
-    const dropdown = screen.getByTestId('loris-visits-select-1-0-dropdown');
+    const dropdown = screen.getByTestId('loris-visits-select-dropdown');
     expect(dropdown.querySelectorAll('li')).toHaveLength(5); // 5 mocked visits
     await userEvent.click(dropdown.querySelectorAll('li')[3]);
 

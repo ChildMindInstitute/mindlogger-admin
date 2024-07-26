@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { UiType } from 'shared/components/Table';
 
@@ -18,7 +18,7 @@ export const LorisVisits = ({ onSetIsLoading, setVisitsData, setStep }: LorisVis
   const { t } = useTranslation();
   const { control, reset, setValue, trigger } = useFormContext();
   const [visitsList, setVisitsList] = useState<string[]>([]);
-  const visitsForm: LorisUsersVisit<LorisActivityForm>[] = useWatch({ name: 'visitsForm' });
+  const visitsForm: LorisUserAnswerVisit[] = useWatch({ name: 'visitsForm' });
 
   const { isLoadingCompleted } = useFetchVisitsData({
     appletId,
@@ -30,35 +30,27 @@ export const LorisVisits = ({ onSetIsLoading, setVisitsData, setStep }: LorisVis
   });
 
   const handleChangeVisit = useCallback(
-    ({ userIndex, activityIndex, value }: HandleChangeVisitProps) => {
-      const formData = [...visitsForm];
-      const currentActivity = formData[userIndex].activities[activityIndex];
+    ({ activityAnswer, value }: HandleChangeVisitProps) => {
+      const updatedVisitsForm = visitsForm.map((userActivityAnswer) => {
+        const { userId, activityId, answerId, visits } = userActivityAnswer;
+        if (activityAnswer.activityId === activityId && activityAnswer.userId === userId) {
+          if (activityAnswer.answerId === answerId) {
+            return {
+              ...userActivityAnswer,
+              visit: value,
+            };
+          }
 
-      formData[userIndex].activities = formData[userIndex].activities.map((activity, index) => {
-        // skip other activities
-        if (activity.activityId !== currentActivity.activityId) return activity;
-
-        // update the current activity
-        if (activityIndex === index) {
           return {
-            ...activity,
-            visit: value,
+            ...userActivityAnswer,
+            visits: [...(visits || []).filter((visit) => visit !== activityAnswer.visit), value],
           };
         }
 
-        // update the same activities
-        const updatedVisits = [
-          ...(activity.visits || []).filter((visit) => visit !== currentActivity.visit), // remove the old value
-          value,
-        ];
-
-        return {
-          ...activity,
-          visits: updatedVisits,
-        };
+        return userActivityAnswer;
       });
 
-      setValue('visitsForm', formData);
+      setValue('visitsForm', updatedVisitsForm);
     },
     [setValue, visitsForm],
   );
@@ -86,7 +78,8 @@ export const LorisVisits = ({ onSetIsLoading, setVisitsData, setStep }: LorisVis
                 maxHeight="34.4rem"
                 columns={getHeadCells()}
                 rows={tableRows}
-                orderBy={'activityName'}
+                order="desc"
+                orderBy={'completedDate'}
                 uiType={UiType.Secondary}
                 tableHeadBg={variables.modalBackground}
               />
