@@ -41,6 +41,8 @@ export const Activities = () => {
     remove: removeActivity,
     update: updateActivity,
     move: moveActivity,
+    // @TODO: Error created as a ticket on: https://mindlogger.atlassian.net/browse/M2-7383
+    // @ts-expect-error Type instantiation is excessively deep and possibly infinite.ts(2589)
   } = useFieldArray<Record<string, ActivityFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: 'activities',
