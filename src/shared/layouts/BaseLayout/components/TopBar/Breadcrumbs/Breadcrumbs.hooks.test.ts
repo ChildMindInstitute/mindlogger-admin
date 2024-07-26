@@ -22,6 +22,35 @@ const preloadedState = {
   },
 };
 
+const preloadedStateWithApplet = {
+  workspaces: {
+    currentWorkspace: {
+      data: {
+        workspaceName: 'WorkspaceName',
+      },
+    },
+  },
+  applet: {
+    applet: {
+      data: {
+        result: {
+          displayName: 'Mocked Applet',
+          activities: [
+            {
+              name: 'Test Activity Name',
+              id: 'a853606f-3d6a-45ff-b6c3-aae09f64c89f',
+            },
+            {
+              name: 'Test Activity Name 2',
+              id: activityId,
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
 const commonDatavizState = {
   applet: {
     applet: {
@@ -130,9 +159,9 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: jest.fn(),
 }));
 
-const testCommonBuilderCrumbs = ({ dashboard, applet, activities }) => {
+const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedAppletProp }) => {
   expect(dashboard).toEqual(expectedDashboard);
-  expect(applet).toEqual(expectedApplet);
+  expect(applet).toEqual(expectedAppletProp || expectedApplet);
   expect(activities).toEqual(expectedActivities);
 };
 
@@ -387,6 +416,46 @@ describe('useBreadcrumbs', () => {
 
     testCommonBuilderCrumbs({ dashboard, applet, activities });
     expect(newActivity).toEqual(expectedNewActivity);
+    expect(activityAbout).toEqual({
+      icon: 'more-info-outlined',
+      label: 'About Activity',
+      key: expect.any(String),
+    });
+  });
+
+  test('should generate correct breadcrumbs for builder activity about with enabled multi informant', () => {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableMultiInformant: true,
+      },
+    });
+    const route = `/builder/${appletId}/activities/${activityId}/about`;
+    const routePath = page.builderAppletActivityAbout;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: preloadedStateWithApplet,
+    });
+
+    expect(result.current).toHaveLength(5);
+    const [dashboard, applet, activities, activity, activityAbout] = result.current;
+
+    testCommonBuilderCrumbs({
+      dashboard,
+      applet,
+      activities,
+      expectedAppletProp: {
+        ...expectedApplet,
+        label: 'Mocked Applet',
+      },
+    });
+    expect(activity).toEqual({
+      icon: 'checklist-outlined',
+      label: 'Test Activity Name 2',
+      navPath: `/builder/${appletId}/activities/${activityId}`,
+      key: expect.any(String),
+    });
     expect(activityAbout).toEqual({
       icon: 'more-info-outlined',
       label: 'About Activity',
