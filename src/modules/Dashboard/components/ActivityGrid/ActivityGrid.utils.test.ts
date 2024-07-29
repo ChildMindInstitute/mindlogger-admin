@@ -76,8 +76,6 @@ describe('getActivityActions', () => {
     },
     roles: [],
     featureFlags: {
-      enableMultiInformant: true,
-      enableMultiInformantTakeNow: true,
       enableActivityAssign: true,
       enableActivityFilterSort: true,
     },

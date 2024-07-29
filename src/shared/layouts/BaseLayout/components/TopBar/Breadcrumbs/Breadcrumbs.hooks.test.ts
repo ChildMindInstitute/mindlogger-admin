@@ -3,7 +3,6 @@
 // @ts-nocheck
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
@@ -166,13 +165,6 @@ const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedApplet
 };
 
 describe('useBreadcrumbs', () => {
-  beforeEach(() => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: false,
-      },
-    });
-  });
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -292,12 +284,6 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/summary', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
-
     const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/summary`;
     const routePath = page.appletParticipantDataSummary;
 
@@ -317,12 +303,6 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/responses', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
-
     const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/responses`;
     const routePath = page.appletParticipantDataReview;
 
@@ -363,7 +343,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for builder activity about', () => {
+  test('should generate correct breadcrumbs for builder new activity about', () => {
     const route = `/builder/${appletId}/activities/${activityId}/about`;
     const routePath = page.builderAppletActivityAbout;
 
@@ -385,12 +365,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for builder activity about with enabled multi informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for builder existing activity about', () => {
     const route = `/builder/${appletId}/activities/${activityId}/about`;
     const routePath = page.builderAppletActivityAbout;
 
@@ -583,12 +558,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant details', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}`;
     const routePath = page.appletParticipantActivities;
 
@@ -643,12 +613,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details schedule using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant details schedule', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}/schedule`;
     const routePath = page.appletParticipantSchedule;
 
@@ -703,12 +668,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant activity details using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant activity details', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}/activities/${activityId}`;
     const routePath = page.appletParticipantActivityDetails;
 

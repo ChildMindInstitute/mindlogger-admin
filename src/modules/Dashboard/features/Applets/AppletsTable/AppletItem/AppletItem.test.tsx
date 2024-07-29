@@ -131,10 +131,10 @@ describe('AppletItem component tests', () => {
 
   describe('should navigate to a particular route for applet actions', () => {
     test.each`
-      actionTestId       | route                                         | description
+      actionTestId       | route                                          | description
       ${'view-users'}    | ${`/dashboard/${mockedAppletId}/participants`} | ${'view users'}
-      ${'view-calendar'} | ${`/dashboard/${mockedAppletId}/schedule`}    | ${'view calendar'}
-      ${'edit'}          | ${`/builder/${mockedAppletId}`}               | ${'edit applet'}
+      ${'view-calendar'} | ${`/dashboard/${mockedAppletId}/schedule`}     | ${'view calendar'}
+      ${'edit'}          | ${`/builder/${mockedAppletId}`}                | ${'edit applet'}
     `('$description', async ({ actionTestId, route }) => {
       renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
