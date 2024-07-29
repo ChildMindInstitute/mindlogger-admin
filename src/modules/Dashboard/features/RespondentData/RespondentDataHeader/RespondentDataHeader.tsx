@@ -95,8 +95,7 @@ export const RespondentDataHeader = ({
     setIsExportOpen(false);
   };
 
-  const canDoTakeNow =
-    activityOrFlow && featureFlags.enableMultiInformantTakeNow && checkIfFullAccess(roles);
+  const canDoTakeNow = activityOrFlow && checkIfFullAccess(roles);
 
   const canViewData = hasPermissionToViewData(roles);
 
