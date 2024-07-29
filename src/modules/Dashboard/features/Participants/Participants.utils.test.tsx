@@ -3,6 +3,7 @@ import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { ParticipantTag, Roles } from 'shared/consts';
+import { Invitation } from 'shared/types';
 
 import { getParticipantActions, getHeadCells, cleanUpDividers } from './Participants.utils';
 import {
@@ -10,7 +11,6 @@ import {
   GetParticipantActionsProps,
   ParticipantActionProps,
 } from './Participants.types';
-import { Invitation } from '../Applet/AddUser/AddUser.types';
 
 describe('Participants utils tests', () => {
   describe('getParticipantActions function', () => {
