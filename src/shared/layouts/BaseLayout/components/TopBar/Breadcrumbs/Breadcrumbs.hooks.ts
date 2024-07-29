@@ -106,7 +106,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         image: appletData?.image || '',
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
-        navPath: generatePath(isDashboard ? page.appletParticipants : page.builderApplet, {
+        navPath: generatePath(isDashboard ? page.appletOverview : page.builderApplet, {
           appletId,
         }),
       });

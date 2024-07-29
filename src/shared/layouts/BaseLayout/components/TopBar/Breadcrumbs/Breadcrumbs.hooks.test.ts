@@ -132,7 +132,7 @@ const commonDataVizTest = ({ home, applet, user, viewData }) => {
   expect(applet).toEqual({
     ...expectedApplet,
     label: 'Mocked Applet',
-    navPath: `/dashboard/${appletId}/participants`,
+    navPath: `/dashboard/${appletId}/overview`,
     chip: undefined,
   });
   expect(user).toEqual({
@@ -259,7 +259,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/participants`,
+      navPath: `/dashboard/${appletId}/overview`,
       chip: undefined,
     });
     expect(addUser).toEqual({
@@ -286,7 +286,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/schedule`,
+      navPath: `/dashboard/${appletId}/overview`,
       chip: undefined,
     });
   });
@@ -632,7 +632,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/overview',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -692,7 +692,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/overview',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -759,7 +759,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: `/dashboard/${appletId}/participants`,
+      navPath: `/dashboard/${appletId}/overview`,
       useCustomIcon: true,
     });
     expect(participant).toEqual({
