@@ -139,7 +139,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       ],
     },
     {
-      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+      groupName: ItemSettingsGroupNames.ScreenConfigurations,
       groupOptions: [
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,

@@ -303,7 +303,7 @@ const mockedSettingGroupsByType = {
   ],
   [ItemResponseType.NumberSelection]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,
-    ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+    ItemSettingsGroupNames.ScreenConfigurations,
   ],
   [ItemResponseType.TimeRange]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,
