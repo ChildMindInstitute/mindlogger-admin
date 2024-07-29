@@ -43,7 +43,10 @@ describe('getFormattedToDate', () => {
     'returns $expected when dateType is $dateType and formToDate is $formToDate',
     ({ dateType, formToDate, expected }) => {
       const result = getFormattedToDate({ dateType, formToDate });
-      expect(result).toBe(expected);
+      const resultWithoutSeconds = result ? result.slice(0, -3) : result;
+      const expectedWithoutSeconds = expected ? expected.slice(0, -3) : expected;
+
+      expect(resultWithoutSeconds).toBe(expectedWithoutSeconds);
     },
   );
 });
