@@ -51,8 +51,8 @@ export const UploadPopup = ({ open, onClose }: UploadPopupProps) => {
         getLorisUsersVisitsApi({ appletId }),
       ]);
 
-      if (usersVisitsResult?.data?.info) {
-        const visitsForm = formatData(usersVisitsResult?.data?.info);
+      if (usersVisitsResult?.data?.result) {
+        const visitsForm = formatData(usersVisitsResult?.data?.result);
         reset({ visitsForm });
 
         if (visitsResult?.data?.visits) {

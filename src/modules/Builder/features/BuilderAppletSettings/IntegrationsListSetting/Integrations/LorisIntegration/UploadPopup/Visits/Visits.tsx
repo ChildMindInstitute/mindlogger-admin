@@ -5,9 +5,9 @@ import { Box } from '@mui/material';
 
 import { StyledBodyMedium, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { UiType } from 'shared/components/Table';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 
-import { findVisitErrorMessage, getHeadCells, getLorisActivitiesRows } from './Visits.utils';
+import { findVisitErrorMessage, getHeadCells, getActivitiesRows } from './Visits.utils';
 import { StyledTable } from './Visits.styles';
 import { HandleChangeVisitProps, VisitsProps } from './Visits.types';
 
@@ -21,54 +21,50 @@ export const Visits = ({ visitsList }: VisitsProps) => {
     formState: { errors },
   } = useFormContext();
 
-  const visitsForm: LorisUsersVisit<LorisActivityForm>[] = useWatch({ name: 'visitsForm' });
+  const visitsForm: LorisUserAnswerVisit[] = useWatch({ name: 'visitsForm' });
 
   const handleChangeVisit = useCallback(
-    ({ userIndex, activityIndex, value }: HandleChangeVisitProps) => {
-      const formData = [...visitsForm];
-      const currentActivity = formData[userIndex].activities[activityIndex];
-      formData[userIndex].activities = formData[userIndex].activities.map((activity, index) => {
-        // skip other activities
-        if (activity.activityId !== currentActivity.activityId) return activity;
-        // update the current activity
-        if (activityIndex === index) {
+    ({ activityAnswer, value }: HandleChangeVisitProps) => {
+      const updatedVisitsForm = visitsForm.map((userActivityAnswer) => {
+        const { userId, activityId, answerId, visits } = userActivityAnswer;
+        if (activityAnswer.activityId === activityId && activityAnswer.userId === userId) {
+          if (activityAnswer.answerId === answerId) {
+            return {
+              ...userActivityAnswer,
+              visit: value,
+            };
+          }
+
           return {
-            ...activity,
-            visit: value,
+            ...userActivityAnswer,
+            visits: [...(visits || []).filter((visit) => visit !== activityAnswer.visit), value],
           };
         }
-        // update the same activities
-        const updatedVisits = [
-          ...(activity.visits || []).filter((visit) => visit !== currentActivity.visit), // remove the old value
-          value,
-        ];
 
-        return {
-          ...activity,
-          visits: updatedVisits,
-        };
+        return userActivityAnswer;
       });
-      setValue('visitsForm', formData);
+
+      setValue('visitsForm', updatedVisitsForm);
     },
     [setValue, visitsForm],
   );
 
   const onSelectAllClick = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setSelectAllChecked(checked);
-    const formData = [...visitsForm].map(({ activities, ...restUserData }) => ({
-      ...restUserData,
-      activities: activities.map((activityData) => ({
-        ...activityData,
-        selected: checked,
-      })),
-    }));
-    setValue('visitsForm', formData);
-    trigger('visitsForm');
+    // setSelectAllChecked(checked);
+    // const formData = [...visitsForm].map(({ activities, ...restUserData }) => ({
+    //   ...restUserData,
+    //   activities: activities.map((activityData) => ({
+    //     ...activityData,
+    //     selected: checked,
+    //   })),
+    // }));
+    // setValue('visitsForm', formData);
+    // trigger('visitsForm');
   };
 
   const tableRows = useMemo(
     () =>
-      getLorisActivitiesRows({
+      getActivitiesRows({
         control,
         trigger,
         visitsList,
@@ -92,7 +88,8 @@ export const Visits = ({ visitsList }: VisitsProps) => {
               maxHeight="38rem"
               columns={getHeadCells(selectAllChecked, onSelectAllClick)}
               rows={tableRows}
-              orderBy={'activityName'}
+              order="desc"
+              orderBy={'completedDate'}
               uiType={UiType.Secondary}
               tableHeadBg={variables.modalBackground}
             />

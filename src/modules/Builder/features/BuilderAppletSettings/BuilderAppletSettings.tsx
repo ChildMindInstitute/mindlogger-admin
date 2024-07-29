@@ -2,8 +2,6 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { AppletSettings } from 'shared/features/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { Integrations } from 'shared/consts';
 
 import { getSettings } from './BuilderAppletSettings.utils';
 
@@ -12,19 +10,9 @@ export const BuilderAppletSettings = () => {
   const { watch, setValue } = useCustomFormContext();
 
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { featureFlags } = useFeatureFlags();
 
   const isPublished = watch('isPublished');
   const workspaceRoles = workspaces.useRolesData();
-  const integrations = workspaces.useData()?.integrations;
-
-  const publishedLorisIntegration = integrations?.some(
-    (integration) =>
-      integration?.integrationType?.toLowerCase() === Integrations.Loris.toLowerCase(),
-  );
-
-  const isIntegrationsItemVisible =
-    publishedLorisIntegration && featureFlags.enableLorisIntegration;
 
   const handleReportConfigSubmit = (values: Record<string, unknown>) => {
     const keys = [
@@ -49,7 +37,6 @@ export const BuilderAppletSettings = () => {
             isPublished,
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
-            isIntegrationsItemVisible,
             appletId: appletData?.id,
           })}
         />

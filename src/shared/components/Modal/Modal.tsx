@@ -111,7 +111,6 @@ export const Modal = ({
             </StyledCloseButton>
           )}
         </StyledDialogHeader>
-
         {children}
         {footer && (
           <StyledFlexSpaceBetween sx={{ gap: 1.6, px: 3.2, py: 2.4, ...footerStyles }}>

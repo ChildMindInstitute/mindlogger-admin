@@ -66,7 +66,11 @@ export const LorisIntegration = () => {
           >
             <Svg width={18} height={18} id="server-connect" />
             <StyledLabelLarge sx={{ ml: theme.spacing(0.8), color: variables.palette.on_surface }}>
-              {t(isServerConfigured ? 'serverStatusConnected' : 'serverStatusNotConnected')}
+              {t(
+                isServerConfigured
+                  ? 'loris.reportServerStatusConnected'
+                  : 'loris.reportServerStatusNotConnected',
+              )}
             </StyledLabelLarge>
           </StyledStatusChip>
           <StyledTitleMedium

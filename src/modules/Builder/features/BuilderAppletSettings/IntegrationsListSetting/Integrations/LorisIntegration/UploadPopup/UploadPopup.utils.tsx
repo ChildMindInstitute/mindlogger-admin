@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 
 import i18n from 'i18n';
 import { StyledBodyLarge, StyledTitleMedium, theme, variables } from 'shared/styles';
-import { LorisActivityForm, LorisActivityResponse, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit, LorisUsersVisit, LorisUsersVisits } from 'modules/Builder/api';
 
 import { UploadSteps, GetScreensProps, UploadDataForm } from './UploadPopup.types';
 import { ConnectionInfo } from '../ConnectionInfo';
@@ -79,54 +79,60 @@ export const getScreens = ({
   },
 ];
 
-export const formatData = (
-  usersVisits: LorisUsersVisit<LorisActivityResponse>[],
-): LorisUsersVisit<LorisActivityResponse>[] =>
-  usersVisits.reduce((acc: LorisUsersVisit[], { activities, ...userData }) => {
-    // TODO: move this logic to the backend
-    const allVisits = activities.reduce(
-      (visitsAcc, { activityId, visits }) => {
-        if (visits.length) {
-          visitsAcc[activityId] = visitsAcc[activityId]
-            ? visitsAcc[activityId].concat(visits)
-            : visits;
-        }
+export const formatData = ({ activityVisits, answers }: LorisUsersVisits): LorisUserAnswerVisit[] =>
+  answers.map(({ activityId, userId, ...restAnswerData }) => {
+    const activityUsersVisits = activityVisits[activityId];
 
-        return visitsAcc;
-      },
-      {} as Record<string, string[]>,
-    );
-
-    const filteredActivities = activities
-      .filter(({ visits }) => !visits.length)
-      .map((activity) => ({
-        ...activity,
-        visits: allVisits[activity.activityId] || [],
+    if (!activityUsersVisits) {
+      return {
+        ...restAnswerData,
+        activityId,
+        userId,
+        visits: [],
         visit: '',
         selected: true,
-      }));
-
-    if (!filteredActivities.length) {
-      return acc;
+      };
     }
 
-    acc.push({ ...userData, activities: filteredActivities });
+    const userVisits = activityUsersVisits.find(
+      (activityUserVisits) => activityUserVisits?.userId === userId,
+    );
 
-    return acc;
-  }, []);
+    return {
+      ...restAnswerData,
+      activityId,
+      userId,
+      visits: userVisits?.visits ?? [],
+      visit: '',
+      selected: true,
+    };
+  });
 
-export const filteredData = (form: UploadDataForm): LorisUsersVisit<LorisActivityForm>[] =>
-  form.visitsForm
-    .filter((userVisit) => userVisit.activities.some((activity) => activity.selected))
-    .map((userVisit) => ({
-      ...userVisit,
-      activities: userVisit.activities.reduce((acc: LorisActivityForm[], activity) => {
-        if (activity.selected) {
-          // eslint-disable-next-line unused-imports/no-unused-vars
-          const { selected, visits, ...rest } = activity;
-          acc.push(rest);
-        }
+export const filteredData = (form: UploadDataForm): LorisUsersVisit[] => {
+  const filteredData = form?.visitsForm.reduce(
+    (acc: { [key: string]: LorisUsersVisit }, activityAnswer) => {
+      if (!activityAnswer.selected || !activityAnswer.visit) return acc;
+      if (!acc[activityAnswer.userId]) {
+        acc[activityAnswer.userId] = {
+          userId: activityAnswer.userId,
+          secretUserId: activityAnswer.secretUserId,
+          activities: [],
+        };
+      }
 
-        return acc;
-      }, []),
-    }));
+      acc[activityAnswer.userId].activities.push({
+        activityId: activityAnswer.activityId,
+        activityName: activityAnswer.activityName,
+        answerId: activityAnswer.answerId,
+        version: activityAnswer.version,
+        completedDate: activityAnswer.completedDate,
+        visit: activityAnswer.visit,
+      });
+
+      return acc;
+    },
+    {},
+  );
+
+  return Object.values(filteredData);
+};

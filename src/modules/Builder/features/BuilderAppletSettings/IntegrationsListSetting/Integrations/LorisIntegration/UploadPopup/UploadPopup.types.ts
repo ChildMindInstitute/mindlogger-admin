@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 
 export type UploadPopupProps = {
   open: boolean;
@@ -24,5 +24,5 @@ export type GetScreensProps = {
 };
 
 export type UploadDataForm = {
-  visitsForm: LorisUsersVisit<LorisActivityForm>[];
+  visitsForm: LorisUserAnswerVisit[];
 };

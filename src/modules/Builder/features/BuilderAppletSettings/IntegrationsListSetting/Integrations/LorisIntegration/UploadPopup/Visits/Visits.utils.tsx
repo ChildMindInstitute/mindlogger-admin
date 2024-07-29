@@ -6,12 +6,12 @@ import { format } from 'date-fns';
 
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
 import { CheckboxController } from 'shared/components/FormComponents';
 
 import { StyledSelectController } from './Visits.styles';
-import { GetActivitiesRows, GetMatchOptionsProps, VisitRow } from './Visits.types';
+import { GetActivitiesRows, GetMatchOptionsProps } from './Visits.types';
+import { UploadDataForm } from '../UploadPopup.types';
 
 const { t } = i18n;
 
@@ -30,7 +30,7 @@ export const getHeadCells = (
     enableSort: false,
   },
   {
-    id: 'completed',
+    id: 'completedDate',
     label: t('loris.completed'),
     enableSort: false,
   },
@@ -53,88 +53,69 @@ export const getMatchOptions = ({ visitsList = [], visits = [] }: GetMatchOption
     disabled: visits.includes(visit),
   }));
 
-export const getLorisActivitiesRows = ({
+export const getActivitiesRows = ({
   control,
   trigger,
   visitsList,
   visitsForm,
   handleChangeVisit,
 }: GetActivitiesRows) =>
-  visitsForm.reduce(
-    (
-      data: VisitRow[],
-      { activities, secretUserId }: LorisUsersVisit<LorisActivityForm>,
-      userIndex,
-    ) => {
-      const userActivities = (activities || []).map(
-        ({ activityName, completedDate, visits }, activityIndex) => ({
-          selected: {
-            content: () => (
-              <CheckboxController
-                control={control}
-                name={`visitsForm.${userIndex}.activities.${activityIndex}.selected`}
-                label={<></>}
-                onCustomChange={() =>
-                  trigger(`visitsForm.${userIndex}.activities.${activityIndex}.visit`)
-                }
-                data-testid={`loris-visits-checkbox-${userIndex}-${activityIndex}`}
-              />
-            ),
-            value: '',
-            maxWidth: '3.2rem',
-          },
-          activityName: {
-            content: () => <>{activityName}</>,
-            value: activityName,
-          },
-          completedDate: {
-            content: () => (
-              <>{format(new Date(completedDate), DateFormats.YearMonthDayHoursMinutes)}</>
-            ),
-            value: completedDate,
-          },
-          secretUserId: {
-            content: () => <>{secretUserId}</>,
-            value: secretUserId,
-          },
-          lorisVisits: {
-            content: () => (
-              <StyledSelectController
-                control={control}
-                name={`visitsForm.${userIndex}.activities.${activityIndex}.visit`}
-                options={getMatchOptions({ visitsList, visits })}
-                placeholder={t('select')}
-                isLabelNeedTranslation={false}
-                data-testid={`loris-visits-select-${userIndex}-${activityIndex}`}
-                customChange={({ target: { value } }) =>
-                  handleChangeVisit({ userIndex, activityIndex, value })
-                }
-              />
-            ),
-            value: '',
-          },
-        }),
-      );
-
-      return data.concat(userActivities);
-    },
+  visitsForm.map(
+    ({ activityName, completedDate, secretUserId, visits }, index) => ({
+      selected: {
+        content: () => (
+          <CheckboxController
+            control={control}
+            name={`visitsForm.${index}.selected`}
+            label={<></>}
+            onCustomChange={() => {
+              trigger(`visitsForm.${index}.visit`);
+            }}
+            data-testid="loris-visits-checkbox"
+          />
+        ),
+        value: activityName,
+        maxWidth: '3.2rem',
+      },
+      activityName: {
+        content: () => <>{activityName}</>,
+        value: activityName,
+      },
+      completedDate: {
+        content: () => <>{format(new Date(completedDate), DateFormats.YearMonthDayHoursMinutes)}</>,
+        value: completedDate,
+      },
+      secretUserId: {
+        content: () => <>{secretUserId}</>,
+        value: secretUserId,
+      },
+      lorisVisits: {
+        content: () => (
+          <StyledSelectController
+            className="visits-select"
+            control={control}
+            name={`visitsForm.${index}.visit`}
+            options={getMatchOptions({ visitsList, visits })}
+            placeholder={t('select')}
+            isLabelNeedTranslation={false}
+            data-testid="loris-visits-select"
+            customChange={({ target: { value } }) =>
+              handleChangeVisit({ activityAnswer: visitsForm[index], value })
+            }
+          />
+        ),
+        value: '',
+      },
+    }),
     [],
   );
 
-export const findVisitErrorMessage = (
-  errors: FieldErrors<{ visitsForm: LorisUsersVisit<LorisActivityForm>[] }>,
-): string | null => {
-  if (errors?.visitsForm?.length) {
-    for (let user = 0; user < errors.visitsForm.length; user++) {
-      const activities = errors.visitsForm[user]?.activities;
-      if (activities?.length) {
-        for (let activity = 0; activity < activities.length; activity++) {
-          const visitError = get(errors, `visitsForm.${user}.activities.${activity}.visit.message`);
-          if (visitError) {
-            return visitError;
-          }
-        }
-      }
+export const findVisitErrorMessage = (errors: FieldErrors<UploadDataForm>): string | null => {
+  if (!errors?.visitsForm?.length) return null;
+  for (let i = 0; i < errors.visitsForm.length; i++) {
+    const visitError = get(errors, `visitsForm[${i}].visit.message`);
+    if (visitError) {
+      return visitError;
     }
   }
 

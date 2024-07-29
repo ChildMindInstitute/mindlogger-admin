@@ -66,14 +66,14 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
         onClose,
         onNext,
         projects: [
-          // {
-          //   id: 'project1',
-          //   name: 'Comprehensive Medical Consultation and Examination Appointment with a Healthcare Professional',
-          // },
-          // {
-          //   id: 'project2',
-          //   name: 'Thorough Health Assessment and Consultation with a Qualified Medical Practition',
-          // },
+          {
+            id: 'project1',
+            name: 'Comprehensive Medical Consultation and Examination Appointment with a Healthcare Professional',
+          },
+          {
+            id: 'project2',
+            name: 'Thorough Health Assessment and Consultation with a Qualified Medical Practition',
+          },
         ],
         onSave,
       }),
@@ -101,7 +101,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       data-testid="loris-configuration-popup"
       height="60rem"
     >
-      <StyledModalWrapper sx={{ mt: theme.spacing(1.2) }}>
+      <StyledModalWrapper>
         <StyledTitleMedium sx={{ color: variables.palette.on_surface, mb: theme.spacing(1.2) }}>
           {screens[step].description}
         </StyledTitleMedium>

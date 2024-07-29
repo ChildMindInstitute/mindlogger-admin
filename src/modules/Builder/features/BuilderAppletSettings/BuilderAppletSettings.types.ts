@@ -6,6 +6,5 @@ export type GetSettings = {
   isPublished?: boolean;
   roles?: Roles[];
   onReportConfigSubmit: (values: Partial<ReportConfigFormValues>) => void;
-  isIntegrationsItemVisible?: boolean;
   appletId?: string;
 };

@@ -1,7 +1,7 @@
 import { Control, FieldValues, UseFormTrigger } from 'react-hook-form';
 
 import { CellContent } from 'shared/components';
-import { LorisActivityForm, LorisUsersVisit } from 'modules/Builder/api';
+import { LorisUserAnswerVisit } from 'modules/Builder/api';
 
 export type VisitRow = {
   activityName: CellContent;
@@ -18,13 +18,12 @@ export type GetActivitiesRows = {
   control: Control<FieldValues>;
   trigger: UseFormTrigger<FieldValues>;
   visitsList: string[];
-  visitsForm: LorisUsersVisit<LorisActivityForm>[];
-  handleChangeVisit: ({ userIndex, activityIndex, value }: HandleChangeVisitProps) => void;
+  visitsForm: LorisUserAnswerVisit[];
+  handleChangeVisit: ({ activityAnswer, value }: HandleChangeVisitProps) => void;
 };
 
 export type HandleChangeVisitProps = {
-  userIndex: number;
-  activityIndex: number;
+  activityAnswer: LorisUserAnswerVisit;
   value: string;
 };
 
