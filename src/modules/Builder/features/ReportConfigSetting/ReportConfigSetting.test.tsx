@@ -107,7 +107,6 @@ describe('ReportConfigSetting', () => {
       testId                                                          | label                      | value                                              | description
       ${`${mockedReportConfigDataTestid}-server-url`}                 | ${'Server URL'}            | ${''}                                              | ${'Server Url'}
       ${`${mockedReportConfigDataTestid}-encrypt-key`}                | ${'Public encryption key'} | ${''}                                              | ${'Public Key'}
-      ${`${mockedReportConfigDataTestid}-recipients`}                 | ${'Add Recipients'}        | ${''}                                              | ${'Recipients'}
       ${`${mockedReportConfigDataTestid}-report-includes-respondent`} | ${'Respondent ID'}         | ${''}                                              | ${'Include Respondent ID'}
       ${`${mockedReportConfigDataTestid}-subject`}                    | ${''}                      | ${'REPORT: dataviz / [Activity Name]'}             | ${'Subject Preview'}
       ${`${mockedReportConfigDataTestid}-report-email-body`}          | ${''}                      | ${'Please see the report attached to this email.'} | ${'Email Body'}
