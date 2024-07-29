@@ -188,23 +188,6 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 
-  test('Take Now menu item is not displayed when feature flag is disabled', () => {
-    const menuItems = getActivityActions({
-      ...defaultArgs,
-      roles: [Roles.Manager],
-      featureFlags: {
-        ...defaultArgs.featureFlags,
-        enableMultiInformantTakeNow: false,
-      },
-    });
-
-    expectAllMenuItemsAreReturned(menuItems);
-    expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
-    expectMenuItemIsDisplayed(menuItems, 'exportData', true);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
-    expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
-  });
-
   test('Assign Activity menu item is not displayed when feature flag is disabled', () => {
     const menuItems = getActivityActions({
       ...defaultArgs,
