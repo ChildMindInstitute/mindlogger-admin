@@ -6,7 +6,7 @@ import { Chip, ChipShape } from 'shared/components/Chip';
 import { StyledClearedButton, StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
 
 import { TagsInputControllerProps, UiType } from './TagsController.types';
-import { StyledInputLabel, StyledTextField } from './TagsController.styles';
+import { StyledTextField } from './TagsController.styles';
 
 export const TagsController = <T extends FieldValues>({
   name,
@@ -71,19 +71,14 @@ export const TagsController = <T extends FieldValues>({
               error={!!error || providedError}
               helperText={error?.message || helperText}
               value={value}
-              showInputLabel={showInputLabel}
               setMinWidth={!!(isFocused || error)}
+              placeholder={showInputLabel ? inputLabel : ''}
               InputProps={{
                 startAdornment: isSecondaryUiType && (
                   <>
                     <StyledFlexTopCenter className="email" sx={{ mr: theme.spacing(1) }}>
                       <Svg id="email-outlined" />
                     </StyledFlexTopCenter>
-                    {showInputLabel && (
-                      <StyledInputLabel showInputLabel={showInputLabel}>
-                        {inputLabel}
-                      </StyledInputLabel>
-                    )}
                     {chips}
                   </>
                 ),
