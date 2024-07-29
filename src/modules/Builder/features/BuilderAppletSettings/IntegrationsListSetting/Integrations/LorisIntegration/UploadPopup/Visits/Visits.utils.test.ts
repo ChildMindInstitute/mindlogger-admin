@@ -10,7 +10,7 @@ describe('getHeadCells', () => {
     expect(headCells).toEqual([
       { id: 'selected', label: expect.any(Object), enableSort: false },
       { id: 'activityName', label: 'Activity Name', enableSort: false },
-      { id: 'completed', label: 'Completed', enableSort: false },
+      { id: 'completedDate', label: 'Completed', enableSort: false },
       { id: 'secretUserId', label: 'ID', enableSort: false },
       { id: 'lorisVisits', label: 'LORIS Visits', enableSort: false },
     ]);
@@ -29,44 +29,45 @@ describe('getMatchOptions', () => {
 });
 
 describe('findVisitErrorMessage', () => {
-  test.each([
-    ['should return null when there are no errors', {}, null],
-    ['should return null when there are no visitForm errors', { visitsForm: [] }, null],
-    [
-      'should return null when there are no activities errors',
-      { visitsForm: [{ activities: [] }] },
-      null,
-    ],
-    [
-      'should return null when there are no visit error messages',
-      { visitsForm: [{ activities: [{ visit: {} }] }] },
-      null,
-    ],
-    [
-      'should return visit error message when it exists',
-      { visitsForm: [{ activities: [{ visit: { message: 'This is an error message' } }] }] },
-      'This is an error message',
-    ],
-    [
-      'should return the first visit error message it finds',
-      {
-        visitsForm: [
-          { activities: [{ visit: { message: 'This is an error message' } }] },
-          { activities: [{ visit: { message: 'Another error message' } }] },
-        ],
-      },
-      'This is an error message',
-    ],
-    [
-      'should return the correct visit error message even with multiple activities',
-      {
-        visitsForm: [
-          { activities: [{ visit: {} }, { visit: { message: 'This is an error message' } }] },
-        ],
-      },
-      'This is an error message',
-    ],
-  ])('%s', (_, errors, expected) => {
-    expect(findVisitErrorMessage(errors)).toBe(expected);
+  test('should return null if there are no errors', () => {
+    const errors: FieldErrors<UploadDataForm> = {};
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBeNull();
+  });
+
+  test('should return null if visitsForm is not present', () => {
+    const errors: FieldErrors<UploadDataForm> = { someOtherField: { message: 'Error' } };
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBeNull();
+  });
+
+  test('should return null if visitsForm is empty', () => {
+    const errors: FieldErrors<UploadDataForm> = { visitsForm: [] };
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBeNull();
+  });
+
+  test('should return the error message from the first visit with an error', () => {
+    const errors: FieldErrors<UploadDataForm> = {
+      visitsForm: [{ visit: { message: 'First error' } }, { visit: { message: 'Second error' } }],
+    };
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBe('First error');
+  });
+
+  test('should skip visits without errors and return the message from the first visit with an error', () => {
+    const errors: FieldErrors<UploadDataForm> = {
+      visitsForm: [{ visit: null }, { visit: { message: 'Error' } }],
+    };
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBe('Error');
+  });
+
+  test('should return null if no visits have errors', () => {
+    const errors: FieldErrors<UploadDataForm> = {
+      visitsForm: [{ visit: null }, { visit: null }],
+    };
+    const result = findVisitErrorMessage(errors);
+    expect(result).toBeNull();
   });
 });

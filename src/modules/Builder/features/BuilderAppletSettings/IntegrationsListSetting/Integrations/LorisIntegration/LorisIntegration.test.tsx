@@ -39,7 +39,7 @@ describe('LorisIntegration', () => {
     render(<LorisIntegration />);
 
     expect(screen.getByText('LORIS')).toBeInTheDocument();
-    expect(screen.getByText('Server Status: Not connected.')).toBeInTheDocument();
+    expect(screen.getByText('Report Server Status: Not connected.')).toBeInTheDocument();
     expect(
       screen.getByText(
         'This integration will allow you to decrypt and upload responses from this applet to your LORIS database.',
@@ -58,7 +58,7 @@ describe('LorisIntegration', () => {
     render(<LorisIntegration />);
 
     expect(screen.getByText('LORIS')).toBeInTheDocument();
-    expect(screen.getByText('Server Status: Connected.')).toBeInTheDocument();
+    expect(screen.getByText('Report Server Status: Connected.')).toBeInTheDocument();
     expect(
       screen.getByText(
         'This integration will allow you to decrypt and upload responses from this applet to your LORIS database.',

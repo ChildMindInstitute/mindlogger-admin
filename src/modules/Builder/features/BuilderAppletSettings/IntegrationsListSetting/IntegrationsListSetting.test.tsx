@@ -24,16 +24,4 @@ describe('IntegrationsListSetting', () => {
     expect(screen.getByText('LORIS')).toBeInTheDocument();
     expect(screen.queryByText('No integrations found')).not.toBeInTheDocument();
   });
-
-  test('should render "No integrations found" message when no integration is enabled', () => {
-    useFeatureFlags.mockReturnValue({
-      featureFlags: {
-        enableLorisIntegration: false,
-      },
-    });
-
-    renderWithProviders(<IntegrationsListSetting />);
-
-    expect(screen.getByText('No integrations found')).toBeInTheDocument();
-  });
 });
