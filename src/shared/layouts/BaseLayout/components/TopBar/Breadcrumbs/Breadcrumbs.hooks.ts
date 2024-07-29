@@ -22,21 +22,17 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const {
-    featureFlags: { enableMultiInformant },
-  } = useFeatureFlags();
   const { appletId, activityId, activityFlowId, respondentId, subjectId, setting } = useParams();
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel({ hideNickname: !!enableMultiInformant });
+  const respondentLabel = useRespondentLabel({ hideNickname: true });
   const subjectLabel = useRespondentLabel({
-    hideNickname: !!enableMultiInformant,
+    hideNickname: true,
     isSubject: true,
   });
   const { workspaceName } = workspaces.useData() ?? {};
@@ -105,16 +101,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     if (appletId && (isDashboard || isBuilder)) {
-      const participantsPath = enableMultiInformant
-        ? page.appletParticipants
-        : page.appletRespondents;
-
       newBreadcrumbs.push({
         useCustomIcon: true,
         image: appletData?.image || '',
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
-        navPath: generatePath(isDashboard ? participantsPath : page.builderApplet, {
+        navPath: generatePath(isDashboard ? page.appletParticipants : page.builderApplet, {
           appletId,
         }),
       });
@@ -136,32 +128,21 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('respondents') && !enableMultiInformant) {
-      newBreadcrumbs.push({
-        icon: 'respondent-outlined',
-        label: t('respondents'),
-        navPath: appletId
-          ? generatePath(page.appletRespondents, { appletId })
-          : page.dashboardRespondents,
-      });
-    }
-
     if (subjectId || respondentId) {
       newBreadcrumbs.push({
-        icon: enableMultiInformant ? undefined : 'account',
+        icon: undefined,
         label: respondentLabel || subjectLabel,
         disabledLink: !currentActivity,
-        navPath:
-          enableMultiInformant && !!currentActivity
-            ? generatePath(page.appletParticipantActivities, {
-                appletId,
-                subjectId: subjectId || respondentId,
-              })
-            : undefined,
+        navPath: currentActivity
+          ? generatePath(page.appletParticipantActivities, {
+              appletId,
+              subjectId: subjectId || respondentId,
+            })
+          : undefined,
       });
     }
 
-    if (enableMultiInformant && !isBuilder) {
+    if (!isBuilder) {
       if (currentActivity) {
         newBreadcrumbs.push({
           image: currentActivity?.image || '',
@@ -183,28 +164,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('summary') && !enableMultiInformant) {
-      newBreadcrumbs.push({
-        icon: 'chart',
-        label: t('summary'),
-        disabledLink: true,
-      });
-    }
-
-    if (pathname.includes('responses') && !enableMultiInformant) {
-      newBreadcrumbs.push({
-        icon: 'checkbox-outlined',
-        label: t('responses'),
-        disabledLink: true,
-      });
-    }
-    if (pathname.includes('schedule') && !enableMultiInformant) {
-      newBreadcrumbs.push({
-        icon: 'schedule-outlined',
-        label: t('schedule'),
-        disabledLink: true,
-      });
-    }
     if (pathname.includes('add-user')) {
       newBreadcrumbs.push({
         icon: 'users-outlined',

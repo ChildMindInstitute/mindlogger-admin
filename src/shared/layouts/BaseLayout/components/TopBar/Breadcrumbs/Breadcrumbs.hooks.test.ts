@@ -259,7 +259,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
+      navPath: `/dashboard/${appletId}/participants`,
       chip: undefined,
     });
     expect(addUser).toEqual({
@@ -280,20 +280,14 @@ describe('useBreadcrumbs', () => {
       preloadedState,
     });
 
-    expect(result.current).toHaveLength(3);
-    const [home, applet, schedule] = result.current;
+    expect(result.current).toHaveLength(2);
+    const [home, applet] = result.current;
 
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
+      navPath: `/dashboard/${appletId}/schedule`,
       chip: undefined,
-    });
-    expect(schedule).toEqual({
-      disabledLink: true,
-      icon: 'schedule-outlined',
-      label: 'Schedule',
-      key: expect.any(String),
     });
   });
 
@@ -345,38 +339,6 @@ describe('useBreadcrumbs', () => {
     const [home, applet, user, viewData] = result.current;
 
     commonDataVizTest({ home, applet, user, viewData });
-  });
-
-  test('should generate correct breadcrumbs for applet settings (export data)', () => {
-    const route = `/dashboard/${appletId}/settings/export-data`;
-    const routePath = page.appletSettingsItem;
-
-    const { result } = renderHookWithProviders(useBreadcrumbs, {
-      route,
-      routePath,
-      preloadedState,
-    });
-
-    expect(result.current).toHaveLength(4);
-    const [home, applet, appletSettings, exportData] = result.current;
-
-    expect(home).toEqual(expectedHome);
-    expect(applet).toEqual({
-      ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
-      chip: undefined,
-    });
-    expect(appletSettings).toEqual({
-      icon: 'settings',
-      label: 'Applet Settings',
-      navPath: `/dashboard/${appletId}/settings`,
-      key: expect.any(String),
-    });
-    expect(exportData).toEqual({
-      icon: 'export',
-      label: 'Export Data',
-      key: expect.any(String),
-    });
   });
 
   test('should generate correct breadcrumbs for builder activities', () => {
