@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 import { Svg } from 'shared/components';
-import { Activity, applet } from 'shared/state/Applet';
+import { applet } from 'shared/state/Applet';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import {
   StyledBodyLarge,
@@ -59,7 +59,7 @@ export function RenderedField({
     const selectedItem = responseOptions.find(({ id }) => id === value);
 
     if (!selectedItem) {
-      const missedItem = activitiesFromStore?.find((activity: Activity) => {
+      const missedItem = activitiesFromStore?.find((activity) => {
         if (fieldValue?.id?.includes(activity?.id)) {
           return activity;
         }
