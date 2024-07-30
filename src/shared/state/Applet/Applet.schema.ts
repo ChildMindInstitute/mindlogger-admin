@@ -1,26 +1,26 @@
 import { ColorResult } from 'react-color';
 
-import { BaseSchema } from 'shared/state/Base';
-import { ElementType, RetentionPeriods } from 'shared/types';
-import {
-  ItemResponseType,
-  SubscaleTotalScore,
-  ConditionType,
-  ScoreConditionType,
-  ConditionalLogicMatch,
-  CalculationType,
-  PerfTaskType,
-  GyroscopeOrTouch,
-  ScoreReportType,
-} from 'shared/consts';
-import { Encryption } from 'shared/utils/encryption';
 import {
   CorrectPress,
-  RoundTypeEnum,
-  FlankerSamplingMethod,
   DeviceType,
+  FlankerSamplingMethod,
   OrderName,
+  RoundTypeEnum,
 } from 'modules/Builder/types';
+import {
+  CalculationType,
+  ConditionType,
+  ConditionalLogicMatch,
+  GyroscopeOrTouch,
+  ItemResponseType,
+  PerfTaskType,
+  ScoreConditionType,
+  ScoreReportType,
+  SubscaleTotalScore,
+} from 'shared/consts';
+import { BaseSchema } from 'shared/state/Base';
+import { ElementType, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils/encryption';
 
 type ActivityFlowItem = {
   activityId: string;
