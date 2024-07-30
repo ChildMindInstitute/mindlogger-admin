@@ -233,7 +233,7 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
     then(schema) {
       return (
         schema.trim()
-          .test("myvalid", t("fieldRequiredAddToContinue"), function (value, textContext) {
+          .test("validate there is only one empty sentences", t("fieldRequiredAddToContinue"), function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
             const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
@@ -247,7 +247,7 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
 
             return true
           })
-          .test("my valid 2", t("fieldAddContentOrRemove"), function (value, textContext) {
+          .test("validate there are more than one empty sentences", t("fieldAddContentOrRemove"), function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
             const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
@@ -268,6 +268,13 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
   id: yup.string().when('type', {
     is: 'itemResponse',
     then: (schema) => schema.trim()
+      .test('validate item was deleted', t('fieldReferenceItemWasDeleted'), function (_, textContext) {
+        if (textContext.parent.id.includes('-deleted')) {
+          return false
+        }
+
+        return true
+      })
       .test("validate required only one field", t('fieldRequiredMakeASelection'),
         function (value, textContext) {
           const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
