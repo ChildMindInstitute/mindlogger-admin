@@ -24,8 +24,9 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
     `
     .MuiInputBase-root {
       min-height: 5.6rem;
-      padding: ${theme.spacing(0, 1, 0, 4)};
+      padding-left: ${theme.spacing(4)};
       display: flex;
+      flex-wrap: wrap;
 
       &.Mui-disabled {
         svg {
@@ -35,10 +36,14 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
     }
 
     .MuiInputBase-input {
-      padding: ${theme.spacing(0.6)};
       flex: 1;
       width: 0;
       min-width: ${setMinWidth ? '50%' : '0.01rem'};
+
+      &.MuiOutlinedInput-input {
+        margin-left: ${theme.spacing(0.8)};
+        padding: 0;
+      }
     }
 
     .email {
@@ -48,10 +53,6 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
       transform: translateY(-50%);
     }
   `};
-
-  .MuiChip-root {
-    margin-top: 0;
-  }
 
   svg {
     fill: ${variables.palette.on_surface_variant};
