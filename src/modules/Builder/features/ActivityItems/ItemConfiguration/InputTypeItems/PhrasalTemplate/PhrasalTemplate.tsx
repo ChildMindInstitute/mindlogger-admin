@@ -24,7 +24,7 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
   const [activitiesIndexString, itemIndexString] = name.split('.items.');
   const { t } = useTranslation('app');
   const phraseName = `${name}.responseValues.phrases`;
-  const { control, getValues } = useCustomFormContext();
+  const { control, getValues, register } = useCustomFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: phraseName,
@@ -71,9 +71,13 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
             control={control}
             id="card-title"
             maxLength={75}
-            name={`${name}.responseValues.title`}
+            name={`${name}.responseValues.cardTitle`}
             placeholder={t('phrasalTemplateItem.titlePlaceholder')}
             withDebounce
+          />
+          <input
+            {...register(`${name}.responseValues.type`, { value: 'phrasalTemplate' })}
+            type="hidden"
           />
         </Box>
 
