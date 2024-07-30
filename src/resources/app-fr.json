@@ -496,6 +496,7 @@
   "fieldRequiredMakeASelection": "Required field, please make a selection to continue.",
   "fieldAddContentOrRemove": "Please add content, or remove field, to continue.",
   "fieldMakeSelectionOrRemove": "Please make a selection, or remove field, to continue.",
+  "fieldReferenceItemWasDeleted": "Reference Item was deleted, please update selection to continue.",
   "fileSizeExceed": "Le fichier est trop gros. Veuillez uploader un fichier de moins de {{size}}.",
   "fillInAllRequired": "Veuillez remplir tous les champs obligatoires",
   "filterByIdentifier": "Filtrer par identifiant",
