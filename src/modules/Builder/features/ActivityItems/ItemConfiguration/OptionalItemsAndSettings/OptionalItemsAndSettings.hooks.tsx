@@ -179,7 +179,7 @@ export const useSettingsSetup = ({
             setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
           case ItemResponseType.PhrasalTemplate:
-            setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], title: '' });
+            setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], cardTitle: '' });
             setConfig(defaultPhrasalTemplateConfig);
         }
       }
