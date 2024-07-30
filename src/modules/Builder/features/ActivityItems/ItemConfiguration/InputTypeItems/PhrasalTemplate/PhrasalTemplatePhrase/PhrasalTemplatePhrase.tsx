@@ -38,7 +38,8 @@ export const PhrasalTemplatePhrase = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const phraseFieldsName = `${name}.fields`;
-  const { control, setValue, getValues } = useCustomFormContext();
+  const { control, setValue, getValues, formState } = useCustomFormContext();
+
   const { fields, append, remove } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
@@ -108,6 +109,7 @@ export const PhrasalTemplatePhrase = ({
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
               variant="text"
+              disabled={formState.isDirty || formState.isSubmitting || !formState.isValid}
             >
               <Svg aria-hidden height={18} id="notes" width={18} />
               {t('phrasalTemplateItem.btnPreviewPhrase')}
