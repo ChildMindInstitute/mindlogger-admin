@@ -51,7 +51,14 @@ export const ActivitiesList = ({
       {flows.map(({ id = '', activities, name }) => (
         <StyledListItem
           key={id}
-          secondaryAction={<ActivityCheckbox isChecked={flowIds.includes(id)} />}
+          secondaryAction={
+            <ActivityCheckbox
+              checked={flowIds.includes(id)}
+              onChange={() => handleFlowClick(id)}
+              data-testid={`${dataTestId}-flow-checkbox-${id}`}
+            />
+          }
+          data-testid={`${dataTestId}-flow-item`}
         >
           <StyledListItemButton onClick={() => handleFlowClick(id)}>
             <ListItemIcon>
@@ -80,7 +87,14 @@ export const ActivitiesList = ({
       {activities.map(({ id = '', name, image }) => (
         <StyledListItem
           key={id}
-          secondaryAction={<ActivityCheckbox isChecked={activityIds.includes(id)} />}
+          secondaryAction={
+            <ActivityCheckbox
+              checked={activityIds.includes(id)}
+              onChange={() => handleActivityClick(id)}
+              data-testid={`${dataTestId}-activity-checkbox-${id}`}
+            />
+          }
+          data-testid={`${dataTestId}-activity-item`}
         >
           <StyledListItemButton onClick={() => handleActivityClick(id)}>
             <ListItemIcon>

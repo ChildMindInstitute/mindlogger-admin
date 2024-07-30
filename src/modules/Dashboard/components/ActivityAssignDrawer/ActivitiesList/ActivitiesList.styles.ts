@@ -12,6 +12,10 @@ export const StyledList = styled(List)`
 
 export const StyledListItem = styled(ListItem)`
   padding: 0;
+
+  .MuiListItemSecondaryAction-root {
+    pointer-events: none;
+  }
 `;
 
 export const StyledListItemButton = styled(ListItemButton)`

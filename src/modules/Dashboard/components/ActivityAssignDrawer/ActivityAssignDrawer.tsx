@@ -297,7 +297,10 @@ export const ActivityAssignDrawer = ({
                     data-testid={`${dataTestId}-select-all`}
                   >
                     {t('selectAll')}
-                    <ActivityCheckbox isChecked={selectionCount === activitiesCount} />
+                    <ActivityCheckbox
+                      checked={selectionCount === activitiesCount}
+                      onChange={handleSelectAll}
+                    />
                   </Button>
                 </StyledFlexTopBaseline>
               </StyledFlexTopBaseline>
