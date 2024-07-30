@@ -37,11 +37,13 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
   const { control, handleSubmit } = methods;
 
   const [step, setStep] = useState(ConfigurationsSteps.LorisConfigurations);
+  const [projects, setProjects] = useState([]);
   const [error, setError] = useState();
 
   // eslint-disable-next-line unused-imports/no-unused-vars
   const saveConfiguration = ({ project, ...config }: ConfigurationForm) => {
     console.log('Configuration:', config);
+    // TODO: fetch LORIS projects
     setStep(ConfigurationsSteps.SelectProject);
   };
 
@@ -74,10 +76,10 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
             id: 'project2',
             name: 'Thorough Health Assessment and Consultation with a Qualified Medical Practition',
           },
-        ],
+        ], // TODO: remove mocked projects
         onSave,
       }),
-    [control, setStep, onClose, onNext, onSave],
+    [control, setStep, onClose, onNext, projects, onSave],
   );
 
   return (

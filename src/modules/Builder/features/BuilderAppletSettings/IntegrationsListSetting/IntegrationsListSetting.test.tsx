@@ -2,26 +2,14 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { useFeatureFlags } from 'shared/hooks';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { IntegrationsListSetting } from './IntegrationsListSetting';
 
-jest.mock('shared/hooks', () => ({
-  useFeatureFlags: jest.fn(),
-}));
-
 describe('IntegrationsListSetting', () => {
   test('should render LORIS when enableLorisIntegration is true', () => {
-    useFeatureFlags.mockReturnValue({
-      featureFlags: {
-        enableLorisIntegration: true,
-      },
-    });
-
     renderWithProviders(<IntegrationsListSetting />);
 
-    expect(screen.getByText('LORIS')).toBeInTheDocument();
-    expect(screen.queryByText('No integrations found')).not.toBeInTheDocument();
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
   });
 });

@@ -38,6 +38,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     expect(screen.getByText('LORIS')).toBeInTheDocument();
     expect(screen.getByText('Report Server Status: Not connected.')).toBeInTheDocument();
     expect(
@@ -57,6 +58,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     expect(screen.getByText('LORIS')).toBeInTheDocument();
     expect(screen.getByText('Report Server Status: Connected.')).toBeInTheDocument();
     expect(
@@ -74,6 +76,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-connect-button'));
 
     expect(screen.getByTestId('loris-configuration-popup')).toBeInTheDocument();
@@ -88,6 +91,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-disconnect-button'));
 
     expect(screen.getByTestId('loris-disconnection-popup')).toBeInTheDocument();
@@ -102,6 +106,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-upload-button'));
 
     expect(screen.getByTestId('loris-upload-popup')).toBeInTheDocument();
@@ -114,6 +119,7 @@ describe('LorisIntegration', () => {
 
     render(<LorisIntegration />);
 
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByText('Report Configuration'));
     expect(navigate).toHaveBeenCalledWith('/builder/appletId/settings/report-configuration');
   });

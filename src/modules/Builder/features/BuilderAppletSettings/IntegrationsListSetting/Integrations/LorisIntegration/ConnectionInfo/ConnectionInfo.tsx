@@ -14,7 +14,7 @@ const mockedConnectionInfo = {
 export const ConnectionInfo = () => {
   const { t } = useTranslation();
 
-  const { serverHostname, username, project } = mockedConnectionInfo;
+  const { serverHostname, username, project } = mockedConnectionInfo; //  TODO: move to the props
 
   return (
     <StyledConnectionInfo data-testid="connection-info">

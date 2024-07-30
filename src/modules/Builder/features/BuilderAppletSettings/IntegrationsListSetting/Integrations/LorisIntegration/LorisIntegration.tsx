@@ -47,7 +47,7 @@ export const LorisIntegration = () => {
 
   return (
     <>
-      <StyledLorisIntegration>
+      <StyledLorisIntegration data-testid="loris-integration">
         <Box>
           <Svg width={94} height={94} id="loris-integration" />
         </Box>
