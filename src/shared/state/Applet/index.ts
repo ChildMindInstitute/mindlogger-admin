@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useAppSelector } from 'redux/store/hooks';
 import { MetaSchema } from 'shared/state/Base';
 
-import * as thunk from './Applet.thunk';
-import { state as initialState } from './Applet.state';
 import { extraReducers } from './Applet.reducer';
 import { AppletSchema } from './Applet.schema';
-import { removeApplet, updateAppletData, resetApplet } from './Applet.utils';
+import { state as initialState } from './Applet.state';
+import * as thunk from './Applet.thunk';
+import { removeApplet, resetApplet, updateAppletData } from './Applet.utils';
 
 export * from './Applet.schema';
 
@@ -33,6 +33,22 @@ export const applet = {
           applet: { data },
         },
       }) => data,
+    ),
+  useActivityDataFromApplet: (currentActivityId: string) =>
+    useAppSelector(
+      ({
+        applet: {
+          applet: { data },
+        },
+      }) => {
+        const activity = data?.result?.activities?.find(({ id }) => id === currentActivityId);
+
+        if (!Array.isArray(activity?.items)) {
+          return []
+        }
+
+        return activity?.items
+      },
     ),
   useResponseStatus: (): MetaSchema['status'] =>
     useAppSelector(
