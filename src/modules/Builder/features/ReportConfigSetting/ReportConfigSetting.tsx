@@ -1,6 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 import { ObjectSchema } from 'yup';
@@ -47,7 +47,6 @@ import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { reportConfig } from 'modules/Builder/state';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useCurrentActivityFlow } from 'modules/Builder/hooks/useCurrentActivityFlow';
-import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { AppletFormValues } from 'modules/Builder/types';
 import { usePrompt } from 'shared/features/AppletSettings/AppletSettings.hooks';
@@ -71,10 +70,7 @@ import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.ho
 import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 import { ServerNotConfigured } from './ServerNotConfigured';
 
-export const ReportConfigSetting = ({
-  onSubmitSuccess,
-  'data-testid': dataTestid,
-}: ReportConfigSettingProps) => {
+export const ReportConfigSetting = ({ 'data-testid': dataTestid }: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { activity, fieldName: activityFieldName } = useCurrentActivity();
@@ -86,8 +82,7 @@ export const ReportConfigSetting = ({
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
   const isActivityOrFlow = isActivity || isActivityFlow;
-  const { setValue: setAppletFormValue, getValues: getAppletFormValues } =
-    useCustomFormContext() || {};
+  const { setValue: setAppletFormValue, getValues: getAppletFormValues } = useFormContext() || {};
   const appletFormValues = getAppletFormValues?.() as AppletFormValues;
   const defaultValues = useDefaultValues(appletFormValues ?? appletData);
 
@@ -103,10 +98,6 @@ export const ReportConfigSetting = ({
   const { accountId = '' } = encryptionInfoFromServer ?? {};
 
   const handleSuccess = () => {
-    if (!onSubmitSuccess) return;
-
-    onSubmitSuccess(getValues());
-
     dispatch(
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
