@@ -53,7 +53,11 @@ export const ActivityAssignDrawer = ({
   const [step, setStep] = useState<1 | 2>(1);
   const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
     useActivityAssignBanners();
-  const { isLoading: isLoadingParticipants, ...dropdownProps } = useParticipantDropdown({
+  const {
+    isLoading: isLoadingParticipants,
+    allParticipants,
+    ...dropdownProps
+  } = useParticipantDropdown({
     appletId,
   });
 
@@ -183,20 +187,35 @@ export const ActivityAssignDrawer = ({
       reset(defaultValues);
 
       setTimeout(() => {
-        if (activityIds.length || flowIds.length) {
-          addBanner('ActivityAutofillBanner');
-        }
-
         if (assignments[0]?.respondentSubjectId) {
-          addBanner('RespondentAutofillBanner', { name: '[TODO populate respondent name]' });
+          const name = allParticipants.find(({ id }) => id === assignments[0].respondentSubjectId)
+            ?.nickname;
+          addBanner('RespondentAutofillBanner', {
+            name,
+            hasActivity: activityIds.length || flowIds.length,
+          });
         } else if (assignments[0]?.targetSubjectId) {
-          addBanner('SubjectAutofillBanner', { name: '[TODO populate subject name]' });
+          const name = allParticipants.find(({ id }) => id === assignments[0].targetSubjectId)
+            ?.nickname;
+          addBanner('SubjectAutofillBanner', {
+            name,
+            hasActivity: activityIds.length || flowIds.length,
+          });
+        } else if (activityIds.length || flowIds.length) {
+          addBanner('ActivityAutofillBanner');
         }
       }, 300);
     } else {
       removeAllBanners();
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Clear subject autofill banner once all subject assignments have a respondent
+  useEffect(() => {
+    if (!assignments.some((value) => value.targetSubjectId && !value.respondentSubjectId)) {
+      removeBanner('SubjectAutofillBanner');
+    }
+  }, [assignments, removeBanner]);
 
   useEffect(() => {
     if (errors.assignments?.type === 'DuplicateRowsError') {
@@ -319,6 +338,7 @@ export const ActivityAssignDrawer = ({
                   return (
                     <AssignmentsTable
                       {...dropdownProps}
+                      allParticipants={allParticipants}
                       assignments={value}
                       onChange={onChange}
                       errors={{ duplicateRows }}
@@ -331,7 +351,7 @@ export const ActivityAssignDrawer = ({
           </StyledFlexColumn>
         </Fade>
 
-        {/* Step 2 – Review and send notifications */}
+        {/* Step 2 – Review and send emails */}
         <Fade in={step === 2}>
           {/* TODO: Review step https://mindlogger.atlassian.net/browse/M2-7261 */}
           {/* When implementing Review step, the `position: 'absolute', inset: 0` props will
@@ -355,9 +375,9 @@ export const ActivityAssignDrawer = ({
                 onClick={handleClickNext}
                 disabled={step === 1 ? !isComplete : !isComplete || !isValid}
                 sx={{ minWidth: '19.7rem' }}
-                data-testid={`${dataTestId}-${step === 1 ? 'next' : 'send-invitations'}`}
+                data-testid={`${dataTestId}-${step === 1 ? 'next' : 'send-emails'}`}
               >
-                {t(step === 1 ? 'next' : 'sendInvitations')}
+                {t(step === 1 ? 'next' : 'sendEmails')}
               </StyledFooterButton>
             </StyledFooterButtonWrapper>
           </StyledFooter>

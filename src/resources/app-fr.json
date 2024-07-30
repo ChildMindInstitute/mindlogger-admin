@@ -39,10 +39,12 @@
     "addRow": "Ajouter une ligne",
     "addRespondent": "Ajouter un répondant",
     "next": "Suivant",
-    "sendInvitations": "Envoyer les invitations",
+    "sendEmails": "Envoyer des e-mails",
     "activityAutofill": "Votre activité a été pré-remplie, ajoutez des répondants pour continuer.",
     "respondentAutofill": "{{name}} a été ajouté dans le tableau, sélectionnez une activité pour continuer.",
     "subjectAutofill": "{{name}} a été ajouté dans le tableau. Veuillez ajouter un répondant de compte complet pour continuer.",
+    "respondentActivityAutofill": "Le participant et l'activité ont été pré-remplis, cliquez sur « Suivant » pour continuer.",
+    "subjectActivityAutofill": "Le participant et l'activité ont été pré-remplis. 1 ligne nécessite une attention pour continuer.",
     "existingAssigments": "Une ou plusieurs de ces activités ont déjà été attribuées; aucune invitation ne sera envoyée.",
     "duplicateRowsError": "Il y a des lignes en double dans le tableau, veuillez les modifier ou les supprimer pour continuer.",
     "networkError": "Oops! Une erreur s'est produite, veuillez réessayer."

@@ -39,10 +39,12 @@
     "addRow": "Add Row",
     "addRespondent": "Add Respondent",
     "next": "Next",
-    "sendInvitations": "Send Invitations",
+    "sendEmails": "Send Emails",
     "activityAutofill": "Your activity was auto-filled, add respondents to continue.",
     "respondentAutofill": "{{name}} was added into the table, select an activity to continue.",
     "subjectAutofill": "{{name}} was added to the table. Please add a full account respondent to continue.",
+    "respondentActivityAutofill": "The Participant & Activity have been auto-filled, click ‘Next’ to continue.",
+    "subjectActivityAutofill": "The Participant & Activity have been auto-filled. 1 row needs attention to continue.",
     "existingAssigments": "One or more of these activities have already been assigned; no invitation will be sent.",
     "duplicateRowsError": "There are duplicate rows in the table, please edit or remove to continue.",
     "networkError": "Oops! Something went wrong, please try again."

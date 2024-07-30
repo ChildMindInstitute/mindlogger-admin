@@ -64,7 +64,7 @@ export const AssignmentsTable = ({
         onChange(updatedAssignments);
       }
     },
-    [assignments, onChange],
+    [allParticipants, assignments, onChange],
   );
 
   const handleAdd = useCallback(() => {
