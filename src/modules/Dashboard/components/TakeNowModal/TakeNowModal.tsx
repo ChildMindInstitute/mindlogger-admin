@@ -410,7 +410,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
             respondent.id !== targetSubject.id &&
             sourceSubject.id !== targetSubject.id
           ) {
-            // Create a temporary multi-informant relation b/n the logged-in user and the source subject
+            // Create a temporary multi-informant relation b/n the logged-in user and the target subject
             createTargetRelation({
               sourceSubjectId: respondent.id,
               subjectId: targetSubject.id,
