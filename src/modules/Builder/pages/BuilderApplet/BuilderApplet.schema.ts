@@ -334,7 +334,7 @@ export const PhrasalTemplateResponseValuePhraseSchema = yup.object({
 });
 
 export const PhrasalTemplateResponseValue = {
-  title: yup
+  cardTitle: yup
     .string()
     .trim()
     .required(t('fieldRequired'))
