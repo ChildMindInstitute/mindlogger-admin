@@ -390,7 +390,7 @@ export const ActivityAssignDrawer = ({
       <HelpPopup
         isVisible={showHelpPopup}
         setIsVisible={setShowHelpPopup}
-        data-testid={dataTestId}
+        data-testid={`${dataTestId}-help-popup`}
       />
     </Drawer>
   );

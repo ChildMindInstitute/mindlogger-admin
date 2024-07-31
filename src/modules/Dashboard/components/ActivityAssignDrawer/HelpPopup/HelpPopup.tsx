@@ -7,11 +7,7 @@ import { StyledBorderedOverflow } from 'shared/styles';
 import { HelpPopupProps } from './HelpPopup.types';
 import { StyledHelpParagraph, StyledHelpTitle } from './HelpPopup.styles';
 
-export const HelpPopup = ({
-  isVisible,
-  setIsVisible,
-  'data-testid': dataTestId,
-}: HelpPopupProps) => {
+export const HelpPopup = ({ isVisible, setIsVisible, ...rest }: HelpPopupProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
 
   return (
@@ -20,11 +16,11 @@ export const HelpPopup = ({
       onClose={() => setIsVisible(false)}
       width="56"
       title={t('helpTitle')}
-      data-testid={`${dataTestId}-help-popup`}
       hasActions
       buttonText={t('helpButton')}
       submitBtnVariant="outlined"
       onSubmit={() => setIsVisible(false)}
+      {...rest}
     >
       <StyledBorderedOverflow sx={{ maxHeight: '43.6rem' }}>
         <Box sx={{ px: 3.2, pb: 2.4 }}>
