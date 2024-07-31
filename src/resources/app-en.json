@@ -1300,7 +1300,8 @@
         "teamMemberGrouping": "Team Members",
         "participantGrouping": "Participants",
         "notFound": "Not Found"
-      }
+      },
+      "relationErrorMessage": "Unable to start activity. Please try again later."
     }
   },
   "teamMemberAlreadyInvited": "Team member already invited",
