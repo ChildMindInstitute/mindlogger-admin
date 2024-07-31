@@ -203,7 +203,10 @@ export const ParticipantDropdown = ({
       loading={isSearching}
       loadingText={t('loadingEllipsis')}
       noOptionsText={t('participantDropdown.notFound')}
-      onInputChange={(_e, search) => debouncedSearchHandler(search)}
+      onInputChange={(_e, search, reason) => {
+        // Skip searching for programmatic value change
+        if (reason !== 'reset') debouncedSearchHandler(search);
+      }}
       componentsProps={{
         clearIndicator: {
           onClick: () => {

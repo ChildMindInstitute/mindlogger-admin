@@ -161,13 +161,16 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
         );
       }
 
-      const [teamMemberResponse, participantsResponse] = await Promise.all(requests);
+      const responses = await Promise.all(requests);
+
+      const participantsResponse =
+        isAnyParticipant || isFullParticipant ? responses.pop() : undefined;
+      const teamMemberResponse = types.includes('team') ? responses.pop() : undefined;
 
       // Filter the search results by allowed team members
-      const allowedTeamMembersSearchResults =
-        (teamMemberResponse?.data.result as Manager[]).filter((manager) =>
-          manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-        ) ?? [];
+      const allowedTeamMembersSearchResults = (
+        (teamMemberResponse?.data.result as Manager[]) ?? []
+      ).filter((manager) => manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)));
 
       const participantsSearchResults = (participantsResponse?.data.result as Respondent[]) ?? [];
 

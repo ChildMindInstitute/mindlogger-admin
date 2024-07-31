@@ -107,6 +107,7 @@ export const Table = ({
                       classes={
                         rowState?.value ? { root: `MuiTableRow-${rowState.value}` } : undefined
                       }
+                      aria-invalid={rowState?.value === 'error'}
                       data-testid="table-row"
                     >
                       {Object.keys(cells)?.map((key) =>

@@ -35,7 +35,7 @@ export const AssignmentsTable = ({
   } = useFeatureFlags();
   const lastAssignment = assignments[assignments.length - 1];
   const showAddButton =
-    !isReadOnly && lastAssignment.respondentSubjectId && lastAssignment.targetSubjectId;
+    !isReadOnly && lastAssignment?.respondentSubjectId && lastAssignment?.targetSubjectId;
 
   const handleChange = useCallback(
     ({ respondentSubjectId, targetSubjectId }: ActivityAssignment, index: number) => {
@@ -43,8 +43,8 @@ export const AssignmentsTable = ({
 
       if (respondentSubjectId !== undefined || targetSubjectId !== undefined) {
         if (respondentSubjectId !== undefined) {
-          // Set as self-assigned if selected respondent is a full account and:
-          // - no target subject has been selected yet
+          // Set as self-assigned if selected respondent is a full account and either:
+          // - no target subject has been selected yet, or
           // - previous assignment was a self-assignment
           const respondent = allParticipants.find(({ id }) => id === respondentSubjectId);
           if (respondent?.userId && !respondent.isTeamMember) {
@@ -144,7 +144,7 @@ export const AssignmentsTable = ({
                 handleSearch={handleRespondentSearch}
                 showGroups
                 emptyValueError={subjectValue && !subject?.userId ? t('addRespondent') : undefined}
-                data-testid={`${dataTestId}-respondent-dropdown`}
+                data-testid={`${dataTestId}-${index}-respondent-dropdown`}
               />
             ),
           },
@@ -172,7 +172,7 @@ export const AssignmentsTable = ({
                     <Box component="ul" sx={{ p: 0 }} {...params} />
                   </Box>
                 )}
-                data-testid={`${dataTestId}-target-subject-dropdown`}
+                data-testid={`${dataTestId}-${index}-target-subject-dropdown`}
               />
             ),
           },

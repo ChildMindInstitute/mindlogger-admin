@@ -72,6 +72,7 @@ export const DashboardTable = (props: DashboardTableProps) => {
                 <TableRow
                   key={keyExtractor(row, index)}
                   classes={rowState?.value ? { root: `MuiTableRow-${rowState.value}` } : undefined}
+                  aria-invalid={rowState?.value === 'error'}
                 >
                   {Object.keys(cells)?.map((key) => {
                     if (row[key].isHidden) {

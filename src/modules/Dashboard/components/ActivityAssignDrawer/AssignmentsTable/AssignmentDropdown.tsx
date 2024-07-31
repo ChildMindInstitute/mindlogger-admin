@@ -13,15 +13,10 @@ export const AssignmentDropdown = ({ isReadOnly, value, ...rest }: AssignmentDro
       <ParticipantSnippet
         {...value}
         hasLimitedAccountIcon={!!value && !value.userId}
-        boxProps={{ sx: { px: 3.2, py: 0.8, maxWidth: '100%' } }}
+        boxProps={{ sx: { px: 3.2, py: 0.8, width: '100%' } }}
       />
     ) : (
-      <ParticipantDropdown
-        value={value}
-        sx={{ mr: 'auto' }}
-        variant={ParticipantDropdownVariant.Full}
-        {...rest}
-      />
+      <ParticipantDropdown value={value} variant={ParticipantDropdownVariant.Full} {...rest} />
     )}
   </StyledFlexTopCenter>
 );

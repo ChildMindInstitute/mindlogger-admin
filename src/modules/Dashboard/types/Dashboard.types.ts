@@ -34,7 +34,7 @@ export type RespondentDetail = {
   appletId: string;
   appletDisplayName: string;
   appletImage?: string;
-  accessId: string;
+  accessId: string | null;
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
