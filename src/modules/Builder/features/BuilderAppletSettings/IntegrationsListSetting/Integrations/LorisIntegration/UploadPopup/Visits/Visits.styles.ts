@@ -5,21 +5,25 @@ import { SelectController } from 'shared/components/FormComponents';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTable = styled(Table)`
-  .visits-select {
-    .MuiFormControl-root {
-      width: 18rem;
+  tbody {
+    .MuiFormControlLabel-root {
+      margin: 0;
     }
+  }
 
-    .MuiSelect-select {
-      padding: ${theme.spacing(0.65, 1.2)};
-      font-size: ${variables.font.size.md};
+  .MuiFormControl-root {
+    width: 18rem;
+  }
 
-      > :first-of-type {
-        display: block;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-      }
+  .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+    padding: ${theme.spacing(0.65, 1.2)};
+    font-size: ${variables.font.size.md};
+
+    > :first-of-type {
+      display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 

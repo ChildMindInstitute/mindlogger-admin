@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogTitle, styled } from '@mui/material';
+import { Box, Dialog, DialogActions, DialogTitle, styled } from '@mui/material';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import theme from 'shared/styles/theme';
@@ -18,17 +18,23 @@ export const StyledDialog = styled(Dialog)`
   }
 `;
 
-export const StyledDialogTitle = styled(DialogTitle)`
+export const StyledDialogHeader = styled(Box)`
   display: flex;
   justify-content: space-between;
+  padding: ${theme.spacing(3.2, 3.2, 0.8)};
+`;
+
+export const StyledDialogTitle = styled(DialogTitle)`
+  display: flex;
   align-items: center;
   && {
-    padding: ${theme.spacing(3.2, 3.2, 0.8)};
+    padding: ${theme.spacing(0)};
     color: ${variables.palette.on_surface};
   }
 `;
 
 export const StyledCloseButton = styled(StyledClearedButton)`
+  height: 4rem;
   border-radius: ${variables.borderRadius.half};
   padding: 0.8rem;
   margin: 0.4rem;

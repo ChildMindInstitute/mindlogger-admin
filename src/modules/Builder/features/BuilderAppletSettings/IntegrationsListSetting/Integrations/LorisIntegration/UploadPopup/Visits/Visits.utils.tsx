@@ -1,20 +1,27 @@
+import { ChangeEvent } from 'react';
+import { FieldErrors } from 'react-hook-form';
+import get from 'lodash.get';
+import { Checkbox } from '@mui/material';
 import { format } from 'date-fns';
 
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
-import { LorisUserAnswerVisit, LorisUsersVisits } from 'modules/Builder/api';
 import { DateFormats } from 'shared/consts';
 import { CheckboxController } from 'shared/components/FormComponents';
 
-import { StyledSelectController } from './LorisVisits.styles';
-import { GetLorisActivitiesRows, GetMatchOptionsProps } from './LorisVisits.types';
+import { StyledSelectController } from './Visits.styles';
+import { GetActivitiesRows, GetMatchOptionsProps } from './Visits.types';
+import { UploadDataForm } from '../UploadPopup.types';
 
 const { t } = i18n;
 
-export const getHeadCells = (): HeadCell[] => [
+export const getHeadCells = (
+  selectAllChecked: boolean,
+  onSelectAllClick: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void,
+): HeadCell[] => [
   {
     id: 'selected',
-    label: '',
+    label: <Checkbox checked={selectAllChecked} onChange={onSelectAllClick} />,
     enableSort: false,
   },
   {
@@ -23,7 +30,7 @@ export const getHeadCells = (): HeadCell[] => [
     enableSort: false,
   },
   {
-    id: 'completed',
+    id: 'completedDate',
     label: t('loris.completed'),
     enableSort: false,
   },
@@ -46,13 +53,13 @@ export const getMatchOptions = ({ visitsList = [], visits = [] }: GetMatchOption
     disabled: visits.includes(visit),
   }));
 
-export const getLorisActivitiesRows = ({
+export const getActivitiesRows = ({
   control,
   trigger,
   visitsList,
   visitsForm,
   handleChangeVisit,
-}: GetLorisActivitiesRows) =>
+}: GetActivitiesRows) =>
   visitsForm.map(
     ({ activityName, completedDate, secretUserId, visits }, index) => ({
       selected: {
@@ -100,35 +107,17 @@ export const getLorisActivitiesRows = ({
         value: '',
       },
     }),
-
     [],
   );
 
-export const formatData = ({ activityVisits, answers }: LorisUsersVisits): LorisUserAnswerVisit[] =>
-  answers.map(({ activityId, userId, ...restAnswerData }) => {
-    const activityUsersVisits = activityVisits[activityId];
-
-    if (!activityUsersVisits) {
-      return {
-        ...restAnswerData,
-        activityId,
-        userId,
-        visits: [],
-        visit: '',
-        selected: true,
-      };
+export const findVisitErrorMessage = (errors: FieldErrors<UploadDataForm>): string | null => {
+  if (!errors?.visitsForm?.length) return null;
+  for (let i = 0; i < errors.visitsForm.length; i++) {
+    const visitError = get(errors, `visitsForm[${i}].visit.message`);
+    if (visitError) {
+      return visitError;
     }
+  }
 
-    const userVisits = activityUsersVisits.find(
-      (activityUserVisits) => activityUserVisits?.userId === userId,
-    );
-
-    return {
-      ...restAnswerData,
-      activityId,
-      userId,
-      visits: userVisits?.visits ?? [],
-      visit: '',
-      selected: true,
-    };
-  });
+  return null;
+};

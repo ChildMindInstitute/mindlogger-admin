@@ -68,6 +68,10 @@ export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) 
       icon: 'data-collection',
       label: t('loris.integration'),
     },
+    [SettingParam.Integrations]: {
+      icon: 'integrations',
+      label: t('integrations'),
+    },
   };
 
   return settingBreadcrumbs[param];

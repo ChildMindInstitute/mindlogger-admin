@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { LDFlagSet } from 'launchdarkly-react-client-sdk';
 
-import { Workspace } from 'redux/modules';
+import { Workspace, workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks/useAsync';
 import { enableIntegrationApi, disableIntegrationApi, Integration } from 'modules/Dashboard/api';
 import { FeatureFlagsIntegrationKeys, FeatureFlagsIntegrations } from 'shared/types/featureFlags';
@@ -17,8 +18,15 @@ export const useIntegrationToggle = ({
   areFeatureFlagsLoaded: boolean;
   featureFlags?: LDFlagSet;
 }) => {
-  const { execute: enableIntegration } = useAsync(enableIntegrationApi);
-  const { execute: disableIntegration } = useAsync(disableIntegrationApi);
+  const dispatch = useAppDispatch();
+  const { getWorkspaces } = workspaces.thunk;
+
+  const { execute: enableIntegration } = useAsync(enableIntegrationApi, () => {
+    dispatch(getWorkspaces());
+  });
+  const { execute: disableIntegration } = useAsync(disableIntegrationApi, () => {
+    dispatch(getWorkspaces());
+  });
 
   const integrationFeatureFlagKey = FeatureFlagsIntegrations[integrationType];
   const integrationFeatureFlagValue = featureFlags?.[integrationFeatureFlagKey];
