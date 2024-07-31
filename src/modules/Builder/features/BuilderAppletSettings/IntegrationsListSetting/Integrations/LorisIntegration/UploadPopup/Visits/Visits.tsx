@@ -50,16 +50,14 @@ export const Visits = ({ visitsList }: VisitsProps) => {
   );
 
   const onSelectAllClick = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    // setSelectAllChecked(checked);
-    // const formData = [...visitsForm].map(({ activities, ...restUserData }) => ({
-    //   ...restUserData,
-    //   activities: activities.map((activityData) => ({
-    //     ...activityData,
-    //     selected: checked,
-    //   })),
-    // }));
-    // setValue('visitsForm', formData);
-    // trigger('visitsForm');
+    setSelectAllChecked(checked);
+    const formData = visitsForm.map((visit) => ({
+      ...visit,
+      selected: checked,
+    }));
+
+    setValue('visitsForm', formData);
+    trigger('visitsForm');
   };
 
   const tableRows = useMemo(
