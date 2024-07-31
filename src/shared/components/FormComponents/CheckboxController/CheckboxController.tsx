@@ -22,8 +22,8 @@ export const CheckboxController = <T extends FieldValues>({
     onChange: (event: boolean) => void,
   ) => {
     const checked = event.target.checked;
-    onCustomChange && onCustomChange(event);
     onChange(isInversed ? !checked : checked);
+    onCustomChange && onCustomChange(event);
   };
 
   return (

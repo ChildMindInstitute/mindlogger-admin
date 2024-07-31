@@ -599,3 +599,7 @@ export type FeedbackNote = {
   note: string;
   createdAt: string;
 };
+
+export type Integration = {
+  integrationType: string;
+};

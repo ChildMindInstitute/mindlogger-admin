@@ -47,9 +47,9 @@ export const Notifications = () => {
     const alerts = alertList.map((alert) => ({
       ...alert,
       timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
-      alert,
     }));
     setNotifications(alerts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alertList]);
 
   useInfinityData({

@@ -12,6 +12,8 @@ export type WebsocketAlertType = {
   answer_id: string;
   subject_id: string;
   workspace: string;
+  respondent_id: string;
+  type: 'answer' | 'integration';
   encryption: {
     public_key: string;
     prime: string;

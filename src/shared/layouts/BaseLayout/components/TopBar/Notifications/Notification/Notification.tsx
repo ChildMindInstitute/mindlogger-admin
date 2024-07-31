@@ -26,6 +26,7 @@ import {
   StyledLogoPlug,
 } from './Notification.styles';
 import { NotificationProps } from './Notification.types';
+import { getMessageColor } from './Notification.utils';
 
 export const Notification = ({
   currentId,
@@ -40,7 +41,7 @@ export const Notification = ({
   timeAgo,
   isWatched,
   subjectId,
-  alert,
+  type,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -56,7 +57,7 @@ export const Notification = ({
 
     await dispatch(
       alerts.actions.updateAlertWatchedState({
-        id: alert.id,
+        id,
         isWatched: true,
       }),
     );
@@ -64,7 +65,7 @@ export const Notification = ({
     !setAlertWatched.fulfilled.match(result) &&
       (await dispatch(
         alerts.actions.updateAlertWatchedState({
-          id: alert.id,
+          id,
           isWatched: false,
         }),
       ));
@@ -123,19 +124,14 @@ export const Notification = ({
             >
               {secretId}
             </StyledTitle>
-            <StyledMessage
-              color={
-                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
-              }
-              isActive={isActive}
-            >
+            <StyledMessage color={getMessageColor(isActive, type)} isActive={isActive}>
               {message}
             </StyledMessage>
           </StyledInfo>
           <StyledRightSection>{!isWatched ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
         </StyledTopSection>
         <StyledBottomSection>
-          {isActive && (
+          {isActive && type !== 'integration' && (
             <StyledBtn
               variant="contained"
               startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}

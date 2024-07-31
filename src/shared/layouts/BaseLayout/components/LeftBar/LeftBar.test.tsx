@@ -1,42 +1,43 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen, waitFor } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedUserData } from 'shared/mock';
-import * as reduxHooks from 'redux/store/hooks';
-import { auth, workspaces } from 'redux/modules';
 
 import { LeftBar } from './LeftBar';
+
+const getPreloadedState = (
+  currentWorkspaceData: Workspace | null = null,
+): PreloadedState<RootState> => ({
+  workspaces: {
+    workspaces: {
+      requestId: 'workspaces-request-id',
+      status: 'success',
+      data: {
+        result: [],
+        count: 1,
+      },
+    },
+    currentWorkspace: {
+      requestId: 'currentWorkspace-request-id',
+      status: 'success',
+      data: currentWorkspaceData,
+    },
+  },
+});
 
 const mockedCurrentWorkspaceData = {
   ownerId: mockedUserData.id,
   workspaceName: 'Jane Doe',
 };
 
-const mockedWorkspacesData = [
-  {
-    ownerId: mockedUserData.id,
-    workspaceName: 'Workspace 2',
-  },
-  mockedCurrentWorkspaceData,
-];
-
-const mockDispatch = jest.fn();
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
-  useAppSelector: jest.fn(),
-}));
-
 describe('LeftBar component', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-    jest.spyOn(workspaces, 'useWorkspacesData').mockReturnValue({ result: mockedWorkspacesData });
-    jest.spyOn(workspaces, 'useData').mockReturnValue(mockedCurrentWorkspaceData);
-
-    renderWithProviders(<LeftBar />);
+    renderWithProviders(<LeftBar />, {
+      preloadedState: getPreloadedState(mockedCurrentWorkspaceData),
+    });
   });
 
   test('renders links with correct text and navigation', async () => {

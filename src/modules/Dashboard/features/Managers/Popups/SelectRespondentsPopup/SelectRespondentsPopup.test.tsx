@@ -75,7 +75,7 @@ describe('SelectRespondentsPopup component tests', () => {
   test('should appear popup without selected respondents', async () => {
     mockAxios.get.mockResolvedValueOnce(successfulResponse);
     renderWithProviders(getPopup(false), { preloadedState });
-    const tableRows = screen.queryAllByTestId('table-row');
+    const tableRows = screen.queryAllByTestId(/table-row-\d+/);
     const select = screen.getByTestId('select-respondents-popup-search-across');
     const selectInput = await waitFor(() => select.querySelector('input'));
 
@@ -127,7 +127,7 @@ describe('SelectRespondentsPopup component tests', () => {
 
       searchInput && fireEvent.change(searchInput, { target: { value: 'Mocked' } });
       await waitFor(() => {
-        expect(screen.queryAllByTestId('table-row').length).toBe(1);
+        expect(screen.queryAllByTestId(/table-row-\d+/).length).toBe(1);
         expect(screen.getByText('Mocked Respondent')).toBeInTheDocument();
       });
     });
@@ -141,7 +141,7 @@ describe('SelectRespondentsPopup component tests', () => {
       selectInput && fireEvent.change(selectInput, { target: { value: SearchAcross.Selected } });
 
       await waitFor(() => {
-        expect(screen.queryAllByTestId('table-row').length).toBe(1);
+        expect(screen.queryAllByTestId(/table-row-\d+/).length).toBe(1);
         expect(screen.getByText('Mocked Respondent')).toBeInTheDocument();
         expect(screen.queryByText('Test Respondent')).not.toBeInTheDocument();
       });
@@ -156,7 +156,7 @@ describe('SelectRespondentsPopup component tests', () => {
       selectInput && fireEvent.change(selectInput, { target: { value: SearchAcross.Unselected } });
 
       await waitFor(() => {
-        expect(screen.queryAllByTestId('table-row').length).toBe(1);
+        expect(screen.queryAllByTestId(/table-row-\d+/).length).toBe(1);
         expect(screen.queryByText('Mocked Respondent')).not.toBeInTheDocument();
         expect(screen.getByText('Test Respondent')).toBeInTheDocument();
       });

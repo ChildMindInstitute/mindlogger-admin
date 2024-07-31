@@ -1,7 +1,7 @@
 import { TableCellProps } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { Cell, HeadCell } from 'shared/types/table';
+import { Cell, HeadCell, Order } from 'shared/types/table';
 
 export interface CellContent extends Omit<TableCellProps, 'content'>, Cell {
   content?: (item?: Row) => ReactNode;
@@ -27,6 +27,7 @@ export type TableProps = {
   columns: HeadCell[];
   rows: Row[] | undefined;
   keyExtractor?: (row: Row, index: number) => string;
+  order?: Order;
   orderBy: string;
   maxHeight?: string;
   uiType?: UiType;

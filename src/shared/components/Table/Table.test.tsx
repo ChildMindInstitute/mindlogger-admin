@@ -31,7 +31,7 @@ describe('Table component tests', () => {
 
   test('Table should render rows with only visible columns', async () => {
     const table = await screen.findByRole('table');
-    const rows = await screen.findAllByTestId('table-row');
+    const rows = await screen.queryAllByTestId(/table-row-\d+/);
 
     expect(table).toBeInTheDocument();
     expect(rows.length).toBe(1);

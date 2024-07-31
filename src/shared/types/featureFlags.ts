@@ -1,8 +1,8 @@
 import { LDFlagValue } from 'launchdarkly-react-client-sdk';
 
 // These keys use the camelCase representation of the feature flag value
-// e.g. enable-multi-informant in LaunchDarky becomes enableMultiInformant
 export const FeatureFlagsKeys = {
+  // e.g. enable-multi-informant in LaunchDarky becomes enableMultiInformant
   enableMultiInformant: 'enableMultiInformant',
   enableParticipantMultiInformant: 'enableParticipantMultiInformant',
   enableMultiInformantTakeNow: 'enableMultiInformantTakeNow',
@@ -17,5 +17,11 @@ export const FeatureFlagsKeys = {
   enableAdminAppSoftLock: 'enableAdminAppSoftLock',
   enableParagraphTextItem: 'enableParagraphTextItem',
 };
+
+export enum FeatureFlagsIntegrations {
+  LORIS = 'enable-loris-integration',
+}
+
+export type FeatureFlagsIntegrationKeys = keyof typeof FeatureFlagsIntegrations;
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

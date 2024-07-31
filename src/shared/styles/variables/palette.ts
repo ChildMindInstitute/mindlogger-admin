@@ -70,6 +70,7 @@ export const palette = {
   purple_alfa30: 'rgba(105, 64, 165, 0.3)',
   red: '#e14646',
   red_alfa30: 'rgba(225, 70, 70, 0.3)',
+  red_alfa8: 'rgba(225, 70, 70, 0.08)',
 
   semantic: {
     error: '#ba1a1a',

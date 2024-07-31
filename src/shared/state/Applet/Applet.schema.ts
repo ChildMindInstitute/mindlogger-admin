@@ -12,6 +12,7 @@ import {
   PerfTaskType,
   GyroscopeOrTouch,
   ScoreReportType,
+  Integrations,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils/encryption';
 import {
@@ -806,6 +807,7 @@ export type SingleApplet = {
   streamEnabled: boolean | null;
   streamIpAddress: string | null;
   streamPort: number | null;
+  integrations?: Integrations[];
 };
 
 export type RespondentMeta = {
