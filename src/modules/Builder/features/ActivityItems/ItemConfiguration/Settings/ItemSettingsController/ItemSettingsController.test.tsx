@@ -139,6 +139,7 @@ const mockedSettingsByType = {
     ItemConfigurationSettings.HasAutoAdvance,
     ItemConfigurationSettings.HasColorPalette,
     ItemConfigurationSettings.HasTooltips,
+    ItemConfigurationSettings.PortraitLayout,
     ItemConfigurationSettings.HasTextInput,
     ItemConfigurationSettings.IsTextInputRequired,
     ItemConfigurationSettings.HasTimer,
@@ -151,6 +152,7 @@ const mockedSettingsByType = {
   [ItemResponseType.MultipleSelection]: [
     ItemConfigurationSettings.HasColorPalette,
     ItemConfigurationSettings.HasTooltips,
+    ItemConfigurationSettings.PortraitLayout,
     ItemConfigurationSettings.HasTextInput,
     ItemConfigurationSettings.IsTextInputRequired,
     ItemConfigurationSettings.HasTimer,
@@ -301,7 +303,7 @@ const mockedSettingGroupsByType = {
   ],
   [ItemResponseType.NumberSelection]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,
-    ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+    ItemSettingsGroupNames.ScreenConfigurations,
   ],
   [ItemResponseType.TimeRange]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,

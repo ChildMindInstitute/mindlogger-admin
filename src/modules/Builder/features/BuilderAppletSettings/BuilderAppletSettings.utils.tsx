@@ -23,7 +23,6 @@ export const getSettings = ({
   isNewApplet,
   isPublished,
   roles,
-  onReportConfigSubmit,
   appletId,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
@@ -109,12 +108,7 @@ export const getSettings = ({
         {
           icon: <Svg id="configure" />,
           label: 'reportConfiguration',
-          component: (
-            <ReportConfigSetting
-              onSubmitSuccess={onReportConfigSubmit}
-              data-testid={`${dataTestid}-report-config-form`}
-            />
-          ),
+          component: <ReportConfigSetting data-testid={`${dataTestid}-report-config-form`} />,
           param: SettingParam.ReportConfiguration,
           disabled: isNewApplet,
           tooltip,

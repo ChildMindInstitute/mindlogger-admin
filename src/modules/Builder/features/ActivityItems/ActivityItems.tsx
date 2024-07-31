@@ -31,7 +31,7 @@ export const ActivityItems = () => {
     insert: insertItem,
     remove: removeItem,
     move: moveItem,
-  } = useFieldArray<Record<string, ItemFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  } = useFieldArray({
     control,
     name: itemsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,

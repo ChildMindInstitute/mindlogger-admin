@@ -15,6 +15,7 @@ export const FeatureFlagsKeys = {
   enableLorisIntegration: 'enableLorisIntegration',
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
   enableAdminAppSoftLock: 'enableAdminAppSoftLock',
+  enableParagraphTextItem: 'enableParagraphTextItem',
 };
 
 export enum FeatureFlagsIntegrations {

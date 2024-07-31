@@ -1,6 +1,6 @@
 import { ConditionType } from 'shared/consts';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
-import { Condition } from 'redux/modules';
+import { Condition, TimeRangeConditionType } from 'shared/state/Applet';
 
 import { ConditionItemType } from './Condition';
 
@@ -33,4 +33,6 @@ export type GetPayload = {
   conditionType: ConditionType;
   conditionPayload?: Condition['payload'];
   selectedItem?: ItemFormValues;
+  formRowIndex?: string;
+  formTimeType?: TimeRangeConditionType;
 };
