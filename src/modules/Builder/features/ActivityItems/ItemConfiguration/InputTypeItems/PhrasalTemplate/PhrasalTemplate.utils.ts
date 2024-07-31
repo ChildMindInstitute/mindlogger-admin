@@ -1,3 +1,4 @@
+
 import { v4 } from 'uuid';
 
 import i18n from 'i18n';
@@ -26,10 +27,10 @@ const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
 ];
 
 const DEFAULT_PHRASE = {
-  image: null,
+  image: '@TODO',
   fields: [
     { type: 'sentence', text: '' },
-    { type: 'itemResponse', id: '', displayMode: '' },
+    { type: 'item_response', itemName: '', displayMode: 'sentence', itemIndex: 0 },
     { type: 'sentence', text: '' },
   ],
 };
@@ -40,9 +41,9 @@ export const getNewDefaultField = (
   type: PhrasalTemplateFieldType = 'sentence',
 ): PhrasalTemplateField => {
   switch (type) {
-    case 'itemResponse':
-      return { type, id: '', displayMode: '' };
-    case 'lineBreak':
+    case 'item_response':
+      return { type, itemName: '', displayMode: 'sentence', itemIndex: 0 };
+    case 'line_break':
       return { type };
     case 'sentence':
     default:
@@ -64,14 +65,14 @@ export const getFieldPlaceholders = (fields: PhrasalTemplateField[] = []) => {
   const shouldShowDefaultPlaceholders =
     fields.length === 3 &&
     fields[0]?.type === 'sentence' &&
-    fields[1]?.type === 'itemResponse' &&
+    fields[1]?.type === 'item_response' &&
     fields[2]?.type === 'sentence';
 
   return shouldShowDefaultPlaceholders
     ? [
-        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
-        '',
-        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
-      ]
+      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
+      '',
+      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
+    ]
     : [];
 };

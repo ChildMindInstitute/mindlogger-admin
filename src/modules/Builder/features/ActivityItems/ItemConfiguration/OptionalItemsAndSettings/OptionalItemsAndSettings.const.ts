@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { DEFAULT_MAX_CHARACTERS, DEFAULT_DISABLED_TIMER_VALUE } from '../ItemConfiguration.const';
+import { DEFAULT_DISABLED_TIMER_VALUE, DEFAULT_MAX_CHARACTERS } from '../ItemConfiguration.const';
 
 export const DEFAULT_OPTION_VALUE = 0;
 export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
@@ -176,5 +176,6 @@ export const defaultTimeConfig = {
 
 export const defaultPhrasalTemplateConfig = {
   skippableItem: false,
-  timer: 0,
+  removeBackButton: false,
+  type: 'phrasal_template',
 };
