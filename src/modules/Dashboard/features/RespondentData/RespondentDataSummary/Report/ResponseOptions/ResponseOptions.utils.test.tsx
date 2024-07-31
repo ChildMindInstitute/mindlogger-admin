@@ -285,6 +285,37 @@ describe('ResponseOptions.utils', () => {
         dataTestid: 'response-option-9-0',
       },
     };
+    const paragraphTextItemProps = {
+      ...sharedProps,
+      activityItemAnswer: {
+        activityItem: {
+          id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
+          question: {
+            en: 'text question',
+          },
+          name: 'paragraph_text_with_response',
+          responseType: 'paragraphText',
+          responseValues: null,
+        },
+        answers: [
+          {
+            answer: {
+              value: 'Paragraph Text Item Test',
+              text: null,
+            },
+            date: '2024-03-14T10:03:01.345000',
+          },
+          {
+            answer: {
+              value: null,
+              text: null,
+            },
+            date: '2024-03-15T18:12:57.700000',
+          },
+        ],
+        dataTestid: 'response-option-10-0',
+      },
+    };
     const dateItemProps = {
       ...sharedProps,
       activityItemAnswer: {
@@ -580,6 +611,17 @@ describe('ResponseOptions.utils', () => {
       'data-testid': 'response-option-9-0',
       responseType: 'text',
     };
+    const paragraphTextItemResult = {
+      answers: [
+        {
+          answer: { text: null, value: 'Paragraph Text Item Test' },
+          date: '2024-03-14T10:03:01.345000',
+        },
+        { answer: { text: null, value: null }, date: '2024-03-15T18:12:57.700000' },
+      ],
+      'data-testid': 'response-option-10-0',
+      responseType: 'paragraphText',
+    };
     const timeItemResult = {
       ...sharedProps,
       answers: [
@@ -677,7 +719,8 @@ describe('ResponseOptions.utils', () => {
       ${multiSlectionItemProps}    | ${multiSelectionItemResult}   | ${'multi selection'}
       ${sliderItemProps}           | ${sliderItemResult}           | ${'slider'}
       ${numberSelectionItemProps}  | ${numberSelectionItemResult}  | ${'number selection'}
-      ${textItemProps}             | ${textItemResult}             | ${'text '}
+      ${textItemProps}             | ${textItemResult}             | ${'text'}
+      ${paragraphTextItemProps}    | ${paragraphTextItemResult}    | ${'paragraph text'}
       ${dateItemProps}             | ${dateItemResult}             | ${'date '}
       ${timeItemProps}             | ${timeItemResult}             | ${'time'}
       ${timeRangeItemProps}        | ${timeRangeItemResult}        | ${'time range'}

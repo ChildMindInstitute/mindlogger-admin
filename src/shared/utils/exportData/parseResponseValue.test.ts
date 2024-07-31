@@ -500,7 +500,7 @@ describe('parseResponseValue', () => {
       config: {
         removeBackButton: false,
         skippableItem: false,
-        maxResponseLength: 300,
+        maxResponseLength: 72,
         correctAnswerRequired: false,
         correctAnswer: '',
         numericalResponseRequired: false,

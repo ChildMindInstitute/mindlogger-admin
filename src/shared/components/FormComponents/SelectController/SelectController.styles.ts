@@ -78,9 +78,12 @@ export const StyledMenuItem = styled(MenuItem, {
     padding: theme.spacing(1, 1.6),
   }),
 
-  ...(itemDisabled && {
-    pointerEvents: 'none',
-  }),
+  '&&': {
+    ...(itemDisabled && {
+      // overrides the style from theme.tsx if itemDisabled='true'
+      pointerEvents: 'none !important',
+    }),
+  },
 }));
 
 export const selectDropdownStyles = {

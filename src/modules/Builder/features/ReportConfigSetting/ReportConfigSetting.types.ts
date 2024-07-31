@@ -33,7 +33,6 @@ export type SetPasswordReportServer = {
 };
 
 export type ReportConfigSettingProps = {
-  onSubmitSuccess?: (values: Partial<ReportConfigFormValues>) => void;
   'data-testid'?: string;
 };
 

@@ -13,6 +13,7 @@ export const StyledMenu = styled(StyledFlexColumn)`
   ${theme.breakpoints.down('xl')} {
     width: 35rem;
   }
+
   ${theme.breakpoints.down('lg')} {
     width: 30rem;
   }
@@ -21,5 +22,13 @@ export const StyledMenu = styled(StyledFlexColumn)`
 export const StyledTextBtn = styled(Button)`
   svg {
     fill: ${variables.palette.primary};
+  }
+
+  &&.Mui-disabled {
+    color: ${variables.palette.disabled};
+
+    svg {
+      fill: ${variables.palette.disabled};
+    }
   }
 `;

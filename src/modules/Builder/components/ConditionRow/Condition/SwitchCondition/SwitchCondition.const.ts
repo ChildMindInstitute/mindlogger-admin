@@ -14,5 +14,7 @@ export const commonInputSx = {
 export const MAX_HOURS = 23;
 export const MAX_MINUTES = 59;
 export const MIN_TIME = setHours(setMinutes(new Date(), 0), 0);
+export const MIN_TIME_LESS_THAN = setHours(setMinutes(new Date(), 1), 0);
 export const MAX_TIME = setHours(setMinutes(new Date(), MAX_MINUTES), MAX_HOURS);
+export const MAX_TIME_GREATER_THAN = setHours(setMinutes(new Date(), 58), MAX_HOURS);
 export const TIME_INTERVALS = 1;

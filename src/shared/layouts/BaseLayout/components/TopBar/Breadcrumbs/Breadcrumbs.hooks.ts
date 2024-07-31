@@ -161,7 +161,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (enableMultiInformant) {
+    if (enableMultiInformant && !isBuilder) {
       if (currentActivity) {
         newBreadcrumbs.push({
           image: currentActivity?.image || '',

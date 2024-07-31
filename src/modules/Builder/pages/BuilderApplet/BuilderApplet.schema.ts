@@ -6,6 +6,7 @@ import {
   getEntityKey,
   getIsRequiredValidateMessage,
   getMaxLengthValidationError,
+  getObjectFromList,
 } from 'shared/utils';
 import {
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
@@ -23,7 +24,7 @@ import {
   ScoreReportType,
 } from 'shared/consts';
 import { RoundTypeEnum } from 'modules/Builder/types';
-import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
+import { Condition, Config, ScoreOrSection } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
@@ -46,10 +47,10 @@ import {
   testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
 import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  ItemTestFunctions,
   alphanumericAndHyphenRegexp,
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
   IP_ADDRESS_REGEXP,
+  ItemTestFunctions,
   PORT_REGEXP,
 } from './BuilderApplet.const';
 
@@ -380,7 +381,9 @@ export const ItemSchema = () =>
             ),
         })
         .when('responseType', {
-          is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
+          is: (responseType: ItemResponseType) =>
+            responseType === ItemResponseType.Text ||
+            responseType === ItemResponseType.ParagraphText,
           then: (schema) =>
             schema.shape({
               maxResponseLength: yup
@@ -594,21 +597,30 @@ export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
     itemKey: yup
       .string()
       .required(t('fillInAllRequired') as string)
-      .test(
-        'item-flow-contradiction',
-        t('appletHasItemFlowContradictions') as string,
-        (itemKey, context) => {
-          const items = get(context, 'from.1.value.items') ?? [];
-          const conditions = get(context, 'parent.conditions');
-          const itemIds = items?.map((item: Item) => getEntityKey(item));
-          const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
-          const itemsBefore = itemIds?.slice(0, itemIndex + 1);
+      .test('item-flow-contradiction', function (itemKey) {
+        const { createError, path, parent, from } = this;
+        const items = (get(from, '1.value.items') ?? []) as ItemFormValues[];
+        const conditions = get(parent, 'conditions') as Condition[];
+        const itemsObject = getObjectFromList(items, undefined, true);
 
-          return !conditions?.some(
-            ({ itemName }: Condition) => itemName && !itemsBefore.includes(itemName),
-          );
-        },
-      ),
+        const conditionItemsInUsageSet = new Set(conditions.map((condition) => condition.itemName));
+        const itemIndex = itemsObject[itemKey]?.index ?? -1;
+
+        // 1# rule: summaryItemIsTheSameAsRuleItem
+        if (conditionItemsInUsageSet.has(itemKey)) {
+          return createError({ path, message: t('summaryItemSameAsRuleItem') });
+        }
+
+        // 2# rule: summaryItemIsBeforeRuleItemInTheList
+        const maxUsedItemIndex = Math.max(
+          ...[...conditionItemsInUsageSet].map((key) => itemsObject[key]?.index ?? -1),
+        );
+        if (itemIndex <= maxUsedItemIndex) {
+          return createError({ path, message: t('appletHasItemFlowContradictions') });
+        }
+
+        return true;
+      }),
     conditions: yup
       .array()
       .of(enableItemFlowExtendedItems ? ItemFlowConditionSchema() : ConditionSchema()),
@@ -671,10 +683,8 @@ export const ScoreSchema = () => ({
       'unique-score-name',
       t('validationMessages.unique', { field: t('scoreName') }) as string,
       (scoreName, context) => {
-        const reports = get(context, 'from.1.value.reports') ?? [];
-        const scores = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Score,
-        );
+        const reports = (get(context, 'from.1.value.reports') ?? []) as ScoreOrSection[];
+        const scores = reports?.filter(({ type }) => type === ScoreReportType.Score);
 
         return testFunctionForUniqueness(scoreName ?? '', scores);
       },
@@ -709,10 +719,8 @@ export const SectionSchema = () => ({
       'unique-section-name',
       t('validationMessages.unique', { field: t('sectionName') }) as string,
       (sectionName, context) => {
-        const reports = get(context, 'from.1.value.reports') ?? [];
-        const sections = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Section,
-        );
+        const reports = (get(context, 'from.1.value.reports') ?? []) as ScoreOrSection[];
+        const sections = reports?.filter(({ type }) => type === ScoreReportType.Section);
 
         return testFunctionForUniqueness(sectionName ?? '', sections);
       },

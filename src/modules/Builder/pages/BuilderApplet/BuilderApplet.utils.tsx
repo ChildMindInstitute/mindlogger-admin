@@ -24,6 +24,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultiSelectOption,
   SingleApplet,
+  SingleMultiSelectionPerRowCondition,
 } from 'shared/state';
 import {
   createArray,
@@ -782,9 +783,19 @@ const getConditionPayload = (item: Item, condition: Condition) => {
     return condition.payload;
 
   const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
-  const optionValue = options?.find(
-    ({ value }) => `${value}` === `${(condition as OptionCondition).payload.optionValue}`,
-  )?.id;
+  const conditionOptionValue = (condition as OptionCondition).payload.optionValue;
+  const optionValue = options?.find(({ value }) => `${value}` === `${conditionOptionValue}`)?.id;
+  if (
+    item.responseType === ItemResponseType.SingleSelectionPerRow ||
+    item.responseType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    const rowIndex = (condition as SingleMultiSelectionPerRowCondition).payload?.rowIndex;
+
+    return {
+      optionValue: conditionOptionValue,
+      rowIndex,
+    };
+  }
 
   return {
     optionValue,

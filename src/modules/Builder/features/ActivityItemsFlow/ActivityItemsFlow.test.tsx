@@ -26,6 +26,7 @@ import {
   mockedNumberSelectActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
+  mockedParagraphTextActivityItem,
 } from 'shared/mock';
 import { createArray, getEntityKey } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
@@ -61,6 +62,7 @@ const mockedAppletWithAllItemTypes = {
         mockedSliderRowsActivityItem,
         mockedAudioPlayerActivityItem,
         mockedNumberSelectActivityItem,
+        mockedParagraphTextActivityItem,
         mockedMultiSelectRowsActivityItem,
         mockedSingleSelectRowsActivityItem,
       ],
@@ -95,6 +97,7 @@ const mockedOrderedSummaryItemItems = [
   mockedSliderRowsActivityItem,
   mockedAudioPlayerActivityItem,
   mockedNumberSelectActivityItem,
+  mockedParagraphTextActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
 ];
@@ -253,7 +256,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getByTestId(`${mockedTestid}-0-summary-item`)).toBeVisible();
   });
 
-  test('Condition Item: all items except Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
+  test('Condition Item: all items except Text/ParagraphText/Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -285,7 +288,7 @@ describe('Activity Items Flow', () => {
     expect(itemDropdown).toBeVisible();
 
     const items = itemDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(17);
+    expect(items).toHaveLength(18);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedSummaryItemItems[index].id);
@@ -329,31 +332,11 @@ describe('Activity Items Flow', () => {
       fireEvent.mouseDown(
         screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
       );
-      fireEvent.click(
-        screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`).querySelector('li'),
-      );
-
-      await waitFor(() => {
-        const error = screen.getByTestId(`${mockedTestid}-0-error`);
-
-        expect(error).toBeVisible();
-        expect(error).toHaveTextContent(
-          'Selected position of the Item in the list contradicts the Item Flow',
-        );
-      });
-
-      fireEvent.mouseDown(
-        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
-      );
-      fireEvent.click(
+      expect(
         screen
           .getByTestId(`${mockedTestid}-0-summary-item-dropdown`)
-          .querySelector('li:last-child'),
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByTestId(`${mockedTestid}-0-error`)).not.toBeInTheDocument();
-      });
+          .querySelector('li:nth-child(1)'),
+      ).toHaveClass('Mui-disabled');
     });
   });
 });

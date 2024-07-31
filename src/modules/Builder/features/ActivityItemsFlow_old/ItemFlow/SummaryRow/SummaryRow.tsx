@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 
@@ -9,6 +9,7 @@ import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSel
 import { ItemFormValues } from 'modules/Builder/types';
 import { StyledSummaryRow } from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { Condition } from 'shared/state/Applet';
 
 import { SummaryRowProps } from './SummaryRow.types';
 import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
@@ -17,14 +18,14 @@ import { useItemsInUsage } from './SummaryRow.hooks';
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
-  const items = useWatch({ name: `${activityName}.items` });
+  const [items, conditions]: [ItemFormValues[], Condition[]] = useWatch({
+    name: [`${activityName}.items`, `${name}.conditions`],
+  });
   const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
     (event: SelectEvent) => {
-      const itemIndex = items?.findIndex(
-        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-      );
+      const itemIndex = items?.findIndex((item) => getEntityKey(item) === event.target.value);
 
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
@@ -32,8 +33,12 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     [items, activityName, setValue],
   );
 
-  const { question } =
-    ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
+  const itemsOptions = useMemo(
+    () => getItemsOptions({ items, itemsInUsage, conditions }),
+    [items, itemsInUsage, conditions],
+  );
+
+  const { question } = (items ?? []).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
 
   return (
     <>
@@ -50,7 +55,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <ItemFlowSelectController
           control={control}
           name={`${name}.itemKey`}
-          options={getItemsOptions({ items, itemsInUsage })}
+          options={itemsOptions}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {

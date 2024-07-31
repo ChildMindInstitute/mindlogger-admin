@@ -10,6 +10,7 @@ export type SummaryRowProps = {
 export type GetItemsOptionsProps = {
   items: ItemFormValues[];
   itemsInUsage: Set<unknown>;
+  conditions: ConditionalLogic['conditions'];
 };
 
 export type GetItemsInUsageProps = {

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 
@@ -9,22 +9,27 @@ import { ItemFlowSelectController } from 'modules/Builder/components/ItemFlowSel
 import { ItemFormValues } from 'modules/Builder/types';
 import { StyledSummaryRow } from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { ConditionalLogicMatch } from 'shared/consts';
+import { Condition } from 'shared/state/Applet';
 
 import { SummaryRowProps } from './SummaryRow.types';
-import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
+import { getItemsOptions, getMatchOptions } from './utils';
 import { useItemsInUsage } from './SummaryRow.hooks';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
-  const items = useWatch({ name: `${activityName}.items` });
+  const matchFieldName = `${name}.match`;
+  const itemKeyFieldName = `${name}.itemKey`;
+  const [items, conditions, match]: [ItemFormValues[], Condition[], ConditionalLogicMatch] =
+    useWatch({
+      name: [`${activityName}.items`, `${name}.conditions`, matchFieldName],
+    });
   const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
     (event: SelectEvent) => {
-      const itemIndex = items?.findIndex(
-        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-      );
+      const itemIndex = items?.findIndex((item) => getEntityKey(item) === event.target.value);
 
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
@@ -32,8 +37,20 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     [items, activityName, setValue],
   );
 
-  const { question } =
-    ((items ?? []) as ItemFormValues[]).find(({ id }) => id === getValues(`${name}.itemKey`)) ?? {};
+  const matchOptions = useMemo(() => getMatchOptions({ conditions, items }), [conditions, items]);
+  const itemsOptions = useMemo(
+    () => getItemsOptions({ items, itemsInUsage, conditions }),
+    [items, itemsInUsage, conditions],
+  );
+  const { question } = (items ?? []).find(({ id }) => id === getValues(itemKeyFieldName)) ?? {};
+
+  useEffect(() => {
+    // If there are contradictory conditions, change the value of the match option from 'All' to 'Any'
+    const needMatchValueChange = matchOptions[1].disabled && match === ConditionalLogicMatch.All;
+    if (needMatchValueChange) {
+      setValue(matchFieldName, ConditionalLogicMatch.Any);
+    }
+  }, [matchOptions, match, matchFieldName, setValue]);
 
   return (
     <>
@@ -42,8 +59,8 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
 
         <ItemFlowSelectController
           control={control}
-          name={`${name}.match`}
-          options={getMatchOptions()}
+          name={matchFieldName}
+          options={matchOptions}
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
           isLabelNeedTranslation={false}
@@ -53,8 +70,8 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
 
         <ItemFlowSelectController
           control={control}
-          name={`${name}.itemKey`}
-          options={getItemsOptions({ items, itemsInUsage })}
+          name={itemKeyFieldName}
+          options={itemsOptions}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
