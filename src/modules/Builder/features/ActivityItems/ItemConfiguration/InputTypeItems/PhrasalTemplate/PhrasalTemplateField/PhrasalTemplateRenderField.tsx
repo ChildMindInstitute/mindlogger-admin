@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -29,23 +30,25 @@ export function RenderedField({
   const fieldValue = getValues(name as string);
   const activitiesFromStore = applet.useActivityDataFromApplet(params?.activityId || '');
   const { question: selectedOptionQuestion } =
-    responseOptions?.find(({ id }) => fieldValue.id === id) ?? {};
+    responseOptions?.find(({ name }) => fieldValue.itemName === name) ?? {};
 
-  const isFieldValueDeleted = fieldValue?.id?.includes('-deleted');
+  const isFieldValueDeleted = fieldValue?.itemName?.includes('-deleted');
 
-  if (
-    fieldValue?.id &&
-    type === 'itemResponse' &&
-    !selectedOptionQuestion &&
-    !isFieldValueDeleted
-  ) {
-    setValue(name, {
-      displayMode: '',
-      id: `${fieldValue.id}-deleted`,
-      type: 'itemResponse',
-      name: responseOptions?.filter(({ id }) => id === fieldValue.id)?.[0]?.name,
-    });
-  }
+  useEffect(() => {
+    if (
+      fieldValue?.itemName &&
+      type === 'item_response' &&
+      !selectedOptionQuestion &&
+      !isFieldValueDeleted
+    ) {
+      setValue(name, {
+        displayMode: 'sentence',
+        itemName: `${fieldValue.itemName}-deleted`,
+        type: 'item_response',
+        itemIndex: 0,
+      });
+    }
+  }, [isFieldValueDeleted, fieldValue, name, setValue, selectedOptionQuestion, type]);
 
   const getRenderedValue = (value: unknown) => {
     if (!value) {
@@ -56,7 +59,7 @@ export function RenderedField({
       );
     }
 
-    const selectedItem = responseOptions.find(({ id }) => id === value);
+    const selectedItem = responseOptions.find(({ name }) => name === value);
 
     if (!selectedItem) {
       const missedItem = activitiesFromStore?.find((activity) => {
@@ -74,17 +77,17 @@ export function RenderedField({
   };
 
   switch (type) {
-    case 'itemResponse':
+    case 'item_response':
       return (
         <SelectController
-          name={`${name}.id`}
+          name={`${name}.itemName`}
           control={control}
           defaultValue=""
           fullWidth
-          options={responseOptions.map(({ id, name, question }) => ({
+          options={responseOptions.map(({ name, question }) => ({
             labelKey: name,
             tooltip: <StyledMdPreview modelValue={(question as unknown as string) ?? ''} />,
-            value: id ?? '',
+            value: name ?? '',
           }))}
           SelectProps={{
             displayEmpty: true,
@@ -99,7 +102,7 @@ export function RenderedField({
           }}
         />
       );
-    case 'lineBreak':
+    case 'line_break':
       return (
         <StyledFlexTopCenter sx={{ height: theme.spacing(5.6), width: '100%' }}>
           <StyledLabelLarge color={variables.palette.outline} sx={{ flexShrink: 0 }}>

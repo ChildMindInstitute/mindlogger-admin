@@ -227,7 +227,7 @@ export const GyroscopeAndTouchConfigSchema = () => ({
 });
 
 export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
-  type: yup.mixed().oneOf(['sentence', 'itemResponse', 'lineBreak']).required(),
+  type: yup.mixed().oneOf(['sentence', 'item_response', 'line_break']).required(),
   text: yup.string().when('type', {
     is: 'sentence',
     then(schema) {
@@ -265,11 +265,12 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
       )
     }
   }),
-  id: yup.string().when('type', {
-    is: 'itemResponse',
+  itemName: yup.string().when('type', {
+    is: 'item_response',
     then: (schema) => schema.trim()
       .test('validate item was deleted', t('fieldReferenceItemWasDeleted'), function (_, textContext) {
-        if (textContext.parent.id.includes('-deleted')) {
+
+        if (textContext.parent.itemName.includes('-deleted')) {
           return false
         }
 
@@ -281,7 +282,7 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
           const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
 
-          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'itemResponse').length > 1;
+          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
 
           if (!value && !isMoreThanOneItemResponse) {
             return false
@@ -297,7 +298,7 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
           const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
 
-          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'itemResponse').length > 1;
+          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
 
           if (!value && isMoreThanOneItemResponse) {
             return false
@@ -310,7 +311,7 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
 
   }),
   // displayMode: yup.string().when('type', {
-  //   is: 'itemResponse',
+  //   is: 'item_response',
   //   then: (schema) => schema.trim().required(t('fieldRequired')),
   // }),
 });
@@ -329,7 +330,7 @@ export const PhrasalTemplateResponseValuePhraseSchema = yup.object({
     .test(
       'minResponseFields',
       t('validationMessages.phraseTemplateMinResponseFields'),
-      (fields = []) => fields.filter(({ type }) => type === 'itemResponse').length > 0,
+      (fields = []) => fields.filter(({ type }) => type === 'item_response').length > 0,
     ),
 });
 

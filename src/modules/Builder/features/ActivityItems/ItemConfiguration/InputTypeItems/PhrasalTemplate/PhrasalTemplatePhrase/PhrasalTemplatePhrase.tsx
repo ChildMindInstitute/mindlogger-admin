@@ -138,8 +138,8 @@ export const PhrasalTemplatePhrase = ({
               field.type === 'sentence' &&
               fields.filter(({ type }) => type === 'sentence').length < 2;
             const isOnlyResponseField =
-              field.type === 'itemResponse' &&
-              fields.filter(({ type }) => type === 'itemResponse').length < 2;
+              field.type === 'item_response' &&
+              fields.filter(({ type }) => type === 'item_response').length < 2;
             const hasMinimumFields = fields.length > 2;
 
             return (
@@ -184,7 +184,7 @@ export const PhrasalTemplatePhrase = ({
             },
             {
               action: () => {
-                handleAddField('itemResponse');
+                handleAddField('item_response');
                 console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="commentDots" />,
@@ -192,7 +192,7 @@ export const PhrasalTemplatePhrase = ({
             },
             {
               action: () => {
-                handleAddField('lineBreak');
+                handleAddField('line_break');
                 console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="flow-outlined" />,

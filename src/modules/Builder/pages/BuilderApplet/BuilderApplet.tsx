@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectSchema } from 'yup';
 
@@ -66,6 +67,7 @@ export const BuilderApplet = () => {
   );
 
   const { featureFlags } = useFeatureFlags();
+
   const methods = useForm<AppletFormValues>({
     defaultValues,
     resolver: yupResolver(
@@ -161,6 +163,7 @@ export const BuilderApplet = () => {
           <Spinner />
         )}
       </StyledBody>
+      <DevTool control={control} />
     </FormProvider>
   );
 };
