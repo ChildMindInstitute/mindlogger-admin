@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledClearedButton } from 'shared/styles';
+import { toggleBooleanState } from 'shared/utils';
 
 import { StyledController } from './ConfigurationForm.styles';
 
@@ -39,7 +40,7 @@ export const ConfigurationForm = () => {
             endAdornment: (
               <StyledClearedButton
                 aria-label="toggle password visibility"
-                onClick={() => setIsPasswordVisible((prevState) => !prevState)}
+                onClick={toggleBooleanState(setIsPasswordVisible)}
               >
                 <Svg id={isPasswordVisible ? 'visibility-off' : 'visibility-on'} />
               </StyledClearedButton>
