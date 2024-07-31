@@ -236,8 +236,9 @@ type ABTrailsConfig = {
 };
 
 export interface PhrasalTemplateConfig {
+  removeBackButton: boolean;
   skippableItem: boolean;
-  timer: number | null;
+  type: string;
 }
 
 export type SliderItemResponseValues = {
@@ -335,8 +336,8 @@ export type DrawingResponseValues = {
 
 export type PhrasalTemplateField =
   | { type: 'sentence'; text: string }
-  | { type: 'itemResponse'; id: string; displayMode: string }
-  | { type: 'lineBreak' };
+  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number; }
+  | { type: 'line_break' };
 
 export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
 
