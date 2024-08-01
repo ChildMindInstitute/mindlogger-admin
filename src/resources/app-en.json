@@ -143,6 +143,7 @@
   "appletHasEmptyRequiredFields": "Please fill in all required fields marked in red",
   "appletHasErrorsInFields": "Please fix the errors in all fields marked in red",
   "appletHasItemFlowContradictions": "Selected position of the Item in the list contradicts the Item Flow",
+  "summaryItemSameAsRuleItem": "This item is already selected as a condition and cannot be selected as a result simultaneously",
   "appletImageDescription": "This image is displayed next to the Applet name in the admin panel, and in the respondent's interface.",
   "appletImg": "Applet Image",
   "appletIsBeingCreated": "Your Applet is being created. Please wait...",
@@ -292,7 +293,10 @@
   "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
   "conditionalLogicValidation": {
-    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions."
+    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
+    "summaryItemIsBeforeRuleItemInTheList": "This Item appears in the Activity before one of the Items involved in the conditional.",
+    "summaryItemIsTheSameAsRuleItem": "This Item already defines one of the conditions and cannot be its result at the same time.",
+    "impossibleToFulfillTheConditionsSimultaneously": "It's impossible to fulfill the specified conditions simultaneously."
   },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
@@ -1221,6 +1225,7 @@
   "sortBy": "Sort By",
   "startDate": "Start date",
   "startEndDate": "Start Date / End Date",
+  "startEndTime": "Start Time / End Time",
   "startTime": "Start time",
   "status": "Status",
   "startTimeResponse": "Start Time Response",

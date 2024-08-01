@@ -78,8 +78,10 @@ import {
   FeedbackNote,
   GetActivityResponse,
   GetActivityParams,
+  EditSubjectResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
+import { ApiSuccessResponse } from './base.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -240,7 +242,10 @@ export const editManagerAccessApi = (
     { signal },
   );
 
-export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: AbortSignal) =>
+export const editSubjectApi = (
+  { subjectId, values }: EditSubject,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<ApiSuccessResponse<EditSubjectResponse>>> =>
   authApiClient.put(
     `/subjects/${subjectId}`,
     {

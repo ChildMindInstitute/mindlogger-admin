@@ -188,6 +188,16 @@ export type EditSubject = SubjectId & {
   };
 };
 
+export type EditSubjectResponse = {
+  id: string;
+  lastSeen: string | null;
+  appletId: string;
+  userId: string | null;
+  secretUserId: string;
+  nickname: string | null;
+  tag: string | null;
+};
+
 export type DeleteSubject = SubjectId & {
   deleteAnswers: boolean;
 };

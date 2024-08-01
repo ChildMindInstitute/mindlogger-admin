@@ -1,3 +1,5 @@
+import { ConditionType } from 'shared/consts';
+
 import { SwitchConditionProps } from '../SwitchCondition.types';
 
 export type TimeConditionProps = Pick<SwitchConditionProps, 'dataTestid'> & {
@@ -7,4 +9,5 @@ export type TimeConditionProps = Pick<SwitchConditionProps, 'dataTestid'> & {
   maxValue: null | string;
   isSingleValueShown: boolean;
   isRangeValueShown: boolean;
+  state?: ConditionType;
 };

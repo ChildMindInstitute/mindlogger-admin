@@ -332,31 +332,11 @@ describe('Activity Items Flow', () => {
       fireEvent.mouseDown(
         screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
       );
-      fireEvent.click(
-        screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`).querySelector('li'),
-      );
-
-      await waitFor(() => {
-        const error = screen.getByTestId(`${mockedTestid}-0-error`);
-
-        expect(error).toBeVisible();
-        expect(error).toHaveTextContent(
-          'Selected position of the Item in the list contradicts the Item Flow',
-        );
-      });
-
-      fireEvent.mouseDown(
-        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
-      );
-      fireEvent.click(
+      expect(
         screen
           .getByTestId(`${mockedTestid}-0-summary-item-dropdown`)
-          .querySelector('li:last-child'),
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByTestId(`${mockedTestid}-0-error`)).not.toBeInTheDocument();
-      });
+          .querySelector('li:nth-child(1)'),
+      ).toHaveClass('Mui-disabled');
     });
   });
 });
