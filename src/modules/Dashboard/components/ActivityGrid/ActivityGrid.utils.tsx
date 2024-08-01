@@ -1,5 +1,22 @@
 import { t } from 'i18next';
+import {
+  isWithinInterval,
+  getDay,
+  getDate,
+  getYear,
+  getMonth,
+  getHours,
+  getMinutes,
+  getSeconds,
+  format,
+  isWeekend,
+  isAfter,
+  setDate,
+  setMonth,
+  setYear,
+} from 'date-fns';
 
+import { Event } from 'modules/Dashboard/state';
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
 import {
@@ -12,6 +29,163 @@ import {
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
+
+/**
+ * this function checks if the current date is within the interval passed as arguments
+ * @param start Date
+ * @param end Date
+ * @returns boolean
+ */
+function datetimeIsWithinInterval(start: Date, end: Date) {
+  const today = new Date();
+  if (isAfter(start, end)) {
+    console.error('The start date is after the end date, be sure to check the dates');
+
+    // using the isWithinInterval function with the start and end dates swapped
+    // in case the start date is after the end date
+    return isWithinInterval(today, { start: end, end: start });
+  }
+
+  return isWithinInterval(today, { start, end });
+}
+
+/**
+ * this function returns the values of the date represented as an object
+ * @param date Date
+ * @returns object
+ */
+function getDateValues(date: Date) {
+  if (!date || !(date instanceof Date)) {
+    console.error('The date is not valid, be sure to pass a valid date');
+
+    return {
+      day: 0,
+      month: 0,
+      year: 0,
+      hour: 0,
+      minute: 0,
+      second: 0,
+      dayInWeek: 0,
+      date: new Date(),
+    };
+  }
+
+  return {
+    day: getDate(date),
+    month: getMonth(date) + 1,
+    year: getYear(date),
+    hour: getHours(date),
+    minute: getMinutes(date),
+    second: getSeconds(date),
+    dayInWeek: getDay(date),
+    date,
+  };
+}
+
+const PERIODICITY_VALUES = {
+  ONCE: 'ONCE',
+  ALWAYS: 'ALWAYS',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  WEEKDAYS: 'WEEKDAYS',
+  MONTHLY: 'MONTHLY',
+};
+
+/**
+ * this function formats the date as YYYY-MM-DD
+ * @param date Date
+ * @returns string
+ */
+function formatDateAsYYYYMMDD(date: Date) {
+  if (!date || !(date instanceof Date)) {
+    console.error('The date is not valid, be sure to pass a valid date');
+  }
+
+  return format(date, 'yyyy-MM-dd');
+}
+
+/**
+ * this function validates if the date is in range based on the PeriodicityTypes object
+ * the options of validation are:
+ * - if the periodicity is always, which means that the activity is always available
+ * - if the periodicity is once, which means that the activity is available only once
+ * - if the periodicity is daily, which means that the activity is available every day
+ * - if the periodicity is weekly, which means that the activity is available every week at the same week day
+ * - if the periodicity is weekdays, which means that the activity is available every weekday and not in weekends
+ * - if the periodicity is monthly, which means that the activity is available every month at the same day
+ * - if the periodicity is not set
+ * @param scheduleEvent PeriodicityType
+ * @returns boolean
+ */
+function validateIfDateIsInRange(scheduleEvent: Event) {
+  if (!scheduleEvent) {
+    console.error('The periodicity is not set, be sure to pass a valid periodicity');
+
+    return false;
+  }
+
+  if (
+    scheduleEvent.accessBeforeSchedule ||
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.ALWAYS
+  ) {
+    return true;
+  }
+
+  const currentDate = new Date();
+  const currentTimeValues = getDateValues(currentDate);
+  const startDate = new Date(
+    `${
+      scheduleEvent.periodicity.startDate
+        ? scheduleEvent.periodicity.startDate
+        : formatDateAsYYYYMMDD(currentDate)
+    }T${scheduleEvent.startTime}`,
+  );
+  const endDate = new Date(
+    `${
+      scheduleEvent?.periodicity.endDate
+        ? scheduleEvent.periodicity.endDate
+        : formatDateAsYYYYMMDD(currentDate)
+    }T${scheduleEvent.endTime}`,
+  );
+
+  const startTimeValues = getDateValues(startDate);
+
+  if (
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.ONCE ||
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.DAILY
+  ) {
+    const todayEndDateWithEndTime = setYear(
+      setMonth(setDate(endDate, currentTimeValues.day), currentTimeValues.month - 1),
+      currentTimeValues.year,
+    );
+
+    return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
+  } else if (scheduleEvent.periodicity.type === PERIODICITY_VALUES.WEEKLY) {
+    if (currentTimeValues.dayInWeek !== startTimeValues.dayInWeek) {
+      return false;
+    }
+
+    return datetimeIsWithinInterval(startDate, endDate);
+  } else if (scheduleEvent.periodicity.type === PERIODICITY_VALUES.WEEKDAYS) {
+    if (isWeekend(currentDate)) {
+      return false;
+    }
+
+    const todayEndDateWithEndTime = setYear(
+      setMonth(setDate(endDate, currentTimeValues.day), currentTimeValues.month - 1),
+      currentTimeValues.year,
+    );
+
+    return datetimeIsWithinInterval(startDate, todayEndDateWithEndTime);
+  } else if (
+    scheduleEvent.periodicity.type === PERIODICITY_VALUES.MONTHLY &&
+    currentTimeValues.day === startTimeValues.day
+  ) {
+    return datetimeIsWithinInterval(startDate, endDate);
+  }
+
+  return false;
+}
 
 export const getActivityActions = ({
   actions: { editActivity, exportData, assignActivity, takeNow },
@@ -33,7 +207,9 @@ export const getActivityActions = ({
   const { id: activityId } = activity;
   const isWebUnsupported = !getIsWebSupported(activity.items);
 
-  if (!activityId) return [];
+  if (!activityId || !activity?.event) return [];
+
+  const isInRange = validateIfDateIsInRange(activity?.event);
 
   return [
     {
@@ -67,8 +243,10 @@ export const getActivityActions = ({
       title: t('takeNow.menuItem'),
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
-      disabled: isWebUnsupported,
-      tooltip: isWebUnsupported && t('activityIsMobileOnly'),
+      disabled: isWebUnsupported || !isInRange,
+      tooltip:
+        (!isInRange && t('activityIsUnavailableAtThisTime')) ||
+        (isWebUnsupported && t('activityIsMobileOnly')),
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];

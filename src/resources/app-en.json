@@ -32,6 +32,7 @@
   "activityImg": "Activity Image",
   "activityIncomplete": "Activity incomplete",
   "activityIsMobileOnly": "This activity must be completed on the Mindlogger mobile app.",
+  "activityIsUnavailableAtThisTime" : "This activity is currently unavailable for completion based on its schedule.",
   "activityIsRequired": "At least 1 activity is required.",
   "activityItemsFlow": "Item Flow",
   "activityItemsFlowDescription": "To determine the order of transition from one Item to another, an Item Flow can be created.",

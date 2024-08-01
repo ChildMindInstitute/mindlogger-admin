@@ -1,14 +1,17 @@
+import { EventNotifications, EventReminder, Periodicity, TimerType } from 'api';
 import { BaseSchema } from 'shared/state/Base';
-import { Periodicity, TimerType, EventNotifications, EventReminder } from 'api';
 
 export type Event = {
-  startTime: string | null;
-  endTime: string | null;
   accessBeforeSchedule: boolean | null;
-  oneTimeCompletion: boolean | null;
-  timer: number | null;
-  timerType: TimerType;
+  activityId: string | null;
+  endTime: string | null;
+  flowId: string | null;
   id: string;
+  notification: {
+    notifications: EventNotifications;
+    reminder: EventReminder;
+  } | null;
+  oneTimeCompletion: boolean | null;
   periodicity: {
     type: Periodicity;
     startDate: string | null;
@@ -16,12 +19,9 @@ export type Event = {
     selectedDate: string | null;
   };
   respondentId: string | null;
-  activityId: string | null;
-  flowId: string | null;
-  notification: {
-    notifications: EventNotifications;
-    reminder: EventReminder;
-  } | null;
+  startTime: string | null;
+  timer: number | null;
+  timerType: TimerType;
 };
 
 export type AppletsSchema = {

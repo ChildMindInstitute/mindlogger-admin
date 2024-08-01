@@ -1,26 +1,27 @@
 import { ColorResult } from 'react-color';
 
-import { BaseSchema } from 'shared/state/Base';
-import { ElementType, RetentionPeriods } from 'shared/types';
-import {
-  ItemResponseType,
-  SubscaleTotalScore,
-  ConditionType,
-  ScoreConditionType,
-  ConditionalLogicMatch,
-  CalculationType,
-  PerfTaskType,
-  GyroscopeOrTouch,
-  ScoreReportType,
-} from 'shared/consts';
-import { Encryption } from 'shared/utils/encryption';
 import {
   CorrectPress,
-  RoundTypeEnum,
-  FlankerSamplingMethod,
   DeviceType,
+  FlankerSamplingMethod,
   OrderName,
+  RoundTypeEnum,
 } from 'modules/Builder/types';
+import { Event } from 'modules/Dashboard/state';
+import {
+  CalculationType,
+  ConditionType,
+  ConditionalLogicMatch,
+  GyroscopeOrTouch,
+  ItemResponseType,
+  PerfTaskType,
+  ScoreConditionType,
+  ScoreReportType,
+  SubscaleTotalScore,
+} from 'shared/consts';
+import { BaseSchema } from 'shared/state/Base';
+import { ElementType, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils/encryption';
 
 type ActivityFlowItem = {
   activityId: string;
@@ -681,26 +682,56 @@ export type ScoresObject = {
   [key: string]: number;
 };
 
+// types from the BE repo defined in src/apps/schedule/domain/constants.py with the same name as the following:
+export type PeriodicityTypeValues = {
+  ONCE: 'ONCE';
+  DAILY: 'DAILY';
+  WEEKLY: 'WEEKLY';
+  WEEKDAYS: 'WEEKDAYS';
+  MONTHLY: 'MONTHLY';
+  ALWAYS: 'ALWAYS';
+};
+
+export type TimerType = {
+  NOT_SET: 'NOT_SET';
+  TIMER: 'TIMER';
+  IDLE: 'IDLE';
+};
+
+export type PeriodicityType = {
+  access_before_schedule: boolean;
+  end_date: string; // Format: "YYYY-MM-DD"
+  end_time: string; // Format: "HH:MM:SS"
+  one_time_completion: null | string;
+  selected_date: null | string;
+  start_date: string; // Format: "YYYY-MM-DD"
+  start_time: string; // Format: "HH:MM:SS"
+  timer: null | number;
+  timer_type: TimerType[keyof TimerType];
+  type: PeriodicityTypeValues[keyof PeriodicityTypeValues];
+};
+
 export type Activity = {
+  createdAt?: string;
+  description: string | Record<string, string>;
   id?: string;
+  image?: string;
+  isHidden?: boolean;
+  isPerformanceTask?: boolean;
+  isReviewable?: boolean;
+  isSkippable?: boolean;
+  items: Item[];
   key?: string;
   name: string;
   order?: number;
-  description: string | Record<string, string>;
-  splashScreen?: string;
-  image?: string;
-  showAllAtOnce?: boolean;
-  isSkippable?: boolean;
-  isReviewable?: boolean;
-  responseIsEditable?: boolean;
-  isHidden?: boolean;
-  items: Item[];
-  scoresAndReports?: ScoresAndReports;
-  subscaleSetting?: SubscaleSetting | null;
-  isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskType | null;
-  createdAt?: string;
+  event?: Event;
   reportIncludedItemName?: string;
+  responseIsEditable?: boolean;
+  scoresAndReports?: ScoresAndReports;
+  showAllAtOnce?: boolean;
+  splashScreen?: string;
+  subscaleSetting?: SubscaleSetting | null;
 };
 
 type Theme = {
