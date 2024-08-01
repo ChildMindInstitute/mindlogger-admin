@@ -1,32 +1,33 @@
-import { useState, ChangeEvent } from 'react';
-import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { ChangeEvent, Fragment, useState } from 'react';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { Tooltip, Svg } from 'shared/components';
+import { Svg, Tooltip } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
-import { ItemResponseType } from 'shared/consts';
+import { StyledBodyMedium, StyledClearedButton, StyledTitleMedium, theme } from 'shared/styles';
+import { ItemResponseType, textLanguageKey } from 'shared/consts';
 import {
   SingleAndMultipleSelectMatrix,
+  SingleAndMultipleSelectRow,
   SingleAndMultiSelectOption,
   SingleAndMultiSelectRowOption,
-  SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
 import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
-import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
+import { getMaxLengthValidationError, toggleBooleanState } from 'shared/utils';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   StyledFormControl,
+  StyledFormLabel,
+  StyledInputControllerContainer,
+  StyledItemSettingGroupContainer,
+  StyledItemSettingsGroupHeader,
   StyledSettingInfoIcon,
   StyledSettingTitleContainer,
-  StyledInputControllerContainer,
-  StyledItemSettingsGroupHeader,
-  StyledItemSettingGroupContainer,
-  StyledFormLabel,
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import {
@@ -35,9 +36,10 @@ import {
   ITEM_TYPES_TO_HAVE_ALERTS,
 } from './ItemSettingsGroup.const';
 import {
-  DEFAULT_TIMER_VALUE,
   DEFAULT_DISABLED_TIMER_VALUE,
   DEFAULT_SCORE_VALUE,
+  DEFAULT_TIMER_VALUE,
+  SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
@@ -53,20 +55,27 @@ export const ItemSettingsGroup = ({
   collapsedByDefault,
 }: ItemSettingsGroupProps) => {
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
+  const {
+    featureFlags: { enableParagraphTextItem },
+  } = useFeatureFlags();
 
   const { t } = useTranslation('app');
-  const { control, setValue, getValues } = useCustomFormContext();
+  const { control, setValue, getValues, setError, clearErrors, getFieldState } =
+    useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
   const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
   const activitySkippableName = `${fieldName}.isSkippable`;
+  const responseOptionsName = `${itemName}.responseValues.options`;
   const handleTimerChange = (event: SelectEvent) => {
     setValue(
       `${name}.${ItemConfigurationSettings.HasTimer}`,
       +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
     );
   };
+  const groupNameLangContext =
+    enableParagraphTextItem && inputType === ItemResponseType.Text ? textLanguageKey : inputType;
 
   return (
     <StyledItemSettingGroupContainer
@@ -78,7 +87,7 @@ export const ItemSettingsGroup = ({
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader onClick={toggleBooleanState(setIsExpanded)}>
-          <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
+          <StyledFormLabel>{t(groupName, { context: groupNameLangContext })}</StyledFormLabel>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
             data-testid="builder-activity-items-item-settings-group-collapse"
@@ -108,6 +117,9 @@ export const ItemSettingsGroup = ({
                 settingKey === ItemConfigurationSettings.HasResponseDataIdentifier;
               const isResponseRequired =
                 settingKey === ItemConfigurationSettings.IsResponseRequired;
+              const isPortraitLayout = settingKey === ItemConfigurationSettings.PortraitLayout;
+              const usePortraitLayout =
+                isPortraitLayout && get(config, ItemConfigurationSettings.PortraitLayout);
 
               const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
               const hasResponseRequired = checkIfItemHasRequiredOptions(config);
@@ -189,13 +201,11 @@ export const ItemSettingsGroup = ({
                     if (hasColorPalette) return;
 
                     setValue(
-                      `${itemName}.responseValues.options`,
-                      getValues(`${itemName}.responseValues.options`)?.map(
-                        (option: SingleAndMultiSelectOption) => ({
-                          ...option,
-                          color: undefined,
-                        }),
-                      ),
+                      responseOptionsName,
+                      getValues(responseOptionsName)?.map((option: SingleAndMultiSelectOption) => ({
+                        ...option,
+                        color: undefined,
+                      })),
                     );
                     setValue(`${itemName}.responseValues.paletteName`, undefined);
                   }
@@ -239,8 +249,8 @@ export const ItemSettingsGroup = ({
                     case ItemResponseType.SingleSelection:
                     case ItemResponseType.MultipleSelection:
                       return setValue(
-                        `${itemName}.responseValues.options`,
-                        getValues(`${itemName}.responseValues.options`)?.map(
+                        responseOptionsName,
+                        getValues(responseOptionsName)?.map(
                           (option: SingleAndMultiSelectOption) => ({
                             ...option,
                             score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
@@ -274,7 +284,7 @@ export const ItemSettingsGroup = ({
                     getValues(`${itemName}.responseValues.rows`)?.map(
                       (row: SingleAndMultipleSelectRow) => ({
                         rowId: row.id,
-                        options: getValues(`${itemName}.responseValues.options`)?.map(
+                        options: getValues(responseOptionsName)?.map(
                           (option: SingleAndMultiSelectRowOption) => ({
                             optionId: option.id,
                             ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
@@ -306,6 +316,32 @@ export const ItemSettingsGroup = ({
                   );
                 }
 
+                if (isPortraitLayout) {
+                  const responseOptions = getValues(
+                    responseOptionsName,
+                  ) as SingleAndMultiSelectOption[];
+                  const maxLengthErrorMessage = getMaxLengthValidationError({
+                    max: SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT,
+                  });
+
+                  responseOptions?.forEach((option, index) => {
+                    const optionTextPath = `${responseOptionsName}.${index}.text`;
+                    const optionTextLength = option?.text?.length || 0;
+                    const currentErrorMessage = getFieldState(optionTextPath)?.error?.message;
+
+                    if (
+                      event.target.checked &&
+                      optionTextLength > SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT
+                    ) {
+                      setError(optionTextPath, {
+                        message: maxLengthErrorMessage,
+                      });
+                    } else if (currentErrorMessage === maxLengthErrorMessage) {
+                      clearErrors(optionTextPath);
+                    }
+                  });
+                }
+
                 onChange({
                   ...config,
                   [settingKey]: event.target.checked,
@@ -313,57 +349,63 @@ export const ItemSettingsGroup = ({
               };
 
               return (
-                <FormControlLabel
-                  sx={sxProps}
-                  key={`${groupName}-${settingKey}`}
-                  control={
-                    <Checkbox
-                      name={settingKey}
-                      checked={!!get(config, settingKey)}
-                      onChange={handleCheckboxChange}
-                      disabled={isDisabled}
-                    />
-                  }
-                  data-testid={`builder-activity-items-item-settings-${settingKey}`}
-                  label={
-                    <StyledSettingTitleContainer withInput={isTimer}>
-                      <StyledTitleMedium sx={{ p: theme.spacing(0, 1), whiteSpace: 'nowrap' }}>
-                        {t(`itemSettings.${settingKey}`)}
-                        {hasTooltip && (
-                          <Tooltip
-                            tooltipTitle={t(`itemSettings.${settingKey}`, { context: 'tooltip' })}
-                            placement="top"
-                          >
-                            <span>
-                              <StyledSettingInfoIcon id="more-info-outlined" />
-                            </span>
-                          </Tooltip>
+                <Fragment key={`${groupName}-${settingKey}`}>
+                  <FormControlLabel
+                    sx={sxProps}
+                    control={
+                      <Checkbox
+                        name={settingKey}
+                        checked={!!get(config, settingKey)}
+                        onChange={handleCheckboxChange}
+                        disabled={isDisabled}
+                      />
+                    }
+                    data-testid={`builder-activity-items-item-settings-${settingKey}`}
+                    label={
+                      <StyledSettingTitleContainer withInput={isTimer}>
+                        <StyledTitleMedium sx={{ p: theme.spacing(0, 1), whiteSpace: 'nowrap' }}>
+                          {t(`itemSettings.${settingKey}`)}
+                          {hasTooltip && (
+                            <Tooltip
+                              tooltipTitle={t(`itemSettings.${settingKey}`, { context: 'tooltip' })}
+                              placement="top"
+                            >
+                              <span>
+                                <StyledSettingInfoIcon id="more-info-outlined" />
+                              </span>
+                            </Tooltip>
+                          )}
+                        </StyledTitleMedium>
+                        {isTimer && (
+                          <>
+                            <StyledInputControllerContainer>
+                              <InputController
+                                control={control}
+                                key={`timer-${isSecondsDisabled}`}
+                                name={`${name}.${ItemConfigurationSettings.HasTimer}`}
+                                type="number"
+                                disabled={isSecondsDisabled}
+                                minNumberValue={
+                                  isSecondsDisabled
+                                    ? DEFAULT_DISABLED_TIMER_VALUE
+                                    : DEFAULT_ACTIVE_TIMER_VALUE
+                                }
+                                data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
+                                onChange={handleTimerChange}
+                              />
+                            </StyledInputControllerContainer>
+                            <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>
+                          </>
                         )}
-                      </StyledTitleMedium>
-                      {isTimer && (
-                        <>
-                          <StyledInputControllerContainer>
-                            <InputController
-                              control={control}
-                              key={`timer-${isSecondsDisabled}`}
-                              name={`${name}.${ItemConfigurationSettings.HasTimer}`}
-                              type="number"
-                              disabled={isSecondsDisabled}
-                              minNumberValue={
-                                isSecondsDisabled
-                                  ? DEFAULT_DISABLED_TIMER_VALUE
-                                  : DEFAULT_ACTIVE_TIMER_VALUE
-                              }
-                              data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
-                              onChange={handleTimerChange}
-                            />
-                          </StyledInputControllerContainer>
-                          <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>
-                        </>
-                      )}
-                    </StyledSettingTitleContainer>
-                  }
-                />
+                      </StyledSettingTitleContainer>
+                    }
+                  />
+                  {usePortraitLayout && (
+                    <StyledBodyMedium sx={{ fontStyle: 'italic' }}>
+                      {t('itemSettings.portraitLayout_subtext')}
+                    </StyledBodyMedium>
+                  )}
+                </Fragment>
               );
             })}
           </FormGroup>

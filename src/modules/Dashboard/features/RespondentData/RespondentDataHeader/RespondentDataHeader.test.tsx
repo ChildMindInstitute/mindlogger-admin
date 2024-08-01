@@ -61,7 +61,6 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
-        enableMultiInformantTakeNow: true,
         enableActivityAssign: true,
       },
       resetLDContext: jest.fn(),
@@ -142,30 +141,6 @@ describe('RespondentDataHeader component tests', () => {
       const actionButton = screen.queryByTestId(`${dataTestid}-export-button`);
       canViewData ? expect(actionButton).toBeInTheDocument() : expect(actionButton).toBeNull();
     });
-  });
-
-  test('should hide take now button based feature flag', () => {
-    mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
-    mockUseFeatureFlags.mockReturnValue({
-      featureFlags: {
-        enableMultiInformantTakeNow: false,
-      },
-      resetLDContext: jest.fn(),
-    });
-
-    renderWithProviders(
-      <RespondentDataHeader
-        dataTestid={dataTestid}
-        applet={mockedApplet}
-        subject={mockedSubject}
-        activityOrFlow={mockedActivity}
-      />,
-      {
-        preloadedState: getPreloadedState(Roles.SuperAdmin),
-      },
-    );
-
-    expect(screen.queryByTestId(`${dataTestid}-take-now`)).toBeNull();
   });
 
   test('should hide assign activity button based feature flag', () => {

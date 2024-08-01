@@ -78,8 +78,11 @@ import {
   FeedbackNote,
   GetActivityResponse,
   GetActivityParams,
+  EditSubjectResponse,
+  CreateTemporaryMultiInformantRelation,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
+import { ApiSuccessResponse } from './base.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -240,7 +243,10 @@ export const editManagerAccessApi = (
     { signal },
   );
 
-export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: AbortSignal) =>
+export const editSubjectApi = (
+  { subjectId, values }: EditSubject,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<ApiSuccessResponse<EditSubjectResponse>>> =>
   authApiClient.put(
     `/subjects/${subjectId}`,
     {
@@ -910,3 +916,15 @@ export const getAppletActivitiesApi = (
     params,
     signal,
   });
+
+export const createTemporaryMultiInformantRelationApi = (
+  { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<null>> =>
+  authApiClient.post(
+    `/subjects/${subjectId}/relations/${sourceSubjectId}/multiinformant-assessment`,
+    {},
+    {
+      signal,
+    },
+  );

@@ -14,6 +14,7 @@ export const DEFAULT_DISABLED_TIMER_VALUE = 0;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MAX_NUMBER = 30;
 export const SELECT_OPTION_TEXT_MAX_LENGTH = 75;
+export const SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT = 24;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_SLIDER_ROWS_SCORE = createArray(
   DEFAULT_SLIDER_MAX_VALUE,
@@ -34,7 +35,9 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
   label: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
-export const DEFAULT_MAX_CHARACTERS = 300;
+export const DEFAULT_MAX_CHARACTERS_SHORT_TEXT = 72;
+export const DEFAULT_MAX_CHARACTERS_TEXT = 300;
+export const DEFAULT_MAX_CHARACTERS_PARAGRAPH_TEXT = 1000;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 
 export const itemsTypeOptions: ItemsOptionGroup[] = [
@@ -92,6 +95,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
+      {
+        value: ItemResponseType.ParagraphText,
+        icon: itemsTypeIcons[ItemResponseType.ParagraphText],
+      },
       {
         value: ItemResponseType.Drawing,
         icon: itemsTypeIcons[ItemResponseType.Drawing],

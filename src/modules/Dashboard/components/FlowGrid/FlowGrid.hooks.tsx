@@ -42,8 +42,7 @@ export function useFlowGridMenu({
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
   const canEdit = checkIfCanEdit(roles);
-  const canDoTakeNow =
-    checkIfFullAccess(roles) && featureFlags.enableMultiInformantTakeNow && hasParticipants;
+  const canDoTakeNow = checkIfFullAccess(roles) && hasParticipants;
   const canAccessData = checkIfCanAccessData(roles);
   const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);

@@ -143,6 +143,7 @@
   "appletHasEmptyRequiredFields": "Please fill in all required fields marked in red",
   "appletHasErrorsInFields": "Please fix the errors in all fields marked in red",
   "appletHasItemFlowContradictions": "Selected position of the Item in the list contradicts the Item Flow",
+  "summaryItemSameAsRuleItem": "This item is already selected as a condition and cannot be selected as a result simultaneously",
   "appletImageDescription": "This image is displayed next to the Applet name in the admin panel, and in the respondent's interface.",
   "appletImg": "Applet Image",
   "appletIsBeingCreated": "Your Applet is being created. Please wait...",
@@ -292,7 +293,10 @@
   "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
   "conditionalLogicValidation": {
-    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions."
+    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
+    "summaryItemIsBeforeRuleItemInTheList": "This Item appears in the Activity before one of the Items involved in the conditional.",
+    "summaryItemIsTheSameAsRuleItem": "This Item already defines one of the conditions and cannot be its result at the same time.",
+    "impossibleToFulfillTheConditionsSimultaneously": "It's impossible to fulfill the specified conditions simultaneously."
   },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
@@ -729,7 +733,10 @@
     "timer": "Set Timer",
     "timer_tooltip": "Time to complete the Item ",
     "autoAdvance": "Auto-advance",
-    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response"
+    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response",
+    "portraitLayout": "Use Portrait Layout",
+    "portraitLayout_tooltip": "Changes the layout of response options to a vertical rectangular card. The picture (if included) will be larger and sit on top of the text rather than to the left, but the option text will be truncated after approx. 24 characters.",
+    "portraitLayout_subtext": "Please note: In portrait layout, option text will be truncated after approximately 24 characters."
   },
   "itemType": "Item Type",
   "itemValue": "Item Value",
@@ -1092,6 +1099,8 @@
   "responseOptions_singleSelection": "Single Selection Response Option",
   "responseOptions_slider": "Slider Response Options",
   "responseOptions_text": "Text Response Options",
+  "responseOptions_shortText": "Short Text Response Options",
+  "responseOptions_paragraphText": "Paragraph Text Response Options",
   "responseOptionsTooltip": "The respondent completed the Activity at these times",
   "retainData": "Retain Data",
   "retry": "Retry",
@@ -1251,6 +1260,7 @@
   "sortBy": "Sort By",
   "startDate": "Start date",
   "startEndDate": "Start Date / End Date",
+  "startEndTime": "Start Time / End Time",
   "startTime": "Start time",
   "status": "Status",
   "startTimeResponse": "Start Time Response",
@@ -1325,7 +1335,8 @@
         "teamMemberGrouping": "Team Members",
         "participantGrouping": "Participants",
         "notFound": "Not Found"
-      }
+      },
+      "relationErrorMessage": "Unable to start activity. Please try again later."
     }
   },
   "teamMemberAlreadyInvited": "Team member already invited",
@@ -1334,15 +1345,23 @@
   "termsOfServiceAgreementRequired": "Please agree to the Terms of Service",
   "testInstruction": "Test Round Instruction",
   "text": "Text",
+  "shortText": "Short Text",
+  "paragraphText": "Paragraph Text",
   "textHint": "Text input field",
+  "shortTextHint": "Short text input field",
+  "paragraphTextHint": "Paragraph text input field",
   "textInputOptionDescription": "The respondent will be able to enter an additional text response",
   "textInputOptionDescription_required": "The respondent will be required to enter an additional text response",
   "textInputOptionHelpText": "*Required",
   "textInputOptionLabel": "Additional Text Input Option",
   "textInputOptionLabel_required": "Additional Text Input Option (Required)",
   "textPlaceholder": "Type text",
-  "textResponseDescription": "The respondent will be able to enter a text response.",
-  "textResponseTitle": "Text Response",
+  "textResponseDescription": "The respondent will be able to enter a text response",
+  "shortTextResponseDescription": "The respondent will be able to enter a short text response",
+  "paragraphTextResponseDescription": "The respondent will be able to enter a long text response",
+  "textResponse": "Text Response",
+  "shortTextResponse": "Short Text Response",
+  "paragraphTextResponse": "Paragraph Text Response",
   "thisReviewerCanView": "This Reviewer Can View",
   "respondentCompletedActivity": "The respondent completed the Activity at these times",
   "respondentCompletedFlow": "The respondent completed the Activity Flow at these times",
@@ -1507,6 +1526,5 @@
   "emailAddress": "Email Address",
   "emailAddressPlaceholder": "email@example.com",
   "emailAlreadyInUse": "That email is <1>already in use</1>. Please enter another one.",
-  "requestShellAccountSuccess": "<0>Shell account <1>{{id}}</1> was successfully created and is available on the <3>Respondents</3> tab.</0>",
   "goToDashboard": "Go to Dashboard"
 }

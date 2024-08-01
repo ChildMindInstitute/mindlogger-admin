@@ -21,7 +21,7 @@ export const StyledSvg = styled(StyledFlexAllCenter)`
 export const StyledButton = styled(StyledClearedButton)`
   justify-content: space-between;
 
-  &.MuiButtonBase-root.MuiButton-root.MuiButton-text:hover {
+  &.MuiButtonBase-root.MuiButton-root {
     background-color: transparent;
   }
 

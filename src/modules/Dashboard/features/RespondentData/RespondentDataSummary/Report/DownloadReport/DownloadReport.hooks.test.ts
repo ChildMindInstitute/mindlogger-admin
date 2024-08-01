@@ -93,7 +93,7 @@ describe('useDownloadReport', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      respondentId: mockedRespondentId,
+      subjectId: mockedRespondentId,
     });
   });
   afterEach(() => {

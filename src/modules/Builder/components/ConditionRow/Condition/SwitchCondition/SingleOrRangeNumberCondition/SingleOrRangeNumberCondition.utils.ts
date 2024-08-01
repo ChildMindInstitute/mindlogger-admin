@@ -1,16 +1,31 @@
-import { SliderItemResponseValues, NumberItemResponseValues } from 'redux/modules';
+import { NumberItemResponseValues, SliderItemResponseValues } from 'redux/modules';
 import { ConditionType } from 'shared/consts';
 
-import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../../Condition.const';
+import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from '../../Condition.const';
 import {
-  GetConditionMinMaxValuesProps,
   GetConditionMinMaxRangeValuesProps,
+  GetConditionMinMaxValuesProps,
 } from './SingleOrRangeNumberCondition.types';
 
 const getDefaultMinMaxValues = (state: ConditionType) => ({
   minNumber: state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE,
   maxNumber: undefined,
 });
+
+const getMinNumberValue = (conditionType: ConditionType, minValue: number) => {
+  if (!conditionType) return DEFAULT_NUMBER_MIN_VALUE;
+  if (conditionType === ConditionType.LessThan) return minValue + 1;
+
+  return minValue;
+};
+
+const getMaxNumberValue = (conditionType: ConditionType, maxValue: number) => {
+  if (!conditionType) return Number.MAX_SAFE_INTEGER;
+  if (conditionType === ConditionType.GreaterThan) return maxValue - 1;
+
+  return maxValue;
+};
+
 export const getConditionMinMaxValues = ({
   item,
   state,
@@ -23,26 +38,28 @@ export const getConditionMinMaxValues = ({
       const responseValues = item.responseValues;
 
       return {
-        minNumber: state ? +responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
-        maxNumber: state ? +responseValues.maxValue : Number.MAX_SAFE_INTEGER,
+        minNumber: getMinNumberValue(state, +responseValues.minValue),
+        maxNumber: getMaxNumberValue(state, +responseValues.maxValue),
       };
     }
     case ConditionItemType.NumberSelection: {
       const responseValues = item.responseValues;
 
       return {
-        minNumber: state ? responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
-        maxNumber: state ? responseValues.maxValue : Number.MAX_SAFE_INTEGER,
+        minNumber: getMinNumberValue(state, responseValues.minValue),
+        maxNumber: getMaxNumberValue(state, responseValues.maxValue),
       };
     }
     case ConditionItemType.SliderRows: {
       const responseValues = item.responseValues;
 
       return {
-        minNumber:
-          state && rowIndex ? +responseValues.rows[+rowIndex].minValue : DEFAULT_NUMBER_MIN_VALUE,
-        maxNumber:
-          state && rowIndex ? +responseValues.rows[+rowIndex].maxValue : Number.MAX_SAFE_INTEGER,
+        minNumber: rowIndex
+          ? getMinNumberValue(state, +responseValues.rows[+rowIndex].minValue)
+          : DEFAULT_NUMBER_MIN_VALUE,
+        maxNumber: rowIndex
+          ? getMaxNumberValue(state, +responseValues.rows[+rowIndex].maxValue)
+          : Number.MAX_SAFE_INTEGER,
       };
     }
     default:

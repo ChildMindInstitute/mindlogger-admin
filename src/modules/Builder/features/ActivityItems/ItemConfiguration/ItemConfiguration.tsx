@@ -18,6 +18,7 @@ import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilter
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
+import { ItemResponseType } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
@@ -74,6 +75,19 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
             groupName,
             groupOptions: groupOptions.filter(({ value }) =>
               itemsForReviewableActivity.includes(value),
+            ),
+          },
+        ];
+      }
+
+      if (groupName === 'input') {
+        return [
+          ...options,
+          {
+            groupName,
+            groupOptions: groupOptions.filter(
+              ({ value }) =>
+                value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
             ),
           },
         ];

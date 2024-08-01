@@ -1,19 +1,22 @@
-import { setHours, setMinutes, addMinutes } from 'date-fns';
+import { addMinutes, setHours, setMinutes } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { TimePicker } from 'shared/components';
 import { StyledBodyLarge, theme } from 'shared/styles';
+import { ConditionType } from 'shared/consts';
 
 import {
-  commonInputWrapperSx,
   commonInputSx,
-  TIME_INTERVALS,
+  commonInputWrapperSx,
   MAX_HOURS,
   MAX_MINUTES,
   MAX_TIME,
+  MAX_TIME_GREATER_THAN,
   MIN_TIME,
+  MIN_TIME_LESS_THAN,
+  TIME_INTERVALS,
 } from '../SwitchCondition.const';
 import { StyledTimeRow } from '../SwitchCondition.styles';
 import { TimeConditionProps } from './TimeCondition.types';
@@ -25,6 +28,7 @@ export const TimeCondition = ({
   maxValue,
   isSingleValueShown,
   isRangeValueShown,
+  state,
   dataTestid,
 }: TimeConditionProps) => {
   const { t } = useTranslation('app');
@@ -44,7 +48,10 @@ export const TimeCondition = ({
       ...commonInputSx,
     },
     timeIntervals: TIME_INTERVALS,
+    minTime: state === ConditionType.LessThan ? MIN_TIME_LESS_THAN : MIN_TIME,
+    maxTime: state === ConditionType.GreaterThan ? MAX_TIME_GREATER_THAN : MAX_TIME,
   };
+
   const onStartTimeChange = (time: string) => {
     if (!time) return;
 

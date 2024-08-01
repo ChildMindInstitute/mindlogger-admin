@@ -20,6 +20,7 @@ export const ITEM_SETTINGS_TO_HAVE_TOOLTIP = [
   ItemConfigurationSettings.HasRandomize,
   ItemConfigurationSettings.HasAlerts,
   ItemConfigurationSettings.HasAutoAdvance,
+  ItemConfigurationSettings.PortraitLayout,
 ];
 
 export const ITEM_TYPES_TO_HAVE_ALERTS = [

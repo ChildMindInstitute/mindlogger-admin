@@ -1,7 +1,7 @@
 import i18n from 'i18n';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, ConditionType } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey } from 'shared/utils/getEntityKey';
 import {
   OptionCondition,
   SingleValueCondition,
@@ -9,10 +9,11 @@ import {
   ScoreReport,
   TimeRangeValueCondition,
   SingleMultiSelectionPerRowCondition,
-} from 'shared/state';
-import { SliderRowsCondition } from 'shared/state/Applet/Applet.schema';
+  SliderRowsCondition,
+  TimeRangeConditionType,
+} from 'shared/state/Applet';
 
-import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { DEFAULT_PAYLOAD_MAX_VALUE, DEFAULT_PAYLOAD_MIN_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
 import { StyledMdPreview } from '../ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -120,12 +121,13 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
 const getDefaultPayload = (
   conditionPayload: SingleValueCondition['payload'] | TimeRangeValueCondition['payload'],
   type?: ItemResponseType,
+  formTimeType?: TimeRangeConditionType,
 ) => {
   let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
   if (type === ItemResponseType.TimeRange)
     return {
       value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
-      type: (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
+      type: formTimeType ?? (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
     };
   if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
 
@@ -134,7 +136,13 @@ const getDefaultPayload = (
   };
 };
 
-export const getPayload = ({ conditionType, conditionPayload, selectedItem }: GetPayload) => {
+export const getPayload = ({
+  conditionType,
+  conditionPayload,
+  selectedItem,
+  formRowIndex,
+  formTimeType,
+}: GetPayload) => {
   const responseType = selectedItem?.responseType;
 
   switch (conditionType) {
@@ -150,7 +158,9 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           optionValue:
             (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.optionValue ?? '',
           rowIndex:
-            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.rowIndex ?? '',
+            formRowIndex ??
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.rowIndex ??
+            '',
         };
       }
 
@@ -168,8 +178,8 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
-        const rowIndex = payload?.rowIndex ?? '';
-        const minValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.minValue : '';
+        const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
+        const minValue = rowIndex ? selectedItem?.responseValues.rows[+rowIndex]?.minValue : '';
 
         return {
           value: minValue,
@@ -177,7 +187,11 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         };
       }
 
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
+      return getDefaultPayload(
+        conditionPayload as SingleValueCondition['payload'],
+        responseType,
+        formTimeType,
+      );
     case ConditionType.LessThan:
       if (
         responseType === ItemResponseType.Slider ||
@@ -189,8 +203,8 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
-        const rowIndex = payload?.rowIndex ?? '';
-        const maxValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.maxValue : '';
+        const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
+        const maxValue = rowIndex ? selectedItem?.responseValues.rows[+rowIndex]?.maxValue : '';
 
         return {
           value: maxValue,
@@ -198,13 +212,25 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         };
       }
 
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
+      return getDefaultPayload(
+        conditionPayload as SingleValueCondition['payload'],
+        responseType,
+        formTimeType,
+      );
     case ConditionType.Equal:
     case ConditionType.NotEqual: {
+      if (
+        responseType === ItemResponseType.Slider ||
+        responseType === ItemResponseType.NumberSelection
+      ) {
+        return {
+          value: selectedItem?.responseValues?.minValue ?? DEFAULT_PAYLOAD_MIN_VALUE,
+        };
+      }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition['payload'];
-        const rowIndex = payload?.rowIndex ?? '';
-        const minValue = rowIndex ? selectedItem?.responseValues.rows[rowIndex]?.minValue : '';
+        const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
+        const minValue = rowIndex ? selectedItem?.responseValues.rows[+rowIndex]?.minValue : '';
 
         return {
           value: minValue,
@@ -212,7 +238,11 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         };
       }
 
-      return getDefaultPayload(conditionPayload as SingleValueCondition['payload'], responseType);
+      return getDefaultPayload(
+        conditionPayload as SingleValueCondition['payload'],
+        responseType,
+        formTimeType,
+      );
     }
     case ConditionType.Between:
     case ConditionType.OutsideOf:
@@ -235,14 +265,15 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         return {
           minValue: (conditionPayload as TimeRangeValueCondition['payload'])?.minValue ?? null,
           maxValue: (conditionPayload as TimeRangeValueCondition['payload'])?.maxValue ?? null,
-          type: (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
+          type:
+            formTimeType ?? (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
         };
       }
       if (responseType === ItemResponseType.SliderRows) {
         const payload = conditionPayload as SliderRowsCondition<RangeValueCondition>['payload'];
-        const rowIndex = payload?.rowIndex ?? '';
+        const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
         const { maxValue = '', minValue = '' } = rowIndex
-          ? selectedItem?.responseValues.rows[rowIndex] ?? {}
+          ? selectedItem?.responseValues.rows[+rowIndex] ?? {}
           : {};
 
         return {

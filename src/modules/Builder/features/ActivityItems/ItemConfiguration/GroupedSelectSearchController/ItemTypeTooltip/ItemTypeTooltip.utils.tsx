@@ -29,6 +29,7 @@ export const getInputTypeContent = () => ({
   [ItemResponseType.MultipleSelectionPerRow]: <SelectionPerRow uiType={multipleUiType} />,
   [ItemResponseType.SliderRows]: <SliderRows />,
   [ItemResponseType.Text]: <Dashed uiType={DashedUiType.Text} />,
+  [ItemResponseType.ParagraphText]: <Dashed uiType={DashedUiType.ParagraphText} />,
   [ItemResponseType.Drawing]: <Dashed uiType={DashedUiType.Drawing} />,
   [ItemResponseType.Photo]: <Dashed uiType={DashedUiType.Photo} />,
   [ItemResponseType.Video]: <Dashed uiType={DashedUiType.Video} />,
