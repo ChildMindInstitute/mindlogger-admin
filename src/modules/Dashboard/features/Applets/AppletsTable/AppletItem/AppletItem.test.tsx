@@ -131,10 +131,10 @@ describe('AppletItem component tests', () => {
 
   describe('should navigate to a particular route for applet actions', () => {
     test.each`
-      actionTestId       | route                                         | description
-      ${'view-users'}    | ${`/dashboard/${mockedAppletId}/respondents`} | ${'view users'}
-      ${'view-calendar'} | ${`/dashboard/${mockedAppletId}/schedule`}    | ${'view calendar'}
-      ${'edit'}          | ${`/builder/${mockedAppletId}`}               | ${'edit applet'}
+      actionTestId       | route                                          | description
+      ${'view-users'}    | ${`/dashboard/${mockedAppletId}/participants`} | ${'view users'}
+      ${'view-calendar'} | ${`/dashboard/${mockedAppletId}/schedule`}     | ${'view calendar'}
+      ${'edit'}          | ${`/builder/${mockedAppletId}`}                | ${'edit applet'}
     `('$description', async ({ actionTestId, route }) => {
       renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
@@ -145,12 +145,12 @@ describe('AppletItem component tests', () => {
     });
   });
 
-  test('should navigate to respondents page on applet click', async () => {
+  test('should navigate to overview page on applet click', async () => {
     renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
     fireEvent.click(screen.getByText('displayName'));
 
-    expect(mockedUseNavigate).nthCalledWith(1, `/dashboard/${mockedAppletId}/respondents`);
+    expect(mockedUseNavigate).nthCalledWith(1, `/dashboard/${mockedAppletId}/overview`);
   });
 
   test('should pin applet in folder', async () => {

@@ -1,8 +1,7 @@
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
+import { Invitation, InvitationStatus } from 'shared/types';
 import { ActivityFlow, Activity } from 'redux/modules';
-
-import { Invitation, InvitationStatus } from '../features/Applet/AddUser/AddUser.types';
 
 export type ManagerApplet = {
   id: string;

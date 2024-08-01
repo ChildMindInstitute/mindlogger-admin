@@ -1487,6 +1487,5 @@
   "emailAddress": "Email Address",
   "emailAddressPlaceholder": "email@example.com",
   "emailAlreadyInUse": "That email is <1>already in use</1>. Please enter another one.",
-  "requestShellAccountSuccess": "<0>Shell account <1>{{id}}</1> was successfully created and is available on the <3>Respondents</3> tab.</0>",
   "goToDashboard": "Go to Dashboard"
 }

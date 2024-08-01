@@ -26,8 +26,7 @@ export const getActivityActions = ({
     (checkIfCanEdit(roles) && !activity?.isPerformanceTask) ||
     EditablePerformanceTasks.includes(activity?.performanceTaskType ?? '');
   const canAccessData = checkIfCanAccessData(roles);
-  const canDoTakeNow =
-    featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfFullAccess(roles);
+  const canDoTakeNow = hasParticipants && checkIfFullAccess(roles);
   const canAssignActivity =
     checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
