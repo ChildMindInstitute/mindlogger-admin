@@ -27,7 +27,7 @@ const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
 ];
 
 const DEFAULT_PHRASE = {
-  image: '@TODO',
+  image: '',
   fields: [
     { type: 'sentence', text: '' },
     { type: 'item_response', itemName: '', displayMode: 'sentence', itemIndex: 0 },
