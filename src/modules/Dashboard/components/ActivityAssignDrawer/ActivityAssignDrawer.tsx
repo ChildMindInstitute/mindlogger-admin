@@ -73,9 +73,9 @@ export const ActivityAssignDrawer = ({
 
   const isLoading = isLoadingParticipants || isLoadingActivities;
 
-  const activities: Activity[] = activitiesData?.data.result?.activitiesDetails ?? [];
+  const activities: Activity[] = activitiesData?.data?.result?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
-    activitiesData?.data.result?.appletDetail?.activityFlows ?? [],
+    activitiesData?.data?.result?.appletDetail?.activityFlows ?? [],
     activities,
   );
   const activitiesCount = activities.length + flows.length;
@@ -181,6 +181,8 @@ export const ActivityAssignDrawer = ({
 
   // Reinitialize drawer form state whenever revealed, and clear banners when closed
   useEffect(() => {
+    if (!allParticipants.length) return;
+
     if (open) {
       const { activityIds, flowIds, assignments } = defaultValues;
 
@@ -188,17 +190,18 @@ export const ActivityAssignDrawer = ({
 
       setTimeout(() => {
         if (assignments[0]?.respondentSubjectId) {
-          const name = allParticipants.find(({ id }) => id === assignments[0].respondentSubjectId)
-            ?.nickname;
+          const { nickname, tag } =
+            allParticipants.find(({ id }) => id === assignments[0].respondentSubjectId) ?? {};
           addBanner('RespondentAutofillBanner', {
-            name,
+            name: nickname,
             hasActivity: activityIds.length || flowIds.length,
+            isTeamMember: tag === 'Team',
           });
         } else if (assignments[0]?.targetSubjectId) {
-          const name = allParticipants.find(({ id }) => id === assignments[0].targetSubjectId)
-            ?.nickname;
+          const { nickname } =
+            allParticipants.find(({ id }) => id === assignments[0].targetSubjectId) ?? {};
           addBanner('SubjectAutofillBanner', {
-            name,
+            name: nickname,
             hasActivity: activityIds.length || flowIds.length,
           });
         } else if (activityIds.length || flowIds.length) {
@@ -208,7 +211,7 @@ export const ActivityAssignDrawer = ({
     } else {
       removeAllBanners();
     }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open, allParticipants]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Clear subject autofill banner once all subject assignments have a respondent
   useEffect(() => {
@@ -262,7 +265,11 @@ export const ActivityAssignDrawer = ({
           >
             <Svg id="help-outlined" />
           </IconButton>
-          <IconButton onClick={handleClose} data-testid={`${dataTestId}-header-close`}>
+          <IconButton
+            onClick={handleClose}
+            aria-label={t('close')}
+            data-testid={`${dataTestId}-header-close`}
+          >
             <Svg id="close" />
           </IconButton>
         </StyledFlexTopCenter>

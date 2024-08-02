@@ -1,6 +1,8 @@
 import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
+import { ApiErrorResponse } from 'redux/modules';
 
 export enum ParticipantDropdownVariant {
   Outlined = 'outlined',
@@ -40,4 +42,7 @@ export type FullTeamSearchType = 'team' | 'full-participant';
 export type UseParticipantDropdownProps = {
   appletId?: string;
   skip?: boolean;
+  successCallback?: (data: AxiosResponse) => void;
+  errorCallback?: (data?: AxiosError<ApiErrorResponse> | null) => void;
+  finallyCallback?: () => void;
 };

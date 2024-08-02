@@ -3,8 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { Banner, BannerProps } from 'shared/components/Banners/Banner';
 
-export const RespondentAutofillBanner = ({ name, hasActivity, ...rest }: BannerProps) => {
+export const RespondentAutofillBanner = ({
+  name,
+  hasActivity,
+  isTeamMember,
+  ...rest
+}: BannerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
+
+  let text: string;
+  if (hasActivity) {
+    text = isTeamMember
+      ? t('teamRespondentActivityAutofill', { name })
+      : t('respondentActivityAutofill', { name });
+  } else {
+    text = isTeamMember ? t('teamRespondentAutofill', { name }) : t('respondentAutofill', { name });
+  }
 
   return (
     <Banner
@@ -14,7 +28,7 @@ export const RespondentAutofillBanner = ({ name, hasActivity, ...rest }: BannerP
       duration={7000}
       {...rest}
     >
-      {hasActivity ? t('respondentActivityAutofill') : t('respondentAutofill', { name })}
+      {text}
     </Banner>
   );
 };

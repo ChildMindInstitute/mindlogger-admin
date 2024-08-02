@@ -238,7 +238,7 @@ export const Activities = () => {
         activityFlowId={flowId}
         open={showActivityAssign}
         respondentSubjectId={subject?.result.userId ? subject.result.id : undefined}
-        targetSubjectId={subject?.result.id}
+        targetSubjectId={subject?.result.tag === 'Team' ? undefined : subject?.result.id}
         onClose={() => {
           setShowActivityAssign(false);
           setActivityId(undefined);

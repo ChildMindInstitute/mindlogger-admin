@@ -582,7 +582,9 @@ export const Participants = () => {
         respondentSubjectId={
           chosenAppletData?.respondentId ? chosenAppletData.subjectId : undefined
         }
-        targetSubjectId={chosenAppletData?.subjectId}
+        targetSubjectId={
+          chosenAppletData?.subjectTag === 'Team' ? undefined : chosenAppletData?.subjectId
+        }
         onClose={() => {
           setShowActivityAssign(false);
           setChosenAppletData(null);

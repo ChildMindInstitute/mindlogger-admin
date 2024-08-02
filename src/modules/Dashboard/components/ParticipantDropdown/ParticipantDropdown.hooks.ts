@@ -21,7 +21,13 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.Manager,
 ] as const;
 
-export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipantDropdownProps) => {
+export const useParticipantDropdown = ({
+  appletId,
+  skip = false,
+  successCallback,
+  errorCallback,
+  finallyCallback,
+}: UseParticipantDropdownProps) => {
   const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
   const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [loggedInTeamMember, setLoggedInTeamMember] = useState<ParticipantDropdownOption | null>(
@@ -38,33 +44,47 @@ export const useParticipantDropdown = ({ appletId, skip = false }: UseParticipan
 
         setAllParticipants(options);
       }
+      successCallback?.(response);
     },
+    errorCallback,
+    finallyCallback,
   );
 
   const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
     getWorkspaceManagersApi,
     (response) => {
       setAllTeamMembers(response?.data?.result || []);
+      successCallback?.(response);
     },
+    errorCallback,
+    finallyCallback,
   );
 
   const {
     execute: fetchLoggedInTeamMember,
     isLoading: isFetchingLoggedInTeamMember,
     value: loggedInTeamMemberResponse,
-  } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
-      setLoggedInTeamMember(loggedInTeamMember);
-      setAllParticipants((prev) => {
-        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-          return prev;
-        }
+  } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      if (response?.data) {
+        const loggedInTeamMember = participantToOption(
+          (response.data as ParticipantsData).result[0],
+        );
+        setLoggedInTeamMember(loggedInTeamMember);
+        setAllParticipants((prev) => {
+          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+            return prev;
+          }
 
-        return [loggedInTeamMember, ...prev];
-      });
-    }
-  });
+          return [loggedInTeamMember, ...prev];
+        });
+      }
+      successCallback?.(response);
+    },
+    errorCallback,
+    finallyCallback,
+  );
 
   const allowedTeamMembers = useMemo(
     () =>
