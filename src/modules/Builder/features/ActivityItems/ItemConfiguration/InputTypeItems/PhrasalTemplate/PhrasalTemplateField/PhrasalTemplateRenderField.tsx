@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -17,6 +17,7 @@ import {
 
 import { StyledLineBreak } from './PhrasalTemplateField.styles';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
+import { DisplayModeOptions } from './constants';
 
 export function RenderedField({
   name = '',
@@ -24,6 +25,10 @@ export function RenderedField({
   type = 'sentence',
   ...otherProps
 }: Omit<PhrasalTemplateFieldProps, 'canRemove' | 'onRemove'>) {
+  const [displayMode, setDisplayMode] = useState<{
+    id: string;
+    items?: Array<{ id: string; name: string }>;
+  }>();
   const { t } = useTranslation('app');
   const params = useParams();
   const { control, getValues, setValue } = useCustomFormContext();
@@ -42,7 +47,7 @@ export function RenderedField({
       !isFieldValueDeleted
     ) {
       setValue(name, {
-        displayMode: 'sentence',
+        displayMode: '',
         itemName: `${fieldValue.itemName}-deleted`,
         type: 'item_response',
         itemIndex: 0,
@@ -73,34 +78,75 @@ export function RenderedField({
       return missedItem?.name;
     }
 
+    if (selectedItem?.responseType !== displayMode?.id) {
+      setDisplayMode({
+        id: selectedItem?.responseType as string,
+        items: DisplayModeOptions[selectedItem?.responseType || 'default'],
+      });
+    }
+
     return selectedItem?.name;
+  };
+
+  const getDisplayModeRenderedValue = (value: unknown) => {
+    if (!value) {
+      return (
+        <StyledBodyLarge color={variables.palette.outline}>
+          {t('phrasalTemplateItem.fieldResponsePlaceholder')}
+        </StyledBodyLarge>
+      );
+    }
+
+    const selectedDisplayMode = displayMode?.items?.find(({ id }) => id === value);
+
+    return selectedDisplayMode?.name;
   };
 
   switch (type) {
     case 'item_response':
       return (
-        <SelectController
-          name={`${name}.itemName`}
-          control={control}
-          defaultValue=""
-          fullWidth
-          options={responseOptions.map(({ name, question }) => ({
-            labelKey: name,
-            tooltip: <StyledMdPreview modelValue={(question as unknown as string) ?? ''} />,
-            value: name ?? '',
-          }))}
-          SelectProps={{
-            displayEmpty: true,
-            renderValue: getRenderedValue,
-            startAdornment: <Svg aria-hidden id="commentDots" />,
-          }}
-          TooltipProps={{
-            placement: 'left',
-            tooltipTitle: selectedOptionQuestion ? (
-              <StyledMdPreview modelValue={(selectedOptionQuestion as unknown as string) ?? ''} />
-            ) : null,
-          }}
-        />
+        <>
+          <SelectController
+            name={`${name}.itemName`}
+            control={control}
+            defaultValue=""
+            fullWidth
+            options={responseOptions.map(({ name, question }) => ({
+              labelKey: name,
+              tooltip: <StyledMdPreview modelValue={(question as unknown as string) ?? ''} />,
+              value: name ?? '',
+            }))}
+            SelectProps={{
+              displayEmpty: true,
+              renderValue: getRenderedValue,
+              startAdornment: <Svg aria-hidden id="commentDots" />,
+            }}
+            TooltipProps={{
+              placement: 'left',
+              tooltipTitle: selectedOptionQuestion ? (
+                <StyledMdPreview modelValue={(selectedOptionQuestion as unknown as string) ?? ''} />
+              ) : null,
+            }}
+          />
+          {displayMode?.items && (
+            <SelectController
+              name={`${name}.displayMode`}
+              control={control}
+              defaultValue=""
+              fullWidth
+              options={displayMode?.items.map(({ name, id }) => ({
+                labelKey: name,
+                tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
+                value: id ?? '',
+              }))}
+              SelectProps={{
+                displayEmpty: true,
+                renderValue: getDisplayModeRenderedValue,
+                startAdornment: <Svg aria-hidden id="commentDots" />,
+              }}
+            />
+          )}
+        </>
       );
     case 'line_break':
       return (
