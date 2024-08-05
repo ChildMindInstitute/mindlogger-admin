@@ -146,6 +146,7 @@ export enum PerfTaskType {
   Gyroscope = 'gyroscope',
   ABTrailsTablet = 'ABTrailsTablet',
   ABTrailsMobile = 'ABTrailsMobile',
+  Unity = 'unity',
 }
 
 export enum GyroscopeOrTouch {

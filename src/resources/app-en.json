@@ -996,13 +996,16 @@
     "abTrailsMobile": "A/B Trails Mobile",
     "flanker": "Simple & Choice Reaction Time Task Builder",
     "gyroscope": "CST Gyroscope",
-    "touch": "CST Touch"
+    "touch": "CST Touch",
+    "unity": "New Unity Task (Beta)"
   },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",
     "flanker": "This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.",
     "gyroscope": "This Activity contains Stability Tracker (Gyroscope) Item.",
-    "touch": "This Activity contains Stability Tracker (Touch) Item."
+    "touch": "This Activity contains Stability Tracker (Touch) Item.",
+    "unity": "New Unity Task",
+    "beta": "(beta)"
   },
   "periodRequired": "Period is required",
   "personalInvitation": "Personal Invitation",
