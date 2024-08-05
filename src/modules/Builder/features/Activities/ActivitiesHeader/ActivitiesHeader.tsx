@@ -8,7 +8,7 @@ import { theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ActivitiesHeaderProps } from './ActivitiesHeader.types';
-import { getPerformanceTasksMenu } from './ActivitiesHeader.utils';
+import { GetPerformanceTasksMenu } from './ActivitiesHeader.utils';
 
 export const ActivitiesHeader = ({ isSticky, children, headerProps }: ActivitiesHeaderProps) => {
   const { t } = useTranslation('app');
@@ -36,7 +36,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           label={t('addPerformanceTask')}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
-          menuItems={getPerformanceTasksMenu(
+          menuItems={GetPerformanceTasksMenu(
             headerProps?.onAddActivity || falseReturnFunc,
             setAnchorEl,
           )}

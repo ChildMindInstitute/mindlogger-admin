@@ -579,6 +579,7 @@ export const getNewPerformanceTask = ({
     [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
     [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
     [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
+    [PerfTaskType.Unity]: getABTrailsItems(DeviceType.Mobile),
   };
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
