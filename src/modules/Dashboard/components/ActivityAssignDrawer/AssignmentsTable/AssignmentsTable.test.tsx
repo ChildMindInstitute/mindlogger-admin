@@ -25,6 +25,7 @@ import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features';
 import { ApiResponseCodes } from 'api';
 
+import { selectParticipant } from '../ActivityAssignDrawer.test-utils';
 import { AssignmentsTable } from './AssignmentsTable';
 import { AssignmentsTableProps } from './AssignmentsTable.types';
 
@@ -147,30 +148,6 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 /**
- * Utility to select a value in a participant drpodown
- */
-export const selectParticipant = async (
-  dropdown: 'respondent' | 'target-subject',
-  index: number,
-  subjectId: string,
-) => {
-  const dropdownTestId = `${mockTestId}-${index}-${dropdown}-dropdown`;
-
-  const participantInputElement = screen.getByTestId(dropdownTestId)?.querySelector('input');
-
-  if (!participantInputElement) {
-    throw new Error(`Autocomplete ${dropdown} dropdown element not found`);
-  }
-
-  fireEvent.mouseDown(participantInputElement);
-
-  await waitFor(() => {
-    const participantOption = screen.getByTestId(`${dropdownTestId}-option-${subjectId}`);
-    fireEvent.click(participantOption);
-  });
-};
-
-/**
  * Wrapper for each component test
  */
 const AssignmentsTableTest = (
@@ -230,7 +207,7 @@ describe('AssignmentsTable', () => {
   it('when full account respondent is selected, should set both assignment respondent and target subject', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('respondent', 0, mockedRespondent.details[0].subjectId);
+    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 0, mockTestId);
     expect(mockOnChange).toHaveBeenLastCalledWith([
       {
         respondentSubjectId: mockedRespondent.details[0].subjectId,
@@ -242,7 +219,12 @@ describe('AssignmentsTable', () => {
   it('when manager account respondent is selected, should only set assignment respondent', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('respondent', 0, mockedOwnerRespondent.details[0].subjectId);
+    await selectParticipant(
+      'respondent',
+      mockedOwnerRespondent.details[0].subjectId,
+      0,
+      mockTestId,
+    );
     expect(mockOnChange).toHaveBeenLastCalledWith([
       { respondentSubjectId: mockedOwnerRespondent.details[0].subjectId },
     ]);
@@ -251,7 +233,7 @@ describe('AssignmentsTable', () => {
   it('when full account target subject is selected, should set assignment target subject', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('target-subject', 0, mockedRespondent.details[0].subjectId);
+    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 0, mockTestId);
     expect(mockOnChange).toHaveBeenLastCalledWith([
       { targetSubjectId: mockedRespondent.details[0].subjectId },
     ]);
@@ -260,7 +242,12 @@ describe('AssignmentsTable', () => {
   it('when limited account target subject is selected, should set assignment target subject and show "Add Respondent" chip', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('target-subject', 0, mockedLimitedRespondent.details[0].subjectId);
+    await selectParticipant(
+      'target-subject',
+      mockedLimitedRespondent.details[0].subjectId,
+      0,
+      mockTestId,
+    );
     expect(mockOnChange).toHaveBeenLastCalledWith([
       { targetSubjectId: mockedLimitedRespondent.details[0].subjectId },
     ]);

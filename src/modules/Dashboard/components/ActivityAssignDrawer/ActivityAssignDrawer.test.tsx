@@ -25,6 +25,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ActivityAssignDrawer } from './ActivityAssignDrawer';
+import { checkAssignment, selectParticipant } from './ActivityAssignDrawer.test-utils';
 
 /* Mock data
 =================================================== */
@@ -140,20 +141,8 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-/**
- * Utility to check the values of the default assignment
- */
-const checkAssignment = (respondent: string, targetSubject: string) => {
-  const respondentInput = screen
-    .getByTestId(`${dataTestId}-assignments-table-0-respondent-dropdown`)
-    .querySelector('input');
-  const targetSubjectInput = screen
-    .getByTestId(`${dataTestId}-assignments-table-0-target-subject-dropdown`)
-    .querySelector('input');
-
-  expect(respondentInput).toHaveValue(respondent);
-  expect(targetSubjectInput).toHaveValue(targetSubject);
-};
+// Required for duplicate assignments test on CI
+jest.setTimeout(10000);
 
 /* Tests
 =================================================== */
@@ -244,6 +233,8 @@ describe('ActivityAssignDrawer', () => {
           'Your Activity was auto-filled, add Respondents to continue.',
         ),
       ).toBeVisible();
+
+      expect(screen.queryByText('Next')).not.toBeVisible();
     });
   });
 
@@ -271,7 +262,7 @@ describe('ActivityAssignDrawer', () => {
     });
   });
 
-  it('prepopulates assignment respondent when passed respondent subject id', async () => {
+  it('prepopulates assignment respondent when passed Team Member respondent subject id', async () => {
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
@@ -290,6 +281,8 @@ describe('ActivityAssignDrawer', () => {
           `${mockedOwnerRespondent.nicknames[0]} was added into the table, select an Activity and Subject to continue.`,
         ),
       ).toBeVisible();
+
+      expect(screen.queryByText('Next')).not.toBeVisible();
     });
   });
 
@@ -318,6 +311,8 @@ describe('ActivityAssignDrawer', () => {
           `${mockedLimitedRespondent.nicknames[0]} was added to the table. Please add a full account Respondent to continue.`,
         ),
       ).toBeVisible();
+
+      expect(screen.queryByText('Next')).not.toBeVisible();
     });
   });
 
@@ -343,6 +338,74 @@ describe('ActivityAssignDrawer', () => {
       expect(
         within(screen.getByRole('alert')).getByText(
           `${mockedRespondent.nicknames[0]} was added into the table, select an Activity to continue.`,
+        ),
+      ).toBeVisible();
+
+      expect(screen.queryByText('Next')).not.toBeVisible();
+    });
+  });
+
+  it('proceeds to Review step after successful submission', async () => {
+    renderWithProviders(
+      <ActivityAssignDrawer
+        appletId={mockedAppletId}
+        activityId={mockedAppletData.activities[0].id}
+        respondentSubjectId={mockedRespondent.details[0].subjectId}
+        targetSubjectId={mockedRespondent.details[0].subjectId}
+        open
+        onClose={mockedOnClose}
+      />,
+      { preloadedState },
+    );
+
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+        ),
+      ).toBeVisible();
+
+      fireEvent.click(screen.getByText('Next'));
+
+      expect(screen.getByText('Review')).toBeVisible();
+    });
+  });
+
+  it('prevents proceeding to Review step if there are duplicate assignments', async () => {
+    renderWithProviders(
+      <ActivityAssignDrawer
+        appletId={mockedAppletId}
+        activityId={mockedAppletData.activities[0].id}
+        respondentSubjectId={mockedRespondent.details[0].subjectId}
+        targetSubjectId={mockedRespondent.details[0].subjectId}
+        open
+        onClose={mockedOnClose}
+      />,
+      { preloadedState },
+    );
+
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+        ),
+      ).toBeVisible();
+    });
+
+    const addButton = screen.getByRole('button', { name: 'Add Row' });
+    fireEvent.click(addButton);
+
+    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
+
+    fireEvent.click(screen.getByText('Next'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Review')).not.toBeVisible();
+
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'There are duplicate rows in the table, please edit or remove to continue.',
         ),
       ).toBeVisible();
     });
