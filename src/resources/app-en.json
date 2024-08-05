@@ -1004,8 +1004,7 @@
     "flanker": "This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.",
     "gyroscope": "This Activity contains Stability Tracker (Gyroscope) Item.",
     "touch": "This Activity contains Stability Tracker (Touch) Item.",
-    "unity": "New Unity Task",
-    "beta": "(beta)"
+    "unity": "New Unity Task"
   },
   "periodRequired": "Period is required",
   "personalInvitation": "Personal Invitation",

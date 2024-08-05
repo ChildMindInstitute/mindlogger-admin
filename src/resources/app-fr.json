@@ -1003,8 +1003,7 @@
     "flanker": "Cette Activité contient un Élément Flanker. Les horodatages collectés pour un appareil Android ne sont pas aussi précis que ceux des appareils iOS.",
     "gyroscope": "Cette Activité contient un Élément de Suivi de Stabilité (Gyroscope).",
     "touch": "Cette Activité contient un Élément de Suivi de Stabilité (Toucher).",
-    "unity": "Nouvelle tâche Unity",
-    "beta": "(beta)"
+    "unity": "Nouvelle tâche Unity"
   },
   "periodRequired": "La période est requise",
   "personalInvitation": "Invitation Personnelle",
