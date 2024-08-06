@@ -653,6 +653,7 @@ const getActivityItemResponseValues = (item: Item) => {
       };
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
+    case ItemResponseType.PhrasalTemplate:
       return item.responseValues;
     default:
       return null;
@@ -1012,6 +1013,7 @@ export const getActivities = (appletActivities: Activity[]) =>
       if (!activity.isReviewable) {
         acc.nonReviewableKeys.push(getEntityKey(activity));
       }
+
       const items = getActivityItems(activity.items);
 
       acc.activities.push({

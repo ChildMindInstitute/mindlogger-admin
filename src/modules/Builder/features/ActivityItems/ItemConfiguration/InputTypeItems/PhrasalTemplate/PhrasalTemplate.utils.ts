@@ -1,4 +1,3 @@
-
 import { v4 } from 'uuid';
 
 import i18n from 'i18n';
@@ -70,9 +69,9 @@ export const getFieldPlaceholders = (fields: PhrasalTemplateField[] = []) => {
 
   return shouldShowDefaultPlaceholders
     ? [
-      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
-      '',
-      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
-    ]
+        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
+        '',
+        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
+      ]
     : [];
 };
