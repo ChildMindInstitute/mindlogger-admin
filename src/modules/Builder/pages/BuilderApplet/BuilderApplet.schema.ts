@@ -18,22 +18,23 @@ import {
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
   PerfTaskType,
-  ScoreReportType
+  ScoreReportType,
 } from 'shared/consts';
 import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
 import {
   getEntityKey,
   getIsRequiredValidateMessage,
   getMaxLengthValidationError,
-  getObjectFromList
+  getObjectFromList,
 } from 'shared/utils';
 
 import { ItemFormValues } from '../../types/Builder.types';
 import {
-  alphanumericAndHyphenRegexp, CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  alphanumericAndHyphenRegexp,
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
   IP_ADDRESS_REGEXP,
   ItemTestFunctions,
-  PORT_REGEXP
+  PORT_REGEXP,
 } from './BuilderApplet.const';
 import {
   checkScoreRegexp,
@@ -50,7 +51,7 @@ import {
   testFunctionForSystemItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
-  testIsReportCommonFieldsRequired
+  testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
 
 const { t } = i18n;
@@ -231,82 +232,100 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
   text: yup.string().when('type', {
     is: 'sentence',
     then(schema) {
-      return (
-        schema.trim()
-          .test("validate there is only one empty sentence", t("fieldRequiredAddToContinue"), function (value, textContext) {
+      return schema
+        .trim()
+        .test(
+          'validate there is only one empty sentence',
+          t('fieldRequiredAddToContinue'),
+          function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema
+              ?.value?.fields || { type: '' };
 
-            const isMoreThanOneSentence = fields?.filter(({ type }) => type === 'sentence').length > 1;
+            const isMoreThanOneSentence =
+              fields?.filter(({ type }) => type === 'sentence').length > 1;
 
             if (!value && !isMoreThanOneSentence) {
-              return false
+              return false;
             }
 
-
-            return true
-          })
-          .test("validate there are more than one empty sentences", t("fieldAddContentOrRemove"), function (value, textContext) {
+            return true;
+          },
+        )
+        .test(
+          'validate there are more than one empty sentences',
+          t('fieldAddContentOrRemove'),
+          function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema
+              ?.value?.fields || { type: '' };
 
-
-            const isMoreThanOneSentence = fields?.filter(({ type }) => type === 'sentence').length > 1;
+            const isMoreThanOneSentence =
+              fields?.filter(({ type }) => type === 'sentence').length > 1;
 
             if (!value && isMoreThanOneSentence) {
-              return false
+              return false;
             }
 
-
-            return true
-          }
-          )
-      )
-    }
+            return true;
+          },
+        );
+    },
   }),
   itemName: yup.string().when('type', {
     is: 'item_response',
-    then: (schema) => schema.trim()
-      .test('validate item was deleted', t('fieldReferenceItemWasDeleted'), function (_, textContext) {
+    then: (schema) =>
+      schema
+        .trim()
+        .test(
+          'validate item was deleted',
+          t('fieldReferenceItemWasDeleted'),
+          function (_, textContext) {
+            if (textContext.parent.itemName.includes('-deleted')) {
+              return false;
+            }
 
-        if (textContext.parent.itemName.includes('-deleted')) {
-          return false
-        }
+            return true;
+          },
+        )
+        .test(
+          'validate required only one field',
+          t('fieldRequiredMakeASelection'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || {
+              type: '',
+            };
 
-        return true
-      })
-      .test("validate required only one field", t('fieldRequiredMakeASelection'),
-        function (value, textContext) {
-          const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-          const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+            const isMoreThanOneItemResponse =
+              fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
 
+            if (!value && !isMoreThanOneItemResponse) {
+              return false;
+            }
 
-          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
+            return true;
+          },
+        )
+        .test(
+          'validate required only one field',
+          t('fieldMakeSelectionOrRemove'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || {
+              type: '',
+            };
 
-          if (!value && !isMoreThanOneItemResponse) {
-            return false
-          }
+            const isMoreThanOneItemResponse =
+              fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
 
+            if (!value && isMoreThanOneItemResponse) {
+              return false;
+            }
 
-          return true
-        }
-      )
-      .test("validate required only one field", t('fieldMakeSelectionOrRemove'),
-        function (value, textContext) {
-          const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-          const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
-
-
-          const isMoreThanOneItemResponse = fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
-
-          if (!value && isMoreThanOneItemResponse) {
-            return false
-          }
-
-          return true
-        }
-      )
-
+            return true;
+          },
+        ),
   }),
 });
 

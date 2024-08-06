@@ -44,10 +44,10 @@ export const applet = {
         const activity = data?.result?.activities?.find(({ id }) => id === currentActivityId);
 
         if (!Array.isArray(activity?.items)) {
-          return []
+          return [];
         }
 
-        return activity?.items
+        return activity?.items;
       },
     ),
   useResponseStatus: (): MetaSchema['status'] =>

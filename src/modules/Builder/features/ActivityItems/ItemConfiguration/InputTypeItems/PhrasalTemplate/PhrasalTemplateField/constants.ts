@@ -1,9 +1,9 @@
-import { ItemResponseType } from "shared/consts";
+import { ItemResponseType } from 'shared/consts';
 
 export const DisplayModeOptions = {
   [ItemResponseType.MultipleSelection]: [
     { id: 'sentence', name: 'Sentence' },
-    { id: 'bullet_list', name: 'Bullet List' }
+    { id: 'bullet_list', name: 'Bullet List' },
   ],
   [ItemResponseType.SingleSelectionPerRow]: [
     { id: 'sentence_option_row', name: 'Sentence: Option Text, Row Text' },
@@ -19,7 +19,7 @@ export const DisplayModeOptions = {
   ],
   [ItemResponseType.Slider]: [
     { id: 'slider_one', name: 'Slider 1' },
-    { id: 'slider_two', name: 'Slider 2' }
+    { id: 'slider_two', name: 'Slider 2' },
   ],
   [ItemResponseType.ABTrails]: undefined,
   [ItemResponseType.Audio]: undefined,
@@ -42,4 +42,4 @@ export const DisplayModeOptions = {
   [ItemResponseType.TouchPractice]: undefined,
   [ItemResponseType.TouchTest]: undefined,
   [ItemResponseType.Video]: undefined,
-}
+};

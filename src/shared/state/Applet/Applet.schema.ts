@@ -345,7 +345,7 @@ export type DrawingResponseValues = {
 
 export type PhrasalTemplateField =
   | { type: 'sentence'; text: string }
-  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number; }
+  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number }
   | { type: 'line_break' };
 
 export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
