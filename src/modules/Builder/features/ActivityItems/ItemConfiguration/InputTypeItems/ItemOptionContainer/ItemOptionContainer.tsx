@@ -11,11 +11,12 @@ import { ItemOptionContainerProps } from './ItemOptionContainer.types';
 
 export const ItemOptionContainer = ({
   title,
+  sx,
   description,
   children,
   'data-testid': dataTestid,
 }: ItemOptionContainerProps) => (
-  <StyledItemOptionContainer data-testid={dataTestid}>
+  <StyledItemOptionContainer data-testid={dataTestid} sx={sx}>
     <StyledFlexColumn data-testid={`${dataTestid}-title`}>
       {title && (
         <StyledLabelBoldLarge sx={{ mb: theme.spacing(description ? 1 : 3.8) }}>

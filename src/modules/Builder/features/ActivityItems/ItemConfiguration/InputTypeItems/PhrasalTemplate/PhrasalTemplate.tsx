@@ -45,7 +45,7 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
     <StyledFlexColumn sx={{ gap: 2.4, placeContent: 'flex-start' }}>
       <StyledTitleMedium>{t('phrasalTemplateItem.lede')}</StyledTitleMedium>
 
-      <ItemOptionContainer title="">
+      <ItemOptionContainer sx={{ mb: 0, pb: 0 }} title="">
         <Box
           component="label"
           htmlFor="card-title"

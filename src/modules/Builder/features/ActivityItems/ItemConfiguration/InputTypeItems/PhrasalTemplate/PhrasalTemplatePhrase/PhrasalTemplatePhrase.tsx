@@ -162,7 +162,7 @@ export const PhrasalTemplatePhrase = ({
           aria-expanded={open}
           aria-haspopup="true"
           onClick={handlePressAdd}
-          sx={{ gap: 0.8, width: 'max-content' }}
+          sx={{ gap: 0.8, ml: -1.4, width: 'max-content' }}
           variant="text"
         >
           <Svg aria-hidden height={18} id="add" width={18} />
