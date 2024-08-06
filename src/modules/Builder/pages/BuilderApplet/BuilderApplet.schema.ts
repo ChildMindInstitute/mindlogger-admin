@@ -18,23 +18,22 @@ import {
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
   PerfTaskType,
-  ScoreReportType,
+  ScoreReportType
 } from 'shared/consts';
-import { Condition, Config, ScoreOrSection } from 'shared/state';
+import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
 import {
   getEntityKey,
   getIsRequiredValidateMessage,
   getMaxLengthValidationError,
-  getObjectFromList,
+  getObjectFromList
 } from 'shared/utils';
 
 import { ItemFormValues } from '../../types/Builder.types';
 import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  alphanumericAndHyphenRegexp, CONDITION_TYPES_TO_HAVE_OPTION_ID,
   IP_ADDRESS_REGEXP,
   ItemTestFunctions,
-  PORT_REGEXP,
-  alphanumericAndHyphenRegexp,
+  PORT_REGEXP
 } from './BuilderApplet.const';
 import {
   checkScoreRegexp,
@@ -51,7 +50,7 @@ import {
   testFunctionForSystemItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
-  testIsReportCommonFieldsRequired,
+  testIsReportCommonFieldsRequired
 } from './BuilderApplet.utils';
 
 const { t } = i18n;
@@ -234,12 +233,11 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
     then(schema) {
       return (
         schema.trim()
-          .test("validate there is only one empty sentences", t("fieldRequiredAddToContinue"), function (value, textContext) {
+          .test("validate there is only one empty sentence", t("fieldRequiredAddToContinue"), function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
-
-            const isMoreThanOneSentence = fields?.filter(({ type }: { type: string }) => type === 'sentence').length > 1;
+            const isMoreThanOneSentence = fields?.filter(({ type }) => type === 'sentence').length > 1;
 
             if (!value && !isMoreThanOneSentence) {
               return false
@@ -250,10 +248,10 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
           })
           .test("validate there are more than one empty sentences", t("fieldAddContentOrRemove"), function (value, textContext) {
             const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
-            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || { type: '' };
 
 
-            const isMoreThanOneSentence = fields?.filter(({ type }: { type: string }) => type === 'sentence').length > 1;
+            const isMoreThanOneSentence = fields?.filter(({ type }) => type === 'sentence').length > 1;
 
             if (!value && isMoreThanOneSentence) {
               return false
@@ -305,16 +303,11 @@ export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
             return false
           }
 
-
           return true
         }
       )
 
   }),
-  // displayMode: yup.string().when('type', {
-  //   is: 'item_response',
-  //   then: (schema) => schema.trim().required(t('fieldRequired')),
-  // }),
 });
 
 export const PhrasalTemplateResponseValuePhraseSchema = yup.object({

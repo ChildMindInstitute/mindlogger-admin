@@ -35,7 +35,7 @@ export function RenderedField({
   const fieldValue = getValues(name as string);
   const activitiesFromStore = applet.useActivityDataFromApplet(params?.activityId || '');
   const { question: selectedOptionQuestion } =
-    responseOptions?.find(({ name }) => fieldValue.itemName === name) ?? {};
+    responseOptions?.find(({ name }) => fieldValue?.itemName === name) ?? {};
 
   const isFieldValueDeleted = fieldValue?.itemName?.includes('-deleted');
 
