@@ -43,7 +43,7 @@ export const StyledAccordionDetails = styled(AccordionDetails)({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(2.4),
-  padding: theme.spacing(0, 0, 1.6, 0),
+  padding: theme.spacing(0, 0, 3.2, 0),
 });
 
 export const StyledPhraseTemplateFieldSet = styled('fieldset')({

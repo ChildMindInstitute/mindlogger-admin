@@ -97,7 +97,6 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
         </StyledPhrasalTemplateList>
       </ItemOptionContainer>
 
-      {/* TODO: M2-7162 Will handle adding additional phrases */}
       <Button onClick={handleAddPhrase} sx={{ gap: 0.8, width: 'max-content' }} variant="outlined">
         <Svg id="add" height={18} width={18} />
         {t('phrasalTemplateItem.btnAddPhrase')}

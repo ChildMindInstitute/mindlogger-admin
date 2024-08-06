@@ -56,7 +56,13 @@ export const PhrasalTemplateField = ({
 
   return (
     <StyledFlexTopCenter sx={{ gap: 0.8, width: '100%' }}>
-      <RenderedField name={name} responseOptions={responseOptions} type={type} {...otherProps} />
+      <RenderedField
+        name={name}
+        responseOptions={responseOptions}
+        type={type}
+        {...otherProps}
+        sx={{ '.MuiFormHelperText-root': { mb: 0.4 } }}
+      />
       <StyledFlexTopCenter
         onBlur={handleBlurMenu}
         onMouseEnter={handleMouseEnterMenu}

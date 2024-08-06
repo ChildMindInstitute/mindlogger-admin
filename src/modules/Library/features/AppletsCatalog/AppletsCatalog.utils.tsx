@@ -73,6 +73,3 @@ export const getItemResponseTypes = (enableParagraphTextItem: boolean) => ({
     title: ItemResponseType.PhrasalTemplate,
   },
 });
-
-export const DEFAULT_PAGE = 1;
-export const DEFAULT_APPLETS_PER_PAGE = 6;

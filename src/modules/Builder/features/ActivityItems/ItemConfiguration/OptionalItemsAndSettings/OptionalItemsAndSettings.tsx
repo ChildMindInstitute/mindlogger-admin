@@ -54,11 +54,7 @@ const getItemConfigurationHeader = (itemResponseType: ItemResponseType, t: TFunc
   }
 
   if (ITEMS_WITH_DOWNLOAD_HEADER.includes(itemResponseType)) {
-    return (
-      <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
-        {t('downloadableContent')}
-      </StyledTitleLarge>
-    );
+    return <StyledTitleLarge sx={{ mb: 2.4 }}>{t('downloadableContent')}</StyledTitleLarge>;
   }
 
   return null;
