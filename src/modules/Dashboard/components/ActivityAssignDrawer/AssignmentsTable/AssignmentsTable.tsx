@@ -43,9 +43,9 @@ export const AssignmentsTable = ({
 
       if (respondentSubjectId !== undefined || targetSubjectId !== undefined) {
         if (respondentSubjectId !== undefined) {
-          // Set as self-assigned if selected respondent is a full account and either:
+          // Set as self-assigned if newly selected respondent is a full account, and either:
           // - no target subject has been selected yet, or
-          // - previous assignment was a self-assignment
+          // - current assignment is a self-assignment (to preserve "Self" in the right column)
           const respondent = allParticipants.find(({ id }) => id === respondentSubjectId);
           if (respondent?.userId && !respondent.isTeamMember) {
             if (
