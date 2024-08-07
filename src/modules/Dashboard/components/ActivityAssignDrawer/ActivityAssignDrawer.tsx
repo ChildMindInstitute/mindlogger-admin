@@ -187,6 +187,7 @@ export const ActivityAssignDrawer = ({
       const { activityIds, flowIds, assignments } = defaultValues;
 
       reset(defaultValues);
+      setStep(1);
 
       setTimeout(() => {
         if (assignments[0]?.respondentSubjectId) {
