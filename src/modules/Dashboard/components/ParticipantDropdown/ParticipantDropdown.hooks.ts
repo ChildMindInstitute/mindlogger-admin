@@ -40,7 +40,9 @@ export const useParticipantDropdown = ({
     getWorkspaceRespondentsApi,
     (response) => {
       if (response?.data) {
-        const options = (response.data as ParticipantsData).result.map(participantToOption);
+        const options = (response.data as ParticipantsData).result
+          .filter((r) => !r.isAnonymousRespondent)
+          .map(participantToOption);
 
         setAllParticipants(options);
       }
