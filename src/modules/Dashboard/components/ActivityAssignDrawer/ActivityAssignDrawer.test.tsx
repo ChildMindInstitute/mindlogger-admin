@@ -141,8 +141,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-// Required for duplicate assignments test on CI
-jest.setTimeout(10000);
+jest.useFakeTimers();
 
 /* Tests
 =================================================== */
@@ -202,6 +201,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityItems = screen.getAllByTestId(`${dataTestId}-activities-list-activity-item`);
       expect(activityItems).toHaveLength(mockedAppletData.activities.length);
@@ -222,6 +222,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityCheckbox = screen.getByTestId(
         `${dataTestId}-activities-list-activity-checkbox-${mockedAppletData.activities[0].id}`,
@@ -244,6 +245,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const selectAll = screen.getByText('Select All');
 
@@ -273,12 +275,13 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       checkAssignment(`${mockedOwnerRespondent.nicknames[0]} (Team)`, '');
 
       expect(
         within(screen.getByRole('alert')).getByText(
-          `${mockedOwnerRespondent.nicknames[0]} was added into the table, select an Activity and Subject to continue.`,
+          '1 Participant was added into the table, select an Activity and Subject to continue.',
         ),
       ).toBeVisible();
 
@@ -297,6 +300,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedLimitedRespondent.details[0].subjectTag}`);
       checkAssignment(
@@ -308,7 +312,7 @@ describe('ActivityAssignDrawer', () => {
 
       expect(
         within(screen.getByRole('alert')).getByText(
-          `${mockedLimitedRespondent.nicknames[0]} was added to the table. Please add a full account Respondent to continue.`,
+          '1 Participant was added to the table. Please add a full account Respondent to continue.',
         ),
       ).toBeVisible();
 
@@ -328,6 +332,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedRespondent.details[0].subjectTag}`);
       checkAssignment(
@@ -337,7 +342,7 @@ describe('ActivityAssignDrawer', () => {
 
       expect(
         within(screen.getByRole('alert')).getByText(
-          `${mockedRespondent.nicknames[0]} was added into the table, select an Activity to continue.`,
+          '1 Participant was added into the table, select an Activity to continue.',
         ),
       ).toBeVisible();
 
@@ -358,15 +363,19 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(
         within(screen.getByRole('alert')).getByText(
           'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
         ),
       ).toBeVisible();
+    });
 
-      fireEvent.click(screen.getByText('Next'));
+    fireEvent.click(screen.getByText('Next'));
 
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
   });
@@ -384,6 +393,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(
         within(screen.getByRole('alert')).getByText(
@@ -400,6 +410,7 @@ describe('ActivityAssignDrawer', () => {
 
     fireEvent.click(screen.getByText('Next'));
 
+    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.queryByText('Review')).not.toBeVisible();
 
