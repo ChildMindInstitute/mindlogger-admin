@@ -1299,7 +1299,8 @@
         "teamMemberGrouping": "Membres de l'équipe",
         "participantGrouping": "Participants",
         "notFound": "Pas trouvé"
-      }
+      },
+      "relationErrorMessage": "Impossible de démarrer l'activité. Veuillez réessayer plus tard."
     }
   },
   "teamMemberAlreadyInvited": "Le membre de l'équipe a déjà été invité",
@@ -1485,6 +1486,5 @@
   "emailAddress": "Adresse e-mail",
   "emailAddressPlaceholder": "email@exemple.com",
   "emailAlreadyInUse": "Cet e-mail est déjà <1>utilisé</1>. Veuillez en saisir un autre.",
-  "requestShellAccountSuccess": "<0>Le compte Shell <1>{{id}}</1> a été créé avec succès et est disponible dans l'onglet <3>Respondents</3>.</0>",
   "goToDashboard": "Aller au tableau de bord"
 }

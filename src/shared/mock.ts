@@ -19,7 +19,6 @@ import {
   SubscaleTotalScore,
 } from './consts';
 import { Item, MultiSelectItem, SingleSelectItem } from './state';
-import { Invitations } from '../modules/Dashboard/features/Applet/AddUser/AddUser.types';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';

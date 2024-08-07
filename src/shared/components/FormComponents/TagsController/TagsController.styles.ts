@@ -1,6 +1,6 @@
 import { styled, TextField } from '@mui/material';
 
-import { variables, theme, StyledBodyLarge } from 'shared/styles';
+import { variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTextField = styled(TextField, shouldForwardProp)`
@@ -14,30 +14,38 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
     }
   }
 
-  ${({
-    isSecondaryUiType,
-    showInputLabel,
-    setMinWidth,
-  }: {
-    isSecondaryUiType: boolean;
-    showInputLabel: boolean;
-    setMinWidth: boolean;
-  }) =>
+  input::placeholder {
+    color: ${variables.palette.outline};
+    opacity: 1;
+  }
+
+  ${({ isSecondaryUiType, setMinWidth }: { isSecondaryUiType: boolean; setMinWidth: boolean }) =>
     isSecondaryUiType &&
     `
     .MuiInputBase-root {
       min-height: 5.6rem;
-      padding: ${theme.spacing(0.4, 1, 0.4, 4)};
+      padding-left: ${theme.spacing(4)};
       display: flex;
-      flex-wrap: ${showInputLabel ? 'unset' : 'wrap'};
+      flex-wrap: wrap;
+
+      &.Mui-disabled {
+        svg {
+          opacity: 0.38;
+        }
+      }
     }
 
     .MuiInputBase-input {
-      padding: ${theme.spacing(0.6)};
       flex: 1;
       width: 0;
       min-width: ${setMinWidth ? '50%' : '0.01rem'};
+
+      &.MuiOutlinedInput-input {
+        margin-left: ${theme.spacing(0.8)};
+        padding: 0;
+      }
     }
+
     .email {
       position: absolute;
       left: ${theme.spacing(1)};
@@ -46,17 +54,7 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
     }
   `};
 
-  .MuiChip-root {
-    margin-top: 0;
-  }
-
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
-`;
-
-export const StyledInputLabel = styled(StyledBodyLarge, shouldForwardProp)`
-  flex-shrink: ${({ showInputLabel }: { showInputLabel: boolean }) =>
-    showInputLabel ? 0 : 'unset'};
-  color: ${variables.palette.outline};
 `;

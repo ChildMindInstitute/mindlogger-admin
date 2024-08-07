@@ -13,7 +13,6 @@ const ParticipantConnections = lazy(
   () => import('modules/Dashboard/features/Participant/Connections'),
 );
 const ParticipantSchedule = lazy(() => import('modules/Dashboard/features/Participant/Schedule'));
-const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
 const Overview = lazy(() => import('modules/Dashboard/features/Applet/Overview'));
 const Activities = lazy(() => import('modules/Dashboard/features/Applet/Activities'));
@@ -78,10 +77,6 @@ export const appletRoutes = [
   {
     path: page.appletSettingsItem,
     Component: AppletSettings,
-  },
-  {
-    path: page.appletAddUser,
-    Component: AddUser,
   },
 ];
 

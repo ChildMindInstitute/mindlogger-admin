@@ -79,6 +79,7 @@ import {
   GetActivityResponse,
   GetActivityParams,
   EditSubjectResponse,
+  CreateTemporaryMultiInformantRelation,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -915,3 +916,15 @@ export const getAppletActivitiesApi = (
     params,
     signal,
   });
+
+export const createTemporaryMultiInformantRelationApi = (
+  { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<null>> =>
+  authApiClient.post(
+    `/subjects/${subjectId}/relations/${sourceSubjectId}/multiinformant-assessment`,
+    {},
+    {
+      signal,
+    },
+  );

@@ -9,9 +9,11 @@ export const Chip = ({
   onRemove,
   canRemove = true,
   'data-testid': dataTestid,
+  disabled,
   ...otherProps
 }: ChipProps) => (
   <StyledChip
+    disabled={disabled}
     shape={shape}
     deleteIcon={
       canRemove ? (
