@@ -191,18 +191,14 @@ export const ActivityAssignDrawer = ({
 
       setTimeout(() => {
         if (assignments[0]?.respondentSubjectId) {
-          const { nickname, tag } =
+          const { isTeamMember } =
             allParticipants.find(({ id }) => id === assignments[0].respondentSubjectId) ?? {};
           addBanner('RespondentAutofillBanner', {
-            name: nickname,
             hasActivity: activityIds.length || flowIds.length,
-            isTeamMember: tag === 'Team',
+            isTeamMember,
           });
         } else if (assignments[0]?.targetSubjectId) {
-          const { nickname } =
-            allParticipants.find(({ id }) => id === assignments[0].targetSubjectId) ?? {};
           addBanner('SubjectAutofillBanner', {
-            name: nickname,
             hasActivity: activityIds.length || flowIds.length,
           });
         } else if (activityIds.length || flowIds.length) {
