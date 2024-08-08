@@ -48,9 +48,7 @@ import {
 
 const getItemConfigurationHeader = (itemResponseType: ItemResponseType, t: TFunction) => {
   if (ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER.includes(itemResponseType)) {
-    return (
-      <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('responseOptions')}</StyledTitleLarge>
-    );
+    return <StyledTitleLarge sx={{ mb: 2.4 }}>{t('responseOptions')}</StyledTitleLarge>;
   }
 
   if (ITEMS_WITH_DOWNLOAD_HEADER.includes(itemResponseType)) {

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 import i18n from 'i18n';
-import { Item, PhrasalTemplateField, PhrasalTemplateFieldType } from 'redux/modules';
+import { Item, PhrasalTemplateField, PhrasalTemplateFieldType, PhrasalTemplateResponseValues } from 'redux/modules';
 import { ItemResponseType } from 'shared/consts';
 
 // TODO: M2-7211 — Additional response types to be added with
@@ -15,18 +15,12 @@ const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
   ItemResponseType.Text,
   ItemResponseType.Time,
   ItemResponseType.TimeRange,
-  // ItemResponseType.ABTrails,
-  // ItemResponseType.Flanker,
-  // ItemResponseType.MultipleSelectionPerRow,
-  // ItemResponseType.SingleSelectionPerRow,
-  // ItemResponseType.SliderRows,
-  // ItemResponseType.StabilityTracker,
-  // ItemResponseType.TouchPractice,
-  // ItemResponseType.TouchTest,
+  ItemResponseType.MultipleSelectionPerRow,
+  ItemResponseType.SingleSelectionPerRow,
 ];
 
-const DEFAULT_PHRASE = {
-  image: '',
+const DEFAULT_PHRASE: PhrasalTemplateResponseValues['phrases'][number] = {
+  image: null,
   fields: [
     { type: 'sentence', text: '' },
     { type: 'item_response', itemName: '', displayMode: 'sentence', itemIndex: 0 },
@@ -69,9 +63,9 @@ export const getFieldPlaceholders = (fields: PhrasalTemplateField[] = []) => {
 
   return shouldShowDefaultPlaceholders
     ? [
-        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
-        '',
-        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
-      ]
+      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
+      '',
+      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
+    ]
     : [];
 };

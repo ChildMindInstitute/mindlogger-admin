@@ -1,6 +1,9 @@
 import { ItemResponseType } from 'shared/consts';
 
-export const DisplayModeOptions = {
+export const DisplayModeOptions: Record<
+  ItemResponseType,
+  { id: string; name: string }[] | undefined
+> = {
   [ItemResponseType.MultipleSelection]: [
     { id: 'sentence', name: 'Sentence' },
     { id: 'bullet_list', name: 'Bullet List' },
@@ -17,10 +20,7 @@ export const DisplayModeOptions = {
     { id: 'bullet_list_option_row', name: 'Bullet List: Option Text, Row Text' },
     { id: 'bullet_list_text_row', name: 'Bullet List: Row Text, Option Text' },
   ],
-  [ItemResponseType.Slider]: [
-    { id: 'slider_one', name: 'Slider 1' },
-    { id: 'slider_two', name: 'Slider 2' },
-  ],
+  [ItemResponseType.Slider]: undefined,
   [ItemResponseType.ABTrails]: undefined,
   [ItemResponseType.Audio]: undefined,
   [ItemResponseType.AudioPlayer]: undefined,
