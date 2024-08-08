@@ -17,7 +17,7 @@ import {
 
 import { StyledLineBreak } from './PhrasalTemplateField.styles';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
-import { DisplayModeOptions } from './constants';
+import { DisplayModeOptions } from './PhrasalTemplateField.const';
 
 export function RenderedField({
   name = '',
