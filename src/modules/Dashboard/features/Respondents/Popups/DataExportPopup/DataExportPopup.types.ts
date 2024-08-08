@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { Row } from 'shared/components';
 import { SingleApplet } from 'shared/state';
-import { ExportDataFilters } from 'shared/utils';
+import { Encryption, ExportDataFilters } from 'shared/utils';
 import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
 import { ChosenAppletData } from '../../Respondents.types';
@@ -32,4 +32,15 @@ export type ExecuteAllPagesOfExportData = {
 export type GetFormattedToDate = {
   dateType?: ExportDateType;
   formToDate?: Date;
+};
+
+export type IdleWorker = Worker & {
+  isIdle: boolean;
+};
+
+export type MultipleDecryptWorkersProps = {
+  handleExportPopupClose: () => void;
+  appletId: string;
+  encryption?: Encryption | null;
+  filters?: ExportDataFilters;
 };
