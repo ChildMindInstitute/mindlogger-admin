@@ -24,7 +24,6 @@ import {
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
-const Applet = lazy(() => import('../pages/Applet'));
 const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
@@ -49,7 +48,7 @@ const RedirectWithParams = ({
   );
 };
 
-export const dashboardRoutes = (featureFlags: FeatureFlags) => (
+export const dashboardRoutes = (_featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>
     <Route element={<Main />}>
       <Route index element={<Navigate to={page.dashboardApplets} replace />} />
@@ -71,38 +70,36 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {featureFlags.enableMultiInformant ? <AppletMultiInformant /> : <Applet />}
+            <AppletMultiInformant />
           </ErrorBoundary>
         </PrivateRoute>
       }
     >
       {appletRoutes.map(({ path, Component }) => {
-        if (featureFlags?.enableMultiInformant) {
-          if (path === page.appletRespondents) {
-            return (
-              <Route
-                key={path}
-                path={path}
-                element={<RedirectWithParams to={page.appletParticipants} replace />}
-              />
-            );
-          }
+        if (path === page.appletRespondents) {
+          return (
+            <Route
+              key={path}
+              path={path}
+              element={<RedirectWithParams to={page.appletParticipants} replace />}
+            />
+          );
+        }
 
-          if (path === page.appletAddUser) {
-            return (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <RedirectWithParams
-                    to={page.appletParticipants}
-                    replace
-                    searchParams={{ showAddParticipant: 'true' }}
-                  />
-                }
-              />
-            );
-          }
+        if (path === page.appletAddUser) {
+          return (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <RedirectWithParams
+                  to={page.appletParticipants}
+                  replace
+                  searchParams={{ showAddParticipant: 'true' }}
+                />
+              }
+            />
+          );
         }
 
         return (
