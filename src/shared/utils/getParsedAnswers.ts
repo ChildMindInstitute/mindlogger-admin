@@ -1,4 +1,5 @@
 import {
+  DecryptedActivityData,
   DecryptedAnswerData,
   DrawingItemAnswer,
   ExportActivity,
@@ -41,7 +42,7 @@ export const getParsedAnswers = async (
 };
 
 export const remapFailedAnswers = (
-  parsedAnswers: Awaited<ReturnType<typeof getParsedAnswers>>,
+  parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
 ): Awaited<ReturnType<typeof getParsedAnswers>> => {
   if (!parsedAnswers.length) return [];
 
