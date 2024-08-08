@@ -78,9 +78,11 @@ export function mapResponseToSubmissionsTableProps(
               activityName,
               createdAt,
               sourceSubjectId,
+              sourceSecretUserId,
               sourceNickname,
               sourceSubjectTag,
               targetSubjectId,
+              targetSecretUserId,
               targetNickname,
               targetSubjectTag,
             }) => {
@@ -106,7 +108,7 @@ export function mapResponseToSubmissionsTableProps(
                     <StyledMaybeEmpty>
                       <ParticipantSnippet
                         tag={sourceSubjectTag}
-                        secretId={sourceSubjectId}
+                        secretId={sourceSecretUserId}
                         nickname={sourceNickname}
                       />
                     </StyledMaybeEmpty>
@@ -123,7 +125,7 @@ export function mapResponseToSubmissionsTableProps(
                       ) : (
                         <ParticipantSnippet
                           tag={targetSubjectTag}
-                          secretId={targetSubjectId}
+                          secretId={targetSecretUserId}
                           nickname={targetNickname}
                         />
                       )}

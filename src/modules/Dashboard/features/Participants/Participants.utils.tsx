@@ -80,8 +80,8 @@ export const getParticipantActions = ({
   nickname,
   tag,
   status,
-  dataTestid,
-  showAssignActivity = false,
+  dataTestId,
+  canAssignActivity,
   roles,
   invitation,
   firstName,
@@ -105,7 +105,7 @@ export const getParticipantActions = ({
   const showEdit = !!appletId && isEditable && !isPending;
   const showUpgrade = isUpgradeable && isEditable;
   const showExport = checkIfCanAccessData(roles) && isViewable && !isPending;
-  const showAssign = canManageParticipants && showAssignActivity && isEditable && !isPending;
+  const showAssign = canManageParticipants && canAssignActivity && isEditable && !isPending;
   const showDivider = (showEdit || showUpgrade || showExport) && showAssign;
 
   const titleArr: string[] = [];
@@ -151,7 +151,7 @@ export const getParticipantActions = ({
       title: t('copyEmailAddress'),
       context,
       isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
-      'data-testid': `${dataTestid}-copy-email`,
+      'data-testid': `${dataTestId}-copy-email`,
     },
     {
       type: MenuItemType.Divider,
@@ -163,7 +163,7 @@ export const getParticipantActions = ({
       title: t('copyInvitationLink'),
       context,
       isDisplayed: hasInvitation && isPending,
-      'data-testid': `${dataTestid}-copy-invitation-link`,
+      'data-testid': `${dataTestId}-copy-invitation-link`,
     },
     {
       icon: <Svg id="edit" width={24} height={24} />,
@@ -171,7 +171,7 @@ export const getParticipantActions = ({
       title: t('editParticipant'),
       context,
       isDisplayed: showEdit,
-      'data-testid': `${dataTestid}-edit`,
+      'data-testid': `${dataTestId}-edit`,
     },
     {
       icon: <Svg id="full-account" width={24} height={24} />,
@@ -179,7 +179,7 @@ export const getParticipantActions = ({
       title: t('upgradeToFullAccount'),
       context,
       isDisplayed: showUpgrade,
-      'data-testid': `${dataTestid}-upgrade-account`,
+      'data-testid': `${dataTestId}-upgrade-account`,
     },
     {
       icon: <Svg id="export" width={24} height={24} />,
@@ -187,7 +187,7 @@ export const getParticipantActions = ({
       title: t('exportData'),
       context,
       isDisplayed: showExport,
-      'data-testid': `${dataTestid}-export-data`,
+      'data-testid': `${dataTestId}-export-data`,
     },
     {
       icon: <Svg id="remove-access" width={24} height={24} />,
@@ -196,7 +196,7 @@ export const getParticipantActions = ({
       context,
       isDisplayed: isEditable,
       customItemColor: variables.palette.dark_error_container,
-      'data-testid': `${dataTestid}-remove`,
+      'data-testid': `${dataTestId}-remove`,
     },
     {
       type: MenuItemType.Divider,
@@ -208,7 +208,7 @@ export const getParticipantActions = ({
       title: t('assignActivity'),
       context,
       isDisplayed: showAssign,
-      'data-testid': `${dataTestid}-assign-activity`,
+      'data-testid': `${dataTestId}-assign-activity`,
     },
   ]);
 };

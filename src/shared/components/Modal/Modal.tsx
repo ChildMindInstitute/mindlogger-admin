@@ -62,7 +62,6 @@ export const Modal = ({
     if (!buttonText) return;
     const button = (
       <Button
-        sx={{ fontWeight: 'bold' }}
         variant={submitBtnVariant}
         disabled={disabledSubmit}
         onClick={onSubmit}

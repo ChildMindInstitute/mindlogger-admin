@@ -14,8 +14,8 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
+  ...rest
 }: BannerProps) => {
-  let timeoutId: NodeJS.Timeout | undefined;
   const [isHovering, setIsHovering] = useState(false);
   const isWindowFocused = useWindowFocus();
 
@@ -24,7 +24,7 @@ export const Banner = ({
   useEffect(() => {
     if (!duration || !onClose || isHovering || !isWindowFocused) return;
 
-    timeoutId = setTimeout(onClose, duration);
+    const timeoutId = setTimeout(onClose, duration);
 
     return () => {
       clearTimeout(timeoutId);
@@ -47,6 +47,7 @@ export const Banner = ({
       onMouseLeave={() => setIsHovering(false)}
       severity={severity}
       data-testid={`${severity}-banner`}
+      {...rest}
     >
       {children}
     </Alert>
