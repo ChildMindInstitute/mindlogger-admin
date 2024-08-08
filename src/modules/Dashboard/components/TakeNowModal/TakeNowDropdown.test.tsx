@@ -1,17 +1,17 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { LabeledUserDropdown } from 'modules/Dashboard/components/TakeNowModal/LabeledDropdown/LabeledUserDropdown';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { ParticipantDropdownOption } from 'modules/Dashboard/components';
 
-import { ParticipantDropdownOption } from './LabeledUserDropdown.types';
+import { TakeNowDropdown } from './TakeNowDropdown';
 
 jest.mock('shared/hooks/useFeatureFlags');
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-describe('LabeledUserDropdown', () => {
+describe('TakeNowDropdown', () => {
   const dataTestId = 'test';
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows label', () => {
     const { queryByText } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -42,7 +42,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows tooltip on hover', async () => {
     const { queryByText, getByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -62,7 +62,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Shows placeholder', () => {
     const { queryByPlaceholderText } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -82,11 +82,11 @@ describe('LabeledUserDropdown', () => {
       id: 'id',
       nickname: 'nickname',
       secretId: 'secretId',
-      isLimitedAccount: true,
+      isTeamMember: false,
     };
 
     const { queryByDisplayValue } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -104,10 +104,14 @@ describe('LabeledUserDropdown', () => {
   });
 
   test('Renders value correctly without nickname', () => {
-    const testValue = { id: 'id', secretId: 'secretId', isLimitedAccount: true };
+    const testValue = {
+      id: 'id',
+      secretId: 'secretId',
+      isTeamMember: false,
+    };
 
     const { queryByDisplayValue } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -124,7 +128,7 @@ describe('LabeledUserDropdown', () => {
 
   test('Does not show warning message when the value is not present', () => {
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -145,10 +149,11 @@ describe('LabeledUserDropdown', () => {
       id: 'subject-id',
       userId: 'user-id',
       tag: 'Team',
+      isTeamMember: true,
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -169,10 +174,11 @@ describe('LabeledUserDropdown', () => {
       id: 'subject-id',
       userId: 'user-id',
       tag: 'Teacher',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -192,10 +198,11 @@ describe('LabeledUserDropdown', () => {
     const option: ParticipantDropdownOption = {
       id: 'subject-id',
       tag: 'Child',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -215,10 +222,11 @@ describe('LabeledUserDropdown', () => {
     const option: ParticipantDropdownOption = {
       id: 'subject-id',
       tag: 'Child',
+      isTeamMember: false,
     };
 
     const { queryByTestId } = renderWithProviders(
-      <LabeledUserDropdown
+      <TakeNowDropdown
         label="Test Label"
         tooltip="Test Tooltip"
         name="test"
@@ -249,10 +257,11 @@ describe('LabeledUserDropdown', () => {
         id: 'subject-id',
         userId: 'user-id',
         tag: 'Team',
+        isTeamMember: true,
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <TakeNowDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -273,10 +282,11 @@ describe('LabeledUserDropdown', () => {
         id: 'subject-id',
         userId: 'user-id',
         tag: 'Teacher',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <TakeNowDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -296,10 +306,11 @@ describe('LabeledUserDropdown', () => {
       const option: ParticipantDropdownOption = {
         id: 'subject-id',
         tag: 'Child',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <TakeNowDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"
@@ -319,10 +330,11 @@ describe('LabeledUserDropdown', () => {
       const option: ParticipantDropdownOption = {
         id: 'subject-id',
         tag: 'Child',
+        isTeamMember: false,
       };
 
       const { queryByTestId } = renderWithProviders(
-        <LabeledUserDropdown
+        <TakeNowDropdown
           label="Test Label"
           tooltip="Test Tooltip"
           name="test"

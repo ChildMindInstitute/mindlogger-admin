@@ -18,6 +18,13 @@ export type ActivityGridProps = {
   onClickItem?: (props: { activityId: string }) => void;
 };
 
+export type UseActivityGridProps = {
+  dataTestId: string;
+  activitiesData: ActivitiesData | null;
+  onClickExportData: (activityId: string) => void;
+  onClickAssign: (activityId: string) => void;
+};
+
 export type ActivityActionProps = {
   activityId: string;
   appletId: string;

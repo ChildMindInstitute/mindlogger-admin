@@ -341,9 +341,11 @@ export interface GetAppletSubmissionsResponse {
     createdAt: string;
     sourceNickname?: string | null;
     sourceSubjectId: string;
+    sourceSecretUserId: string;
     sourceSubjectTag?: ParticipantTag | null;
     targetNickname?: string | null;
     targetSubjectId: string;
+    targetSecretUserId: string;
     targetSubjectTag?: ParticipantTag | null;
     updatedAt: string;
   }[];

@@ -71,8 +71,8 @@ export type GetParticipantActionsProps = {
   tag?: ParticipantTag | null;
   appletId?: string;
   status: RespondentStatus;
-  dataTestid: string;
-  showAssignActivity?: boolean;
+  dataTestId: string;
+  canAssignActivity?: boolean;
   roles?: Roles[];
 };
 

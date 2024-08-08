@@ -11,6 +11,7 @@ import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { Activity, ActivityFlow } from 'redux/modules';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
+import { ActivityAssignDrawer } from 'modules/Dashboard/components';
 
 import { ActivitiesSectionHeader } from './ActivitiesSectionHeader';
 import { ActivitiesToolbar } from './ActivitiesToolbar';
@@ -19,7 +20,9 @@ const dataTestId = 'dashboard-applet-activities';
 
 export const Activities = () => {
   const [activityId, setActivityId] = useState<string>();
+  const [flowId, setFlowId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
+  const [showActivityAssign, setShowActivityAssign] = useState(false);
   const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const { t } = useTranslation('app');
@@ -34,17 +37,21 @@ export const Activities = () => {
   const showContent =
     (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
 
-  const { formatRow, TakeNowModal } = useActivityGrid(
+  const { formatRow, TakeNowModal } = useActivityGrid({
     dataTestId,
-    {
+    activitiesData: {
       result: activities,
       count: activities.length,
     },
-    useCallback((activityId: string) => {
+    onClickExportData: useCallback((activityId) => {
       setActivityId(activityId);
       setShowExportPopup(true);
     }, []),
-  );
+    onClickAssign: useCallback((activityId) => {
+      setActivityId(activityId);
+      setShowActivityAssign(true);
+    }, []),
+  });
 
   const formattedActivities = useMemo(
     () => activities.map((activity) => formatRow(activity)),
@@ -61,7 +68,12 @@ export const Activities = () => {
     <StyledFlexColumn sx={{ gap: 2.4, height: '100%' }}>
       {isLoading && <Spinner />}
 
-      <ActivitiesToolbar appletId={appletId} data-testid={dataTestId} sx={{ p: 3.2, pb: 0 }} />
+      <ActivitiesToolbar
+        appletId={appletId}
+        data-testid={dataTestId}
+        onClickAssign={() => setShowActivityAssign(true)}
+        sx={{ p: 3.2, pb: 0 }}
+      />
 
       {showContent && (
         <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2, pt: 0 }}>
@@ -74,6 +86,10 @@ export const Activities = () => {
                 activities={activities}
                 data-testid={dataTestId}
                 flows={flows}
+                onClickAssign={(flowId) => {
+                  setFlowId(flowId);
+                  setShowActivityAssign(true);
+                }}
               />
             </StyledFlexColumn>
           )}
@@ -107,6 +123,18 @@ export const Activities = () => {
           }}
         />
       )}
+
+      <ActivityAssignDrawer
+        appletId={appletId}
+        activityId={activityId}
+        activityFlowId={flowId}
+        open={showActivityAssign}
+        onClose={() => {
+          setShowActivityAssign(false);
+          setActivityId(undefined);
+          setFlowId(undefined);
+        }}
+      />
     </StyledFlexColumn>
   );
 };

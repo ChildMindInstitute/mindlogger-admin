@@ -17,6 +17,7 @@ import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
+import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 
 import { Participants } from './Participants';
 
@@ -59,6 +60,16 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const RESPONDENTS_ENDPOINT = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
+// Mock responses for requests made both by Participants table and ActivityAssignDrawer
+const mockedResponses = {
+  [`/activities/applet/${mockedAppletId}`]: mockSuccessfulHttpResponse({ result: [] }),
+  [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]: mockSuccessfulHttpResponse({
+    result: [],
+  }),
+  [RESPONDENTS_ENDPOINT]: mockSuccessfulHttpResponse({ result: [] }),
+};
+
 const getMockedGetWithParticipants = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
@@ -84,12 +95,12 @@ describe('Participants component tests', () => {
     });
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   test('should render empty table', async () => {
-    const successfulGetMock = {
-      status: ApiResponseCodes.SuccessfulResponse,
-      data: null,
-    };
-    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
+    mockGetRequestResponses(mockedResponses);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -118,7 +129,10 @@ describe('Participants component tests', () => {
   });
 
   test('should render table with participants', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithParticipants());
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
     const tableColumnNames = [
       'ID',
@@ -138,7 +152,10 @@ describe('Participants component tests', () => {
   });
 
   test('participant row should link to participant details page', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithParticipants());
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
     const firstParticipantSecretIdCell = await waitFor(() =>
       screen.getByTestId('dashboard-participants-table-0-cell-secretIds'),
@@ -154,7 +171,10 @@ describe('Participants component tests', () => {
   });
 
   test('should pin participant', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithParticipants());
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     const participantPin = await waitFor(() => screen.getByTestId('dashboard-participants-pin'));
@@ -171,7 +191,10 @@ describe('Participants component tests', () => {
   });
 
   test('participant actions should appear on participant actions button click', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithParticipants());
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -190,7 +213,10 @@ describe('Participants component tests', () => {
   });
 
   test('actions should appear for anonymous participant', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithParticipants(true));
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(true),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -215,7 +241,10 @@ describe('Participants component tests', () => {
       ${'dashboard-participants-export-data'} | ${'dashboard-participants-export-data-popup-password'} | ${'export data'}
       ${'dashboard-participants-remove'}      | ${'dashboard-respondents-remove-access-popup'}         | ${'remove participant'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(getMockedGetWithParticipants());
+      mockGetRequestResponses({
+        ...mockedResponses,
+        [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+      });
       renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -229,7 +258,10 @@ describe('Participants component tests', () => {
   });
 
   test('should search participants', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithParticipants());
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
@@ -238,18 +270,15 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(
-        `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
-        {
-          params: {
-            limit: 20,
-            page: 1,
-            search: mockedSearchValue,
-            ordering: '-isPinned,+tags',
-          },
-          signal: undefined,
+      expect(mockAxios.get).toHaveBeenLastCalledWith(RESPONDENTS_ENDPOINT, {
+        params: {
+          limit: 20,
+          page: 1,
+          search: mockedSearchValue,
+          ordering: '-isPinned,+tags',
         },
-      );
+        signal: undefined,
+      });
     });
   });
 });

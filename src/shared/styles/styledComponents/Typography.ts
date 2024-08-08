@@ -21,6 +21,14 @@ export const StyledHeadlineLarge = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
 `;
 
+export const StyledHeadlineMedium = styled(Typography)`
+  font-size: ${variables.font.size.xxl2};
+  line-height: ${variables.font.lineHeight.xxl2};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
+`;
+
 export const StyledHeadline = styled(Typography)`
   font-size: ${variables.font.size.xxl};
   line-height: ${variables.font.lineHeight.xxl};
@@ -123,7 +131,7 @@ export const StyledBodyLarge = styled(Typography)`
   font-size: ${variables.font.size.lg};
   line-height: ${variables.font.lineHeight.lg};
   font-weight: ${variables.font.weight.regular};
-  color: ${({ color }: StyledProps) => color || variables.palette.black};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface_variant};
   letter-spacing: ${({ letterSpacing }: StyledProps) =>
     letterSpacing ? variables.font.letterSpacing[letterSpacing] : variables.font.letterSpacing.md};
 `;
