@@ -1,7 +1,12 @@
 import { v4 } from 'uuid';
 
 import i18n from 'i18n';
-import { Item, PhrasalTemplateField, PhrasalTemplateFieldType, PhrasalTemplateResponseValues } from 'redux/modules';
+import {
+  Item,
+  PhrasalTemplateField,
+  PhrasalTemplateFieldType,
+  PhrasalTemplateResponseValues,
+} from 'redux/modules';
 import { ItemResponseType } from 'shared/consts';
 
 // TODO: M2-7211 — Additional response types to be added with
@@ -63,9 +68,9 @@ export const getFieldPlaceholders = (fields: PhrasalTemplateField[] = []) => {
 
   return shouldShowDefaultPlaceholders
     ? [
-      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
-      '',
-      i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
-    ]
+        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExample'),
+        '',
+        i18n.t('phrasalTemplateItem.fieldSentencePlaceholderExampleConclusion'),
+      ]
     : [];
 };
