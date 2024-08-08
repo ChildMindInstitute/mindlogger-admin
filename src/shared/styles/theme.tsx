@@ -789,21 +789,15 @@ export const theme = createTheme({
         },
       },
     },
-    MuiModal: {
-      styleOverrides: {
-        root: {
-          '.MuiModal-backdrop': {
-            backgroundColor: 'rgba(0, 0, 0, 0.25)',
-          },
-        },
-      },
-    },
     MuiDrawer: {
       styleOverrides: {
         root: {
           '.MuiDrawer-paper': {
             maxWidth: '100%',
             backgroundColor: variables.palette.surface,
+          },
+          '.MuiModal-backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
           },
         },
       },
