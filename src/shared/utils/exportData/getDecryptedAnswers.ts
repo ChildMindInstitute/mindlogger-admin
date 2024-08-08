@@ -28,7 +28,14 @@ export const getDecryptedAnswers = async <T extends EncryptedAnswerSharedProps>(
     };
   }
 
-  const { userPublicKey, answer, itemIds, events, migratedData, ...rest } = answersApiResponse;
+  const {
+    userPublicKey,
+    answer,
+    itemIds: _itemIds,
+    events,
+    migratedData,
+    ...rest
+  } = answersApiResponse;
 
   const migratedUrls =
     migratedData?.decryptedFileAnswers &&
