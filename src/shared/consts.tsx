@@ -121,6 +121,7 @@ export enum ItemResponseType {
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
   Video = 'video',
+  UnityFile = 'unityFile',
 }
 
 export const textLanguageKey = 'shortText';
@@ -192,6 +193,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
   [ItemResponseType.PhrasalTemplate]: <Svg id="fileAlt" />,
+  [ItemResponseType.UnityFile]: null,
 };
 
 export const enum SubscaleTotalScore {

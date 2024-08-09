@@ -6,13 +6,17 @@ import { StyledBuilderContainerHeader } from 'shared/features';
 import { ButtonWithMenu, Svg, MenuUiType } from 'shared/components';
 import { theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActivitiesHeaderProps } from './ActivitiesHeader.types';
-import { GetPerformanceTasksMenu } from './ActivitiesHeader.utils';
+import { getPerformanceTasksMenu } from './ActivitiesHeader.utils';
 
 export const ActivitiesHeader = ({ isSticky, children, headerProps }: ActivitiesHeaderProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const {
+    featureFlags: { enableMeritActivityType },
+  } = useFeatureFlags();
 
   const handleActivityAdd = () => {
     headerProps?.onAddActivity && headerProps.onAddActivity(null);
@@ -36,9 +40,10 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           label={t('addPerformanceTask')}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
-          menuItems={GetPerformanceTasksMenu(
+          menuItems={getPerformanceTasksMenu(
             headerProps?.onAddActivity || falseReturnFunc,
             setAnchorEl,
+            enableMeritActivityType,
           )}
           startIcon={<Svg id="add" width={18} height={18} />}
           menuListWidth="44rem"

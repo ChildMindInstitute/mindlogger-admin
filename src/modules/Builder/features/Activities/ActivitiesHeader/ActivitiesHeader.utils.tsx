@@ -1,6 +1,5 @@
 import i18n from 'i18n';
 import { PerfTaskType } from 'shared/consts';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActivityAddProps, PerformanceTasks } from '../Activities.types';
 
@@ -8,14 +7,11 @@ const { t } = i18n;
 
 const getMenuItemTitle = (perfTask: string) => `performanceTasks.${perfTask}`;
 
-export const GetPerformanceTasksMenu = (
+export const getPerformanceTasksMenu = (
   onAddActivity: (props: ActivityAddProps) => void,
   setAnchorEl: (el: null | HTMLElement) => void,
+  enableMeritActivityType?: boolean,
 ) => {
-  const {
-    featureFlags: { enableMeritActivityType },
-  } = useFeatureFlags();
-
   const getAction = (props: ActivityAddProps) => {
     onAddActivity(props);
     setAnchorEl(null);

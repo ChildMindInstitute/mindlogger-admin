@@ -567,6 +567,20 @@ export const getABTrailsItems = (deviceType: DeviceType) =>
     },
   }));
 
+export const getUnityFileItem = (deviceType: DeviceType) => [
+  {
+    id: undefined,
+    key: uuidv4(),
+    responseType: ItemResponseType.UnityFile,
+    name: `${ItemResponseType.UnityFile}_${deviceType}`,
+    question: t('unityInstructions'),
+    config: {
+      deviceType,
+      orderName: OrderName[ordinalStrings[0] as keyof typeof OrderName],
+    },
+  },
+];
+
 export const getNewPerformanceTask = ({
   name,
   description,
@@ -579,7 +593,7 @@ export const getNewPerformanceTask = ({
     [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
     [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
     [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
-    [PerfTaskType.Unity]: getABTrailsItems(DeviceType.Mobile),
+    [PerfTaskType.Unity]: getUnityFileItem(DeviceType.Mobile),
   };
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
