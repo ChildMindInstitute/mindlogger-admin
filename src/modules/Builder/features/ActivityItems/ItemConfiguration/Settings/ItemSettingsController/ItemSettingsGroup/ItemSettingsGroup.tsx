@@ -299,7 +299,11 @@ export const ItemSettingsGroup = ({
                   );
                 }
 
-                if (isAlerts && ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType)) {
+                if (
+                  isAlerts &&
+                  ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType) &&
+                  inputType !== ItemResponseType.PhrasalTemplate
+                ) {
                   const hasAlerts = event.target.checked;
 
                   setValue(

@@ -2,8 +2,8 @@ import { ItemResponseType } from 'shared/consts';
 
 import {
   DEFAULT_DISABLED_TIMER_VALUE,
-  DEFAULT_MAX_CHARACTERS_SHORT_TEXT,
   DEFAULT_MAX_CHARACTERS_PARAGRAPH_TEXT,
+  DEFAULT_MAX_CHARACTERS_SHORT_TEXT,
 } from '../ItemConfiguration.const';
 
 export const DEFAULT_OPTION_VALUE = 0;
@@ -27,6 +27,7 @@ export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
   ItemResponseType.Photo,
   ItemResponseType.Video,
 ];
+export const ITEMS_WITH_DOWNLOAD_HEADER = [ItemResponseType.PhrasalTemplate];
 
 export const defaultSingleAndMultiSelectionRowsConfig = {
   removeBackButton: false,
@@ -184,4 +185,10 @@ export const defaultTimeConfig = {
     textInputRequired: false,
   },
   timer: 0,
+};
+
+export const defaultPhrasalTemplateConfig = {
+  skippableItem: false,
+  removeBackButton: false,
+  type: 'phrasal_template',
 };
