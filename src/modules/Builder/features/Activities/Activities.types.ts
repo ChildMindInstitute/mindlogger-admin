@@ -31,4 +31,5 @@ export const enum PerformanceTasks {
   Flanker = 'flanker',
   Gyroscope = 'gyroscope',
   Touch = 'touch',
+  Unity = 'unity',
 }

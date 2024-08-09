@@ -307,7 +307,7 @@ export const ItemSettingsGroup = ({
                     hasAlerts
                       ? [
                           getEmptyAlert({
-                            responseType: inputType,
+                            responseType: inputType as ItemResponseType,
                             responseValues: getValues(`${itemName}.responseValues`),
                             config,
                           }),
