@@ -14,6 +14,7 @@ export const FeatureFlagsKeys = {
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
   enableAdminAppSoftLock: 'enableAdminAppSoftLock',
   enableParagraphTextItem: 'enableParagraphTextItem',
+  enableDataExportSpeedUp: 'enableDataExportSpeedUp',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

@@ -155,6 +155,7 @@
     "lint-staged": "^14.0.1",
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "worker-loader": "^3.0.8"
   }
 }
