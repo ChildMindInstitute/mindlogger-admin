@@ -26,6 +26,7 @@ import {
 } from './PhrasalTemplatePhrase.styles';
 import { PhrasalTemplatePhraseProps } from './PhrasalTemplatePhrase.types';
 import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.utils';
+import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
 
 export const PhrasalTemplatePhrase = ({
   canRemovePhrase = false,
@@ -48,7 +49,7 @@ export const PhrasalTemplatePhrase = ({
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
 
-  const handleAddField = (type: PhrasalTemplateFieldType = 'sentence') => {
+  const handleAddField = (type: PhrasalTemplateFieldType = KEYWORDS.SENTENCE) => {
     append(getNewDefaultField(type));
   };
 
@@ -135,11 +136,11 @@ export const PhrasalTemplatePhrase = ({
         <StyledPhraseTemplateFieldSet>
           {fields.map((field, i) => {
             const isOnlySentenceField =
-              field.type === 'sentence' &&
-              fields.filter(({ type }) => type === 'sentence').length < 2;
+              field.type === KEYWORDS.SENTENCE &&
+              fields.filter(({ type }) => type === KEYWORDS.SENTENCE).length < 2;
             const isOnlyResponseField =
-              field.type === 'item_response' &&
-              fields.filter(({ type }) => type === 'item_response').length < 2;
+              field.type === KEYWORDS.ITEM_RESPONSE &&
+              fields.filter(({ type }) => type === KEYWORDS.ITEM_RESPONSE).length < 2;
             const hasMinimumFields = fields.length > 2;
 
             return (
@@ -176,7 +177,7 @@ export const PhrasalTemplatePhrase = ({
           menuItems={[
             {
               action: () => {
-                handleAddField('sentence');
+                handleAddField(KEYWORDS.SENTENCE);
                 console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="formatText" />,
@@ -184,7 +185,7 @@ export const PhrasalTemplatePhrase = ({
             },
             {
               action: () => {
-                handleAddField('item_response');
+                handleAddField(KEYWORDS.ITEM_RESPONSE);
                 console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="commentDots" />,
@@ -192,7 +193,7 @@ export const PhrasalTemplatePhrase = ({
             },
             {
               action: () => {
-                handleAddField('line_break');
+                handleAddField(KEYWORDS.LINE_BREAK);
                 console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="flow-outlined" />,

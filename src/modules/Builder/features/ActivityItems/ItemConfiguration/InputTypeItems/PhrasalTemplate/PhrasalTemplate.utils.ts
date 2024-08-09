@@ -9,6 +9,8 @@ import {
 } from 'redux/modules';
 import { ItemResponseType } from 'shared/consts';
 
+import { KEYWORDS } from './PhrasalTemplateField/PhrasalTemplateField.const';
+
 // TODO: M2-7211 — Additional response types to be added with
 // additional UI for selecting discrete response values.
 const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
@@ -22,30 +24,31 @@ const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
   ItemResponseType.TimeRange,
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.SliderRows,
 ];
 
 const DEFAULT_PHRASE: PhrasalTemplateResponseValues['phrases'][number] = {
   image: null,
   fields: [
-    { type: 'sentence', text: '' },
-    { type: 'item_response', itemName: '', displayMode: 'sentence', itemIndex: 0 },
-    { type: 'sentence', text: '' },
+    { type: KEYWORDS.SENTENCE, text: '' },
+    { type: KEYWORDS.ITEM_RESPONSE, itemName: '', displayMode: KEYWORDS.SENTENCE, itemIndex: 0 },
+    { type: KEYWORDS.SENTENCE, text: '' },
   ],
 };
 
 export const getNewDefaultPhrase = () => ({ ...DEFAULT_PHRASE, id: v4() });
 
 export const getNewDefaultField = (
-  type: PhrasalTemplateFieldType = 'sentence',
+  type: PhrasalTemplateFieldType = KEYWORDS.SENTENCE,
 ): PhrasalTemplateField => {
   switch (type) {
-    case 'item_response':
-      return { type, itemName: '', displayMode: 'sentence', itemIndex: 0 };
-    case 'line_break':
+    case KEYWORDS.ITEM_RESPONSE:
+      return { type, itemName: '', displayMode: KEYWORDS.SENTENCE, itemIndex: 0 };
+    case KEYWORDS.LINE_BREAK:
       return { type };
-    case 'sentence':
+    case KEYWORDS.SENTENCE:
     default:
-      return { type: 'sentence', text: '' };
+      return { type: KEYWORDS.SENTENCE, text: '' };
   }
 };
 
@@ -62,9 +65,9 @@ export const getActivityItemsForResponseField = (items: Item[] = [], itemIndex =
 export const getFieldPlaceholders = (fields: PhrasalTemplateField[] = []) => {
   const shouldShowDefaultPlaceholders =
     fields.length === 3 &&
-    fields[0]?.type === 'sentence' &&
-    fields[1]?.type === 'item_response' &&
-    fields[2]?.type === 'sentence';
+    fields[0]?.type === KEYWORDS.SENTENCE &&
+    fields[1]?.type === KEYWORDS.ITEM_RESPONSE &&
+    fields[2]?.type === KEYWORDS.SENTENCE;
 
   return shouldShowDefaultPlaceholders
     ? [
