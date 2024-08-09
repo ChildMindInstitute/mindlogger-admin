@@ -120,6 +120,7 @@ export enum ItemResponseType {
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
   ABTrails = 'ABTrails',
+  UnityFile = 'unityFile',
 }
 
 export const textLanguageKey = 'shortText';
@@ -190,6 +191,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
+  [ItemResponseType.UnityFile]: null,
 };
 
 export const enum SubscaleTotalScore {

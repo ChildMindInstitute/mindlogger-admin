@@ -502,7 +502,8 @@ export type Item<T = ItemCommonType> =
   | SliderRowsItem<T>
   | StabilityTrackerItem<T>
   | TouchPracticeItem<T>
-  | TouchTestItem<T>;
+  | TouchTestItem<T>
+  | UnityItem<T>;
 
 export type ItemCommonType = {
   id?: string;
@@ -655,6 +656,12 @@ export type TouchPracticeItem<T = ItemCommonType> = T & {
 
 export type TouchTestItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.TouchTest;
+  config: TouchConfig;
+  responseValues: null;
+};
+
+export type UnityItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.UnityFile;
   config: TouchConfig;
   responseValues: null;
 };
