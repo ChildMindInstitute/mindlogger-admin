@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
-import { format } from 'date-fns';
 
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
@@ -13,20 +12,16 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { getExportDataApi } from 'api';
-import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
-import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
+import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
-import { getFormattedToDate } from './DataExportPopup.utils';
 import { useMultipleDecryptWorkers } from './DataExportPopup.hooks';
 import { BUFFER_PERCENTAGE } from './DataExportPopup.const';
+import { ExportDataFetchService as ExportDataFetchServiceClass } from './ExportDataFetchSevice';
 
 export const DataExportPopup = ({
   filters = {},
@@ -42,7 +37,6 @@ export const DataExportPopup = ({
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
-  const abortControllerRef = useRef<AbortController | null>(null);
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
@@ -67,12 +61,25 @@ export const DataExportPopup = ({
     filters,
   });
 
+  const ExportDataFetchService = useRef(
+    new ExportDataFetchServiceClass(
+      setExportDataQueue,
+      setActiveModal,
+      dataExportingApiRef,
+      limitRef,
+      setDataIsExporting,
+    ),
+  ).current;
+
   const handleDataExportSubmit = async () => {
     if (dataIsExporting || dataExportingApiRef.current || !appletId) {
       return;
     }
 
-    await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
+    await ExportDataFetchService.executeAllPagesOfExportData(getValues, {
+      appletId,
+      targetSubjectIds: subjectId,
+    });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -82,59 +89,6 @@ export const DataExportPopup = ({
   });
 
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting && !hasEncryptionCheck;
-
-  const executeAllPagesOfExportData = useCallback(
-    async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
-      abortControllerRef.current = new AbortController();
-      try {
-        dataExportingApiRef.current = true;
-        setDataIsExporting(true);
-
-        const dateType = getValues?.().dateType;
-        const formFromDate = getValues?.().fromDate;
-        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const formToDate = getValues?.().toDate;
-        const toDate = getFormattedToDate({ dateType, formToDate });
-
-        const body = {
-          appletId,
-          targetSubjectIds,
-          fromDate,
-          toDate,
-        };
-        const firstPageResponse = await getExportDataApi(body, abortControllerRef.current.signal);
-        const { result: firstPageData, count = 0 } = firstPageResponse.data;
-        const pageLimit = getExportPageAmount(count);
-        setExportDataQueue([firstPageData]);
-
-        if (pageLimit > 1) {
-          limitRef.current = pageLimit;
-          for (let page = 2; page <= pageLimit; page++) {
-            const nextPageResponse = await getExportDataApi(
-              {
-                ...body,
-                page,
-              },
-              abortControllerRef.current.signal,
-            );
-            const { result: nextPageData } = nextPageResponse.data;
-
-            setExportDataQueue((prevState) =>
-              prevState ? [...prevState, nextPageData] : [nextPageData],
-            );
-          }
-        }
-      } catch (e) {
-        const error = e as TypeError;
-        console.warn('Error while downloading export data', error);
-        setActiveModal(Modals.ExportError);
-        await sendLogFile({ error });
-      } finally {
-        dataExportingApiRef.current = false;
-      }
-    },
-    [getValues, dataExportingApiRef, limitRef, setDataIsExporting, setExportDataQueue],
-  );
   const handleRetry = () => {
     setActiveModal(Modals.DataExport);
     handleDataExportSubmit();
@@ -187,12 +141,11 @@ export const DataExportPopup = ({
 
   useEffect(
     () => () => {
-      if (abortControllerRef.current) {
-        // stop requests to the API if the component unmounts
-        abortControllerRef.current.abort();
-      }
+      if (!ExportDataFetchService) return;
+
+      ExportDataFetchService.cancelExport();
     },
-    [],
+    [ExportDataFetchService],
   );
 
   switch (activeModal) {
