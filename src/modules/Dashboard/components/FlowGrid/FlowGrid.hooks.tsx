@@ -14,9 +14,10 @@ import {
   checkIfFullAccess,
   getIsWebSupported,
 } from 'shared/utils';
-import { RespondentDetails, HydratedActivityFlow } from 'modules/Dashboard/types';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { ItemResponseType } from 'shared/consts';
 
+import { UseFlowGridMenuProps } from './FlowGrid.types';
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
 
 type FlowsMenuActionParams = MenuActionProps<{ appletId?: string; flowId?: string }>;
@@ -27,13 +28,8 @@ export function useFlowGridMenu({
   testId = '',
   subject,
   onClickExportData,
-}: {
-  appletId?: string;
-  hasParticipants?: boolean;
-  testId?: string;
-  onClickExportData?: (flowId: string) => void;
-  subject?: RespondentDetails;
-}) {
+  onClickAssign,
+}: UseFlowGridMenuProps) {
   const { t } = useTranslation('app');
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId: testId });
   const { featureFlags } = useFeatureFlags();
@@ -49,6 +45,7 @@ export function useFlowGridMenu({
 
   const getActionsMenu = useCallback(
     ({ flow }: { flow: HydratedActivityFlow }) => {
+      const flowId = flow.id;
       const flowItems = flow.activities.reduce<{ responseType: ItemResponseType }[]>(
         (items, activity) => [...items, ...activity.items],
         [],
@@ -68,7 +65,7 @@ export function useFlowGridMenu({
               );
             }
           },
-          context: { appletId, flowId: flow?.id },
+          context: { appletId, flowId },
           icon: <Svg id="edit" />,
           isDisplayed: canEdit,
           title: t('editFlow'),
@@ -76,20 +73,23 @@ export function useFlowGridMenu({
         {
           'data-testid': `${testId}-flow-export`,
           action: () => {
-            if (flow?.id) {
-              onClickExportData?.(flow?.id);
+            if (flowId) {
+              onClickExportData(flowId);
             }
           },
-          disabled: !flow?.id,
+          disabled: !flowId,
           icon: <Svg id="export" />,
           title: t('exportData'),
           isDisplayed: canAccessData,
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
-          // TODO: Implement assign
-          // https://mindlogger.atlassian.net/browse/M2-5710
           'data-testid': `${testId}-flow-assign`,
+          action: () => {
+            if (flowId) {
+              onClickAssign(flowId);
+            }
+          },
           icon: <Svg id="add" />,
           title: t('assignActivity'),
           isDisplayed: canAssign,
@@ -103,12 +103,13 @@ export function useFlowGridMenu({
                     ...subject,
                     secretId: subject.secretUserId,
                     userId: subject.userId,
+                    isTeamMember: subject.tag === 'Team',
                   },
                 }
               : undefined;
             openTakeNowModal(flow, options);
           },
-          context: { appletId, flowId: flow?.id },
+          context: { appletId, flowId },
           icon: <Svg id="play-outline" />,
           isDisplayed: canDoTakeNow,
           title: t('takeNow.menuItem'),
@@ -124,6 +125,7 @@ export function useFlowGridMenu({
       canDoTakeNow,
       canEdit,
       navigate,
+      onClickAssign,
       onClickExportData,
       openTakeNowModal,
       showDivider,

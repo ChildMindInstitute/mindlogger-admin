@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { FlowSummaryCard } from 'modules/Dashboard/components/FlowSummaryCard';
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
-import { Activity } from 'redux/modules';
 import { StyledFlexColumn } from 'shared/styles';
+import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 
 import { FlowGridProps } from './FlowGrid.types';
 import { useFlowGridMenu } from './FlowGrid.hooks';
@@ -13,6 +13,7 @@ export const FlowGrid = ({
   activities = [],
   flows = [],
   subject,
+  onClickAssign,
   onClickItem,
   'data-testid': dataTestId,
   ...otherProps
@@ -23,11 +24,14 @@ export const FlowGrid = ({
     appletId: applet?.id,
     hasParticipants: true,
     subject,
+    testId: dataTestId,
     onClickExportData: useCallback((flowId: string) => {
       setFlowId(flowId);
       setShowExportPopup(true);
     }, []),
+    onClickAssign,
   });
+  const hydratedFlows = useMemo(() => hydrateActivityFlows(flows, activities), [activities, flows]);
 
   return (
     <>
@@ -37,26 +41,16 @@ export const FlowGrid = ({
         data-testid={`${dataTestId}-flow-grid`}
         {...otherProps}
       >
-        {flows.map((flow) => {
-          const { id, activityIds = [] } = flow;
-          const hydratedFlow = {
-            ...flow,
-            activities: activityIds
-              .map((activityId) => activities.find(({ id }) => id === activityId))
-              .filter(Boolean) as Activity[],
-          };
-
-          return (
-            <FlowSummaryCard
-              flow={hydratedFlow}
-              component="li"
-              menuItems={getActionsMenu({ flow: hydratedFlow })}
-              key={id}
-              onClick={onClickItem}
-              data-testid={`${dataTestId}-flow-card`}
-            />
-          );
-        })}
+        {hydratedFlows.map((flow) => (
+          <FlowSummaryCard
+            flow={flow}
+            component="li"
+            menuItems={getActionsMenu({ flow })}
+            key={flow.id}
+            onClick={onClickItem}
+            data-testid={`${dataTestId}-flow-card`}
+          />
+        ))}
       </StyledFlexColumn>
 
       <TakeNowModal />

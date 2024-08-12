@@ -6,13 +6,17 @@ import { Activity } from 'redux/modules';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useActivityGrid } from './ActivityGrid.hooks';
+import { UseActivityGridProps } from './ActivityGrid.types';
 
 const { activities: appletActivities } = mockedAppletFormData;
 const mockedActivities = appletActivities as unknown as Activity[];
-const mockedActivitiesData = {
-  result: mockedActivities,
-  count: mockedActivities.length,
-};
+const props = {
+  dataTestId: 'test',
+  activitiesData: {
+    result: mockedActivities,
+    count: mockedActivities.length,
+  },
+} as UseActivityGridProps;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -41,7 +45,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { actions },
       },
-    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid(props));
 
     expect(actions).toMatchObject({
       editActivity: expect.any(Function),
@@ -56,7 +60,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { formatRow },
       },
-    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid(props));
 
     const activity = mockedActivities[0];
     const row = formatRow(activity);
@@ -101,7 +105,7 @@ describe('useActivityGrid', () => {
       result: {
         current: { getActivityById },
       },
-    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid(props));
 
     const activity = mockedActivities[0];
     expect(getActivityById(String(activity.id))).toEqual(activity);
@@ -118,7 +122,7 @@ describe('useActivityGrid', () => {
           actions: { editActivity },
         },
       },
-    } = renderHookWithProviders(() => useActivityGrid('test', mockedActivitiesData));
+    } = renderHookWithProviders(() => useActivityGrid(props));
 
     const activity = mockedActivities[0];
     editActivity({

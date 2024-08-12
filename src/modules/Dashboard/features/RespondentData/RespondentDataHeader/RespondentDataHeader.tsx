@@ -24,9 +24,11 @@ import { palette } from 'shared/styles/variables/palette';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { NavigationEyebrow } from 'shared/components/NavigationEyebrow';
 import { ItemResponseType } from 'shared/consts';
-import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
+import { ActivityFlowThumbnail, ActivityAssignDrawer } from 'modules/Dashboard/components';
 
 import { RespondentDataHeaderProps } from './RespondentDataHeader.types';
+
+const dataTestId = 'respondent-data-header';
 
 export const RespondentDataHeader = ({
   dataTestid,
@@ -35,9 +37,9 @@ export const RespondentDataHeader = ({
   subject,
 }: RespondentDataHeaderProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId, activityId, activityFlowId } = useParams();
   const { featureFlags } = useFeatureFlags();
-  const dataTestId = 'respondent-data-header';
+  const [showActivityAssign, setShowActivityAssign] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
@@ -76,14 +78,13 @@ export const RespondentDataHeader = ({
         userId: subject.userId,
         secretId: subject.secretUserId,
         nickname: subject.nickname,
+        isTeamMember: subject.tag === 'Team',
       },
     });
   };
 
   const handleAssignActivity = () => {
-    // TODO: Implement assign
-    // https://mindlogger.atlassian.net/browse/M2-5710
-    alert(`TODO: Assign activity (${activityOrFlow?.id})`);
+    setShowActivityAssign(true);
   };
 
   const handleOpenExport = () => {
@@ -186,6 +187,17 @@ export const RespondentDataHeader = ({
           </StyledFlexTopCenter>
         )}
       </StyledFlexSpaceBetween>
+
+      <ActivityAssignDrawer
+        appletId={appletId}
+        activityId={activityId}
+        activityFlowId={activityFlowId}
+        open={showActivityAssign}
+        respondentSubjectId={subject.userId ? subject.id : undefined}
+        targetSubjectId={subject.tag === 'Team' ? undefined : subject.id}
+        onClose={() => setShowActivityAssign(false)}
+      />
+
       {canDoTakeNow && <TakeNowModal />}
     </>
   );

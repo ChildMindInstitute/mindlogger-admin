@@ -1,8 +1,9 @@
 import { BoxTypeMap } from '@mui/system';
 import { ElementType } from 'react';
 
-import { StyledFlexTopCenter, variables } from 'shared/styles';
+import { StyledFlexAllCenter, StyledFlexTopCenter, variables } from 'shared/styles';
 import { ParticipantTagChip } from 'modules/Dashboard/components';
+import { Svg } from 'shared/components';
 
 import { ParticipantSnippetProps, ParticipantSnippetVariant } from './ParticipantSnippet.types';
 import { StyledText, StyledTextLarge } from './ParticipantSnippet.styles';
@@ -12,13 +13,22 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
   secretId,
   nickname,
   tag,
+  isTeamMember = tag === 'Team',
   boxProps,
   variant = ParticipantSnippetVariant.Default,
-  'data-testid': dataTestId,
+  hasLimitedAccountIcon,
+  'data-testid': dataTestId = 'participant-snippet',
 }: ParticipantSnippetProps<T>) => {
   const { sx, ...rest } = boxProps ?? {};
   const isDefaultVariant = variant === ParticipantSnippetVariant.Default;
   const TextComponent = isDefaultVariant ? StyledText : StyledTextLarge;
+
+  const components = isTeamMember
+    ? [{ name: 'nickname', value: nickname }]
+    : [
+        { name: 'secretId', value: secretId },
+        { name: 'nickname', value: nickname },
+      ];
 
   return (
     <StyledFlexTopCenter
@@ -26,16 +36,24 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
       {...rest}
       data-testid={dataTestId}
     >
-      <TextComponent data-testid={`${dataTestId}-secretId`}>{secretId}</TextComponent>
-      {!!nickname && (
+      <TextComponent data-testid={`${dataTestId}-${components[0].name}`} sx={{ maxWidth: '50%' }}>
+        {components[0].value}
+      </TextComponent>
+      {!!components[1] && (
         <TextComponent
           color={variables.palette[isDefaultVariant ? 'neutral60' : 'outline']}
-          data-testid={`${dataTestId}-nickname`}
+          data-testid={`${dataTestId}-${components[1].name}`}
         >
-          {nickname}
+          {components[1].value}
         </TextComponent>
       )}
       <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
+      {hasLimitedAccountIcon && (
+        <StyledFlexAllCenter sx={{ ml: 'auto' }}>
+          <Svg id="coordinator" width={24} height={24} />
+        </StyledFlexAllCenter>
+      )}
+
       {children}
     </StyledFlexTopCenter>
   );

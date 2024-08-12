@@ -66,6 +66,7 @@ export const BuilderApplet = () => {
   );
 
   const { featureFlags } = useFeatureFlags();
+
   const methods = useForm<AppletFormValues>({
     defaultValues,
     resolver: yupResolver(

@@ -14,6 +14,7 @@ export const FeatureFlagsKeys = {
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
   enableAdminAppSoftLock: 'enableAdminAppSoftLock',
   enableParagraphTextItem: 'enableParagraphTextItem',
+  enablePhrasalTemplate: 'enablePhrasalTemplate',
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
 };
 

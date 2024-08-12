@@ -1,6 +1,7 @@
 import { BoxProps } from '@mui/material';
 
 export interface ParticipantActivitiesToolbarProps extends BoxProps {
-  appletId?: string;
-  'data-testid'?: string;
+  appletId: string;
+  onClickAssign: () => void;
+  'data-testid': string;
 }

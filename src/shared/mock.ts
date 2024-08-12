@@ -128,6 +128,7 @@ export const mockedRespondent: Respondent = {
   status: RespondentStatus.Invited,
   email: 'resp1@mail.com',
 };
+
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedSubjectId2 = 'subject-id-123';
 export const mockedRespondent2: Respondent = {
@@ -156,6 +157,38 @@ export const mockedRespondent2: Respondent = {
       subjectFirstName: 'John',
       subjectLastName: 'Doe',
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
+    },
+  ],
+};
+
+export const mockedLimitedSubjectId = 'limited-subject-id-123';
+export const mockedLimitedRespondent = {
+  id: null,
+  nicknames: ['Limited 1'],
+  secretIds: ['limited-1'],
+  isAnonymousRespondent: false,
+  lastSeen: new Date().toDateString(),
+  isPinned: false,
+  role: Roles.Respondent,
+  status: RespondentStatus.NotInvited,
+  email: null,
+  subjects: [mockedLimitedSubjectId],
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: mockedApplet.displayName,
+      appletImage: '',
+      accessId: null,
+      respondentNickname: 'Limited 1',
+      respondentSecretId: 'limited-1',
+      hasIndividualSchedule: false,
+      encryption: mockedApplet.encryption,
+      subjectId: mockedLimitedSubjectId,
+      subjectTag: 'Child' as ParticipantTag,
+      subjectFirstName: 'Limited',
+      subjectLastName: 'One',
+      subjectCreatedAt: '2024-07-12T13:07:25.455726',
       invitation: null,
     },
   ],

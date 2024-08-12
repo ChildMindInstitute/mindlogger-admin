@@ -55,6 +55,18 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
 
   const availableItemsTypeOptions = itemsTypeOptions.reduce(
     (options: ItemsOptionGroup[], { groupName, groupOptions }) => {
+      if (groupName === 'downloadable' && !isReviewable) {
+        return [
+          ...options,
+          {
+            groupName,
+            groupOptions: groupOptions.filter(
+              ({ value }) => value !== 'phrasalTemplate' || featureFlags.enablePhrasalTemplate,
+            ),
+          },
+        ];
+      }
+
       if (isReviewable) {
         if (groupName !== 'select') return options;
 

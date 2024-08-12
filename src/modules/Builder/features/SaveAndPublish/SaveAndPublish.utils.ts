@@ -350,6 +350,10 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     };
   }
 
+  if (responseType === ItemResponseType.PhrasalTemplate) {
+    return responseValues;
+  }
+
   return null;
 };
 
