@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
+import { format } from 'date-fns';
 
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
@@ -14,14 +15,17 @@ import {
 } from 'shared/styles';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
+import { DateFormats } from 'shared/consts';
 
-import { DataExportPopupProps, Modals } from './DataExportPopup.types';
+import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
 import { useMultipleDecryptWorkers } from './DataExportPopup.hooks';
 import { BUFFER_PERCENTAGE } from './DataExportPopup.const';
 import { ExportDataFetchService as ExportDataFetchServiceClass } from './ExportDataFetchSevice';
+import { getFormattedToDate } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
@@ -47,36 +51,65 @@ export const DataExportPopup = ({
     setPopupVisible(false);
   }, [setChosenAppletData, setPopupVisible]);
 
-  const {
-    dataIsExporting,
-    setDataIsExporting,
-    setExportDataQueue,
-    dataExportingApiRef,
-    limitRef,
-    finishedPagesRef,
-  } = useMultipleDecryptWorkers({
-    handleExportPopupClose,
-    appletId,
-    encryption,
-    filters,
-  });
+  const { dataIsExporting, setDataIsExporting, setExportDataQueue, limitRef, finishedPagesRef } =
+    useMultipleDecryptWorkers({
+      handleExportPopupClose,
+      appletId,
+      encryption,
+      filters,
+    });
 
-  const ExportDataFetchService = useRef(
-    new ExportDataFetchServiceClass(
-      setExportDataQueue,
-      setActiveModal,
-      dataExportingApiRef,
-      limitRef,
-      setDataIsExporting,
-    ),
-  ).current;
+  const ExportDataFetchService = useRef(new ExportDataFetchServiceClass()).current;
+
+  const executeAllPagesOfExportData = async ({
+    appletId,
+    targetSubjectIds,
+  }: ExecuteAllPagesOfExportData) => {
+    try {
+      setDataIsExporting(true);
+
+      const dateType = getValues?.().dateType;
+      const formFromDate = getValues?.().fromDate;
+      const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
+      const formToDate = getValues?.().toDate;
+      const toDate = getFormattedToDate({ dateType, formToDate });
+
+      const body = {
+        appletId,
+        targetSubjectIds,
+        fromDate,
+        toDate,
+      };
+      const firstPageResponse = await ExportDataFetchService.executeExport(body);
+      const { result: firstPageData, count = 0 } = firstPageResponse.data;
+      const pageLimit = getExportPageAmount(count);
+      setExportDataQueue([firstPageData]);
+
+      if (pageLimit > 1) {
+        limitRef.current = pageLimit;
+        for (let page = 2; page <= pageLimit; page++) {
+          const nextPageResponse = await ExportDataFetchService.executeExport({
+            ...body,
+            page,
+          });
+          const { result: nextPageData } = nextPageResponse.data;
+
+          setExportDataQueue((prevState) =>
+            prevState ? [...prevState, nextPageData] : [nextPageData],
+          );
+        }
+      }
+    } catch {
+      setActiveModal(Modals.ExportError);
+    }
+  };
 
   const handleDataExportSubmit = async () => {
-    if (dataIsExporting || dataExportingApiRef.current || !appletId) {
+    if (dataIsExporting || !appletId) {
       return;
     }
 
-    await ExportDataFetchService.executeAllPagesOfExportData(getValues, {
+    await executeAllPagesOfExportData({
       appletId,
       targetSubjectIds: subjectId,
     });

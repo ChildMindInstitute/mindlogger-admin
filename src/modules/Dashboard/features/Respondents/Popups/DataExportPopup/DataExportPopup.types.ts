@@ -29,6 +29,12 @@ export type ExecuteAllPagesOfExportData = {
   targetSubjectIds?: string;
 };
 
+export type ExportDataProps = ExecuteAllPagesOfExportData & {
+  fromDate: string;
+  toDate?: string;
+  page?: number;
+};
+
 export type GetFormattedToDate = {
   dateType?: ExportDateType;
   formToDate?: Date;

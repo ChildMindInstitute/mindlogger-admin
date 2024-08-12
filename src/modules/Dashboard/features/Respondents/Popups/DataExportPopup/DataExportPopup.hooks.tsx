@@ -19,7 +19,6 @@ export const useMultipleDecryptWorkers = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [exportDataQueue, setExportDataQueue] = useState<ExportDataResult[] | null>(null);
 
-  const dataExportingApiRef = useRef(false);
   const limitRef = useRef(1);
   const finishedPagesRef = useRef<Set<number>>(new Set());
 
@@ -36,7 +35,6 @@ export const useMultipleDecryptWorkers = ({
       privateKey,
       filters,
       shouldLogDataInDebugMode,
-      dataExportingApiRef,
       setDataIsExporting,
       handleExportPopupClose,
       appletId,
@@ -69,7 +67,6 @@ export const useMultipleDecryptWorkers = ({
     dataIsExporting,
     setDataIsExporting,
     setExportDataQueue,
-    dataExportingApiRef,
     limitRef,
     finishedPagesRef,
   };

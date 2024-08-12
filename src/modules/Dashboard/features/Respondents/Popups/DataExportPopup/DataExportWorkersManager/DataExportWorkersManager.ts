@@ -22,7 +22,6 @@ export class DataExportWorkersManager {
     private privateKey: number[],
     private filters: ExportDataFilters | undefined,
     private shouldLogDataInDebugMode: boolean,
-    private dataExportingApiRef: MutableRefObject<boolean>,
     private setDataIsExporting: Dispatch<SetStateAction<boolean>>,
     private handleExportPopupClose: () => void,
     private appletId: string,
@@ -49,7 +48,7 @@ export class DataExportWorkersManager {
       this.finishedPagesRef.current.size === this.limitRef.current;
     const allWorkersIdle = this.workers.every((worker) => worker.isIdle);
 
-    if (!this.dataExportingApiRef.current && allPagesProcessed && allWorkersIdle) {
+    if (allPagesProcessed && allWorkersIdle) {
       this.setDataIsExporting(false);
       this.handleExportPopupClose();
       Mixpanel.track('Export Data Successful', { 'Applet ID': this.appletId });
