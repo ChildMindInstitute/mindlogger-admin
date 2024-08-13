@@ -1,4 +1,9 @@
-import { AppletExportData, ExportDataResult } from 'shared/types/answer';
+import {
+  AppletExportData,
+  DecryptedActivityData,
+  ExportDataResult,
+  ExtendedExportAnswerWithoutEncryption,
+} from 'shared/types/answer';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { getObjectFromList } from '../getObjectFromList';
@@ -35,7 +40,7 @@ export const getDefaultExportData = (): AppletExportData => ({
 export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
   const filterKeys = Object.keys(filters ?? {}) as (keyof typeof filters)[];
 
-  return ({ decryptedAnswers }: Awaited<ReturnType<typeof getParsedAnswers>>[number]) =>
+  return ({ decryptedAnswers }: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>) =>
     decryptedAnswers.some((decryptedAnswers) =>
       filterKeys.reduce((acc, filterKey) => {
         if (acc === false) {
@@ -49,12 +54,10 @@ export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
     );
 };
 
-export const prepareData = async (
-  data: ExportDataResult,
-  getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
+export const prepareDecryptedData = async (
+  parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
   filters?: ExportDataFilters,
 ) => {
-  const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
   logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const filteredParsedAnswers = parsedAnswers.filter(getParsedAnswersFilterFn(filters));
   const remappedParsedAnswers = remapFailedAnswers(filteredParsedAnswers);
@@ -98,4 +101,14 @@ export const prepareData = async (
   }
 
   return acc;
+};
+
+export const prepareEncryptedData = async (
+  data: ExportDataResult,
+  getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
+  filters?: ExportDataFilters,
+) => {
+  const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
+
+  return prepareDecryptedData(parsedAnswers, filters);
 };
