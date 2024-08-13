@@ -17,6 +17,7 @@ import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 
 import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -41,10 +42,11 @@ export const DataExportPopup = ({
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
-
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
+  const { getAppletPrivateKey } = useEncryptionStorage();
+  const privateKeyRef = useRef<null | number[]>(null);
 
   const handleExportPopupClose = useCallback(() => {
     setChosenAppletData?.(null);
@@ -57,6 +59,7 @@ export const DataExportPopup = ({
       appletId,
       encryption,
       filters,
+      privateKeyRef,
     });
 
   const ExportDataFetchService = useRef(new ExportDataFetchServiceClass()).current;
@@ -67,6 +70,7 @@ export const DataExportPopup = ({
   }: ExecuteAllPagesOfExportData) => {
     try {
       setDataIsExporting(true);
+      privateKeyRef.current = getAppletPrivateKey(appletId) as number[];
 
       const dateType = getValues?.().dateType;
       const formFromDate = getValues?.().fromDate;

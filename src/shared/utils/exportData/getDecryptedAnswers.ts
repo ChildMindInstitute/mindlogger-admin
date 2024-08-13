@@ -17,7 +17,7 @@ import { getObjectFromList } from '../getObjectFromList';
 export const getDecryptedAnswers = async <T extends EncryptedAnswerSharedProps>(
   answersApiResponse: T,
   encryptionInfoFromServer: EncryptionParsed | null,
-  privateKey: number[],
+  privateKey: number[] | null,
   shouldLogDataInDebugMode: boolean,
   itemResponseTypeEnum: Record<string, string>,
 ): Promise<DecryptedActivityData<T>> => {
@@ -44,7 +44,7 @@ export const getDecryptedAnswers = async <T extends EncryptedAnswerSharedProps>(
   let answersDecrypted: AnswerDTO[] = [];
   let eventsDecrypted: EventDTO[] = [];
 
-  if (userPublicKey) {
+  if (userPublicKey && privateKey) {
     let userPublicKeyParsed;
     try {
       userPublicKeyParsed = JSON.parse(userPublicKey);

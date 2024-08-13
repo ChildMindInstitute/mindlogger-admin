@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { ExportDataResult } from 'shared/types/answer';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import { isProduction } from 'shared/utils/env';
 import { SessionStorageKeys } from 'shared/utils/storage';
 
@@ -14,17 +13,14 @@ export const useMultipleDecryptWorkers = ({
   appletId,
   encryption,
   filters,
+  privateKeyRef,
 }: MultipleDecryptWorkersProps) => {
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [exportDataQueue, setExportDataQueue] = useState<ExportDataResult[] | null>(null);
-
   const limitRef = useRef(1);
   const finishedPagesRef = useRef<Set<number>>(new Set());
-
-  const { getAppletPrivateKey } = useEncryptionStorage();
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
-  const privateKey = getAppletPrivateKey(appletId) as number[];
 
   const shouldLogDataInDebugMode =
     !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
@@ -32,7 +28,7 @@ export const useMultipleDecryptWorkers = ({
   const DataExportWorkerManager = useRef(
     new DataExportWorkersManagerClass(
       encryptionInfoFromServer,
-      privateKey,
+      privateKeyRef,
       filters,
       shouldLogDataInDebugMode,
       setDataIsExporting,

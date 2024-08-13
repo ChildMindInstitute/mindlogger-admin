@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { Row } from 'shared/components';
 import { SingleApplet } from 'shared/state';
@@ -47,6 +47,7 @@ export type IdleWorker = Worker & {
 export type MultipleDecryptWorkersProps = {
   handleExportPopupClose: () => void;
   appletId: string;
+  privateKeyRef: MutableRefObject<number[] | null>;
   encryption?: Encryption | null;
   filters?: ExportDataFilters;
 };

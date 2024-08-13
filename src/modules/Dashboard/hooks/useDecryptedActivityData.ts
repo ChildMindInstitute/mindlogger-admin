@@ -22,7 +22,6 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption);
   const { getAppletPrivateKey } = useEncryptionStorage();
-  const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
   const shouldLogDataInDebugMode =
     !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
 
@@ -30,12 +29,15 @@ export const useDecryptedActivityData = (
 
   return async <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
-  ): Promise<DecryptedActivityData<T>> =>
-    getDecryptedAnswers(
+  ): Promise<DecryptedActivityData<T>> => {
+    const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
+
+    return getDecryptedAnswers(
       answersApiResponse,
       encryptionInfoFromServer,
       privateKey,
       shouldLogDataInDebugMode,
       ItemResponseType,
     );
+  };
 };

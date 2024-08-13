@@ -19,7 +19,7 @@ export class DataExportWorkersManager {
 
   constructor(
     private encryptionInfoFromServer: EncryptionParsed | null,
-    private privateKey: number[],
+    private privateKeyRef: MutableRefObject<number[] | null>,
     private filters: ExportDataFilters | undefined,
     private shouldLogDataInDebugMode: boolean,
     private setDataIsExporting: Dispatch<SetStateAction<boolean>>,
@@ -87,7 +87,7 @@ export class DataExportWorkersManager {
           encryptedData: pageData,
           encryptionInfoFromServer: this.encryptionInfoFromServer,
           page,
-          privateKey: this.privateKey,
+          privateKey: this.privateKeyRef.current,
           hasSuffix: this.limitRef.current > 1,
           filters: this.filters,
           shouldLogDataInDebugMode: this.shouldLogDataInDebugMode,

@@ -16,7 +16,7 @@ export type WorkerPostMessageEvent = MessageEvent<
   CommonMessageProps & {
     encryptedData: ExportDataResult;
     encryptionInfoFromServer: EncryptionParsed | null;
-    privateKey: number[];
+    privateKey: number[] | null;
     shouldLogDataInDebugMode: boolean;
     ItemResponseType: Record<string, string>;
   }
@@ -33,7 +33,7 @@ export type WorkerOnMessageEvent = MessageEvent<
 export type GetDecryptedParsedAnswers = {
   exportDataResult: ExportDataResult;
   encryptionInfoFromServer: EncryptionParsed | null;
-  privateKey: number[];
+  privateKey: number[] | null;
   shouldLogDataInDebugMode: boolean;
   itemResponseTypeEnum: Record<string, string>;
 };
