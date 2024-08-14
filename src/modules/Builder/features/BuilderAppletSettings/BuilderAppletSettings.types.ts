@@ -5,5 +5,6 @@ export type GetSettings = {
   isPublished?: boolean;
   roles?: Roles[];
   enableLorisIntegration?: boolean;
+  enableShareToLibrary?: boolean;
   appletId?: string;
 };
