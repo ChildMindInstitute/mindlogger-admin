@@ -120,6 +120,7 @@ export enum ItemResponseType {
   TimeRange = 'timeRange',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
+  UnityFile = 'unityFile',
   Video = 'video',
 }
 
@@ -146,6 +147,7 @@ export enum PerfTaskType {
   Gyroscope = 'gyroscope',
   ABTrailsTablet = 'ABTrailsTablet',
   ABTrailsMobile = 'ABTrailsMobile',
+  Unity = 'unity',
 }
 
 export enum GyroscopeOrTouch {
@@ -191,6 +193,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
   [ItemResponseType.PhrasalTemplate]: <Svg id="fileAlt" />,
+  [ItemResponseType.UnityFile]: null,
 };
 
 export const enum SubscaleTotalScore {

@@ -72,4 +72,5 @@ export const getItemResponseTypes = (enableParagraphTextItem: boolean) => ({
     icon: <Svg id="fileAlt" />,
     title: ItemResponseType.PhrasalTemplate,
   },
+  [ItemResponseType.UnityFile]: { icon: null, title: ItemResponseType.UnityFile },
 });

@@ -995,13 +995,15 @@
     "abTrailsMobile": "A/B Trails Mobile",
     "flanker": "Constructeur de tâches de temps de réaction simple et au choix",
     "gyroscope": "CST Gyroscope",
-    "touch": "CST Touch"
+    "touch": "CST Touch",
+    "unity": "Nouvelle tâche Unity (Beta)"
   },
   "performanceTasksDesc": {
     "abTrails": "Parcours A/B",
     "flanker": "Cette Activité contient un Élément Flanker. Les horodatages collectés pour un appareil Android ne sont pas aussi précis que ceux des appareils iOS.",
     "gyroscope": "Cette Activité contient un Élément de Suivi de Stabilité (Gyroscope).",
-    "touch": "Cette Activité contient un Élément de Suivi de Stabilité (Toucher)."
+    "touch": "Cette Activité contient un Élément de Suivi de Stabilité (Toucher).",
+    "unity": "Nouvelle tâche Unity"
   },
   "periodRequired": "La période est requise",
   "personalInvitation": "Invitation Personnelle",
@@ -1438,6 +1440,7 @@
   "tryAgain": "Réessayer",
   "underline": "Souligner",
   "undo": "Annuler",
+  "unityInstructions": "Upload Configurations",
   "unorderedList": "Liste non ordonnée",
   "unread": "Non lu",
   "unselected": "Non sélectionné",
