@@ -120,8 +120,8 @@ export enum ItemResponseType {
   TimeRange = 'timeRange',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
-  Video = 'video',
   UnityFile = 'unityFile',
+  Video = 'video',
 }
 
 export const textLanguageKey = 'shortText';

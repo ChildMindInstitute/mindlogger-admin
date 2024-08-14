@@ -41,5 +41,6 @@ export const DisplayModeOptions: Record<
   [ItemResponseType.TimeRange]: undefined,
   [ItemResponseType.TouchPractice]: undefined,
   [ItemResponseType.TouchTest]: undefined,
+  [ItemResponseType.UnityFile]: undefined,
   [ItemResponseType.Video]: undefined,
 };

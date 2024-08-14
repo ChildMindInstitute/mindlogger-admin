@@ -302,7 +302,8 @@ export const ItemSettingsGroup = ({
                 if (
                   isAlerts &&
                   ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType) &&
-                  inputType !== ItemResponseType.PhrasalTemplate
+                  inputType !== ItemResponseType.PhrasalTemplate &&
+                  inputType !== ItemResponseType.UnityFile
                 ) {
                   const hasAlerts = event.target.checked;
 
@@ -311,7 +312,7 @@ export const ItemSettingsGroup = ({
                     hasAlerts
                       ? [
                           getEmptyAlert({
-                            responseType: inputType as ItemResponseType,
+                            responseType: inputType,
                             responseValues: getValues(`${itemName}.responseValues`),
                             config,
                           }),

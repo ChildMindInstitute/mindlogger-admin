@@ -525,8 +525,8 @@ export type Item<T = ItemCommonType> =
   | StabilityTrackerItem<T>
   | TouchPracticeItem<T>
   | TouchTestItem<T>
-  | PhrasalTemplateItem<T>
-  | UnityItem<T>;
+  | UnityItem<T>
+  | PhrasalTemplateItem<T>;
 
 export type ItemCommonType = {
   id?: string;
@@ -686,6 +686,7 @@ export type TouchTestItem<T = ItemCommonType> = T & {
 export type PhrasalTemplateItem<T = ItemCommonType> = T & {
   config: PhrasalTemplateConfig;
   responseType: ItemResponseType.PhrasalTemplate;
+  responseValues: null;
 };
 
 export type UnityItem<T = ItemCommonType> = T & {
