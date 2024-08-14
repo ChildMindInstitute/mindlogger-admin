@@ -12,23 +12,27 @@ export const FeatureFlags = {
   async login(userId: string) {
     if (!_ldClient) return;
     _userId = userId;
-    this.identify({
+
+    return this.identify({
       userId,
     });
   },
-  async updateWorkspaces(workspaces: string[]) {
+  async updateWorkspaces(workspaces: string[], workspaceId: string) {
     if (!_userId) return;
-    this.identify({
+
+    return this.identify({
       userId: _userId,
       workspaces,
+      workspaceId,
     });
   },
-  async identify(context: { userId?: string; workspaces?: string[] }) {
+  async identify(context: { userId?: string; workspaces?: string[]; workspaceId?: string }) {
     if (PROHIBITED_PII_KEYS.some((val) => Object.keys(context).includes(val))) {
       throw new Error('Context contains prohibited keys');
     }
     if (!_ldClient) return;
-    _ldClient?.identify(
+
+    return _ldClient?.identify(
       {
         ...context,
         kind: 'admin-users',
@@ -40,7 +44,8 @@ export const FeatureFlags = {
   async logout() {
     _userId = '';
     if (!_ldClient) return;
-    _ldClient.identify({
+
+    return _ldClient.identify({
       kind: 'user',
       anonymous: true,
     });
