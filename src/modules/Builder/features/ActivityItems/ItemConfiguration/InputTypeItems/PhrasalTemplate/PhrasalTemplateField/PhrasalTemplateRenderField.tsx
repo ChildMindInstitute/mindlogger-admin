@@ -30,7 +30,7 @@ export function RenderedField({
     id: string;
     items?: Array<{ id: string; name: string }>;
   }>();
-  const [fromResponse, setFromResponse] = useState<{
+  const [responseFrom, setResponseFrom] = useState<{
     name: string;
     items?: SliderRowsItemResponseValues[];
   }>();
@@ -38,7 +38,7 @@ export function RenderedField({
   const params = useParams();
   const { control, getValues, setValue } = useCustomFormContext();
   const fieldValue = getValues(name as string);
-  const activitiesFromStore = applet.useActivityDataFromApplet(params?.activityId || '');
+  const itemsFromStore = applet.useActivityItemsFromApplet(params?.activityId || '');
   const { question: selectedOptionQuestion } =
     responseOptions?.find(({ name }) => fieldValue?.itemName === name) ?? {};
 
@@ -72,9 +72,9 @@ export function RenderedField({
     const selectedItem = responseOptions.find(({ name }) => name === value);
 
     if (!selectedItem) {
-      const missedItem = activitiesFromStore?.find((activity) => {
-        if (fieldValue?.itemName?.includes(activity?.name)) {
-          return activity;
+      const missedItem = itemsFromStore?.find((item) => {
+        if (fieldValue?.itemName?.includes(item?.name)) {
+          return item;
         }
 
         return null;
@@ -93,7 +93,7 @@ export function RenderedField({
         id: selectedItem?.responseType as string,
         items,
       });
-      setFromResponse(undefined);
+      setResponseFrom(undefined);
       setValue(name, {
         ...fieldValue,
         itemIndex: 0,
@@ -102,10 +102,10 @@ export function RenderedField({
     }
 
     if (
-      selectedItem?.name !== fromResponse?.name &&
+      selectedItem?.name !== responseFrom?.name &&
       selectedItem?.responseType === ItemResponseType.SliderRows
     ) {
-      setFromResponse({
+      setResponseFrom({
         name: selectedItem?.name,
         items: selectedItem?.responseValues?.rows,
       });
@@ -133,7 +133,7 @@ export function RenderedField({
     return selectedDisplayMode?.name;
   };
 
-  const getFromResponseRenderedValue = (value: unknown) => {
+  const getResponseFromRenderedValue = (value: unknown) => {
     if (!value && typeof Number(value) !== 'number') {
       return (
         <StyledBodyLarge color={variables.palette.outline}>
@@ -142,7 +142,7 @@ export function RenderedField({
       );
     }
 
-    const selectedFromResponse = fromResponse?.items?.[Number(value)];
+    const selectedFromResponse = responseFrom?.items?.[Number(value)];
 
     return selectedFromResponse?.label;
   };
@@ -191,20 +191,20 @@ export function RenderedField({
               }}
             />
           )}
-          {fromResponse?.items && (
+          {responseFrom?.items && (
             <SelectController
               name={`${name}.itemIndex`}
               control={control}
               defaultValue=""
               fullWidth
-              options={fromResponse?.items.map(({ label }, index) => ({
+              options={responseFrom?.items.map(({ label }, index) => ({
                 labelKey: label as string,
                 tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
-                value: `${index}` ?? '',
+                value: `${index}`,
               }))}
               SelectProps={{
                 displayEmpty: true,
-                renderValue: getFromResponseRenderedValue,
+                renderValue: getResponseFromRenderedValue,
                 startAdornment: <Svg aria-hidden id="commentDots" />,
               }}
             />

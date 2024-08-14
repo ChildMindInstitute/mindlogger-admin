@@ -1,7 +1,9 @@
 import { ItemResponseType } from 'shared/consts';
 
 export const DisplayModeOptions: Readonly<
-  Record<ItemResponseType, { id: string; name: string }[] | undefined>
+  Record<ItemResponseType, { id: string; name: string }[] | undefined> & {
+    default: undefined;
+  }
 > = {
   [ItemResponseType.MultipleSelection]: [
     { id: 'sentence', name: 'Sentence' },
@@ -41,6 +43,7 @@ export const DisplayModeOptions: Readonly<
   [ItemResponseType.TouchPractice]: undefined,
   [ItemResponseType.TouchTest]: undefined,
   [ItemResponseType.Video]: undefined,
+  default: undefined,
 };
 
 export const KEYWORDS = {
