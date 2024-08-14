@@ -1033,7 +1033,15 @@
     "titleHint": "Displayed in the header of the Phrasal Template output, alongside the Applet name and image.",
     "titleHintLabel": "See more details",
     "titleLabel": "Card Title (Required)",
-    "titlePlaceholder": "Example: Action Plan"
+    "titlePlaceholder": "Example: Action Plan",
+    "displayModes": {
+      "sentence": "Sentence",
+      "bullet_list": "Bullet List",
+      "sentence_option_row": "Sentence: Option Text, Row Text",
+      "sentence_row_option": "Sentence: Row Text, Option Text",
+      "bullet_list_option_row": "Bullet List: Option Text, Row Text",
+      "bullet_list_text_row": "Bullet List: Row Text, Option Text"
+    }
   },
   "phrasalTemplateExample": "When I feel sad <em>I will call a friend</em> for support.",
   "phrasalTemplateHint": "Create phrases using a Respondentʼs previous inputs.",

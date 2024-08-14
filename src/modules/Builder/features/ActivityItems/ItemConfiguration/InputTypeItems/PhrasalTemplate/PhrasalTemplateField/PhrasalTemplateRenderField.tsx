@@ -128,9 +128,7 @@ export function RenderedField({
       );
     }
 
-    const selectedDisplayMode = displayMode?.items?.find(({ id }) => id === value);
-
-    return selectedDisplayMode?.name;
+    return t(`phrasalTemplateItem.displayModes.${value}`);
   };
 
   const getResponseFromRenderedValue = (value: unknown) => {
