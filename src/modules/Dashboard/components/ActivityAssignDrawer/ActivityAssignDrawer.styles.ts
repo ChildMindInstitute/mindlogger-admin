@@ -1,4 +1,5 @@
 import { Box, Button, styled } from '@mui/material';
+import zIndex from '@mui/material/styles/zIndex';
 
 import {
   StyledFlexAllCenter,
@@ -9,8 +10,23 @@ import {
 } from 'shared/styles';
 
 export const StyledHeader = styled(StyledFlexTopCenter)({
+  position: 'sticky',
+  top: 0,
+  zIndex: zIndex.appBar,
+  background: variables.palette.surface,
   padding: theme.spacing(3.2, 2.4, 2.2, 4),
   borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+});
+
+export const StyledPane = styled(StyledFlexColumn)({
+  padding: theme.spacing(4),
+  flex: 1,
+  // Keep hidden panes absolute-positioned for active pane to dictate content height
+  '&:not([style*="opacity: 1"])': {
+    position: 'absolute',
+    inset: 0,
+    overflow: 'hidden',
+  },
 });
 
 export const StyledFooterWrapper = styled(Box)({
@@ -18,6 +34,7 @@ export const StyledFooterWrapper = styled(Box)({
   position: 'sticky',
   overflow: 'hidden',
   bottom: 0,
+  zIndex: zIndex.appBar,
   flexShrink: 0,
 });
 

@@ -80,6 +80,7 @@ import {
   GetActivityParams,
   EditSubjectResponse,
   CreateTemporaryMultiInformantRelation,
+  GetAssignmentsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -928,3 +929,12 @@ export const createTemporaryMultiInformantRelationApi = (
       signal,
     },
   );
+
+export const getAppletAssignmentsApi = (
+  { appletId, ...params }: GetAssignmentsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/assignments/applet/${appletId}`, {
+    params,
+    signal,
+  });

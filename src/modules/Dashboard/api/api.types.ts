@@ -606,3 +606,23 @@ export type CreateTemporaryMultiInformantRelation = {
   subjectId: string;
   sourceSubjectId: string;
 };
+
+export type GetAssignmentsParams = AppletId & {
+  flows?: string;
+  activities?: string;
+};
+
+export type Assignment = {
+  id?: string;
+  activityId: string | null;
+  activityFlowId: string | null;
+  respondentSubjectId: string;
+  targetSubjectId: string;
+};
+
+export type GetAppletAssignmentsResponse = {
+  result: {
+    appletId: string;
+    assignments: Assignment[];
+  };
+};

@@ -9,7 +9,8 @@ import { ActivityAssignment } from '../ActivityAssignDrawer.types';
 export type AssignmentsTableProps = Omit<ReturnType<typeof useParticipantDropdown>, 'isLoading'> & {
   teamMembersOnly: ParticipantDropdownOption[];
   assignments: ActivityAssignment[];
-  onChange: (assignments: ActivityAssignment[]) => void;
+  onChange?: (assignments: ActivityAssignment[]) => void;
+  onAdd?: () => void;
   isReadOnly?: boolean;
   errors?: {
     duplicateRows?: `${string}_${string}`[];

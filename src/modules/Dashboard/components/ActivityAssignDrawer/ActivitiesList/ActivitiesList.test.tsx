@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { useForm } from 'react-hook-form';
 
 import { mockedAppletData } from 'shared/mock';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
@@ -18,20 +17,7 @@ const mockTestId = 'test-id';
 
 const ActivitiesListTest = (
   defaultValues: Pick<ActivityAssignFormValues, 'activityIds' | 'flowIds'>,
-) => {
-  const { control } = useForm<ActivityAssignFormValues>({
-    defaultValues,
-  });
-
-  return (
-    <ActivitiesList
-      activities={mockActivities}
-      flows={mockFlows}
-      control={control}
-      data-testid={mockTestId}
-    />
-  );
-};
+) => <ActivitiesList activities={mockActivities} flows={mockFlows} data-testid={mockTestId} />;
 
 describe('ActivitiesList component', () => {
   it('renders the list of activities & flows', () => {
