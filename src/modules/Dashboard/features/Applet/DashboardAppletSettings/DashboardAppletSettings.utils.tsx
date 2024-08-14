@@ -8,7 +8,7 @@ import {
   DeleteAppletSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
-  // ShareAppletSetting,
+  ShareAppletSetting,
 } from 'shared/features/AppletSettings';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
@@ -88,17 +88,18 @@ export const getSettings = ({ isPublished, roles, appletId }: GetSettings): Item
     {
       label: 'sharing',
       //remove after uncommenting Share to Library functionality
-      isVisible: roles?.includes(Roles.SuperAdmin),
+      // isVisible: roles?.includes(Roles.SuperAdmin),
       items: [
-        // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-        // introduced. (Story: AUS-4.1.4.10).
-        // {
-        //   icon: <Svg id="share" />,
-        //   label: 'shareToLibrary',
-        //   component: <ShareAppletSetting />,
-        //   param: SettingParam.ShareApplet,
-        //   'data-testid': `${dataTestid}-share-to-library`,
-        // },
+        /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
+        with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
+        AUS-4.1.4.10).*/
+        {
+          icon: <Svg id="share" />,
+          label: 'shareToLibrary',
+          component: <ShareAppletSetting />,
+          param: SettingParam.ShareApplet,
+          'data-testid': `${dataTestid}-share-to-library`,
+        },
         {
           icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
           label: isPublished ? 'concealApplet' : 'publishApplet',

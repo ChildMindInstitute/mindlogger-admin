@@ -15,7 +15,7 @@ export const getAppletActions = ({
     deleteAction,
     transferOwnership,
     duplicateAction,
-    // shareAppletAction,
+    shareAppletAction,
     publishAppletAction,
     editAction,
   },
@@ -72,14 +72,15 @@ export const getAppletActions = ({
       isDisplayed: isOwner || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-transfer',
     },
-    // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-    // introduced. (Story: AUS-4.1.4.10).
-    // {
-    //   icon: <Svg id="share" />,
-    //   action: shareAppletAction,
-    //   title: t('shareWithTheLibrary'),
-    //   'data-testid': 'dashboard-applets-applet-share',
-    // },
+    /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
+    with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
+    AUS-4.1.4.10).*/
+    {
+      icon: <Svg id="share" />,
+      action: shareAppletAction,
+      title: t('shareWithTheLibrary'),
+      'data-testid': 'dashboard-applets-applet-share',
+    },
     {
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
