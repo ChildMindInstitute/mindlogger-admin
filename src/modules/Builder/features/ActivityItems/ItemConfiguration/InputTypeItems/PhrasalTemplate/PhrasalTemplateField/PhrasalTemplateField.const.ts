@@ -48,6 +48,7 @@ export const DisplayModeOptions: Readonly<
 
 export const KEYWORDS = {
   SENTENCE: 'sentence',
+  DISPLAY_SENTENCE: 'sentence',
   ITEM_RESPONSE: 'item_response',
   LINE_BREAK: 'line_break',
 } as const;

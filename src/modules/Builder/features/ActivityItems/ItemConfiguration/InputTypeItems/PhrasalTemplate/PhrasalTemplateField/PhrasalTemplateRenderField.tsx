@@ -52,7 +52,7 @@ export function RenderedField({
       !isFieldValueDeleted
     ) {
       setValue(name, {
-        displayMode: KEYWORDS.SENTENCE,
+        displayMode: KEYWORDS.DISPLAY_SENTENCE,
         itemName: `${fieldValue.itemName}-deleted`,
         type: KEYWORDS.ITEM_RESPONSE,
         itemIndex: 0,
@@ -97,7 +97,7 @@ export function RenderedField({
       setValue(name, {
         ...fieldValue,
         itemIndex: 0,
-        displayMode: items ? fieldValue?.displayMode : KEYWORDS.SENTENCE,
+        displayMode: items ? fieldValue?.displayMode : KEYWORDS.DISPLAY_SENTENCE,
       });
     }
 
@@ -112,7 +112,7 @@ export function RenderedField({
       setDisplayMode(undefined);
       setValue(name, {
         ...fieldValue,
-        displayMode: KEYWORDS.SENTENCE,
+        displayMode: KEYWORDS.DISPLAY_SENTENCE,
       });
     }
 

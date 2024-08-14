@@ -31,7 +31,12 @@ const DEFAULT_PHRASE: PhrasalTemplateResponseValues['phrases'][number] = {
   image: null,
   fields: [
     { type: KEYWORDS.SENTENCE, text: '' },
-    { type: KEYWORDS.ITEM_RESPONSE, itemName: '', displayMode: KEYWORDS.SENTENCE, itemIndex: 0 },
+    {
+      type: KEYWORDS.ITEM_RESPONSE,
+      itemName: '',
+      displayMode: KEYWORDS.DISPLAY_SENTENCE,
+      itemIndex: 0,
+    },
     { type: KEYWORDS.SENTENCE, text: '' },
   ],
 };
