@@ -8,25 +8,27 @@ import { ActionsMenu, MenuActionProps, Row } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { Activity, workspaces } from 'redux/modules';
-import {
-  ActionsObject,
-  ActivitiesData,
-  ActivityActionProps,
-  BaseActivity,
-  getActivityActions,
-  StyledSvg,
-} from 'modules/Dashboard/components/ActivityGrid';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 
-export const useActivityGrid = (
-  dataTestId: string,
-  activitiesData: ActivitiesData | null,
-  onClickExportData?: (activityId: string) => void,
-) => {
+import {
+  ActionsObject,
+  ActivityActionProps,
+  BaseActivity,
+  getActivityActions,
+  StyledSvg,
+  UseActivityGridProps,
+} from '.';
+
+export const useActivityGrid = ({
+  dataTestId,
+  activitiesData,
+  onClickExportData,
+  onClickAssign,
+}: UseActivityGridProps) => {
   const navigate = useNavigate();
   const { appletId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
@@ -71,14 +73,13 @@ export const useActivityGrid = (
       },
       exportData: ({ context }: MenuActionProps<ActivityActionProps>) => {
         if (context?.activityId) {
-          onClickExportData?.(context?.activityId);
+          onClickExportData(context.activityId);
         }
       },
       assignActivity: ({ context }: MenuActionProps<ActivityActionProps>) => {
-        const { activityId } = context || {};
-        // TODO: Implement assign
-        // https://mindlogger.atlassian.net/browse/M2-5710
-        alert(`TODO: Assign activity (${activityId})`);
+        if (context?.activityId) {
+          onClickAssign(context.activityId);
+        }
       },
       takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || { activityId: '' };
@@ -88,7 +89,7 @@ export const useActivityGrid = (
         }
       },
     }),
-    [appletId, getActivityById, navigate, onClickExportData, openTakeNowModal],
+    [appletId, getActivityById, navigate, onClickAssign, onClickExportData, openTakeNowModal],
   );
 
   const formatRow = useCallback(

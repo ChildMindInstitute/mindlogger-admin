@@ -65,36 +65,44 @@ export const DashboardTable = (props: DashboardTableProps) => {
             uiType={uiType}
           />
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={keyExtractor(row, index)}>
-                {Object.keys(row)?.map((key) => {
-                  if (row[key].isHidden) {
-                    return null;
-                  }
+            {rows.map((row, index) => {
+              const { rowState, ...cells } = row;
 
-                  const { contentWithTooltip, content, maxWidth, sx, ...otherProps } = row[key];
+              return (
+                <TableRow
+                  key={keyExtractor(row, index)}
+                  classes={rowState?.value ? { root: `MuiTableRow-${rowState.value}` } : undefined}
+                  aria-invalid={rowState?.value === 'error'}
+                >
+                  {Object.keys(cells)?.map((key) => {
+                    if (row[key].isHidden) {
+                      return null;
+                    }
 
-                  return (
-                    <StyledTableCell
-                      scope="row"
-                      key={key}
-                      {...otherProps}
-                      hasColFixedWidth={hasColFixedWidth}
-                      sx={{
-                        cursor: otherProps.onClick ? 'pointer' : 'default',
-                        maxWidth,
-                        ...sx,
-                      }}
-                      data-testid={`${dataTestid}-${index}-cell-${key}`}
-                    >
-                      <StyledEllipsisText as="div">
-                        {contentWithTooltip ? contentWithTooltip : content?.(row)}
-                      </StyledEllipsisText>
-                    </StyledTableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
+                    const { contentWithTooltip, content, maxWidth, sx, ...otherProps } = row[key];
+
+                    return (
+                      <StyledTableCell
+                        scope="row"
+                        key={key}
+                        {...otherProps}
+                        hasColFixedWidth={hasColFixedWidth}
+                        sx={{
+                          cursor: otherProps.onClick ? 'pointer' : 'default',
+                          maxWidth,
+                          ...sx,
+                        }}
+                        data-testid={`${dataTestid}-${index}-cell-${key}`}
+                      >
+                        <StyledEllipsisText as="div">
+                          {contentWithTooltip ? contentWithTooltip : content?.(row)}
+                        </StyledEllipsisText>
+                      </StyledTableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </MuiTable>
       )}

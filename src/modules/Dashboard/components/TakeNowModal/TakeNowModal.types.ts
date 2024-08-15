@@ -1,6 +1,5 @@
 import { ModalProps } from 'shared/components';
-
-import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
+import { ParticipantDropdownOption, ParticipantDropdownProps } from 'modules/Dashboard/components';
 
 export type UseTakeNowModalProps = {
   dataTestId: string;
@@ -18,4 +17,10 @@ export type OpenTakeNowModalOptions = {
    * The ID of the participant who should be selected by default in the "Who will be providing the responses?" dropdown.
    */
   sourceSubject?: ParticipantDropdownOption;
+};
+
+export type TakeNowDropdownProps = ParticipantDropdownProps & {
+  label: string;
+  tooltip?: string;
+  canShowWarningMessage?: boolean;
 };

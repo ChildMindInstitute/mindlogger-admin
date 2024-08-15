@@ -13,6 +13,11 @@ export interface CellContent extends Omit<TableCellProps, 'content'>, Cell {
 }
 
 export type Row = {
+  /**
+   * Map of column IDs to cell contents.
+   * Add special column `rowState: { value: 'error' }` to highlight entire row in error state
+   * (it will not introduce a separate column).
+   */
   [name: string]: CellContent;
 };
 
