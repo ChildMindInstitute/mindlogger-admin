@@ -33,6 +33,7 @@ export const ActivityReview = ({
   isSingleActivity,
   index,
   assignments,
+  onDelete,
   'data-testid': dataTestId,
   ...dropdownProps
 }: ActivityReviewProps) => {
@@ -82,7 +83,7 @@ export const ActivityReview = ({
           <StyledFlexAllCenter sx={{ ml: 'auto', gap: 1.6 }}>
             <IconButton
               onClick={(e) => {
-                window.alert('TODO: delete activity');
+                onDelete(activity ?? flow);
                 e.stopPropagation();
               }}
             >

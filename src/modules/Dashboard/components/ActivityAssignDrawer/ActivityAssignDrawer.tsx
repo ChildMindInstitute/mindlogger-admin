@@ -50,6 +50,7 @@ import { HelpPopup } from './HelpPopup';
 import { ActivitiesList } from './ActivitiesList';
 import { useActivityAssignBanners } from './ActivityAssignDrawer.hooks';
 import { AssignmentCounts } from './AssignmentCounts';
+import { DeletePopup } from './DeletePopup';
 
 const dataTestId = 'applet-activity-assign';
 
@@ -66,9 +67,13 @@ export const ActivityAssignDrawer = ({
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
   const drawerRef = useRef<HTMLDivElement>(null);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [reviewedAssignments, setReviewedAssignments] = useState<Assignment[]>([]);
   const [emailCount, setEmailCount] = useState(0);
+  const [selectedActivityOrFlow, setSelectedActivityOrFlow] = useState<
+    Activity | HydratedActivityFlow
+  >();
   const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
     useActivityAssignBanners();
   const {
@@ -185,6 +190,27 @@ export const ActivityAssignDrawer = ({
     }
 
     onClose();
+  };
+
+  const handleDelete = () => {
+    if (!selectedActivityOrFlow) return;
+
+    const isFlow = 'activities' in selectedActivityOrFlow;
+    if (isFlow) {
+      setValue(
+        'flowIds',
+        flowIds.filter((id) => id !== selectedActivityOrFlow.id),
+        { shouldDirty: true },
+      );
+    } else {
+      setValue(
+        'activityIds',
+        activityIds.filter((id) => id !== selectedActivityOrFlow.id),
+        { shouldDirty: true },
+      );
+    }
+
+    reviewAssignments();
   };
 
   const reviewAssignments = useCallback(async () => {
@@ -519,6 +545,10 @@ export const ActivityAssignDrawer = ({
                     index={index}
                     flow={flow}
                     assignments={assignments as ValidActivityAssignment[]}
+                    onDelete={(flow) => {
+                      setSelectedActivityOrFlow(flow);
+                      setShowDeletePopup(true);
+                    }}
                     data-testid={`${dataTestId}-review-flow-${flow.id}`}
                   />
                 ))}
@@ -536,6 +566,10 @@ export const ActivityAssignDrawer = ({
                     index={index + flowIds.length}
                     activity={activity}
                     assignments={assignments as ValidActivityAssignment[]}
+                    onDelete={(activity) => {
+                      setSelectedActivityOrFlow(activity);
+                      setShowDeletePopup(true);
+                    }}
                     data-testid={`${dataTestId}-review-activity-${activity.id}`}
                   />
                 ))}
@@ -564,6 +598,13 @@ export const ActivityAssignDrawer = ({
         isVisible={showHelpPopup}
         setIsVisible={setShowHelpPopup}
         data-testid={`${dataTestId}-help-popup`}
+      />
+      <DeletePopup
+        isVisible={showDeletePopup}
+        setIsVisible={setShowDeletePopup}
+        onConfirm={handleDelete}
+        activityName={selectedActivityOrFlow?.name}
+        data-testid={`${dataTestId}-delete-popup`}
       />
     </Drawer>
   );

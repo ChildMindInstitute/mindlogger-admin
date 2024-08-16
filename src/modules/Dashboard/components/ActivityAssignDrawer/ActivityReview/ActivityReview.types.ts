@@ -18,6 +18,7 @@ export type ActivityReviewProps = {
   isSingleActivity?: boolean;
   index: number;
   assignments: ValidActivityAssignment[];
+  onDelete: (activityOrFlow: Activity | HydratedActivityFlow) => void;
   'data-testid': string;
 } & (ActivityReviewWithActivity | ActivityReviewWithFlow) &
   Omit<ReturnType<typeof useParticipantDropdown>, 'isLoading'>;

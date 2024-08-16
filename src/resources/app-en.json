@@ -63,7 +63,10 @@
     "reviewToggleButton": "Toggle assignment visibility",
     "activitySubtitle": "Activity",
     "respondentsSubtitle": "Respondents",
-    "showMore": "Show More ({{count}})"
+    "showMore": "Show More ({{count}})",
+    "deletePopupTitle": "Remove Activity",
+    "deletePopupButton": "Yes, Remove",
+    "deletePopupText": "Are you sure you want to remove assignments for the activity <0>{{activityName}}</0>?"
   },
   "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "activityCompleted": "Activity Completed",

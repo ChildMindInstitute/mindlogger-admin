@@ -63,7 +63,10 @@
     "reviewToggleButton": "Basculer la visibilité d'attribution",
     "activitySubtitle": "Activité",
     "respondentsSubtitle": "Répondants",
-    "showMore": "Afficher plus ({{count}})"
+    "showMore": "Afficher plus ({{count}})",
+    "deletePopupTitle": "Supprimer l'activité",
+    "deletePopupButton": "Oui, supprimer",
+    "deletePopupText": "Êtes-vous sûr de vouloir supprimer les attributions pour l'activité <0>{{activityName}}</0>?"
   },
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page.",
   "activityCompleted": "Activité terminée",
