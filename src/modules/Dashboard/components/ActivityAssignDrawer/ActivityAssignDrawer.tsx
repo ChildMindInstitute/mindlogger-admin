@@ -123,7 +123,7 @@ export const ActivityAssignDrawer = ({
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors, isDirty },
+    formState: { isValid, errors },
     reset,
   } = useForm<ActivityAssignFormValues>({
     resolver: yupResolver(useActivityAssignFormSchema()),
@@ -182,12 +182,12 @@ export const ActivityAssignDrawer = ({
 
   const handleClose = () => {
     // TODO: Display confirmation popup https://mindlogger.atlassian.net/browse/M2-7399
-    if (
-      isDirty &&
-      !window.confirm('[TODO: Replace me with popup]\nChanges will be lost, are you sure?')
-    ) {
-      return;
-    }
+    // if (
+    //   isDirty &&
+    //   !window.confirm('[TODO: Replace me with popup]\nChanges will be lost, are you sure?')
+    // ) {
+    //   return;
+    // }
 
     onClose();
   };
