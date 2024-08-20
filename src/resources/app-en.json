@@ -1570,5 +1570,12 @@
   "emailAddress": "Email Address",
   "emailAddressPlaceholder": "email@example.com",
   "emailAlreadyInUse": "That email is <1>already in use</1>. Please enter another one.",
+  "arbitraryWarning": {
+    "title": "Warning: Arbitrary Server is Connected",
+    "contentFirst": "Your applet <1>{{appletName}}</1> is currently connected to an arbitrary server for data storage.<br /><br /> If you proceed with the ownership transfer without contacting us, your applet will <3>lose its arbitrary server configurations</3>, and all data it subsequently collects will be stored on MindLogger servers from this point forward.<br /><br /> In order to transfer the ownership of the applet while <5>retaining the arbitrary server configuration</5>, please reach out to the MindLogger support team by clicking the button below.",
+    "contentSecond": "<0>Again, proceeding with the ownership transfer will cause this applet to lose its arbitrary server configurations, and all data it subsequently collects will be stored on MindLogger servers from this point forward.</0><br /><br /> To proceed with the ownership transfer for your applet <2>{{appletName}}</2> and break its arbitrary server connections, please re-enter the password of your applet below.",
+    "contactSupport": "Contact Support",
+    "proceedAnyway": "I wish to proceed anyway"
+  },
   "goToDashboard": "Go to Dashboard"
 }

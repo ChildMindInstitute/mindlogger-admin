@@ -1,8 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { mockedAppletId, mockedEmail } from 'shared/mock';
+import { mockedAppletId, mockedCurrentWorkspace, mockedEmail } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { initialStateData } from 'shared/state';
+import { Roles } from 'shared/consts';
 
 import { TransferOwnership } from './TransferOwnership';
 
@@ -15,18 +18,18 @@ const transferOwnershipComponent = (
     appletId={mockedAppletId}
     setIsSubmitted={mockedSetIsSubmitted}
     setEmailTransferred={mockedSetEmailTransferred}
-    isSubmitted={false}
+    isSubmitted={true}
     data-testid={dataTestid}
   />
 );
 
 describe('TransferOwnership', () => {
   test('renders without errors', () => {
-    render(transferOwnershipComponent);
+    renderWithProviders(transferOwnershipComponent);
   });
 
   test('not transfers ownership on form submission with invalid email', async () => {
-    render(transferOwnershipComponent);
+    renderWithProviders(transferOwnershipComponent);
     await userEvent.type(screen.getByLabelText(/Email/i), 'invalid@email{enter}');
 
     const error = await screen.findByText('Email must be valid');
@@ -34,8 +37,8 @@ describe('TransferOwnership', () => {
   });
 
   test('transfers ownership on form submission with valid email', async () => {
-    render(transferOwnershipComponent);
-    await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+    renderWithProviders(transferOwnershipComponent);
+    await userEvent.type(screen.getByLabelText(/Owner email/i), `${mockedEmail}{enter}`);
 
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(
@@ -45,5 +48,32 @@ describe('TransferOwnership', () => {
         { signal: undefined },
       );
     });
+  });
+
+  test('shows ArbitraryWarningPopup if there is arbitrary server in Workspace', async () => {
+    const preloadedState = {
+      workspaces: {
+        workspaces: initialStateData,
+        currentWorkspace: {
+          ...initialStateData,
+          data: {
+            ...mockedCurrentWorkspace.data,
+            useArbitrary: true,
+          },
+        },
+        roles: {
+          ...initialStateData,
+          data: {
+            [mockedAppletId]: [Roles.Manager],
+          },
+        },
+        workspacesRoles: initialStateData,
+      },
+    };
+    renderWithProviders(transferOwnershipComponent, { preloadedState });
+    await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+
+    expect(screen.getByTestId('arbitrary-warning-popup')).toBeInTheDocument();
+    expect(mockAxios.post).not.toHaveBeenCalled();
   });
 });
