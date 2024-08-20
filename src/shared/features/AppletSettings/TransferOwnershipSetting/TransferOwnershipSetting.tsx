@@ -29,6 +29,7 @@ export const TransferOwnershipSetting = () => {
           ref={transferOwnershipRef}
           appletId={appletData?.id}
           appletName={appletData?.displayName}
+          encryption={appletData?.encryption}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransferred={handleEmailTransferred}

@@ -1569,5 +1569,12 @@
   "emailAddress": "Adresse e-mail",
   "emailAddressPlaceholder": "email@exemple.com",
   "emailAlreadyInUse": "Cet e-mail est déjà <1>utilisé</1>. Veuillez en saisir un autre.",
+  "arbitraryWarning": {
+    "title": "Avertissement : Un serveur arbitraire est connecté",
+    "contentFirst": "Votre applet <1>{{appletName}}</1> est actuellement connecté à un serveur arbitraire pour le stockage des données.<br /><br /> Si vous poursuivez le transfert de propriété sans nous contacter, votre applet <3>perdra ses configurations de serveur arbitraire</3>, et toutes les données qu'il collectera par la suite seront stockées sur les serveurs de MindLogger à partir de ce moment.<br /><br /> Afin de transférer la propriété de l'applet tout en <5>conservant la configuration du serveur arbitraire</5>, veuillez contacter l'équipe de support de MindLogger en cliquant sur le bouton ci-dessous.",
+    "contentSecond": "<0>Encore une fois, poursuivre le transfert de propriété fera que cet applet perdra ses configurations de serveur arbitraire, et toutes les données qu'il collectera par la suite seront stockées sur les serveurs de MindLogger à partir de ce moment.</0><br /><br /> Pour poursuivre le transfert de propriété de votre applet <2>{{appletName}}</2> et rompre ses connexions au serveur arbitraire, veuillez entrer à nouveau le mot de passe de votre applet ci-dessous.",
+    "contactSupport": "Contacter le support",
+    "proceedAnyway": "Je souhaite continuer quand même"
+  },
   "goToDashboard": "Aller au tableau de bord"
 }
