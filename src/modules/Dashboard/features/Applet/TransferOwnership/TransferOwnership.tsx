@@ -44,7 +44,7 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
     const { t } = useTranslation('app');
     const { useArbitrary } = workspaces.useData() ?? {};
     const [warningPopupVisible, setWarningPopupVisible] = useState(false);
-    const { getValues, setValue, handleSubmit, control, resetField /*, watch*/ } =
+    const { getValues, setValue, handleSubmit, control, resetField } =
       useForm<TransferOwnershipFormValues>({
         resolver: yupResolver(
           yup.object({
