@@ -178,7 +178,7 @@ export function RenderedField({
               defaultValue=""
               fullWidth
               options={displayMode?.items.map(({ name, id }) => ({
-                labelKey: name,
+                labelKey: t(`phrasalTemplateItem.displayModes.${id}`),
                 tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
                 value: id ?? '',
               }))}
