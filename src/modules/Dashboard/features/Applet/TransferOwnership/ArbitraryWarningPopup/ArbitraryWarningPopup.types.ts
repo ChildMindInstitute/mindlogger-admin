@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { Encryption } from 'shared/utils/encryption';
 
 export type ArbitraryWarningPopupProps = {
@@ -14,3 +16,12 @@ export enum Steps {
   First,
   Second,
 }
+
+export type GetScreensProps = {
+  enterPasswordScreen: ReactNode;
+  appletName: string;
+  onFirstCancel: () => void;
+  onFirstSubmit: () => void;
+  onSecondCancel: () => void;
+  onSecondSubmit: () => void;
+};

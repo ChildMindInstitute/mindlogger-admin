@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
 import { Trans } from 'react-i18next';
 import { ButtonProps } from '@mui/material';
 
 import { SubmitBtnColor } from 'shared/components/Modal';
+
+import { GetScreensProps } from './ArbitraryWarningPopup.types';
 
 export const getScreens = ({
   enterPasswordScreen,
@@ -11,14 +12,7 @@ export const getScreens = ({
   onFirstSubmit,
   onSecondCancel,
   onSecondSubmit,
-}: {
-  enterPasswordScreen: ReactNode;
-  appletName: string;
-  onFirstCancel: () => void;
-  onFirstSubmit: () => void;
-  onSecondCancel: () => void;
-  onSecondSubmit: () => void;
-}) => [
+}: GetScreensProps) => [
   {
     title: 'arbitraryWarning.title',
     btnText: 'arbitraryWarning.proceedAnyway',
