@@ -1034,7 +1034,15 @@
     "titleHint": "Affiché dans l'en-tête de la sortie du modèle de phrase, à côté du nom et de l'image de l'applet.",
     "titleHintLabel": "Voir plus de détails",
     "titleLabel": "Titre de la carte (obligatoire)",
-    "titlePlaceholder": "Exemple: Plan d'action"
+    "titlePlaceholder": "Exemple: Plan d'action",
+    "displayModes": {
+      "sentence": "Phrase",
+      "bullet_list": "Liste à puces",
+      "sentence_option_row": "Phrase : Texte de l'Option, Texte de la Ligne",
+      "sentence_row_option": "Phrase : Texte de la Ligne, Texte de l'Option",
+      "bullet_list_option_row": "Liste à puces : Texte de l'Option, Texte de la Ligne",
+      "bullet_list_text_row": "Liste à puces : Texte de la Ligne, Texte de l'Option"
+    }
   },
   "phrasalTemplateExample": "Quand je me sens triste, <em>j'appelle un ami</em> pour obtenir de l'aide.",
   "phrasalTemplateHint": "Créez des phrases en utilisant les entrées précédentes du répondant.",

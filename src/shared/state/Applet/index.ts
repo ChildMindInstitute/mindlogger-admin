@@ -34,7 +34,7 @@ export const applet = {
         },
       }) => data,
     ),
-  useActivityDataFromApplet: (currentActivityId: string) =>
+  useActivityItemsFromApplet: (currentActivityId: string) =>
     useAppSelector(
       ({
         applet: {
