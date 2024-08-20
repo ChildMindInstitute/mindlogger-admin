@@ -93,6 +93,23 @@ export const ActivityFlowAbout = () => {
             }
             data-testid={`${dataTestid}-hide-badge`}
           />
+          <CheckboxController
+            control={control}
+            defaultControllerValue={true}
+            key={`activityFlows.${activityFlowIndex}.autoAssign`}
+            name={`activityFlows.${activityFlowIndex}.autoAssign`}
+            label={
+              <StyledBodyLarge sx={{ position: 'relative' }}>
+                {t('autoAssignFlow')}
+                <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+                  <span>
+                    <StyledSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
+              </StyledBodyLarge>
+            }
+            data-testid={`${dataTestid}-auto-assign`}
+          />
         </StyledFlexColumn>
       </StyledWrapper>
     </BuilderContainer>

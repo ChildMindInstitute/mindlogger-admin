@@ -174,6 +174,21 @@ export const ActivityAbout = () => {
       onCustomChange: handleIsReviewableChange,
       'data-testid': 'builder-activity-about-reviewable',
     },
+    {
+      name: `${fieldName}.autoAssign`,
+      defaultControllerValue: true,
+      label: (
+        <StyledBodyLarge sx={{ position: 'relative' }}>
+          <span>{t('autoAssignActivity')}</span>
+          <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+            <span>
+              <StyledCheckboxTooltipSvg id="more-info-outlined" />
+            </span>
+          </Tooltip>
+        </StyledBodyLarge>
+      ),
+      'data-testid': 'builder-activity-about-auto-assign',
+    },
   ];
 
   return (
@@ -210,10 +225,19 @@ export const ActivityAbout = () => {
       </StyledTitleMedium>
       <StyledFlexColumn>
         {checkboxes.map(
-          ({ name, label, isInversed, disabled, 'data-testid': dataTestid, onCustomChange }) => (
+          ({
+            name,
+            label,
+            isInversed,
+            disabled,
+            'data-testid': dataTestid,
+            onCustomChange,
+            defaultControllerValue,
+          }) => (
             <CheckboxController
               key={name}
               control={control}
+              defaultControllerValue={defaultControllerValue}
               name={name}
               label={label}
               disabled={disabled}

@@ -15,6 +15,7 @@ export const CheckboxController = <T extends FieldValues>({
   onCustomChange,
   'data-testid': dataTestid,
   sxLabelProps = {},
+  defaultControllerValue,
   ...checkboxProps
 }: InputControllerProps<T>) => {
   const handleCheckboxChange = (
@@ -24,6 +25,20 @@ export const CheckboxController = <T extends FieldValues>({
     const checked = event.target.checked;
     onCustomChange && onCustomChange(event);
     onChange(isInversed ? !checked : checked);
+  };
+
+  // Since this is a *checkbox* controller, we only really care about the
+  // `boolean` type. And indeed the type of `defaultControllerValue` is
+  // `boolean | undefined`. However, the way we render the generic `Controller`
+  // component below means it can't properly infer the type of its field's
+  // value, which means the type of the controller's own `defaultValue` prop
+  // would end up being something along the line of `string | undefined`, which
+  // is just the standard HTML element attribute value type.
+  // So that's why we have to include `string` and `undefined` in the Record's
+  // value type, so this entire object would be compatible with the props of a
+  // generically rendered `Controller` component.
+  const defaultValueProps: Record<string, boolean | string | undefined> = {
+    defaultValue: defaultControllerValue,
   };
 
   return (
@@ -52,6 +67,7 @@ export const CheckboxController = <T extends FieldValues>({
           {error && <StyledErrorText marginTop={0}>{error?.message}</StyledErrorText>}
         </>
       )}
+      {...defaultValueProps}
     />
   );
 };
