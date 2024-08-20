@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 
 import { mockedAppletData } from 'shared/mock';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
-import { ActivityAssignFormValues } from 'modules/Dashboard/components/ActivityAssignDrawer/ActivityAssignDrawer.types';
 import { Activity, ActivityFlow } from 'redux/modules';
 
 import { ActivitiesList } from './ActivitiesList';
@@ -15,13 +14,17 @@ const mockFlows = hydrateActivityFlows(
 
 const mockTestId = 'test-id';
 
-const ActivitiesListTest = (
-  defaultValues: Pick<ActivityAssignFormValues, 'activityIds' | 'flowIds'>,
-) => <ActivitiesList activities={mockActivities} flows={mockFlows} data-testid={mockTestId} />;
-
 describe('ActivitiesList component', () => {
   it('renders the list of activities & flows', () => {
-    render(<ActivitiesListTest activityIds={[]} flowIds={[]} />);
+    render(
+      <ActivitiesList
+        activities={mockActivities}
+        flows={mockFlows}
+        data-testid={mockTestId}
+        activityIds={[]}
+        flowIds={[]}
+      />,
+    );
 
     const activityItems = screen.getAllByTestId(`${mockTestId}-activity-item`);
     expect(activityItems).toHaveLength(mockActivities.length);
@@ -33,7 +36,15 @@ describe('ActivitiesList component', () => {
     const activityIds = [String(mockActivities[0].id)];
     const flowIds = [String(mockFlows[0].id)];
 
-    render(<ActivitiesListTest activityIds={activityIds} flowIds={flowIds} />);
+    render(
+      <ActivitiesList
+        activities={mockActivities}
+        flows={mockFlows}
+        data-testid={mockTestId}
+        activityIds={activityIds}
+        flowIds={flowIds}
+      />,
+    );
 
     // Check if the checkboxes are checked for the specified activity and flow IDs
     activityIds.forEach((id) => {

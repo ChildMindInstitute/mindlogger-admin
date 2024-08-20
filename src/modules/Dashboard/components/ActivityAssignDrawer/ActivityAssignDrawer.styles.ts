@@ -1,5 +1,4 @@
 import { Box, Button, keyframes, styled } from '@mui/material';
-import zIndex from '@mui/material/styles/zIndex';
 
 import {
   StyledFlexAllCenter,
@@ -12,7 +11,7 @@ import {
 export const StyledHeader = styled(StyledFlexTopCenter)({
   position: 'sticky',
   top: 0,
-  zIndex: zIndex.appBar,
+  zIndex: theme.zIndex.appBar,
   background: variables.palette.surface,
   padding: theme.spacing(3.2, 2.4, 2.2, 4),
   borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
@@ -34,7 +33,7 @@ export const StyledFooterWrapper = styled(Box)({
   position: 'sticky',
   overflow: 'hidden',
   bottom: 0,
-  zIndex: zIndex.appBar,
+  zIndex: theme.zIndex.appBar,
   flexShrink: 0,
 });
 

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { t } from 'i18next';
 
@@ -25,9 +25,14 @@ describe('DeletePopup', () => {
     expect(screen.getByTestId(mockedTestId)).toBeInTheDocument();
     expect(screen.getByText(t('activityAssign.deletePopupTitle'))).toBeInTheDocument();
     expect(screen.getByText(t('activityAssign.deletePopupButton'))).toBeInTheDocument();
-    expect(
-      screen.getByText(t('activityAssign.deletePopupText', { activityName: mockedActivityName })),
-    ).toBeInTheDocument();
+
+    const popupText = screen.getByText(
+      /Are you sure you want to remove assignments for the activity/,
+    );
+    expect(popupText).toBeInTheDocument();
+
+    const strongText = within(popupText).getByText(mockedActivityName);
+    expect(strongText.tagName).toBe('STRONG');
   });
 
   test('clicking default submit button or close button closes the popup', async () => {

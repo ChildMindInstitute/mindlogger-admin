@@ -139,7 +139,7 @@ export const ActivityAssignDrawer = ({
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors },
+    formState: { errors },
     reset,
   } = useForm<ActivityAssignFormValues>({
     resolver: yupResolver(useActivityAssignFormSchema()),
@@ -671,7 +671,7 @@ export const ActivityAssignDrawer = ({
                 step={step}
                 variant="contained"
                 onClick={handleClickNext}
-                disabled={isLoading || !isValid || isFooterHidden}
+                disabled={isLoading || !!errors.assignments || isFooterHidden}
                 sx={{ minWidth: '19.7rem' }}
                 data-testid={`${dataTestId}-${nextButtonKey}`}
               >
