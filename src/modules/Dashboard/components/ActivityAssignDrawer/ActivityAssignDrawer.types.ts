@@ -2,7 +2,7 @@ import { DrawerProps } from '@mui/material';
 import { DeepRequired } from 'react-hook-form';
 
 export type ActivityAssignDrawerProps = Pick<DrawerProps, 'open'> & {
-  onClose: () => void;
+  onClose: (shouldRefetch?: boolean) => void;
   appletId?: string;
   activityId?: string;
   activityFlowId?: string;

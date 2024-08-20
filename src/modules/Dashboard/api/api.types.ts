@@ -612,6 +612,10 @@ export type GetAssignmentsParams = AppletId & {
   activities?: string;
 };
 
+export type PostAssignmentsParams = AppletId & {
+  assignments: Assignment[];
+};
+
 export type Assignment = {
   id?: string;
   activityId: string | null;
@@ -620,7 +624,7 @@ export type Assignment = {
   targetSubjectId: string;
 };
 
-export type GetAppletAssignmentsResponse = {
+export type AppletAssignmentsResponse = {
   result: {
     appletId: string;
     assignments: Assignment[];

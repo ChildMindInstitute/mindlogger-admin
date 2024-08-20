@@ -1,16 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import successImage from 'assets/images/email-success.webp';
 import {
+  StyledBodyLarger,
   StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopBaseline,
   StyledFlexTopCenter,
+  StyledHeadlineLarge,
   StyledHeadlineMedium,
   StyledLabelLarge,
+  StyledLinearProgressLarge,
   StyledTitleLarge,
   StyledTitleLargish,
   variables,
@@ -22,8 +26,10 @@ import {
   Assignment,
   getAppletActivitiesApi,
   getAppletAssignmentsApi,
-  GetAppletAssignmentsResponse,
+  AppletAssignmentsResponse,
   GetAssignmentsParams,
+  postAppletAssignmentsApi,
+  PostAssignmentsParams,
 } from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
@@ -45,6 +51,7 @@ import {
   StyledFooterWrapper,
   StyledHeader,
   StyledPane,
+  StyledSuccessImage,
 } from './ActivityAssignDrawer.styles';
 import { HelpPopup } from './HelpPopup';
 import { ActivitiesList } from './ActivitiesList';
@@ -68,12 +75,13 @@ export const ActivityAssignDrawer = ({
   const drawerRef = useRef<HTMLDivElement>(null);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState(1);
   const [reviewedAssignments, setReviewedAssignments] = useState<Assignment[]>([]);
   const [emailCount, setEmailCount] = useState(0);
   const [selectedActivityOrFlow, setSelectedActivityOrFlow] = useState<
     Activity | HydratedActivityFlow
   >();
+  const [progress, setProgress] = useState(0);
   const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
     useActivityAssignBanners();
   const {
@@ -94,17 +102,25 @@ export const ActivityAssignDrawer = ({
     () => addBanner('NetworkErrorBanner'),
   );
 
-  const {
-    execute: getAssignments,
-    isLoading: isLoadingAssignments,
-    value: assignmentsData,
-  } = useAsync<GetAssignmentsParams, GetAppletAssignmentsResponse>(
+  const { execute: getAssignments, isLoading: isLoadingGetAssignments } = useAsync<
+    GetAssignmentsParams,
+    AppletAssignmentsResponse
+  >(
     getAppletAssignmentsApi,
     () => removeBanner('NetworkErrorBanner'),
     () => addBanner('NetworkErrorBanner'),
   );
 
-  const isLoading = isLoadingParticipants || isLoadingActivities || isLoadingAssignments;
+  const { execute: createAssignments } = useAsync<PostAssignmentsParams, AppletAssignmentsResponse>(
+    postAppletAssignmentsApi,
+    () => removeBanner('NetworkErrorBanner'),
+    () => {
+      addBanner('NetworkErrorBanner');
+      setStep(2);
+    },
+  );
+
+  const isLoading = isLoadingParticipants || isLoadingActivities || isLoadingGetAssignments;
 
   const activities: Activity[] = activitiesData?.data?.result?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
@@ -157,6 +173,7 @@ export const ActivityAssignDrawer = ({
   }, [assignments]);
 
   const isComplete = !!selectionCount && assignmentCounts.complete && !assignmentCounts.incomplete;
+  const isFooterHidden = (step === 1 && !isComplete) || step === 3;
 
   const scrollPane = (top = 0) => {
     drawerRef.current?.scrollTo({ top, behavior: 'smooth' });
@@ -210,109 +227,136 @@ export const ActivityAssignDrawer = ({
       );
     }
 
-    reviewAssignments();
+    removeAllBanners();
+    handleSubmit(reviewAssignments)();
   };
 
-  const reviewAssignments = useCallback(async () => {
-    if (!appletId) return;
+  const reviewAssignments: SubmitHandler<ActivityAssignFormValues> = useCallback(
+    async ({ assignments, flowIds, activityIds }) => {
+      if (!appletId) return;
 
-    // Delete empty assignments after validation
-    const validAssignments = assignments.filter(
-      (a) => a.respondentSubjectId || a.targetSubjectId,
-    ) as ValidActivityAssignment[];
-    setValue('assignments', validAssignments);
+      // Delete empty assignments after validation
+      const validAssignments = assignments.filter(
+        (a) => a.respondentSubjectId || a.targetSubjectId,
+      ) as ValidActivityAssignment[];
+      setValue('assignments', validAssignments);
 
-    // Fetch existing assignments to check for duplicates
-    await getAssignments({
-      appletId,
-      flows: flowIds.join(',') || undefined,
-      activities: activityIds.join(',') || undefined,
-    });
-
-    const hydratedAssignments: Assignment[] = [];
-    for (const activityFlowId of flowIds) {
-      hydratedAssignments.push(
-        ...validAssignments.map((assignment) => ({
-          ...assignment,
-          activityId: null,
-          activityFlowId,
-        })),
-      );
-    }
-    for (const activityId of activityIds) {
-      hydratedAssignments.push(
-        ...validAssignments.map((assignment) => ({
-          ...assignment,
-          activityId,
-          activityFlowId: null,
-        })),
-      );
-    }
-
-    // Check if any of the submitted assignments already exist in the applet
-    const existingAssignments = assignmentsData?.data.result.assignments ?? [];
-
-    // Calculate # of duplicates and emails being sent
-    let duplicates = 0;
-    const emailRecipients = new Set<string>();
-
-    for (const assignment of hydratedAssignments) {
-      const exists = existingAssignments.some(
-        (existing) =>
-          existing.respondentSubjectId === assignment.respondentSubjectId &&
-          existing.targetSubjectId === assignment.targetSubjectId &&
-          existing.activityId === assignment.activityId &&
-          existing.activityFlowId === assignment.activityFlowId,
-      );
-
-      if (exists) {
-        duplicates++;
-      } else {
-        emailRecipients.add(assignment.respondentSubjectId);
+      // Convert respondent-subject assignments to a flat list of fully hydrated assignments
+      // (one for each activity/flow)
+      const hydratedAssignments: Assignment[] = [];
+      for (const activityFlowId of flowIds) {
+        hydratedAssignments.push(
+          ...validAssignments.map((assignment) => ({
+            ...assignment,
+            activityId: null,
+            activityFlowId,
+          })),
+        );
       }
-    }
-
-    if (duplicates) {
-      if (duplicates === hydratedAssignments.length) {
-        addBanner('ExistingAssignmentsBanner', { allAssigned: true, duration: 10000 });
-        setStep(1);
-
-        return;
-      } else {
-        addBanner('ExistingAssignmentsBanner');
+      for (const activityId of activityIds) {
+        hydratedAssignments.push(
+          ...validAssignments.map((assignment) => ({
+            ...assignment,
+            activityId,
+            activityFlowId: null,
+          })),
+        );
       }
-    }
 
-    setEmailCount(emailRecipients.size);
-    setReviewedAssignments(hydratedAssignments);
-    setStep(2);
-  }, [
-    activityIds,
-    addBanner,
-    appletId,
-    assignments,
-    assignmentsData?.data.result.assignments,
-    flowIds,
-    getAssignments,
-    setValue,
-  ]);
+      // Calculate # of pre-existing assignments and emails being sent
+      const getAssignmentsData = await getAssignments({
+        appletId,
+        flows: flowIds.join(',') || undefined,
+        activities: activityIds.join(',') || undefined,
+      });
+      const existingAssignments = getAssignmentsData.data.result.assignments;
+
+      let duplicates = 0;
+      const emailRecipients = new Set<string>();
+
+      for (const assignment of hydratedAssignments) {
+        const exists = existingAssignments.some(
+          (existing) =>
+            existing.respondentSubjectId === assignment.respondentSubjectId &&
+            existing.targetSubjectId === assignment.targetSubjectId &&
+            existing.activityId === assignment.activityId &&
+            existing.activityFlowId === assignment.activityFlowId,
+        );
+
+        if (exists) {
+          duplicates++;
+        } else {
+          emailRecipients.add(assignment.respondentSubjectId);
+        }
+      }
+
+      if (duplicates) {
+        if (duplicates === hydratedAssignments.length) {
+          addBanner('ExistingAssignmentsBanner', { allAssigned: true, duration: 10000 });
+          setStep(1);
+
+          return;
+        } else {
+          addBanner('ExistingAssignmentsBanner');
+        }
+      }
+
+      setEmailCount(emailRecipients.size);
+      setReviewedAssignments(hydratedAssignments);
+      setStep(2);
+    },
+    [addBanner, appletId, getAssignments, setValue],
+  );
 
   const handleClickNext = useCallback(() => {
-    if (step === 1) {
-      removeAllBanners();
-      handleSubmit(reviewAssignments)();
-    } else {
-      removeAllBanners();
-      // TODO: Submit to BE https://mindlogger.atlassian.net/browse/M2-7261
-      handleSubmit(() => {})();
+    removeAllBanners();
+
+    switch (step) {
+      case 1:
+        handleSubmit(reviewAssignments)();
+        break;
+
+      case 2:
+        handleSubmit(async () => {
+          if (!appletId) return;
+
+          setStep(3);
+
+          setProgress(0);
+          // Create illusion of BE request making progress (never quite reaching 100% till the end)
+          const intervalId = setInterval(
+            () => setProgress((progress) => progress + (100 - progress) * 0.1),
+            300,
+          );
+          await createAssignments({ appletId, assignments: reviewedAssignments });
+          clearInterval(intervalId);
+          setProgress(100);
+
+          // Allow progress bar fill animation to complete before transitioning to success screen
+          setTimeout(() => setStep(4), 400);
+        })();
+        break;
+
+      case 4:
+        onClose(true);
+        break;
     }
-  }, [handleSubmit, removeAllBanners, reviewAssignments, step]);
+  }, [
+    appletId,
+    createAssignments,
+    handleSubmit,
+    onClose,
+    removeAllBanners,
+    reviewAssignments,
+    reviewedAssignments,
+    step,
+  ]);
 
   const handleClickBack = useCallback(() => {
     scrollPane();
     setEmailCount(0);
     setReviewedAssignments([]);
-    setStep(1);
+    setStep((step) => step - 1);
   }, []);
 
   // Initialize activities/flows data
@@ -370,6 +414,21 @@ export const ActivityAssignDrawer = ({
     }
   }, [addBanner, errors.assignments, removeBanner]);
 
+  let nextButtonKey: string;
+  switch (step) {
+    case 1:
+      nextButtonKey = 'next';
+      break;
+    case 2:
+    case 3:
+      nextButtonKey = 'sendEmails';
+      break;
+    case 4:
+    default:
+      nextButtonKey = 'done';
+      break;
+  }
+
   return (
     <Drawer
       PaperProps={{ ref: drawerRef }}
@@ -382,41 +441,43 @@ export const ActivityAssignDrawer = ({
     >
       {isLoading && <Spinner />}
 
-      <StyledHeader>
-        <Box sx={{ position: 'relative', flex: 1 }}>
-          <Fade in={step === 1}>
-            <StyledHeadlineMedium>{t(`titleStep1`)}</StyledHeadlineMedium>
-          </Fade>
-          <Fade in={step === 2}>
-            <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0 }}>
-              <IconButton
-                color="outlined"
-                onClick={handleClickBack}
-                data-testid={`${dataTestId}-back`}
-              >
-                <Svg id="arrow-navigate-left" />
-              </IconButton>
-              <StyledHeadlineMedium sx={{ mx: 'auto' }}>{t(`titleStep2`)}</StyledHeadlineMedium>
-            </StyledFlexTopCenter>
-          </Fade>
-        </Box>
+      <Fade in={step === 1 || step === 2}>
+        <StyledHeader>
+          <Box sx={{ position: 'relative', flex: 1 }}>
+            <Fade in={step === 1}>
+              <StyledHeadlineMedium>{t(`titleStep1`)}</StyledHeadlineMedium>
+            </Fade>
+            <Fade in={step >= 2}>
+              <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0 }}>
+                <IconButton
+                  color="outlined"
+                  onClick={handleClickBack}
+                  data-testid={`${dataTestId}-back`}
+                >
+                  <Svg id="arrow-navigate-left" />
+                </IconButton>
+                <StyledHeadlineMedium sx={{ mx: 'auto' }}>{t(`titleStep2`)}</StyledHeadlineMedium>
+              </StyledFlexTopCenter>
+            </Fade>
+          </Box>
 
-        <StyledFlexTopCenter sx={{ gap: 0.8 }}>
-          <IconButton
-            onClick={() => setShowHelpPopup(true)}
-            data-testid={`${dataTestId}-header-help`}
-          >
-            <Svg id="help-outlined" />
-          </IconButton>
-          <IconButton
-            onClick={handleClose}
-            aria-label={t('close')}
-            data-testid={`${dataTestId}-header-close`}
-          >
-            <Svg id="close" />
-          </IconButton>
-        </StyledFlexTopCenter>
-      </StyledHeader>
+          <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+            <IconButton
+              onClick={() => setShowHelpPopup(true)}
+              data-testid={`${dataTestId}-header-help`}
+            >
+              <Svg id="help-outlined" />
+            </IconButton>
+            <IconButton
+              onClick={handleClose}
+              aria-label={t('close')}
+              data-testid={`${dataTestId}-header-close`}
+            >
+              <Svg id="close" />
+            </IconButton>
+          </StyledFlexTopCenter>
+        </StyledHeader>
+      </Fade>
 
       {bannersComponent}
 
@@ -576,18 +637,45 @@ export const ActivityAssignDrawer = ({
           </StyledPane>
         </Fade>
 
+        {/* Step 3 – Assigning */}
+        <Fade in={step === 3} onEntered={() => scrollPane()} unmountOnExit>
+          <StyledPane
+            sx={{ placeContent: 'center', alignItems: 'center', textAlign: 'center', mt: -9.5 }}
+          >
+            <StyledTitleLargish>{t('assigning')}</StyledTitleLargish>
+            <StyledLinearProgressLarge
+              variant="determinate"
+              value={progress}
+              sx={{ width: '24.3rem', mt: 3.7 }}
+            />
+          </StyledPane>
+        </Fade>
+
+        {/* Step 4 – Success */}
+        <Fade in={step === 4} onEntered={() => scrollPane()} unmountOnExit>
+          <StyledPane sx={{ placeContent: 'center', textAlign: 'center', gap: 2.1, mt: -9.5 }}>
+            <Box>
+              <StyledSuccessImage src={successImage} alt="" />
+              <StyledHeadlineLarge as="h1" sx={{ m: 0 }}>
+                {t('success')}
+              </StyledHeadlineLarge>
+            </Box>
+            <StyledBodyLarger>{t('emailsSent')}</StyledBodyLarger>
+          </StyledPane>
+        </Fade>
+
         <StyledFooterWrapper>
-          <StyledFooter hidden={!isComplete}>
+          <StyledFooter hidden={isFooterHidden} sx={step > 2 ? { borderTop: 0 } : undefined}>
             <StyledFooterButtonWrapper step={step}>
               <StyledFooterButton
                 step={step}
                 variant="contained"
                 onClick={handleClickNext}
-                disabled={isLoading || (step === 1 ? !isComplete : !isComplete || !isValid)}
+                disabled={isLoading || !isValid || isFooterHidden}
                 sx={{ minWidth: '19.7rem' }}
-                data-testid={`${dataTestId}-${step === 1 ? 'next' : 'send-emails'}`}
+                data-testid={`${dataTestId}-${nextButtonKey}`}
               >
-                {t(step === 1 ? 'next' : 'sendEmails')}
+                {t(nextButtonKey)}
               </StyledFooterButton>
             </StyledFooterButtonWrapper>
           </StyledFooter>

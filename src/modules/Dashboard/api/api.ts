@@ -81,6 +81,7 @@ import {
   EditSubjectResponse,
   CreateTemporaryMultiInformantRelation,
   GetAssignmentsParams,
+  PostAssignmentsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -936,5 +937,19 @@ export const getAppletAssignmentsApi = (
 ) =>
   authApiClient.get(`/assignments/applet/${appletId}`, {
     params,
+    signal,
+  });
+
+export const postAppletAssignmentsApi = (
+  { appletId, assignments }: PostAssignmentsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(`/assignments/applet/${appletId}`, {
+    assignments: assignments.map((a) => ({
+      activity_id: a.activityId,
+      activity_flow_id: a.activityFlowId,
+      respondent_subject_id: a.respondentSubjectId,
+      target_subject_id: a.targetSubjectId,
+    })),
     signal,
   });

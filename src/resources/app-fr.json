@@ -49,7 +49,7 @@
     "respondentActivityAutofill": "Le participant et l'activité ont été pré-remplis, cliquez sur « Suivant » pour continuer.",
     "teamRespondentActivityAutofill": "Le répondant et l'activité ont été pré-remplis, sélectionnez un sujet pour continuer.",
     "subjectActivityAutofill": "Le participant et l'activité ont été pré-remplis. 1 ligne nécessite une attention pour continuer.",
-    "existingAssigments": "Une ou plusieurs de ces activités ont déjà été attribuées ; aucun e-mail pour ces attributions ne sera envoyé.",
+    "existingAssignments": "Une ou plusieurs de ces activités ont déjà été attribuées ; aucun e-mail pour ces attributions ne sera envoyé.",
     "existingAssignmentsAll": "Toutes les attributions saisies existent déjà. Veuillez créer de nouvelles attributions uniques.",
     "duplicateRowsError": "Il y a des lignes en double dans le tableau, veuillez les modifier ou les supprimer pour continuer.",
     "networkError": "Oops! Une erreur s'est produite, veuillez réessayer.",
@@ -66,7 +66,11 @@
     "showMore": "Afficher plus ({{count}})",
     "deletePopupTitle": "Supprimer l'activité",
     "deletePopupButton": "Oui, supprimer",
-    "deletePopupText": "Êtes-vous sûr de vouloir supprimer les attributions pour l'activité <0>{{activityName}}</0>?"
+    "deletePopupText": "Êtes-vous sûr de vouloir supprimer les attributions pour l'activité <0>{{activityName}}</0>?",
+    "assigning": "Attribution aux participants",
+    "success": "Succès !",
+    "emailsSent": "Les e-mails ont été envoyées",
+    "done": "Terminé"
   },
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page.",
   "activityCompleted": "Activité terminée",
