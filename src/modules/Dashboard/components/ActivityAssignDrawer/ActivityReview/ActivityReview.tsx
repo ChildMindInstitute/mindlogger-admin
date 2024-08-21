@@ -63,6 +63,7 @@ export const ActivityReview = ({
       expanded={isExpanded}
       onChange={(_, expanded) => setIsExpanded(expanded)}
       disabled={isSingleActivity}
+      data-testid={dataTestId}
     >
       <StyledAccordionSummary>
         <Svg id="email-outlined" width={18} height={18} />
@@ -86,6 +87,7 @@ export const ActivityReview = ({
                 onDelete(activity ?? flow);
                 e.stopPropagation();
               }}
+              data-testid={`${dataTestId}-${index}-delete-button`}
             >
               <Svg aria-label={t('deleteAssignment')} id="trash" fill={variables.palette.red} />
             </IconButton>
@@ -109,7 +111,7 @@ export const ActivityReview = ({
             activities={activity ? [activity] : []}
             flows={flow ? [flow] : []}
             isReadOnly
-            data-testid={dataTestId}
+            data-testid={`${dataTestId}-activities-list`}
           />
         </StyledFlexColumn>
 
