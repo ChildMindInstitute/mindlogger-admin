@@ -95,7 +95,6 @@ export const ActivityFlowAbout = () => {
           />
           <CheckboxController
             control={control}
-            defaultControllerValue={true}
             key={`activityFlows.${activityFlowIndex}.autoAssign`}
             name={`activityFlows.${activityFlowIndex}.autoAssign`}
             label={

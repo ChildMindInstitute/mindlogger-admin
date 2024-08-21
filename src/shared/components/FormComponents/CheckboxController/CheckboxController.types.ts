@@ -8,7 +8,6 @@ type FormCheckboxProps = {
   onCustomChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   'data-testid'?: string;
   sxLabelProps?: SxProps;
-  defaultControllerValue?: boolean;
 } & CheckboxProps;
 
 export type InputControllerProps<T extends FieldValues> = FormCheckboxProps & UseControllerProps<T>;

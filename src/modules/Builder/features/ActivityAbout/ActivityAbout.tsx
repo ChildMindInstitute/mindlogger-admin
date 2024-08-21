@@ -176,7 +176,6 @@ export const ActivityAbout = () => {
     },
     {
       name: `${fieldName}.autoAssign`,
-      defaultControllerValue: true,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
           <span>{t('autoAssignActivity')}</span>
@@ -224,29 +223,9 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(
-          ({
-            name,
-            label,
-            isInversed,
-            disabled,
-            'data-testid': dataTestid,
-            onCustomChange,
-            defaultControllerValue,
-          }) => (
-            <CheckboxController
-              key={name}
-              control={control}
-              defaultControllerValue={defaultControllerValue}
-              name={name}
-              label={label}
-              disabled={disabled}
-              isInversed={isInversed}
-              onCustomChange={onCustomChange}
-              data-testid={dataTestid}
-            />
-          ),
-        )}
+        {checkboxes.map((props) => (
+          <CheckboxController {...props} key={props.name} control={control} />
+        ))}
       </StyledFlexColumn>
     </BuilderContainer>
   );
