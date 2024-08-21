@@ -68,4 +68,9 @@ export const getItemResponseTypes = (enableParagraphTextItem: boolean) => ({
   [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
   [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },
   [ItemResponseType.TouchPractice]: { icon: null, title: ItemResponseType.TouchPractice },
+  [ItemResponseType.PhrasalTemplate]: {
+    icon: <Svg id="fileAlt" />,
+    title: ItemResponseType.PhrasalTemplate,
+  },
+  [ItemResponseType.UnityFile]: { icon: null, title: ItemResponseType.UnityFile },
 });

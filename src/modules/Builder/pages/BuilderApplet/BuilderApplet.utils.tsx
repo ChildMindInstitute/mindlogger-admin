@@ -567,6 +567,20 @@ export const getABTrailsItems = (deviceType: DeviceType) =>
     },
   }));
 
+export const getUnityFileItem = (deviceType: DeviceType) => [
+  {
+    id: undefined,
+    key: uuidv4(),
+    responseType: ItemResponseType.UnityFile,
+    name: `${ItemResponseType.UnityFile}_${deviceType}`,
+    question: t('unityInstructions'),
+    config: {
+      deviceType,
+      orderName: OrderName[ordinalStrings[0] as keyof typeof OrderName],
+    },
+  },
+];
+
 export const getNewPerformanceTask = ({
   name,
   description,
@@ -579,6 +593,7 @@ export const getNewPerformanceTask = ({
     [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
     [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
     [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
+    [PerfTaskType.Unity]: getUnityFileItem(DeviceType.Mobile),
   };
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
@@ -653,6 +668,7 @@ const getActivityItemResponseValues = (item: Item) => {
       };
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
+    case ItemResponseType.PhrasalTemplate:
       return item.responseValues;
     default:
       return null;
@@ -1012,6 +1028,7 @@ export const getActivities = (appletActivities: Activity[]) =>
       if (!activity.isReviewable) {
         acc.nonReviewableKeys.push(getEntityKey(activity));
       }
+
       const items = getActivityItems(activity.items);
 
       acc.activities.push({

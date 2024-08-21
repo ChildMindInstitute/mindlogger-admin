@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
 import { Box, TooltipProps } from '@mui/material';
@@ -84,9 +84,37 @@ export const SelectController = <T extends FieldValues>({
   setTrigger,
   SelectProps,
   shouldSkipIcon = false,
+  TooltipProps = {},
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const [open, setOpen] = useState(false);
+  const selectIsOpen = useRef(false);
+
+  const handleCloseSelect = (e: React.SyntheticEvent) => {
+    selectIsOpen.current = false;
+
+    SelectProps?.onClose?.(e);
+  };
+
+  const handleOpenSelect = (e: React.SyntheticEvent) => {
+    selectIsOpen.current = true;
+    setOpen(false);
+
+    SelectProps?.onOpen?.(e);
+  };
+
+  const handleCloseTooltip = (e: Event | React.SyntheticEvent) => {
+    setOpen(false);
+    TooltipProps.onClose?.(e);
+  };
+
+  const handleOpenTooltip = (e: React.SyntheticEvent) => {
+    if (!selectIsOpen.current) {
+      setOpen(true);
+      TooltipProps.onOpen?.(e);
+    }
+  };
 
   const getMenuItem = (
     { labelKey, value, itemDisabled, icon, hidden, tooltip, tooltipPlacement }: GetMenuItem,
@@ -166,41 +194,51 @@ export const SelectController = <T extends FieldValues>({
         </>
       )}
 
-      <StyledTextField
-        {...props}
-        select
-        onChange={onChange}
-        value={selectedValue}
-        error={!!error || providedError}
-        helperText={isErrorVisible ? error?.message || helperText : ''}
-        disabled={disabled}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: { ...selectDropdownStyles, ...dropdownStyles },
-              'data-testid': `${dataTestid}-dropdown`,
-            },
-          },
-          IconComponent: shouldSkipIcon
-            ? undefined
-            : (props) => <Svg className={props.className} id="navigate-down" />,
-          ...SelectProps,
-          ...(shouldSkipIcon && {
-            inputProps: {
-              sx: {
-                pr: '1.2rem !important',
-                minWidth: '94% !important',
+      <Tooltip
+        enterDelay={500}
+        {...TooltipProps}
+        onClose={handleCloseTooltip}
+        onOpen={handleOpenTooltip}
+        open={open}
+      >
+        <StyledTextField
+          {...props}
+          select
+          onChange={onChange}
+          value={selectedValue}
+          error={!!error || providedError}
+          helperText={isErrorVisible ? error?.message || helperText : ''}
+          disabled={disabled}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: { ...selectDropdownStyles, ...dropdownStyles },
+                'data-testid': `${dataTestid}-dropdown`,
               },
             },
-          }),
-        }}
-        data-testid={dataTestid}
-      >
-        {renderGroupedOptions(selectedValue)}
-        {targetSelector && (
-          <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
-        )}
-      </StyledTextField>
+            IconComponent: shouldSkipIcon
+              ? undefined
+              : (props) => <Svg className={props.className} id="navigate-down" />,
+            ...SelectProps,
+            onClose: handleCloseSelect,
+            onOpen: handleOpenSelect,
+            ...(shouldSkipIcon && {
+              inputProps: {
+                sx: {
+                  pr: '1.2rem !important',
+                  minWidth: '94% !important',
+                },
+              },
+            }),
+          }}
+          data-testid={dataTestid}
+        >
+          {renderGroupedOptions(selectedValue)}
+          {targetSelector && (
+            <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
+          )}
+        </StyledTextField>
+      </Tooltip>
     </Box>
   );
 

@@ -61,6 +61,7 @@ const mockedMobileTestid = 'builder-activities-add-perf-task-abtrails-mobile';
 const mockedFlankerTestid = 'builder-activities-add-perf-task-flanker';
 const mockedGyroscopeTestid = 'builder-activities-add-perf-task-gyroscope';
 const mockedTouchTestid = 'builder-activities-add-perf-task-touch';
+const mockedUnityTestid = 'builder-activities-add-perf-task-unity';
 
 const mockedUseNavigate = jest.fn();
 
@@ -99,6 +100,8 @@ const addPerfTask = (perfTaskType) => {
       return fireEvent.click(screen.getByTestId(mockedGyroscopeTestid));
     case PerformanceTasks.Touch:
       return fireEvent.click(screen.getByTestId(mockedTouchTestid));
+    case PerformanceTasks.Unity:
+      return fireEvent.click(screen.getByTestId(mockedUnityTestid));
     default:
       return;
   }

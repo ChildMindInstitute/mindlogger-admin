@@ -12,6 +12,7 @@ import {
   Time,
   TimeRange,
   SelectionPerRow,
+  PhrasalTemplate,
 } from './TooltipComponents';
 
 const singleUiType = SelectionUiType.Single;
@@ -37,4 +38,5 @@ export const getInputTypeContent = () => ({
   [ItemResponseType.Message]: <Dashed uiType={DashedUiType.Message} />,
   [ItemResponseType.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
   [ItemResponseType.Time]: <Time />,
+  [ItemResponseType.PhrasalTemplate]: <PhrasalTemplate />,
 });

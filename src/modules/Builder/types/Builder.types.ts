@@ -12,6 +12,7 @@ import {
   TouchTestItem,
   ItemCommonType,
   Item,
+  UnityItem,
 } from 'shared/state';
 import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
 import { ArrayElement } from 'shared/types';
@@ -113,6 +114,7 @@ export type GetNewPerformanceTask = {
         | StabilityTrackerItem<ItemFormValuesCommonType>
         | TouchPracticeItem<ItemFormValuesCommonType>
         | TouchTestItem<ItemFormValuesCommonType>
+        | UnityItem<ItemFormValuesCommonType>
       >[]
     >,
     string,
@@ -134,6 +136,7 @@ export type ItemResponseTypeNoPerfTasks = Exclude<
   | ItemResponseType.TouchPractice
   | ItemResponseType.TouchTest
   | ItemResponseType.ABTrails
+  | ItemResponseType.UnityFile
 >;
 
 export enum RoundTypeEnum {

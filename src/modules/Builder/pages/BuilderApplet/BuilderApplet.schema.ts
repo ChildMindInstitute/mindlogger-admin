@@ -1,13 +1,10 @@
-import * as yup from 'yup';
 import get from 'lodash/get';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
-import {
-  getEntityKey,
-  getIsRequiredValidateMessage,
-  getMaxLengthValidationError,
-  getObjectFromList,
-} from 'shared/utils';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { RoundTypeEnum } from 'modules/Builder/types';
 import {
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
@@ -23,12 +20,22 @@ import {
   PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import { RoundTypeEnum } from 'modules/Builder/types';
-import { Condition, Config, ScoreOrSection } from 'shared/state';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
+import {
+  getEntityKey,
+  getIsRequiredValidateMessage,
+  getMaxLengthValidationError,
+  getObjectFromList,
+} from 'shared/utils';
 
 import { ItemFormValues } from '../../types/Builder.types';
+import {
+  alphanumericAndHyphenRegexp,
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  IP_ADDRESS_REGEXP,
+  ItemTestFunctions,
+  PORT_REGEXP,
+} from './BuilderApplet.const';
 import {
   checkScoreRegexp,
   getCommonSliderValidationProps,
@@ -46,13 +53,6 @@ import {
   testFunctionForUniqueness,
   testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
-import {
-  alphanumericAndHyphenRegexp,
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  IP_ADDRESS_REGEXP,
-  ItemTestFunctions,
-  PORT_REGEXP,
-} from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -227,6 +227,135 @@ export const GyroscopeAndTouchConfigSchema = () => ({
   }),
 });
 
+export const PhrasalTemplateResponseValuePhraseFieldSchema = yup.object({
+  type: yup.mixed().oneOf(['sentence', 'item_response', 'line_break']).required(),
+  text: yup.string().when('type', {
+    is: 'sentence',
+    then(schema) {
+      return schema
+        .trim()
+        .test(
+          'validate there is only one empty sentence',
+          t('fieldRequiredAddToContinue'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema
+              ?.value?.fields || { type: '' };
+
+            const isMoreThanOneSentence =
+              fields?.filter(({ type }) => type === 'sentence').length > 1;
+
+            if (!value && !isMoreThanOneSentence) {
+              return false;
+            }
+
+            return true;
+          },
+        )
+        .test(
+          'validate there are more than one empty sentences',
+          t('fieldAddContentOrRemove'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields: PhrasalTemplateField[] = parentPhrasalTemplateResponseValuePhraseSchema
+              ?.value?.fields || { type: '' };
+
+            const isMoreThanOneSentence =
+              fields?.filter(({ type }) => type === 'sentence').length > 1;
+
+            if (!value && isMoreThanOneSentence) {
+              return false;
+            }
+
+            return true;
+          },
+        );
+    },
+  }),
+  itemName: yup.string().when('type', {
+    is: 'item_response',
+    then: (schema) =>
+      schema
+        .trim()
+        .test(
+          'validate item was deleted',
+          t('fieldReferenceItemWasDeleted'),
+          function (_, textContext) {
+            if (textContext.parent.itemName.includes('-deleted')) {
+              return false;
+            }
+
+            return true;
+          },
+        )
+        .test(
+          'validate required only one field',
+          t('fieldRequiredMakeASelection'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || {
+              type: '',
+            };
+
+            const isMoreThanOneItemResponse =
+              fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
+
+            if (!value && !isMoreThanOneItemResponse) {
+              return false;
+            }
+
+            return true;
+          },
+        )
+        .test(
+          'validate required only one field',
+          t('fieldMakeSelectionOrRemove'),
+          function (value, textContext) {
+            const parentPhrasalTemplateResponseValuePhraseSchema = textContext.from?.[1];
+            const fields = parentPhrasalTemplateResponseValuePhraseSchema?.value?.fields || {
+              type: '',
+            };
+
+            const isMoreThanOneItemResponse =
+              fields?.filter(({ type }: { type: string }) => type === 'item_response').length > 1;
+
+            if (!value && isMoreThanOneItemResponse) {
+              return false;
+            }
+
+            return true;
+          },
+        ),
+  }),
+});
+
+export const PhrasalTemplateResponseValuePhraseSchema = yup.object({
+  image: yup.string().nullable(),
+  fields: yup
+    .array()
+    .of(PhrasalTemplateResponseValuePhraseFieldSchema)
+    .min(2, t('validationMessages.phraseTemplateMinFields'))
+    .test(
+      'minSentenceFields',
+      t('validationMessages.phraseTemplateMinSentenceFields'),
+      (fields = []) => fields.filter(({ type }) => type === 'sentence').length > 0,
+    )
+    .test(
+      'minResponseFields',
+      t('validationMessages.phraseTemplateMinResponseFields'),
+      (fields = []) => fields.filter(({ type }) => type === 'item_response').length > 0,
+    ),
+});
+
+export const PhrasalTemplateResponseValue = {
+  cardTitle: yup
+    .string()
+    .trim()
+    .required(t('fieldRequired'))
+    .max(75, t('validationMessages.maxCharacters', { count: 75 })),
+  phrases: yup.array().of(PhrasalTemplateResponseValuePhraseSchema).min(1),
+};
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -303,6 +432,10 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
+
+        if (responseType === ItemResponseType.PhrasalTemplate) {
+          return schema.shape(PhrasalTemplateResponseValue);
+        }
 
         return schema.nullable();
       }),

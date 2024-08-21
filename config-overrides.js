@@ -5,6 +5,12 @@ const MAX_CYCLES = 5;
 let numCyclesDetected = 0;
 
 module.exports = function override(config) {
+  config.module.rules.unshift({
+    test: /\.worker\.ts$/,
+    use: {
+      loader: 'worker-loader',
+    },
+  });
   config.resolve.fallback = {
     crypto: require.resolve('crypto-browserify'),
     buffer: require.resolve('buffer'),
