@@ -1,29 +1,48 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import successImage from 'assets/images/email-success.webp';
 import {
+  StyledBodyLarger,
+  StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopBaseline,
   StyledFlexTopCenter,
+  StyledHeadlineLarge,
   StyledHeadlineMedium,
   StyledLabelLarge,
+  StyledLinearProgressLarge,
   StyledTitleLarge,
+  StyledTitleLargish,
   variables,
 } from 'shared/styles';
-import { Spinner, Svg } from 'shared/components';
+import { Spinner, Svg, Tooltip } from 'shared/components';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useAsync } from 'shared/hooks';
-import { getAppletActivitiesApi } from 'api';
+import {
+  Assignment,
+  getAppletActivitiesApi,
+  getAppletAssignmentsApi,
+  AppletAssignmentsResponse,
+  GetAssignmentsParams,
+  postAppletAssignmentsApi,
+  PostAssignmentsParams,
+} from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 
+import { ActivityReview } from './ActivityReview';
 import { AssignmentsTable } from './AssignmentsTable';
 import { ActivityCheckbox } from './ActivityCheckbox';
-import { ActivityAssignDrawerProps, ActivityAssignFormValues } from './ActivityAssignDrawer.types';
+import {
+  ActivityAssignDrawerProps,
+  ActivityAssignFormValues,
+  ValidActivityAssignment,
+} from './ActivityAssignDrawer.types';
 import { useActivityAssignFormSchema } from './ActivityAssignDrawer.schema';
 import {
   StyledFooter,
@@ -31,10 +50,14 @@ import {
   StyledFooterButtonWrapper,
   StyledFooterWrapper,
   StyledHeader,
+  StyledPane,
+  StyledSuccessImage,
 } from './ActivityAssignDrawer.styles';
 import { HelpPopup } from './HelpPopup';
 import { ActivitiesList } from './ActivitiesList';
 import { useActivityAssignBanners } from './ActivityAssignDrawer.hooks';
+import { AssignmentCounts } from './AssignmentCounts';
+import { DeletePopup } from './DeletePopup';
 
 const dataTestId = 'applet-activity-assign';
 
@@ -49,8 +72,16 @@ export const ActivityAssignDrawer = ({
   ...rest
 }: ActivityAssignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
+  const drawerRef = useRef<HTMLDivElement>(null);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
-  const [step, setStep] = useState<1 | 2>(1);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [step, setStep] = useState(1);
+  const [reviewedAssignments, setReviewedAssignments] = useState<Assignment[]>([]);
+  const [emailCount, setEmailCount] = useState(0);
+  const [selectedActivityOrFlow, setSelectedActivityOrFlow] = useState<
+    Activity | HydratedActivityFlow
+  >();
+  const [progress, setProgress] = useState(0);
   const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
     useActivityAssignBanners();
   const {
@@ -71,7 +102,25 @@ export const ActivityAssignDrawer = ({
     () => addBanner('NetworkErrorBanner'),
   );
 
-  const isLoading = isLoadingParticipants || isLoadingActivities;
+  const { execute: getAssignments, isLoading: isLoadingGetAssignments } = useAsync<
+    GetAssignmentsParams,
+    AppletAssignmentsResponse
+  >(
+    getAppletAssignmentsApi,
+    () => removeBanner('NetworkErrorBanner'),
+    () => addBanner('NetworkErrorBanner'),
+  );
+
+  const { execute: createAssignments } = useAsync<PostAssignmentsParams, AppletAssignmentsResponse>(
+    postAppletAssignmentsApi,
+    () => removeBanner('NetworkErrorBanner'),
+    () => {
+      addBanner('NetworkErrorBanner');
+      setStep(2);
+    },
+  );
+
+  const isLoading = isLoadingParticipants || isLoadingActivities || isLoadingGetAssignments;
 
   const activities: Activity[] = activitiesData?.data?.result?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
@@ -90,7 +139,7 @@ export const ActivityAssignDrawer = ({
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors, isDirty },
+    formState: { errors },
     reset,
   } = useForm<ActivityAssignFormValues>({
     resolver: yupResolver(useActivityAssignFormSchema()),
@@ -124,6 +173,11 @@ export const ActivityAssignDrawer = ({
   }, [assignments]);
 
   const isComplete = !!selectionCount && assignmentCounts.complete && !assignmentCounts.incomplete;
+  const isFooterHidden = (step === 1 && !isComplete) || step === 3;
+
+  const scrollPane = (top = 0) => {
+    drawerRef.current?.scrollTo({ top, behavior: 'smooth' });
+  };
 
   const handleSelectAll = () => {
     if (selectionCount === activitiesCount) {
@@ -145,32 +199,165 @@ export const ActivityAssignDrawer = ({
 
   const handleClose = () => {
     // TODO: Display confirmation popup https://mindlogger.atlassian.net/browse/M2-7399
-    if (
-      isDirty &&
-      !window.confirm('[TODO: Replace me with popup]\nChanges will be lost, are you sure?')
-    ) {
-      return;
-    }
+    // if (
+    //   isDirty &&
+    //   !window.confirm('[TODO: Replace me with popup]\nChanges will be lost, are you sure?')
+    // ) {
+    //   return;
+    // }
 
     onClose();
   };
 
-  const handleClickNext = () => {
-    if (step === 1) {
-      removeAllBanners();
-      handleSubmit(() => {
-        // Delete incomplete assignments after validation
-        setValue(
-          'assignments',
-          assignments.filter((a) => a.respondentSubjectId || a.targetSubjectId),
-        );
-        setStep(2);
-      })();
+  const handleDelete = () => {
+    if (!selectedActivityOrFlow) return;
+
+    const isFlow = 'activities' in selectedActivityOrFlow;
+    if (isFlow) {
+      setValue(
+        'flowIds',
+        flowIds.filter((id) => id !== selectedActivityOrFlow.id),
+        { shouldDirty: true },
+      );
     } else {
-      // TODO: Submit to BE https://mindlogger.atlassian.net/browse/M2-7261
-      handleSubmit(() => {})();
+      setValue(
+        'activityIds',
+        activityIds.filter((id) => id !== selectedActivityOrFlow.id),
+        { shouldDirty: true },
+      );
     }
+
+    removeAllBanners();
+    handleSubmit(reviewAssignments)();
   };
+
+  const reviewAssignments: SubmitHandler<ActivityAssignFormValues> = useCallback(
+    async ({ assignments, flowIds, activityIds }) => {
+      if (!appletId) return;
+
+      // Delete empty assignments after validation
+      const validAssignments = assignments.filter(
+        (a) => a.respondentSubjectId || a.targetSubjectId,
+      ) as ValidActivityAssignment[];
+      setValue('assignments', validAssignments);
+
+      // Convert respondent-subject assignments to a flat list of fully hydrated assignments
+      // (one for each activity/flow)
+      const hydratedAssignments: Assignment[] = [];
+      for (const activityFlowId of flowIds) {
+        hydratedAssignments.push(
+          ...validAssignments.map((assignment) => ({
+            ...assignment,
+            activityId: null,
+            activityFlowId,
+          })),
+        );
+      }
+      for (const activityId of activityIds) {
+        hydratedAssignments.push(
+          ...validAssignments.map((assignment) => ({
+            ...assignment,
+            activityId,
+            activityFlowId: null,
+          })),
+        );
+      }
+
+      // Calculate # of pre-existing assignments and emails being sent
+      const getAssignmentsData = await getAssignments({
+        appletId,
+        flows: flowIds.join(',') || undefined,
+        activities: activityIds.join(',') || undefined,
+      });
+      const existingAssignments = getAssignmentsData.data.result.assignments;
+
+      let duplicates = 0;
+      const emailRecipients = new Set<string>();
+
+      for (const assignment of hydratedAssignments) {
+        const exists = existingAssignments.some(
+          (existing) =>
+            existing.respondentSubjectId === assignment.respondentSubjectId &&
+            existing.targetSubjectId === assignment.targetSubjectId &&
+            existing.activityId === assignment.activityId &&
+            existing.activityFlowId === assignment.activityFlowId,
+        );
+
+        if (exists) {
+          duplicates++;
+        } else {
+          emailRecipients.add(assignment.respondentSubjectId);
+        }
+      }
+
+      if (duplicates) {
+        if (duplicates === hydratedAssignments.length) {
+          addBanner('ExistingAssignmentsBanner', { allAssigned: true, duration: 10000 });
+          setStep(1);
+
+          return;
+        } else {
+          addBanner('ExistingAssignmentsBanner');
+        }
+      }
+
+      setEmailCount(emailRecipients.size);
+      setReviewedAssignments(hydratedAssignments);
+      setStep(2);
+    },
+    [addBanner, appletId, getAssignments, setValue],
+  );
+
+  const handleClickNext = useCallback(() => {
+    removeAllBanners();
+
+    switch (step) {
+      case 1:
+        handleSubmit(reviewAssignments)();
+        break;
+
+      case 2:
+        handleSubmit(async () => {
+          if (!appletId) return;
+
+          setStep(3);
+
+          setProgress(0);
+          // Create illusion of BE request making progress (never quite reaching 100% till the end)
+          const intervalId = setInterval(
+            () => setProgress((progress) => progress + (100 - progress) * 0.1),
+            300,
+          );
+          await createAssignments({ appletId, assignments: reviewedAssignments });
+          clearInterval(intervalId);
+          setProgress(100);
+
+          // Allow progress bar fill animation to complete before transitioning to success screen
+          setTimeout(() => setStep(4), 400);
+        })();
+        break;
+
+      case 4:
+        onClose(true);
+        break;
+    }
+  }, [
+    appletId,
+    createAssignments,
+    handleSubmit,
+    onClose,
+    removeAllBanners,
+    reviewAssignments,
+    reviewedAssignments,
+    step,
+  ]);
+
+  const handleClickBack = useCallback(() => {
+    scrollPane();
+    setEmailCount(0);
+    setReviewedAssignments([]);
+    setStep((step) => step - 1);
+  }, []);
 
   // Initialize activities/flows data
   useEffect(() => {
@@ -188,6 +375,8 @@ export const ActivityAssignDrawer = ({
 
       reset(defaultValues);
       setStep(1);
+      setEmailCount(0);
+      setReviewedAssignments([]);
 
       setTimeout(() => {
         if (assignments[0]?.respondentSubjectId) {
@@ -225,8 +414,24 @@ export const ActivityAssignDrawer = ({
     }
   }, [addBanner, errors.assignments, removeBanner]);
 
+  let nextButtonKey: string;
+  switch (step) {
+    case 1:
+      nextButtonKey = 'next';
+      break;
+    case 2:
+    case 3:
+      nextButtonKey = 'sendEmails';
+      break;
+    case 4:
+    default:
+      nextButtonKey = 'done';
+      break;
+  }
+
   return (
     <Drawer
+      PaperProps={{ ref: drawerRef }}
       anchor="right"
       onClose={handleClose}
       open={open}
@@ -236,48 +441,50 @@ export const ActivityAssignDrawer = ({
     >
       {isLoading && <Spinner />}
 
-      <StyledHeader>
-        <Box sx={{ position: 'relative', flex: 1 }}>
-          <Fade in={step === 1}>
-            <StyledHeadlineMedium>{t(`titleStep1`)}</StyledHeadlineMedium>
-          </Fade>
-          <Fade in={step === 2}>
-            <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0 }}>
-              <IconButton
-                color="outlined"
-                onClick={() => setStep(1)}
-                data-testid={`${dataTestId}-back`}
-              >
-                <Svg id="arrow-navigate-left" />
-              </IconButton>
-              <StyledHeadlineMedium sx={{ mx: 'auto' }}>{t(`titleStep2`)}</StyledHeadlineMedium>
-            </StyledFlexTopCenter>
-          </Fade>
-        </Box>
+      <Fade in={step === 1 || step === 2}>
+        <StyledHeader>
+          <Box sx={{ position: 'relative', flex: 1 }}>
+            <Fade in={step === 1}>
+              <StyledHeadlineMedium>{t(`titleStep1`)}</StyledHeadlineMedium>
+            </Fade>
+            <Fade in={step >= 2}>
+              <StyledFlexTopCenter sx={{ position: 'absolute', inset: 0 }}>
+                <IconButton
+                  color="outlined"
+                  onClick={handleClickBack}
+                  data-testid={`${dataTestId}-back`}
+                >
+                  <Svg id="arrow-navigate-left" />
+                </IconButton>
+                <StyledHeadlineMedium sx={{ mx: 'auto' }}>{t(`titleStep2`)}</StyledHeadlineMedium>
+              </StyledFlexTopCenter>
+            </Fade>
+          </Box>
 
-        <StyledFlexTopCenter sx={{ gap: 0.8 }}>
-          <IconButton
-            onClick={() => setShowHelpPopup(true)}
-            data-testid={`${dataTestId}-header-help`}
-          >
-            <Svg id="help-outlined" />
-          </IconButton>
-          <IconButton
-            onClick={handleClose}
-            aria-label={t('close')}
-            data-testid={`${dataTestId}-header-close`}
-          >
-            <Svg id="close" />
-          </IconButton>
-        </StyledFlexTopCenter>
-      </StyledHeader>
+          <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+            <IconButton
+              onClick={() => setShowHelpPopup(true)}
+              data-testid={`${dataTestId}-header-help`}
+            >
+              <Svg id="help-outlined" />
+            </IconButton>
+            <IconButton
+              onClick={handleClose}
+              aria-label={t('close')}
+              data-testid={`${dataTestId}-header-close`}
+            >
+              <Svg id="close" />
+            </IconButton>
+          </StyledFlexTopCenter>
+        </StyledHeader>
+      </Fade>
 
       {bannersComponent}
 
-      <StyledFlexColumn sx={{ position: 'relative', overflowY: 'auto', flex: 1 }}>
+      <StyledFlexColumn sx={{ position: 'relative', flex: 1 }}>
         {/* Step 1 – Select activities and add respondents */}
-        <Fade in={step === 1}>
-          <StyledFlexColumn sx={{ p: 4, gap: 4.8 }}>
+        <Fade in={step === 1} onEntered={() => scrollPane()}>
+          <StyledPane sx={{ gap: 4.8 }}>
             {/* Select activities */}
             <StyledFlexColumn sx={{ gap: 0.8 }}>
               <StyledFlexTopBaseline>
@@ -309,11 +516,26 @@ export const ActivityAssignDrawer = ({
                 </StyledFlexTopBaseline>
               </StyledFlexTopBaseline>
 
-              <ActivitiesList
-                activities={activities}
-                flows={flows}
+              <Controller
                 control={control}
-                data-testid={`${dataTestId}-activities-list`}
+                name="activityIds"
+                render={({ field: { onChange: onChangeActivityids, value: activityIds } }) => (
+                  <Controller
+                    control={control}
+                    name="flowIds"
+                    render={({ field: { onChange: onChangeFlowIds, value: flowIds } }) => (
+                      <ActivitiesList
+                        activities={activities}
+                        flows={flows}
+                        activityIds={activityIds}
+                        flowIds={flowIds}
+                        onChangeActivityIds={onChangeActivityids}
+                        onChangeFlowIds={onChangeFlowIds}
+                        data-testid={`${dataTestId}-activities-list`}
+                      />
+                    )}
+                  />
+                )}
               />
             </StyledFlexColumn>
 
@@ -321,16 +543,7 @@ export const ActivityAssignDrawer = ({
             <StyledFlexColumn sx={{ gap: 1.6 }}>
               <StyledFlexTopBaseline sx={{ gap: 1.6 }}>
                 <StyledTitleLarge>{t('addRespondents')}</StyledTitleLarge>
-                {!!assignmentCounts.selfReports && (
-                  <StyledLabelLarge color={variables.palette.on_surface_variant}>
-                    {t('selfReports', { count: assignmentCounts.selfReports })}
-                  </StyledLabelLarge>
-                )}
-                {!!assignmentCounts.multiInformant && (
-                  <StyledLabelLarge color={variables.palette.on_surface_variant}>
-                    {t('multiInformant', { count: assignmentCounts.multiInformant })}
-                  </StyledLabelLarge>
-                )}
+                <AssignmentCounts {...assignmentCounts} />
               </StyledFlexTopBaseline>
 
               <Controller
@@ -348,6 +561,11 @@ export const ActivityAssignDrawer = ({
                       allParticipants={allParticipants}
                       assignments={value}
                       onChange={onChange}
+                      onAdd={() =>
+                        setTimeout(() => {
+                          scrollPane(drawerRef.current?.clientHeight);
+                        }, 50)
+                      }
                       errors={{ duplicateRows }}
                       data-testid={`${dataTestId}-assignments-table`}
                     />
@@ -355,36 +573,109 @@ export const ActivityAssignDrawer = ({
                 }}
               />
             </StyledFlexColumn>
-          </StyledFlexColumn>
+          </StyledPane>
         </Fade>
 
         {/* Step 2 – Review and send emails */}
-        <Fade in={step === 2}>
-          {/* TODO: Review step https://mindlogger.atlassian.net/browse/M2-7261 */}
-          {/* When implementing Review step, the `position: 'absolute', inset: 0` props will
-          need to be attached to the step's topmost StyledFlexColumn that is guaranteed to be the
-          shortest for Fade transitions to preserve layout. It may be the case that when 1 activity
-          is selected, Step 2 is shortest, while 2+ selected activities makes Step 1 shortest. The
-          tallest component needs to be the one with static positioning to ensure the parent
-          container can accommodate both panes. A less fragile but not terribly complex approach
-          would be preferred. */}
-          <StyledFlexColumn sx={{ position: 'absolute', inset: 0, p: 4, gap: 1.6 }}>
-            TODO: Review step
-          </StyledFlexColumn>
+        <Fade in={step === 2} onEntered={() => scrollPane()} unmountOnExit>
+          <StyledPane sx={{ gap: 1.6 }}>
+            <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+              <StyledTitleLargish>{t('reviewSummary', { count: emailCount })}</StyledTitleLargish>
+              <Tooltip tooltipTitle={t('reviewSummaryTooltip')}>
+                <StyledFlexAllCenter component="span">
+                  <Svg
+                    id="help-outlined"
+                    width={18}
+                    height={18}
+                    fill={variables.palette.on_surface_variant}
+                  />
+                </StyledFlexAllCenter>
+              </Tooltip>
+            </StyledFlexTopCenter>
+
+            {/* Review assignments for each flow */}
+            {!!flowIds.length &&
+              flows
+                .filter(({ id = '' }) => flowIds.includes(id))
+                .map((flow, index) => (
+                  <ActivityReview
+                    {...dropdownProps}
+                    allParticipants={allParticipants}
+                    key={flow.id}
+                    isSingleActivity={flowIds.length + activityIds.length === 1}
+                    index={index}
+                    flow={flow}
+                    assignments={assignments as ValidActivityAssignment[]}
+                    onDelete={(flow) => {
+                      setSelectedActivityOrFlow(flow);
+                      setShowDeletePopup(true);
+                    }}
+                    data-testid={`${dataTestId}-review-flow-${flow.id}`}
+                  />
+                ))}
+
+            {/* Review assignments for each activity */}
+            {!!activityIds.length &&
+              activities
+                .filter(({ id = '' }) => activityIds.includes(id))
+                .map((activity, index) => (
+                  <ActivityReview
+                    {...dropdownProps}
+                    allParticipants={allParticipants}
+                    key={activity.id}
+                    isSingleActivity={flowIds.length + activityIds.length === 1}
+                    index={index + flowIds.length}
+                    activity={activity}
+                    assignments={assignments as ValidActivityAssignment[]}
+                    onDelete={(activity) => {
+                      setSelectedActivityOrFlow(activity);
+                      setShowDeletePopup(true);
+                    }}
+                    data-testid={`${dataTestId}-review-activity-${activity.id}`}
+                  />
+                ))}
+          </StyledPane>
+        </Fade>
+
+        {/* Step 3 – Assigning */}
+        <Fade in={step === 3} onEntered={() => scrollPane()} unmountOnExit>
+          <StyledPane
+            sx={{ placeContent: 'center', alignItems: 'center', textAlign: 'center', mt: -9.5 }}
+          >
+            <StyledTitleLargish>{t('assigning')}</StyledTitleLargish>
+            <StyledLinearProgressLarge
+              variant="determinate"
+              value={progress}
+              sx={{ width: '24.3rem', mt: 3.7 }}
+            />
+          </StyledPane>
+        </Fade>
+
+        {/* Step 4 – Success */}
+        <Fade in={step === 4} onEntered={() => scrollPane()} unmountOnExit>
+          <StyledPane sx={{ placeContent: 'center', textAlign: 'center', gap: 2.1, mt: -9.5 }}>
+            <Box>
+              <StyledSuccessImage src={successImage} alt="" />
+              <StyledHeadlineLarge as="h1" sx={{ m: 0 }}>
+                {t('success')}
+              </StyledHeadlineLarge>
+            </Box>
+            <StyledBodyLarger>{t('emailsSent')}</StyledBodyLarger>
+          </StyledPane>
         </Fade>
 
         <StyledFooterWrapper>
-          <StyledFooter hidden={!isComplete}>
+          <StyledFooter hidden={isFooterHidden} sx={step > 2 ? { borderTop: 0 } : undefined}>
             <StyledFooterButtonWrapper step={step}>
               <StyledFooterButton
                 step={step}
                 variant="contained"
                 onClick={handleClickNext}
-                disabled={step === 1 ? !isComplete : !isComplete || !isValid}
+                disabled={isLoading || !!errors.assignments || isFooterHidden}
                 sx={{ minWidth: '19.7rem' }}
-                data-testid={`${dataTestId}-${step === 1 ? 'next' : 'send-emails'}`}
+                data-testid={`${dataTestId}-${nextButtonKey}`}
               >
-                {t(step === 1 ? 'next' : 'sendEmails')}
+                {t(nextButtonKey)}
               </StyledFooterButton>
             </StyledFooterButtonWrapper>
           </StyledFooter>
@@ -395,6 +686,13 @@ export const ActivityAssignDrawer = ({
         isVisible={showHelpPopup}
         setIsVisible={setShowHelpPopup}
         data-testid={`${dataTestId}-help-popup`}
+      />
+      <DeletePopup
+        isVisible={showDeletePopup}
+        setIsVisible={setShowDeletePopup}
+        onConfirm={handleDelete}
+        activityName={selectedActivityOrFlow?.name}
+        data-testid={`${dataTestId}-delete-popup`}
       />
     </Drawer>
   );

@@ -1,13 +1,13 @@
-import { Control } from 'react-hook-form';
-
 import { Activity } from 'redux/modules';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
-
-import { ActivityAssignFormValues } from '../ActivityAssignDrawer.types';
 
 export type ActivitiesListProps = {
   activities: Activity[];
   flows: HydratedActivityFlow[];
-  control: Control<ActivityAssignFormValues>;
+  activityIds?: string[];
+  flowIds?: string[];
+  onChangeActivityIds?: (activityIds: string[]) => void;
+  onChangeFlowIds?: (flowIds: string[]) => void;
+  isReadOnly?: boolean;
   'data-testid': string;
 };

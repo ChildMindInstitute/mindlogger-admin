@@ -2,7 +2,7 @@ import i18n from 'i18n';
 import { Svg, Tooltip } from 'shared/components';
 import { StyledFlexAllCenter, StyledFlexTopCenter, variables } from 'shared/styles';
 
-export const getHeadCells = () => {
+export const getHeadCells = (isReadOnly?: boolean) => {
   const { t } = i18n;
 
   return [
@@ -11,16 +11,18 @@ export const getHeadCells = () => {
       label: (
         <StyledFlexTopCenter sx={{ gap: 0.6 }}>
           {t('activityAssign.assignTo')}
-          <Tooltip tooltipTitle={t('activityAssign.assignToTooltip')}>
-            <StyledFlexAllCenter component="span">
-              <Svg
-                id="help-outlined"
-                width={18}
-                height={18}
-                fill={variables.palette.on_surface_variant}
-              />
-            </StyledFlexAllCenter>
-          </Tooltip>
+          {!isReadOnly && (
+            <Tooltip tooltipTitle={t('activityAssign.assignToTooltip')}>
+              <StyledFlexAllCenter component="span">
+                <Svg
+                  id="help-outlined"
+                  width={18}
+                  height={18}
+                  fill={variables.palette.on_surface_variant}
+                />
+              </StyledFlexAllCenter>
+            </Tooltip>
+          )}
         </StyledFlexTopCenter>
       ),
       width: '50%',
@@ -31,16 +33,18 @@ export const getHeadCells = () => {
       label: (
         <StyledFlexTopCenter sx={{ gap: 0.6 }}>
           {t('activityAssign.whoIsActivityAbout')}
-          <Tooltip tooltipTitle={t('activityAssign.whoIsActivityAboutTooltip')}>
-            <StyledFlexAllCenter component="span">
-              <Svg
-                id="help-outlined"
-                width={18}
-                height={18}
-                fill={variables.palette.on_surface_variant}
-              />
-            </StyledFlexAllCenter>
-          </Tooltip>
+          {!isReadOnly && (
+            <Tooltip tooltipTitle={t('activityAssign.whoIsActivityAboutTooltip')}>
+              <StyledFlexAllCenter component="span">
+                <Svg
+                  id="help-outlined"
+                  width={18}
+                  height={18}
+                  fill={variables.palette.on_surface_variant}
+                />
+              </StyledFlexAllCenter>
+            </Tooltip>
+          )}
         </StyledFlexTopCenter>
       ),
       width: '50%',
