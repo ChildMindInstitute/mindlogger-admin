@@ -4,4 +4,5 @@ export type GetSettings = {
   isPublished?: boolean;
   roles?: Roles[];
   appletId?: string;
+  enableShareToLibrary?: boolean;
 };
