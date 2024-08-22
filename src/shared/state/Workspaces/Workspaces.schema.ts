@@ -6,6 +6,7 @@ export type Workspace = {
   ownerId: string;
   workspaceName: string;
   image?: string;
+  useArbitrary?: boolean;
 };
 
 export type AppletRoles = Record<string, Roles[]>;

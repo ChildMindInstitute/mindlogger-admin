@@ -9,8 +9,8 @@ import {
 } from 'modules/Builder/types';
 import {
   CalculationType,
-  ConditionType,
   ConditionalLogicMatch,
+  ConditionType,
   GyroscopeOrTouch,
   ItemResponseType,
   PerfTaskType,
@@ -525,6 +525,7 @@ export type Item<T = ItemCommonType> =
   | StabilityTrackerItem<T>
   | TouchPracticeItem<T>
   | TouchTestItem<T>
+  | UnityItem<T>
   | PhrasalTemplateItem<T>;
 
 export type ItemCommonType = {
@@ -685,6 +686,12 @@ export type TouchTestItem<T = ItemCommonType> = T & {
 export type PhrasalTemplateItem<T = ItemCommonType> = T & {
   config: PhrasalTemplateConfig;
   responseType: ItemResponseType.PhrasalTemplate;
+  responseValues: null;
+};
+
+export type UnityItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.UnityFile;
+  config: TouchConfig;
   responseValues: null;
 };
 

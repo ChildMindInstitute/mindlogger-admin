@@ -348,6 +348,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     isSkippable: false,
     responseIsEditable: true,
     isHidden: false,
+    autoAssign: true,
     ...activity,
     isReviewable: false,
     items,
@@ -567,6 +568,20 @@ export const getABTrailsItems = (deviceType: DeviceType) =>
     },
   }));
 
+export const getUnityFileItem = (deviceType: DeviceType) => [
+  {
+    id: undefined,
+    key: uuidv4(),
+    responseType: ItemResponseType.UnityFile,
+    name: `${ItemResponseType.UnityFile}_${deviceType}`,
+    question: t('unityInstructions'),
+    config: {
+      deviceType,
+      orderName: OrderName[ordinalStrings[0] as keyof typeof OrderName],
+    },
+  },
+];
+
 export const getNewPerformanceTask = ({
   name,
   description,
@@ -579,6 +594,7 @@ export const getNewPerformanceTask = ({
     [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
     [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
     [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
+    [PerfTaskType.Unity]: getUnityFileItem(DeviceType.Mobile),
   };
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
@@ -628,6 +644,7 @@ export const getNewActivityFlow = () => ({
   isSingleReport: false,
   hideBadge: false,
   isHidden: false,
+  autoAssign: true,
 });
 
 const getActivityItemResponseValues = (item: Item) => {

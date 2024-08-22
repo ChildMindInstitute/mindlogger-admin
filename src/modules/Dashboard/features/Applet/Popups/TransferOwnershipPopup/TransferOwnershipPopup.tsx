@@ -44,6 +44,7 @@ export const TransferOwnershipPopup = () => {
           <TransferOwnership
             appletId={currentApplet?.id ?? ''}
             appletName={currentApplet?.displayName}
+            encryption={currentApplet?.encryption}
             isSubmitted={isSubmitted}
             setIsSubmitted={setIsSubmitted}
             setEmailTransferred={handleEmailTransferred}

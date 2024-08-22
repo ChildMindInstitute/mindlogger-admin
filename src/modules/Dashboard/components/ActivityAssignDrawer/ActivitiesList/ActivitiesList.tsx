@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { ListItemIcon, ListItemText } from '@mui/material';
-import { useController, useWatch } from 'react-hook-form';
 
 import { Chip, ChipShape, Svg } from 'shared/components';
 import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
@@ -11,6 +10,7 @@ import {
   StyledListItem,
   StyledListItemButton,
   StyledListItemTextPrimary,
+  StyledReadOnlyButton,
 } from './ActivitiesList.styles';
 import { ActivitiesListProps } from './ActivitiesList.types';
 import { ActivityCheckbox } from '../ActivityCheckbox';
@@ -18,20 +18,19 @@ import { ActivityCheckbox } from '../ActivityCheckbox';
 export const ActivitiesList = ({
   activities,
   flows,
-  control,
+  activityIds,
+  flowIds,
+  onChangeActivityIds,
+  onChangeFlowIds,
+  isReadOnly,
   'data-testid': dataTestId,
 }: ActivitiesListProps) => {
   const { t } = useTranslation('app');
-  const [activityIds, flowIds] = useWatch({ control, name: ['activityIds', 'flowIds'] });
-  const {
-    field: { onChange: onChangeActivityIds },
-  } = useController({ control, name: 'activityIds' });
-  const {
-    field: { onChange: onChangeFlowIds },
-  } = useController({ control, name: 'flowIds' });
 
   const handleActivityClick = (id: string) => {
-    if (activityIds.includes(id)) {
+    if (!activityIds || !onChangeActivityIds) return;
+
+    if (activityIds?.includes(id)) {
       onChangeActivityIds(activityIds.filter((activityId) => activityId !== id));
     } else {
       onChangeActivityIds([...activityIds, id]);
@@ -39,28 +38,34 @@ export const ActivitiesList = ({
   };
 
   const handleFlowClick = (id: string) => {
-    if (flowIds.includes(id)) {
+    if (!flowIds || !onChangeFlowIds) return;
+
+    if (flowIds?.includes(id)) {
       onChangeFlowIds(flowIds.filter((flowId) => flowId !== id));
     } else {
       onChangeFlowIds([...flowIds, id]);
     }
   };
 
+  const ButtonComponent = isReadOnly ? StyledReadOnlyButton : StyledListItemButton;
+
   return (
-    <StyledList data-testid={dataTestId}>
+    <StyledList data-testid={dataTestId} sx={isReadOnly ? { height: 'auto', py: 0.5 } : undefined}>
       {flows.map(({ id = '', activities, name }) => (
         <StyledListItem
           key={id}
           secondaryAction={
-            <ActivityCheckbox
-              checked={flowIds.includes(id)}
-              onChange={() => handleFlowClick(id)}
-              data-testid={`${dataTestId}-flow-checkbox-${id}`}
-            />
+            isReadOnly ? undefined : (
+              <ActivityCheckbox
+                checked={flowIds?.includes(id)}
+                onChange={() => handleFlowClick(id)}
+                data-testid={`${dataTestId}-flow-checkbox-${id}`}
+              />
+            )
           }
           data-testid={`${dataTestId}-flow-item`}
         >
-          <StyledListItemButton onClick={() => handleFlowClick(id)}>
+          <ButtonComponent onClick={isReadOnly ? undefined : () => handleFlowClick(id)}>
             <ListItemIcon>
               <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
                 <ActivityFlowThumbnail activities={activities} />
@@ -80,7 +85,7 @@ export const ActivitiesList = ({
                 </StyledListItemTextPrimary>
               }
             />
-          </StyledListItemButton>
+          </ButtonComponent>
         </StyledListItem>
       ))}
 
@@ -88,22 +93,24 @@ export const ActivitiesList = ({
         <StyledListItem
           key={id}
           secondaryAction={
-            <ActivityCheckbox
-              checked={activityIds.includes(id)}
-              onChange={() => handleActivityClick(id)}
-              data-testid={`${dataTestId}-activity-checkbox-${id}`}
-            />
+            isReadOnly ? undefined : (
+              <ActivityCheckbox
+                checked={activityIds?.includes(id)}
+                onChange={() => handleActivityClick(id)}
+                data-testid={`${dataTestId}-activity-checkbox-${id}`}
+              />
+            )
           }
           data-testid={`${dataTestId}-activity-item`}
         >
-          <StyledListItemButton onClick={() => handleActivityClick(id)}>
+          <ButtonComponent onClick={isReadOnly ? undefined : () => handleActivityClick(id)}>
             <ListItemIcon>
               <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
                 {!!image && <StyledActivityThumbnailImg src={image} alt={name} />}
               </StyledActivityThumbnailContainer>
             </ListItemIcon>
             <ListItemText primary={<StyledListItemTextPrimary>{name}</StyledListItemTextPrimary>} />
-          </StyledListItemButton>
+          </ButtonComponent>
         </StyledListItem>
       ))}
     </StyledList>

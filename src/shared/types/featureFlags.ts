@@ -17,6 +17,7 @@ export const FeatureFlagsKeys = {
   enablePhrasalTemplate: 'enablePhrasalTemplate',
   enableShareToLibrary: 'enableShareToLibrary',
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
+  enableMeritActivityType: 'enableMeritActivityType',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
