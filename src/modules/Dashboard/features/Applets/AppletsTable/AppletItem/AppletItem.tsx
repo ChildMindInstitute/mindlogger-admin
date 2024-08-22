@@ -35,7 +35,7 @@ import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getAppletActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
-export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
+export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItemProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
@@ -230,7 +230,12 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         </StyledTableCell>
         <StyledTableCell>
           <ActionsMenu
-            menuItems={getAppletActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
+            menuItems={getAppletActions({
+              actions,
+              item,
+              roles: workspaceRoles?.data?.[appletId],
+              enableShareToLibrary,
+            })}
             data-testid="dashboard-applets-table-applet-actions"
           />
         </StyledTableCell>

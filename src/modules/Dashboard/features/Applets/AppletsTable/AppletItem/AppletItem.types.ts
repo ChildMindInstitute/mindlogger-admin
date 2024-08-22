@@ -15,6 +15,11 @@ export type AppletActions = {
   };
   item: Applet;
   roles?: Roles[];
+  enableShareToLibrary?: boolean;
 };
 
-export type AppletItemProps = { item: Applet; onPublish: () => void };
+export type AppletItemProps = {
+  item: Applet;
+  onPublish: () => void;
+  enableShareToLibrary?: boolean;
+};

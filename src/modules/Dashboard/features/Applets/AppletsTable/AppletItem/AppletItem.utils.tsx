@@ -21,6 +21,7 @@ export const getAppletActions = ({
   },
   item,
   roles,
+  enableShareToLibrary,
 }: AppletActions) => {
   const { isPublished } = item;
   const isReviewer = roles?.includes(Roles.Reviewer);
@@ -79,6 +80,7 @@ export const getAppletActions = ({
       icon: <Svg id="share" />,
       action: shareAppletAction,
       title: t('shareWithTheLibrary'),
+      isDisplayed: canEdit && enableShareToLibrary,
       'data-testid': 'dashboard-applets-applet-share',
     },
     {
