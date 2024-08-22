@@ -66,11 +66,12 @@ describe('ActivityFlowAbout', () => {
   });
 
   test.each`
-    testId                                  | hasLabel | label                                   | tooltip                                                           | description
-    ${`${mockedFlowsTestid}-name`}          | ${true}  | ${'Activity Flow Name'}                 | ${''}                                                             | ${'New Activity Flow: Name'}
-    ${`${mockedFlowsTestid}-description`}   | ${true}  | ${'Activity Flow Description'}          | ${''}                                                             | ${'New Activity Flow: Description'}
-    ${`${mockedFlowsTestid}-single-report`} | ${false} | ${'Combine reports into a single file'} | ${''}                                                             | ${'New Activity Flow: Combine Reports'}
-    ${`${mockedFlowsTestid}-hide-badge`}    | ${false} | ${'Hide badge'}                         | ${'The Activity Flow identifier will be hidden from Respondents'} | ${'New Activity Flow: Hide Badge'}
+    testId                                  | hasLabel | label                                       | tooltip                                                           | description
+    ${`${mockedFlowsTestid}-name`}          | ${true}  | ${'Activity Flow Name'}                     | ${''}                                                             | ${'New Activity Flow: Name'}
+    ${`${mockedFlowsTestid}-description`}   | ${true}  | ${'Activity Flow Description'}              | ${''}                                                             | ${'New Activity Flow: Description'}
+    ${`${mockedFlowsTestid}-single-report`} | ${false} | ${'Combine reports into a single file'}     | ${''}                                                             | ${'New Activity Flow: Combine Reports'}
+    ${`${mockedFlowsTestid}-hide-badge`}    | ${false} | ${'Hide badge'}                             | ${'The Activity Flow identifier will be hidden from Respondents'} | ${'New Activity Flow: Hide Badge'}
+    ${`${mockedFlowsTestid}-auto-assign`}   | ${false} | ${'Auto-assign this flow (as self-report)'} | ${''}                                                             | ${'New Activity Flow: Auto-assign'}
   `('$description', async ({ testId, hasLabel, label, tooltip }) => {
     renderNewActivityFlowAbout();
 
@@ -92,6 +93,7 @@ describe('ActivityFlowAbout', () => {
     ${`${mockedFlowsTestid}-description`}   | ${'description'}    | ${'afd'} | ${'Existing Activity Flow: Description'}
     ${`${mockedFlowsTestid}-single-report`} | ${'isSingleReport'} | ${false} | ${'Existing Activity Flow: Combine Reports'}
     ${`${mockedFlowsTestid}-hide-badge`}    | ${'hideBadge'}      | ${false} | ${'Existing Activity Flow: Hide Badge'}
+    ${`${mockedFlowsTestid}-auto-assign`}   | ${'autoAssign'}     | ${true}  | ${'Existing Activity Flow: Auto-assign'}
   `('$description', ({ testId, attribute, value }) => {
     const ref = renderActivityFlowAbout();
 
@@ -108,6 +110,7 @@ describe('ActivityFlowAbout', () => {
     ${`${mockedFlowsTestid}-description`}   | ${'description'}    | ${'textarea'} | ${'Activity Flow Description'} | ${'Change Activity Flow: Description'}
     ${`${mockedFlowsTestid}-single-report`} | ${'isSingleReport'} | ${''}         | ${true}                        | ${'Change Activity Flow: Combine Reports'}
     ${`${mockedFlowsTestid}-hide-badge`}    | ${'hideBadge'}      | ${''}         | ${true}                        | ${'Change Activity Flow: Hide Badge'}
+    ${`${mockedFlowsTestid}-auto-assign`}   | ${'autoAssign'}     | ${''}         | ${false}                       | ${'Change Activity Flow: Auto-assign'}
   `('$description', ({ testId, attribute, inputType, value }) => {
     const ref = renderActivityFlowAbout();
 

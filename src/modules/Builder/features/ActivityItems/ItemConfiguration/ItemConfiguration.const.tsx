@@ -52,7 +52,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         value: ItemResponseType.MultipleSelection,
         icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
-      { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
+      {
+        value: ItemResponseType.Slider,
+        icon: itemsTypeIcons[ItemResponseType.Slider],
+      },
       {
         value: ItemResponseType.Date,
         icon: itemsTypeIcons[ItemResponseType.Date],
@@ -138,6 +141,15 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.AudioPlayer,
         icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
+      },
+    ],
+  },
+  {
+    groupName: 'downloadable',
+    groupOptions: [
+      {
+        value: ItemResponseType.PhrasalTemplate,
+        icon: itemsTypeIcons[ItemResponseType.PhrasalTemplate],
       },
     ],
   },

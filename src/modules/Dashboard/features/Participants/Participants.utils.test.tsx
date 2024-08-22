@@ -3,6 +3,7 @@ import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { ParticipantTag, Roles } from 'shared/consts';
+import { Invitation } from 'shared/types';
 
 import { getParticipantActions, getHeadCells, cleanUpDividers } from './Participants.utils';
 import {
@@ -10,7 +11,6 @@ import {
   GetParticipantActionsProps,
   ParticipantActionProps,
 } from './Participants.types';
-import { Invitation } from '../Applet/AddUser/AddUser.types';
 
 describe('Participants utils tests', () => {
   describe('getParticipantActions function', () => {
@@ -73,13 +73,13 @@ describe('Participants utils tests', () => {
       secretId: 'test secret id',
       nickname: 'test nickname',
       tag: 'Child' as ParticipantTag,
-      showAssignActivity: true,
+      canAssignActivity: true,
       invitation: null,
       firstName: 'Jane',
       lastName: 'Doe',
       subjectCreatedAt: '2021-10-01T00:00:00.000Z',
       status: RespondentStatus.Invited,
-      dataTestid: dataTestId,
+      dataTestId,
     };
 
     const expectedContext: ParticipantActionProps = {
@@ -218,7 +218,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
-        dataTestid: dataTestId,
+        dataTestId,
         roles: [Roles.Manager],
         invitation: approvedInvitation,
       });
@@ -250,7 +250,7 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         email: null,
         status: RespondentStatus.NotInvited,
-        dataTestid: dataTestId,
+        dataTestId,
         roles: [Roles.Manager],
       });
       const displayedActions = actions.filter((action) => action.isDisplayed);
@@ -295,7 +295,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Pending,
-        dataTestid: dataTestId,
+        dataTestId,
         invitation: pendingInvitation,
         roles: [Roles.Manager],
       });

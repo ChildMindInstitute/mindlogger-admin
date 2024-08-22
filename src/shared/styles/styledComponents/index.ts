@@ -1,5 +1,6 @@
 export * from './AppletImage';
 export * from './Body';
+export * from './BorderedOverflow';
 export * from './Buttons';
 export * from './ErrorText';
 export * from './Flex';

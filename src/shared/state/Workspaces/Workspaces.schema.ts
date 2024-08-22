@@ -7,6 +7,7 @@ export type Workspace = {
   ownerId: string;
   workspaceName: string;
   image?: string;
+  useArbitrary?: boolean;
   integrations?: Integration[] | null;
 };
 

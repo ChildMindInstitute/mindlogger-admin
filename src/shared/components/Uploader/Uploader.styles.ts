@@ -1,10 +1,6 @@
 import { styled, Box } from '@mui/material';
 
-import {
-  StyledFlexAllCenter,
-  StyledFlexColumn,
-  StyledBodyMedium,
-} from 'shared/styles/styledComponents';
+import { StyledFlexColumn, StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -22,13 +18,13 @@ const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean)
   border: ${
     hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
   };
-  
+
   .image-container {
     transition: ${variables.transitions.bgColor};
     padding: ${theme.spacing(0.7)};
     border-radius: ${variables.borderRadius.half};
   }
-  
+
   &:hover {
     .image-container {
       background-color: ${variables.palette.on_surface_variant_alfa8};
@@ -36,9 +32,12 @@ const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean)
   }
 `;
 
-export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
-  position: relative;
+export const StyledContainer = styled('button', shouldForwardProp)`
+  align-items: center;
+  display: flex;
   flex-shrink: 0;
+  justify-content: center;
+  position: relative;
 
   ${({
     height,
@@ -93,7 +92,7 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
          span {
           color: ${variables.palette.primary};
          }
-          
+
          svg {
           fill: ${variables.palette.surface_variant};
          }
@@ -101,7 +100,7 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
     }
 
     if (!isPrimaryUiType && hasError) {
-      return `   
+      return `
          svg {
           fill: ${variables.palette.semantic.error};
          }

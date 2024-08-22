@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
+import { TFunction } from 'i18next';
 
 import { SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
@@ -42,7 +43,20 @@ import { getOptionValue } from './OptionalItemsAndSettings.utils';
 import {
   DEFAULT_OPTION_VALUE,
   ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER,
+  ITEMS_WITH_DOWNLOAD_HEADER,
 } from './OptionalItemsAndSettings.const';
+
+const getItemConfigurationHeader = (itemResponseType: ItemResponseType, t: TFunction) => {
+  if (ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER.includes(itemResponseType)) {
+    return <StyledTitleLarge sx={{ mb: 2.4 }}>{t('responseOptions')}</StyledTitleLarge>;
+  }
+
+  if (ITEMS_WITH_DOWNLOAD_HEADER.includes(itemResponseType)) {
+    return <StyledTitleLarge sx={{ mb: 2.4 }}>{t('downloadableContent')}</StyledTitleLarge>;
+  }
+
+  return null;
+};
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -110,9 +124,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const hasResponseDataIdentifier = get(
       settings,
       ItemConfigurationSettings.HasResponseDataIdentifier,
-    );
-    const hasResponseOptionsHeader = ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER.includes(
-      responseType as ItemResponseType,
     );
 
     const handleAddOption = async ({ isAppendedOption, ...rest }: HandleAddOptionProps) => {
@@ -227,11 +238,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     return (
       <>
-        {hasResponseOptionsHeader && (
-          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
-            {t('responseOptions')}
-          </StyledTitleLarge>
-        )}
+        {getItemConfigurationHeader(responseType, t)}
+
         {hasOptions && (
           <>
             {hasColorPalette && !showColorPalette && (

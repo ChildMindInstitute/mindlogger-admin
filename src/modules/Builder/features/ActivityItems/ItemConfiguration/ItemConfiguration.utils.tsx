@@ -44,6 +44,7 @@ export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, strin
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
+  [ItemResponseType.PhrasalTemplate]: t('phrasalTemplateHint'),
 });
 
 export const getEmptySliderOption = ({

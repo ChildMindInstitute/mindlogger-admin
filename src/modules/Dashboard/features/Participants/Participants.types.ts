@@ -2,8 +2,7 @@ import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboar
 import { MenuActionProps } from 'shared/components';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
-
-import { Invitation } from '../Applet/AddUser/AddUser.types';
+import { Invitation } from 'shared/types';
 
 export type ParticipantActionProps = {
   respondentId: string | null;
@@ -72,8 +71,8 @@ export type GetParticipantActionsProps = {
   tag?: ParticipantTag | null;
   appletId?: string;
   status: RespondentStatus;
-  dataTestid: string;
-  showAssignActivity?: boolean;
+  dataTestId: string;
+  canAssignActivity?: boolean;
   roles?: Roles[];
 };
 

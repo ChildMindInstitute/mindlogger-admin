@@ -9,6 +9,8 @@ export const StyledRoot = styled(Box)({
   flexShrink: 0,
   flexWrap: 'wrap',
   height: '8rem',
+  maxWidth: '100%',
+  maxHeight: '100%',
   overflow: 'hidden',
   placeContent: 'flex-start',
   placeItems: 'flex-start',

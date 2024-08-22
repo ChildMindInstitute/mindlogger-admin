@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
-import { SxProps, TooltipProps } from '@mui/material';
+import { SxProps } from '@mui/material';
 
+import { TooltipProps } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types/event';
 
 export type Option = {
@@ -45,6 +46,7 @@ type FormSelectProps = {
   setTrigger?: Dispatch<SetStateAction<boolean>>;
   'data-testid'?: string;
   shouldSkipIcon?: boolean;
+  TooltipProps?: Omit<TooltipProps, 'children'>;
   className?: string;
 } & TextFieldProps;
 

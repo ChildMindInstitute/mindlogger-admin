@@ -341,9 +341,11 @@ export interface GetAppletSubmissionsResponse {
     createdAt: string;
     sourceNickname?: string | null;
     sourceSubjectId: string;
+    sourceSecretUserId: string;
     sourceSubjectTag?: ParticipantTag | null;
     targetNickname?: string | null;
     targetSubjectId: string;
+    targetSecretUserId: string;
     targetSubjectTag?: ParticipantTag | null;
     updatedAt: string;
   }[];
@@ -598,6 +600,35 @@ export type FeedbackNote = {
   user: Omit<User, 'email'>;
   note: string;
   createdAt: string;
+};
+
+export type CreateTemporaryMultiInformantRelation = {
+  subjectId: string;
+  sourceSubjectId: string;
+};
+
+export type GetAssignmentsParams = AppletId & {
+  flows?: string;
+  activities?: string;
+};
+
+export type PostAssignmentsParams = AppletId & {
+  assignments: Assignment[];
+};
+
+export type Assignment = {
+  id?: string;
+  activityId: string | null;
+  activityFlowId: string | null;
+  respondentSubjectId: string;
+  targetSubjectId: string;
+};
+
+export type AppletAssignmentsResponse = {
+  result: {
+    appletId: string;
+    assignments: Assignment[];
+  };
 };
 
 export type Integration = {
