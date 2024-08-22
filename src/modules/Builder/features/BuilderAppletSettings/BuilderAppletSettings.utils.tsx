@@ -30,7 +30,7 @@ export const getSettings = ({
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
   const canEdit = checkIfCanEdit(roles);
-  const isShareToLibraryVisible = enableShareToLibrary && canEdit;
+  const isShareToLibraryVisible = !!(enableShareToLibrary && canEdit);
   const isSharingVisible =
     !isNewApplet && (roles?.includes(Roles.SuperAdmin) || isShareToLibraryVisible);
 

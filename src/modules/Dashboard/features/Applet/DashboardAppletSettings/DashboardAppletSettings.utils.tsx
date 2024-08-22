@@ -23,7 +23,7 @@ export const getSettings = ({
 }: GetSettings): ItemNavigation[] => {
   const dataTestid = 'dashboard-applet-settings';
   const canEdit = checkIfCanEdit(roles);
-  const isShareToLibraryVisible = enableShareToLibrary && canEdit;
+  const isShareToLibraryVisible = !!(enableShareToLibrary && canEdit);
   const isSharingVisible = roles?.includes(Roles.SuperAdmin) || isShareToLibraryVisible;
 
   return [
