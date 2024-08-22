@@ -15,7 +15,12 @@ import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ isPublished, roles, appletId }: GetSettings): ItemNavigation[] => {
+export const getSettings = ({
+  isPublished,
+  roles,
+  appletId,
+  enableShareToLibrary,
+}: GetSettings): ItemNavigation[] => {
   const dataTestid = 'dashboard-applet-settings';
 
   return [
@@ -87,8 +92,7 @@ export const getSettings = ({ isPublished, roles, appletId }: GetSettings): Item
     },
     {
       label: 'sharing',
-      //remove after uncommenting Share to Library functionality
-      // isVisible: roles?.includes(Roles.SuperAdmin),
+      isVisible: roles?.includes(Roles.SuperAdmin) || enableShareToLibrary,
       items: [
         /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
         with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
@@ -98,6 +102,7 @@ export const getSettings = ({ isPublished, roles, appletId }: GetSettings): Item
           label: 'shareToLibrary',
           component: <ShareAppletSetting />,
           param: SettingParam.ShareApplet,
+          isVisible: enableShareToLibrary,
           'data-testid': `${dataTestid}-share-to-library`,
         },
         {
