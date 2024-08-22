@@ -11,7 +11,7 @@ import {
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
-import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
@@ -29,6 +29,10 @@ export const getSettings = ({
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
+  const canEdit = checkIfCanEdit(roles);
+  const isShareToLibraryVisible = enableShareToLibrary && canEdit;
+  const isSharingVisible =
+    !isNewApplet && (roles?.includes(Roles.SuperAdmin) || isShareToLibraryVisible);
 
   return [
     {
@@ -126,8 +130,7 @@ export const getSettings = ({
 
     {
       label: 'sharing',
-      //remove roles?.includes(Roles.SuperAdmin) check after uncommenting Share to Library functionality
-      isVisible: !isNewApplet && (roles?.includes(Roles.SuperAdmin) || enableShareToLibrary),
+      isVisible: isSharingVisible,
       items: [
         /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
         with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
@@ -137,7 +140,7 @@ export const getSettings = ({
           label: 'shareToLibrary',
           component: <ShareAppletSetting />,
           param: SettingParam.ShareApplet,
-          isVisible: enableShareToLibrary,
+          isVisible: isShareToLibraryVisible,
           'data-testid': `${dataTestid}-share-to-library`,
         },
         {
