@@ -3,7 +3,8 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { EmptyState, TableHead } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { Applet, Folder } from 'api';
+import { Applet, Folder } from 'modules/Dashboard/api';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   StyledCellItem,
@@ -31,6 +32,7 @@ export const AppletsTable = ({
 }: AppletsTableProps) => {
   const perPage =
     rowsPerPage && rowsPerPage > DEFAULT_ROWS_PER_PAGE ? rowsPerPage : DEFAULT_ROWS_PER_PAGE;
+  const { featureFlags } = useFeatureFlags();
 
   const tableHeader = (
     <StyledTableCellContent>
@@ -53,7 +55,11 @@ export const AppletsTable = ({
     row?.isFolder ? (
       <FolderItem item={row as Folder} />
     ) : (
-      <AppletItem item={row as Applet} onPublish={handleReload} />
+      <AppletItem
+        item={row as Applet}
+        onPublish={handleReload}
+        enableShareToLibrary={featureFlags.enableShareToLibrary}
+      />
     );
 
   const getEmptyTable = () => <EmptyState>{emptyComponent}</EmptyState>;

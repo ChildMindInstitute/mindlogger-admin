@@ -58,6 +58,23 @@ export const LeftBar = () => {
     }
   };
 
+  // useEffect(() => {
+  //   dispatch(workspaces.thunk.getWorkspaces());
+  // }, []);
+  //
+  // useEffect(() => {
+  //   if (!workspacesData?.length || !id || !dispatch) return;
+  //
+  //   const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
+  //   const storageWorkspace = authStorage.getWorkspace();
+  //   const currentWorkspace = storageWorkspace || ownerWorkspace;
+  //   dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+  //
+  //   if (!currentWorkspace?.ownerId) return;
+  //
+  //   FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), currentWorkspace.ownerId);
+  // }, [workspacesData, dispatch, id]);
+
   useEffect(() => {
     const fetchWorkspaces = async () => {
       const { getWorkspaces } = workspaces.thunk;
@@ -89,16 +106,19 @@ export const LeftBar = () => {
   useEffect(() => {
     const { workspace } = location.state ?? {};
 
-    if (workspace) {
-      authStorage.setWorkspace(workspace);
-      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+    if (!workspace || !dispatch) return;
 
-      if (!workspace?.ownerId || !workspacesData) return;
+    authStorage.setWorkspace(workspace);
+    dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 
-      fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state]);
+    if (!workspace?.ownerId || !workspacesData) return;
+
+    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), workspace.ownerId);
+  }, [location.state, workspacesData, dispatch]);
+  //     fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [location.state]);
 
   useIntegrationToggle({
     integrationType: 'LORIS',

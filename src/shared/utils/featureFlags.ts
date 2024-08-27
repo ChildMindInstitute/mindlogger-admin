@@ -17,15 +17,15 @@ export const FeatureFlags = {
       userId,
     });
   },
-  async updateWorkspace(workspaces: string[], workspaceId: string) {
-    if (!_userId) return;
-
-    return this.identify({
-      userId: _userId,
-      workspaces,
-      workspaceId,
-    });
-  },
+  // async updateWorkspace(workspaces: string[], workspaceId: string) {
+  //   if (!_userId) return;
+  //
+  //   return this.identify({
+  //     userId: _userId,
+  //     workspaces,
+  //     workspaceId,
+  //   });
+  // },
   async updateWorkspaces(workspaces: string[], workspaceId: string) {
     if (!_userId) return;
 
