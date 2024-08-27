@@ -50,30 +50,13 @@ export const LeftBar = () => {
       setAreFeatureFlagsLoaded(false);
       setFeatureFlags(undefined);
 
-      const featureFlags = await FeatureFlags.updateWorkspace(workspaceNames, ownerId);
+      const featureFlags = await FeatureFlags.updateWorkspaces(workspaceNames, ownerId);
 
       setFeatureFlags(featureFlags);
     } finally {
       setAreFeatureFlagsLoaded(true);
     }
   };
-
-  // useEffect(() => {
-  //   dispatch(workspaces.thunk.getWorkspaces());
-  // }, []);
-  //
-  // useEffect(() => {
-  //   if (!workspacesData?.length || !id || !dispatch) return;
-  //
-  //   const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-  //   const storageWorkspace = authStorage.getWorkspace();
-  //   const currentWorkspace = storageWorkspace || ownerWorkspace;
-  //   dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
-  //
-  //   if (!currentWorkspace?.ownerId) return;
-  //
-  //   FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), currentWorkspace.ownerId);
-  // }, [workspacesData, dispatch, id]);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -94,8 +77,7 @@ export const LeftBar = () => {
 
         const workspaceNames = getWorkspaceNames(data.result);
 
-        await FeatureFlags.updateWorkspaces(workspaceNames, currentWorkspace.ownerId);
-        fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
+        await fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
       }
     };
 
@@ -113,12 +95,8 @@ export const LeftBar = () => {
 
     if (!workspace?.ownerId || !workspacesData) return;
 
-    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), workspace.ownerId);
+    fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
   }, [location.state, workspacesData, dispatch]);
-  //     fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [location.state]);
 
   useIntegrationToggle({
     integrationType: 'LORIS',
