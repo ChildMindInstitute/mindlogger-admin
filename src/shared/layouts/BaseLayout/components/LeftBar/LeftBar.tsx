@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { LDFlagSet } from 'launchdarkly-react-client-sdk';
 
 import { page } from 'resources';
 import { StyledLabelMedium, variables } from 'shared/styles';
@@ -16,6 +17,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
+import { useIntegrationToggle } from './LeftBar.hooks';
 import { getWorkspaceNames } from './LeftBar.utils';
 
 export const LeftBar = () => {
@@ -29,24 +31,59 @@ export const LeftBar = () => {
   const { result: workspacesData } = workspaces.useWorkspacesData() || {};
   const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const [areFeatureFlagsLoaded, setAreFeatureFlagsLoaded] = useState(false);
+  const [featureFlags, setFeatureFlags] = useState<LDFlagSet>();
   const dataTestid = 'left-bar';
 
+  const handleLinkClick = (key: string) => {
+    if (key === 'library') {
+      Mixpanel.track('Browse applet library click');
+    }
+  };
+
+  const handleChangeWorkspace = (workspace: Workspace) => {
+    navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
+  };
+
+  const fetchFeatureFlags = async (workspaceNames: string[], ownerId: string) => {
+    try {
+      setAreFeatureFlagsLoaded(false);
+      setFeatureFlags(undefined);
+
+      const featureFlags = await FeatureFlags.updateWorkspaces(workspaceNames, ownerId);
+
+      setFeatureFlags(featureFlags);
+    } finally {
+      setAreFeatureFlagsLoaded(true);
+    }
+  };
+
   useEffect(() => {
-    dispatch(workspaces.thunk.getWorkspaces());
+    const fetchWorkspaces = async () => {
+      const { getWorkspaces } = workspaces.thunk;
+      const workspacesResult = await dispatch(getWorkspaces());
+
+      if (getWorkspaces.fulfilled.match(workspacesResult)) {
+        const {
+          payload: { data },
+        } = workspacesResult;
+
+        const ownerWorkspace = (data?.result as Workspace[])?.find((item) => item.ownerId === id);
+        const storageWorkspace = authStorage.getWorkspace();
+        const currentWorkspace = storageWorkspace || ownerWorkspace;
+        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+
+        if (!currentWorkspace?.ownerId) return;
+
+        const workspaceNames = getWorkspaceNames(data.result);
+
+        await fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
+      }
+    };
+
+    fetchWorkspaces();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (!workspacesData?.length || !id || !dispatch) return;
-
-    const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-    const storageWorkspace = authStorage.getWorkspace();
-    const currentWorkspace = storageWorkspace || ownerWorkspace;
-    dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
-
-    if (!currentWorkspace?.ownerId) return;
-
-    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), currentWorkspace.ownerId);
-  }, [workspacesData, dispatch, id]);
 
   useEffect(() => {
     const { workspace } = location.state ?? {};
@@ -58,18 +95,15 @@ export const LeftBar = () => {
 
     if (!workspace?.ownerId || !workspacesData) return;
 
-    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), workspace.ownerId);
+    fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
   }, [location.state, workspacesData, dispatch]);
 
-  const handleLinkClick = (key: string) => {
-    if (key === 'library') {
-      Mixpanel.track('Browse applet library click');
-    }
-  };
-
-  const handleChangeWorkspace = (workspace: Workspace) => {
-    navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
-  };
+  useIntegrationToggle({
+    integrationType: 'LORIS',
+    currentWorkspaceData,
+    areFeatureFlagsLoaded,
+    featureFlags,
+  });
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
