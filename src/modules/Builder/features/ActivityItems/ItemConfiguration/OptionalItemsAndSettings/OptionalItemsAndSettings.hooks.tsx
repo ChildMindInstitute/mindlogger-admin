@@ -91,8 +91,6 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
         return <AudioPlayer name={name} />;
       case ItemResponseType.PhrasalTemplate:
         return <PhrasalTemplate name={name} />;
-      // case ItemResponseType.Unity:
-      // return <Unity />;
       default:
         return null;
     }
