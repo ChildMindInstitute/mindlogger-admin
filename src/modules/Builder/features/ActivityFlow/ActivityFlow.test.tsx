@@ -81,7 +81,6 @@ describe('ActivityFlow', () => {
       isSingleReport: false,
       hideBadge: false,
       isHidden: false,
-      autoAssign: true,
       items: activityFlowData.items,
     });
 
