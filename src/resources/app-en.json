@@ -1607,8 +1607,5 @@
     "contactSupport": "Contact Support",
     "proceedAnyway": "I wish to proceed anyway"
   },
-  "autoAssignActivity": "Auto-assign this activity (as self-report)",
-  "autoAssignFlow": "Auto-assign this flow (as self-report)",
-  "autoAssignTooltip": "Keep this box selected to automatically assign this Activity or Flow to all new Participants. If instead you’d like to manually assign Activities or Flows to your Participants (for either Self-Reporting or Multi-Informant reporting) unselect this box. You’ll then be able to assign Activities or Flows from the Activities Tab in your Applet.",
   "goToDashboard": "Go to Dashboard"
 }
