@@ -42,7 +42,7 @@ export const DisplayModeOptions: Readonly<
   [ItemResponseType.TimeRange]: undefined,
   [ItemResponseType.TouchPractice]: undefined,
   [ItemResponseType.TouchTest]: undefined,
-  [ItemResponseType.UnityFile]: undefined,
+  [ItemResponseType.Unity]: undefined,
   [ItemResponseType.Video]: undefined,
   default: undefined,
 };

@@ -20,6 +20,7 @@ export const enum Path {
   Gyroscope = 'gyroscope',
   Touch = 'touch',
   Participants = 'participants',
+  Unity = 'unity',
 }
 
 export const enum SettingParam {
@@ -76,6 +77,7 @@ export const getUpdatedAppletUrl = (
       page.builderAppletFlanker,
       page.builderAppletGyroscope,
       page.builderAppletTouch,
+      page.builderAppletUnity,
       page.builderAppletActivityItem,
       page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
@@ -128,6 +130,9 @@ export const checkCurrentPerformanceTaskPage = (url: string) => ({
   ).test(url),
   [PerformanceTasks.Touch]: new RegExp(
     `${getAppletPerformanceActivityPageRegexp(Path.Touch)}`,
+  ).test(url),
+  [PerformanceTasks.Unity]: new RegExp(
+    `${getAppletPerformanceActivityPageRegexp(Path.Unity)}`,
   ).test(url),
 });
 

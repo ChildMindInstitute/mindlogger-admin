@@ -426,16 +426,19 @@ describe('useBreadcrumbs', () => {
   const perfRoute1 = `/builder/${appletId}/activities/performance-task/touch/${activityId}`;
   const perfRoute2 = `/builder/${appletId}/activities/performance-task/gyroscope/${activityId}`;
   const perfRoute3 = `/builder/${appletId}/activities/performance-task/flanker/${activityId}`;
+  const perfRoute3 = `/builder/${appletId}/activities/performance-task/unity/${activityId}`;
   const { builderAppletTouch, builderAppletGyroscope, builderAppletFlanker } = page;
   const label1 = 'CST Touch';
   const label2 = 'CST Gyroscope';
   const label3 = 'Simple & Choice Reaction Time Task Builder';
+  const label4 = 'Unity';
 
   test.each`
     route         | routePath                 | label
     ${perfRoute1} | ${builderAppletTouch}     | ${label1}
     ${perfRoute2} | ${builderAppletGyroscope} | ${label2}
     ${perfRoute3} | ${builderAppletFlanker}   | ${label3}
+    ${perfRoute4} | ${builderAppletUnity}     | ${label4}
   `(
     'should generate correct breadcrumbs for builder performance task - $label',
     ({ route, routePath, label }) => {

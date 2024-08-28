@@ -49,6 +49,7 @@ import {
   getEmptyAudioResponse,
   getEmptyNumberSelection,
   getEmptySliderOption,
+  getUnityEmptyFileResponse,
 } from '../ItemConfiguration.utils';
 import { getNewDefaultPhrase } from '../InputTypeItems/PhrasalTemplate/PhrasalTemplate.utils';
 import { DEFAULT_MAX_CHARACTERS_TEXT } from '../ItemConfiguration.const';
@@ -90,6 +91,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
         return <AudioPlayer name={name} />;
       case ItemResponseType.PhrasalTemplate:
         return <PhrasalTemplate name={name} />;
+      // case ItemResponseType.Unity:
+      // return <Unity />;
       default:
         return null;
     }
@@ -103,7 +106,7 @@ export const useSettingsSetup = ({
   handleAddSingleOrMultipleRow,
 }: SettingsSetupProps) => {
   const {
-    featureFlags: { enableParagraphTextItem },
+    featureFlags: { enableParagraphTextItem, enableMeritActivityType },
   } = useFeatureFlags();
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
@@ -194,6 +197,11 @@ export const useSettingsSetup = ({
             handleAddSingleOrMultipleRow?.();
             setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
+          case ItemResponseType.Unity:
+            // setConfig(getUnityEmptyFileResponse); // TODO: add defaultUnityFileConfig
+            setValue(`${name}.responseValues`, getUnityEmptyFileResponse);
+            break;
+
           case ItemResponseType.PhrasalTemplate:
             setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], cardTitle: '' });
             setConfig(defaultPhrasalTemplateConfig);

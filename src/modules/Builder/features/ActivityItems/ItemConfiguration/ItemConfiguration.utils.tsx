@@ -97,6 +97,10 @@ export const getEmptyFlowItem = () => ({
   conditions: getEmptyCondition(),
 });
 
+export const getUnityEmptyFileResponse = () => ({
+  file: '',
+});
+
 export const getEmptyAlert = ({ config, responseType, responseValues }: GetEmptyAlert) => {
   const isSlider = responseType === ItemResponseType.Slider;
   const alert = {

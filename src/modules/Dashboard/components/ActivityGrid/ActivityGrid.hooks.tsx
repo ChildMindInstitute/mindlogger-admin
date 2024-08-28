@@ -57,7 +57,7 @@ export const useActivityGrid = ({
 
         const navigateTo =
           activity?.isPerformanceTask && activity?.performanceTaskType
-            ? // Additional validation for flanker, gyroscope and touch is done in getActivityActions as these are the only editable options
+            ? // Additional validation for flanker, gyroscope, touch and unity is done in getActivityActions as these are the only editable options
               // Here it's safe to assume the task is EditablePerformanceTasksType
               getPerformanceTaskPath(
                 activity?.performanceTaskType as unknown as EditablePerformanceTasksType,

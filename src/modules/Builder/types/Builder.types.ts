@@ -137,7 +137,7 @@ export type ItemResponseTypeNoPerfTasks = Exclude<
   | ItemResponseType.TouchPractice
   | ItemResponseType.TouchTest
   | ItemResponseType.ABTrails
-  | ItemResponseType.UnityFile
+  | ItemResponseType.Unity
 >;
 
 export enum RoundTypeEnum {
