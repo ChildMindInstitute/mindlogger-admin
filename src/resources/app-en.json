@@ -29,12 +29,14 @@
     "selfReports_other": "{{count}} Self-Reports",
     "multiInformant_one": "{{count}} Multi-Informant",
     "multiInformant_other": "{{count}} Multi-Informant",
+    "assignmentCountsTooltip": "<0>Self-Report: The number of rows in the table where the subject and respondent are the same participant.</0><0>Multi-Informant: The number of rows in the table where the subject and respondent are different participants.</0>",
     "assignTo": "Assign to",
     "assignToTooltip": "The Respondent of the activity.",
     "whoIsActivityAbout": "Who is the activity about?",
     "whoIsActivityAboutTooltip": "The Subject of the activity. Leave this field as ‘Self’ for self-reports.",
     "respondentPlaceholder": "Participant123",
     "subjectPlaceholder": "Self",
+    "subjectPlaceholderTeamMember": "Select Subject",
     "subjectSelf": "Self",
     "addRow": "Add Row",
     "addRespondent": "Add Respondent",
@@ -47,9 +49,28 @@
     "respondentActivityAutofill": "The Participant & Activity have been auto-filled, click ‘Next’ to continue.",
     "teamRespondentActivityAutofill": "The Respondent & Activity have been auto-filled, select a Subject to continue.",
     "subjectActivityAutofill": "The Participant & Activity have been auto-filled. 1 row needs attention to continue.",
-    "existingAssigments": "One or more of these Activities have already been assigned; no email will be sent.",
+    "existingAssignments": "One or more of these Activities have already been assigned; no emails for those assignments will be sent.",
+    "existingAssignmentsAll": "All of the requested assignments already exist. Please create new unique assignments.",
     "duplicateRowsError": "There are duplicate rows in the table, please edit or remove to continue.",
-    "networkError": "Oops! Something went wrong, please try again."
+    "networkError": "Oops! Something went wrong, please try again.",
+    "reviewSummary_one": "You'll send {{count}} Email",
+    "reviewSummary_other": "You'll send {{count}} Emails",
+    "reviewSummaryTooltip": "Each respondent will receive 1 email with information about all new assignments. If any activities listed below are already assigned, no duplicate assignments will be created or sent to respondents.",
+    "assignmentTitle": "Assignment {{index}}",
+    "numberAssignees_one": "{{count}} Assignee",
+    "numberAssignees_other": "{{count}} Assignees",
+    "deleteAssignment": "Delete assignment",
+    "reviewToggleButton": "Toggle assignment visibility",
+    "activitySubtitle": "Activity",
+    "respondentsSubtitle": "Respondents",
+    "showMore": "Show More ({{count}})",
+    "deletePopupTitle": "Remove Activity",
+    "deletePopupButton": "Yes, Remove",
+    "deletePopupText": "Are you sure you want to remove assignments for the activity <0>{{activityName}}</0>?",
+    "assigning": "Assigning to participants",
+    "success": "Success!",
+    "emailsSent": "Emails have been sent",
+    "done": "Done"
   },
   "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "activityCompleted": "Activity Completed",
@@ -821,8 +842,14 @@
     "uploadPublicData": "Upload public data into LORIS",
     "reportServerTooltip": "Configure the Server first on the Report Configuration tab",
     "publishTooltip": "Save & publish the Applet first",
-    "agreementText": "I agree to decrypt the Respondents' data and upload it to LORIS in an unencrypted format. Only the data from completed Activities by consented Respondents will be uploaded.",
-    "successMessage": "If any new data has been collected, it has been uploaded successfully."
+    "agreementText": "I agree to decrypt the Respondents' data and upload it to LORIS in an unencrypted format.\nOnly the data from completed Activities by consented Respondents will be uploaded.",
+    "agree": "I agree",
+    "completed": "Completed",
+    "visits": "LORIS Visits",
+    "visitsDescription": "Please check if predefined Visit values are correct: ",
+    "successMessage": "If any new data has been collected, it has been uploaded successfully.",
+    "visitRequired": "Selected rows require visits.",
+    "noDataToUpload": "At the moment there is no new data available.\nPlease check back later."
   },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",
@@ -974,7 +1001,8 @@
   "participantDropdown": {
     "teamMemberGrouping": "Team Members",
     "participantGrouping": "Participants",
-    "notFound": "Not Found"
+    "notFound": "Not Found",
+    "limitedAccountIconTooltip": "Limited Accounts require an additional participant to be their respondent."
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
@@ -1035,7 +1063,15 @@
     "titleHint": "Displayed in the header of the Phrasal Template output, alongside the Applet name and image.",
     "titleHintLabel": "See more details",
     "titleLabel": "Card Title (Required)",
-    "titlePlaceholder": "Example: Action Plan"
+    "titlePlaceholder": "Example: Action Plan",
+    "displayModes": {
+      "sentence": "Sentence",
+      "bullet_list": "Bullet List",
+      "sentence_option_row": "Sentence: Option Text, Row Text",
+      "sentence_row_option": "Sentence: Row Text, Option Text",
+      "bullet_list_option_row": "Bullet List: Option Text, Row Text",
+      "bullet_list_text_row": "Bullet List: Row Text, Option Text"
+    }
   },
   "phrasalTemplateExample": "When I feel sad <em>I will call a friend</em> for support.",
   "phrasalTemplateHint": "Create phrases using a Respondentʼs previous inputs.",
@@ -1577,5 +1613,8 @@
     "contactSupport": "Contact Support",
     "proceedAnyway": "I wish to proceed anyway"
   },
+  "autoAssignActivity": "Auto-assign this activity (as self-report)",
+  "autoAssignFlow": "Auto-assign this flow (as self-report)",
+  "autoAssignTooltip": "Keep this box selected to automatically assign this Activity or Flow to all new Participants. If instead you’d like to manually assign Activities or Flows to your Participants (for either Self-Reporting or Multi-Informant reporting) unselect this box. You’ll then be able to assign Activities or Flows from the Activities Tab in your Applet.",
   "goToDashboard": "Go to Dashboard"
 }

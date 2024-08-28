@@ -20,8 +20,6 @@ describe('ServerNotConfigured', () => {
   test('renders correctly', () => {
     renderWithProviders(<ServerNotConfigured appletId="testAppletId" data-testid="test" />);
 
-    screen.debug();
-
     expect(
       screen.getByText('Server Status: Not Configured. Report can not be generated.'),
     ).toBeInTheDocument();

@@ -1,9 +1,10 @@
 import { BoxTypeMap } from '@mui/system';
 import { ElementType } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { StyledFlexAllCenter, StyledFlexTopCenter, variables } from 'shared/styles';
 import { ParticipantTagChip } from 'modules/Dashboard/components';
-import { Svg } from 'shared/components';
+import { Svg, Tooltip } from 'shared/components';
 
 import { ParticipantSnippetProps, ParticipantSnippetVariant } from './ParticipantSnippet.types';
 import { StyledText, StyledTextLarge } from './ParticipantSnippet.styles';
@@ -19,6 +20,7 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
   hasLimitedAccountIcon,
   'data-testid': dataTestId = 'participant-snippet',
 }: ParticipantSnippetProps<T>) => {
+  const { t } = useTranslation('app');
   const { sx, ...rest } = boxProps ?? {};
   const isDefaultVariant = variant === ParticipantSnippetVariant.Default;
   const TextComponent = isDefaultVariant ? StyledText : StyledTextLarge;
@@ -49,9 +51,11 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
       )}
       <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
       {hasLimitedAccountIcon && (
-        <StyledFlexAllCenter sx={{ ml: 'auto' }}>
-          <Svg id="coordinator" width={24} height={24} />
-        </StyledFlexAllCenter>
+        <Tooltip tooltipTitle={t('participantDropdown.limitedAccountIconTooltip')}>
+          <StyledFlexAllCenter sx={{ ml: 'auto', pointerEvents: 'auto' }}>
+            <Svg id="coordinator" width={24} height={24} />
+          </StyledFlexAllCenter>
+        </Tooltip>
       )}
 
       {children}

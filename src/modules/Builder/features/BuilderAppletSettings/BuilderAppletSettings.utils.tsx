@@ -5,13 +5,13 @@ import { Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
-  // ShareAppletSetting,
+  ShareAppletSetting,
   DeleteAppletSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
-import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
@@ -24,10 +24,15 @@ export const getSettings = ({
   isPublished,
   roles,
   enableLorisIntegration,
+  enableShareToLibrary,
   appletId,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
+  const canEdit = checkIfCanEdit(roles);
+  const isShareToLibraryVisible = !!(enableShareToLibrary && canEdit);
+  const isSharingVisible =
+    !isNewApplet && (roles?.includes(Roles.SuperAdmin) || isShareToLibraryVisible);
 
   return [
     {
@@ -50,14 +55,18 @@ export const getSettings = ({
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
-        {
-          icon: <Svg id="data-collection" />,
-          label: 'loris.integration',
-          component: <LorisIntegrationSetting />,
-          param: SettingParam.LorisIntegration,
-          isVisible: enableLorisIntegration,
-          'data-testid': `${dataTestid}-loris-integration`,
-        },
+        ...(enableLorisIntegration
+          ? [
+              {
+                icon: <Svg id="data-collection" />,
+                label: 'loris.integration',
+                component: <LorisIntegrationSetting />,
+                param: SettingParam.LorisIntegration,
+                isVisible: enableLorisIntegration,
+                'data-testid': `${dataTestid}-loris-integration`,
+              },
+            ]
+          : []),
       ],
     },
     {
@@ -125,18 +134,19 @@ export const getSettings = ({
 
     {
       label: 'sharing',
-      //remove roles?.includes(Roles.SuperAdmin) check after uncommenting Share to Library functionality
-      isVisible: !isNewApplet && roles?.includes(Roles.SuperAdmin),
+      isVisible: isSharingVisible,
       items: [
-        // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-        // introduced. (Story: AUS-4.1.4.10).
-        // {
-        //   icon: <Svg id="share" />,
-        //   label: 'shareToLibrary',
-        //   component: <ShareAppletSetting />,
-        //   param: SettingParam.ShareApplet,
-        //   'data-testid': `${dataTestid}-share-to-library`,
-        // },
+        /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
+        with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
+        AUS-4.1.4.10).*/
+        {
+          icon: <Svg id="share" />,
+          label: 'shareToLibrary',
+          component: <ShareAppletSetting />,
+          param: SettingParam.ShareApplet,
+          isVisible: isShareToLibraryVisible,
+          'data-testid': `${dataTestid}-share-to-library`,
+        },
         {
           icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
           label: isPublished ? 'concealApplet' : 'publishApplet',

@@ -1,4 +1,5 @@
 import { Roles } from 'shared/consts';
+import { Integration } from 'modules/Dashboard/api/api.types';
 
 import { BaseSchema } from '../Base';
 
@@ -7,6 +8,7 @@ export type Workspace = {
   workspaceName: string;
   image?: string;
   useArbitrary?: boolean;
+  integrations?: Integration[] | null;
 };
 
 export type AppletRoles = Record<string, Roles[]>;

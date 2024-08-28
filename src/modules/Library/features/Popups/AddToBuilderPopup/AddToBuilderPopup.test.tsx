@@ -134,7 +134,7 @@ jest.mock('modules/Library/hooks', () => ({
 const testStep1 = async ({ title }) => {
   expect(title).toHaveTextContent('Select Workspace');
   expect(screen.getByTestId(`${dataTestid}-step-1`)).toBeInTheDocument();
-  const tableRows = screen.getAllByTestId('table-row');
+  const tableRows = screen.queryAllByTestId(/table-row-\d+/);
   expect(tableRows).toHaveLength(2); // mocked 2 workspaces
 
   const radio = within(tableRows[1]).getByRole('radio');
@@ -263,7 +263,7 @@ describe('AddToBuilderPopup', () => {
     const selectWorkspaceTable = screen.getByTestId('select-workspace-table');
     expect(selectWorkspaceTable).toBeInTheDocument();
 
-    const tableRows = screen.getAllByTestId('table-row');
+    const tableRows = screen.queryAllByTestId(/table-row-\d+/);
     expect(tableRows).toHaveLength(2); // mocked 2 workspaces
 
     const confirmButton = screen.getByTestId(`${dataTestid}-submit-button`);

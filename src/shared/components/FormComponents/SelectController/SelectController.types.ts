@@ -47,6 +47,7 @@ type FormSelectProps = {
   'data-testid'?: string;
   shouldSkipIcon?: boolean;
   TooltipProps?: Omit<TooltipProps, 'children'>;
+  className?: string;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormSelectProps & UseControllerProps<T>;
