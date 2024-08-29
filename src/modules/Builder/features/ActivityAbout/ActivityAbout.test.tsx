@@ -96,6 +96,7 @@ describe('ActivityAbout', () => {
       'builder-activity-about-skippable',
       'builder-activity-about-response-editable',
       'builder-activity-about-reviewable',
+      'builder-activity-about-auto-assign',
     ];
 
     fieldsDataTestIds.forEach((dataTestId) =>
@@ -124,6 +125,8 @@ describe('ActivityAbout', () => {
       'This Activity is intended for reviewer assessment only',
     );
     expect(isReviewable).not.toBeDisabled();
+    const isAutoAssign = screen.getByLabelText('Auto-assign this activity (as self-report)');
+    expect(isAutoAssign).toBeChecked();
   });
 
   test("shouldn't turn activity to reviewer one", () => {

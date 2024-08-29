@@ -876,6 +876,7 @@ export const mockedAppletFormData = {
         },
       ],
       isReviewable: false,
+      autoAssign: true,
     },
   ],
   activityFlows: [
@@ -883,6 +884,7 @@ export const mockedAppletFormData = {
       name: 'af1',
       description: 'afd',
       isSingleReport: false,
+      autoAssign: true,
       hideBadge: false,
       reportIncludedActivityName: null,
       reportIncludedItemName: null,
