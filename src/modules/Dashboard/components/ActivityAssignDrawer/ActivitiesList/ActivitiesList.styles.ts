@@ -7,7 +7,7 @@ export const StyledList = styled(List)`
   overflow-y: auto;
   padding: ${theme.spacing(0.8, 0)};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  border-radius: ${variables.borderRadius.md};
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledListItem = styled(ListItem)`
@@ -16,6 +16,10 @@ export const StyledListItem = styled(ListItem)`
   .MuiListItemSecondaryAction-root {
     pointer-events: none;
   }
+`;
+
+export const StyledReadOnlyButton = styled(StyledFlexTopCenter)`
+  padding: ${theme.spacing(1.2, 1.6)};
 `;
 
 export const StyledListItemButton = styled(ListItemButton)`

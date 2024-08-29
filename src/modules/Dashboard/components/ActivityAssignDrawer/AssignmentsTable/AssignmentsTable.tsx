@@ -25,6 +25,7 @@ export const AssignmentsTable = ({
   handleSearch,
   assignments,
   onChange,
+  onAdd,
   isReadOnly,
   errors,
   'data-testid': dataTestId,
@@ -61,15 +62,16 @@ export const AssignmentsTable = ({
         if (targetSubjectId !== undefined) {
           updatedAssignments[index].targetSubjectId = targetSubjectId;
         }
-        onChange(updatedAssignments);
+        onChange?.(updatedAssignments);
       }
     },
     [allParticipants, assignments, onChange],
   );
 
   const handleAdd = useCallback(() => {
-    onChange([...assignments, { respondentSubjectId: null, targetSubjectId: null }]);
-  }, [assignments, onChange]);
+    onChange?.([...assignments, { respondentSubjectId: null, targetSubjectId: null }]);
+    onAdd?.();
+  }, [assignments, onChange, onAdd]);
 
   const handleRespondentSearch = useCallback(
     async (query: string) => {
@@ -152,7 +154,9 @@ export const AssignmentsTable = ({
             value: targetSubjectId ?? '',
             content: () => (
               <AssignmentDropdown
-                placeholder={t('subjectPlaceholder')}
+                placeholder={t(
+                  respondent?.isTeamMember ? 'subjectPlaceholderTeamMember' : 'subjectPlaceholder',
+                )}
                 isReadOnly={isReadOnly}
                 value={subjectValue}
                 options={subjectOptions}
@@ -198,7 +202,7 @@ export const AssignmentsTable = ({
   return (
     <StyledTableContainer>
       <StyledTable
-        columns={getHeadCells()}
+        columns={getHeadCells(isReadOnly)}
         rows={rows}
         enablePagination={false}
         handleRequestSort={() => {}}

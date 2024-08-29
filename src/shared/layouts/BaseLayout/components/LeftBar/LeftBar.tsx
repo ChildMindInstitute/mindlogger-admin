@@ -16,6 +16,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
+import { getWorkspaceNames } from './LeftBar.utils';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -35,30 +36,30 @@ export const LeftBar = () => {
   }, []);
 
   useEffect(() => {
-    if (workspacesData?.length) {
-      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-      const storageWorkspace = authStorage.getWorkspace();
-      const currentWorkspace = storageWorkspace || ownerWorkspace;
-      dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+    if (!workspacesData?.length || !id || !dispatch) return;
 
-      if (!currentWorkspace) return;
+    const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
+    const storageWorkspace = authStorage.getWorkspace();
+    const currentWorkspace = storageWorkspace || ownerWorkspace;
+    dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
 
-      FeatureFlags.updateWorkspaces([currentWorkspace?.ownerId]);
-    }
-  }, [workspacesData]);
+    if (!currentWorkspace?.ownerId) return;
+
+    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), currentWorkspace.ownerId);
+  }, [workspacesData, dispatch, id]);
 
   useEffect(() => {
     const { workspace } = location.state ?? {};
 
-    if (workspace) {
-      authStorage.setWorkspace(workspace);
-      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+    if (!workspace || !dispatch) return;
 
-      if (!workspace) return;
+    authStorage.setWorkspace(workspace);
+    dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 
-      FeatureFlags.updateWorkspaces([workspace?.ownerId]);
-    }
-  }, [location.state]);
+    if (!workspace?.ownerId || !workspacesData) return;
+
+    FeatureFlags.updateWorkspaces(getWorkspaceNames(workspacesData), workspace.ownerId);
+  }, [location.state, workspacesData, dispatch]);
 
   const handleLinkClick = (key: string) => {
     if (key === 'library') {

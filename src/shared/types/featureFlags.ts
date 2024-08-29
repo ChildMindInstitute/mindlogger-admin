@@ -15,6 +15,7 @@ export const FeatureFlagsKeys = {
   enableAdminAppSoftLock: 'enableAdminAppSoftLock',
   enableParagraphTextItem: 'enableParagraphTextItem',
   enablePhrasalTemplate: 'enablePhrasalTemplate',
+  enableShareToLibrary: 'enableShareToLibrary',
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
   enableMeritActivityType: 'enableMeritActivityType',
 };

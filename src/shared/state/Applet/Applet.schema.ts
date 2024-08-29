@@ -9,8 +9,8 @@ import {
 } from 'modules/Builder/types';
 import {
   CalculationType,
-  ConditionType,
   ConditionalLogicMatch,
+  ConditionType,
   GyroscopeOrTouch,
   ItemResponseType,
   PerfTaskType,

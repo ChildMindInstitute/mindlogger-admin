@@ -1,5 +1,6 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
+import mockAxios from 'jest-mock-axios';
 
 import { ApiResponseCodes } from 'api';
 import {
@@ -118,10 +119,25 @@ const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
   count: 1,
 });
 
+const mockedAssignment = {
+  activityId: mockedAppletData.activities[0].id,
+  activityFlowId: null,
+  respondentSubjectId: mockedRespondent.details[0].subjectId,
+  targetSubjectId: mockedRespondent.details[0].subjectId,
+};
+
+const mockedLimitedAssignment = {
+  activityId: mockedAppletData.activities[0].id,
+  activityFlowId: null,
+  respondentSubjectId: mockedRespondent.details[0].subjectId,
+  targetSubjectId: mockedLimitedRespondent.details[0].subjectId,
+};
+
 const GET_APPLET_URL = `/applets/${mockedAppletId}`;
 const GET_APPLET_ACTIVITIES_URL = `/activities/applet/${mockedAppletId}`;
 const GET_WORKSPACE_RESPONDENTS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 const GET_WORKSPACE_MANAGERS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`;
+const APPLET_ASSIGNMENTS_URL = `/assignments/applet/${mockedAppletId}`;
 
 const preloadedState = {
   workspaces: {
@@ -141,7 +157,10 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+Element.prototype.scrollTo = jest.fn();
+
 jest.useFakeTimers();
+jest.setTimeout(10000);
 
 /* Tests
 =================================================== */
@@ -167,6 +186,12 @@ describe('ActivityAssignDrawer', () => {
 
         return mockedGetAppletParticipants;
       },
+      [APPLET_ASSIGNMENTS_URL]: mockSuccessfulHttpResponse({
+        result: {
+          appletId: mockedAppletId,
+          assignments: [mockedAssignment],
+        },
+      }),
     });
   });
 
@@ -233,7 +258,7 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           'Your Activity was auto-filled, add Respondents to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -283,7 +308,7 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           '1 Participant was added into the table, select an Activity and Subject to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -314,7 +339,7 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           '1 Participant was added to the table. Please add a full account Respondent to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -344,13 +369,45 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           '1 Participant was added into the table, select an Activity to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
   });
 
   it('proceeds to Review step after successful submission', async () => {
+    renderWithProviders(
+      <ActivityAssignDrawer
+        appletId={mockedAppletId}
+        activityId={mockedAppletData.activities[0].id}
+        respondentSubjectId={mockedRespondent.details[0].subjectId}
+        targetSubjectId={mockedLimitedRespondent.details[0].subjectId}
+        open
+        onClose={mockedOnClose}
+      />,
+      { preloadedState },
+    );
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    const submitButton = screen.getByText('Next');
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    fireEvent.click(submitButton);
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(screen.getByText('Review')).toBeVisible();
+    });
+  });
+
+  it('proceeds to Review step with warning if submitting some existing assignments', async () => {
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
@@ -369,14 +426,66 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Next'));
+    const addButton = screen.getByRole('button', { name: 'Add Row' });
+    fireEvent.click(addButton);
+
+    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+
+    const submitButton = screen.getByText('Next');
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    fireEvent.click(submitButton);
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
+        ),
+      ).toBeInTheDocument();
+
       expect(screen.getByText('Review')).toBeVisible();
+    });
+  });
+
+  it('does not proceed to Review step if submitting only existing assignments', async () => {
+    renderWithProviders(
+      <ActivityAssignDrawer
+        appletId={mockedAppletId}
+        activityId={mockedAppletData.activities[0].id}
+        respondentSubjectId={mockedRespondent.details[0].subjectId}
+        targetSubjectId={mockedRespondent.details[0].subjectId}
+        open
+        onClose={mockedOnClose}
+      />,
+      { preloadedState },
+    );
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    const submitButton = screen.getByText('Next');
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    fireEvent.click(submitButton);
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'All of the requested assignments already exist. Please create new unique assignments.',
+        ),
+      ).toBeInTheDocument();
+
+      expect(screen.getByText('Review')).not.toBeVisible();
     });
   });
 
@@ -399,26 +508,106 @@ describe('ActivityAssignDrawer', () => {
         within(screen.getByRole('alert')).getByText(
           'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
     });
 
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 1);
     await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 1);
 
-    fireEvent.click(screen.getByText('Next'));
+    const submitButton = screen.getByText('Next');
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    fireEvent.click(submitButton);
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
+      expect(submitButton).not.toBeEnabled();
       expect(screen.queryByText('Review')).not.toBeVisible();
 
       expect(
         within(screen.getByRole('alert')).getByText(
           'There are duplicate rows in the table, please edit or remove to continue.',
         ),
-      ).toBeVisible();
+      ).toBeInTheDocument();
     });
+
+    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+    await waitFor(() => {
+      expect(submitButton).toBeEnabled();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
+  });
+
+  it('successfully submits assignments to the API', async () => {
+    mockAxios.post.mockResolvedValue(
+      mockSuccessfulHttpResponse({
+        result: {
+          appletId: mockedAppletId,
+          assignments: [], // POST result is never used
+        },
+      }),
+    );
+
+    renderWithProviders(
+      <ActivityAssignDrawer
+        appletId={mockedAppletId}
+        activityId={mockedAppletData.activities[0].id}
+        respondentSubjectId={mockedRespondent.details[0].subjectId}
+        targetSubjectId={mockedRespondent.details[0].subjectId}
+        open
+        onClose={mockedOnClose}
+      />,
+      { preloadedState },
+    );
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('alert')).getByText(
+          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    const addButton = screen.getByRole('button', { name: 'Add Row' });
+    fireEvent.click(addButton);
+
+    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+
+    const submitButton = screen.getByText('Next');
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    fireEvent.click(submitButton);
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(screen.getByText('Review')).toBeVisible();
+    });
+
+    fireEvent.click(screen.getByText('Send Emails'));
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(screen.getByText('Assigning to participants')).toBeVisible();
+    });
+
+    jest.advanceTimersToNextTimer();
+    await waitFor(() => {
+      expect(screen.getByText('Emails have been sent')).toBeVisible();
+
+      expect(mockAxios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+        assignments: [mockedAssignment, mockedLimitedAssignment].map((a) => ({
+          activity_id: a.activityId,
+          activity_flow_id: a.activityFlowId,
+          respondent_subject_id: a.respondentSubjectId,
+          target_subject_id: a.targetSubjectId,
+        })),
+      });
+    });
+
+    fireEvent.click(screen.getByText('Done'));
+    expect(mockedOnClose).toHaveBeenCalled();
   });
 });

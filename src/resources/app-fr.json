@@ -29,6 +29,7 @@
     "selfReports_other": "{{count}} Auto-évaluations",
     "multiInformant_one": "{{count}} Multi-informateur",
     "multiInformant_other": "{{count}} Multi-informateurs",
+    "assignmentCountsTooltip": "<0>Auto-évaluation : Le nombre de lignes dans le tableau où le sujet et le répondant sont le même participant.</0><0>Multi-informateur : Le nombre de lignes dans le tableau où le sujet et le répondant sont des participants différents.</0>",
     "assignTo": "Assigner à",
     "assignToTooltip": "Le répondant de l'activité.",
     "whoIsActivityAbout": "De qui s'agit-il dans l'activité?",
@@ -36,6 +37,7 @@
     "respondentPlaceholder": "Participant123",
     "subjectPlaceholder": "Soi-même",
     "subjectSelf": "Soi-même",
+    "subjectPlaceholderTeamMember": "Sélectionner le sujet",
     "addRow": "Ajouter une ligne",
     "addRespondent": "Ajouter un répondant",
     "next": "Suivant",
@@ -47,9 +49,28 @@
     "respondentActivityAutofill": "Le participant et l'activité ont été pré-remplis, cliquez sur « Suivant » pour continuer.",
     "teamRespondentActivityAutofill": "Le répondant et l'activité ont été pré-remplis, sélectionnez un sujet pour continuer.",
     "subjectActivityAutofill": "Le participant et l'activité ont été pré-remplis. 1 ligne nécessite une attention pour continuer.",
-    "existingAssigments": "Une ou plusieurs de ces activités ont déjà été attribuées; aucune invitation ne sera envoyée.",
+    "existingAssignments": "Une ou plusieurs de ces activités ont déjà été attribuées ; aucun e-mail pour ces attributions ne sera envoyé.",
+    "existingAssignmentsAll": "Toutes les attributions saisies existent déjà. Veuillez créer de nouvelles attributions uniques.",
     "duplicateRowsError": "Il y a des lignes en double dans le tableau, veuillez les modifier ou les supprimer pour continuer.",
-    "networkError": "Oops! Une erreur s'est produite, veuillez réessayer."
+    "networkError": "Oops! Une erreur s'est produite, veuillez réessayer.",
+    "reviewSummary_one": "Vous enverrez {{count}} e-mail",
+    "reviewSummary_other": "Vous enverrez {{count}} e-mails",
+    "reviewSummaryTooltip": "Chaque répondant recevra 1 e-mail avec des informations sur toutes les nouvelles attributions. Si certaines activités répertoriées ci-dessous sont déjà attribuées, aucune attribution en double ne sera créée ou envoyée aux répondants.",
+    "assignmentTitle": "Attribution {{index}}",
+    "numberAssignees_one": "{{count}} assigné",
+    "numberAssignees_other": "{{count}} assignés",
+    "deleteAssignment": "Supprimer l'attribution",
+    "reviewToggleButton": "Basculer la visibilité d'attribution",
+    "activitySubtitle": "Activité",
+    "respondentsSubtitle": "Répondants",
+    "showMore": "Afficher plus ({{count}})",
+    "deletePopupTitle": "Supprimer l'activité",
+    "deletePopupButton": "Oui, supprimer",
+    "deletePopupText": "Êtes-vous sûr de vouloir supprimer les attributions pour l'activité <0>{{activityName}}</0>?",
+    "assigning": "Attribution aux participants",
+    "success": "Succès !",
+    "emailsSent": "Les e-mails ont été envoyées",
+    "done": "Terminé"
   },
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page.",
   "activityCompleted": "Activité terminée",
@@ -973,7 +994,8 @@
   "participantDropdown": {
     "teamMemberGrouping": "Membres de l'équipe",
     "participantGrouping": "Participants",
-    "notFound": "Pas trouvé"
+    "notFound": "Pas trouvé",
+    "limitedAccountIconTooltip": "Les comptes limités nécessitent un participant supplémentaire pour être leur répondant."
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
@@ -1034,7 +1056,15 @@
     "titleHint": "Affiché dans l'en-tête de la sortie du modèle de phrase, à côté du nom et de l'image de l'applet.",
     "titleHintLabel": "Voir plus de détails",
     "titleLabel": "Titre de la carte (obligatoire)",
-    "titlePlaceholder": "Exemple: Plan d'action"
+    "titlePlaceholder": "Exemple: Plan d'action",
+    "displayModes": {
+      "sentence": "Phrase",
+      "bullet_list": "Liste à puces",
+      "sentence_option_row": "Phrase : Texte de l'Option, Texte de la Ligne",
+      "sentence_row_option": "Phrase : Texte de la Ligne, Texte de l'Option",
+      "bullet_list_option_row": "Liste à puces : Texte de l'Option, Texte de la Ligne",
+      "bullet_list_text_row": "Liste à puces : Texte de la Ligne, Texte de l'Option"
+    }
   },
   "phrasalTemplateExample": "Quand je me sens triste, <em>j'appelle un ami</em> pour obtenir de l'aide.",
   "phrasalTemplateHint": "Créez des phrases en utilisant les entrées précédentes du répondant.",
@@ -1569,5 +1599,12 @@
   "emailAddress": "Adresse e-mail",
   "emailAddressPlaceholder": "email@exemple.com",
   "emailAlreadyInUse": "Cet e-mail est déjà <1>utilisé</1>. Veuillez en saisir un autre.",
+  "arbitraryWarning": {
+    "title": "Avertissement : Un serveur arbitraire est connecté",
+    "contentFirst": "Votre applet <1>{{appletName}}</1> est actuellement connecté à un serveur arbitraire pour le stockage des données.<br /><br /> Si vous poursuivez le transfert de propriété sans nous contacter, votre applet <3>perdra ses configurations de serveur arbitraire</3>, et toutes les données qu'il collectera par la suite seront stockées sur les serveurs de MindLogger à partir de ce moment.<br /><br /> Afin de transférer la propriété de l'applet tout en <5>conservant la configuration du serveur arbitraire</5>, veuillez contacter l'équipe de support de MindLogger en cliquant sur le bouton ci-dessous.",
+    "contentSecond": "<0>Encore une fois, poursuivre le transfert de propriété fera que cet applet perdra ses configurations de serveur arbitraire, et toutes les données qu'il collectera par la suite seront stockées sur les serveurs de MindLogger à partir de ce moment.</0><br /><br /> Pour poursuivre le transfert de propriété de votre applet <2>{{appletName}}</2> et rompre ses connexions au serveur arbitraire, veuillez entrer à nouveau le mot de passe de votre applet ci-dessous.",
+    "contactSupport": "Contacter le support",
+    "proceedAnyway": "Je souhaite continuer quand même"
+  },
   "goToDashboard": "Aller au tableau de bord"
 }

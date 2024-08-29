@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 import { Svg } from 'shared/components';
-import { applet } from 'shared/state/Applet';
+import { applet, SliderRowsItemResponseValues } from 'shared/state/Applet';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import {
   StyledBodyLarge,
@@ -14,26 +14,31 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { ItemResponseType } from 'shared/consts';
 
 import { StyledLineBreak } from './PhrasalTemplateField.styles';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
-import { DisplayModeOptions } from './PhrasalTemplateField.const';
+import { DisplayModeOptions, KEYWORDS } from './PhrasalTemplateField.const';
 
 export function RenderedField({
   name = '',
   responseOptions = [],
-  type = 'sentence',
+  type = KEYWORDS.SENTENCE,
   ...otherProps
 }: Omit<PhrasalTemplateFieldProps, 'canRemove' | 'onRemove'>) {
   const [displayMode, setDisplayMode] = useState<{
     id: string;
     items?: Array<{ id: string; name: string }>;
   }>();
+  const [responseFrom, setResponseFrom] = useState<{
+    name: string;
+    items?: SliderRowsItemResponseValues[];
+  }>();
   const { t } = useTranslation('app');
   const params = useParams();
   const { control, getValues, setValue } = useCustomFormContext();
   const fieldValue = getValues(name as string);
-  const activitiesFromStore = applet.useActivityDataFromApplet(params?.activityId || '');
+  const itemsFromStore = applet.useActivityItemsFromApplet(params?.activityId || '');
   const { question: selectedOptionQuestion } =
     responseOptions?.find(({ name }) => fieldValue?.itemName === name) ?? {};
 
@@ -42,14 +47,14 @@ export function RenderedField({
   useEffect(() => {
     if (
       fieldValue?.itemName &&
-      type === 'item_response' &&
+      type === KEYWORDS.ITEM_RESPONSE &&
       !selectedOptionQuestion &&
       !isFieldValueDeleted
     ) {
       setValue(name, {
-        displayMode: '',
+        displayMode: KEYWORDS.DISPLAY_SENTENCE,
         itemName: `${fieldValue.itemName}-deleted`,
-        type: 'item_response',
+        type: KEYWORDS.ITEM_RESPONSE,
         itemIndex: 0,
       });
     }
@@ -67,9 +72,9 @@ export function RenderedField({
     const selectedItem = responseOptions.find(({ name }) => name === value);
 
     if (!selectedItem) {
-      const missedItem = activitiesFromStore?.find((activity) => {
-        if (fieldValue?.id?.includes(activity?.id)) {
-          return activity;
+      const missedItem = itemsFromStore?.find((item) => {
+        if (fieldValue?.itemName?.includes(item?.name)) {
+          return item;
         }
 
         return null;
@@ -78,10 +83,36 @@ export function RenderedField({
       return missedItem?.name;
     }
 
-    if (selectedItem?.responseType !== displayMode?.id) {
+    if (
+      selectedItem?.responseType !== displayMode?.id &&
+      selectedItem?.responseType !== ItemResponseType.SliderRows
+    ) {
+      const items = DisplayModeOptions[selectedItem?.responseType || 'default'];
+
       setDisplayMode({
         id: selectedItem?.responseType as string,
-        items: DisplayModeOptions[selectedItem?.responseType || 'default'],
+        items,
+      });
+      setResponseFrom(undefined);
+      setValue(name, {
+        ...fieldValue,
+        itemIndex: 0,
+        displayMode: items ? fieldValue?.displayMode : KEYWORDS.DISPLAY_SENTENCE,
+      });
+    }
+
+    if (
+      selectedItem?.name !== responseFrom?.name &&
+      selectedItem?.responseType === ItemResponseType.SliderRows
+    ) {
+      setResponseFrom({
+        name: selectedItem?.name,
+        items: selectedItem?.responseValues?.rows,
+      });
+      setDisplayMode(undefined);
+      setValue(name, {
+        ...fieldValue,
+        displayMode: KEYWORDS.DISPLAY_SENTENCE,
       });
     }
 
@@ -97,13 +128,25 @@ export function RenderedField({
       );
     }
 
-    const selectedDisplayMode = displayMode?.items?.find(({ id }) => id === value);
+    return t(`phrasalTemplateItem.displayModes.${value}`);
+  };
 
-    return selectedDisplayMode?.name;
+  const getResponseFromRenderedValue = (value: unknown) => {
+    if (!value && typeof Number(value) !== 'number') {
+      return (
+        <StyledBodyLarge color={variables.palette.outline}>
+          {t('phrasalTemplateItem.fieldResponsePlaceholder')}
+        </StyledBodyLarge>
+      );
+    }
+
+    const selectedFromResponse = responseFrom?.items?.[Number(value)];
+
+    return selectedFromResponse?.label;
   };
 
   switch (type) {
-    case 'item_response':
+    case KEYWORDS.ITEM_RESPONSE:
       return (
         <>
           <SelectController
@@ -135,7 +178,7 @@ export function RenderedField({
               defaultValue=""
               fullWidth
               options={displayMode?.items.map(({ name, id }) => ({
-                labelKey: name,
+                labelKey: t(`phrasalTemplateItem.displayModes.${id}`),
                 tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
                 value: id ?? '',
               }))}
@@ -146,9 +189,27 @@ export function RenderedField({
               }}
             />
           )}
+          {responseFrom?.items && (
+            <SelectController
+              name={`${name}.itemIndex`}
+              control={control}
+              defaultValue=""
+              fullWidth
+              options={responseFrom?.items.map(({ label }, index) => ({
+                labelKey: label as string,
+                tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
+                value: `${index}`,
+              }))}
+              SelectProps={{
+                displayEmpty: true,
+                renderValue: getResponseFromRenderedValue,
+                startAdornment: <Svg aria-hidden id="commentDots" />,
+              }}
+            />
+          )}
         </>
       );
-    case 'line_break':
+    case KEYWORDS.LINE_BREAK:
       return (
         <StyledFlexTopCenter sx={{ height: theme.spacing(5.6), width: '100%' }}>
           <StyledLabelLarge color={variables.palette.outline} sx={{ flexShrink: 0 }}>
@@ -158,7 +219,7 @@ export function RenderedField({
           <StyledLineBreak />
         </StyledFlexTopCenter>
       );
-    case 'sentence':
+    case KEYWORDS.SENTENCE:
     default:
       return (
         <InputController

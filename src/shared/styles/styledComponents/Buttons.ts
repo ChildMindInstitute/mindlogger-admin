@@ -1,5 +1,6 @@
 import { Button, styled } from '@mui/material';
 
+import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
 export const StyledClearedButton = styled(Button)`
@@ -49,3 +50,13 @@ export const StyledLinkBtn = styled(StyledClearedButton)`
     background-color: transparent;
   }
 ` as typeof Button;
+
+export const StyledPlainLinkBtn = styled(StyledClearedButton)`
+  color: ${variables.palette.primary};
+  margin: ${theme.spacing(-0.4, -0.8)};
+  padding: ${theme.spacing(0.4, 0.8)};
+
+  &&:hover {
+    background-color: transparent;
+  }
+`;

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { StyledFlexTopCenter } from 'shared/styles';
 
+import { KEYWORDS } from './PhrasalTemplateField.const';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
 import { RenderedField } from './PhrasalTemplateRenderField';
 
@@ -13,7 +14,7 @@ export const PhrasalTemplateField = ({
   name = '',
   onRemove,
   responseOptions = [],
-  type = 'sentence',
+  type = KEYWORDS.SENTENCE,
   ...otherProps
 }: PhrasalTemplateFieldProps) => {
   const [showExpandedMenu, setShowExpandedMenu] = useState(false);
