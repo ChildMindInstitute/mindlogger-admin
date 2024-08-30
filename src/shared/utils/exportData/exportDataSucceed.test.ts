@@ -123,7 +123,7 @@ describe('exportDataSucceed', () => {
     expect(exportMediaZipUtils.exportMediaZip).toHaveBeenNthCalledWith(
       1,
       [],
-      'media-responses-Sat Jan 01 2000-test',
+      'media-responses-Sat Jan 01 2000-test.zip',
     );
   };
 
