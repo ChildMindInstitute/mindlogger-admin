@@ -217,6 +217,34 @@ export const enum ConditionType {
   NotEqual = 'NOT_EQUAL',
   Between = 'BETWEEN',
   OutsideOf = 'OUTSIDE_OF',
+  GreaterThanDate = 'GREATER_THAN_DATE',
+  LessThanDate = 'LESS_THAN_DATE',
+  EqualToDate = 'EQUAL_TO_DATE',
+  NotEqualToDate = 'NOT_EQUAL_TO_DATE',
+  BetweenDates = 'BETWEEN_DATES',
+  OutsideOfDates = 'OUTSIDE_OF_DATES',
+  GreaterThanTime = 'GREATER_THAN_TIME',
+  LessThanTime = 'LESS_THAN_TIME',
+  EqualToTime = 'EQUAL_TO_TIME',
+  NotEqualToTime = 'NOT_EQUAL_TO_TIME',
+  BetweenTimes = 'BETWEEN_TIMES',
+  OutsideOfTimes = 'OUTSIDE_OF_TIMES',
+  GreaterThanTimeRange = 'GREATER_THAN_TIME_RANGE',
+  LessThanTimeRange = 'LESS_THAN_TIME_RANGE',
+  EqualToTimeRange = 'EQUAL_TO_TIME_RANGE',
+  NotEqualToTimeRange = 'NOT_EQUAL_TO_TIME_RANGE',
+  BetweenTimesRange = 'BETWEEN_TIMES_RANGE',
+  OutsideOfTimesRange = 'OUTSIDE_OF_TIMES_RANGE',
+  GreaterThanSliderRows = 'GREATER_THAN_SLIDER_ROWS',
+  LessThanSliderRows = 'LESS_THAN_SLIDER_ROWS',
+  EqualToSliderRows = 'EQUAL_TO_SLIDER_ROWS',
+  NotEqualToSliderRows = 'NOT_EQUAL_TO_SLIDER_ROWS',
+  BetweenSliderRows = 'BETWEEN_SLIDER_ROWS',
+  OutsideOfSliderRows = 'OUTSIDE_OF_SLIDER_ROWS',
+  EqualToRowOption = 'EQUAL_TO_ROW_OPTION',
+  NotEqualToRowOption = 'NOT_EQUAL_TO_ROW_OPTION',
+  IncludesRowOption = 'INCLUDES_ROW_OPTION',
+  NotIncludesRowOption = 'NOT_INCLUDES_ROW_OPTION',
 }
 
 export const ScoreConditionType = 'EQUAL_TO_SCORE';
@@ -251,10 +279,38 @@ export const enum MediaType {
 export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.GreaterThan,
   ConditionType.LessThan,
+  ConditionType.GreaterThanDate,
+  ConditionType.LessThanDate,
+  ConditionType.GreaterThanTime,
+  ConditionType.LessThanTime,
+  ConditionType.GreaterThanTimeRange,
+  ConditionType.LessThanTimeRange,
+  ConditionType.GreaterThanSliderRows,
+  ConditionType.LessThanSliderRows,
   ConditionType.Equal,
   ConditionType.NotEqual,
+  ConditionType.EqualToDate,
+  ConditionType.NotEqualToDate,
+  ConditionType.EqualToTime,
+  ConditionType.NotEqualToTime,
+  ConditionType.EqualToTimeRange,
+  ConditionType.NotEqualToTimeRange,
+  ConditionType.EqualToSliderRows,
+  ConditionType.NotEqualToSliderRows,
 ];
-export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];
+
+export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [
+  ConditionType.Between,
+  ConditionType.OutsideOf,
+  ConditionType.BetweenDates,
+  ConditionType.OutsideOfDates,
+  ConditionType.BetweenSliderRows,
+  ConditionType.OutsideOfSliderRows,
+  ConditionType.BetweenTimesRange,
+  ConditionType.OutsideOfTimesRange,
+  ConditionType.BetweenTimes,
+  ConditionType.OutsideOfTimes,
+];
 
 export const GENERAL_REPORT_NAME = 'report';
 
@@ -344,6 +400,7 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
+
 export const enum AnalyticsCalendarPrefix {
   IndividualCalendar = 'IC',
   GeneralCalendar = 'GC',

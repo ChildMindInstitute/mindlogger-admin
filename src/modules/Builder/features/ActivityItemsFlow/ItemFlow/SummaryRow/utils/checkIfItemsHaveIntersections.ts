@@ -50,8 +50,6 @@ export const checkIfItemsHaveIntersections = <T extends ConditionWithSetType>({
   );
 
   switch (responseType) {
-    case ItemResponseType.Time:
-    case ItemResponseType.Date:
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection: {
       if (minValue === undefined || maxValue === undefined) return false;
@@ -83,44 +81,108 @@ export const checkIfItemsHaveIntersections = <T extends ConditionWithSetType>({
         maxValue,
       });
     }
+    case ItemResponseType.Date: {
+      if (minValue === undefined || maxValue === undefined) return false;
+
+      const greaterThanValue = (
+        groupedCondition[ConditionType.GreaterThanDate] as SingleValueType | undefined
+      )?.value;
+      const lessThanValue = (
+        groupedCondition[ConditionType.LessThanDate] as SingleValueType | undefined
+      )?.value;
+      const equalSetUnion = (
+        groupedCondition[ConditionType.EqualToDate] as EqualValueType | undefined
+      )?.value;
+      const notEqualSetUnion = (
+        groupedCondition[ConditionType.NotEqualToDate] as EqualValueType | undefined
+      )?.value;
+      const betweenUnion = (groupedCondition[ConditionType.BetweenDates] as RangeType | undefined)
+        ?.range;
+      const outsideOfUnion = (
+        groupedCondition[ConditionType.OutsideOfDates] as RangeType | undefined
+      )?.range;
+
+      return checkAllNumericContradictions({
+        lessThanValue,
+        greaterThanValue,
+        equalSetUnion,
+        notEqualSetUnion,
+        betweenUnion,
+        outsideOfUnion,
+        minValue,
+        maxValue,
+      });
+    }
+    case ItemResponseType.Time: {
+      if (minValue === undefined || maxValue === undefined) return false;
+
+      const greaterThanValue = (
+        groupedCondition[ConditionType.GreaterThanTime] as SingleValueType | undefined
+      )?.value;
+      const lessThanValue = (
+        groupedCondition[ConditionType.LessThanTime] as SingleValueType | undefined
+      )?.value;
+      const equalSetUnion = (
+        groupedCondition[ConditionType.EqualToTime] as EqualValueType | undefined
+      )?.value;
+      const notEqualSetUnion = (
+        groupedCondition[ConditionType.NotEqualToTime] as EqualValueType | undefined
+      )?.value;
+      const betweenUnion = (groupedCondition[ConditionType.BetweenTimes] as RangeType | undefined)
+        ?.range;
+      const outsideOfUnion = (
+        groupedCondition[ConditionType.OutsideOfTimes] as RangeType | undefined
+      )?.range;
+
+      return checkAllNumericContradictions({
+        lessThanValue,
+        greaterThanValue,
+        equalSetUnion,
+        notEqualSetUnion,
+        betweenUnion,
+        outsideOfUnion,
+        minValue,
+        maxValue,
+      });
+    }
     case ItemResponseType.TimeRange: {
       if (minValue === undefined || maxValue === undefined) return false;
 
-      const lessThanCondition = groupedCondition[ConditionType.LessThan] as
+      const lessThanCondition = groupedCondition[ConditionType.LessThanTimeRange] as
         | TimeSingleValueType<number>
         | undefined;
-      const lessThanStartTime = lessThanCondition?.startTime?.value;
-      const lessThanEndTime = lessThanCondition?.endTime?.value;
+      const lessThanStartTime = lessThanCondition?.from?.value;
+      const lessThanEndTime = lessThanCondition?.to?.value;
 
-      const greaterThanCondition = groupedCondition[ConditionType.GreaterThan] as
+      const greaterThanCondition = groupedCondition[ConditionType.GreaterThanTimeRange] as
         | TimeSingleValueType<number>
         | undefined;
-      const greaterThanStartTime = greaterThanCondition?.startTime?.value;
-      const greaterThanEndTime = greaterThanCondition?.endTime?.value;
+      const greaterThanStartTime = greaterThanCondition?.from?.value;
+      const greaterThanEndTime = greaterThanCondition?.to?.value;
 
-      const equalCondition = groupedCondition[ConditionType.Equal] as
+      const equalCondition = groupedCondition[ConditionType.EqualToTimeRange] as
         | TimeEqualValueType<number>
         | undefined;
-      const equalSetUnionStartTime = equalCondition?.startTime?.value;
-      const equalSetUnionEndTime = equalCondition?.endTime?.value;
+      const equalSetUnionStartTime = equalCondition?.from?.value;
+      const equalSetUnionEndTime = equalCondition?.to?.value;
 
-      const notEqualCondition = groupedCondition[ConditionType.NotEqual] as
+      const notEqualCondition = groupedCondition[ConditionType.NotEqualToTimeRange] as
         | TimeEqualValueType<number>
         | undefined;
-      const notEqualSetUnionStartTime = notEqualCondition?.startTime?.value;
-      const notEqualSetUnionEndTime = notEqualCondition?.endTime?.value;
+      const notEqualSetUnionStartTime = notEqualCondition?.from?.value;
+      const notEqualSetUnionEndTime = notEqualCondition?.to?.value;
 
-      const betweenCondition = groupedCondition[ConditionType.Between] as
+      const betweenCondition = groupedCondition[ConditionType.BetweenTimesRange] as
         | TimeRangeType<number>
         | undefined;
-      const betweenUnionStartTime = betweenCondition?.startTime?.range;
-      const betweenUnionEndTime = betweenCondition?.endTime?.range;
+      const betweenUnionStartTime = betweenCondition?.from?.range;
+      const betweenUnionEndTime = betweenCondition?.to?.range;
 
-      const outsideOfCondition = groupedCondition[ConditionType.OutsideOf] as
+      const outsideOfCondition = groupedCondition[ConditionType.OutsideOfTimesRange] as
         | TimeRangeType<number>
         | undefined;
-      const outsideOfUnionStartTime = outsideOfCondition?.startTime?.range;
-      const outsideOfUnionEndTime = outsideOfCondition?.endTime?.range;
+      const outsideOfUnionStartTime = outsideOfCondition?.from?.range;
+      const outsideOfUnionEndTime = outsideOfCondition?.to?.range;
 
       return (
         checkAllNumericContradictions({

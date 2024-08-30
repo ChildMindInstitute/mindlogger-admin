@@ -1,8 +1,10 @@
 import { ItemResponseType } from 'shared/consts';
 import {
+  DateSingleValueCondition,
   SingleValueCondition,
   SliderRowsCondition,
   TimeRangeSingleValueCondition,
+  TimeSingleValueCondition,
 } from 'shared/state/Applet';
 
 import {
@@ -35,8 +37,8 @@ export const getCombinedValueSet = (
       return { value: accValue.concat(nextValue) };
     }
     case ItemResponseType.Date: {
-      const nextCondition = conditions[1] as SingleValueCondition<Date>;
-      const nextValue = nextCondition.payload.value;
+      const nextCondition = conditions[1] as DateSingleValueCondition<Date>;
+      const nextValue = nextCondition.payload.date;
       if (!conditions[0]) {
         return { value: [convertDateToNumber(nextValue)] };
       }
@@ -47,8 +49,8 @@ export const getCombinedValueSet = (
       return { value: accValue.concat(convertDateToNumber(nextValue)) };
     }
     case ItemResponseType.Time: {
-      const nextCondition = conditions[1] as SingleValueCondition<string>;
-      const nextValue = nextCondition.payload.value;
+      const nextCondition = conditions[1] as TimeSingleValueCondition;
+      const nextValue = nextCondition.payload.time;
       if (!conditions[0]) {
         return { value: [convertToMinutes(nextValue)] };
       }
@@ -59,8 +61,8 @@ export const getCombinedValueSet = (
       return { value: accValue.concat(convertToMinutes(nextValue)) };
     }
     case ItemResponseType.TimeRange: {
-      const nextCondition = conditions[1] as TimeRangeSingleValueCondition<string>;
-      const { value: nextValue, type: payloadType } = nextCondition.payload;
+      const nextCondition = conditions[1] as TimeRangeSingleValueCondition;
+      const { time: nextValue, fieldName: payloadType } = nextCondition.payload;
       if (!conditions[0]) {
         return {
           isTimeRange: true,
