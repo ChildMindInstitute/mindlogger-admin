@@ -22,10 +22,10 @@ import { StyledTimeRow } from '../SwitchCondition.styles';
 import { TimeConditionProps } from './TimeCondition.types';
 
 export const TimeCondition = ({
-  numberValueName,
-  minValueName,
-  maxValueName,
-  maxValue,
+  timeValueName,
+  minTimeValueName,
+  maxTimeValueName,
+  maxTimeValue,
   isSingleValueShown,
   isRangeValueShown,
   state,
@@ -48,8 +48,14 @@ export const TimeCondition = ({
       ...commonInputSx,
     },
     timeIntervals: TIME_INTERVALS,
-    minTime: state === ConditionType.LessThan ? MIN_TIME_LESS_THAN : MIN_TIME,
-    maxTime: state === ConditionType.GreaterThan ? MAX_TIME_GREATER_THAN : MAX_TIME,
+    minTime:
+      state === ConditionType.LessThanTime || state === ConditionType.LessThanTimeRange
+        ? MIN_TIME_LESS_THAN
+        : MIN_TIME,
+    maxTime:
+      state === ConditionType.GreaterThan || state === ConditionType.GreaterThanTimeRange
+        ? MAX_TIME_GREATER_THAN
+        : MAX_TIME,
   };
 
   const onStartTimeChange = (time: string) => {
@@ -62,16 +68,16 @@ export const TimeCondition = ({
     );
     setMinEndTime(resultDate);
 
-    if (maxValue && time && maxValue < time) {
+    if (maxTimeValue && time && maxTimeValue < time) {
       if (Number(startTimeHours) === MAX_HOURS && Number(startTimeMinutes) === MAX_MINUTES) {
-        setValue(maxValueName, time);
+        setValue(maxTimeValueName, time);
 
         return;
       }
       const endTimeDate = addMinutes(resultDate, 1);
       const endTimeHours = endTimeDate.getHours();
       const endTimeMinutes = endTimeDate.getMinutes();
-      setValue(maxValueName, `${endTimeHours}:${endTimeMinutes}`);
+      setValue(maxTimeValueName, `${endTimeHours}:${endTimeMinutes}`);
     }
   };
 
@@ -80,7 +86,7 @@ export const TimeCondition = ({
       {isSingleValueShown && (
         <TimePicker
           {...commonTimePickerProps}
-          name={numberValueName}
+          name={timeValueName}
           data-testid={`${dataTestid}-time`}
         />
       )}
@@ -89,7 +95,7 @@ export const TimeCondition = ({
           <TimePicker
             {...commonTimePickerProps}
             onCustomChange={onStartTimeChange}
-            name={minValueName}
+            name={minTimeValueName}
             data-testid={`${dataTestid}-start-time`}
           />
           <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
@@ -97,7 +103,7 @@ export const TimeCondition = ({
             {...commonTimePickerProps}
             minTime={minEndTime}
             maxTime={MAX_TIME}
-            name={maxValueName}
+            name={maxTimeValueName}
             data-testid={`${dataTestid}-end-time`}
           />
         </StyledTimeRow>

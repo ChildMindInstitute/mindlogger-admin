@@ -1,5 +1,7 @@
 import { ItemResponseType } from 'shared/consts';
 import {
+  DateSingleValueCondition,
+  TimeSingleValueCondition,
   SingleValueCondition,
   SliderRowsCondition,
   TimeRangeSingleValueCondition,
@@ -36,8 +38,8 @@ export const getLessThanCombinedValue = (
       return { value };
     }
     case ItemResponseType.Date: {
-      const nextCondition = conditions[1] as SingleValueCondition<Date>;
-      const nextValue = nextCondition.payload.value;
+      const nextCondition = conditions[1] as DateSingleValueCondition<Date>;
+      const nextValue = nextCondition.payload.date;
       if (!conditions[0]) {
         return { value: convertDateToNumber(nextValue) };
       }
@@ -49,8 +51,8 @@ export const getLessThanCombinedValue = (
       return { value: convertDateToNumber(value) };
     }
     case ItemResponseType.Time: {
-      const nextCondition = conditions[1] as SingleValueCondition<string>;
-      const nextValue = nextCondition.payload.value;
+      const nextCondition = conditions[1] as TimeSingleValueCondition;
+      const nextValue = nextCondition.payload.time;
       if (!conditions[0]) {
         return { value: convertToMinutes(nextValue) };
       }
@@ -62,8 +64,8 @@ export const getLessThanCombinedValue = (
       return { value: convertToMinutes(value) };
     }
     case ItemResponseType.TimeRange: {
-      const nextCondition = conditions[1] as TimeRangeSingleValueCondition<string>;
-      const { value: nextValue, type: payloadType } = nextCondition.payload;
+      const nextCondition = conditions[1] as TimeRangeSingleValueCondition;
+      const { time: nextValue, fieldName: payloadType } = nextCondition.payload;
       if (!conditions[0]) {
         return {
           isTimeRange: true,

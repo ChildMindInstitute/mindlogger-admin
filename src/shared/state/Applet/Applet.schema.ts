@@ -441,15 +441,15 @@ export type OptionCondition = BaseCondition & {
     optionValue: string | number;
   };
 };
-export type SingleMultiSelectionPerRowCondition = OptionCondition & {
+export type SingleMultiSelectionPerRowCondition<T = string> = OptionCondition & {
   payload: {
-    rowIndex?: string;
+    rowIndex?: T;
   };
 };
 
-export type SliderRowsCondition<T = SingleValueCondition> = T & {
+export type SliderRowsCondition<T = SingleValueCondition, K = string> = T & {
   payload: {
-    rowIndex: string;
+    rowIndex: K;
   };
 };
 
@@ -466,19 +466,51 @@ export type RangeValueCondition<T = number> = BaseCondition & {
   };
 };
 
-export const enum TimeRangeConditionType {
-  StartTime = 'startTime',
-  EndTime = 'endTime',
-}
-
-export type TimeRangeValueCondition<T = Date> = RangeValueCondition<T> & {
+export type DateSingleValueCondition<T = string> = BaseCondition & {
   payload: {
-    type: TimeRangeConditionType;
+    date: T;
   };
 };
-export type TimeRangeSingleValueCondition<T = Date> = SingleValueCondition<T> & {
+
+export type DateRangeValueCondition<T = string> = BaseCondition & {
   payload: {
-    type: TimeRangeConditionType;
+    minDate: T;
+    maxDate: T;
+  };
+};
+
+export type Time = {
+  hours: number;
+  minutes: number;
+};
+
+export type TimeSingleValueCondition<T = string> = BaseCondition & {
+  payload: {
+    time: T;
+  };
+};
+
+export type TimeIntervalValueCondition<T = string> = BaseCondition & {
+  payload: {
+    minTime: T;
+    maxTime: T;
+  };
+};
+
+export const enum TimeRangeConditionType {
+  StartTime = 'from',
+  EndTime = 'to',
+}
+
+export type TimeRangeSingleValueCondition<T = string> = TimeSingleValueCondition<T> & {
+  payload: {
+    fieldName: TimeRangeConditionType;
+  };
+};
+
+export type TimeRangeIntervalValueCondition<T = string> = TimeIntervalValueCondition<T> & {
+  payload: {
+    fieldName: TimeRangeConditionType;
   };
 };
 
@@ -486,8 +518,17 @@ export type Condition =
   | OptionCondition
   | SingleValueCondition
   | RangeValueCondition
-  | TimeRangeValueCondition
+  | DateSingleValueCondition
+  | DateSingleValueCondition<Date>
+  | DateRangeValueCondition
+  | TimeSingleValueCondition
+  | TimeSingleValueCondition<Time>
+  | TimeIntervalValueCondition
+  | TimeIntervalValueCondition<Time>
   | TimeRangeSingleValueCondition
+  | TimeRangeSingleValueCondition<Time>
+  | TimeRangeIntervalValueCondition
+  | TimeRangeIntervalValueCondition<Time>
   | SingleMultiSelectionPerRowCondition
   | SliderRowsCondition
   | SliderRowsCondition<RangeValueCondition>

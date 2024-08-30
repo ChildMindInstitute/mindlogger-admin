@@ -1,8 +1,10 @@
 import { ItemResponseType } from 'shared/consts';
 import {
+  DateRangeValueCondition,
   RangeValueCondition,
   SliderRowsCondition,
-  TimeRangeValueCondition,
+  TimeIntervalValueCondition,
+  TimeRangeIntervalValueCondition,
 } from 'shared/state/Applet';
 
 import {
@@ -41,11 +43,11 @@ export const getOutsideOfCombinedRange = (
       return { range: [leftValue, rightValue] };
     }
     case ItemResponseType.Date: {
-      const nextCondition = conditions[1] as RangeValueCondition<Date>;
-      const nextMinValue = nextCondition.payload.minValue;
-      const nextMaxValue = nextCondition.payload.maxValue;
+      const nextCondition = conditions[1] as DateRangeValueCondition<Date>;
+      const nextMinValue = nextCondition.payload.minDate;
+      const nextMaxValue = nextCondition.payload.maxDate;
       if (!conditions[0]) {
-        return { range: [convertDateToNumber(nextMaxValue), convertDateToNumber(nextMaxValue)] };
+        return { range: [convertDateToNumber(nextMinValue), convertDateToNumber(nextMaxValue)] };
       }
 
       const accCondition = conditions[0] as RangeType<Date>;
@@ -59,9 +61,9 @@ export const getOutsideOfCombinedRange = (
       return { range: [convertDateToNumber(leftValue), convertDateToNumber(rightValue)] };
     }
     case ItemResponseType.Time: {
-      const nextCondition = conditions[1] as RangeValueCondition<string>;
-      const nextMinValue = nextCondition.payload.minValue;
-      const nextMaxValue = nextCondition.payload.maxValue;
+      const nextCondition = conditions[1] as TimeIntervalValueCondition;
+      const nextMinValue = nextCondition.payload.minTime;
+      const nextMaxValue = nextCondition.payload.maxTime;
       if (!conditions[0]) {
         return { range: [convertToMinutes(nextMinValue), convertToMinutes(nextMaxValue)] };
       }
@@ -77,10 +79,10 @@ export const getOutsideOfCombinedRange = (
       return { range: [convertToMinutes(leftValue), convertToMinutes(rightValue)] };
     }
     case ItemResponseType.TimeRange: {
-      const nextCondition = conditions[1] as TimeRangeValueCondition<string>;
-      const nextMinValue = nextCondition.payload.minValue;
-      const nextMaxValue = nextCondition.payload.maxValue;
-      const payloadType = nextCondition.payload.type;
+      const nextCondition = conditions[1] as TimeRangeIntervalValueCondition;
+      const nextMinValue = nextCondition.payload.minTime;
+      const nextMaxValue = nextCondition.payload.maxTime;
+      const payloadType = nextCondition.payload.fieldName;
       if (!conditions[0]) {
         return {
           isTimeRange: true,

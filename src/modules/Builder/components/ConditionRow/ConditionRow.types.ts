@@ -1,6 +1,12 @@
 import { ConditionType } from 'shared/consts';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
-import { Condition, TimeRangeConditionType } from 'shared/state/Applet';
+import {
+  Condition,
+  DateSingleValueCondition,
+  SingleValueCondition,
+  TimeRangeConditionType,
+  TimeSingleValueCondition,
+} from 'shared/state/Applet';
 
 import { ConditionItemType } from './Condition';
 
@@ -36,3 +42,14 @@ export type GetPayload = {
   formRowIndex?: string;
   formTimeType?: TimeRangeConditionType;
 };
+
+export enum PropertyName {
+  Value = 'value',
+  Date = 'date',
+  Time = 'time',
+}
+
+export type SingleValueConditionPayload =
+  | SingleValueCondition['payload']
+  | DateSingleValueCondition['payload']
+  | TimeSingleValueCondition['payload'];
