@@ -7,7 +7,7 @@ import { StyledModalWrapper } from 'shared/styles';
 interface UnityFileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpload: () => void;
+  onUpload: (file: File) => void;
   dataTestid: string;
 }
 
@@ -29,10 +29,8 @@ const UnityFileModal: React.FC<UnityFileModalProps> = ({
   };
 
   const handleSubmit = () => {
-    // Handle file upload logic here
     if (selectedFile) {
-      // Upload the file to the server
-      onUpload();
+      onUpload(selectedFile);
     }
     onClose();
   };

@@ -7,6 +7,7 @@ import { StyledHeadlineLarge, StyledTitleMedium, theme } from 'shared/styles';
 import { NameDescription } from '../NameDescription';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
+import { UnityFilePreview } from './UnityFilePreview';
 
 export const Unity = () => {
   const { t } = useTranslation();
@@ -15,8 +16,8 @@ export const Unity = () => {
 
   const dataTestid = 'builder-activity-unity';
 
-  const handleUpload = () => {
-    console.log('ABVC');
+  const handleUpload = (uploadedFile: File) => {
+    setFile(uploadedFile);
   };
 
   const handleCloseModal = () => {
@@ -29,12 +30,16 @@ export const Unity = () => {
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{'Unity file '}</StyledHeadlineLarge>
         <NameDescription />
         <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>{t('instructions')}</StyledTitleMedium>
-        <UnityFileModal
-          dataTestid={dataTestid}
-          onUpload={handleUpload}
-          onClose={() => handleCloseModal()}
-          isOpen={isModalOpen}
-        />
+        {file ? (
+          <UnityFileModal
+            dataTestid={dataTestid}
+            onUpload={handleUpload}
+            onClose={() => handleCloseModal()}
+            isOpen={isModalOpen}
+          />
+        ) : (
+          <UnityFilePreview file={file} />
+        )}
       </StyledPerformanceTaskBody>
     </Box>
   );
