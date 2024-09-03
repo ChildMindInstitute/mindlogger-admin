@@ -41,11 +41,11 @@ const UnityFileModal: React.FC<UnityFileModalProps> = ({
       onClose={onClose}
       onSubmit={handleSubmit}
       onSecondBtnSubmit={onClose}
-      title={t('deleteActivity')}
-      buttonText={t('delete')}
+      title={'uploadUnityConfigFile'}
+      buttonText={t('import')}
       secondBtnText={t('cancel')}
-      hasSecondBtn
-      submitBtnColor="error"
+      hasSecondBtn={false}
+      submitBtnColor="primary"
       data-testid={dataTestid}
     >
       <StyledModalWrapper>
