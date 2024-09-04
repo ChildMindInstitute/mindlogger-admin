@@ -9,7 +9,6 @@ import {
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
-
 const { t } = i18n;
 
 export const getOptions = () => [
