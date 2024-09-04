@@ -1410,7 +1410,7 @@
       "targetSubjectLabel": "De qui s’adressent les réponses?",
       "targetSubjectPlaceholder": "Sélectionnez parmi les participants",
       "loggedInUserLabel": "Qui saisira les réponses ?",
-      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe",
+      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe et les participant",
       "dropdown": {
         "limitedAccountWarning": "Le participant sélectionné ne peut pas saisir ses propres réponses. Veuillez sélectionner un membre de l'équipe pour continuer."
       },
