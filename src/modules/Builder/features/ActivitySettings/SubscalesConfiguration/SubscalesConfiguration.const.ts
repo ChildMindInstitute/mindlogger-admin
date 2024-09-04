@@ -9,6 +9,7 @@ import {
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
+
 const { t } = i18n;
 
 export const getOptions = () => [
@@ -82,7 +83,11 @@ export const ageTextItem = getNewActivityItem({
   allowEdit: false,
   name: LookupTableItems.Age_screen,
   question: t('ageQuestion'),
-  config: defaultTextConfig,
+  config: {
+    ...defaultTextConfig,
+    maxResponseLength: 3,
+    numericalResponseRequired: true,
+  },
   responseType: ItemResponseType.Text,
   responseValues: null,
 });
