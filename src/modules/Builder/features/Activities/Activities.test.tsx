@@ -26,7 +26,6 @@ const mockedEmptyActivity = {
   responseIsEditable: true,
   isHidden: false,
   isReviewable: false,
-  autoAssign: true,
   items: [],
   scoresAndReports: {
     generateReport: false,
