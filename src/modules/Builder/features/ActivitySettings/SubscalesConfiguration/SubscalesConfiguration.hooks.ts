@@ -35,7 +35,9 @@ export const useSubscalesSystemItemsSetup = (
     const hasSystemItems = items?.some((item) => isSystemItem(item));
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
-    const ageScreenItem = items?.find((item) => item.name === LookupTableItems.Age_screen);
+    const ageScreenItem = items?.find(
+      (item) => isSystemItem(item) && item.name === LookupTableItems.Age_screen,
+    );
     const oldAgeFieldType = ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text';
     const ageFieldTypeChanged = oldAgeFieldType !== ageFieldType;
     const shouldEditSubscaleSystemItems =
