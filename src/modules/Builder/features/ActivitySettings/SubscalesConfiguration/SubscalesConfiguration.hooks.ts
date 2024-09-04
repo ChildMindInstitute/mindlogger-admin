@@ -5,9 +5,9 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { isSystemItem } from 'shared/utils';
 import { AgeFieldType } from 'shared/state';
+import { LookupTableItems } from 'shared/consts';
 
 import { ageDropdownItem, ageTextItem, genderItem } from './SubscalesConfiguration.const';
-import { LookupTableItems } from '../../../../../shared/consts';
 
 export const useSubscalesSystemItemsSetup = (
   subscales: SubscaleFormValue[],
@@ -26,7 +26,9 @@ export const useSubscalesSystemItemsSetup = (
       items.filter((item) => !isSystemItem(item)),
     );
   const replaceSystemItems = (newItems: ItemFormValues[]) => {
-    setValue(itemsFieldName, [...items.filter((item) => !isSystemItem(item)), ...newItems], { shouldDirty: true });
+    setValue(itemsFieldName, [...items.filter((item) => !isSystemItem(item)), ...newItems], {
+      shouldDirty: true,
+    });
   };
   useEffect(() => {
     const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);

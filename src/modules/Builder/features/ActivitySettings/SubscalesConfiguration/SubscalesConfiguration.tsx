@@ -9,7 +9,7 @@ import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { LookupTableItems, SubscaleTotalScore } from 'shared/consts';
-import { getEntityKey, toggleBooleanState } from 'shared/utils';
+import { getEntityKey, isSystemItem, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
@@ -125,7 +125,9 @@ export const SubscalesConfiguration = () => {
   }, [!!calculateTotalScore]);
 
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
-  const ageScreenItem = items?.find((item) => item.name === LookupTableItems.Age_screen);
+  const ageScreenItem = items?.find(
+    (item) => isSystemItem(item) && item.name === LookupTableItems.Age_screen,
+  );
   const [ageFieldType, setAgeFieldType] = useState<AgeFieldType>(
     ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text',
   );
@@ -191,7 +193,9 @@ export const SubscalesConfiguration = () => {
             data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
           {hasLookupTable && (
-            <FormControl sx={{ mt: theme.spacing(2), flexDirection: 'row', alignItems: 'center', gap: 1.6 }}>
+            <FormControl
+              sx={{ mt: theme.spacing(2), flexDirection: 'row', alignItems: 'center', gap: 1.6 }}
+            >
               <FormLabel id="age-field-type-radio-btns-label">
                 <StyledTitleMedium>{t('ageFieldTypeLabel')}</StyledTitleMedium>
               </FormLabel>
@@ -201,8 +205,18 @@ export const SubscalesConfiguration = () => {
                 value={ageFieldType}
                 onChange={(e) => setAgeFieldType(e.target.value as AgeFieldType)}
               >
-                <FormControlLabel value="text" control={<Radio />} label={t('ageFieldTypeText')} />
-                <FormControlLabel value="dropdown" control={<Radio />} label={t('ageFieldTypeDropdown')} />
+                <FormControlLabel
+                  value="text"
+                  control={<Radio />}
+                  label={t('ageFieldTypeText')}
+                  data-testid={`${dataTestid}-age-field-type-text`}
+                />
+                <FormControlLabel
+                  value="dropdown"
+                  control={<Radio />}
+                  label={t('ageFieldTypeDropdown')}
+                  data-testid={`${dataTestid}-age-field-type-dropdown`}
+                />
               </RadioGroup>
             </FormControl>
           )}
