@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -8,11 +8,12 @@ import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shar
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
-import { SubscaleTotalScore } from 'shared/consts';
+import { LookupTableItems, SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
-import { SubscaleFormValue } from 'modules/Builder/types';
+import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
+import { AgeFieldType } from 'shared/state';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
@@ -49,6 +50,7 @@ export const SubscalesConfiguration = () => {
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const calculateTotalScoreField = `${fieldName}.subscaleSetting.calculateTotalScore`;
   const totalScoresTableDataField = `${fieldName}.subscaleSetting.totalScoresTableData`;
+  const itemsFieldName = `${fieldName}.items`;
   const {
     append: appendSubscale,
     remove: removeSubscale,
@@ -122,7 +124,14 @@ export const SubscalesConfiguration = () => {
     setCalculateTotalScoreSwitch(!!calculateTotalScore);
   }, [!!calculateTotalScore]);
 
-  useSubscalesSystemItemsSetup(subscales);
+  const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
+  const ageScreenItem = items?.find((item) => item.name === LookupTableItems.Age_screen);
+  const [ageFieldType, setAgeFieldType] = useState<AgeFieldType>(
+    ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text',
+  );
+
+  useSubscalesSystemItemsSetup(subscales, ageFieldType);
+  const hasLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
 
   return (
     <StyledButtonsContainer>
@@ -181,6 +190,27 @@ export const SubscalesConfiguration = () => {
             noDataPlaceholder={t('noElementsYet')}
             data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
+          {/* TODO: Translate */}
+          {hasLookupTable && (
+            <FormControl sx={{ mt: theme.spacing(2) }}>
+              <FormLabel id="age-field-type-radio-btns-label">Age screen field type:</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="age-field-type-radio-btns-label"
+                name="age-field-type-radio-buttons-group"
+                value={ageFieldType}
+                onChange={(e) => setAgeFieldType(e.target.value as AgeFieldType)}
+              >
+                <FormControlLabel
+                  value="text"
+                  control={<Radio />}
+                  label="Text Field"
+                  defaultChecked={true}
+                />
+                <FormControlLabel value="dropdown" control={<Radio />} label="Dropdown List" />
+              </RadioGroup>
+            </FormControl>
+          )}
           <SwitchWithState
             checked={calculateTotalScoreSwitch}
             handleChange={calculateTotalScoreSwitchChange}

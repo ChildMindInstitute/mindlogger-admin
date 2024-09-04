@@ -4,6 +4,7 @@ import i18n from 'i18n';
 import { SubscaleTotalScore, ItemResponseType, LookupTableItems } from 'shared/consts';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import {
+  defaultNumberSelectionConfig,
   defaultSingleSelectionConfig,
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
@@ -77,11 +78,23 @@ export const genderItem = getNewActivityItem({
   },
 });
 
-export const ageItem = getNewActivityItem({
+export const ageTextItem = getNewActivityItem({
   allowEdit: false,
   name: LookupTableItems.Age_screen,
   question: t('ageQuestion'),
   config: defaultTextConfig,
   responseType: ItemResponseType.Text,
   responseValues: null,
+});
+
+export const ageDropdownItem = getNewActivityItem({
+  allowEdit: false,
+  name: LookupTableItems.Age_screen,
+  question: t('ageQuestion'),
+  config: defaultNumberSelectionConfig,
+  responseType: ItemResponseType.NumberSelection,
+  responseValues: {
+    minValue: 1,
+    maxValue: 50,
+  },
 });

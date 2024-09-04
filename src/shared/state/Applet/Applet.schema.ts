@@ -745,6 +745,8 @@ export type ScoresAndReports = {
   reports: ScoreOrSection[];
 };
 
+export type AgeFieldType = 'text' | 'dropdown';
+
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   calculateTotalScore?: SubscaleTotalScore | null;
   subscales?: ActivitySettingsSubscale<T>[];
