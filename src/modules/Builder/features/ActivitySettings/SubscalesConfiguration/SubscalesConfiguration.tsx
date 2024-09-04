@@ -190,24 +190,19 @@ export const SubscalesConfiguration = () => {
             noDataPlaceholder={t('noElementsYet')}
             data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
-          {/* TODO: Translate */}
           {hasLookupTable && (
-            <FormControl sx={{ mt: theme.spacing(2) }}>
-              <FormLabel id="age-field-type-radio-btns-label">Age screen field type:</FormLabel>
+            <FormControl sx={{ mt: theme.spacing(2), flexDirection: 'row', alignItems: 'center', gap: 1.6 }}>
+              <FormLabel id="age-field-type-radio-btns-label">
+                <StyledTitleMedium>{t('ageFieldTypeLabel')}</StyledTitleMedium>
+              </FormLabel>
               <RadioGroup
                 row
                 aria-labelledby="age-field-type-radio-btns-label"
-                name="age-field-type-radio-buttons-group"
                 value={ageFieldType}
                 onChange={(e) => setAgeFieldType(e.target.value as AgeFieldType)}
               >
-                <FormControlLabel
-                  value="text"
-                  control={<Radio />}
-                  label="Text Field"
-                  defaultChecked={true}
-                />
-                <FormControlLabel value="dropdown" control={<Radio />} label="Dropdown List" />
+                <FormControlLabel value="text" control={<Radio />} label={t('ageFieldTypeText')} />
+                <FormControlLabel value="dropdown" control={<Radio />} label={t('ageFieldTypeDropdown')} />
               </RadioGroup>
             </FormControl>
           )}
