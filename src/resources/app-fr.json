@@ -1039,7 +1039,7 @@
   "photoHint": "Tâche de capture de photo",
   "photoResponseDescription": "Le participant pourra prendre ou uploader une photo.",
   "photoResponseTitle": "Réponse avec Photo",
-  "phrasalTemplate": "Modèle de phrase",
+  "phrasalTemplate": "Constructeur de phrases",
   "phrasalTemplateItem": {
     "btnAddField": "Ajouter…",
     "btnAddPhrase": "Nouvelle phrase",

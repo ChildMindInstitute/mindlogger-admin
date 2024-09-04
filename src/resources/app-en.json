@@ -1040,7 +1040,7 @@
   "photoHint": "Photo capture task",
   "photoResponseDescription": "The respondent will be able to take or upload a photo.",
   "photoResponseTitle": "Photo Response",
-  "phrasalTemplate": "Phrasal Template",
+  "phrasalTemplate": "Phrase Builder",
   "phrasalTemplateItem": {
     "btnAddField": "Add…",
     "btnAddPhrase": "New Phrase",
