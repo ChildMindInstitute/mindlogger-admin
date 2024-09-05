@@ -89,31 +89,49 @@ export function RenderedField({
     ) {
       const items = DisplayModeOptions[selectedItem?.responseType || 'default'];
 
-      setDisplayMode({
-        id: selectedItem?.responseType as string,
-        items,
-      });
-      setResponseFrom(undefined);
-      setValue(name, {
-        ...fieldValue,
-        itemIndex: 0,
-        displayMode: items ? fieldValue?.displayMode : KEYWORDS.DISPLAY_SENTENCE,
-      });
+      setTimeout(() => {
+        // These state update calls are side effects of this `getRenderedValue`
+        // function. We have to defer the side effects to the next rendering
+        // cycle to avoid this warning:
+        // ```
+        // Warning: Cannot update a component (`RenderedField`) while rendering
+        // a different component (`ForwardRef(SelectInput)`).
+        // ```
+        setDisplayMode({
+          id: selectedItem?.responseType as string,
+          items,
+        });
+        setResponseFrom(undefined);
+        setValue(name, {
+          ...fieldValue,
+          itemIndex: 0,
+          displayMode: items ? fieldValue?.displayMode : KEYWORDS.DISPLAY_SENTENCE,
+        });
+      }, 1);
     }
 
     if (
       selectedItem?.name !== responseFrom?.name &&
       selectedItem?.responseType === ItemResponseType.SliderRows
     ) {
-      setResponseFrom({
-        name: selectedItem?.name,
-        items: selectedItem?.responseValues?.rows,
-      });
-      setDisplayMode(undefined);
-      setValue(name, {
-        ...fieldValue,
-        displayMode: KEYWORDS.DISPLAY_SENTENCE,
-      });
+      setTimeout(() => {
+        // These state update calls are side effects of this `getRenderedValue`
+        // function. We have to defer the side effects to the next rendering
+        // cycle to avoid this warning:
+        // ```
+        // Warning: Cannot update a component (`RenderedField`) while rendering
+        // a different component (`ForwardRef(SelectInput)`).
+        // ```
+        setResponseFrom({
+          name: selectedItem?.name,
+          items: selectedItem?.responseValues?.rows,
+        });
+        setDisplayMode(undefined);
+        setValue(name, {
+          ...fieldValue,
+          displayMode: KEYWORDS.DISPLAY_SENTENCE,
+        });
+      }, 1);
     }
 
     return selectedItem?.name;
