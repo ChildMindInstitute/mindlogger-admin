@@ -193,9 +193,7 @@ export const SubscalesConfiguration = () => {
             data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
           {hasLookupTable && (
-            <FormControl
-              sx={{ mt: 2, flexDirection: 'row', alignItems: 'center', gap: 1.6 }}
-            >
+            <FormControl sx={{ mt: 2, flexDirection: 'row', alignItems: 'center', gap: 1.6 }}>
               <FormLabel id="age-field-type-radio-btns-label">
                 <StyledTitleMedium>{t('ageFieldTypeLabel')}</StyledTitleMedium>
               </FormLabel>
