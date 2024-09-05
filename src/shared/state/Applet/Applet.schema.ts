@@ -251,6 +251,7 @@ export interface PhrasalTemplateConfig {
 }
 
 export interface UnityConfig {
+  skippableItem?: boolean;
   file: Uint8Array;
 }
 
@@ -697,7 +698,7 @@ export type PhrasalTemplateItem<T = ItemCommonType> = T & {
 
 export type UnityItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.Unity;
-  config: TouchConfig;
+  config: UnityConfig;
   responseValues: null;
 };
 

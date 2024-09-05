@@ -3,8 +3,6 @@ import { lazy } from 'react';
 import { Path } from 'shared/utils';
 import { GyroscopeOrTouch } from 'shared/consts';
 
-import Unity from '../features/PerformanceTasks/Unity';
-
 const Activities = lazy(() => import('modules/Builder/features/Activities'));
 const AboutApplet = lazy(() => import('modules/Builder/features/AboutApplet'));
 const ActivityAbout = lazy(() => import('modules/Builder/features/ActivityAbout'));
@@ -17,6 +15,7 @@ const Flanker = lazy(() => import('modules/Builder/features/PerformanceTasks/Fla
 const GyroscopeAndTouch = lazy(
   () => import('modules/Builder/features/PerformanceTasks/GyroscopeAndTouch'),
 );
+const Unity = lazy(() => import('modules/Builder/features/PerformanceTasks/Unity'));
 
 export const appletRoutes = [
   { path: Path.About, Component: AboutApplet },

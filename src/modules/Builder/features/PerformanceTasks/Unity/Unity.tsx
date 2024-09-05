@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { Svg } from 'shared/components';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
@@ -12,15 +13,43 @@ import { UnityFilePreview } from './UnityFilePreview';
 
 export const Unity = () => {
   const { t } = useTranslation();
+  const { setValue, watch, trigger } = useCustomFormContext();
+
   const [file, setFile] = useState<File | null>(null);
+
+  const urlName = 'activities[0].items[0].config.file';
+  const url = watch(urlName);
+  const [fileContent, setFileContent] = useState<string>(url ? url : '');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const isValidFile = file !== null && file.type === 'application/x-yaml';
+  const VALID_FILE_TYPES = [
+    'application/x-yaml',
+    'application/yaml',
+    'text/yaml',
+    'text/x-yaml',
+    'text/plain',
+    'application/json',
+  ];
+
+  const isValidFile = file !== null && VALID_FILE_TYPES.includes(file.type);
 
   const dataTestid = 'builder-activity-unity';
 
   const handleUpload = (uploadedFile: File) => {
     setFile(uploadedFile);
+    const formFile = watch(urlName);
+    if (formFile === null) {
+      setFileContent('');
+
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileContentString = e.target?.result as string;
+      setFileContent(fileContentString);
+      setValue(urlName, fileContentString);
+    };
+    reader.readAsText(uploadedFile);
   };
 
   const handleCloseModal = () => {
@@ -31,9 +60,18 @@ export const Unity = () => {
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    if (!url) return;
+
+    if (url) {
+      trigger(urlName);
+      setFileContent(url);
+    }
+  }, [url]);
+
   const OpenModalButton = () =>
     isValidFile ? (
-      <UnityFilePreview file={file} />
+      <UnityFilePreview fileContent={fileContent} />
     ) : (
       <Button
         variant="text"
