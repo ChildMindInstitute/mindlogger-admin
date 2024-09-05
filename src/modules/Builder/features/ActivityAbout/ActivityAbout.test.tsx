@@ -14,6 +14,7 @@ import {
   mockedSingleSelectFormValues,
   mockedSliderFormValues,
 } from 'shared/mock';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { initialStateData } from 'shared/state';
 import { Roles } from 'shared/consts';
 
@@ -79,7 +80,22 @@ const appletFormData = {
   ],
 };
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 describe('ActivityAbout', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
   test('should render all fields for a new applet', () => {
     const route = `/builder/new-applet/activities/${mockedActivityId}/about`;
     renderWithAppletFormData({
@@ -127,6 +143,23 @@ describe('ActivityAbout', () => {
     expect(isReviewable).not.toBeDisabled();
     const isAutoAssign = screen.getByLabelText('Auto-assign this activity (as self-report)');
     expect(isAutoAssign).toBeChecked();
+  });
+
+  test('should hide auto assign checkbox based on feature flag', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableActivityAssign: false,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    renderWithAppletFormData({
+      children: <ActivityAbout />,
+      appletFormData,
+      options: { route, routePath, preloadedState },
+    });
+
+    expect(screen.queryByLabelText('Auto-assign this activity (as self-report)')).toBeNull();
   });
 
   test("shouldn't turn activity to reviewer one", () => {

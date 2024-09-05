@@ -10,6 +10,7 @@ import { mockedAppletFormData } from 'shared/mock';
 import { getEntityKey } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { ActivityFlowAbout } from './ActivityFlowAbout';
 
@@ -60,9 +61,21 @@ const renderNewActivityFlowAbout = () => renderActivityFlowAbout(mockedAppletFor
 const renderActivityFlowAboutWithTwoFlows = () =>
   renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 describe('ActivityFlowAbout', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
   });
 
   test.each`
@@ -138,6 +151,21 @@ describe('ActivityFlowAbout', () => {
     await waitFor(() => {
       expect(screen.getByText(error)).toBeVisible();
     });
+  });
+
+  test('should hide auto assign checkbox based on feature flag', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableActivityAssign: false,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    renderActivityFlowAbout();
+
+    const field = screen.queryByTestId(`${mockedFlowsTestid}-auto-assign`);
+
+    expect(field).toBeNull();
   });
 
   test('Validations: activity flow with existing name', async () => {
