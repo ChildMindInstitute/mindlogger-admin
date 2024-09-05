@@ -98,7 +98,7 @@ export const ageDropdownItem = getNewActivityItem({
   config: defaultNumberSelectionConfig,
   responseType: ItemResponseType.NumberSelection,
   responseValues: {
-    minValue: 1,
+    minValue: 0,
     maxValue: 50,
   },
 });
