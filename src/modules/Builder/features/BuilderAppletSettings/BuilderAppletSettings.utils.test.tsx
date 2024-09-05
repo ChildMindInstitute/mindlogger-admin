@@ -20,7 +20,7 @@ describe('getSettings', () => {
   });
 
   describe('should return right items for section ', () => {
-    const usersAndDataItems = ['dataRetention', 'liveResponseStreaming', 'loris.integration'];
+    const usersAndDataItems = ['dataRetention', 'liveResponseStreaming'];
     const appletContentItems = ['versionHistory', 'transferOwnership', 'deleteApplet'];
     const sharingItemsForPublished = ['shareToLibrary', 'concealApplet'];
     const sharingItems = ['shareToLibrary', 'publishApplet'];

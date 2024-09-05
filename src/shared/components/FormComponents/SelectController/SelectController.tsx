@@ -85,6 +85,7 @@ export const SelectController = <T extends FieldValues>({
   SelectProps,
   shouldSkipIcon = false,
   TooltipProps = {},
+  className,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -186,11 +187,11 @@ export const SelectController = <T extends FieldValues>({
     selectedValue?: string,
     error?: FieldError,
   ) => (
-    <Box sx={{ position: 'relative', width: '100%', ...sx }}>
+    <Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
       {placeholder && !selectedValue && (
         <>
           <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
-          <StyledPlaceholder>{placeholder}</StyledPlaceholder>
+          <StyledPlaceholder className="controller-placeholder">{placeholder}</StyledPlaceholder>
         </>
       )}
 
@@ -251,8 +252,8 @@ export const SelectController = <T extends FieldValues>({
           render={({ field: { onChange, value }, fieldState: { error } }) =>
             renderSelect(
               (event) => {
-                customChange && customChange(event);
                 onChange(event);
+                customChange && customChange(event);
                 setTrigger?.(false);
               },
               value,

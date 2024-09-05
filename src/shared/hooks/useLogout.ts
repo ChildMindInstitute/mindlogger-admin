@@ -46,11 +46,11 @@ export const useLogout = () => {
       dispatch(alerts.actions.resetAlerts());
       dispatch(auth.actions.resetAuthorization());
 
-      navigate(page.login);
-
       Mixpanel.track('Logout');
       Mixpanel.logout();
-      FeatureFlags.logout();
+      await FeatureFlags.logout();
+
+      navigate(page.login);
     }
   };
 };

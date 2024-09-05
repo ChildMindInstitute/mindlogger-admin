@@ -45,6 +45,7 @@ import {
   DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   GyroscopeOrTouch,
+  Integrations,
   ItemResponseType,
   LookupTableItems,
   PerfTaskType,
@@ -1057,6 +1058,9 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
 
   const { activities, nonReviewableKeys } = getActivities(appletData.activities || []);
 
+  const hasLorisIntegration =
+    appletData.integrations?.some((integration) => integration === Integrations.Loris) || false;
+
   const processedApplet: AppletFormValues = {
     ...appletData,
     description: getDictionaryText(appletData.description),
@@ -1069,8 +1073,8 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
       nonReviewableKeys,
     }),
     streamEnabled: !!appletData.streamEnabled,
-    // TODO: Once the backend (the necessary endpoints to enable integration) is ready,
-    // make sure that the integrations property works correctly
+    lorisIntegration: hasLorisIntegration,
+    integrations: appletData.integrations,
   };
 
   return processedApplet;

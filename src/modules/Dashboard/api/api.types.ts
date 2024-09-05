@@ -630,3 +630,7 @@ export type AppletAssignmentsResponse = {
     assignments: Assignment[];
   };
 };
+
+export type Integration = {
+  integrationType: string;
+};
