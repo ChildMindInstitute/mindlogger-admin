@@ -20,7 +20,6 @@ import {
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
-  DecryptedTextAnswer,
   ElementType,
 } from 'shared/types';
 
@@ -119,10 +118,19 @@ export const calcScores = <T>(
       const genderAnswer = activityItems[LookupTableItems.Gender_screen]
         ?.answer as DecryptedSingleSelectionAnswer;
       const withSex = sex ? parseSex(sex) === String(genderAnswer?.value) : true;
-      const withAge = age
-        ? String(age) ===
-          (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
-        : true;
+
+      const ageAnswer = activityItems[LookupTableItems.Age_screen]?.answer;
+      let reportedAge: string | undefined;
+
+      if (ageAnswer) {
+        if (typeof ageAnswer === 'string') {
+          reportedAge = ageAnswer;
+        } else if ('value' in ageAnswer && typeof ageAnswer.value === 'number') {
+          reportedAge = String(ageAnswer.value);
+        }
+      }
+
+      const withAge = age ? String(age) === reportedAge : true;
 
       if (!withSex || !withAge) return false;
 
