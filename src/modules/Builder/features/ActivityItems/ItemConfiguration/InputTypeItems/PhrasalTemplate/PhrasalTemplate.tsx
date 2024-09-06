@@ -1,7 +1,7 @@
 import { useFieldArray } from 'react-hook-form';
 import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import {
   StyledFlexColumn,
@@ -37,9 +37,21 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
     [currentItemIndex, items],
   );
 
-  const handleAddPhrase = () => {
+  const handleAddPhrase = useCallback(() => {
     append(getNewDefaultPhrase());
-  };
+  }, [append]);
+
+  const handleRemovePhrase = useCallback(
+    (index: number) => {
+      console.warn('TODO: M2-7163 — Remove Phrase Confirmation');
+      remove(index);
+    },
+    [remove],
+  );
+
+  const handlePreviewPhrase = useCallback((index: number) => {
+    console.log('!!! handlePreviewPhrase index', index);
+  }, []);
 
   return (
     <StyledFlexColumn sx={{ gap: 2.4, placeContent: 'flex-start' }}>
@@ -88,9 +100,8 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
               index={i}
               key={field.id}
               name={`${name}.responseValues.phrases.${i}`}
-              onRemovePhrase={() => {
-                remove(i);
-              }}
+              onRemovePhrase={() => handleRemovePhrase(i)}
+              onPreviewPhrase={() => handlePreviewPhrase(i)}
               responseOptions={responseOptions}
             />
           ))}

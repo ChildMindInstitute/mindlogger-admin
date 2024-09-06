@@ -34,6 +34,7 @@ export const PhrasalTemplatePhrase = ({
   responseOptions = [],
   index = 0,
   onRemovePhrase,
+  onPreviewPhrase,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -63,15 +64,12 @@ export const PhrasalTemplatePhrase = ({
 
   const handleRemovePhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-
     onRemovePhrase?.();
-    console.warn('TODO: M2-7163 — Remove Phrase');
   };
 
   const handlePreviewPhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-
-    console.warn('TODO: M2-7164 — Preview Phrase');
+    onPreviewPhrase?.();
   };
 
   return (
@@ -110,7 +108,7 @@ export const PhrasalTemplatePhrase = ({
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
               variant="text"
-              disabled={formState.isDirty || formState.isSubmitting || !formState.isValid}
+              disabled={formState.isSubmitting || !formState.isValid}
             >
               <Svg aria-hidden height={18} id="notes" width={18} />
               {t('phrasalTemplateItem.btnPreviewPhrase')}
