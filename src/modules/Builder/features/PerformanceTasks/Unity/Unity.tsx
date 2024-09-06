@@ -73,15 +73,17 @@ export const Unity = () => {
     isValidFile ? (
       <UnityFilePreview fileContent={fileContent} />
     ) : (
-      <Button
-        variant="text"
-        startIcon={<Svg id="add" width={18} height={18} />}
-        onClick={handleOpenModal}
-        sx={{ mr: theme.spacing(1.6) }}
-        data-testid="builder-activities-add-activity"
-      >
-        {t('upload')}
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <Button
+          variant="text"
+          startIcon={<Svg id="add" width={18} height={18} />}
+          onClick={handleOpenModal}
+          sx={{ ml: theme.spacing(-1) }}
+          data-testid="builder-activities-add-activity"
+        >
+          {t('upload')}
+        </Button>
+      </Box>
     );
 
   return (
