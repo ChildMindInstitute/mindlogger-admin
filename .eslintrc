@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import", "react-hooks", "@typescript-eslint", "unused-imports"],
+  "plugins": ["import", "react-hooks", "@typescript-eslint", "unused-imports", "prettier"],
   "env": {
     "node": true
   },
@@ -9,7 +9,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
