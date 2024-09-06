@@ -27,7 +27,11 @@ export const HelpPopup = ({ isVisible, setIsVisible, ...rest }: HelpPopupProps) 
           <Trans i18nKey="activityAssign.helpContent">
             <StyledHelpTitle></StyledHelpTitle>
             <StyledHelpParagraph></StyledHelpParagraph>
+            <StyledHelpParagraph></StyledHelpParagraph>
             <StyledHelpTitle></StyledHelpTitle>
+            <StyledHelpParagraph></StyledHelpParagraph>
+            <StyledHelpTitle></StyledHelpTitle>
+            <StyledHelpParagraph></StyledHelpParagraph>
             <StyledHelpParagraph></StyledHelpParagraph>
             <StyledHelpParagraph></StyledHelpParagraph>
             <StyledHelpTitle></StyledHelpTitle>
