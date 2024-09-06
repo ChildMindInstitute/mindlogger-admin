@@ -1,11 +1,13 @@
 import { IconButton } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
-import { StyledFlexTopCenter } from 'shared/styles';
+import { Menu, Svg } from 'shared/components';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
 
 import { KEYWORDS } from './PhrasalTemplateField.const';
+import { StyledFlexTopCenterDraggable } from './PhrasalTemplateField.styles';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
 import { RenderedField } from './PhrasalTemplateRenderField';
 
@@ -15,93 +17,114 @@ export const PhrasalTemplateField = ({
   onRemove,
   responseOptions = [],
   type = KEYWORDS.SENTENCE,
+  itemId,
+  index,
   ...otherProps
 }: PhrasalTemplateFieldProps) => {
-  const [showExpandedMenu, setShowExpandedMenu] = useState(false);
+  const [isExpandedMenuOpen, setIsExpandedMenuOpen] = useState<boolean>(false);
+  const [removeItemMenuAnchorEl, setRemoveItemMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const isRemoveItemMenuOpen = Boolean(removeItemMenuAnchorEl);
   const menuRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation('app');
 
-  const handleFocusMenu = () => {
-    setShowExpandedMenu(true);
-  };
+  const showExpandedMenu = useCallback(() => {
+    setIsExpandedMenuOpen(true);
+  }, []);
 
-  const handleMouseEnterMenu = () => {
-    setShowExpandedMenu(true);
-  };
-
-  const handleHoverLeaveMenu = () => {
-    if (document.activeElement) {
-      const children = menuRef.current?.childNodes;
-      const activeElIsChild = [...(children ?? [])].includes(document.activeElement);
-
-      if (activeElIsChild) {
-        return;
-      }
+  const hideExpandedMenu = useCallback(() => {
+    if (!isRemoveItemMenuOpen) {
+      setIsExpandedMenuOpen(false);
     }
+  }, [isRemoveItemMenuOpen]);
 
-    setShowExpandedMenu(false);
-  };
+  const handleOpenRemoveItemMenu = useCallback((evt: React.MouseEvent<HTMLButtonElement>) => {
+    setRemoveItemMenuAnchorEl(evt.currentTarget);
+  }, []);
 
-  const handleBlurMenu: React.FocusEventHandler<HTMLDivElement> = (e) => {
-    if (e.relatedTarget) {
-      const children = menuRef.current?.childNodes;
-      const relatedTargetIsChild = [...(children ?? [])].includes(e.relatedTarget);
-
-      if (relatedTargetIsChild) {
-        return;
-      }
-    }
-
-    setShowExpandedMenu(false);
-  };
+  const handleCloseRemoveItemMenu = useCallback(() => {
+    setRemoveItemMenuAnchorEl(null);
+    setIsExpandedMenuOpen(false);
+  }, []);
 
   return (
-    <StyledFlexTopCenter sx={{ gap: 0.8, width: '100%' }}>
-      <RenderedField
-        name={name}
-        responseOptions={responseOptions}
-        type={type}
-        {...otherProps}
-        sx={{ '.MuiFormHelperText-root': { mb: 0.4 } }}
-      />
-      <StyledFlexTopCenter
-        onBlur={handleBlurMenu}
-        onMouseEnter={handleMouseEnterMenu}
-        onMouseLeave={handleHoverLeaveMenu}
-        ref={menuRef}
-        sx={{ gap: 0.8 }}
-      >
-        {showExpandedMenu ? (
-          <>
-            <IconButton color="default" disabled={!canRemove} onClick={onRemove}>
-              <Svg
-                aria-label={t('phrasalTemplateItem.btnRemoveField')}
-                fill="currentColor"
-                id="trash"
-              />
-            </IconButton>
-
-            {/* TODO: M2-7183 — Draggable re-ordering of phrase fields */}
-            <IconButton color="default" disabled>
-              <Svg
-                aria-label={t('phrasalTemplateItem.btnOrderField')}
-                fill="currentColor"
-                id="drag"
-              />
-            </IconButton>
-          </>
-        ) : (
-          <IconButton color="default" onFocus={handleFocusMenu}>
-            <Svg
-              aria-label={t('phrasalTemplateItem.btnShowFieldControls')}
-              fill="currentColor"
-              id="dots"
-              height={18}
-              width={18}
+    <>
+      <Draggable index={index} draggableId={itemId}>
+        {(draggableProvided, snapshot, rubric) => (
+          <StyledFlexTopCenterDraggable
+            sx={{ gap: 0.8 }}
+            ref={draggableProvided.innerRef}
+            {...draggableProvided.draggableProps}
+            isDragging={snapshot.isDragging && rubric.draggableId === itemId}
+          >
+            <RenderedField
+              name={name}
+              responseOptions={responseOptions}
+              type={type}
+              index={index}
+              itemId={itemId}
+              sx={{ '.MuiFormHelperText-root': { mb: 0.4 } }}
+              {...otherProps}
             />
-          </IconButton>
+            <StyledFlexTopCenter
+              onBlur={hideExpandedMenu}
+              onMouseEnter={showExpandedMenu}
+              onMouseLeave={hideExpandedMenu}
+              ref={menuRef}
+              sx={{ gap: 0.8 }}
+            >
+              {isExpandedMenuOpen ? (
+                <>
+                  <IconButton
+                    color="default"
+                    disabled={!canRemove}
+                    onClick={handleOpenRemoveItemMenu}
+                  >
+                    <Svg
+                      aria-label={t('phrasalTemplateItem.btnRemoveField')}
+                      fill="currentColor"
+                      id="trash"
+                    />
+                  </IconButton>
+                  <IconButton color="default" {...draggableProvided.dragHandleProps}>
+                    <Svg
+                      aria-label={t('phrasalTemplateItem.btnOrderField')}
+                      fill="currentColor"
+                      id="drag"
+                    />
+                  </IconButton>
+                </>
+              ) : (
+                <IconButton
+                  color="default"
+                  onMouseEnter={showExpandedMenu}
+                  onMouseLeave={hideExpandedMenu}
+                  {...draggableProvided.dragHandleProps}
+                >
+                  <Svg
+                    aria-label={t('phrasalTemplateItem.btnShowFieldControls')}
+                    fill="currentColor"
+                    id="dots"
+                    height={18}
+                    width={18}
+                  />
+                </IconButton>
+              )}
+            </StyledFlexTopCenter>
+          </StyledFlexTopCenterDraggable>
         )}
-      </StyledFlexTopCenter>
-    </StyledFlexTopCenter>
+      </Draggable>
+      <Menu
+        anchorEl={removeItemMenuAnchorEl}
+        onClose={handleCloseRemoveItemMenu}
+        menuItems={[
+          {
+            action: onRemove,
+            icon: <Svg id="trash" />,
+            title: 'remove',
+            customItemColor: variables.palette.semantic.error,
+          },
+        ]}
+      />
+    </>
   );
 };

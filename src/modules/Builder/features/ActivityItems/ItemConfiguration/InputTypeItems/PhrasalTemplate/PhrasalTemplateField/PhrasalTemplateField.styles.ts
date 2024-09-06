@@ -1,6 +1,13 @@
 import { Box, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+
+export const StyledFlexTopCenterDraggable = styled(StyledFlexTopCenter)`
+  ${({ isDragging }: { isDragging: boolean }) => `
+  box-shadow: ${isDragging ? variables.boxShadow.light3 : 'inherit'};
+  ${isDragging && `background-color: ${variables.palette.surface}`};
+`};
+`;
 
 export const StyledLineBreak = styled(Box)({
   borderTop: `1px dashed ${variables.palette.outline_variant2}`,

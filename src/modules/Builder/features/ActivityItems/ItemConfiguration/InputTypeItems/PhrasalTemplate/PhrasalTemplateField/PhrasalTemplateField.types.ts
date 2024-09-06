@@ -7,4 +7,6 @@ export type PhrasalTemplateFieldProps<Variant extends TextFieldVariants = TextFi
   onRemove?: () => void;
   responseOptions?: Item[];
   type?: PhrasalTemplateFieldType;
+  itemId: string;
+  index: number;
 } & TextFieldProps<Variant>;
