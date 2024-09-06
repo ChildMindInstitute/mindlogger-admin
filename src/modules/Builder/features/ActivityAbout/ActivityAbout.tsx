@@ -29,6 +29,7 @@ import {
   useCustomFormContext,
 } from 'modules/Builder/hooks';
 import { getUpdatedActivityFlows } from 'modules/Builder/utils';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -44,6 +45,7 @@ import {
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
+  const { featureFlags } = useFeatureFlags();
 
   useRedirectIfNoMatchedActivity();
 
@@ -174,6 +176,24 @@ export const ActivityAbout = () => {
       onCustomChange: handleIsReviewableChange,
       'data-testid': 'builder-activity-about-reviewable',
     },
+    ...(featureFlags.enableActivityAssign
+      ? [
+          {
+            name: `${fieldName}.autoAssign`,
+            label: (
+              <StyledBodyLarge sx={{ position: 'relative' }}>
+                <span>{t('autoAssignActivity')}</span>
+                <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+                  <span>
+                    <StyledCheckboxTooltipSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
+              </StyledBodyLarge>
+            ),
+            'data-testid': 'builder-activity-about-auto-assign',
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -209,20 +229,9 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(
-          ({ name, label, isInversed, disabled, 'data-testid': dataTestid, onCustomChange }) => (
-            <CheckboxController
-              key={name}
-              control={control}
-              name={name}
-              label={label}
-              disabled={disabled}
-              isInversed={isInversed}
-              onCustomChange={onCustomChange}
-              data-testid={dataTestid}
-            />
-          ),
-        )}
+        {checkboxes.map((props) => (
+          <CheckboxController {...props} key={props.name} control={control} />
+        ))}
       </StyledFlexColumn>
     </BuilderContainer>
   );

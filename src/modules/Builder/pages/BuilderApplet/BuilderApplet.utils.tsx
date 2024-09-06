@@ -360,6 +360,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     isSkippable: false,
     responseIsEditable: true,
     isHidden: false,
+    autoAssign: true,
     ...activity,
     isReviewable: false,
     items,
@@ -655,6 +656,7 @@ export const getNewActivityFlow = () => ({
   isSingleReport: false,
   hideBadge: false,
   isHidden: false,
+  autoAssign: true,
 });
 
 const getActivityItemResponseValues = (item: Item) => {
