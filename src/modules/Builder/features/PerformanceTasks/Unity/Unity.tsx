@@ -17,8 +17,11 @@ export const Unity = () => {
 
   const [file, setFile] = useState<File | null>(null);
 
-  const urlName = 'activities[0].items[0].config.file';
+  const activities = watch('activities');
+  const unityActivityIndex = activities.findIndex((a: { type: string }) => a.type === 'unity');
+  const urlName = `activities[${unityActivityIndex}].items[0].config.file`;
   const url = watch(urlName);
+
   const [fileContent, setFileContent] = useState<string>(url ? url : '');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
