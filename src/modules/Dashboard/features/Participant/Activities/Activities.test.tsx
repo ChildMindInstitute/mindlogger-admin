@@ -6,13 +6,15 @@ import { PreloadedState } from '@reduxjs/toolkit';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
-import { ParticipantTag, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletData,
   mockedAppletId,
   mockedEncryption,
   mockedOwnerId,
+  mockedOwnerRespondent,
+  mockedOwnerSubject,
   mockedRespondent,
   mockedRespondent2,
   mockedUserData,
@@ -28,7 +30,6 @@ import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features/Managers';
-import { RespondentStatus } from 'modules/Dashboard/types';
 import {
   expectMixpanelTrack,
   openTakeNowModal,
@@ -66,6 +67,26 @@ const successfulGetAppletActivitiesMock = {
   },
 };
 
+const successfulEmptyGetAppletSubjectActivitiesMock = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: {
+      activities: [],
+      activityFlows: [],
+    },
+  },
+};
+
+const successfulGetAppletSubjectActivitiesMock = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: {
+      activities: mockedAppletData.activities,
+      activityFlows: mockedAppletData.activityFlows,
+    },
+  },
+};
+
 const successfulGetAppletMock = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: { result: mockedAppletData },
@@ -80,11 +101,12 @@ const successfulEmptyHttpResponseMock: HttpResponse = {
 
 const getAppletUrl = `/applets/${mockedAppletId}`;
 const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
+const getAppletSubjectActivitiesUrl = `/activities/applet/${mockedAppletId}/subject/${mockedOwnerRespondent.details[0].subjectId}`;
 const getWorkspaceRespondentsUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 const getWorkspaceManagersUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`;
 
 const testId = 'dashboard-applet-participant-activities';
-const route = `/dashboard/${mockedAppletId}/participants/${mockedUserData.id}`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerRespondent.details[0].subjectId}`;
 const routePath = page.appletParticipantActivities;
 
 const preloadedState: PreloadedState<RootState> = {
@@ -95,14 +117,7 @@ const preloadedState: PreloadedState<RootState> = {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: {
-        id: 'test-id',
-        secretUserId: 'secretUserId',
-        nickname: 'nickname',
-        lastSeen: null,
-        tag: 'Child' as ParticipantTag,
-        userId: null,
-      },
+      result: mockedOwnerSubject,
     }),
   },
 };
@@ -134,13 +149,14 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     mockGetRequestResponses({
       [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
+      [getAppletSubjectActivitiesUrl]: successfulEmptyGetAppletSubjectActivitiesMock,
       [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
       [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
     });
     renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
     await waitFor(() => {
-      expect(screen.getByText('Applet has no activities')).toBeInTheDocument();
+      expect(screen.getByText('No activities available for this participant')).toBeInTheDocument();
     });
   });
 
@@ -148,6 +164,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     mockGetRequestResponses({
       [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+      [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
       [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
       [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
     });
@@ -157,7 +174,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect(mockAxios.get).toHaveBeenCalledWith(getAppletSubjectActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
@@ -176,6 +193,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
       });
@@ -218,6 +236,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         mockGetRequestResponses({
           [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
           [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
         });
@@ -242,37 +261,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     });
 
     test('should pre-populate admin and participant in Take Now modal', async () => {
-      const mockedOwnerRespondent = {
-        id: mockedUserData.id,
-        nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-        secretIds: ['mockedOwnerSecretId'],
-        isAnonymousRespondent: false,
-        lastSeen: new Date().toDateString(),
-        isPinned: false,
-        accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-        role: Roles.Owner,
-        details: [
-          {
-            appletId: mockedApplet.id,
-            appletDisplayName: mockedApplet.displayName,
-            appletImage: '',
-            accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-            respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-            respondentSecretId: 'mockedOwnerSecretId',
-            hasIndividualSchedule: false,
-            encryption: mockedApplet.encryption,
-            subjectId: 'owner-subject-id-123',
-            subjectTag: 'Team' as ParticipantTag,
-            subjectFirstName: 'John',
-            subjectLastName: 'Doe',
-            subjectCreatedAt: '2023-09-26T12:11:46.162083',
-            invitation: null,
-          },
-        ],
-        status: RespondentStatus.Invited,
-        email: mockedUserData.email,
-      };
-
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
         result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
         count: 3,
@@ -315,6 +303,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
           if (params.userId === mockedOwnerRespondent.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
@@ -353,48 +342,16 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         .getByTestId(targetSubjectDropdownTestId(testId))
         .querySelector('input');
 
-      const { secretUserId, nickname, tag } =
-        preloadedState?.users?.subjectDetails.data?.result ?? {};
+      const { firstName, lastName, tag } = preloadedState?.users?.subjectDetails.data?.result ?? {};
 
-      expect(targetSubjectInputElement).toHaveValue(`${secretUserId} (${nickname}) (${tag})`);
+      expect(targetSubjectInputElement).toHaveValue(`${firstName} ${lastName} (${tag})`);
 
       expect(sourceSubjectInputElement).toHaveValue(
-        `${mockedUserData.firstName} ${mockedUserData.lastName} (Team)`,
+        `${mockedUserData.firstName} ${mockedUserData.lastName} (${mockedOwnerSubject.tag})`,
       );
     });
 
     test('Full account participants cannot self-report', async () => {
-      const mockedOwnerRespondent = {
-        id: mockedUserData.id,
-        nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-        secretIds: ['mockedOwnerSecretId'],
-        isAnonymousRespondent: false,
-        lastSeen: new Date().toDateString(),
-        isPinned: false,
-        accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-        role: Roles.Owner,
-        details: [
-          {
-            appletId: mockedApplet.id,
-            appletDisplayName: mockedApplet.displayName,
-            appletImage: '',
-            accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-            respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-            respondentSecretId: 'mockedOwnerSecretId',
-            hasIndividualSchedule: false,
-            encryption: mockedApplet.encryption,
-            subjectId: 'owner-subject-id-123',
-            subjectTag: 'Team' as ParticipantTag,
-            subjectFirstName: 'John',
-            subjectLastName: 'Doe',
-            subjectCreatedAt: '2023-09-26T12:11:46.162083',
-            invitation: null,
-          },
-        ],
-        status: RespondentStatus.Invited,
-        email: mockedUserData.email,
-      };
-
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
         result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
         count: 3,
@@ -437,6 +394,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
           if (params.userId === mockedOwnerRespondent.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
@@ -487,37 +445,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     });
 
     test('Full account participants are not present in the inputting dropdown', async () => {
-      const mockedOwnerRespondent = {
-        id: mockedUserData.id,
-        nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-        secretIds: ['mockedOwnerSecretId'],
-        isAnonymousRespondent: false,
-        lastSeen: new Date().toDateString(),
-        isPinned: false,
-        accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-        role: Roles.Owner,
-        details: [
-          {
-            appletId: mockedApplet.id,
-            appletDisplayName: mockedApplet.displayName,
-            appletImage: '',
-            accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-            respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-            respondentSecretId: 'mockedOwnerSecretId',
-            hasIndividualSchedule: false,
-            encryption: mockedApplet.encryption,
-            subjectId: 'owner-subject-id-123',
-            subjectTag: 'Team' as ParticipantTag,
-            subjectFirstName: 'John',
-            subjectLastName: 'Doe',
-            subjectCreatedAt: '2023-09-26T12:11:46.162083',
-            invitation: null,
-          },
-        ],
-        status: RespondentStatus.Invited,
-        email: mockedUserData.email,
-      };
-
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
         result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
         count: 3,
@@ -560,6 +487,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
           if (params.userId === mockedOwnerRespondent.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
@@ -644,37 +572,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       });
 
       test('should pre-populate only participant in Take Now modal', async () => {
-        const mockedOwnerRespondent = {
-          id: mockedUserData.id,
-          nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-          secretIds: ['mockedOwnerSecretId'],
-          isAnonymousRespondent: false,
-          lastSeen: new Date().toDateString(),
-          isPinned: false,
-          accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-          role: Roles.Owner,
-          details: [
-            {
-              appletId: mockedApplet.id,
-              appletDisplayName: mockedApplet.displayName,
-              appletImage: '',
-              accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-              respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-              respondentSecretId: 'mockedOwnerSecretId',
-              hasIndividualSchedule: false,
-              encryption: mockedApplet.encryption,
-              subjectId: 'owner-subject-id-123',
-              subjectTag: 'Team' as ParticipantTag,
-              subjectFirstName: 'John',
-              subjectLastName: 'Doe',
-              subjectCreatedAt: '2023-09-26T12:11:46.162083',
-              invitation: null,
-            },
-          ],
-          status: RespondentStatus.Invited,
-          email: mockedUserData.email,
-        };
-
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
           result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
           count: 3,
@@ -717,6 +614,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         mockGetRequestResponses({
           [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
             if (params.userId === mockedOwnerRespondent.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
@@ -755,46 +653,15 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           .getByTestId(targetSubjectDropdownTestId(testId))
           .querySelector('input');
 
-        const { secretUserId, nickname, tag } =
+        const { firstName, lastName, tag } =
           preloadedState?.users?.subjectDetails.data?.result ?? {};
 
-        expect(targetSubjectInputElement).toHaveValue(`${secretUserId} (${nickname}) (${tag})`);
+        expect(targetSubjectInputElement).toHaveValue(`${firstName} ${lastName} (${tag})`);
 
         expect(sourceSubjectInputElement).toHaveValue('');
       });
 
       test('Full account participants can self-report', async () => {
-        const mockedOwnerRespondent = {
-          id: mockedUserData.id,
-          nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-          secretIds: ['mockedOwnerSecretId'],
-          isAnonymousRespondent: false,
-          lastSeen: new Date().toDateString(),
-          isPinned: false,
-          accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-          role: Roles.Owner,
-          details: [
-            {
-              appletId: mockedApplet.id,
-              appletDisplayName: mockedApplet.displayName,
-              appletImage: '',
-              accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-              respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-              respondentSecretId: 'mockedOwnerSecretId',
-              hasIndividualSchedule: false,
-              encryption: mockedApplet.encryption,
-              subjectId: 'owner-subject-id-123',
-              subjectTag: 'Team' as ParticipantTag,
-              subjectFirstName: 'John',
-              subjectLastName: 'Doe',
-              subjectCreatedAt: '2023-09-26T12:11:46.162083',
-              invitation: null,
-            },
-          ],
-          status: RespondentStatus.Invited,
-          email: mockedUserData.email,
-        };
-
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
           result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
           count: 3,
@@ -837,6 +704,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         mockGetRequestResponses({
           [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
             if (params.userId === mockedOwnerRespondent.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
@@ -880,37 +748,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       });
 
       test('Full account participants are present in the inputting dropdown', async () => {
-        const mockedOwnerRespondent = {
-          id: mockedUserData.id,
-          nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-          secretIds: ['mockedOwnerSecretId'],
-          isAnonymousRespondent: false,
-          lastSeen: new Date().toDateString(),
-          isPinned: false,
-          accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-          role: Roles.Owner,
-          details: [
-            {
-              appletId: mockedApplet.id,
-              appletDisplayName: mockedApplet.displayName,
-              appletImage: '',
-              accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-              respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-              respondentSecretId: 'mockedOwnerSecretId',
-              hasIndividualSchedule: false,
-              encryption: mockedApplet.encryption,
-              subjectId: 'owner-subject-id-123',
-              subjectTag: 'Team' as ParticipantTag,
-              subjectFirstName: 'John',
-              subjectLastName: 'Doe',
-              subjectCreatedAt: '2023-09-26T12:11:46.162083',
-              invitation: null,
-            },
-          ],
-          status: RespondentStatus.Invited,
-          email: mockedUserData.email,
-        };
-
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
           result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
           count: 3,
@@ -953,6 +790,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         mockGetRequestResponses({
           [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
             if (params.userId === mockedOwnerRespondent.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
