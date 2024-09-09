@@ -25,7 +25,7 @@ export function RenderedField({
   responseOptions = [],
   type = KEYWORDS.SENTENCE,
   ...otherProps
-}: Omit<PhrasalTemplateFieldProps, 'canRemove' | 'onRemove'>) {
+}: Omit<PhrasalTemplateFieldProps, 'canRemove' | 'onRemove' | 'setAnchorPopUp'>) {
   const [displayMode, setDisplayMode] = useState<{
     id: string;
     items?: Array<{ id: string; name: string }>;
