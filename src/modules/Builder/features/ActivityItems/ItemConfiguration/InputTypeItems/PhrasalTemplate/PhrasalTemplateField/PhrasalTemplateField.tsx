@@ -115,6 +115,9 @@ export const PhrasalTemplateField = ({
       </Draggable>
       <Menu
         anchorEl={removeItemMenuAnchorEl}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        width="23.2rem"
         onClose={handleCloseRemoveItemMenu}
         menuItems={[
           {
