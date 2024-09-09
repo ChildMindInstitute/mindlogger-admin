@@ -1600,6 +1600,7 @@
   "noAccessDescription": "To refresh the data, please click the button below.",
   "noActivities": "No activities found",
   "noActivitiesForApplet": "Applet has no activities",
+  "noActivitiesForParticipant": "No activities available for this participant",
   "noPermissionToViewData": "You do not have permission to view this data",
   "notInvited": "Not invited",
   "pending": "Pending",

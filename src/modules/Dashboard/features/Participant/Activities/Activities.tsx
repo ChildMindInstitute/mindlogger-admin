@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi } from 'api';
+import { getAppletSubjectActivitiesApi } from 'api';
 import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import {
   ActivityActionProps,
@@ -47,17 +47,15 @@ export const Activities = () => {
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
-  // TODO M2-6223: Update this call to include a `subject_id` param
   const {
     execute,
     isLoading: isLoadingActivities,
     value,
     previousValue,
-  } = useAsync(getAppletActivitiesApi);
-  const flows: ActivityFlow[] =
-    (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
+  } = useAsync(getAppletSubjectActivitiesApi);
+  const flows: ActivityFlow[] = (value ?? previousValue)?.data?.result.activityFlows ?? [];
   const activities: Activity[] = useMemo(
-    () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
+    () => (value ?? previousValue)?.data?.result.activities ?? [],
     [value, previousValue],
   );
 
@@ -82,18 +80,17 @@ export const Activities = () => {
 
   const isLoadingSubject = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
   const isLoading = isLoadingActivities || isLoadingSubject;
-  const showContent =
-    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
+  const showContent = (isLoading && previousValue?.data?.result.activities?.length) || !isLoading;
 
   useEffect(() => {
-    if (!appletId) return;
+    if (!appletId || !subjectId) return;
 
-    execute({ params: { appletId } });
-  }, [appletId, execute]);
+    execute({ appletId, subjectId });
+  }, [appletId, execute, subjectId]);
 
   const formattedActivities = useMemo(
     () =>
-      (activities ?? []).map((activity) => {
+      activities.map((activity) => {
         const actions = {
           ...defaultActions,
           takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {

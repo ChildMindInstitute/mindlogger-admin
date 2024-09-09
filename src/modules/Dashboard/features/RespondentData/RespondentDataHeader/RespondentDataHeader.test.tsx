@@ -38,6 +38,8 @@ const mockedSubject: RespondentDetails = {
   userId: mockedRespondentId,
   ...mockedRespondent,
   id: mockedRespondentId,
+  firstName: 'John',
+  lastName: 'Doe',
 };
 
 const mockedActivity = {

@@ -23,7 +23,7 @@ export const mockGetRequestResponses = (
 
       return Promise.resolve(responses[url]);
     } else {
-      return Promise.reject(`No response provided for ${url}`);
+      throw new Error(`No response provided for ${url}`);
     }
   });
 };

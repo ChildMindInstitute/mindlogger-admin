@@ -47,6 +47,48 @@ export const mockedApplet = {
   encryption: mockedEncryption,
 } as Applet;
 
+export const mockedOwnerSubject = {
+  id: '123e4567-e89b-12d3-a456-426614174000',
+  secretUserId: 'mockedOwnerSecretId',
+  nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
+  lastSeen: null,
+  tag: 'Team' as ParticipantTag,
+  userId: null,
+  firstName: mockedUserData.firstName,
+  lastName: mockedUserData.lastName,
+};
+
+export const mockedOwnerRespondent = {
+  id: mockedUserData.id,
+  nicknames: [mockedOwnerSubject.nickname],
+  secretIds: [mockedOwnerSubject.secretUserId],
+  isAnonymousRespondent: false,
+  lastSeen: new Date().toDateString(),
+  isPinned: false,
+  accessId: '912e17b8-195f-4685-b77b-137539b9054d',
+  role: Roles.Owner,
+  details: [
+    {
+      appletId: mockedApplet.id,
+      appletDisplayName: mockedApplet.displayName,
+      appletImage: '',
+      accessId: '912e17b8-195f-4685-b77b-137539b9054d',
+      respondentNickname: mockedOwnerSubject.nickname,
+      respondentSecretId: mockedOwnerSubject.secretUserId,
+      hasIndividualSchedule: false,
+      encryption: mockedApplet.encryption,
+      subjectId: mockedOwnerSubject.id,
+      subjectTag: mockedOwnerSubject.tag,
+      subjectFirstName: mockedOwnerSubject.firstName,
+      subjectLastName: mockedOwnerSubject.lastName,
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
+    },
+  ],
+  status: RespondentStatus.Invited,
+  email: mockedUserData.email,
+};
+
 export const mockedIdentifiers = [
   {
     identifier: '09a0bbf7994d5cf408292d7fb35dce18:e8051724b3f422950c1b0eb9c7013c72',
