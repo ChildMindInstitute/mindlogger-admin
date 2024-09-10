@@ -6,6 +6,7 @@ import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { useFeatureFlags } from 'shared/hooks';
+import i18n from 'i18n';
 
 import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
@@ -14,6 +15,8 @@ import { LookupTable, TScoreSeverity } from '../LookupTable';
 import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
 import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
 import { StyledSvg } from '../SubscalesConfiguration.styles';
+
+const { t } = i18n;
 
 export const SubscaleHeaderContent = ({
   onRemove,
@@ -40,6 +43,24 @@ export const SubscaleHeaderContent = ({
       ...item,
       ...(TScoreSeverity[i] ? { severity: TScoreSeverity[i] } : {}),
     }));
+  }, [featureFlags.enableCahmiSubscaleScoring]);
+
+  const columnHeaders = useMemo(() => {
+    if (!featureFlags.enableCahmiSubscaleScoring) {
+      return subscaleColumnData;
+    }
+
+    return [
+      ...subscaleColumnData.slice(0, -1),
+      {
+        key: 'severity',
+        label: t('subscaleLookupTable.column.severity'),
+        styles: {
+          width: '10%',
+        },
+      },
+      ...subscaleColumnData.slice(-1),
+    ];
   }, [featureFlags.enableCahmiSubscaleScoring]);
 
   return (
@@ -69,7 +90,7 @@ export const SubscaleHeaderContent = ({
         <LookupTable
           open={isSubscaleLookupTableOpened}
           labelsObject={getSubscaleModalLabels(subscaleName)}
-          columnData={subscaleColumnData}
+          columnData={columnHeaders}
           tableData={subscaleTableData}
           template={csvTemplate}
           templatePrefix={'subscale_'}

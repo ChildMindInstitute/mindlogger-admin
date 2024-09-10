@@ -1362,7 +1362,8 @@
       "rawScore": "Raw Score",
       "score": "Score",
       "sex": "Sex",
-      "text": "Text"
+      "text": "Text",
+      "severity": "Severity"
     },
     "delete": {
       "initDescription": "Are you sure you want to delete the Lookup Table for <1>{{name}}</1>?",

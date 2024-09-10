@@ -1360,7 +1360,8 @@
       "rawScore": "Score brut",
       "score": "Score",
       "sex": "Genre",
-      "text": "Texte"
+      "text": "Texte",
+      "severity": "Niveau de gravité"
     },
     "delete": {
       "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche pour <1>{{name}}</1>?",
