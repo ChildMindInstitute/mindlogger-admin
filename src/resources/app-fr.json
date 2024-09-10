@@ -1062,7 +1062,7 @@
     "imageLabel": "Ajouter une image d'en-tête pour cette phrase (facultatif)",
     "lede": "Le répondant verra le contenu ci-dessous affiché dans une carte téléchargeable.",
     "phraseOrder": "Phrase {{order}}",
-    "titleHint": "Affiché dans l'en-tête de la sortie du modèle de phrase, à côté du nom et de l'image de l'applet.",
+    "titleHint": "Affiché dans l'en-tête du Constructeur de phrases, à côté du nom et de l'image de l'applet.",
     "titleHintLabel": "Voir plus de détails",
     "titleLabel": "Titre de la carte (obligatoire)",
     "titlePlaceholder": "Exemple: Plan d'action",
