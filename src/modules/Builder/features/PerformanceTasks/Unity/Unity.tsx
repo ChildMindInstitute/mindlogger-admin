@@ -69,6 +69,7 @@ export const Unity = () => {
       trigger(urlName);
       setFileContent(url);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   const OpenModalButton = () =>
