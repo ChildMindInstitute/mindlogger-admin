@@ -43,3 +43,4 @@ export * from './sortItemsByOrder';
 export * from './nullReturnFunc';
 export * from './isObject';
 export * from './responseType';
+export * from './regex';
