@@ -1378,6 +1378,9 @@
       "incorrectFileFormat": "Format de fichier incorrect. Veuillez uploader un fichier au format <1>.csv</1>.",
       "onDelete": "La table de recherche actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
     },
+    "warnings": {
+      "incompleteSeverityData": "La table de recherche actuelle inclut des valeurs de gravité manquantes dans certaines lignes. Téléchargez le fichier correct ou enregistrez et continuez."
+    },
     "upload": {
       "initDescription": "Veuillez uploader un fichier au format <1>.csv</1>.",
       "successDescription": "Votre table de recherche pour <1>{{name}}</1> a été analysée avec succès.",

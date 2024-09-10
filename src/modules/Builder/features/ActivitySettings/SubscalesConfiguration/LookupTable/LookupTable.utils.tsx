@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
 import { DataTable, FileUploader } from 'shared/components';
-import { theme, variables } from 'shared/styles';
+import { StyledTitleSmall, theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
 import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
@@ -13,6 +13,7 @@ export const getModalComponents = ({
   columnData,
   data,
   error,
+  warning,
   labelsObject,
   onFileReady,
   onUpdate,
@@ -58,6 +59,11 @@ export const getModalComponents = ({
               data={data}
               noDataPlaceholder={t('noElementsYet')}
             />
+            {warning && (
+              <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
+                {warning}
+              </StyledTitleSmall>
+            )}
           </>
         ),
         buttonText: t('save'),

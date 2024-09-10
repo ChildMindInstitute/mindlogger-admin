@@ -17,6 +17,7 @@ export type LookupTableProps = {
 
 export type LookupTableSetupHookProps = {
   errors: LabelsObject['errors'];
+  warnings: LabelsObject['warnings'];
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
@@ -36,6 +37,9 @@ export type LabelsObject = {
     fileCantBeParsed: JSX.Element;
     onDelete: JSX.Element | string;
   };
+  warnings: {
+    incompleteSeverityData: string;
+  };
 };
 
 export type GetComponentsProps = {
@@ -43,6 +47,7 @@ export type GetComponentsProps = {
   columnData: LookupTableProps['columnData'];
   data?: DataTableItem[];
   error: JSX.Element | null;
+  warning: string | null;
   labelsObject: LabelsObject;
   onFileReady: (file: ImportedFile | null) => void;
   onDownloadTemplate: FileUploaderProps['onDownloadTemplate'];

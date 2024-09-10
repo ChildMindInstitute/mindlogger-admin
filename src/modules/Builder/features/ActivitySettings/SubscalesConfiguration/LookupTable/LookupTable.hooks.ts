@@ -15,6 +15,7 @@ import {
 
 export const useSubscaleLookupTableSetup = ({
   errors,
+  warnings,
   template,
   templatePrefix,
   tableData,
@@ -26,6 +27,7 @@ export const useSubscaleLookupTableSetup = ({
   const [step, setStep] = useState<Steps>(0);
   const [data, setData] = useState<DataTableItem[]>();
   const [error, setError] = useState<JSX.Element | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
 
   const { featureFlags } = useFeatureFlags();
 
@@ -55,6 +57,12 @@ export const useSubscaleLookupTableSetup = ({
 
       return mappedItem;
     });
+
+    const incompleteSeverityData = mappedData.some((item) => !item.severity);
+    if (incompleteSeverityData) {
+      setWarning(warnings.incompleteSeverityData);
+    }
+
     setError(null);
     setData(mappedData);
     setStep((prevState) => ++prevState as Steps);
@@ -77,6 +85,7 @@ export const useSubscaleLookupTableSetup = ({
     step,
     data,
     error,
+    warning,
     setModalType,
     setError,
     setStep,
