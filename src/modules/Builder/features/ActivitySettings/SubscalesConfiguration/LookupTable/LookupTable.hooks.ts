@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { DataTableItem, FileError, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
+import { useFeatureFlags } from 'shared/hooks';
 
-import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
-import { processImportedData } from './LookupTable.utils';
+import {
+  ModalType,
+  Steps,
+  LookupTableSetupHookProps,
+  LookupTableDataItem,
+  TScoreSeverity,
+} from './LookupTable.types';
 
 export const useSubscaleLookupTableSetup = ({
   errors,
@@ -20,6 +27,8 @@ export const useSubscaleLookupTableSetup = ({
   const [data, setData] = useState<DataTableItem[]>();
   const [error, setError] = useState<JSX.Element | null>(null);
 
+  const { featureFlags } = useFeatureFlags();
+
   const onFileReady = (file: ImportedFile | null) => {
     if (!file) return setData([]);
 
@@ -29,7 +38,23 @@ export const useSubscaleLookupTableSetup = ({
       return FileError.SchemaValidation;
     }
 
-    const mappedData = file.data.map(processImportedData);
+    const mappedData = file.data.map((item: Record<string, string | number>) => {
+      Object.keys(item).forEach(
+        (k) => (item[k] = typeof item[k] === 'string' ? (item[k] as string).trim() : item[k]),
+      );
+
+      const mappedItem: LookupTableDataItem = {
+        ...(item as LookupTableDataItem),
+        sex: (item.sex as string) || null,
+        id: uuidv4(),
+      };
+
+      if (featureFlags.enableCahmiSubscaleScoring) {
+        mappedItem.severity = (item.severity as TScoreSeverity) || null;
+      }
+
+      return mappedItem;
+    });
     setError(null);
     setData(mappedData);
     setStep((prevState) => ++prevState as Steps);
