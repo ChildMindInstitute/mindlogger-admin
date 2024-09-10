@@ -143,6 +143,7 @@ export const processImportedData = (item: Record<string, string | number>) => {
   return {
     ...item,
     sex: (item.sex as string) || null,
+    severity: (item.severity as string) || null,
     id: uuidv4(),
   } as LookupTableDataItem;
 };

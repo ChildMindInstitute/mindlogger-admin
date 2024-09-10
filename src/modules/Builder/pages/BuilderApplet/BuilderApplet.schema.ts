@@ -22,11 +22,13 @@ import {
 } from 'shared/consts';
 import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
 import {
+  createRegexFromList,
   getEntityKey,
   getIsRequiredValidateMessage,
   getMaxLengthValidationError,
   getObjectFromList,
 } from 'shared/utils';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 import { ItemFormValues } from '../../types/Builder.types';
 import {
@@ -600,6 +602,10 @@ const SubscaleTableDataItemSchema = () =>
         .nullable()
         .matches(/^[MF]?$/),
       optionalText: optionalTextSchema,
+      severity: yup
+        .string()
+        .nullable()
+        .matches(createRegexFromList(Array.from(TScoreSeverity))),
     })
     .noUnknown()
     .required();
