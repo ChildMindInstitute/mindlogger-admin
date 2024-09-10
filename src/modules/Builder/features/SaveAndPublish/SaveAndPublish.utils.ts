@@ -7,6 +7,8 @@ import {
   ActivityFlow,
   Condition,
   ConditionalLogic,
+  DateRangeValueCondition,
+  DateSingleValueCondition,
   FlankerConfig,
   Item,
   ItemAlert,
@@ -18,8 +20,11 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
   SingleMultiSelectionPerRowCondition,
-  SingleValueCondition,
   SliderRowsCondition,
+  TimeIntervalValueCondition,
+  TimeRangeIntervalValueCondition,
+  TimeRangeSingleValueCondition,
+  TimeSingleValueCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import {
@@ -363,41 +368,92 @@ export const processConditionPayload = (
 ) => {
   switch (itemType) {
     case ItemResponseType.Date: {
-      const conditionData = condition as SingleValueCondition<Date> | RangeValueCondition<Date>;
+      const conditionData = condition as
+        | DateSingleValueCondition<Date>
+        | DateRangeValueCondition<Date>;
       const conditionType = conditionData.type;
       if (
         conditionType &&
-        [ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)
+        [ConditionType.BetweenDates, ConditionType.OutsideOfDates].includes(conditionType)
       ) {
-        const conditionPayload = conditionData.payload as RangeValueCondition<Date>['payload'];
-        const minValue = formatToNumberDate(conditionPayload.minValue);
-        const maxValue = formatToNumberDate(conditionPayload.maxValue);
+        const conditionPayload = conditionData.payload as DateRangeValueCondition<Date>['payload'];
+        if (!conditionPayload.minDate || !conditionPayload.maxDate) return;
+
+        const minDate = formatToNumberDate(conditionPayload.minDate);
+        const maxDate = formatToNumberDate(conditionPayload.maxDate);
 
         return {
-          ...conditionData.payload,
-          minValue,
-          maxValue,
+          minDate,
+          maxDate,
         };
       }
 
-      const conditionPayload = conditionData.payload as SingleValueCondition<Date>['payload'];
-      const value = formatToNumberDate(conditionPayload.value);
+      const conditionPayload = conditionData.payload as DateSingleValueCondition<Date>['payload'];
+      if (!conditionPayload.date) return;
+
+      const date = formatToNumberDate(conditionPayload.date);
 
       return {
-        value,
+        date,
       };
     }
-    case ItemResponseType.SingleSelectionPerRow:
-    case ItemResponseType.MultipleSelectionPerRow:
+    case ItemResponseType.Time:
+    case ItemResponseType.TimeRange: {
+      const conditionData = condition as unknown as
+        | TimeSingleValueCondition
+        | TimeIntervalValueCondition
+        | TimeRangeSingleValueCondition
+        | TimeRangeIntervalValueCondition;
+      const conditionType = conditionData.type;
+      if (
+        conditionType &&
+        [
+          ConditionType.BetweenTimes,
+          ConditionType.BetweenTimesRange,
+          ConditionType.OutsideOfTimes,
+          ConditionType.OutsideOfTimesRange,
+        ].includes(conditionType)
+      ) {
+        const conditionPayload = conditionData.payload as
+          | TimeIntervalValueCondition['payload']
+          | TimeRangeIntervalValueCondition['payload'];
+        const payloadMinTime = conditionPayload.minTime;
+        const payloadMaxTime = conditionPayload.maxTime;
+        if (!payloadMinTime || !payloadMaxTime) return;
+
+        const [minTimeHours, minTimeMinutes] = payloadMinTime.split(':');
+        const [maxTimeHours, maxTimeMinutes] = payloadMaxTime.split(':');
+        const minTime = { hours: Number(minTimeHours), minutes: Number(minTimeMinutes) };
+        const maxTime = { hours: Number(maxTimeHours), minutes: Number(maxTimeMinutes) };
+
+        return {
+          ...conditionPayload,
+          minTime,
+          maxTime,
+        };
+      }
+
+      const conditionPayload = conditionData.payload as
+        | TimeSingleValueCondition['payload']
+        | TimeRangeSingleValueCondition['payload'];
+      if (!conditionPayload.time) return;
+
+      const [hours, minutes] = conditionPayload.time.split(':');
+      const time = { hours: Number(hours), minutes: Number(minutes) };
+
+      return {
+        ...conditionPayload,
+        time,
+      };
+    }
     case ItemResponseType.SliderRows: {
       const conditionData = condition as
-        | SingleMultiSelectionPerRowCondition
         | SliderRowsCondition
         | SliderRowsCondition<RangeValueCondition>;
 
       return {
         ...conditionData.payload,
-        rowIndex: conditionData.payload.rowIndex,
+        rowIndex: Number(conditionData.payload.rowIndex),
       };
     }
     default:
@@ -415,7 +471,9 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
     item.responseType === ItemResponseType.SingleSelectionPerRow ||
     item.responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const rowIndex = (condition as SingleMultiSelectionPerRowCondition).payload?.rowIndex;
+    const rowIndex = Number(
+      (condition as SingleMultiSelectionPerRowCondition<string>).payload?.rowIndex,
+    );
 
     return {
       optionValue: optionId,
@@ -425,7 +483,7 @@ export const getConditionPayload = (item: ItemFormValues, condition: Condition) 
   const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
 
   return {
-    optionValue: options?.find(({ id }) => id === optionId)?.value,
+    optionValue: String(options?.find(({ id }) => id === optionId)?.value),
   };
 };
 

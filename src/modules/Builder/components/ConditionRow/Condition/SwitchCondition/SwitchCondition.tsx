@@ -34,14 +34,38 @@ export const SwitchCondition = ({
   const numberValueName = `${payloadName}.value`;
   const minValueName = `${payloadName}.minValue`;
   const maxValueName = `${payloadName}.maxValue`;
-  const typeName = `${payloadName}.type`;
+  const dateValueName = `${payloadName}.date`;
+  const minDateValueName = `${payloadName}.minDate`;
+  const maxDateValueName = `${payloadName}.maxDate`;
+  const timeValueName = `${payloadName}.time`;
+  const minTimeValueName = `${payloadName}.minTime`;
+  const maxTimeValueName = `${payloadName}.maxTime`;
+  const typeName = `${payloadName}.fieldName`;
   const rowIndexName = `${payloadName}.rowIndex`;
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const { fieldName: activityName } = useCurrentActivity();
   const itemsName = `${activityName}.items`;
-  const [minValue, maxValue, conditionPayload, items, conditionItem] = useWatch({
-    name: [minValueName, maxValueName, payloadName, itemsName, itemName],
+  const [
+    minValue,
+    minDateValue,
+    maxValue,
+    maxDateValue,
+    maxTimeValue,
+    conditionPayload,
+    items,
+    conditionItem,
+  ] = useWatch({
+    name: [
+      minValueName,
+      minDateValueName,
+      maxValueName,
+      maxDateValueName,
+      maxTimeValueName,
+      payloadName,
+      itemsName,
+      itemName,
+    ],
   });
   const groupedItems = getObjectFromList<ItemFormValues>(items);
   const selectedItemForm = groupedItems[conditionItem];
@@ -52,10 +76,10 @@ export const SwitchCondition = ({
   const itemType = selectedItem?.type;
 
   const commonTimeConditionProps = {
-    numberValueName,
-    minValueName,
-    maxValueName,
-    maxValue,
+    timeValueName,
+    minTimeValueName,
+    maxTimeValueName,
+    maxTimeValue,
     isSingleValueShown,
     isRangeValueShown,
     state,
@@ -81,7 +105,7 @@ export const SwitchCondition = ({
     dataTestid,
   };
 
-  const handleChangeSubstate = useCallback(
+  const handleChangeSubState = useCallback(
     (
       selectType:
         | ConditionItemType.SingleSelectionPerRow
@@ -132,7 +156,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-rowIndex`}
             disabled={!isItemSelected}
-            customChange={handleChangeSubstate(itemType)}
+            customChange={handleChangeSubState(itemType)}
           />
           <SingleMultiScoreCondition
             {...commonSingleMultiScoreConditionProps}
@@ -152,7 +176,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-rowIndex`}
             disabled={!isItemSelected}
-            customChange={handleChangeSubstate(itemType)}
+            customChange={handleChangeSubState(itemType)}
           />
           <SingleOrRangeNumberCondition
             {...commonSingleOrRangeNumberConditionProps}
@@ -187,9 +211,9 @@ export const SwitchCondition = ({
       };
 
       const onCloseStartDateCallback = () => {
-        if (!minValue || !maxValue) return;
-        if (maxValue < minValue) {
-          setValue(maxValueName, addDays(minValue, 1));
+        if (!minDateValue || !maxDateValue) return;
+        if (maxDateValue < minDateValue) {
+          setValue(maxDateValueName, addDays(minDateValue, 1));
         }
       };
 
@@ -199,7 +223,7 @@ export const SwitchCondition = ({
           {isSingleValueShown && (
             <StyledFlexTopCenter>
               <DatePicker
-                name={numberValueName}
+                name={dateValueName}
                 data-testid={`${dataTestid}-date-value`}
                 skipMinDate
                 {...commonDateInputProps}
@@ -209,7 +233,7 @@ export const SwitchCondition = ({
           {isRangeValueShown && (
             <StyledFlexTopCenter>
               <DatePicker
-                name={minValueName}
+                name={minDateValueName}
                 key={`min-date-value-${isRangeValueShown}`}
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
@@ -218,7 +242,7 @@ export const SwitchCondition = ({
               />
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
               <DatePicker
-                name={maxValueName}
+                name={maxDateValueName}
                 key={`max-date-value-${isRangeValueShown}`}
                 minDate={minValue as Date}
                 data-testid={`${dataTestid}-end-date-value`}
@@ -248,7 +272,7 @@ export const SwitchCondition = ({
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-type-value`}
             disabled={!isItemSelected}
-            customChange={handleChangeSubstate(itemType)}
+            customChange={handleChangeSubState(itemType)}
           />
           {children}
           <TimeCondition {...commonTimeConditionProps} />

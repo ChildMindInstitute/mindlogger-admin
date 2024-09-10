@@ -6,10 +6,14 @@ import {
   ResponseValues,
   SingleValueCondition,
   RangeValueCondition,
-  TimeRangeValueCondition,
   SliderRowsCondition,
   TimeRangeConditionType,
   SliderRowsItemResponseValues,
+  TimeSingleValueCondition,
+  DateRangeValueCondition,
+  TimeIntervalValueCondition,
+  TimeRangeIntervalValueCondition,
+  DateSingleValueCondition,
 } from 'shared/state/Applet';
 
 export type SummaryRowProps = {
@@ -36,11 +40,13 @@ export type ConditionWithResponseValues = Condition & {
 export type ConditionWithSetType =
   | SingleValueCondition
   | SingleValueCondition<string>
-  | SingleValueCondition<Date>
+  | DateSingleValueCondition<Date>
   | RangeValueCondition
-  | RangeValueCondition<Date>
+  | DateRangeValueCondition<Date>
   | RangeValueCondition<string>
-  | TimeRangeValueCondition
+  | TimeSingleValueCondition
+  | TimeIntervalValueCondition
+  | TimeRangeIntervalValueCondition
   | SliderRowsCondition
   | SliderRowsCondition<RangeValueCondition>;
 

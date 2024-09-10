@@ -9,6 +9,9 @@ import {
 } from '../checkContradictionCases/checkContradictionCases';
 import { CheckAllNumericContradictions } from './checkAllNumericContradictions.types';
 
+const isVariableDefined = (value: unknown): value is number | string | boolean | object =>
+  value !== undefined && value !== null;
+
 export const checkAllNumericContradictions = ({
   lessThanValue,
   greaterThanValue,
@@ -20,8 +23,8 @@ export const checkAllNumericContradictions = ({
   maxValue,
 }: CheckAllNumericContradictions) => {
   if (
-    lessThanValue !== undefined &&
-    greaterThanValue !== undefined &&
+    isVariableDefined(lessThanValue) &&
+    isVariableDefined(greaterThanValue) &&
     lessThanValue - greaterThanValue <= 1
   ) {
     // Check "greaterThanValue" and "lessThanValue" contradiction
@@ -29,8 +32,8 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    greaterThanValue !== undefined &&
-    equalSetUnion !== undefined &&
+    isVariableDefined(greaterThanValue) &&
+    isVariableDefined(equalSetUnion) &&
     equalSetUnion.some((value) => value <= greaterThanValue)
   ) {
     // Check "greaterThanValue" and "isEqualTo" contradiction
@@ -38,8 +41,8 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    greaterThanValue !== undefined &&
-    notEqualSetUnion !== undefined &&
+    isVariableDefined(greaterThanValue) &&
+    isVariableDefined(notEqualSetUnion) &&
     checkGreaterLessNotEqual({
       compareValue: greaterThanValue,
       notEqualArray: notEqualSetUnion,
@@ -52,7 +55,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    greaterThanValue !== undefined &&
+    isVariableDefined(greaterThanValue) &&
     betweenUnion?.length === 2 &&
     greaterThanValue + 1 >= betweenUnion[1]
   ) {
@@ -61,7 +64,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    greaterThanValue !== undefined &&
+    isVariableDefined(greaterThanValue) &&
     outsideOfUnion?.length === 2 &&
     checkGreaterLessOutside({
       compareValue: greaterThanValue,
@@ -75,8 +78,8 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    lessThanValue !== undefined &&
-    equalSetUnion !== undefined &&
+    isVariableDefined(lessThanValue) &&
+    isVariableDefined(equalSetUnion) &&
     equalSetUnion.some((value) => value >= lessThanValue)
   ) {
     // Check "lessThanValue" and "isEqualTo" contradiction
@@ -84,8 +87,8 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    lessThanValue !== undefined &&
-    notEqualSetUnion !== undefined &&
+    isVariableDefined(lessThanValue) &&
+    isVariableDefined(notEqualSetUnion) &&
     checkGreaterLessNotEqual({
       compareValue: lessThanValue,
       notEqualArray: notEqualSetUnion,
@@ -98,7 +101,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    lessThanValue !== undefined &&
+    isVariableDefined(lessThanValue) &&
     betweenUnion?.length === 2 &&
     lessThanValue - 1 <= betweenUnion[0]
   ) {
@@ -107,7 +110,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    lessThanValue !== undefined &&
+    isVariableDefined(lessThanValue) &&
     outsideOfUnion?.length === 2 &&
     checkGreaterLessOutside({
       compareValue: lessThanValue,
@@ -120,14 +123,14 @@ export const checkAllNumericContradictions = ({
     return true;
   }
 
-  if (equalSetUnion !== undefined && Array.from(new Set(equalSetUnion)).length > 1) {
+  if (isVariableDefined(equalSetUnion) && Array.from(new Set(equalSetUnion)).length > 1) {
     // Check "equalTo" contradiction
     return true;
   }
 
   if (
-    equalSetUnion !== undefined &&
-    notEqualSetUnion !== undefined &&
+    isVariableDefined(equalSetUnion) &&
+    isVariableDefined(notEqualSetUnion) &&
     equalSetUnion.some((value) => notEqualSetUnion.includes(value))
   ) {
     // Check "equalTo" and "isNotEqualTo" contradiction
@@ -135,7 +138,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    equalSetUnion !== undefined &&
+    isVariableDefined(equalSetUnion) &&
     betweenUnion?.length === 2 &&
     equalSetUnion.some((value) => value <= betweenUnion[0] || value >= betweenUnion[1])
   ) {
@@ -144,7 +147,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    equalSetUnion !== undefined &&
+    isVariableDefined(equalSetUnion) &&
     outsideOfUnion?.length === 2 &&
     equalSetUnion.some((value) => value >= outsideOfUnion[0] && value <= outsideOfUnion[1])
   ) {
@@ -153,7 +156,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    notEqualSetUnion !== undefined &&
+    isVariableDefined(notEqualSetUnion) &&
     betweenUnion?.length === 2 &&
     checkNotEqualBetween({ betweenUnion, notEqualSetUnion })
   ) {
@@ -162,7 +165,7 @@ export const checkAllNumericContradictions = ({
   }
 
   if (
-    notEqualSetUnion !== undefined &&
+    isVariableDefined(notEqualSetUnion) &&
     outsideOfUnion?.length === 2 &&
     checkNotEqualOutside({ outsideOfUnion, notEqualSetUnion, minValue, maxValue })
   ) {

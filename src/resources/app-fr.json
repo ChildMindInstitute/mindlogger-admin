@@ -1039,7 +1039,7 @@
   "photoHint": "Tâche de capture de photo",
   "photoResponseDescription": "Le participant pourra prendre ou uploader une photo.",
   "photoResponseTitle": "Réponse avec Photo",
-  "phrasalTemplate": "Modèle de phrase",
+  "phrasalTemplate": "Constructeur de phrases",
   "phrasalTemplateItem": {
     "btnAddField": "Ajouter…",
     "btnAddPhrase": "Nouvelle phrase",
@@ -1410,7 +1410,7 @@
       "targetSubjectLabel": "De qui s’adressent les réponses?",
       "targetSubjectPlaceholder": "Sélectionnez parmi les participants",
       "loggedInUserLabel": "Qui saisira les réponses ?",
-      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe",
+      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe et les participant",
       "dropdown": {
         "limitedAccountWarning": "Le participant sélectionné ne peut pas saisir ses propres réponses. Veuillez sélectionner un membre de l'équipe pour continuer."
       },
@@ -1612,5 +1612,8 @@
     "contactSupport": "Contacter le support",
     "proceedAnyway": "Je souhaite continuer quand même"
   },
+  "autoAssignActivity": "Attribuer automatiquement cette activité (sous forme d'auto-évaluation)",
+  "autoAssignFlow": "Attribuer automatiquement ce flux (sous forme d'auto-évaluation)",
+  "autoAssignTooltip": "Gardez cette case cochée pour attribuer automatiquement cette activité ou ce flux à tous les nouveaux participants. Si, à la place, vous souhaitez attribuer manuellement des activités ou des flux à vos participants (pour une déclaration automatique ou une déclaration multi-informateurs), décochez cette case. Vous pourrez ensuite attribuer des activités ou des flux à partir de l'onglet Activités de votre applet.",
   "goToDashboard": "Aller au tableau de bord"
 }

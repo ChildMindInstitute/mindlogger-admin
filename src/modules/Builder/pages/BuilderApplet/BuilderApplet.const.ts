@@ -6,6 +6,35 @@ export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.NotIncludesOption,
   ConditionType.EqualToOption,
   ConditionType.NotEqualToOption,
+  ConditionType.EqualToRowOption,
+  ConditionType.NotEqualToRowOption,
+  ConditionType.IncludesRowOption,
+  ConditionType.NotIncludesRowOption,
+];
+
+export const TIME_SINGLE_CONDITION_TYPES = [
+  ConditionType.GreaterThanTime,
+  ConditionType.LessThanTime,
+  ConditionType.EqualToTime,
+  ConditionType.NotEqualToTime,
+  ConditionType.GreaterThanTimeRange,
+  ConditionType.LessThanTimeRange,
+  ConditionType.EqualToTimeRange,
+  ConditionType.NotEqualToTimeRange,
+];
+export const TIME_INTERVAL_CONDITION_TYPES = [
+  ConditionType.BetweenTimes,
+  ConditionType.OutsideOfTimes,
+  ConditionType.BetweenTimesRange,
+  ConditionType.OutsideOfTimesRange,
+];
+export const SLIDER_ROWS_CONDITION_TYPES = [
+  ConditionType.GreaterThanSliderRows,
+  ConditionType.LessThanSliderRows,
+  ConditionType.EqualToSliderRows,
+  ConditionType.NotEqualToSliderRows,
+  ConditionType.BetweenSliderRows,
+  ConditionType.OutsideOfSliderRows,
 ];
 
 export const defaultFlankerBtnObj = { text: '', image: '', value: CorrectPress.Left };

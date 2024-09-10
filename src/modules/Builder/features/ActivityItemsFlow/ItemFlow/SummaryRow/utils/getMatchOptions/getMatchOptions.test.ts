@@ -405,7 +405,7 @@ describe('getMatchOptions', () => {
         [
           {
             key: '58ce8e95-a311-416f-9d5f-0accea60e38f',
-            type: 'EQUAL_TO_OPTION',
+            type: 'EQUAL_TO_ROW_OPTION',
             itemName: '6e782b65-c728-4582-90fd-9fca9a14c399',
             payload: {
               optionValue: 'ac099f3c-f89d-42bc-8702-e739efc6066d',
@@ -414,7 +414,7 @@ describe('getMatchOptions', () => {
           },
           {
             key: '39702247-12b6-47a5-b0eb-198487a2e51a',
-            type: 'EQUAL_TO_OPTION',
+            type: 'EQUAL_TO_ROW_OPTION',
             itemName: '6e782b65-c728-4582-90fd-9fca9a14c399',
             payload: {
               optionValue: 'abc9086f-94f2-4bfb-a901-9c6d7ac781e9',
@@ -423,7 +423,7 @@ describe('getMatchOptions', () => {
           },
           {
             key: '7fa852d7-4443-4e6a-8218-b8469aa18077',
-            type: 'EQUAL_TO_OPTION',
+            type: 'EQUAL_TO_ROW_OPTION',
             itemName: '6e782b65-c728-4582-90fd-9fca9a14c399',
             payload: {
               optionValue: '50d92b70-4957-491b-a18b-1f05c131239b',
@@ -438,7 +438,7 @@ describe('getMatchOptions', () => {
         [
           {
             key: '53537452-5f1e-4141-bf2a-ae2d4db466ff',
-            type: 'INCLUDES_OPTION',
+            type: 'INCLUDES_ROW_OPTION',
             itemName: '0c24a7dd-0471-4433-ac39-380808ca9089',
             payload: {
               optionValue: '1ab4718d-32d0-41a0-844c-b173cf8635f4',
@@ -447,7 +447,7 @@ describe('getMatchOptions', () => {
           },
           {
             key: '41b57d9f-5410-4bab-aab5-d7b7d338a391',
-            type: 'INCLUDES_OPTION',
+            type: 'INCLUDES_ROW_OPTION',
             itemName: '0c24a7dd-0471-4433-ac39-380808ca9089',
             payload: {
               optionValue: 'afa6412b-fbc3-4da1-95bf-3d510df1ecb2',
@@ -501,18 +501,18 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'GREATER_THAN',
+            type: 'GREATER_THAN_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-28T21:00:00.000Z'),
+              date: new Date('2024-07-28T21:00:00.000Z'),
             },
           },
           {
             key: 'aa05afce-a0e1-40ad-8ac2-aec0e785cd89',
-            type: 'LESS_THAN',
+            type: 'LESS_THAN_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-29T21:00:00.000Z'),
+              date: new Date('2024-07-29T21:00:00.000Z'),
             },
           },
         ],
@@ -523,18 +523,18 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'GREATER_THAN',
+            type: 'GREATER_THAN_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-28T21:00:00.000Z'),
+              date: new Date('2024-07-28T21:00:00.000Z'),
             },
           },
           {
             key: 'aa05afce-a0e1-40ad-8ac2-aec0e785cd89',
-            type: 'EQUAL',
+            type: 'EQUAL_TO_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-28T21:00:00.000Z'),
+              date: new Date('2024-07-28T21:00:00.000Z'),
             },
           },
         ],
@@ -545,18 +545,18 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'GREATER_THAN',
+            type: 'GREATER_THAN_TIME',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              value: '23:58',
+              time: '23:58',
             },
           },
           {
             key: 'aa05afce-a0e1-40ad-8ac2-aec0e785cd89',
-            type: 'NOT_EQUAL',
+            type: 'NOT_EQUAL_TO_TIME',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              value: '23:59',
+              time: '23:59',
             },
           },
         ],
@@ -592,21 +592,21 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'GREATER_THAN',
+            type: 'GREATER_THAN_TIME_RANGE',
             itemName: 'e7ab28ec-dcd1-49fc-8626-92bf840e8685',
             payload: {
-              value: '16:54',
-              type: 'startTime',
+              time: '16:54',
+              fieldName: 'from',
             },
           },
           {
             key: 'aa05afce-a0e1-40ad-8ac2-aec0e785cd89',
-            type: 'OUTSIDE_OF',
+            type: 'OUTSIDE_OF_TIMES_RANGE',
             itemName: 'e7ab28ec-dcd1-49fc-8626-92bf840e8685',
             payload: {
-              minValue: '16:52',
-              maxValue: '23:59',
-              type: 'startTime',
+              minTime: '16:52',
+              maxTime: '23:59',
+              fieldName: 'from',
             },
           },
         ],
@@ -694,19 +694,19 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'LESS_THAN',
+            type: 'LESS_THAN_TIME',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              value: '04:20',
+              time: '04:20',
             },
           },
           {
             key: '00596832-2ce9-418a-9c8d-8160618c12e7',
-            type: 'OUTSIDE_OF',
+            type: 'OUTSIDE_OF_TIMES',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              minValue: '00:00',
-              maxValue: '17:12',
+              minTime: '00:00',
+              maxTime: '17:12',
             },
           },
         ],
@@ -717,20 +717,20 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'EQUAL',
+            type: 'EQUAL_TO_TIME_RANGE',
             itemName: 'e7ab28ec-dcd1-49fc-8626-92bf840e8685',
             payload: {
-              value: '17:19',
-              type: 'endTime',
+              time: '17:19',
+              fieldName: 'to',
             },
           },
           {
             key: '00596832-2ce9-418a-9c8d-8160618c12e7',
-            type: 'EQUAL',
+            type: 'EQUAL_TO_TIME_RANGE',
             itemName: 'e7ab28ec-dcd1-49fc-8626-92bf840e8685',
             payload: {
-              value: '17:18',
-              type: 'endTime',
+              time: '17:18',
+              fieldName: 'to',
             },
           },
         ],
@@ -741,26 +741,26 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'EQUAL',
+            type: 'EQUAL_TO_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-22T21:00:00.000Z'),
+              date: new Date('2024-07-22T21:00:00.000Z'),
             },
           },
           {
             key: '93df2253-f2fb-4c33-bd00-3b2b7f998791',
-            type: 'NOT_EQUAL',
+            type: 'NOT_EQUAL_TO_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-30T21:00:00.000Z'),
+              date: new Date('2024-07-30T21:00:00.000Z'),
             },
           },
           {
             key: 'c085ea38-d6a8-4f0b-a8a6-4d55999644de',
-            type: 'NOT_EQUAL',
+            type: 'NOT_EQUAL_TO_DATE',
             itemName: '32b04b4e-e257-4533-8208-d435122eea87',
             payload: {
-              value: new Date('2024-07-22T21:00:00.000Z'),
+              date: new Date('2024-07-22T21:00:00.000Z'),
             },
           },
         ],
@@ -883,20 +883,20 @@ describe('getMatchOptions', () => {
         [
           {
             key: 'd17388c4-ae88-47f7-a092-89f8d7174fa1',
-            type: 'BETWEEN',
+            type: 'BETWEEN_TIMES',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              minValue: '17:34',
-              maxValue: '23:59',
+              minTime: '17:34',
+              maxTime: '23:59',
             },
           },
           {
             key: '93df2253-f2fb-4c33-bd00-3b2b7f998791',
-            type: 'OUTSIDE_OF',
+            type: 'OUTSIDE_OF_TIMES',
             itemName: 'a5ce484e-33b2-47b0-b357-ce2e2b1558cb',
             payload: {
-              minValue: '17:33',
-              maxValue: '23:58',
+              minTime: '17:33',
+              maxTime: '23:58',
             },
           },
         ],

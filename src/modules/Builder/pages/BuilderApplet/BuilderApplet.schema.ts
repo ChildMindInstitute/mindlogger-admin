@@ -636,6 +636,9 @@ export const SubscaleSchema = () =>
     .required();
 
 const conditionValueSchema = yup.string().required(getIsRequiredValidateMessage('conditionValue'));
+const conditionDateValueSchema = yup
+  .date()
+  .required(getIsRequiredValidateMessage('conditionValue'));
 export const ItemFlowConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
@@ -644,13 +647,15 @@ export const ItemFlowConditionSchema = () =>
       const itemId = get(options, 'from.0.value.itemName');
       const items: ItemFormValues[] = get(options, 'from.2.value.items', []);
       const foundItem = items.find((item) => getEntityKey(item) === itemId);
+      const isTime = foundItem?.responseType === ItemResponseType.Time;
+      const isDate = foundItem?.responseType === ItemResponseType.Date;
       const isTimeRange = foundItem?.responseType === ItemResponseType.TimeRange;
       const isSingleSelectionPerRow =
         foundItem?.responseType === ItemResponseType.SingleSelectionPerRow;
       const isMultipleSelectionPerRow =
         foundItem?.responseType === ItemResponseType.MultipleSelectionPerRow;
       const isSliderRows = foundItem?.responseType === ItemResponseType.SliderRows;
-      const typeShapeObject = { type: conditionValueSchema };
+      const typeShapeObject = { fieldName: conditionValueSchema };
       const rowIndexShapeObject = { rowIndex: conditionValueSchema };
 
       if (!type) {
@@ -672,10 +677,19 @@ export const ItemFlowConditionSchema = () =>
         return baseSchema;
       }
       if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
+        if (isDate) {
+          return schema.shape({
+            date: conditionDateValueSchema,
+          });
+        }
+        if (isTime || isTimeRange) {
+          const timeSchema = schema.shape({ time: conditionValueSchema });
+
+          return isTimeRange ? timeSchema.concat(yup.object(typeShapeObject)) : timeSchema;
+        }
         const baseSchema = schema.shape({
           value: conditionValueSchema,
         });
-        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
         if (isSliderRows) {
           return baseSchema.concat(yup.object(rowIndexShapeObject));
         }
@@ -683,16 +697,28 @@ export const ItemFlowConditionSchema = () =>
         return baseSchema;
       }
       if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type)) {
-        const baseSchema = schema.shape({
+        if (isTime || isTimeRange) {
+          const timeSchema = schema.shape({
+            minTime: conditionValueSchema,
+            maxTime: conditionValueSchema,
+          });
+
+          return isTimeRange ? timeSchema.concat(yup.object(typeShapeObject)) : timeSchema;
+        }
+
+        if (isDate) {
+          return schema.shape({
+            minDate: conditionDateValueSchema,
+            maxDate: conditionDateValueSchema,
+          });
+        }
+
+        const valueSchema = schema.shape({
           minValue: conditionValueSchema,
           maxValue: conditionValueSchema,
         });
-        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
-        if (isSliderRows) {
-          return baseSchema.concat(yup.object(rowIndexShapeObject));
-        }
 
-        return baseSchema;
+        return isSliderRows ? valueSchema.concat(yup.object(rowIndexShapeObject)) : valueSchema;
       }
 
       return schema;
