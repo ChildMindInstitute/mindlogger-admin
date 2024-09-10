@@ -45,6 +45,7 @@ export const subscaleTableTemplate = [
     sex: 'M',
     optionalText:
       'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+    severity: 'Minimal',
   },
   {
     score: '20',
@@ -53,6 +54,7 @@ export const subscaleTableTemplate = [
     sex: 'M',
     optionalText:
       'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+    severity: 'Mild',
   },
   {
     score: '30',
@@ -60,6 +62,7 @@ export const subscaleTableTemplate = [
     age: 15,
     sex: 'M',
     optionalText: 'Markdown Text Here',
+    severity: 'Moderate',
   },
   {
     score: '40',
@@ -67,6 +70,7 @@ export const subscaleTableTemplate = [
     age: 15,
     sex: 'F',
     optionalText: 'Good',
+    severity: 'Severe',
   },
   {
     score: '50',
