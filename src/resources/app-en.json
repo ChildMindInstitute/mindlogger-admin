@@ -1063,7 +1063,7 @@
     "imageLabel": "Add a header image for this phrase (optional)",
     "lede": "The respondent will see the content below displayed in a downloadable card.",
     "phraseOrder": "Phrase {{order}}",
-    "titleHint": "Displayed in the header of the Phrasal Template output, alongside the Applet name and image.",
+    "titleHint": "Displayed in the header of the Phrase Builder output, alongside the Applet name and image.",
     "titleHintLabel": "See more details",
     "titleLabel": "Card Title (Required)",
     "titlePlaceholder": "Example: Action Plan",
