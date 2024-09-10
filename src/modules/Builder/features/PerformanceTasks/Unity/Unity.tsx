@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { Svg } from 'shared/components';
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
@@ -14,12 +14,11 @@ import { UnityFilePreview } from './UnityFilePreview';
 export const Unity = () => {
   const { t } = useTranslation();
   const { setValue, watch, trigger } = useCustomFormContext();
+  const { fieldName } = useCurrentActivity();
 
   const [file, setFile] = useState<File | null>(null);
 
-  const activities = watch('activities');
-  const unityActivityIndex = activities.findIndex((a: { type: string }) => a.type === 'unity');
-  const urlName = `activities[${unityActivityIndex}].items[0].config.file`;
+  const urlName = `${fieldName}.items[0].config.file`;
   const url = watch(urlName);
 
   const [fileContent, setFileContent] = useState<string>(url ? url : '');
