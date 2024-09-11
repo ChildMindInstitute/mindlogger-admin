@@ -7,6 +7,7 @@ import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { expectBanner } from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
@@ -23,7 +24,22 @@ jest.mock('modules/Builder/hooks', () => ({
   useAppletPrivateKeySetter: jest.fn(),
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 describe('useSaveAndPublishSetup hook', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableCahmiSubscaleScoring: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
     mockAxios.reset();
