@@ -13,7 +13,7 @@ import { UnityFilePreview } from './UnityFilePreview';
 
 export const Unity = () => {
   const { t } = useTranslation();
-  const { setValue, watch, trigger } = useCustomFormContext();
+  const { setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
   const [file, setFile] = useState<File | null>(null);
@@ -33,7 +33,7 @@ export const Unity = () => {
     'application/json',
   ];
 
-  const isValidFile = file !== null && VALID_FILE_TYPES.includes(file.type);
+  const isValidFile = (file !== null && VALID_FILE_TYPES.includes(file.type)) || url?.length > 0;
 
   const dataTestid = 'builder-activity-unity';
 
@@ -63,15 +63,12 @@ export const Unity = () => {
   };
 
   useEffect(() => {
-    if (!url) return;
-
-    if (url) {
-      trigger(urlName);
+    if (url && url.length > 0) {
       setFileContent(url);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
+  // TODO Upload a new file if already uploaded should be implemented - TASK https://mindlogger.atlassian.net/browse/M2-7779
   const OpenModalButton = () =>
     isValidFile ? (
       <UnityFilePreview fileContent={fileContent} />
