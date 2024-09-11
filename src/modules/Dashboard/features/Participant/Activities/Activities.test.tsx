@@ -140,6 +140,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
         enableParticipantMultiInformant: false,
+        enableActivityAssign: false,
       },
       resetLDContext: jest.fn(),
     });
@@ -161,6 +162,32 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   test('should render grid with activity summary cards', async () => {
+    mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
+      [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+      [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
+      [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
+      [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState });
+
+    const activities = ['Existing Activity', 'Newly added activity'];
+
+    await waitFor(() => {
+      expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
+      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
+    });
+  });
+
+  test('should render grid with assigned activity summary cards when `enableActivityAssign` feature flag is enabled', async () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableParticipantMultiInformant: false,
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
     mockGetRequestResponses({
       [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
