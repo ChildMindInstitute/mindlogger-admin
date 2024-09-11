@@ -427,7 +427,8 @@ describe('useBreadcrumbs', () => {
   const perfRoute2 = `/builder/${appletId}/activities/performance-task/gyroscope/${activityId}`;
   const perfRoute3 = `/builder/${appletId}/activities/performance-task/flanker/${activityId}`;
   const perfRoute4 = `/builder/${appletId}/activities/performance-task/unity/${activityId}`;
-  const { builderAppletTouch, builderAppletGyroscope, builderAppletFlanker } = page;
+  const { builderAppletTouch, builderAppletGyroscope, builderAppletFlanker, builderAppletUnity } =
+    page;
   const label1 = 'CST Touch';
   const label2 = 'CST Gyroscope';
   const label3 = 'Simple & Choice Reaction Time Task Builder';

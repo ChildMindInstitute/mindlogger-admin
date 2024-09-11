@@ -1025,7 +1025,7 @@
     "flanker": "Simple & Choice Reaction Time Task Builder",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "New Unity Task (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",

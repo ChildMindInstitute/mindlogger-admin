@@ -1024,7 +1024,7 @@
     "flanker": "Constructeur de tâches de temps de réaction simple et au choix",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "Nouvelle tâche Unity (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "Parcours A/B",
