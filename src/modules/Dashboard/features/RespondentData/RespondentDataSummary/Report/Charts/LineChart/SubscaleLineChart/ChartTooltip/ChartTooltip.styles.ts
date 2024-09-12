@@ -4,14 +4,16 @@ import { MarkDownPreview } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTooltip = styled(Box)`
-  min-width: 20rem;
-  max-width: 32rem;
-  max-height: 32rem;
+  min-width: 38rem;
+  max-width: 62rem;
+  max-height: 62rem;
   overflow-y: auto;
+
   background-color: ${variables.palette.surface2};
   border-radius: ${variables.borderRadius.lg};
   box-shadow: ${variables.boxShadow.light2};
-  padding: ${theme.spacing(1.6, 2.4)};
+  padding: ${theme.spacing(1.6, 0, 1.6, 2.4)};
+  margin: ${theme.spacing(1, 2.4, 1.6, 2.4)};
 `;
 
 export const StyledBackground = styled(Box)`
@@ -31,6 +33,9 @@ export const StyledMdPreview = styled(MarkDownPreview)`
   .default-theme {
     p {
       padding: 0;
+      margin: ${theme.spacing(-1.4, 0.6, 0, 0.6)};
+      word-break: break-word;
+      font-size: ${variables.font.size.md};
     }
 
     img {
