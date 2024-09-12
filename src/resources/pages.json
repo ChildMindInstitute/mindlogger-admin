@@ -44,6 +44,7 @@
   "builderAppletFlanker": "/builder/:appletId/activities/performance-task/flanker/:activityId",
   "builderAppletGyroscope": "/builder/:appletId/activities/performance-task/gyroscope/:activityId",
   "builderAppletTouch": "/builder/:appletId/activities/performance-task/touch/:activityId",
+  "builderAppletUnity": "/builder/:appletId/activities/performance-task/unity/:activityId",
   "builderAppletActivityFlow": "/builder/:appletId/activity-flows",
   "builderAppletActivityFlowItem": "/builder/:appletId/activity-flows/:activityFlowId",
   "builderAppletActivityFlowItemAbout": "/builder/:appletId/activity-flows/:activityFlowId/about",

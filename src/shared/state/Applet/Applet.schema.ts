@@ -251,6 +251,11 @@ export interface PhrasalTemplateConfig {
   type: string;
 }
 
+export interface UnityConfig {
+  skippableItem?: boolean;
+  file: Uint8Array;
+}
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel?: string;
@@ -408,7 +413,8 @@ export type Config =
   | TouchConfig
   | FlankerConfig
   | ABTrailsConfig
-  | PhrasalTemplateConfig;
+  | PhrasalTemplateConfig
+  | UnityConfig;
 
 export type ItemAlert = {
   key?: string;
@@ -733,8 +739,8 @@ export type PhrasalTemplateItem<T = ItemCommonType> = T & {
 };
 
 export type UnityItem<T = ItemCommonType> = T & {
-  responseType: ItemResponseType.UnityFile;
-  config: TouchConfig;
+  responseType: ItemResponseType.Unity;
+  config: UnityConfig;
   responseValues: null;
 };
 

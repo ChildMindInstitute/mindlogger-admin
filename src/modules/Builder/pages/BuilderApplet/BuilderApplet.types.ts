@@ -1,6 +1,11 @@
 import { Activity, ActivityFlow, Condition, Item, ScoreReport } from 'shared/state';
 
-import { flankerItems, getABTrailsItems, getGyroscopeOrTouchItems } from './BuilderApplet.utils';
+import {
+  flankerItems,
+  getABTrailsItems,
+  getGyroscopeOrTouchItems,
+  getUnityItems,
+} from './BuilderApplet.utils';
 
 export type GetSectionConditions = {
   items?: Item[];
@@ -17,7 +22,12 @@ export type GetMessageItem = {
 type FlankerItemsType = typeof flankerItems;
 type GyroscopeOrTouchItemsType = ReturnType<typeof getGyroscopeOrTouchItems>;
 type ABTrailsItemsType = ReturnType<typeof getABTrailsItems>;
-export type PerformanceTaskItems = FlankerItemsType | GyroscopeOrTouchItemsType | ABTrailsItemsType;
+type UnityItemsType = ReturnType<typeof getUnityItems>;
+export type PerformanceTaskItems =
+  | FlankerItemsType
+  | GyroscopeOrTouchItemsType
+  | ABTrailsItemsType
+  | UnityItemsType;
 
 export type GetActivityFlows = {
   activityFlows: ActivityFlow[];

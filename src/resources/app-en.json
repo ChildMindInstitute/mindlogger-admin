@@ -1028,7 +1028,7 @@
     "flanker": "Simple & Choice Reaction Time Task Builder",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "New Unity Task (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",
@@ -1481,6 +1481,7 @@
   "underline": "Underline",
   "undo": "Undo",
   "unityInstructions": "Upload Configurations",
+  "unityTaskConfigurationFile": "Unity Task Configuration File",
   "unorderedList": "Unordered list",
   "unread": "Unread",
   "unselected": "Unselected",
@@ -1502,6 +1503,7 @@
   "uploadMdImg": "Upload Image",
   "uploadSchedule": "Please upload a schedule in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than {{size}}.",
+  "uploadUnityConfigFile": "Upload Unity Configuration File",
   "uploadVideo": "Upload Video",
   "urlPlaceholder": "Type url",
   "userBuilder": "{{userName}}'s Builder",

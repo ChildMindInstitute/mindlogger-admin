@@ -120,7 +120,7 @@ export enum ItemResponseType {
   TimeRange = 'timeRange',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
-  UnityFile = 'unityFile',
+  Unity = 'unity',
   Video = 'video',
 }
 
@@ -193,7 +193,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
   [ItemResponseType.PhrasalTemplate]: <Svg id="fileAlt" />,
-  [ItemResponseType.UnityFile]: null,
+  [ItemResponseType.Unity]: null,
 };
 
 export const enum SubscaleTotalScore {

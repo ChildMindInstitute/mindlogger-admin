@@ -27,7 +27,7 @@ export const getPerformanceTasksMenu = (
                 performanceTaskName: t(getMenuItemTitle(PerformanceTasks.Unity)),
                 performanceTaskDesc: t('performanceTasksDesc.unity'),
                 performanceTaskType: PerfTaskType.Unity,
-                isNavigationBlocked: true,
+                isNavigationBlocked: false,
               }),
             'data-testid': 'builder-activities-add-perf-task-unity',
           },
