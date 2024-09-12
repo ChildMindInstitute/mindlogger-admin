@@ -14,13 +14,19 @@ export const ActivityGrid = ({
   onClickItem,
 }: ActivityGridProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId, subjectId } = useParams();
 
   const isEmpty = !rows?.length;
 
   const getEmptyComponent = () => {
     if (isEmpty) {
-      return appletId ? t('noActivitiesForApplet') : t('noActivities');
+      if (subjectId) {
+        return t('noActivitiesForParticipant');
+      } else if (appletId) {
+        return t('noActivitiesForApplet');
+      } else {
+        return t('noActivities');
+      }
     }
   };
 

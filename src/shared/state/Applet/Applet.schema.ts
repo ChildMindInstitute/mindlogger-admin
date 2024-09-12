@@ -45,6 +45,7 @@ export type ActivityFlow = {
   createdAt?: string;
   reportIncludedItemName?: string;
   reportIncludedActivityName?: string;
+  autoAssign?: boolean;
 };
 
 export type TextInputConfig = {
@@ -781,6 +782,7 @@ export type Activity = {
   performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
+  autoAssign?: boolean;
 };
 
 type Theme = {

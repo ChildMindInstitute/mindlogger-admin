@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi } from 'api';
-import { useAsync, useEncryptionStorage } from 'shared/hooks';
+import { getAppletActivitiesApi, getAppletSubjectActivitiesApi } from 'api';
+import { useAsync, useEncryptionStorage, useFeatureFlags } from 'shared/hooks';
 import {
   ActivityActionProps,
   ActivityGrid,
@@ -46,20 +46,52 @@ export const Activities = () => {
   const [selectedActivityOrFlowId, setSelectedActivityOrFlowId] = useState<ActivityOrFlowId>();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-
-  // TODO M2-6223: Update this call to include a `subject_id` param
   const {
-    execute,
+    featureFlags: { enableActivityAssign },
+  } = useFeatureFlags();
+
+  // TODO: Remove use of getAppletActivitiesApi once enableActivityAssign feature flag is removed
+  // https://mindlogger.atlassian.net/browse/M2-6518
+  const {
+    execute: fetchActivities,
     isLoading: isLoadingActivities,
-    value,
-    previousValue,
+    value: fetchedActivities,
+    previousValue: previousActivities,
   } = useAsync(getAppletActivitiesApi);
-  const flows: ActivityFlow[] =
-    (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
-  const activities: Activity[] = useMemo(
-    () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
-    [value, previousValue],
-  );
+  const {
+    execute: fetchAssignedActivities,
+    isLoading: isLoadingAssignedActivities,
+    value: assignedActivities,
+    previousValue: previousAssignedActivities,
+  } = useAsync(getAppletSubjectActivitiesApi);
+
+  const flows: ActivityFlow[] = useMemo(() => {
+    if (enableActivityAssign) {
+      return (assignedActivities ?? previousAssignedActivities)?.data?.result.activityFlows ?? [];
+    }
+
+    return (fetchedActivities ?? previousActivities)?.data?.result.appletDetail.activityFlows ?? [];
+  }, [
+    assignedActivities,
+    enableActivityAssign,
+    fetchedActivities,
+    previousActivities,
+    previousAssignedActivities,
+  ]);
+
+  const activities: Activity[] = useMemo(() => {
+    if (enableActivityAssign) {
+      return (assignedActivities ?? previousAssignedActivities)?.data?.result.activities ?? [];
+    }
+
+    return (fetchedActivities ?? previousActivities)?.data?.result.activitiesDetails ?? [];
+  }, [
+    assignedActivities,
+    enableActivityAssign,
+    fetchedActivities,
+    previousActivities,
+    previousAssignedActivities,
+  ]);
 
   const {
     formatRow,
@@ -81,19 +113,22 @@ export const Activities = () => {
   });
 
   const isLoadingSubject = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
-  const isLoading = isLoadingActivities || isLoadingSubject;
-  const showContent =
-    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
+  const isLoading = isLoadingActivities || isLoadingAssignedActivities || isLoadingSubject;
+  const showContent = !isLoading || !!activities.length;
 
   useEffect(() => {
-    if (!appletId) return;
+    if (!appletId || !subjectId) return;
 
-    execute({ params: { appletId } });
-  }, [appletId, execute]);
+    if (enableActivityAssign) {
+      fetchAssignedActivities({ appletId, subjectId });
+    } else {
+      fetchActivities({ params: { appletId } });
+    }
+  }, [appletId, enableActivityAssign, fetchActivities, fetchAssignedActivities, subjectId]);
 
   const formattedActivities = useMemo(
     () =>
-      (activities ?? []).map((activity) => {
+      activities.map((activity) => {
         const actions = {
           ...defaultActions,
           takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {

@@ -77,6 +77,8 @@ export type RespondentDetails = {
   lastSeen: string | null;
   tag?: ParticipantTag | null;
   userId: string | null;
+  firstName: string;
+  lastName: string;
 };
 
 export enum AccountType {
