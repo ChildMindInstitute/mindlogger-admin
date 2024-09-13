@@ -1,9 +1,11 @@
 import { ActivityId, AppletId } from 'shared/api';
-import { Activity, Item, SingleApplet, SubscaleSetting } from 'shared/state';
+import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
+
+import { RespondentDetails } from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -29,6 +31,23 @@ export type GetActivitiesParams = {
     appletId: string;
     hasScore?: boolean;
     hasSubmitted?: boolean;
+  };
+};
+
+export type GetSubjectActivitiesParams = AppletId & SubjectId;
+
+export type HydratedAssignment = {
+  id: string;
+  activityId: string;
+  activityFlowId: string;
+  respondentSubject: RespondentDetails;
+  targetSubject: RespondentDetails;
+};
+
+export type AppletSubjectActivitiesResponse = {
+  result: {
+    activities: Array<Activity & { assignments: HydratedAssignment[] }>;
+    activityFlows: Array<ActivityFlow & { assignments: HydratedAssignment[] }>;
   };
 };
 

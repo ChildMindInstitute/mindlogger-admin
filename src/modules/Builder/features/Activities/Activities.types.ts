@@ -23,6 +23,7 @@ export enum EditablePerformanceTasksType {
   Flanker = 'flanker',
   Gyroscope = 'gyroscope',
   Touch = 'touch',
+  Unity = 'unity',
 }
 
 export const enum PerformanceTasks {

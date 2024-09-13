@@ -83,6 +83,8 @@ import {
   CreateTemporaryMultiInformantRelation,
   GetAssignmentsParams,
   PostAssignmentsParams,
+  GetSubjectActivitiesParams,
+  AppletSubjectActivitiesResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -917,6 +919,14 @@ export const getAppletActivitiesApi = (
 ) =>
   authApiClient.get(`/activities/applet/${appletId}`, {
     params,
+    signal,
+  });
+
+export const getAppletSubjectActivitiesApi = (
+  { appletId, subjectId }: GetSubjectActivitiesParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<AppletSubjectActivitiesResponse>> =>
+  authApiClient.get(`/activities/applet/${appletId}/subject/${subjectId}`, {
     signal,
   });
 

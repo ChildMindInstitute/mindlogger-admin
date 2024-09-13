@@ -59,6 +59,8 @@ const preloadedState = {
           lastSeen: null,
           tag: 'Child' as ParticipantTag,
           userId: null,
+          firstName: 'John',
+          lastName: 'Doe',
         },
       },
     },

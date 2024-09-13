@@ -1027,7 +1027,7 @@
     "flanker": "Constructeur de tâches de temps de réaction simple et au choix",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "Nouvelle tâche Unity (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "Parcours A/B",
@@ -1484,6 +1484,7 @@
   "underline": "Souligner",
   "undo": "Annuler",
   "unityInstructions": "Upload Configurations",
+  "unityTaskConfigurationFile": "Fichier de configuration des tâches Unity",
   "unorderedList": "Liste non ordonnée",
   "unread": "Non lu",
   "unselected": "Non sélectionné",
@@ -1505,6 +1506,7 @@
   "uploadMdImg": "Uploader une image",
   "uploadSchedule": "Veuillez uploader un programme dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "uploadTransfluent": "Veuillez uploader une image JPG ou PNG transfluent de moins de {{size}}.",
+  "uploadUnityConfigFile": "Télécharger le fichier de configuration Unity",
   "uploadVideo": "Uploader une vidéo",
   "urlPlaceholder": "Saisissez l'URL",
   "userBuilder": "Constructeur de {{userName}}",
@@ -1601,6 +1603,7 @@
   "appletNameExists": "Ce nom d'Applet existe déjà",
   "noActivities": "Aucune activité trouvée",
   "noActivitiesForApplet": "L'applet n'a aucune activité",
+  "noActivitiesForParticipant": "Aucune activité disponible pour ce participant",
   "noAccessTitle": "Pas d'accès à l'applet",
   "noAccessDescription": "Pour rafraîchir les données, veuillez cliquer sur le bouton ci-dessous.",
   "noPermissionToViewData": "Vous n'avez pas la permission de voir ces données",
