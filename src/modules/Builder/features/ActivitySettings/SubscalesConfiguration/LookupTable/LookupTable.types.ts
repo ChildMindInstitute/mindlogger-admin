@@ -72,7 +72,7 @@ export type ScreenObjectProps = Record<
     | 'hasThirdBtn'
     | 'thirdBtnText'
     | 'onThirdBtnSubmit'
-  > & { component: JSX.Element })[]
+  > & { component?: JSX.Element })[]
 >;
 
 export const enum ModalType {

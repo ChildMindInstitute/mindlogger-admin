@@ -30,7 +30,7 @@ export const getModalComponents = ({
         component: (
           <>
             <FileUploader
-              uploadLabel={labelsObject[ModalType.Upload].initDescription}
+              uploadLabel={labelsObject[modalType].initDescription}
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
@@ -52,7 +52,7 @@ export const getModalComponents = ({
         title: labelsObject[modalType].title,
         component: (
           <>
-            <Box sx={{ mb: theme.spacing(2) }}>{labelsObject.upload.successDescription}</Box>
+            <Box sx={{ mb: theme.spacing(2) }}>{labelsObject[modalType].successDescription}</Box>
             <DataTable
               tableHeadBackground={variables.modalBackground}
               columns={columnData}
@@ -112,7 +112,7 @@ export const getModalComponents = ({
     [ModalType.Delete]: [
       {
         title: labelsObject[modalType].title,
-        component: labelsObject.delete.initDescription,
+        component: labelsObject[modalType].initDescription,
         buttonText: t('delete'),
         onSubmit: () => {
           onUpdate();
@@ -125,7 +125,7 @@ export const getModalComponents = ({
       },
       {
         title: labelsObject[modalType].title,
-        component: labelsObject.delete.successDescription!,
+        component: labelsObject[modalType].successDescription,
         buttonText: t('ok'),
         onSubmit: onClose,
       },
