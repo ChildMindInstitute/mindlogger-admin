@@ -1244,9 +1244,6 @@ export const testFunctionForNotExistedItems = (value: string, context: yup.TestC
   return variableNames.every((variable) => items.some((item) => item.name === variable));
 };
 
-export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>
-  typeof value === 'number' || value ? +value > 0 : true;
-
 export const checkScoreRegexp = /^-?\d+\.?\d{0,5}$/;
 
 export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: string) => {

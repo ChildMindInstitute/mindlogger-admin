@@ -50,7 +50,6 @@ import {
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
-  testFunctionForSubscaleAge,
   testFunctionForSystemItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
@@ -597,7 +596,7 @@ const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
       age: yup
         .string()
         .nullable()
-        .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
+        .matches(/^(|[1-9]\d*|[1-9]\d*~[1-9]\d*)$/),
       sex: yup
         .string()
         .nullable()
