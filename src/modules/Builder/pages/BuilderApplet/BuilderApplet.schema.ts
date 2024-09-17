@@ -596,7 +596,7 @@ const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
       age: yup
         .string()
         .nullable()
-        .matches(/^(|[1-9]\d*|[1-9]\d*~[1-9]\d*)$/),
+        .matches(/^(|\d+|\d+~\d+)$/),
       sex: yup
         .string()
         .nullable()
