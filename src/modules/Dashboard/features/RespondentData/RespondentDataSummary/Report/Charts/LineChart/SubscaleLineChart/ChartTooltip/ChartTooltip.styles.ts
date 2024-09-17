@@ -31,7 +31,8 @@ export const StyledMdPreview = styled(MarkDownPreview)`
 
   .default-theme {
     p {
-      margin: ${theme.spacing(-1.0, 0, 1.6, 0)};
+      padding: 0;
+      margin: ${theme.spacing(-1.0, 0, 1.6, -0.3)};
       word-break: break-word;
       font-size: ${variables.font.size.md};
     }
