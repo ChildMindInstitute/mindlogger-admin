@@ -58,9 +58,11 @@ export const useSubscaleLookupTableSetup = ({
       return mappedItem;
     });
 
-    const incompleteSeverityData = mappedData.some((item) => !item.severity);
-    if (incompleteSeverityData) {
-      setWarning(warnings.incompleteSeverityData);
+    if (featureFlags.enableCahmiSubscaleScoring) {
+      const incompleteSeverityData = mappedData.some((item) => !item.severity);
+      if (incompleteSeverityData) {
+        setWarning(warnings.incompleteSeverityData);
+      }
     }
 
     setError(null);
