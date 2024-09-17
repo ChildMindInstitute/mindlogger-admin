@@ -50,6 +50,7 @@ import {
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
+  testFunctionForSubscaleAge,
   testFunctionForSystemItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
@@ -593,10 +594,15 @@ const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
     .object({
       score: scoreSchema,
       rawScore: scoreSchema,
-      age: yup
-        .string()
-        .nullable()
-        .matches(/^(|\d+|\d+~\d+)$/),
+      age: featureFlags.enableCahmiSubscaleScoring
+        ? yup
+            .string()
+            .nullable()
+            .matches(/^(|\d+|\d+~\d+)$/)
+        : yup
+            .string()
+            .nullable()
+            .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
       sex: yup
         .string()
         .nullable()
