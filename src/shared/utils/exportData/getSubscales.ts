@@ -130,6 +130,7 @@ export const calcScores = <T>(
         }
       }
 
+      // TODO: Update the score calculation to account for age ranges (https://mindlogger.atlassian.net/browse/M2-7672)
       const withAge = age ? String(age) === reportedAge : true;
 
       if (!withSex || !withAge) return false;

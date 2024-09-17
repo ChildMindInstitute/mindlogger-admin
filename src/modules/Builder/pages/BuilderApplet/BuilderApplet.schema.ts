@@ -40,6 +40,7 @@ import {
   PORT_REGEXP,
 } from './BuilderApplet.const';
 import {
+  ageRangeRegexp,
   checkScoreRegexp,
   getCommonSliderValidationProps,
   getConditionsMatch,
@@ -595,10 +596,7 @@ const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
       score: scoreSchema,
       rawScore: scoreSchema,
       age: featureFlags.enableCahmiSubscaleScoring
-        ? yup
-            .string()
-            .nullable()
-            .matches(/^(|\d+|\d+~\d+)$/)
+        ? yup.string().nullable().matches(ageRangeRegexp)
         : yup
             .string()
             .nullable()
