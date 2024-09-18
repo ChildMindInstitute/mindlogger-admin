@@ -1,18 +1,104 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { prepareData } from './prepareData';
+import { prepareDecryptedData, prepareEncryptedData } from './prepareData';
 import * as getParsedAnswersFunctions from '../getParsedAnswers';
 import { mockedParsedAnswers } from '../../mock';
+
+const mockedExportDataResult = {
+  reportData: [
+    {
+      id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+      activity_flow_submission_id: '',
+      activity_scheduled_time: '1689764371123',
+      activity_start_time: '1689764605250.957',
+      activity_end_time: '1689764605250.957',
+      flag: 'completed',
+      secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
+      userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+      source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
+      activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+      activity_flow_id: '',
+      activity_flow_name: '',
+      item: 'single',
+      item_id: '5470cf91-76bf-48b4-b3da-4a615313c257',
+      response: 'value: 0',
+      prompt: 'single',
+      options: 'Opt1: 0, Opt2: 1, Opt3: 2',
+      version: '2.1.0',
+      rawScore: '',
+      reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
+      event_id: '',
+      timezone_offset: '',
+    },
+    {
+      id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+      activity_flow_submission_id: '',
+      activity_scheduled_time: '1689764371123',
+      activity_start_time: '1689764605250.957',
+      activity_end_time: '1689764605250.957',
+      flag: 'completed',
+      secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
+      userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+      source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
+      activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+      activity_flow_id: '',
+      activity_flow_name: '',
+      item: 'multi',
+      item_id: 'dd9c96ad-b57c-4440-b284-27c7f1351fd0',
+      response: 'value: 0',
+      prompt: 'multi',
+      options: 'Opt1: 0, Opt2: 1, Opt3: 2',
+      version: '2.1.0',
+      rawScore: '',
+      reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
+      event_id: '',
+      timezone_offset: '',
+    },
+    {
+      id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
+      activity_flow_submission_id: '',
+      activity_scheduled_time: '1689764371123',
+      activity_start_time: '1689764605250.957',
+      activity_end_time: '1689764605250.957',
+      flag: 'completed',
+      secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
+      userId: '0e6d026f-b382-4022-9208-74a54768ea81',
+      source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
+      activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+      activity_flow_id: '',
+      activity_flow_name: '',
+      item: 'slider',
+      item_id: 'ab47ab74-1ae5-475b-b1cb-bc868ead793f',
+      response: 'value: 5',
+      prompt: 'slider',
+      options: '0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5',
+      version: '2.1.0',
+      rawScore: '',
+      reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
+      event_id: '',
+      timezone_offset: '',
+    },
+  ],
+  activityJourneyData: [],
+  mediaData: [],
+  drawingItemsData: [],
+  stabilityTrackerItemsData: [],
+  abTrailsItemsData: [],
+  flankerItemsData: [],
+};
 
 describe('prepareData', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  test('should return an object with the correct keys', async () => {
-    const data = { activities: [], answers: [] };
-    const getDecryptedAnswers = jest.fn();
-    const result = await prepareData(data, getDecryptedAnswers);
+  const testCorrectKeys = (result) => {
     expect(result).toHaveProperty('reportData');
     expect(result).toHaveProperty('activityJourneyData');
     expect(result).toHaveProperty('mediaData');
@@ -27,8 +113,23 @@ describe('prepareData', () => {
     expect(result.stabilityTrackerItemsData).toEqual([]);
     expect(result.abTrailsItemsData).toEqual([]);
     expect(result.flankerItemsData).toEqual([]);
+  };
+
+  test('prepareEncryptedData should return an object with the correct keys', async () => {
+    const data = { activities: [], answers: [] };
+    const getDecryptedAnswers = jest.fn();
+    const result = await prepareEncryptedData(data, getDecryptedAnswers);
+
+    testCorrectKeys(result);
   });
-  test('should return filled in reportData', async () => {
+
+  test('prepareDecryptedData should return an object with the correct keys', async () => {
+    const result = await prepareDecryptedData([]);
+
+    testCorrectKeys(result);
+  });
+
+  test('prepareEncryptedData should return filled in reportData', async () => {
     const data = {
       answers: [
         {
@@ -252,94 +353,12 @@ describe('prepareData', () => {
       .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
       .mockImplementationOnce(() => mockedParsedAnswers);
 
-    const result = await prepareData(data, getDecryptedAnswers);
-    expect(result).toEqual({
-      reportData: [
-        {
-          id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
-          activity_flow_submission_id: '',
-          activity_scheduled_time: '1689764371123',
-          activity_start_time: '1689764605250.957',
-          activity_end_time: '1689764605250.957',
-          flag: 'completed',
-          secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
-          userId: '0e6d026f-b382-4022-9208-74a54768ea81',
-          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-          activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
-          activity_name: 'New Activity#Single_Multi_Slider - Assessment',
-          activity_flow_id: '',
-          activity_flow_name: '',
-          item: 'single',
-          item_id: '5470cf91-76bf-48b4-b3da-4a615313c257',
-          response: 'value: 0',
-          prompt: 'single',
-          options: 'Opt1: 0, Opt2: 1, Opt3: 2',
-          version: '2.1.0',
-          rawScore: '',
-          reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
-          event_id: '',
-          timezone_offset: '',
-        },
-        {
-          id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
-          activity_flow_submission_id: '',
-          activity_scheduled_time: '1689764371123',
-          activity_start_time: '1689764605250.957',
-          activity_end_time: '1689764605250.957',
-          flag: 'completed',
-          secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
-          userId: '0e6d026f-b382-4022-9208-74a54768ea81',
-          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-          activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
-          activity_name: 'New Activity#Single_Multi_Slider - Assessment',
-          activity_flow_id: '',
-          activity_flow_name: '',
-          item: 'multi',
-          item_id: 'dd9c96ad-b57c-4440-b284-27c7f1351fd0',
-          response: 'value: 0',
-          prompt: 'multi',
-          options: 'Opt1: 0, Opt2: 1, Opt3: 2',
-          version: '2.1.0',
-          rawScore: '',
-          reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
-          event_id: '',
-          timezone_offset: '',
-        },
-        {
-          id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
-          activity_flow_submission_id: '',
-          activity_scheduled_time: '1689764371123',
-          activity_start_time: '1689764605250.957',
-          activity_end_time: '1689764605250.957',
-          flag: 'completed',
-          secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
-          userId: '0e6d026f-b382-4022-9208-74a54768ea81',
-          source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-          target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-          activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
-          activity_name: 'New Activity#Single_Multi_Slider - Assessment',
-          activity_flow_id: '',
-          activity_flow_name: '',
-          item: 'slider',
-          item_id: 'ab47ab74-1ae5-475b-b1cb-bc868ead793f',
-          response: 'value: 5',
-          prompt: 'slider',
-          options: '0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5',
-          version: '2.1.0',
-          rawScore: '',
-          reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
-          event_id: '',
-          timezone_offset: '',
-        },
-      ],
-      activityJourneyData: [],
-      mediaData: [],
-      drawingItemsData: [],
-      stabilityTrackerItemsData: [],
-      abTrailsItemsData: [],
-      flankerItemsData: [],
-    });
+    const result = await prepareEncryptedData(data, getDecryptedAnswers);
+    expect(result).toEqual(mockedExportDataResult);
+  });
+
+  test('prepareDecryptedData should return filled in reportData', async () => {
+    const result = await prepareDecryptedData(mockedParsedAnswers);
+    expect(result).toEqual(mockedExportDataResult);
   });
 });

@@ -13,12 +13,23 @@ const props = {
 };
 
 describe('ParticipantSnippet component', () => {
-  test('should render the snippet', () => {
+  test('should render secretId followed by nickname if not team member', () => {
     render(<ParticipantSnippet {...props} />);
 
-    expect(screen.getByText(props.secretId)).toBeInTheDocument();
-    expect(screen.getByText(props.nickname)).toBeInTheDocument();
+    const secretIdElement = screen.getByText(props.secretId);
+    const nextSiblingElement = secretIdElement.nextSibling as ChildNode;
+
+    expect(nextSiblingElement).toBeInTheDocument();
+    expect(nextSiblingElement.textContent).toBe(props.nickname);
     expect(screen.getByText('Child')).toBeInTheDocument();
+  });
+
+  test('should render only nickname if team member', () => {
+    render(<ParticipantSnippet {...props} tag="Team" />);
+
+    expect(screen.getByText(props.nickname)).toBeInTheDocument();
+    expect(screen.queryByTestId(`${dataTestid}-secretId`)).not.toBeInTheDocument();
+    expect(screen.getByText('Team')).toBeInTheDocument();
   });
 
   test('should render with only the secretId', () => {

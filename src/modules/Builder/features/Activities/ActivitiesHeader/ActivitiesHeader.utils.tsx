@@ -10,6 +10,7 @@ const getMenuItemTitle = (perfTask: string) => `performanceTasks.${perfTask}`;
 export const getPerformanceTasksMenu = (
   onAddActivity: (props: ActivityAddProps) => void,
   setAnchorEl: (el: null | HTMLElement) => void,
+  enableMeritActivityType?: boolean,
 ) => {
   const getAction = (props: ActivityAddProps) => {
     onAddActivity(props);
@@ -17,6 +18,21 @@ export const getPerformanceTasksMenu = (
   };
 
   return [
+    ...(enableMeritActivityType
+      ? [
+          {
+            title: getMenuItemTitle(PerformanceTasks.Unity),
+            action: () =>
+              getAction({
+                performanceTaskName: t(getMenuItemTitle(PerformanceTasks.Unity)),
+                performanceTaskDesc: t('performanceTasksDesc.unity'),
+                performanceTaskType: PerfTaskType.Unity,
+                isNavigationBlocked: true,
+              }),
+            'data-testid': 'builder-activities-add-perf-task-unity',
+          },
+        ]
+      : []),
     {
       title: getMenuItemTitle(PerformanceTasks.AbTrailsIpad),
       action: () =>

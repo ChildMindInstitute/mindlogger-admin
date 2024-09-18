@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { exportDataSucceed } from './exportDataSucceed';
+import { exportEncryptedDataSucceed, exportDecryptedDataSucceed } from './exportDataSucceed';
 import * as prepareDataUtils from './prepareData';
 import * as exportTemplateUtils from '../exportTemplate';
 import * as exportCsvZipUtils from './exportCsvZip';
@@ -13,7 +13,10 @@ describe('exportDataSucceed', () => {
   });
   beforeEach(() => {
     jest
-      .spyOn(prepareDataUtils, 'prepareData')
+      .spyOn(prepareDataUtils, 'prepareEncryptedData')
+      .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
+    jest
+      .spyOn(prepareDataUtils, 'prepareDecryptedData')
       .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
     jest.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
     jest.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
@@ -31,24 +34,14 @@ describe('exportDataSucceed', () => {
     activities: [],
     answers: [],
   };
+  const mockedDecryptedExportData = [
+    {
+      decryptedAnswers: [],
+      decryptedEvents: [],
+    },
+  ];
 
-  test('check actions with empty data', async () => {
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(
-      undefined,
-    );
-
-    expect(prepareDataUtils.prepareData).not.toHaveBeenCalled();
-  });
-  test('check actions with default data', async () => {
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '-test' })(
-      mockedExportData,
-    );
-
-    expect(prepareDataUtils.prepareData).toHaveBeenCalledWith(
-      mockedExportData,
-      mockedGetDecryptedAnswers,
-      undefined,
-    );
+  const checkCommonActions = () => {
     expect(exportTemplateUtils.exportTemplate).toHaveBeenCalledTimes(2);
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: [],
@@ -130,23 +123,13 @@ describe('exportDataSucceed', () => {
     expect(exportMediaZipUtils.exportMediaZip).toHaveBeenNthCalledWith(
       1,
       [],
-      'media-responses-Sat Jan 01 2000-test.zip',
+      'media-responses-Sat Jan 01 2000-test',
     );
-  });
-  test("should set 'null' for defaultData in exportTemplate", async () => {
-    const reportData = [{ id: 'test' }];
-    const activityJourneyData = [{ id: 'test' }];
-    jest.spyOn(prepareDataUtils, 'prepareData').mockReturnValue(
-      Promise.resolve({
-        ...prepareDataUtils.getDefaultExportData(),
-        reportData,
-        activityJourneyData,
-      }),
-    );
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(
-      mockedExportData,
-    );
+  };
 
+  const reportData = [{ id: 'test' }];
+  const activityJourneyData = [{ id: 'test' }];
+  const checkExportTemplateDefaultData = () => {
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: reportData,
       defaultData: null,
@@ -157,5 +140,83 @@ describe('exportDataSucceed', () => {
       defaultData: null,
       fileName: 'activity_user_journey',
     });
+  };
+
+  test('exportEncryptedDataSucceed: check actions with empty data', async () => {
+    await exportEncryptedDataSucceed({
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      suffix: '',
+    })(undefined);
+
+    expect(prepareDataUtils.prepareEncryptedData).not.toHaveBeenCalled();
+  });
+
+  test('exportDecryptedDataSucceed: check actions with empty data', async () => {
+    await exportDecryptedDataSucceed({
+      suffix: '',
+    })(undefined);
+
+    expect(prepareDataUtils.prepareDecryptedData).not.toHaveBeenCalled();
+  });
+
+  test('exportEncryptedDataSucceed: check actions with default data', async () => {
+    await exportEncryptedDataSucceed({
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      suffix: '-test',
+    })(mockedExportData);
+
+    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
+      mockedExportData,
+      mockedGetDecryptedAnswers,
+      undefined,
+    );
+
+    checkCommonActions();
+  });
+
+  test('exportDecryptedDataSucceed: check actions with default data', async () => {
+    await exportDecryptedDataSucceed({
+      suffix: '-test',
+    })(mockedDecryptedExportData);
+
+    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
+      mockedDecryptedExportData,
+      undefined,
+    );
+
+    checkCommonActions();
+  });
+
+  test("exportEncryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
+    jest.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
+      Promise.resolve({
+        ...prepareDataUtils.getDefaultExportData(),
+        reportData,
+        activityJourneyData,
+      }),
+    );
+    await exportEncryptedDataSucceed({
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      suffix: '',
+    })(mockedExportData);
+
+    checkExportTemplateDefaultData();
+  });
+
+  test("exportDecryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
+    const reportData = [{ id: 'test' }];
+    const activityJourneyData = [{ id: 'test' }];
+    jest.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
+      Promise.resolve({
+        ...prepareDataUtils.getDefaultExportData(),
+        reportData,
+        activityJourneyData,
+      }),
+    );
+    await exportDecryptedDataSucceed({
+      suffix: '',
+    })(mockedDecryptedExportData);
+
+    checkExportTemplateDefaultData();
   });
 });

@@ -114,24 +114,35 @@ export const Table = ({
               {rows
                 ?.sort(getComparator(order, orderBy))
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow key={keyExtractor(row, index)} data-testid={`table-row-${index}`}>
-                    {Object.keys(row)?.map((key) =>
-                      row[key].isHidden ? null : (
-                        <TableCell
-                          sx={{ height: '4.8rem', maxWidth: row[key].maxWidth }}
-                          onClick={row[key].onClick}
-                          scope="row"
-                          key={key}
-                          align={row[key].align}
-                          width={row[key].width}
-                        >
-                          {row[key].content?.(row)}
-                        </TableCell>
-                      ),
-                    )}
-                  </TableRow>
-                ))}
+                .map((row, index) => {
+                  const { rowState, ...cells } = row;
+
+                  return (
+                    <TableRow
+                      key={keyExtractor(row, index)}
+                      classes={
+                        rowState?.value ? { root: `MuiTableRow-${rowState.value}` } : undefined
+                      }
+                      aria-invalid={rowState?.value === 'error'}
+                      data-testid={`table-row-${index}`}
+                    >
+                      {Object.keys(cells)?.map((key) =>
+                        row[key].isHidden ? null : (
+                          <TableCell
+                            sx={{ height: '4.8rem', maxWidth: row[key].maxWidth }}
+                            onClick={row[key].onClick}
+                            scope="row"
+                            key={key}
+                            align={row[key].align}
+                            width={row[key].width}
+                          >
+                            {row[key].content?.(row)}
+                          </TableCell>
+                        ),
+                      )}
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </MuiTable>
         ) : (

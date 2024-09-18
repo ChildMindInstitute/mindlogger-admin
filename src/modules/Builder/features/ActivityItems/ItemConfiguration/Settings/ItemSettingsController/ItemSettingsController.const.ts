@@ -389,4 +389,11 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
+  [ItemResponseType.PhrasalTemplate]: [
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+      groupOptions: [ItemConfigurationSettings.HasTimer, ItemConfigurationSettings.IsSkippable],
+      collapsedByDefault: true,
+    },
+  ],
 };

@@ -50,7 +50,7 @@ export const LeftBar = () => {
       setAreFeatureFlagsLoaded(false);
       setFeatureFlags(undefined);
 
-      const featureFlags = await FeatureFlags.updateWorkspace(workspaceNames, ownerId);
+      const featureFlags = await FeatureFlags.updateWorkspaces(workspaceNames, ownerId);
 
       setFeatureFlags(featureFlags);
     } finally {
@@ -77,8 +77,7 @@ export const LeftBar = () => {
 
         const workspaceNames = getWorkspaceNames(data.result);
 
-        await FeatureFlags.updateWorkspaces(workspaceNames, currentWorkspace.ownerId);
-        fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
+        await fetchFeatureFlags(workspaceNames, currentWorkspace.ownerId);
       }
     };
 
@@ -89,16 +88,15 @@ export const LeftBar = () => {
   useEffect(() => {
     const { workspace } = location.state ?? {};
 
-    if (workspace) {
-      authStorage.setWorkspace(workspace);
-      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+    if (!workspace || !dispatch) return;
 
-      if (!workspace?.ownerId || !workspacesData) return;
+    authStorage.setWorkspace(workspace);
+    dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 
-      fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state]);
+    if (!workspace?.ownerId || !workspacesData) return;
+
+    fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
+  }, [location.state, workspacesData, dispatch]);
 
   useIntegrationToggle({
     integrationType: 'LORIS',

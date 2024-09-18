@@ -124,8 +124,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
-        enableMultiInformant: true,
-        enableMultiInformantTakeNow: true,
         enableParticipantMultiInformant: false,
       },
       resetLDContext: jest.fn(),
@@ -234,53 +232,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           userEvent.click(actionDots);
           await waitFor(() =>
             expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible(),
-          );
-        } else {
-          await waitFor(() =>
-            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null),
-          );
-        }
-      });
-    });
-
-    describe('Should hide Take now button for everyone if feature flag is off', () => {
-      test.each`
-        role                 | description
-        ${Roles.Manager}     | ${'Take Now for Manager'}
-        ${Roles.SuperAdmin}  | ${'Take Now for SuperAdmin'}
-        ${Roles.Owner}       | ${'Take Now for Owner'}
-        ${Roles.Coordinator} | ${'Take Now for Coordinator'}
-        ${Roles.Editor}      | ${'Take Now for Editor'}
-        ${Roles.Respondent}  | ${'Take Now for Respondent'}
-        ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
-      `('$description', async ({ role }: { role: Roles }) => {
-        mockGetRequestResponses({
-          [getAppletUrl]: successfulGetAppletMock,
-          [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
-          [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
-          [getWorkspaceManagersUrl]: successfulEmptyHttpResponseMock,
-        });
-
-        mockUseFeatureFlags.mockReturnValue({
-          featureFlags: {
-            enableMultiInformant: true,
-            enableMultiInformantTakeNow: false,
-            enableParticipantMultiInformant: false,
-          },
-          resetLDContext: jest.fn(),
-        });
-
-        renderWithProviders(<Activities />, {
-          preloadedState: { ...preloadedState, ...getPreloadedState(role) },
-          route,
-          routePath,
-        });
-
-        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
-        if (actionDots) {
-          await userEvent.click(actionDots);
-          await waitFor(() =>
-            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null),
           );
         } else {
           await waitFor(() =>
@@ -686,8 +637,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       beforeEach(() => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: {
-            enableMultiInformant: true,
-            enableMultiInformantTakeNow: true,
             enableParticipantMultiInformant: true,
           },
           resetLDContext: jest.fn(),

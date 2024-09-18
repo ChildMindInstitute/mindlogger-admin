@@ -96,30 +96,32 @@ export enum Roles {
 }
 
 export enum ItemResponseType {
-  SingleSelection = 'singleSelect',
-  MultipleSelection = 'multiSelect',
-  Slider = 'slider',
-  Date = 'date',
-  NumberSelection = 'numberSelect',
-  TimeRange = 'timeRange',
-  SingleSelectionPerRow = 'singleSelectRows',
-  MultipleSelectionPerRow = 'multiSelectRows',
-  SliderRows = 'sliderRows',
-  Text = 'text',
-  ParagraphText = 'paragraphText',
-  Drawing = 'drawing',
-  Photo = 'photo',
-  Video = 'video',
-  Geolocation = 'geolocation',
+  ABTrails = 'ABTrails',
   Audio = 'audio',
-  Message = 'message',
   AudioPlayer = 'audioPlayer',
-  Time = 'time',
+  Date = 'date',
+  Drawing = 'drawing',
   Flanker = 'flanker',
+  Geolocation = 'geolocation',
+  Message = 'message',
+  MultipleSelection = 'multiSelect',
+  MultipleSelectionPerRow = 'multiSelectRows',
+  NumberSelection = 'numberSelect',
+  ParagraphText = 'paragraphText',
+  Photo = 'photo',
+  PhrasalTemplate = 'phrasalTemplate',
+  SingleSelection = 'singleSelect',
+  SingleSelectionPerRow = 'singleSelectRows',
+  Slider = 'slider',
+  SliderRows = 'sliderRows',
   StabilityTracker = 'stabilityTracker',
+  Text = 'text',
+  Time = 'time',
+  TimeRange = 'timeRange',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
-  ABTrails = 'ABTrails',
+  UnityFile = 'unityFile',
+  Video = 'video',
 }
 
 export const textLanguageKey = 'shortText';
@@ -145,6 +147,7 @@ export enum PerfTaskType {
   Gyroscope = 'gyroscope',
   ABTrailsTablet = 'ABTrailsTablet',
   ABTrailsMobile = 'ABTrailsMobile',
+  Unity = 'unity',
 }
 
 export enum GyroscopeOrTouch {
@@ -189,6 +192,8 @@ export const itemsTypeIcons = {
   [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
+  [ItemResponseType.PhrasalTemplate]: <Svg id="fileAlt" />,
+  [ItemResponseType.UnityFile]: null,
 };
 
 export const enum SubscaleTotalScore {

@@ -1,27 +1,27 @@
 import { ColorResult } from 'react-color';
 
-import { BaseSchema } from 'shared/state/Base';
-import { ElementType, RetentionPeriods } from 'shared/types';
-import {
-  ItemResponseType,
-  SubscaleTotalScore,
-  ConditionType,
-  ScoreConditionType,
-  ConditionalLogicMatch,
-  CalculationType,
-  PerfTaskType,
-  GyroscopeOrTouch,
-  ScoreReportType,
-  Integrations,
-} from 'shared/consts';
-import { Encryption } from 'shared/utils/encryption';
 import {
   CorrectPress,
-  RoundTypeEnum,
-  FlankerSamplingMethod,
   DeviceType,
+  FlankerSamplingMethod,
   OrderName,
+  RoundTypeEnum,
 } from 'modules/Builder/types';
+import {
+  CalculationType,
+  ConditionalLogicMatch,
+  ConditionType,
+  GyroscopeOrTouch,
+  ItemResponseType,
+  PerfTaskType,
+  ScoreConditionType,
+  ScoreReportType,
+  SubscaleTotalScore,
+  Integrations,
+} from 'shared/consts';
+import { BaseSchema } from 'shared/state/Base';
+import { ElementType, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils/encryption';
 
 type ActivityFlowItem = {
   activityId: string;
@@ -244,6 +244,12 @@ type ABTrailsConfig = {
   removeBackButton?: boolean;
 };
 
+export interface PhrasalTemplateConfig {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  type: string;
+}
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel?: string;
@@ -338,6 +344,20 @@ export type DrawingResponseValues = {
   } | null;
 };
 
+export type PhrasalTemplateField =
+  | { type: 'sentence'; text: string }
+  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number }
+  | { type: 'line_break' };
+
+export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
+
+export interface PhrasalTemplateResponseValues {
+  phrases: {
+    image: string | null;
+    fields: PhrasalTemplateField[];
+  }[];
+}
+
 export type GyroscopeConfig = {
   userInputType: GyroscopeOrTouch;
   phase: RoundTypeEnum;
@@ -364,7 +384,8 @@ export type ResponseValues =
   | DrawingResponseValues
   | PhotoResponseValues
   | GeolocationResponseValues
-  | MessageResponseValues;
+  | MessageResponseValues
+  | PhrasalTemplateResponseValues;
 
 export type Config =
   | TextInputConfig
@@ -385,7 +406,8 @@ export type Config =
   | GyroscopeConfig
   | TouchConfig
   | FlankerConfig
-  | ABTrailsConfig;
+  | ABTrailsConfig
+  | PhrasalTemplateConfig;
 
 export type ItemAlert = {
   key?: string;
@@ -503,7 +525,9 @@ export type Item<T = ItemCommonType> =
   | SliderRowsItem<T>
   | StabilityTrackerItem<T>
   | TouchPracticeItem<T>
-  | TouchTestItem<T>;
+  | TouchTestItem<T>
+  | UnityItem<T>
+  | PhrasalTemplateItem<T>;
 
 export type ItemCommonType = {
   id?: string;
@@ -656,6 +680,18 @@ export type TouchPracticeItem<T = ItemCommonType> = T & {
 
 export type TouchTestItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.TouchTest;
+  config: TouchConfig;
+  responseValues: null;
+};
+
+export type PhrasalTemplateItem<T = ItemCommonType> = T & {
+  config: PhrasalTemplateConfig;
+  responseType: ItemResponseType.PhrasalTemplate;
+  responseValues: null;
+};
+
+export type UnityItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.UnityFile;
   config: TouchConfig;
   responseValues: null;
 };

@@ -85,11 +85,6 @@ export const theme = createTheme({
           borderRadius: variables.borderRadius.lg2,
           boxShadow: 'none',
         },
-        root: {
-          '.MuiBackdrop-root': {
-            backgroundColor: 'rgba(0, 0, 0, 0.33)',
-          },
-        },
       },
     },
     MuiDialogTitle: {
@@ -145,7 +140,26 @@ export const theme = createTheme({
             letterSpacing: variables.font.letterSpacing.lg,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
-            borderLeft: `${variables.borderWidth.md} solid transparent}`,
+            borderLeft: 0,
+          },
+          '&.MuiTableRow-error': {
+            position: 'relative',
+            '.MuiTableCell-root:first-child::before': {
+              content: '""',
+              position: 'absolute',
+              top: `-${variables.borderWidth.md2}`,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              border: `${variables.borderWidth.md2} solid ${variables.palette.red}`,
+            },
+          },
+          '&.MuiTableRow-error:first-child .MuiTableCell-root:first-child::before': {
+            top: 0,
+          },
+          '&.MuiTableRow-error:last-child .MuiTableCell-root:first-child::before': {
+            borderBottomLeftRadius: variables.borderRadius.lg2,
+            borderBottomRightRadius: variables.borderRadius.lg2,
           },
         },
       },
@@ -402,24 +416,27 @@ export const theme = createTheme({
           minWidth: '10rem',
           padding: '1rem 2rem',
           textTransform: 'none',
+          gap: '0.8rem',
 
-          '& svg': {
+          '& svg:not([fill])': {
             fill: 'currentColor',
           },
         },
       },
     },
     MuiChip: {
+      defaultProps: { size: 'small' },
       styleOverrides: {
-        root: ({ ownerState }) => ({
+        root: ({ ownerState: { color, variant, size } }) => ({
           borderRadius: variables.borderRadius.md,
-          fontSize: variables.font.size.md,
+          fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
           fontWeight: variables.font.weight.regular,
+          letterSpacing: size === 'small' ? 0 : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
-          height: '2.4rem',
-          lineHeight: variables.font.lineHeight.md,
-          padding: '0.2rem 0.8rem',
-          ...getChipStyleOverrides({ color: ownerState.color, variant: ownerState.variant }),
+          height: size === 'small' ? '2.4rem' : '3.2rem',
+          lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
+          padding: size === 'small' ? '0.2rem 0.8rem' : '0.4rem 0.8rem',
+          ...getChipStyleOverrides({ color, variant }),
 
           '.MuiChip-deleteIcon': { margin: 0 },
           '.MuiChip-icon': { fill: 'currentColor', margin: 0 },
@@ -544,7 +561,7 @@ export const theme = createTheme({
           padding: 0,
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.outline_variant,
-          color: variables.palette.black,
+          color: variables.palette.on_surface,
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
@@ -736,6 +753,7 @@ export const theme = createTheme({
             }),
           }),
           '.MuiAlert-action': {
+            marginLeft: 0,
             marginRight: 0,
             paddingTop: 0,
             alignItems: 'center',
@@ -746,6 +764,7 @@ export const theme = createTheme({
           '.MuiAlert-message': {
             padding: 0,
             maxWidth: theme.spacing(80),
+            marginRight: 'auto',
           },
           '.MuiLink-root:hover': {
             textDecorationColor: 'transparent',
@@ -768,6 +787,72 @@ export const theme = createTheme({
           border: 0,
           margin: 0,
         },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          '.MuiDrawer-paper': {
+            maxWidth: '100%',
+            backgroundColor: variables.palette.surface,
+          },
+          '.MuiModal-backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+          },
+        },
+      },
+    },
+    MuiListItemSecondaryAction: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({ ownerState: { color }, theme }) => ({
+          ...(color === 'outlined' && {
+            borderWidth: variables.borderWidth.md,
+            borderStyle: 'solid',
+            borderColor: variables.palette.outline_variant,
+          }),
+          '&.MuiAutocomplete-popupIndicator': {
+            padding: theme.spacing(0.8),
+            margin: theme.spacing(-0.6, -0.4, -0.6, 0.6),
+            color: variables.palette.on_surface_variant,
+          },
+          '&.MuiAutocomplete-clearIndicator': {
+            padding: theme.spacing(1),
+            margin: theme.spacing(-0.6, 0),
+            color: variables.palette.on_surface_variant,
+          },
+        }),
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: ({ theme, ownerState: { size } }) => ({
+          '&&': {
+            '.MuiAutocomplete-inputRoot': {
+              padding: theme.spacing(size === 'large' ? 1.2 : 0.9),
+              paddingLeft: theme.spacing(size === 'large' ? 2.7 : 1.2),
+            },
+            '&.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot': {
+              paddingRight: theme.spacing(size === 'large' ? 8.8 : 5.6),
+            },
+            '&.MuiAutocomplete-hasPopupIcon .MuiAutocomplete-inputRoot': {
+              paddingRight: theme.spacing(size === 'large' ? 8.8 : 5.6),
+            },
+            '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon .MuiAutocomplete-inputRoot':
+              {
+                paddingRight: theme.spacing(size === 'large' ? 13.6 : 10.4),
+              },
+            '.MuiAutocomplete-endAdornment': {
+              right: theme.spacing(size === 'large' ? 1.6 : 0.9),
+            },
+          },
+        }),
       },
     },
   },
@@ -802,6 +887,18 @@ declare module '@mui/material/Button' {
     elevated: true;
     tonal: true;
     textNeutral: true;
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    outlined: true;
+  }
+}
+
+declare module '@mui/material/Autocomplete' {
+  interface AutocompletePropsSizeOverrides {
+    large: true;
   }
 }
 

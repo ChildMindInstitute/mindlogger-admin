@@ -14,7 +14,6 @@ import {
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   Encryption,
   falseReturnFunc,
@@ -36,7 +35,7 @@ import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getAppletActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
-export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
+export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItemProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
@@ -45,13 +44,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { id: accountId } = userData?.user || {};
   const workspaceRoles = workspaces.useRolesData();
   const appletId = item.id;
-  const {
-    featureFlags: { enableMultiInformant },
-  } = useFeatureFlags();
-  const participantPath = generatePath(
-    enableMultiInformant ? page.appletOverview : page.appletRespondents,
-    { appletId },
-  );
+  const overviewPath = generatePath(page.appletOverview, { appletId });
+  const participantPath = generatePath(page.appletParticipants, { appletId });
 
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const encryptionDataRef = useRef<{
@@ -98,7 +92,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     await fetchData();
   };
 
-  const handleAppletClick = () => checkAppletEncryption(() => navigate(participantPath));
+  const handleAppletClick = () => checkAppletEncryption(() => navigate(overviewPath));
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
@@ -236,7 +230,12 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         </StyledTableCell>
         <StyledTableCell>
           <ActionsMenu
-            menuItems={getAppletActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
+            menuItems={getAppletActions({
+              actions,
+              item,
+              roles: workspaceRoles?.data?.[appletId],
+              enableShareToLibrary,
+            })}
             data-testid="dashboard-applets-table-applet-actions"
           />
         </StyledTableCell>

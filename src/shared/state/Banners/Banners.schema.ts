@@ -8,7 +8,6 @@ export enum BannerType {
   TransferOwnershipSuccessBanner,
   VersionWarningBanner,
   PasswordResetSuccessfulBanner,
-  ShellAccountSuccessBanner,
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
 }

@@ -5,7 +5,7 @@ import { Chip, Svg } from 'shared/components';
 
 import { ParticipantTagChipProps } from './ParticipantTagChip.types';
 
-export const ParticipantTagChip = ({ tag }: ParticipantTagChipProps) => {
+export const ParticipantTagChip = ({ tag, ...rest }: ParticipantTagChipProps) => {
   const { i18n, t } = useTranslation();
 
   if (!tag) return null;
@@ -19,6 +19,7 @@ export const ParticipantTagChip = ({ tag }: ParticipantTagChipProps) => {
       }
       color="secondary"
       title={i18n.exists(`participantTag.${tag}`) ? t(`participantTag.${tag}`) : tag}
+      {...rest}
     />
   );
 };

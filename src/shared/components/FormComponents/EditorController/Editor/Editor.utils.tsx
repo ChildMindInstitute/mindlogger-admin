@@ -226,3 +226,6 @@ export const getToolbars = (): ToolbarNames[] => [
   'pageFullscreen',
   'htmlPreview',
 ];
+
+export const fixAngleBrackets = (content: string) =>
+  content.replace(/&lt;|&gt;/g, (match) => (match === '&lt;' ? '<' : '>'));

@@ -22,8 +22,8 @@ describe('getSettings', () => {
   describe('should return right items for section ', () => {
     const usersAndDataItems = ['dataRetention', 'liveResponseStreaming', 'integrations'];
     const appletContentItems = ['versionHistory', 'transferOwnership', 'deleteApplet'];
-    const sharingItemsForPublished = ['concealApplet'];
-    const sharingItems = ['publishApplet'];
+    const sharingItemsForPublished = ['shareToLibrary', 'concealApplet'];
+    const sharingItems = ['shareToLibrary', 'publishApplet'];
 
     test.each`
       isPublished | sectionLabel       | items                       | description
@@ -70,21 +70,27 @@ describe('getSettings', () => {
 
   describe('should return right isVisible for sharing section ', () => {
     test.each`
-      isVisible | roles                | description
-      ${false}  | ${[Roles.Manager]}   | ${'sharing for Manager'}
-      ${true}   | ${Roles.SuperAdmin}  | ${'sharing for SuperAdmin'}
-      ${false}  | ${Roles.Owner}       | ${'sharing for Owner'}
-      ${false}  | ${Roles.Coordinator} | ${'sharing for Coordinator'}
-      ${false}  | ${Roles.Editor}      | ${'sharing for Editor'}
-      ${false}  | ${Roles.Respondent}  | ${'sharing for Respondent'}
-      ${false}  | ${Roles.Reviewer}    | ${'sharing for Reviewer'}
-    `('$description', ({ isVisible, roles }) => {
+      isVisible | roles                  | enableShareToLibrary | description
+      ${false}  | ${[Roles.Manager]}     | ${false}             | ${'sharing for Manager'}
+      ${true}   | ${[Roles.Manager]}     | ${true}              | ${'sharing for Manager, enableShareToLibrary = true'}
+      ${true}   | ${[Roles.SuperAdmin]}  | ${false}             | ${'sharing for SuperAdmin'}
+      ${false}  | ${[Roles.Owner]}       | ${false}             | ${'sharing for Owner'}
+      ${true}   | ${[Roles.Owner]}       | ${true}              | ${'sharing for Owner, enableShareToLibrary = true'}
+      ${false}  | ${[Roles.Coordinator]} | ${false}             | ${'sharing for Coordinator'}
+      ${false}  | ${[Roles.Coordinator]} | ${true}              | ${'sharing for Coordinator, enableShareToLibrary = true'}
+      ${false}  | ${[Roles.Editor]}      | ${false}             | ${'sharing for Editor'}
+      ${true}   | ${[Roles.Editor]}      | ${true}              | ${'sharing for Editor, enableShareToLibrary = true'}
+      ${false}  | ${[Roles.Respondent]}  | ${false}             | ${'sharing for Respondent'}
+      ${false}  | ${[Roles.Reviewer]}    | ${false}             | ${'sharing for Reviewer'}
+      ${false}  | ${[Roles.Reviewer]}    | ${true}              | ${'sharing for Reviewer, enableShareToLibrary = true'}
+    `('$description', ({ isVisible, roles, enableShareToLibrary }) => {
       expect(
         getSettings({
           isNewApplet: false,
           isPublished: true,
           roles,
           appletId,
+          enableShareToLibrary,
         }).find((section) => section.label === 'sharing')?.isVisible,
       ).toBe(isVisible);
     });

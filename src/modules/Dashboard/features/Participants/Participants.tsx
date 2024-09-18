@@ -27,7 +27,11 @@ import { StyledBody, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
+import {
+  ActivityAssignDrawer,
+  ParticipantSnippetInfo,
+  ParticipantTagChip,
+} from 'modules/Dashboard/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
@@ -60,6 +64,7 @@ export const Participants = () => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   const { featureFlags } = useFeatureFlags();
+  const [showActivityAssign, setShowActivityAssign] = useState(false);
 
   const [respondentsData, setRespondentsData] = useState<ParticipantsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,6 +73,8 @@ export const Participants = () => {
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const { ownerId } = workspaces.useData() || {};
   const canViewParticipants = checkIfCanViewParticipants(roles);
+  const canAssignActivity =
+    checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
 
   const handleToggleAddParticipant = () => {
     setSearchParams(
@@ -231,8 +238,17 @@ export const Participants = () => {
       });
       setRemoveAccessPopupVisible(true);
     },
-    assignActivity: ({ context: _context }: MenuActionProps<ParticipantActionProps>) => {
-      alert('TODO: Assign activity');
+    assignActivity: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+      const { respondentId, respondentOrSubjectId } = context || {};
+      if (!respondentOrSubjectId) return;
+
+      setRespondentKey(respondentOrSubjectId);
+      handleSetDataForAppletPage({
+        respondentId,
+        respondentOrSubjectId,
+        key: FilteredAppletsKey.Viewable,
+      });
+      setShowActivityAssign(true);
     },
     copyEmailAddress: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { email, invitation } = context || {};
@@ -387,8 +403,8 @@ export const Participants = () => {
               nickname,
               tag,
               status,
-              dataTestid: dataTestId,
-              showAssignActivity: featureFlags.enableActivityAssign,
+              dataTestId,
+              canAssignActivity,
               roles,
               invitation: detail.invitation,
               firstName: detail.subjectFirstName,
@@ -559,6 +575,21 @@ export const Participants = () => {
           tag={participantDetails?.tag}
         />
       )}
+
+      <ActivityAssignDrawer
+        appletId={appletId}
+        open={showActivityAssign}
+        respondentSubjectId={
+          chosenAppletData?.respondentId ? chosenAppletData.subjectId : undefined
+        }
+        targetSubjectId={
+          chosenAppletData?.subjectTag === 'Team' ? undefined : chosenAppletData?.subjectId
+        }
+        onClose={() => {
+          setShowActivityAssign(false);
+          setChosenAppletData(null);
+        }}
+      />
     </StyledBody>
   );
 };

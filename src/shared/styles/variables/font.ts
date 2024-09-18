@@ -1,6 +1,7 @@
 export const font = {
   size: {
     xxxl: '3.2rem', //32px
+    xxl2: '2.8rem', //28px
     xxl: '2.4rem', //24px
     xl: '2.2rem', //22px
     lrg: '2rem', //20px
@@ -16,6 +17,7 @@ export const font = {
   },
   lineHeight: {
     xxxl: '4rem', //40px
+    xxl2: '3.6rem', //36px
     xxl: '3.2rem', //32px
     xl: '2.8rem', //28px
     lg: '2.4rem', //24px

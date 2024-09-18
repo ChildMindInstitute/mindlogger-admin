@@ -19,6 +19,7 @@ import {
   TextResponse,
   TextResponseUiType,
   Time,
+  PhrasalTemplate,
   VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
@@ -31,6 +32,7 @@ import {
   defaultGeolocationConfig,
   defaultMessageConfig,
   defaultMultiSelectionConfig,
+  defaultPhrasalTemplateConfig,
   defaultNumberSelectionConfig,
   defaultParagraphTextConfig,
   defaultPhotoConfig,
@@ -48,6 +50,7 @@ import {
   getEmptyNumberSelection,
   getEmptySliderOption,
 } from '../ItemConfiguration.utils';
+import { getNewDefaultPhrase } from '../InputTypeItems/PhrasalTemplate/PhrasalTemplate.utils';
 import { DEFAULT_MAX_CHARACTERS_TEXT } from '../ItemConfiguration.const';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
@@ -85,6 +88,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
         return <Drawing name={name} />;
       case ItemResponseType.AudioPlayer:
         return <AudioPlayer name={name} />;
+      case ItemResponseType.PhrasalTemplate:
+        return <PhrasalTemplate name={name} />;
       default:
         return null;
     }
@@ -189,6 +194,9 @@ export const useSettingsSetup = ({
             handleAddSingleOrMultipleRow?.();
             setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
+          case ItemResponseType.PhrasalTemplate:
+            setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], cardTitle: '' });
+            setConfig(defaultPhrasalTemplateConfig);
         }
       }
     });

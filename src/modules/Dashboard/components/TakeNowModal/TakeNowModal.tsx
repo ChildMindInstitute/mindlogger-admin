@@ -1,12 +1,12 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Modal } from 'shared/components';
-import { auth, workspaces } from 'redux/modules';
+import { Modal, Spinner } from 'shared/components';
+import { workspaces } from 'redux/modules';
 import {
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -14,9 +14,9 @@ import {
   theme,
   StyledActivityThumbnailContainer,
   StyledActivityThumbnailImg,
+  StyledErrorText,
 } from 'shared/styles';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
+import { createTemporaryMultiInformantRelationApi } from 'api';
 import {
   MixpanelPayload,
   MixpanelProps,
@@ -24,37 +24,38 @@ import {
   checkIfDashboardAppletActivitiesUrlPassed,
   checkIfDashboardAppletParticipantDetailsUrlPassed,
   checkIfFullAccess,
-  joinWihComma,
+  getErrorMessage,
 } from 'shared/utils';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync, useLogout } from 'shared/hooks';
-import { Manager, Respondent, HydratedActivityFlow } from 'modules/Dashboard/types';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
+import {
+  ActivityFlowThumbnail,
+  FullTeamSearchType,
+  ParticipantDropdownOption,
+  useParticipantDropdown,
+} from 'modules/Dashboard/components';
 
 import {
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
-import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
+import { TakeNowDropdown } from './TakeNowDropdown';
 
-const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
-  Roles.SuperAdmin,
-  Roles.Owner,
-  Roles.Manager,
-] as const;
-
-type AnyTeamSearchType = 'team' | 'any-participant';
-type FullTeamSearchType = 'team' | 'full-participant';
+type TakeNowData = {
+  url: URL;
+  respondent: ParticipantDropdownOption;
+  sourceSubjectId: string;
+  targetSubjectId: string;
+};
 
 const getAccountType = (subject: ParticipantDropdownOption | null) => {
   if (!subject) return null;
 
   if (subject.userId) {
-    if (subject.tag === 'Team') return 'Team';
+    if (subject.isTeamMember) return 'Team';
 
     return 'Full';
   }
@@ -64,8 +65,6 @@ const getAccountType = (subject: ParticipantDropdownOption | null) => {
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
-  const { ownerId } = workspaces.useData() || {};
-  const userData = auth.useData();
   const { appletId } = useParams();
   const {
     featureFlags: { enableParticipantMultiInformant },
@@ -75,8 +74,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const [activityOrFlow, setActivityOrFlow] = useState<BaseActivity | HydratedActivityFlow | null>(
     null,
   );
-  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
@@ -85,6 +82,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const canTakeNow = checkIfFullAccess(roles);
+  const {
+    allParticipants,
+    participantsAndTeamMembers,
+    fullAccountParticipantsAndTeamMembers,
+    teamMembersOnly,
+    loggedInTeamMember,
+    handleSearch,
+  } = useParticipantDropdown({ appletId, skip: !canTakeNow });
 
   const track = useCallback(
     (
@@ -111,143 +116,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [activityOrFlow, appletId, multiInformantAssessmentId],
   );
 
-  const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
-    const stringNicknames = joinWihComma(participant.nicknames, true);
-    const stringSecretIds = joinWihComma(participant.secretIds, true);
-
-    return {
-      id: participant.details[0].subjectId,
-      userId: participant.id,
-      secretId: stringSecretIds,
-      nickname: stringNicknames,
-      tag: participant.details[0].subjectTag,
-    };
-  }, []);
-
-  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const options = (response.data as ParticipantsData).result.map(participantToOption);
-
-        setAllParticipants(options);
-      }
-    },
-  );
-
-  const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
-    getWorkspaceManagersApi,
-    (response) => {
-      setAllTeamMembers(response?.data?.result || []);
-    },
-  );
-
-  const {
-    execute: fetchLoggedInTeamMember,
-    isLoading: isFetchingLoggedInTeamMember,
-    value: loggedInTeamMemberResponse,
-  } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
-      if (!enableParticipantMultiInformant) {
-        setDefaultSourceSubject(loggedInTeamMember);
-      }
-      setAllParticipants((prev) => {
-        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-          return prev;
-        }
-
-        return [loggedInTeamMember, ...prev];
-      });
-    }
-  });
-
-  const allowedTeamMembers = useMemo(
-    () =>
-      allTeamMembers.filter((manager) =>
-        manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-      ),
-    [allTeamMembers],
-  );
-
-  const participantsOnly = useMemo(
-    () => allParticipants.filter((participant) => participant.tag !== 'Team'),
-    [allParticipants],
-  );
-
-  const fullAccountParticipantsOnly = useMemo(
-    () => participantsOnly.filter((participant) => !!participant.userId),
-    [participantsOnly],
-  );
-
-  const teamMembersOnly = useMemo(
-    () =>
-      allParticipants.filter(
-        (participant) =>
-          participant.tag === 'Team' &&
-          allowedTeamMembers.some((manager) => manager.id === participant.userId),
-      ),
-    [allParticipants, allowedTeamMembers],
-  );
-
-  const participantsAndTeamMembers = useMemo(
-    () => [...teamMembersOnly, ...participantsOnly],
-    [participantsOnly, teamMembersOnly],
-  );
-
-  const fullAccountParticipantsAndTeamMembers = useMemo(
-    () => [...teamMembersOnly, ...fullAccountParticipantsOnly],
-    [fullAccountParticipantsOnly, teamMembersOnly],
-  );
-
-  useEffect(() => {
-    if (!canTakeNow) return;
-    if (appletId) {
-      if (allParticipants.length === 0 && !isFetchingParticipants) {
-        fetchParticipants({
-          params: {
-            ownerId,
-            appletId,
-            limit: 100,
-          },
-        });
-      } else if (allParticipants.length > 0 && allTeamMembers.length === 0 && !isFetchingManagers) {
-        fetchManagers({
-          params: {
-            ownerId,
-            appletId,
-            limit: 100,
-          },
-        });
-      }
-
-      if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
-        fetchLoggedInTeamMember({
-          params: {
-            ownerId,
-            appletId,
-            userId: userData.user.id,
-            limit: 1,
-          },
-        });
-      }
-    }
-  }, [
-    appletId,
-    ownerId,
-    userData,
-    allParticipants,
-    allTeamMembers,
-    loggedInTeamMemberResponse,
-    isFetchingParticipants,
-    isFetchingManagers,
-    isFetchingLoggedInTeamMember,
-    fetchParticipants,
-    fetchManagers,
-    fetchLoggedInTeamMember,
-    canTakeNow,
-  ]);
-
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleLogout = useLogout();
     const handleClose = () => {
@@ -268,6 +136,86 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
       defaultSourceSubject?.userId ? defaultSourceSubject : null,
     );
+    const [takeNowData, setTakeNowData] = useState<TakeNowData | null>(null);
+
+    const launchWebApp = useCallback(() => {
+      if (takeNowData === null) {
+        return;
+      }
+
+      setActivityOrFlow(null);
+
+      const newTab = window.open(takeNowData.url, '_blank');
+      // message received from the TakeNowSuccessModal.tsx file from the web app
+      // it's needed to close the new tab after the user clicks the "Close" button
+      window.addEventListener('message', function messageHandler(event) {
+        if (event.origin === takeNowData.url.origin) {
+          const message = event.data;
+
+          if (message === 'close-me') {
+            newTab?.close();
+          }
+
+          this.removeEventListener('message', messageHandler);
+        }
+      });
+
+      handleLogout({ shouldSoftLock: true });
+    }, [handleLogout, takeNowData]);
+
+    const {
+      execute: createSourceRelation,
+      isLoading: isCreatingSourceRelation,
+      value: sourceRelationResponse,
+      error: sourceRelationError,
+    } = useAsync(createTemporaryMultiInformantRelationApi);
+
+    const {
+      execute: createTargetRelation,
+      isLoading: isCreatingTargetRelation,
+      value: targetRelationResponse,
+      error: targetRelationError,
+    } = useAsync(createTemporaryMultiInformantRelationApi);
+
+    useEffect(() => {
+      if (takeNowData !== null) {
+        const needSourceRelation =
+          takeNowData.respondent.tag !== 'Team' &&
+          takeNowData.respondent.id !== takeNowData.sourceSubjectId;
+        const needTargetRelation =
+          takeNowData.respondent.tag !== 'Team' &&
+          takeNowData.respondent.id !== takeNowData.targetSubjectId &&
+          takeNowData.sourceSubjectId !== takeNowData.targetSubjectId;
+
+        if (
+          (needSourceRelation && !sourceRelationResponse) ||
+          (needTargetRelation && !targetRelationResponse)
+        ) {
+          return;
+        }
+
+        if (needSourceRelation && sourceRelationResponse && sourceRelationResponse.status !== 200) {
+          console.error(sourceRelationError);
+
+          return;
+        }
+
+        if (needTargetRelation && targetRelationResponse && targetRelationResponse.status !== 200) {
+          console.error(targetRelationError);
+
+          return;
+        }
+
+        launchWebApp();
+      }
+    }, [
+      launchWebApp,
+      sourceRelationError,
+      sourceRelationResponse,
+      takeNowData,
+      targetRelationError,
+      targetRelationResponse,
+    ]);
 
     const handleSubmit = useCallback(() => {
       if (
@@ -282,12 +230,16 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         url.searchParams.set('targetSubjectId', targetSubject.id);
         url.searchParams.set('multiInformantAssessmentId', String(multiInformantAssessmentId));
 
+        let respondent: ParticipantDropdownOption = sourceSubject;
+
         // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
         // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
         if (isSelfReporting && sourceSubject.userId) {
           url.searchParams.set('respondentId', sourceSubject.userId);
+          respondent = sourceSubject;
         } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
           url.searchParams.set('respondentId', loggedInUser.userId);
+          respondent = loggedInUser;
         }
 
         track('Multi-informant Start Activity click', {
@@ -299,108 +251,45 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           [MixpanelProps.IsSelfReporting]: isSelfReporting || loggedInUser?.id === sourceSubject.id,
         });
 
-        setActivityOrFlow(null);
-
-        const newTab = window.open(url.toString(), '_blank');
-        // message received from the TakeNowSuccessModal.tsx file from the web app
-        // it's needed to close the new tab after the user clicks the "Close" button
-        window.addEventListener('message', function messageHandler(event) {
-          if (event.origin === url.origin) {
-            const message = event.data;
-
-            if (message === 'close-me') {
-              newTab?.close();
-            }
-
-            this.removeEventListener('message', messageHandler);
+        if (!isCreatingSourceRelation && !isCreatingTargetRelation) {
+          if (respondent.tag !== 'Team' && respondent.id !== sourceSubject.id) {
+            // Create a temporary multi-informant relation b/n the logged-in user and the source subject
+            createSourceRelation({
+              sourceSubjectId: respondent.id,
+              subjectId: sourceSubject.id,
+            });
           }
-        });
 
-        handleLogout({ shouldSoftLock: true });
+          if (
+            respondent.tag !== 'Team' &&
+            respondent.id !== targetSubject.id &&
+            sourceSubject.id !== targetSubject.id
+          ) {
+            // Create a temporary multi-informant relation b/n the logged-in user and the target subject
+            createTargetRelation({
+              sourceSubjectId: respondent.id,
+              subjectId: targetSubject.id,
+            });
+          }
+        }
+
+        setTakeNowData({
+          url,
+          respondent,
+          sourceSubjectId: sourceSubject.id,
+          targetSubjectId: targetSubject.id,
+        });
       }
-    }, [targetSubject, sourceSubject, isSelfReporting, loggedInUser, handleLogout]);
-
-    /**
-     * Handle participant search. It can be a combination of team members and any participants
-     * (full account, pending, and limited), or just team members and full account participants
-     */
-    const handleSearch = useCallback(
-      async (
-        query: string,
-        types:
-          | [AnyTeamSearchType, ...AnyTeamSearchType[]]
-          | [FullTeamSearchType, ...FullTeamSearchType[]],
-      ): Promise<ParticipantDropdownOption[]> => {
-        const requests = [];
-
-        // @ts-expect-error Yes, the array can in fact contain this value
-        const isAnyParticipant = types.includes('any-participant');
-
-        // @ts-expect-error Yes, the array can in fact contain this value
-        const isFullParticipant = types.includes('full-participant');
-
-        if (types.includes('team')) {
-          requests.push(
-            getWorkspaceManagersApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-              },
-            }),
-          );
-        }
-
-        if (isAnyParticipant) {
-          requests.push(
-            getWorkspaceRespondentsApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-              },
-            }),
-          );
-        } else if (isFullParticipant) {
-          requests.push(
-            getWorkspaceRespondentsApi({
-              params: {
-                ownerId,
-                appletId,
-                search: query,
-                limit: DEFAULT_ROWS_PER_PAGE,
-                shell: isFullParticipant ? false : undefined,
-              },
-            }),
-          );
-        }
-
-        const [teamMemberResponse, participantsResponse] = await Promise.all(requests);
-
-        // Filter the search results by allowed team members
-        const allowedTeamMembersSearchResults =
-          (teamMemberResponse?.data?.result as Manager[]).filter((manager) =>
-            manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-          ) ?? [];
-
-        const participantsSearchResults =
-          (participantsResponse?.data?.result as Respondent[]) ?? [];
-
-        // If there are team members in the search results, we only want to show them if they are allowed
-        return participantsSearchResults.map(participantToOption).filter((participant) => {
-          if (participant.tag !== 'Team') {
-            return isAnyParticipant || !!participant.userId;
-          } else {
-            return allowedTeamMembersSearchResults.some(
-              (manager) => manager.id === participant.userId,
-            );
-          }
-        });
-      },
-      [],
-    );
+    }, [
+      targetSubject,
+      sourceSubject,
+      isSelfReporting,
+      loggedInUser,
+      isCreatingSourceRelation,
+      isCreatingTargetRelation,
+      createSourceRelation,
+      createTargetRelation,
+    ]);
 
     if (!activityOrFlow || !allParticipants || !participantsAndTeamMembers) {
       return null;
@@ -415,6 +304,26 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       );
     }
 
+    const TakeNowSpinner = () => {
+      if (isCreatingSourceRelation || isCreatingTargetRelation) {
+        return <Spinner />;
+      }
+
+      return null;
+    };
+
+    const SubjectRelationError = () => {
+      if (sourceRelationError || targetRelationError) {
+        return (
+          <StyledErrorText sx={{ mt: 0, mb: 0 }}>
+            {getErrorMessage(t('takeNow.modal.relationErrorMessage'))}
+          </StyledErrorText>
+        );
+      }
+
+      return null;
+    };
+
     return (
       <Modal
         open={true}
@@ -426,10 +335,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         disabledSubmit={
           targetSubject === null ||
           sourceSubject === null ||
-          (!isSelfReporting && loggedInUser === null)
+          (!isSelfReporting && loggedInUser === null) ||
+          isCreatingSourceRelation ||
+          isCreatingTargetRelation
         }
         data-testid={`${dataTestId}-take-now-modal`}
       >
+        <TakeNowSpinner />
         <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
           <StyledFlexTopCenter gap={2.4}>
             <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
@@ -438,7 +350,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           <StyledFlexColumn gap={2.4}>
             <StyledFlexColumn gap={0.8}>
               <StyledFlexColumn gap={0.4}>
-                <LabeledUserDropdown
+                <TakeNowDropdown
                   label={t('takeNow.modal.sourceSubjectLabel')}
                   name={'participant'}
                   placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
@@ -456,14 +368,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
                     const selfReportingCondition =
                       !option ||
-                      (enableParticipantMultiInformant ? !!option.userId : option.tag === 'Team');
+                      (enableParticipantMultiInformant ? !!option.userId : option.isTeamMember);
 
                     setIsSelfReporting(selfReportingCondition);
                   }}
                   data-testid={`${dataTestId}-take-now-modal-source-subject-dropdown`}
                   handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
                   canShowWarningMessage={true}
-                  showGroups={true}
+                  showGroups
                 />
                 <FormControlLabel
                   control={
@@ -483,13 +395,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   disabled={
                     enableParticipantMultiInformant
                       ? !sourceSubject?.userId
-                      : sourceSubject?.tag !== 'Team'
+                      : !sourceSubject?.isTeamMember
                   }
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>
               {!isSelfReporting && (
-                <LabeledUserDropdown
+                <TakeNowDropdown
                   label={t('takeNow.modal.loggedInUserLabel')}
                   name={'loggedInUser'}
                   sx={{ gap: 1, pl: 5.2 }}
@@ -520,11 +432,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
                     return handleSearch(query, participantSearchTypes);
                   }}
-                  showGroups={true}
+                  showGroups
                 />
               )}
             </StyledFlexColumn>
-            <LabeledUserDropdown
+            <TakeNowDropdown
               label={t('takeNow.modal.targetSubjectLabel')}
               name={'subject'}
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
@@ -542,6 +454,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
               handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
             />
+            <SubjectRelationError />
           </StyledFlexColumn>
         </StyledFlexColumn>
       </Modal>
@@ -568,6 +481,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     if (sourceSubject) {
       setDefaultSourceSubject(sourceSubject);
       analyticsPayload[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
+    } else {
+      setDefaultSourceSubject(enableParticipantMultiInformant ? null : loggedInTeamMember);
     }
 
     if (checkIfDashboardAppletActivitiesUrlPassed(pathname)) {

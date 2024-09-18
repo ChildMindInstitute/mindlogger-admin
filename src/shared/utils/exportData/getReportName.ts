@@ -8,8 +8,10 @@ export const enum ZipFile {
   Flanker = 'flanker',
 }
 
+export const getReportStringName = (name: ZipFile, suffix: string) =>
+  `${name}-responses-${new Date().toDateString()}${suffix}`;
 export const getReportZipName = (name: ZipFile, suffix: string) =>
-  `${name}-responses-${new Date().toDateString()}${suffix}.zip`;
+  `${getReportStringName(name, suffix)}.zip`;
 
 export const getStabilityTrackerCsvName = (
   item: DecryptedAnswerData,

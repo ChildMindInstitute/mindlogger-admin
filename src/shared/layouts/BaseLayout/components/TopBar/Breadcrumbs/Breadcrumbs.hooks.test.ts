@@ -3,7 +3,6 @@
 // @ts-nocheck
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
@@ -132,7 +131,7 @@ const commonDataVizTest = ({ home, applet, user, viewData }) => {
   expect(applet).toEqual({
     ...expectedApplet,
     label: 'Mocked Applet',
-    navPath: `/dashboard/${appletId}/participants`,
+    navPath: `/dashboard/${appletId}/overview`,
     chip: undefined,
   });
   expect(user).toEqual({
@@ -166,13 +165,6 @@ const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedApplet
 };
 
 describe('useBreadcrumbs', () => {
-  beforeEach(() => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: false,
-      },
-    });
-  });
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -259,7 +251,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
+      navPath: `/dashboard/${appletId}/overview`,
       chip: undefined,
     });
     expect(addUser).toEqual({
@@ -280,30 +272,18 @@ describe('useBreadcrumbs', () => {
       preloadedState,
     });
 
-    expect(result.current).toHaveLength(3);
-    const [home, applet, schedule] = result.current;
+    expect(result.current).toHaveLength(2);
+    const [home, applet] = result.current;
 
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
+      navPath: `/dashboard/${appletId}/overview`,
       chip: undefined,
-    });
-    expect(schedule).toEqual({
-      disabledLink: true,
-      icon: 'schedule-outlined',
-      label: 'Schedule',
-      key: expect.any(String),
     });
   });
 
   test('should generate correct breadcrumbs for applet dataviz/summary', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
-
     const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/summary`;
     const routePath = page.appletParticipantDataSummary;
 
@@ -323,12 +303,6 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/responses', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
-
     const route = `/dashboard/${appletId}/participants/${participantId}/dataviz/responses`;
     const routePath = page.appletParticipantDataReview;
 
@@ -345,38 +319,6 @@ describe('useBreadcrumbs', () => {
     const [home, applet, user, viewData] = result.current;
 
     commonDataVizTest({ home, applet, user, viewData });
-  });
-
-  test('should generate correct breadcrumbs for applet settings (export data)', () => {
-    const route = `/dashboard/${appletId}/settings/export-data`;
-    const routePath = page.appletSettingsItem;
-
-    const { result } = renderHookWithProviders(useBreadcrumbs, {
-      route,
-      routePath,
-      preloadedState,
-    });
-
-    expect(result.current).toHaveLength(4);
-    const [home, applet, appletSettings, exportData] = result.current;
-
-    expect(home).toEqual(expectedHome);
-    expect(applet).toEqual({
-      ...expectedApplet,
-      navPath: `/dashboard/${appletId}/respondents`,
-      chip: undefined,
-    });
-    expect(appletSettings).toEqual({
-      icon: 'settings',
-      label: 'Applet Settings',
-      navPath: `/dashboard/${appletId}/settings`,
-      key: expect.any(String),
-    });
-    expect(exportData).toEqual({
-      icon: 'export',
-      label: 'Export Data',
-      key: expect.any(String),
-    });
   });
 
   test('should generate correct breadcrumbs for builder activities', () => {
@@ -401,7 +343,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for builder activity about', () => {
+  test('should generate correct breadcrumbs for builder new activity about', () => {
     const route = `/builder/${appletId}/activities/${activityId}/about`;
     const routePath = page.builderAppletActivityAbout;
 
@@ -423,12 +365,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for builder activity about with enabled multi informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for builder existing activity about', () => {
     const route = `/builder/${appletId}/activities/${activityId}/about`;
     const routePath = page.builderAppletActivityAbout;
 
@@ -621,12 +558,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant details', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}`;
     const routePath = page.appletParticipantActivities;
 
@@ -670,7 +602,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/overview',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -681,12 +613,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details schedule using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant details schedule', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}/schedule`;
     const routePath = page.appletParticipantSchedule;
 
@@ -730,7 +657,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/overview',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -741,12 +668,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant activity details using multi-informant', () => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableMultiInformant: true,
-      },
-    });
+  test('should generate correct breadcrumbs for participant activity details', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}/activities/${activityId}`;
     const routePath = page.appletParticipantActivityDetails;
 
@@ -797,7 +719,7 @@ describe('useBreadcrumbs', () => {
       image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: `/dashboard/${appletId}/participants`,
+      navPath: `/dashboard/${appletId}/overview`,
       useCustomIcon: true,
     });
     expect(participant).toEqual({
