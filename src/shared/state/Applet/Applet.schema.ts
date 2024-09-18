@@ -45,6 +45,7 @@ export type ActivityFlow = {
   createdAt?: string;
   reportIncludedItemName?: string;
   reportIncludedActivityName?: string;
+  autoAssign?: boolean;
 };
 
 export type TextInputConfig = {
@@ -745,6 +746,8 @@ export type ScoresAndReports = {
   reports: ScoreOrSection[];
 };
 
+export type AgeFieldType = 'text' | 'dropdown';
+
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   calculateTotalScore?: SubscaleTotalScore | null;
   subscales?: ActivitySettingsSubscale<T>[];
@@ -779,6 +782,7 @@ export type Activity = {
   performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
+  autoAssign?: boolean;
 };
 
 type Theme = {

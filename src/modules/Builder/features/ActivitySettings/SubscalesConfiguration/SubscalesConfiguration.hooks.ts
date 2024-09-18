@@ -4,10 +4,15 @@ import { useFormContext } from 'react-hook-form';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { isSystemItem } from 'shared/utils';
+import { AgeFieldType } from 'shared/state';
+import { LookupTableItems } from 'shared/consts';
 
-import { ageItem, genderItem } from './SubscalesConfiguration.const';
+import { ageDropdownItem, ageTextItem, genderItem } from './SubscalesConfiguration.const';
 
-export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => {
+export const useSubscalesSystemItemsSetup = (
+  subscales: SubscaleFormValue[],
+  ageFieldType: AgeFieldType,
+) => {
   const { fieldName: activityFieldName } = useCurrentActivity();
   const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
@@ -20,13 +25,32 @@ export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => 
       itemsFieldName,
       items.filter((item) => !isSystemItem(item)),
     );
+  const replaceSystemItems = (newItems: ItemFormValues[]) => {
+    setValue(itemsFieldName, [...items.filter((item) => !isSystemItem(item)), ...newItems], {
+      shouldDirty: true,
+    });
+  };
   useEffect(() => {
     const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
     const hasSystemItems = items?.some((item) => isSystemItem(item));
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
+    const ageScreenItem = items?.find(
+      (item) => isSystemItem(item) && item.name === LookupTableItems.Age_screen,
+    );
+    const oldAgeFieldType = ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text';
+    const ageFieldTypeChanged = oldAgeFieldType !== ageFieldType;
+    const shouldEditSubscaleSystemItems =
+      hasSubscaleLookupTable && hasSystemItems && ageFieldTypeChanged;
+
+    const ageField: ItemFormValues = ageFieldType === 'dropdown' ? ageDropdownItem : ageTextItem;
+
     if (shouldAddSubscaleSystemItems) {
-      appendSystemItems([genderItem, ageItem]);
+      appendSystemItems([genderItem, ageField]);
+
+      return;
+    } else if (shouldEditSubscaleSystemItems) {
+      replaceSystemItems([genderItem, ageField]);
 
       return;
     }
@@ -34,5 +58,5 @@ export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => 
     if (hasSubscaleLookupTable) return;
 
     removeSystemItems();
-  }, [subscales]);
+  }, [subscales, ageFieldType]);
 };

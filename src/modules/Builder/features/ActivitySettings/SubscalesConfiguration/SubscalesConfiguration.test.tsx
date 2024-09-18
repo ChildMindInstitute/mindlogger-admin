@@ -1,9 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { createRef } from 'react';
+import { createRef, RefObject } from 'react';
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { useForm } from 'react-hook-form';
 
 import { page } from 'resources';
 import {
@@ -28,6 +29,8 @@ import {
 } from 'shared/mock';
 import { SettingParam, isSystemItem } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { LookupTableItems } from 'shared/consts';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 
@@ -134,7 +137,7 @@ const mockedAppletWithGenderAndAgeNonSystemItems = {
 };
 
 const renderSubscales = (formData = mockedAppletWithAllItemTypes) => {
-  const ref = createRef();
+  const ref = createRef<ReturnType<typeof useForm>>();
 
   renderWithAppletFormData({
     appletFormData: formData,
@@ -155,6 +158,24 @@ const renderSubscales = (formData = mockedAppletWithAllItemTypes) => {
 
 const addSubscale = () => {
   fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+};
+
+const setUpLookupTable = async (): Promise<RefObject<ReturnType<typeof useForm>>> => {
+  const ref = renderSubscales();
+
+  addSubscale();
+
+  fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+  expect(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`)).toBeVisible();
+
+  await waitFor(() => {
+    screen.getByText('Your Lookup Table for was parsed successfully.');
+  });
+
+  fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup-submit-button`));
+
+  return ref;
 };
 
 jest.mock('shared/components/FileUploader/FileUploader', () => ({
@@ -337,6 +358,42 @@ describe('SubscalesConfiguration', () => {
         .getValues('activities.0.items')
         .filter((item) => isSystemItem(item));
       expect(addedSystemItems).toHaveLength(0);
+    });
+  });
+
+  test('Age field type setting is shown/hidden if LookupTable is uploaded/removed', async () => {
+    await setUpLookupTable();
+
+    expect(screen.queryByText('Age field type:')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-0-remove`));
+
+    expect(screen.queryByText('Age field type:')).not.toBeInTheDocument();
+  });
+
+  test('Age question respects field type setting', async () => {
+    const ref = await setUpLookupTable();
+
+    // Click "Text Field"
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-age-field-type-text`));
+
+    await waitFor(() => {
+      const ageSystemItem = (ref.current.getValues('activities.0.items') as ItemFormValues[]).find(
+        (item) => item.name === LookupTableItems.Age_screen,
+      );
+      expect(ageSystemItem).not.toBeUndefined();
+      expect(ageSystemItem?.responseType).toEqual('text');
+    });
+
+    // Click "Dropdown List"
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-age-field-type-dropdown`));
+
+    await waitFor(() => {
+      const ageSystemItem = (ref.current.getValues('activities.0.items') as ItemFormValues[]).find(
+        (item) => item.name === LookupTableItems.Age_screen,
+      );
+      expect(ageSystemItem).not.toBeUndefined();
+      expect(ageSystemItem?.responseType).toEqual('numberSelect');
     });
   });
 

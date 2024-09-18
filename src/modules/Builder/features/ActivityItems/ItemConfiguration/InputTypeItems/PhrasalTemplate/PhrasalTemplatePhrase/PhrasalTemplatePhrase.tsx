@@ -1,7 +1,8 @@
-import { Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Control, useFieldArray } from 'react-hook-form';
+import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
@@ -15,6 +16,7 @@ import {
   StyledLabelBoldLarge,
   variables,
 } from 'shared/styles';
+import { DndDroppable } from 'modules/Builder/components';
 
 import { PhrasalTemplateField } from '../PhrasalTemplateField';
 import { PhrasalTemplateImageField } from '../PhrasalTemplateImageField';
@@ -36,12 +38,12 @@ export const PhrasalTemplatePhrase = ({
   onRemovePhrase,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
+
   const phraseFieldsName = `${name}.fields`;
   const { control, setValue, getValues, formState } = useCustomFormContext();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, swap } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
   });
@@ -49,17 +51,27 @@ export const PhrasalTemplatePhrase = ({
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
 
-  const handleAddField = (type: PhrasalTemplateFieldType = KEYWORDS.SENTENCE) => {
-    append(getNewDefaultField(type));
-  };
+  const handleOpenAddItemMenu = useCallback((evt: React.MouseEvent<HTMLButtonElement>) => {
+    setAddItemMenuAnchorEl(evt.currentTarget);
+  }, []);
 
-  const handlePressAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
+  const handleCloseAddItemMenu = useCallback(() => {
+    setAddItemMenuAnchorEl(null);
+  }, []);
 
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+  const handleAddField = useCallback(
+    (type: PhrasalTemplateFieldType) => {
+      append(getNewDefaultField(type));
+    },
+    [append],
+  );
+
+  const handleRemoveField = useCallback(
+    (fieldIndex: number) => () => {
+      remove(fieldIndex);
+    },
+    [remove],
+  );
 
   const handleRemovePhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -72,6 +84,18 @@ export const PhrasalTemplatePhrase = ({
     e.stopPropagation();
 
     console.warn('TODO: M2-7164 — Preview Phrase');
+  };
+
+  const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ destination, source }) => {
+    if (
+      !destination ||
+      source?.index === destination?.index ||
+      typeof source?.index !== 'number' ||
+      typeof destination?.index !== 'number'
+    )
+      return;
+
+    swap(source.index, destination.index);
   };
 
   return (
@@ -133,36 +157,47 @@ export const PhrasalTemplatePhrase = ({
           onChangeValue={(value = '') => setValue(`${name}.image`, value || '')}
         />
 
-        <StyledPhraseTemplateFieldSet>
-          {fields.map((field, i) => {
-            const isOnlySentenceField =
-              field.type === KEYWORDS.SENTENCE &&
-              fields.filter(({ type }) => type === KEYWORDS.SENTENCE).length < 2;
-            const isOnlyResponseField =
-              field.type === KEYWORDS.ITEM_RESPONSE &&
-              fields.filter(({ type }) => type === KEYWORDS.ITEM_RESPONSE).length < 2;
-            const hasMinimumFields = fields.length > 2;
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <DndDroppable droppableId="phrasal-dnd-template" direction="vertical">
+            {(provided) => (
+              <Box {...provided.droppableProps} ref={provided.innerRef}>
+                <StyledPhraseTemplateFieldSet>
+                  {fields.map((field, fieldIndex) => {
+                    const isOnlySentenceField =
+                      field.type === KEYWORDS.SENTENCE &&
+                      fields.filter(({ type }) => type === KEYWORDS.SENTENCE).length < 2;
+                    const isOnlyResponseField =
+                      field.type === KEYWORDS.ITEM_RESPONSE &&
+                      fields.filter(({ type }) => type === KEYWORDS.ITEM_RESPONSE).length < 2;
+                    const hasMinimumFields = fields.length > 2;
 
-            return (
-              <PhrasalTemplateField
-                canRemove={hasMinimumFields && !isOnlyResponseField && !isOnlySentenceField}
-                key={field.id}
-                name={`${phraseFieldsName}.${i}`}
-                onRemove={() => {
-                  remove(i);
-                }}
-                responseOptions={responseOptions}
-                type={field.type}
-                placeholder={fieldPlaceholders[i]}
-              />
-            );
-          })}
-        </StyledPhraseTemplateFieldSet>
-
+                    return (
+                      <>
+                        <PhrasalTemplateField
+                          key={`draggable-item-${field.id}`}
+                          itemId={`draggable-item-${field.id}`}
+                          index={fieldIndex}
+                          canRemove={
+                            hasMinimumFields && !isOnlyResponseField && !isOnlySentenceField
+                          }
+                          name={`${phraseFieldsName}.${fieldIndex}`}
+                          onRemove={handleRemoveField(fieldIndex)}
+                          responseOptions={responseOptions}
+                          type={field.type}
+                          placeholder={fieldPlaceholders[fieldIndex]}
+                        />
+                      </>
+                    );
+                  })}
+                </StyledPhraseTemplateFieldSet>
+              </Box>
+            )}
+          </DndDroppable>
+        </DragDropContext>
         <Button
-          aria-expanded={open}
+          aria-expanded={Boolean(addItemMenuAnchorEl)}
           aria-haspopup="true"
-          onClick={handlePressAdd}
+          onClick={handleOpenAddItemMenu}
           sx={{ gap: 0.8, ml: -1.4, width: 'max-content' }}
           variant="text"
         >
@@ -172,13 +207,12 @@ export const PhrasalTemplatePhrase = ({
         </Button>
 
         <Menu
-          anchorEl={anchorEl}
-          onClose={handleCloseMenu}
+          anchorEl={addItemMenuAnchorEl}
+          onClose={handleCloseAddItemMenu}
           menuItems={[
             {
               action: () => {
                 handleAddField(KEYWORDS.SENTENCE);
-                console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="formatText" />,
               title: 'phrasalTemplateItem.fieldSentenceTitle',
@@ -186,7 +220,6 @@ export const PhrasalTemplatePhrase = ({
             {
               action: () => {
                 handleAddField(KEYWORDS.ITEM_RESPONSE);
-                console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="commentDots" />,
               title: 'phrasalTemplateItem.fieldResponseTitle',
@@ -194,7 +227,6 @@ export const PhrasalTemplatePhrase = ({
             {
               action: () => {
                 handleAddField(KEYWORDS.LINE_BREAK);
-                console.warn('TODO: M2-7183 Add Phrasal Fields');
               },
               icon: <Svg id="flow-outlined" />,
               title: 'phrasalTemplateItem.fieldLineBreakTitle',
