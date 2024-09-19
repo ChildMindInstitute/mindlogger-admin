@@ -78,6 +78,7 @@ export const Subscale = ({
               <AdditionalInformation
                 data-testid={`${dataTestid}-additional-information`}
                 optionText={subscale.optionText}
+                severity={subscale.severity}
               />
             </Box>
           )}

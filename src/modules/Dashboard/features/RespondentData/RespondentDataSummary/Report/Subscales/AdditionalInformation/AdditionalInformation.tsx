@@ -5,7 +5,7 @@ import 'md-editor-rt/lib/style.css';
 
 import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
-import { StyledHeadline, theme } from 'shared/styles';
+import { StyledHeadline, StyledTitleBoldMedium, theme } from 'shared/styles';
 import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
@@ -13,6 +13,7 @@ import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInform
 
 export const AdditionalInformation = ({
   optionText,
+  severity,
   'data-testid': dataTestid,
 }: AdditionalInformationProps) => {
   const { t } = useTranslation();
@@ -38,6 +39,11 @@ export const AdditionalInformation = ({
         </StyledHeadline>
       </StyledHeader>
       <StyledContent>
+        {severity && (
+          <StyledTitleBoldMedium sx={{ pl: theme.spacing(2) }}>
+            {t('subscaleLookupTable.column.severity')}: {severity}
+          </StyledTitleBoldMedium>
+        )}
         <StyledMdPreview modelValue={additionalInformation} />
       </StyledContent>
     </Box>

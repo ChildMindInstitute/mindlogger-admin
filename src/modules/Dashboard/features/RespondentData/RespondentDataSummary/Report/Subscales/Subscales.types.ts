@@ -10,13 +10,14 @@ export const enum SubscalesTypes {
   Table = 'Table',
 }
 
-export type SubscaleScore = {
+export type LabeledSubscaleScore = {
   label: string;
   score: number;
 };
 
 export type AdditionalInformation = {
   optionText: string;
+  severity?: string;
   'data-testid'?: string;
 };
 
@@ -27,14 +28,25 @@ export type SubscalesProps = {
   flowResponsesIndex?: number;
 };
 
+export type CalculatedSubscaleScore = {
+  score: number;
+  optionText: string;
+  severity?: string;
+};
+
+export type CalculatedSubscaleScores = {
+  [subscaleName: string]: CalculatedSubscaleScore;
+};
+
 export type ParsedSubscale = {
   score: number;
   optionText: string;
+  severity?: string;
   date: Date;
   activityCompletionID?: string;
   activityItems: Record<string, ActivityItemAnswer>;
   subscalesObject: Record<string, ActivitySettingsSubscale>;
-  restScores?: { [key: string]: { score: number; optionText: string } };
+  restScores?: CalculatedSubscaleScores;
 };
 
 export type ParsedSubscales = {
@@ -53,7 +65,8 @@ export type ActivityCompletionToRender = {
     items?: SingleMultiSelectionSliderFormattedResponses[];
     score: number;
     optionText?: string;
-    restScores?: { [key: string]: { score: number; optionText: string } };
+    severity?: string;
+    restScores?: CalculatedSubscaleScores;
   };
 };
 
@@ -61,7 +74,7 @@ export type SubscaleToRender = Record<
   string,
   {
     items?: SingleMultiSelectionSliderFormattedResponses[];
-    restScores?: { [key: string]: { score: number; optionText: string } };
+    restScores?: CalculatedSubscaleScores;
   }
 >;
 
@@ -69,6 +82,7 @@ export type Subscale = {
   items?: SingleMultiSelectionSliderFormattedResponses[];
   score?: number;
   optionText?: string;
+  severity?: string;
   restScores: Record<string, Subscale>;
 };
 

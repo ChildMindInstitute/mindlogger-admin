@@ -22,6 +22,7 @@ import {
   DecryptedSliderAnswer,
   ElementType,
 } from 'shared/types';
+import { CalculatedSubscaleScores } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
@@ -47,8 +48,8 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-  result: { [key: string]: { score: number; optionText: string } },
-): { [key: string]: { score: number; optionText: string } } => {
+  result: CalculatedSubscaleScores,
+): CalculatedSubscaleScores => {
   let itemCount = 0;
 
   const sumScore = data.items.reduce((acc, item) => {
@@ -158,6 +159,7 @@ export const calcScores = <T>(
       [data.name]: {
         score: Number(subscaleTableDataItem?.score) || getRoundTo2Decimal(calculatedScore),
         optionText: subscaleTableDataItem?.optionalText || '',
+        severity: subscaleTableDataItem?.severity,
       },
     };
   }

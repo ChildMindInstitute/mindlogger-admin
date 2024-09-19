@@ -15,7 +15,7 @@ export const getSubscalesToRender = (
   subscalesObject: Record<string, ActivitySettingsSubscale>,
   endDatetime: string,
   result: SubscaleToRender,
-) => {
+): SubscaleToRender => {
   if (!data?.items || !result) {
     return result;
   }
