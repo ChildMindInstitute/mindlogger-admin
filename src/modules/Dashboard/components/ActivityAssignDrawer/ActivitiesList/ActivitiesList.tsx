@@ -81,7 +81,7 @@ export const ActivitiesList = ({
                   <StyledListItemTextPrimary>
                     {name}
                     <Chip
-                      color="secondary"
+                      color="primary"
                       size="medium"
                       icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
                       shape={ChipShape.Rectangular}

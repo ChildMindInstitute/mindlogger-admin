@@ -2,6 +2,7 @@ export * from './Accordion';
 export * from './ActivityAssignDrawer';
 export * from './ActivitySummaryCard';
 export * from './ActivityFlowThumbnail';
+export * from './AssignmentCounts';
 export * from './Banners';
 export * from './DashboardTable';
 export * from './ParticipantSnippet';
