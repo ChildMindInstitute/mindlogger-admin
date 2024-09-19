@@ -42,6 +42,7 @@ export const Activities = () => {
   const [flowId, setFlowId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [showActivityAssign, setShowActivityAssign] = useState(false);
+  const [showActivityUnassign, setShowActivityUnassign] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [selectedActivityOrFlowId, setSelectedActivityOrFlowId] = useState<ActivityOrFlowId>();
   const workspaceRoles = workspaces.useRolesData();
@@ -101,14 +102,18 @@ export const Activities = () => {
     openTakeNowModal,
   } = useActivityGrid({
     dataTestId,
-    activitiesData: { result: activities, count: activities.length },
-    onClickExportData: useCallback((activityId) => {
-      setActivityId(activityId);
+    activitiesData: { activities, total: activities.length },
+    onClickExportData: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
       setShowExportPopup(true);
     }, []),
-    onClickAssign: useCallback((activityId) => {
-      setActivityId(activityId);
+    onClickAssign: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
       setShowActivityAssign(true);
+    }, []),
+    onClickUnassign: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
+      setShowActivityUnassign(true);
     }, []),
   });
 
@@ -223,6 +228,10 @@ export const Activities = () => {
                 onClickAssign={(flowId) => {
                   setFlowId(flowId);
                   setShowActivityAssign(true);
+                }}
+                onClickUnassign={(flowId) => {
+                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
+                  setShowActivityUnassign(true);
                 }}
               />
             </StyledFlexColumn>

@@ -14,8 +14,8 @@ import {
   checkIfFullAccess,
   getIsWebSupported,
 } from 'shared/utils';
-import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { ItemResponseType } from 'shared/consts';
+import { AssignedHydratedActivityFlow } from 'modules/Dashboard/types';
 
 import { UseFlowGridMenuProps } from './FlowGrid.types';
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
@@ -29,6 +29,7 @@ export function useFlowGridMenu({
   subject,
   onClickExportData,
   onClickAssign,
+  onClickUnassign,
 }: UseFlowGridMenuProps) {
   const { t } = useTranslation('app');
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId: testId });
@@ -41,14 +42,17 @@ export function useFlowGridMenu({
   const canDoTakeNow = checkIfFullAccess(roles) && hasParticipants;
   const canAccessData = checkIfCanAccessData(roles);
   const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
-  const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);
+  const showDivider = (canEdit || canAccessData || canAssign) && canDoTakeNow;
 
   const getActionsMenu = useCallback(
-    ({ flow }: { flow: HydratedActivityFlow }) => {
-      const flowId = flow.id;
+    ({ flow }: { flow: AssignedHydratedActivityFlow }) => {
+      const { id: flowId, autoAssign } = flow;
       const flowItems = flow.activities.reduce<{ responseType: ItemResponseType }[]>(
         (items, activity) => [...items, ...activity.items],
         [],
+      );
+      const isAssigned = !!flow.assignments?.some(
+        (a) => a.respondentSubject.id === subject?.id || a.targetSubject.id === subject?.id,
       );
       const isWebUnsupported = !getIsWebSupported(flowItems);
 
@@ -73,27 +77,34 @@ export function useFlowGridMenu({
         {
           'data-testid': `${testId}-flow-export`,
           action: () => {
-            if (flowId) {
-              onClickExportData(flowId);
-            }
+            if (flowId) onClickExportData(flowId);
           },
           disabled: !flowId,
           icon: <Svg id="export" />,
           title: t('exportData'),
           isDisplayed: canAccessData,
         },
-        { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
           'data-testid': `${testId}-flow-assign`,
           action: () => {
-            if (flowId) {
-              onClickAssign(flowId);
-            }
+            if (flowId) onClickAssign(flowId);
           },
-          icon: <Svg id="add" />,
+          icon: <Svg id="file-plus" />,
           title: t('assignActivity'),
-          isDisplayed: canAssign,
+          isDisplayed: canAssign && !autoAssign,
         },
+        {
+          'data-testid': `${testId}-flow-unassign`,
+          action: () => {
+            if (flowId) onClickUnassign?.(flowId);
+          },
+          icon: <Svg id="clear-calendar" />,
+          title: t('unassignActivity'),
+          isDisplayed: canAssign && (autoAssign || isAssigned),
+          disabled: autoAssign,
+          tooltip: autoAssign && t('unassignActivityDisabledTooltip'),
+        },
+        { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
           'data-testid': `${testId}-flow-take-now`,
           action: () => {
@@ -127,6 +138,7 @@ export function useFlowGridMenu({
       navigate,
       onClickAssign,
       onClickExportData,
+      onClickUnassign,
       openTakeNowModal,
       showDivider,
       subject,

@@ -40,8 +40,8 @@ export const Activities = () => {
   const { formatRow, TakeNowModal } = useActivityGrid({
     dataTestId,
     activitiesData: {
-      result: activities,
-      count: activities.length,
+      activities,
+      total: activities.length,
     },
     onClickExportData: useCallback((activityId) => {
       setActivityId(activityId);

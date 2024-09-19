@@ -36,18 +36,28 @@ export type GetActivitiesParams = {
 
 export type GetSubjectActivitiesParams = AppletId & SubjectId;
 
+export type AppletActivitiesResponse = {
+  result: {
+    activitiesDetails: Activity[];
+    appletDetail: Applet;
+  };
+};
+
 export type HydratedAssignment = {
   id: string;
-  activityId: string;
-  activityFlowId: string;
+  activityId: string | null;
+  activityFlowId: string | null;
   respondentSubject: RespondentDetails;
   targetSubject: RespondentDetails;
 };
 
+export type AssignedActivity = Activity & { assignments?: HydratedAssignment[] };
+export type AssignedActivityFlow = ActivityFlow & { assignments?: HydratedAssignment[] };
+
 export type AppletSubjectActivitiesResponse = {
   result: {
-    activities: Array<Activity & { assignments: HydratedAssignment[] }>;
-    activityFlows: Array<ActivityFlow & { assignments: HydratedAssignment[] }>;
+    activities: AssignedActivity[];
+    activityFlows: AssignedActivityFlow[];
   };
 };
 

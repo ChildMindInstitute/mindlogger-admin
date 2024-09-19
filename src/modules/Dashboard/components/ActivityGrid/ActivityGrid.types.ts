@@ -1,9 +1,8 @@
 import { FC } from 'react';
 
 import { MenuActionProps, Row } from 'shared/components';
-import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
-import { DatavizEntity } from 'api';
+import { AssignedActivity } from 'api';
 import { Order } from 'shared/types';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
@@ -20,9 +19,13 @@ export type ActivityGridProps = {
 
 export type UseActivityGridProps = {
   dataTestId: string;
-  activitiesData: ActivitiesData | null;
+  activitiesData: {
+    activities: AssignedActivity[];
+    total: number;
+  };
   onClickExportData: (activityId: string) => void;
   onClickAssign: (activityId: string) => void;
+  onClickUnassign?: (activityId: string) => void;
 };
 
 export type ActivityActionProps = {
@@ -31,26 +34,21 @@ export type ActivityActionProps = {
   participantId?: string;
 };
 
-export type ActivitiesData = {
-  result: Activity[] | DatavizEntity[];
-  count: number;
-};
-
-export type BaseActivity = Partial<Activity>;
-
 export type ActivityActions = {
   actions: ActionsObject;
   dataTestId: string;
   appletId: string;
+  subjectId?: string;
   roles?: Roles[];
   hasParticipants?: boolean;
   featureFlags: FeatureFlags;
-  activity: BaseActivity;
+  activity: AssignedActivity;
 };
 
 export type ActionsObject = {
   editActivity?: (props: MenuActionProps<ActivityActionProps>) => void;
   exportData?: (props: MenuActionProps<ActivityActionProps>) => void;
   assignActivity?: (props: MenuActionProps<ActivityActionProps>) => void;
+  unassignActivity?: (props: MenuActionProps<ActivityActionProps>) => void;
   takeNow?: (props: MenuActionProps<ActivityActionProps>) => void;
 };

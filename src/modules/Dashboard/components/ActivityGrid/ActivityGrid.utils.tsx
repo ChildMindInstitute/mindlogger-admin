@@ -14,23 +14,26 @@ import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Ac
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
 export const getActivityActions = ({
-  actions: { editActivity, exportData, assignActivity, takeNow },
+  actions: { editActivity, exportData, assignActivity, unassignActivity, takeNow },
   appletId,
+  subjectId,
   dataTestId,
   roles,
   featureFlags,
   hasParticipants,
   activity,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
+  const { id: activityId, autoAssign } = activity;
   const canEdit =
     (checkIfCanEdit(roles) && !activity?.isPerformanceTask) ||
     EditablePerformanceTasks.includes(activity?.performanceTaskType ?? '');
   const canAccessData = checkIfCanAccessData(roles);
   const canDoTakeNow = hasParticipants && checkIfFullAccess(roles);
-  const canAssignActivity =
-    checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
-  const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
-  const { id: activityId } = activity;
+  const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
+  const isAssigned = !!activity.assignments?.some(
+    (a) => subjectId && (a.respondentSubject.id === subjectId || a.targetSubject.id === subjectId),
+  );
+  const showDivider = (canEdit || canAccessData || canAssign) && canDoTakeNow;
   const isWebUnsupported = !getIsWebSupported(activity.items);
 
   if (!activityId) return [];
@@ -52,15 +55,25 @@ export const getActivityActions = ({
       isDisplayed: canAccessData,
       'data-testid': `${dataTestId}-activity-export`,
     },
-    { type: MenuItemType.Divider, isDisplayed: showDivider },
     {
-      icon: <Svg id="add" />,
+      icon: <Svg id="file-plus" />,
       action: assignActivity,
       title: t('assignActivity'),
       context: { appletId, activityId },
-      isDisplayed: canAssignActivity,
+      isDisplayed: canAssign && !autoAssign,
       'data-testid': `${dataTestId}-activity-assign`,
     },
+    {
+      icon: <Svg id="clear-calendar" />,
+      action: unassignActivity,
+      title: t('unassignActivity'),
+      context: { appletId, activityId },
+      isDisplayed: canAssign && (autoAssign || isAssigned),
+      disabled: autoAssign,
+      tooltip: autoAssign && t('unassignActivityDisabledTooltip'),
+      'data-testid': `${dataTestId}-activity-unassign`,
+    },
+    { type: MenuItemType.Divider, isDisplayed: showDivider },
     {
       icon: <Svg id="play-outline" />,
       action: takeNow,

@@ -6,7 +6,7 @@ import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Modal, Spinner } from 'shared/components';
-import { workspaces } from 'redux/modules';
+import { Activity, workspaces } from 'redux/modules';
 import {
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -41,7 +41,6 @@ import {
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { BaseActivity } from '../ActivityGrid';
 import { TakeNowDropdown } from './TakeNowDropdown';
 
 type TakeNowData = {
@@ -71,7 +70,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   } = useFeatureFlags();
   const { pathname } = useLocation();
 
-  const [activityOrFlow, setActivityOrFlow] = useState<BaseActivity | HydratedActivityFlow | null>(
+  const [activityOrFlow, setActivityOrFlow] = useState<Activity | HydratedActivityFlow | null>(
     null,
   );
   const [defaultTargetSubject, setDefaultTargetSubject] =
@@ -95,7 +94,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     (
       action: string,
       payload?: MixpanelPayload,
-      newActivityOrFlow?: BaseActivity | HydratedActivityFlow,
+      newActivityOrFlow?: Activity | HydratedActivityFlow,
     ) => {
       const props: MixpanelPayload = {
         [MixpanelProps.Feature]: 'Multi-informant',
@@ -462,7 +461,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   };
 
   const openTakeNowModal = (
-    activityOrFlow: BaseActivity | HydratedActivityFlow,
+    activityOrFlow: Activity | HydratedActivityFlow,
     { targetSubject, sourceSubject }: OpenTakeNowModalOptions = {},
   ) => {
     const uuid = uuidv4();
