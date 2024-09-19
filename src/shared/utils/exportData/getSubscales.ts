@@ -130,8 +130,18 @@ export const calcScores = <T>(
         }
       }
 
-      // TODO: Update the score calculation to account for age ranges (https://mindlogger.atlassian.net/browse/M2-7672)
-      const withAge = age ? String(age) === reportedAge : true;
+      const hasAgeInterval = age && age.includes(INTERVAL_SYMBOL);
+      let withAge = true;
+
+      if (age) {
+        if (!hasAgeInterval) {
+          withAge = String(age) === reportedAge;
+        } else {
+          const [minAge, maxAge] = age.replace(/\s/g, '').split(INTERVAL_SYMBOL);
+          const reportedAgeNum = Number(reportedAge);
+          withAge = Number(minAge) <= reportedAgeNum && reportedAgeNum <= Number(maxAge);
+        }
+      }
 
       if (!withSex || !withAge) return false;
 
