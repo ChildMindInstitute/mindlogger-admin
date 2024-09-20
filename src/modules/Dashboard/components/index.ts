@@ -1,5 +1,6 @@
 export * from './Accordion';
 export * from './ActivityAssignDrawer';
+export * from './ActivityUnassignDrawer';
 export * from './ActivitySummaryCard';
 export * from './ActivityFlowThumbnail';
 export * from './AssignmentCounts';
