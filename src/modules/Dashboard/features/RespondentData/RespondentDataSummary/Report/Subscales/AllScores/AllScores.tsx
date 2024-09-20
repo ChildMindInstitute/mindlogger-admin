@@ -1,16 +1,21 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import uniqueId from 'lodash.uniqueid';
 
 import {
   StyledBodyMedium,
+  StyledFlexAllCenter,
+  StyledFlexTopCenter,
   StyledFlexTopStart,
   StyledHeadline,
   theme,
   variables,
 } from 'shared/styles';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 import { SubscaleLineChart } from '../../Charts/LineChart';
 import { AllScoresProps } from './AllScores.types';
+import { getSeveritySvg } from '../../Charts/LineChart/SubscaleLineChart/SubscaleLineChart.utils';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
@@ -18,6 +23,18 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
   const { t } = useTranslation('app');
 
   if (!data.subscales.length) return null;
+
+  const LegendIcons = TScoreSeverity.map((severity) => (
+    <StyledFlexAllCenter sx={{ gap: theme.spacing(0.8) }} key={uniqueId()}>
+      <div
+        style={{ width: theme.spacing(2.4), height: theme.spacing(2.4) }}
+        dangerouslySetInnerHTML={{
+          __html: getSeveritySvg(severity, variables.palette.outline),
+        }}
+      />
+      <StyledBodyMedium>{severity || 'Default'}</StyledBodyMedium>
+    </StyledFlexAllCenter>
+  ));
 
   return (
     <Box sx={{ mb: theme.spacing(2.4) }} data-testid="all-scores">
@@ -40,6 +57,13 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
         )}
       </StyledFlexTopStart>
       <SubscaleLineChart data={data} versions={versions} />
+      <StyledFlexTopCenter
+        className="line-chart-legend"
+        sx={{ justifyContent: 'flex-start', gap: theme.spacing(1.6) }}
+      >
+        <StyledBodyMedium sx={{ lineHeight: theme.spacing(2.4) }}>{t('key')}:</StyledBodyMedium>
+        {LegendIcons}
+      </StyledFlexTopCenter>
     </Box>
   );
 };

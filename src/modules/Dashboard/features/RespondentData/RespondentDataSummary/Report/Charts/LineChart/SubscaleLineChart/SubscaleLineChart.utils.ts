@@ -171,11 +171,7 @@ export const getOptions = (
   };
 };
 
-export const getSeverityImageElement = (
-  severity: TScoreSeverity,
-  color: string,
-): HTMLImageElement => {
-  const image = new Image();
+export const getSeveritySvg = (severity: TScoreSeverity, color: string) => {
   let svg: string;
 
   switch (severity) {
@@ -197,8 +193,15 @@ export const getSeverityImageElement = (
       break;
   }
 
-  svg = svg.replace(new RegExp(COLOR_PLACEHOLDER, 'g'), color);
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  return svg.replace(new RegExp(COLOR_PLACEHOLDER, 'g'), color);
+};
+
+export const getSeverityImageElement = (
+  severity: TScoreSeverity,
+  color: string,
+): HTMLImageElement => {
+  const image = new Image();
+  const blob = new Blob([getSeveritySvg(severity, color)], { type: 'image/svg+xml' });
   image.src = URL.createObjectURL(blob);
 
   return image;
