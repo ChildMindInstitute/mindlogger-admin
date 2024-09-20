@@ -21,6 +21,7 @@ import {
   SubscaleLineDataPointRaw,
   SubscaleLineChartProps,
   TooltipData,
+  TooltipItemWithRawData,
 } from './SubscaleLineChart.types';
 import { ChartType } from '../../Chart.types';
 
@@ -72,23 +73,26 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
     const chart = chartRef.current;
 
-    const tooltipsPoint = dataPoints.filter((point) => point.dataset.xAxisID === 'x');
+    const tooltipsPoint = dataPoints.filter(
+      (point) => point.dataset.xAxisID === 'x',
+    ) as TooltipItemWithRawData<'line', SubscaleLineDataPointRaw>[];
 
     if (chart && tooltipsPoint.length) {
       const tooltipDataPoints = await Promise.all(
-        tooltipsPoint.map(async (dataPoint) => {
-          let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
+        tooltipsPoint.map<Promise<TooltipData>>(async (dataPoint) => {
+          let optionText = dataPoint.raw.optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {
             optionText = (await getOptionTextApi(optionText)).data;
           }
 
           return {
-            date: (dataPoint.raw as SubscaleLineDataPointRaw).x,
+            date: dataPoint.raw.x,
             backgroundColor: dataPoint.dataset.backgroundColor as string,
             label: dataPoint.dataset.label as string,
-            value: (dataPoint.raw as SubscaleLineDataPointRaw).y,
+            value: dataPoint.raw.y,
             optionText,
+            severity: dataPoint.raw.severity,
           };
         }),
       );

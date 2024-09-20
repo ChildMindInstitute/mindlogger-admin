@@ -169,10 +169,11 @@ export const getData = (data: SubscaleChartData, versions: Version[], max: numbe
     ...data.subscales.map((subscale, index) => ({
       xAxisID: 'x',
       label: subscale.name,
-      data: subscale.activityCompletions.map(({ date, score, optionText }) => ({
+      data: subscale.activityCompletions.map(({ date, score, optionText, severity }) => ({
         x: date,
         y: score,
         optionText,
+        severity,
       })),
       borderColor: COLORS[index % COLORS.length],
       backgroundColor: COLORS[index % COLORS.length],

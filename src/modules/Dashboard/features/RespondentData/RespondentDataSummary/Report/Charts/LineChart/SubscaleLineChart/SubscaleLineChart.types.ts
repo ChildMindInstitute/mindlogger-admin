@@ -1,4 +1,4 @@
-import { Chart } from 'chart.js';
+import { Chart, ChartType, TooltipItem } from 'chart.js';
 
 import { Version } from 'api';
 
@@ -6,6 +6,7 @@ export type ActivityCompletion = {
   date: Date;
   score: number;
   optionText?: string;
+  severity?: string;
 };
 
 export type Subscale = {
@@ -30,10 +31,19 @@ export type TooltipData = {
   label: string;
   value: number;
   optionText: string;
+  severity: string;
 };
 
 export type SubscaleLineDataPointRaw = {
   x: Date;
   y: number;
   optionText: string;
+  severity: string;
+};
+
+export type TooltipItemWithRawData<TType extends ChartType, RawDataType> = Omit<
+  TooltipItem<TType>,
+  'raw'
+> & {
+  raw: RawDataType;
 };
