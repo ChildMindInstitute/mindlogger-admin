@@ -227,7 +227,7 @@ jest.mock('./ActivityCompletionScores', () => ({
 }));
 
 describe('Subscales component', () => {
-  test('renders component with correct data', async () => {
+  test('Correctly renders the AllScores component', async () => {
     renderWithProviders(
       <ReportContext.Provider
         value={{
@@ -243,7 +243,7 @@ describe('Subscales component', () => {
     expect(screen.queryAllByTestId(/subscale-\d+$/)).toHaveLength(2);
   });
 
-  test('renders component with correct data', async () => {
+  test('Correctly renders the ActivityCompletionScores component', async () => {
     renderWithProviders(
       <ReportContext.Provider
         value={{
