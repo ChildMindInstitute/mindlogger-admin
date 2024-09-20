@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ListItemIcon, ListItemText } from '@mui/material';
 
-import { Chip, ChipShape, Svg } from 'shared/components';
+import { Chip, ChipShape, Svg, Tooltip } from 'shared/components';
 import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
 import { StyledActivityThumbnailContainer, StyledActivityThumbnailImg } from 'shared/styles';
 import { useFeatureFlags } from 'shared/hooks';
@@ -55,74 +55,86 @@ export const ActivitiesList = ({
   return (
     <StyledList data-testid={dataTestId} sx={isReadOnly ? { height: 'auto', py: 0.5 } : undefined}>
       {flows.map(({ id = '', activities, name, autoAssign }) => (
-        <StyledListItem
-          key={id}
-          secondaryAction={
-            isReadOnly ? undefined : (
-              <ActivityCheckbox
-                checked={flowIds?.includes(id)}
-                onChange={() => handleFlowClick(id)}
-                data-testid={`${dataTestId}-flow-checkbox-${id}`}
-                disabled={enableActivityAssignFlag ? autoAssign : undefined}
-              />
-            )
-          }
-          data-testid={`${dataTestId}-flow-item`}
+        <Tooltip
+          placement="left"
+          tooltipTitle={enableActivityAssignFlag && autoAssign && t('autoAssignFlowDisabled')}
         >
-          <ButtonComponent
-            onClick={isReadOnly ? undefined : () => handleFlowClick(id)}
-            disabled={enableActivityAssignFlag ? autoAssign : undefined}
+          <StyledListItem
+            key={id}
+            secondaryAction={
+              isReadOnly ? undefined : (
+                <ActivityCheckbox
+                  checked={flowIds?.includes(id)}
+                  onChange={() => handleFlowClick(id)}
+                  data-testid={`${dataTestId}-flow-checkbox-${id}`}
+                  disabled={enableActivityAssignFlag ? autoAssign : undefined}
+                />
+              )
+            }
+            data-testid={`${dataTestId}-flow-item`}
           >
-            <ListItemIcon>
-              <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
-                <ActivityFlowThumbnail activities={activities} />
-              </StyledActivityThumbnailContainer>
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <StyledListItemTextPrimary>
-                  {name}
-                  <Chip
-                    color="secondary"
-                    size="medium"
-                    icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
-                    shape={ChipShape.Rectangular}
-                    title={t('flow')}
-                  />
-                </StyledListItemTextPrimary>
-              }
-            />
-          </ButtonComponent>
-        </StyledListItem>
+            <ButtonComponent
+              onClick={isReadOnly ? undefined : () => handleFlowClick(id)}
+              disabled={enableActivityAssignFlag ? autoAssign : undefined}
+            >
+              <ListItemIcon>
+                <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
+                  <ActivityFlowThumbnail activities={activities} />
+                </StyledActivityThumbnailContainer>
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <StyledListItemTextPrimary>
+                    {name}
+                    <Chip
+                      color="secondary"
+                      size="medium"
+                      icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
+                      shape={ChipShape.Rectangular}
+                      title={t('flow')}
+                    />
+                  </StyledListItemTextPrimary>
+                }
+              />
+            </ButtonComponent>
+          </StyledListItem>
+        </Tooltip>
       ))}
 
       {activities.map(({ id = '', name, image, autoAssign }) => (
-        <StyledListItem
-          key={id}
-          secondaryAction={
-            isReadOnly ? undefined : (
-              <ActivityCheckbox
-                checked={activityIds?.includes(id)}
-                onChange={() => handleActivityClick(id)}
-                data-testid={`${dataTestId}-activity-checkbox-${id}`}
-                disabled={enableActivityAssignFlag ? autoAssign : undefined}
-              />
-            )
-          }
-          data-testid={`${dataTestId}-activity-item`}
+        <Tooltip
+          placement="left"
+          tooltipTitle={enableActivityAssignFlag && autoAssign && t('autoAssignActivityDisabled')}
         >
-          <ButtonComponent
-            onClick={isReadOnly ? undefined : () => handleActivityClick(id)}
-            disabled={enableActivityAssignFlag ? autoAssign : undefined}
+          <StyledListItem
+            key={id}
+            secondaryAction={
+              isReadOnly ? undefined : (
+                <ActivityCheckbox
+                  checked={activityIds?.includes(id)}
+                  onChange={() => handleActivityClick(id)}
+                  data-testid={`${dataTestId}-activity-checkbox-${id}`}
+                  disabled={enableActivityAssignFlag ? autoAssign : undefined}
+                />
+              )
+            }
+            data-testid={`${dataTestId}-activity-item`}
           >
-            <ListItemIcon>
-              <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
-                {!!image && <StyledActivityThumbnailImg src={image} alt={name} />}
-              </StyledActivityThumbnailContainer>
-            </ListItemIcon>
-            <ListItemText primary={<StyledListItemTextPrimary>{name}</StyledListItemTextPrimary>} />
-          </ButtonComponent>
-        </StyledListItem>
+            <ButtonComponent
+              onClick={isReadOnly ? undefined : () => handleActivityClick(id)}
+              disabled={enableActivityAssignFlag ? autoAssign : undefined}
+            >
+              <ListItemIcon>
+                <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
+                  {!!image && <StyledActivityThumbnailImg src={image} alt={name} />}
+                </StyledActivityThumbnailContainer>
+              </ListItemIcon>
+              <ListItemText
+                primary={<StyledListItemTextPrimary>{name}</StyledListItemTextPrimary>}
+              />
+            </ButtonComponent>
+          </StyledListItem>
+        </Tooltip>
       ))}
     </StyledList>
   );
