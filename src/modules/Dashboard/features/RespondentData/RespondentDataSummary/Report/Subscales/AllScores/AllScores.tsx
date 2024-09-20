@@ -12,6 +12,7 @@ import {
   variables,
 } from 'shared/styles';
 import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { SubscaleLineChart } from '../../Charts/LineChart';
 import { AllScoresProps } from './AllScores.types';
@@ -21,6 +22,7 @@ const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</S
 
 export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllScoresProps) => {
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
 
   if (!data.subscales.length) return null;
 
@@ -57,13 +59,15 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
         )}
       </StyledFlexTopStart>
       <SubscaleLineChart data={data} versions={versions} />
-      <StyledFlexTopCenter
-        className="line-chart-legend"
-        sx={{ justifyContent: 'flex-start', gap: theme.spacing(1.6) }}
-      >
-        <StyledBodyMedium sx={{ lineHeight: theme.spacing(2.4) }}>{t('key')}:</StyledBodyMedium>
-        {LegendIcons}
-      </StyledFlexTopCenter>
+      {featureFlags.enableCahmiSubscaleScoring && (
+        <StyledFlexTopCenter
+          className="line-chart-legend"
+          sx={{ justifyContent: 'flex-start', gap: theme.spacing(1.6) }}
+        >
+          <StyledBodyMedium sx={{ lineHeight: theme.spacing(2.4) }}>{t('key')}:</StyledBodyMedium>
+          {LegendIcons}
+        </StyledFlexTopCenter>
+      )}
     </Box>
   );
 };

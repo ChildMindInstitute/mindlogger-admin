@@ -10,6 +10,7 @@ import { Box } from '@mui/material';
 import { getOptionTextApi } from 'api';
 import { pluck } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
@@ -31,6 +32,7 @@ const dataTestid = 'subscale-line-chart';
 
 export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) => {
   const { i18n } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
   const chartRef = useRef<ChartJSOrUndefined<'line', SubscaleLineDataPointRaw[]> | null>(null);
 
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -110,7 +112,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
       <Line
         ref={chartRef}
         options={getOptions(lang, minDate, maxDate, tooltipHandler, min, max, stepSize)}
-        data={getData(data, filteredVersions, max)}
+        data={getData(data, filteredVersions, max, featureFlags.enableCahmiSubscaleScoring)}
         plugins={[ChartDataLabels, legendMargin]}
       />
     ),

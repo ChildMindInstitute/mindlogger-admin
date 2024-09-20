@@ -7,6 +7,7 @@ import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { StyledHeadline, StyledTitleBoldMedium, theme } from 'shared/styles';
 import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
 import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
@@ -17,6 +18,7 @@ export const AdditionalInformation = ({
   'data-testid': dataTestid,
 }: AdditionalInformationProps) => {
   const { t } = useTranslation();
+  const { featureFlags } = useFeatureFlags();
   const { execute: getOptionText } = useAsync(getOptionTextApi, (response) =>
     setAdditionalInformation(response?.data || ''),
   );
@@ -39,7 +41,7 @@ export const AdditionalInformation = ({
         </StyledHeadline>
       </StyledHeader>
       <StyledContent>
-        {severity && (
+        {featureFlags.enableCahmiSubscaleScoring && severity && (
           <StyledTitleBoldMedium sx={{ pl: theme.spacing(2) }}>
             {t('subscaleLookupTable.column.severity')}: {severity}
           </StyledTitleBoldMedium>

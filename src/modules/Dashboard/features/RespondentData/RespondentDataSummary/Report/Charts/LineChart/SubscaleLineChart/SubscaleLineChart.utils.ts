@@ -12,12 +12,14 @@ import { Version } from 'api';
 import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 import {
+  SUBSCALES_CHART_LABEL_WIDTH_Y,
+  locales,
+  POINT_RADIUS_DEFAULT,
+  POINT_RADIUS_SECONDARY,
   COLORS,
   commonLabelsProps,
-  locales,
-  SUBSCALES_CHART_LABEL_WIDTH_Y,
 } from '../../Charts.const';
-import { getTimeConfig, getTimelineStepSize } from '../../Charts.utils';
+import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
 import {
   COLOR_PLACEHOLDER,
@@ -207,29 +209,45 @@ export const getSeverityImageElement = (
   return image;
 };
 
-export const getData = (data: SubscaleChartData, versions: Version[], max: number) => ({
+export const getData = (
+  data: SubscaleChartData,
+  versions: Version[],
+  max: number,
+  enableCahmiSubscaleScoring = false,
+) => ({
   datasets: [
-    ...data.subscales.map((subscale, index) => ({
-      xAxisID: 'x',
-      label: subscale.name,
-      data: subscale.activityCompletions.map(({ date, score, optionText, severity }) => ({
-        x: date,
-        y: score,
-        optionText,
-        severity,
-      })),
-      borderColor: COLORS[index % COLORS.length],
-      backgroundColor: COLORS[index % COLORS.length],
-      datalabels: {
-        display: false,
-      },
-      pointStyle: subscale.activityCompletions.map((completion) =>
-        getSeverityImageElement(
-          completion.severity as TScoreSeverity,
-          COLORS[index % COLORS.length],
+    ...data.subscales.map((subscale, index) => {
+      const pointStyle = enableCahmiSubscaleScoring
+        ? subscale.activityCompletions.map((completion) =>
+            getSeverityImageElement(
+              completion.severity as TScoreSeverity,
+              COLORS[index % COLORS.length],
+            ),
+          )
+        : undefined;
+
+      return {
+        xAxisID: 'x',
+        label: subscale.name,
+        data: subscale.activityCompletions.map(({ date, score, optionText, severity }) => ({
+          x: date,
+          y: score,
+          optionText,
+          severity,
+        })),
+        borderColor: COLORS[index % COLORS.length],
+        backgroundColor: COLORS[index % COLORS.length],
+        datalabels: {
+          display: false,
+        },
+        borderWidth: 1,
+        pointRadius: subscale.activityCompletions.map(({ optionText }) =>
+          optionText ? POINT_RADIUS_DEFAULT : POINT_RADIUS_SECONDARY,
         ),
-      ),
-    })),
+        pointBorderColor: variables.palette.white,
+        pointStyle,
+      };
+    }),
     {
       xAxisID: 'x1',
       data: [],

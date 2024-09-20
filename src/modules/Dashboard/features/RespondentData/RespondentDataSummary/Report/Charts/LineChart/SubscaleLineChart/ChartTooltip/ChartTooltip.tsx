@@ -12,6 +12,7 @@ import {
   variables,
 } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { StyledIndent } from '../../../Chart.styles';
 import { StyledBackground, StyledMdPreview, StyledTooltip } from './ChartTooltip.styles';
@@ -19,6 +20,7 @@ import { ChartTooltipProps } from './ChartTooltip.types';
 
 export const ChartTooltip = ({ dataPoints, 'data-testid': dataTestid }: ChartTooltipProps) => {
   const { t } = useTranslation();
+  const { featureFlags } = useFeatureFlags();
 
   return (
     <>
@@ -41,7 +43,7 @@ export const ChartTooltip = ({ dataPoints, 'data-testid': dataTestid }: ChartToo
                     {label}: {value}
                   </StyledLabelMedium>
                 </StyledFlexTopCenter>
-                {severity && (
+                {featureFlags.enableCahmiSubscaleScoring && severity && (
                   <StyledTitleBoldMedium>
                     {t('subscaleLookupTable.column.severity')}: {severity}
                   </StyledTitleBoldMedium>
