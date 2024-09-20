@@ -83,7 +83,7 @@ export const enum ModalType {
 
 export type Steps = 0 | 1;
 
-export const TScoreSeverity = ['Minimal', 'Mild', 'Moderate', 'Severe', ''] as const;
+export const TScoreSeverity = ['', 'Minimal', 'Mild', 'Moderate', 'Severe'] as const;
 
 export type TScoreSeverity = (typeof TScoreSeverity)[number];
 

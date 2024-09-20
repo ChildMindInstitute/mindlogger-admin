@@ -1,25 +1,32 @@
 import { Context } from 'chartjs-plugin-datalabels';
 import {
-  LegendItem,
   ChartData,
+  ChartDataset,
+  LegendItem,
   LinearScale,
   ScriptableTooltipContext,
-  ChartDataset,
 } from 'chart.js';
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 import {
-  SUBSCALES_CHART_LABEL_WIDTH_Y,
-  locales,
-  POINT_RADIUS_DEFAULT,
-  POINT_RADIUS_SECONDARY,
   COLORS,
   commonLabelsProps,
+  locales,
+  SUBSCALES_CHART_LABEL_WIDTH_Y,
 } from '../../Charts.const';
-import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
+import { getTimeConfig, getTimelineStepSize } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
+import {
+  COLOR_PLACEHOLDER,
+  defaultSeveritySvg,
+  mildSeveritySvg,
+  minimalSeveritySvg,
+  moderateSeveritySvg,
+  severeSeveritySvg,
+} from './SubscaleLineChart.const';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -164,6 +171,39 @@ export const getOptions = (
   };
 };
 
+export const getSeverityImageElement = (
+  severity: TScoreSeverity,
+  color: string,
+): HTMLImageElement => {
+  const image = new Image();
+  let svg: string;
+
+  switch (severity) {
+    case 'Minimal':
+      svg = minimalSeveritySvg;
+      break;
+    case 'Mild':
+      svg = mildSeveritySvg;
+      break;
+    case 'Moderate':
+      svg = moderateSeveritySvg;
+      break;
+    case 'Severe':
+      svg = severeSeveritySvg;
+      break;
+    case '':
+    default:
+      svg = defaultSeveritySvg;
+      break;
+  }
+
+  svg = svg.replace(new RegExp(COLOR_PLACEHOLDER, 'g'), color);
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  image.src = URL.createObjectURL(blob);
+
+  return image;
+};
+
 export const getData = (data: SubscaleChartData, versions: Version[], max: number) => ({
   datasets: [
     ...data.subscales.map((subscale, index) => ({
@@ -180,11 +220,12 @@ export const getData = (data: SubscaleChartData, versions: Version[], max: numbe
       datalabels: {
         display: false,
       },
-      borderWidth: 1,
-      pointRadius: subscale.activityCompletions.map(({ optionText }) =>
-        optionText ? POINT_RADIUS_DEFAULT : POINT_RADIUS_SECONDARY,
+      pointStyle: subscale.activityCompletions.map((completion) =>
+        getSeverityImageElement(
+          completion.severity as TScoreSeverity,
+          COLORS[index % COLORS.length],
+        ),
       ),
-      pointBorderColor: variables.palette.white,
     })),
     {
       xAxisID: 'x1',
