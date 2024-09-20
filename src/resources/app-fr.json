@@ -1360,7 +1360,8 @@
       "rawScore": "Score brut",
       "score": "Score",
       "sex": "Genre",
-      "text": "Texte"
+      "text": "Texte",
+      "severity": "Niveau de gravité"
     },
     "delete": {
       "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche pour <1>{{name}}</1>?",
@@ -1376,6 +1377,9 @@
       "haveToUploadFile": "Vous devez uploader un fichier pour continuer.",
       "incorrectFileFormat": "Format de fichier incorrect. Veuillez uploader un fichier au format <1>.csv</1>.",
       "onDelete": "La table de recherche actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
+    },
+    "warnings": {
+      "incompleteSeverityData": "La table de recherche actuelle inclut des valeurs de gravité manquantes dans certaines lignes. Téléchargez le fichier correct ou enregistrez et continuez."
     },
     "upload": {
       "initDescription": "Veuillez uploader un fichier au format <1>.csv</1>.",

@@ -22,11 +22,14 @@ import {
 } from 'shared/consts';
 import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
 import {
+  createRegexFromList,
   getEntityKey,
   getIsRequiredValidateMessage,
   getMaxLengthValidationError,
   getObjectFromList,
 } from 'shared/utils';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { ItemFormValues } from '../../types/Builder.types';
 import {
@@ -37,6 +40,7 @@ import {
   PORT_REGEXP,
 } from './BuilderApplet.const';
 import {
+  ageRangeRegexp,
   checkScoreRegexp,
   getCommonSliderValidationProps,
   getConditionsMatch,
@@ -586,20 +590,30 @@ const scoreSchema = yup
   .required()
   .test('subscale-score-validator', getTestFunctionForSubscaleScore(checkScoreRegexp));
 const optionalTextSchema = yup.string().nullable();
-const SubscaleTableDataItemSchema = () =>
+const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
   yup
     .object({
       score: scoreSchema,
       rawScore: scoreSchema,
-      age: yup
-        .string()
-        .nullable()
-        .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
+      age: featureFlags.enableCahmiSubscaleScoring
+        ? yup.string().nullable().matches(ageRangeRegexp)
+        : yup
+            .string()
+            .nullable()
+            .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
       sex: yup
         .string()
         .nullable()
         .matches(/^[MF]?$/),
       optionalText: optionalTextSchema,
+      ...(featureFlags.enableCahmiSubscaleScoring
+        ? {
+            severity: yup
+              .string()
+              .nullable()
+              .matches(createRegexFromList(Array.from(TScoreSeverity))),
+          }
+        : {}),
     })
     .noUnknown()
     .required();
@@ -612,9 +626,10 @@ const TotalScoreTableDataItemSchema = () =>
     })
     .noUnknown();
 
-export const SubscaleTableDataSchema = yup.array().of(SubscaleTableDataItemSchema()).nullable();
+export const SubscaleTableDataSchema = (featureFlags: FeatureFlags) =>
+  yup.array().of(SubscaleTableDataItemSchema(featureFlags)).nullable();
 
-export const SubscaleSchema = () =>
+export const SubscaleSchema = (featureFlags: FeatureFlags) =>
   yup
     .object({
       name: yup
@@ -631,7 +646,7 @@ export const SubscaleSchema = () =>
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
-      subscaleTableData: SubscaleTableDataSchema,
+      subscaleTableData: SubscaleTableDataSchema(featureFlags),
     })
     .required();
 
@@ -750,7 +765,7 @@ export const ConditionSchema = () =>
     }),
   });
 
-export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
+export const ConditionalLogicSchema = (featureFlags: FeatureFlags) =>
   yup.object({
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
     itemKey: yup
@@ -782,7 +797,7 @@ export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
       }),
     conditions: yup
       .array()
-      .of(enableItemFlowExtendedItems ? ItemFlowConditionSchema() : ConditionSchema()),
+      .of(featureFlags.enableItemFlowExtendedItems ? ItemFlowConditionSchema() : ConditionSchema()),
   });
 
 const getReportCommonFields = (isScoreReport = false) => ({
@@ -946,7 +961,7 @@ export const ScoreOrSectionSchema = () =>
     }),
   });
 
-export const ActivitySchema = (enableItemFlowExtendedItems: boolean) =>
+export const ActivitySchema = (featureFlags: FeatureFlags) =>
   yup.object({
     name: yup
       .string()
@@ -988,11 +1003,11 @@ export const ActivitySchema = (enableItemFlowExtendedItems: boolean) =>
     subscaleSetting: yup
       .object({
         calculateTotalScore: yup.string().nullable(),
-        subscales: yup.array().of(SubscaleSchema()),
+        subscales: yup.array().of(SubscaleSchema(featureFlags)),
         totalScoresTableData: yup.array().of(TotalScoreTableDataItemSchema()).nullable(),
       })
       .nullable(),
-    conditionalLogic: yup.array().of(ConditionalLogicSchema(enableItemFlowExtendedItems)),
+    conditionalLogic: yup.array().of(ConditionalLogicSchema(featureFlags)),
     scoresAndReports: yup
       .object({
         generateReport: yup.boolean(),
@@ -1036,7 +1051,7 @@ export const ActivityFlowSchema = () =>
     })
     .required();
 
-export const AppletSchema = (enableItemFlowExtendedItems: boolean) =>
+export const AppletSchema = (featureFlags: FeatureFlags) =>
   yup.object({
     displayName: yup.string().required(getIsRequiredValidateMessage('appletName')),
     description: yup.string(),
@@ -1044,7 +1059,7 @@ export const AppletSchema = (enableItemFlowExtendedItems: boolean) =>
     about: yup.string(),
     image: yup.string(),
     watermark: yup.string(),
-    activities: yup.array().of(ActivitySchema(enableItemFlowExtendedItems)).min(1),
+    activities: yup.array().of(ActivitySchema(featureFlags)).min(1),
     activityFlows: yup.array().of(ActivityFlowSchema()),
     streamIpAddress: yup.string().matches(IP_ADDRESS_REGEXP, t('invalidIpAddress')).nullable(),
     streamPort: yup.string().matches(PORT_REGEXP, t('invalidPort')).nullable(),

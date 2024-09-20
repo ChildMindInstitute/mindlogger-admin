@@ -29,7 +29,11 @@ const FormComponent = forwardRef(({ defaultValues, children }: FormComponentProp
   const methods = useForm<AppletFormValues>({
     defaultValues: defaultValues ?? mockedAppletFormData,
     mode: 'onChange',
-    resolver: yupResolver(AppletSchema(ENABLE_ITEM_FLOW_EXTENDED_ITEMS)),
+    resolver: yupResolver(
+      AppletSchema({
+        enableItemFlowExtendedItems: ENABLE_ITEM_FLOW_EXTENDED_ITEMS,
+      }),
+    ),
   });
 
   useImperativeHandle(ref, () => methods, [ref]);

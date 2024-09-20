@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
 
+import { FileError } from 'shared/components';
+
+type LookupTableFile = { name: string; data: Record<string, string | number>[] };
+
 type LookupTableUploaderProps = {
-  onFileReady: (data: { name: string; data: Record<string, string | number>[] }) => void;
+  onFileReady: (data: LookupTableFile) => void | FileError;
+  validationError?: JSX.Element | string | null;
 };
 
-const lookupTableFileData = {
+const lookupTableFileData: LookupTableFile = {
   name: 'subscale_lookup_table_template (12).csv',
   data: [
     {
@@ -47,10 +52,16 @@ const lookupTableFileData = {
   ],
 };
 
-export const FileUploader = ({ onFileReady }: LookupTableUploaderProps) => {
+export const setMockLookupTableFileData = (
+  mockLookupTableFileData: Record<string, string | number>[],
+) => {
+  lookupTableFileData.data = mockLookupTableFileData;
+};
+
+export const FileUploader = ({ onFileReady, validationError }: LookupTableUploaderProps) => {
   useEffect(() => {
     onFileReady(lookupTableFileData);
   }, []);
 
-  return null;
+  return validationError || null;
 };

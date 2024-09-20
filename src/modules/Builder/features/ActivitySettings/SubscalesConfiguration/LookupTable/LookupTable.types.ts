@@ -17,6 +17,7 @@ export type LookupTableProps = {
 
 export type LookupTableSetupHookProps = {
   errors: LabelsObject['errors'];
+  warnings: LabelsObject['warnings'];
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
@@ -36,6 +37,9 @@ export type LabelsObject = {
     fileCantBeParsed: JSX.Element;
     onDelete: JSX.Element | string;
   };
+  warnings: {
+    incompleteSeverityData: string;
+  };
 };
 
 export type GetComponentsProps = {
@@ -43,6 +47,7 @@ export type GetComponentsProps = {
   columnData: LookupTableProps['columnData'];
   data?: DataTableItem[];
   error: JSX.Element | null;
+  warning: string | null;
   labelsObject: LabelsObject;
   onFileReady: (file: ImportedFile | null) => void;
   onDownloadTemplate: FileUploaderProps['onDownloadTemplate'];
@@ -78,10 +83,15 @@ export const enum ModalType {
 
 export type Steps = 0 | 1;
 
+export const TScoreSeverity = ['Minimal', 'Mild', 'Moderate', 'Severe', ''] as const;
+
+export type TScoreSeverity = (typeof TScoreSeverity)[number];
+
 export type LookupTableDataItem = DataTableItem & {
   score?: string;
   rawScore: string;
   optionalText: string;
+  severity?: TScoreSeverity | null;
   age?: string | number | null;
   sex?: string | null;
   id: string;
