@@ -21,7 +21,7 @@ import {
 } from 'shared/styles';
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useFeatureFlags } from 'shared/hooks';
 import {
   Assignment,
   getAppletActivitiesApi,
@@ -72,6 +72,9 @@ export const ActivityAssignDrawer = ({
   ...rest
 }: ActivityAssignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityAssign' });
+  const { featureFlags } = useFeatureFlags();
+  const enableActivityAssignFlag = featureFlags.enableActivityAssign;
+
   const drawerRef = useRef<HTMLDivElement>(null);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -127,7 +130,6 @@ export const ActivityAssignDrawer = ({
     activitiesData?.data?.result?.appletDetail?.activityFlows ?? [],
     activities,
   );
-  const activitiesCount = activities.length + flows.length;
 
   const defaultValues = {
     activityIds: activityId ? [activityId] : [],
@@ -179,21 +181,39 @@ export const ActivityAssignDrawer = ({
     drawerRef.current?.scrollTo({ top, behavior: 'smooth' });
   };
 
+  // Note: Once 'enableActivityAssignFlag flag is removed, the following variables can be
+  // simplified and replaced by the logic w/in the `if` block.
+  let assignableActivities = activities.map(({ id = '' }) => id);
+  let assignableFlows = flows.map(({ id = '' }) => id);
+  let activitiesCount = activities.length + flows.length;
+  let selectAllIsChecked = selectionCount === activitiesCount;
+  let disableSelectAll;
+
+  if (enableActivityAssignFlag) {
+    assignableActivities = activities
+      .map(({ autoAssign, id = '' }) => !autoAssign && id)
+      .filter((activity) => !!activity) as [] | string[];
+
+    assignableFlows = flows
+      .map(({ autoAssign, id = '' }) => !autoAssign && id)
+      .filter((flow) => !!flow) as [] | string[];
+
+    activitiesCount = assignableActivities.length + assignableFlows.length;
+    selectAllIsChecked = activitiesCount !== 0 && selectionCount === activitiesCount;
+
+    disableSelectAll =
+      activities.every(({ autoAssign }) => autoAssign) &&
+      flows.every(({ autoAssign }) => autoAssign);
+  }
+  // ---
+
   const handleSelectAll = () => {
     if (selectionCount === activitiesCount) {
       setValue('activityIds', [], { shouldDirty: true });
       setValue('flowIds', [], { shouldDirty: true });
     } else {
-      setValue(
-        'activityIds',
-        activities.map(({ id = '' }) => id),
-        { shouldDirty: true },
-      );
-      setValue(
-        'flowIds',
-        flows.map(({ id = '' }) => id),
-        { shouldDirty: true },
-      );
+      setValue('activityIds', assignableActivities, { shouldDirty: true });
+      setValue('flowIds', assignableFlows, { shouldDirty: true });
     }
   };
 
@@ -506,11 +526,13 @@ export const ActivityAssignDrawer = ({
                     size="small"
                     onClick={handleSelectAll}
                     data-testid={`${dataTestId}-select-all`}
+                    disabled={disableSelectAll}
                   >
                     {t('selectAll')}
                     <ActivityCheckbox
-                      checked={selectionCount === activitiesCount}
+                      checked={selectAllIsChecked}
                       onChange={handleSelectAll}
+                      disabled={disableSelectAll}
                     />
                   </Button>
                 </StyledFlexTopBaseline>
