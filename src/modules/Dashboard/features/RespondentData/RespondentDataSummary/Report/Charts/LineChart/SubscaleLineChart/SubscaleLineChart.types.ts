@@ -6,7 +6,7 @@ export type ActivityCompletion = {
   date: Date;
   score: number;
   optionText?: string;
-  severity?: string;
+  severity?: string | null;
 };
 
 export type Subscale = {

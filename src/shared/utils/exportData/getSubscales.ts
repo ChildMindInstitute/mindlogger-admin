@@ -131,7 +131,7 @@ export const calcScores = <T>(
         }
       }
 
-      const hasAgeInterval = age && age.includes(INTERVAL_SYMBOL);
+      const hasAgeInterval = age && typeof age === 'string' && age.includes(INTERVAL_SYMBOL);
       let withAge = true;
 
       if (age) {

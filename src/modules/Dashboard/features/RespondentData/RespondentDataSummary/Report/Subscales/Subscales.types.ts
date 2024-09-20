@@ -17,7 +17,7 @@ export type LabeledSubscaleScore = {
 
 export type AdditionalInformation = {
   optionText: string;
-  severity?: string;
+  severity?: string | null;
   'data-testid'?: string;
 };
 
@@ -31,7 +31,7 @@ export type SubscalesProps = {
 export type CalculatedSubscaleScore = {
   score: number;
   optionText: string;
-  severity?: string;
+  severity?: string | null;
 };
 
 export type CalculatedSubscaleScores = {
@@ -41,7 +41,7 @@ export type CalculatedSubscaleScores = {
 export type ParsedSubscale = {
   score: number;
   optionText: string;
-  severity?: string;
+  severity?: string | null;
   date: Date;
   activityCompletionID?: string;
   activityItems: Record<string, ActivityItemAnswer>;
@@ -65,7 +65,7 @@ export type ActivityCompletionToRender = {
     items?: SingleMultiSelectionSliderFormattedResponses[];
     score: number;
     optionText?: string;
-    severity?: string;
+    severity?: string | null;
     restScores?: CalculatedSubscaleScores;
   };
 };
@@ -82,7 +82,7 @@ export type Subscale = {
   items?: SingleMultiSelectionSliderFormattedResponses[];
   score?: number;
   optionText?: string;
-  severity?: string;
+  severity?: string | null;
   restScores: Record<string, Subscale>;
 };
 

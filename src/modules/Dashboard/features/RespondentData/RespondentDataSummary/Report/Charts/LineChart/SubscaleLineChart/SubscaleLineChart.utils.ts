@@ -189,7 +189,6 @@ export const getSeveritySvg = (severity: TScoreSeverity, color: string) => {
     case 'Severe':
       svg = severeSeveritySvg;
       break;
-    case '':
     default:
       svg = defaultSeveritySvg;
       break;

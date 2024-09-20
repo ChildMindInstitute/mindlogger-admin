@@ -22,6 +22,7 @@ import {
 import { BaseSchema } from 'shared/state/Base';
 import { ElementType, RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils/encryption';
+import { LookupTableDataItem } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 type ActivityFlowItem = {
   activityId: string;
@@ -861,7 +862,7 @@ export type ActivitySettingsSubscale<T = ActivitySettingsSubscaleItem> = {
   name: string;
   scoring: SubscaleTotalScore;
   items: T[];
-  subscaleTableData?: Record<string, string>[] | null;
+  subscaleTableData?: LookupTableDataItem[] | null;
 };
 
 export type SingleApplet = {

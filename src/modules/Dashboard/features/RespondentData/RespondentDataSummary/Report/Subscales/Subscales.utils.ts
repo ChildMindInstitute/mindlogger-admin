@@ -166,7 +166,7 @@ export const groupSubscales = (
     {},
   );
 
-  const root = Object.keys(data).reduce((acc: GroupedSubscales, curr) => {
+  const root = Object.keys(data).reduce<GroupedSubscales>((acc, curr) => {
     if (currRestScores[curr]) return acc;
     const restScores = data[curr]?.restScores ?? {};
     const scores = Object.keys(restScores);
