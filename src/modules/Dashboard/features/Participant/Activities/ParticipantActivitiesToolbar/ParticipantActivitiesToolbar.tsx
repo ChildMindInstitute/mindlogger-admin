@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonWithMenu, Search, Svg } from 'shared/components';
+import { ButtonWithMenu, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { workspaces } from 'redux/modules';
@@ -62,12 +62,16 @@ export const ParticipantActivitiesToolbar = ({
       )}
 
       <StyledFlexWrap sx={{ gap: 1.2 }}>
+        {/*
+        TODO: Search currently does nothing, commenting out. Should be implemented as part of
+        filters task: https://mindlogger.atlassian.net/browse/M2-5530
         <Search
           data-testid={`${dataTestId}-search`}
           placeholder={t('searchActivities')}
           sx={{ width: '32rem' }}
           withDebounce
         />
+        */}
 
         {canAssignActivity && (
           <Button data-testid={`${dataTestId}-assign`} onClick={onClickAssign} variant="contained">
