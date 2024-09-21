@@ -42,7 +42,10 @@ export const AdditionalInformation = ({
       </StyledHeader>
       <StyledContent>
         {featureFlags.enableCahmiSubscaleScoring && severity && (
-          <StyledTitleBoldMedium sx={{ pl: theme.spacing(2) }}>
+          <StyledTitleBoldMedium
+            sx={{ pl: theme.spacing(2) }}
+            data-testid={`${dataTestid}-severity`}
+          >
             {t('subscaleLookupTable.column.severity')}: {severity}
           </StyledTitleBoldMedium>
         )}
