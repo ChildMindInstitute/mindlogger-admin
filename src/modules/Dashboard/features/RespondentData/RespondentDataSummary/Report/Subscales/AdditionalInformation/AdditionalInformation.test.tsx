@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
@@ -13,9 +11,13 @@ const mockedLinkResponse = 'This is the response from the link API';
 
 jest.mock('./AdditionalInformation.styles', () => ({
   ...jest.requireActual('./AdditionalInformation.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
+  StyledMdPreview: ({
+    modelValue,
+    'data-testid': dataTestid,
+  }: {
+    modelValue: string;
+    'data-testid': string;
+  }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
 describe('AdditionalInformation component', () => {
@@ -24,7 +26,7 @@ describe('AdditionalInformation component', () => {
   });
 
   test('renders AdditionalInformation component with regular text', () => {
-    renderWithProviders(<AdditionalInformation optionText={mockedOptionText} />);
+    renderWithProviders(<AdditionalInformation optionText={mockedOptionText} severity={null} />);
 
     expect(screen.getByText('Additional Information')).toBeInTheDocument();
     expect(screen.getByText(mockedOptionText)).toBeInTheDocument();
@@ -35,7 +37,9 @@ describe('AdditionalInformation component', () => {
       data: mockedLinkResponse,
     });
 
-    renderWithProviders(<AdditionalInformation optionText={mockedLinkOptionText} />);
+    renderWithProviders(
+      <AdditionalInformation optionText={mockedLinkOptionText} severity={null} />,
+    );
 
     expect(screen.getByText('Additional Information')).toBeInTheDocument();
 

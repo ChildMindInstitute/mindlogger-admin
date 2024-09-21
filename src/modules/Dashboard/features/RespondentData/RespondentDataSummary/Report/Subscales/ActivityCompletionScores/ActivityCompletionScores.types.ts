@@ -1,10 +1,10 @@
-import { LabeledSubscaleScore } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
+import { ChartData } from '../../Charts/BarChart/BarChart.types';
 
 export type ScoresProps = {
   reviewDate?: number;
   finalSubscaleScore?: number;
   frequency?: number;
   optionText?: string;
-  subscaleScores: LabeledSubscaleScore[];
+  subscaleScores: ChartData[];
   showAllSubscaleResultsVisible: boolean;
 };

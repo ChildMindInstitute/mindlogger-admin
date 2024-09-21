@@ -1,12 +1,13 @@
 import { Chart, ChartType, TooltipItem } from 'chart.js';
 
 import { Version } from 'api';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 export type ActivityCompletion = {
   date: Date;
   score: number;
   optionText?: string;
-  severity?: string | null;
+  severity?: TScoreSeverity | null;
 };
 
 export type Subscale = {
@@ -31,14 +32,14 @@ export type TooltipData = {
   label: string;
   value: number;
   optionText: string;
-  severity: string;
+  severity: TScoreSeverity;
 };
 
 export type SubscaleLineDataPointRaw = {
   x: Date;
   y: number;
   optionText: string;
-  severity: string;
+  severity: TScoreSeverity;
 };
 
 export type TooltipItemWithRawData<TType extends ChartType, RawDataType> = Omit<

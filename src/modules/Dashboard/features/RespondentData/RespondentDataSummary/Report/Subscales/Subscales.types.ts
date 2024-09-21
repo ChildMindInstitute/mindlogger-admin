@@ -5,19 +5,15 @@ import {
   ActivityCompletion,
   SingleMultiSelectionSliderFormattedResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 export const enum SubscalesTypes {
   Table = 'Table',
 }
 
-export type LabeledSubscaleScore = {
-  label: string;
-  score: number;
-};
-
 export type AdditionalInformation = {
   optionText: string;
-  severity?: string | null;
+  severity: TScoreSeverity | null;
   'data-testid'?: string;
 };
 
@@ -31,7 +27,7 @@ export type SubscalesProps = {
 export type CalculatedSubscaleScore = {
   score: number;
   optionText: string;
-  severity?: string | null;
+  severity: TScoreSeverity | null;
 };
 
 export type CalculatedSubscaleScores = {
@@ -41,7 +37,7 @@ export type CalculatedSubscaleScores = {
 export type ParsedSubscale = {
   score: number;
   optionText: string;
-  severity?: string | null;
+  severity: TScoreSeverity | null;
   date: Date;
   activityCompletionID?: string;
   activityItems: Record<string, ActivityItemAnswer>;
@@ -65,7 +61,7 @@ export type ActivityCompletionToRender = {
     items?: SingleMultiSelectionSliderFormattedResponses[];
     score: number;
     optionText?: string;
-    severity?: string | null;
+    severity: TScoreSeverity | null;
     restScores?: CalculatedSubscaleScores;
   };
 };
@@ -82,7 +78,7 @@ export type Subscale = {
   items?: SingleMultiSelectionSliderFormattedResponses[];
   score?: number;
   optionText?: string;
-  severity?: string | null;
+  severity: TScoreSeverity | null;
   restScores: Record<string, Subscale>;
 };
 

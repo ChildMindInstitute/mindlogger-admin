@@ -159,12 +159,15 @@ export const calcScores = <T>(
       [data.name]: {
         score: Number(subscaleTableDataItem?.score) || getRoundTo2Decimal(calculatedScore),
         optionText: subscaleTableDataItem?.optionalText || '',
-        severity: subscaleTableDataItem?.severity,
+        severity: subscaleTableDataItem?.severity || null,
       },
     };
   }
 
-  return { ...result, [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '' } };
+  return {
+    ...result,
+    [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+  };
 };
 
 export const calcTotalScore = (
