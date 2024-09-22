@@ -20,7 +20,13 @@ import { getSeveritySvg } from '../../Charts/LineChart/SubscaleLineChart/Subscal
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
-export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllScoresProps) => {
+export const AllScores = ({
+  data,
+  latestFinalScore,
+  frequency,
+  versions,
+  'data-testid': dataTestId,
+}: AllScoresProps) => {
   const { t } = useTranslation('app');
   const { featureFlags } = useFeatureFlags();
 
@@ -39,21 +45,21 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
   ));
 
   return (
-    <Box sx={{ mb: theme.spacing(2.4) }} data-testid="all-scores">
+    <Box sx={{ mb: theme.spacing(2.4) }} data-testid={`${dataTestId}-container`}>
       <StyledHeadline sx={{ mb: theme.spacing(0.8), color: variables.palette.on_surface }}>
         {t('subscaleScores')}
       </StyledHeadline>
       <StyledFlexTopStart>
         {!!latestFinalScore && (
           <>
-            <StyledBodyMedium data-testid="latest-final-subscale-score">
+            <StyledBodyMedium data-testid={`${dataTestId}-latest-final-subscale-score`}>
               {t('latestFinalSubscaleScore')}: {latestFinalScore}
             </StyledBodyMedium>
             {StringDivider}
           </>
         )}
         {!!frequency && (
-          <StyledBodyMedium data-testid="frequency">
+          <StyledBodyMedium data-testid={`${dataTestId}-frequency`}>
             {t('frequency')}: {frequency}
           </StyledBodyMedium>
         )}
@@ -61,8 +67,8 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
       <SubscaleLineChart data={data} versions={versions} />
       {featureFlags.enableCahmiSubscaleScoring && (
         <StyledFlexTopCenter
-          className="line-chart-legend"
           sx={{ justifyContent: 'flex-start', gap: theme.spacing(1.6) }}
+          data-testid={`${dataTestId}-line-chart-legend`}
         >
           <StyledBodyMedium sx={{ lineHeight: theme.spacing(2.4) }}>{t('key')}:</StyledBodyMedium>
           {LegendIcons}
