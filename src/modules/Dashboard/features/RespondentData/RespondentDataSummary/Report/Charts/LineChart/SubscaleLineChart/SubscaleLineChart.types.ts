@@ -32,14 +32,14 @@ export type TooltipData = {
   label: string;
   value: number;
   optionText: string;
-  severity: TScoreSeverity;
+  severity: TScoreSeverity | null;
 };
 
 export type SubscaleLineDataPointRaw = {
   x: Date;
   y: number;
   optionText: string;
-  severity: TScoreSeverity;
+  severity: TScoreSeverity | null;
 };
 
 export type TooltipItemWithRawData<TType extends ChartType, RawDataType> = Omit<

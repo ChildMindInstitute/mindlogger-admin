@@ -44,7 +44,7 @@ export const ChartTooltip = ({ dataPoints, 'data-testid': dataTestid }: ChartToo
                   </StyledLabelMedium>
                 </StyledFlexTopCenter>
                 {featureFlags.enableCahmiSubscaleScoring && severity && (
-                  <StyledTitleBoldMedium>
+                  <StyledTitleBoldMedium data-testid={`${dataTestid}-severity-${index}`}>
                     {t('subscaleLookupTable.column.severity')}: {severity}
                   </StyledTitleBoldMedium>
                 )}

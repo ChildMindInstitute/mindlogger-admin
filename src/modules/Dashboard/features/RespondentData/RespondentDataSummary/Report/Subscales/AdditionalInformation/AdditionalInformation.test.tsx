@@ -72,7 +72,10 @@ describe('AdditionalInformation component', () => {
         data-testid={dataTestId}
       />,
     );
-    expect(screen.queryByTestId(`${dataTestId}-severity`)).not.toBeNull();
+
+    const severity = screen.queryByTestId(`${dataTestId}-severity`);
+    expect(severity).not.toBeNull();
+    expect(severity?.textContent).toEqual('Severity: Mild');
   });
 
   test('Does not render severity text when it is not provided', () => {
