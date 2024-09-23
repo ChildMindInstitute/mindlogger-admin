@@ -332,7 +332,7 @@ export const Participants = () => {
 
     const defaultOnClick = () => {
       navigate(
-        generatePath(page.appletParticipantActivities, {
+        generatePath(page.appletParticipantDetails, {
           appletId,
           subjectId: detail.subjectId,
         }),

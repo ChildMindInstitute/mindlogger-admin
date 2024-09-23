@@ -134,7 +134,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         label: respondentLabel || subjectLabel,
         disabledLink: !currentActivity,
         navPath: currentActivity
-          ? generatePath(page.appletParticipantActivities, {
+          ? generatePath(page.appletParticipantDetails, {
               appletId,
               subjectId: subjectId || respondentId,
             })

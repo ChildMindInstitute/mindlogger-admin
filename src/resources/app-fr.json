@@ -276,6 +276,9 @@
   "assign": "Attribuer",
   "assignActivity": "Attribuer l'activité",
   "assignFlow": "Attribuer le flux",
+  "assignments": "Attributions",
+  "activitiesByParticipant": "Par le participant",
+  "activitiesAboutParticipant": "Concernant le participant",
   "assessment": "Évaluation",
   "at": "À",
   "lowercaseAt": "à",
@@ -1030,6 +1033,10 @@
     "participantGrouping": "Participants",
     "notFound": "Pas trouvé",
     "limitedAccountIconTooltip": "Les comptes limités nécessitent un participant supplémentaire pour être leur répondant."
+  },
+  "participantDetails": {
+    "byParticipant": "Par le participant",
+    "aboutParticipant": "Concernant le participant"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",

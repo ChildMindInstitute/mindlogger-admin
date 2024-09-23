@@ -276,6 +276,7 @@
   "assign": "Assign",
   "assignActivity": "Assign Activity",
   "assignFlow": "Assign Flow",
+  "assignments": "Assignments",
   "assessment": "Assessment",
   "at": "At",
   "lowercaseAt": "at",
@@ -1031,6 +1032,10 @@
     "participantGrouping": "Participants",
     "notFound": "Not Found",
     "limitedAccountIconTooltip": "Limited Accounts require an additional participant to be their respondent."
+  },
+  "participantDetails": {
+    "byParticipant": "By Participant",
+    "aboutParticipant": "About Participant"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
