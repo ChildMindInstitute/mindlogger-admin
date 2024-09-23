@@ -9,7 +9,9 @@ export const ActivityCheckbox = (props: CheckboxProps) => (
       <Svg
         id="add-circle"
         fill={
-          props.disabled ? variables.palette.outline_variant : variables.palette.on_surface_variant
+          props.disabled
+            ? variables.palette.on_surface_variant_alfa16
+            : variables.palette.on_surface_variant
         }
       />
     }
