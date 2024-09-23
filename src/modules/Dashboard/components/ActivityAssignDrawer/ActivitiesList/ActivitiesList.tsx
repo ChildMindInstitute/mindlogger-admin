@@ -4,7 +4,6 @@ import { ListItemIcon, ListItemText } from '@mui/material';
 import { Chip, ChipShape, Svg, Tooltip } from 'shared/components';
 import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
 import { StyledActivityThumbnailContainer, StyledActivityThumbnailImg } from 'shared/styles';
-import { useFeatureFlags } from 'shared/hooks';
 
 import {
   StyledList,
@@ -27,8 +26,6 @@ export const ActivitiesList = ({
   'data-testid': dataTestId,
 }: ActivitiesListProps) => {
   const { t } = useTranslation('app');
-  const { featureFlags } = useFeatureFlags();
-  const enableActivityAssignFlag = featureFlags.enableActivityAssign;
 
   const handleActivityClick = (id: string) => {
     if (!activityIds || !onChangeActivityIds) return;
@@ -55,10 +52,7 @@ export const ActivitiesList = ({
   return (
     <StyledList data-testid={dataTestId} sx={isReadOnly ? { height: 'auto', py: 0.5 } : undefined}>
       {flows.map(({ id = '', activities, name, autoAssign }) => (
-        <Tooltip
-          placement="left"
-          tooltipTitle={enableActivityAssignFlag && autoAssign && t('autoAssignFlowDisabled')}
-        >
+        <Tooltip placement="left" tooltipTitle={autoAssign && t('autoAssignFlowDisabled')}>
           <StyledListItem
             key={id}
             secondaryAction={
@@ -67,7 +61,7 @@ export const ActivitiesList = ({
                   checked={flowIds?.includes(id)}
                   onChange={() => handleFlowClick(id)}
                   data-testid={`${dataTestId}-flow-checkbox-${id}`}
-                  disabled={enableActivityAssignFlag ? autoAssign : undefined}
+                  disabled={autoAssign}
                 />
               )
             }
@@ -75,7 +69,7 @@ export const ActivitiesList = ({
           >
             <ButtonComponent
               onClick={isReadOnly ? undefined : () => handleFlowClick(id)}
-              disabled={enableActivityAssignFlag ? autoAssign : undefined}
+              disabled={autoAssign}
             >
               <ListItemIcon>
                 <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
@@ -102,10 +96,7 @@ export const ActivitiesList = ({
       ))}
 
       {activities.map(({ id = '', name, image, autoAssign }) => (
-        <Tooltip
-          placement="left"
-          tooltipTitle={enableActivityAssignFlag && autoAssign && t('autoAssignActivityDisabled')}
-        >
+        <Tooltip placement="left" tooltipTitle={autoAssign && t('autoAssignActivityDisabled')}>
           <StyledListItem
             key={id}
             secondaryAction={
@@ -114,7 +105,7 @@ export const ActivitiesList = ({
                   checked={activityIds?.includes(id)}
                   onChange={() => handleActivityClick(id)}
                   data-testid={`${dataTestId}-activity-checkbox-${id}`}
-                  disabled={enableActivityAssignFlag ? autoAssign : undefined}
+                  disabled={autoAssign}
                 />
               )
             }
@@ -122,7 +113,7 @@ export const ActivitiesList = ({
           >
             <ButtonComponent
               onClick={isReadOnly ? undefined : () => handleActivityClick(id)}
-              disabled={enableActivityAssignFlag ? autoAssign : undefined}
+              disabled={autoAssign}
             >
               <ListItemIcon>
                 <StyledActivityThumbnailContainer sx={{ width: '4.8rem', height: '4.8rem' }}>
