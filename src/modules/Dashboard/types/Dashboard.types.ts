@@ -3,14 +3,13 @@ import { Encryption } from 'shared/utils';
 import { Invitation, InvitationStatus } from 'shared/types';
 import { ActivityFlow, Activity } from 'redux/modules';
 
+import { Role } from '../features/Managers/Popups/ManagersEditAccessPopup/ManagersEditAccessPopup.types';
+
 export type ManagerApplet = {
   id: string;
   displayName: string;
   image?: string;
-  roles: {
-    accessId?: string;
-    role: Roles;
-  }[];
+  roles: Role[];
   encryption?: Encryption;
 };
 

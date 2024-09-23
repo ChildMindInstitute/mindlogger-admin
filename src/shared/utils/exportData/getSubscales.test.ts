@@ -72,30 +72,30 @@ const mockedSubscaleSettingWithAverageCalculation = {
   calculateTotalScore: SubscaleTotalScore.Average,
 };
 const itemsWithOptTextExpected = {
-  [data.name]: { optionText: 'Description #2 for range 4~20', score: 5 },
+  [data.name]: { optionText: 'Description #2 for range 4~20', score: 5, severity: null },
 };
 const itemsWithOptTextWithAverageCalculationExpected = {
-  [data.name]: { optionText: 'Description #1 for range 0~4', score: 1.67 },
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 1.67, severity: null },
 };
 const itemsWithoutOptTextExpected = {
-  [data.name]: { optionText: '', score: 5 },
+  [data.name]: { optionText: '', score: 5, severity: null },
 };
 
 const itemsWithSingleAndMultiHiddenWithOptTextExpected = {
-  [data.name]: { optionText: 'Description #1 for range 0~4', score: 3 },
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 3, severity: null },
 };
 const itemsWithSingleAndMultiHiddenWithoutOptTextExpected = {
-  [data.name]: { optionText: '', score: 3 },
+  [data.name]: { optionText: '', score: 3, severity: null },
 };
 
 const emptyItemsWithOptTextExpected = {
-  [data.name]: { optionText: 'Description #1 for range 0~4', score: 0 },
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 0, severity: null },
 };
 const emptyItemsWithoutOptTextExpected = {
-  [data.name]: { optionText: '', score: 0 },
+  [data.name]: { optionText: '', score: 0, severity: null },
 };
 const itemsWithoutTypeExpected = {
-  [data.name]: { optionText: 'Description #1 for range 0~4', score: 0 },
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 0, severity: null },
 };
 const filledSubscaleScores = {
   'Final SubScale Score': 5,
@@ -129,6 +129,7 @@ describe('getSubscales', () => {
       },
     );
   });
+
   describe('parseSex', () => {
     test.each`
       sex          | expected
@@ -143,17 +144,31 @@ describe('getSubscales', () => {
   });
 
   describe('calcScores', () => {
+    const mockLookupTableWithSeverity = [
+      {
+        score: '10',
+        rawScore: '5',
+        age: '25',
+        sex: null,
+        optionalText: 'Awesome text',
+        severity: 'Mild',
+      },
+    ];
+
+    const itemsWithSeverityExpected = {
+      [data.name]: { optionText: 'Awesome text', score: 10, severity: 'Mild' },
+    };
+
     test.each`
-      subscaleItems               | subscaleTableData             | expected                            | description
-      ${subscaleItems}            | ${mockedTotalScoresTableData} | ${itemsWithOptTextExpected}         | ${'should return score=5'}
-      ${subscaleItems}            | ${null}                       | ${itemsWithoutOptTextExpected}      | ${'should return score=5 without opt text'}
-      ${[]}                       | ${mockedTotalScoresTableData} | ${emptyItemsWithOptTextExpected}    | ${'should return score=0'}
-      ${[]}                       | ${null}                       | ${emptyItemsWithoutOptTextExpected} | ${'should return score=0 without opt text'}
-      ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData} | ${itemsWithoutTypeExpected}         | ${'should return score=0'}
+      subscaleItems               | subscaleTableData              | expected                            | description
+      ${subscaleItems}            | ${mockedTotalScoresTableData}  | ${itemsWithOptTextExpected}         | ${'should return score=5'}
+      ${subscaleItems}            | ${mockLookupTableWithSeverity} | ${itemsWithSeverityExpected}        | ${'should return score=10 with severity'}
+      ${subscaleItems}            | ${null}                        | ${itemsWithoutOptTextExpected}      | ${'should return score=5 without opt text'}
+      ${[]}                       | ${mockedTotalScoresTableData}  | ${emptyItemsWithOptTextExpected}    | ${'should return score=0'}
+      ${[]}                       | ${null}                        | ${emptyItemsWithoutOptTextExpected} | ${'should return score=0 without opt text'}
+      ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData}  | ${itemsWithoutTypeExpected}         | ${'should return score=0'}
     `('$description', ({ subscaleItems, subscaleTableData, expected }) => {
       const subscaleData = { ...data, subscaleTableData, items: subscaleItems };
-      /* eslint-disable @typescript-eslint/ban-ts-comment */
-      // @ts-ignore
       expect(calcScores(subscaleData, activityItems, subscaleObject, {})).toEqual(expected);
     });
   });
@@ -168,8 +183,6 @@ describe('getSubscales', () => {
       ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData} | ${itemsWithoutTypeExpected}                            | ${'should return score=0'}
     `('$description', ({ subscaleItems, subscaleTableData, expected }) => {
       const subscaleData = { ...data, subscaleTableData, items: subscaleItems };
-      /* eslint-disable @typescript-eslint/ban-ts-comment */
-      // @ts-ignore
       expect(calcScores(subscaleData, activityItemsWithoutHiddenItems, subscaleObject, {})).toEqual(
         expected,
       );
