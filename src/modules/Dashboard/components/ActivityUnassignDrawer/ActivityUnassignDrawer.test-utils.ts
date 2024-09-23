@@ -1,4 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
+
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 const DEFAULT_TEST_ID = 'applet-activity-unassign-assignments-table';
 
@@ -6,18 +8,23 @@ const DEFAULT_TEST_ID = 'applet-activity-unassign-assignments-table';
  * Check the values of an assignment
  */
 export const checkAssignment = (
-  respondent: string,
-  targetSubject: string,
+  respondentSubject: RespondentDetails,
+  targetSubject: RespondentDetails,
   index = 0,
   testId = DEFAULT_TEST_ID,
 ) => {
-  const respondentInput = screen
-    .getByTestId(`${testId}-${index}-respondent-dropdown`)
-    .querySelector('input');
-  const targetSubjectInput = screen
-    .getByTestId(`${testId}-${index}-target-subject-dropdown`)
-    .querySelector('input');
+  const withinRespondentCell = within(
+    screen.getByTestId(`${testId}-${index}-cell-respondentSubject`),
+  );
+  const withinTargetCell = within(screen.getByTestId(`${testId}-${index}-cell-targetSubject`));
 
-  expect(respondentInput).toHaveValue(respondent);
-  expect(targetSubjectInput).toHaveValue(targetSubject);
+  expect(withinRespondentCell.getByText(respondentSubject.nickname)).toBeInTheDocument();
+  if (respondentSubject.tag) {
+    expect(withinRespondentCell.getByText(respondentSubject.tag)).toBeInTheDocument();
+  }
+
+  expect(withinTargetCell.getByText(targetSubject.nickname)).toBeInTheDocument();
+  if (targetSubject.tag) {
+    expect(withinTargetCell.getByText(targetSubject.tag)).toBeInTheDocument();
+  }
 };

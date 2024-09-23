@@ -11,6 +11,7 @@ import {
   mockedEncryption,
   mockedLimitedRespondent,
   mockedOwnerId,
+  mockedOwnerRespondent,
   mockedRespondent,
   mockedRespondent2,
   mockedUserData,
@@ -19,8 +20,7 @@ import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/util
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantTag, Roles } from 'shared/consts';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { Roles } from 'shared/consts';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features';
 import { ApiResponseCodes } from 'api';
@@ -52,37 +52,6 @@ const mockedGetAppletActivities = {
 const mockedGetApplet = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: { result: mockedAppletData },
-};
-
-const mockedOwnerRespondent = {
-  id: mockedUserData.id,
-  nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
-  secretIds: ['mockedOwnerSecretId'],
-  isAnonymousRespondent: false,
-  lastSeen: new Date().toDateString(),
-  isPinned: false,
-  accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-  role: Roles.Owner,
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: mockedApplet.displayName,
-      appletImage: '',
-      accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-      respondentNickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
-      respondentSecretId: 'mockedOwnerSecretId',
-      hasIndividualSchedule: false,
-      encryption: mockedApplet.encryption,
-      subjectId: 'owner-subject-id-123',
-      subjectTag: 'Team' as ParticipantTag,
-      subjectFirstName: 'John',
-      subjectLastName: 'Doe',
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-    },
-  ],
-  status: RespondentStatus.Invited,
-  email: mockedUserData.email,
 };
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
