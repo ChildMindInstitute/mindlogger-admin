@@ -10,7 +10,7 @@ import { StyledAppletSettingsDescription } from 'shared/features/AppletSettings/
 import { useIsServerConfigured, useFeatureFlags } from 'shared/hooks';
 import { Integrations } from 'shared/consts';
 
-import { UploadDataPopup } from './UploadDataPopup';
+import { UploadDataPopup } from './UploadDataPopup/UploadDataPopup';
 
 export const LorisIntegrationSetting = () => {
   const [popupOpen, setPopupOpen] = useState(false);
