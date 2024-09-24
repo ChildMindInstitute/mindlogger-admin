@@ -68,7 +68,6 @@ const mockedActivity: AssignedActivity = {
 const props: ActivityUnassignDrawerProps = {
   appletId: mockedAppletId,
   activityOrFlow: mockedActivity,
-  participantContext: 'respondent',
   open: true,
   onClose: mockedOnClose,
 };

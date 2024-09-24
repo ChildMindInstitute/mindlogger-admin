@@ -40,7 +40,6 @@ export const ActivityUnassignDrawer = ({
   activityOrFlow,
   onClose,
   open = false,
-  participantContext = 'respondent',
   ...rest
 }: ActivityUnassignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityUnassign' });
@@ -71,7 +70,7 @@ export const ActivityUnassignDrawer = ({
   );
 
   const defaultValues = {
-    selectedAssignments: hasSingleAssignment ? [assignments[0]] : [],
+    selected: hasSingleAssignment ? [assignments[0]] : [],
   };
 
   const {
@@ -83,14 +82,14 @@ export const ActivityUnassignDrawer = ({
     resolver: yupResolver(
       yup
         .object({
-          selectedAssignments: yup.array().min(1).required(),
+          selected: yup.array().min(1).required(),
         })
         .required(),
     ),
     defaultValues,
   });
 
-  const selected = useWatch({ control, name: 'selectedAssignments' });
+  const selected = useWatch({ control, name: 'selected' });
 
   const assignmentCounts = useMemo(() => {
     const counts = { selfReports: 0, multiInformant: 0 };
@@ -118,7 +117,7 @@ export const ActivityUnassignDrawer = ({
         break;
 
       case 2:
-        handleSubmit(async ({ selectedAssignments }) => {
+        handleSubmit(async ({ selected: selectedAssignments }) => {
           if (!appletId) return;
 
           await deleteAssignments({
@@ -148,10 +147,7 @@ export const ActivityUnassignDrawer = ({
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const confirmationBody = useMemo(
-    () => getConfirmationBody({ selected, participantContext }),
-    [selected, participantContext],
-  );
+  const confirmationBody = useMemo(() => getConfirmationBody({ selected }), [selected]);
 
   return (
     <>
@@ -208,7 +204,7 @@ export const ActivityUnassignDrawer = ({
 
               <Controller
                 control={control}
-                name="selectedAssignments"
+                name="selected"
                 render={({ field: { onChange, value } }) => (
                   <AssignmentsTable
                     assignments={assignments}

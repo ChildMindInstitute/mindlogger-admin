@@ -85,6 +85,8 @@
     "confirmationButton": "Unassign",
     "confirmationBodyActivitySingle": "If you proceed, <0>{{respondent}}</0> will no longer be required to complete this activity about <0>{{target}}</0>. Any data previously collected will not be lost.",
     "confirmationBodyFlowSingle": "If you proceed, <0>{{respondent}}</0> will no longer be required to complete this flow about <0>{{target}}</0>. Any data previously collected will not be lost.",
+    "confirmationBodyActivityMultiple": "If you proceed, <0>{{selectedCount}} selected Respondents</0> will no longer be required to complete this activity about the <0>{{selectedCount}} selected Subjects</0>. Any data previously collected will not be lost.",
+    "confirmationBodyFlowMultiple": "If you proceed, <0>{{selectedCount}} selected Respondents</0> will no longer be required to complete this flow about the <0>{{selectedCount}} selected Subjects</0>. Any data previously collected will not be lost.",
     "confirmationBodyActivityMultipleTargets": "If you proceed, <0>{{respondent}}</0> will no longer be required to complete this activity about the <0>{{selectedCount}} selected Subjects</0>. Any data previously collected will not be lost.",
     "confirmationBodyFlowMultipleTargets": "If you proceed, <0>{{respondent}}</0> will no longer be required to complete this flow about the <0>{{selectedCount}} selected Subjects</0>. Any data previously collected will not be lost.",
     "confirmationBodyActivityMultipleRespondents": "If you proceed, the <0>{{selectedCount}} selected Respondents</0> will no longer be required to complete this activity about <0>{{target}}</0>. Any data previously collected will not be lost.",

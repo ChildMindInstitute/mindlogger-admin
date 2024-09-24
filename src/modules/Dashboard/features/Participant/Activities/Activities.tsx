@@ -366,10 +366,6 @@ export const Activities = () => {
         appletId={appletId}
         activityOrFlow={selectedActivityOrFlow}
         open={showActivityUnassign}
-        // TODO: Provide "respondent" or "target" below based on active tab of revised PDP screen
-        // https://mindlogger.atlassian.net/browse/M2-7767
-        // https://mindlogger.atlassian.net/browse/M2-7798
-        participantContext="respondent"
         onClose={(shouldRefetch?: boolean) => {
           setShowActivityUnassign(false);
           if (shouldRefetch && appletId && subjectId) {
