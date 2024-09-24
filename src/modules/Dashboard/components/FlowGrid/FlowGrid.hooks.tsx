@@ -90,7 +90,7 @@ export function useFlowGridMenu({
             if (flowId) onClickAssign(flowId);
           },
           icon: <Svg id="file-plus" />,
-          title: t('assignActivity'),
+          title: t('assignFlow'),
           isDisplayed: canAssign && !autoAssign,
         },
         {
@@ -99,10 +99,10 @@ export function useFlowGridMenu({
             if (flowId) onClickUnassign?.(flowId);
           },
           icon: <Svg id="clear-calendar" />,
-          title: t('unassignActivity'),
+          title: t('unassignFlow'),
           isDisplayed: canAssign && (autoAssign || isAssigned),
           disabled: autoAssign,
-          tooltip: autoAssign && t('unassignActivityDisabledTooltip'),
+          tooltip: autoAssign && t('unassignFlowDisabledTooltip'),
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {

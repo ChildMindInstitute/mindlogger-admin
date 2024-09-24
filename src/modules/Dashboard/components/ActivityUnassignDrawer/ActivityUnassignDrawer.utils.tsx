@@ -16,12 +16,15 @@ const getSubjectLabel = (subject?: RespondentDetails) => {
 };
 
 export const getConfirmationBody = ({ selected, participantContext }: GetConfirmationBodyProps) => {
+  const i18nKeyPrefix = `activityUnassign.confirmationBody${
+    selected[0]?.activityFlowId ? 'Flow' : 'Activity'
+  }`;
   const respondent = getSubjectLabel(selected[0]?.respondentSubject);
   const target = getSubjectLabel(selected[0]?.targetSubject);
 
   if (selected.length === 1) {
     return (
-      <Trans i18nKey="activityUnassign.confirmationBodySingle">
+      <Trans i18nKey={`${i18nKeyPrefix}Single`}>
         <strong>
           <>{{ respondent }}</>
         </strong>
@@ -40,7 +43,7 @@ export const getConfirmationBody = ({ selected, participantContext }: GetConfirm
   }
 
   return participantContext === 'respondent' ? (
-    <Trans i18nKey="activityUnassign.confirmationBodyMultipleTargets">
+    <Trans i18nKey={`${i18nKeyPrefix}MultipleTargets`}>
       <strong>
         <>{{ respondent }}</>
       </strong>
@@ -49,7 +52,7 @@ export const getConfirmationBody = ({ selected, participantContext }: GetConfirm
       </strong>
     </Trans>
   ) : (
-    <Trans i18nKey="activityUnassign.confirmationBodyMultipleRespondents">
+    <Trans i18nKey={`${i18nKeyPrefix}MultipleRespondents`}>
       <strong>
         <>{{ selectedCount: selected.length }}</>
       </strong>

@@ -5,7 +5,7 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Modal, Spinner } from 'shared/components';
+import { FlowChip, Modal, Spinner } from 'shared/components';
 import { Activity, workspaces } from 'redux/modules';
 import {
   StyledFlexColumn,
@@ -344,7 +344,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
           <StyledFlexTopCenter gap={2.4}>
             <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
-            <StyledHeadline sx={{ flexGrow: 1 }}>{activityOrFlow.name}</StyledHeadline>
+            <StyledFlexTopCenter sx={{ flexGrow: 1, gap: 0.8 }}>
+              <StyledHeadline>{activityOrFlow.name}</StyledHeadline>
+              {'activities' in activityOrFlow && <FlowChip />}
+            </StyledFlexTopCenter>
           </StyledFlexTopCenter>
           <StyledFlexColumn gap={2.4}>
             <StyledFlexColumn gap={0.8}>

@@ -3,6 +3,7 @@ import { Box, Button, Drawer, IconButton } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import {
   StyledActivityThumbnailContainer,
@@ -15,7 +16,7 @@ import {
   StyledHeadlineMedium,
   StyledTitleLarge,
 } from 'shared/styles';
-import { Chip, ChipShape, Svg } from 'shared/components';
+import { FlowChip, Svg } from 'shared/components';
 import { useAsync, useModalBanners } from 'shared/hooks';
 import { deleteAppletAssignmentsApi, PostAssignmentsParams } from 'api';
 import { ActivityFlowThumbnail, AssignmentCounts } from 'modules/Dashboard/components';
@@ -26,7 +27,6 @@ import {
   ActivityUnassignDrawerProps,
   ActivityUnassignFormValues,
 } from './ActivityUnassignDrawer.types';
-import { useActivityUnassignFormSchema } from './ActivityUnassignDrawer.schema';
 import { StyledFooter, StyledFooterWrapper, StyledHeader } from './ActivityUnassignDrawer.styles';
 import { ConfirmationPopup } from './ConfirmationPopup';
 import { ActivityUnassignBannerComponents } from './ActivityUnassignDrawer.const';
@@ -45,6 +45,7 @@ export const ActivityUnassignDrawer = ({
 }: ActivityUnassignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityUnassign' });
   const dispatch = useAppDispatch();
+  const isFlow = !!activityOrFlow && 'activities' in activityOrFlow;
   const assignments = useMemo(() => activityOrFlow?.assignments ?? [], [activityOrFlow]);
   const hasSingleAssignment = assignments.length === 1;
   const [step, setStep] = useState(1);
@@ -79,7 +80,13 @@ export const ActivityUnassignDrawer = ({
     formState: { isValid },
     reset,
   } = useForm<ActivityUnassignFormValues>({
-    resolver: yupResolver(useActivityUnassignFormSchema()),
+    resolver: yupResolver(
+      yup
+        .object({
+          selectedAssignments: yup.array().min(1).required(),
+        })
+        .required(),
+    ),
     defaultValues,
   });
 
@@ -158,7 +165,7 @@ export const ActivityUnassignDrawer = ({
       >
         <StyledHeader>
           <Box sx={{ position: 'relative', flex: 1 }}>
-            <StyledHeadlineMedium>{t('title')}</StyledHeadlineMedium>
+            <StyledHeadlineMedium>{t(`title${isFlow ? 'Flow' : 'Activity'}`)}</StyledHeadlineMedium>
           </Box>
 
           <StyledFlexTopCenter sx={{ gap: 0.8 }}>
@@ -184,22 +191,12 @@ export const ActivityUnassignDrawer = ({
                     alt={activityOrFlow.name}
                   />
                 )}
-                {activityOrFlow && 'activities' in activityOrFlow && (
-                  <ActivityFlowThumbnail activities={activityOrFlow.activities} />
-                )}
+                {isFlow && <ActivityFlowThumbnail activities={activityOrFlow.activities} />}
               </StyledActivityThumbnailContainer>
 
               <StyledFlexTopCenter sx={{ gap: 0.8 }}>
                 <StyledHeadline>{activityOrFlow?.name}</StyledHeadline>
-                {!!activityOrFlow && 'activities' in activityOrFlow && (
-                  <Chip
-                    color="primary"
-                    size="medium"
-                    icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
-                    shape={ChipShape.Rectangular}
-                    title={t('flow')}
-                  />
-                )}
+                {isFlow && <FlowChip />}
               </StyledFlexTopCenter>
             </StyledFlexTopCenter>
 

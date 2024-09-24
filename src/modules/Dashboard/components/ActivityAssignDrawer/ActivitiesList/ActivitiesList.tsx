@@ -1,9 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { ListItemIcon, ListItemText } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { Chip, ChipShape, Svg, Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components';
 import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
 import { StyledActivityThumbnailContainer, StyledActivityThumbnailImg } from 'shared/styles';
+import { FlowChip } from 'shared/components';
 
 import {
   StyledList,
@@ -80,13 +81,7 @@ export const ActivitiesList = ({
                 primary={
                   <StyledListItemTextPrimary>
                     {name}
-                    <Chip
-                      color="primary"
-                      size="medium"
-                      icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
-                      shape={ChipShape.Rectangular}
-                      title={t('flow')}
-                    />
+                    <FlowChip />
                   </StyledListItemTextPrimary>
                 }
               />
