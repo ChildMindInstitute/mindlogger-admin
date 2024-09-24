@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { ReactNode, useImperativeHandle, forwardRef } from 'react';
+import { ReactNode, useImperativeHandle, forwardRef, RefObject } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -15,6 +15,7 @@ type FormComponentProps = {
   defaultValues?: AppletFormValues;
   children: ReactNode;
 };
+
 type RenderWithAppletFormData = {
   children: ReactNode;
   appletFormData?: AppletFormValues;
@@ -28,7 +29,11 @@ const FormComponent = forwardRef(({ defaultValues, children }: FormComponentProp
   const methods = useForm<AppletFormValues>({
     defaultValues: defaultValues ?? mockedAppletFormData,
     mode: 'onChange',
-    resolver: yupResolver(AppletSchema(ENABLE_ITEM_FLOW_EXTENDED_ITEMS)),
+    resolver: yupResolver(
+      AppletSchema({
+        enableItemFlowExtendedItems: ENABLE_ITEM_FLOW_EXTENDED_ITEMS,
+      }),
+    ),
   });
 
   useImperativeHandle(ref, () => methods, [ref]);

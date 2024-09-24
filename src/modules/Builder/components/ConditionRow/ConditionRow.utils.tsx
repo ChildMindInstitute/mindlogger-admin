@@ -1,20 +1,26 @@
 import i18n from 'i18n';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
-import { ItemResponseType, ConditionType } from 'shared/consts';
+import { ConditionType, ItemResponseType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils/getEntityKey';
 import {
+  DateRangeValueCondition,
   OptionCondition,
-  SingleValueCondition,
   RangeValueCondition,
   ScoreReport,
-  TimeRangeValueCondition,
   SingleMultiSelectionPerRowCondition,
   SliderRowsCondition,
-  TimeRangeConditionType,
+  TimeIntervalValueCondition,
+  TimeRangeIntervalValueCondition,
+  TimeRangeSingleValueCondition,
 } from 'shared/state/Applet';
 
 import { DEFAULT_PAYLOAD_MAX_VALUE, DEFAULT_PAYLOAD_MIN_VALUE } from './ConditionRow.const';
-import { GetPayload, OptionListItem } from './ConditionRow.types';
+import {
+  GetPayload,
+  OptionListItem,
+  PropertyName,
+  SingleValueConditionPayload,
+} from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
 import { StyledMdPreview } from '../ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
@@ -119,21 +125,34 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   );
 
 const getDefaultPayload = (
-  conditionPayload: SingleValueCondition['payload'] | TimeRangeValueCondition['payload'],
+  conditionPayload: SingleValueConditionPayload,
   type?: ItemResponseType,
-  formTimeType?: TimeRangeConditionType,
 ) => {
-  let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
-  if (type === ItemResponseType.TimeRange)
-    return {
-      value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
-      type: formTimeType ?? (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
-    };
-  if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
+  const defaultValue =
+    type === ItemResponseType.Date || type === ItemResponseType.Time
+      ? null
+      : DEFAULT_PAYLOAD_MIN_VALUE;
 
-  return {
-    value: (conditionPayload as SingleValueCondition['payload'])?.value ?? defaultValue,
-  };
+  switch (type) {
+    case ItemResponseType.Date:
+      if (PropertyName.Date in conditionPayload) {
+        return { date: conditionPayload.date ?? defaultValue };
+      }
+
+      return { date: defaultValue };
+    case ItemResponseType.Time:
+      if (PropertyName.Time in conditionPayload) {
+        return { time: conditionPayload.time ?? defaultValue };
+      }
+
+      return { time: defaultValue };
+    default:
+      if (PropertyName.Value in conditionPayload) {
+        return { value: conditionPayload.value ?? defaultValue };
+      }
+
+      return { value: defaultValue };
+  }
 };
 
 export const getPayload = ({
@@ -150,6 +169,10 @@ export const getPayload = ({
     case ConditionType.NotIncludesOption:
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
+    case ConditionType.IncludesRowOption:
+    case ConditionType.NotIncludesRowOption:
+    case ConditionType.EqualToRowOption:
+    case ConditionType.NotEqualToRowOption:
       if (
         responseType === ItemResponseType.SingleSelectionPerRow ||
         responseType === ItemResponseType.MultipleSelectionPerRow
@@ -168,6 +191,9 @@ export const getPayload = ({
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
+    case ConditionType.GreaterThanDate:
+    case ConditionType.GreaterThanTime:
+    case ConditionType.GreaterThanSliderRows:
       if (
         responseType === ItemResponseType.Slider ||
         responseType === ItemResponseType.NumberSelection
@@ -187,12 +213,11 @@ export const getPayload = ({
         };
       }
 
-      return getDefaultPayload(
-        conditionPayload as SingleValueCondition['payload'],
-        responseType,
-        formTimeType,
-      );
+      return getDefaultPayload(conditionPayload as SingleValueConditionPayload, responseType);
     case ConditionType.LessThan:
+    case ConditionType.LessThanDate:
+    case ConditionType.LessThanTime:
+    case ConditionType.LessThanSliderRows:
       if (
         responseType === ItemResponseType.Slider ||
         responseType === ItemResponseType.NumberSelection
@@ -212,13 +237,15 @@ export const getPayload = ({
         };
       }
 
-      return getDefaultPayload(
-        conditionPayload as SingleValueCondition['payload'],
-        responseType,
-        formTimeType,
-      );
+      return getDefaultPayload(conditionPayload as SingleValueConditionPayload, responseType);
     case ConditionType.Equal:
-    case ConditionType.NotEqual: {
+    case ConditionType.EqualToDate:
+    case ConditionType.EqualToTime:
+    case ConditionType.EqualToSliderRows:
+    case ConditionType.NotEqual:
+    case ConditionType.NotEqualToDate:
+    case ConditionType.NotEqualToTime:
+    case ConditionType.NotEqualToSliderRows: {
       if (
         responseType === ItemResponseType.Slider ||
         responseType === ItemResponseType.NumberSelection
@@ -238,14 +265,45 @@ export const getPayload = ({
         };
       }
 
-      return getDefaultPayload(
-        conditionPayload as SingleValueCondition['payload'],
-        responseType,
-        formTimeType,
-      );
+      return getDefaultPayload(conditionPayload as SingleValueConditionPayload, responseType);
     }
+    case ConditionType.BetweenDates:
+    case ConditionType.OutsideOfDates:
+      return {
+        minDate: (conditionPayload as DateRangeValueCondition['payload'])?.minDate ?? null,
+        maxDate: (conditionPayload as DateRangeValueCondition['payload'])?.maxDate ?? null,
+      };
+    case ConditionType.BetweenTimes:
+    case ConditionType.OutsideOfTimes:
+      return {
+        minTime: (conditionPayload as TimeIntervalValueCondition['payload'])?.minTime ?? null,
+        maxTime: (conditionPayload as TimeIntervalValueCondition['payload'])?.maxTime ?? null,
+      };
+    case ConditionType.GreaterThanTimeRange:
+    case ConditionType.LessThanTimeRange:
+    case ConditionType.EqualToTimeRange:
+    case ConditionType.NotEqualToTimeRange:
+      return {
+        time: (conditionPayload as TimeRangeSingleValueCondition['payload'])?.time ?? null,
+        fieldName:
+          formTimeType ??
+          (conditionPayload as TimeRangeSingleValueCondition['payload'])?.fieldName ??
+          null,
+      };
+    case ConditionType.BetweenTimesRange:
+    case ConditionType.OutsideOfTimesRange:
+      return {
+        minTime: (conditionPayload as TimeRangeIntervalValueCondition['payload'])?.minTime ?? null,
+        maxTime: (conditionPayload as TimeRangeIntervalValueCondition['payload'])?.maxTime ?? null,
+        fieldName:
+          formTimeType ??
+          (conditionPayload as TimeRangeIntervalValueCondition['payload'])?.fieldName ??
+          null,
+      };
     case ConditionType.Between:
+    case ConditionType.BetweenSliderRows:
     case ConditionType.OutsideOf:
+    case ConditionType.OutsideOfSliderRows:
       if (
         responseType === ItemResponseType.Slider ||
         responseType === ItemResponseType.NumberSelection
@@ -253,20 +311,6 @@ export const getPayload = ({
         return {
           minValue: selectedItem?.responseValues.minValue,
           maxValue: selectedItem?.responseValues.maxValue,
-        };
-      }
-      if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
-        return {
-          minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
-          maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
-        };
-      }
-      if (responseType === ItemResponseType.TimeRange) {
-        return {
-          minValue: (conditionPayload as TimeRangeValueCondition['payload'])?.minValue ?? null,
-          maxValue: (conditionPayload as TimeRangeValueCondition['payload'])?.maxValue ?? null,
-          type:
-            formTimeType ?? (conditionPayload as TimeRangeValueCondition['payload'])?.type ?? null,
         };
       }
       if (responseType === ItemResponseType.SliderRows) {

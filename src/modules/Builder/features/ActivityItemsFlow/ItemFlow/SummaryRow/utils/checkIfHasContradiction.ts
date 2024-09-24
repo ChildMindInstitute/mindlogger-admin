@@ -89,8 +89,8 @@ export const checkIfHasContradiction = (
       case ItemResponseType.SingleSelectionPerRow:
         return checkIfSelectionsPerRowHaveIntersections({
           conditions: groupedConditions,
-          sameOptionValue: ConditionType.EqualToOption,
-          inverseOptionValue: ConditionType.NotEqualToOption,
+          sameOptionValue: ConditionType.EqualToRowOption,
+          inverseOptionValue: ConditionType.NotEqualToRowOption,
           isSingleSelect: true,
         });
       case ItemResponseType.MultipleSelection: {
@@ -108,8 +108,8 @@ export const checkIfHasContradiction = (
       case ItemResponseType.MultipleSelectionPerRow:
         return checkIfSelectionsPerRowHaveIntersections({
           conditions: groupedConditions,
-          sameOptionValue: ConditionType.IncludesOption,
-          inverseOptionValue: ConditionType.NotIncludesOption,
+          sameOptionValue: ConditionType.IncludesRowOption,
+          inverseOptionValue: ConditionType.NotIncludesRowOption,
         });
       default:
         return false;

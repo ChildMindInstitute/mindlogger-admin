@@ -45,6 +45,7 @@ export type ActivityFlow = {
   createdAt?: string;
   reportIncludedItemName?: string;
   reportIncludedActivityName?: string;
+  autoAssign?: boolean;
 };
 
 export type TextInputConfig = {
@@ -250,6 +251,11 @@ export interface PhrasalTemplateConfig {
   type: string;
 }
 
+export interface UnityConfig {
+  skippableItem?: boolean;
+  file: Uint8Array;
+}
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel?: string;
@@ -407,7 +413,8 @@ export type Config =
   | TouchConfig
   | FlankerConfig
   | ABTrailsConfig
-  | PhrasalTemplateConfig;
+  | PhrasalTemplateConfig
+  | UnityConfig;
 
 export type ItemAlert = {
   key?: string;
@@ -441,15 +448,15 @@ export type OptionCondition = BaseCondition & {
     optionValue: string | number;
   };
 };
-export type SingleMultiSelectionPerRowCondition = OptionCondition & {
+export type SingleMultiSelectionPerRowCondition<T = string> = OptionCondition & {
   payload: {
-    rowIndex?: string;
+    rowIndex?: T;
   };
 };
 
-export type SliderRowsCondition<T = SingleValueCondition> = T & {
+export type SliderRowsCondition<T = SingleValueCondition, K = string> = T & {
   payload: {
-    rowIndex: string;
+    rowIndex: K;
   };
 };
 
@@ -466,19 +473,51 @@ export type RangeValueCondition<T = number> = BaseCondition & {
   };
 };
 
-export const enum TimeRangeConditionType {
-  StartTime = 'startTime',
-  EndTime = 'endTime',
-}
-
-export type TimeRangeValueCondition<T = Date> = RangeValueCondition<T> & {
+export type DateSingleValueCondition<T = string> = BaseCondition & {
   payload: {
-    type: TimeRangeConditionType;
+    date: T;
   };
 };
-export type TimeRangeSingleValueCondition<T = Date> = SingleValueCondition<T> & {
+
+export type DateRangeValueCondition<T = string> = BaseCondition & {
   payload: {
-    type: TimeRangeConditionType;
+    minDate: T;
+    maxDate: T;
+  };
+};
+
+export type Time = {
+  hours: number;
+  minutes: number;
+};
+
+export type TimeSingleValueCondition<T = string> = BaseCondition & {
+  payload: {
+    time: T;
+  };
+};
+
+export type TimeIntervalValueCondition<T = string> = BaseCondition & {
+  payload: {
+    minTime: T;
+    maxTime: T;
+  };
+};
+
+export const enum TimeRangeConditionType {
+  StartTime = 'from',
+  EndTime = 'to',
+}
+
+export type TimeRangeSingleValueCondition<T = string> = TimeSingleValueCondition<T> & {
+  payload: {
+    fieldName: TimeRangeConditionType;
+  };
+};
+
+export type TimeRangeIntervalValueCondition<T = string> = TimeIntervalValueCondition<T> & {
+  payload: {
+    fieldName: TimeRangeConditionType;
   };
 };
 
@@ -486,8 +525,17 @@ export type Condition =
   | OptionCondition
   | SingleValueCondition
   | RangeValueCondition
-  | TimeRangeValueCondition
+  | DateSingleValueCondition
+  | DateSingleValueCondition<Date>
+  | DateRangeValueCondition
+  | TimeSingleValueCondition
+  | TimeSingleValueCondition<Time>
+  | TimeIntervalValueCondition
+  | TimeIntervalValueCondition<Time>
   | TimeRangeSingleValueCondition
+  | TimeRangeSingleValueCondition<Time>
+  | TimeRangeIntervalValueCondition
+  | TimeRangeIntervalValueCondition<Time>
   | SingleMultiSelectionPerRowCondition
   | SliderRowsCondition
   | SliderRowsCondition<RangeValueCondition>
@@ -691,8 +739,8 @@ export type PhrasalTemplateItem<T = ItemCommonType> = T & {
 };
 
 export type UnityItem<T = ItemCommonType> = T & {
-  responseType: ItemResponseType.UnityFile;
-  config: TouchConfig;
+  responseType: ItemResponseType.Unity;
+  config: UnityConfig;
   responseValues: null;
 };
 
@@ -703,6 +751,8 @@ export type ScoresAndReports = {
   showScoreSummary: boolean;
   reports: ScoreOrSection[];
 };
+
+export type AgeFieldType = 'text' | 'dropdown';
 
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   calculateTotalScore?: SubscaleTotalScore | null;
@@ -738,6 +788,7 @@ export type Activity = {
   performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
+  autoAssign?: boolean;
 };
 
 type Theme = {

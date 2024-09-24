@@ -17,7 +17,7 @@
     "titleStep2": "Vérifiez",
     "close": "Fermer",
     "helpTitle": "Aide sur attribution d'une activité",
-    "helpContent": "<0>Activités</0> <1>Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier le calendrier d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</1> <2>Répondants</2> <3>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</3> <4>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier le calendrier » en haut à droite de la liste.</4> <5>FAQ</5> <6>LOREM IPSUM Sélectionnez des activités individuelles dans la liste ou utilisez « Sélectionner tout » pour créer des affectations pour toutes les activités et flux de votre applet. Si vous devez modifier la planification d'une activité, sélectionnez simplement l'activité, puis cliquez sur « Modifier la planification » en haut à droite de la liste.</6>",
+    "helpContent": "<0>Démarrage rapide</0> <1>Pour créer une affectation d'activité, sélectionnez une ou plusieurs activités dans la liste, puis les participants qui doivent compléter ces activités (c.-à-d. les répondants). Une fois terminé, vos participants ne verront que les évaluations qui leur sont spécifiquement attribuées (c.-à-d. lorsqu'ils sont les répondants), ce qui leur permet de se concentrer sur ce qui est pertinent.</1><2>Notez que, par défaut, les affectations sont définies comme auto-évaluations. Pour créer une affectation d'activité multi-informateur, ajoutez simplement un deuxième participant (c.-à-d. le sujet de l'activité) dans la colonne de droite du tableau sous « À propos de qui est cette activité ? ».</2><3>Activités</3> <4>Veuillez noter que les activités ou flux pour lesquels la case « Affectation automatique » est cochée (dans le générateur d'applets) apparaîtront comme désactivés dans cette liste et ne pourront donc pas être attribués. Pour rendre une activité attribuable, quittez simplement ce flux et retournez à votre « Tableau de bord », accédez à « Modifier l'applet » dans le menu à trois points de l'applet, naviguez vers l'onglet « Activités », sélectionnez l'activité que vous souhaitez attribuer manuellement, et décochez la case « Affectation automatique » dans l'onglet « À propos de l'activité ». Cliquez sur « Enregistrer et publier » pour sauvegarder vos modifications, puis revenez à ce flux d'affectation pour créer votre nouvelle affectation. Pour rendre un flux attribuable, suivez des étapes similaires, sauf que vous devrez naviguer vers l'onglet « Flux d'activités », puis sélectionner le flux d'activités que vous souhaitez attribuer manuellement (plutôt que l'onglet « Activités »).</4> <5>Ajouter des répondants</5> <6>Pour ajouter un répondant, cliquez sur une cellule dans la colonne de gauche du tableau et recherchez le participant souhaité (comptes complets uniquement) ou un membre de l'équipe. Par défaut, la colonne de droite sera remplie par « Soi-même », ce comportement par défaut est un raccourci pour créer des auto-évaluations. Vous pouvez le laisser tel quel ou le modifier pour d'autres configurations d'affectation.</6><7>Pour créer des affectations multi-informateurs, après avoir ajouté un répondant dans la colonne de gauche, cliquez dans la colonne de droite pour ajouter un deuxième participant (comptes complets ou limités) ou un membre de l'équipe pour être le sujet de l'activité. Dans les affectations multi-informateurs, le participant de la colonne de gauche (c.-à-d. le répondant) sera chargé d'accomplir les activités sélectionnées au nom de/à propos du participant de la colonne de droite (c.-à-d. le sujet), ce qui signifie que le participant de la colonne de droite ne sera pas chargé d'accomplir les activités. Pour ajouter plus de lignes au tableau, survolez simplement le tableau pour révéler le bouton « Ajouter une ligne » en bas à gauche.</7><8>Veuillez noter que les comptes limités sont restreints à la colonne de droite. En effet, les comptes limités ne peuvent être que des sujets, et non des répondants, en fonction des paramètres des comptes limités dans MindLogger. Par conséquent, tous les comptes limités nécessitent que vous ajoutiez un compte complet ou un membre de l'équipe en tant que répondant de l'activité avant de pouvoir continuer.</8><9>Revoir et envoyer</9> <10>Une fois que vous avez fait vos sélections, vous aurez la possibilité de revoir. Une fois les affectations envoyées, tous les répondants (c.-à-d. les participants listés dans la colonne de gauche) recevront un e-mail les informant qu'ils ont été affectés à une nouvelle activité.</10>",
     "helpButton": "J'ai compris",
     "selectActivities": "Sélectionner les activités",
     "selected_one": "{{count}} sélectionnée",
@@ -168,7 +168,10 @@
   "addUsers": "Ajouter des utilisateurs",
   "addViaCSV": "Ajouter via CSV",
   "advancedSettings": "Paramètres avancés",
-  "ageQuestion": "Quel âge avez-vous?",
+  "ageQuestion": "Quel âge avez-vous?<br><br>*Veuillez fournir votre réponse aussi précisément que possible. Les informations que vous fournissez sont importantes pour garantir l'exactitude de vos résultats. Si vous avez des inquiétudes quant à la manière dont vos informations seront utilisées, veuillez vous référer à nos Conditions d'utilisation.*",
+  "ageFieldTypeLabel": "Type de champ d'âge :",
+  "ageFieldTypeText": "Champ de texte",
+  "ageFieldTypeDropdown": "Liste déroulante",
   "agreement": " J'accepte les ",
   "agreementAppletAvailability": "J'accepte que les autres utilisateurs de MindLogger puissent utiliser le contenu de cette applet dans leurs propres applets. Seul le contenu de l'applet est partagé. Aucune information sur l'utilisateur n'est partagée.",
   "alert": "Alerte",
@@ -652,7 +655,7 @@
   "fullAccount": "Compte complet",
   "fullAccountDescription": "Permet au participant d'effectuer des activités sur lui-même et sur les autres, tout en ayant également accès à l'application mobile MindLogger.",
   "fullName": "Nom et prénom",
-  "genderQuestion": "Comment vous décririez-vous?",
+  "genderQuestion": "Comment vous décririez-vous?<br><br>*Veuillez fournir votre réponse aussi précisément que possible. Les informations que vous fournissez sont importantes pour garantir l'exactitude de vos résultats. Si vous avez des inquiétudes quant à la manière dont vos informations seront utilisées, veuillez vous référer à nos Conditions d'utilisation.*",
   "generalSettings": "Paramètres généraux",
   "generateLink": "Générer un lien",
   "generateLinkNo": "Non, un compte n'est pas requis",
@@ -1046,7 +1049,7 @@
     "flanker": "Constructeur de tâches de temps de réaction simple et au choix",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "Nouvelle tâche Unity (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "Parcours A/B",
@@ -1061,7 +1064,7 @@
   "photoHint": "Tâche de capture de photo",
   "photoResponseDescription": "Le participant pourra prendre ou uploader une photo.",
   "photoResponseTitle": "Réponse avec Photo",
-  "phrasalTemplate": "Modèle de phrase",
+  "phrasalTemplate": "Constructeur de phrases",
   "phrasalTemplateItem": {
     "btnAddField": "Ajouter…",
     "btnAddPhrase": "Nouvelle phrase",
@@ -1081,7 +1084,7 @@
     "imageLabel": "Ajouter une image d'en-tête pour cette phrase (facultatif)",
     "lede": "Le répondant verra le contenu ci-dessous affiché dans une carte téléchargeable.",
     "phraseOrder": "Phrase {{order}}",
-    "titleHint": "Affiché dans l'en-tête de la sortie du modèle de phrase, à côté du nom et de l'image de l'applet.",
+    "titleHint": "Affiché dans l'en-tête du Constructeur de phrases, à côté du nom et de l'image de l'applet.",
     "titleHintLabel": "Voir plus de détails",
     "titleLabel": "Titre de la carte (obligatoire)",
     "titlePlaceholder": "Exemple: Plan d'action",
@@ -1379,7 +1382,8 @@
       "rawScore": "Score brut",
       "score": "Score",
       "sex": "Genre",
-      "text": "Texte"
+      "text": "Texte",
+      "severity": "Niveau de gravité"
     },
     "delete": {
       "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche pour <1>{{name}}</1>?",
@@ -1395,6 +1399,9 @@
       "haveToUploadFile": "Vous devez uploader un fichier pour continuer.",
       "incorrectFileFormat": "Format de fichier incorrect. Veuillez uploader un fichier au format <1>.csv</1>.",
       "onDelete": "La table de recherche actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
+    },
+    "warnings": {
+      "incompleteSeverityData": "La table de recherche actuelle inclut des valeurs de gravité manquantes dans certaines lignes. Téléchargez le fichier correct ou enregistrez et continuez."
     },
     "upload": {
       "initDescription": "Veuillez uploader un fichier au format <1>.csv</1>.",
@@ -1432,7 +1439,7 @@
       "targetSubjectLabel": "De qui s’adressent les réponses?",
       "targetSubjectPlaceholder": "Sélectionnez parmi les participants",
       "loggedInUserLabel": "Qui saisira les réponses ?",
-      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe",
+      "loggedInUserPlaceholder": "Sélectionnez parmi les membres de l'équipe et les participant",
       "dropdown": {
         "limitedAccountWarning": "Le participant sélectionné ne peut pas saisir ses propres réponses. Veuillez sélectionner un membre de l'équipe pour continuer."
       },
@@ -1499,6 +1506,7 @@
   "underline": "Souligner",
   "undo": "Annuler",
   "unityInstructions": "Upload Configurations",
+  "unityTaskConfigurationFile": "Fichier de configuration des tâches Unity",
   "unorderedList": "Liste non ordonnée",
   "unread": "Non lu",
   "unselected": "Non sélectionné",
@@ -1520,6 +1528,7 @@
   "uploadMdImg": "Uploader une image",
   "uploadSchedule": "Veuillez uploader un programme dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "uploadTransfluent": "Veuillez uploader une image JPG ou PNG transfluent de moins de {{size}}.",
+  "uploadUnityConfigFile": "Télécharger le fichier de configuration Unity",
   "uploadVideo": "Uploader une vidéo",
   "urlPlaceholder": "Saisissez l'URL",
   "userBuilder": "Constructeur de {{userName}}",
@@ -1616,6 +1625,7 @@
   "appletNameExists": "Ce nom d'Applet existe déjà",
   "noActivities": "Aucune activité trouvée",
   "noActivitiesForApplet": "L'applet n'a aucune activité",
+  "noActivitiesForParticipant": "Aucune activité disponible pour ce participant",
   "noAccessTitle": "Pas d'accès à l'applet",
   "noAccessDescription": "Pour rafraîchir les données, veuillez cliquer sur le bouton ci-dessous.",
   "noPermissionToViewData": "Vous n'avez pas la permission de voir ces données",

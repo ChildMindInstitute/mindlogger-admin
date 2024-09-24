@@ -101,6 +101,7 @@ describe('getPerformanceTaskPath', () => {
     ${EditablePerformanceTasksType.Flanker}   | ${page.builderAppletFlanker}
     ${EditablePerformanceTasksType.Gyroscope} | ${page.builderAppletGyroscope}
     ${EditablePerformanceTasksType.Touch}     | ${page.builderAppletTouch}
+    ${EditablePerformanceTasksType.Unity}     | ${page.builderAppletUnity}
   `('performanceTask = $performanceTask', ({ performanceTask, expected }) => {
     const result = getPerformanceTaskPath(performanceTask);
     expect(result).toBe(expected);

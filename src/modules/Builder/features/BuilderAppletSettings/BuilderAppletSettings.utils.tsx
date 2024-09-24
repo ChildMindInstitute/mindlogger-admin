@@ -15,7 +15,7 @@ import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
-import { IntegrationsListSetting } from './IntegrationsListSetting';
+import { LorisIntegrationSetting } from './LorisIntegrationSetting/LorisIntegrationSetting';
 
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
@@ -55,13 +55,18 @@ export const getSettings = ({
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
-        {
-          icon: <Svg id="integrations" />,
-          label: 'integrations',
-          component: <IntegrationsListSetting />,
-          param: SettingParam.Integrations,
-          'data-testid': `${dataTestid}-integrations`,
-        },
+        ...(enableLorisIntegration
+          ? [
+              {
+                icon: <Svg id="data-collection" />,
+                label: 'loris.integration',
+                component: <LorisIntegrationSetting />,
+                param: SettingParam.LorisIntegration,
+                isVisible: enableLorisIntegration,
+                'data-testid': `${dataTestid}-loris-integration`,
+              },
+            ]
+          : []),
       ],
     },
     {

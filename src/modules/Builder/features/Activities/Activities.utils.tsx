@@ -47,6 +47,7 @@ const performanceTaskPaths: Record<EditablePerformanceTasksType, string> = {
   [PerfTaskType.Flanker]: page.builderAppletFlanker,
   [PerfTaskType.Gyroscope]: page.builderAppletGyroscope,
   [PerfTaskType.Touch]: page.builderAppletTouch,
+  [PerfTaskType.Unity]: page.builderAppletUnity,
 };
 
 export const getPerformanceTaskPath = (performanceTask: EditablePerformanceTasksType) =>

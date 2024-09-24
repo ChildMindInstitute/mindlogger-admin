@@ -20,6 +20,7 @@ export const enum Path {
   Gyroscope = 'gyroscope',
   Touch = 'touch',
   Participants = 'participants',
+  Unity = 'unity',
 }
 
 export const enum SettingParam {
@@ -52,7 +53,7 @@ export const APPLET_SETTINGS_PAGE_REGEXP_STRING = `(${APPLET_DASHBOARD_PAGE_REGE
 export const ACTIVITIES_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.Activities}`;
 export const ACTIVITY_FLOWS_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.ActivityFlow}`;
 export const ACTIVITY_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/(${uuidRegexp})`;
-export const PERFORMANCE_TASK_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/${Path.PerformanceTask}\\/${Path.Flanker}|${Path.Gyroscope}|${Path.Touch}/(${uuidRegexp})`;
+export const PERFORMANCE_TASK_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/${Path.PerformanceTask}\\/(?:${Path.Flanker}|${Path.Gyroscope}|${Path.Touch}|${Path.Unity})\\/(${uuidRegexp})`;
 export const ACTIVITY_FLOW_PAGE_REGEXP_STRING = `${ACTIVITY_FLOWS_PAGE_REGEXP_STRING}\\/(${uuidRegexp})`;
 
 export const getAppletPageRegexp = (path?: string) =>
@@ -77,6 +78,7 @@ export const getUpdatedAppletUrl = (
       page.builderAppletFlanker,
       page.builderAppletGyroscope,
       page.builderAppletTouch,
+      page.builderAppletUnity,
       page.builderAppletActivityItem,
       page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
@@ -129,6 +131,9 @@ export const checkCurrentPerformanceTaskPage = (url: string) => ({
   ).test(url),
   [PerformanceTasks.Touch]: new RegExp(
     `${getAppletPerformanceActivityPageRegexp(Path.Touch)}`,
+  ).test(url),
+  [PerformanceTasks.Unity]: new RegExp(
+    `${getAppletPerformanceActivityPageRegexp(Path.Unity)}`,
   ).test(url),
 });
 

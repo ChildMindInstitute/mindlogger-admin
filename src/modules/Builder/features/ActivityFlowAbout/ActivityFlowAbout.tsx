@@ -16,12 +16,15 @@ import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
 import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
+  const { featureFlags } = useFeatureFlags();
+
   const { control, watch } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
@@ -93,22 +96,24 @@ export const ActivityFlowAbout = () => {
             }
             data-testid={`${dataTestid}-hide-badge`}
           />
-          <CheckboxController
-            control={control}
-            key={`activityFlows.${activityFlowIndex}.autoAssign`}
-            name={`activityFlows.${activityFlowIndex}.autoAssign`}
-            label={
-              <StyledBodyLarge sx={{ position: 'relative' }}>
-                {t('autoAssignFlow')}
-                <Tooltip tooltipTitle={t('autoAssignTooltip')}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledBodyLarge>
-            }
-            data-testid={`${dataTestid}-auto-assign`}
-          />
+          {featureFlags.enableActivityAssign && (
+            <CheckboxController
+              control={control}
+              key={`activityFlows.${activityFlowIndex}.autoAssign`}
+              name={`activityFlows.${activityFlowIndex}.autoAssign`}
+              label={
+                <StyledBodyLarge sx={{ position: 'relative' }}>
+                  {t('autoAssignFlow')}
+                  <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+                    <span>
+                      <StyledSvg id="more-info-outlined" />
+                    </span>
+                  </Tooltip>
+                </StyledBodyLarge>
+              }
+              data-testid={`${dataTestid}-auto-assign`}
+            />
+          )}
         </StyledFlexColumn>
       </StyledWrapper>
     </BuilderContainer>

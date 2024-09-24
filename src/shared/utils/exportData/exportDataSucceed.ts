@@ -15,7 +15,7 @@ import {
 import { exportTemplate } from '../exportTemplate';
 import { exportCsvZip } from './exportCsvZip';
 import { exportMediaZip } from './exportMediaZip';
-import { getReportStringName, getReportZipName, ZipFile } from './getReportName';
+import { getReportZipName, ZipFile } from './getReportName';
 import { ExportDataFilters, prepareEncryptedData, prepareDecryptedData } from './prepareData';
 
 const exportProcessedData = async ({
@@ -44,7 +44,7 @@ const exportProcessedData = async ({
     exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker, suffix)),
     exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails, suffix)),
     exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker, suffix)),
-    exportMediaZip(mediaData, getReportStringName(ZipFile.Media, suffix)),
+    exportMediaZip(mediaData, getReportZipName(ZipFile.Media, suffix)),
   ]);
 };
 

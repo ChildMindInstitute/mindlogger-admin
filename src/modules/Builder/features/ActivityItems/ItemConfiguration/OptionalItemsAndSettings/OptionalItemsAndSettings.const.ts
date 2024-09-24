@@ -192,3 +192,9 @@ export const defaultPhrasalTemplateConfig = {
   removeBackButton: false,
   type: 'phrasal_template',
 };
+
+export const defaultUnityConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  timer: 0,
+};

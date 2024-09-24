@@ -25,6 +25,14 @@ import {
   SingleAndMultiSelectOption,
   SingleApplet,
   SingleMultiSelectionPerRowCondition,
+  Time,
+  SliderRowsCondition,
+  SingleValueCondition,
+  RangeValueCondition,
+  TimeIntervalValueCondition,
+  TimeRangeIntervalValueCondition,
+  TimeSingleValueCondition,
+  TimeRangeSingleValueCondition,
 } from 'shared/state';
 import {
   createArray,
@@ -92,6 +100,9 @@ import {
   defaultFlankerBtnObj,
   ordinalStrings,
   SAMPLE_SIZE,
+  SLIDER_ROWS_CONDITION_TYPES,
+  TIME_INTERVAL_CONDITION_TYPES,
+  TIME_SINGLE_CONDITION_TYPES,
 } from './BuilderApplet.const';
 import {
   GetSectionConditions,
@@ -569,12 +580,12 @@ export const getABTrailsItems = (deviceType: DeviceType) =>
     },
   }));
 
-export const getUnityFileItem = (deviceType: DeviceType) => [
+export const getUnityItems = (deviceType: DeviceType) => [
   {
     id: undefined,
     key: uuidv4(),
-    responseType: ItemResponseType.UnityFile,
-    name: `${ItemResponseType.UnityFile}_${deviceType}`,
+    responseType: ItemResponseType.Unity,
+    name: `${ItemResponseType.Unity}_${deviceType}`,
     question: t('unityInstructions'),
     config: {
       deviceType,
@@ -595,7 +606,7 @@ export const getNewPerformanceTask = ({
     [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
     [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
     [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
-    [PerfTaskType.Unity]: getUnityFileItem(DeviceType.Mobile),
+    [PerfTaskType.Unity]: getUnityItems(DeviceType.Mobile),
   };
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
@@ -796,9 +807,49 @@ const getActivityFlows = ({ activityFlows, activities, nonReviewableKeys }: GetA
     }),
   }));
 
+const formatTime = (hours: number, minutes: number) => {
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, '0');
+
+  return `${formattedHours}:${formattedMinutes}`;
+};
+
 const getConditionPayload = (item: Item, condition: Condition) => {
-  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType))
-    return condition.payload;
+  const conditionType = condition.type as ConditionType;
+  if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as
+      | TimeSingleValueCondition<Time>['payload']
+      | TimeRangeSingleValueCondition<Time>['payload'];
+
+    return {
+      ...conditionPayload,
+      time: formatTime(conditionPayload.time.hours, conditionPayload.time.minutes),
+    };
+  }
+  if (TIME_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as
+      | TimeIntervalValueCondition<Time>['payload']
+      | TimeRangeIntervalValueCondition<Time>['payload'];
+
+    return {
+      ...conditionPayload,
+      minTime: formatTime(conditionPayload.minTime.hours, conditionPayload.minTime.minutes),
+      maxTime: formatTime(conditionPayload.maxTime.hours, conditionPayload.maxTime.minutes),
+    };
+  }
+  if (SLIDER_ROWS_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as
+      | SliderRowsCondition<SingleValueCondition, number>['payload']
+      | SliderRowsCondition<RangeValueCondition, number>['payload'];
+    const rowIndex = String(conditionPayload.rowIndex);
+
+    return {
+      ...conditionPayload,
+      rowIndex,
+    };
+  }
+
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(conditionType)) return condition.payload;
 
   const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
   const conditionOptionValue = (condition as OptionCondition).payload.optionValue;
@@ -807,7 +858,9 @@ const getConditionPayload = (item: Item, condition: Condition) => {
     item.responseType === ItemResponseType.SingleSelectionPerRow ||
     item.responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const rowIndex = (condition as SingleMultiSelectionPerRowCondition).payload?.rowIndex;
+    const rowIndex = String(
+      (condition as SingleMultiSelectionPerRowCondition<number>).payload?.rowIndex,
+    );
 
     return {
       optionValue: conditionOptionValue,
@@ -1195,6 +1248,8 @@ export const testFunctionForSubscaleAge = (field: string, value?: number | strin
   typeof value === 'number' || value ? +value > 0 : true;
 
 export const checkScoreRegexp = /^-?\d+\.?\d{0,5}$/;
+
+export const ageRangeRegexp = new RegExp(`^(|\\d+|\\d+${INTERVAL_SYMBOL}\\d+)$`);
 
 export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: string) => {
   if (!value) return false;

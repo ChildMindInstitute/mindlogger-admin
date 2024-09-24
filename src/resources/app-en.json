@@ -17,7 +17,7 @@
     "titleStep2": "Review",
     "close": "Close",
     "helpTitle": "Assign Activity Help",
-    "helpContent": "<0>Activities</0> <1>Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</1> <2>Respondents</2> <3>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</3> <4>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</4> <5>FAQ</5> <6>LOREM IPSUM Select individual activities from the list or use ‘Select All’ to create assignments for all your Applet’s activities & flows. If you need to edit the scheduling of any activity, simply select the activity and then click ‘Edit Schedule’ to the top right of the list.</6>",
+    "helpContent": "<0>Quick Start</0> <1>To create an Activity assignment, select one or multiple Activities from the list, followed by the Participants that should complete those Activities (ie. Respondents). Once complete, your Participants will only see the assessments that are specifically assigned to them (ie. where they are the Respondent), ensuring they focus on what's relevant.</1><2>Please note that, by default, assignments will set to Self-Report. If you would like to create a Multi-Informant Activity assignment, simply add a second Participant (ie. the Subject of the Activity) to the right-hand column of the table under “Who is this activity about?”.</2><3>Activities</3> <4>Please note that Activities or Flows where the ‘Auto-assign’ checkbox is selected (within the Applet Builder) will appear in this list as disabled, and therefore cannot be assigned. To make an Activity assignable, simply exit this flow and go back to your ‘Dashboard’, navigate to ‘Edit Applet’ from the 3-dot menu of the Applet, navigate to the ‘Activities’ tab, select the Activity you’d like to manually assign, and deselect the ‘Auto-assign’ checkbox from within the ‘About Activity’ tab. Click ‘Save & Publish’ to save your changes and return to this assignment flow to create your new assignment. To make a Flow assignable you’ll follow similar steps, except you’ll need to navigate to the ‘Activity Flow’ tab, followed by the Activity Flow you’d like to manually assign (rather than the ‘Activities’ tab).</4> <5>Add Respondents</5> <6>To add a Respondent, click a cell in the left-hand column of the table, and search for your desired Participant (Full Accounts only) or Team Member. By default, the right-hand column will populate with ‘Self’, this default behaviour is a shortcut to creating Self-Reports. You can leave it as is or modify it for other assignment configurations.</6><7>In order to create Multi-Informant assignments, after adding a Respondent to the left-hand column, click into the right-hand column to add a second Participant (Full or Limited Accounts) or Team Member to be the Subject of the Activity. In Multi-Informant assignments the Participant in the left-hand column (ie. the Respondent) will be assigned to complete the Activities selected on behalf of/about the Participant in the right-hand column (ie. the Subject). Meaning that the Participant in the right-hand column will not be assigned to complete the Activities. To add more rows to the table, simply hover over the table to reveal the ‘Add row’ button to the bottom-left.</7><8>Please note that Limited Accounts are restricted to the right-hand column. This is because Limited Accounts can only be Subjects, not Respondents based on the parameters of Limited Accounts in MindLogger. Therefore, all Limited Accounts require you to add a Full Account or Team Member as the Activity’s Respondent before you can continue.</8><9>Review & Send</9> <10>Once you’ve made your selections, you will have a chance to review. Once assignments are sent, all Respondents (ie. Participants listed in the left-hand column) will be sent an email notifying them that they have been assigned a new Activity.</10>",
     "helpButton": "Got it",
     "selectActivities": "Select Activities",
     "selected_one": "{{count}} Selected",
@@ -168,7 +168,10 @@
   "addUsers": "Add Users",
   "addViaCSV": "Add via CSV",
   "advancedSettings": "Advanced Settings",
-  "ageQuestion": "How old are you?",
+  "ageQuestion": "How old are you?<br><br>*Please provide your response as accurately as possible. The information you provide is important for ensuring the accuracy of your results. If you have any concerns about how your information will be used, please refer to our Terms of Service.*",
+  "ageFieldTypeLabel": "Age field type:",
+  "ageFieldTypeText": "Text Field",
+  "ageFieldTypeDropdown": "Dropdown List",
   "agreement": " I agree to the ",
   "agreementAppletAvailability": "I agree that the contents of this Applet will be available for other MindLogger users to use in their own Applets. Only Applet content is shared. No user information is shared.",
   "alert": "Alert",
@@ -652,7 +655,7 @@
   "fullAccount": "Full Account",
   "fullAccountDescription": "Allows the participant to perform activities about themselves and others, while also having access to the MindLogger mobile app.",
   "fullName": "Full Name",
-  "genderQuestion": "How do you describe yourself?",
+  "genderQuestion": "How do you describe yourself?<br><br>*Please provide your response as accurately as possible. The information you provide is important for ensuring the accuracy of your results. If you have any concerns about how your information will be used, please refer to our Terms of Service.*",
   "generalSettings": "General Settings",
   "generateLink": "Generate Link",
   "generateLinkNo": "No, account is not required",
@@ -1047,7 +1050,7 @@
     "flanker": "Simple & Choice Reaction Time Task Builder",
     "gyroscope": "CST Gyroscope",
     "touch": "CST Touch",
-    "unity": "New Unity Task (Beta)"
+    "unity": "Unity"
   },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",
@@ -1062,7 +1065,7 @@
   "photoHint": "Photo capture task",
   "photoResponseDescription": "The respondent will be able to take or upload a photo.",
   "photoResponseTitle": "Photo Response",
-  "phrasalTemplate": "Phrasal Template",
+  "phrasalTemplate": "Phrase Builder",
   "phrasalTemplateItem": {
     "btnAddField": "Add…",
     "btnAddPhrase": "New Phrase",
@@ -1082,7 +1085,7 @@
     "imageLabel": "Add a header image for this phrase (optional)",
     "lede": "The respondent will see the content below displayed in a downloadable card.",
     "phraseOrder": "Phrase {{order}}",
-    "titleHint": "Displayed in the header of the Phrasal Template output, alongside the Applet name and image.",
+    "titleHint": "Displayed in the header of the Phrase Builder output, alongside the Applet name and image.",
     "titleHintLabel": "See more details",
     "titleLabel": "Card Title (Required)",
     "titlePlaceholder": "Example: Action Plan",
@@ -1381,7 +1384,8 @@
       "rawScore": "Raw Score",
       "score": "Score",
       "sex": "Sex",
-      "text": "Text"
+      "text": "Text",
+      "severity": "Severity"
     },
     "delete": {
       "initDescription": "Are you sure you want to delete the Lookup Table for <1>{{name}}</1>?",
@@ -1397,6 +1401,9 @@
       "haveToUploadFile": "You have to upload file to proceed.",
       "incorrectFileFormat": "Incorrect file format. Please upload file in <1>.csv</1> format.",
       "onDelete": "The current Lookup Table for <1>{{name}}</1> has not been deleted. Please try again."
+    },
+    "warnings": {
+      "incompleteSeverityData": "Current lookup table includes missing Severity in some rows. Upload correct file or Save and Continue."
     },
     "upload": {
       "initDescription": "Please upload file in <1>.csv</1> format.",
@@ -1433,7 +1440,7 @@
       "targetSubjectLabel": "Who are the responses about?",
       "targetSubjectPlaceholder": "Select from participants",
       "loggedInUserLabel": "Who will be inputting the responses?",
-      "loggedInUserPlaceholder": "Select from team members",
+      "loggedInUserPlaceholder": "Select from team members and participants",
       "dropdown": {
         "limitedAccountWarning": "The selected participant is unable to input their own answers. Please select a team member to continue."
       },
@@ -1500,6 +1507,7 @@
   "underline": "Underline",
   "undo": "Undo",
   "unityInstructions": "Upload Configurations",
+  "unityTaskConfigurationFile": "Unity Task Configuration File",
   "unorderedList": "Unordered list",
   "unread": "Unread",
   "unselected": "Unselected",
@@ -1521,6 +1529,7 @@
   "uploadMdImg": "Upload Image",
   "uploadSchedule": "Please upload a schedule in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than {{size}}.",
+  "uploadUnityConfigFile": "Upload Unity Configuration File",
   "uploadVideo": "Upload Video",
   "urlPlaceholder": "Type url",
   "userBuilder": "{{userName}}'s Builder",
@@ -1619,6 +1628,7 @@
   "noAccessDescription": "To refresh the data, please click the button below.",
   "noActivities": "No activities found",
   "noActivitiesForApplet": "Applet has no activities",
+  "noActivitiesForParticipant": "No activities available for this participant",
   "noPermissionToViewData": "You do not have permission to view this data",
   "notInvited": "Not invited",
   "pending": "Pending",

@@ -29,6 +29,7 @@ import {
   useCustomFormContext,
 } from 'modules/Builder/hooks';
 import { getUpdatedActivityFlows } from 'modules/Builder/utils';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -44,6 +45,7 @@ import {
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
+  const { featureFlags } = useFeatureFlags();
 
   useRedirectIfNoMatchedActivity();
 
@@ -174,20 +176,24 @@ export const ActivityAbout = () => {
       onCustomChange: handleIsReviewableChange,
       'data-testid': 'builder-activity-about-reviewable',
     },
-    {
-      name: `${fieldName}.autoAssign`,
-      label: (
-        <StyledBodyLarge sx={{ position: 'relative' }}>
-          <span>{t('autoAssignActivity')}</span>
-          <Tooltip tooltipTitle={t('autoAssignTooltip')}>
-            <span>
-              <StyledCheckboxTooltipSvg id="more-info-outlined" />
-            </span>
-          </Tooltip>
-        </StyledBodyLarge>
-      ),
-      'data-testid': 'builder-activity-about-auto-assign',
-    },
+    ...(featureFlags.enableActivityAssign
+      ? [
+          {
+            name: `${fieldName}.autoAssign`,
+            label: (
+              <StyledBodyLarge sx={{ position: 'relative' }}>
+                <span>{t('autoAssignActivity')}</span>
+                <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+                  <span>
+                    <StyledCheckboxTooltipSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
+              </StyledBodyLarge>
+            ),
+            'data-testid': 'builder-activity-about-auto-assign',
+          },
+        ]
+      : []),
   ];
 
   return (
