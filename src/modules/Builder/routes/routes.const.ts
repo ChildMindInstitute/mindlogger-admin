@@ -15,6 +15,7 @@ const Flanker = lazy(() => import('modules/Builder/features/PerformanceTasks/Fla
 const GyroscopeAndTouch = lazy(
   () => import('modules/Builder/features/PerformanceTasks/GyroscopeAndTouch'),
 );
+const Unity = lazy(() => import('modules/Builder/features/PerformanceTasks/Unity'));
 
 export const appletRoutes = [
   { path: Path.About, Component: AboutApplet },
@@ -43,4 +44,5 @@ export const performanceTasksRoutes = [
     props: { type: GyroscopeOrTouch.Gyroscope },
   },
   { path: Path.Touch, Component: GyroscopeAndTouch, props: { type: GyroscopeOrTouch.Touch } },
+  { path: Path.Unity, Component: Unity },
 ];
