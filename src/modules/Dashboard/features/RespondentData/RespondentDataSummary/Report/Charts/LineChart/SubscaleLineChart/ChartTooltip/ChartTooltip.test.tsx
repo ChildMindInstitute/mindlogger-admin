@@ -3,6 +3,7 @@
 import { render, screen, within } from '@testing-library/react';
 
 import { ChartTooltip } from './ChartTooltip';
+// Import styled components
 
 const dataTestid = 'subscale-line-chart';
 
@@ -36,31 +37,33 @@ describe('ChartTooltip', () => {
   test('renders component correctly when props data is null', () => {
     render(<ChartTooltip data={null} />);
     const tooltip = screen.queryByTestId(`${dataTestid}-tooltip`);
-    expect(tooltip).not.toBeInTheDocument();
+    expect(tooltip).toBeNull(); // Using Jest's default matcher to check if the element is not present
   });
 
   test('renders component correctly', () => {
     render(<ChartTooltip {...props} />);
-    const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
-    expect(tooltip).toBeInTheDocument();
+    const tooltip = screen.queryByTestId(`${dataTestid}-tooltip`);
+    expect(tooltip).not.toBeNull();
 
     const regex = new RegExp(`${dataTestid}-tooltip-item-\\d+$`);
     const tooltipItems = screen.queryAllByTestId(regex);
-    expect(tooltipItems).toHaveLength(2);
+    expect(tooltipItems.length).toBe(2);
 
     const itemContainer0 = screen.getByTestId(`${dataTestid}-tooltip-item-0`);
-    expect(itemContainer0).toHaveTextContent('Example 1: 42');
-    const mdEditor0 = within(itemContainer0).getByTestId(`${dataTestid}-tooltip-item-0-md-preview`);
-    expect(mdEditor0).toBeInTheDocument();
-    expect(itemContainer0).toHaveTextContent('Mocked Option Text');
-    expect(itemContainer0).toHaveTextContent('Dec 20, 14:55');
+    expect(itemContainer0.textContent).toContain('Example 1: 42');
+    const mdEditor0 = within(itemContainer0).queryByTestId(
+      `${dataTestid}-tooltip-item-0-md-preview`,
+    );
+    expect(mdEditor0).not.toBeNull();
+    expect(itemContainer0.textContent).toContain('Mocked Option Text');
+    expect(itemContainer0.textContent).toContain('Dec 20, 14:55');
 
     const itemContainer1 = screen.getByTestId(`${dataTestid}-tooltip-item-1`);
-    expect(itemContainer1).toHaveTextContent('Example 2: 7');
+    expect(itemContainer1.textContent).toContain('Example 2: 7');
     const mdEditor1 = within(itemContainer1).queryByTestId(
       `${dataTestid}-tooltip-item-1-md-preview`,
     );
-    expect(mdEditor1).not.toBeInTheDocument();
-    expect(itemContainer1).toHaveTextContent('Dec 20, 17:20');
+    expect(mdEditor1).toBeNull();
+    expect(itemContainer1.textContent).toContain('Dec 20, 17:20');
   });
 });
