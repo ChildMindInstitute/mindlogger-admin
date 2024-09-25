@@ -386,12 +386,12 @@ export const ActivityAssignDrawer = ({
             hasActivity: activityIds.length || flowIds.length,
             isTeamMember,
           });
-        } else if (activityIds.length || flowIds.length) {
-          addBanner('ActivityAutofillBanner');
         } else if (assignments[0]?.targetSubjectId) {
           addBanner('SubjectAutofillBanner', {
             hasActivity: activityIds.length || flowIds.length,
           });
+        } else if (activityIds.length || flowIds.length) {
+          addBanner('ActivityAutofillBanner');
         }
       }, 300);
     } else {
