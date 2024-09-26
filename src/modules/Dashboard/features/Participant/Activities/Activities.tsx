@@ -58,23 +58,21 @@ export const Activities = () => {
     execute: fetchActivities,
     isLoading: isLoadingActivities,
     value: fetchedActivities,
-    previousValue: prevActivities,
-  } = useAsync(getAppletActivitiesApi);
+  } = useAsync(getAppletActivitiesApi, { retainValue: true });
 
   const {
     execute: fetchAssignedActivities,
     isLoading: isLoadingAssignedActivities,
     value: fetchedAssignedActivities,
-    previousValue: prevAssignedActivities,
-  } = useAsync(getAppletSubjectActivitiesApi);
+  } = useAsync(getAppletSubjectActivitiesApi, { retainValue: true });
 
   const flows: AssignedActivityFlow[] = useMemo(
-    () => (fetchedActivities ?? prevActivities)?.data?.result.appletDetail.activityFlows ?? [],
-    [fetchedActivities, prevActivities],
+    () => fetchedActivities?.data?.result.appletDetail.activityFlows ?? [],
+    [fetchedActivities],
   );
   const assignedFlows: AssignedActivityFlow[] = useMemo(
-    () => (fetchedAssignedActivities ?? prevAssignedActivities)?.data?.result.activityFlows ?? [],
-    [fetchedAssignedActivities, prevAssignedActivities],
+    () => fetchedAssignedActivities?.data?.result.activityFlows ?? [],
+    [fetchedAssignedActivities],
   );
   const unassignedFlows: AssignedActivityFlow[] = useMemo(
     () =>
@@ -85,12 +83,12 @@ export const Activities = () => {
   );
 
   const activities: AssignedActivity[] = useMemo(
-    () => (fetchedActivities ?? prevActivities)?.data?.result.activitiesDetails ?? [],
-    [fetchedActivities, prevActivities],
+    () => fetchedActivities?.data?.result.activitiesDetails ?? [],
+    [fetchedActivities],
   );
   const assignedActivities: AssignedActivity[] = useMemo(
-    () => (fetchedAssignedActivities ?? prevAssignedActivities)?.data?.result.activities ?? [],
-    [fetchedAssignedActivities, prevAssignedActivities],
+    () => fetchedAssignedActivities?.data?.result.activities ?? [],
+    [fetchedAssignedActivities],
   );
   const unassignedActivities: AssignedActivity[] = useMemo(
     () =>

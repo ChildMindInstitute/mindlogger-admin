@@ -24,11 +24,11 @@ export const Overview = () => {
   const [unlockedPath, setUnlockedPath] = useState<string>();
   const { appletId } = useParams();
   const { data: workspaceRolesData } = workspaces.useRolesData();
-  const { execute, isLoading, previousValue, value } = useAsync(getAppletSubmissionsApi);
+  const { execute, isLoading, value } = useAsync(getAppletSubmissionsApi, { retainValue: true });
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const { getAppletPrivateKey } = useEncryptionStorage();
-  const { data } = value ?? previousValue ?? {};
+  const { data } = value ?? {};
   const roles = appletId ? workspaceRolesData?.[appletId] : undefined;
   const canAccessData = checkIfCanAccessData(roles);
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {

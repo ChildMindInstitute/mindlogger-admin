@@ -1,38 +1,51 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { ApiErrorResponse } from 'shared/state/Base';
 
+import {
+  ErrorCallback,
+  FinallyCallback,
+  optionsIsObjectTypeGuard,
+  SuccessCallback,
+  UseAsyncOptions,
+} from './useAsync.types';
+
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
-  callback?: (data: AxiosResponse<K>, args?: T) => void,
-  errorCallback?: (data: AxiosError<ApiErrorResponse> | null, args?: T) => void,
-  finallyCallback?: (args?: T) => void,
-  dependencies?: unknown[],
+  ...options: UseAsyncOptions<T, K>
 ) => {
+  let successCallback: SuccessCallback<T, K> | undefined;
+  let errorCallback: ErrorCallback<T> | undefined;
+  let finallyCallback: FinallyCallback<T> | undefined;
+  let retainValue = false;
+
+  // Support both array-based and object-based options
+  if (optionsIsObjectTypeGuard(options)) {
+    const opts = options[0];
+    successCallback = opts.successCallback;
+    errorCallback = opts.errorCallback;
+    finallyCallback = opts.finallyCallback;
+    retainValue = opts.retainValue ?? false;
+  } else {
+    [successCallback, errorCallback, finallyCallback] = options;
+  }
+
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
-  const refValue = useRef<AxiosResponse<K> | null>(null);
-  const refPrevValue = useRef(refValue.current);
   const [error, setError] = useState<AxiosError<ApiErrorResponse> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const deps = dependencies ?? [];
 
   const execute = useCallback(
     (body: T) => {
       setIsLoading(true);
 
-      if (refValue.current !== null) {
-        refPrevValue.current = refValue.current;
-      }
-
-      setValue(null);
+      if (!retainValue) setValue(null);
       setError(null);
 
       return asyncFunction(body)
         ?.then((response) => {
           setValue(response);
-          callback?.(response, body);
-          refValue.current = response;
+          successCallback?.(response, body);
 
           return response;
         })
@@ -47,12 +60,11 @@ export const useAsync = <T, K>(
           finallyCallback?.(body);
         });
     },
-    [asyncFunction, ...deps],
+    [asyncFunction], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return {
     execute,
-    previousValue: refPrevValue.current,
     value,
     error,
     isLoading,
