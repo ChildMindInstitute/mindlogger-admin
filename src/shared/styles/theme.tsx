@@ -144,7 +144,7 @@ export const theme = createTheme({
           },
           '&.MuiTableRow-error': {
             position: 'relative',
-            '.MuiTableCell-root:first-child::before': {
+            '.MuiTableCell-root:first-of-type::before': {
               content: '""',
               position: 'absolute',
               top: `-${variables.borderWidth.md2}`,
@@ -154,10 +154,10 @@ export const theme = createTheme({
               border: `${variables.borderWidth.md2} solid ${variables.palette.red}`,
             },
           },
-          '&.MuiTableRow-error:first-child .MuiTableCell-root:first-child::before': {
+          '&.MuiTableRow-error:first-of-type .MuiTableCell-root:first-of-type::before': {
             top: 0,
           },
-          '&.MuiTableRow-error:last-child .MuiTableCell-root:first-child::before': {
+          '&.MuiTableRow-error:last-of-type .MuiTableCell-root:first-of-type::before': {
             borderBottomLeftRadius: variables.borderRadius.lg2,
             borderBottomRightRadius: variables.borderRadius.lg2,
           },

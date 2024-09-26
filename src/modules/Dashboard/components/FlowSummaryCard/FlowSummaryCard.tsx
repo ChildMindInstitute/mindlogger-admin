@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { ActionsMenu, Chip, ChipShape, Svg } from 'shared/components';
+import { ActionsMenu, Chip, ChipShape, FlowChip, Svg } from 'shared/components';
 import { StyledEllipsisText, StyledFlexColumn, variables } from 'shared/styles';
 import { getDictionaryText } from 'shared/utils';
 
@@ -36,12 +36,7 @@ export const FlowSummaryCard = <T,>({
       </StyledFlexColumn>
 
       <Box sx={{ display: 'flex', gap: 0.8 }}>
-        <Chip
-          color="primary"
-          icon={<Svg aria-hidden id="multiple-activities" height={18} width={18} />}
-          shape={ChipShape.Rectangular}
-          title={t('flow')}
-        />
+        <FlowChip size="small" />
 
         <Chip
           icon={<Svg aria-hidden id="checklist-filled" height={18} width={18} />}

@@ -1,24 +1,19 @@
 import { Collapse } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { FunctionComponent, useCallback, useState } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 
 import { BannerProps } from 'shared/components/Banners/Banner';
 
-import { ActivityAssignBannerComponents } from './ActivityAssignDrawer.const';
-
-export const useActivityAssignBanners = () => {
+export const useModalBanners = (components: Record<string, FunctionComponent<BannerProps>>) => {
   const [banners, setBanners] = useState<
-    { key: keyof typeof ActivityAssignBannerComponents; bannerProps: BannerProps }[]
+    { key: keyof typeof components; bannerProps: BannerProps }[]
   >([]);
 
-  const addBanner = useCallback(
-    (key: keyof typeof ActivityAssignBannerComponents, bannerProps: BannerProps = {}) => {
-      setBanners((prevBanners) => [...prevBanners, { key, bannerProps }]);
-    },
-    [],
-  );
+  const addBanner = useCallback((key: keyof typeof components, bannerProps: BannerProps = {}) => {
+    setBanners((prevBanners) => [...prevBanners, { key, bannerProps }]);
+  }, []);
 
-  const removeBanner = useCallback((key: keyof typeof ActivityAssignBannerComponents) => {
+  const removeBanner = useCallback((key: keyof typeof components) => {
     setBanners((prevBanners) => prevBanners.filter((banner) => banner.key !== key));
   }, []);
 
@@ -29,7 +24,7 @@ export const useActivityAssignBanners = () => {
   const bannersComponent = (
     <TransitionGroup>
       {banners.map(({ key, bannerProps }) => {
-        const BannerComponent = ActivityAssignBannerComponents[key];
+        const BannerComponent = components[key];
 
         return (
           <Collapse key={key}>

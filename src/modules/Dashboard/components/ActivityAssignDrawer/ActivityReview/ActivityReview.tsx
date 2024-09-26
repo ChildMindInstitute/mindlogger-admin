@@ -14,6 +14,7 @@ import {
   variables,
 } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { AssignmentCounts } from 'modules/Dashboard/components';
 
 import { AssignmentsTable } from '../AssignmentsTable';
 import { ActivityReviewProps } from './ActivityReview.types';
@@ -23,7 +24,6 @@ import {
   StyledAccordionDetails,
   StyledAccordionSummary,
 } from './ActivityReview.styles';
-import { AssignmentCounts } from '../AssignmentCounts';
 
 const ASSIGNMENTS_LIMIT = 10;
 

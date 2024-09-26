@@ -21,7 +21,7 @@ import {
 } from 'shared/styles';
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useModalBanners } from 'shared/hooks';
 import {
   Assignment,
   getAppletActivitiesApi,
@@ -33,7 +33,7 @@ import {
 } from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
-import { useParticipantDropdown } from 'modules/Dashboard/components';
+import { useParticipantDropdown, AssignmentCounts } from 'modules/Dashboard/components';
 
 import { ActivityReview } from './ActivityReview';
 import { AssignmentsTable } from './AssignmentsTable';
@@ -55,9 +55,8 @@ import {
 } from './ActivityAssignDrawer.styles';
 import { HelpPopup } from './HelpPopup';
 import { ActivitiesList } from './ActivitiesList';
-import { useActivityAssignBanners } from './ActivityAssignDrawer.hooks';
-import { AssignmentCounts } from './AssignmentCounts';
 import { DeletePopup } from './DeletePopup';
+import { ActivityAssignBannerComponents } from './ActivityAssignDrawer.const';
 
 const dataTestId = 'applet-activity-assign';
 
@@ -83,8 +82,9 @@ export const ActivityAssignDrawer = ({
     Activity | HydratedActivityFlow
   >();
   const [progress, setProgress] = useState(0);
-  const { addBanner, removeBanner, removeAllBanners, bannersComponent } =
-    useActivityAssignBanners();
+  const { addBanner, removeBanner, removeAllBanners, bannersComponent } = useModalBanners(
+    ActivityAssignBannerComponents,
+  );
   const {
     isLoading: isLoadingParticipants,
     allParticipants,

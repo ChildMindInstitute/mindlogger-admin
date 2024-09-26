@@ -2,6 +2,7 @@ import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { Invitation, InvitationStatus } from 'shared/types';
 import { ActivityFlow, Activity } from 'redux/modules';
+import { HydratedAssignment } from 'api';
 
 export type ManagerApplet = {
   id: string;
@@ -90,6 +91,11 @@ export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
 };
+
 export type HydratedActivityFlow = ActivityFlow & {
   activities: Activity[];
+};
+
+export type AssignedHydratedActivityFlow = HydratedActivityFlow & {
+  assignments?: HydratedAssignment[];
 };

@@ -6,7 +6,6 @@ export type ActivityAssignDrawerProps = Pick<DrawerProps, 'open'> & {
   appletId?: string;
   activityId?: string;
   activityFlowId?: string;
-  /** User ID */
   respondentSubjectId?: string | null;
   targetSubjectId?: string | null;
 };
