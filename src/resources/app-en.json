@@ -1035,7 +1035,11 @@
   },
   "participantDetails": {
     "byParticipant": "By Participant",
-    "aboutParticipant": "About Participant"
+    "aboutParticipant": "About Participant",
+    "aboutParticipantEmpty": "No Activities are assigned to be completed about this Participant.",
+    "aboutParticipantEmptyTeamMember": "This Participant is a Team Member and Activities cannot be completed about them.",
+    "assignActivityButton": "Assign Activity",
+    "activitiesAndFlows": "Activities & Flows"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
