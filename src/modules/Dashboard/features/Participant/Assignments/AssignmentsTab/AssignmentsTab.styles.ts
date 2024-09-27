@@ -20,6 +20,12 @@ export const StyledToggleButton = styled(ToggleButton)`
     border-radius: ${variables.borderRadius.xxxl2} !important;
     border-color: ${variables.palette.outline_variant} !important;
     height: auto;
+
+    &:hover,
+    &:not(.Mui-selected):focus {
+      background-color: ${variables.palette.primary_alfa8};
+    }
+
     &.Mui-selected {
       border-color: transparent !important;
     }
