@@ -61,6 +61,22 @@ export type AppletSubjectActivitiesResponse = {
   };
 };
 
+export type ParticipantActivityOrFlow = {
+  id: string;
+  isFlow: boolean;
+  name: string;
+  description: string;
+  images: string[];
+  status: 'active' | 'inactive' | 'hidden' | 'deleted';
+  autoAssign: boolean;
+  assignments: HydratedAssignment[];
+};
+
+export type AppletParticipantActivitiesResponse = {
+  result: ParticipantActivityOrFlow[];
+  count: number;
+};
+
 export type RespondentId = { respondentId: string };
 
 export type TargetSubjectId = { targetSubjectId: string };
