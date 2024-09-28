@@ -535,36 +535,6 @@ export const flankerItems = [
     responseType: ItemResponseType.Flanker,
     order: 9,
   }, //8 TestFirst
-  getMessageItem({
-    name: FlankerItemNames.TestInstructionSecond,
-    question: t('flankerInstructions.next'),
-    order: 10,
-  }), //9
-  {
-    name: FlankerItemNames.TestSecond,
-    config: {
-      ...defaultFlankerCommonConfig,
-      ...defaultFlankerTestConfig,
-      isLastTest: false,
-    },
-    responseType: ItemResponseType.Flanker,
-    order: 11,
-  }, //10 TestSecond
-  getMessageItem({
-    name: FlankerItemNames.TestInstructionThird,
-    question: t('flankerInstructions.next'),
-    order: 12,
-  }), //11
-  {
-    name: FlankerItemNames.TestThird,
-    config: {
-      ...defaultFlankerCommonConfig,
-      ...defaultFlankerTestConfig,
-      isLastTest: true,
-    },
-    responseType: ItemResponseType.Flanker,
-    order: 13,
-  }, //12 TestThird
 ];
 
 export const getABTrailsItems = (deviceType: DeviceType) =>
@@ -912,7 +882,7 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
     return {
       ...condition,
       payload,
-      itemName: relatedItem ? getEntityKey(relatedItem) : scoreName ?? condition.itemName,
+      itemName: relatedItem ? getEntityKey(relatedItem) : (scoreName ?? condition.itemName),
     };
   });
 

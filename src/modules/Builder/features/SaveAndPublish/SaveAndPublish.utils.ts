@@ -545,7 +545,7 @@ export const getActivityItems = (activity: ActivityFormValues) => {
 
     return items?.map(({ id, ...item }, index) => {
       const itemCommonFields = getItemCommonFields({ id, item, items, conditionalLogic });
-      const isLastTest = index === FlankerItemPositions.TestThird;
+      const isLastTest = index === FlankerItemPositions.TestFirst;
 
       if (index === FlankerItemPositions.PracticeFirst) {
         return {
@@ -570,11 +570,7 @@ export const getActivityItems = (activity: ActivityFormValues) => {
         };
       }
 
-      if (
-        index === FlankerItemPositions.TestFirst ||
-        index === FlankerItemPositions.TestSecond ||
-        index === FlankerItemPositions.TestThird
-      ) {
+      if (index === FlankerItemPositions.TestFirst) {
         return {
           ...item,
           config: {
