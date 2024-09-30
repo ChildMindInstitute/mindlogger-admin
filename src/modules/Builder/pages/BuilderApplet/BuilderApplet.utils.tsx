@@ -882,7 +882,7 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
     return {
       ...condition,
       payload,
-      itemName: relatedItem ? getEntityKey(relatedItem) : (scoreName ?? condition.itemName),
+      itemName: relatedItem ? getEntityKey(relatedItem) : scoreName ?? condition.itemName,
     };
   });
 
