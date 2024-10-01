@@ -611,7 +611,8 @@ const SubscaleTableDataItemSchema = (featureFlags: FeatureFlags) =>
             severity: yup
               .string()
               .nullable()
-              .matches(createRegexFromList(Array.from(TScoreSeverity))),
+              // This includes the empty string so that there can be rows without a severity value
+              .matches(createRegexFromList([...TScoreSeverity, ''])),
           }
         : {}),
     })

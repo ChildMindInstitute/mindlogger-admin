@@ -26,16 +26,19 @@ export const getSubscalesDefaults = () => ({
   id: uuidv4(),
 });
 
-export const getItemNameInSubscale = (item: ItemFormValues) =>
+export const getItemNameInSubscale = <I extends Pick<ItemFormValues, 'name'>>(item: I) =>
   capitalize(`${t('item_one')}: ${item.name}`);
 
-export const getItemElementName = (item: ItemFormValues) =>
+export const getItemElementName = <I extends Pick<ItemFormValues, 'name' | 'question'>>(item: I) =>
   `${getItemNameInSubscale(item)}: ${removeMarkdown(item.question)}`;
 
-export const getSubscaleElementName = (
-  subscale: SubscaleFormValue,
-  subscalesMap: Record<string, SubscaleFormValue>,
-  itemsMap: Record<string, ItemFormValues>,
+export const getSubscaleElementName = <
+  S extends Pick<SubscaleFormValue, 'name' | 'items'>,
+  I extends Pick<ItemFormValues, 'name'>,
+>(
+  subscale: S,
+  subscalesMap: Record<string, S>,
+  itemsMap: Record<string, I>,
 ) =>
   `${t('subscale')}: ${subscale.name} (${subscale.items
     .reduce((acc, itemId) => {
@@ -48,9 +51,9 @@ export const getSubscaleElementName = (
     }, [] as string[])
     .join(', ')})`;
 
-export const getItemElements = (
+export const getItemElements = <I extends Pick<ItemFormValues, 'id' | 'name' | 'question'>>(
   subscaleId: string,
-  items: ItemFormValues[] = [],
+  items: I[] = [],
   subscales: SubscaleFormValue[] = [],
 ) => {
   if (!items) return [];
@@ -76,9 +79,12 @@ export const getItemElements = (
   return subscaleElements.concat(itemElements);
 };
 
-export const getPropertiesToFilterByIds = (
-  items: ItemFormValues[] = [],
-  subscales: SubscaleFormValue[] = [],
+export const getPropertiesToFilterByIds = <
+  I extends Pick<ItemFormValues, 'id'>,
+  S extends Pick<SubscaleFormValue, 'id' | 'items'>,
+>(
+  items: I[] = [],
+  subscales: S[] = [],
 ) => {
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
@@ -97,9 +103,12 @@ export const getPropertiesToFilterByIds = (
   };
 };
 
-export const getNotUsedElements = (
-  subscalesMap: Record<string, SubscaleFormValue>,
-  itemsMap: Record<string, ItemFormValues>,
+export const getNotUsedElements = <
+  S extends Pick<SubscaleFormValue, 'name' | 'items'>,
+  I extends Pick<ItemFormValues, 'name' | 'question'>,
+>(
+  subscalesMap: Record<string, S>,
+  itemsMap: Record<string, I>,
   mergedIds: string[],
   markedUniqueElementsIds: ReturnType<typeof getPropertiesToFilterByIds>['markedUniqueElementsIds'],
 ) =>

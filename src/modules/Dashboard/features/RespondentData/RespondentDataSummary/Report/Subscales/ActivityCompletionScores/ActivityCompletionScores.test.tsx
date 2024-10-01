@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -7,6 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ReportContext } from '../../Report.context';
 import { ActivityCompletionScores } from './ActivityCompletionScores';
+import { ChartData } from '../../Charts/BarChart/BarChart.types';
 
 jest.mock('modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts', () => ({
   BarChart: () => <div data-testid="mocked-bar-chart" />,
@@ -20,9 +19,9 @@ jest.mock('../AdditionalInformation', () => ({
 
 describe('ActivityCompletionScores component', () => {
   test('renders component with correct data', async () => {
-    const mockedSubscaleScores = [
-      { subscale: 'Subscale 1', score: 20 },
-      { subscale: 'Subscale 2', score: 30 },
+    const mockedSubscaleScores: ChartData[] = [
+      { label: 'Subscale 1', score: 20 },
+      { label: 'Subscale 2', score: 30 },
     ];
 
     const setCurrentActivityCompletionData = jest.fn();
@@ -30,11 +29,12 @@ describe('ActivityCompletionScores component', () => {
     renderWithProviders(
       <ReportContext.Provider
         value={{
+          currentActivityCompletionData: null,
           setCurrentActivityCompletionData,
         }}
       >
         <ActivityCompletionScores
-          reviewDate={new Date('2024-01-23T20:10:15')}
+          reviewDate={new Date('2024-01-23T20:10:15').getTime()}
           finalSubscaleScore={25}
           frequency={3}
           optionText="Mocked option text"
