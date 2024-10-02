@@ -276,6 +276,8 @@
   "assign": "Attribuer",
   "assignActivity": "Attribuer l'activité",
   "assignFlow": "Attribuer le flux",
+  "assignActivityDisabledTooltip": "Cette activité est définie sur « Caché » dans le Créateur d'Activités et ne peut donc pas être attribuée ici.",
+  "assignFlowDisabledTooltip": "Ce flux est défini sur « Caché » dans le Créateur de Flux d'Activités et ne peut donc pas être attribué ici.",
   "assignments": "Attributions",
   "activitiesByParticipant": "Par le participant",
   "activitiesAboutParticipant": "Concernant le participant",

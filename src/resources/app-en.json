@@ -276,6 +276,8 @@
   "assign": "Assign",
   "assignActivity": "Assign Activity",
   "assignFlow": "Assign Flow",
+  "assignActivityDisabledTooltip": "This activity is set to ‘Hidden’ in the Activity Builder and therefore cannot be assigned here.",
+  "assignFlowDisabledTooltip": "This flow is set to ‘Hidden’ in the Activity Flow Builder and therefore cannot be assigned here.",
   "assignments": "Assignments",
   "assessment": "Assessment",
   "at": "At",

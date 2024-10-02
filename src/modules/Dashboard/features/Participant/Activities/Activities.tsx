@@ -34,6 +34,10 @@ import { ParticipantActivitiesToolbar } from './ParticipantActivitiesToolbar';
 
 const dataTestId = 'dashboard-applet-participant-activities';
 
+/**
+ * @deprecated Use the updated Participant Details design, which defaults to `AboutParticipant` tab
+ * defined in `modules/Dashboard/features/Participant/Assignments/AboutParticipant`
+ */
 export const Activities = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId, subjectId } = useParams();

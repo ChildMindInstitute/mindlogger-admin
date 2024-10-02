@@ -1,16 +1,17 @@
 import { PropsWithChildren } from 'react';
 
-import { ActivityAssignDrawerProps } from 'modules/Dashboard/components/ActivityAssignDrawer/ActivityAssignDrawer.types';
-import { AssignedActivity } from 'api';
-import { AssignedHydratedActivityFlow } from 'modules/Dashboard/types';
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 export type AssignmentsTabProps = PropsWithChildren<{
-  onRefetch?: () => void;
-  activityOrFlow?: AssignedActivity | AssignedHydratedActivityFlow;
-}> &
-  Pick<ActivityAssignDrawerProps, 'respondentSubjectId' | 'targetSubjectId'>;
+  respondentSubject?: RespondentDetails;
+  targetSubject?: RespondentDetails;
+  'data-testid': string;
+}>;
 
-export type AssignmentsTabHandle = {
-  showAssign: () => void;
-  showUnassign: () => void;
+export type UseAssignmentsTabProps = {
+  appletId?: string;
+  targetSubject?: RespondentDetails;
+  respondentSubject?: RespondentDetails;
+  handleRefetch?: () => void;
+  dataTestId: string;
 };

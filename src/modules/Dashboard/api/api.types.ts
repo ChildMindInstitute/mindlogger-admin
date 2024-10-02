@@ -1,6 +1,6 @@
 import { ActivityId, AppletId } from 'shared/api';
 import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, Roles } from 'shared/consts';
+import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
@@ -71,12 +71,21 @@ type ParticipantFlow = {
   activityIds: string[];
 };
 
+export enum ActivityAssignmentStatus {
+  Active = 'active',
+  Inactive = 'inactive',
+  Hidden = 'hidden',
+  Deleted = 'deleted',
+}
+
 export type ParticipantActivityOrFlow = (ParticipantActivity | ParticipantFlow) & {
   id: string;
   name: string;
   description: string;
   images: string[];
-  status: 'active' | 'inactive' | 'hidden' | 'deleted';
+  isPerformanceTask: boolean | null;
+  performanceTaskType: PerfTaskType | null;
+  status: ActivityAssignmentStatus;
   autoAssign: boolean;
   assignments: HydratedAssignment[];
 };
