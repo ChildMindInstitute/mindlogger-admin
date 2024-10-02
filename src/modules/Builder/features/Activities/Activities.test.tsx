@@ -290,12 +290,12 @@ describe('Activities', () => {
     });
 
     test.each`
-      perfTaskType                       | shouldNavigate | name                                            | perfTaskDescription                                                                                                   | items         | description
-      ${PerformanceTasks.AbTrailsIpad}   | ${false}       | ${'A/B Trails iPad'}                            | ${'A/B Trails'}                                                                                                       | ${'4 items'}  | ${'A/B Trails iPad'}
-      ${PerformanceTasks.AbTrailsMobile} | ${false}       | ${'A/B Trails Mobile'}                          | ${'A/B Trails'}                                                                                                       | ${'4 items'}  | ${'A/B Trails Mobile'}
-      ${PerformanceTasks.Flanker}        | ${true}        | ${'Simple & Choice Reaction Time Task Builder'} | ${'This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.'} | ${'13 items'} | ${'Flanker'}
-      ${PerformanceTasks.Gyroscope}      | ${true}        | ${'CST Gyroscope'}                              | ${'This Activity contains Stability Tracker (Gyroscope) Item.'}                                                       | ${'5 items'}  | ${'CST Gyroscope'}
-      ${PerformanceTasks.Touch}          | ${true}        | ${'CST Touch'}                                  | ${'This Activity contains Stability Tracker (Touch) Item.'}                                                           | ${'5 items'}  | ${'CST Touch'}
+      perfTaskType                       | shouldNavigate | name                                            | perfTaskDescription                                                                                                   | items        | description
+      ${PerformanceTasks.AbTrailsIpad}   | ${false}       | ${'A/B Trails iPad'}                            | ${'A/B Trails'}                                                                                                       | ${'4 items'} | ${'A/B Trails iPad'}
+      ${PerformanceTasks.AbTrailsMobile} | ${false}       | ${'A/B Trails Mobile'}                          | ${'A/B Trails'}                                                                                                       | ${'4 items'} | ${'A/B Trails Mobile'}
+      ${PerformanceTasks.Flanker}        | ${true}        | ${'Simple & Choice Reaction Time Task Builder'} | ${'This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.'} | ${'9 items'} | ${'Flanker'}
+      ${PerformanceTasks.Gyroscope}      | ${true}        | ${'CST Gyroscope'}                              | ${'This Activity contains Stability Tracker (Gyroscope) Item.'}                                                       | ${'5 items'} | ${'CST Gyroscope'}
+      ${PerformanceTasks.Touch}          | ${true}        | ${'CST Touch'}                                  | ${'This Activity contains Stability Tracker (Touch) Item.'}                                                           | ${'5 items'} | ${'CST Touch'}
     `(
       '$description',
       async ({ perfTaskType, shouldNavigate, name, perfTaskDescription, items }) => {
