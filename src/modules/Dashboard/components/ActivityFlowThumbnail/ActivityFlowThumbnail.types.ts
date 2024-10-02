@@ -3,5 +3,6 @@ import { BoxProps } from '@mui/material';
 import { Activity } from 'redux/modules';
 
 export type ActivityFlowThumbnailProps = BoxProps & {
-  activities?: Activity[];
+  /** Activities or image URLs */
+  activities?: Array<Activity | string | undefined>;
 };

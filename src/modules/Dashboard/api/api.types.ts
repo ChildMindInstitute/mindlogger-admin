@@ -61,9 +61,18 @@ export type AppletSubjectActivitiesResponse = {
   };
 };
 
-export type ParticipantActivityOrFlow = {
+type ParticipantActivity = {
+  isFlow: false;
+  activityIds: null;
+};
+
+type ParticipantFlow = {
+  isFlow: true;
+  activityIds: string[];
+};
+
+export type ParticipantActivityOrFlow = (ParticipantActivity | ParticipantFlow) & {
   id: string;
-  isFlow: boolean;
   name: string;
   description: string;
   images: string[];
