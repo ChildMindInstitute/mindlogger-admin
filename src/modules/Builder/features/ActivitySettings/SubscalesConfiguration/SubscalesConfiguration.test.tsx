@@ -5,7 +5,9 @@ import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
+import { setMockLookupTableFileData } from '__mocks__/LookupTableUploader';
 
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { page } from 'resources';
 import {
   mockedAppletFormData,
@@ -160,8 +162,10 @@ const addSubscale = () => {
   fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 };
 
-const setUpLookupTable = async (): Promise<RefObject<ReturnType<typeof useForm>>> => {
-  const ref = renderSubscales();
+const setUpLookupTable = async (
+  formData = mockedAppletWithAllItemTypes,
+): Promise<RefObject<ReturnType<typeof useForm>>> => {
+  const ref = renderSubscales(formData);
 
   addSubscale();
 
@@ -182,8 +186,22 @@ jest.mock('shared/components/FileUploader/FileUploader', () => ({
   ...jest.requireActual('__mocks__/LookupTableUploader'),
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 describe('SubscalesConfiguration', () => {
-  beforeEach(() => {});
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableCahmiSubscaleScoring: false,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
   test('Default Empty Page', () => {
     renderSubscales();
 
@@ -398,19 +416,7 @@ describe('SubscalesConfiguration', () => {
   });
 
   test('Upload Lookup Table does not remove non-system items with name "gender_screen"/"age_screen"', async () => {
-    const ref = renderSubscales(mockedAppletWithGenderAndAgeNonSystemItems);
-
-    addSubscale();
-
-    fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
-
-    expect(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`)).toBeVisible();
-
-    await waitFor(() => {
-      screen.getByText('Your Lookup Table for was parsed successfully.');
-    });
-
-    fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup-submit-button`));
+    const ref = await setUpLookupTable(mockedAppletWithGenderAndAgeNonSystemItems);
 
     const items = ref.current.getValues('activities.0.items');
 
@@ -479,6 +485,225 @@ describe('SubscalesConfiguration', () => {
         expect(
           screen.getByText('That Subscale Name is already in use. Please use a different name'),
         ).toBeVisible();
+      });
+    });
+
+    describe('Parsing', () => {
+      test('Lookup table is valid without severity column when enableCahmiSubscaleScoring is true', async () => {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: {
+            enableCahmiSubscaleScoring: true,
+          },
+          resetLDContext: jest.fn(),
+        });
+
+        await setUpLookupTable();
+      });
+
+      test('Lookup table is valid without severity column when enableCahmiSubscaleScoring is false', async () => {
+        renderSubscales();
+
+        addSubscale();
+
+        fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+        const popup = screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`);
+
+        expect(popup).toBeVisible();
+        expect(popup).toHaveTextContent('Your Lookup Table for was parsed successfully.');
+        expect(popup).not.toHaveTextContent('Severity');
+      });
+
+      test('Lookup table is valid with severity column when enableCahmiSubscaleScoring is true', async () => {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: { enableCahmiSubscaleScoring: true },
+          resetLDContext: jest.fn(),
+        });
+
+        setMockLookupTableFileData([
+          {
+            score: '10',
+            rawScore: '1',
+            age: '15',
+            sex: 'M',
+            optionalText:
+              'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            severity: 'Minimal',
+          },
+        ]);
+
+        renderSubscales();
+
+        addSubscale();
+
+        fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+        const popup = screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`);
+
+        expect(popup).toBeVisible();
+        expect(popup).toHaveTextContent('Your Lookup Table for was parsed successfully.');
+        expect(popup).toHaveTextContent('Severity');
+        expect(popup).toHaveTextContent('Minimal');
+      });
+
+      test('Lookup table is valid with empty severity column', async () => {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: { enableCahmiSubscaleScoring: true },
+          resetLDContext: jest.fn(),
+        });
+
+        setMockLookupTableFileData([
+          {
+            score: '10',
+            rawScore: '1',
+            age: '15',
+            sex: 'M',
+            optionalText:
+              'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            severity: '',
+          },
+        ]);
+
+        await setUpLookupTable();
+      });
+
+      test('Lookup table is valid with incomplete severity column', async () => {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: { enableCahmiSubscaleScoring: true },
+          resetLDContext: jest.fn(),
+        });
+
+        setMockLookupTableFileData([
+          {
+            score: '10',
+            rawScore: '1',
+            age: '15',
+            sex: 'M',
+            optionalText:
+              'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            severity: 'Minimal',
+          },
+          {
+            score: '10',
+            rawScore: '1',
+            age: '15',
+            sex: 'M',
+            optionalText:
+              'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            severity: '',
+          },
+        ]);
+
+        renderSubscales();
+
+        addSubscale();
+
+        fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+        const popup = screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`);
+
+        expect(popup).toBeVisible();
+        expect(popup).toHaveTextContent('Your Lookup Table for was parsed successfully.');
+        expect(popup).toHaveTextContent(
+          'Current lookup table includes missing Severity in some rows',
+        );
+      });
+
+      test('Lookup table fails with invalid severity value', async () => {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: { enableCahmiSubscaleScoring: true },
+          resetLDContext: jest.fn(),
+        });
+
+        setMockLookupTableFileData([
+          {
+            score: '10',
+            rawScore: '1',
+            age: '15',
+            sex: 'M',
+            optionalText:
+              'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            severity: 'Invalid',
+          },
+        ]);
+
+        renderSubscales();
+
+        addSubscale();
+
+        fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+        const popup = screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`);
+
+        expect(popup).toBeVisible();
+        expect(popup).toHaveTextContent("Your file can't be parsed");
+      });
+
+      describe('Lookup Table supports valid ages', () => {
+        test.each`
+          age       | description                      | enableCahmiSubscaleScoring
+          ${'1'}    | ${'Single non-negative integer'} | ${false}
+          ${''}     | ${'No age'}                      | ${false}
+          ${'1~20'} | ${'Proper age range'}            | ${true}
+          ${'0'}    | ${'Zero'}                        | ${true}
+        `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
+          mockUseFeatureFlags.mockReturnValue({
+            featureFlags: { enableCahmiSubscaleScoring },
+            resetLDContext: jest.fn(),
+          });
+
+          setMockLookupTableFileData([
+            {
+              score: '10',
+              rawScore: '1',
+              age,
+              sex: 'M',
+              optionalText:
+                'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            },
+          ]);
+
+          await setUpLookupTable();
+        });
+      });
+
+      describe('Lookup Table does not support invalid ages', () => {
+        test.each`
+          age        | description                                                        | enableCahmiSubscaleScoring
+          ${'1~20'}  | ${'Ranges not supported when enableCahmiSubscaleScoringis false '} | ${false}
+          ${'-1'}    | ${'Age should not be negative'}                                    | ${false}
+          ${'-1~20'} | ${'Age range should not be negative'}                              | ${true}
+          ${'~20'}   | ${'Incomplete range left'}                                         | ${true}
+          ${'1~'}    | ${'Incomplete range right'}                                        | ${true}
+          ${'~'}     | ${'Incomplete range both sides'}                                   | ${true}
+        `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
+          mockUseFeatureFlags.mockReturnValue({
+            featureFlags: { enableCahmiSubscaleScoring },
+            resetLDContext: jest.fn(),
+          });
+
+          setMockLookupTableFileData([
+            {
+              score: '10',
+              rawScore: '1',
+              age,
+              sex: 'M',
+              optionalText:
+                'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+            },
+          ]);
+
+          renderSubscales();
+
+          addSubscale();
+
+          fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table`));
+
+          const popup = screen.getByTestId(`${mockedTestid}-0-lookup-table-popup`);
+
+          expect(popup).toBeVisible();
+          expect(popup).toHaveTextContent("Your file can't be parsed");
+        });
       });
     });
   });

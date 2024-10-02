@@ -69,9 +69,7 @@ export const BuilderApplet = () => {
 
   const methods = useForm<AppletFormValues>({
     defaultValues,
-    resolver: yupResolver(
-      AppletSchema(featureFlags.enableItemFlowExtendedItems) as ObjectSchema<AppletFormValues>,
-    ),
+    resolver: yupResolver(AppletSchema(featureFlags) as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
   const { reset, control, setValue, getValues } = methods;

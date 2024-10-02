@@ -19,6 +19,7 @@ export const LookupTable = ({
 }: LookupTableProps) => {
   const { step, ...hookProps } = useSubscaleLookupTableSetup({
     errors: labelsObject.errors,
+    warnings: labelsObject.warnings,
     template,
     templatePrefix,
     tableData,

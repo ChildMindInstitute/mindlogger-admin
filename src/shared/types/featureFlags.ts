@@ -18,6 +18,7 @@ export const FeatureFlagsKeys = {
   enableShareToLibrary: 'enableShareToLibrary',
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
   enableMeritActivityType: 'enableMeritActivityType',
+  enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
 };
 
 export enum FeatureFlagsIntegrations {

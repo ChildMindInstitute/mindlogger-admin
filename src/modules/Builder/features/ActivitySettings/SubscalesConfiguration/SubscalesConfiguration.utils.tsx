@@ -308,6 +308,9 @@ export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
       </StyledTitleSmall>
     ),
   },
+  warnings: {
+    incompleteSeverityData: t('subscaleLookupTable.warnings.incompleteSeverityData'),
+  },
 });
 
 export const getAddTotalScoreModalLabels = (): LabelsObject => {

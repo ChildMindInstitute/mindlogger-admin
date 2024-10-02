@@ -1360,7 +1360,8 @@
       "rawScore": "Score brut",
       "score": "Score",
       "sex": "Genre",
-      "text": "Texte"
+      "text": "Texte",
+      "severity": "Niveau de gravité"
     },
     "delete": {
       "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche pour <1>{{name}}</1>?",
@@ -1376,6 +1377,9 @@
       "haveToUploadFile": "Vous devez uploader un fichier pour continuer.",
       "incorrectFileFormat": "Format de fichier incorrect. Veuillez uploader un fichier au format <1>.csv</1>.",
       "onDelete": "La table de recherche actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
+    },
+    "warnings": {
+      "incompleteSeverityData": "La table de recherche actuelle inclut des valeurs de gravité manquantes dans certaines lignes. Téléchargez le fichier correct ou enregistrez et continuez."
     },
     "upload": {
       "initDescription": "Veuillez uploader un fichier au format <1>.csv</1>.",
@@ -1621,5 +1625,7 @@
   "autoAssignActivity": "Attribuer automatiquement cette activité (sous forme d'auto-évaluation)",
   "autoAssignFlow": "Attribuer automatiquement ce flux (sous forme d'auto-évaluation)",
   "autoAssignTooltip": "Gardez cette case cochée pour attribuer automatiquement cette activité ou ce flux à tous les nouveaux participants. Si, à la place, vous souhaitez attribuer manuellement des activités ou des flux à vos participants (pour une déclaration automatique ou une déclaration multi-informateurs), décochez cette case. Vous pourrez ensuite attribuer des activités ou des flux à partir de l'onglet Activités de votre applet.",
+  "autoAssignActivityDisabled": "Cette activité est paramétrée sur « Attribution automatique » dans le générateur d'activités et ne peut donc pas être attribuée ici.",
+  "autoAssignFlowDisabled": "Ce flux est défini sur « Auto-assign » dans l'Activity Flow Builder et ne peut donc pas être affecté ici.",
   "goToDashboard": "Aller au tableau de bord"
 }

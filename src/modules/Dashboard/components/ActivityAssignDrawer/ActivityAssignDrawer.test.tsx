@@ -264,7 +264,7 @@ describe('ActivityAssignDrawer', () => {
     });
   });
 
-  it('toggles selection of all activities and flows when toggling Select All', async () => {
+  it('toggles selection of all non-disabled activities and flows when toggling Select All', async () => {
     renderWithProviders(
       <ActivityAssignDrawer appletId={mockedAppletId} open onClose={mockedOnClose} />,
       { preloadedState },
@@ -279,12 +279,22 @@ describe('ActivityAssignDrawer', () => {
 
       fireEvent.click(selectAll);
       [...activities, ...flows].forEach((checkbox) => {
-        expect(within(checkbox).getByRole('checkbox')).toBeChecked();
+        const checkboxElement = within(checkbox).getByRole('checkbox');
+        const itemIsNotDisabled = checkboxElement.getAttribute('disable') === 'false';
+
+        if (itemIsNotDisabled) {
+          expect(checkboxElement).toBeChecked();
+        }
       });
 
       fireEvent.click(selectAll);
       [...activities, ...flows].forEach((checkbox) => {
-        expect(within(checkbox).getByRole('checkbox')).not.toBeChecked();
+        const checkboxElement = within(checkbox).getByRole('checkbox');
+        const itemIsNotDisabled = checkboxElement.getAttribute('disable') === 'false';
+
+        if (itemIsNotDisabled) {
+          expect(checkboxElement).not.toBeChecked();
+        }
       });
     });
   });

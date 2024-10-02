@@ -1362,7 +1362,8 @@
       "rawScore": "Raw Score",
       "score": "Score",
       "sex": "Sex",
-      "text": "Text"
+      "text": "Text",
+      "severity": "Severity"
     },
     "delete": {
       "initDescription": "Are you sure you want to delete the Lookup Table for <1>{{name}}</1>?",
@@ -1378,6 +1379,9 @@
       "haveToUploadFile": "You have to upload file to proceed.",
       "incorrectFileFormat": "Incorrect file format. Please upload file in <1>.csv</1> format.",
       "onDelete": "The current Lookup Table for <1>{{name}}</1> has not been deleted. Please try again."
+    },
+    "warnings": {
+      "incompleteSeverityData": "Current lookup table includes missing Severity in some rows. Upload correct file or Save and Continue."
     },
     "upload": {
       "initDescription": "Please upload file in <1>.csv</1> format.",
@@ -1622,5 +1626,7 @@
   "autoAssignActivity": "Auto-assign this activity (as self-report)",
   "autoAssignFlow": "Auto-assign this flow (as self-report)",
   "autoAssignTooltip": "Keep this box selected to automatically assign this Activity or Flow to all new Participants. If instead you’d like to manually assign Activities or Flows to your Participants (for either Self-Reporting or Multi-Informant reporting) unselect this box. You’ll then be able to assign Activities or Flows from the Activities Tab in your Applet.",
+  "autoAssignActivityDisabled": "This activity is set to ‘Auto-assign’ in the Activity Builder and therefore cannot be assigned here.",
+  "autoAssignFlowDisabled": "This flow is set to ‘Auto-assign’ in the Activity Flow Builder and therefore cannot be assigned here.",
   "goToDashboard": "Go to Dashboard"
 }
