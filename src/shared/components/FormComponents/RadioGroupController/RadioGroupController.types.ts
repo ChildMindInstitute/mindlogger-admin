@@ -2,7 +2,9 @@ import { FormControlLabelProps, RadioGroupProps } from '@mui/material';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 type FormRadioGroupProps = {
-  options: Omit<FormControlLabelProps, 'control'>[];
+  options: (Omit<FormControlLabelProps, 'control'> & {
+    tooltipText?: string;
+  })[];
   'data-testid'?: string;
 } & RadioGroupProps;
 
