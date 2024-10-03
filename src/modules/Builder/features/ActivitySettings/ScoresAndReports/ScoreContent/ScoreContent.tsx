@@ -19,6 +19,7 @@ import {
 } from 'shared/styles';
 import {
   InputController,
+  RadioGroupController,
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
@@ -276,6 +277,32 @@ export const ScoreContent = ({
               >
                 {scoreRangeLabel}
               </StyledBodyLarge>
+            </Box>
+          </StyledFlexTopStart>
+          <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
+            <Box sx={{ mr: theme.spacing(2.4), width: '50%', flexDirection: 'column', gap: 1.6 }}>
+              <StyledTitleMedium>{t('Which score type would you like to use?')}</StyledTitleMedium>
+              <RadioGroupController
+                key={'key'}
+                name={'name'}
+                control={control}
+                options={[
+                  {
+                    value: 'score',
+                    label: t('Score'),
+                    tooltipText:
+                      "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app.",
+                  },
+                  {
+                    value: 'rawScore',
+                    label: t('Raw Score'),
+                    tooltipText:
+                      "Select 'Raw Score' to choose the items used to calculate a raw score.",
+                  },
+                ]}
+                defaultValue={'rawScore'}
+                data-testid={`${dataTestid}-score-type-toggle`}
+              />
             </Box>
           </StyledFlexTopStart>
           <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
