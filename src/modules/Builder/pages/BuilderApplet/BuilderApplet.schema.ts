@@ -921,6 +921,15 @@ export const ScoreOrSectionSchema = () =>
       then: (schema) => schema.required(),
       otherwise: (schema) => schema.nullable(),
     }),
+    scoreType: yup
+      .string()
+      .oneOf(['score', 'rawScore'])
+      .when('type', {
+        is: ScoreReportType.Score,
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.nullable(),
+      }),
+    linkedSubscaleName: yup.string().nullable(),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
       then: (schema) => schema.required(),

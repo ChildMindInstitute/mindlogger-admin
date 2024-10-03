@@ -1,5 +1,6 @@
-import { ScoreOrSection } from 'shared/state';
+import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { mockedMultiActivityItem, mockedSingleActivityItem } from 'shared/mock';
+import { CalculationType, ScoreReportType } from 'shared/consts';
 
 import {
   getReportIndex,
@@ -13,12 +14,13 @@ jest.mock('uuid', () => ({
   v4: () => 'mockedUudv4',
 }));
 
-const firstScore = {
-  type: 'score',
+const firstScore: ScoreReport = {
+  type: ScoreReportType.Score,
   key: 'scoreKey',
   name: 'firstScore',
   id: 'sumScore_firstscore',
-  calculationType: 'sum',
+  calculationType: CalculationType.Sum,
+  scoreType: 'rawScore',
   itemsScore: ['multiple', 'slider'],
   showMessage: true,
   printItems: false,
@@ -26,22 +28,22 @@ const firstScore = {
   itemsPrint: [],
   conditionalLogic: [],
 };
-const firstSection = {
-  type: 'section',
+const firstSection: SectionReport = {
+  type: ScoreReportType.Section,
   name: 'firstSection',
-  key: 'sectionKey',
+  id: 'first_section',
   showMessage: true,
   printItems: false,
   message: 'section message',
   itemsPrint: [],
-  conditionalLogic: null,
 };
-const secondScore = {
-  type: 'score',
+const secondScore: ScoreReport = {
+  type: ScoreReportType.Score,
   name: 'secondScore',
   key: 'secondScoreKey',
   id: 'averageScore_secondscore',
-  calculationType: 'average',
+  calculationType: CalculationType.Average,
+  scoreType: 'rawScore',
   showMessage: true,
   printItems: false,
   itemsScore: ['single', 'multiple'],

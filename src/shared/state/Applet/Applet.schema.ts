@@ -815,15 +815,22 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
+export type ScoreTypeScoreType = 'score' | 'rawScore';
+
 export type ScoreReport = {
   id: string;
   key: string;
   name: string;
   type: ScoreReportType.Score;
+  /** Whether to show raw score or T scores in the report */
+  scoreType: ScoreTypeScoreType;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
   itemsScore: string[];
+
+  /** The name of a subscale to use for a lookup table, if `scoreType` is set to "score" */
+  linkedSubscaleName?: string;
   itemsPrint?: string[];
   message?: string;
   minScore?: number;
