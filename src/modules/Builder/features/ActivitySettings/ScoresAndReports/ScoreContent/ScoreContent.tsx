@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import {
   useCheckAndTriggerOnNameUniqueness,
@@ -11,11 +12,14 @@ import {
 import {
   StyledBodyLarge,
   StyledFlexColumn,
+  StyledFlexTopCenter,
   StyledFlexTopStart,
+  StyledLabelLarge,
   StyledObserverTarget,
   StyledTitleMedium,
   StyledTitleSmall,
   theme,
+  variables,
 } from 'shared/styles';
 import {
   InputController,
@@ -24,10 +28,10 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic, ScoreReport } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport, ScoreTypeScoreType } from 'shared/state';
 import { CalculationType, observerStyles } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, SettingParam } from 'shared/utils';
 import {
   REACT_HOOK_FORM_KEY_NAME,
   SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
@@ -35,6 +39,8 @@ import {
 import { SelectEvent, isScoreReport } from 'shared/types';
 import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
+import { SubscaleFormValue } from 'modules/Builder/types';
+import { page } from 'resources';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -71,6 +77,8 @@ export const ScoreContent = ({
   isStaticActive,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
+  const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -82,13 +90,32 @@ export const ScoreContent = ({
   const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
-  const score = useWatch({ name });
-  const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
+  const linkedSubscaleNameField = `${name}.linkedSubscaleName`;
+  const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] });
+  const subscalesWithLookupTables = subscales.filter(
+    ({ subscaleTableData }) => !!subscaleTableData && subscaleTableData.length,
+  );
+
+  const score: ScoreReport = useWatch({ name });
+  const {
+    name: scoreName,
+    id: scoreId,
+    calculationType,
+    itemsScore,
+    scoreType,
+    linkedSubscaleName,
+  } = score || {};
+  const linkedSubscale = subscalesWithLookupTables.find(({ name }) => name === linkedSubscaleName);
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
+
+  // TODO: Update selected items to account for the linked subscale
   const selectedItems = scoreItems?.filter(
     (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
+
+  // TODO: Update the score range calculation to account for the linked subscale
   const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(scoreRange)
@@ -152,44 +179,106 @@ export const ScoreContent = ({
     setValue(`${name}.calculationType`, prevCalculationType);
   };
 
-  const handleCalculationChange = (event: SelectEvent) => {
-    const calculationType = event.target.value as CalculationType;
-    setPrevCalculationType(score.calculationType);
+  const handleCalculationChange = useCallback(
+    (event: { target: { value: string } }) => {
+      const calculationType = event.target.value as CalculationType;
+      setPrevCalculationType(score.calculationType);
 
-    const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
-    const newScoreId = getScoreId(scoreName, calculationType);
+      const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
+      const newScoreId = getScoreId(scoreName, calculationType);
 
-    if (oldScoreId !== newScoreId) {
-      const isVariable = getIsScoreIdVariable({
-        id: score.id,
-        reports: getValues(reportsName),
-        isScore: true,
-      });
+      if (oldScoreId !== newScoreId) {
+        const isVariable = getIsScoreIdVariable({
+          id: score.id,
+          reports: getValues(reportsName),
+          isScore: true,
+        });
 
-      if (isVariable) {
-        setIsChangeScoreIdPopupVisible(true);
+        if (isVariable) {
+          setIsChangeScoreIdPopupVisible(true);
 
-        return;
+          return;
+        }
       }
-    }
 
-    setValue(`${name}.id`, newScoreId);
-    setPrevCalculationType(calculationType);
-    updateScoreConditionIds({
-      setValue,
-      conditionsName: scoreConditionalsName,
-      scoreId: newScoreId,
-      conditions: getValues(scoreConditionalsName),
-    });
-    updateScoreConditionsPayload({
-      setValue,
-      getValues,
-      scoreConditionalsName,
-      selectedItems,
-      calculationType,
+      setValue(`${name}.id`, newScoreId);
+      setPrevCalculationType(calculationType);
+      updateScoreConditionIds({
+        setValue,
+        conditionsName: scoreConditionalsName,
+        scoreId: newScoreId,
+        conditions: getValues(scoreConditionalsName),
+      });
+      updateScoreConditionsPayload({
+        setValue,
+        getValues,
+        scoreConditionalsName,
+        selectedItems,
+        calculationType,
+        activity,
+      });
+    },
+    [
       activity,
-    });
-  };
+      getValues,
+      name,
+      prevCalculationType,
+      prevScoreName,
+      reportsName,
+      score.calculationType,
+      score.id,
+      scoreConditionalsName,
+      scoreName,
+      selectedItems,
+      setValue,
+    ],
+  );
+
+  const handleLinkedSubscaleChange = useCallback(
+    (e: SelectEvent) => {
+      const subscaleName = e.target.value;
+      const newLinkedSubscale = subscalesWithLookupTables.find(({ name }) => name === subscaleName);
+
+      if (!newLinkedSubscale) return;
+
+      setValue(linkedSubscaleNameField, subscaleName);
+
+      if (scoreType === 'score') {
+        setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
+
+        if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
+          setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
+          handleCalculationChange({ target: { value: newLinkedSubscale.scoring } });
+        }
+      }
+    },
+    [
+      calculationType,
+      handleCalculationChange,
+      linkedSubscaleNameField,
+      name,
+      scoreType,
+      setValue,
+      subscalesWithLookupTables,
+    ],
+  );
+
+  const handleScoreTypeChange = useCallback(
+    (e: SelectEvent) => {
+      const scoreType = e.target.value as ScoreTypeScoreType;
+      setValue(`${name}.scoreType`, scoreType);
+
+      if (
+        scoreType === 'score' &&
+        linkedSubscale &&
+        `${calculationType}` !== `${linkedSubscale.scoring}`
+      ) {
+        setValue(`${name}.calculationType`, linkedSubscale.scoring);
+        handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+      }
+    },
+    [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
+  );
 
   const handleNameBlur = () => {
     if (scoreName === prevScoreName) return;
@@ -236,6 +325,21 @@ export const ScoreContent = ({
     });
   };
 
+  useEffect(() => {
+    // Update the calculation type based on the linked subscale
+    // This accounts for changes made to the linked subscale on the
+    // subscale configuration screen, and only needs to run once
+    if (
+      scoreType === 'score' &&
+      linkedSubscale &&
+      `${calculationType}` !== `${linkedSubscale.scoring}`
+    ) {
+      setValue(`${name}.calculationType`, linkedSubscale.scoring);
+      handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
       <StyledObserverTarget className={targetSelector} sx={observerStyles} />
@@ -264,6 +368,7 @@ export const ScoreContent = ({
                 fullWidth
                 data-testid={`${dataTestid}-calculation-type`}
                 customChange={handleCalculationChange}
+                disabled={scoreType === 'score'}
               />
             </Box>
             <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
@@ -279,33 +384,78 @@ export const ScoreContent = ({
               </StyledBodyLarge>
             </Box>
           </StyledFlexTopStart>
-          <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
-            <Box sx={{ mr: theme.spacing(2.4), width: '50%', flexDirection: 'column', gap: 1.6 }}>
-              <StyledTitleMedium>{t('Which score type would you like to use?')}</StyledTitleMedium>
-              <RadioGroupController
-                key={'key'}
-                name={'name'}
-                control={control}
-                options={[
-                  {
-                    value: 'score',
-                    label: t('Score'),
-                    tooltipText:
-                      "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app.",
-                  },
-                  {
-                    value: 'rawScore',
-                    label: t('Raw Score'),
-                    tooltipText:
-                      "Select 'Raw Score' to choose the items used to calculate a raw score.",
-                  },
-                ]}
-                defaultValue={'rawScore'}
-                data-testid={`${dataTestid}-score-type-toggle`}
-              />
-            </Box>
-          </StyledFlexTopStart>
-          <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
+          <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
+            <StyledTitleMedium>{t('Which score type would you like to use?')}</StyledTitleMedium>
+            <RadioGroupController
+              name={`${name}.scoreType`}
+              control={control}
+              onChange={handleScoreTypeChange}
+              options={[
+                {
+                  value: 'score',
+                  label: t('Score'),
+                  tooltipText:
+                    "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app.",
+                },
+                {
+                  value: 'rawScore',
+                  label: t('Raw Score'),
+                  tooltipText:
+                    "Select 'Raw Score' to choose the items used to calculate a raw score.",
+                },
+              ]}
+              defaultValue={'rawScore'}
+              data-testid={`${dataTestid}-score-type-toggle`}
+            />
+            {scoreType === 'score' && (
+              <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
+                <SelectController
+                  name={linkedSubscaleNameField}
+                  sx={{ width: '50%', pr: theme.spacing(2.4) }}
+                  control={control}
+                  options={subscalesWithLookupTables.map(({ name }) => ({
+                    value: name,
+                    labelKey: name,
+                  }))}
+                  label={t('Linked Subscale')}
+                  InputLabelProps={{ shrink: true }}
+                  placeholder={t('Select a subscale to link')}
+                  fullWidth
+                  data-testid={`${dataTestid}-linked-subscale`}
+                  customChange={handleLinkedSubscaleChange}
+                  variant="outlined"
+                />
+                {linkedSubscaleName && (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      background: 'transparent',
+                      paddingX: theme.spacing(2.4),
+                      borderColor: variables.palette.outline_variant2,
+                    }}
+                    onClick={() => {
+                      // We may not be able to navigate to a specific subscale without modifying that
+                      // screen. So let's just go to the subscales screen for now.
+                      navigate(
+                        generatePath(page.builderAppletActivitySettingsItem, {
+                          appletId,
+                          activityId,
+                          setting: SettingParam.SubscalesConfiguration,
+                        }),
+                      );
+                    }}
+                  >
+                    <StyledLabelLarge color={variables.palette.primary}>
+                      {t('View Subscale Configuration')}
+                    </StyledLabelLarge>
+                  </Button>
+                )}
+              </StyledFlexTopCenter>
+            )}
+          </StyledFlexColumn>
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.2), mt: 4.8 }}>
+            {t('scoreItems')}
+          </StyledTitleMedium>
           <TransferListController
             name={`${name}.itemsScore`}
             items={tableItems}
