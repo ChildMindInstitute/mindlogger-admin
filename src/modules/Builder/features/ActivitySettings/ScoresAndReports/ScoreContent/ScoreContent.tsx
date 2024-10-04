@@ -116,8 +116,12 @@ export const ScoreContent = ({
     itemsScore?.includes(getEntityKey(item, true));
   const selectedItems = scoreItems?.filter(selectedItemsPredicate);
 
-  // TODO: Update the score range calculation to account for the linked subscale
-  const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
+  const scoreRange = getScoreRange({
+    items: selectedItems,
+    calculationType,
+    activity,
+    lookupTable: scoreType === 'score' ? linkedSubscale?.subscaleTableData : null,
+  });
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(scoreRange)
     : EMPTY_SCORE_RANGE_LABEL;
