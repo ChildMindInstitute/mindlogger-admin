@@ -153,7 +153,7 @@ export const SubscalesConfiguration = () => {
     reports.forEach((report, index) => {
       if (
         report.type === 'score' &&
-        report.scoreType === 'score' &&
+        report.scoringType === 'score' &&
         report.linkedSubscaleName === subscale.name
       ) {
         const updatedReport: ScoreReport = {

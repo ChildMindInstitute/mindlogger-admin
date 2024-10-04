@@ -815,9 +815,9 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
-export const ScoreReportScoreType = ['score', 'rawScore'] as const;
+export const ScoreReportScoringType = ['score', 'rawScore'] as const;
 
-export type ScoreReportScoreType = (typeof ScoreReportScoreType)[number];
+export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
 
 export type ScoreReport = {
   id: string;
@@ -825,13 +825,13 @@ export type ScoreReport = {
   name: string;
   type: ScoreReportType.Score;
   /** Whether to show raw score or T scores in the report */
-  scoreType: ScoreReportScoreType;
+  scoringType: ScoreReportScoringType;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
   itemsScore: string[];
 
-  /** The name of a subscale to use for a lookup table, if `scoreType` is set to "score" */
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
   linkedSubscaleName?: string;
   itemsPrint?: string[];
   message?: string;

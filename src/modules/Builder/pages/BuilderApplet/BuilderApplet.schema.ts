@@ -25,7 +25,7 @@ import {
   Config,
   PhrasalTemplateField,
   ScoreOrSection,
-  ScoreReportScoreType,
+  ScoreReportScoringType,
 } from 'shared/state';
 import {
   createRegexFromList,
@@ -927,15 +927,15 @@ export const ScoreOrSectionSchema = () =>
       then: (schema) => schema.required(),
       otherwise: (schema) => schema.nullable(),
     }),
-    scoreType: yup
+    scoringType: yup
       .string()
-      .oneOf(ScoreReportScoreType)
+      .oneOf(ScoreReportScoringType)
       .when('type', {
         is: ScoreReportType.Score,
         then: (schema) => schema.required(),
         otherwise: (schema) => schema.nullable(),
       }),
-    linkedSubscaleName: yup.string().when('scoreType', {
+    linkedSubscaleName: yup.string().when('scoringType', {
       is: 'score',
       then: (schema) => schema.required(t('linkedSubscaleNameRequired')),
       otherwise: (schema) => schema.nullable(),

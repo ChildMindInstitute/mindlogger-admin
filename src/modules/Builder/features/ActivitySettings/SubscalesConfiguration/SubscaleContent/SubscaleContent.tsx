@@ -77,7 +77,7 @@ export const SubscaleContent = ({
             reports.forEach((report, index) => {
               if (
                 report.type === 'score' &&
-                report.scoreType === 'score' &&
+                report.scoringType === 'score' &&
                 report.linkedSubscaleName === subscaleName
               ) {
                 const updatedReport: ScoreReport = {

@@ -28,7 +28,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic, ScoreReport, ScoreReportScoreType } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport, ScoreReportScoringType } from 'shared/state';
 import { CalculationType, observerStyles } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey, SettingParam } from 'shared/utils';
@@ -95,7 +95,7 @@ export const ScoreContent = ({
   const scoreNameField = `${name}.name`;
   const calculationTypeField = `${name}.calculationType`;
   const itemsScoreField = `${name}.itemsScore`;
-  const scoreTypeField = `${name}.scoreType`;
+  const scoringTypeField = `${name}.scoringType`;
   const linkedSubscaleNameField = `${name}.linkedSubscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
@@ -107,7 +107,7 @@ export const ScoreContent = ({
     id: scoreId,
     calculationType,
     itemsScore,
-    scoreType,
+    scoringType,
     linkedSubscaleName,
   } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
@@ -133,7 +133,7 @@ export const ScoreContent = ({
     items: selectedItems,
     calculationType,
     activity,
-    lookupTable: scoreType === 'score' ? linkedSubscale?.subscaleTableData : null,
+    lookupTable: scoringType === 'score' ? linkedSubscale?.subscaleTableData : null,
   });
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(scoreRange)
@@ -261,7 +261,7 @@ export const ScoreContent = ({
 
       setValue(linkedSubscaleNameField, subscaleName);
 
-      if (scoreType === 'score') {
+      if (scoringType === 'score') {
         setValue(calculationTypeField, newLinkedSubscale.scoring);
         setValue(itemsScoreField, newLinkedSubscale.items);
 
@@ -276,7 +276,7 @@ export const ScoreContent = ({
       handleCalculationChange,
       linkedSubscaleNameField,
       name,
-      scoreType,
+      scoringType,
       setValue,
       eligibleSubscales,
     ],
@@ -284,10 +284,10 @@ export const ScoreContent = ({
 
   const handleScoreTypeChange = useCallback(
     (e: SelectEvent) => {
-      const scoreType = e.target.value as ScoreReportScoreType;
-      setValue(scoreTypeField, scoreType);
+      const scoringType = e.target.value as ScoreReportScoringType;
+      setValue(scoringTypeField, scoringType);
 
-      if (scoreType === 'score' && linkedSubscale) {
+      if (scoringType === 'score' && linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
           setValue(calculationTypeField, linkedSubscale.scoring);
           handleCalculationChange({ target: { value: linkedSubscale.scoring } });
@@ -346,7 +346,7 @@ export const ScoreContent = ({
 
   useEffect(() => {
     // Account for changes made to the linked subscale on the subscale configuration screen
-    if (scoreType === 'score') {
+    if (scoringType === 'score') {
       if (linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
           setValue(calculationTypeField, linkedSubscale.scoring);
@@ -360,7 +360,7 @@ export const ScoreContent = ({
         }
 
         if (eligibleSubscales.length <= 0) {
-          setValue(scoreTypeField, 'rawScore');
+          setValue(scoringTypeField, 'rawScore');
         }
       }
     }
@@ -368,7 +368,7 @@ export const ScoreContent = ({
   }, []);
 
   const ItemsList = () => {
-    if (scoreType === 'score' && linkedSubscale) {
+    if (scoringType === 'score' && linkedSubscale) {
       return (
         <Box sx={{ mb: theme.spacing(2.5) }}>
           <DataTable
@@ -426,7 +426,7 @@ export const ScoreContent = ({
                 fullWidth
                 data-testid={`${dataTestid}-calculation-type`}
                 customChange={handleCalculationChange}
-                disabled={scoreType === 'score'}
+                disabled={scoringType === 'score'}
               />
             </Box>
             <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
@@ -446,7 +446,7 @@ export const ScoreContent = ({
             <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
               <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
               <RadioGroupController
-                name={scoreTypeField}
+                name={scoringTypeField}
                 control={control}
                 onChange={handleScoreTypeChange}
                 options={[
@@ -464,7 +464,7 @@ export const ScoreContent = ({
                 defaultValue={'rawScore'}
                 data-testid={`${dataTestid}-score-type-toggle`}
               />
-              {scoreType === 'score' && (
+              {scoringType === 'score' && (
                 <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
                   <SelectController
                     name={linkedSubscaleNameField}
