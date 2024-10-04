@@ -41,6 +41,7 @@ import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { page } from 'resources';
+import { DataTable } from 'shared/components';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -65,6 +66,7 @@ import {
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import { StaticScoreContent } from './StaticScoreContent';
+import { getTableScoreItems } from '../ScoresAndReports.utils';
 
 export const ScoreContent = ({
   name,
@@ -110,10 +112,9 @@ export const ScoreContent = ({
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
 
-  // TODO: Update selected items to account for the linked subscale
-  const selectedItems = scoreItems?.filter(
-    (item) => itemsScore?.includes(getEntityKey(item, true)),
-  );
+  const selectedItemsPredicate = (item: { id?: string; key?: string }) =>
+    itemsScore?.includes(getEntityKey(item, true));
+  const selectedItems = scoreItems?.filter(selectedItemsPredicate);
 
   // TODO: Update the score range calculation to account for the linked subscale
   const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
@@ -245,6 +246,7 @@ export const ScoreContent = ({
 
       if (scoreType === 'score') {
         setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
+        setValue(`${name}.itemsScore`, newLinkedSubscale.items);
 
         if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
           setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
@@ -268,13 +270,13 @@ export const ScoreContent = ({
       const scoreType = e.target.value as ScoreTypeScoreType;
       setValue(`${name}.scoreType`, scoreType);
 
-      if (
-        scoreType === 'score' &&
-        linkedSubscale &&
-        `${calculationType}` !== `${linkedSubscale.scoring}`
-      ) {
-        setValue(`${name}.calculationType`, linkedSubscale.scoring);
-        handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+      if (scoreType === 'score' && linkedSubscale) {
+        if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
+          setValue(`${name}.calculationType`, linkedSubscale.scoring);
+          handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+        }
+
+        setValue(`${name}.itemsScore`, linkedSubscale.items);
       }
     },
     [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
@@ -329,17 +331,49 @@ export const ScoreContent = ({
     // Update the calculation type based on the linked subscale
     // This accounts for changes made to the linked subscale on the
     // subscale configuration screen, and only needs to run once
-    if (
-      scoreType === 'score' &&
-      linkedSubscale &&
-      `${calculationType}` !== `${linkedSubscale.scoring}`
-    ) {
-      setValue(`${name}.calculationType`, linkedSubscale.scoring);
-      handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+    if (scoreType === 'score' && linkedSubscale) {
+      if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
+        setValue(`${name}.calculationType`, linkedSubscale.scoring);
+        handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+      }
+
+      setValue(`${name}.itemsScore`, linkedSubscale.items);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const ItemsList = () => {
+    if (scoreType === 'score' && linkedSubscale) {
+      return (
+        <Box sx={{ mb: theme.spacing(2.5) }}>
+          <DataTable
+            columns={getSelectedItemsColumns()}
+            data={getTableScoreItems(scoreItems)?.filter(selectedItemsPredicate)}
+            noDataPlaceholder={t('noSelectedItemsYet')}
+            data-testid={`${dataTestid}-selected`}
+          />
+        </Box>
+      );
+    }
+
+    return (
+      <TransferListController
+        name={`${name}.itemsScore`}
+        items={tableItems}
+        columns={getScoreItemsColumns()}
+        selectedItemsColumns={getSelectedItemsColumns()}
+        hasSelectedSection
+        searchKey="label"
+        hasSearch
+        sxProps={{ mb: theme.spacing(2.5) }}
+        tooltipByDefault
+        onChangeSelectedCallback={onItemsToCalculateScoreChange}
+        data-testid={`${dataTestid}-items-score`}
+      />
+    );
+  };
+
+  // TODO: Move strings to i18n
   return (
     <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
       <StyledObserverTarget className={targetSelector} sx={observerStyles} />
@@ -456,19 +490,7 @@ export const ScoreContent = ({
           <StyledTitleMedium sx={{ mb: theme.spacing(1.2), mt: 4.8 }}>
             {t('scoreItems')}
           </StyledTitleMedium>
-          <TransferListController
-            name={`${name}.itemsScore`}
-            items={tableItems}
-            columns={getScoreItemsColumns()}
-            selectedItemsColumns={getSelectedItemsColumns()}
-            hasSelectedSection
-            searchKey="label"
-            hasSearch
-            sxProps={{ mb: theme.spacing(2.5) }}
-            tooltipByDefault
-            onChangeSelectedCallback={onItemsToCalculateScoreChange}
-            data-testid={`${dataTestid}-items-score`}
-          />
+          <ItemsList />
           <SectionScoreCommonFields
             name={name}
             sectionId={`score-${index}`}
