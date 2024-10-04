@@ -437,74 +437,77 @@ export const ScoreContent = ({
               </StyledBodyLarge>
             </Box>
           </StyledFlexTopStart>
-          <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
-            <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
-            <RadioGroupController
-              name={`${name}.scoreType`}
-              control={control}
-              onChange={handleScoreTypeChange}
-              options={[
-                {
-                  value: 'score',
-                  label: t('scoreContent.scoreRadioBtn.label'),
-                  tooltipText: t('scoreContent.scoreRadioBtn.tooltip'),
-                },
-                {
-                  value: 'rawScore',
-                  label: t('scoreContent.rawScoreRadioBtn.label'),
-                  tooltipText: t('scoreContent.rawScoreRadioBtn.tooltip'),
-                },
-              ]}
-              defaultValue={'rawScore'}
-              data-testid={`${dataTestid}-score-type-toggle`}
-            />
-            {scoreType === 'score' && (
-              <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
-                <SelectController
-                  name={linkedSubscaleNameField}
-                  sx={{ width: '50%', pr: theme.spacing(2.4) }}
-                  control={control}
-                  options={eligibleSubscales.map(({ name }) => ({
-                    value: name,
-                    labelKey: name,
-                  }))}
-                  label={t('scoreContent.linkedSubscaleField.label')}
-                  InputLabelProps={{ shrink: true }}
-                  placeholder={t('scoreContent.linkedSubscaleField.placeholder')}
-                  fullWidth
-                  data-testid={`${dataTestid}-linked-subscale`}
-                  customChange={handleLinkedSubscaleChange}
-                  variant="outlined"
-                />
-                {linkedSubscaleName && (
-                  <Button
+          {eligibleSubscales.length > 0 && (
+            <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
+              <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
+              <RadioGroupController
+                name={`${name}.scoreType`}
+                key={`${name}.scoreType`}
+                control={control}
+                onChange={handleScoreTypeChange}
+                options={[
+                  {
+                    value: 'score',
+                    label: t('scoreContent.scoreRadioBtn.label'),
+                    tooltipText: t('scoreContent.scoreRadioBtn.tooltip'),
+                  },
+                  {
+                    value: 'rawScore',
+                    label: t('scoreContent.rawScoreRadioBtn.label'),
+                    tooltipText: t('scoreContent.rawScoreRadioBtn.tooltip'),
+                  },
+                ]}
+                defaultValue={'rawScore'}
+                data-testid={`${dataTestid}-score-type-toggle`}
+              />
+              {scoreType === 'score' && (
+                <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
+                  <SelectController
+                    name={linkedSubscaleNameField}
+                    sx={{ width: '50%', pr: theme.spacing(2.4) }}
+                    control={control}
+                    options={eligibleSubscales.map(({ name }) => ({
+                      value: name,
+                      labelKey: name,
+                    }))}
+                    label={t('scoreContent.linkedSubscaleField.label')}
+                    InputLabelProps={{ shrink: true }}
+                    placeholder={t('scoreContent.linkedSubscaleField.placeholder')}
+                    fullWidth
+                    data-testid={`${dataTestid}-linked-subscale`}
+                    customChange={handleLinkedSubscaleChange}
                     variant="outlined"
-                    sx={{
-                      background: 'transparent',
-                      paddingX: theme.spacing(2.4),
-                      borderColor: variables.palette.outline_variant2,
-                    }}
-                    onClick={() => {
-                      // We may not be able to navigate to a specific subscale without modifying that
-                      // screen. So let's just go to the subscales screen for now.
-                      navigate(
-                        generatePath(page.builderAppletActivitySettingsItem, {
-                          appletId,
-                          activityId,
-                          setting: SettingParam.SubscalesConfiguration,
-                        }),
-                      );
-                    }}
-                  >
-                    <StyledLabelLarge color={variables.palette.primary}>
-                      {t('scoreContent.viewSubscaleConfiguration')}
-                    </StyledLabelLarge>
-                  </Button>
-                )}
-              </StyledFlexTopCenter>
-            )}
-          </StyledFlexColumn>
-          <StyledTitleMedium sx={{ mb: theme.spacing(1.2), mt: 4.8 }}>
+                  />
+                  {linkedSubscaleName && (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        background: 'transparent',
+                        paddingX: theme.spacing(2.4),
+                        borderColor: variables.palette.outline_variant2,
+                      }}
+                      onClick={() => {
+                        // We may not be able to navigate to a specific subscale without modifying that
+                        // screen. So let's just go to the subscales screen for now.
+                        navigate(
+                          generatePath(page.builderAppletActivitySettingsItem, {
+                            appletId,
+                            activityId,
+                            setting: SettingParam.SubscalesConfiguration,
+                          }),
+                        );
+                      }}
+                    >
+                      <StyledLabelLarge color={variables.palette.primary}>
+                        {t('scoreContent.viewSubscaleConfiguration')}
+                      </StyledLabelLarge>
+                    </Button>
+                  )}
+                </StyledFlexTopCenter>
+              )}
+            </StyledFlexColumn>
+          )}
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.2), mt: theme.spacing(2.4) }}>
             {t('scoreItems')}
           </StyledTitleMedium>
           <ItemsList />
