@@ -387,7 +387,6 @@ export const ScoreContent = ({
     );
   };
 
-  // TODO: Move strings to i18n
   return (
     <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
       <StyledObserverTarget className={targetSelector} sx={observerStyles} />
@@ -433,7 +432,7 @@ export const ScoreContent = ({
             </Box>
           </StyledFlexTopStart>
           <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
-            <StyledTitleMedium>{t('Which score type would you like to use?')}</StyledTitleMedium>
+            <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
             <RadioGroupController
               name={`${name}.scoreType`}
               control={control}
@@ -441,15 +440,13 @@ export const ScoreContent = ({
               options={[
                 {
                   value: 'score',
-                  label: t('Score'),
-                  tooltipText:
-                    "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app.",
+                  label: t('scoreContent.scoreRadioBtn.label'),
+                  tooltipText: t('scoreContent.scoreRadioBtn.tooltip'),
                 },
                 {
                   value: 'rawScore',
-                  label: t('Raw Score'),
-                  tooltipText:
-                    "Select 'Raw Score' to choose the items used to calculate a raw score.",
+                  label: t('scoreContent.rawScoreRadioBtn.label'),
+                  tooltipText: t('scoreContent.rawScoreRadioBtn.tooltip'),
                 },
               ]}
               defaultValue={'rawScore'}
@@ -465,9 +462,9 @@ export const ScoreContent = ({
                     value: name,
                     labelKey: name,
                   }))}
-                  label={t('Linked Subscale')}
+                  label={t('scoreContent.linkedSubscaleField.label')}
                   InputLabelProps={{ shrink: true }}
-                  placeholder={t('Select a subscale to link')}
+                  placeholder={t('scoreContent.linkedSubscaleField.placeholder')}
                   fullWidth
                   data-testid={`${dataTestid}-linked-subscale`}
                   customChange={handleLinkedSubscaleChange}
@@ -494,7 +491,7 @@ export const ScoreContent = ({
                     }}
                   >
                     <StyledLabelLarge color={variables.palette.primary}>
-                      {t('View Subscale Configuration')}
+                      {t('scoreContent.viewSubscaleConfiguration')}
                     </StyledLabelLarge>
                   </Button>
                 )}

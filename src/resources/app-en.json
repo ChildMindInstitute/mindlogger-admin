@@ -1382,6 +1382,22 @@
   "submit": "Submit",
   "subscale": "Subscale",
   "subscaleHeader": "Subscale {{index}}: {{name}}",
+  "scoreContent": {
+    "whichScoreType": "Which score type would you like to use?",
+    "scoreRadioBtn": {
+      "label": "Score",
+      "tooltip": "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app."
+    },
+    "rawScoreRadioBtn": {
+      "label": "Raw Score",
+      "tooltip": "Select 'Raw Score' to choose the items used to calculate a raw score."
+    },
+    "linkedSubscaleField": {
+      "label": "Linked Subscale",
+      "placeholder": "Select a subscale to link"
+    },
+    "viewSubscaleConfiguration": "View Subscale Configuration"
+  },
   "subscaleLookupTable": {
     "column": {
       "age": "Age",
