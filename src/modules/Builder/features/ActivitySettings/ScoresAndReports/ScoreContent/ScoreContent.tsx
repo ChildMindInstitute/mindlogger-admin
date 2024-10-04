@@ -91,8 +91,13 @@ export const ScoreContent = ({
 
   const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
-
+  const scoreIdField = `${name}.id`;
+  const scoreNameField = `${name}.name`;
+  const calculationTypeField = `${name}.calculationType`;
+  const itemsScoreField = `${name}.itemsScore`;
+  const scoreTypeField = `${name}.scoreType`;
   const linkedSubscaleNameField = `${name}.linkedSubscaleName`;
+
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] });
 
@@ -181,15 +186,15 @@ export const ScoreContent = ({
       scoreId: newScoreId,
     });
 
-    setValue(`${name}.id`, newScoreId);
+    setValue(scoreIdField, newScoreId);
     setPrevScoreName(scoreName);
     setPrevCalculationType(calculationType);
   };
 
   const onCancelChangeScoreId = () => {
     setIsChangeScoreIdPopupVisible(false);
-    setValue(`${name}.name`, prevScoreName);
-    setValue(`${name}.calculationType`, prevCalculationType);
+    setValue(scoreNameField, prevScoreName);
+    setValue(calculationTypeField, prevCalculationType);
   };
 
   const handleCalculationChange = useCallback(
@@ -214,7 +219,7 @@ export const ScoreContent = ({
         }
       }
 
-      setValue(`${name}.id`, newScoreId);
+      setValue(scoreIdField, newScoreId);
       setPrevCalculationType(calculationType);
       updateScoreConditionIds({
         setValue,
@@ -257,11 +262,11 @@ export const ScoreContent = ({
       setValue(linkedSubscaleNameField, subscaleName);
 
       if (scoreType === 'score') {
-        setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
-        setValue(`${name}.itemsScore`, newLinkedSubscale.items);
+        setValue(calculationTypeField, newLinkedSubscale.scoring);
+        setValue(itemsScoreField, newLinkedSubscale.items);
 
         if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
-          setValue(`${name}.calculationType`, newLinkedSubscale.scoring);
+          setValue(calculationTypeField, newLinkedSubscale.scoring);
           handleCalculationChange({ target: { value: newLinkedSubscale.scoring } });
         }
       }
@@ -280,15 +285,15 @@ export const ScoreContent = ({
   const handleScoreTypeChange = useCallback(
     (e: SelectEvent) => {
       const scoreType = e.target.value as ScoreReportScoreType;
-      setValue(`${name}.scoreType`, scoreType);
+      setValue(scoreTypeField, scoreType);
 
       if (scoreType === 'score' && linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
-          setValue(`${name}.calculationType`, linkedSubscale.scoring);
+          setValue(calculationTypeField, linkedSubscale.scoring);
           handleCalculationChange({ target: { value: linkedSubscale.scoring } });
         }
 
-        setValue(`${name}.itemsScore`, linkedSubscale.items);
+        setValue(itemsScoreField, linkedSubscale.items);
       }
     },
     [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
@@ -316,7 +321,7 @@ export const ScoreContent = ({
 
     setPrevScoreName(scoreName);
 
-    setValue(`${name}.id`, newScoreId);
+    setValue(scoreIdField, newScoreId);
     updateScoreConditionIds({
       setValue,
       conditionsName: scoreConditionalsName,
@@ -344,18 +349,18 @@ export const ScoreContent = ({
     if (scoreType === 'score') {
       if (linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
-          setValue(`${name}.calculationType`, linkedSubscale.scoring);
+          setValue(calculationTypeField, linkedSubscale.scoring);
           handleCalculationChange({ target: { value: linkedSubscale.scoring } });
         }
 
-        setValue(`${name}.itemsScore`, linkedSubscale.items);
+        setValue(itemsScoreField, linkedSubscale.items);
       } else {
         if (linkedSubscaleName) {
           setValue(linkedSubscaleNameField, '');
         }
 
         if (eligibleSubscales.length <= 0) {
-          setValue(`${name}.scoreType`, 'rawScore');
+          setValue(scoreTypeField, 'rawScore');
         }
       }
     }
@@ -378,7 +383,7 @@ export const ScoreContent = ({
 
     return (
       <TransferListController
-        name={`${name}.itemsScore`}
+        name={itemsScoreField}
         items={tableItems}
         columns={getScoreItemsColumns()}
         selectedItemsColumns={getSelectedItemsColumns()}
@@ -404,8 +409,8 @@ export const ScoreContent = ({
             <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
               <InputController
                 control={control}
-                key={`${name}.name`}
-                name={`${name}.name`}
+                key={scoreNameField}
+                name={scoreNameField}
                 label={t('scoreName')}
                 onBlur={handleNameBlur}
                 sx={{ mb: theme.spacing(4.8) }}
@@ -413,7 +418,7 @@ export const ScoreContent = ({
                 withDebounce
               />
               <SelectController
-                name={`${name}.calculationType`}
+                name={calculationTypeField}
                 sx={{ mb: theme.spacing(4.8) }}
                 control={control}
                 options={calculationTypes}
@@ -441,8 +446,7 @@ export const ScoreContent = ({
             <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
               <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
               <RadioGroupController
-                name={`${name}.scoreType`}
-                key={`${name}.scoreType`}
+                name={scoreTypeField}
                 control={control}
                 onChange={handleScoreTypeChange}
                 options={[
