@@ -340,16 +340,18 @@ export const ScoreContent = ({
   };
 
   useEffect(() => {
-    // Update the calculation type based on the linked subscale
-    // This accounts for changes made to the linked subscale on the
-    // subscale configuration screen, and only needs to run once
-    if (scoreType === 'score' && linkedSubscale) {
-      if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
-        setValue(`${name}.calculationType`, linkedSubscale.scoring);
-        handleCalculationChange({ target: { value: linkedSubscale.scoring } });
-      }
+    // Account for changes made to the linked subscale on the subscale configuration screen
+    if (scoreType === 'score') {
+      if (linkedSubscale) {
+        if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
+          setValue(`${name}.calculationType`, linkedSubscale.scoring);
+          handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+        }
 
-      setValue(`${name}.itemsScore`, linkedSubscale.items);
+        setValue(`${name}.itemsScore`, linkedSubscale.items);
+      } else if (linkedSubscaleName) {
+        setValue(linkedSubscaleNameField, undefined);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
