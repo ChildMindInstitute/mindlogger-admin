@@ -158,7 +158,7 @@ export const SubscalesConfiguration = () => {
       ) {
         const updatedReport: ScoreReport = {
           ...report,
-          linkedSubscaleName: undefined,
+          linkedSubscaleName: '',
         };
         updateReport(index, updatedReport);
       }
