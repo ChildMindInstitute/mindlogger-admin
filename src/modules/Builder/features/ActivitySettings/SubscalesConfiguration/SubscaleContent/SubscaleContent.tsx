@@ -78,11 +78,11 @@ export const SubscaleContent = ({
               if (
                 report.type === 'score' &&
                 report.scoringType === 'score' &&
-                report.linkedSubscaleName === subscaleName
+                report.subscaleName === subscaleName
               ) {
                 const updatedReport: ScoreReport = {
                   ...report,
-                  linkedSubscaleName: e.target.value,
+                  subscaleName: e.target.value,
                 };
                 updateReport(index, updatedReport);
               }

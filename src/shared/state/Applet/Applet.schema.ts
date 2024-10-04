@@ -832,7 +832,7 @@ export type ScoreReport = {
   itemsScore: string[];
 
   /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
-  linkedSubscaleName?: string;
+  subscaleName?: string;
   itemsPrint?: string[];
   message?: string;
   minScore?: number;

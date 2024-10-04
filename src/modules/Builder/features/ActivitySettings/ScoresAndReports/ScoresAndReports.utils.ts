@@ -16,7 +16,7 @@ export const getScoreDefaults = (): ScoreReport => ({
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
   scoringType: 'rawScore',
-  linkedSubscaleName: '',
+  subscaleName: '',
   itemsScore: [],
   showMessage: true,
   printItems: false,

@@ -96,7 +96,7 @@ export const ScoreContent = ({
   const calculationTypeField = `${name}.calculationType`;
   const itemsScoreField = `${name}.itemsScore`;
   const scoringTypeField = `${name}.scoringType`;
-  const linkedSubscaleNameField = `${name}.linkedSubscaleName`;
+  const subscaleNameField = `${name}.subscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] });
@@ -108,7 +108,7 @@ export const ScoreContent = ({
     calculationType,
     itemsScore,
     scoringType,
-    linkedSubscaleName,
+    subscaleName,
   } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
@@ -127,7 +127,7 @@ export const ScoreContent = ({
 
     return hasLookupTable && hasNonSubscaleItems;
   });
-  const linkedSubscale = eligibleSubscales.find(({ name }) => name === linkedSubscaleName);
+  const linkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
 
   const scoreRange = getScoreRange({
     items: selectedItems,
@@ -259,7 +259,7 @@ export const ScoreContent = ({
 
       if (!newLinkedSubscale) return;
 
-      setValue(linkedSubscaleNameField, subscaleName);
+      setValue(subscaleNameField, subscaleName);
 
       if (scoringType === 'score') {
         setValue(calculationTypeField, newLinkedSubscale.scoring);
@@ -274,7 +274,7 @@ export const ScoreContent = ({
     [
       calculationType,
       handleCalculationChange,
-      linkedSubscaleNameField,
+      subscaleNameField,
       name,
       scoringType,
       setValue,
@@ -355,8 +355,8 @@ export const ScoreContent = ({
 
         setValue(itemsScoreField, linkedSubscale.items);
       } else {
-        if (linkedSubscaleName) {
-          setValue(linkedSubscaleNameField, '');
+        if (subscaleName) {
+          setValue(subscaleNameField, '');
         }
 
         if (eligibleSubscales.length <= 0) {
@@ -467,7 +467,7 @@ export const ScoreContent = ({
               {scoringType === 'score' && (
                 <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
                   <SelectController
-                    name={linkedSubscaleNameField}
+                    name={subscaleNameField}
                     sx={{ width: '50%', pr: theme.spacing(2.4) }}
                     control={control}
                     options={eligibleSubscales.map(({ name }) => ({
@@ -482,7 +482,7 @@ export const ScoreContent = ({
                     customChange={handleLinkedSubscaleChange}
                     variant="outlined"
                   />
-                  {linkedSubscaleName && (
+                  {subscaleName && (
                     <Button
                       variant="outlined"
                       sx={{

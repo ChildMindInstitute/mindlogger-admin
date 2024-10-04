@@ -935,9 +935,9 @@ export const ScoreOrSectionSchema = () =>
         then: (schema) => schema.required(),
         otherwise: (schema) => schema.nullable(),
       }),
-    linkedSubscaleName: yup.string().when('scoringType', {
+    subscaleName: yup.string().when('scoringType', {
       is: 'score',
-      then: (schema) => schema.required(t('linkedSubscaleNameRequired')),
+      then: (schema) => schema.required(t('subscaleNameRequired')),
       otherwise: (schema) => schema.nullable(),
     }),
     id: yup.string().when('type', {
