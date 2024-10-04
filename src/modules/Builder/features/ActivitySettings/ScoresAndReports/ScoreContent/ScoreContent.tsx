@@ -28,7 +28,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic, ScoreReport, ScoreTypeScoreType } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport, ScoreReportScoreType } from 'shared/state';
 import { CalculationType, observerStyles } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey, SettingParam } from 'shared/utils';
@@ -279,7 +279,7 @@ export const ScoreContent = ({
 
   const handleScoreTypeChange = useCallback(
     (e: SelectEvent) => {
-      const scoreType = e.target.value as ScoreTypeScoreType;
+      const scoreType = e.target.value as ScoreReportScoreType;
       setValue(`${name}.scoreType`, scoreType);
 
       if (scoreType === 'score' && linkedSubscale) {

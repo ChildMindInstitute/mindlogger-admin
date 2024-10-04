@@ -815,7 +815,7 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
-export type ScoreTypeScoreType = 'score' | 'rawScore';
+export type ScoreReportScoreType = 'score' | 'rawScore';
 
 export type ScoreReport = {
   id: string;
@@ -823,7 +823,7 @@ export type ScoreReport = {
   name: string;
   type: ScoreReportType.Score;
   /** Whether to show raw score or T scores in the report */
-  scoreType: ScoreTypeScoreType;
+  scoreType: ScoreReportScoreType;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
