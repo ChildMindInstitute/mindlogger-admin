@@ -854,6 +854,7 @@
   "linkSuccessfullyCopied": "Link successfully copied",
   "linkText": "Link text",
   "linkUrl": "Link url",
+  "linkedSubscaleNameRequired": "Please select a valid Subscale",
   "liveResponseStreaming": "Live Response Streaming",
   "liveResponseStreamingDescription": "Send responses to a server of your choice, as they are being entered.",
   "liveResponseStreamingLabel": "Enable streaming of response data",

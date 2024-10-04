@@ -854,6 +854,7 @@
   "linkSuccessfullyCopied": "Lien copié avec succès",
   "linkText": "Texte du Lien",
   "linkUrl": "URL du Lien",
+  "linkedSubscaleNameRequired": "Veuillez sélectionner une sous-échelle valide",
   "liveResponseStreaming": "Diffusion en direct des réponses",
   "liveResponseStreamingDescription": "Envoyez les réponses à un serveur de votre choix au fur et à mesure de leur saisie.",
   "liveResponseStreamingLabel": "Activer la diffusion en continu des données de réponse",

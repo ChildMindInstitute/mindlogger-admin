@@ -20,7 +20,13 @@ import {
   PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
+import {
+  Condition,
+  Config,
+  PhrasalTemplateField,
+  ScoreOrSection,
+  ScoreReportScoreType,
+} from 'shared/state';
 import {
   createRegexFromList,
   getEntityKey,
@@ -923,13 +929,17 @@ export const ScoreOrSectionSchema = () =>
     }),
     scoreType: yup
       .string()
-      .oneOf(['score', 'rawScore'])
+      .oneOf(ScoreReportScoreType)
       .when('type', {
         is: ScoreReportType.Score,
         then: (schema) => schema.required(),
         otherwise: (schema) => schema.nullable(),
       }),
-    linkedSubscaleName: yup.string().nullable(),
+    linkedSubscaleName: yup.string().when('scoreType', {
+      is: 'score',
+      then: (schema) => schema.required(t('linkedSubscaleNameRequired')),
+      otherwise: (schema) => schema.nullable(),
+    }),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
       then: (schema) => schema.required(),
