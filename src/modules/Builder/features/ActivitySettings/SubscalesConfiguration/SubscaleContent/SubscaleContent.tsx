@@ -1,4 +1,4 @@
-import { useWatch } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
@@ -15,6 +15,8 @@ import {
 import { DataTable } from 'shared/components/DataTable';
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
+import { ScoreOrSection, ScoreReport } from 'shared/state';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -36,11 +38,23 @@ export const SubscaleContent = ({
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
+  const subscaleName: string = useWatch({ name: `${name}.name` });
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
     subscales,
   );
+
+  const reportsField = `${fieldName}.scoresAndReports.reports`;
+  const { fields: reports, update: updateReport } = useFieldArray<
+    Record<string, ScoreOrSection[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
+    control,
+    name: reportsField,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
+  });
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
@@ -56,6 +70,24 @@ export const SubscaleContent = ({
           label={t('subscaleName')}
           data-testid={`${dataTestid}-name`}
           withDebounce
+          onChange={(e, onChange) => {
+            onChange();
+
+            // Also update the name of this subscale in any score reports that are linked to it
+            reports.forEach((report, index) => {
+              if (
+                report.type === 'score' &&
+                report.scoreType === 'score' &&
+                report.linkedSubscaleName === subscaleName
+              ) {
+                const updatedReport: ScoreReport = {
+                  ...report,
+                  linkedSubscaleName: e.target.value,
+                };
+                updateReport(index, updatedReport);
+              }
+            });
+          }}
         />
         <SelectController
           name={`${name}.scoring`}
