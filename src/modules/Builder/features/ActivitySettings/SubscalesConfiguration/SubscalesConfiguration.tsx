@@ -13,7 +13,8 @@ import { getEntityKey, isSystemItem, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
-import { AgeFieldType } from 'shared/state';
+import { ActivitySettingsSubscale, AgeFieldType, ScoreOrSection, ScoreReport } from 'shared/state';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
@@ -59,6 +60,18 @@ export const SubscalesConfiguration = () => {
     control,
     name: subscalesField,
   });
+
+  const reportsField = `${fieldName}.scoresAndReports.reports`;
+  const { fields: reports, update: updateReport } = useFieldArray<
+    Record<string, ScoreOrSection[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
+    control,
+    name: reportsField,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
+  });
+
   const calculateTotalScore = watch(calculateTotalScoreField);
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(!!calculateTotalScore);
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
@@ -135,6 +148,23 @@ export const SubscalesConfiguration = () => {
   useSubscalesSystemItemsSetup(subscales, ageFieldType);
   const hasLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
 
+  /** Remove this subscale from any report scores that are linked to it */
+  const removeReportScoreLink = (subscale: ActivitySettingsSubscale<string>) => {
+    reports.forEach((report, index) => {
+      if (
+        report.type === 'score' &&
+        report.scoreType === 'score' &&
+        report.linkedSubscaleName === subscale.name
+      ) {
+        const updatedReport: ScoreReport = {
+          ...report,
+          linkedSubscaleName: undefined,
+        };
+        updateReport(index, updatedReport);
+      }
+    });
+  };
+
   return (
     <StyledButtonsContainer>
       {subscales?.map((subscale, index) => {
@@ -153,6 +183,7 @@ export const SubscalesConfiguration = () => {
             headerContentProps={{
               onRemove: () => {
                 removeSubscale(index);
+                removeReportScoreLink(subscale);
               },
               name: subscaleField,
               title,
@@ -161,6 +192,10 @@ export const SubscalesConfiguration = () => {
                   ...subscale,
                   subscaleTableData,
                 });
+
+                if (!subscaleTableData) {
+                  removeReportScoreLink(subscale);
+                }
               },
               'data-testid': subscaleDataTestid,
             }}
