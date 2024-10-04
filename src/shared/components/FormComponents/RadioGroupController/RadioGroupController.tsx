@@ -33,9 +33,8 @@ export const RadioGroupController = <T extends FieldValues>({
         }}
       >
         {options?.map(({ value, label, disabled, tooltipText }, index) => (
-          <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+          <StyledFlexTopCenter sx={{ gap: 0.8 }} key={uniqueId()}>
             <StyledFormControlLabel
-              key={uniqueId()}
               value={value}
               sx={{ display: 'flex', gap: 0.8 }}
               control={<Radio sx={{ padding: '12px' }} />}
