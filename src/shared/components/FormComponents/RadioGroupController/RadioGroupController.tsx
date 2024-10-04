@@ -21,7 +21,17 @@ export const RadioGroupController = <T extends FieldValues>({
     name={name}
     defaultValue={defaultValue}
     render={({ field }) => (
-      <RadioGroup {...field} data-testid={dataTestid} onChange={onChange}>
+      <RadioGroup
+        {...field}
+        data-testid={dataTestid}
+        onChange={(event, value) => {
+          if (onChange) {
+            onChange(event, value, field.onChange);
+          }
+
+          field.onChange(event, value);
+        }}
+      >
         {options?.map(({ value, label, disabled, tooltipText }, index) => (
           <StyledFlexTopCenter sx={{ gap: 0.8 }}>
             <StyledFormControlLabel

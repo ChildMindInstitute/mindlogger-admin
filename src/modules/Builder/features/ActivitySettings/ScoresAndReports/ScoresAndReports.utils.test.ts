@@ -63,6 +63,7 @@ describe('getScoreDefaults', () => {
       id: 'sumScore_',
       calculationType: 'sum',
       itemsScore: [],
+      scoreType: 'rawScore',
       showMessage: true,
       printItems: false,
       message: '',
