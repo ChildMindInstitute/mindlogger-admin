@@ -173,9 +173,19 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
+      const isTargetTeamMember = targetSubject?.tag === 'Team';
       const isAssigned = !!assignments?.some((a) => a.targetSubject.id === targetSubject?.id);
       const isAssignDisplayed = canAssign && !autoAssign;
       const isUnassignDisplayed = canAssign && isAssignable && (autoAssign || isAssigned);
+
+      let assignTooltip: string | undefined;
+      if (isTargetTeamMember) {
+        assignTooltip = t('assignToTeamMemberTooltip');
+      } else if (!isAssignable) {
+        assignTooltip = isFlow
+          ? t('assignFlowDisabledTooltip')
+          : t('assignActivityDisabledTooltip');
+      }
 
       const showDivider =
         (isEditDisplayed || canAccessData || isAssignDisplayed || isUnassignDisplayed) &&
@@ -206,10 +216,8 @@ export const useAssignmentsTab = ({
           icon: <Svg id="file-plus" />,
           title: isFlow ? t('assignFlow') : t('assignActivity'),
           isDisplayed: canAssign && !autoAssign,
-          disabled: !isAssignable,
-          tooltip:
-            !isAssignable &&
-            (isFlow ? t('assignFlowDisabledTooltip') : t('assignActivityDisabledTooltip')),
+          disabled: !isAssignable || isTargetTeamMember,
+          tooltip: assignTooltip,
         },
         {
           'data-testid': `${dataTestId}-unassign`,
@@ -240,7 +248,7 @@ export const useAssignmentsTab = ({
                 ...targetSubject,
                 secretId: targetSubject.secretUserId,
                 userId: targetSubject.userId,
-                isTeamMember: targetSubject.tag === 'Team',
+                isTeamMember: isTargetTeamMember,
               },
             }),
           icon: <Svg id="play-outline" />,
