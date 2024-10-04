@@ -349,8 +349,14 @@ export const ScoreContent = ({
         }
 
         setValue(`${name}.itemsScore`, linkedSubscale.items);
-      } else if (linkedSubscaleName) {
-        setValue(linkedSubscaleNameField, undefined);
+      } else {
+        if (linkedSubscaleName) {
+          setValue(linkedSubscaleNameField, '');
+        }
+
+        if (eligibleSubscales.length <= 0) {
+          setValue(`${name}.scoreType`, 'rawScore');
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
