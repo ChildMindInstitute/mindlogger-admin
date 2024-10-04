@@ -64,6 +64,7 @@ describe('getScoreDefaults', () => {
       calculationType: 'sum',
       itemsScore: [],
       scoreType: 'rawScore',
+      linkedSubscaleName: '',
       showMessage: true,
       printItems: false,
       message: '',
