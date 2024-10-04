@@ -123,7 +123,9 @@ export const SliderPanel = ({
     hasAlerts && setValue(`${alertsName}.${index}.value`, '');
   };
 
-  const handleMinValueChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMinValueChange = async (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const value = event.target.value === '' ? '' : +event.target.value;
     await setValue(minValueName, value);
     clearErrors([minValueName, maxValueName]);
@@ -165,7 +167,7 @@ export const SliderPanel = ({
     setDefaultScoresAndAlerts();
   };
 
-  const handleMaxValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMaxValueChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value === '' ? '' : +event.target.value;
     clearErrors([minValueName, maxValueName]);
     setValue(maxValueName, value);

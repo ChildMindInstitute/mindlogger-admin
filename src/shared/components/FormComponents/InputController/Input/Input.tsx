@@ -77,17 +77,23 @@ export const Input = <T extends FieldValues>({
     }
   };
   const handleChange = (event: SelectEvent) => {
-    if (onCustomChange) return onCustomChange(event);
-    const newValue = event.target.value;
-    if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;
-    const getNumberValue = () => {
-      if (!isNumberType) return undefined;
-      if (isControlledNumberValue) return +newValue;
+    const handleChangeLogic = () => {
+      const newValue = event.target.value;
+      if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength)
+        return;
+      const getNumberValue = () => {
+        if (!isNumberType) return undefined;
+        if (isControlledNumberValue) return +newValue;
 
-      return newValue === '' ? '' : +newValue;
+        return newValue === '' ? '' : +newValue;
+      };
+
+      onChange?.(getNumberValue() ?? newValue);
     };
 
-    onChange?.(getNumberValue() ?? newValue);
+    if (onCustomChange) return onCustomChange(event, handleChangeLogic);
+
+    handleChangeLogic();
   };
   const handleDebouncedChange = debounce(
     (event: SelectEvent) => handleChange(event),
