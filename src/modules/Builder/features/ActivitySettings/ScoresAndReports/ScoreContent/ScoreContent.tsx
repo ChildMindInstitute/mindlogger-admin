@@ -95,9 +95,6 @@ export const ScoreContent = ({
   const linkedSubscaleNameField = `${name}.linkedSubscaleName`;
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] });
-  const subscalesWithLookupTables = subscales.filter(
-    ({ subscaleTableData }) => !!subscaleTableData && subscaleTableData.length,
-  );
 
   const score: ScoreReport = useWatch({ name });
   const {
@@ -108,13 +105,24 @@ export const ScoreContent = ({
     scoreType,
     linkedSubscaleName,
   } = score || {};
-  const linkedSubscale = subscalesWithLookupTables.find(({ name }) => name === linkedSubscaleName);
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
 
   const selectedItemsPredicate = (item: { id?: string; key?: string }) =>
     itemsScore?.includes(getEntityKey(item, true));
   const selectedItems = scoreItems?.filter(selectedItemsPredicate);
+
+  const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
+    const hasLookupTable = !!subscaleTableData && subscaleTableData.length;
+
+    // Subscales can contain only nested subscales, but they need at least one activity item
+    // because that's what the report score is calculated from
+    const hasNonSubscaleItems =
+      scoreItems?.filter((item) => items.includes(getEntityKey(item, true)))?.length > 0;
+
+    return hasLookupTable && hasNonSubscaleItems;
+  });
+  const linkedSubscale = eligibleSubscales.find(({ name }) => name === linkedSubscaleName);
 
   const scoreRange = getScoreRange({
     items: selectedItems,
@@ -242,7 +250,7 @@ export const ScoreContent = ({
   const handleLinkedSubscaleChange = useCallback(
     (e: SelectEvent) => {
       const subscaleName = e.target.value;
-      const newLinkedSubscale = subscalesWithLookupTables.find(({ name }) => name === subscaleName);
+      const newLinkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
 
       if (!newLinkedSubscale) return;
 
@@ -265,7 +273,7 @@ export const ScoreContent = ({
       name,
       scoreType,
       setValue,
-      subscalesWithLookupTables,
+      eligibleSubscales,
     ],
   );
 
@@ -451,7 +459,7 @@ export const ScoreContent = ({
                   name={linkedSubscaleNameField}
                   sx={{ width: '50%', pr: theme.spacing(2.4) }}
                   control={control}
-                  options={subscalesWithLookupTables.map(({ name }) => ({
+                  options={eligibleSubscales.map(({ name }) => ({
                     value: name,
                     labelKey: name,
                   }))}
