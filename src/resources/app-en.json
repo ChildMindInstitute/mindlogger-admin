@@ -1051,6 +1051,8 @@
     "byParticipant": "By Participant",
     "aboutParticipant": "About Participant",
     "aboutParticipantEmpty": "No Activities are assigned to be completed about this Participant.",
+    "byParticipantEmpty": "No Activities are assigned for this Participant to complete.",
+    "byParticipantEmptyLimitedAccount": "This Participant has a Limited Account and cannot be assigned to complete Activities.",
     "aboutParticipantEmptyTeamMember": "This Participant is a Team Member and Activities cannot be completed about them.",
     "assignActivityButton": "Assign Activity",
     "activitiesAndFlows": "Activities & Flows"
