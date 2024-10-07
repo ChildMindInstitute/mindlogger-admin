@@ -941,6 +941,14 @@ export const getAppletTargetSubjectActivitiesApi = (
     signal,
   });
 
+export const getAppletRespondentSubjectActivitiesApi = (
+  { appletId, subjectId }: GetSubjectActivitiesParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<AppletParticipantActivitiesResponse>> =>
+  authApiClient.get(`/activities/applet/${appletId}/respondent/${subjectId}`, {
+    signal,
+  });
+
 export const createTemporaryMultiInformantRelationApi = (
   { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
   signal?: AbortSignal,
