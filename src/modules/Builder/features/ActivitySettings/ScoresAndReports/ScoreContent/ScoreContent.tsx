@@ -363,7 +363,12 @@ export const ScoreContent = ({
           setValue(scoringTypeField, 'raw_score');
         }
       }
+    } else if (subscaleName === undefined) {
+      // Account for scores that have been saved without a linked subscale
+      // This will remove the MUI controlled field warnings
+      setValue(subscaleNameField, '');
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -427,6 +432,7 @@ export const ScoreContent = ({
                 data-testid={`${dataTestid}-calculation-type`}
                 customChange={handleCalculationChange}
                 disabled={scoringType === 'score'}
+                variant={'outlined'}
               />
             </Box>
             <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
