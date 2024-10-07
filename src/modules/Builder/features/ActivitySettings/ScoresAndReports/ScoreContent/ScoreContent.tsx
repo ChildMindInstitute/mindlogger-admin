@@ -263,7 +263,11 @@ export const ScoreContent = ({
 
       if (scoringType === 'score') {
         setValue(calculationTypeField, newLinkedSubscale.scoring);
-        setValue(itemsScoreField, newLinkedSubscale.items);
+
+        const eligibleItems = newLinkedSubscale.items.filter(
+          (item) => !!activity?.items.some((activityItem) => activityItem.id === item),
+        );
+        setValue(itemsScoreField, eligibleItems);
 
         if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
           setValue(calculationTypeField, newLinkedSubscale.scoring);
