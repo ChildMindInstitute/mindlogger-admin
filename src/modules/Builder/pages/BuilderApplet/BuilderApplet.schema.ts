@@ -927,14 +927,9 @@ export const ScoreOrSectionSchema = () =>
       then: (schema) => schema.required(),
       otherwise: (schema) => schema.nullable(),
     }),
-    scoringType: yup
-      .string()
-      .oneOf(ScoreReportScoringType)
-      .when('type', {
-        is: ScoreReportType.Score,
-        then: (schema) => schema.required(),
-        otherwise: (schema) => schema.nullable(),
-      }),
+    // Technically this field is required, but it may be null in existing data
+    // so we enforce this instead in the UI
+    scoringType: yup.string().oneOf(ScoreReportScoringType).nullable(),
     subscaleName: yup.string().when('scoringType', {
       is: 'score',
       then: (schema) => schema.required(t('subscaleNameRequired')),
