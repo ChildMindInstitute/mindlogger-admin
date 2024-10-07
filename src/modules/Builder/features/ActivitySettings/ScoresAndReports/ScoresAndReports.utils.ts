@@ -15,7 +15,7 @@ export const getScoreDefaults = (): ScoreReport => ({
   key: uuidv4(),
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
-  scoringType: 'rawScore',
+  scoringType: 'raw_score',
   subscaleName: '',
   itemsScore: [],
   showMessage: true,

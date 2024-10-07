@@ -815,7 +815,7 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
-export const ScoreReportScoringType = ['score', 'rawScore'] as const;
+export const ScoreReportScoringType = ['score', 'raw_score'] as const;
 
 export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
 

@@ -360,7 +360,7 @@ export const ScoreContent = ({
         }
 
         if (eligibleSubscales.length <= 0) {
-          setValue(scoringTypeField, 'rawScore');
+          setValue(scoringTypeField, 'raw_score');
         }
       }
     }
@@ -456,12 +456,12 @@ export const ScoreContent = ({
                     tooltipText: t('scoreContent.scoreRadioBtn.tooltip'),
                   },
                   {
-                    value: 'rawScore',
+                    value: 'raw_score',
                     label: t('scoreContent.rawScoreRadioBtn.label'),
                     tooltipText: t('scoreContent.rawScoreRadioBtn.tooltip'),
                   },
                 ]}
-                defaultValue={'rawScore'}
+                defaultValue={'raw_score'}
                 data-testid={`${dataTestid}-score-type-toggle`}
               />
               {scoringType === 'score' && (
