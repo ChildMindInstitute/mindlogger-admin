@@ -37,6 +37,14 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
     [currentItemIndex, items],
   );
 
+  const handleRemovePhraseAtIndex = (index: number) => {
+    remove(index);
+
+    if (fields.length <= 1) {
+      handleAddPhrase();
+    }
+  };
+
   const handleAddPhrase = () => {
     append(getNewDefaultPhrase());
   };
@@ -84,12 +92,11 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
         <StyledPhrasalTemplateList>
           {fields.map((field, i) => (
             <PhrasalTemplatePhrase
-              canRemovePhrase={fields.length > 1}
               index={i}
               key={field.id}
               name={`${name}.responseValues.phrases.${i}`}
               onRemovePhrase={() => {
-                remove(i);
+                handleRemovePhraseAtIndex(i);
               }}
               responseOptions={responseOptions}
             />
