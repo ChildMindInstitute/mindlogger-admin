@@ -367,10 +367,17 @@ export const ScoreContent = ({
           setValue(scoringTypeField, 'raw_score');
         }
       }
-    } else if (subscaleName === undefined) {
-      // Account for scores that have been saved without a linked subscale
-      // This will remove the MUI controlled field warnings
-      setValue(subscaleNameField, '');
+    } else {
+      if (subscaleName === null || subscaleName === undefined) {
+        // Account for scores that have been saved without a linked subscale
+        // This will remove the MUI controlled field warnings
+        setValue(subscaleNameField, '');
+      }
+
+      // Account for scores that have been saved without a scoring type
+      if (!scoringType) {
+        setValue(scoringTypeField, 'raw_score');
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
