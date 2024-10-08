@@ -99,7 +99,7 @@ export const ScoreContent = ({
   const subscaleNameField = `${name}.subscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] });
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
 
   const score: ScoreReport = useWatch({ name });
   const {
