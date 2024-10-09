@@ -21,7 +21,6 @@ import {
   getDateInUserTimezone,
   getEncryptionToServer,
   Mixpanel,
-  SettingParam,
 } from 'shared/utils';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
@@ -147,11 +146,14 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
         ),
       ),
     duplicateAction: () =>
-      navigate(
-        generatePath(page.appletSettingsItem, {
-          appletId: item.id,
-          setting: SettingParam.DuplicateApplet,
-        }),
+      checkAppletEncryption(() =>
+        dispatch(
+          popups.actions.setPopupVisible({
+            applet: item,
+            key: 'duplicatePopupsVisible',
+            value: true,
+          }),
+        ),
       ),
     transferOwnership: () =>
       checkAppletEncryption(() =>
