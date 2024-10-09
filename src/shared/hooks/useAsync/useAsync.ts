@@ -11,6 +11,23 @@ import {
   UseAsyncOptions,
 } from './useAsync.types';
 
+/**
+ * Utility hook to handle async operations with loading state, error state, and callbacks.
+ *
+ * @param asyncFunction Async function to be called
+ * @param options Options object with the following properties:
+ * - `successCallback`: Callback to be called on success
+ * - `errorCallback`: Callback to be called on error
+ * - `finallyCallback`: Callback to be called on completion
+ * - `retainValue`: Whether to preserve the previous returned value during loading state (if false,
+ *   the value will be set to `null` the next time `execute` is called)
+ * @returns Object with the following properties:
+ * - `execute`: Function that executes the async function
+ * - `value`: Async function's successful response value
+ * - `error`: Async function's returned value if there is an error
+ * - `isLoading`: Whether the async function is currently executing
+ * - `setError`: Function to set the error value
+ */
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
   ...options: UseAsyncOptions<T, K>
