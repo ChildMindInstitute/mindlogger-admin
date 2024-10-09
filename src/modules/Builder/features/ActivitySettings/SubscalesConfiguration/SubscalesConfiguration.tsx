@@ -13,8 +13,7 @@ import { getEntityKey, isSystemItem, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
-import { ActivitySettingsSubscale, AgeFieldType, ScoreOrSection, ScoreReport } from 'shared/state';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { AgeFieldType } from 'shared/state';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
@@ -39,7 +38,10 @@ import {
 } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
-import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
+import {
+  useLinkedScoreReports,
+  useSubscalesSystemItemsSetup,
+} from './SubscalesConfiguration.hooks';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
@@ -61,16 +63,7 @@ export const SubscalesConfiguration = () => {
     name: subscalesField,
   });
 
-  const reportsField = `${fieldName}.scoresAndReports.reports`;
-  const { fields: reports, update: updateReport } = useFieldArray<
-    Record<string, ScoreOrSection[]>,
-    string,
-    typeof REACT_HOOK_FORM_KEY_NAME
-  >({
-    control,
-    name: reportsField,
-    keyName: REACT_HOOK_FORM_KEY_NAME,
-  });
+  const { removeReportScoreLink } = useLinkedScoreReports();
 
   const calculateTotalScore = watch(calculateTotalScoreField);
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(!!calculateTotalScore);
@@ -147,23 +140,6 @@ export const SubscalesConfiguration = () => {
 
   useSubscalesSystemItemsSetup(subscales, ageFieldType);
   const hasLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
-
-  /** Remove this subscale from any report scores that are linked to it */
-  const removeReportScoreLink = (subscale: ActivitySettingsSubscale<string>) => {
-    reports.forEach((report, index) => {
-      if (
-        report.type === 'score' &&
-        report.scoringType === 'score' &&
-        report.subscaleName === subscale.name
-      ) {
-        const updatedReport: ScoreReport = {
-          ...report,
-          subscaleName: '',
-        };
-        updateReport(index, updatedReport);
-      }
-    });
-  };
 
   return (
     <StyledButtonsContainer>

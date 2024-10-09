@@ -1,4 +1,4 @@
-import { useFieldArray, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
@@ -15,8 +15,7 @@ import {
 import { DataTable } from 'shared/components/DataTable';
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
-import { ScoreOrSection, ScoreReport } from 'shared/state';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { useLinkedScoreReports } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/SubscalesConfiguration.hooks';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -45,16 +44,7 @@ export const SubscaleContent = ({
     subscales,
   );
 
-  const reportsField = `${fieldName}.scoresAndReports.reports`;
-  const { fields: reports, update: updateReport } = useFieldArray<
-    Record<string, ScoreOrSection[]>,
-    string,
-    typeof REACT_HOOK_FORM_KEY_NAME
-  >({
-    control,
-    name: reportsField,
-    keyName: REACT_HOOK_FORM_KEY_NAME,
-  });
+  const { updateSubscaleNameInReports } = useLinkedScoreReports();
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
@@ -72,21 +62,8 @@ export const SubscaleContent = ({
           withDebounce
           onChange={(e, onChange) => {
             onChange();
-
             // Also update the name of this subscale in any score reports that are linked to it
-            reports.forEach((report, index) => {
-              if (
-                report.type === 'score' &&
-                report.scoringType === 'score' &&
-                report.subscaleName === subscaleName
-              ) {
-                const updatedReport: ScoreReport = {
-                  ...report,
-                  subscaleName: e.target.value,
-                };
-                updateReport(index, updatedReport);
-              }
-            });
+            updateSubscaleNameInReports(subscaleName, e.target.value);
           }}
         />
         <SelectController
