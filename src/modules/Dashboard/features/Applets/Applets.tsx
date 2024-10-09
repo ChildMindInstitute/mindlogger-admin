@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Folder, Applet } from 'api';
 import {
   DeletePopup,
+  DuplicatePopups,
   PublishConcealAppletPopup,
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
@@ -38,8 +39,12 @@ export const Applets = () => {
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { deletePopupVisible, transferOwnershipPopupVisible, publishConcealPopupVisible } =
-    popups.useData();
+  const {
+    duplicatePopupsVisible,
+    deletePopupVisible,
+    transferOwnershipPopupVisible,
+    publishConcealPopupVisible,
+  } = popups.useData();
 
   const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } =
     useAppletsWithFolders(setRows);
@@ -168,6 +173,7 @@ export const Applets = () => {
           data-testid="dashboard-applets-table"
           {...tableProps}
         />
+        {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
         {deletePopupVisible && (
           <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
         )}
