@@ -72,6 +72,11 @@ type UseLinkedScoreReportsReturn = {
    * Update the name of a subscale in any linked score reports
    */
   updateSubscaleNameInReports: (oldSubscaleName: string, newSubscaleName: string) => void;
+
+  /**
+   * Check if there are any non-subscales in the list of subscale items
+   */
+  hasNonSubscaleItems: (subscaleItems: ActivitySettingsSubscale<string>['items']) => boolean;
 };
 
 /**
@@ -96,14 +101,22 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
   const subscalesField = `${currentActivityFieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
 
+  const hasNonSubscaleItems = useCallback(
+    (subscaleItems: ActivitySettingsSubscale<string>['items']) => {
+      const nonSubscaleItems =
+        currentActivity?.items?.filter((item) =>
+          subscaleItems.includes(getEntityKey(item, true)),
+        ) ?? [];
+
+      return nonSubscaleItems.length > 0;
+    },
+    [currentActivity?.items],
+  );
+
   const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
     const hasLookupTable = !!subscaleTableData && subscaleTableData.length;
 
-    const nonSubscaleItems =
-      currentActivity?.items?.filter((item) => items.includes(getEntityKey(item, true))) ?? [];
-    const hasNonSubscaleItems = nonSubscaleItems.length > 0;
-
-    return hasLookupTable && hasNonSubscaleItems;
+    return hasLookupTable && hasNonSubscaleItems(items);
   });
 
   const linkedScores = scoreOrSectionArray.filter(
@@ -164,5 +177,5 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
     }
   }, [eligibleSubscales, linkedScores, updateReport]);
 
-  return { removeReportScoreLink, updateSubscaleNameInReports };
+  return { removeReportScoreLink, updateSubscaleNameInReports, hasNonSubscaleItems };
 };

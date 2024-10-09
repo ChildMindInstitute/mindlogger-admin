@@ -1,5 +1,6 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
 import {
@@ -36,20 +37,29 @@ export const SubscaleContent = ({
   const { control } = useCustomFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
   const subscaleName: string = useWatch({ name: `${name}.name` });
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
-    subscales,
+    subscales || [],
   );
 
-  const { updateSubscaleNameInReports } = useLinkedScoreReports();
+  const { updateSubscaleNameInReports, hasNonSubscaleItems, removeReportScoreLink } =
+    useLinkedScoreReports();
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
     entitiesFieldPath: subscalesField,
   });
+
+  useEffect(() => {
+    const subscale = subscales?.find((subscale) => subscale.id === subscaleId);
+
+    if (subscale && !hasNonSubscaleItems(subscale.items)) {
+      removeReportScoreLink(subscale);
+    }
+  }, [hasNonSubscaleItems, removeReportScoreLink, subscaleId, subscales]);
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
