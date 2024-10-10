@@ -1080,6 +1080,11 @@
   "photoResponseDescription": "Le participant pourra prendre ou uploader une photo.",
   "photoResponseTitle": "Réponse avec Photo",
   "phrasalTemplate": "Constructeur de phrases",
+  "phrasalTemplateRemovePopup": {
+    "title": "Supprimer la phrase",
+    "areYouSure": "Êtes-vous sûr de vouloir supprimer cette phrase? Cette action ne peut pas être annulée.",
+    "confirm": "Oui, supprimer"
+  },
   "phrasalTemplateItem": {
     "btnAddField": "Ajouter…",
     "btnAddPhrase": "Nouvelle phrase",
