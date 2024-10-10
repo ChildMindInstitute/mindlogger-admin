@@ -90,7 +90,7 @@ export const EditRespondentPopup = ({
     });
   };
 
-  const handleChangeSecretId = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSecretId = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue('secretUserId', event.target.value);
     setIsServerErrorVisible(false);
     trigger('secretUserId');
