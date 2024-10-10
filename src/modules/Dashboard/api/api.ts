@@ -315,7 +315,7 @@ export const postSubjectInvitationApi = (
   );
 
 export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signal?: AbortSignal) =>
-  authApiClient.post(
+  authApiClient.post<ResponseWithObject<Applet>>(
     `/applets/${appletId}/duplicate`,
     { ...options },
     {
