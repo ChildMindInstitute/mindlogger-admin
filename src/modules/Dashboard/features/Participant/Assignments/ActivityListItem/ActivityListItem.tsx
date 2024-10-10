@@ -14,7 +14,7 @@ export const ActivityListItem = ({
   onClick,
   children,
 }: ActivityListItemProps) => (
-  <StyledActivityListItem as="button" onClick={onClick}>
+  <StyledActivityListItem as={onClick ? 'a' : 'div'} onClick={onClick}>
     <StyledFlexTopCenter sx={{ gap: 0.8 }}>
       <StyledActivityThumbnailContainer sx={{ width: '5.6rem', height: '5.6rem', mr: 0.8 }}>
         {isFlow ? (

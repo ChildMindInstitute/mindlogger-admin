@@ -22,6 +22,7 @@ import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { UseAssignmentsTabProps } from './AssignmentsTab.types';
 
@@ -77,6 +78,14 @@ export const useAssignmentsTab = ({
   const handleCloseDrawer = (shouldRefetch?: boolean) => {
     setShowActivityAssign(false);
     setShowActivityUnassign(false);
+
+    // Allow drawer to transition out before clearing activity/flow to prevent unintended
+    // rendering of possible empty state before drawer closes
+    setTimeout(() => {
+      setSelectedActivityOrFlow(undefined);
+      setSelectedTargetSubjectId(undefined);
+    }, 300);
+
     if (shouldRefetch) handleRefetch?.();
   };
 
@@ -146,10 +155,15 @@ export const useAssignmentsTab = ({
     [appletId, navigate],
   );
 
-  const onClickAssign = useCallback((activityOrFlow?: ParticipantActivityOrFlow) => {
-    if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
-    setShowActivityAssign(true);
-  }, []);
+  const onClickAssign = useCallback(
+    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
+      if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
+      setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
+
+      setShowActivityAssign(true);
+    },
+    [targetSubject],
+  );
 
   const getActionsMenu = useCallback(
     (activityOrFlow: ParticipantActivityOrFlow) => {
@@ -174,17 +188,23 @@ export const useAssignmentsTab = ({
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
       const isTargetTeamMember = targetSubject?.tag === 'Team';
-      const isAssigned = !!assignments?.some((a) => a.targetSubject.id === targetSubject?.id);
-      const isAssignDisplayed = canAssign && !autoAssign;
+      const isAssigned = !!assignments?.some(
+        (a) =>
+          a.targetSubject.id === targetSubject?.id ||
+          a.respondentSubject.id === respondentSubject?.id,
+      );
+      const isAssignDisplayed =
+        canAssign && (!autoAssign || status === ActivityAssignmentStatus.Hidden);
+      const isAssignDisabled = !isAssignable || isTargetTeamMember;
       const isUnassignDisplayed = canAssign && isAssignable && (autoAssign || isAssigned);
 
       let assignTooltip: string | undefined;
-      if (isTargetTeamMember) {
-        assignTooltip = t('assignToTeamMemberTooltip');
-      } else if (!isAssignable) {
+      if (status === ActivityAssignmentStatus.Hidden) {
         assignTooltip = isFlow
           ? t('assignFlowDisabledTooltip')
           : t('assignActivityDisabledTooltip');
+      } else if (isTargetTeamMember) {
+        assignTooltip = t('assignToTeamMemberTooltip');
       }
 
       const showDivider =
@@ -208,15 +228,15 @@ export const useAssignmentsTab = ({
           disabled: !id,
           icon: <Svg id="export" />,
           title: t('exportData'),
-          isDisplayed: canAccessData,
+          isDisplayed: canAccessData && !!targetSubject,
         },
         {
           'data-testid': `${dataTestId}-assign`,
           action: () => onClickAssign(activityOrFlow),
           icon: <Svg id="file-plus" />,
           title: isFlow ? t('assignFlow') : t('assignActivity'),
-          isDisplayed: canAssign && !autoAssign,
-          disabled: !isAssignable || isTargetTeamMember,
+          isDisplayed: isAssignDisplayed,
+          disabled: isAssignDisabled,
           tooltip: assignTooltip,
         },
         {
@@ -312,7 +332,7 @@ export const useAssignmentsTab = ({
         }
         activityFlowId={selectedActivityOrFlow?.isFlow ? selectedActivityOrFlow.id : undefined}
         respondentSubjectId={respondentSubject?.id}
-        targetSubjectId={targetSubject?.id}
+        targetSubjectId={selectedTargetSubjectId}
       />
 
       <ActivityUnassignDrawer
