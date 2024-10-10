@@ -14,7 +14,7 @@ export const setLorisIntegrationApi = ({ appletId }: AppletId, signal?: AbortSig
   );
 
 export const getLorisVisitsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/integrations/${appletId}loris/visits`, { signal });
+  authApiClient.get(`/integrations/loris/${appletId}/visits`, { signal });
 
 export const getLorisUsersVisitsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/integrations/loris/${appletId}/users/visits`, { signal });

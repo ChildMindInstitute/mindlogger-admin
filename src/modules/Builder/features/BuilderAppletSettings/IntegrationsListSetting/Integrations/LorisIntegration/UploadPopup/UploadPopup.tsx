@@ -47,7 +47,7 @@ export const UploadPopup = ({ open, onClose }: UploadPopupProps) => {
     try {
       setIsLoading(true);
       const [visitsResult, usersVisitsResult] = await Promise.all([
-        getLorisVisitsApi(appletId),
+        getLorisVisitsApi({ appletId }),
         getLorisUsersVisitsApi({ appletId }),
       ]);
 
