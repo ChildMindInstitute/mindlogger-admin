@@ -15,7 +15,7 @@ import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
-import { LorisIntegrationSetting } from './LorisIntegrationSetting';
+import { LorisIntegration } from './IntegrationsListSetting/Integrations';
 
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
@@ -58,9 +58,9 @@ export const getSettings = ({
         ...(enableLorisIntegration
           ? [
               {
-                icon: <Svg id="data-collection" />,
+                icon: <Svg id="integrations" />,
                 label: 'loris.integration',
-                component: <LorisIntegrationSetting />,
+                component: <LorisIntegration />,
                 param: SettingParam.LorisIntegration,
                 isVisible: enableLorisIntegration,
                 'data-testid': `${dataTestid}-loris-integration`,

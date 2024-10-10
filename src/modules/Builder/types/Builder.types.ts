@@ -13,8 +13,9 @@ import {
   ItemCommonType,
   Item,
   UnityItem,
+  Integration,
 } from 'shared/state';
-import { Integrations, ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
+import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
 import { ArrayElement } from 'shared/types';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
@@ -94,8 +95,7 @@ export type AppletFormValues = {
   reportRecipients?: string[];
   reportIncludeUserId?: boolean;
   reportEmailBody?: string;
-  lorisIntegration?: boolean;
-  integrations?: Integrations[];
+  integrations?: Integration[];
 };
 
 export type GetNewActivity = {

@@ -254,6 +254,7 @@ export const SelectController = <T extends FieldValues>({
               (event) => {
                 customChange?.(event);
                 onChange(event);
+                customChange && customChange(event);
                 setTrigger?.(false);
               },
               value,

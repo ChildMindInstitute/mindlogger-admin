@@ -435,6 +435,6 @@ export const observerStyles = {
   bottom: 0,
 };
 
-export const enum Integrations {
+export const enum IntegrationTypes {
   Loris = 'loris',
 }
