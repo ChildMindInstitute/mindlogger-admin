@@ -274,6 +274,7 @@ export type DuplicateApplet = AppletId & {
   options: {
     encryption: Encryption;
     displayName: string;
+    includeReportServer?: boolean;
   };
 };
 
