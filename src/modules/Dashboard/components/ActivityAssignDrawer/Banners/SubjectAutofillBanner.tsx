@@ -14,7 +14,7 @@ export const SubjectAutofillBanner = (props: BannerProps) => {
       duration={8000}
       {...props}
     >
-      {t('subjectAutofill')}
+      {props.hasActivity ? t('subjectActivityAutofill') : t('subjectAutofill')}
     </Banner>
   );
 };

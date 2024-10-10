@@ -33,6 +33,7 @@ export const palette = {
   on_surface_alfa38: 'rgba(26, 28, 30, 0.38)',
   on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
   on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
+  on_surface_variant_alfa16: 'rgba(66, 71, 78, 0.16)',
   on_primary_container_alfa8: 'rgba(0, 29, 50, 0.08)',
   on_secondary_container_alfa8: 'rgba(14, 29, 42, 0.08)',
   on_secondary_container_alfa12: 'rgba(14, 29, 42, 0.12)',
