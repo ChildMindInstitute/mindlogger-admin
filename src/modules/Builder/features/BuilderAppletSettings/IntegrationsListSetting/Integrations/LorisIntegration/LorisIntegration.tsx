@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { applet } from 'redux/modules';
+import { applet } from 'shared/state/Applet';
 import { Svg } from 'shared/components';
 import { SettingParam } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
@@ -15,38 +16,60 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Integrations } from 'shared/consts';
+import { IntegrationTypes } from 'shared/consts';
 
 import { StyledLink, StyledLorisIntegration, StyledStatusChip } from './LorisIntegration.styles';
 import { ConfigurationPopup } from './ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup';
 import { UploadPopup } from './UploadPopup';
+import { useFetchLorisIntegrationStatus } from './LorisIntegration.hooks';
 
 export const LorisIntegration = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { appletId } = useParams();
 
   const isServerConfigured = useIsServerConfigured();
   const { result: appletData } = applet.useAppletData() ?? {};
 
+  const methods = useForm({
+    defaultValues: {
+      hostname: '',
+      project: '',
+    },
+  });
+
   const [isConfigurationPopupVisible, setIsConfigurationPopupVisible] = useState(false);
   const [isDisconnectionPopupVisible, setIsDisconnectionPopupVisible] = useState(false);
   const [isUploadPopupVisible, setIsUploadPopupVisible] = useState(false);
+  const [isIntegrationEnabled, setIsIntegrationEnabled] = useState(
+    Boolean(appletData?.integrations?.some((i) => i.integrationType === IntegrationTypes.Loris)), // TODO MOVE TO IS INTEGRATED HOOK
+  );
+  useFetchLorisIntegrationStatus(appletData?.id) || {};
 
-  const isIntegrationEnabled = appletData?.integrations?.some(
-    (integration) => integration?.toLowerCase() === Integrations.Loris.toLowerCase(),
+  const appletLorisIntegration = appletData?.integrations?.find(
+    (i) => i.integrationType === IntegrationTypes.Loris,
   );
 
   const handleRedirect = () =>
-    navigate(`/builder/${appletId}/settings/${SettingParam.ReportConfiguration}`);
+    navigate(`/builder/${appletData?.id}/settings/${SettingParam.ReportConfiguration}`);
 
   const handleConnect = () => {
     setIsConfigurationPopupVisible(true);
   };
 
+  useEffect(() => {
+    if (
+      appletLorisIntegration?.configuration.hostname &&
+      appletLorisIntegration?.configuration.project
+    ) {
+      setIsIntegrationEnabled(true);
+    } else {
+      setIsIntegrationEnabled(false);
+    }
+  }, [appletLorisIntegration]);
+
   return (
-    <>
+    <FormProvider {...methods}>
       <StyledLorisIntegration data-testid="loris-integration">
         <Box>
           <Svg width={94} height={94} id="loris-integration" />
@@ -143,6 +166,6 @@ export const LorisIntegration = () => {
       {isUploadPopupVisible && (
         <UploadPopup open={isUploadPopupVisible} onClose={() => setIsUploadPopupVisible(false)} />
       )}
-    </>
+    </FormProvider>
   );
 };

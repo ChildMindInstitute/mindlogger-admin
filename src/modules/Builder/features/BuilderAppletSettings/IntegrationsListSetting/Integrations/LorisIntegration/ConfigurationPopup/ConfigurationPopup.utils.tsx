@@ -5,14 +5,14 @@ import { SelectController } from 'shared/components/FormComponents';
 import { StyledTitleMedium, variables } from 'shared/styles';
 
 import { ConfigurationForm } from './ConfigurationForm';
-import { ConfigurationsSteps, GetScreensProps, Project } from './ConfigurationPopup.types';
+import { ConfigurationsSteps, GetScreensProps } from './ConfigurationPopup.types';
 
 const { t } = i18n;
 
-export const getMatchOptions = (projects: Project[]) =>
-  projects.map(({ id, name }) => ({
-    labelKey: name,
-    value: id,
+export const getMatchOptions = (projects: string[]) =>
+  projects.map((p) => ({
+    labelKey: p,
+    value: p,
   }));
 
 export const getScreens = ({

@@ -4,23 +4,18 @@ import { Box } from '@mui/material';
 import { StyledBodyLarge, StyledLabelBoldLarge, theme } from 'shared/styles';
 
 import { StyledConnectionInfo } from './ConnectionInfo.styles';
-
-const mockedConnectionInfo = {
-  serverHostname: '192.168.001',
-  username: 'yxiao37',
-  project: 'Healthy Dog Network',
-};
+import { useLorisConnectionInfo } from '../LorisIntegration.hooks';
 
 export const ConnectionInfo = () => {
   const { t } = useTranslation();
 
-  const { serverHostname, username, project } = mockedConnectionInfo; //  TODO: move to the props
+  const { hostname, project, username } = useLorisConnectionInfo();
 
   return (
     <StyledConnectionInfo data-testid="connection-info">
       <Box>
         <StyledLabelBoldLarge> {t('loris.serverHostname')}</StyledLabelBoldLarge>
-        <StyledBodyLarge>{serverHostname}</StyledBodyLarge>
+        <StyledBodyLarge>{hostname}</StyledBodyLarge>
       </Box>
       <Box sx={{ mt: theme.spacing(1.2) }}>
         <StyledLabelBoldLarge>{t('loris.username')}</StyledLabelBoldLarge>

@@ -872,7 +872,10 @@
     "connection": "Votre applet est actuellement connecté à:",
     "dataUploadTitle": "Téléversement de données LORIS",
     "dataUploadConfirmation": "Veuillez confirmer que vous souhaitez envoyer les nouvelles données collectées de cet applet au projet LORIS ci-dessous :",
-    "dataUploadDescription": "Toutes les données des répondants seront déchiffrées et téléversées dans la base de données LORIS."
+    "dataUploadDescription": "Toutes les données des répondants seront déchiffrées et téléversées dans la base de données LORIS.",
+    "connectionSuccessful": "Your LORIS account connection was successful. You can proceed to upload the data.",
+    "disconnectionSuccessful": "Votre compte LORIS a été déconnecté avec succès"
+
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",

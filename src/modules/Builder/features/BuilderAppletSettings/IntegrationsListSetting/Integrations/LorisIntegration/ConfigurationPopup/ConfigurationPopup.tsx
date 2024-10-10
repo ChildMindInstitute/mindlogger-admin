@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Control, FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
+import { applet, banners } from 'shared/state';
 import { Modal } from 'shared/components/Modal';
 import { Svg } from 'shared/components';
 import {
@@ -13,6 +14,8 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { useAppDispatch } from 'redux/store';
+import { IntegrationTypes } from 'shared/consts';
 
 import {
   ConfigurationForm,
@@ -21,6 +24,7 @@ import {
 } from './ConfigurationPopup.types';
 import { configurationFormSchema } from './ConfigurationPopup.schema';
 import { getScreens } from './ConfigurationPopup.utils';
+import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.hooks';
 
 export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) => {
   const { t } = useTranslation();
@@ -34,22 +38,87 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
     },
   });
 
-  const { control, handleSubmit } = methods;
+  const { control, handleSubmit, getValues, setValue } = methods;
 
   const [step, setStep] = useState(ConfigurationsSteps.LorisConfigurations);
   const [projects, setProjects] = useState([]);
-  const [error, setError] = useState();
+  const [error, setError] = useState<string | undefined>(undefined);
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const saveConfiguration = ({ project, ...config }: ConfigurationForm) => {
-    console.log('Configuration:', config);
-    // TODO: fetch LORIS projects
-    setStep(ConfigurationsSteps.SelectProject);
+  const dispatch = useAppDispatch();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const { updateAppletData } = applet.actions;
+
+  const saveConfiguration = async () => {
+    try {
+      const { hostname, username, password } = getValues();
+      const projects = await fetchLorisProjects(hostname, username, password);
+      setProjects(projects);
+      setStep(ConfigurationsSteps.SelectProject);
+    } catch (error) {
+      setError('Failed to fetch projects');
+      setProjects([]);
+      setStep(ConfigurationsSteps.SelectProject);
+    }
   };
 
-  const saveProject = ({ project }: ConfigurationForm) => {
-    console.log('Project:', project);
-    onClose();
+  const saveProject = async ({ project }: { project?: string }) => {
+    try {
+      const { hostname, username, password } = getValues();
+      if (!appletData?.id) {
+        setError('Applet data is missing');
+
+        return;
+      }
+
+      if (!project) {
+        setError('Project is missing');
+
+        return;
+      }
+
+      const data = await saveLorisProject(appletData.id, hostname, username, password, project);
+
+      if (data.result && data.result[0].message.includes('has previously been tied to applet')) {
+        setError('This applet is already tied to a LORIS project');
+
+        return;
+      }
+
+      // Set the form values
+      setValue('hostname', hostname);
+      setValue('username', username);
+      setValue('project', project);
+
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            children: t('loris.connectionSuccessful'),
+            'data-testid': 'loris-connection-successful-banner',
+          },
+        }),
+      );
+
+      const appletUpdatedData = {
+        ...appletData,
+        integrations: [
+          ...(appletData?.integrations ?? []),
+          {
+            integrationType: IntegrationTypes.Loris,
+            configuration: {
+              hostname,
+              username,
+              project,
+            },
+          },
+        ],
+      };
+
+      dispatch(updateAppletData(appletUpdatedData));
+      onClose();
+    } catch (error) {
+      setError('Failed to save project');
+    }
   };
 
   const onNext = useCallback(() => {
@@ -67,20 +136,25 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
         setStep,
         onClose,
         onNext,
-        projects: [
-          {
-            id: 'project1',
-            name: 'Comprehensive Medical Consultation and Examination Appointment with a Healthcare Professional',
-          },
-          {
-            id: 'project2',
-            name: 'Thorough Health Assessment and Consultation with a Qualified Medical Practition',
-          },
-        ], // TODO: remove mocked projects
+        projects,
         onSave,
       }),
     [control, setStep, onClose, onNext, projects, onSave],
   );
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            children: t('loris.errorSavingConnection'),
+            'data-testid': 'loris-connection-error-banner',
+          },
+        }),
+      );
+    }
+  }, [error]);
 
   return (
     <Modal

@@ -874,7 +874,10 @@
     "connection": "Your applet is currently connected to:",
     "dataUploadTitle": "LORIS Data Upload",
     "dataUploadConfirmation": "Please confirm that you want to send the newly collected data from this applet to the LORIS project below:",
-    "dataUploadDescription": "All respondent data will be decrypted and uploaded to the LORIS database."
+    "dataUploadDescription": "All respondent data will be decrypted and uploaded to the LORIS database.",
+    "connectionSuccessful": "Your LORIS account connection was successful. You can proceed to upload the data.",
+    "disconnectionSuccessful": "Your LORIS account was successfully disconnected.",
+    "errorSavingConnection": "Error saving LORIS configuration. Please try again."
   },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",

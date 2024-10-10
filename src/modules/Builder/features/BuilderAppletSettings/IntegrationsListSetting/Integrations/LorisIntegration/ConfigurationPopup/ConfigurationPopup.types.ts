@@ -18,16 +18,11 @@ export enum ConfigurationsSteps {
   SelectProject,
 }
 
-export type Project = {
-  id: string;
-  name: string;
-};
-
 export type GetScreensProps = {
   control: Control<FieldValues>;
   setStep: Dispatch<SetStateAction<ConfigurationsSteps>>;
   onClose: () => void;
   onNext: () => void;
   onSave: () => void;
-  projects: Project[];
+  projects: string[];
 };

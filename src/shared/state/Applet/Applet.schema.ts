@@ -17,7 +17,7 @@ import {
   ScoreConditionType,
   ScoreReportType,
   SubscaleTotalScore,
-  Integrations,
+  IntegrationTypes,
 } from 'shared/consts';
 import { BaseSchema } from 'shared/state/Base';
 import { ElementType, RetentionPeriods } from 'shared/types';
@@ -894,7 +894,16 @@ export type SingleApplet = {
   streamEnabled: boolean | null;
   streamIpAddress: string | null;
   streamPort: number | null;
-  integrations?: Integrations[];
+  integrations?: Integration[];
+};
+
+export type Integration = {
+  integrationType: IntegrationTypes;
+  configuration: {
+    hostname?: string;
+    username?: string;
+    project?: string;
+  };
 };
 
 export type RespondentMeta = {
