@@ -564,7 +564,7 @@ describe('useBreadcrumbs', () => {
 
   test('should generate correct breadcrumbs for participant details', () => {
     const route = `/dashboard/${appletId}/participants/${participantId}`;
-    const routePath = page.appletParticipantActivities;
+    const routePath = page.appletParticipantDetails;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
       route,

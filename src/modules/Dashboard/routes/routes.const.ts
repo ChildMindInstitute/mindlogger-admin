@@ -6,8 +6,9 @@ const Applets = lazy(() => import('modules/Dashboard/features/Applets'));
 const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
 const Participants = lazy(() => import('modules/Dashboard/features/Participants'));
-const ParticipantActivities = lazy(
-  () => import('modules/Dashboard/features/Participant/Activities'),
+const ParticipantDetails = lazy(() => import('modules/Dashboard/features/Participant'));
+const ParticipantDetailsByParticipant = lazy(
+  () => import('modules/Dashboard/features/Participant/Assignments/ByParticipant'),
 );
 const ParticipantConnections = lazy(
   () => import('modules/Dashboard/features/Participant/Connections'),
@@ -82,8 +83,12 @@ export const appletRoutes = [
 
 export const participantDetailsRoutes = [
   {
-    path: page.appletParticipantActivities,
-    Component: ParticipantActivities,
+    path: page.appletParticipantDetails,
+    Component: ParticipantDetails,
+  },
+  {
+    path: page.appletParticipantDetailsByParticipant,
+    Component: ParticipantDetailsByParticipant,
   },
   {
     path: page.appletParticipantConnections,

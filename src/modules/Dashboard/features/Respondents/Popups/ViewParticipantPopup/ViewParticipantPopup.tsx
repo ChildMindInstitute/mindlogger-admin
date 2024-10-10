@@ -27,7 +27,7 @@ export const ViewParticipantPopup = ({
   useEffect(() => {
     if (chosenAppletData) {
       const { appletId, subjectId } = chosenAppletData;
-      navigate(generatePath(page.appletParticipantActivities, { appletId, subjectId }));
+      navigate(generatePath(page.appletParticipantDetails, { appletId, subjectId }));
       handlePopupClose();
     }
   }, [chosenAppletData, handlePopupClose, navigate]);

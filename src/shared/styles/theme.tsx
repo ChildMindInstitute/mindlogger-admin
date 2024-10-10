@@ -258,7 +258,7 @@ export const theme = createTheme({
           props: { variant: 'outlined' },
           style: {
             background: variables.palette.white,
-            border: `1px solid ${variables.palette.outline}`,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
             color: variables.palette.primary,
             fontWeight: variables.font.weight.regular,
 
@@ -268,13 +268,10 @@ export const theme = createTheme({
             },
 
             '&:not(.Mui-disabled)': {
+              borderColor: variables.palette.outline_variant,
+
               '&:hover': {
                 backgroundColor: variables.palette.primary_alfa8,
-                borderColor: variables.palette.outline,
-              },
-
-              '&:focus': {
-                borderColor: 'currentColor',
               },
 
               '&:focus, &:active': {

@@ -1,15 +1,14 @@
 import { DrawerProps } from '@mui/material';
 
-import { AssignedActivity, HydratedAssignment } from 'api';
+import { AssignedActivity, HydratedAssignment, ParticipantActivityOrFlow } from 'api';
 import { AssignedHydratedActivityFlow } from 'modules/Dashboard/types';
 
-const ParticipantContext = ['respondent', 'target'] as const;
-export type ParticipantContext = (typeof ParticipantContext)[number];
+type ActivityOrFlow = AssignedActivity | AssignedHydratedActivityFlow | ParticipantActivityOrFlow;
 
 export type ActivityUnassignDrawerProps = Pick<DrawerProps, 'open'> & {
   onClose: (shouldRefetch?: boolean) => void;
   appletId?: string;
-  activityOrFlow?: AssignedActivity | AssignedHydratedActivityFlow;
+  activityOrFlow?: ActivityOrFlow;
 };
 
 export type ActivityUnassignFormValues = {

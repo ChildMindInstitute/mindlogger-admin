@@ -26,14 +26,13 @@ export const Activities = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const { t } = useTranslation('app');
-  const { execute, isLoading, value, previousValue } = useAsync(getAppletActivitiesApi);
+  const { execute, isLoading, value } = useAsync(getAppletActivitiesApi, { retainValue: true });
 
-  const activities: Activity[] = useMemo(
-    () => (value ?? previousValue)?.data.result.activitiesDetails ?? [],
-    [value, previousValue],
+  const activities: Activity[] = useMemo(() => value?.data.result.activitiesDetails ?? [], [value]);
+  const flows: ActivityFlow[] = useMemo(
+    () => value?.data.result.appletDetail.activityFlows ?? [],
+    [value],
   );
-  const flows: ActivityFlow[] =
-    (value ?? previousValue)?.data.result.appletDetail.activityFlows ?? [];
   const showContent = !isLoading || !!activities.length;
 
   const { formatRow, TakeNowModal } = useActivityGrid({

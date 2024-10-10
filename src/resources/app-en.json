@@ -276,6 +276,10 @@
   "assign": "Assign",
   "assignActivity": "Assign Activity",
   "assignFlow": "Assign Flow",
+  "assignActivityDisabledTooltip": "This activity is set to ‘Hidden’ in the Activity Builder and therefore cannot be assigned here.",
+  "assignFlowDisabledTooltip": "This flow is set to ‘Hidden’ in the Activity Flow Builder and therefore cannot be assigned here.",
+  "assignToTeamMemberTooltip": "The current Participant is a Team Member and therefore cannot be assigned as the subject of an Activity or Flow.",
+  "assignments": "Assignments",
   "assessment": "Assessment",
   "at": "At",
   "lowercaseAt": "at",
@@ -1031,6 +1035,14 @@
     "participantGrouping": "Participants",
     "notFound": "Not Found",
     "limitedAccountIconTooltip": "Limited Accounts require an additional participant to be their respondent."
+  },
+  "participantDetails": {
+    "byParticipant": "By Participant",
+    "aboutParticipant": "About Participant",
+    "aboutParticipantEmpty": "No Activities are assigned to be completed about this Participant.",
+    "aboutParticipantEmptyTeamMember": "This Participant is a Team Member and Activities cannot be completed about them.",
+    "assignActivityButton": "Assign Activity",
+    "activitiesAndFlows": "Activities & Flows"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
