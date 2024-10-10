@@ -66,9 +66,6 @@ export function mapResponseToSubmissionsTableProps(
       { id: 'subject', label: i18n.t('appletOverview.columnSubject') },
       { id: 'submissionDate', label: i18n.t('appletOverview.columnSubmissionDate') },
     ],
-    handleRequestSort: () => {},
-    order: 'desc' as const,
-    orderBy: '',
     rows:
       submissions.length > 0
         ? submissions.map(

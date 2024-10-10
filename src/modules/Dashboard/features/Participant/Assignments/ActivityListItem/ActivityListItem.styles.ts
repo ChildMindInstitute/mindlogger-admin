@@ -1,18 +1,9 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import {
-  ellipsisTextCss,
-  StyledFlexTopCenter,
-  StyledTitleLargish,
-  theme,
-  variables,
-} from 'shared/styles';
+import { ellipsisTextCss, StyledTitleLargish, variables } from 'shared/styles';
 
-export const StyledActivityListItem = styled(StyledFlexTopCenter)(
+export const StyledActivityListItem = styled(Box)(
   ({ onClick }: { onClick?: () => void }) => `
-  flex-wrap: wrap;
-  padding: ${theme.spacing(1.5)};
-  gap: ${theme.spacing(0.8, 4.8)};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.lg2};
   background-color: ${variables.palette.surface};

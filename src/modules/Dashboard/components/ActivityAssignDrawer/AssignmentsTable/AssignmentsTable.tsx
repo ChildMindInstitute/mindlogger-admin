@@ -205,9 +205,6 @@ export const AssignmentsTable = ({
         columns={getHeadCells(isReadOnly)}
         rows={rows}
         enablePagination={false}
-        handleRequestSort={() => {}}
-        order="asc"
-        orderBy="respondentSubjectId"
         data-testid={dataTestId}
       />
       {showAddButton && (
