@@ -13,8 +13,8 @@ export const setLorisIntegrationApi = ({ appletId }: AppletId, signal?: AbortSig
     { params: { applet_id: appletId }, signal },
   );
 
-export const getLorisVisitsApi = (signal?: AbortSignal) =>
-  authApiClient.get('/integrations/loris/visits', { signal });
+export const getLorisVisitsApi = (appletId: string, signal?: AbortSignal) =>
+  authApiClient.get(`/integrations/${appletId}loris/visits`, { signal });
 
 export const getLorisUsersVisitsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/integrations/loris/${appletId}/users/visits`, { signal });
