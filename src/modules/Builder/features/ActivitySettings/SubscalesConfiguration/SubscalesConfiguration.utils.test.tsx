@@ -32,8 +32,6 @@ describe('SubscalesConfiguration.utils', () => {
 
   describe('getItemNameInSubscale', () => {
     test('returns formatted item name', () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       expect(getItemNameInSubscale(mockedSingleSelectFormValues)).toStrictEqual('Item: Item1');
     });
   });
@@ -41,8 +39,6 @@ describe('SubscalesConfiguration.utils', () => {
   describe('getItemElementName', () => {
     test('returns formatted element name', () => {
       expect(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         getItemElementName({
           ...mockedSingleSelectFormValues,
           question: '~~Lorem ipsum~~',
@@ -77,11 +73,7 @@ describe('SubscalesConfiguration.utils', () => {
         'Subscale: ss-2 (Subscale: ss-1, Item: single)',
       ],
     ])('%s', (_, subscale, itemsMap, expected) => {
-      expect(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        getSubscaleElementName(subscale, subscalesMap, itemsMap),
-      ).toBe(expected);
+      expect(getSubscaleElementName(subscale, subscalesMap, itemsMap)).toBe(expected);
     });
   });
 
@@ -137,11 +129,7 @@ describe('SubscalesConfiguration.utils', () => {
         ],
       ],
     ])('%s', (_, subscaleId, items, subscales, expected) => {
-      expect(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        getItemElements(subscaleId, items, subscales),
-      ).toStrictEqual(expected);
+      expect(getItemElements(subscaleId as string, items, subscales)).toStrictEqual(expected);
     });
   });
 
@@ -186,15 +174,11 @@ describe('SubscalesConfiguration.utils', () => {
       [
         'should return empty list when subscales are empty',
         mockedSubscale1.items,
-        [],
+        [] as (Omit<typeof mockedSubscale1, 'items'> & { items: string[] })[],
         expectedResult3,
       ],
     ])('%s', (_, items, subscales, expected) => {
-      expect(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        getPropertiesToFilterByIds(items, subscales),
-      ).toStrictEqual(expected);
+      expect(getPropertiesToFilterByIds(items, subscales)).toStrictEqual(expected);
     });
   });
 
@@ -305,8 +289,6 @@ describe('SubscalesConfiguration.utils', () => {
         ],
       ])('%s', (_, subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds, expectedResult) => {
         expect(
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           getNotUsedElements(subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds),
         ).toStrictEqual(expectedResult);
       });

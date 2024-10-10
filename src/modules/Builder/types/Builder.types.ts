@@ -189,11 +189,7 @@ export enum FlankerItemNames {
   PracticeSecond = 'Flanker_Practice_2',
   PracticeThird = 'Flanker_Practice_3',
   TestInstructionFirst = 'Flanker_test_instructions_1',
-  TestInstructionSecond = 'Flanker_test_instructions_2',
-  TestInstructionThird = 'Flanker_test_instructions_3',
   TestFirst = 'Flanker_test_1',
-  TestSecond = 'Flanker_test_2',
-  TestThird = 'Flanker_test_3',
 }
 
 export enum FlankerSamplingMethod {
@@ -212,8 +208,6 @@ export enum FlankerItemPositions {
   PracticeSecond = 4,
   PracticeThird = 6,
   TestFirst = 8,
-  TestSecond = 10,
-  TestThird = 12,
 }
 
 export enum FlankerNextButton {

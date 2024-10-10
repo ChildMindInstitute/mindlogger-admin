@@ -2,15 +2,15 @@ import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { Invitation, InvitationStatus } from 'shared/types';
 import { ActivityFlow, Activity } from 'redux/modules';
+import { HydratedAssignment } from 'api';
+
+import { Role } from '../features/Managers/Popups/ManagersEditAccessPopup/ManagersEditAccessPopup.types';
 
 export type ManagerApplet = {
   id: string;
   displayName: string;
   image?: string;
-  roles: {
-    accessId?: string;
-    role: Roles;
-  }[];
+  roles: Role[];
   encryption?: Encryption;
 };
 
@@ -90,6 +90,11 @@ export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
 };
+
 export type HydratedActivityFlow = ActivityFlow & {
   activities: Activity[];
+};
+
+export type AssignedHydratedActivityFlow = HydratedActivityFlow & {
+  assignments?: HydratedAssignment[];
 };

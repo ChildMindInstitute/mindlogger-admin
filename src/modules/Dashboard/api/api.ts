@@ -85,6 +85,8 @@ import {
   PostAssignmentsParams,
   GetSubjectActivitiesParams,
   AppletSubjectActivitiesResponse,
+  AppletActivitiesResponse,
+  AppletAssignmentsResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -916,7 +918,7 @@ export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSig
 export const getAppletActivitiesApi = (
   { params: { appletId, ...params } }: GetActivitiesParams,
   signal?: AbortSignal,
-) =>
+): Promise<AxiosResponse<AppletActivitiesResponse>> =>
   authApiClient.get(`/activities/applet/${appletId}`, {
     params,
     signal,
@@ -945,7 +947,7 @@ export const createTemporaryMultiInformantRelationApi = (
 export const getAppletAssignmentsApi = (
   { appletId, ...params }: GetAssignmentsParams,
   signal?: AbortSignal,
-) =>
+): Promise<AxiosResponse<AppletAssignmentsResponse>> =>
   authApiClient.get(`/assignments/applet/${appletId}`, {
     params,
     signal,
@@ -954,7 +956,7 @@ export const getAppletAssignmentsApi = (
 export const postAppletAssignmentsApi = (
   { appletId, assignments }: PostAssignmentsParams,
   signal?: AbortSignal,
-) =>
+): Promise<AxiosResponse<AppletAssignmentsResponse>> =>
   authApiClient.post(`/assignments/applet/${appletId}`, {
     assignments: assignments.map((a) => ({
       activity_id: a.activityId,
@@ -962,6 +964,22 @@ export const postAppletAssignmentsApi = (
       respondent_subject_id: a.respondentSubjectId,
       target_subject_id: a.targetSubjectId,
     })),
+    signal,
+  });
+
+export const deleteAppletAssignmentsApi = (
+  { appletId, assignments }: PostAssignmentsParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<null>> =>
+  authApiClient.delete(`/assignments/applet/${appletId}`, {
+    data: {
+      assignments: assignments.map((a) => ({
+        activity_id: a.activityId,
+        activity_flow_id: a.activityFlowId,
+        respondent_subject_id: a.respondentSubjectId,
+        target_subject_id: a.targetSubjectId,
+      })),
+    },
     signal,
   });
 

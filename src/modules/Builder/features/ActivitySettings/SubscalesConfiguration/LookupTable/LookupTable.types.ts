@@ -83,15 +83,15 @@ export const enum ModalType {
 
 export type Steps = 0 | 1;
 
-export const TScoreSeverity = ['Minimal', 'Mild', 'Moderate', 'Severe', ''] as const;
+export const TScoreSeverity = ['Minimal', 'Mild', 'Moderate', 'Severe'] as const;
 
 export type TScoreSeverity = (typeof TScoreSeverity)[number];
 
-export type LookupTableDataItem = DataTableItem & {
+export type LookupTableDataItem = Omit<DataTableItem, 'id'> & {
   score?: string;
   rawScore: string;
   optionalText: string;
-  severity?: TScoreSeverity | null;
+  severity: TScoreSeverity | null;
   age?: string | number | null;
   sex?: string | null;
   id: string;

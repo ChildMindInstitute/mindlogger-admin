@@ -1,9 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { AdditionalInformation } from './AdditionalInformation';
 
@@ -13,21 +12,88 @@ const mockedLinkResponse = 'This is the response from the link API';
 
 jest.mock('./AdditionalInformation.styles', () => ({
   ...jest.requireActual('./AdditionalInformation.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
+  StyledMdPreview: ({
+    modelValue,
+    'data-testid': dataTestid,
+  }: {
+    modelValue: string;
+    'data-testid': string;
+  }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
+const dataTestId = 'additional-info';
+
 describe('AdditionalInformation component', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableCahmiSubscaleScoring: false,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
   afterEach(() => {
     mockAxios.reset();
   });
 
   test('renders AdditionalInformation component with regular text', () => {
-    renderWithProviders(<AdditionalInformation optionText={mockedOptionText} />);
+    renderWithProviders(
+      <AdditionalInformation
+        optionText={mockedOptionText}
+        severity={null}
+        data-testid={dataTestId}
+      />,
+    );
 
-    expect(screen.getByText('Additional Information')).toBeInTheDocument();
-    expect(screen.getByText(mockedOptionText)).toBeInTheDocument();
+    expect(screen.queryByText('Additional Information')).not.toBeNull();
+    expect(screen.queryByText(mockedOptionText)).not.toBeNull();
+    expect(screen.queryByTestId(`${dataTestId}-severity`)).toBeNull();
+  });
+
+  test('renders AdditionalInformation component with severity when enableCahmiSubscaleScoring = true', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableCahmiSubscaleScoring: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    renderWithProviders(
+      <AdditionalInformation
+        optionText={mockedOptionText}
+        severity="Mild"
+        data-testid={dataTestId}
+      />,
+    );
+
+    const severity = screen.queryByTestId(`${dataTestId}-severity`);
+    expect(severity).not.toBeNull();
+    expect(severity?.textContent).toEqual('Severity: Mild');
+  });
+
+  test('Does not render severity text when it is not provided', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableCahmiSubscaleScoring: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    renderWithProviders(
+      <AdditionalInformation
+        optionText={mockedOptionText}
+        severity={null}
+        data-testid={dataTestId}
+      />,
+    );
+    expect(screen.queryByTestId(`${dataTestId}-severity`)).toBeNull();
   });
 
   test('renders AdditionalInformation component with link and fetches additional information', async () => {
@@ -35,14 +101,21 @@ describe('AdditionalInformation component', () => {
       data: mockedLinkResponse,
     });
 
-    renderWithProviders(<AdditionalInformation optionText={mockedLinkOptionText} />);
+    renderWithProviders(
+      <AdditionalInformation
+        optionText={mockedLinkOptionText}
+        severity={null}
+        data-testid={dataTestId}
+      />,
+    );
 
-    expect(screen.getByText('Additional Information')).toBeInTheDocument();
+    expect(screen.queryByText('Additional Information')).not.toBeNull();
 
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(1, mockedLinkOptionText);
     });
 
-    expect(screen.getByText(mockedLinkResponse)).toBeInTheDocument();
+    expect(screen.queryByText(mockedLinkResponse)).not.toBeNull();
+    expect(screen.queryByTestId(`${dataTestId}-severity`)).toBeNull();
   });
 });

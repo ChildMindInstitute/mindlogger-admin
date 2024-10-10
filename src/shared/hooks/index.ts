@@ -23,3 +23,4 @@ export * from './useWindowFocus';
 export * from './useMediaUpload';
 export * from './useTransferOwnership';
 export * from './useFeatureFlags';
+export * from './useModalBanners';
