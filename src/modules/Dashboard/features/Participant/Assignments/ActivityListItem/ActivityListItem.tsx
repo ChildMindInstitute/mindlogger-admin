@@ -3,14 +3,14 @@ import {
   StyledActivityThumbnailImg,
   StyledFlexTopCenter,
 } from 'shared/styles';
-import { ActivityFlowThumbnail } from 'modules/Dashboard/components';
+import { ActivityFlowThumbnail, ActivityStatusChip } from 'modules/Dashboard/components';
 import { FlowChip } from 'shared/components';
 
 import { ActivityListItemProps } from './ActivityListItem.types';
 import { StyledActivityListItem, StyledActivityName } from './ActivityListItem.styles';
 
 export const ActivityListItem = ({
-  activityOrFlow: { isFlow, images, name },
+  activityOrFlow: { isFlow, images, name, status },
   onClick,
   children,
 }: ActivityListItemProps) => (
@@ -25,6 +25,7 @@ export const ActivityListItem = ({
       </StyledActivityThumbnailContainer>
       <StyledActivityName>{name}</StyledActivityName>
       {isFlow && <FlowChip size="small" />}
+      <ActivityStatusChip status={status} />
     </StyledFlexTopCenter>
 
     <StyledFlexTopCenter sx={{ gap: 0.8, ml: 'auto' }}>{children}</StyledFlexTopCenter>

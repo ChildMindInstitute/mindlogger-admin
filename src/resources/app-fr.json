@@ -124,6 +124,16 @@
   "activitySettings": "Paramètres de l'activité",
   "activitySplashscreen": "Écran d'accueil",
   "activitySplashScreenDescription": "Une image qui est affichée à un utilisateur avant l'activité.",
+  "activityStatus": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "hidden": "Caché",
+    "deleted": "Indisponible",
+    "activeTooltip": "Au moins un participant est assigné pour compléter cette activité ou ce flux.",
+    "inactiveTooltip": "Aucun participant n'est assigné pour compléter cette activité ou ce flux.",
+    "hiddenTooltip": "Cette activité ou ce flux est caché dans le créateur d'activités et ne peut pas être assigné.",
+    "deletedTooltip": "Cette activité ou ce flux a été supprimé et ne peut pas être assigné."
+  },
   "activityUnavailableAtTime": "L'activité n'est pas disponible pour le moment",
   "addActivity": "Ajouter une activité",
   "addBlankActivity": "Ajouter une activité vide",

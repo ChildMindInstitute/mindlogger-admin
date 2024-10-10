@@ -9,3 +9,4 @@ export * from './DashboardTable';
 export * from './ParticipantSnippet';
 export * from './ParticipantTagChip';
 export * from './ParticipantDropdown';
+export * from './ActivityStatusChip';

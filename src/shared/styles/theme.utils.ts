@@ -37,6 +37,16 @@ export const getChipStyleOverrides = ({
           backgroundColor: isFilled ? variables.palette.primary_container : undefined,
         },
       };
+    case 'success':
+      return {
+        color: variables.palette.on_surface_variant,
+        [key]: variables.palette.green_light,
+
+        '&[tabindex="0"]:hover': {
+          borderColor: variables.palette.green,
+          backgroundColor: isFilled ? variables.palette.green : undefined,
+        },
+      };
     case 'warning':
       return {
         color: variables.palette.on_surface_variant,
