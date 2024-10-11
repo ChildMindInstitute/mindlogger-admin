@@ -6,8 +6,8 @@ export type TableHeadProps = {
   className?: string;
   tableHeader: JSX.Element | null;
   headCells: HeadCell[];
-  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  order: Order;
+  onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
+  order?: Order;
   orderBy?: string;
   uiType?: UiType;
   hasColFixedWidth?: boolean;
