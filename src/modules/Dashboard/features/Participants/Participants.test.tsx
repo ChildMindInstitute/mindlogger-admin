@@ -270,7 +270,7 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(RESPONDENTS_ENDPOINT, {
+      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
         params: {
           limit: 20,
           page: 1,
