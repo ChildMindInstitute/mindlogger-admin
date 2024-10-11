@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { renderHook, act } from '@testing-library/react';
 
-import { useAsync } from './useAsync';
+import { useAsync } from '.';
 
 const mockedData = { data: 'mock data' };
 const errorResponse = { response: { data: 'error data' } };

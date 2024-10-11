@@ -107,7 +107,7 @@ const getWorkspaceManagersUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAp
 
 const testId = 'dashboard-applet-participant-activities';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerRespondent.details[0].subjectId}`;
-const routePath = page.appletParticipantActivities;
+const routePath = page.appletParticipantDetails;
 
 const preloadedState: PreloadedState<RootState> = {
   ...getPreloadedState(),

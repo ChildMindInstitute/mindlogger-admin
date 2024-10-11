@@ -1,5 +1,8 @@
 import { ModalProps } from 'shared/components';
 import { ParticipantDropdownOption, ParticipantDropdownProps } from 'modules/Dashboard/components';
+import { Activity } from 'redux/modules';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
+import { ParticipantActivityOrFlow } from 'api';
 
 export type UseTakeNowModalProps = {
   dataTestId: string;
@@ -18,6 +21,11 @@ export type OpenTakeNowModalOptions = {
    */
   sourceSubject?: ParticipantDropdownOption;
 };
+
+export type OpenTakeNowModal = (
+  activityOrFlow: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
+  options?: OpenTakeNowModalOptions,
+) => void;
 
 export type TakeNowDropdownProps = ParticipantDropdownProps & {
   label: string;

@@ -11,7 +11,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import ParticipantDetails from './ParticipantDetails';
 
 const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}`;
-const routePath = page.appletParticipantActivities;
+const routePath = page.appletParticipantDetails;
 
 const mockedAppletResult = {
   data: {

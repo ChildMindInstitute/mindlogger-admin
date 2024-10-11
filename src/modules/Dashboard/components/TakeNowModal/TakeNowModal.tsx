@@ -16,7 +16,7 @@ import {
   StyledActivityThumbnailImg,
   StyledErrorText,
 } from 'shared/styles';
-import { createTemporaryMultiInformantRelationApi } from 'api';
+import { createTemporaryMultiInformantRelationApi, ParticipantActivityOrFlow } from 'api';
 import {
   MixpanelPayload,
   MixpanelProps,
@@ -37,6 +37,7 @@ import {
 } from 'modules/Dashboard/components';
 
 import {
+  OpenTakeNowModal,
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
@@ -70,9 +71,12 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   } = useFeatureFlags();
   const { pathname } = useLocation();
 
-  const [activityOrFlow, setActivityOrFlow] = useState<Activity | HydratedActivityFlow | null>(
-    null,
-  );
+  const [activityOrFlow, setActivityOrFlow] = useState<
+    Activity | HydratedActivityFlow | ParticipantActivityOrFlow | null
+  >(null);
+  const isFlow =
+    activityOrFlow &&
+    (('isFlow' in activityOrFlow && activityOrFlow.isFlow) || 'activities' in activityOrFlow);
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
@@ -94,7 +98,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     (
       action: string,
       payload?: MixpanelPayload,
-      newActivityOrFlow?: Activity | HydratedActivityFlow,
+      newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
       const props: MixpanelPayload = {
         [MixpanelProps.Feature]: 'Multi-informant',
@@ -297,10 +301,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     let thumbnail: ReactNode = null;
     if ('activities' in activityOrFlow) {
       thumbnail = <ActivityFlowThumbnail activities={activityOrFlow.activities} />;
-    } else if (activityOrFlow.image) {
-      thumbnail = (
-        <StyledActivityThumbnailImg src={activityOrFlow.image} alt={activityOrFlow.name} />
-      );
+    } else if ('isFlow' in activityOrFlow && activityOrFlow.isFlow) {
+      thumbnail = <ActivityFlowThumbnail activities={activityOrFlow.images} />;
+    } else {
+      const image = 'images' in activityOrFlow ? activityOrFlow.images[0] : activityOrFlow.image;
+      if (image) thumbnail = <StyledActivityThumbnailImg src={image} alt={activityOrFlow.name} />;
     }
 
     const TakeNowSpinner = () => {
@@ -346,7 +351,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
             <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: 0.8 }}>
               <StyledHeadline>{activityOrFlow.name}</StyledHeadline>
-              {'activities' in activityOrFlow && <FlowChip />}
+              {isFlow && <FlowChip />}
             </StyledFlexTopCenter>
           </StyledFlexTopCenter>
           <StyledFlexColumn gap={2.4}>
@@ -463,8 +468,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     );
   };
 
-  const openTakeNowModal = (
-    activityOrFlow: Activity | HydratedActivityFlow,
+  const openTakeNowModal: OpenTakeNowModal = (
+    activityOrFlow: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     { targetSubject, sourceSubject }: OpenTakeNowModalOptions = {},
   ) => {
     const uuid = uuidv4();

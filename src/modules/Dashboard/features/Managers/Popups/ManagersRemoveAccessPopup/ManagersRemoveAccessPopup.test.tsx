@@ -7,7 +7,7 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
-import * as useAsyncHooks from 'shared/hooks/useAsync';
+import * as useAsyncHooks from 'shared/hooks/useAsync/useAsync';
 
 import { ManagersRemoveAccessPopup } from '.';
 

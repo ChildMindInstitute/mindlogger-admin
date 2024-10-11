@@ -163,7 +163,7 @@ describe('Participants component tests', () => {
     fireEvent.click(firstParticipantSecretIdCell);
 
     expect(mockedUseNavigate).toHaveBeenCalledWith(
-      generatePath(page.appletParticipantActivities, {
+      generatePath(page.appletParticipantDetails, {
         appletId: mockedAppletId,
         subjectId: mockedSubjectId1,
       }),
