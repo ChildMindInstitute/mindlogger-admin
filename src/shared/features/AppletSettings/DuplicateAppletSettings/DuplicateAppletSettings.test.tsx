@@ -14,6 +14,7 @@ import {
 import { SettingParam, expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
+import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
 
 import { DuplicateAppletSettings } from './DuplicateAppletSettings';
 
@@ -70,9 +71,12 @@ jest.mock('react-router-dom', () => ({
 
 describe('DuplicateAppletSettings', () => {
   test('should render and navigate to builder', async () => {
+    mockGetRequestResponses({
+      [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
+    });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: mockedAppletData });
+    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));

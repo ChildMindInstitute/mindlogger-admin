@@ -38,9 +38,15 @@ const renderReportServerHook = (message: string) => {
   (verifyReportServer as jest.Mock).mockResolvedValue({
     json: async () => ({ message }),
   });
-  (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
 
-  return renderHook(() => useCheckReportServer({ url: mockUrl, publicKey: mockPublicKey }));
+  return renderHook(() =>
+    useCheckReportServer({
+      url: mockUrl,
+      publicKey: mockPublicKey,
+      appletId: 'testAppletId',
+      ownerId: 'testOwnerId',
+    }),
+  );
 };
 
 const renderDefaultValuesHook = (appletData = {}, params) => {
@@ -104,10 +110,14 @@ describe('useCheckReportServer', () => {
     (setPasswordReportServer as jest.Mock).mockResolvedValue({
       json: async () => ({ message: SUCCESS_MESSAGE }),
     });
-    (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
 
     const { result } = renderHook(() =>
-      useCheckReportServer({ url: mockUrl, publicKey: 'mockPublicKey' }),
+      useCheckReportServer({
+        url: mockUrl,
+        publicKey: 'mockPublicKey',
+        appletId: 'testAppletId',
+        ownerId: 'testOwnerId',
+      }),
     );
 
     let setPasswordResult;
@@ -131,10 +141,14 @@ describe('useCheckReportServer', () => {
     (setPasswordReportServer as jest.Mock).mockResolvedValue({
       json: async () => ({ message: 'OTHER_MESSAGE' }),
     });
-    (useParams as jest.Mock).mockReturnValue({ appletId: 'testAppletId', ownerId: 'testOwnerId' });
 
     const { result } = renderHook(() =>
-      useCheckReportServer({ url: mockUrl, publicKey: 'mockPublicKey' }),
+      useCheckReportServer({
+        url: mockUrl,
+        publicKey: 'mockPublicKey',
+        appletId: 'testAppletId',
+        ownerId: 'testOwnerId',
+      }),
     );
 
     let setPasswordResult;
