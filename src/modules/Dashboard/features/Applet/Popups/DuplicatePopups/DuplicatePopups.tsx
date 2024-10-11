@@ -238,7 +238,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   useEffect(() => {
     async function effect() {
-      if (!newAppletSuccessResponse) return;
+      if (!newAppletSuccessResponse || !duplicatePopupsVisible) return;
 
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
@@ -270,9 +270,13 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
     void effect();
   }, [
+    currentApplet?.reportPublicKey,
     currentAppletId,
+    duplicatePopupsVisible,
     handleDuplicateSuccess,
+    includeReportServer,
     newAppletSuccessResponse,
+    ownerId,
     setAppletPrivateKey,
     setNewAppletReportServerPassword,
   ]);
