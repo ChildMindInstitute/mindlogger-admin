@@ -88,6 +88,8 @@ import {
   AppletActivitiesResponse,
   AppletAssignmentsResponse,
   AppletParticipantActivitiesResponse,
+  GetTargetSubjectsByRespondentParams,
+  GetTargetSubjectsByRespondentResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -997,6 +999,14 @@ export const deleteAppletAssignmentsApi = (
         target_subject_id: a.targetSubjectId,
       })),
     },
+    signal,
+  });
+
+export const getTargetSubjectsByRespondentApi = (
+  { subjectId, activityOrFlowId }: GetTargetSubjectsByRespondentParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<GetTargetSubjectsByRespondentResponse>> =>
+  authApiClient.get(`/subjects/respondent/${subjectId}/activity-or-flow/${activityOrFlowId}`, {
     signal,
   });
 

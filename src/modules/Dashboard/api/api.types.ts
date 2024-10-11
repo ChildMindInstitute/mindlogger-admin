@@ -695,6 +695,23 @@ export type AppletAssignmentsResponse = {
   };
 };
 
+export type GetTargetSubjectsByRespondentParams = SubjectId & {
+  activityOrFlowId: string;
+};
+
+export type TargetSubjectsByRespondent = Array<
+  RespondentDetails &
+    AppletId & {
+      submissionCount: number;
+      currentlyAssigned: boolean;
+    }
+>;
+
+export type GetTargetSubjectsByRespondentResponse = {
+  result: TargetSubjectsByRespondent;
+  count: number;
+};
+
 export type Integration = {
   integrationType: string;
 };
