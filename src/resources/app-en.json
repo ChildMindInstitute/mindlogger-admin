@@ -1055,7 +1055,11 @@
     "byParticipantEmptyLimitedAccount": "This Participant has a Limited Account and cannot be assigned to complete Activities.",
     "aboutParticipantEmptyTeamMember": "This Participant is a Team Member and Activities cannot be completed about them.",
     "assignActivityButton": "Assign Activity",
-    "activitiesAndFlows": "Activities & Flows"
+    "activitiesAndFlows": "Activities & Flows",
+    "toggleSubjectsView": "Toggle Subjects View",
+    "subjectOfActivity": "Subject of Activity",
+    "submissions": "Submissions",
+    "currentlyAssigned": "Currently Assigned"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",

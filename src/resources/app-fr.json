@@ -1054,7 +1054,11 @@
     "byParticipantEmpty": "Aucune activité n'est attribuée à ce participant pour être complétée.",
     "byParticipantEmptyLimitedAccount": "Ce participant a un compte limité et ne peut pas être assigné pour compléter des activités.",
     "assignActivityButton": "Attribuer une activité",
-    "activitiesAndFlows": "Activités & Flux"
+    "activitiesAndFlows": "Activités & Flux",
+    "toggleSubjectsView": "Basculer la vue des sujets",
+    "subjectOfActivity": "Sujet de l'activité",
+    "submissions": "Soumissions",
+    "currentlyAssigned": "Actuellement assigné"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
