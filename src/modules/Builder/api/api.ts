@@ -1,7 +1,14 @@
 import { AppletId, Response } from 'shared/api/api.types';
 import { authApiClient } from 'shared/api/apiConfig';
 
-import { GetThemesParams, Theme, UploadLorisUsersVisitsParams } from './api.types';
+import {
+  SaveIntegrationParams,
+  FetchIntegrationProjectsParams,
+  GetThemesParams,
+  Theme,
+  UploadLorisUsersVisitsParams,
+  FetchIntegrationStatusParams,
+} from './api.types';
 
 export const getThemesApi = (params: GetThemesParams, signal?: AbortSignal) =>
   authApiClient.get<Response<Theme>>('/themes', { params, signal });
@@ -27,3 +34,29 @@ export const uploadLorisUsersVisitsApi = (
     params: { applet_id: appletId },
     signal,
   });
+
+export const getLorisIntegrationStatus = async (
+  params: FetchIntegrationStatusParams,
+  signal?: AbortSignal,
+) => await authApiClient.get('/integrations', { params, signal });
+
+export const fetchLorisProjectsFromApi = async (
+  params: FetchIntegrationProjectsParams,
+  signal?: AbortSignal,
+) => authApiClient.get(`/integrations/loris/projects`, { params, signal });
+
+export const saveIntegrationToApi = async (params: SaveIntegrationParams, signal?: AbortSignal) =>
+  authApiClient.post(
+    '/integrations',
+    {
+      appletId: params.appletId,
+      integrationType: params.integrationType,
+      configuration: {
+        hostname: params.hostname,
+        username: params.username,
+        password: params.password,
+        project: params.project,
+      },
+    },
+    { signal },
+  );

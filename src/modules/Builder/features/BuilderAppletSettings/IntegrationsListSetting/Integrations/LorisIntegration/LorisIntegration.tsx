@@ -22,7 +22,8 @@ import { StyledLink, StyledLorisIntegration, StyledStatusChip } from './LorisInt
 import { ConfigurationPopup } from './ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup';
 import { UploadPopup } from './UploadPopup';
-import { useFetchLorisIntegrationStatus } from './LorisIntegration.hooks';
+import { useUpdateLorisIntegrationStatus } from './LorisIntegration.hooks';
+import { hasLorisIntegrationOnState } from './LorisIntegration.utils';
 
 export const LorisIntegration = () => {
   const { t } = useTranslation('app');
@@ -42,9 +43,10 @@ export const LorisIntegration = () => {
   const [isDisconnectionPopupVisible, setIsDisconnectionPopupVisible] = useState(false);
   const [isUploadPopupVisible, setIsUploadPopupVisible] = useState(false);
   const [isIntegrationEnabled, setIsIntegrationEnabled] = useState(
-    Boolean(appletData?.integrations?.some((i) => i.integrationType === IntegrationTypes.Loris)), // TODO MOVE TO IS INTEGRATED HOOK
+    hasLorisIntegrationOnState(appletData?.integrations),
   );
-  useFetchLorisIntegrationStatus(appletData?.id) || {};
+
+  useUpdateLorisIntegrationStatus();
 
   const appletLorisIntegration = appletData?.integrations?.find(
     (i) => i.integrationType === IntegrationTypes.Loris,
@@ -80,22 +82,22 @@ export const LorisIntegration = () => {
           >
             LORIS
           </StyledTitleBoldLargish>
-          <StyledStatusChip
-            sx={{
-              backgroundColor: isServerConfigured
-                ? variables.palette.green_light
-                : variables.palette.red_light,
-            }}
-          >
-            <Svg width={18} height={18} id="server-connect" />
-            <StyledLabelLarge sx={{ ml: theme.spacing(0.8), color: variables.palette.on_surface }}>
-              {t(
-                isServerConfigured
-                  ? 'loris.reportServerStatusConnected'
-                  : 'loris.reportServerStatusNotConnected',
-              )}
-            </StyledLabelLarge>
-          </StyledStatusChip>
+          {isIntegrationEnabled && isServerConfigured && (
+            <StyledStatusChip
+              sx={{
+                backgroundColor: isServerConfigured
+                  ? variables.palette.green_light
+                  : variables.palette.red_light,
+              }}
+            >
+              <Svg width={18} height={18} id="server-connect" />
+              <StyledLabelLarge
+                sx={{ ml: theme.spacing(0.8), color: variables.palette.on_surface }}
+              >
+                {t('loris.reportServerStatusConnected')}
+              </StyledLabelLarge>
+            </StyledStatusChip>
+          )}
           <StyledTitleMedium
             sx={{
               color: variables.palette.on_surface,

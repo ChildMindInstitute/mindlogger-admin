@@ -437,4 +437,6 @@ export const observerStyles = {
 
 export const enum IntegrationTypes {
   Loris = 'loris',
+  LorisUpperCase = 'LORIS', // In the API the integration type is in uppercase in some endpoints and lowercase in others
+  SampleIntegration = 'sample',
 }

@@ -46,6 +46,7 @@ export const getScreens = ({
             options={getMatchOptions(projects)}
             placeholder={t('loris.project')}
             data-testid="loris-project-select"
+            isLabelNeedTranslation={false}
           />
         ) : (
           <StyledTitleMedium sx={{ color: variables.palette.semantic.error }}>

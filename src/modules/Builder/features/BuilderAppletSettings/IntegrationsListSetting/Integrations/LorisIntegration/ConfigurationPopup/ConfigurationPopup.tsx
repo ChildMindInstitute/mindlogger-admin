@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Control, FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,7 +24,7 @@ import {
 } from './ConfigurationPopup.types';
 import { configurationFormSchema } from './ConfigurationPopup.schema';
 import { getScreens } from './ConfigurationPopup.utils';
-import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.hooks';
+import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.utils';
 
 export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) => {
   const { t } = useTranslation();
@@ -54,10 +54,10 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       const projects = await fetchLorisProjects(hostname, username, password);
       setProjects(projects);
       setStep(ConfigurationsSteps.SelectProject);
+      setError(undefined);
     } catch (error) {
-      setError('Failed to fetch projects');
+      setError(t('loris.errors.fetchProjectsFailed'));
       setProjects([]);
-      setStep(ConfigurationsSteps.SelectProject);
     }
   };
 
@@ -65,13 +65,13 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
     try {
       const { hostname, username, password } = getValues();
       if (!appletData?.id) {
-        setError('Applet data is missing');
+        setError(t('loris.errors.appletDataMissing'));
 
         return;
       }
 
       if (!project) {
-        setError('Project is missing');
+        setError(t('loris.errors.projectMissing'));
 
         return;
       }
@@ -79,7 +79,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       const data = await saveLorisProject(appletData.id, hostname, username, password, project);
 
       if (data.result && data.result[0].message.includes('has previously been tied to applet')) {
-        setError('This applet is already tied to a LORIS project');
+        setError(t('loris.errors.appletAlreadyTied'));
 
         return;
       }
@@ -117,7 +117,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       dispatch(updateAppletData(appletUpdatedData));
       onClose();
     } catch (error) {
-      setError('Failed to save project');
+      setError(t('loris.errors.saveProjectFailed'));
     }
   };
 
@@ -141,20 +141,6 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       }),
     [control, setStep, onClose, onNext, projects, onSave],
   );
-
-  useEffect(() => {
-    if (error) {
-      dispatch(
-        banners.actions.addBanner({
-          key: 'SaveSuccessBanner',
-          bannerProps: {
-            children: t('loris.errorSavingConnection'),
-            'data-testid': 'loris-connection-error-banner',
-          },
-        }),
-      );
-    }
-  }, [error]);
 
   return (
     <Modal

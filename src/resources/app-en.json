@@ -884,7 +884,7 @@
     "noDataToUpload": "At the moment there is no new data available. Please check back later.",
     "description": "This integration will allow you to decrypt and upload responses from this applet to your LORIS database.",
     "configureReportServerHint": "To connect, you must first configure your server under <1>Report Configuration</1>.",
-    "reportServerStatusConnected": "Report Server Status: Connected.",
+    "reportServerStatusConnected": "Connected",
     "reportServerStatusNotConnected": "Report Server Status: Not connected.",
     "connect": "Connect",
     "serverHostname": "LORIS Server Hostname",
@@ -902,7 +902,14 @@
     "dataUploadDescription": "All respondent data will be decrypted and uploaded to the LORIS database.",
     "connectionSuccessful": "Your LORIS account connection was successful. You can proceed to upload the data.",
     "disconnectionSuccessful": "Your LORIS account was successfully disconnected.",
-    "errorSavingConnection": "Error saving LORIS configuration. Please try again."
+    "errors": {
+      "savingConnectionFailed": "Error saving LORIS configuration. Please try again.",
+      "fetchProjectsFailed": "Failed to fetch projects",
+      "appletDataMissing": "Applet data is missing",
+      "projectMissing": "Project is missing",
+      "appletAlreadyTied": "This applet is already tied to a LORIS project",
+      "saveProjectFailed": "Failed to save project"
+    }
   },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",

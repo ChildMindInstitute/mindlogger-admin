@@ -882,7 +882,7 @@
     "noDataToUpload": "Il n'y a actuellement aucune nouvelle donnée disponible. Veuillez revenir plus tard.",
     "description": "Cette intégration vous permettra de déchiffrer et de télécharger les réponses de cet applet dans votre base de données LORIS.",
     "configureReportServerHint": "Pour vous connecter, vous devez d’abord configurer votre serveur sous <1>Configuration du rapport</1>.",
-    "reportServerStatusConnected": "État du serveur de rapports: Connecté.",
+    "reportServerStatusConnected": "Connecté",
     "reportServerStatusNotConnected": "État du serveur de rapports: Non connecté.",
     "connect": "Connecter",
     "serverHostname": "Nom d'hôte du serveur LORIS",
@@ -899,7 +899,15 @@
     "dataUploadConfirmation": "Veuillez confirmer que vous souhaitez envoyer les nouvelles données collectées de cet applet au projet LORIS ci-dessous :",
     "dataUploadDescription": "Toutes les données des répondants seront déchiffrées et téléversées dans la base de données LORIS.",
     "connectionSuccessful": "Your LORIS account connection was successful. You can proceed to upload the data.",
-    "disconnectionSuccessful": "Votre compte LORIS a été déconnecté avec succès"
+    "disconnectionSuccessful": "Votre compte LORIS a été déconnecté avec succès",
+    "errors": {
+      "savingConnectionFailed": "Erreur lors de l'enregistrement de la configuration LORIS. Veuillez réessayer.",
+      "fetchProjectsFailed": "Échec de la récupération des projets",
+      "appletDataMissing": "Les données de l'applet sont manquantes",
+      "projectMissing": "Le projet est manquant",
+      "appletAlreadyTied": "Cet applet est déjà lié à un projet LORIS",
+      "saveProjectFailed": "Échec de l'enregistrement du projet"
+    }
 
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
