@@ -115,4 +115,6 @@ describe('DuplicateAppletSettings', () => {
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });
+
+  // TODO Add test(s) for duplicating with report server configuration  - https://mindlogger.atlassian.net/browse/M2-8037
 });

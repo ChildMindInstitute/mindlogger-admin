@@ -108,6 +108,8 @@ describe('DuplicatePopups', () => {
     });
   });
 
+  // TODO Add test(s) for duplicating with report server configuration  - https://mindlogger.atlassian.net/browse/M2-8037
+
   // TODO uncomment after useasync changes
   // test('should open error modal', async () => {
   //   mockAxios.post.mockRejectedValue(new Error('error'));
