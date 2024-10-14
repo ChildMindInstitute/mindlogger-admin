@@ -15,7 +15,13 @@ import {
 } from 'shared/utils';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledFlexColumn, StyledModalWrapper, variables } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledErrorText,
+  StyledFlexColumn,
+  StyledModalWrapper,
+  variables,
+} from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { applet, auth, banners, popups, SingleApplet, workspaces } from 'redux/modules';
@@ -330,7 +336,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
                     <CheckboxController
                       name={'includeReportServer'}
                       control={control}
-                      label={t('duplicateAppletReportServer')}
+                      label={<StyledBodyLarge>{t('duplicateAppletReportServer')}</StyledBodyLarge>}
                       sxLabelProps={{ ml: 0 }}
                       sx={{ pl: 0 }}
                     />
