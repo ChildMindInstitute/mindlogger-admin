@@ -58,6 +58,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     password?: string;
   }>({});
 
+  const currentAppHasReportServerConfigured = !!currentApplet?.reportServerIp;
+
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
@@ -323,20 +325,22 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
                     </StyledErrorText>
                   )}
                 </Box>
-                <Box>
-                  <CheckboxController
-                    name={'includeReportServer'}
-                    control={control}
-                    label={t('duplicateAppletReportServer')}
-                    sxLabelProps={{ ml: 0 }}
-                    sx={{ pl: 0 }}
-                  />
-                  {nameError && (
-                    <StyledErrorText marginTop={0.5} marginBottom={0}>
-                      {reportServerError}
-                    </StyledErrorText>
-                  )}
-                </Box>
+                {currentAppHasReportServerConfigured && (
+                  <Box>
+                    <CheckboxController
+                      name={'includeReportServer'}
+                      control={control}
+                      label={t('duplicateAppletReportServer')}
+                      sxLabelProps={{ ml: 0 }}
+                      sx={{ pl: 0 }}
+                    />
+                    {nameError && (
+                      <StyledErrorText marginTop={0.5} marginBottom={0}>
+                        {reportServerError}
+                      </StyledErrorText>
+                    )}
+                  </Box>
+                )}
               </StyledFlexColumn>
             </form>
           </StyledModalWrapper>
