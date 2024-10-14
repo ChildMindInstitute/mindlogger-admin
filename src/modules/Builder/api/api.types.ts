@@ -78,13 +78,16 @@ export type FetchIntegrationProjectsParams = {
   hostname: string;
   username: string;
   password: string;
+  integrationType: IntegrationTypes;
 };
 
 export type SaveIntegrationParams = {
   appletId: string;
-  hostname: string;
-  project: string;
-  username: string;
-  password: string;
   integrationType: IntegrationTypes;
+  configuration: {
+    hostname: string;
+    project: string;
+    username: string;
+    password?: string;
+  };
 };

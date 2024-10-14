@@ -43,20 +43,7 @@ export const getLorisIntegrationStatus = async (
 export const fetchLorisProjectsFromApi = async (
   params: FetchIntegrationProjectsParams,
   signal?: AbortSignal,
-) => authApiClient.get(`/integrations/loris/projects`, { params, signal });
+) => authApiClient.get(`/integrations/${params.integrationType}/projects`, { params, signal });
 
 export const saveIntegrationToApi = async (params: SaveIntegrationParams, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/integrations',
-    {
-      appletId: params.appletId,
-      integrationType: params.integrationType,
-      configuration: {
-        hostname: params.hostname,
-        username: params.username,
-        password: params.password,
-        project: params.project,
-      },
-    },
-    { signal },
-  );
+  authApiClient.post('/integrations', params, { signal });

@@ -3,7 +3,12 @@ import { fetchLorisProjectsFromApi, saveIntegrationToApi } from 'modules/Builder
 import { Integration } from 'shared/state/Applet/Applet.schema';
 
 export const fetchLorisProjects = async (hostname: string, username: string, password: string) => {
-  const res = await fetchLorisProjectsFromApi({ hostname, username, password });
+  const res = await fetchLorisProjectsFromApi({
+    hostname,
+    username,
+    password,
+    integrationType: IntegrationTypes.Loris,
+  });
 
   if (res.status !== 200) {
     throw new Error('Failed to fetch projects');
@@ -22,16 +27,18 @@ export const saveLorisProject = async (
   try {
     const res = await saveIntegrationToApi({
       appletId,
-      hostname,
-      username,
-      password,
-      project,
       integrationType: IntegrationTypes.LorisUpperCase,
+      configuration: {
+        hostname,
+        username,
+        password,
+        project,
+      },
     });
 
     if (res.status !== 201 && res.status !== 200) {
       console.error('Failed to save project', res);
-      throw new Error('Failed to save project'); // TODO CHECK IF THIS IS THE PATTERN IN THE APP 🧨
+      throw new Error('Failed to save project');
     }
 
     return res.data;
