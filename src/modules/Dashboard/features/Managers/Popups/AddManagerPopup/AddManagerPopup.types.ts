@@ -1,4 +1,4 @@
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 import { WorkspaceInfo } from 'modules/Dashboard/types';
 import { Roles } from 'shared/consts';
 
@@ -16,7 +16,7 @@ export type AddManagerFormValues = {
   firstName: string;
   lastName: string;
   title?: string;
-  language: Languages;
+  language: ApiLanguages;
   participants?: { label: string; id: string }[];
   workspaceName?: string;
 };

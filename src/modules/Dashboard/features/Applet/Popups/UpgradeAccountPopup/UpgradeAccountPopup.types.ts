@@ -1,4 +1,4 @@
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
 export type UpgradeAccountPopupProps = {
@@ -11,7 +11,7 @@ export type UpgradeAccountPopupProps = {
 
 export type UpgradeAccountFormValues = {
   email: string;
-  language: Languages;
+  language: ApiLanguages;
 };
 
 export const Fields = {

@@ -8,7 +8,7 @@ import {
   SelectController,
   TagsAutocompleteController,
 } from 'shared/components/FormComponents';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 import { Roles } from 'shared/consts';
 import { getRespondentName } from 'shared/utils';
 import { Svg, Tooltip } from 'shared/components';
@@ -114,7 +114,7 @@ export const AddManagerForm = ({
           <SelectController
             {...commonProps}
             name={Fields.language}
-            options={Object.values(Languages).map((lang) => ({ labelKey: lang, value: lang }))}
+            options={Object.values(ApiLanguages).map((lang) => ({ labelKey: lang, value: lang }))}
             label={t('invitationLanguage')}
             helperText={t('languageTooltip')}
             data-testid={`${dataTestId}-lang`}

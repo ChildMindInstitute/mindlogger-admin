@@ -12,7 +12,7 @@ import {
 } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { Mixpanel, MixpanelProps, getErrorMessage } from 'shared/utils';
-import { Languages, postSubjectInvitationApi } from 'api';
+import { ApiLanguages, postSubjectInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
@@ -41,7 +41,7 @@ export const UpgradeAccountPopup = ({
   const { t, i18n } = useTranslation('app');
   const defaultValues = {
     email: '',
-    language: i18n.language as Languages,
+    language: i18n.language as ApiLanguages,
   };
   const {
     handleSubmit,

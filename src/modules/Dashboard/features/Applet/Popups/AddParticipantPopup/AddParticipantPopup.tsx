@@ -9,7 +9,7 @@ import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/style
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { MixpanelProps, Mixpanel, getErrorMessage } from 'shared/utils';
-import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
+import { ApiLanguages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
@@ -40,7 +40,7 @@ export const AddParticipantPopup = ({
   const { t, i18n } = useTranslation('app');
   const defaults = {
     ...defaultValues,
-    language: i18n.language as Languages,
+    language: i18n.language as ApiLanguages,
   };
   const {
     handleSubmit,
