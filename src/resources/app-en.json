@@ -124,6 +124,16 @@
   "activitySettings": "Activity Settings",
   "activitySplashscreen": "Splash Screen",
   "activitySplashScreenDescription": "An image that is displayed to a respondent before the activity.",
+  "activityStatus": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "hidden": "Hidden",
+    "deleted": "Unavailable",
+    "activeTooltip": "At least one Participant is assigned to complete this Activity or Flow.",
+    "inactiveTooltip": "No Participants are assigned to complete this Activity or Flow.",
+    "hiddenTooltip": "This Activity or Flow is hidden in the Activity Builder and cannot be assigned.",
+    "deletedTooltip": "This Activity or Flow has been deleted and cannot be assigned."
+  },
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "addActivity": "Add Activity",
   "addBlankActivity": "Add Blank Activity",
