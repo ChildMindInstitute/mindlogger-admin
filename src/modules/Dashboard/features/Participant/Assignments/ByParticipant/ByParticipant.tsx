@@ -8,9 +8,9 @@ import { users } from 'redux/modules';
 import { ActionsMenu, Spinner } from 'shared/components';
 
 import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
-import { EmptyState } from './EmptyState';
 import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
+import { EmptyState } from '../EmptyState';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -58,13 +58,22 @@ const ByParticipant = () => {
   }, [handleRefetch]);
 
   const isLoading = isLoadingSubject || isLoadingActivities || isLoadingHook;
+  const isRespondentLimited = !respondentSubject?.userId;
 
   return (
     <AssignmentsTab>
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (
-        <EmptyState onClickAssign={onClickAssign} isLimitedAccount={!respondentSubject?.userId} />
+        <EmptyState
+          icon="by-participant"
+          onClickAssign={isRespondentLimited ? undefined : onClickAssign}
+          title={
+            isRespondentLimited
+              ? t('participantDetails.byParticipantEmptyLimitedAccount')
+              : t('participantDetails.byParticipantEmpty')
+          }
+        />
       )}
 
       {!!activities.length && (
