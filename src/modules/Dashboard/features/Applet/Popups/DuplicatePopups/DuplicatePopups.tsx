@@ -4,16 +4,36 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 
-import { Encryption, getEncryptionToServer, Mixpanel } from 'shared/utils';
+import {
+  Encryption,
+  getEncryptionToServer,
+  getPrivateKey,
+  Mixpanel,
+  publicEncrypt,
+} from 'shared/utils';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
+import { CheckboxController, InputController } from 'shared/components/FormComponents';
+import {
+  StyledBodyLarge,
+  StyledErrorText,
+  StyledFlexColumn,
+  StyledModalWrapper,
+  variables,
+} from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
-import { applet, auth, banners, popups } from 'redux/modules';
+import { applet, auth, banners, popups, SingleApplet, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { ApiResponseCodes, duplicateAppletApi, getAppletUniqueNameApi } from 'api';
+import {
+  ApiResponseCodes,
+  Applet,
+  duplicateAppletApi,
+  getAppletUniqueNameApi,
+  ResponseWithObject,
+} from 'api';
+import { useCheckReportServer } from 'modules/Builder/features/ReportConfigSetting/ReportConfigSetting.hooks';
 
 import {
   AppletPasswordPopup,
@@ -30,28 +50,57 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const { duplicatePopupsVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
-  const currentApplet = appletData || result;
+  const currentApplet = {
+    ...(appletData || result),
+    reportServerIp: result?.reportServerIp,
+    reportPublicKey: result?.reportPublicKey,
+  } as SingleApplet | undefined;
+  const { getApplet } = applet.thunk;
   const currentAppletName = currentApplet?.displayName ?? '';
   const currentAppletId = currentApplet?.id ?? '';
+  const ownerId = workspaces.useData()?.ownerId ?? '';
   const encryptionDataRef = useRef<{
     encryption?: Encryption;
     password?: string;
   }>({});
 
+  const currentAppHasReportServerConfigured = !!currentApplet?.reportServerIp;
+
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
+  const [reportServerError, setReportServerError] = useState<string | null>(null);
+  const [newAppletSuccessResponse, setNewAppletSuccessResponse] = useState<AxiosResponse<
+    ResponseWithObject<Applet>
+  > | null>(null);
 
-  const { handleSubmit, control, trigger, getValues, setValue } =
+  const { onVerify: verifyCurrentAppletReportServer } = useCheckReportServer({
+    url: currentApplet?.reportServerIp ?? '',
+    publicKey: currentApplet?.reportPublicKey ?? '',
+    appletId: currentAppletId,
+    ownerId,
+  });
+
+  const { onSetPassword: setNewAppletReportServerPassword } = useCheckReportServer({
+    url: newAppletSuccessResponse?.data.result.reportServerIp ?? '',
+    publicKey: newAppletSuccessResponse?.data.result.reportPublicKey ?? '',
+    appletId: newAppletSuccessResponse?.data.result.id ?? '',
+    ownerId,
+  });
+
+  const { handleSubmit, control, trigger, watch, getValues, setValue } =
     useForm<DuplicatePopupsFormValues>({
       resolver: yupResolver(
         yup.object({
           name: yup.string().required(t('nameRequired')!),
+          includeReportServer: yup.boolean().required(),
         }),
       ),
-      defaultValues: { name: '' },
+      defaultValues: { name: '', includeReportServer: false },
     });
+
+  const { includeReportServer } = watch();
 
   const { execute: executeGetName, isLoading: isGetNameLoading } = useAsync(
     getAppletUniqueNameApi,
@@ -63,34 +112,10 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
-  const { execute: executeGetNameSecond, isLoading: isGetNameSecondLoading } = useAsync(
-    getAppletUniqueNameApi,
-    (res) => {
-      const currentName = getValues('name');
-      const nameFromApi = res?.data?.result?.name;
-      if (nameFromApi === currentName) {
-        setNameModalVisible(false);
-        setPasswordModalVisible(true);
-
-        return;
-      }
-      setNameError(t('appletNameExists'));
-    },
-    () => {
-      setErrorModalVisible(true);
-    },
-  );
-
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
     async (res) => {
-      await setAppletPrivateKey({
-        appletPassword: encryptionDataRef.current.password ?? '',
-        encryption: encryptionDataRef.current.encryption!,
-        appletId: currentAppletId,
-      });
-
-      handleDuplicateSuccess(res);
+      setNewAppletSuccessResponse(res);
     },
     (error) => {
       setPasswordModalVisible(false);
@@ -149,7 +174,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     );
   };
 
-  const submitCallback = async (ref?: AppletPasswordRefType) => {
+  const submitPasswordCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
     const encryption = await getEncryptionToServer(password, accountId ?? '');
     encryptionDataRef.current = {
@@ -161,6 +186,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       options: {
         encryption,
         displayName: getValues('name'),
+        includeReportServer,
       },
     });
   };
@@ -170,16 +196,44 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     setNameModalVisible(true);
   };
 
-  const setNameHandler = async () => {
-    await executeGetNameSecond({ name: getValues('name') });
+  const onSubmitNameModal = async () => {
+    let nameIsValid = false;
+    let reportServerIsValid = !includeReportServer;
+
+    try {
+      const res = await getAppletUniqueNameApi({ name: getValues('name') });
+      const currentName = getValues('name');
+      const nameFromApi = res?.data?.result?.name;
+      if (nameFromApi === currentName) {
+        nameIsValid = true;
+      } else {
+        setNameError(t('appletNameExists'));
+      }
+    } catch (e) {
+      setErrorModalVisible(true);
+    }
+
+    if (includeReportServer) {
+      reportServerIsValid = await verifyCurrentAppletReportServer();
+      if (!reportServerIsValid) {
+        setReportServerError(t('reportServerInvalid'));
+      } else {
+        setReportServerError(null);
+      }
+    }
+
+    if (nameIsValid && reportServerIsValid) {
+      setNameModalVisible(false);
+      setPasswordModalVisible(true);
+    }
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue('name', event.target.value);
     setNameError(null);
-    trigger('name');
+    void trigger('name');
   };
-  const isLoading = isGetNameLoading || isGetNameSecondLoading;
+  const isLoading = isGetNameLoading;
   const dataTestid = 'dashboard-applets-duplicate-popup';
 
   useEffect(() => {
@@ -190,13 +244,67 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     })();
   }, [duplicatePopupsVisible]);
 
+  useEffect(() => {
+    async function effect() {
+      if (!newAppletSuccessResponse || !duplicatePopupsVisible) return;
+
+      await setAppletPrivateKey({
+        appletPassword: encryptionDataRef.current.password ?? '',
+        encryption: encryptionDataRef.current.encryption!,
+        appletId: currentAppletId,
+      });
+
+      if (includeReportServer) {
+        // This request has a (very small) potential to fail. Ideally we would do this before the
+        // duplication takes place, but we can't since we need the ID of the new applet
+        // for the request. The best we could do is notify the user of the reason for the failure,
+        // but we don't have any proper workaround for this.
+        await setNewAppletReportServerPassword(
+          await publicEncrypt(
+            JSON.stringify({
+              password: encryptionDataRef.current.password ?? '',
+              privateKey: await getPrivateKey({
+                appletPassword: encryptionDataRef.current.password ?? '',
+                accountId: ownerId,
+              }),
+            }),
+            currentApplet?.reportPublicKey ?? '',
+          ),
+        );
+      }
+
+      handleDuplicateSuccess(newAppletSuccessResponse);
+    }
+
+    void effect();
+  }, [
+    currentApplet?.reportPublicKey,
+    currentAppletId,
+    duplicatePopupsVisible,
+    handleDuplicateSuccess,
+    includeReportServer,
+    newAppletSuccessResponse,
+    ownerId,
+    setAppletPrivateKey,
+    setNewAppletReportServerPassword,
+  ]);
+
+  useEffect(() => {
+    async function effect() {
+      // Fetch the report server properties of the applet
+      await dispatch(getApplet({ appletId: currentAppletId }));
+    }
+
+    void effect();
+  }, [currentAppletId, dispatch, getApplet]);
+
   return (
     <>
       <Modal
         open={nameModalVisible}
         onClose={nameModalClose}
         title={t('appletDuplication')}
-        onSubmit={setNameHandler}
+        onSubmit={onSubmitNameModal}
         buttonText={t('submit')}
         disabledSubmit={isLoading}
         data-testid={dataTestid}
@@ -204,22 +312,43 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         <>
           {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
           <StyledModalWrapper>
-            <form onSubmit={handleSubmit(setNameHandler)} noValidate>
-              <InputController
-                fullWidth
-                name="name"
-                control={control}
-                label={t('appletName')}
-                onChange={handleNameChange}
-                error={!!nameError}
-                data-testid={`${dataTestid}-name`}
-              />
+            <form onSubmit={handleSubmit(onSubmitNameModal)} noValidate>
+              <StyledFlexColumn sx={{ gap: 1.6 }}>
+                <Box>
+                  <InputController
+                    variant="outlined"
+                    fullWidth
+                    name="name"
+                    control={control}
+                    label={t('appletName')}
+                    onChange={handleNameChange}
+                    error={!!nameError}
+                    data-testid={`${dataTestid}-name`}
+                  />
+                  {nameError && (
+                    <StyledErrorText marginTop={0.5} marginBottom={0}>
+                      {nameError}
+                    </StyledErrorText>
+                  )}
+                </Box>
+                {currentAppHasReportServerConfigured && (
+                  <Box>
+                    <CheckboxController
+                      name={'includeReportServer'}
+                      control={control}
+                      label={<StyledBodyLarge>{t('duplicateAppletReportServer')}</StyledBodyLarge>}
+                      sxLabelProps={{ ml: 0 }}
+                      sx={{ pl: 0 }}
+                    />
+                    {nameError && (
+                      <StyledErrorText marginTop={0.5} marginBottom={0}>
+                        {reportServerError}
+                      </StyledErrorText>
+                    )}
+                  </Box>
+                )}
+              </StyledFlexColumn>
             </form>
-            {nameError && (
-              <StyledErrorText marginTop={0.5} marginBottom={0}>
-                {nameError}
-              </StyledErrorText>
-            )}
           </StyledModalWrapper>
         </>
       </Modal>
@@ -229,7 +358,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}
-          submitCallback={submitCallback}
+          submitCallback={submitPasswordCallback}
           isLoading={isDuplicateLoading}
           data-testid={`${dataTestid}-password-popup`}
         />

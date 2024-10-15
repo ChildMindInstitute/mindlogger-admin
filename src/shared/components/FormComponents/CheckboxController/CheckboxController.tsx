@@ -39,7 +39,7 @@ export const CheckboxController = <T extends FieldValues>({
             control={
               <Checkbox
                 {...checkboxProps}
-                sx={{ color: error && variables.palette.semantic.error }}
+                sx={{ color: error && variables.palette.semantic.error, ...checkboxProps.sx }}
                 disabled={disabled}
                 checked={(isInversed ? !value : value) ?? false}
                 onChange={(event) => {
