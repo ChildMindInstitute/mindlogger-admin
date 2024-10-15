@@ -72,7 +72,7 @@ const ByParticipant = () => {
 
     // Refresh target subject data for any expanded views
     Object.entries(expandedViewsData).forEach(([id, viewData]) => {
-      if (viewData) handleRefetchExpandedView(id);
+      if (viewData) void handleRefetchExpandedView(id);
     });
   }, [handleRefetchActivities, expandedViewsData, handleRefetchExpandedView]);
 
@@ -103,7 +103,7 @@ const ByParticipant = () => {
       if (!respondentSubject) return;
 
       if (isExpanded) {
-        handleRefetchExpandedView(activityOrFlowId);
+        void handleRefetchExpandedView(activityOrFlowId);
       } else {
         // If expanded view is closed, remove data to free up memory and minimize refetches
         // (after delay to account for transition)
