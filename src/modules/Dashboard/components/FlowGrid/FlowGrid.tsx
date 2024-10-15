@@ -14,6 +14,7 @@ export const FlowGrid = ({
   flows = [],
   subject,
   onClickAssign,
+  onClickUnassign,
   onClickItem,
   'data-testid': dataTestId,
   ...otherProps
@@ -30,6 +31,7 @@ export const FlowGrid = ({
       setShowExportPopup(true);
     }, []),
     onClickAssign,
+    onClickUnassign,
   });
   const hydratedFlows = useMemo(() => hydrateActivityFlows(flows, activities), [activities, flows]);
 

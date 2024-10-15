@@ -5,9 +5,9 @@ import { ApiErrorResponse } from 'shared/state/Base';
 
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
-  callback?: (data: AxiosResponse<K>) => void,
-  errorCallback?: (data: AxiosError<ApiErrorResponse> | null) => void,
-  finallyCallback?: () => void,
+  callback?: (data: AxiosResponse<K>, args?: T) => void,
+  errorCallback?: (data: AxiosError<ApiErrorResponse> | null, args?: T) => void,
+  finallyCallback?: (args?: T) => void,
   dependencies?: unknown[],
 ) => {
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
@@ -31,20 +31,20 @@ export const useAsync = <T, K>(
       return asyncFunction(body)
         ?.then((response) => {
           setValue(response);
-          callback?.(response);
+          callback?.(response, body);
           refValue.current = response;
 
           return response;
         })
         .catch((error) => {
           setError(error);
-          errorCallback?.(error);
+          errorCallback?.(error, body);
 
           throw error.response;
         })
         .finally(() => {
           setIsLoading(false);
-          finallyCallback?.();
+          finallyCallback?.(body);
         });
     },
     [asyncFunction, ...deps],

@@ -1,11 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 import { page } from 'resources';
-import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
@@ -18,7 +16,16 @@ import {
   ScoreReportType,
   SubscaleTotalScore,
 } from './consts';
-import { Item, MultiSelectItem, SingleSelectItem } from './state';
+import {
+  ActivitySettingsSubscale,
+  ActivitySettingsSubscaleItem,
+  Item,
+  MultiSelectItem,
+  SingleSelectItem,
+  SubscaleSetting,
+} from './state';
+import { DecryptedAnswerData, ElementType, Invitations } from './types';
+import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -164,7 +171,6 @@ export const mockedRespondent: Respondent = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
   details: [mockedRespondentDetails],
   status: RespondentStatus.Invited,
@@ -180,7 +186,6 @@ export const mockedRespondent2: Respondent = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
   status: RespondentStatus.Invited,
   email: 'resp2@mail.com',
@@ -515,10 +520,10 @@ export const mockedManager: Manager = {
   invitationKey: null,
 };
 
-export const mockedSingleSelectFormValues = {
+export const mockedSingleSelectFormValues: Omit<ItemFormValues, 'id'> & { id: string } = {
   id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
   name: 'Item1',
-  responseType: 'singleSelect',
+  responseType: ItemResponseType.SingleSelection,
   responseValues: {
     options: [
       {
@@ -551,6 +556,7 @@ export const mockedSingleSelectFormValues = {
     removeBackButton: false,
     randomizeOptions: false,
     autoAdvance: false,
+    portraitLayout: false,
   },
 };
 
@@ -732,6 +738,8 @@ export const mockedInvitation: Invitations = {
       secretUserId: null,
       nickname: null,
       meta: {},
+      tag: null,
+      title: null,
     },
   ],
   count: 1,
@@ -988,6 +996,7 @@ export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType
       textInputRequired: false,
     },
     autoAdvance: false,
+    portraitLayout: false,
   },
   name: 'single_text_score',
   isHidden: false,
@@ -1040,6 +1049,7 @@ export const mockedMultiActivityItem: MultiSelectItem<ItemFormValuesCommonType> 
       textInputOption: undefined,
       textInputRequired: false,
     },
+    portraitLayout: false,
   },
   name: 'multi_text_score',
   isHidden: false,
@@ -1961,44 +1971,56 @@ export const mockedTotalScoresTableData = [
     optionalText: 'Description #3 for range -10~0',
   },
 ];
-export const mockedSubscaleTableData1 = [
+export const mockedSubscaleTableData1: LookupTableDataItem[] = [
   {
+    id: uuidv4(),
     score: '2',
     rawScore: '1',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Description 1',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '4',
     rawScore: '2',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Description 2',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '6',
     rawScore: '3',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Markdown Text Here',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '8',
     rawScore: '4',
-    age: 15,
+    age: '15',
     sex: 'F',
     optionalText: 'Good',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '10',
     rawScore: '5',
-    age: 15,
+    age: '15',
     sex: null,
     optionalText: 'Awesome text',
+    severity: null,
   },
 ];
-export const mockedSubscale1 = {
+export const mockedSubscale1: ActivitySettingsSubscale<
+  ActivitySettingsSubscaleItem & { id: string; question?: string }
+> = {
   id: 'subscale-1',
   name: 'ss-1',
   scoring: SubscaleTotalScore.Sum,
@@ -2006,123 +2028,122 @@ export const mockedSubscale1 = {
     {
       id: 'single-1',
       name: 'single',
-      type: 'item',
+      type: ElementType.Item,
       question: 'lorem ipsum single',
     },
     {
       id: 'multi-1',
       name: 'multi',
-      type: 'item',
+      type: ElementType.Item,
       question: 'lorem ipsum multi',
     },
     {
       id: 'slider-1',
       name: 'slider',
-      type: 'item',
+      type: ElementType.Item,
       question: 'lorem ipsum slider',
     },
   ],
   subscaleTableData: mockedSubscaleTableData1,
 };
-export const mockedSubscaleTableData2 = [
+export const mockedSubscaleTableData2: LookupTableDataItem[] = [
   {
+    id: uuidv4(),
     score: '2',
     rawScore: '1',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Description 1',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '4',
     rawScore: '2',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Description 2',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '6',
     rawScore: '3',
-    age: 15,
+    age: '15',
     sex: 'M',
     optionalText: 'Markdown Text Here',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '8',
     rawScore: '4',
-    age: 15,
+    age: '15',
     sex: 'F',
     optionalText: 'Good',
+    severity: null,
   },
   {
+    id: uuidv4(),
     score: '10',
     rawScore: '5',
-    age: 15,
+    age: '15',
     sex: null,
     optionalText: 'Awesome text',
+    severity: null,
   },
 ];
-export const mockedSubscale2 = {
+export const mockedSubscale2: ActivitySettingsSubscale<
+  ActivitySettingsSubscaleItem & { id: string; question?: string }
+> = {
   id: 'subscale-2',
   name: 'ss-2',
-  scoring: 'sum',
+  scoring: SubscaleTotalScore.Sum,
   items: [
     {
       id: 'subscale-1',
       name: 'ss-1',
-      type: 'subscale',
+      type: ElementType.Subscale,
     },
     {
       id: 'single-1',
       name: 'single',
-      type: 'item',
+      type: ElementType.Item,
       question: 'lorem ipsum single',
     },
   ],
   subscaleTableData: mockedSubscaleTableData2,
 };
-export const mockedSubscaleSetting = {
+export const mockedSubscaleSetting: SubscaleSetting = {
   calculateTotalScore: SubscaleTotalScore.Sum,
   subscales: [mockedSubscale1, mockedSubscale2],
   totalScoresTableData: mockedTotalScoresTableData,
 };
-export const mockedItemsSettingsForSubscale = [
+export const mockedItemsSettingsForSubscale: Item[] = [
   {
-    question: 'single',
-    responseType: 'singleSelect',
+    question: { en: 'single' },
+    responseType: ItemResponseType.SingleSelection,
     responseValues: {
-      paletteName: null,
       options: [
         {
           id: '4bae594b-4385-402c-aa96-0f6438e7e642',
           text: 'opt1',
-          image: null,
           score: 3,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 0,
         },
         {
           id: 'b8b0a211-7f30-48af-bee5-54cbf53889bd',
           text: 'opt2',
-          image: null,
           score: 5,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 1,
         },
         {
           id: '3c75fa7f-3ae9-4b4f-ab29-81664418c430',
           text: 'opt3',
-          image: null,
           score: 1,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 2,
         },
       ],
@@ -2142,50 +2163,37 @@ export const mockedItemsSettingsForSubscale = [
         textInputRequired: false,
       },
       autoAdvance: false,
+      portraitLayout: false,
     },
     name: 'single',
     isHidden: false,
-    conditionalLogic: null,
     allowEdit: true,
     id: 'e3d95ec0-32cd-4dff-8f81-6a0debfe7099',
   },
   {
-    question: 'multi',
-    responseType: 'multiSelect',
+    question: { en: 'multi' },
+    responseType: ItemResponseType.MultipleSelection,
     responseValues: {
-      paletteName: null,
       options: [
         {
           id: 'e6f6b1c1-3ec2-45b2-8c34-6d0970b86d64',
           text: 'opt1',
-          image: null,
           score: 1,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 0,
         },
         {
           id: 'a64abb45-1ba3-4113-88b1-5e28459755dc',
           text: 'opt2',
-          image: null,
           score: 3,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 1,
         },
         {
           id: '1ce9e52d-28b3-4768-846c-83e378db59ef',
           text: 'opt3',
-          image: null,
           score: 0,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 2,
         },
       ],
@@ -2204,25 +2212,22 @@ export const mockedItemsSettingsForSubscale = [
         textInputOption: false,
         textInputRequired: false,
       },
+      portraitLayout: false,
     },
     name: 'multi',
     isHidden: false,
-    conditionalLogic: null,
     allowEdit: true,
     id: '16a50393-7952-4fcb-8e3b-5f042ab05ed9',
   },
   {
-    question: 'slider',
-    responseType: 'slider',
+    question: { en: 'slider' },
+    responseType: ItemResponseType.Slider,
     responseValues: {
       minLabel: 'min',
       maxLabel: 'max',
       minValue: 0,
       maxValue: 5,
-      minImage: null,
-      maxImage: null,
       scores: [1, 2, 3, 4, 5, 6],
-      alerts: null,
     },
     config: {
       removeBackButton: false,
@@ -2240,36 +2245,24 @@ export const mockedItemsSettingsForSubscale = [
     },
     name: 'slider',
     isHidden: false,
-    conditionalLogic: null,
     allowEdit: true,
     id: '42231d03-316b-42e3-8c9b-cd117c916e6d',
   },
   {
-    question: 'How do you describe yourself?',
-    responseType: 'singleSelect',
+    question: { en: 'How do you describe yourself?' },
+    responseType: ItemResponseType.SingleSelection,
     responseValues: {
-      paletteName: null,
       options: [
         {
           id: '4a80acc2-d2cb-4dc5-b518-4fee6e4d7c0d',
           text: 'Male',
-          image: null,
-          score: null,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 0,
         },
         {
           id: '60fff102-0e8d-458f-984a-65d737230e55',
           text: 'Female',
-          image: null,
-          score: null,
-          tooltip: null,
           isHidden: false,
-          color: null,
-          alert: null,
           value: 1,
         },
       ],
@@ -2289,16 +2282,16 @@ export const mockedItemsSettingsForSubscale = [
         textInputRequired: false,
       },
       autoAdvance: false,
+      portraitLayout: false,
     },
     name: 'gender_screen',
     isHidden: false,
-    conditionalLogic: null,
     allowEdit: false,
     id: 'ac8643f5-3c98-4ce7-b94c-8735a8bd2943',
   },
   {
-    question: 'How old are you?',
-    responseType: 'text',
+    question: { en: 'How old are you?' },
+    responseType: ItemResponseType.Text,
     responseValues: null,
     config: {
       removeBackButton: false,
@@ -2309,54 +2302,40 @@ export const mockedItemsSettingsForSubscale = [
       numericalResponseRequired: false,
       responseDataIdentifier: false,
       responseRequired: false,
-      isIdentifier: null,
     },
     name: 'age_screen',
     isHidden: false,
-    conditionalLogic: null,
     allowEdit: false,
     id: '028d9ee5-68cc-4c6f-9e13-60e7aa52a412',
   },
 ];
-export const mockedDecryptedAnswersWithSubscales = [
+
+export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
   {
     activityItem: {
-      question: 'single',
-      responseType: 'singleSelect',
+      question: { en: 'single' },
+      responseType: ItemResponseType.SingleSelection,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '4bae594b-4385-402c-aa96-0f6438e7e642',
             text: 'opt1',
-            image: null,
             score: 3,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 0,
           },
           {
             id: 'b8b0a211-7f30-48af-bee5-54cbf53889bd',
             text: 'opt2',
-            image: null,
             score: 5,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 1,
           },
           {
             id: '3c75fa7f-3ae9-4b4f-ab29-81664418c430',
             text: 'opt3',
-            image: null,
             score: 1,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 2,
           },
         ],
@@ -2376,10 +2355,10 @@ export const mockedDecryptedAnswersWithSubscales = [
           textInputRequired: false,
         },
         autoAdvance: false,
+        portraitLayout: false,
       },
       name: 'single',
       isHidden: false,
-      conditionalLogic: null,
       allowEdit: true,
       id: 'e3d95ec0-32cd-4dff-8f81-6a0debfe7099',
     },
@@ -2394,12 +2373,10 @@ export const mockedDecryptedAnswersWithSubscales = [
     sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
     targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
-    legacyProfileId: null,
     scheduledDatetime: null,
     startDatetime: 1698673918.439,
     endDatetime: 1698673935.278,
     migratedDate: null,
-    appletHistoryId: 'fd913b3f-704c-4425-96d5-5386cefaf5cc_1.2.0',
     activityHistoryId: 'eb521f27-5ccb-4286-97ce-704793294015_1.2.0',
     flowHistoryId: null,
     flowName: null,
@@ -2411,45 +2388,35 @@ export const mockedDecryptedAnswersWithSubscales = [
     items: mockedItemsSettingsForSubscale,
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
+    sourceSecretId: null,
+    targetSecretId: null,
+    reviewedFlowSubmitId: null,
   },
   {
     activityItem: {
-      question: 'multi',
-      responseType: 'multiSelect',
+      question: { en: 'multi' },
+      responseType: ItemResponseType.MultipleSelection,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: 'e6f6b1c1-3ec2-45b2-8c34-6d0970b86d64',
             text: 'opt1',
-            image: null,
             score: 1,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 0,
           },
           {
             id: 'a64abb45-1ba3-4113-88b1-5e28459755dc',
             text: 'opt2',
-            image: null,
             score: 3,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 1,
           },
           {
             id: '1ce9e52d-28b3-4768-846c-83e378db59ef',
             text: 'opt3',
-            image: null,
             score: 0,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 2,
           },
         ],
@@ -2468,10 +2435,10 @@ export const mockedDecryptedAnswersWithSubscales = [
           textInputOption: false,
           textInputRequired: false,
         },
+        portraitLayout: false,
       },
       name: 'multi',
       isHidden: false,
-      conditionalLogic: null,
       allowEdit: true,
       id: '16a50393-7952-4fcb-8e3b-5f042ab05ed9',
     },
@@ -2486,12 +2453,10 @@ export const mockedDecryptedAnswersWithSubscales = [
     sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
     targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
-    legacyProfileId: null,
     scheduledDatetime: null,
     startDatetime: 1698673918.439,
     endDatetime: 1698673935.278,
     migratedDate: null,
-    appletHistoryId: 'fd913b3f-704c-4425-96d5-5386cefaf5cc_1.2.0',
     activityHistoryId: 'eb521f27-5ccb-4286-97ce-704793294015_1.2.0',
     flowHistoryId: null,
     flowName: null,
@@ -2503,20 +2468,20 @@ export const mockedDecryptedAnswersWithSubscales = [
     items: mockedItemsSettingsForSubscale,
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
+    sourceSecretId: null,
+    targetSecretId: null,
+    reviewedFlowSubmitId: null,
   },
   {
     activityItem: {
-      question: 'slider',
-      responseType: 'slider',
+      question: { en: 'slider' },
+      responseType: ItemResponseType.Slider,
       responseValues: {
         minLabel: 'min',
         maxLabel: 'max',
         minValue: 0,
         maxValue: 5,
-        minImage: null,
-        maxImage: null,
         scores: [1, 2, 3, 4, 5, 6],
-        alerts: null,
       },
       config: {
         removeBackButton: false,
@@ -2534,7 +2499,6 @@ export const mockedDecryptedAnswersWithSubscales = [
       },
       name: 'slider',
       isHidden: false,
-      conditionalLogic: null,
       allowEdit: true,
       id: '42231d03-316b-42e3-8c9b-cd117c916e6d',
     },
@@ -2549,12 +2513,10 @@ export const mockedDecryptedAnswersWithSubscales = [
     sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
     targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
-    legacyProfileId: null,
     scheduledDatetime: null,
     startDatetime: 1698673918.439,
     endDatetime: 1698673935.278,
     migratedDate: null,
-    appletHistoryId: 'fd913b3f-704c-4425-96d5-5386cefaf5cc_1.2.0',
     activityHistoryId: 'eb521f27-5ccb-4286-97ce-704793294015_1.2.0',
     flowHistoryId: null,
     flowName: null,
@@ -2566,34 +2528,26 @@ export const mockedDecryptedAnswersWithSubscales = [
     items: mockedItemsSettingsForSubscale,
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
+    sourceSecretId: null,
+    targetSecretId: null,
+    reviewedFlowSubmitId: null,
   },
   {
     activityItem: {
-      question: 'How do you describe yourself?',
-      responseType: 'singleSelect',
+      question: { en: 'How do you describe yourself?' },
+      responseType: ItemResponseType.SingleSelection,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '4a80acc2-d2cb-4dc5-b518-4fee6e4d7c0d',
             text: 'Male',
-            image: null,
-            score: null,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 0,
           },
           {
             id: '60fff102-0e8d-458f-984a-65d737230e55',
             text: 'Female',
-            image: null,
-            score: null,
-            tooltip: null,
             isHidden: false,
-            color: null,
-            alert: null,
             value: 1,
           },
         ],
@@ -2613,10 +2567,10 @@ export const mockedDecryptedAnswersWithSubscales = [
           textInputRequired: false,
         },
         autoAdvance: false,
+        portraitLayout: false,
       },
       name: 'gender_screen',
       isHidden: false,
-      conditionalLogic: null,
       allowEdit: false,
       id: 'ac8643f5-3c98-4ce7-b94c-8735a8bd2943',
     },
@@ -2631,12 +2585,10 @@ export const mockedDecryptedAnswersWithSubscales = [
     sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
     targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
-    legacyProfileId: null,
     scheduledDatetime: null,
     startDatetime: 1698673918.439,
     endDatetime: 1698673935.278,
     migratedDate: null,
-    appletHistoryId: 'fd913b3f-704c-4425-96d5-5386cefaf5cc_1.2.0',
     activityHistoryId: 'eb521f27-5ccb-4286-97ce-704793294015_1.2.0',
     flowHistoryId: null,
     flowName: null,
@@ -2648,11 +2600,14 @@ export const mockedDecryptedAnswersWithSubscales = [
     items: mockedItemsSettingsForSubscale,
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
+    sourceSecretId: null,
+    targetSecretId: null,
+    reviewedFlowSubmitId: null,
   },
   {
     activityItem: {
-      question: 'How old are you?',
-      responseType: 'text',
+      question: { en: 'How old are you?' },
+      responseType: ItemResponseType.Text,
       responseValues: null,
       config: {
         removeBackButton: false,
@@ -2663,11 +2618,9 @@ export const mockedDecryptedAnswersWithSubscales = [
         numericalResponseRequired: false,
         responseDataIdentifier: false,
         responseRequired: false,
-        isIdentifier: null,
       },
       name: 'age_screen',
       isHidden: false,
-      conditionalLogic: null,
       allowEdit: false,
       id: '028d9ee5-68cc-4c6f-9e13-60e7aa52a412',
     },
@@ -2679,12 +2632,10 @@ export const mockedDecryptedAnswersWithSubscales = [
     sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
     targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
     respondentSecretId: 'respondentSecretId',
-    legacyProfileId: null,
     scheduledDatetime: null,
     startDatetime: 1698673918.439,
     endDatetime: 1698673935.278,
     migratedDate: null,
-    appletHistoryId: 'fd913b3f-704c-4425-96d5-5386cefaf5cc_1.2.0',
     activityHistoryId: 'eb521f27-5ccb-4286-97ce-704793294015_1.2.0',
     flowHistoryId: null,
     flowName: null,
@@ -2696,6 +2647,9 @@ export const mockedDecryptedAnswersWithSubscales = [
     items: mockedItemsSettingsForSubscale,
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
+    sourceSecretId: null,
+    targetSecretId: null,
+    reviewedFlowSubmitId: null,
   },
 ];
 
@@ -2826,7 +2780,6 @@ export const mockedDecryptedObjectForDrawing = {
   items: [mockedDrawingSettings],
   activityName: 'New Activity#Drawing-item2',
   subscaleSetting: null,
-  submitId: 'some-submit-id',
 };
 export const mockedDecryptedEventsForDrawing = [
   {
@@ -3042,21 +2995,18 @@ export const mockedAppletSummaryData = [
 ];
 
 export const mockIntersectionObserver = () => {
-  global.IntersectionObserver = jest.fn((_, options = {}) => {
-    const instance = {
-      thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
-      root: options.root,
-      rootMargin: options.rootMargin,
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn(),
-    };
-
-    return instance;
-  });
+  global.IntersectionObserver = jest.fn((_, options = {}) => ({
+    thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold || 0],
+    root: options.root || null,
+    rootMargin: options.rootMargin || '',
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+    takeRecords: jest.fn(),
+  }));
 };
 
-export const assessment = [
+export const assessment: AssessmentActivityItem[] = [
   {
     activityItem: {
       question: {
@@ -3099,6 +3049,7 @@ export const assessment = [
           textInputOption: false,
           textInputRequired: false,
         },
+        portraitLayout: false,
       },
       name: 'ms-1',
       isHidden: false,
@@ -3153,6 +3104,7 @@ export const assessment = [
             textInputOption: false,
             textInputRequired: false,
           },
+          portraitLayout: false,
         },
         name: 'ms-1',
         isHidden: false,
@@ -3163,7 +3115,7 @@ export const assessment = [
       },
     ],
   },
-] as AssessmentActivityItem[];
+];
 
 export const assessmentVersions = [
   '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.1.0',

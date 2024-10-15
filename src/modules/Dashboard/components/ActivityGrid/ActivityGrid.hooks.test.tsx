@@ -13,8 +13,8 @@ const mockedActivities = appletActivities as unknown as Activity[];
 const props = {
   dataTestId: 'test',
   activitiesData: {
-    result: mockedActivities,
-    count: mockedActivities.length,
+    activities: mockedActivities,
+    total: mockedActivities.length,
   },
 } as UseActivityGridProps;
 

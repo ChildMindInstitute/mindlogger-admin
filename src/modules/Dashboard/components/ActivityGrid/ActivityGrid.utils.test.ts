@@ -4,9 +4,10 @@ import {
   ActivityActionProps,
   ActivityActions,
 } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.types';
-import { mockedActivityId, mockedAppletId } from 'shared/mock';
+import { mockedAppletFormData, mockedAppletId } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { MenuItem } from 'shared/components';
+import { Activity } from 'redux/modules';
 
 describe('getActivityActions', () => {
   const dataTestId = 'test';
@@ -15,6 +16,7 @@ describe('getActivityActions', () => {
     editActivity: jest.fn(),
     exportData: jest.fn(),
     assignActivity: jest.fn(),
+    unassignActivity: jest.fn(),
     takeNow: jest.fn(),
   } as const;
 
@@ -24,13 +26,15 @@ describe('getActivityActions', () => {
     editActivity: `${dataTestId}-activity-edit`,
     exportData: `${dataTestId}-activity-export`,
     assignActivity: `${dataTestId}-activity-assign`,
+    unassignActivity: `${dataTestId}-activity-unassign`,
     takeNow: `${dataTestId}-activity-take-now`,
   } as const;
 
   const expectAllMenuItemsAreReturned = (menuItems: MenuItem<ActivityActionProps>[]) => {
-    expect(menuItems).toHaveLength(5);
+    expect(menuItems).toHaveLength(6);
 
-    const [editActivity, exportData, _divider, assignActivity, takeNow] = menuItems;
+    const [editActivity, exportData, assignActivity, unassignActivity, _divider, takeNow] =
+      menuItems;
 
     expect(editActivity).toBeDefined();
     expect(editActivity.action).toBe(actions.editActivity);
@@ -38,6 +42,8 @@ describe('getActivityActions', () => {
     expect(exportData.action).toBe(actions.exportData);
     expect(assignActivity).toBeDefined();
     expect(assignActivity.action).toBe(actions.assignActivity);
+    expect(unassignActivity).toBeDefined();
+    expect(unassignActivity.action).toBe(actions.unassignActivity);
     expect(takeNow).toBeDefined();
     expect(takeNow.action).toBe(actions.takeNow);
   };
@@ -49,9 +55,11 @@ describe('getActivityActions', () => {
       case 'exportData':
         return menuItems[1];
       case 'assignActivity':
+        return menuItems[2];
+      case 'unassignActivity':
         return menuItems[3];
       case 'takeNow':
-        return menuItems[4];
+        return menuItems[5];
       default:
         throw new Error('Invalid dataTestId');
     }
@@ -61,19 +69,24 @@ describe('getActivityActions', () => {
     menuItems: MenuItem<ActivityActionProps>[],
     action: Action,
     isDisplayed: boolean,
+    disabled?: boolean,
   ) => {
     const menuItem = getMenuItem(menuItems, action);
     expect(menuItem['data-testid']).toBe(menuItemTestIds[action]);
     expect(menuItem.isDisplayed).toBe(isDisplayed);
+    if (disabled !== undefined) {
+      expect(menuItem.disabled).toBe(disabled);
+    }
   };
+
+  const activity = mockedAppletFormData.activities[0] as unknown as Activity;
+  const unassignedActivity = { ...activity, autoAssign: false };
 
   const defaultArgs: ActivityActions = {
     actions,
     dataTestId,
     appletId: mockedAppletId,
-    activity: {
-      id: mockedActivityId,
-    },
+    activity,
     roles: [],
     featureFlags: {
       enableActivityAssign: true,
@@ -92,10 +105,11 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
-  test('Correct menu items are displayed when user is a manager', () => {
+  test('Correct menu items are displayed for assigned activity when user is a manager', () => {
     const menuItems = getActivityActions({
       ...defaultArgs,
       roles: [Roles.Manager],
@@ -104,7 +118,8 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', true, true);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 
@@ -117,7 +132,8 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', true, true);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -131,6 +147,7 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -144,6 +161,7 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -157,6 +175,7 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -169,7 +188,8 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', true, true);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 
@@ -182,7 +202,23 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', true, true);
+    expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
+  });
+
+  test('Correct menu items are displayed when user is an owner and activity is unassigned', () => {
+    const menuItems = getActivityActions({
+      ...defaultArgs,
+      roles: [Roles.Owner],
+      activity: unassignedActivity,
+    });
+
+    expectAllMenuItemsAreReturned(menuItems);
+    expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'exportData', true);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 
@@ -200,6 +236,7 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'unassignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 });

@@ -11,8 +11,8 @@ import { Subscale } from './Subscale';
 import { ReportContext } from '../Report.context';
 import {
   ActivityCompletionToRender,
+  ParsedSubscale,
   ParsedSubscales,
-  SubscaleScore,
   SubscalesProps,
 } from './Subscales.types';
 import { AllScores } from './AllScores';
@@ -22,6 +22,7 @@ import {
   getAllSubscalesToRender,
   formatCurrentSubscales,
 } from './Subscales.utils';
+import { ChartData } from '../Charts/BarChart/BarChart.types';
 
 export const Subscales = ({
   answers,
@@ -68,12 +69,13 @@ export const Subscales = ({
             getAllSubscalesToRender(acc.allSubscalesToRender, item, subscale, activityItems);
 
             const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
-            const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
+            const { [subscale.name]: _removed, ...restScores } = calculatedSubscale;
 
-            const activityCompletion = {
+            const activityCompletion: ParsedSubscale = {
               date: new Date(item.endDatetime),
               score: calculatedSubscale[subscale.name].score,
               optionText: calculatedSubscale[subscale.name].optionText,
+              severity: calculatedSubscale[subscale.name].severity,
               activityCompletionID: item.answerId,
               activityItems,
               subscalesObject,
@@ -116,7 +118,7 @@ export const Subscales = ({
       (
         acc: {
           activityCompletionToRender: ActivityCompletionToRender;
-          activityCompletionScores: SubscaleScore[];
+          activityCompletionScores: ChartData[];
         },
         item,
       ) => {
@@ -137,6 +139,7 @@ export const Subscales = ({
           ...subscaleToRender[item.name],
           score: subscale?.score,
           optionText: subscale?.optionText,
+          severity: subscale?.severity,
           restScores: subscale.restScores,
         };
         acc.activityCompletionScores.push({

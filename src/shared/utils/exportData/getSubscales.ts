@@ -22,6 +22,7 @@ import {
   DecryptedSliderAnswer,
   ElementType,
 } from 'shared/types';
+import { CalculatedSubscaleScores } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
@@ -47,8 +48,8 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-  result: { [key: string]: { score: number; optionText: string } },
-): { [key: string]: { score: number; optionText: string } } => {
+  result: CalculatedSubscaleScores,
+): CalculatedSubscaleScores => {
   let itemCount = 0;
 
   const sumScore = data.items.reduce((acc, item) => {
@@ -130,8 +131,18 @@ export const calcScores = <T>(
         }
       }
 
-      // TODO: Update the score calculation to account for age ranges (https://mindlogger.atlassian.net/browse/M2-7672)
-      const withAge = age ? String(age) === reportedAge : true;
+      const hasAgeInterval = age && typeof age === 'string' && age.includes(INTERVAL_SYMBOL);
+      let withAge = true;
+
+      if (age) {
+        if (!hasAgeInterval) {
+          withAge = String(age) === reportedAge;
+        } else {
+          const [minAge, maxAge] = age.replace(/\s/g, '').split(INTERVAL_SYMBOL);
+          const reportedAgeNum = Number(reportedAge);
+          withAge = Number(minAge) <= reportedAgeNum && reportedAgeNum <= Number(maxAge);
+        }
+      }
 
       if (!withSex || !withAge) return false;
 
@@ -148,11 +159,15 @@ export const calcScores = <T>(
       [data.name]: {
         score: Number(subscaleTableDataItem?.score) || getRoundTo2Decimal(calculatedScore),
         optionText: subscaleTableDataItem?.optionalText || '',
+        severity: subscaleTableDataItem?.severity || null,
       },
     };
   }
 
-  return { ...result, [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '' } };
+  return {
+    ...result,
+    [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+  };
 };
 
 export const calcTotalScore = (

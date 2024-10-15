@@ -29,19 +29,18 @@ export const Activities = () => {
   const { execute, isLoading, value, previousValue } = useAsync(getAppletActivitiesApi);
 
   const activities: Activity[] = useMemo(
-    () => (value ?? previousValue)?.data?.result?.activitiesDetails ?? [],
+    () => (value ?? previousValue)?.data.result.activitiesDetails ?? [],
     [value, previousValue],
   );
   const flows: ActivityFlow[] =
-    (value ?? previousValue)?.data?.result?.appletDetail?.activityFlows ?? [];
-  const showContent =
-    (isLoading && previousValue?.data?.result?.activitiesDetails?.length > 0) || !isLoading;
+    (value ?? previousValue)?.data.result.appletDetail.activityFlows ?? [];
+  const showContent = !isLoading || !!activities.length;
 
   const { formatRow, TakeNowModal } = useActivityGrid({
     dataTestId,
     activitiesData: {
-      result: activities,
-      count: activities.length,
+      activities,
+      total: activities.length,
     },
     onClickExportData: useCallback((activityId) => {
       setActivityId(activityId);

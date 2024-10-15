@@ -70,7 +70,13 @@ export const Menu = <T = unknown,>({
           };
 
           const TooltipWrapper = ({ children }: { children: JSX.Element }) =>
-            tooltip ? <Tooltip tooltipTitle={tooltip}>{children}</Tooltip> : children;
+            tooltip ? (
+              <Tooltip tooltipTitle={tooltip} placement="right">
+                {children}
+              </Tooltip>
+            ) : (
+              children
+            );
 
           const menuItemContent = (
             <TooltipWrapper>

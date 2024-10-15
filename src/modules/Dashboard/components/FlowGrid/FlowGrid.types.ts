@@ -9,6 +9,7 @@ export interface FlowGridProps extends BoxProps {
   activities?: Activity[];
   subject?: RespondentDetails;
   onClickAssign: (flowId: string) => void;
+  onClickUnassign?: (flowId: string) => void;
   onClickItem?: (props: { activityFlowId: string }) => void;
   'data-testid': string;
 }
@@ -20,4 +21,5 @@ export type UseFlowGridMenuProps = {
   subject?: RespondentDetails;
   onClickExportData: (flowId: string) => void;
   onClickAssign: (flowId: string) => void;
+  onClickUnassign?: (flowId: string) => void;
 };

@@ -1,13 +1,19 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import {
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+import { ElementType } from 'shared/types';
+import { nullReturnFunc } from 'shared/utils';
 
 import { Subscales } from './Subscales';
 import { ReportContext } from '../Report.context';
+import { ActivityCompletion } from '../../../RespondentData.types';
 
-const answers = [
+const answers: ActivityCompletion[] = [
   {
     decryptedAnswer: [
       {
@@ -15,7 +21,7 @@ const answers = [
           question: {
             en: 'Single Selection',
           },
-          responseType: 'singleSelect',
+          responseType: ItemResponseType.SingleSelection,
           responseValues: {
             options: [
               {
@@ -35,6 +41,7 @@ const answers = [
           name: 'Item1',
           id: '3a3e6cbd-1d06-4f90-bbde-7ad71e1fbc9b',
           order: 1,
+          config: defaultSingleSelectionConfig,
         },
         answer: {
           value: 1,
@@ -46,7 +53,7 @@ const answers = [
           question: {
             en: 'Slider 1',
           },
-          responseType: 'slider',
+          responseType: ItemResponseType.Slider,
           responseValues: {
             minValue: 1,
             maxValue: 5,
@@ -55,6 +62,7 @@ const answers = [
           name: 'Item2',
           id: '140d3fd0-26bb-4f15-a1fd-ed1be7a30605',
           order: 2,
+          config: defaultSliderConfig,
         },
         answer: {
           value: 3,
@@ -67,34 +75,34 @@ const answers = [
     startDatetime: '2024-01-24T19:29:34.607000',
     endDatetime: '2024-01-24T19:29:41.932000',
     subscaleSetting: {
-      calculateTotalScore: 'sum',
+      calculateTotalScore: SubscaleTotalScore.Sum,
       subscales: [
         {
           name: 'Sum',
-          scoring: 'sum',
+          scoring: SubscaleTotalScore.Sum,
           items: [
             {
               name: 'Item1',
-              type: 'item',
+              type: ElementType.Item,
             },
             {
               name: 'Item2',
-              type: 'item',
+              type: ElementType.Item,
             },
           ],
           subscaleTableData: null,
         },
         {
           name: 'Average',
-          scoring: 'average',
+          scoring: SubscaleTotalScore.Average,
           items: [
             {
               name: 'Item1',
-              type: 'item',
+              type: ElementType.Item,
             },
             {
               name: 'Item2',
-              type: 'item',
+              type: ElementType.Item,
             },
           ],
           subscaleTableData: null,
@@ -110,7 +118,7 @@ const answers = [
           question: {
             en: 'Single Selection',
           },
-          responseType: 'singleSelect',
+          responseType: ItemResponseType.SingleSelection,
           responseValues: {
             options: [
               {
@@ -130,6 +138,7 @@ const answers = [
           name: 'Item1',
           id: '3a3e6cbd-1d06-4f90-bbde-7ad71e1fbc9b',
           order: 1,
+          config: defaultSingleSelectionConfig,
         },
         answer: {
           value: 1,
@@ -141,7 +150,7 @@ const answers = [
           question: {
             en: 'Slider 1',
           },
-          responseType: 'slider',
+          responseType: ItemResponseType.Slider,
           responseValues: {
             minValue: 1,
             maxValue: 5,
@@ -150,6 +159,7 @@ const answers = [
           name: 'Item2',
           id: '140d3fd0-26bb-4f15-a1fd-ed1be7a30605',
           order: 2,
+          config: defaultSliderConfig,
         },
         answer: {
           value: 5,
@@ -162,34 +172,34 @@ const answers = [
     startDatetime: '2024-01-24T19:30:23.076000',
     endDatetime: '2024-01-24T19:30:31.181000',
     subscaleSetting: {
-      calculateTotalScore: 'sum',
+      calculateTotalScore: SubscaleTotalScore.Sum,
       subscales: [
         {
           name: 'Sum',
-          scoring: 'sum',
+          scoring: SubscaleTotalScore.Sum,
           items: [
             {
               name: 'Item1',
-              type: 'item',
+              type: ElementType.Item,
             },
             {
               name: 'Item2',
-              type: 'item',
+              type: ElementType.Item,
             },
           ],
           subscaleTableData: null,
         },
         {
           name: 'Average',
-          scoring: 'average',
+          scoring: SubscaleTotalScore.Average,
           items: [
             {
               name: 'Item1',
-              type: 'item',
+              type: ElementType.Item,
             },
             {
               name: 'Item2',
-              type: 'item',
+              type: ElementType.Item,
             },
           ],
           subscaleTableData: null,
@@ -203,7 +213,9 @@ const answers = [
 const subscalesFrequency = answers.length;
 
 jest.mock('./Subscale', () => ({
-  Subscale: ({ 'data-testid': dataTestid }) => <div data-testid={dataTestid} />,
+  Subscale: ({ 'data-testid': dataTestid }: { 'data-testid': string }) => (
+    <div data-testid={dataTestid} />
+  ),
 }));
 
 jest.mock('./AllScores', () => ({
@@ -215,11 +227,12 @@ jest.mock('./ActivityCompletionScores', () => ({
 }));
 
 describe('Subscales component', () => {
-  test('renders component with correct data', async () => {
+  test('Correctly renders the AllScores component', async () => {
     renderWithProviders(
       <ReportContext.Provider
         value={{
-          currentActivityCompletionData: false,
+          currentActivityCompletionData: null,
+          setCurrentActivityCompletionData: nullReturnFunc,
         }}
       >
         <Subscales answers={answers} versions={[]} subscalesFrequency={subscalesFrequency} />,
@@ -230,14 +243,15 @@ describe('Subscales component', () => {
     expect(screen.queryAllByTestId(/subscale-\d+$/)).toHaveLength(2);
   });
 
-  test('renders component with correct data', async () => {
+  test('Correctly renders the ActivityCompletionScores component', async () => {
     renderWithProviders(
       <ReportContext.Provider
         value={{
           currentActivityCompletionData: {
-            answerId: '03f80472-7829-44b0-a900-f93a70459932',
+            answerId: answers[0].answerId,
             date: 1706120981932,
           },
+          setCurrentActivityCompletionData: nullReturnFunc,
         }}
       >
         <Subscales answers={answers} versions={[]} subscalesFrequency={subscalesFrequency} />,

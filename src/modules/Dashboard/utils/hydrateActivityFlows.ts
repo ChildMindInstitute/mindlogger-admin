@@ -1,10 +1,11 @@
-import { HydratedActivityFlow } from 'modules/Dashboard/types';
-import { Activity, ActivityFlow } from 'redux/modules';
+import { AssignedActivity, AssignedActivityFlow } from 'api';
+import { AssignedHydratedActivityFlow } from 'modules/Dashboard/types';
+import { Activity } from 'redux/modules';
 
 export const hydrateActivityFlows = (
-  flows: ActivityFlow[],
-  activities: Activity[],
-): HydratedActivityFlow[] =>
+  flows: AssignedActivityFlow[],
+  activities: AssignedActivity[],
+): AssignedHydratedActivityFlow[] =>
   flows.map((flow) => ({
     ...flow,
     activities: (flow.activityIds ?? [])

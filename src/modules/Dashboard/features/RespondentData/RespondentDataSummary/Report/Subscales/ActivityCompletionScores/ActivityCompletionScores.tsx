@@ -83,7 +83,8 @@ export const ActivityCompletionScores = ({
       <BarChart chartData={subscaleScores} />
       {optionText && (
         <Box sx={{ m: theme.spacing(6.4, 0) }}>
-          <AdditionalInformation optionText={optionText} />
+          {/* No severity information is associated with the total score */}
+          <AdditionalInformation optionText={optionText} severity={null} />
         </Box>
       )}
     </Box>

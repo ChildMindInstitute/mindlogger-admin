@@ -2,7 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi, getAppletSubjectActivitiesApi } from 'api';
+import {
+  AssignedActivity,
+  AssignedActivityFlow,
+  getAppletActivitiesApi,
+  getAppletSubjectActivitiesApi,
+} from 'api';
 import { useAsync, useEncryptionStorage, useFeatureFlags } from 'shared/hooks';
 import {
   ActivityActionProps,
@@ -15,13 +20,13 @@ import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowMod
 import { ActivitiesSectionHeader } from 'modules/Dashboard/features/Applet/Activities/ActivitiesSectionHeader';
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { users } from 'modules/Dashboard/state';
-import { Activity, ActivityFlow } from 'redux/modules';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
 import { workspaces } from 'shared/state';
 import { checkIfCanAccessData } from 'shared/utils';
-import { ActivityAssignDrawer } from 'modules/Dashboard/components';
+import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
+import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 
 import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
@@ -38,10 +43,9 @@ export const Activities = () => {
   const navigate = useNavigate();
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
-  const [activityId, setActivityId] = useState<string>();
-  const [flowId, setFlowId] = useState<string>();
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [showActivityAssign, setShowActivityAssign] = useState(false);
+  const [showActivityUnassign, setShowActivityUnassign] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [selectedActivityOrFlowId, setSelectedActivityOrFlowId] = useState<ActivityOrFlowId>();
   const workspaceRoles = workspaces.useRolesData();
@@ -50,47 +54,77 @@ export const Activities = () => {
     featureFlags: { enableActivityAssign },
   } = useFeatureFlags();
 
-  // TODO: Remove use of getAppletActivitiesApi once enableActivityAssign feature flag is removed
-  // https://mindlogger.atlassian.net/browse/M2-6518
   const {
     execute: fetchActivities,
     isLoading: isLoadingActivities,
     value: fetchedActivities,
-    previousValue: previousActivities,
+    previousValue: prevActivities,
   } = useAsync(getAppletActivitiesApi);
+
   const {
     execute: fetchAssignedActivities,
     isLoading: isLoadingAssignedActivities,
-    value: assignedActivities,
-    previousValue: previousAssignedActivities,
+    value: fetchedAssignedActivities,
+    previousValue: prevAssignedActivities,
   } = useAsync(getAppletSubjectActivitiesApi);
 
-  const flows: ActivityFlow[] = useMemo(() => {
-    if (enableActivityAssign) {
-      return (assignedActivities ?? previousAssignedActivities)?.data?.result.activityFlows ?? [];
+  const flows: AssignedActivityFlow[] = useMemo(
+    () => (fetchedActivities ?? prevActivities)?.data?.result.appletDetail.activityFlows ?? [],
+    [fetchedActivities, prevActivities],
+  );
+  const assignedFlows: AssignedActivityFlow[] = useMemo(
+    () => (fetchedAssignedActivities ?? prevAssignedActivities)?.data?.result.activityFlows ?? [],
+    [fetchedAssignedActivities, prevAssignedActivities],
+  );
+  const unassignedFlows: AssignedActivityFlow[] = useMemo(
+    () =>
+      enableActivityAssign
+        ? flows.filter((activity) => !assignedFlows.some(({ id }) => id === activity.id))
+        : [],
+    [assignedFlows, enableActivityAssign, flows],
+  );
+
+  const activities: AssignedActivity[] = useMemo(
+    () => (fetchedActivities ?? prevActivities)?.data?.result.activitiesDetails ?? [],
+    [fetchedActivities, prevActivities],
+  );
+  const assignedActivities: AssignedActivity[] = useMemo(
+    () => (fetchedAssignedActivities ?? prevAssignedActivities)?.data?.result.activities ?? [],
+    [fetchedAssignedActivities, prevAssignedActivities],
+  );
+  const unassignedActivities: AssignedActivity[] = useMemo(
+    () =>
+      enableActivityAssign
+        ? activities.filter((activity) => !assignedActivities.some(({ id }) => id === activity.id))
+        : [],
+    [activities, assignedActivities, enableActivityAssign],
+  );
+
+  const selectedActivityOrFlow = useMemo(() => {
+    if (!selectedActivityOrFlowId) return undefined;
+
+    if (selectedActivityOrFlowId.activityId) {
+      return (enableActivityAssign ? assignedActivities : activities).find(
+        (activity) => activity.id === selectedActivityOrFlowId.activityId,
+      );
     }
 
-    return (fetchedActivities ?? previousActivities)?.data?.result.appletDetail.activityFlows ?? [];
-  }, [
-    assignedActivities,
-    enableActivityAssign,
-    fetchedActivities,
-    previousActivities,
-    previousAssignedActivities,
-  ]);
+    if (selectedActivityOrFlowId.activityFlowId) {
+      const flow = (enableActivityAssign ? assignedFlows : flows).find(
+        (flow) => flow.id === selectedActivityOrFlowId.activityFlowId,
+      );
 
-  const activities: Activity[] = useMemo(() => {
-    if (enableActivityAssign) {
-      return (assignedActivities ?? previousAssignedActivities)?.data?.result.activities ?? [];
+      return flow ? hydrateActivityFlows([flow], activities)[0] : undefined;
     }
 
-    return (fetchedActivities ?? previousActivities)?.data?.result.activitiesDetails ?? [];
+    return undefined;
   }, [
+    activities,
     assignedActivities,
+    assignedFlows,
     enableActivityAssign,
-    fetchedActivities,
-    previousActivities,
-    previousAssignedActivities,
+    flows,
+    selectedActivityOrFlowId,
   ]);
 
   const {
@@ -101,14 +135,18 @@ export const Activities = () => {
     openTakeNowModal,
   } = useActivityGrid({
     dataTestId,
-    activitiesData: { result: activities, count: activities.length },
-    onClickExportData: useCallback((activityId) => {
-      setActivityId(activityId);
+    activitiesData: { activities, total: activities.length },
+    onClickExportData: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
       setShowExportPopup(true);
     }, []),
-    onClickAssign: useCallback((activityId) => {
-      setActivityId(activityId);
+    onClickAssign: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
       setShowActivityAssign(true);
+    }, []),
+    onClickUnassign: useCallback((activityId: string) => {
+      setSelectedActivityOrFlowId({ activityId });
+      setShowActivityUnassign(true);
     }, []),
   });
 
@@ -119,15 +157,14 @@ export const Activities = () => {
   useEffect(() => {
     if (!appletId || !subjectId) return;
 
+    fetchActivities({ params: { appletId } });
     if (enableActivityAssign) {
       fetchAssignedActivities({ appletId, subjectId });
-    } else {
-      fetchActivities({ params: { appletId } });
     }
   }, [appletId, enableActivityAssign, fetchActivities, fetchAssignedActivities, subjectId]);
 
-  const formattedActivities = useMemo(
-    () =>
+  const formatActivities = useCallback(
+    (activities: AssignedActivity[]) =>
       activities.map((activity) => {
         const actions = {
           ...defaultActions,
@@ -155,7 +192,7 @@ export const Activities = () => {
 
         return formatRow(activity, actions);
       }),
-    [activities, formatRow, defaultActions, getActivityById, openTakeNowModal, subject, subjectId],
+    [formatRow, defaultActions, getActivityById, openTakeNowModal, subject, subjectId],
   );
 
   const canAccessData = checkIfCanAccessData(roles);
@@ -209,75 +246,134 @@ export const Activities = () => {
 
       {showContent && (
         <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>
-          {!!flows?.length && (
+          {!!(enableActivityAssign ? assignedFlows : flows).length && (
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
-              <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
+              <ActivitiesSectionHeader
+                title={t('flows')}
+                count={(enableActivityAssign ? assignedFlows : flows).length}
+              />
 
               <FlowGrid
                 activities={activities}
                 applet={appletData}
                 data-testid={dataTestId}
-                flows={flows}
+                flows={enableActivityAssign ? assignedFlows : flows}
                 subject={subject?.result}
                 onClickItem={getClickHandler()}
                 onClickAssign={(flowId) => {
-                  setFlowId(flowId);
+                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
                   setShowActivityAssign(true);
+                }}
+                onClickUnassign={(flowId) => {
+                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
+                  setShowActivityUnassign(true);
                 }}
               />
             </StyledFlexColumn>
           )}
 
           <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
-            <ActivitiesSectionHeader title={t('activities')} count={activities?.length ?? 0} />
+            <ActivitiesSectionHeader
+              title={t('activities')}
+              count={(enableActivityAssign ? assignedActivities : activities).length}
+            />
 
             <ActivityGrid
-              rows={formattedActivities}
+              rows={formatActivities(enableActivityAssign ? assignedActivities : activities)}
               TakeNowModal={TakeNowModal}
               data-testid={dataTestId}
               order="desc"
               orderBy=""
               onClickItem={getClickHandler()}
             />
-            {viewDataPopupVisible && selectedActivityOrFlowId && (
-              <UnlockAppletPopup
-                appletId={appletId || ''}
-                popupVisible={viewDataPopupVisible}
-                setPopupVisible={(value) => {
-                  setViewDataPopupVisible(value);
-                  setSelectedActivityOrFlowId(undefined);
-                }}
-                onSubmitHandler={() => navigateToData(selectedActivityOrFlowId)}
-              />
-            )}
           </StyledFlexColumn>
+
+          {!!(unassignedFlows.length || unassignedActivities.length) && (
+            <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
+              <ActivitiesSectionHeader
+                title={t('unassigned')}
+                count={unassignedFlows.length + unassignedActivities.length ?? 0}
+              />
+
+              <FlowGrid
+                activities={activities}
+                applet={appletData}
+                data-testid={`${dataTestId}-unassigned`}
+                flows={unassignedFlows}
+                subject={subject?.result}
+                onClickItem={getClickHandler()}
+                onClickAssign={(flowId) => {
+                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
+                  setShowActivityAssign(true);
+                }}
+              />
+
+              <ActivityGrid
+                rows={formatActivities(unassignedActivities)}
+                TakeNowModal={TakeNowModal}
+                data-testid={`${dataTestId}-unassigned`}
+                order="desc"
+                orderBy=""
+                onClickItem={getClickHandler()}
+              />
+            </StyledFlexColumn>
+          )}
         </StyledFlexColumn>
+      )}
+
+      {viewDataPopupVisible && selectedActivityOrFlowId && (
+        <UnlockAppletPopup
+          appletId={appletId || ''}
+          popupVisible={viewDataPopupVisible}
+          setPopupVisible={(value) => {
+            setViewDataPopupVisible(value);
+            setSelectedActivityOrFlowId(undefined);
+          }}
+          onSubmitHandler={() => navigateToData(selectedActivityOrFlowId)}
+        />
       )}
 
       {showExportPopup && (
         <DataExportPopup
           chosenAppletData={appletData ?? null}
-          filters={{ activityId, targetSubjectId: subjectId }}
+          filters={{ activityId: selectedActivityOrFlowId?.activityId, targetSubjectId: subjectId }}
           isAppletSetting
           popupVisible={showExportPopup}
           setPopupVisible={() => {
             setShowExportPopup(false);
-            setActivityId(undefined);
+            setSelectedActivityOrFlowId(undefined);
           }}
         />
       )}
 
       <ActivityAssignDrawer
         appletId={appletId}
-        activityId={activityId}
-        activityFlowId={flowId}
+        activityId={selectedActivityOrFlowId?.activityId}
+        activityFlowId={selectedActivityOrFlowId?.activityFlowId}
         open={showActivityAssign}
         respondentSubjectId={subject?.result.userId ? subject.result.id : undefined}
         targetSubjectId={subject?.result.tag === 'Team' ? undefined : subject?.result.id}
-        onClose={() => {
+        onClose={(shouldRefetch?: boolean) => {
           setShowActivityAssign(false);
-          setActivityId(undefined);
-          setFlowId(undefined);
+          if (shouldRefetch && appletId && subjectId) {
+            fetchAssignedActivities({ appletId, subjectId });
+          }
+          setSelectedActivityOrFlowId(undefined);
+        }}
+      />
+
+      <ActivityUnassignDrawer
+        appletId={appletId}
+        activityOrFlow={selectedActivityOrFlow}
+        open={showActivityUnassign}
+        onClose={(shouldRefetch?: boolean) => {
+          setShowActivityUnassign(false);
+          if (shouldRefetch && appletId && subjectId) {
+            fetchAssignedActivities({ appletId, subjectId });
+          }
+          // Allow drawer to transition out before clearing activity/flow to prevent activity
+          // header from rendering empty state before drawer closes
+          setTimeout(() => setSelectedActivityOrFlowId(undefined), 300);
         }}
       />
     </StyledFlexColumn>

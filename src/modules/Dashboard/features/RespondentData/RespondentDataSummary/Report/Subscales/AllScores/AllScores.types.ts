@@ -7,4 +7,5 @@ export type AllScoresProps = {
   frequency: number;
   data: SubscaleChartData;
   versions: Version[];
+  'data-testid'?: string;
 };

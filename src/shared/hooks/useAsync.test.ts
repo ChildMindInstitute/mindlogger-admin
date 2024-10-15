@@ -26,7 +26,7 @@ describe('useAsync', () => {
     expect(updatedResult.value).toEqual(mockedData);
     expect(updatedResult.error).toBeNull();
     expect(updatedResult.isLoading).toBe(false);
-    expect(mockCallback).toHaveBeenCalledWith(mockedData);
+    expect(mockCallback).toHaveBeenCalledWith(mockedData, {});
   });
 
   test('should handle errors and update state accordingly', async () => {
@@ -47,7 +47,7 @@ describe('useAsync', () => {
     expect(updatedResult.value).toBeNull();
     expect(updatedResult.error).toEqual(errorResponse);
     expect(updatedResult.isLoading).toBe(false);
-    expect(mockErrorCallback).toHaveBeenCalledWith(errorResponse);
+    expect(mockErrorCallback).toHaveBeenCalledWith(errorResponse, {});
   });
 
   test('should call finally callback regardless of success or failure', async () => {

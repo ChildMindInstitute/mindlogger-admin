@@ -2,12 +2,12 @@ import { useCallback, useMemo } from 'react';
 import { format } from 'date-fns';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { DatavizEntity } from 'api';
+import { AssignedActivity } from 'api';
 import { page } from 'resources';
 import { ActionsMenu, MenuActionProps, Row } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles';
-import { Activity, workspaces } from 'redux/modules';
+import { workspaces } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
@@ -17,7 +17,6 @@ import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 import {
   ActionsObject,
   ActivityActionProps,
-  BaseActivity,
   getActivityActions,
   StyledSvg,
   UseActivityGridProps,
@@ -28,9 +27,10 @@ export const useActivityGrid = ({
   activitiesData,
   onClickExportData,
   onClickAssign,
+  onClickUnassign,
 }: UseActivityGridProps) => {
   const navigate = useNavigate();
-  const { appletId } = useParams();
+  const { appletId, subjectId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const { featureFlags } = useFeatureFlags();
@@ -38,13 +38,8 @@ export const useActivityGrid = ({
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
 
   const getActivityById = useCallback(
-    (id: string): BaseActivity | null => {
-      if (!activitiesData) return null;
-
-      return (
-        (activitiesData.result as BaseActivity[]).find((activity) => activity.id === id) || null
-      );
-    },
+    (id: string): AssignedActivity | null =>
+      activitiesData?.activities.find((activity) => activity.id === id) ?? null,
     [activitiesData],
   );
 
@@ -81,6 +76,11 @@ export const useActivityGrid = ({
           onClickAssign(context.activityId);
         }
       },
+      unassignActivity: ({ context }: MenuActionProps<ActivityActionProps>) => {
+        if (context?.activityId) {
+          onClickUnassign?.(context.activityId);
+        }
+      },
       takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || { activityId: '' };
         const activity = getActivityById(activityId);
@@ -89,14 +89,21 @@ export const useActivityGrid = ({
         }
       },
     }),
-    [appletId, getActivityById, navigate, onClickAssign, onClickExportData, openTakeNowModal],
+    [
+      appletId,
+      getActivityById,
+      navigate,
+      onClickAssign,
+      onClickExportData,
+      onClickUnassign,
+      openTakeNowModal,
+    ],
   );
 
   const formatRow = useCallback(
-    (activity: Activity | DatavizEntity, actions?: ActionsObject): Row => {
+    (activity: AssignedActivity, actions?: ActionsObject): Row => {
       const activityId = String(activity.id);
       const name = activity.name;
-      // TODO M2-6223: getSummaryActivitiesApi needs to be updated to return `image`
       const image = String('image' in activity ? activity.image : '');
 
       // TODO: Populate with data from BE when available
@@ -143,8 +150,9 @@ export const useActivityGrid = ({
             !!appletId && (
               <ActionsMenu
                 menuItems={getActivityActions({
-                  actions: actions || defaultActions,
+                  actions: actions ?? defaultActions,
                   appletId,
+                  subjectId,
                   activity,
                   dataTestId,
                   roles,
@@ -163,7 +171,7 @@ export const useActivityGrid = ({
         },
       };
     },
-    [appletId, roles, defaultActions, dataTestId, featureFlags],
+    [appletId, subjectId, defaultActions, dataTestId, roles, featureFlags],
   );
 
   return { actions: defaultActions, getActivityById, formatRow, TakeNowModal, openTakeNowModal };
