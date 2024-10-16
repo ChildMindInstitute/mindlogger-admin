@@ -1,4 +1,4 @@
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 import { AccountType } from 'modules/Dashboard/types';
 import { UserSelectableParticipantTag } from 'shared/consts';
 
@@ -22,7 +22,7 @@ export type AddParticipantFormValues = {
   nickname?: string;
   secretUserId: string;
   tag?: UserSelectableParticipantTag;
-  language: Languages;
+  language: ApiLanguages;
 };
 
 export const Fields = {

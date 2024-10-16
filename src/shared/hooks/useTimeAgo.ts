@@ -3,7 +3,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import fr from 'javascript-time-ago/locale/fr';
 
-import { LANGUAGES } from 'shared/api/api.const';
+import { regionalLangFormats, UiLanguages } from 'shared/ui';
 
 TimeAgo.addLocale(en);
 TimeAgo.addLocale(fr);
@@ -11,5 +11,5 @@ TimeAgo.addLocale(fr);
 export const useTimeAgo = () => {
   const { i18n } = useTranslation('app');
 
-  return new TimeAgo(LANGUAGES[i18n.language as keyof typeof LANGUAGES].replace('_', '-'));
+  return new TimeAgo(regionalLangFormats[i18n.language as UiLanguages]);
 };

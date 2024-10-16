@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 
 import { UpgradeAccountFormProps } from './UpgradeAccountForm.types';
 import { Fields } from '../UpgradeAccountPopup.types';
@@ -35,7 +35,7 @@ export const UpgradeAccountForm = ({
           <SelectController
             {...commonProps}
             name={Fields.language}
-            options={Object.values(Languages).map((lang) => ({ labelKey: lang, value: lang }))}
+            options={Object.values(ApiLanguages).map((lang) => ({ labelKey: lang, value: lang }))}
             label={t('invitationLanguage')}
             helperText={t('languageTooltip')}
             data-testid={`${dataTestid}-lang`}

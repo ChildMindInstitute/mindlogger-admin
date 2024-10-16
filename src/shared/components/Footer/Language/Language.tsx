@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
-import { Languages } from 'shared/api';
+import { UiLanguages } from 'shared/ui';
 
 import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem } from './Language.types';
@@ -13,7 +13,7 @@ import { languages } from './Language.const';
 
 export const Language = () => {
   const { i18n } = useTranslation('app');
-  const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
+  const langFromStorage = storage.getItem(LocalStorageKeys.Language) || UiLanguages.EN;
   const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
 
   const [currentLanguage, setCurrentLanguage] = useState(language);

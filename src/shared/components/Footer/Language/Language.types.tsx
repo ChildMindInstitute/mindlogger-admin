@@ -1,7 +1,7 @@
-import { Languages } from 'shared/api';
+import { UiLanguages } from 'shared/ui';
 
 export type LanguageItem = {
-  value: Languages;
+  value: UiLanguages;
   label: string;
   type: string;
   component: JSX.Element;
