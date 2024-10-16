@@ -21,7 +21,6 @@ import {
 
 export const ActivityListItem = ({
   activityOrFlow,
-  onClick,
   onClickToggleExpandedView,
   expandedView,
   isLoadingExpandedView,
@@ -37,11 +36,9 @@ export const ActivityListItem = ({
     onClickToggleExpandedView?.(!isExpanded);
   };
 
-  const handleClick = onClick ?? (expandedView ? handleClickToggleExpandedView : undefined);
-
   return (
     <StyledActivityListItem>
-      <StyledActivityListItemInner as={handleClick ? 'a' : 'div'} onClick={handleClick}>
+      <StyledActivityListItemInner>
         <StyledFlexTopCenter sx={{ gap: 0.8 }}>
           <StyledActivityThumbnailContainer sx={{ width: '5.6rem', height: '5.6rem', mr: 0.8 }}>
             {isFlow ? (
@@ -63,6 +60,8 @@ export const ActivityListItem = ({
               onClick={handleClickToggleExpandedView}
               color="outlined"
               sx={{ ml: 0.8 }}
+              className="primary-button"
+              disableRipple
               disabled={isLoadingExpandedView}
             >
               {isLoadingExpandedView && !isExpandComplete ? (

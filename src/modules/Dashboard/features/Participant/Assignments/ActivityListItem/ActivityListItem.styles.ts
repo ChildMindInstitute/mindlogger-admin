@@ -31,18 +31,39 @@ export const StyledActivityListItemInner = styled(StyledFlexTopCenter)`
   padding: ${theme.spacing(1.5)};
   column-gap: ${theme.spacing(4.8)};
   row-gap: ${theme.spacing(0.8)};
+  position: relative;
   background-color: ${variables.palette.surface};
-  transition: ${variables.transitions.bgColor};
 
-  ${({ onClick }: { onClick?: () => void }) =>
-    onClick
-      ? `cursor: pointer;
+  button:not(.primary-button) {
+    z-index: 1;
 
-        &:hover,
-        &:focus {
-          background-color: ${variables.palette.on_surface_variant_alfa8};
-        }`
-      : ''}
+    /* Add click slop for secondary buttons */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -${theme.spacing(0.8)};
+    }
+  }
+
+  .primary-button {
+    position: static;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: transparent;
+      transition: ${variables.transitions.bgColor};
+    }
+
+    &:hover::after,
+    &:focus::after {
+      background-color: ${variables.palette.on_surface_variant_alfa8};
+    }
+  }
+
+  button {
+    position: relative;
   }
 `;
 

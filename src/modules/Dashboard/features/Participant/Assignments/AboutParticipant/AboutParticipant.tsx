@@ -79,15 +79,13 @@ const AboutParticipant = () => {
           count={fetchedActivities?.data.count ?? 0}
         >
           {activities.map((activity, index) => (
-            <ActivityListItem
-              key={activity.id}
-              activityOrFlow={activity}
-              onClick={() => handleClickNavigateToData(activity)}
-            >
+            <ActivityListItem key={activity.id} activityOrFlow={activity}>
               <Button
                 variant="outlined"
                 onClick={() => handleClickNavigateToData(activity)}
                 sx={{ mr: 0.4 }}
+                className="primary-button"
+                disableRipple
                 data-testid={`${dataTestId}-${index}-view-data`}
               >
                 <Svg id="chart" width="18" height="18" fill="currentColor" />
