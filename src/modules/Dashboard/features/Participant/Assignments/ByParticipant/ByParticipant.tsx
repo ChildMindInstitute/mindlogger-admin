@@ -28,7 +28,7 @@ const ByParticipant = () => {
   const isLoadingRespondentSubject = useSubjectStatus() !== 'success';
   const { result: respondentSubject } = useSubject() ?? {};
   const [expandedViewsData, setExpandedViewsData] = useState<
-    Record<string, TargetSubjectsByRespondent | undefined>
+    Record<string, TargetSubjectsByRespondent>
   >({});
   const [expandedViewsLoading, setExpandedViewsLoading] = useState<Record<string, boolean>>({});
 
@@ -71,9 +71,7 @@ const ByParticipant = () => {
     handleRefetchActivities();
 
     // Refresh target subject data for any expanded views
-    Object.entries(expandedViewsData).forEach(([id, viewData]) => {
-      if (viewData) void handleRefetchExpandedView(id);
-    });
+    Object.entries(expandedViewsData).forEach(([id]) => void handleRefetchExpandedView(id));
   }, [handleRefetchActivities, expandedViewsData, handleRefetchExpandedView]);
 
   const {
@@ -108,7 +106,11 @@ const ByParticipant = () => {
         // If expanded view is closed, remove data to free up memory and minimize refetches
         // (after delay to account for transition)
         setTimeout(() => {
-          setExpandedViewsData((prev) => ({ ...prev, [activityOrFlowId]: undefined }));
+          setExpandedViewsData((prev) => {
+            const { [activityOrFlowId]: _, ...rest } = prev;
+
+            return rest;
+          });
         }, 300);
       }
     },
@@ -159,7 +161,7 @@ const ByParticipant = () => {
                   data-test-id={`${dataTestId}-${index}`}
                 />
               }
-              isLoadingExpandedView={!!expandedViewsLoading[activity.id]}
+              isLoadingExpandedView={expandedViewsLoading[activity.id]}
             >
               <ActionsMenu
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
