@@ -34,9 +34,13 @@ export const StyledActivityListItemInner = styled(StyledFlexTopCenter)`
   position: relative;
   background-color: ${variables.palette.surface};
 
+  [aria-label] > .MuiChip-root,
   button:not(.primary-button) {
+    position: relative;
     z-index: 1;
+  }
 
+  button:not(.primary-button) {
     /* Add click slop for secondary buttons */
     &::after {
       content: '';
