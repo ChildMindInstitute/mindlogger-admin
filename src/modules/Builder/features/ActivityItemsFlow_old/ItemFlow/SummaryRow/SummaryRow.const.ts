@@ -8,4 +8,5 @@ export const ITEMS_RESPONSE_TYPES_TO_SHOW = [
   ItemResponseType.ParagraphText,
   ItemResponseType.Time,
   ItemResponseType.TimeRange,
+  ItemResponseType.Message,
 ];
