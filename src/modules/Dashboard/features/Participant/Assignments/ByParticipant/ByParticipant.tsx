@@ -1,25 +1,36 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAsync } from 'shared/hooks';
-import { getAppletRespondentSubjectActivitiesApi } from 'api';
+import {
+  getAppletRespondentSubjectActivitiesApi,
+  getTargetSubjectsByRespondentApi,
+  ParticipantActivityOrFlow,
+  TargetSubjectsByRespondent,
+} from 'api';
 import { users } from 'redux/modules';
 import { ActionsMenu, Spinner } from 'shared/components';
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
 import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
+import { ExpandedView } from './ExpandedView';
 
 const dataTestId = 'participant-details-about-participant';
 
 const ByParticipant = () => {
   const { t } = useTranslation('app');
-  const { appletId, subjectId } = useParams();
+  const { appletId, subjectId: respondentSubjectId } = useParams();
   const { useSubject, useSubjectStatus } = users;
-  const isLoadingSubject = useSubjectStatus() !== 'success';
+  const isLoadingRespondentSubject = useSubjectStatus() !== 'success';
   const { result: respondentSubject } = useSubject() ?? {};
+  const [expandedViewsData, setExpandedViewsData] = useState<
+    Record<string, TargetSubjectsByRespondent>
+  >({});
+  const [expandedViewsLoading, setExpandedViewsLoading] = useState<Record<string, boolean>>({});
 
   const {
     execute: fetchActivities,
@@ -29,35 +40,88 @@ const ByParticipant = () => {
 
   const activities = fetchedActivities?.data.result ?? [];
 
-  const handleRefetch = useCallback(() => {
-    // Avoid fetching activities for respondent if respondent is a limited account
-    if (!appletId || !subjectId || !respondentSubject?.userId) return;
+  const handleRefetchExpandedView = useCallback(
+    async (activityOrFlowId: string) => {
+      if (!respondentSubjectId) return;
 
-    fetchActivities({ appletId, subjectId });
-  }, [appletId, fetchActivities, respondentSubject?.userId, subjectId]);
+      setExpandedViewsLoading((prev) => ({ ...prev, [activityOrFlowId]: true }));
+
+      try {
+        const { data } = await getTargetSubjectsByRespondentApi({
+          activityOrFlowId,
+          subjectId: respondentSubjectId,
+        });
+        // Add or update the correspondent element in expandedViewsData
+        setExpandedViewsData((prev) => ({ ...prev, [activityOrFlowId]: data.result }));
+      } finally {
+        setExpandedViewsLoading((prev) => ({ ...prev, [activityOrFlowId]: false }));
+      }
+    },
+    [respondentSubjectId],
+  );
+
+  const handleRefetchActivities = useCallback(() => {
+    // Avoid fetching activities for respondent if respondent is a limited account
+    if (!appletId || !respondentSubject?.id || !respondentSubject.userId) return;
+
+    fetchActivities({ appletId, subjectId: respondentSubject.id });
+  }, [appletId, fetchActivities, respondentSubject]);
+
+  const handleRefetchAll = useCallback(() => {
+    handleRefetchActivities();
+
+    // Refresh target subject data for any expanded views
+    Object.entries(expandedViewsData).forEach(([id]) => void handleRefetchExpandedView(id));
+  }, [handleRefetchActivities, expandedViewsData, handleRefetchExpandedView]);
 
   const {
     getActionsMenu,
     onClickAssign,
+    onClickNavigateToData,
     isLoading: isLoadingHook,
     modals,
-  } = useAssignmentsTab({ appletId, respondentSubject, handleRefetch, dataTestId });
+  } = useAssignmentsTab({
+    appletId,
+    respondentSubject,
+    handleRefetch: handleRefetchAll,
+    dataTestId,
+  });
 
-  /*
-  TODO: Handler for navigating to data when card is expanded
-  https://mindlogger.atlassian.net/browse/M2-7921
-  const handleClickNavigateToData = (activityOrFlow: ParticipantActivityOrFlow, targetSubject: RespondentDetails) => {
+  const handleClickNavigateToData = (
+    activityOrFlow: ParticipantActivityOrFlow,
+    targetSubject: RespondentDetails,
+  ) => {
     if (!respondentSubject) return;
 
     onClickNavigateToData(activityOrFlow, targetSubject.id);
   };
-  */
+
+  const handleClickToggleExpandedView = useCallback(
+    (isExpanded: boolean, activityOrFlowId: string) => {
+      if (!respondentSubject) return;
+
+      if (isExpanded) {
+        void handleRefetchExpandedView(activityOrFlowId);
+      } else {
+        // If expanded view is closed, remove data to free up memory and minimize refetches
+        // (after delay to account for transition)
+        setTimeout(() => {
+          setExpandedViewsData((prev) => {
+            const { [activityOrFlowId]: _, ...rest } = prev;
+
+            return rest;
+          });
+        }, 300);
+      }
+    },
+    [handleRefetchExpandedView, respondentSubject],
+  );
 
   useEffect(() => {
-    handleRefetch();
-  }, [handleRefetch]);
+    handleRefetchActivities();
+  }, [handleRefetchActivities]);
 
-  const isLoading = isLoadingSubject || isLoadingActivities || isLoadingHook;
+  const isLoading = isLoadingRespondentSubject || isLoadingActivities || isLoadingHook;
   const isRespondentLimited = !respondentSubject?.userId;
 
   return (
@@ -76,13 +140,29 @@ const ByParticipant = () => {
         />
       )}
 
-      {!!activities.length && (
+      {!!activities.length && respondentSubject && (
         <ActivitiesList
           title={t('participantDetails.activitiesAndFlows')}
           count={fetchedActivities?.data.count ?? 0}
         >
           {activities.map((activity, index) => (
-            <ActivityListItem key={activity.id} activityOrFlow={activity}>
+            <ActivityListItem
+              key={activity.id}
+              activityOrFlow={activity}
+              onClickToggleExpandedView={(isExpanded) =>
+                handleClickToggleExpandedView(isExpanded, activity.id)
+              }
+              expandedView={
+                <ExpandedView
+                  activityOrFlow={activity}
+                  targetSubjects={expandedViewsData[activity.id]}
+                  getActionsMenu={getActionsMenu}
+                  onClickViewData={handleClickNavigateToData}
+                  data-test-id={`${dataTestId}-${index}`}
+                />
+              }
+              isLoadingExpandedView={expandedViewsLoading[activity.id]}
+            >
               <ActionsMenu
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: -6, horizontal: 'right' }}
@@ -90,9 +170,6 @@ const ByParticipant = () => {
                 menuItems={getActionsMenu(activity)}
                 data-testid={`${dataTestId}-${index}`}
               />
-
-              {/* TODO: Add expand/collapse button
-                  https://mindlogger.atlassian.net/browse/M2-7921 */}
             </ActivityListItem>
           ))}
 

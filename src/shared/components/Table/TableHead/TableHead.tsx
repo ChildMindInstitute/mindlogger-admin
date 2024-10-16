@@ -17,7 +17,7 @@ export const TableHead = ({
   tableHeadBg,
 }: TableHeadProps) => {
   const createSortHandler = (property: string) => (event: MouseEvent<unknown>) =>
-    onRequestSort(event, property);
+    onRequestSort?.(event, property);
 
   return (
     <StyledTableHead

@@ -165,8 +165,18 @@ export const useAssignmentsTab = ({
     [targetSubject],
   );
 
+  /**
+   * Returns action menu items for the given activity or flow, based on activity and assignment
+   * status and user permissions.
+   *
+   * If `targetSubjectArg` is omitted, assumes general tab context (main activity/flow list of
+   * either the About Participant or By Participant tab).
+   *
+   * If `targetSubjectArg` is provided, assumes expanded view context (list of target subjects for
+   * the current respondent).
+   */
   const getActionsMenu = useCallback(
-    (activityOrFlow: ParticipantActivityOrFlow) => {
+    (activityOrFlow: ParticipantActivityOrFlow, targetSubjectArg = targetSubject) => {
       const { id, autoAssign, assignments, isFlow, performanceTaskType, status } = activityOrFlow;
 
       // TODO: Remove extra steps below after supportedPlatforms prop is returned by API
@@ -180,17 +190,19 @@ export const useAssignmentsTab = ({
       );
       const isWebSupported = getIsWebSupported(items);
 
+      const isExpandedViewContext = !!respondentSubject && !!targetSubjectArg;
       const isEditDisplayed =
+        !isExpandedViewContext &&
         canEdit &&
         (isFlow ||
           !activityOrFlow.isPerformanceTask ||
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isTargetTeamMember = targetSubject?.tag === 'Team';
+      const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>
-          a.targetSubject.id === targetSubject?.id ||
+          a.targetSubject.id === targetSubjectArg?.id ||
           a.respondentSubject.id === respondentSubject?.id,
       );
       const isAssignDisplayed =
@@ -228,11 +240,11 @@ export const useAssignmentsTab = ({
           disabled: !id,
           icon: <Svg id="export" />,
           title: t('exportData'),
-          isDisplayed: canAccessData && !!targetSubject,
+          isDisplayed: canAccessData && !!targetSubjectArg,
         },
         {
           'data-testid': `${dataTestId}-assign`,
-          action: () => onClickAssign(activityOrFlow),
+          action: () => onClickAssign(activityOrFlow, targetSubjectArg),
           icon: <Svg id="file-plus" />,
           title: isFlow ? t('assignFlow') : t('assignActivity'),
           isDisplayed: isAssignDisplayed,
@@ -261,13 +273,11 @@ export const useAssignmentsTab = ({
               sourceSubject: respondentSubject && {
                 ...respondentSubject,
                 secretId: respondentSubject.secretUserId,
-                userId: respondentSubject.userId,
                 isTeamMember: respondentSubject.tag === 'Team',
               },
-              targetSubject: targetSubject && {
-                ...targetSubject,
-                secretId: targetSubject.secretUserId,
-                userId: targetSubject.userId,
+              targetSubject: targetSubjectArg && {
+                ...targetSubjectArg,
+                secretId: targetSubjectArg.secretUserId,
                 isTeamMember: isTargetTeamMember,
               },
             }),
@@ -307,19 +317,21 @@ export const useAssignmentsTab = ({
         onSubmitHandler={() => navigateToData(selectedActivityOrFlow, selectedTargetSubjectId)}
       />
 
-      <DataExportPopup
-        chosenAppletData={appletData}
-        filters={{
-          activityId: selectedActivityOrFlow?.id,
-          targetSubjectId: selectedTargetSubjectId,
-        }}
-        isAppletSetting
-        popupVisible={showExportData}
-        setPopupVisible={() => {
-          setShowExportData(false);
-          setSelectedActivityOrFlow(undefined);
-        }}
-      />
+      {showExportData && (
+        <DataExportPopup
+          chosenAppletData={appletData}
+          filters={{
+            activityId: selectedActivityOrFlow?.id,
+            targetSubjectId: selectedTargetSubjectId,
+          }}
+          isAppletSetting
+          popupVisible={showExportData}
+          setPopupVisible={() => {
+            setShowExportData(false);
+            setSelectedActivityOrFlow(undefined);
+          }}
+        />
+      )}
 
       <ActivityAssignDrawer
         appletId={appletId}
