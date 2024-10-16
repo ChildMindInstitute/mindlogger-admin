@@ -19,6 +19,14 @@ import {
   StyledActivityName,
 } from './ActivityListItem.styles';
 
+/**
+ * Generic container for displaying an activity or flow in any of the lists shown on the
+ * Participant Details page.
+ *
+ * If it's desirable for a button being passed in the `children` to cause the entire list item to be
+ * clickable, make sure to assign it the CSS class `primary-button`. It's advised to add the
+ * `disableRipple` prop to such a button for a better user experience.
+ */
 export const ActivityListItem = ({
   activityOrFlow,
   onClickToggleExpandedView,
