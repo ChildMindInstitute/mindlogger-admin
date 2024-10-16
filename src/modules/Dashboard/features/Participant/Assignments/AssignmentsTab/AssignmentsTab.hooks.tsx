@@ -317,19 +317,21 @@ export const useAssignmentsTab = ({
         onSubmitHandler={() => navigateToData(selectedActivityOrFlow, selectedTargetSubjectId)}
       />
 
-      <DataExportPopup
-        chosenAppletData={appletData}
-        filters={{
-          activityId: selectedActivityOrFlow?.id,
-          targetSubjectId: selectedTargetSubjectId,
-        }}
-        isAppletSetting
-        popupVisible={showExportData}
-        setPopupVisible={() => {
-          setShowExportData(false);
-          setSelectedActivityOrFlow(undefined);
-        }}
-      />
+      {showExportData && (
+        <DataExportPopup
+          chosenAppletData={appletData}
+          filters={{
+            activityId: selectedActivityOrFlow?.id,
+            targetSubjectId: selectedTargetSubjectId,
+          }}
+          isAppletSetting
+          popupVisible={showExportData}
+          setPopupVisible={() => {
+            setShowExportData(false);
+            setSelectedActivityOrFlow(undefined);
+          }}
+        />
+      )}
 
       <ActivityAssignDrawer
         appletId={appletId}
