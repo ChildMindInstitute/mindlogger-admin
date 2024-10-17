@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { EMAIL_REGEXP, USER_SELECTABLE_PARTICIPANT_TAGS } from 'shared/consts';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 export const AddParticipantPopupSchema = () => {
@@ -34,7 +34,7 @@ export const AddParticipantPopupSchema = () => {
       nickname: yup.string(),
       secretUserId: yup.string().required(t('secretUserIdRequired')),
       tag: yup.string().oneOf(USER_SELECTABLE_PARTICIPANT_TAGS),
-      language: yup.string().required().oneOf(Object.values(Languages)),
+      language: yup.string().required().oneOf(Object.values(ApiLanguages)),
     })
     .required();
 };

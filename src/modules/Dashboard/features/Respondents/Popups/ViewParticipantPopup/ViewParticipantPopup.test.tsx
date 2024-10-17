@@ -89,7 +89,7 @@ describe('ViewParticipantPopup', () => {
       />,
     );
 
-    expect(mockedGeneratePath).toBeCalledWith(page.appletParticipantActivities, {
+    expect(mockedGeneratePath).toBeCalledWith(page.appletParticipantDetails, {
       appletId: mockedAppletId,
       subjectId: mockedSubjectId1,
     });

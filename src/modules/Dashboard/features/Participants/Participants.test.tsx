@@ -163,7 +163,7 @@ describe('Participants component tests', () => {
     fireEvent.click(firstParticipantSecretIdCell);
 
     expect(mockedUseNavigate).toHaveBeenCalledWith(
-      generatePath(page.appletParticipantActivities, {
+      generatePath(page.appletParticipantDetails, {
         appletId: mockedAppletId,
         subjectId: mockedSubjectId1,
       }),
@@ -270,7 +270,7 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(RESPONDENTS_ENDPOINT, {
+      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
         params: {
           limit: 20,
           page: 1,

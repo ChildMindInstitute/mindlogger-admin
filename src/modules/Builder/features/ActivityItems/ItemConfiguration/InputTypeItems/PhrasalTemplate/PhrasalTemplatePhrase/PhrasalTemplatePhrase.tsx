@@ -17,6 +17,7 @@ import {
   variables,
 } from 'shared/styles';
 import { DndDroppable } from 'modules/Builder/components';
+import { RemovePhrasePopup } from 'modules/Builder/components/RemovePhrasePopup';
 
 import { PhrasalTemplateField } from '../PhrasalTemplateField';
 import { PhrasalTemplateImageField } from '../PhrasalTemplateImageField';
@@ -31,13 +32,13 @@ import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.uti
 import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
 
 export const PhrasalTemplatePhrase = ({
-  canRemovePhrase = false,
   name = '',
   responseOptions = [],
   index = 0,
   onRemovePhrase,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
+  const [removePopupOpen, setRemovePopupOpen] = useState(false);
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const phraseFieldsName = `${name}.fields`;
@@ -73,11 +74,15 @@ export const PhrasalTemplatePhrase = ({
     [remove],
   );
 
-  const handleRemovePhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleShowRemovePopup = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
+    setRemovePopupOpen(true);
+  };
+
+  const handleRemovePhrase = () => {
+    setRemovePopupOpen(false);
     onRemovePhrase?.();
-    console.warn('TODO: M2-7163 — Remove Phrase');
   };
 
   const handlePreviewPhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -140,7 +145,7 @@ export const PhrasalTemplatePhrase = ({
               {t('phrasalTemplateItem.btnPreviewPhrase')}
             </Button>
 
-            <IconButton color="default" disabled={!canRemovePhrase} onClick={handleRemovePhrase}>
+            <IconButton color="default" onClick={handleShowRemovePopup}>
               <Svg
                 aria-label={t('phrasalTemplateItem.btnRemovePhrase')}
                 fill="currentColor"
@@ -234,6 +239,12 @@ export const PhrasalTemplatePhrase = ({
           ]}
         />
       </StyledAccordionDetails>
+
+      <RemovePhrasePopup
+        open={removePopupOpen}
+        onClose={() => setRemovePopupOpen(false)}
+        onRemove={handleRemovePhrase}
+      />
     </StyledAccordion>
   );
 };

@@ -1,11 +1,11 @@
 import { PropsOf } from '@emotion/react';
 import { Button } from '@mui/material';
-import { formatDistanceStrict } from 'date-fns';
+import { formatDistanceStrict, Locale } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 import { generatePath } from 'react-router-dom';
 
 import i18n from 'i18n';
-import { GetAppletSubmissionsResponse, Languages } from 'api';
+import { GetAppletSubmissionsResponse } from 'api';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
 import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStats';
 import { Svg } from 'shared/components';
@@ -13,7 +13,13 @@ import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
 import { page } from 'resources';
 
-const locales = { en: enUS, fr };
+const getI18nLocale = (language: string): Locale => {
+  if (language === 'fr') {
+    return fr;
+  }
+
+  return enUS;
+};
 
 export function mapResponseToQuickStatProps(
   { participantsCount, submissionsCount }: GetAppletSubmissionsResponse = {
@@ -66,9 +72,6 @@ export function mapResponseToSubmissionsTableProps(
       { id: 'subject', label: i18n.t('appletOverview.columnSubject') },
       { id: 'submissionDate', label: i18n.t('appletOverview.columnSubmissionDate') },
     ],
-    handleRequestSort: () => {},
-    order: 'desc' as const,
-    orderBy: '',
     rows:
       submissions.length > 0
         ? submissions.map(
@@ -145,7 +148,7 @@ export function mapResponseToSubmissionsTableProps(
                         new Date(),
                         {
                           addSuffix: true,
-                          locale: locales[i18n.language as Languages],
+                          locale: getI18nLocale(i18n.language),
                         },
                       )}
                     </StyledMaybeEmpty>

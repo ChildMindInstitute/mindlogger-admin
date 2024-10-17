@@ -3,8 +3,9 @@ import mockAxios from 'jest-mock-axios';
 
 import { expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
+import { mockedApplet, mockedAppletData, mockedAppletId, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
+import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
 
 import { DuplicatePopups } from './DuplicatePopups';
 
@@ -37,6 +38,7 @@ describe('DuplicatePopups', () => {
   });
 
   test('should show an error if the name already exists in database', async () => {
+    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name (1)' } } });
 
@@ -53,6 +55,10 @@ describe('DuplicatePopups', () => {
   });
 
   test('should duplicate and open success modal', async () => {
+    mockGetRequestResponses({
+      [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
+    });
+
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
@@ -101,6 +107,8 @@ describe('DuplicatePopups', () => {
       ).toBeDefined();
     });
   });
+
+  // TODO Add test(s) for duplicating with report server configuration  - https://mindlogger.atlassian.net/browse/M2-8037
 
   // TODO uncomment after useasync changes
   // test('should open error modal', async () => {

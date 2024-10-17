@@ -285,7 +285,7 @@ describe('ActivityAssignDrawer', () => {
 
       expect(
         within(screen.getByRole('alert')).getByText(
-          '1 Participant was added into the table, select an Activity and Subject to continue.',
+          '1 Respondent was added into the table, select an Activity and Subject to continue.',
         ),
       ).toBeInTheDocument();
 
@@ -371,7 +371,7 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => {
       expect(
         within(screen.getByRole('alert')).getByText(
-          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+          'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
         ),
       ).toBeInTheDocument();
     });

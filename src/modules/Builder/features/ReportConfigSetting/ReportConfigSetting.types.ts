@@ -22,6 +22,8 @@ export type VerifyReportServer = {
 export type UseCheckReportServer = {
   url: string;
   publicKey: string;
+  appletId: string;
+  ownerId: string;
 };
 
 export type SetPasswordReportServer = {

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 
 import { UpgradeAccountForm } from './UpgradeAccountForm';
 import { UpgradeAccountFormValues } from '../UpgradeAccountPopup.types';
@@ -13,7 +13,7 @@ const UpgradeAccountFormTest = () => {
   const { control } = useForm<UpgradeAccountFormValues>({
     defaultValues: {
       email: '',
-      language: Languages.EN,
+      language: ApiLanguages.EN,
     },
   });
 

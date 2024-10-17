@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { EMAIL_REGEXP } from 'shared/consts';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 
 export const UpgradeAccountPopupSchema = () => {
   const { t } = i18n;
@@ -19,7 +19,7 @@ export const UpgradeAccountPopupSchema = () => {
 
           return true;
         }),
-      language: yup.string().required().oneOf(Object.values(Languages)),
+      language: yup.string().required().oneOf(Object.values(ApiLanguages)),
     })
     .required();
 };

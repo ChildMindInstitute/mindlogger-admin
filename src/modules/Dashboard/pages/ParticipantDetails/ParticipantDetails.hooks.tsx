@@ -7,21 +7,23 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 export const useParticipantDetailsTabs = () => {
   const { appletId, subjectId } = useParams();
-  const { featureFlags } = useFeatureFlags();
+  const {
+    featureFlags: { enableActivityAssign, enableParticipantConnections },
+  } = useFeatureFlags();
 
   return [
     {
-      labelKey: 'activities',
-      id: 'participant-activities',
+      labelKey: enableActivityAssign ? 'assignments' : 'activities',
+      id: `participant-${enableActivityAssign ? 'assignments' : 'activities'}`,
       icon: <Svg id="checklist-outlined" />,
       activeIcon: <Svg id="checklist-filled" />,
-      path: generatePath(page.appletParticipantActivities, {
+      path: generatePath(page.appletParticipantDetails, {
         appletId,
         subjectId,
       }),
-      'data-testid': 'participant-activities',
+      'data-testid': `participant-${enableActivityAssign ? 'assignments' : 'activities'}`,
     },
-    featureFlags.enableParticipantConnections
+    enableParticipantConnections
       ? {
           labelKey: 'connections',
           id: 'participant-connections',

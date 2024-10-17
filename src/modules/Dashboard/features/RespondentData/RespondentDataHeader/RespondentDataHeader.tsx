@@ -63,7 +63,7 @@ export const RespondentDataHeader = ({
 
   const navigateUp = () =>
     navigate(
-      generatePath(activityOrFlow ? page.appletParticipantActivities : page.appletParticipants, {
+      generatePath(activityOrFlow ? page.appletParticipantDetails : page.appletParticipants, {
         appletId,
         subjectId: subject.id,
       }),

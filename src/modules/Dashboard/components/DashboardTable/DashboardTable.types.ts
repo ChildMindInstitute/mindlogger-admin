@@ -8,13 +8,13 @@ interface DashboardTableCommonProps {
   className?: string;
   columns: HeadCell[];
   emptyComponent?: JSX.Element | string;
-  handleRequestSort: (event: MouseEvent<unknown>, property: string) => void;
+  handleRequestSort?: (event: MouseEvent<unknown>, property: string) => void;
   hasColFixedWidth?: boolean;
   keyExtractor?: (item: Row, index: number) => string;
   maxHeight?: string;
   onScroll?: (event: UIEvent<HTMLDivElement>) => void;
-  order: Order;
-  orderBy: string;
+  order?: Order;
+  orderBy?: string;
   rows?: Row[];
   searchValue?: string;
   uiType?: UiType;

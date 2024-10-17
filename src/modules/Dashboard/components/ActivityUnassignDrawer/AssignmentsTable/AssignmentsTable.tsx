@@ -112,9 +112,6 @@ export const AssignmentsTable = ({
       columns={getHeadCells()}
       rows={rows}
       enablePagination={false}
-      handleRequestSort={() => {}}
-      order="asc"
-      orderBy="id"
       data-testid={dataTestId}
     />
   );
