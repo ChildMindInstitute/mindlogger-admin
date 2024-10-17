@@ -1,4 +1,5 @@
 import { AppletId } from 'shared/api/api.types';
+import { IntegrationTypes } from 'shared/consts';
 
 export type GetThemesParams = {
   search?: string;
@@ -66,3 +67,32 @@ export type LorisUsersVisit = {
 export type UploadLorisUsersVisitsParams = AppletId & {
   payload: LorisUsersVisit[];
 };
+
+export type FetchIntegrationStatusParams = {
+  // currently set as snake case on the API
+  applet_id: string;
+  integration_type: IntegrationTypes;
+};
+
+export type FetchIntegrationProjectsParams = {
+  hostname: string;
+  username: string;
+  password: string;
+  integrationType: IntegrationTypes;
+};
+
+export type LorisIntegrationConfiguration = {
+  hostname: string;
+  project: string;
+  username: string;
+  password?: string;
+};
+
+export type SaveIntegrationParams<T> = {
+  appletId: string;
+  integrationType: IntegrationTypes;
+  configuration: T;
+};
+
+// Specific type for Loris
+export type SaveLorisIntegrationParams = SaveIntegrationParams<LorisIntegrationConfiguration>;
