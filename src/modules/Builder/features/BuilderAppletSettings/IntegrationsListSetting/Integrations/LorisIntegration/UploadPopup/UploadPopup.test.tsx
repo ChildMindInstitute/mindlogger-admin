@@ -59,7 +59,7 @@ describe('UploadPopup', () => {
         'Please confirm that you want to send the newly collected data from this applet to the LORIS project below:',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByTestId('connection-info')).toBeInTheDocument(); // TODO: mocked connection info
+    expect(screen.getByTestId('connection-info')).toBeInTheDocument();
     expect(
       screen.getByText('All respondent data will be decrypted and uploaded to the LORIS database.'),
     ).toBeInTheDocument();
