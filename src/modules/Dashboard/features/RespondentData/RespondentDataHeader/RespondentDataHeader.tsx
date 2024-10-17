@@ -162,14 +162,18 @@ export const RespondentDataHeader = ({
               onExportSettingsClose={handleCloseExport}
             />
             {featureFlags.enableActivityAssign && (
-              <Button
-                variant="tonal"
-                onClick={handleAssignActivity}
-                data-testid={`${dataTestid}-assign-activity`}
-                disabled={activityOrFlow?.autoAssign}
-              >
-                {t('assign')}
-              </Button>
+              <Tooltip tooltipTitle={activityOrFlow?.autoAssign && t('autoAssignFlowDisabled')}>
+                <span>
+                  <Button
+                    variant="tonal"
+                    onClick={handleAssignActivity}
+                    data-testid={`${dataTestid}-assign-activity`}
+                    disabled={activityOrFlow?.autoAssign}
+                  >
+                    {t('assign')}
+                  </Button>
+                </span>
+              </Tooltip>
             )}
             {canDoTakeNow && (
               <Tooltip tooltipTitle={!isWebSupported && t('activityIsMobileOnly')}>
