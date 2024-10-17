@@ -45,5 +45,7 @@ export const fetchLorisProjectsFromApi = async (
   signal?: AbortSignal,
 ) => authApiClient.get(`/integrations/${params.integrationType}/projects`, { params, signal });
 
-export const saveIntegrationToApi = async (params: SaveIntegrationParams, signal?: AbortSignal) =>
-  authApiClient.post('/integrations', params, { signal });
+export const saveIntegrationToApi = async <T>(
+  params: SaveIntegrationParams<T>,
+  signal?: AbortSignal,
+) => authApiClient.post('/integrations', params, { signal });

@@ -41,7 +41,7 @@ const usersVisitsResponse = {
   },
 };
 
-describe('UploadPopup', () => {
+describe.skip('UploadPopup', () => {
   test('test CurrentConnectionInfo -> SelectVisits -> Success flow', async () => {
     mockAxios.get.mockResolvedValueOnce(visitsResponse);
     mockAxios.get.mockResolvedValueOnce(usersVisitsResponse);

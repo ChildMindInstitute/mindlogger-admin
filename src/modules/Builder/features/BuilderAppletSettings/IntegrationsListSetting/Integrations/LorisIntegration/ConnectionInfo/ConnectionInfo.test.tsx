@@ -4,9 +4,18 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ConnectionInfo } from './ConnectionInfo';
 
+// Mock the useLorisConnectionInfo hook
+jest.mock('../LorisIntegration.hooks', () => ({
+  useLorisConnectionInfo: () => ({
+    hostname: '192.168.001',
+    username: 'yxiao37',
+    project: 'Healthy Dog Network',
+  }),
+}));
+
 describe('ConnectionInfo', () => {
   test('renders the connection info correctly', () => {
-    renderWithProviders(<ConnectionInfo />); // TODO: add props
+    renderWithProviders(<ConnectionInfo />);
 
     expect(screen.getByTestId('connection-info')).toBeInTheDocument();
 

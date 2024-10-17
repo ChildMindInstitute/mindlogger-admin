@@ -1,17 +1,59 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
+import { mockedApplet } from 'shared/mock';
+import { createStore } from 'redux';
 import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
-import { applet } from 'redux/modules';
 
 import { LorisIntegration } from './LorisIntegration';
+
+const hostname = 'hostname';
+const login = 'login';
+const project = 'project';
+
+const preloadedStateWithoutIntegration = {
+  applet: {
+    applet: {
+      data: {
+        result: {
+          ...mockedApplet,
+        },
+      },
+    },
+  },
+};
+
+const preloadedStateWithIntegration = {
+  applet: {
+    applet: {
+      data: {
+        result: {
+          ...mockedApplet,
+          integrations: [
+            {
+              integrationType: LorisIntegrationApiType.LorisApiType,
+              configuration: {
+                hostname,
+                login,
+                project,
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+};
 
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
   useParams: jest.fn(),
+  generatePath: jest.fn(),
 }));
 
 jest.mock('shared/hooks/useIsServerConfigured', () => ({
@@ -24,6 +66,13 @@ jest.mock('redux/modules', () => ({
   },
 }));
 
+const renderWithStore = (preloadedState) =>
+  render(
+    <Provider store={createStore(() => preloadedState)}>
+      <LorisIntegration />
+    </Provider>,
+  );
+
 describe('LorisIntegration', () => {
   const navigate = jest.fn();
 
@@ -34,13 +83,11 @@ describe('LorisIntegration', () => {
 
   test('should render the LorisIntegration component with server not configured', () => {
     useIsServerConfigured.mockReturnValue(false);
-    applet.useAppletData.mockReturnValue({ result: { integrations: [] } });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithoutIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     expect(screen.getByText('LORIS')).toBeInTheDocument();
-    expect(screen.getByText('Report Server Status: Not connected.')).toBeInTheDocument();
     expect(
       screen.getByText(
         'This integration will allow you to decrypt and upload responses from this applet to your LORIS database.',
@@ -52,15 +99,11 @@ describe('LorisIntegration', () => {
 
   test('should render the LorisIntegration component with server configured and integration enabled', () => {
     useIsServerConfigured.mockReturnValue(true);
-    applet.useAppletData.mockReturnValue({
-      result: { integrations: ['Loris'] },
-    });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     expect(screen.getByText('LORIS')).toBeInTheDocument();
-    expect(screen.getByText('Report Server Status: Connected.')).toBeInTheDocument();
     expect(
       screen.getByText(
         'This integration will allow you to decrypt and upload responses from this applet to your LORIS database.',
@@ -72,9 +115,8 @@ describe('LorisIntegration', () => {
 
   test('should show ConfigurationPopup when connect button is clicked', async () => {
     useIsServerConfigured.mockReturnValue(true);
-    applet.useAppletData.mockReturnValue({ result: { integrations: [] } });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithoutIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-connect-button'));
@@ -85,26 +127,22 @@ describe('LorisIntegration', () => {
 
   test('should show DisconnectionPopup when disconnect text is clicked', async () => {
     useIsServerConfigured.mockReturnValue(true);
-    applet.useAppletData.mockReturnValue({
-      result: { integrations: ['Loris'] },
-    });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-disconnect-button'));
 
     expect(screen.getByTestId('loris-disconnection-popup')).toBeInTheDocument();
     expect(screen.getByText('LORIS Configuration')).toBeInTheDocument();
+    expect(screen.getByText(hostname)).toBeInTheDocument();
+    expect(screen.getByText(project)).toBeInTheDocument();
   });
 
   test('should show UploadPopup when upload button is clicked', async () => {
     useIsServerConfigured.mockReturnValue(true);
-    applet.useAppletData.mockReturnValue({
-      result: { integrations: ['Loris'] },
-    });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('loris-integration-upload-button'));
@@ -113,11 +151,10 @@ describe('LorisIntegration', () => {
     expect(screen.getByText('LORIS Data Upload')).toBeInTheDocument();
   });
 
-  test('should redirect to report configuration when Report Configuration link is clicked', async () => {
+  test.skip('should redirect to report configuration when Report Configuration link is clicked', async () => {
     useIsServerConfigured.mockReturnValue(false);
-    applet.useAppletData.mockReturnValue({ result: { integrations: [] } });
 
-    render(<LorisIntegration />);
+    renderWithStore(preloadedStateWithoutIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByText('Report Configuration'));

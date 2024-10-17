@@ -118,15 +118,18 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       onClose();
     } catch (error) {
       setError(t('loris.errors.saveProjectFailed'));
+      console.error(error);
     }
   };
 
   const onNext = useCallback(() => {
     handleSubmit(saveConfiguration)();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSubmit]);
 
   const onSave = useCallback(() => {
     handleSubmit(saveProject)();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSubmit]);
 
   const screens = useMemo(

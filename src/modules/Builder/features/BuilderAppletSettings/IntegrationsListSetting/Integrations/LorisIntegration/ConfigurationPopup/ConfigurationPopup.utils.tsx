@@ -34,11 +34,11 @@ export const getScreens = ({
   {
     leftButtonText: t('back'),
     rightButtonText: t('loris.connect'),
-    disabledRightButton: !projects.length,
-    description: projects.length ? t('loris.selectProject') : '',
+    disabledRightButton: !projects?.length,
+    description: projects?.length ? t('loris.selectProject') : '',
     content: (
       <>
-        {projects.length ? (
+        {projects?.length ? (
           <SelectController
             fullWidth
             control={control}

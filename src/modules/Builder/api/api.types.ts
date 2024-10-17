@@ -81,13 +81,18 @@ export type FetchIntegrationProjectsParams = {
   integrationType: IntegrationTypes;
 };
 
-export type SaveIntegrationParams = {
+export type LorisIntegrationConfiguration = {
+  hostname: string;
+  project: string;
+  username: string;
+  password?: string;
+};
+
+export type SaveIntegrationParams<T> = {
   appletId: string;
   integrationType: IntegrationTypes;
-  configuration: {
-    hostname: string;
-    project: string;
-    username: string;
-    password?: string;
-  };
+  configuration: T;
 };
+
+// Specific type for Loris
+export type SaveLorisIntegrationParams = SaveIntegrationParams<LorisIntegrationConfiguration>;

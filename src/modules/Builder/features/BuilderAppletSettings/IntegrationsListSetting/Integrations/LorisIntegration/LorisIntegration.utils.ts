@@ -27,7 +27,7 @@ export const saveLorisProject = async (
   try {
     const res = await saveIntegrationToApi({
       appletId,
-      integrationType: IntegrationTypes.LorisUpperCase,
+      integrationType: IntegrationTypes.Loris,
       configuration: {
         hostname,
         username,
