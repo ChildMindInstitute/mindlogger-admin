@@ -31,7 +31,7 @@ export const useUpdateLorisIntegrationStatus = () => {
       try {
         const res = await getLorisIntegrationStatus({
           applet_id: appletData.id,
-          integration_type: IntegrationTypes.LorisUpperCase,
+          integration_type: IntegrationTypes.Loris,
         });
         const { hostname, username, project } = res.data.configuration || {};
 

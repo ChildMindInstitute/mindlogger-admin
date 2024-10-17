@@ -49,7 +49,6 @@ export const palette = {
   neutral60: '#909194',
   neutral90: '#e2e2e5',
   yellow_light: '#f5e6b3',
-  green_light: '#b7d7d3',
   orange_light: '#f4d5b6',
 
   black: '#000',
