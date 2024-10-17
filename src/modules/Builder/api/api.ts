@@ -43,7 +43,11 @@ export const getLorisIntegrationStatus = async (
 export const fetchLorisProjectsFromApi = async (
   params: FetchIntegrationProjectsParams,
   signal?: AbortSignal,
-) => authApiClient.get(`/integrations/${params.integrationType}/projects`, { params, signal });
+) =>
+  authApiClient.get(`/integrations/${params.integrationType.toLocaleLowerCase()}/projects`, {
+    params,
+    signal,
+  });
 
 export const saveIntegrationToApi = async <T>(
   params: SaveIntegrationParams<T>,
