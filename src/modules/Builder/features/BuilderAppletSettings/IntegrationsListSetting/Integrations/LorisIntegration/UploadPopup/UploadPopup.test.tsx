@@ -41,7 +41,7 @@ const usersVisitsResponse = {
   },
 };
 
-describe.skip('UploadPopup', () => {
+describe('UploadPopup', () => {
   test('test CurrentConnectionInfo -> SelectVisits -> Success flow', async () => {
     mockAxios.get.mockResolvedValueOnce(visitsResponse);
     mockAxios.get.mockResolvedValueOnce(usersVisitsResponse);
@@ -75,7 +75,7 @@ describe.skip('UploadPopup', () => {
     expect(confirmButton).toHaveTextContent('Confirm');
     await userEvent.click(confirmButton);
 
-    expect(mockAxios.get).toBeCalledWith('/integrations/loris/visits', { signal: undefined });
+    expect(mockAxios.get).toBeCalledWith('/integrations/loris/123/visits', { signal: undefined }); // Failing
     expect(mockAxios.get).toBeCalledWith('/integrations/loris/123/users/visits', {
       signal: undefined,
     });
