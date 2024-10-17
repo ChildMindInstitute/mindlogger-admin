@@ -36,7 +36,7 @@ const preloadedStateWithIntegration = {
           ...mockedApplet,
           integrations: [
             {
-              integrationType: LorisIntegrationApiType.LorisApiType,
+              integrationType: 'LORIS',
               configuration: {
                 hostname,
                 login,
