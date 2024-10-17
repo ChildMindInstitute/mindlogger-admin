@@ -151,13 +151,15 @@ describe('LorisIntegration', () => {
     expect(screen.getByText('LORIS Data Upload')).toBeInTheDocument();
   });
 
-  test.skip('should redirect to report configuration when Report Configuration link is clicked', async () => {
+  test('should redirect to report configuration when Report Configuration link is clicked', async () => {
     useIsServerConfigured.mockReturnValue(false);
 
     renderWithStore(preloadedStateWithoutIntegration);
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     await userEvent.click(screen.getByText('Report Configuration'));
-    expect(navigate).toHaveBeenCalledWith('/builder/appletId/settings/report-configuration');
+    expect(navigate).toHaveBeenCalledWith(
+      '/builder/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/settings/report-configuration',
+    );
   });
 });
