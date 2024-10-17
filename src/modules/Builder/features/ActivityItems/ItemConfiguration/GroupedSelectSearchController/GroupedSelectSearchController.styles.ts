@@ -1,4 +1,4 @@
-import { styled, MenuItem, ListItem, Select, Box } from '@mui/material';
+import { styled, MenuItem, ListItem, Select } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
@@ -84,11 +84,4 @@ export const StyledListSubheader = styled(ListItem)`
   .svg-checkbox-multiple-filled {
     stroke: ${palette.on_surface_variant};
   }
-`;
-
-export const StyledMobileOnly = styled(Box)`
-  margin-left: ${theme.spacing(1)};
-  padding: ${theme.spacing(0.6, 1.2)};
-  background-color: ${variables.palette.on_surface_variant_alfa8};
-  border-radius: ${variables.borderRadius.xs};
 `;

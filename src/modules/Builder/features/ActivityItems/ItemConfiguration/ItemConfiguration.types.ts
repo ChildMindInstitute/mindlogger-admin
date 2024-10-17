@@ -47,7 +47,6 @@ export type Alert = {
 export type ItemsOption = {
   value: ItemResponseTypeNoPerfTasks;
   icon: JSX.Element;
-  isMobileOnly?: boolean;
 };
 
 export type ItemsOptionGroup = {
