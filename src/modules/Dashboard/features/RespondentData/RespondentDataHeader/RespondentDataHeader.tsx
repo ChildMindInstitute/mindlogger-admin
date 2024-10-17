@@ -166,6 +166,7 @@ export const RespondentDataHeader = ({
                 variant="tonal"
                 onClick={handleAssignActivity}
                 data-testid={`${dataTestid}-assign-activity`}
+                disabled={activityOrFlow?.autoAssign}
               >
                 {t('assign')}
               </Button>
