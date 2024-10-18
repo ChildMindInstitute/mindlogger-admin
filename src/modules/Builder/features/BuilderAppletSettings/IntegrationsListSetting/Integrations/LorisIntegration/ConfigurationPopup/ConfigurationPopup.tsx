@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Control, FieldValues, FormProvider, useForm } from 'react-hook-form';
@@ -38,7 +39,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
     },
   });
 
-  const { control, handleSubmit, getValues, setValue } = methods;
+  const { control, handleSubmit, getValues } = methods;
 
   const [step, setStep] = useState(ConfigurationsSteps.LorisConfigurations);
   const [projects, setProjects] = useState([]);
@@ -56,6 +57,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
       setStep(ConfigurationsSteps.SelectProject);
       setError(undefined);
     } catch (error) {
+      console.error(error);
       setError(t('loris.errors.fetchProjectsFailed'));
       setProjects([]);
     }
@@ -83,11 +85,6 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
 
         return;
       }
-
-      // Set the form values
-      setValue('hostname', hostname);
-      setValue('username', username);
-      setValue('project', project);
 
       dispatch(
         banners.actions.addBanner({
@@ -124,12 +121,10 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
 
   const onNext = useCallback(() => {
     handleSubmit(saveConfiguration)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSubmit]);
 
   const onSave = useCallback(() => {
     handleSubmit(saveProject)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSubmit]);
 
   const screens = useMemo(

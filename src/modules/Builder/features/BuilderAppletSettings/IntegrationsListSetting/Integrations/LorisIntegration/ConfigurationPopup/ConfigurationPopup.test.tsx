@@ -132,7 +132,6 @@ describe('ConfigurationPopup', () => {
     await userEvent.type(screen.getByLabelText(/LORIS Password/i), '123456');
     await userEvent.click(screen.getByTestId('loris-configuration-popup-submit-button'));
 
-    // TODO FAILING
     await waitFor(() => {
       expect(screen.getByText(/Failed/i)).toBeInTheDocument();
     });
@@ -153,7 +152,7 @@ describe('ConfigurationPopup', () => {
       expect(screen.getByTestId('loris-project-select')).toBeInTheDocument();
     });
 
-    await userEvent.selectOptions(screen.getByTestId('loris-project-select'), 'Project1'); // FAILING
+    await userEvent.selectOptions(screen.getByTestId('loris-project-select'), 'Project1'); //TODO FAILING - FIX
     await userEvent.click(screen.getByTestId('loris-configuration-popup-submit-button'));
 
     await waitFor(() => {
@@ -180,7 +179,7 @@ describe('ConfigurationPopup', () => {
     await userEvent.click(screen.getByTestId('loris-configuration-popup-submit-button'));
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to save LORIS project')).toBeInTheDocument();
+      expect(screen.getByText('Failed to fetch projects')).toBeInTheDocument(); // TODO FAILING - FIX
     });
   });
 });

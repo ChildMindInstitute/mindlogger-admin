@@ -1,8 +1,11 @@
 import { IntegrationTypes } from 'shared/consts';
 import { fetchLorisProjectsFromApi, saveIntegrationToApi } from 'modules/Builder/api';
 import { Integration } from 'shared/state/Applet/Applet.schema';
+import i18n from 'i18n';
 
 export const fetchLorisProjects = async (hostname: string, username: string, password: string) => {
+  const { t } = i18n;
+
   const res = await fetchLorisProjectsFromApi({
     hostname,
     username,
@@ -11,7 +14,7 @@ export const fetchLorisProjects = async (hostname: string, username: string, pas
   });
 
   if (res.status !== 200) {
-    throw new Error('Failed to fetch projects');
+    throw new Error(t('loris.errors.fetchProjectsFailed'));
   }
 
   return res.data.projects;
@@ -24,6 +27,8 @@ export const saveLorisProject = async (
   password: string,
   project: string,
 ) => {
+  const { t } = i18n;
+
   try {
     const res = await saveIntegrationToApi({
       appletId,
@@ -37,14 +42,13 @@ export const saveLorisProject = async (
     });
 
     if (res.status !== 201 && res.status !== 200) {
-      console.error('Failed to save project', res);
-      throw new Error('Failed to save project');
+      throw new Error(t('loris.errors.savingConnectionFailed'));
     }
 
     return res.data;
   } catch (error) {
-    console.error('Error requesting to save project', error);
-    throw new Error('Failed to save project');
+    console.error(t('loris.errors.savingConnectionFailed'), error);
+    throw new Error(t('loris.errors.savingConnectionFailed'));
   }
 };
 

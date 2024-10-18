@@ -920,7 +920,7 @@
     "disconnectionSuccessful": "Votre compte LORIS a été déconnecté avec succès",
     "errors": {
       "savingConnectionFailed": "Erreur lors de l'enregistrement de la configuration LORIS. Veuillez réessayer.",
-      "fetchProjectsFailed": "Échec de la récupération des projets",
+      "fetchProjectsFailed": "Identifiants de serveur ou de nom d'hôte invalides.",
       "appletDataMissing": "Les données de l'applet sont manquantes",
       "projectMissing": "Le projet est manquant",
       "appletAlreadyTied": "Cet applet est déjà lié à un projet LORIS",

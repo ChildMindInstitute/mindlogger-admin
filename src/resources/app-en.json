@@ -922,7 +922,7 @@
     "disconnectionSuccessful": "Your LORIS account was successfully disconnected.",
     "errors": {
       "savingConnectionFailed": "Error saving LORIS configuration. Please try again.",
-      "fetchProjectsFailed": "Failed to fetch projects",
+      "fetchProjectsFailed": "Invalid server or hostname credentials.",
       "appletDataMissing": "Applet data is missing",
       "projectMissing": "Project is missing",
       "appletAlreadyTied": "This applet is already tied to a LORIS project",
