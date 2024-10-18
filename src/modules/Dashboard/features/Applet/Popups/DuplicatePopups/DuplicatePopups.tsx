@@ -229,7 +229,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     }
   };
 
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue('name', event.target.value);
     setNameError(null);
     void trigger('name');

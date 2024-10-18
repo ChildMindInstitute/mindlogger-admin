@@ -86,19 +86,32 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = ({ items = [], calculationType, activity }: GetScoreRange) => {
+export const getScoreRange = ({
+  items = [],
+  calculationType,
+  activity,
+  lookupTable,
+}: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = items.length;
 
+  const lookupTableScores = lookupTable?.map((it) => Number(it.score) || 0) ?? [NaN];
+  const lookupTableMinScore = Math.min(...lookupTableScores);
+  const lookupTableMaxScore = Math.max(...lookupTableScores);
+
   items.forEach((item) => {
-    const { minScore, maxScore } = getItemScoreRange(item);
+    const { minScore: itemMinScore, maxScore: itemMaxScore } = getItemScoreRange(item);
 
     if (!item.config.skippableItem && !activity?.isSkippable) {
-      totalMinScore += minScore;
+      totalMinScore += isNaN(lookupTableMinScore)
+        ? itemMinScore
+        : Math.min(itemMinScore, lookupTableMinScore);
     }
 
-    totalMaxScore += maxScore;
+    totalMaxScore += isNaN(lookupTableMaxScore)
+      ? itemMaxScore
+      : Math.max(itemMaxScore, lookupTableMaxScore);
   });
 
   switch (calculationType) {

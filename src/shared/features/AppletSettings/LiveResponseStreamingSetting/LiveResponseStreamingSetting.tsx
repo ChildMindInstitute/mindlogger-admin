@@ -66,7 +66,9 @@ export const LiveResponseStreamingSetting = () => {
               name={ipAddressFieldName}
               control={control}
               label={t('defaultIpAddress')}
-              onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+              onChange={({
+                target: { value },
+              }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                 onInputChange({ value, fieldName: ipAddressFieldName })
               }
               withDebounce
@@ -79,7 +81,9 @@ export const LiveResponseStreamingSetting = () => {
               name={portFieldName}
               control={control}
               label={t('defaultPort')}
-              onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+              onChange={({
+                target: { value },
+              }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                 onInputChange({ value, fieldName: portFieldName })
               }
               withDebounce
