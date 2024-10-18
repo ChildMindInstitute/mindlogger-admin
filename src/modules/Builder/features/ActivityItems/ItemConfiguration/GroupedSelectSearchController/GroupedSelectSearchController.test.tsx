@@ -1,43 +1,41 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { useForm } from 'react-hook-form';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Fragment } from 'react';
 
+import { ItemResponseType } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
+import { ItemsOptionGroup } from '../ItemConfiguration.types';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
-const options = [
+const options: ItemsOptionGroup[] = [
   {
     groupName: 'select',
     groupOptions: [
-      {
-        value: 'singleSelect',
-        icon: null,
-      },
-      {
-        value: 'multiSelect',
-        icon: null,
-      },
+      { value: ItemResponseType.SingleSelection, icon: <Fragment /> },
+      { value: ItemResponseType.MultipleSelection, icon: <Fragment /> },
     ],
   },
-
+  {
+    groupName: 'webOnly',
+    groupOptions: [{ value: ItemResponseType.PhrasalTemplate, icon: <Fragment /> }],
+  },
+  {
+    groupName: 'mobileOnly',
+    groupOptions: [
+      { value: ItemResponseType.Audio, icon: <Fragment /> },
+      { value: ItemResponseType.Drawing, icon: <Fragment /> },
+      { value: ItemResponseType.Geolocation, icon: <Fragment /> },
+      { value: ItemResponseType.Photo, icon: <Fragment /> },
+      { value: ItemResponseType.Video, icon: <Fragment /> },
+    ],
+  },
   {
     groupName: 'input',
-    groupOptions: [
-      {
-        value: 'text',
-        icon: null,
-      },
-
-      {
-        value: 'photo',
-        icon: null,
-        isMobileOnly: true,
-      },
-    ],
+    groupOptions: [{ value: ItemResponseType.Text, icon: <Fragment /> }],
   },
 ];
 
@@ -57,19 +55,41 @@ const FormComponent = () => {
 };
 
 describe('GroupedSelectSearchController', () => {
-  test('renders component with search functionality', async () => {
-    renderWithProviders(<FormComponent />);
+  const selectLabel = /Item Type/i;
 
+  beforeEach(() => {
+    renderWithProviders(<FormComponent />);
+  });
+
+  test('renders labels for client-specific responseTypes', async () => {
+    const selectEl = await screen.findByLabelText(selectLabel);
+    await userEvent.click(selectEl);
+    const popoverMenu = await screen.findByTestId('popover-menu');
+
+    options.forEach(({ groupOptions }) => {
+      groupOptions.forEach(({ value }) => {
+        const option = within(popoverMenu).getByTestId(`${dataTestid}-option-${value}`);
+
+        getIsMobileOnly(value)
+          ? expect(within(option).getByTestId('mobile-only-label')).toBeInTheDocument()
+          : expect(within(option).queryByTestId('mobile-only-label')).not.toBeInTheDocument();
+
+        getIsWebOnly(value)
+          ? expect(within(option).getByTestId('web-only-label')).toBeInTheDocument()
+          : expect(within(option).queryByTestId('web-only-label')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  test('renders component with search functionality', async () => {
     const itemConfiguration = screen.getByTestId(dataTestid);
     const inputElement = itemConfiguration.querySelector('input');
-
-    expect(inputElement).toBeInTheDocument();
-    expect(inputElement.value).toBe('');
-
-    const selectLabel = /Item Type/i;
     const selectEl = await screen.findByLabelText(selectLabel);
 
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement?.value).toBe('');
     expect(selectEl).toBeInTheDocument();
+
     await userEvent.click(selectEl);
 
     const popoverMenu = await screen.findByTestId('popover-menu');
@@ -77,19 +97,10 @@ describe('GroupedSelectSearchController', () => {
 
     expect(within(popoverMenu).getByTestId(`${dataTestid}-search`)).toBeInTheDocument();
 
-    options.forEach(({ groupName, groupOptions }) => {
+    options.forEach(({ groupName }) => {
       expect(
         within(popoverMenu).getByTestId(`${dataTestid}-group-${groupName}`),
       ).toBeInTheDocument();
-
-      groupOptions.forEach(({ value, isMobileOnly }) => {
-        const option = within(popoverMenu).getByTestId(`${dataTestid}-option-${value}`);
-        expect(option).toBeInTheDocument();
-
-        isMobileOnly
-          ? expect(within(option).getByTestId('mobile-only-label')).toBeInTheDocument()
-          : expect(within(option).queryByTestId('mobile-only-label')).not.toBeInTheDocument();
-      });
     });
 
     // test select 'photo' item type
@@ -105,7 +116,7 @@ describe('GroupedSelectSearchController', () => {
     await userEvent.click(photoOption);
 
     expect(popoverMenu).not.toBeInTheDocument(); // popover is not visible
-    expect(inputElement.value).toBe('photo'); // check input value
+    expect(inputElement?.value).toBe('photo'); // check input value
 
     // test search
     await userEvent.click(selectEl);
@@ -113,7 +124,8 @@ describe('GroupedSelectSearchController', () => {
     expect(search).toBeInTheDocument();
 
     const searchInput = search.querySelector('input');
-    await userEvent.type(searchInput, 'searchhhh'); // not found
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await userEvent.type(searchInput!, 'searchhhh'); // not found
 
     const emptySearch = await screen.findByTestId(`${dataTestid}-empty-search`);
     expect(emptySearch).toBeInTheDocument();
@@ -130,7 +142,8 @@ describe('GroupedSelectSearchController', () => {
     expect(emptySearch).not.toBeInTheDocument();
 
     const searchValue = 'sing';
-    await userEvent.type(searchInput, searchValue);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await userEvent.type(searchInput!, searchValue);
 
     const singleSelect = screen.getByTestId(`${dataTestid}-option-singleSelect`);
     expect(singleSelect.querySelector('.highlighted-text')).toHaveTextContent(

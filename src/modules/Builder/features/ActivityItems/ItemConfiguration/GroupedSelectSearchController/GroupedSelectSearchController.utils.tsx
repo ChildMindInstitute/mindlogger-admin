@@ -1,7 +1,5 @@
 import { KeyboardEvent } from 'react';
 
-import { ItemResponseType } from 'shared/consts';
-
 export const handleSearchKeyDown = (event: KeyboardEvent) => {
   if (event.key !== 'Escape') {
     event.stopPropagation();
@@ -10,12 +8,3 @@ export const handleSearchKeyDown = (event: KeyboardEvent) => {
     event.preventDefault();
   }
 };
-
-export const getIsOnlyMobileValue = (value: ItemResponseType): boolean =>
-  [
-    ItemResponseType.Drawing,
-    ItemResponseType.Photo,
-    ItemResponseType.Video,
-    ItemResponseType.Geolocation,
-    ItemResponseType.Audio,
-  ].includes(value);
