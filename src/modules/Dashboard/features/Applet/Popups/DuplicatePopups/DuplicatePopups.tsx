@@ -112,6 +112,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
+  const resetEncryptionData = () => (encryptionDataRef.current = {});
+
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
     async (res) => {
@@ -122,9 +124,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       if (error?.response?.status === ApiResponseCodes.Forbidden) return;
 
       setErrorModalVisible(true);
-    },
-    () => {
-      encryptionDataRef.current = {};
+      resetEncryptionData();
     },
   );
 
@@ -157,6 +157,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
     onCloseCallback?.();
     duplicatePopupsClose();
+    resetEncryptionData();
 
     Mixpanel.track('Applet Created Successfully', {
       'Applet ID': currentAppletId,
