@@ -24,6 +24,7 @@ import { logDataInDebugMode } from '../logger';
 export interface ExportDataFilters {
   activityId?: string;
   flowId?: string;
+  sourceSubjectId?: string;
   targetSubjectId?: string;
 }
 
