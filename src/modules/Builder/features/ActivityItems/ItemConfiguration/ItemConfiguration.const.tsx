@@ -102,17 +102,14 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Drawing,
         icon: itemsTypeIcons[ItemResponseType.Drawing],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.Photo,
         icon: itemsTypeIcons[ItemResponseType.Photo],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.Video,
         icon: itemsTypeIcons[ItemResponseType.Video],
-        isMobileOnly: true,
       },
     ],
   },
@@ -122,12 +119,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Geolocation,
         icon: itemsTypeIcons[ItemResponseType.Geolocation],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.Audio,
         icon: itemsTypeIcons[ItemResponseType.Audio],
-        isMobileOnly: true,
       },
     ],
   },

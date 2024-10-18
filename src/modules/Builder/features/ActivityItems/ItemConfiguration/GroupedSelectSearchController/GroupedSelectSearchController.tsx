@@ -1,27 +1,62 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
+import { BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyMedium, StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
-import { falseReturnFunc } from 'shared/utils';
+import { StyledClearedButton, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { Chip } from 'shared/components';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
   StyledListSubheader,
   StyledMenuItem,
-  StyledMobileOnly,
   StyledSelect,
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
-import { getIsOnlyMobileValue, handleSearchKeyDown } from './GroupedSelectSearchController.utils';
+import { handleSearchKeyDown } from './GroupedSelectSearchController.utils';
 import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
+
+const SelectItemContent = ({
+  icon,
+  label,
+  sx,
+  value,
+  ...otherProps
+}: {
+  icon?: React.ReactNode;
+  label: React.ReactNode;
+  value: ItemResponseType;
+} & BoxProps) => {
+  const { t } = useTranslation('app');
+  const isMobileOnly = getIsMobileOnly(value);
+  const isWebOnly = getIsWebOnly(value);
+
+  return (
+    <StyledFlexTopCenter sx={{ ...sx, gap: 1, maxHeight: 24 }} {...otherProps}>
+      {icon}
+      {label}
+      {(isMobileOnly || isWebOnly) && (
+        <Chip
+          data-testid={isMobileOnly ? 'mobile-only-label' : 'web-only-label'}
+          sx={{
+            borderRadius: variables.borderRadius.xs,
+            color: 'currentcolor',
+            height: 36,
+            px: 1.2,
+          }}
+          title={isMobileOnly ? t('mobileOnly') : t('webOnly')}
+        />
+      )}
+    </StyledFlexTopCenter>
+  );
+};
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
   name,
@@ -77,12 +112,6 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     setValue(`${fieldName}.responseValues.proportion.enabled`, true);
   };
 
-  const mobileOnly = (
-    <StyledMobileOnly data-testid="mobile-only-label">
-      <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
-    </StyledMobileOnly>
-  );
-
   return (
     <>
       <Controller
@@ -118,15 +147,11 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 labelId="input-type-label"
                 label={t('itemType')}
                 renderValue={() => (
-                  <StyledFlexTopCenter sx={{ maxHeight: '2.3rem' }}>
-                    <StyledFlexTopCenter sx={{ overflow: 'hidden' }}>
-                      <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-                        {itemsTypeIcons[value]}
-                      </StyledFlexTopCenter>
-                      {t(getItemLanguageKey(value))}
-                      {getIsOnlyMobileValue(value) && mobileOnly}
-                    </StyledFlexTopCenter>
-                  </StyledFlexTopCenter>
+                  <SelectItemContent
+                    icon={itemsTypeIcons[value]}
+                    label={t(getItemLanguageKey(value))}
+                    value={value}
+                  />
                 )}
                 open={selectOpen}
                 onClose={handleSelectClose}
@@ -167,33 +192,28 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     />
                   </form>
                 </StyledListSubheader>
+
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
-                  ...groupOptions.map(({ value: groupValue, icon, isMobileOnly }) => {
-                    const isHidden = getIsNotHaveSearchValue(groupValue, searchTermLowercase);
+                  ...groupOptions.map(({ value, icon }) => {
+                    const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
                     return (
                       <StyledMenuItem
                         onMouseEnter={
-                          selectOpen
-                            ? (event) => handleTooltipOpen(event, groupValue)
-                            : falseReturnFunc
+                          selectOpen ? (event) => handleTooltipOpen(event, value) : falseReturnFunc
                         }
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
-                        key={groupValue}
-                        value={groupValue}
-                        data-testid={`${dataTestid}-option-${groupValue}`}
+                        key={value}
+                        value={value}
+                        data-testid={`${dataTestid}-option-${value}`}
                       >
-                        <StyledFlexTopCenter>
-                          <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>
-                            {icon}
-                          </StyledFlexTopCenter>
-                          <StyledFlexTopCenter>
-                            {getGroupValueText(searchTerm, groupValue)}
-                            {isMobileOnly && mobileOnly}
-                          </StyledFlexTopCenter>
-                        </StyledFlexTopCenter>
+                        <SelectItemContent
+                          icon={<StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>}
+                          label={getGroupValueText(searchTerm, value)}
+                          value={value}
+                        />
                       </StyledMenuItem>
                     );
                   }),
