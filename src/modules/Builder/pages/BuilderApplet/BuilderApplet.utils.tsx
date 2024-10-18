@@ -53,7 +53,6 @@ import {
   DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   GyroscopeOrTouch,
-  Integrations,
   ItemResponseType,
   LookupTableItems,
   PerfTaskType,
@@ -1083,9 +1082,6 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
 
   const { activities, nonReviewableKeys } = getActivities(appletData.activities || []);
 
-  const hasLorisIntegration =
-    appletData.integrations?.some((integration) => integration === Integrations.Loris) || false;
-
   const processedApplet: AppletFormValues = {
     ...appletData,
     description: getDictionaryText(appletData.description),
@@ -1098,7 +1094,6 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
       nonReviewableKeys,
     }),
     streamEnabled: !!appletData.streamEnabled,
-    lorisIntegration: hasLorisIntegration,
     integrations: appletData.integrations,
   };
 
@@ -1162,7 +1157,7 @@ export const testIsReportCommonFieldsRequired = (
 };
 
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
-  items?.filter((item) => item.name === value).length < 2 ?? true;
+  items?.filter((item) => item.name === value).length < 2;
 
 export const testFunctionForSystemItems = (
   currentItem: ItemFormValues,
