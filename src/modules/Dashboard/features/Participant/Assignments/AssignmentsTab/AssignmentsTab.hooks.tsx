@@ -235,6 +235,7 @@ export const useAssignmentsTab = ({
           'data-testid': `${dataTestId}-export`,
           action: () => {
             setSelectedActivityOrFlow(activityOrFlow);
+            setSelectedTargetSubjectId(targetSubjectArg?.id);
             setShowExportData(true);
           },
           disabled: !id,
@@ -321,14 +322,20 @@ export const useAssignmentsTab = ({
         <DataExportPopup
           chosenAppletData={appletData}
           filters={{
-            activityId: selectedActivityOrFlow?.id,
+            activityId: selectedActivityOrFlow?.isFlow ? undefined : selectedActivityOrFlow?.id,
+            flowId: selectedActivityOrFlow?.isFlow ? selectedActivityOrFlow.id : undefined,
+            sourceSubjectId: respondentSubject?.id,
             targetSubjectId: selectedTargetSubjectId,
           }}
           isAppletSetting
           popupVisible={showExportData}
-          setPopupVisible={() => {
-            setShowExportData(false);
-            setSelectedActivityOrFlow(undefined);
+          setPopupVisible={(isVisible) => {
+            setShowExportData(isVisible);
+
+            if (!isVisible) {
+              setSelectedActivityOrFlow(undefined);
+              setSelectedTargetSubjectId(undefined);
+            }
           }}
         />
       )}
