@@ -321,7 +321,8 @@ export const useAssignmentsTab = ({
         <DataExportPopup
           chosenAppletData={appletData}
           filters={{
-            activityId: selectedActivityOrFlow?.id,
+            activityId: selectedActivityOrFlow?.isFlow ? undefined : selectedActivityOrFlow?.id,
+            flowId: selectedActivityOrFlow?.isFlow ? selectedActivityOrFlow.id : undefined,
             targetSubjectId: selectedTargetSubjectId,
           }}
           isAppletSetting
