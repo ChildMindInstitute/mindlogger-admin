@@ -133,7 +133,7 @@ describe('ConfigurationPopup', () => {
     await userEvent.click(screen.getByTestId('loris-configuration-popup-submit-button'));
 
     await waitFor(() => {
-      expect(screen.getByText(/Failed/i)).toBeInTheDocument();
+      expect(screen.getByText(/Invalid server or hostname credentials/i)).toBeInTheDocument();
     });
   });
 
