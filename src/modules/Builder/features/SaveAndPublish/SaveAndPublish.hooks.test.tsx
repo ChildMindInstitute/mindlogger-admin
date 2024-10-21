@@ -4,14 +4,25 @@ import mockAxios from 'jest-mock-axios';
 import { ApiResponseCodes } from 'api';
 import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { expectBanner } from 'shared/utils';
+import {
+  AppletCreatedSuccessfullyEvent,
+  AppletEditSuccessfulEvent,
+  AppletSaveClickEvent,
+  expectBanner,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+} from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { ItemResponseType } from 'shared/consts';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
 
+/* Mocks
+=================================================== */
 jest.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
@@ -30,6 +41,18 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+
+/* Utilities
+=================================================== */
+export const expectMixpanelTrack = (
+  event: AppletSaveClickEvent | AppletCreatedSuccessfullyEvent | AppletEditSuccessfulEvent,
+) => {
+  expect(spyMixpanelTrack).toHaveBeenCalledWith(event);
+};
+
+/* Tests
+=================================================== */
 describe('useSaveAndPublishSetup hook', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -57,6 +80,17 @@ describe('useSaveAndPublishSetup hook', () => {
         });
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletSaveClick,
+          [MixpanelProps.AppletId]: undefined,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletCreatedSuccessfully,
+          [MixpanelProps.AppletId]: undefined,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
 
         await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
       });
@@ -99,6 +133,17 @@ describe('useSaveAndPublishSetup hook', () => {
         });
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletSaveClick,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletEditSuccessful,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
 
         await waitFor(() =>
           expect(
