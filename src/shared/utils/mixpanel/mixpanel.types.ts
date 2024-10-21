@@ -1,4 +1,4 @@
-import { AnalyticsCalendarPrefix, ParticipantTag } from 'shared/consts';
+import { AnalyticsCalendarPrefix, ItemResponseType, ParticipantTag } from 'shared/consts';
 
 export enum MixpanelProps {
   Feature = 'Feature',
@@ -10,6 +10,7 @@ export enum MixpanelProps {
   TargetAccountType = 'Target Account Type',
   InputAccountType = 'Input Account Type',
   IsSelfReporting = 'Is Self Reporting',
+  ItemTypes = 'Item Types',
   Roles = 'Roles',
   Tag = 'Tag',
   Via = 'Via',
@@ -88,6 +89,11 @@ export enum MixpanelEventType {
   ConfirmUnassignActivityOrFlow = 'Confirm Unassign Activity/Flow',
 }
 
+export type MixpanelAppletSaveEventType =
+  | MixpanelEventType.AppletSaveClick
+  | MixpanelEventType.AppletCreatedSuccessfully
+  | MixpanelEventType.AppletEditSuccessful;
+
 export enum MixpanelIndividualCalendarEvent {
   ScheduleSaveClick = 'IC Schedule save click',
   ScheduleSuccessful = 'IC Schedule successful',
@@ -157,7 +163,13 @@ export type AppletReportConfigurationClickEvent = WithAppletId<{
   action: MixpanelEventType.AppletReportConfigurationClick;
 }>;
 
-export type AppletSaveClickEvent = WithAppletId<{
+export type WithAppletSaveProps<T> = T &
+  WithAppletId<{
+    [MixpanelProps.ItemTypes]: ItemResponseType[];
+    [MixpanelProps.Feature]?: 'SSI';
+  }>;
+
+export type AppletSaveClickEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletSaveClick;
   [MixpanelProps.AutoAssignedActivityCount]?: number;
   [MixpanelProps.AutoAssignedFlowCount]?: number;
@@ -169,13 +181,18 @@ export type PasswordAddedSuccessfullyEvent = WithAppletId<{
   action: MixpanelEventType.PasswordAddedSuccessfully;
 }>;
 
-export type AppletEditSuccessfulEvent = WithAppletId<{
+export type AppletEditSuccessfulEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletEditSuccessful;
 }>;
 
-export type AppletCreatedSuccessfullyEvent = WithAppletId<{
+export type AppletCreatedSuccessfullyEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletCreatedSuccessfully;
 }>;
+
+export type AppletSaveEvent =
+  | AppletSaveClickEvent
+  | AppletEditSuccessfulEvent
+  | AppletCreatedSuccessfullyEvent;
 
 export type ExportDataClickEvent = WithAppletId<{
   action: MixpanelEventType.ExportDataClick;
