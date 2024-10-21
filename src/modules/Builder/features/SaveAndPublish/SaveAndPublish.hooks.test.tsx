@@ -1,10 +1,11 @@
 import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import { Dict } from 'mixpanel-browser';
 
 import { ApiResponseCodes } from 'api';
 import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { expectBanner } from 'shared/utils';
+import { expectBanner, Mixpanel, MixpanelProps } from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -12,6 +13,8 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
 
+/* Mocks
+=================================================== */
 jest.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
@@ -30,6 +33,22 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+
+/* Utilities
+=================================================== */
+export const expectMixpanelTrack = (action: string, payload?: Dict) => {
+  expect(spyMixpanelTrack).toHaveBeenCalledWith(
+    action,
+    expect.objectContaining({
+      [MixpanelProps.ItemTypes]: ['text'],
+      ...payload,
+    }),
+  );
+};
+
+/* Tests
+=================================================== */
 describe('useSaveAndPublishSetup hook', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -57,6 +76,13 @@ describe('useSaveAndPublishSetup hook', () => {
         });
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        expectMixpanelTrack('Applet Save click', {
+          [MixpanelProps.AppletId]: undefined,
+        });
+        expectMixpanelTrack('Applet Created Successfully', {
+          [MixpanelProps.AppletId]: undefined,
+        });
 
         await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
       });
@@ -99,6 +125,13 @@ describe('useSaveAndPublishSetup hook', () => {
         });
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        expectMixpanelTrack('Applet Save click', {
+          [MixpanelProps.AppletId]: mockedAppletId,
+        });
+        expectMixpanelTrack('Applet edit successful', {
+          [MixpanelProps.AppletId]: mockedAppletId,
+        });
 
         await waitFor(() =>
           expect(

@@ -19,6 +19,8 @@ import {
   getSanitizedContent,
   getUpdatedAppletUrl,
   Mixpanel,
+  MixpanelPayload,
+  MixpanelProps,
   SettingParam,
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
@@ -39,6 +41,7 @@ import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
+import { ItemResponseType } from 'shared/consts';
 
 import {
   getActivityItems,
@@ -323,6 +326,31 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
   const isDisplayNameDirty = dirtyFields?.displayName;
 
+  const trackSave = useCallback(
+    (action: string, payload?: MixpanelPayload) => {
+      const applet = getAppletData();
+
+      const itemTypes: ItemResponseType[] = [];
+      (applet?.activities ?? []).forEach((activity) => {
+        itemTypes.push(...(activity.items ?? []).map((item) => item.responseType));
+      });
+      const uniqueItemTypes = new Set(itemTypes);
+
+      const props: MixpanelPayload = {
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
+        ...payload,
+      };
+
+      if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
+        props[MixpanelProps.Feature] = 'SSI';
+      }
+
+      Mixpanel.track(action, props);
+    },
+    [appletId, getAppletData],
+  );
+
   useEffect(() => {
     const isUpdateOrCreate =
       responseTypePrefix === AppletThunkTypePrefix.Create ||
@@ -363,9 +391,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     await handleSaveAndPublishFirstClick();
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
-    });
+    trackSave('Applet Save click');
 
     if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
@@ -416,9 +442,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
-    });
+    trackSave('Applet Save click');
 
     await sendRequestWithPasswordCheck();
   };
@@ -451,7 +475,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
     await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
       Mixpanel.track('Password added successfully', {
-        'Applet ID': appletId,
+        [MixpanelProps.AppletId]: appletId,
       }),
     );
     setIsPasswordPopupOpened(false);
@@ -521,9 +545,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet edit successful', {
-        'Applet ID': appletId,
-      });
+      trackSave('Applet edit successful');
 
       showSuccessBanner(true);
 
@@ -539,9 +561,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully', {
-        'Applet ID': appletId,
-      });
+      trackSave('Applet Created Successfully');
 
       showSuccessBanner();
 
