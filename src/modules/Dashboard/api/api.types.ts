@@ -1,6 +1,6 @@
 import { ActivityId, AppletId } from 'shared/api';
 import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, Roles } from 'shared/consts';
+import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
@@ -59,6 +59,40 @@ export type AppletSubjectActivitiesResponse = {
     activities: AssignedActivity[];
     activityFlows: AssignedActivityFlow[];
   };
+};
+
+type ParticipantActivity = {
+  isFlow: false;
+  activityIds: null;
+};
+
+type ParticipantFlow = {
+  isFlow: true;
+  activityIds: string[];
+};
+
+export enum ActivityAssignmentStatus {
+  Active = 'active',
+  Inactive = 'inactive',
+  Hidden = 'hidden',
+  Deleted = 'deleted',
+}
+
+export type ParticipantActivityOrFlow = (ParticipantActivity | ParticipantFlow) & {
+  id: string;
+  name: string;
+  description: string;
+  images: string[];
+  isPerformanceTask: boolean | null;
+  performanceTaskType: PerfTaskType | null;
+  status: ActivityAssignmentStatus;
+  autoAssign: boolean;
+  assignments: HydratedAssignment[];
+};
+
+export type AppletParticipantActivitiesResponse = {
+  result: ParticipantActivityOrFlow[];
+  count: number;
 };
 
 export type RespondentId = { respondentId: string };
@@ -274,6 +308,7 @@ export type DuplicateApplet = AppletId & {
   options: {
     encryption: Encryption;
     displayName: string;
+    includeReportServer?: boolean;
   };
 };
 
@@ -658,6 +693,23 @@ export type AppletAssignmentsResponse = {
     appletId: string;
     assignments: Assignment[];
   };
+};
+
+export type GetTargetSubjectsByRespondentParams = SubjectId & {
+  activityOrFlowId: string;
+};
+
+export type TargetSubjectsByRespondent = Array<
+  RespondentDetails &
+    AppletId & {
+      submissionCount: number;
+      currentlyAssigned: boolean;
+    }
+>;
+
+export type GetTargetSubjectsByRespondentResponse = {
+  result: TargetSubjectsByRespondent;
+  count: number;
 };
 
 export type Integration = {

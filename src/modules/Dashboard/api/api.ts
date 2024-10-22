@@ -87,6 +87,9 @@ import {
   AppletSubjectActivitiesResponse,
   AppletActivitiesResponse,
   AppletAssignmentsResponse,
+  AppletParticipantActivitiesResponse,
+  GetTargetSubjectsByRespondentParams,
+  GetTargetSubjectsByRespondentResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -315,7 +318,7 @@ export const postSubjectInvitationApi = (
   );
 
 export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signal?: AbortSignal) =>
-  authApiClient.post(
+  authApiClient.post<ResponseWithObject<Applet>>(
     `/applets/${appletId}/duplicate`,
     { ...options },
     {
@@ -932,6 +935,22 @@ export const getAppletSubjectActivitiesApi = (
     signal,
   });
 
+export const getAppletTargetSubjectActivitiesApi = (
+  { appletId, subjectId }: GetSubjectActivitiesParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<AppletParticipantActivitiesResponse>> =>
+  authApiClient.get(`/activities/applet/${appletId}/target/${subjectId}`, {
+    signal,
+  });
+
+export const getAppletRespondentSubjectActivitiesApi = (
+  { appletId, subjectId }: GetSubjectActivitiesParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<AppletParticipantActivitiesResponse>> =>
+  authApiClient.get(`/activities/applet/${appletId}/respondent/${subjectId}`, {
+    signal,
+  });
+
 export const createTemporaryMultiInformantRelationApi = (
   { subjectId, sourceSubjectId }: CreateTemporaryMultiInformantRelation,
   signal?: AbortSignal,
@@ -980,6 +999,14 @@ export const deleteAppletAssignmentsApi = (
         target_subject_id: a.targetSubjectId,
       })),
     },
+    signal,
+  });
+
+export const getTargetSubjectsByRespondentApi = (
+  { subjectId, activityOrFlowId }: GetTargetSubjectsByRespondentParams,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<GetTargetSubjectsByRespondentResponse>> =>
+  authApiClient.get(`/subjects/respondent/${subjectId}/activity-or-flow/${activityOrFlowId}`, {
     signal,
   });
 

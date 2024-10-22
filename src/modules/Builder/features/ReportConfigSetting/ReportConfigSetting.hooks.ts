@@ -12,9 +12,12 @@ import {
   defaultValues as initialValues,
 } from './ReportConfigSetting.const';
 
-export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) => {
-  const { appletId = '', ownerId = '' } = useParams();
-
+export const useCheckReportServer = ({
+  url,
+  publicKey,
+  appletId,
+  ownerId,
+}: UseCheckReportServer) => {
   const onVerify = async () => {
     const token = authStorage.getAccessToken();
 

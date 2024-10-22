@@ -204,7 +204,7 @@ export const Respondents = () => {
         });
 
         navigate(
-          generatePath(page.appletParticipantActivities, {
+          generatePath(page.appletParticipantDetails, {
             appletId,
             subjectId: chosenAppletData?.subjectId,
           }),

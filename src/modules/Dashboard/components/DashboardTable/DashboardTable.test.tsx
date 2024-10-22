@@ -75,9 +75,6 @@ describe('DashboardTable component tests', () => {
           columns={mockColumns}
           rows={getMockRows()}
           enablePagination={false}
-          handleRequestSort={() => {}}
-          order="desc"
-          orderBy=""
         />,
       );
     });

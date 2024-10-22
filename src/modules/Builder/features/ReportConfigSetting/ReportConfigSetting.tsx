@@ -4,6 +4,7 @@ import { useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 import { ObjectSchema } from 'yup';
+import { useParams } from 'react-router-dom';
 
 import {
   postReportConfigApi,
@@ -180,9 +181,13 @@ export const ReportConfigSetting = ({ 'data-testid': dataTestid }: ReportConfigS
         )
       : null;
 
+  const { appletId = '', ownerId = '' } = useParams();
+
   const { onVerify, onSetPassword } = useCheckReportServer({
     url: reportServerUrl,
     publicKey: reportPublicKey,
+    appletId,
+    ownerId,
   });
 
   const handleAddEmail = async (value: string) => {

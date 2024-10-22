@@ -385,11 +385,10 @@ export const ActivityAssignDrawer = ({
 
       setTimeout(() => {
         if (assignments[0]?.respondentSubjectId) {
-          const { isTeamMember } =
-            allParticipants.find(({ id }) => id === assignments[0].respondentSubjectId) ?? {};
           addBanner('RespondentAutofillBanner', {
             hasActivity: activityIds.length || flowIds.length,
-            isTeamMember,
+            hasSubject: !!assignments[0].targetSubjectId,
+            isSelfReport: assignments[0].respondentSubjectId === assignments[0].targetSubjectId,
           });
         } else if (assignments[0]?.targetSubjectId) {
           addBanner('SubjectAutofillBanner', {

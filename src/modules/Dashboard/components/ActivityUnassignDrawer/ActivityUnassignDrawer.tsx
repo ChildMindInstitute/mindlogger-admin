@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, IconButton } from '@mui/material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -44,7 +44,9 @@ export const ActivityUnassignDrawer = ({
 }: ActivityUnassignDrawerProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'activityUnassign' });
   const dispatch = useAppDispatch();
-  const isFlow = !!activityOrFlow && 'activities' in activityOrFlow;
+  const isFlow =
+    activityOrFlow &&
+    (('isFlow' in activityOrFlow && activityOrFlow.isFlow) || 'activities' in activityOrFlow);
   const assignments = useMemo(() => activityOrFlow?.assignments ?? [], [activityOrFlow]);
   const hasSingleAssignment = assignments.length === 1;
   const [step, setStep] = useState(1);
@@ -103,6 +105,18 @@ export const ActivityUnassignDrawer = ({
 
     return counts;
   }, [assignments]);
+
+  let thumbnail: ReactNode = null;
+  if (activityOrFlow) {
+    if ('activities' in activityOrFlow) {
+      thumbnail = <ActivityFlowThumbnail activities={activityOrFlow.activities} />;
+    } else if ('isFlow' in activityOrFlow && activityOrFlow.isFlow) {
+      thumbnail = <ActivityFlowThumbnail activities={activityOrFlow.images} />;
+    } else {
+      const image = 'images' in activityOrFlow ? activityOrFlow.images[0] : activityOrFlow.image;
+      if (image) thumbnail = <StyledActivityThumbnailImg src={image} alt={activityOrFlow.name} />;
+    }
+  }
 
   const handleClose = () => {
     onClose();
@@ -181,13 +195,7 @@ export const ActivityUnassignDrawer = ({
           <StyledFlexColumn sx={{ p: 4, gap: 4 }}>
             <StyledFlexTopCenter sx={{ gap: 2.4 }}>
               <StyledActivityThumbnailContainer sx={{ width: '8rem', height: '8rem' }}>
-                {activityOrFlow && 'image' in activityOrFlow && !!activityOrFlow.image && (
-                  <StyledActivityThumbnailImg
-                    src={activityOrFlow.image}
-                    alt={activityOrFlow.name}
-                  />
-                )}
-                {isFlow && <ActivityFlowThumbnail activities={activityOrFlow.activities} />}
+                {thumbnail}
               </StyledActivityThumbnailContainer>
 
               <StyledFlexTopCenter sx={{ gap: 0.8 }}>
