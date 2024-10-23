@@ -8,6 +8,7 @@ import {
   Theme,
   UploadLorisUsersVisitsParams,
   FetchIntegrationStatusParams,
+  DeleteIntegrationParams,
 } from './api.types';
 
 export const getThemesApi = (params: GetThemesParams, signal?: AbortSignal) =>
@@ -53,3 +54,12 @@ export const saveIntegrationToApi = async <T>(
   params: SaveIntegrationParams<T>,
   signal?: AbortSignal,
 ) => authApiClient.post('/integrations', params, { signal });
+
+export const deleteIntegrationFromApi = async (
+  params: DeleteIntegrationParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/integrations/applet/${params.appletId}`, {
+    params: { integration_type: params.integration_type },
+    signal,
+  });

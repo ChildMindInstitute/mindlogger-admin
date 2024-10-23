@@ -94,5 +94,10 @@ export type SaveIntegrationParams<T> = {
   configuration: T;
 };
 
+export type DeleteIntegrationParams = {
+  appletId: string;
+  integration_type: IntegrationTypes;
+};
+
 // Specific type for Loris
 export type SaveLorisIntegrationParams = SaveIntegrationParams<LorisIntegrationConfiguration>;

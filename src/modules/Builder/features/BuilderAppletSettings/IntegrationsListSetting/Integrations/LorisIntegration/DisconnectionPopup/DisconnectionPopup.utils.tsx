@@ -8,7 +8,7 @@ import { ConnectionInfo } from '../ConnectionInfo';
 
 const { t } = i18n;
 
-export const getScreens = ({ onClose, setStep }: GetScreensProps) => [
+export const getScreens = ({ onClose, setStep, handleDisconnect }: GetScreensProps) => [
   {
     leftButtonText: t('cancel'),
     rightButtonText: t('loris.disconnect'),
@@ -35,6 +35,6 @@ export const getScreens = ({ onClose, setStep }: GetScreensProps) => [
       </StyledTitleMedium>
     ),
     leftButtonClick: () => setStep(DisconnectionSteps.CurrentConnectionInfo),
-    rightButtonClick: () => {},
+    rightButtonClick: handleDisconnect,
   },
 ];
