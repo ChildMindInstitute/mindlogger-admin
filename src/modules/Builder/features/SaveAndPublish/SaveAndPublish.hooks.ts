@@ -19,9 +19,9 @@ import {
   getSanitizedContent,
   getUpdatedAppletUrl,
   Mixpanel,
-  MixpanelPayload,
   MixpanelProps,
   SettingParam,
+  trackAppletSave,
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
@@ -41,7 +41,6 @@ import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
-import { ItemResponseType } from 'shared/consts';
 
 import {
   getActivityItems,
@@ -326,31 +325,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
   const isDisplayNameDirty = dirtyFields?.displayName;
 
-  const trackSave = useCallback(
-    (action: string, payload?: MixpanelPayload) => {
-      const applet = getAppletData();
-
-      const itemTypes: ItemResponseType[] = [];
-      (applet?.activities ?? []).forEach((activity) => {
-        itemTypes.push(...(activity.items ?? []).map((item) => item.responseType));
-      });
-      const uniqueItemTypes = new Set(itemTypes);
-
-      const props: MixpanelPayload = {
-        [MixpanelProps.AppletId]: appletId,
-        [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
-        ...payload,
-      };
-
-      if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
-        props[MixpanelProps.Feature] = 'SSI';
-      }
-
-      Mixpanel.track(action, props);
-    },
-    [appletId, getAppletData],
-  );
-
   useEffect(() => {
     const isUpdateOrCreate =
       responseTypePrefix === AppletThunkTypePrefix.Create ||
@@ -390,8 +364,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const handleSaveChangesSaveSubmit = async () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
-    await handleSaveAndPublishFirstClick();
-    trackSave('Applet Save click');
+    const result = await handleSaveAndPublishFirstClick();
+    trackAppletSave({ action: 'Applet Save click', applet: result.payload.data.result, appletId });
 
     if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
@@ -442,9 +416,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    trackSave('Applet Save click');
+    trackAppletSave({ action: 'Applet Save click', applet: getAppletData(), appletId });
 
-    await sendRequestWithPasswordCheck();
+    return await sendRequestWithPasswordCheck();
   };
 
   const handlePublishProcessOnClose = () => {
@@ -465,19 +439,18 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    await sendRequest();
+    return await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (password?: string) => {
-    await sendRequest(password);
-  };
+  const handleAppletPasswordSubmit = (password?: string) => sendRequest(password);
 
   const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
-    await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('Password added successfully', {
-        [MixpanelProps.AppletId]: appletId,
-      }),
-    );
+    const appletData = await handleAppletPasswordSubmit(ref?.current?.password);
+
+    Mixpanel.track('Password added successfully', {
+      [MixpanelProps.AppletId]: appletData.id,
+    });
+
     setIsPasswordPopupOpened(false);
 
     if (isLogoutInProgress) {
@@ -545,7 +518,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      trackSave('Applet edit successful');
+      trackAppletSave({ action: 'Applet edit successful', applet: result.payload.data.result });
 
       showSuccessBanner(true);
 
@@ -558,10 +531,15 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       if (appletId && ownerId) {
         navigateToApplet(appletId);
       }
+
+      return result.payload.data.result;
     }
 
     if (createApplet.fulfilled.match(result)) {
-      trackSave('Applet Created Successfully');
+      trackAppletSave({
+        action: 'Applet Created Successfully',
+        applet: result.payload.data.result,
+      });
 
       showSuccessBanner();
 
@@ -584,6 +562,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       if (createdAppletId && ownerId) {
         navigateToApplet(createdAppletId);
       }
+
+      return result.payload.data.result;
     }
   };
 
