@@ -1665,6 +1665,7 @@
   "visibilityDecreasesOverMaxCharacters": "La visibilité diminue au-delà de {{max}} caractères",
   "waitForRespondentDataDownload": "Veuillez patienter pendant le téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
   "dataProcessing": "Traitement de {{ percentages  }}%...",
+  "webOnly": "Web uniquement",
   "week": "Semaine",
   "weekdays": "Jours de la semaine",
   "weekly": "Hebdomadaire",
