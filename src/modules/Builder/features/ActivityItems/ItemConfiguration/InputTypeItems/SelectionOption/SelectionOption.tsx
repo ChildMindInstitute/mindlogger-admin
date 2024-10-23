@@ -105,7 +105,7 @@ export const SelectionOption = ({
     }
   };
 
-  const handleScoreChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleScoreChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (event.target.value === '') return setValue(scoreName, 0);
 
     setValue(scoreName, +event.target.value);

@@ -45,7 +45,9 @@ export const TextResponse = ({ name, uiType }: TextResponseProps) => {
     }
   };
 
-  const handleResponseLengthOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleResponseLengthOnChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const newValue = +event.target.value;
     handleResponseLengthChange(newValue);
   };

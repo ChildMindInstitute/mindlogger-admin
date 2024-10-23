@@ -57,7 +57,9 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
 
     const { execute, error, setError } = useAsync(transferOwnershipApi);
 
-    const handleEmailCustomChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleEmailCustomChange = (
+      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
       setValue(emailInputName, event.target.value);
       if (!error) return;
 
