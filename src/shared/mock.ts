@@ -1463,12 +1463,6 @@ export const mockedPhrasalTemplateActivityItem = {
   _id: undefined,
 };
 
-export const mockedParagraphAndPhrasalTemplateActivities = [
-  // Directly using the mockedParagraphTextActivityItem
-  mockedParagraphTextActivityItem,
-  mockedPhrasalTemplateActivityItem,
-];
-
 export const mockedVideoActivityItem = {
   question: 'video_text',
   responseType: 'video',
