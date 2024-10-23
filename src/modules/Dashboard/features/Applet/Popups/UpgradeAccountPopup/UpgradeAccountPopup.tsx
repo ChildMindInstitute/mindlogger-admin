@@ -80,7 +80,8 @@ export const UpgradeAccountPopup = ({
       }),
     );
 
-    Mixpanel.track(MixpanelEventType.UpgradeToFullAccountInviteCreated, {
+    Mixpanel.track({
+      action: MixpanelEventType.UpgradeToFullAccountInviteCreated,
       [MixpanelProps.AppletId]: appletId,
     });
 
@@ -90,7 +91,8 @@ export const UpgradeAccountPopup = ({
   const handleSubmitForm = (values: UpgradeAccountFormValues) => {
     if (!appletId || !subjectId) return;
 
-    Mixpanel.track(MixpanelEventType.UpgradeToFullAccountFormSubmitted, {
+    Mixpanel.track({
+      action: MixpanelEventType.UpgradeToFullAccountFormSubmitted,
       [MixpanelProps.AppletId]: appletId,
     });
 

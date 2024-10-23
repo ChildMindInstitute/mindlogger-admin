@@ -37,7 +37,8 @@ export const CreateEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick, {
+    Mixpanel.track({
+      action: MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick,
       [MixpanelProps.AppletId]: appletId,
     });
   };

@@ -43,7 +43,7 @@ export const useMultiInformantAppletTabs = () => {
       id: 'applet-schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-outlined" />,
-      onClick: () => Mixpanel.track(MixpanelEventType.ViewGeneralCalendarClick),
+      onClick: () => Mixpanel.track({ action: MixpanelEventType.ViewGeneralCalendarClick }),
       path: generatePath(page.appletSchedule, {
         appletId,
       }),

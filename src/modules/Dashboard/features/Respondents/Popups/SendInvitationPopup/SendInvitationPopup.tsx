@@ -45,7 +45,7 @@ export const SendInvitationPopup = ({
 
   const submitForm = () => {
     if (!appletId || !subjectId) return;
-    Mixpanel.track(MixpanelEventType.SubjectInvitationClick);
+    Mixpanel.track({ action: MixpanelEventType.SubjectInvitationClick });
     setHasCommonError(false);
     execute({ appletId, subjectId, email: getValues('email') });
   };

@@ -1,4 +1,4 @@
-import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { AnalyticsCalendarPrefix, ParticipantTag } from 'shared/consts';
 
 export enum MixpanelProps {
   Feature = 'Feature',
@@ -14,8 +14,6 @@ export enum MixpanelProps {
   Tag = 'Tag',
   Via = 'Via',
 }
-
-export type MixpanelPayload = Partial<Record<MixpanelProps, unknown>>;
 
 export enum MixpanelEventType {
   InvitationSent = 'Invitation sent successfully',
@@ -98,3 +96,351 @@ export const MixpanelCalendarEvent = {
   [AnalyticsCalendarPrefix.IndividualCalendar]: MixpanelIndividualCalendarEvent,
   [AnalyticsCalendarPrefix.GeneralCalendar]: MixpanelGeneralCalendarEvent,
 } as const;
+
+type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
+
+export type MixpanelInvitationSentEvent = WithAppletId<{
+  action: MixpanelEventType.InvitationSent;
+}>;
+
+export type LoginSuccessfulEvent = {
+  action: MixpanelEventType.LoginSuccessful;
+};
+
+export type LoginBtnClickEvent = {
+  action: MixpanelEventType.LoginBtnClick;
+};
+
+export type LogoutEvent = {
+  action: MixpanelEventType.Logout;
+};
+
+export type CreateAccountOnLoginScreenEvent = {
+  action: MixpanelEventType.CreateAccountOnLoginScreen;
+};
+
+export type SignUpSuccessfulEvent = {
+  action: MixpanelEventType.SignUpSuccessful;
+};
+
+export type AddActivityClickEvent = WithAppletId<{
+  action: MixpanelEventType.AddActivityClick;
+}>;
+
+export type ActivityEditClickEvent = WithAppletId<{
+  action: MixpanelEventType.ActivityEditClick;
+}>;
+
+export type AppletEditClickEvent = WithAppletId<{
+  action: MixpanelEventType.AppletEditClick;
+}>;
+
+export type ScoresAndReportBtnClickEvent = WithAppletId<{
+  action: MixpanelEventType.ScoresAndReportBtnClick;
+}>;
+
+export type ActivityReportConfigurationClickEvent = WithAppletId<{
+  action: MixpanelEventType.ActivityReportConfigurationClick;
+}>;
+
+export type AppletReportConfigurationClickEvent = WithAppletId<{
+  action: MixpanelEventType.AppletReportConfigurationClick;
+}>;
+
+export type AppletSaveClickEvent = WithAppletId<{
+  action: MixpanelEventType.AppletSaveClick;
+}>;
+
+export type PasswordAddedSuccessfullyEvent = WithAppletId<{
+  action: MixpanelEventType.PasswordAddedSuccessfully;
+}>;
+
+export type AppletEditSuccessfulEvent = WithAppletId<{
+  action: MixpanelEventType.AppletEditSuccessful;
+}>;
+
+export type AppletCreatedSuccessfullyEvent = WithAppletId<{
+  action: MixpanelEventType.AppletCreatedSuccessfully;
+}>;
+
+export type ExportDataClickEvent = WithAppletId<{
+  action: MixpanelEventType.ExportDataClick;
+}>;
+
+type TakeNowEvent = WithAppletId<{
+  [MixpanelProps.Feature]?: 'Multi-informant';
+  [MixpanelProps.MultiInformantAssessmentId]?: string | null;
+  [MixpanelProps.ActivityId]?: string;
+  [MixpanelProps.ActivityFlowId]?: string;
+}>;
+
+export type TakeNowDialogClosedEvent = TakeNowEvent & {
+  action: MixpanelEventType.TakeNowDialogClosed;
+};
+
+export type MultiInformantStartActivityClickEvent = TakeNowEvent & {
+  action: MixpanelEventType.MultiInformantStartActivityClick;
+  [MixpanelProps.SourceAccountType]?: string | null;
+  [MixpanelProps.TargetAccountType]?: string | null;
+  [MixpanelProps.InputAccountType]?: string | null;
+  [MixpanelProps.IsSelfReporting]: boolean;
+};
+
+export type ProvidingResponsesDropdownOpenedEvent = TakeNowEvent & {
+  action: MixpanelEventType.ProvidingResponsesDropdownOpened;
+};
+
+export type ProvidingResponsesSelectionChangedEvent = TakeNowEvent & {
+  action: MixpanelEventType.ProvidingResponsesSelectionChanged;
+  [MixpanelProps.SourceAccountType]?: string | null;
+};
+
+export type OwnResponsesCheckboxToggledEvent = TakeNowEvent & {
+  action: MixpanelEventType.OwnResponsesCheckboxToggled;
+  [MixpanelProps.IsSelfReporting]: boolean;
+};
+
+export type InputtingResponsesDropdownOpenedEvent = TakeNowEvent & {
+  action: MixpanelEventType.InputtingResponsesDropdownOpened;
+};
+
+export type InputtingResponsesSelectionChangedEvent = TakeNowEvent & {
+  action: MixpanelEventType.InputtingResponsesSelectionChanged;
+  [MixpanelProps.InputAccountType]?: string | null;
+};
+
+export type ResponsesAboutDropdownOpenedEvent = TakeNowEvent & {
+  action: MixpanelEventType.ResponsesAboutDropdownOpened;
+};
+
+export type ResponsesAboutSelectionChangedEvent = TakeNowEvent & {
+  action: MixpanelEventType.ResponsesAboutSelectionChanged;
+  [MixpanelProps.TargetAccountType]?: string | null;
+};
+
+export type TakeNowClickEvent = TakeNowEvent & {
+  action: MixpanelEventType.TakeNowClick;
+  [MixpanelProps.TargetAccountType]?: string | null;
+  [MixpanelProps.SourceAccountType]?: string | null;
+  [MixpanelProps.Via]?: 'Applet - Activities' | 'Applet - Participants - Activities';
+};
+
+export type AddParticipantBtnClickedEvent = WithAppletId<{
+  action: MixpanelEventType.AddParticipantBtnClicked;
+  [MixpanelProps.Via]: 'Applet - Overview' | 'Applet - Participants';
+}>;
+
+export type FullAccountInvitationCreatedEvent = WithAppletId<{
+  action: MixpanelEventType.FullAccountInvitationCreated;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type LimitedAccountCreatedEvent = WithAppletId<{
+  action: MixpanelEventType.LimitedAccountCreated;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type FullAccountInvitationFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.FullAccountInvitationFormSubmitted;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type AddLimitedAccountFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.AddLimitedAccountFormSubmitted;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type UpgradeToFullAccountInviteCreatedEvent = WithAppletId<{
+  action: MixpanelEventType.UpgradeToFullAccountInviteCreated;
+}>;
+
+export type UpgradeToFullAccountFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.UpgradeToFullAccountFormSubmitted;
+}>;
+
+export type UpgradeToFullAccountClickedEvent = WithAppletId<{
+  action: MixpanelEventType.UpgradeToFullAccountClicked;
+  [MixpanelProps.Via]: 'Applet - Participants';
+}>;
+
+export type BuildAppletClickEvent = {
+  action: MixpanelEventType.BuildAppletClick;
+};
+
+export type BrowseAppletLibraryClickEvent = {
+  action: MixpanelEventType.BrowseAppletLibraryClick;
+};
+
+export type EditTeamMemberClickedEvent = WithAppletId<{
+  action: MixpanelEventType.EditTeamMemberClicked;
+  [MixpanelProps.Via]: 'Applet - Team' | 'Team';
+}>;
+
+export type AddTeamMemberBtnClickedEvent = WithAppletId<{
+  action: MixpanelEventType.AddTeamMemberBtnClicked;
+  [MixpanelProps.Via]: 'Applet - Team' | 'Team';
+}>;
+
+export type TeamMemberInvitedSuccessfullyEvent = WithAppletId<{
+  action: MixpanelEventType.TeamMemberInvitedSuccessfully;
+  [MixpanelProps.Roles]: string[];
+}>;
+
+export type TeamMemberInvitationFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.TeamMemberInvitationFormSubmitted;
+  [MixpanelProps.Roles]: string[];
+}>;
+
+export type TeamMemberEditSuccessfulEvent = WithAppletId<{
+  action: MixpanelEventType.TeamMemberEditSuccessful;
+  [MixpanelProps.Roles]: string[];
+}>;
+
+export type EditTeamMemberFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.EditTeamMemberFormSubmitted;
+  [MixpanelProps.Roles]: string[];
+}>;
+
+export type EditFullAccountClickedEvent = WithAppletId<{
+  action: MixpanelEventType.EditFullAccountClicked;
+  [MixpanelProps.Via]: 'Applet - Participants';
+}>;
+
+export type EditLimitedAccountClickedEvent = WithAppletId<{
+  action: MixpanelEventType.EditLimitedAccountClicked;
+  [MixpanelProps.Via]: 'Applet - Participants';
+}>;
+
+export type ExportDataSuccessfulEvent = WithAppletId<{
+  action: MixpanelEventType.ExportDataSuccessful;
+}>;
+
+export type FullAccountEditedSuccessfullyEvent = WithAppletId<{
+  action: MixpanelEventType.FullAccountEditedSuccessfully;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type LimitedAccountEditedSuccessfullyEvent = WithAppletId<{
+  action: MixpanelEventType.LimitedAccountEditedSuccessfully;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type EditFullAccountFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.EditFullAccountFormSubmitted;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type EditLimitedAccountFormSubmittedEvent = WithAppletId<{
+  action: MixpanelEventType.EditLimitedAccountFormSubmitted;
+  [MixpanelProps.Tag]?: Exclude<ParticipantTag, ''> | null;
+}>;
+
+export type ViewGeneralCalendarClickEvent = WithAppletId<{
+  action: MixpanelEventType.ViewGeneralCalendarClick;
+}>;
+
+export type ViewIndividualCalendarClickEvent = WithAppletId<{
+  action: MixpanelEventType.ViewIndividualCalendarClick;
+}>;
+
+export type SubjectInvitationClickEvent = {
+  action: MixpanelEventType.SubjectInvitationClick;
+};
+
+export type AddToBasketClickEvent = WithAppletId<{
+  action: MixpanelEventType.AddToBasketClick;
+}>;
+
+export type GoToBasketClickEvent = WithAppletId<{
+  action: MixpanelEventType.GoToBasketClick;
+}>;
+
+export type AddToAppletBuilderClickEvent = {
+  action: MixpanelEventType.AddToAppletBuilderClick;
+};
+
+export type ScheduleSaveClickEvent = WithAppletId<{
+  action:
+    | MixpanelIndividualCalendarEvent.ScheduleSaveClick
+    | MixpanelGeneralCalendarEvent.ScheduleSaveClick;
+}>;
+
+export type ScheduleSuccessfulEvent = WithAppletId<{
+  action:
+    | MixpanelIndividualCalendarEvent.ScheduleSuccessful
+    | MixpanelGeneralCalendarEvent.ScheduleSuccessful;
+}>;
+
+export type ScheduleImportSuccessfulEvent = WithAppletId<{
+  action:
+    | MixpanelIndividualCalendarEvent.ScheduleImportSuccessful
+    | MixpanelGeneralCalendarEvent.ScheduleImportSuccessful;
+}>;
+
+export type ScheduleImportClickEvent = WithAppletId<{
+  action:
+    | MixpanelIndividualCalendarEvent.ScheduleImportClick
+    | MixpanelGeneralCalendarEvent.ScheduleImportClick;
+}>;
+
+export type MixpanelEvent =
+  | MixpanelInvitationSentEvent
+  | LoginSuccessfulEvent
+  | LoginBtnClickEvent
+  | LogoutEvent
+  | CreateAccountOnLoginScreenEvent
+  | SignUpSuccessfulEvent
+  | AddActivityClickEvent
+  | ActivityEditClickEvent
+  | AppletEditClickEvent
+  | ScoresAndReportBtnClickEvent
+  | ActivityReportConfigurationClickEvent
+  | AppletReportConfigurationClickEvent
+  | AppletSaveClickEvent
+  | PasswordAddedSuccessfullyEvent
+  | AppletEditSuccessfulEvent
+  | AppletCreatedSuccessfullyEvent
+  | ExportDataClickEvent
+  | TakeNowDialogClosedEvent
+  | MultiInformantStartActivityClickEvent
+  | ProvidingResponsesDropdownOpenedEvent
+  | ProvidingResponsesSelectionChangedEvent
+  | OwnResponsesCheckboxToggledEvent
+  | InputtingResponsesDropdownOpenedEvent
+  | InputtingResponsesSelectionChangedEvent
+  | ResponsesAboutDropdownOpenedEvent
+  | ResponsesAboutSelectionChangedEvent
+  | TakeNowClickEvent
+  | AddParticipantBtnClickedEvent
+  | FullAccountInvitationCreatedEvent
+  | LimitedAccountCreatedEvent
+  | FullAccountInvitationFormSubmittedEvent
+  | AddLimitedAccountFormSubmittedEvent
+  | UpgradeToFullAccountInviteCreatedEvent
+  | UpgradeToFullAccountFormSubmittedEvent
+  | UpgradeToFullAccountClickedEvent
+  | BuildAppletClickEvent
+  | BrowseAppletLibraryClickEvent
+  | EditTeamMemberClickedEvent
+  | AddTeamMemberBtnClickedEvent
+  | TeamMemberInvitedSuccessfullyEvent
+  | TeamMemberInvitationFormSubmittedEvent
+  | TeamMemberEditSuccessfulEvent
+  | EditTeamMemberFormSubmittedEvent
+  | EditFullAccountClickedEvent
+  | EditLimitedAccountClickedEvent
+  | ExportDataSuccessfulEvent
+  | FullAccountEditedSuccessfullyEvent
+  | LimitedAccountEditedSuccessfullyEvent
+  | EditFullAccountFormSubmittedEvent
+  | EditLimitedAccountFormSubmittedEvent
+  | ViewGeneralCalendarClickEvent
+  | ViewIndividualCalendarClickEvent
+  | SubjectInvitationClickEvent
+  | AddToBasketClickEvent
+  | GoToBasketClickEvent
+  | AddToAppletBuilderClickEvent
+  | ScheduleSaveClickEvent
+  | ScheduleSuccessfulEvent
+  | ScheduleImportSuccessfulEvent
+  | ScheduleImportClickEvent;

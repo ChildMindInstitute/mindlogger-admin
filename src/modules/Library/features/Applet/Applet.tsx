@@ -92,7 +92,8 @@ export const Applet = ({
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
 
-    Mixpanel.track(MixpanelEventType.AddToBasketClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.AddToBasketClick,
       [MixpanelProps.AppletId]: id,
     });
   };

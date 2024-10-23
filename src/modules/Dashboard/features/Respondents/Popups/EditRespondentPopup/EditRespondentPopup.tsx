@@ -55,10 +55,10 @@ export const EditRespondentPopup = ({
     editSubjectApi,
     ({ data }) => {
       const { userId, appletId, tag } = data?.result ?? {};
-      const event = userId
-        ? MixpanelEventType.FullAccountEditedSuccessfully
-        : MixpanelEventType.LimitedAccountEditedSuccessfully;
-      Mixpanel.track(event, {
+      Mixpanel.track({
+        action: userId
+          ? MixpanelEventType.FullAccountEditedSuccessfully
+          : MixpanelEventType.LimitedAccountEditedSuccessfully,
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
@@ -78,10 +78,10 @@ export const EditRespondentPopup = ({
     const { secretUserId, nickname, tag } = getValues();
     const { appletId, respondentId, subjectId } = chosenAppletData;
 
-    const event = respondentId
-      ? MixpanelEventType.EditFullAccountFormSubmitted
-      : MixpanelEventType.EditLimitedAccountFormSubmitted;
-    Mixpanel.track(event, {
+    Mixpanel.track({
+      action: respondentId
+        ? MixpanelEventType.EditFullAccountFormSubmitted
+        : MixpanelEventType.EditLimitedAccountFormSubmitted,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
     });

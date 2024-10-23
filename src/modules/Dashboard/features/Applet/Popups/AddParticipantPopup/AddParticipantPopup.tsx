@@ -85,7 +85,8 @@ export const AddParticipantPopup = ({
       }),
     );
 
-    Mixpanel.track(MixpanelEventType.FullAccountInvitationCreated, {
+    Mixpanel.track({
+      action: MixpanelEventType.FullAccountInvitationCreated,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
@@ -107,7 +108,8 @@ export const AddParticipantPopup = ({
       }),
     );
 
-    Mixpanel.track(MixpanelEventType.LimitedAccountCreated, {
+    Mixpanel.track({
+      action: MixpanelEventType.LimitedAccountCreated,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
@@ -127,7 +129,8 @@ export const AddParticipantPopup = ({
     const { email, nickname, tag, ...rest } = values;
 
     if (isFullAccount) {
-      Mixpanel.track(MixpanelEventType.FullAccountInvitationFormSubmitted, {
+      Mixpanel.track({
+        action: MixpanelEventType.FullAccountInvitationFormSubmitted,
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
@@ -146,7 +149,8 @@ export const AddParticipantPopup = ({
         },
       });
     } else {
-      Mixpanel.track(MixpanelEventType.AddLimitedAccountFormSubmitted, {
+      Mixpanel.track({
+        action: MixpanelEventType.AddLimitedAccountFormSubmitted,
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });

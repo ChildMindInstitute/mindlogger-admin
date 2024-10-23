@@ -123,7 +123,8 @@ export const DataExportPopup = ({
         }
 
         handlePopupClose();
-        Mixpanel.track(MixpanelEventType.ExportDataSuccessful, {
+        Mixpanel.track({
+          action: MixpanelEventType.ExportDataSuccessful,
           [MixpanelProps.AppletId]: appletId,
         });
       } catch (e) {

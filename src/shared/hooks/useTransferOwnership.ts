@@ -22,7 +22,8 @@ export const useTransferOwnership = (appletId?: string) => {
       }),
     );
 
-    Mixpanel.track(MixpanelEventType.InvitationSent, {
+    Mixpanel.track({
+      action: MixpanelEventType.InvitationSent,
       [MixpanelProps.AppletId]: appletId,
     });
   };

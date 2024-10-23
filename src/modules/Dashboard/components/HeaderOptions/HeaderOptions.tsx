@@ -20,7 +20,7 @@ export const HeaderOptions = () => {
 
   const handleOpenExport = () => {
     setIsExportOpen(true);
-    Mixpanel.track(MixpanelEventType.ExportDataClick);
+    Mixpanel.track({ action: MixpanelEventType.ExportDataClick });
   };
 
   const handleCloseExport = () => {

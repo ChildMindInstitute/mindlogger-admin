@@ -24,6 +24,8 @@ export const useFeatureFlags = () => {
     const features: FeatureFlags = {};
     keys.forEach((key) => (features[key] = flags[FeatureFlagsKeys[key]]));
 
+    features.enableCahmiSubscaleScoring = true;
+
     return features;
   };
 

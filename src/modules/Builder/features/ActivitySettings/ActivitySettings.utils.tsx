@@ -32,7 +32,8 @@ export const getActivitySettings = ({
           hasError: hasActivityReportsErrors,
           'data-testid': `${dataTestid}-scores-and-reports`,
           onClick: () =>
-            Mixpanel.track(MixpanelEventType.ScoresAndReportBtnClick, {
+            Mixpanel.track({
+              action: MixpanelEventType.ScoresAndReportBtnClick,
               [MixpanelProps.AppletId]: appletId,
             }),
         },
@@ -45,7 +46,8 @@ export const getActivitySettings = ({
           tooltip: isNewActivity ? 'saveAndPublishFirst' : undefined,
           'data-testid': `${dataTestid}-report-config`,
           onClick: () =>
-            Mixpanel.track(MixpanelEventType.ActivityReportConfigurationClick, {
+            Mixpanel.track({
+              action: MixpanelEventType.ActivityReportConfigurationClick,
               [MixpanelProps.AppletId]: appletId,
             }),
         },

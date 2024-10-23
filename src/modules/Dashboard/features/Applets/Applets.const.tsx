@@ -38,7 +38,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(getBuilderAppletUrl(Path.NewApplet));
-      Mixpanel.track(MixpanelEventType.BuildAppletClick);
+      Mixpanel.track({ action: MixpanelEventType.BuildAppletClick });
     },
     'data-testid': 'dashboard-applets-add-applet-new',
   },
@@ -48,7 +48,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(page.library);
-      Mixpanel.track(MixpanelEventType.BrowseAppletLibraryClick);
+      Mixpanel.track({ action: MixpanelEventType.BrowseAppletLibraryClick });
     },
     'data-testid': 'dashboard-applets-add-applet-from-library',
   },

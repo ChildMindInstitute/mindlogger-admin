@@ -52,7 +52,8 @@ export class DataExportWorkersManager {
     if (allPagesProcessed && allWorkersIdle) {
       this.setDataIsExporting(false);
       this.handleExportPopupClose();
-      Mixpanel.track(MixpanelEventType.ExportDataSuccessful, {
+      Mixpanel.track({
+        action: MixpanelEventType.ExportDataSuccessful,
         [MixpanelProps.AppletId]: this.appletId,
       });
     }

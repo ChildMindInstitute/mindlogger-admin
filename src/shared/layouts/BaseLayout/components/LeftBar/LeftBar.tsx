@@ -36,7 +36,7 @@ export const LeftBar = () => {
 
   const handleLinkClick = (key: string) => {
     if (key === 'library') {
-      Mixpanel.track(MixpanelEventType.BrowseAppletLibraryClick);
+      Mixpanel.track({ action: MixpanelEventType.BrowseAppletLibraryClick });
     }
   };
 

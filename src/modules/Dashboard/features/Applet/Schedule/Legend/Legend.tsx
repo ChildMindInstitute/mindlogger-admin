@@ -65,7 +65,8 @@ export const Legend = ({
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleImportClick, {
+    Mixpanel.track({
+      action: MixpanelCalendarEvent[analyticsPrefix].ScheduleImportClick,
       [MixpanelProps.AppletId]: appletId,
     });
   };

@@ -49,7 +49,8 @@ export const ScheduleSetupPopup = ({
 
     setPopupVisible(false);
     navigate(generatePath(page.appletParticipantSchedule, { appletId: chosenAppletId, subjectId }));
-    Mixpanel.track(MixpanelEventType.ViewIndividualCalendarClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.ViewIndividualCalendarClick,
       [MixpanelProps.AppletId]: appletId,
     });
   }, [

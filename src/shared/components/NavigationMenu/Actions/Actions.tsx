@@ -32,7 +32,8 @@ export const Actions = ({ isCompact }: ActionsProps) => {
           <StyledSetting
             onClick={() => {
               setIsExportOpen(true);
-              Mixpanel.track(MixpanelEventType.ExportDataClick, {
+              Mixpanel.track({
+                action: MixpanelEventType.ExportDataClick,
                 [MixpanelProps.AppletId]: appletData?.id ?? appletId,
               });
             }}

@@ -365,7 +365,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     await handleSaveAndPublishFirstClick();
-    Mixpanel.track(MixpanelEventType.AppletSaveClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: appletId,
     });
 
@@ -418,7 +419,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track(MixpanelEventType.AppletSaveClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: appletId,
     });
 
@@ -452,7 +454,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
   const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
     await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track(MixpanelEventType.PasswordAddedSuccessfully, {
+      Mixpanel.track({
+        action: MixpanelEventType.PasswordAddedSuccessfully,
         [MixpanelProps.AppletId]: appletId,
       }),
     );
@@ -523,7 +526,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track(MixpanelEventType.AppletEditSuccessful, {
+      Mixpanel.track({
+        action: MixpanelEventType.AppletEditSuccessful,
         [MixpanelProps.AppletId]: appletId,
       });
 
@@ -541,7 +545,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+      Mixpanel.track({
+        action: MixpanelEventType.AppletCreatedSuccessfully,
         [MixpanelProps.AppletId]: appletId,
       });
 

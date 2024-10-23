@@ -161,7 +161,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
     resetEncryptionData();
 
-    Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+    Mixpanel.track({
+      action: MixpanelEventType.AppletCreatedSuccessfully,
       [MixpanelProps.AppletId]: currentAppletId,
     });
 

@@ -45,7 +45,7 @@ export const Cart = () => {
   const dataTestid = 'library-cart';
 
   const handleAddToBuilder = async () => {
-    Mixpanel.track(MixpanelEventType.AddToAppletBuilderClick);
+    Mixpanel.track({ action: MixpanelEventType.AddToAppletBuilderClick });
     if (!isAuthorized) {
       return setAuthPopupVisible(true);
     }

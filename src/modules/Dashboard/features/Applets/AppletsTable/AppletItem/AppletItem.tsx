@@ -114,7 +114,8 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
     });
     await fetchData();
     setPasswordPopupVisible(false);
-    Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+    Mixpanel.track({
+      action: MixpanelEventType.AppletCreatedSuccessfully,
       [MixpanelProps.AppletId]: appletId,
     });
   };
@@ -134,7 +135,8 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);
-        Mixpanel.track(MixpanelEventType.ViewGeneralCalendarClick, {
+        Mixpanel.track({
+          action: MixpanelEventType.ViewGeneralCalendarClick,
           [MixpanelProps.AppletId]: appletId,
         });
       }),
@@ -188,7 +190,8 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
         if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
-        Mixpanel.track(MixpanelEventType.AppletEditClick, {
+        Mixpanel.track({
+          action: MixpanelEventType.AppletEditClick,
           [MixpanelProps.AppletId]: appletId,
         });
       }),

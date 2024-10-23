@@ -57,7 +57,8 @@ export const getSettings = ({
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
           onClick: () =>
-            Mixpanel.track(MixpanelEventType.AppletEditClick, {
+            Mixpanel.track({
+              action: MixpanelEventType.AppletEditClick,
               [MixpanelProps.AppletId]: appletId,
             }),
         },

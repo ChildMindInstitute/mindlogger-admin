@@ -77,7 +77,8 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    Mixpanel.track(MixpanelEventType.AddActivityClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.AddActivityClick,
       [MixpanelProps.AppletId]: appletId,
     });
     const {
@@ -142,7 +143,8 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
-    Mixpanel.track(MixpanelEventType.ActivityEditClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.ActivityEditClick,
       [MixpanelProps.AppletId]: appletId,
     });
     const activityToEdit = activities[index];

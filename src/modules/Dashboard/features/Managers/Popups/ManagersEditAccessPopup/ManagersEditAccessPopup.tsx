@@ -33,7 +33,8 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
     isLoading: isEditAccessLoading,
   } = useAsync(editManagerAccessApi, () => {
     for (const { appletId, roles } of submittedAccessesRef.current) {
-      Mixpanel.track(MixpanelEventType.TeamMemberEditSuccessful, {
+      Mixpanel.track({
+        action: MixpanelEventType.TeamMemberEditSuccessful,
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Roles]: roles,
       });
@@ -106,7 +107,8 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
 
       submittedAccessesRef.current = accesses;
       for (const { appletId, roles } of accesses) {
-        Mixpanel.track(MixpanelEventType.EditTeamMemberFormSubmitted, {
+        Mixpanel.track({
+          action: MixpanelEventType.EditTeamMemberFormSubmitted,
           [MixpanelProps.AppletId]: appletId,
           [MixpanelProps.Roles]: roles,
         });

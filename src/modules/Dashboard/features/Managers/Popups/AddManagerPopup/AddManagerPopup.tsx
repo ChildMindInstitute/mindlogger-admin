@@ -106,7 +106,8 @@ export const AddManagerPopup = ({
       }),
     );
 
-    Mixpanel.track(MixpanelEventType.TeamMemberInvitedSuccessfully, {
+    Mixpanel.track({
+      action: MixpanelEventType.TeamMemberInvitedSuccessfully,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Roles]: [role],
     });
@@ -119,7 +120,8 @@ export const AddManagerPopup = ({
 
     const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
 
-    Mixpanel.track(MixpanelEventType.TeamMemberInvitationFormSubmitted, {
+    Mixpanel.track({
+      action: MixpanelEventType.TeamMemberInvitationFormSubmitted,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Roles]: [role],
     });

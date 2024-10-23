@@ -155,7 +155,8 @@ export const ImportSchedulePopup = ({
       await importSchedule({ appletId, body });
       onClose();
 
-      Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleImportSuccessful, {
+      Mixpanel.track({
+        action: MixpanelCalendarEvent[analyticsPrefix].ScheduleImportSuccessful,
         [MixpanelProps.AppletId]: appletId,
       });
     }

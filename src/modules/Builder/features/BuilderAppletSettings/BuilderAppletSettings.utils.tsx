@@ -132,7 +132,8 @@ export const getSettings = ({
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
           onClick: () =>
-            Mixpanel.track(MixpanelEventType.AppletReportConfigurationClick, {
+            Mixpanel.track({
+              action: MixpanelEventType.AppletReportConfigurationClick,
               [MixpanelProps.AppletId]: appletId,
             }),
         },

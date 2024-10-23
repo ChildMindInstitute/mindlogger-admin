@@ -55,7 +55,7 @@ export const SignUpForm = () => {
     if (signUp.fulfilled.match(result)) {
       navigateToLibrary(navigate);
 
-      Mixpanel.track(MixpanelEventType.SignUpSuccessful);
+      Mixpanel.track({ action: MixpanelEventType.SignUpSuccessful });
     }
 
     if (signUp.rejected.match(result)) {

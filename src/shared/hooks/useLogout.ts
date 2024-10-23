@@ -46,7 +46,7 @@ export const useLogout = () => {
       dispatch(alerts.actions.resetAlerts());
       dispatch(auth.actions.resetAuthorization());
 
-      Mixpanel.track(MixpanelEventType.Logout);
+      Mixpanel.track({ action: MixpanelEventType.Logout });
       Mixpanel.logout();
       await FeatureFlags.logout();
 

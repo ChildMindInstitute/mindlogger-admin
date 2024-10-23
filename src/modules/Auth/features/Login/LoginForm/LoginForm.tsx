@@ -71,7 +71,7 @@ export const LoginForm = () => {
         }
       }
 
-      Mixpanel.track(MixpanelEventType.LoginSuccessful);
+      Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
 
       clearSoftLock();
     }
@@ -124,11 +124,11 @@ export const LoginForm = () => {
     clearSoftLock();
     navigate(page.signUp);
 
-    Mixpanel.track(MixpanelEventType.CreateAccountOnLoginScreen);
+    Mixpanel.track({ action: MixpanelEventType.CreateAccountOnLoginScreen });
   };
 
   const handleLoginClick = () => {
-    Mixpanel.track(MixpanelEventType.LoginBtnClick);
+    Mixpanel.track({ action: MixpanelEventType.LoginBtnClick });
   };
 
   const handleResetPasswordClick = () => {

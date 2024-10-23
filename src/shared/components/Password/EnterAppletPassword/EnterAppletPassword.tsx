@@ -47,7 +47,8 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
           setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
         submitCallback();
 
-        Mixpanel.track(MixpanelEventType.PasswordAddedSuccessfully, {
+        Mixpanel.track({
+          action: MixpanelEventType.PasswordAddedSuccessfully,
           [MixpanelProps.AppletId]: appletId,
         });
       } else {

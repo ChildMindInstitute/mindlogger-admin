@@ -158,7 +158,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         await createEvent({ appletId, body });
       }
 
-      Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleSuccessful, {
+      Mixpanel.track({
+        action: MixpanelCalendarEvent[analyticsPrefix].ScheduleSuccessful,
         [MixpanelProps.AppletId]: appletId,
       });
     };

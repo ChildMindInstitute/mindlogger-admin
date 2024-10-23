@@ -61,7 +61,7 @@ export const EditEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick);
+    Mixpanel.track({ action: MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick });
   };
 
   const handleRemoveEvent = async () => {

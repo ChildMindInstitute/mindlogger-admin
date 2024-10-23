@@ -83,7 +83,8 @@ export const Overview = () => {
           <QuickStats
             {...mapResponseToQuickStatProps(data, {
               onPressAddParticipant: () => {
-                Mixpanel.track(MixpanelEventType.AddParticipantBtnClicked, {
+                Mixpanel.track({
+                  action: MixpanelEventType.AddParticipantBtnClicked,
                   [MixpanelProps.AppletId]: appletId,
                   [MixpanelProps.Via]: 'Applet - Overview',
                 });

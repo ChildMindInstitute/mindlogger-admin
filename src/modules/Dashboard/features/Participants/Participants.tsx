@@ -86,7 +86,8 @@ export const Participants = () => {
           return params;
         }
 
-        Mixpanel.track(MixpanelEventType.AddParticipantBtnClicked, {
+        Mixpanel.track({
+          action: MixpanelEventType.AddParticipantBtnClicked,
           [MixpanelProps.AppletId]: appletId,
           [MixpanelProps.Via]: 'Applet - Participants',
         });
@@ -180,7 +181,8 @@ export const Participants = () => {
     nickname,
     tag,
   }: HandleUpgradeAccount) => {
-    Mixpanel.track(MixpanelEventType.UpgradeToFullAccountClicked, {
+    Mixpanel.track({
+      action: MixpanelEventType.UpgradeToFullAccountClicked,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Via]: 'Applet - Participants',
     });
@@ -199,10 +201,10 @@ export const Participants = () => {
       const { respondentId, respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
-      const event = respondentId
-        ? MixpanelEventType.EditFullAccountClicked
-        : MixpanelEventType.EditLimitedAccountClicked;
-      Mixpanel.track(event, {
+      Mixpanel.track({
+        action: respondentId
+          ? MixpanelEventType.EditFullAccountClicked
+          : MixpanelEventType.EditLimitedAccountClicked,
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Via]: 'Applet - Participants',
       });
@@ -228,7 +230,7 @@ export const Participants = () => {
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
       setDataExportPopupVisible(true);
-      Mixpanel.track(MixpanelEventType.ExportDataClick);
+      Mixpanel.track({ action: MixpanelEventType.ExportDataClick });
     },
     removeParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};

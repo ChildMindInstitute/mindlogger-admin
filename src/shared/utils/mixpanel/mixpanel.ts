@@ -1,4 +1,4 @@
-import { MixpanelPayload, MixpanelAction } from 'shared/utils/mixpanel/mixpanel.types';
+import { MixpanelEvent } from 'shared/utils/mixpanel/mixpanel.types';
 
 import { isProduction, isStaging, isUat, isDev } from '../env';
 
@@ -24,10 +24,11 @@ export const Mixpanel = {
       });
     }
   },
-  track(action: MixpanelAction, payload?: MixpanelPayload) {
+  track(event: MixpanelEvent) {
     if (shouldEnableMixpanel) {
       import('mixpanel-browser').then(({ default: mixpanel }) => {
-        mixpanel.track(`[Admin] ${action}`, payload);
+        const { action, ...properties } = event;
+        mixpanel.track(`[Admin] ${action}`, properties);
       });
     }
   },

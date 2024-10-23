@@ -30,7 +30,8 @@ export const AppletDetails = () => {
 
   const handleNavigateToLibraryCart = () => {
     navigate(page.libraryCart);
-    Mixpanel.track(MixpanelEventType.GoToBasketClick, {
+    Mixpanel.track({
+      action: MixpanelEventType.GoToBasketClick,
       [MixpanelProps.AppletId]: appletId,
     });
   };
