@@ -1417,6 +1417,58 @@ export const mockedPhotoActivityItem = {
   id: '129a20df-5330-494c-8c4c-eb3c7847fe95',
 };
 
+export const mockedPhrasalTemplateActivityItem = {
+  key: undefined,
+  name: 'Item phrasalTemplate',
+  question: {
+    en: '',
+  },
+  responseType: 'phrasalTemplate',
+  responseValues: {
+    type: 'phrasalTemplate',
+    cardTitle: 'ItemPhraseBuilder',
+    phrases: [
+      {
+        image: null,
+        fields: [
+          {
+            type: 'sentence',
+            text: 'First sentence phrase builder',
+          },
+          {
+            type: 'item_response',
+            itemName: mockedParagraphTextActivityItem.name, // Reference the paragraph item's name
+            displayMode: 'sentence',
+            itemIndex: 0,
+          },
+          {
+            type: 'sentence',
+            text: 'Second sentence phrase builder',
+          },
+        ],
+      },
+    ],
+  },
+  config: {
+    type: 'phrasalTemplate',
+    removeBackButton: false,
+  },
+  conditionalLogic: undefined,
+  alerts: undefined,
+  allowEdit: true,
+  isHidden: false,
+  order: undefined,
+  id: '53b9e37a-ae36-43cd-9f58-d3ce6dc41c72',
+  settings: undefined,
+  _id: undefined,
+};
+
+export const mockedParagraphAndPhrasalTemplateActivities = [
+  // Directly using the mockedParagraphTextActivityItem
+  mockedParagraphTextActivityItem,
+  mockedPhrasalTemplateActivityItem,
+];
+
 export const mockedVideoActivityItem = {
   question: 'video_text',
   responseType: 'video',
