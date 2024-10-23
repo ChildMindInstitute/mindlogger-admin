@@ -2,7 +2,7 @@ import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { ApiResponseCodes } from 'api';
-import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
+import { mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import {
   AppletCreatedSuccessfullyEvent,
@@ -71,7 +71,12 @@ describe('useSaveAndPublishSetup hook', () => {
   describe('handleSaveAndPublishFirstClick', () => {
     describe('creating a new applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.post.mockResolvedValueOnce({ data: {} });
+        mockAxios.post.mockResolvedValueOnce({
+          status: ApiResponseCodes.SuccessfulResponse,
+          data: {
+            result: { ...mockedSimpleAppletFormData, id: mockedAppletId },
+          },
+        });
 
         const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
           preloadedState: getPreloadedState(),
@@ -88,7 +93,7 @@ describe('useSaveAndPublishSetup hook', () => {
         });
         expectMixpanelTrack({
           action: MixpanelEventType.AppletCreatedSuccessfully,
-          [MixpanelProps.AppletId]: undefined,
+          [MixpanelProps.AppletId]: mockedAppletId,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
         });
 
@@ -122,7 +127,7 @@ describe('useSaveAndPublishSetup hook', () => {
         mockAxios.put.mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
-            result: mockedApplet,
+            result: { ...mockedSimpleAppletFormData, id: mockedAppletId },
           },
         });
 
