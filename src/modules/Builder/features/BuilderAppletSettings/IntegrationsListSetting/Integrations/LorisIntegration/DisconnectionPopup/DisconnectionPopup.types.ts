@@ -12,5 +12,6 @@ export enum DisconnectionSteps {
 
 export type GetScreensProps = {
   onClose: () => void;
+  handleDisconnect: () => void;
   setStep: Dispatch<SetStateAction<DisconnectionSteps>>;
 };
