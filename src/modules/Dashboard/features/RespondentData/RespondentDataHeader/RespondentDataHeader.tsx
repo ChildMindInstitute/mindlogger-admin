@@ -36,10 +36,11 @@ export const RespondentDataHeader = ({
   activityOrFlow,
   subject,
 }: RespondentDataHeaderProps) => {
-  const { t } = useTranslation('app');
   const { appletId, activityId, activityFlowId } = useParams();
   const { featureFlags } = useFeatureFlags();
   const [showActivityAssign, setShowActivityAssign] = useState(false);
+  const { t } = useTranslation('app');
+  const i18nKeyInfix = activityOrFlow && 'activities' in activityOrFlow ? 'Flow' : 'Activity';
 
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
@@ -162,13 +163,20 @@ export const RespondentDataHeader = ({
               onExportSettingsClose={handleCloseExport}
             />
             {featureFlags.enableActivityAssign && (
-              <Button
-                variant="tonal"
-                onClick={handleAssignActivity}
-                data-testid={`${dataTestid}-assign-activity`}
+              <Tooltip
+                tooltipTitle={activityOrFlow?.autoAssign && t(`autoAssign${i18nKeyInfix}Disabled`)}
               >
-                {t('assign')}
-              </Button>
+                <span>
+                  <Button
+                    variant="tonal"
+                    onClick={handleAssignActivity}
+                    data-testid={`${dataTestid}-assign-activity`}
+                    disabled={activityOrFlow?.autoAssign}
+                  >
+                    {t('assign')}
+                  </Button>
+                </span>
+              </Tooltip>
             )}
             {canDoTakeNow && (
               <Tooltip tooltipTitle={!isWebSupported && t('activityIsMobileOnly')}>
