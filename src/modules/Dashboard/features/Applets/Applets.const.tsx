@@ -3,7 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
-import { getBuilderAppletUrl, Mixpanel, Path } from 'shared/utils';
+import { getBuilderAppletUrl, Mixpanel, Path, MixpanelEventType } from 'shared/utils';
 import { page } from 'resources';
 
 export enum AppletsColumnsWidth {
@@ -38,7 +38,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(getBuilderAppletUrl(Path.NewApplet));
-      Mixpanel.track('Build Applet click');
+      Mixpanel.track(MixpanelEventType.BuildAppletClick);
     },
     'data-testid': 'dashboard-applets-add-applet-new',
   },
@@ -48,7 +48,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(page.library);
-      Mixpanel.track('Browse applet library click');
+      Mixpanel.track(MixpanelEventType.BrowseAppletLibraryClick);
     },
     'data-testid': 'dashboard-applets-add-applet-from-library',
   },

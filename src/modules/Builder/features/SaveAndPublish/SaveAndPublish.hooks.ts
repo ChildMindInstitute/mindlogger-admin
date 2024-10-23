@@ -19,6 +19,8 @@ import {
   getSanitizedContent,
   getUpdatedAppletUrl,
   Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
   SettingParam,
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
@@ -363,8 +365,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     await handleSaveAndPublishFirstClick();
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelEventType.AppletSaveClick, {
+      [MixpanelProps.AppletId]: appletId,
     });
 
     if (isLogoutInProgress && !isNewApplet) {
@@ -416,8 +418,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelEventType.AppletSaveClick, {
+      [MixpanelProps.AppletId]: appletId,
     });
 
     await sendRequestWithPasswordCheck();
@@ -450,8 +452,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
   const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
     await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('Password added successfully', {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelEventType.PasswordAddedSuccessfully, {
+        [MixpanelProps.AppletId]: appletId,
       }),
     );
     setIsPasswordPopupOpened(false);
@@ -521,8 +523,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet edit successful', {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelEventType.AppletEditSuccessful, {
+        [MixpanelProps.AppletId]: appletId,
       });
 
       showSuccessBanner(true);
@@ -539,8 +541,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully', {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+        [MixpanelProps.AppletId]: appletId,
       });
 
       showSuccessBanner();

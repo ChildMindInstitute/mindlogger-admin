@@ -21,6 +21,7 @@ import {
   joinWihComma,
   Mixpanel,
   MixpanelProps,
+  MixpanelEventType,
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
@@ -85,7 +86,7 @@ export const Participants = () => {
           return params;
         }
 
-        Mixpanel.track('Add Participant button clicked', {
+        Mixpanel.track(MixpanelEventType.AddParticipantBtnClicked, {
           [MixpanelProps.AppletId]: appletId,
           [MixpanelProps.Via]: 'Applet - Participants',
         });
@@ -179,7 +180,7 @@ export const Participants = () => {
     nickname,
     tag,
   }: HandleUpgradeAccount) => {
-    Mixpanel.track('Upgrade to Full Account clicked', {
+    Mixpanel.track(MixpanelEventType.UpgradeToFullAccountClicked, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Via]: 'Applet - Participants',
     });
@@ -198,7 +199,9 @@ export const Participants = () => {
       const { respondentId, respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
-      const event = respondentId ? 'Edit Full Account clicked' : 'Edit Limited Account clicked';
+      const event = respondentId
+        ? MixpanelEventType.EditFullAccountClicked
+        : MixpanelEventType.EditLimitedAccountClicked;
       Mixpanel.track(event, {
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Via]: 'Applet - Participants',
@@ -225,7 +228,7 @@ export const Participants = () => {
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
       setDataExportPopupVisible(true);
-      Mixpanel.track('Export Data click');
+      Mixpanel.track(MixpanelEventType.ExportDataClick);
     },
     removeParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};

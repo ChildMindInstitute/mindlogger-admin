@@ -12,6 +12,8 @@ import {
   getPrivateKey,
   Mixpanel,
   publicEncrypt,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
@@ -159,8 +161,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
     resetEncryptionData();
 
-    Mixpanel.track('Applet Created Successfully', {
-      'Applet ID': currentAppletId,
+    Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+      [MixpanelProps.AppletId]: currentAppletId,
     });
 
     dispatch(

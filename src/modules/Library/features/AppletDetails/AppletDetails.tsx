@@ -9,7 +9,7 @@ import { getPublishedAppletApi } from 'modules/Library/api';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { library } from 'modules/Library/state';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import { Applet, AppletUiType } from '../Applet';
 
@@ -30,8 +30,8 @@ export const AppletDetails = () => {
 
   const handleNavigateToLibraryCart = () => {
     navigate(page.libraryCart);
-    Mixpanel.track('Go to Basket click', {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelEventType.GoToBasketClick, {
+      [MixpanelProps.AppletId]: appletId,
     });
   };
 

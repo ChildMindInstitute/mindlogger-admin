@@ -30,6 +30,8 @@ import {
   isManagerOrOwner,
   joinWihComma,
   Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
@@ -189,8 +191,8 @@ export const Respondents = () => {
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
       setDataExportPopupVisible(true);
-      Mixpanel.track('Export Data click', {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelEventType.ExportDataClick, {
+        [MixpanelProps.AppletId]: appletId,
       });
     },
     viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => {

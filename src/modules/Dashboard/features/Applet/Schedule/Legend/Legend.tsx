@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { exportTemplate, Mixpanel } from 'shared/utils';
+import { exportTemplate, Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
 
@@ -65,8 +65,8 @@ export const Legend = ({
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track(`${analyticsPrefix} Schedule Import click`, {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleImportClick, {
+      [MixpanelProps.AppletId]: appletId,
     });
   };
 

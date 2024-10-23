@@ -8,7 +8,7 @@ import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/
 import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
-import { MixpanelProps, Mixpanel, getErrorMessage } from 'shared/utils';
+import { MixpanelProps, Mixpanel, getErrorMessage, MixpanelEventType } from 'shared/utils';
 import { ApiLanguages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -85,7 +85,7 @@ export const AddParticipantPopup = ({
       }),
     );
 
-    Mixpanel.track('Full Account invitation created successfully', {
+    Mixpanel.track(MixpanelEventType.FullAccountInvitationCreated, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
@@ -107,7 +107,7 @@ export const AddParticipantPopup = ({
       }),
     );
 
-    Mixpanel.track('Limited Account created successfully', {
+    Mixpanel.track(MixpanelEventType.LimitedAccountCreated, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
     });
@@ -127,7 +127,7 @@ export const AddParticipantPopup = ({
     const { email, nickname, tag, ...rest } = values;
 
     if (isFullAccount) {
-      Mixpanel.track('Full Account invitation form submitted', {
+      Mixpanel.track(MixpanelEventType.FullAccountInvitationFormSubmitted, {
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
@@ -146,7 +146,7 @@ export const AddParticipantPopup = ({
         },
       });
     } else {
-      Mixpanel.track('Add Limited Account form submitted', {
+      Mixpanel.track(MixpanelEventType.AddLimitedAccountFormSubmitted, {
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });

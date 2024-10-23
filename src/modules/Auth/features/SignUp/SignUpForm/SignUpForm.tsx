@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 
@@ -55,7 +55,7 @@ export const SignUpForm = () => {
     if (signUp.fulfilled.match(result)) {
       navigateToLibrary(navigate);
 
-      Mixpanel.track('Signup Successful');
+      Mixpanel.track(MixpanelEventType.SignUpSuccessful);
     }
 
     if (signUp.rejected.match(result)) {

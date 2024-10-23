@@ -7,7 +7,13 @@ import { EmptyState, Modal, Spinner } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { Roles } from 'shared/consts';
-import { Mixpanel, MixpanelProps, getErrorMessage, isManagerOrOwner } from 'shared/utils';
+import {
+  Mixpanel,
+  MixpanelProps,
+  getErrorMessage,
+  isManagerOrOwner,
+  MixpanelEventType,
+} from 'shared/utils';
 import { ApiLanguages, postAppletInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -100,7 +106,7 @@ export const AddManagerPopup = ({
       }),
     );
 
-    Mixpanel.track('Team Member account invitation created successfully', {
+    Mixpanel.track(MixpanelEventType.TeamMemberInvitedSuccessfully, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Roles]: [role],
     });
@@ -113,7 +119,7 @@ export const AddManagerPopup = ({
 
     const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
 
-    Mixpanel.track('Team Member account invitation form submitted', {
+    Mixpanel.track(MixpanelEventType.TeamMemberInvitationFormSubmitted, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Roles]: [role],
     });

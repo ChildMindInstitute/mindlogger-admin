@@ -14,7 +14,7 @@ import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { applet } from 'shared/state';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import {
   deleteIndividualEventsApi,
@@ -155,8 +155,8 @@ export const ImportSchedulePopup = ({
       await importSchedule({ appletId, body });
       onClose();
 
-      Mixpanel.track(`${analyticsPrefix} Schedule import successful`, {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleImportSuccessful, {
+        [MixpanelProps.AppletId]: appletId,
       });
     }
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { getBuilderAppletUrl } from 'shared/utils/urlGenerator';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import {
   StyledAppletSettingsButton,
@@ -17,8 +17,8 @@ export const EditAppletSetting = () => {
 
   const handleClick = () => {
     navigate(getBuilderAppletUrl(appletId || ''));
-    Mixpanel.track('Applet edit click', {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelEventType.AppletEditClick, {
+      [MixpanelProps.AppletId]: appletId,
     });
   };
 

@@ -7,7 +7,7 @@ import { ObjectSchema } from 'yup';
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { getErrorMessage, Mixpanel } from 'shared/utils';
+import { getErrorMessage, Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { applet, workspaces } from 'shared/state';
@@ -158,8 +158,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         await createEvent({ appletId, body });
       }
 
-      Mixpanel.track(`${analyticsPrefix} Schedule successful`, {
-        'Applet ID': appletId,
+      Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleSuccessful, {
+        [MixpanelProps.AppletId]: appletId,
       });
     };
 

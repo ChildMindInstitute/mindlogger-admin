@@ -21,6 +21,8 @@ import {
   getDateInUserTimezone,
   getEncryptionToServer,
   Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
@@ -112,15 +114,16 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
     });
     await fetchData();
     setPasswordPopupVisible(false);
-    Mixpanel.track('Applet Created Successfully', {
-      'Applet ID': appletId,
+    Mixpanel.track(MixpanelEventType.AppletCreatedSuccessfully, {
+      [MixpanelProps.AppletId]: appletId,
     });
   };
 
-  const checkAppletEncryption = (callback: () => void) =>
-    hasOwnerRole(workspaceRoles?.data?.[appletId]?.[0]) && !item.encryption
-      ? setPasswordPopupVisible(true)
-      : callback();
+  const checkAppletEncryption = (callback: () => void) => {
+    const itHasOwnerRole = hasOwnerRole(workspaceRoles?.data?.[appletId]?.[0]);
+
+    return itHasOwnerRole && !item.encryption ? setPasswordPopupVisible(true) : callback();
+  };
 
   const actions = {
     removeFromFolder: async () => {
@@ -131,8 +134,8 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);
-        Mixpanel.track('View General calendar click', {
-          'Applet ID': appletId,
+        Mixpanel.track(MixpanelEventType.ViewGeneralCalendarClick, {
+          [MixpanelProps.AppletId]: appletId,
         });
       }),
     deleteAction: () =>
@@ -185,8 +188,8 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
         if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
-        Mixpanel.track('Applet edit click', {
-          'Applet ID': appletId,
+        Mixpanel.track(MixpanelEventType.AppletEditClick, {
+          [MixpanelProps.AppletId]: appletId,
         });
       }),
   };

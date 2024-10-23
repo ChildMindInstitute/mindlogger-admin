@@ -15,7 +15,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel, checkIfFullAccess, getIsWebSupported } from 'shared/utils';
+import { Mixpanel, checkIfFullAccess, getIsWebSupported, MixpanelEventType } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
@@ -90,7 +90,7 @@ export const RespondentDataHeader = ({
 
   const handleOpenExport = () => {
     setIsExportOpen(true);
-    Mixpanel.track('Export Data click');
+    Mixpanel.track(MixpanelEventType.ExportDataClick);
   };
 
   const handleCloseExport = () => {

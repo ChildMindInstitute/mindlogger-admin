@@ -10,7 +10,13 @@ import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editSubjectApi } from 'api';
-import { MixpanelProps, Mixpanel, falseReturnFunc, getErrorMessage } from 'shared/utils';
+import {
+  MixpanelProps,
+  Mixpanel,
+  falseReturnFunc,
+  getErrorMessage,
+  MixpanelEventType,
+} from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 
@@ -50,8 +56,8 @@ export const EditRespondentPopup = ({
     ({ data }) => {
       const { userId, appletId, tag } = data?.result ?? {};
       const event = userId
-        ? 'Full Account edited successfully'
-        : 'Limited Account edited successfully';
+        ? MixpanelEventType.FullAccountEditedSuccessfully
+        : MixpanelEventType.LimitedAccountEditedSuccessfully;
       Mixpanel.track(event, {
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
@@ -73,8 +79,8 @@ export const EditRespondentPopup = ({
     const { appletId, respondentId, subjectId } = chosenAppletData;
 
     const event = respondentId
-      ? 'Edit Full Account form submitted'
-      : 'Edit Limited Account form submitted';
+      ? MixpanelEventType.EditFullAccountFormSubmitted
+      : MixpanelEventType.EditLimitedAccountFormSubmitted;
     Mixpanel.track(event, {
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null

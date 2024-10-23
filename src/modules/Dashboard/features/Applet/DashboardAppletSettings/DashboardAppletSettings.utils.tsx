@@ -10,7 +10,14 @@ import {
   VersionHistorySetting,
   ShareAppletSetting,
 } from 'shared/features/AppletSettings';
-import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared/utils';
+import {
+  Mixpanel,
+  SettingParam,
+  isManagerOrOwner,
+  checkIfCanEdit,
+  MixpanelEventType,
+  MixpanelProps,
+} from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
 
 import { GetSettings } from './DashboardAppletSettings.types';
@@ -50,8 +57,8 @@ export const getSettings = ({
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
           onClick: () =>
-            Mixpanel.track('Applet edit click', {
-              'Applet ID': appletId,
+            Mixpanel.track(MixpanelEventType.AppletEditClick, {
+              [MixpanelProps.AppletId]: appletId,
             }),
         },
         // Description: "Download Schema" logic is hidden until it will be used in future features

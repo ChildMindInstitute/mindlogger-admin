@@ -7,7 +7,7 @@ import { page } from 'resources';
 import { Svg } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
-import { Mixpanel, checkIfCanAccessData, checkIfCanEdit } from 'shared/utils';
+import { Mixpanel, checkIfCanAccessData, checkIfCanEdit, MixpanelEventType } from 'shared/utils';
 import { workspaces } from 'shared/state';
 
 export const HeaderOptions = () => {
@@ -20,7 +20,7 @@ export const HeaderOptions = () => {
 
   const handleOpenExport = () => {
     setIsExportOpen(true);
-    Mixpanel.track('Export Data click');
+    Mixpanel.track(MixpanelEventType.ExportDataClick);
   };
 
   const handleCloseExport = () => {

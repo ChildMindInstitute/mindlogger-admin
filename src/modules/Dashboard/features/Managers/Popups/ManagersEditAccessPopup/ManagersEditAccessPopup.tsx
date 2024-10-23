@@ -8,7 +8,7 @@ import { Roles } from 'shared/consts';
 import { banners, workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editManagerAccessApi, removeManagerAccessApi } from 'api';
-import { Mixpanel, MixpanelProps, getErrorMessage, pluck } from 'shared/utils';
+import { Mixpanel, MixpanelProps, getErrorMessage, pluck, MixpanelEventType } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 
 import { Applet } from './Applet';
@@ -33,7 +33,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
     isLoading: isEditAccessLoading,
   } = useAsync(editManagerAccessApi, () => {
     for (const { appletId, roles } of submittedAccessesRef.current) {
-      Mixpanel.track('Team Member edited successfully', {
+      Mixpanel.track(MixpanelEventType.TeamMemberEditSuccessful, {
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.Roles]: roles,
       });
@@ -106,7 +106,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
 
       submittedAccessesRef.current = accesses;
       for (const { appletId, roles } of accesses) {
-        Mixpanel.track('Edit Team Member form submitted', {
+        Mixpanel.track(MixpanelEventType.EditTeamMemberFormSubmitted, {
           [MixpanelProps.AppletId]: appletId,
           [MixpanelProps.Roles]: roles,
         });

@@ -8,7 +8,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelCalendarEvent } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { StyledFlexSpaceBetween } from 'shared/styles';
 
@@ -61,7 +61,7 @@ export const EditEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
+    Mixpanel.track(MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick);
   };
 
   const handleRemoveEvent = async () => {

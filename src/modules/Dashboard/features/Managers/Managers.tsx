@@ -26,6 +26,7 @@ import {
   checkIfFullAccess,
   isManagerOrOwner,
   joinWihComma,
+  MixpanelEventType,
 } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
@@ -127,7 +128,7 @@ export const Managers = () => {
       if (appletId) {
         analyticsPayload[MixpanelProps.AppletId] = appletId;
       }
-      Mixpanel.track('Edit Team Member clicked', analyticsPayload);
+      Mixpanel.track(MixpanelEventType.EditTeamMemberClicked, analyticsPayload);
 
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
@@ -154,7 +155,7 @@ export const Managers = () => {
     if (appletId) {
       analyticsPayload[MixpanelProps.AppletId] = appletId;
     }
-    Mixpanel.track('Add Team Member button clicked', analyticsPayload);
+    Mixpanel.track(MixpanelEventType.AddTeamMemberBtnClicked, analyticsPayload);
 
     setAddManagerPopupVisible(true);
   };

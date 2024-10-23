@@ -11,7 +11,14 @@ import {
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
-import { Mixpanel, SettingParam, isManagerOrOwner, checkIfCanEdit } from 'shared/utils';
+import {
+  Mixpanel,
+  SettingParam,
+  isManagerOrOwner,
+  checkIfCanEdit,
+  MixpanelEventType,
+  MixpanelProps,
+} from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
@@ -125,8 +132,8 @@ export const getSettings = ({
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
           onClick: () =>
-            Mixpanel.track('Applet - Report Configuration Click', {
-              'Applet ID': appletId,
+            Mixpanel.track(MixpanelEventType.AppletReportConfigurationClick, {
+              [MixpanelProps.AppletId]: appletId,
             }),
         },
       ],

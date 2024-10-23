@@ -6,7 +6,7 @@ import { ApiResponseCodes } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
@@ -46,7 +46,7 @@ export const useLogout = () => {
       dispatch(alerts.actions.resetAlerts());
       dispatch(auth.actions.resetAuthorization());
 
-      Mixpanel.track('Logout');
+      Mixpanel.track(MixpanelEventType.Logout);
       Mixpanel.logout();
       await FeatureFlags.logout();
 

@@ -22,6 +22,8 @@ import {
   getHighlightedText,
   Mixpanel,
   toggleBooleanState,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
@@ -90,8 +92,8 @@ export const Applet = ({
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
 
-    Mixpanel.track('Add to Basket click', {
-      'Applet ID': id,
+    Mixpanel.track(MixpanelEventType.AddToBasketClick, {
+      [MixpanelProps.AppletId]: id,
     });
   };
 
