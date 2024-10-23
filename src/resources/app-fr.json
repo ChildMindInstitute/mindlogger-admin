@@ -926,7 +926,6 @@
       "appletAlreadyTied": "Cet applet est déjà lié à un projet LORIS",
       "saveProjectFailed": "Échec de l'enregistrement du projet"
     }
-
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
@@ -1133,6 +1132,10 @@
   "photoResponseDescription": "Le participant pourra prendre ou uploader une photo.",
   "photoResponseTitle": "Réponse avec Photo",
   "phrasalTemplate": "Constructeur de phrases",
+  "phrasalTemplatePreviewPopup": {
+    "title": "Aperçu de la phrase {{index}}",
+    "responsePlaceholder": "[{{itemName}} réponse]"
+  },
   "phrasalTemplateRemovePopup": {
     "title": "Supprimer la phrase",
     "areYouSure": "Êtes-vous sûr de vouloir supprimer cette phrase? Cette action ne peut pas être annulée.",

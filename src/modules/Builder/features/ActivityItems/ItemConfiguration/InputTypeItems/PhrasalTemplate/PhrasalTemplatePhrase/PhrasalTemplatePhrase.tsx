@@ -18,6 +18,7 @@ import {
 } from 'shared/styles';
 import { DndDroppable } from 'modules/Builder/components';
 import { RemovePhrasePopup } from 'modules/Builder/components/RemovePhrasePopup';
+import { PreviewPhrasePopup } from 'modules/Builder/components/PreviewPhrasePopup/PreviewPhrasePopup';
 
 import { PhrasalTemplateField } from '../PhrasalTemplateField';
 import { PhrasalTemplateImageField } from '../PhrasalTemplateImageField';
@@ -39,6 +40,7 @@ export const PhrasalTemplatePhrase = ({
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
   const [removePopupOpen, setRemovePopupOpen] = useState(false);
+  const [previewPopupOpen, setPreviewPopupOpen] = useState(false);
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const phraseFieldsName = `${name}.fields`;
@@ -88,7 +90,7 @@ export const PhrasalTemplatePhrase = ({
   const handlePreviewPhrase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
-    console.warn('TODO: M2-7164 — Preview Phrase');
+    setPreviewPopupOpen(true);
   };
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ destination, source }) => {
@@ -139,7 +141,7 @@ export const PhrasalTemplatePhrase = ({
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
               variant="text"
-              disabled={formState.isDirty || formState.isSubmitting || !formState.isValid}
+              disabled={formState.isSubmitting || !formState.isValid}
             >
               <Svg aria-hidden height={18} id="notes" width={18} />
               {t('phrasalTemplateItem.btnPreviewPhrase')}
@@ -244,6 +246,15 @@ export const PhrasalTemplatePhrase = ({
         open={removePopupOpen}
         onClose={() => setRemovePopupOpen(false)}
         onRemove={handleRemovePhrase}
+      />
+
+      <PreviewPhrasePopup
+        title={t('phrasalTemplatePreviewPopup.title', { index: index + 1 })}
+        fields={fields}
+        name={phraseFieldsName}
+        imageUrl={imageFieldValue}
+        open={previewPopupOpen}
+        onClose={() => setPreviewPopupOpen(false)}
       />
     </StyledAccordion>
   );
