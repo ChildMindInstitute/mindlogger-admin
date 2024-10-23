@@ -28,6 +28,8 @@ import {
   mockedNumberSelectActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
+  mockedPhrasalTemplateActivityItem,
+  mockedParagraphTextActivityItem,
 } from 'shared/mock';
 import { SettingParam, isSystemItem } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
@@ -115,6 +117,8 @@ const mockedAppletWithAllItemTypes = {
         mockedSingleActivityItemWithoutScores,
         mockedMultiActivityItemWithoutScores,
         mockedSliderActivityItemWithoutScores,
+        mockedPhrasalTemplateActivityItem,
+        mockedParagraphTextActivityItem,
       ],
     },
   ],

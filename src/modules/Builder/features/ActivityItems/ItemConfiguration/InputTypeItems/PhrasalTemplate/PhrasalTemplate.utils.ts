@@ -25,6 +25,7 @@ const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.SliderRows,
+  ItemResponseType.ParagraphText,
 ];
 
 const DEFAULT_PHRASE: PhrasalTemplateResponseValues['phrases'][number] = {
