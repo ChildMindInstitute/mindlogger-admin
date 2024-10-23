@@ -351,9 +351,22 @@ export type DrawingResponseValues = {
   } | null;
 };
 
+export type PhrasalTemplateFieldDisplayMode =
+  | 'bullet_list'
+  | 'bullet_list_option_row'
+  | 'bullet_list_text_row'
+  | 'sentence'
+  | 'sentence_option_row'
+  | 'sentence_row_option';
+
 export type PhrasalTemplateField =
   | { type: 'sentence'; text: string }
-  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number }
+  | {
+      type: 'item_response';
+      itemName: string;
+      displayMode: PhrasalTemplateFieldDisplayMode;
+      itemIndex: number;
+    }
   | { type: 'line_break' };
 
 export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
