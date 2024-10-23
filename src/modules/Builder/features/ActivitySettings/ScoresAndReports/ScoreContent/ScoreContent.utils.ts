@@ -96,7 +96,9 @@ export const getScoreRange = ({
     totalMaxScore = 0;
   const count = items.length;
 
-  const lookupTableScores = lookupTable?.map((it) => Number(it.score) || 0) ?? [NaN];
+  const lookupTableScores = lookupTable
+    ?.map((it) => Number(it.score) || NaN)
+    ?.filter((score) => !isNaN(score)) ?? [NaN];
   const lookupTableMinScore = Math.min(...lookupTableScores);
   const lookupTableMaxScore = Math.max(...lookupTableScores);
 
