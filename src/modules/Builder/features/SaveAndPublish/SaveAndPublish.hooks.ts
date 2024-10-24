@@ -19,7 +19,9 @@ import {
   getSanitizedContent,
   getUpdatedAppletUrl,
   Mixpanel,
+  MixpanelProps,
   SettingParam,
+  trackAppletSave,
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
@@ -362,10 +364,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const handleSaveChangesSaveSubmit = async () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
-    await handleSaveAndPublishFirstClick();
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
-    });
+    const result = await handleSaveAndPublishFirstClick();
+    trackAppletSave({ action: 'Applet Save click', applet: result.payload.data.result, appletId });
 
     if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
@@ -416,11 +416,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track('Applet Save click', {
-      'Applet ID': appletId,
-    });
+    trackAppletSave({ action: 'Applet Save click', applet: getAppletData(), appletId });
 
-    await sendRequestWithPasswordCheck();
+    return await sendRequestWithPasswordCheck();
   };
 
   const handlePublishProcessOnClose = () => {
@@ -441,19 +439,18 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    await sendRequest();
+    return await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (password?: string) => {
-    await sendRequest(password);
-  };
+  const handleAppletPasswordSubmit = (password?: string) => sendRequest(password);
 
   const handlePasswordSubmit = async (ref?: AppletPasswordRefType) => {
-    await handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('Password added successfully', {
-        'Applet ID': appletId,
-      }),
-    );
+    const appletData = await handleAppletPasswordSubmit(ref?.current?.password);
+
+    Mixpanel.track('Password added successfully', {
+      [MixpanelProps.AppletId]: appletData.id,
+    });
+
     setIsPasswordPopupOpened(false);
 
     if (isLogoutInProgress) {
@@ -521,9 +518,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet edit successful', {
-        'Applet ID': appletId,
-      });
+      trackAppletSave({ action: 'Applet edit successful', applet: result.payload.data.result });
 
       showSuccessBanner(true);
 
@@ -536,11 +531,14 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       if (appletId && ownerId) {
         navigateToApplet(appletId);
       }
+
+      return result.payload.data.result;
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully', {
-        'Applet ID': appletId,
+      trackAppletSave({
+        action: 'Applet Created Successfully',
+        applet: result.payload.data.result,
       });
 
       showSuccessBanner();
@@ -564,6 +562,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       if (createdAppletId && ownerId) {
         navigateToApplet(createdAppletId);
       }
+
+      return result.payload.data.result;
     }
   };
 
