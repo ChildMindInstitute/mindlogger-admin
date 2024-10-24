@@ -1,8 +1,20 @@
 import { SingleApplet } from 'redux/modules';
 import { ItemResponseType } from 'shared/consts';
 
-import { AppletSaveEvent, MixpanelAppletSaveEventType, MixpanelProps } from './mixpanel.types';
+import {
+  AppletSaveEvent,
+  MixpanelAppletSaveEventType,
+  MixpanelEvent,
+  MixpanelFeature,
+  MixpanelProps,
+  WithFeature,
+} from './mixpanel.types';
 import { Mixpanel } from './mixpanel';
+
+export const addFeatureToEvent = (event: WithFeature<MixpanelEvent>, feature: MixpanelFeature) => {
+  const features = event[MixpanelProps.Feature] ?? [];
+  event[MixpanelProps.Feature] = [...features, feature];
+};
 
 export const trackAppletSave = ({
   action,
@@ -28,7 +40,7 @@ export const trackAppletSave = ({
   };
 
   if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
-    event[MixpanelProps.Feature] = 'SSI';
+    addFeatureToEvent(event, MixpanelFeature.SSI);
   }
 
   Mixpanel.track(event);
