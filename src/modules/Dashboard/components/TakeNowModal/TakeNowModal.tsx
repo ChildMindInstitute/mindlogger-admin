@@ -120,8 +120,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         | TakeNowClickEvent,
       newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
-      event[MixpanelProps.AppletId] = appletId;
-      event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+      event[MixpanelProps.AppletId] = event[MixpanelProps.AppletId] ?? appletId;
+      event[MixpanelProps.MultiInformantAssessmentId] =
+        event[MixpanelProps.MultiInformantAssessmentId] ?? multiInformantAssessmentId;
       addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;

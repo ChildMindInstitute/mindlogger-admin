@@ -4,14 +4,13 @@ import { ItemResponseType } from 'shared/consts';
 import {
   AppletSaveEvent,
   MixpanelAppletSaveEventType,
-  MixpanelEvent,
   MixpanelFeature,
   MixpanelProps,
   WithFeature,
 } from './mixpanel.types';
 import { Mixpanel } from './mixpanel';
 
-export const addFeatureToEvent = (event: WithFeature<MixpanelEvent>, feature: MixpanelFeature) => {
+export const addFeatureToEvent = (event: WithFeature, feature: MixpanelFeature) => {
   const features = event[MixpanelProps.Feature] ?? [];
   event[MixpanelProps.Feature] = [...features, feature];
 };
