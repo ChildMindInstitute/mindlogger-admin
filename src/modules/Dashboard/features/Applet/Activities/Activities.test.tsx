@@ -36,7 +36,7 @@ import {
   takeNowModalTestId,
   toggleSelfReportCheckbox,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
-import { MixpanelProps } from 'shared/utils';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { Activities } from './Activities';
 
@@ -356,7 +356,10 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await openTakeNowModal(testId);
 
-      expectMixpanelTrack('Take Now click', { [MixpanelProps.Via]: 'Applet - Activities' });
+      expectMixpanelTrack({
+        action: MixpanelEventType.TakeNowClick,
+        [MixpanelProps.Via]: 'Applet - Activities',
+      });
 
       const sourceInputElement = screen
         .getByTestId(sourceSubjectDropdownTestId(testId))
@@ -368,8 +371,9 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       selectParticipant(testId, 'target', mockedRespondent.details[0].subjectId);
 
-      expectMixpanelTrack('"Who are the responses about" dropdown opened');
-      expectMixpanelTrack('"Who are the responses about" selection changed', {
+      expectMixpanelTrack({ action: MixpanelEventType.ResponsesAboutDropdownOpened });
+      expectMixpanelTrack({
+        action: MixpanelEventType.ResponsesAboutSelectionChanged,
         [MixpanelProps.TargetAccountType]: 'Full',
       });
 
@@ -379,7 +383,8 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       fireEvent.click(submitButton);
 
-      expectMixpanelTrack('Multi-informant Start Activity click', {
+      expectMixpanelTrack({
+        action: MixpanelEventType.MultiInformantStartActivityClick,
         [MixpanelProps.SourceAccountType]: 'Team',
         [MixpanelProps.TargetAccountType]: 'Full',
         [MixpanelProps.InputAccountType]: 'Team',
@@ -494,8 +499,9 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       selectParticipant(testId, 'source', mockedRespondent.details[0].subjectId);
 
-      expectMixpanelTrack('"Who will be providing responses" dropdown opened');
-      expectMixpanelTrack('"Who will be providing responses" selection changed', {
+      expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
+      expectMixpanelTrack({
+        action: MixpanelEventType.ProvidingResponsesSelectionChanged,
         [MixpanelProps.SourceAccountType]: 'Full',
       });
 
@@ -611,14 +617,16 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
 
-      expectMixpanelTrack('"Who will be providing responses" dropdown opened');
-      expectMixpanelTrack('"Who will be providing responses" selection changed', {
+      expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
+      expectMixpanelTrack({
+        action: MixpanelEventType.ProvidingResponsesSelectionChanged,
         [MixpanelProps.SourceAccountType]: 'Team',
       });
 
       await toggleSelfReportCheckbox(testId);
 
-      expectMixpanelTrack('Own responses checkbox toggled', {
+      expectMixpanelTrack({
+        action: MixpanelEventType.OwnResponsesCheckboxToggled,
         [MixpanelProps.IsSelfReporting]: false,
       });
 
@@ -632,7 +640,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       fireEvent.mouseDown(inputElement);
 
-      expectMixpanelTrack('"Who will be inputting the responses" dropdown opened');
+      expectMixpanelTrack({ action: MixpanelEventType.InputtingResponsesDropdownOpened });
 
       const options = within(getByRole('listbox')).queryAllByRole('option');
 
@@ -649,7 +657,8 @@ describe('Dashboard > Applet > Activities screen', () => {
 
       selectParticipant(testId, 'loggedin', mockedOwnerRespondent.details[0].subjectId);
 
-      expectMixpanelTrack('"Who will be inputting the responses" selection changed', {
+      expectMixpanelTrack({
+        action: MixpanelEventType.InputtingResponsesSelectionChanged,
         [MixpanelProps.InputAccountType]: 'Team',
       });
     });
@@ -771,8 +780,9 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
 
-        expectMixpanelTrack('"Who will be providing responses" dropdown opened');
-        expectMixpanelTrack('"Who will be providing responses" selection changed', {
+        expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
+        expectMixpanelTrack({
+          action: MixpanelEventType.ProvidingResponsesSelectionChanged,
           [MixpanelProps.SourceAccountType]: 'Team',
         });
 
@@ -888,14 +898,16 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
 
-        expectMixpanelTrack('"Who will be providing responses" dropdown opened');
-        expectMixpanelTrack('"Who will be providing responses" selection changed', {
+        expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
+        expectMixpanelTrack({
+          action: MixpanelEventType.ProvidingResponsesSelectionChanged,
           [MixpanelProps.SourceAccountType]: 'Team',
         });
 
         await toggleSelfReportCheckbox(testId);
 
-        expectMixpanelTrack('Own responses checkbox toggled', {
+        expectMixpanelTrack({
+          action: MixpanelEventType.OwnResponsesCheckboxToggled,
           [MixpanelProps.IsSelfReporting]: false,
         });
 
@@ -909,7 +921,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
         fireEvent.mouseDown(inputElement);
 
-        expectMixpanelTrack('"Who will be inputting the responses" dropdown opened');
+        expectMixpanelTrack({ action: MixpanelEventType.InputtingResponsesDropdownOpened });
 
         const options = within(getByRole('listbox')).queryAllByRole('option');
 

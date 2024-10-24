@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { Dict } from 'mixpanel-browser';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FlowChip, Modal, Spinner } from 'shared/components';
@@ -18,13 +17,23 @@ import {
 } from 'shared/styles';
 import { createTemporaryMultiInformantRelationApi, ParticipantActivityOrFlow } from 'api';
 import {
-  MixpanelPayload,
   MixpanelProps,
   Mixpanel,
   checkIfDashboardAppletActivitiesUrlPassed,
   checkIfDashboardAppletParticipantDetailsUrlPassed,
   checkIfFullAccess,
   getErrorMessage,
+  MixpanelEventType,
+  TakeNowDialogClosedEvent,
+  MultiInformantStartActivityClickEvent,
+  ProvidingResponsesDropdownOpenedEvent,
+  ProvidingResponsesSelectionChangedEvent,
+  OwnResponsesCheckboxToggledEvent,
+  InputtingResponsesDropdownOpenedEvent,
+  InputtingResponsesSelectionChangedEvent,
+  ResponsesAboutDropdownOpenedEvent,
+  ResponsesAboutSelectionChangedEvent,
+  TakeNowClickEvent,
 } from 'shared/utils';
 import { useAsync, useLogout } from 'shared/hooks';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
@@ -96,25 +105,33 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
   const track = useCallback(
     (
-      action: string,
-      payload?: MixpanelPayload,
+      event:
+        | TakeNowDialogClosedEvent
+        | MultiInformantStartActivityClickEvent
+        | ProvidingResponsesDropdownOpenedEvent
+        | ProvidingResponsesSelectionChangedEvent
+        | OwnResponsesCheckboxToggledEvent
+        | InputtingResponsesDropdownOpenedEvent
+        | InputtingResponsesSelectionChangedEvent
+        | ResponsesAboutDropdownOpenedEvent
+        | ResponsesAboutSelectionChangedEvent
+        | TakeNowClickEvent,
       newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
-      const props: MixpanelPayload = {
-        [MixpanelProps.Feature]: 'Multi-informant',
-        [MixpanelProps.AppletId]: appletId,
-        [MixpanelProps.MultiInformantAssessmentId]: multiInformantAssessmentId,
-        ...payload,
-      };
+      event[MixpanelProps.Feature] = event[MixpanelProps.Feature] ?? 'Multi-informant';
+      event[MixpanelProps.AppletId] = event[MixpanelProps.AppletId] ?? appletId;
+      event[MixpanelProps.MultiInformantAssessmentId] =
+        event[MixpanelProps.MultiInformantAssessmentId] ?? multiInformantAssessmentId;
+
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
 
       if (trackedActivityOrFlow) {
         const isFlow = 'activityIds' in trackedActivityOrFlow;
-        props[isFlow ? MixpanelProps.ActivityFlowId : MixpanelProps.ActivityId] =
+        event[isFlow ? MixpanelProps.ActivityFlowId : MixpanelProps.ActivityId] =
           trackedActivityOrFlow.id;
       }
 
-      Mixpanel.track(action, props);
+      Mixpanel.track(event);
     },
     [activityOrFlow, appletId, multiInformantAssessmentId],
   );
@@ -122,7 +139,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleLogout = useLogout();
     const handleClose = () => {
-      track('Take Now dialogue closed');
+      track({ action: MixpanelEventType.TakeNowDialogClosed });
 
       setActivityOrFlow(null);
       setMultiInformantAssessmentId(null);
@@ -245,7 +262,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           respondent = loggedInUser;
         }
 
-        track('Multi-informant Start Activity click', {
+        track({
+          action: MixpanelEventType.MultiInformantStartActivityClick,
           [MixpanelProps.SourceAccountType]: getAccountType(sourceSubject),
           [MixpanelProps.TargetAccountType]: getAccountType(targetSubject),
           [MixpanelProps.InputAccountType]: getAccountType(
@@ -364,10 +382,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   value={sourceSubject}
                   options={participantsAndTeamMembers}
                   onOpen={() => {
-                    track('"Who will be providing responses" dropdown opened');
+                    track({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
                   }}
                   onChange={(option) => {
-                    track('"Who will be providing responses" selection changed', {
+                    track({
+                      action: MixpanelEventType.ProvidingResponsesSelectionChanged,
                       [MixpanelProps.SourceAccountType]: getAccountType(option),
                     });
 
@@ -394,7 +413,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => {
-                    track('Own responses checkbox toggled', {
+                    track({
+                      action: MixpanelEventType.OwnResponsesCheckboxToggled,
                       [MixpanelProps.IsSelfReporting]: checked,
                     });
                     setIsSelfReporting(checked);
@@ -420,10 +440,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                       : teamMembersOnly
                   }
                   onOpen={() => {
-                    track('"Who will be inputting the responses" dropdown opened');
+                    track({ action: MixpanelEventType.InputtingResponsesDropdownOpened });
                   }}
                   onChange={(option) => {
-                    track('"Who will be inputting the responses" selection changed', {
+                    track({
+                      action: MixpanelEventType.InputtingResponsesSelectionChanged,
                       [MixpanelProps.InputAccountType]: getAccountType(option),
                     });
                     setLoggedInUser(option);
@@ -450,10 +471,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               value={targetSubject}
               options={participantsAndTeamMembers}
               onOpen={() => {
-                track('"Who are the responses about" dropdown opened');
+                track({ action: MixpanelEventType.ResponsesAboutDropdownOpened });
               }}
               onChange={(option) => {
-                track('"Who are the responses about" selection changed', {
+                track({
+                  action: MixpanelEventType.ResponsesAboutSelectionChanged,
                   [MixpanelProps.TargetAccountType]: getAccountType(option),
                 });
                 setTargetSubject(option);
@@ -473,7 +495,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     { targetSubject, sourceSubject }: OpenTakeNowModalOptions = {},
   ) => {
     const uuid = uuidv4();
-    const analyticsPayload: Dict = {
+    const event: TakeNowClickEvent = {
+      action: MixpanelEventType.TakeNowClick,
       [MixpanelProps.MultiInformantAssessmentId]: uuid,
     };
 
@@ -482,23 +505,23 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
     if (targetSubject) {
       setDefaultTargetSubject(targetSubject);
-      analyticsPayload[MixpanelProps.TargetAccountType] = getAccountType(targetSubject);
+      event[MixpanelProps.TargetAccountType] = getAccountType(targetSubject);
     }
 
     if (sourceSubject) {
       setDefaultSourceSubject(sourceSubject);
-      analyticsPayload[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
+      event[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
     } else {
       setDefaultSourceSubject(enableParticipantMultiInformant ? null : loggedInTeamMember);
     }
 
     if (checkIfDashboardAppletActivitiesUrlPassed(pathname)) {
-      analyticsPayload[MixpanelProps.Via] = 'Applet - Activities';
+      event[MixpanelProps.Via] = 'Applet - Activities';
     } else if (checkIfDashboardAppletParticipantDetailsUrlPassed(pathname)) {
-      analyticsPayload[MixpanelProps.Via] = 'Applet - Participants - Activities';
+      event[MixpanelProps.Via] = 'Applet - Participants - Activities';
     }
 
-    track('Take Now click', analyticsPayload, activityOrFlow);
+    track(event, activityOrFlow);
   };
 
   return { TakeNowModal, openTakeNowModal };

@@ -1,12 +1,11 @@
 import { useCallback, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
 import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { page } from 'resources';
-import { Mixpanel, getErrorMessage } from 'shared/utils';
+import { Mixpanel, getErrorMessage, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 
@@ -50,8 +49,9 @@ export const ScheduleSetupPopup = ({
 
     setPopupVisible(false);
     navigate(generatePath(page.appletParticipantSchedule, { appletId: chosenAppletId, subjectId }));
-    Mixpanel.track('View Individual calendar click', {
-      'Applet ID': appletId,
+    Mixpanel.track({
+      action: MixpanelEventType.ViewIndividualCalendarClick,
+      [MixpanelProps.AppletId]: appletId,
     });
   }, [
     chosenAppletId,

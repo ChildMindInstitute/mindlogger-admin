@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
+import { Mixpanel, MixpanelProps, expectBanner, MixpanelEventType } from 'shared/utils';
 import { initialStateData } from 'redux/modules';
 import { Roles } from 'shared/consts';
 
@@ -92,7 +92,8 @@ describe('AddManagerPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
-    expect(mixpanelTrack).toBeCalledWith('Team Member account invitation form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.TeamMemberInvitationFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: [mockSubmitValues.role],
     });
@@ -101,7 +102,8 @@ describe('AddManagerPopup component', () => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
 
-    expect(mixpanelTrack).toBeCalledWith('Team Member account invitation created successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.TeamMemberInvitedSuccessfully,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: [mockSubmitValues.role],
     });

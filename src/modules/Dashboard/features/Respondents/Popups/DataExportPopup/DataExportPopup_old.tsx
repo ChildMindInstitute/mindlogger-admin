@@ -13,7 +13,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { exportEncryptedDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
+import {
+  exportEncryptedDataSucceed,
+  Mixpanel,
+  sendLogFile,
+  MixpanelEventType,
+  MixpanelProps,
+} from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
@@ -117,8 +123,9 @@ export const DataExportPopup = ({
         }
 
         handlePopupClose();
-        Mixpanel.track('Export Data Successful', {
-          'Applet ID': appletId,
+        Mixpanel.track({
+          action: MixpanelEventType.ExportDataSuccessful,
+          [MixpanelProps.AppletId]: appletId,
         });
       } catch (e) {
         const error = e as TypeError;

@@ -19,7 +19,7 @@ import {
   useReturnToLibraryPath,
   useWorkspaceList,
 } from 'modules/Library/hooks';
-import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
+import { getDictionaryText, Mixpanel, Path, MixpanelEventType } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
@@ -45,7 +45,7 @@ export const Cart = () => {
   const dataTestid = 'library-cart';
 
   const handleAddToBuilder = async () => {
-    Mixpanel.track('Add to applet builder click');
+    Mixpanel.track({ action: MixpanelEventType.AddToAppletBuilderClick });
     if (!isAuthorized) {
       return setAuthPopupVisible(true);
     }

@@ -258,7 +258,7 @@ export type EditSubjectResponse = {
   userId: string | null;
   secretUserId: string;
   nickname: string | null;
-  tag: string | null;
+  tag: ParticipantTag | null;
 };
 
 export type DeleteSubject = SubjectId & {

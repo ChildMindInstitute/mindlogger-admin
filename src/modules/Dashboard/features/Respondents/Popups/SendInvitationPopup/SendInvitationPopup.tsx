@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { getErrorMessage, Mixpanel } from 'shared/utils';
+import { getErrorMessage, Mixpanel, MixpanelEventType } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { postSubjectInvitationApi } from 'api';
 import { InputController } from 'shared/components/FormComponents';
@@ -45,7 +45,7 @@ export const SendInvitationPopup = ({
 
   const submitForm = () => {
     if (!appletId || !subjectId) return;
-    Mixpanel.track('Subject Invitation click');
+    Mixpanel.track({ action: MixpanelEventType.SubjectInvitationClick });
     setHasCommonError(false);
     execute({ appletId, subjectId, email: getValues('email') });
   };

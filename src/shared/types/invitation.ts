@@ -1,3 +1,5 @@
+import { ParticipantTag } from 'shared/consts';
+
 export type Invitation = {
   appletId: string;
   appletName: string;
@@ -14,7 +16,7 @@ export type Invitation = {
     subject_id?: string;
     secret_user_id?: string | null;
   };
-  tag: string | null;
+  tag: ParticipantTag | null;
   title: string | null;
 };
 

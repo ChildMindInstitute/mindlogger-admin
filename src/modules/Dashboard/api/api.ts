@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { ExportDataResult } from 'shared/types';
+import { ExportDataResult, Invitation } from 'shared/types';
 import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
 
@@ -284,7 +284,7 @@ export const postAppletInvitationApi = (
   { url, appletId, options }: AppletInvitationData,
   signal?: AbortSignal,
 ) =>
-  authApiClient.post(
+  authApiClient.post<ResponseWithObject<Invitation>>(
     `/invitations/${appletId}/${url}`,
     { ...options },
     {

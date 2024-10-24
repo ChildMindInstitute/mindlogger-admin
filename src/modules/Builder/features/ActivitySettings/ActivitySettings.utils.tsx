@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { SettingParam } from 'shared/utils';
+import { SettingParam, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
@@ -32,8 +32,9 @@ export const getActivitySettings = ({
           hasError: hasActivityReportsErrors,
           'data-testid': `${dataTestid}-scores-and-reports`,
           onClick: () =>
-            Mixpanel.track('Scores and Report Button Click', {
-              'Applet ID': appletId,
+            Mixpanel.track({
+              action: MixpanelEventType.ScoresAndReportBtnClick,
+              [MixpanelProps.AppletId]: appletId,
             }),
         },
         {
@@ -45,8 +46,9 @@ export const getActivitySettings = ({
           tooltip: isNewActivity ? 'saveAndPublishFirst' : undefined,
           'data-testid': `${dataTestid}-report-config`,
           onClick: () =>
-            Mixpanel.track('Activity - Report Configuration Click', {
-              'Applet ID': appletId,
+            Mixpanel.track({
+              action: MixpanelEventType.ActivityReportConfigurationClick,
+              [MixpanelProps.AppletId]: appletId,
             }),
         },
       ],

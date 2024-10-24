@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
-import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
+import { Mixpanel, MixpanelProps, expectBanner, MixpanelEventType } from 'shared/utils';
 import { ParticipantTag } from 'shared/consts';
 
 import { UpgradeAccountPopup } from './UpgradeAccountPopup';
@@ -50,7 +50,8 @@ describe('UpgradeAccountPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
-    expect(mixpanelTrack).toBeCalledWith('Upgrade to Full Account invitation form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.UpgradeToFullAccountFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
     });
 
@@ -58,9 +59,9 @@ describe('UpgradeAccountPopup component', () => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
 
-    expect(mixpanelTrack).toBeCalledWith(
-      'Upgrade to Full Account invitation created successfully',
-      { [MixpanelProps.AppletId]: mockedAppletId },
-    );
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.UpgradeToFullAccountInviteCreated,
+      [MixpanelProps.AppletId]: mockedAppletId,
+    });
   });
 });

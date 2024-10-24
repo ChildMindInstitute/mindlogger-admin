@@ -12,7 +12,7 @@ import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { LocationStateKeys } from 'shared/types';
@@ -71,7 +71,7 @@ export const LoginForm = () => {
         }
       }
 
-      Mixpanel.track('Login Successful');
+      Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
 
       clearSoftLock();
     }
@@ -124,11 +124,11 @@ export const LoginForm = () => {
     clearSoftLock();
     navigate(page.signUp);
 
-    Mixpanel.track('Create account button on login screen click');
+    Mixpanel.track({ action: MixpanelEventType.CreateAccountOnLoginScreen });
   };
 
   const handleLoginClick = () => {
-    Mixpanel.track('Login Button click');
+    Mixpanel.track({ action: MixpanelEventType.LoginBtnClick });
   };
 
   const handleResetPasswordClick = () => {

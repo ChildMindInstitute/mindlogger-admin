@@ -16,7 +16,7 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
@@ -77,8 +77,9 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    Mixpanel.track('Add Activity click', {
-      'Applet ID': appletId,
+    Mixpanel.track({
+      action: MixpanelEventType.AddActivityClick,
+      [MixpanelProps.AppletId]: appletId,
     });
     const {
       index,
@@ -142,8 +143,9 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
-    Mixpanel.track('Activity edit click', {
-      'Applet ID': appletId,
+    Mixpanel.track({
+      action: MixpanelEventType.ActivityEditClick,
+      [MixpanelProps.AppletId]: appletId,
     });
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);

@@ -1,4 +1,4 @@
-import { MixpanelPayload } from 'shared/utils/mixpanel/mixpanel.types';
+import { MixpanelEvent } from 'shared/utils/mixpanel/mixpanel.types';
 
 import { isProduction, isStaging, isUat, isDev } from '../env';
 
@@ -10,38 +10,44 @@ const shouldEnableMixpanel =
   (isProduction || isStaging || isUat || process.env.REACT_APP_MIXPANEL_FORCE_ENABLE === 'true');
 
 export const Mixpanel = {
-  async init() {
+  init() {
     if (shouldEnableMixpanel) {
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.init(PROJECT_TOKEN, { ignore_dnt: isDev });
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        mixpanel.init(PROJECT_TOKEN, { ignore_dnt: isDev });
+      });
     }
   },
-  async trackPageView(pageName: string) {
+  trackPageView(pageName: string) {
     if (shouldEnableMixpanel) {
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
+      });
     }
   },
-  async track(action: string, payload?: MixpanelPayload) {
+  track(event: MixpanelEvent) {
     if (shouldEnableMixpanel) {
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.track(`[Admin] ${action}`, payload);
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        const { action, ...properties } = event;
+        mixpanel.track(`[Admin] ${action}`, properties);
+      });
     }
   },
-  async login(userId: string) {
+  login(userId: string) {
     if (shouldEnableMixpanel) {
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.identify(userId);
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        mixpanel.identify(userId);
+      });
       mixpanel.people.set({
         'User ID': userId,
         'App Build Number': process.env.REACT_APP_DEVELOP_BUILD_VERSION,
       });
     }
   },
-  async logout() {
+  logout() {
     if (shouldEnableMixpanel) {
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.reset();
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        mixpanel.reset();
+      });
     }
   },
 };
