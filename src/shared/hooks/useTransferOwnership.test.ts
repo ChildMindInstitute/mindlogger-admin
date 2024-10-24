@@ -7,6 +7,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { RootState } from 'redux/store';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import { useTransferOwnership } from './useTransferOwnership';
 
@@ -78,8 +79,9 @@ describe('useTransferOwnership', () => {
 
     expect(store.getState().banners).toEqual(populatedState.banners);
     expect(mockedCallback).toBeCalled();
-    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully', {
-      'Applet ID': 'appletId',
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.InvitationSent,
+      [MixpanelProps.AppletId]: 'appletId',
     });
   });
 });
