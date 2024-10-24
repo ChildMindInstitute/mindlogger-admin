@@ -25,6 +25,7 @@ import {
   checkIfDashboardAppletParticipantDetailsUrlPassed,
   checkIfFullAccess,
   getErrorMessage,
+  addFeatureToAnalyticsPayload,
 } from 'shared/utils';
 import { useAsync, useLogout } from 'shared/hooks';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
@@ -101,11 +102,12 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
       const props: MixpanelPayload = {
-        [MixpanelProps.Feature]: 'Multi-informant',
         [MixpanelProps.AppletId]: appletId,
         [MixpanelProps.MultiInformantAssessmentId]: multiInformantAssessmentId,
         ...payload,
       };
+      addFeatureToAnalyticsPayload(props, 'Multi-informant');
+
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
 
       if (trackedActivityOrFlow) {

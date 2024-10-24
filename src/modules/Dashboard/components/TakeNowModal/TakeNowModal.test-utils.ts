@@ -73,7 +73,7 @@ export const expectMixpanelTrack = (action: string, payload?: Dict) => {
   expect(spyMixpanelTrack).toHaveBeenCalledWith(
     action,
     expect.objectContaining({
-      [MixpanelProps.Feature]: 'Multi-informant',
+      [MixpanelProps.Feature]: ['Multi-informant'],
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.MultiInformantAssessmentId]: expect.any(String),
       [MixpanelProps.ActivityId]: mockedAppletData.activities[0].id,

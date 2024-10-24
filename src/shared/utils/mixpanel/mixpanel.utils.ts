@@ -4,6 +4,11 @@ import { ItemResponseType } from 'shared/consts';
 import { MixpanelPayload, MixpanelProps } from './mixpanel.types';
 import { Mixpanel } from './mixpanel';
 
+export const addFeatureToAnalyticsPayload = (payload: MixpanelPayload, feature: string) => {
+  const features = (payload[MixpanelProps.Feature] as string[]) ?? [];
+  payload[MixpanelProps.Feature] = [...features, feature];
+};
+
 export const trackAppletSave = ({
   action,
   applet,
@@ -30,7 +35,7 @@ export const trackAppletSave = ({
   };
 
   if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
-    props[MixpanelProps.Feature] = 'SSI';
+    addFeatureToAnalyticsPayload(props, 'SSI');
   }
 
   Mixpanel.track(action, props);
