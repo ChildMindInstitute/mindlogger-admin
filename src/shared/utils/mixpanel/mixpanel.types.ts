@@ -88,10 +88,6 @@ export enum MixpanelGeneralCalendarEvent {
   ScheduleImportClick = 'GC Schedule Import click',
 }
 
-export type MixpanelAction =
-  | MixpanelEventType
-  | MixpanelIndividualCalendarEvent
-  | MixpanelGeneralCalendarEvent;
 export const MixpanelCalendarEvent = {
   [AnalyticsCalendarPrefix.IndividualCalendar]: MixpanelIndividualCalendarEvent,
   [AnalyticsCalendarPrefix.GeneralCalendar]: MixpanelGeneralCalendarEvent,
