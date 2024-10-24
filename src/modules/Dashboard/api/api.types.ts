@@ -1,6 +1,6 @@
 import { ActivityId, AppletId } from 'shared/api';
 import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, PerfTaskType, Roles, UserSelectableParticipantTag } from 'shared/consts';
+import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
@@ -258,7 +258,7 @@ export type EditSubjectResponse = {
   userId: string | null;
   secretUserId: string;
   nickname: string | null;
-  tag: UserSelectableParticipantTag | null;
+  tag: ParticipantTag | null;
 };
 
 export type DeleteSubject = SubjectId & {
