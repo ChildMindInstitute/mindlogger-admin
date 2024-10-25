@@ -424,9 +424,7 @@ export type StartUnAssignActivityOrFlowEvent = WithAppletId<{
   [MixpanelProps.ActivityId]?: string;
   [MixpanelProps.ActivityFlowId]?: string;
   [MixpanelProps.EntityType]?: 'activity' | 'flow';
-
-  // TODO: Turn into string union
-  [MixpanelProps.Via]?: string;
+  [MixpanelProps.Via]?: 'Participant - Assignments';
 }>;
 
 export type ConfirmUnAssignActivityOrFlowEvent = WithAppletId<{
