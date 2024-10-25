@@ -5,10 +5,10 @@ import { theme, variables } from 'shared/styles';
 export const StyledImage = styled('img')({
   borderRadius: variables.borderRadius.md,
   flexShrink: 0,
-  height: 56,
+  height: '5.6rem',
   objectFit: 'cover',
   overflow: 'hidden',
-  width: 56,
+  width: '5.6rem',
 });
 
 export const StyledPreviewContainer = styled('div')({
@@ -16,7 +16,7 @@ export const StyledPreviewContainer = styled('div')({
   borderRadius: variables.borderRadius.lg2,
   display: 'flex',
   gap: theme.spacing(2.4),
-  maxHeight: 400,
+  maxHeight: '40rem',
   overflowY: 'auto',
   padding: theme.spacing(4, 3.2),
   placeItems: 'flex-start',

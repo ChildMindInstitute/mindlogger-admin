@@ -136,7 +136,15 @@ export const PhrasalTemplatePhrase = ({
             </Tooltip>
           </StyledFlexTopCenter>
 
-          <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+          <StyledFlexTopCenter
+            onClick={(e) => {
+              // This exists in order to prevent clicks on the child Button
+              // from propagating up and triggering the Accordion
+              // expand / collapse behavior when it is `disabled`.
+              e.stopPropagation();
+            }}
+            sx={{ gap: 0.8 }}
+          >
             <Button
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
