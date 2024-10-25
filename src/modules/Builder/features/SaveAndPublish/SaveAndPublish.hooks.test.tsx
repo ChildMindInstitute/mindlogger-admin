@@ -4,10 +4,12 @@ import mockAxios from 'jest-mock-axios';
 import { ApiResponseCodes } from 'api';
 import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { expectBanner } from 'shared/utils';
+import { expectBanner, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { SingleApplet } from 'shared/state';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
@@ -19,7 +21,52 @@ jest.mock('modules/Builder/hooks', () => ({
       dirtyFields: [],
       isDirty: true,
     },
-    getValues: () => mockedSimpleAppletFormData,
+    getValues: () =>
+      ({
+        ...mockedSimpleAppletFormData,
+        activities: [
+          ...mockedSimpleAppletFormData.activities,
+          {
+            name: 'Auto assigned activity',
+            autoAssign: true,
+            description: 'Test',
+            showAllAtOnce: false,
+            isSkippable: false,
+            responseIsEditable: true,
+            isHidden: false,
+            isReviewable: false,
+            items: [
+              {
+                responseType: 'text',
+                name: 'Item',
+                question: 'Test',
+                config: {
+                  removeBackButton: false,
+                  skippableItem: false,
+                  maxResponseLength: 72,
+                  correctAnswerRequired: false,
+                  correctAnswer: '',
+                  numericalResponseRequired: false,
+                  responseDataIdentifier: false,
+                  responseRequired: false,
+                },
+                isHidden: false,
+                allowEdit: true,
+                key: '03b655eb-6478-45f4-8625-5ef6bf5877db',
+                alerts: [],
+                responseValues: {},
+              },
+            ],
+            scoresAndReports: {
+              generateReport: false,
+              reports: [],
+              showScoreSummary: false,
+            },
+            conditionalLogic: [],
+            key: 'c913d560-b69d-47ec-828c-eec12c47ca24',
+          },
+        ],
+      }) as SingleApplet,
   }),
   useAppletPrivateKeySetter: jest.fn(),
 }));
@@ -30,6 +77,8 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 describe('useSaveAndPublishSetup hook', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -38,6 +87,7 @@ describe('useSaveAndPublishSetup hook', () => {
       },
       resetLDContext: jest.fn(),
     });
+    mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -59,6 +109,17 @@ describe('useSaveAndPublishSetup hook', () => {
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
 
         await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+
+        expect(mixpanelTrack).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.AppletSaveClick,
+            [MixpanelProps.AppletId]: undefined,
+            [MixpanelProps.AutoAssignedActivityCount]: 1,
+            [MixpanelProps.AutoAssignedFlowCount]: 0,
+            [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+            [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+          }),
+        );
       });
 
       test('should not show a success banner if call to save fails', async () => {
@@ -99,6 +160,17 @@ describe('useSaveAndPublishSetup hook', () => {
         });
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        expect(mixpanelTrack).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.AppletSaveClick,
+            [MixpanelProps.AppletId]: mockedAppletId,
+            [MixpanelProps.AutoAssignedActivityCount]: 1,
+            [MixpanelProps.AutoAssignedFlowCount]: 0,
+            [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+            [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+          }),
+        );
 
         await waitFor(() =>
           expect(

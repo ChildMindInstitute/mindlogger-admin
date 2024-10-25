@@ -37,6 +37,7 @@ import {
   toggleSelfReportCheckbox,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
 
 import { Activities } from './Activities';
 
@@ -93,14 +94,18 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 describe('Dashboard > Applet > Activities screen', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
         enableParticipantMultiInformant: false,
+        enableActivityAssign: false,
       },
       resetLDContext: jest.fn(),
     });
+    mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -192,6 +197,11 @@ describe('Dashboard > Applet > Activities screen', () => {
         routePath,
       });
 
+      // Wait for networks requests to resolve
+      await waitFor(() =>
+        expect(screen.getAllByTestId(`${testId}-activity-actions-dots`).length).toBeGreaterThan(0),
+      );
+
       const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
       if (actionDots && canEdit) {
         userEvent.click(actionDots);
@@ -208,6 +218,132 @@ describe('Dashboard > Applet > Activities screen', () => {
         await waitFor(() => expect(screen.queryByTestId(`${testId}-activity-edit`)).toBe(null));
       }
     });
+  });
+
+  test('click Assign Activity more menu item should trigger Mixpanel event', async () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        ...mockUseFeatureFlags().featureFlags,
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
+      [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, {
+      route,
+      routePath,
+      preloadedState: getPreloadedState(),
+    });
+
+    // Wait for networks requests to resolve
+    await waitFor(() =>
+      expect(screen.getAllByTestId(`${testId}-activity-actions-dots`).length).toBeGreaterThan(0),
+    );
+
+    const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+    await userEvent.click(actionDots);
+
+    await waitFor(() => expect(screen.getByTestId(`${testId}-activity-assign`)).toBeVisible());
+
+    fireEvent.click(screen.getByTestId(`${testId}-activity-assign`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.ActivityId]: mockedAppletData.activities[0].id,
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.Via]: 'Applet - Activities',
+      }),
+    );
+  });
+
+  test('click Assign Flow more menu item should trigger Mixpanel event', async () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        ...mockUseFeatureFlags().featureFlags,
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
+      [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, {
+      route,
+      routePath,
+      preloadedState: getPreloadedState(),
+    });
+
+    // Wait for networks requests to resolve
+    await waitFor(() =>
+      expect(screen.getAllByTestId(`${testId}-flow-card-actions-dots`).length).toBeGreaterThan(0),
+    );
+
+    const actionDots = screen.queryAllByTestId(`${testId}-flow-card-actions-dots`)[0];
+    await userEvent.click(actionDots);
+
+    await waitFor(() => expect(screen.getByTestId(`${testId}-flow-assign`)).toBeVisible());
+
+    fireEvent.click(screen.getByTestId(`${testId}-flow-assign`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.ActivityFlowId]: mockedAppletData.activityFlows[0].id,
+        [MixpanelProps.EntityType]: 'flow',
+        [MixpanelProps.Via]: 'Applet - Activities',
+      }),
+    );
+  });
+
+  test('click Assign toolbar button should trigger Mixpanel event', async () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        ...mockUseFeatureFlags().featureFlags,
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
+      [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, {
+      route,
+      routePath,
+      preloadedState: getPreloadedState(),
+    });
+
+    fireEvent.click(screen.getByTestId(`${testId}-assign`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.Via]: 'Applet - Activities',
+      }),
+    );
   });
 
   describe('Take now modal', () => {
@@ -235,6 +371,13 @@ describe('Dashboard > Applet > Activities screen', () => {
           route,
           routePath,
         });
+
+        // Wait for networks requests to resolve
+        await waitFor(() =>
+          expect(screen.getAllByTestId(`${testId}-activity-actions-dots`).length).toBeGreaterThan(
+            0,
+          ),
+        );
 
         const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
 
