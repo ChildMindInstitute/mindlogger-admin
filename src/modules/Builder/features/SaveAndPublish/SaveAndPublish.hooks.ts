@@ -365,10 +365,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     await handleSaveAndPublishFirstClick();
-    Mixpanel.track({
-      action: MixpanelEventType.AppletSaveClick,
-      [MixpanelProps.AppletId]: appletId,
-    });
 
     if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
@@ -419,9 +415,24 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
+    const appletData = getAppletData() as SingleApplet;
+    const autoAssignedActivityCount = appletData.activities.filter(
+      (activity) => activity.autoAssign,
+    ).length;
+    const manualAssignedActivityCount = appletData.activities.length - autoAssignedActivityCount;
+    const autoAssignedActivityFlowCount = appletData.activityFlows.filter(
+      (flow) => flow.autoAssign,
+    ).length;
+    const manualAssignedActivityFlowCount =
+      appletData.activityFlows.length - autoAssignedActivityFlowCount;
+
     Mixpanel.track({
       action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
+      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
+      [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
+      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
     });
 
     await sendRequestWithPasswordCheck();
