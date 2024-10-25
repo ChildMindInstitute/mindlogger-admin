@@ -212,7 +212,7 @@ describe('Participants utils tests', () => {
         meta: {
           subject_id: 'ba1f11c8-df12-43f2-bc01-2c3df232fb48',
         },
-        tag: `${commonGetActionsProps.tag}`,
+        tag: commonGetActionsProps.tag as ParticipantTag,
         title: null,
       };
       const actions = getParticipantActions({
@@ -289,7 +289,7 @@ describe('Participants utils tests', () => {
         meta: {
           subject_id: 'ba1f11c8-df12-43f2-bc01-2c3df232fb48',
         },
-        tag: `${commonGetActionsProps.tag}`,
+        tag: commonGetActionsProps.tag as ParticipantTag,
         title: null,
       };
       const actions = getParticipantActions({

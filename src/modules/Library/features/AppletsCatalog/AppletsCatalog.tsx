@@ -14,7 +14,7 @@ import {
   StyledAppletContainer,
   StyledAppletList,
 } from 'shared/styles';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 
@@ -61,7 +61,7 @@ export const AppletsCatalog = () => {
 
   const handleNavigateToLibraryCart = () => {
     navigate(page.libraryCart);
-    Mixpanel.track('Go to Basket click');
+    Mixpanel.track({ action: MixpanelEventType.GoToBasketClick });
   };
 
   useEffect(() => {
