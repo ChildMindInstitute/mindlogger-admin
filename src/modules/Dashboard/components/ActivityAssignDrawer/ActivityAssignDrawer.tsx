@@ -23,17 +23,18 @@ import { Spinner, Svg, Tooltip } from 'shared/components';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useAsync, useModalBanners } from 'shared/hooks';
 import {
+  AppletAssignmentsResponse,
   Assignment,
   getAppletActivitiesApi,
   getAppletAssignmentsApi,
-  AppletAssignmentsResponse,
   GetAssignmentsParams,
   postAppletAssignmentsApi,
   PostAssignmentsParams,
 } from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
-import { useParticipantDropdown, AssignmentCounts } from 'modules/Dashboard/components';
+import { AssignmentCounts, useParticipantDropdown } from 'modules/Dashboard/components';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { ActivityReview } from './ActivityReview';
 import { AssignmentsTable } from './AssignmentsTable';
@@ -324,6 +325,37 @@ export const ActivityAssignDrawer = ({
       case 2:
         handleSubmit(async () => {
           if (!appletId) return;
+
+          let selfReportAssignmentCount = 0;
+          let multiInformantAssignmentCount = 0;
+          let activityCount = 0;
+          let flowCount = 0;
+
+          for (const assignment of reviewedAssignments) {
+            if (assignment.activityId) {
+              activityCount++;
+            }
+
+            if (assignment.activityFlowId) {
+              flowCount++;
+            }
+
+            if (assignment.respondentSubjectId === assignment.targetSubjectId) {
+              selfReportAssignmentCount++;
+            } else {
+              multiInformantAssignmentCount++;
+            }
+          }
+
+          Mixpanel.track({
+            action: MixpanelEventType.ConfirmAssignActivityOrFlow,
+            [MixpanelProps.AppletId]: appletId,
+            [MixpanelProps.AssignmentCount]: reviewedAssignments.length,
+            [MixpanelProps.SelfReportAssignmentCount]: selfReportAssignmentCount,
+            [MixpanelProps.MultiInformantAssignmentCount]: multiInformantAssignmentCount,
+            [MixpanelProps.ActivityCount]: activityCount,
+            [MixpanelProps.FlowCount]: flowCount,
+          });
 
           setStep(3);
 

@@ -412,9 +412,6 @@ export type StartAssignActivityOrFlowEvent = WithAppletId<{
 
 export type ConfirmAssignActivityOrFlowEvent = WithAppletId<{
   action: MixpanelEventType.ConfirmAssignActivityOrFlow;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-  [MixpanelProps.EntityType]?: 'activity' | 'flow';
   [MixpanelProps.AssignmentCount]?: number;
   [MixpanelProps.SelfReportAssignmentCount]?: number;
   [MixpanelProps.MultiInformantAssignmentCount]?: number;
