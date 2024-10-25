@@ -11,6 +11,8 @@ import { ActivityFormValues, ItemFormValuesCommonType } from 'modules/Builder/ty
 import { DataTableItem } from 'shared/components';
 import { CalculationType } from 'shared/consts';
 
+import { LookupTableDataItem } from '../../SubscalesConfiguration/LookupTable';
+
 export type ScoreContentProps = {
   name: string;
   title: string;
@@ -61,6 +63,7 @@ export type GetScoreRange = {
   items: ItemsWithScore[];
   calculationType: CalculationType;
   activity?: ActivityFormValues;
+  lookupTable?: LookupTableDataItem[] | null;
 };
 
 export type GetIsScoreIdVariable = {

@@ -38,7 +38,10 @@ import {
 } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
-import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
+import {
+  useLinkedScoreReports,
+  useSubscalesSystemItemsSetup,
+} from './SubscalesConfiguration.hooks';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
@@ -59,6 +62,9 @@ export const SubscalesConfiguration = () => {
     control,
     name: subscalesField,
   });
+
+  const { removeReportScoreLink } = useLinkedScoreReports();
+
   const calculateTotalScore = watch(calculateTotalScoreField);
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(!!calculateTotalScore);
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
@@ -153,6 +159,7 @@ export const SubscalesConfiguration = () => {
             headerContentProps={{
               onRemove: () => {
                 removeSubscale(index);
+                removeReportScoreLink(subscale);
               },
               name: subscaleField,
               title,
@@ -161,6 +168,10 @@ export const SubscalesConfiguration = () => {
                   ...subscale,
                   subscaleTableData,
                 });
+
+                if (!subscaleTableData) {
+                  removeReportScoreLink(subscale);
+                }
               },
               'data-testid': subscaleDataTestid,
             }}

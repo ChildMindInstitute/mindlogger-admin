@@ -7,7 +7,10 @@ import { FormInputProps } from '../InputController.types';
 export type InputProps<T extends FieldValues> = FormInputProps & {
   onChange: (value: string | number) => void;
   value: FieldPathValue<T, Path<T>>;
-  onCustomChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onCustomChange?: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    onChange: () => void,
+  ) => void;
 };
 
 export type GetTextAdornment = {

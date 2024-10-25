@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useCallback, useEffect } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { isSystemItem } from 'shared/utils';
-import { AgeFieldType } from 'shared/state';
+import { getEntityKey, isSystemItem } from 'shared/utils';
+import { ActivitySettingsSubscale, AgeFieldType, ScoreOrSection, ScoreReport } from 'shared/state';
 import { LookupTableItems } from 'shared/consts';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ageDropdownItem, ageTextItem, genderItem } from './SubscalesConfiguration.const';
 
@@ -59,4 +60,122 @@ export const useSubscalesSystemItemsSetup = (
 
     removeSystemItems();
   }, [subscales, ageFieldType]);
+};
+
+type UseLinkedScoreReportsReturn = {
+  /**
+   * Remove this subscale from any report scores that are linked to it
+   */
+  removeReportScoreLink: (subscale: ActivitySettingsSubscale<string>) => void;
+
+  /**
+   * Update the name of a subscale in any linked score reports
+   */
+  updateSubscaleNameInReports: (oldSubscaleName: string, newSubscaleName: string) => void;
+
+  /**
+   * Check if there are any non-subscales in the list of subscale items
+   */
+  hasNonSubscaleItems: (subscaleItems: ActivitySettingsSubscale<string>['items']) => boolean;
+};
+
+/**
+ * A hook that returns some utility functions for keeping report scores that are linked to subscales
+ * up to date. It also ensures that linked scores are reset to 'raw_score' if there are no more
+ * eligible subscales
+ */
+export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
+  const { control: appletFormControl } = useFormContext();
+  const { fieldName: currentActivityFieldName, activity: currentActivity } = useCurrentActivity();
+  const reportsField = `${currentActivityFieldName}.scoresAndReports.reports`;
+  const { fields: scoreOrSectionArray, update: updateReport } = useFieldArray<
+    Record<string, ScoreOrSection[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
+    control: appletFormControl,
+    name: reportsField,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
+  });
+
+  const subscalesField = `${currentActivityFieldName}.subscaleSetting.subscales`;
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
+
+  const hasNonSubscaleItems = useCallback(
+    (subscaleItems: ActivitySettingsSubscale<string>['items']) => {
+      const nonSubscaleItems =
+        currentActivity?.items?.filter((item) =>
+          subscaleItems.includes(getEntityKey(item, true)),
+        ) ?? [];
+
+      return nonSubscaleItems.length > 0;
+    },
+    [currentActivity?.items],
+  );
+
+  const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
+    const hasLookupTable = !!subscaleTableData && subscaleTableData.length;
+
+    return hasLookupTable && hasNonSubscaleItems(items);
+  });
+
+  const linkedScores = scoreOrSectionArray.filter(
+    (report) => report.type === 'score' && report.scoringType === 'score',
+  ) as ScoreReport[];
+
+  /**
+   * Remove this subscale from any report scores that are linked to it
+   */
+  const removeReportScoreLink = useCallback(
+    (subscale: ActivitySettingsSubscale<string>) => {
+      linkedScores.forEach((scoreReport, index) => {
+        if (scoreReport.subscaleName === subscale.name) {
+          const updatedReport: ScoreReport = {
+            ...scoreReport,
+            subscaleName: '',
+          };
+          updateReport(index, updatedReport);
+        }
+      });
+    },
+    [linkedScores, updateReport],
+  );
+
+  const updateSubscaleNameInReports = useCallback(
+    (oldSubscaleName: string, newSubscaleName: string) => {
+      const isEligibleSubscale = eligibleSubscales.some(
+        (subscale) => subscale.name === oldSubscaleName,
+      );
+      if (!isEligibleSubscale) return;
+
+      linkedScores.forEach((scoreReport, index) => {
+        if (scoreReport.subscaleName === oldSubscaleName) {
+          const updatedReport: ScoreReport = {
+            ...scoreReport,
+            subscaleName: newSubscaleName,
+          };
+          updateReport(index, updatedReport);
+        }
+      });
+    },
+    [eligibleSubscales, linkedScores, updateReport],
+  );
+
+  useEffect(() => {
+    if (eligibleSubscales.length === 0) {
+      // If there are no more eligible subscales, then these linked scores should be reset to
+      // 'raw_score' instead of 'score'. Otherwise, the admin will see an error reported in the UI
+      // but there will be nothing to fix when they go back to the reports screen
+      linkedScores.forEach((scoreReport, index) => {
+        const updatedReport: ScoreReport = {
+          ...scoreReport,
+          subscaleName: '',
+          scoringType: 'raw_score',
+        };
+        updateReport(index, updatedReport);
+      });
+    }
+  }, [eligibleSubscales, linkedScores, updateReport]);
+
+  return { removeReportScoreLink, updateSubscaleNameInReports, hasNonSubscaleItems };
 };

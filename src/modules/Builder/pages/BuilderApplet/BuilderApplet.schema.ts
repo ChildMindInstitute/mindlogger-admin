@@ -20,7 +20,13 @@ import {
   PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import { Condition, Config, PhrasalTemplateField, ScoreOrSection } from 'shared/state';
+import {
+  Condition,
+  Config,
+  PhrasalTemplateField,
+  ScoreOrSection,
+  ScoreReportScoringType,
+} from 'shared/state';
 import {
   createRegexFromList,
   getEntityKey,
@@ -919,6 +925,14 @@ export const ScoreOrSectionSchema = () =>
     calculationType: yup.string().when('type', {
       is: ScoreReportType.Score,
       then: (schema) => schema.required(),
+      otherwise: (schema) => schema.nullable(),
+    }),
+    // Technically this field is required, but it may be null in existing data
+    // so we enforce this instead in the UI
+    scoringType: yup.string().oneOf(ScoreReportScoringType).nullable(),
+    subscaleName: yup.string().when('scoringType', {
+      is: 'score',
+      then: (schema) => schema.required(t('subscaleNameRequired')),
       otherwise: (schema) => schema.nullable(),
     }),
     id: yup.string().when('type', {

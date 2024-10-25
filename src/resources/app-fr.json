@@ -872,6 +872,7 @@
   "linkSuccessfullyCopied": "Lien copié avec succès",
   "linkText": "Texte du Lien",
   "linkUrl": "URL du Lien",
+  "subscaleNameRequired": "Veuillez sélectionner une sous-échelle valide",
   "liveResponseStreaming": "Diffusion en direct des réponses",
   "liveResponseStreamingDescription": "Envoyez les réponses à un serveur de votre choix au fur et à mesure de leur saisie.",
   "liveResponseStreamingLabel": "Activer la diffusion en continu des données de réponse",
@@ -1450,6 +1451,22 @@
   "submit": "Soumettre",
   "subscale": "Sous-échelle",
   "subscaleHeader": "Sous-échelle {{index}} : {{name}}",
+  "scoreContent": {
+    "whichScoreType": "Quel type de score souhaitez-vous utiliser ?",
+    "scoreRadioBtn": {
+      "label": "Score",
+      "tooltip": "Sélectionnez « Score » pour inclure le score converti à partir de la table de recherche dans le rapport PDF. Ce score apparaîtra uniquement dans le rapport PDF et ne sera pas affiché dans l'application Web ou mobile."
+    },
+    "rawScoreRadioBtn": {
+      "label": "Score brut",
+      "tooltip": "Sélectionnez « Score brut » pour choisir les éléments utilisés pour calculer un score brut."
+    },
+    "linkedSubscaleField": {
+      "label": "Sous-échelle liée",
+      "placeholder": "Sélectionnez une sous-échelle à lier"
+    },
+    "viewSubscaleConfiguration": "Afficher la configuration de sous-échelle"
+  },
   "subscaleLookupTable": {
     "column": {
       "age": "Âge",

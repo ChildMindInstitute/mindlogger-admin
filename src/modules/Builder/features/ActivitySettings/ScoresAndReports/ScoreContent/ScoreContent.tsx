@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import {
   useCheckAndTriggerOnNameUniqueness,
@@ -11,22 +12,26 @@ import {
 import {
   StyledBodyLarge,
   StyledFlexColumn,
+  StyledFlexTopCenter,
   StyledFlexTopStart,
+  StyledLabelLarge,
   StyledObserverTarget,
   StyledTitleMedium,
   StyledTitleSmall,
   theme,
+  variables,
 } from 'shared/styles';
 import {
   InputController,
+  RadioGroupController,
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic, ScoreReport } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport, ScoreReportScoringType } from 'shared/state';
 import { CalculationType, observerStyles } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, SettingParam } from 'shared/utils';
 import {
   REACT_HOOK_FORM_KEY_NAME,
   SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
@@ -34,6 +39,9 @@ import {
 import { SelectEvent, isScoreReport } from 'shared/types';
 import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
+import { SubscaleFormValue } from 'modules/Builder/types';
+import { page } from 'resources';
+import { DataTable } from 'shared/components';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -58,6 +66,7 @@ import {
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import { StaticScoreContent } from './StaticScoreContent';
+import { getTableScoreItems } from '../ScoresAndReports.utils';
 
 export const ScoreContent = ({
   name,
@@ -70,6 +79,8 @@ export const ScoreContent = ({
   isStaticActive,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
+  const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -80,15 +91,50 @@ export const ScoreContent = ({
 
   const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
+  const scoreIdField = `${name}.id`;
+  const scoreNameField = `${name}.name`;
+  const calculationTypeField = `${name}.calculationType`;
+  const itemsScoreField = `${name}.itemsScore`;
+  const scoringTypeField = `${name}.scoringType`;
+  const subscaleNameField = `${name}.subscaleName`;
 
-  const score = useWatch({ name });
-  const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
+  const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
+
+  const score: ScoreReport = useWatch({ name });
+  const {
+    name: scoreName,
+    id: scoreId,
+    calculationType,
+    itemsScore,
+    scoringType,
+    subscaleName,
+  } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
-  const selectedItems = scoreItems?.filter(
-    (item) => itemsScore?.includes(getEntityKey(item, true)),
-  );
-  const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
+
+  const selectedItemsPredicate = (item: { id?: string; key?: string }) =>
+    itemsScore?.includes(getEntityKey(item, true));
+  const selectedItems = scoreItems?.filter(selectedItemsPredicate);
+
+  const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
+    const hasLookupTable = !!subscaleTableData && subscaleTableData.length;
+
+    // Subscales can contain only nested subscales, but they need at least one activity item
+    // because that's what the report score is calculated from
+    const hasNonSubscaleItems =
+      scoreItems?.filter((item) => items.includes(getEntityKey(item, true)))?.length > 0;
+
+    return hasLookupTable && hasNonSubscaleItems;
+  });
+  const linkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
+
+  const scoreRange = getScoreRange({
+    items: selectedItems,
+    calculationType,
+    activity,
+    lookupTable: scoringType === 'score' ? linkedSubscale?.subscaleTableData : null,
+  });
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(scoreRange)
     : EMPTY_SCORE_RANGE_LABEL;
@@ -140,55 +186,122 @@ export const ScoreContent = ({
       scoreId: newScoreId,
     });
 
-    setValue(`${name}.id`, newScoreId);
+    setValue(scoreIdField, newScoreId);
     setPrevScoreName(scoreName);
     setPrevCalculationType(calculationType);
   };
 
   const onCancelChangeScoreId = () => {
     setIsChangeScoreIdPopupVisible(false);
-    setValue(`${name}.name`, prevScoreName);
-    setValue(`${name}.calculationType`, prevCalculationType);
+    setValue(scoreNameField, prevScoreName);
+    setValue(calculationTypeField, prevCalculationType);
   };
 
-  const handleCalculationChange = (event: SelectEvent) => {
-    const calculationType = event.target.value as CalculationType;
-    setPrevCalculationType(score.calculationType);
+  const handleCalculationChange = useCallback(
+    (event: { target: { value: string } }) => {
+      const calculationType = event.target.value as CalculationType;
+      setPrevCalculationType(score.calculationType);
 
-    const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
-    const newScoreId = getScoreId(scoreName, calculationType);
+      const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
+      const newScoreId = getScoreId(scoreName, calculationType);
 
-    if (oldScoreId !== newScoreId) {
-      const isVariable = getIsScoreIdVariable({
-        id: score.id,
-        reports: getValues(reportsName),
-        isScore: true,
-      });
+      if (oldScoreId !== newScoreId) {
+        const isVariable = getIsScoreIdVariable({
+          id: score.id,
+          reports: getValues(reportsName),
+          isScore: true,
+        });
 
-      if (isVariable) {
-        setIsChangeScoreIdPopupVisible(true);
+        if (isVariable) {
+          setIsChangeScoreIdPopupVisible(true);
 
-        return;
+          return;
+        }
       }
-    }
 
-    setValue(`${name}.id`, newScoreId);
-    setPrevCalculationType(calculationType);
-    updateScoreConditionIds({
-      setValue,
-      conditionsName: scoreConditionalsName,
-      scoreId: newScoreId,
-      conditions: getValues(scoreConditionalsName),
-    });
-    updateScoreConditionsPayload({
-      setValue,
-      getValues,
-      scoreConditionalsName,
-      selectedItems,
-      calculationType,
+      setValue(scoreIdField, newScoreId);
+      setPrevCalculationType(calculationType);
+      updateScoreConditionIds({
+        setValue,
+        conditionsName: scoreConditionalsName,
+        scoreId: newScoreId,
+        conditions: getValues(scoreConditionalsName),
+      });
+      updateScoreConditionsPayload({
+        setValue,
+        getValues,
+        scoreConditionalsName,
+        selectedItems,
+        calculationType,
+        activity,
+      });
+    },
+    [
       activity,
-    });
-  };
+      getValues,
+      name,
+      prevCalculationType,
+      prevScoreName,
+      reportsName,
+      score?.calculationType,
+      score?.id,
+      scoreConditionalsName,
+      scoreName,
+      selectedItems,
+      setValue,
+    ],
+  );
+
+  const handleLinkedSubscaleChange = useCallback(
+    (e: SelectEvent) => {
+      const subscaleName = e.target.value;
+      const newLinkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
+
+      if (!newLinkedSubscale) return;
+
+      setValue(subscaleNameField, subscaleName);
+
+      if (scoringType === 'score') {
+        setValue(calculationTypeField, newLinkedSubscale.scoring);
+
+        const eligibleItems = newLinkedSubscale.items.filter(
+          (item) => !!activity?.items.some((activityItem) => activityItem.id === item),
+        );
+        setValue(itemsScoreField, eligibleItems);
+
+        if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
+          setValue(calculationTypeField, newLinkedSubscale.scoring);
+          handleCalculationChange({ target: { value: newLinkedSubscale.scoring } });
+        }
+      }
+    },
+    [
+      calculationType,
+      handleCalculationChange,
+      subscaleNameField,
+      name,
+      scoringType,
+      setValue,
+      eligibleSubscales,
+    ],
+  );
+
+  const handleScoreTypeChange = useCallback(
+    (e: SelectEvent) => {
+      const scoringType = e.target.value as ScoreReportScoringType;
+      setValue(scoringTypeField, scoringType);
+
+      if (scoringType === 'score' && linkedSubscale) {
+        if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
+          setValue(calculationTypeField, linkedSubscale.scoring);
+          handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+        }
+
+        setValue(itemsScoreField, linkedSubscale.items);
+      }
+    },
+    [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
+  );
 
   const handleNameBlur = () => {
     if (scoreName === prevScoreName) return;
@@ -212,7 +325,7 @@ export const ScoreContent = ({
 
     setPrevScoreName(scoreName);
 
-    setValue(`${name}.id`, newScoreId);
+    setValue(scoreIdField, newScoreId);
     updateScoreConditionIds({
       setValue,
       conditionsName: scoreConditionalsName,
@@ -235,6 +348,72 @@ export const ScoreContent = ({
     });
   };
 
+  useEffect(() => {
+    // Account for changes made to the linked subscale on the subscale configuration screen
+    if (scoringType === 'score') {
+      if (linkedSubscale) {
+        if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
+          setValue(calculationTypeField, linkedSubscale.scoring);
+          handleCalculationChange({ target: { value: linkedSubscale.scoring } });
+        }
+
+        setValue(itemsScoreField, linkedSubscale.items);
+      } else {
+        if (subscaleName) {
+          setValue(subscaleNameField, '');
+        }
+
+        if (eligibleSubscales.length <= 0) {
+          setValue(scoringTypeField, 'raw_score');
+        }
+      }
+    } else {
+      if (subscaleName === null || subscaleName === undefined) {
+        // Account for scores that have been saved without a linked subscale
+        // This will remove the MUI controlled field warnings
+        setValue(subscaleNameField, '');
+      }
+
+      // Account for scores that have been saved without a scoring type
+      if (!scoringType) {
+        setValue(scoringTypeField, 'raw_score');
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const ItemsList = () => {
+    if (scoringType === 'score' && linkedSubscale) {
+      return (
+        <Box sx={{ mb: theme.spacing(2.5) }}>
+          <DataTable
+            columns={getSelectedItemsColumns()}
+            data={getTableScoreItems(scoreItems)?.filter(selectedItemsPredicate)}
+            noDataPlaceholder={t('noSelectedItemsYet')}
+            data-testid={`${dataTestid}-selected`}
+          />
+        </Box>
+      );
+    }
+
+    return (
+      <TransferListController
+        name={itemsScoreField}
+        items={tableItems}
+        columns={getScoreItemsColumns()}
+        selectedItemsColumns={getSelectedItemsColumns()}
+        hasSelectedSection
+        searchKey="label"
+        hasSearch
+        sxProps={{ mb: theme.spacing(2.5) }}
+        tooltipByDefault
+        onChangeSelectedCallback={onItemsToCalculateScoreChange}
+        data-testid={`${dataTestid}-items-score`}
+      />
+    );
+  };
+
   return (
     <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
       <StyledObserverTarget className={targetSelector} sx={observerStyles} />
@@ -246,8 +425,8 @@ export const ScoreContent = ({
             <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
               <InputController
                 control={control}
-                key={`${name}.name`}
-                name={`${name}.name`}
+                key={scoreNameField}
+                name={scoreNameField}
                 label={t('scoreName')}
                 onBlur={handleNameBlur}
                 sx={{ mb: theme.spacing(4.8) }}
@@ -255,7 +434,7 @@ export const ScoreContent = ({
                 withDebounce
               />
               <SelectController
-                name={`${name}.calculationType`}
+                name={calculationTypeField}
                 sx={{ mb: theme.spacing(4.8) }}
                 control={control}
                 options={calculationTypes}
@@ -263,6 +442,8 @@ export const ScoreContent = ({
                 fullWidth
                 data-testid={`${dataTestid}-calculation-type`}
                 customChange={handleCalculationChange}
+                disabled={scoringType === 'score'}
+                variant={'outlined'}
               />
             </Box>
             <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
@@ -278,20 +459,79 @@ export const ScoreContent = ({
               </StyledBodyLarge>
             </Box>
           </StyledFlexTopStart>
-          <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
-          <TransferListController
-            name={`${name}.itemsScore`}
-            items={tableItems}
-            columns={getScoreItemsColumns()}
-            selectedItemsColumns={getSelectedItemsColumns()}
-            hasSelectedSection
-            searchKey="label"
-            hasSearch
-            sxProps={{ mb: theme.spacing(2.5) }}
-            tooltipByDefault
-            onChangeSelectedCallback={onItemsToCalculateScoreChange}
-            data-testid={`${dataTestid}-items-score`}
-          />
+          {eligibleSubscales.length > 0 && (
+            <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
+              <StyledTitleMedium>{t('scoreContent.whichScoreType')}</StyledTitleMedium>
+              <RadioGroupController
+                name={scoringTypeField}
+                control={control}
+                onChange={handleScoreTypeChange}
+                options={[
+                  {
+                    value: 'score',
+                    label: t('scoreContent.scoreRadioBtn.label'),
+                    tooltipText: t('scoreContent.scoreRadioBtn.tooltip'),
+                  },
+                  {
+                    value: 'raw_score',
+                    label: t('scoreContent.rawScoreRadioBtn.label'),
+                    tooltipText: t('scoreContent.rawScoreRadioBtn.tooltip'),
+                  },
+                ]}
+                defaultValue={'raw_score'}
+                data-testid={`${dataTestid}-score-type-toggle`}
+              />
+              {scoringType === 'score' && (
+                <StyledFlexTopCenter sx={{ mt: 0.8, gap: 2.4 }}>
+                  <SelectController
+                    name={subscaleNameField}
+                    sx={{ width: '50%', pr: theme.spacing(2.4) }}
+                    control={control}
+                    options={eligibleSubscales.map(({ name }) => ({
+                      value: name,
+                      labelKey: name,
+                    }))}
+                    label={t('scoreContent.linkedSubscaleField.label')}
+                    InputLabelProps={{ shrink: true }}
+                    placeholder={t('scoreContent.linkedSubscaleField.placeholder')}
+                    fullWidth
+                    data-testid={`${dataTestid}-linked-subscale`}
+                    customChange={handleLinkedSubscaleChange}
+                    variant="outlined"
+                  />
+                  {subscaleName && (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        background: 'transparent',
+                        paddingX: theme.spacing(2.4),
+                        borderColor: variables.palette.outline_variant2,
+                      }}
+                      onClick={() => {
+                        // We may not be able to navigate to a specific subscale without modifying that
+                        // screen. So let's just go to the subscales screen for now.
+                        navigate(
+                          generatePath(page.builderAppletActivitySettingsItem, {
+                            appletId,
+                            activityId,
+                            setting: SettingParam.SubscalesConfiguration,
+                          }),
+                        );
+                      }}
+                    >
+                      <StyledLabelLarge color={variables.palette.primary}>
+                        {t('scoreContent.viewSubscaleConfiguration')}
+                      </StyledLabelLarge>
+                    </Button>
+                  )}
+                </StyledFlexTopCenter>
+              )}
+            </StyledFlexColumn>
+          )}
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.2), mt: theme.spacing(2.4) }}>
+            {t('scoreItems')}
+          </StyledTitleMedium>
+          <ItemsList />
           <SectionScoreCommonFields
             name={name}
             sectionId={`score-${index}`}
