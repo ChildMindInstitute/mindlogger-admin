@@ -254,6 +254,11 @@ export const Participants = () => {
         key: FilteredAppletsKey.Viewable,
       });
       setShowActivityAssign(true);
+      Mixpanel.track({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Via]: 'Applet - Participants',
+      });
     },
     copyEmailAddress: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { email, invitation } = context || {};

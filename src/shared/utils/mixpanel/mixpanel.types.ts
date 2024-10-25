@@ -402,9 +402,12 @@ export type StartAssignActivityOrFlowEvent = WithAppletId<{
   [MixpanelProps.ActivityId]?: string;
   [MixpanelProps.ActivityFlowId]?: string;
   [MixpanelProps.EntityType]?: 'activity' | 'flow';
-
-  // TODO: Turn into string union
-  [MixpanelProps.Via]?: string;
+  [MixpanelProps.Via]?:
+    | 'Applet - Activities'
+    | 'Applet - Participants'
+    | 'Data Viz'
+    | 'Participant - Activities'
+    | 'Participant - Assignments';
 }>;
 
 export type ConfirmAssignActivityOrFlowEvent = WithAppletId<{
