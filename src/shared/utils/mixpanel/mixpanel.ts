@@ -36,10 +36,10 @@ export const Mixpanel = {
     if (shouldEnableMixpanel) {
       import('mixpanel-browser').then(({ default: mixpanel }) => {
         mixpanel.identify(userId);
-      });
-      mixpanel.people.set({
-        'User ID': userId,
-        'App Build Number': process.env.REACT_APP_DEVELOP_BUILD_VERSION,
+        mixpanel.people.set({
+          'User ID': userId,
+          'App Build Number': process.env.REACT_APP_DEVELOP_BUILD_VERSION,
+        });
       });
     }
   },
