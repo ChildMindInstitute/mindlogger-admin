@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import { ChangeEvent, FC, PropsWithChildren } from 'react';
 import { TextFieldProps } from '@mui/material/TextField';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
@@ -30,4 +30,10 @@ export type FormInputProps = {
   'data-testid'?: string;
 } & TextFieldProps;
 
-export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;
+export type InputControllerProps<T extends FieldValues> = Omit<FormInputProps, 'onChange'> &
+  UseControllerProps<T> & {
+    onChange?: (
+      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      onChange: () => void,
+    ) => void;
+  };
