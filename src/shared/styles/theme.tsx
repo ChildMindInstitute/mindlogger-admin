@@ -290,17 +290,15 @@ export const theme = createTheme({
               color: variables.palette.disabled,
             },
 
-            '&:not(.MuiButton-textError)': {
+            '&:not(.MuiButton-textError):not(.Mui-disabled)': {
               color: variables.palette.primary,
 
-              '&:not(.Mui-disabled)': {
-                '&:hover': {
-                  backgroundColor: variables.palette.primary_alfa8,
-                },
+              '&:hover': {
+                backgroundColor: variables.palette.primary_alfa8,
+              },
 
-                '&:focus, &:active': {
-                  backgroundColor: variables.palette.primary_alfa12,
-                },
+              '&:focus, &:active': {
+                backgroundColor: variables.palette.primary_alfa12,
               },
             },
 
