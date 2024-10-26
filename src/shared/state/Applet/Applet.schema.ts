@@ -351,9 +351,22 @@ export type DrawingResponseValues = {
   } | null;
 };
 
+export type PhrasalTemplateFieldDisplayMode =
+  | 'bullet_list'
+  | 'bullet_list_option_row'
+  | 'bullet_list_text_row'
+  | 'sentence'
+  | 'sentence_option_row'
+  | 'sentence_row_option';
+
 export type PhrasalTemplateField =
   | { type: 'sentence'; text: string }
-  | { type: 'item_response'; itemName: string; displayMode: string; itemIndex: number }
+  | {
+      type: 'item_response';
+      itemName: string;
+      displayMode: PhrasalTemplateFieldDisplayMode;
+      itemIndex: number;
+    }
   | { type: 'line_break' };
 
 export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
@@ -815,15 +828,24 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
+export const ScoreReportScoringType = ['score', 'raw_score'] as const;
+
+export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
+
 export type ScoreReport = {
   id: string;
   key: string;
   name: string;
   type: ScoreReportType.Score;
+  /** Whether to show raw score or T scores in the report */
+  scoringType: ScoreReportScoringType;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
   itemsScore: string[];
+
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
+  subscaleName?: string;
   itemsPrint?: string[];
   message?: string;
   minScore?: number;

@@ -872,6 +872,7 @@
   "linkSuccessfullyCopied": "Link successfully copied",
   "linkText": "Link text",
   "linkUrl": "Link url",
+  "subscaleNameRequired": "Please select a valid Subscale",
   "liveResponseStreaming": "Live Response Streaming",
   "liveResponseStreamingDescription": "Send responses to a server of your choice, as they are being entered.",
   "liveResponseStreamingLabel": "Enable streaming of response data",
@@ -898,7 +899,7 @@
     "visitsDescription": "Please check if predefined Visit values are correct: ",
     "successMessage": "If any new data has been collected, it has been uploaded successfully.",
     "visitRequired": "Selected rows require visits.",
-    "visitsMinRequired": "Select at least one visit", 
+    "visitsMinRequired": "Select at least one visit",
     "noDataToUpload": "At the moment there is no new data available. Please check back later.",
     "description": "This integration will allow you to decrypt and upload responses from this applet to your LORIS database.",
     "configureReportServerHint": "To connect, you must first configure your server under <1>Report Configuration</1>.",
@@ -1137,6 +1138,10 @@
     "title": "Remove Phrase",
     "areYouSure": "Are you sure you want to delete this phrase? This action cannot be undone.",
     "confirm": "Yes, Remove"
+  },
+  "phrasalTemplatePreviewPopup": {
+    "title": "Preview Phrase {{index}}",
+    "responsePlaceholder": "[{{itemName}} Response]"
   },
   "phrasalTemplateItem": {
     "btnAddField": "Add…",
@@ -1451,6 +1456,22 @@
   "submit": "Submit",
   "subscale": "Subscale",
   "subscaleHeader": "Subscale {{index}}: {{name}}",
+  "scoreContent": {
+    "whichScoreType": "Which score type would you like to use?",
+    "scoreRadioBtn": {
+      "label": "Score",
+      "tooltip": "Select 'Score' to include the converted Score from the Lookup Table in the PDF report. This score will only appear in the PDF report and will not be displayed in the web or mobile app."
+    },
+    "rawScoreRadioBtn": {
+      "label": "Raw Score",
+      "tooltip": "Select 'Raw Score' to choose the items used to calculate a raw score."
+    },
+    "linkedSubscaleField": {
+      "label": "Linked Subscale",
+      "placeholder": "Select a subscale to link"
+    },
+    "viewSubscaleConfiguration": "View Subscale Configuration"
+  },
   "subscaleLookupTable": {
     "column": {
       "age": "Age",

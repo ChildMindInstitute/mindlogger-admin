@@ -19,7 +19,7 @@ import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Buil
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
 import { SettingParam, getEntityKey } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks';
-import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
+import { ScoreOrSection, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME, REPORTS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
@@ -85,7 +85,7 @@ export const ScoresAndReports = () => {
   const dataTestid = 'builder-activity-settings-scores-and-reports';
 
   const handleAddScore = () => {
-    appendReport(getScoreDefaults() as ScoreReport);
+    appendReport(getScoreDefaults());
   };
 
   const handleAddSection = () => {
