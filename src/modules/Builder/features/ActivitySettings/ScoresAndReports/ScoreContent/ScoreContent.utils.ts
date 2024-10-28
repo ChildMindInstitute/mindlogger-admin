@@ -112,22 +112,42 @@ export const getScoreRange = ({
     totalMaxScore += itemMaxScore;
   });
 
-  totalMinScore = isNaN(lookupTableMinScore)
-    ? totalMinScore
-    : Math.min(totalMinScore, lookupTableMinScore);
-
-  totalMaxScore = isNaN(lookupTableMaxScore)
-    ? totalMaxScore
-    : Math.max(totalMaxScore, lookupTableMaxScore);
-
   switch (calculationType) {
-    case CalculationType.Sum:
-      return { minScore: totalMinScore, maxScore: totalMaxScore };
-    case CalculationType.Average:
+    case CalculationType.Sum: {
+      const minScore = isNaN(lookupTableMinScore)
+        ? totalMinScore
+        : Math.min(totalMinScore, lookupTableMinScore);
+
+      const maxScore = isNaN(lookupTableMaxScore)
+        ? totalMaxScore
+        : Math.max(totalMaxScore, lookupTableMaxScore);
+
+      return { minScore, maxScore };
+    }
+    case CalculationType.Average: {
+      if (!count) {
+        return {
+          minScore: 0,
+          maxScore: 0,
+        };
+      }
+
+      const minItemAverage = totalMinScore / count;
+      const maxItemAverage = totalMaxScore / count;
+
+      const minAverageScore = isNaN(lookupTableMinScore)
+        ? minItemAverage
+        : Math.min(minItemAverage, lookupTableMinScore);
+
+      const maxAverageScore = isNaN(lookupTableMaxScore)
+        ? maxItemAverage
+        : Math.max(maxItemAverage, lookupTableMaxScore);
+
       return {
-        minScore: count ? totalMinScore / count : 0,
-        maxScore: count ? totalMaxScore / count : 0,
+        minScore: minAverageScore,
+        maxScore: maxAverageScore,
       };
+    }
     case CalculationType.Percentage:
       return { minScore: totalMaxScore ? (totalMinScore / totalMaxScore) * 100 : 0, maxScore: 100 };
   }
