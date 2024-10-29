@@ -216,17 +216,19 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
    */
   const removeReportScoreLink = useCallback(
     (subscale: ActivitySettingsSubscale<string>) => {
-      linkedScores.forEach((scoreReport, index) => {
-        if (scoreReport.subscaleName === subscale.name) {
+      scoreOrSectionArray.forEach((report, index) => {
+        if (!reportIsScore(report) || !linkedScores.includes(report)) return;
+
+        if (report.subscaleName === subscale.name) {
           const updatedReport: ScoreReport = {
-            ...scoreReport,
+            ...report,
             subscaleName: '',
           };
           updateReport(index, updatedReport);
         }
       });
     },
-    [linkedScores, updateReport],
+    [linkedScores, updateReport, scoreOrSectionArray],
   );
 
   const updateSubscaleNameInReports = useCallback(
@@ -236,17 +238,19 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
       );
       if (!isEligibleSubscale) return;
 
-      linkedScores.forEach((scoreReport, index) => {
-        if (scoreReport.subscaleName === oldSubscaleName) {
+      scoreOrSectionArray.forEach((report, index) => {
+        if (!reportIsScore(report) || !linkedScores.includes(report)) return;
+
+        if (report.subscaleName === oldSubscaleName) {
           const updatedReport: ScoreReport = {
-            ...scoreReport,
+            ...report,
             subscaleName: newSubscaleName,
           };
           updateReport(index, updatedReport);
         }
       });
     },
-    [eligibleSubscales, linkedScores, updateReport],
+    [eligibleSubscales, linkedScores, updateReport, scoreOrSectionArray],
   );
 
   useEffect(() => {
@@ -254,16 +258,18 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
       // If there are no more eligible subscales, then these linked scores should be reset to
       // 'raw_score' instead of 'score'. Otherwise, the admin will see an error reported in the UI
       // but there will be nothing to fix when they go back to the reports screen
-      linkedScores.forEach((scoreReport, index) => {
+      scoreOrSectionArray.forEach((report, index) => {
+        if (!reportIsScore(report) || !linkedScores.includes(report)) return;
+
         const updatedReport: ScoreReport = {
-          ...scoreReport,
+          ...report,
           subscaleName: '',
           scoringType: 'raw_score',
         };
         updateReport(index, updatedReport);
       });
     }
-  }, [eligibleSubscales, linkedScores, updateReport]);
+  }, [eligibleSubscales, linkedScores, updateReport, scoreOrSectionArray]);
 
   return { removeReportScoreLink, updateSubscaleNameInReports, hasNonSubscaleItems };
 };
