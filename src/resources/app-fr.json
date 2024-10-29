@@ -1022,6 +1022,8 @@
   "noResponseIdentifier": "Aucun identifiant de réponse pour le moment.",
   "viewingResponsesSubmitted": "Consultation des réponses soumises le :",
   "responseIdentifierWithColon": "Identifiant de réponse :",
+  "respondentIdentifierWithColon": "Intimé :",
+  "subjectIdentifierWithColon": "Sujet :",
   "versionWithColon": "Version :",
   "noRespondents": "Pas encore de participants.",
   "noParticipants": "Aucun participant pour l'instant.",
