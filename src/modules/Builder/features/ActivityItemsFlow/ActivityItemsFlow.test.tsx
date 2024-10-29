@@ -26,6 +26,7 @@ import {
   mockedNumberSelectActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
+  mockedPhrasalTemplateActivityItem,
   mockedParagraphTextActivityItem,
 } from 'shared/mock';
 import { createArray, getEntityKey } from 'shared/utils';
@@ -62,6 +63,7 @@ const mockedAppletWithAllItemTypes = {
         mockedSliderRowsActivityItem,
         mockedAudioPlayerActivityItem,
         mockedNumberSelectActivityItem,
+        mockedPhrasalTemplateActivityItem,
         mockedParagraphTextActivityItem,
         mockedMultiSelectRowsActivityItem,
         mockedSingleSelectRowsActivityItem,
@@ -100,6 +102,7 @@ const mockedOrderedSummaryItemItems = [
   mockedParagraphTextActivityItem,
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
+  mockedPhrasalTemplateActivityItem,
 ];
 
 const renderActivityItemsFlow = (formData) => {
