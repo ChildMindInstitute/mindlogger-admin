@@ -7,6 +7,7 @@ import { getEntityKey, isSystemItem } from 'shared/utils';
 import { ActivitySettingsSubscale, AgeFieldType, ScoreOrSection, ScoreReport } from 'shared/state';
 import { LookupTableItems } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { reportIsScore } from 'modules/Builder/features/ActivitySettings/ScoresAndReports/ScoresAndReports.utils';
 
 import { ageDropdownItem, ageTextItem, genderItem } from './SubscalesConfiguration.const';
 
@@ -19,18 +20,105 @@ export const useSubscalesSystemItemsSetup = (
   const itemsFieldName = `${activityFieldName}.items`;
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
 
+  const { control: appletFormControl } = useFormContext();
+  const reportsField = `${activityFieldName}.scoresAndReports.reports`;
+  const { fields: scoreOrSectionArray, update: updateReport } = useFieldArray<
+    Record<string, ScoreOrSection[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
+    control: appletFormControl,
+    name: reportsField,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
+  });
+
   const appendSystemItems = (newItems: ItemFormValues[]) =>
     setValue(itemsFieldName, [...items, ...newItems]);
-  const removeSystemItems = () =>
-    setValue(
-      itemsFieldName,
-      items.filter((item) => !isSystemItem(item)),
-    );
-  const replaceSystemItems = (newItems: ItemFormValues[]) => {
-    setValue(itemsFieldName, [...items.filter((item) => !isSystemItem(item)), ...newItems], {
-      shouldDirty: true,
+
+  const updateReports = (
+    mapItemsPrint: (itemsPrint: string[] | undefined) => string[] | undefined,
+  ) => {
+    scoreOrSectionArray.forEach((report, i) => {
+      const updatedReport = {
+        ...report,
+        itemsPrint: mapItemsPrint(report.itemsPrint),
+      };
+
+      if (reportIsScore(updatedReport)) {
+        updatedReport.conditionalLogic = updatedReport?.conditionalLogic?.map((condition) => ({
+          ...condition,
+          itemsPrint: mapItemsPrint(condition.itemsPrint),
+        }));
+      }
+
+      updateReport(i, updatedReport);
     });
   };
+
+  const removeSystemItems = () => {
+    const systemItemKeys: string[] = [];
+
+    setValue(
+      itemsFieldName,
+      items.filter((item) => {
+        if (isSystemItem(item)) {
+          systemItemKeys.push(getEntityKey(item));
+
+          return false;
+        }
+
+        return true;
+      }),
+    );
+
+    // Remove system items from report scores that include them
+    updateReports(
+      (itemsPrint: string[] | undefined) =>
+        itemsPrint?.filter((item) => !systemItemKeys.includes(item)),
+    );
+  };
+
+  const replaceSystemItems = (newSystemItems: ItemFormValues[]) => {
+    const oldSystemItems: { key: string; name: string }[] = [];
+
+    setValue(
+      itemsFieldName,
+      [
+        ...items.filter((item) => {
+          if (isSystemItem(item)) {
+            oldSystemItems.push({ key: getEntityKey(item), name: item.name });
+
+            return false;
+          }
+
+          return true;
+        }),
+        ...newSystemItems,
+      ],
+      {
+        shouldDirty: true,
+      },
+    );
+
+    // Replace system items in report scores that include them
+    updateReports(
+      (itemsPrint: string[] | undefined) =>
+        itemsPrint
+          ?.map((item) => {
+            const oldSystemItem = oldSystemItems.find((old) => old.key === item);
+
+            if (oldSystemItem) {
+              const newItem = newSystemItems.find((newItem) => newItem.name === oldSystemItem.name);
+
+              return newItem ? getEntityKey(newItem) : null;
+            }
+
+            return item;
+          })
+          .filter((it): it is string => it !== null),
+    );
+  };
+
   useEffect(() => {
     const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
     const hasSystemItems = items?.some((item) => isSystemItem(item));
