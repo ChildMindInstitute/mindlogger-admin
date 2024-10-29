@@ -4,7 +4,7 @@ import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { Manager, Respondent } from 'modules/Dashboard/types';
+import { Manager, Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
 
 import {
@@ -23,6 +23,7 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
 
 export const useParticipantDropdown = ({
   appletId,
+  includePendingAccounts = false,
   skip = false,
   successCallback,
   errorCallback,
@@ -41,7 +42,11 @@ export const useParticipantDropdown = ({
     (response) => {
       if (response?.data) {
         const options = (response.data as ParticipantsData).result
-          .filter((r) => !r.isAnonymousRespondent)
+          .filter(
+            (r) =>
+              !r.isAnonymousRespondent &&
+              (includePendingAccounts || r.status !== RespondentStatus.Pending),
+          )
           .map(participantToOption);
 
         setAllParticipants(options);
