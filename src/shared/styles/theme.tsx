@@ -154,6 +154,26 @@ export const theme = createTheme({
               border: `${variables.borderWidth.md2} solid ${variables.palette.red}`,
             },
           },
+          '&.MuiTableRow-has-hover': {
+            cursor: 'pointer',
+            transition: variables.transitions.bgColor,
+            '&:hover': {
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
+            },
+          },
+          '&.MuiTableRow-dragged-over': {
+            position: 'relative',
+            '.MuiTableCell-root:first-of-type::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              border: `${variables.borderWidth.lg} solid ${variables.palette.primary}`,
+              borderRadius: variables.borderRadius.xs,
+            },
+          },
           '&.MuiTableRow-error:first-of-type .MuiTableCell-root:first-of-type::before': {
             top: 0,
           },

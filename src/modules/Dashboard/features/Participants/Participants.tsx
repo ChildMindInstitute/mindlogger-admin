@@ -347,6 +347,9 @@ export const Participants = () => {
         };
 
     return {
+      rowState: {
+        value: !isPending && 'has-hover',
+      },
       id: {
         value: respondentOrSubjectId,
         isHidden: true,

@@ -233,8 +233,8 @@ describe('FolderItem component tests', () => {
     const tableRow = await findByTestId('dashboard-applets-table-folder-row');
 
     expect(tableRow).toBeInTheDocument();
-    expect(tableRow).toHaveClass('has-hover');
-    expect(tableRow).not.toHaveClass('dragged-over');
+    expect(tableRow).toHaveClass('MuiTableRow-has-hover');
+    expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
     jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
@@ -243,7 +243,7 @@ describe('FolderItem component tests', () => {
 
     rerender(getFolderItemComponent(false));
 
-    expect(tableRow).toHaveClass('has-hover dragged-over');
+    expect(tableRow).toHaveClass('MuiTableRow-has-hover MuiTableRow-dragged-over');
   });
 
   test('should not have classname for hover if folder is empty', async () => {
@@ -256,6 +256,6 @@ describe('FolderItem component tests', () => {
     const tableRow = await findByTestId('dashboard-applets-table-folder-row');
 
     expect(tableRow).toBeInTheDocument();
-    expect(tableRow).not.toHaveClass('has-hover');
+    expect(tableRow).not.toHaveClass('MuiTableRow-has-hover');
   });
 });
