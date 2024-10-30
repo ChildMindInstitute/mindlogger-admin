@@ -6,6 +6,8 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { SelectUiType, StyledMenuItemProps } from './SelectController.types';
 
 export const StyledTextField = styled(TextField)`
+  width: 100%;
+
   && {
     .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
       padding-right: 4rem;
