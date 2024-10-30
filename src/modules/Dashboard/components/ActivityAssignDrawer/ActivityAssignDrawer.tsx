@@ -328,18 +328,8 @@ export const ActivityAssignDrawer = ({
 
           let selfReportAssignmentCount = 0;
           let multiInformantAssignmentCount = 0;
-          let activityCount = 0;
-          let flowCount = 0;
 
           for (const assignment of reviewedAssignments) {
-            if (assignment.activityId) {
-              activityCount++;
-            }
-
-            if (assignment.activityFlowId) {
-              flowCount++;
-            }
-
             if (assignment.respondentSubjectId === assignment.targetSubjectId) {
               selfReportAssignmentCount++;
             } else {
@@ -353,8 +343,8 @@ export const ActivityAssignDrawer = ({
             [MixpanelProps.AssignmentCount]: reviewedAssignments.length,
             [MixpanelProps.SelfReportAssignmentCount]: selfReportAssignmentCount,
             [MixpanelProps.MultiInformantAssignmentCount]: multiInformantAssignmentCount,
-            [MixpanelProps.ActivityCount]: activityCount,
-            [MixpanelProps.FlowCount]: flowCount,
+            [MixpanelProps.ActivityCount]: activityIds.length,
+            [MixpanelProps.FlowCount]: flowIds.length,
           });
 
           setStep(3);
