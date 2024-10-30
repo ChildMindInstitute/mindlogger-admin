@@ -26,6 +26,11 @@ export enum MixpanelProps {
   ManuallyAssignedFlowCount = 'Manually-assigned flow count',
 }
 
+export enum MixpanelFeature {
+  MultiInformant = 'Multi-informant',
+  SSI = 'SSI',
+}
+
 export enum MixpanelEventType {
   InvitationSent = 'Invitation sent successfully',
   LoginSuccessful = 'Login Successful',
@@ -115,6 +120,10 @@ export const MixpanelCalendarEvent = {
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
 
+export type WithFeature<T = object> = T & {
+  [MixpanelProps.Feature]?: MixpanelFeature[];
+};
+
 export type MixpanelInvitationSentEvent = WithAppletId<{
   action: MixpanelEventType.InvitationSent;
 }>;
@@ -166,7 +175,6 @@ export type AppletReportConfigurationClickEvent = WithAppletId<{
 export type WithAppletSaveProps<T> = T &
   WithAppletId<{
     [MixpanelProps.ItemTypes]: ItemResponseType[];
-    [MixpanelProps.Feature]?: 'SSI';
   }>;
 
 export type AppletSaveClickEvent = WithAppletSaveProps<{

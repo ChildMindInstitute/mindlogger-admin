@@ -22,6 +22,7 @@ import {
   MixpanelEventType,
   MixpanelProps,
   SettingParam,
+  trackAppletSave,
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
@@ -415,24 +416,10 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    const appletData = getAppletData() as SingleApplet;
-    const autoAssignedActivityCount = appletData.activities.filter(
-      (activity) => activity.autoAssign,
-    ).length;
-    const manualAssignedActivityCount = appletData.activities.length - autoAssignedActivityCount;
-    const autoAssignedActivityFlowCount = appletData.activityFlows.filter(
-      (flow) => flow.autoAssign,
-    ).length;
-    const manualAssignedActivityFlowCount =
-      appletData.activityFlows.length - autoAssignedActivityFlowCount;
-
-    Mixpanel.track({
+    trackAppletSave({
       action: MixpanelEventType.AppletSaveClick,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
-      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
-      [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
-      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+      applet: getAppletData(),
+      appletId,
     });
 
     await sendRequestWithPasswordCheck();
@@ -537,9 +524,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track({
+      trackAppletSave({
         action: MixpanelEventType.AppletEditSuccessful,
-        [MixpanelProps.AppletId]: appletId,
+        applet: result.payload.data.result,
       });
 
       showSuccessBanner(true);
@@ -556,9 +543,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track({
+      trackAppletSave({
         action: MixpanelEventType.AppletCreatedSuccessfully,
-        [MixpanelProps.AppletId]: appletId,
+        applet: result.payload.data.result,
       });
 
       showSuccessBanner();
