@@ -589,7 +589,7 @@ describe('ActivityAssignDrawer', () => {
           [MixpanelProps.AssignmentCount]: 2,
           [MixpanelProps.SelfReportAssignmentCount]: 1,
           [MixpanelProps.MultiInformantAssignmentCount]: 1,
-          [MixpanelProps.ActivityCount]: 2,
+          [MixpanelProps.ActivityCount]: 1,
           [MixpanelProps.FlowCount]: 0,
         }),
       );
