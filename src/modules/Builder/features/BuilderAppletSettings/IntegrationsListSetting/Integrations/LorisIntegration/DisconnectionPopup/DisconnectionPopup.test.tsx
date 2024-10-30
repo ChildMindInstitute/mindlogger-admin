@@ -1,13 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DisconnectionPopup } from './DisconnectionPopup';
 
-describe.skip('DisconnectionPopup', () => {
+describe('DisconnectionPopup', () => {
   const mockOnClose = jest.fn();
 
   test('should render the DisconnectionPopup component', () => {
-    render(<DisconnectionPopup open={true} onClose={mockOnClose} />);
+    renderWithProviders(<DisconnectionPopup open={true} onClose={mockOnClose} />);
 
     expect(screen.getByTestId('loris-disconnection-popup')).toBeInTheDocument();
     expect(screen.getByText('LORIS Configuration')).toBeInTheDocument();
@@ -24,7 +26,7 @@ describe.skip('DisconnectionPopup', () => {
   });
 
   test('should handle right button click to change step', async () => {
-    render(<DisconnectionPopup open={true} onClose={mockOnClose} />);
+    renderWithProviders(<DisconnectionPopup open={true} onClose={mockOnClose} />);
 
     expect(screen.getByTestId('loris-disconnection-popup')).toBeInTheDocument();
     const submitButton1 = screen.getByTestId('loris-disconnection-popup-submit-button');
@@ -42,7 +44,7 @@ describe.skip('DisconnectionPopup', () => {
   });
 
   test('should handle left button click to close', async () => {
-    render(<DisconnectionPopup open={true} onClose={mockOnClose} />);
+    renderWithProviders(<DisconnectionPopup open={true} onClose={mockOnClose} />);
 
     expect(screen.getByTestId('loris-disconnection-popup')).toBeInTheDocument();
     const leftButton = screen.getByTestId('loris-disconnection-popup-left-button');
