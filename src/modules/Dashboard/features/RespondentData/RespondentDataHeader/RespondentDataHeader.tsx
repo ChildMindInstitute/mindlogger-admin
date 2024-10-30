@@ -21,6 +21,7 @@ import {
   getIsWebSupported,
   MixpanelEventType,
   MixpanelProps,
+  StartAssignActivityOrFlowEvent,
 } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
@@ -92,13 +93,21 @@ export const RespondentDataHeader = ({
 
   const handleAssignActivity = () => {
     setShowActivityAssign(true);
-    Mixpanel.track({
+    const event: StartAssignActivityOrFlowEvent = {
       action: MixpanelEventType.StartAssignActivityOrFlow,
       [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.ActivityId]: activityId,
-      [MixpanelProps.EntityType]: 'activity',
       [MixpanelProps.Via]: 'Data Viz',
-    });
+    };
+
+    if (activityId) {
+      event[MixpanelProps.ActivityId] = activityId;
+      event[MixpanelProps.EntityType] = 'activity';
+    } else if (activityFlowId) {
+      event[MixpanelProps.ActivityFlowId] = activityFlowId;
+      event[MixpanelProps.EntityType] = 'flow';
+    }
+
+    Mixpanel.track(event);
   };
 
   const handleOpenExport = () => {

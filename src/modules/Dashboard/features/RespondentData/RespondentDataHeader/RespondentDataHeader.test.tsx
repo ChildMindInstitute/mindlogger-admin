@@ -175,7 +175,7 @@ describe('RespondentDataHeader component tests', () => {
     expect(screen.queryByTestId(`${dataTestid}-assign-activity`)).toBeNull();
   });
 
-  test('should trigger Mixpanel event when Assign toolbar button is clicked', () => {
+  test('should trigger Mixpanel event when Assign toolbar button is clicked for activity', () => {
     mockedUseParams.mockReturnValue({ ...mockedUseParams(), activityId: mockedActivityId });
     renderWithProviders(
       <RespondentDataHeader
@@ -197,6 +197,43 @@ describe('RespondentDataHeader component tests', () => {
         [MixpanelProps.AppletId]: mockedAppletId,
         [MixpanelProps.ActivityId]: mockedActivityId,
         [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.Via]: 'Data Viz',
+      }),
+    );
+  });
+
+  test('should trigger Mixpanel event when Assign toolbar button is clicked for activity flow', () => {
+    mockedUseParams.mockReturnValue({
+      ...mockedUseParams(),
+      activityFlowId: mockedActivityFlow.id,
+    });
+
+    const {
+      reportIncludedItemName: _reportIncludedItemName,
+      reportIncludedActivityName: _reportIncludedActivityName,
+      ...mockFlow
+    } = mockedActivityFlow;
+
+    renderWithProviders(
+      <RespondentDataHeader
+        dataTestid={dataTestid}
+        applet={mockedApplet}
+        subject={mockedSubject}
+        activityOrFlow={mockFlow}
+      />,
+      {
+        preloadedState: getPreloadedState(Roles.SuperAdmin),
+      },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestid}-assign-activity`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.ActivityFlowId]: mockFlow.id,
+        [MixpanelProps.EntityType]: 'flow',
         [MixpanelProps.Via]: 'Data Viz',
       }),
     );
