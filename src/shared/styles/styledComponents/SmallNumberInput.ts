@@ -4,7 +4,7 @@ import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
 export const StyledSmallNumberInput = styled(Box)`
-  width: 8.8rem;
+  min-width: 8.8rem;
   margin: ${theme.spacing(0.8, 0)};
 
   .MuiBox-root {
