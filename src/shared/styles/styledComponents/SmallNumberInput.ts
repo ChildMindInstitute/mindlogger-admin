@@ -35,5 +35,7 @@ export const StyledSmallNumberInput = styled(Box)`
   .MuiInputBase-input {
     padding: ${theme.spacing(0.7, 0)};
     text-align: center;
+    max-width: 7rem;
+    overflow: scroll;
   }
 `;
