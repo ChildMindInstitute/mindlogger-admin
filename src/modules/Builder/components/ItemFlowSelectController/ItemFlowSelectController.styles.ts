@@ -21,7 +21,6 @@ export const StyledSelectController = styled(SelectController)({
 
   '&& .MuiSelect-select': {
     padding: theme.spacing(0.65, 1.2),
-    minWidth: '14rem',
   },
 
   '&& .MuiFormHelperText-root': {
