@@ -15,10 +15,8 @@ export const useSessionBanners = () => {
   useEffect(() => {
     // Only update banners when session status changes
     if (prevIsSessionValid.current !== isSessionValid) {
-      if (isSessionValid) {
+      if (!isSessionValid) {
         // Add version warning banner when logging in
-        dispatch(banners.actions.addBanner({ key: 'VersionWarningBanner' }));
-      } else {
         dispatch(banners.actions.removeAllBanners());
       }
     }
