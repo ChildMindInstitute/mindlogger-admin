@@ -173,9 +173,11 @@ export type AppletReportConfigurationClickEvent = WithAppletId<{
 }>;
 
 export type WithAppletSaveProps<T> = T &
-  WithAppletId<{
-    [MixpanelProps.ItemTypes]: ItemResponseType[];
-  }>;
+  WithFeature<
+    WithAppletId<{
+      [MixpanelProps.ItemTypes]: ItemResponseType[];
+    }>
+  >;
 
 export type AppletSaveClickEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletSaveClick;
