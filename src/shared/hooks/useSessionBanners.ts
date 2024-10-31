@@ -16,11 +16,9 @@ export const useSessionBanners = () => {
     // Only update banners when session status changes
     if (prevIsSessionValid.current !== isSessionValid) {
       if (!isSessionValid) {
-        // Add version warning banner when logging in
         dispatch(banners.actions.removeAllBanners());
       }
     }
-
     prevIsSessionValid.current = isSessionValid;
   }, [dispatch, isSessionValid]);
 };
