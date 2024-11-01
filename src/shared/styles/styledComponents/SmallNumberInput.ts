@@ -9,6 +9,10 @@ export const StyledSmallNumberInput = styled(Box)`
 
   .MuiBox-root {
     margin: 0;
+
+    .MuiTextField-root {
+      width: auto;
+    }
   }
 
   .MuiButton-root {
@@ -29,6 +33,13 @@ export const StyledSmallNumberInput = styled(Box)`
       .MuiOutlinedInput-notchedOutline {
         border-color: ${variables.palette.primary};
       }
+    }
+
+    .MuiInputBase-input {
+      padding: ${theme.spacing(0.7, 0)};
+      text-align: center;
+      max-width: 7rem;
+      overflow: scroll;
     }
   }
 `;
