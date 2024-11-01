@@ -31,11 +31,18 @@ export const StyledSmallNumberInput = styled(Box)`
       }
     }
   }
+`;
 
-  .MuiInputBase-input {
-    padding: ${theme.spacing(0.7, 0)};
-    text-align: center;
-    max-width: 7rem;
-    overflow: scroll;
+export const StyledSmallPercentageInput = styled(StyledSmallNumberInput)`
+  .MuiInputBase-root {
+    .MuiInputBase-input {
+      margin-right: ${theme.spacing(0.75)};
+      padding-right: 0;
+      text-align: end;
+    }
+
+    > .MuiBox-root > .MuiTypography-root {
+      margin-right: ${theme.spacing(0.75)};
+    }
   }
 `;
