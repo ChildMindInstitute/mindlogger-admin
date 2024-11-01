@@ -50,6 +50,7 @@ export const StyledSmallPercentageInput = styled(StyledSmallNumberInput)`
       margin-right: ${theme.spacing(0.75)};
       padding-right: 0;
       text-align: end;
+      max-width: 3rem;
     }
 
     > .MuiBox-root > .MuiTypography-root {
