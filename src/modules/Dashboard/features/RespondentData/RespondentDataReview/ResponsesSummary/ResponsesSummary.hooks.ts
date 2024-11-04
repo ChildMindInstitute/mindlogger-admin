@@ -11,6 +11,7 @@ export const useResponsesSummary = ({
   endDatetime,
   createdAt,
   identifier,
+  sourceSubject,
   version,
 }: Omit<ResponsesSummaryProps, 'data-testid'>) => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ export const useResponsesSummary = ({
     DateFormats.MonthDayYearTimeSeconds,
   );
 
-  const respondent = useRespondentLabel({ hideLabel: true });
+  const respondent = useRespondentLabel({ hideLabel: true, sourceSubject });
 
   return [
     {

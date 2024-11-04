@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { RespondentDetails } from 'modules/Dashboard/types';
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
 
@@ -7,6 +8,7 @@ type Parameters = {
   isSubject?: boolean;
   hideNickname?: boolean;
   hideLabel?: boolean;
+  sourceSubject?: RespondentDetails | null;
 };
 
 export const useRespondentLabel = (
@@ -14,14 +16,16 @@ export const useRespondentLabel = (
     isSubject: false,
     hideNickname: false,
     hideLabel: false,
+    sourceSubject: null,
   },
 ) => {
   const { t } = useTranslation('app');
   const { useRespondent, useSubject } = users;
   const subjectResult = useSubject();
-  const respondentResult = useRespondent();
+  const respondentResult = useRespondent()?.result ?? parameters.sourceSubject;
 
-  const result = parameters.isSubject ? subjectResult?.result : respondentResult?.result;
+  const result = parameters.isSubject ? subjectResult?.result : respondentResult;
+
   const { secretUserId, nickname } = result || {};
 
   if (!secretUserId) return '';
