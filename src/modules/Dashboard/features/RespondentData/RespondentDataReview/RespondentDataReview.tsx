@@ -251,8 +251,9 @@ export const RespondentDataReview = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActivityCompleted]);
 
-  const sourceSubject =
-    activityAnswers?.[0]?.sourceSubject || flowAnswers?.[0]?.answers[0].sourceSubject;
+  const sourceSubject = hasActivityResponses
+    ? activityAnswers?.[0]?.sourceSubject
+    : flowAnswers?.[0]?.answers[0].sourceSubject;
 
   return (
     <StyledContainer>
