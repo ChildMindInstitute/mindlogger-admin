@@ -251,6 +251,11 @@ export const RespondentDataReview = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActivityCompleted]);
 
+  /**
+   * Determines the source subject based on the presence of activity responses.
+   * If activity responses are available, it retrieves the source subject from the first activity answer.
+   * Otherwise, it retrieves the source subject from the first flow answer.
+   */
   const sourceSubject = hasActivityResponses
     ? activityAnswers?.[0]?.sourceSubject
     : flowAnswers?.[0]?.answers[0].sourceSubject;
