@@ -20,12 +20,12 @@ import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/component
 import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
 import {
   Mixpanel,
-  MixpanelPayload,
   MixpanelProps,
   checkIfCanManageParticipants,
   checkIfFullAccess,
   isManagerOrOwner,
   joinWihComma,
+  MixpanelEventType,
 } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
@@ -121,13 +121,11 @@ export const Managers = () => {
       setRemoveAccessPopupVisible(true);
     },
     editTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
-      const analyticsPayload: MixpanelPayload = {
+      Mixpanel.track({
+        action: MixpanelEventType.EditTeamMemberClicked,
         [MixpanelProps.Via]: appletId ? 'Applet - Team' : 'Team',
-      };
-      if (appletId) {
-        analyticsPayload[MixpanelProps.AppletId] = appletId;
-      }
-      Mixpanel.track('Edit Team Member clicked', analyticsPayload);
+        [MixpanelProps.AppletId]: appletId,
+      });
 
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
@@ -148,13 +146,11 @@ export const Managers = () => {
   };
 
   const handleAddManagerClick = () => {
-    const analyticsPayload: MixpanelPayload = {
+    Mixpanel.track({
+      action: MixpanelEventType.AddTeamMemberBtnClicked,
+      [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.Via]: appletId ? 'Applet - Team' : 'Team',
-    };
-    if (appletId) {
-      analyticsPayload[MixpanelProps.AppletId] = appletId;
-    }
-    Mixpanel.track('Add Team Member button clicked', analyticsPayload);
+    });
 
     setAddManagerPopupVisible(true);
   };

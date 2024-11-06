@@ -10,7 +10,7 @@ import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace
 import { workspaces, auth, Workspace } from 'redux/modules';
 import { authStorage } from 'shared/utils/authStorage';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 import { LocationStateKeys } from 'shared/types';
 import { FeatureFlags } from 'shared/utils/featureFlags';
@@ -36,7 +36,7 @@ export const LeftBar = () => {
 
   const handleLinkClick = (key: string) => {
     if (key === 'library') {
-      Mixpanel.track('Browse applet library click');
+      Mixpanel.track({ action: MixpanelEventType.BrowseAppletLibraryClick });
     }
   };
 

@@ -1,9 +1,21 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Dict } from 'mixpanel-browser';
 
 import { mockedAppletData, mockedAppletId } from 'shared/mock';
-import { MixpanelProps, Mixpanel } from 'shared/utils';
+import {
+  MixpanelProps,
+  Mixpanel,
+  TakeNowDialogClosedEvent,
+  MultiInformantStartActivityClickEvent,
+  ProvidingResponsesDropdownOpenedEvent,
+  ProvidingResponsesSelectionChangedEvent,
+  OwnResponsesCheckboxToggledEvent,
+  InputtingResponsesDropdownOpenedEvent,
+  InputtingResponsesSelectionChangedEvent,
+  ResponsesAboutDropdownOpenedEvent,
+  ResponsesAboutSelectionChangedEvent,
+  TakeNowClickEvent,
+} from 'shared/utils';
 
 const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
@@ -69,15 +81,26 @@ export const toggleSelfReportCheckbox = async (testId: string) => {
   fireEvent.click(checkbox);
 };
 
-export const expectMixpanelTrack = (action: string, payload?: Dict) => {
+export const expectMixpanelTrack = (
+  event:
+    | TakeNowDialogClosedEvent
+    | MultiInformantStartActivityClickEvent
+    | ProvidingResponsesDropdownOpenedEvent
+    | ProvidingResponsesSelectionChangedEvent
+    | OwnResponsesCheckboxToggledEvent
+    | InputtingResponsesDropdownOpenedEvent
+    | InputtingResponsesSelectionChangedEvent
+    | ResponsesAboutDropdownOpenedEvent
+    | ResponsesAboutSelectionChangedEvent
+    | TakeNowClickEvent,
+) => {
   expect(spyMixpanelTrack).toHaveBeenCalledWith(
-    action,
     expect.objectContaining({
-      [MixpanelProps.Feature]: 'Multi-informant',
+      [MixpanelProps.Feature]: ['Multi-informant'],
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.MultiInformantAssessmentId]: expect.any(String),
       [MixpanelProps.ActivityId]: mockedAppletData.activities[0].id,
-      ...payload,
+      ...event,
     }),
   );
 };

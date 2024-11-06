@@ -6,7 +6,7 @@ import { Svg } from 'shared/components/Svg';
 import { ExportDataSetting } from 'shared/features/AppletSettings/ExportDataSetting';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
-import { Mixpanel, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, isManagerOrOwner, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { workspaces, applet } from 'redux/modules';
 
 import { StyledSettingsGroup, StyledSettings, StyledSetting, StyledTitle } from './Actions.styles';
@@ -32,8 +32,9 @@ export const Actions = ({ isCompact }: ActionsProps) => {
           <StyledSetting
             onClick={() => {
               setIsExportOpen(true);
-              Mixpanel.track('Export Data click', {
-                'Applet ID': appletData?.id ?? appletId,
+              Mixpanel.track({
+                action: MixpanelEventType.ExportDataClick,
+                [MixpanelProps.AppletId]: appletData?.id ?? appletId,
               });
             }}
             isCompact={isCompact}

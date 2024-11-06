@@ -16,7 +16,7 @@ import {
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
-import { Mixpanel, MixpanelProps, expectBanner } from 'shared/utils';
+import { Mixpanel, MixpanelProps, expectBanner, MixpanelEventType } from 'shared/utils';
 
 import { EditAccessPopup } from './ManagersEditAccessPopup';
 
@@ -146,7 +146,8 @@ describe('EditAccessPopup component', () => {
     const saveButton = screen.getByTestId(`${dataTestid}-access-popup-submit-button`);
     await userEvent.click(saveButton);
 
-    expect(mixpanelTrack).toBeCalledWith('Edit Team Member form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.EditTeamMemberFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: user.roles,
     });
@@ -175,7 +176,8 @@ describe('EditAccessPopup component', () => {
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
-    expect(mixpanelTrack).toBeCalledWith('Team Member edited successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.TeamMemberEditSuccessful,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: user.roles,
     });
@@ -242,7 +244,8 @@ describe('EditAccessPopup component', () => {
 
     await userEvent.click(saveButton);
 
-    expect(mixpanelTrack).toBeCalledWith('Edit Team Member form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.EditTeamMemberFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: [Roles.Reviewer],
     });
@@ -271,7 +274,8 @@ describe('EditAccessPopup component', () => {
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
-    expect(mixpanelTrack).toBeCalledWith('Team Member edited successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.TeamMemberEditSuccessful,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Roles]: [Roles.Reviewer],
     });

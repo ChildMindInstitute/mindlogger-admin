@@ -2,7 +2,7 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 export const useMultiInformantAppletTabs = () => {
   const { appletId } = useParams();
@@ -43,7 +43,7 @@ export const useMultiInformantAppletTabs = () => {
       id: 'applet-schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-outlined" />,
-      onClick: () => Mixpanel.track('View General calendar click'),
+      onClick: () => Mixpanel.track({ action: MixpanelEventType.ViewGeneralCalendarClick }),
       path: generatePath(page.appletSchedule, {
         appletId,
       }),
