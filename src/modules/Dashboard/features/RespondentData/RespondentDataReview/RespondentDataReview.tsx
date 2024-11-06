@@ -261,6 +261,8 @@ export const RespondentDataReview = () => {
     ? activityAnswers?.[0]?.sourceSubject
     : flowAnswers?.[0]?.answers[0].sourceSubject;
 
+  console.log('sourceSubject', activityAnswers);
+
   return (
     <StyledContainer>
       <ReviewMenu
