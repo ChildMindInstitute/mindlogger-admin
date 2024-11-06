@@ -17,7 +17,6 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
-import { useIntegrationToggle } from './LeftBar.hooks';
 import { getWorkspaceNames } from './LeftBar.utils';
 
 export const LeftBar = () => {
@@ -97,13 +96,6 @@ export const LeftBar = () => {
 
     fetchFeatureFlags(getWorkspaceNames(workspacesData), workspace.ownerId);
   }, [location.state, workspacesData, dispatch]);
-
-  useIntegrationToggle({
-    integrationType: 'LORIS',
-    currentWorkspaceData,
-    areFeatureFlagsLoaded,
-    featureFlags,
-  });
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>

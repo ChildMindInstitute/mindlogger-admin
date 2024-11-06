@@ -8,7 +8,7 @@ import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { Roles } from 'shared/consts';
 import { Mixpanel, MixpanelProps, getErrorMessage, isManagerOrOwner } from 'shared/utils';
-import { Languages, postAppletInvitationApi } from 'api';
+import { ApiLanguages, postAppletInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners, users, workspaces } from 'redux/modules';
@@ -52,7 +52,7 @@ export const AddManagerPopup = ({
 
   const defaults = {
     ...defaultValues(appletRoles),
-    language: i18n.language as Languages,
+    language: i18n.language as ApiLanguages,
     workspaceName: workspaceInfo?.name,
   };
 

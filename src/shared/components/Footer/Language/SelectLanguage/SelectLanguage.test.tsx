@@ -3,7 +3,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { Languages } from 'shared/api';
+import { UiLanguages } from 'shared/ui';
 
 import { SelectLanguage } from './SelectLanguage';
 import { languages } from '../Language.const';
@@ -13,7 +13,7 @@ const props = {
   open: true,
   onClose,
   currentLanguage: {
-    value: Languages.EN,
+    value: UiLanguages.EN,
   },
 };
 
@@ -52,7 +52,7 @@ describe('SelectLanguage', () => {
     fireEvent.click(okButton);
 
     expect(onClose).toBeCalledWith({
-      value: Languages.EN,
+      value: UiLanguages.EN,
     });
 
     const close = screen.getByTestId(`${dataTestid}-close-button`);

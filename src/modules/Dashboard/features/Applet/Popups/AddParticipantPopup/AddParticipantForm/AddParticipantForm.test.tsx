@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 
 import { AddParticipantForm } from './AddParticipantForm';
 import { AddParticipantFormValues } from '../AddParticipantPopup.types';
@@ -16,7 +16,7 @@ const AddParticipantFormTest = ({ accountType }: Pick<AddParticipantFormProps, '
   const { control } = useForm<AddParticipantFormValues>({
     defaultValues: {
       ...defaultValues,
-      language: Languages.EN,
+      language: ApiLanguages.EN,
     },
   });
 

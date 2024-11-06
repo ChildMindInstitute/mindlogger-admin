@@ -21,7 +21,6 @@ import {
   Mixpanel,
   SettingParam,
 } from 'shared/utils';
-import { Integrations } from 'shared/consts';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { AppletThunkTypePrefix } from 'shared/state/Applet/Applet.thunk';
@@ -107,7 +106,6 @@ export const useAppletDataFromForm = () => {
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
-      integrations: appletInfo.lorisIntegration ? [Integrations.Loris] : undefined,
       ...removeAppletExtraFields(isNewApplet),
     };
   };

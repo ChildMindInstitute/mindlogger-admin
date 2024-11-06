@@ -17,7 +17,7 @@ import {
   ScoreConditionType,
   ScoreReportType,
   SubscaleTotalScore,
-  Integrations,
+  IntegrationTypes,
 } from 'shared/consts';
 import { BaseSchema } from 'shared/state/Base';
 import { ElementType, RetentionPeriods } from 'shared/types';
@@ -815,15 +815,24 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
+export const ScoreReportScoringType = ['score', 'raw_score'] as const;
+
+export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
+
 export type ScoreReport = {
   id: string;
   key: string;
   name: string;
   type: ScoreReportType.Score;
+  /** Whether to show raw score or T scores in the report */
+  scoringType: ScoreReportScoringType;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
   itemsScore: string[];
+
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
+  subscaleName?: string;
   itemsPrint?: string[];
   message?: string;
   minScore?: number;
@@ -895,7 +904,16 @@ export type SingleApplet = {
   streamEnabled: boolean | null;
   streamIpAddress: string | null;
   streamPort: number | null;
-  integrations?: Integrations[];
+  integrations?: Integration[];
+};
+
+export type Integration = {
+  integrationType: IntegrationTypes;
+  configuration: {
+    hostname?: string;
+    username?: string;
+    project?: string;
+  };
 };
 
 export type RespondentMeta = {

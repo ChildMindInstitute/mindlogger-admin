@@ -86,29 +86,68 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = ({ items = [], calculationType, activity }: GetScoreRange) => {
+export const getScoreRange = ({
+  items = [],
+  calculationType,
+  activity,
+  lookupTable,
+}: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = items.length;
 
+  const lookupTableScores = lookupTable
+    ?.map((it) => Number(it.score) || NaN)
+    ?.filter((score) => !isNaN(score)) ?? [NaN];
+  const lookupTableMinScore = Math.min(...lookupTableScores);
+  const lookupTableMaxScore = Math.max(...lookupTableScores);
+
   items.forEach((item) => {
-    const { minScore, maxScore } = getItemScoreRange(item);
+    const { minScore: itemMinScore, maxScore: itemMaxScore } = getItemScoreRange(item);
 
     if (!item.config.skippableItem && !activity?.isSkippable) {
-      totalMinScore += minScore;
+      totalMinScore += itemMinScore;
     }
 
-    totalMaxScore += maxScore;
+    totalMaxScore += itemMaxScore;
   });
 
   switch (calculationType) {
-    case CalculationType.Sum:
-      return { minScore: totalMinScore, maxScore: totalMaxScore };
-    case CalculationType.Average:
+    case CalculationType.Sum: {
+      const minScore = isNaN(lookupTableMinScore)
+        ? totalMinScore
+        : Math.min(totalMinScore, lookupTableMinScore);
+
+      const maxScore = isNaN(lookupTableMaxScore)
+        ? totalMaxScore
+        : Math.max(totalMaxScore, lookupTableMaxScore);
+
+      return { minScore, maxScore };
+    }
+    case CalculationType.Average: {
+      if (!count) {
+        return {
+          minScore: 0,
+          maxScore: 0,
+        };
+      }
+
+      const minItemAverage = totalMinScore / count;
+      const maxItemAverage = totalMaxScore / count;
+
+      const minAverageScore = isNaN(lookupTableMinScore)
+        ? minItemAverage
+        : Math.min(minItemAverage, lookupTableMinScore);
+
+      const maxAverageScore = isNaN(lookupTableMaxScore)
+        ? maxItemAverage
+        : Math.max(maxItemAverage, lookupTableMaxScore);
+
       return {
-        minScore: count ? totalMinScore / count : 0,
-        maxScore: count ? totalMaxScore / count : 0,
+        minScore: minAverageScore,
+        maxScore: maxAverageScore,
       };
+    }
     case CalculationType.Percentage:
       return { minScore: totalMaxScore ? (totalMinScore / totalMaxScore) * 100 : 0, maxScore: 100 };
   }

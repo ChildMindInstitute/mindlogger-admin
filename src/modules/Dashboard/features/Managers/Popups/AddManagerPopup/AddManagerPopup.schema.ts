@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { EMAIL_REGEXP, Roles } from 'shared/consts';
-import { Languages } from 'api';
+import { ApiLanguages } from 'api';
 
 export const AddManagerPopupSchema = (isWorkspaceNameVisible: boolean) => {
   const { t } = i18n;
@@ -17,7 +17,7 @@ export const AddManagerPopupSchema = (isWorkspaceNameVisible: boolean) => {
       firstName: yup.string().required(t('firstNameRequired')),
       lastName: yup.string().required(t('lastNameRequired')),
       title: yup.string(),
-      language: yup.string().required().oneOf(Object.values(Languages)),
+      language: yup.string().required().oneOf(Object.values(ApiLanguages)),
       subjectIds: yup.array().of(yup.string().required()),
       workspaceName: isWorkspaceNameVisible
         ? yup.string().required(t('workspaceNameRequired'))

@@ -2,19 +2,21 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { DataTableItem } from 'shared/components';
 import { CalculationType, ScoreReportType } from 'shared/consts';
-import { ScoreOrSection } from 'shared/state';
+import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/types';
 import { getEntityKey } from 'shared/utils';
 import { removeMarkdown } from 'modules/Builder/utils';
 
 import { getScoreId } from './ScoreContent/ScoreContent.utils';
 
-export const getScoreDefaults = () => ({
+export const getScoreDefaults = (): ScoreReport => ({
   name: '',
   type: ScoreReportType.Score,
   key: uuidv4(),
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
+  scoringType: 'raw_score',
+  subscaleName: '',
   itemsScore: [],
   showMessage: true,
   printItems: false,
@@ -22,7 +24,7 @@ export const getScoreDefaults = () => ({
   itemsPrint: [],
 });
 
-export const getSectionDefaults = () => ({
+export const getSectionDefaults = (): SectionReport => ({
   name: '',
   type: ScoreReportType.Section,
   id: uuidv4(),
@@ -57,3 +59,9 @@ export const getTableScoreItems = (items?: ItemFormValues[]) =>
       },
     ];
   }, []);
+
+export const reportIsScore = (report: ScoreOrSection): report is ScoreReport =>
+  report.type === ScoreReportType.Score;
+
+export const reportIsSection = (report: ScoreOrSection): report is SectionReport =>
+  report.type === ScoreReportType.Section;

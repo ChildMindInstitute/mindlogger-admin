@@ -2,15 +2,16 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
+import { UiLanguages, regionalLangFormats } from 'shared/ui';
 
-import { apiRoutesToSkip, BASE_API_URL, Languages, regionalLangFormats } from './api.const';
+import { apiRoutesToSkip, BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
 
 export const getCommonConfig = (config: InternalAxiosRequestConfig) => {
   config.baseURL = BASE_API_URL || '';
-  const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
+  const langFromStorage = storage.getItem(LocalStorageKeys.Language) || UiLanguages.EN;
   config.headers['Content-Language'] =
-    regionalLangFormats[langFromStorage as Languages] || (langFromStorage as string);
+    regionalLangFormats[langFromStorage as UiLanguages] || langFromStorage;
 
   return config;
 };

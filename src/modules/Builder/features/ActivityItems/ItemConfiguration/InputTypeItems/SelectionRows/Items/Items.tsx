@@ -126,7 +126,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
           const isRemoveButtonVisible =
             hasRemoveButton && key === options?.length - 1 && index !== 0;
 
-          const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+          const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
             if (event.target.value === '') return setValue(scoreName, 0);
 
             setValue(scoreName, +event.target.value);

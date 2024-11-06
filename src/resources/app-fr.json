@@ -555,6 +555,7 @@
   "editParticipant": "Modifier un participant",
   "editRespondents": "Modifier les participants",
   "editUser": "Modifier l'utilisateur",
+  "el": "Grec",
   "element": "Élément",
   "elementsAssociatedWithSubscales": "Éléments associés à une ou plusieurs sous-échelles",
   "elementsNotIncludedInSubscale": "Éléments non inclus dans une sous-échelle",
@@ -871,6 +872,7 @@
   "linkSuccessfullyCopied": "Lien copié avec succès",
   "linkText": "Texte du Lien",
   "linkUrl": "URL du Lien",
+  "subscaleNameRequired": "Veuillez sélectionner une sous-échelle valide",
   "liveResponseStreaming": "Diffusion en direct des réponses",
   "liveResponseStreamingDescription": "Envoyez les réponses à un serveur de votre choix au fur et à mesure de leur saisie.",
   "liveResponseStreamingLabel": "Activer la diffusion en continu des données de réponse",
@@ -878,9 +880,12 @@
   "defaultIpAddress": "Adresse IP par défaut",
   "defaultPort": "Port par défaut",
   "invalidIpAddress": "Adresse IP invalide",
+  "integrations": "Intégrations",
   "loris": {
+    "configurationPopupTitle": "Configuration de LORIS",
+    "configurationPopupDescription": "Veuillez entrer votre nom d’hôte LORIS et vos identifiants.",
+    "selectProject": "Sélectionnez le projet LORIS auquel vous souhaitez connecter cet applet.",
     "integration": "Intégration LORIS",
-    "description": "Activer la collecte de données permettra ensuite de vous offrir la possibilité d'initier le téléchargement des données provenant des activités terminées par les répondants consentants dans LORIS, dans le but de les utiliser et de les contextualiser. Veuillez noter que seuls les répondants ayant accepté de rendre leurs réponses publiques auront accès aux activités complètes dans cette applet.",
     "activateDataCollection": "Activer la collecte de données",
     "uploadPublicData": "Télécharger des données publiques dans LORIS",
     "reportServerTooltip": "Configurez d'abord le serveur dans l'onglet Configuration du rapport",
@@ -892,7 +897,37 @@
     "visitsDescription": "Veuillez vérifier si les valeurs de Visite prédéfinies sont correctes: ",
     "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès.",
     "visitRequired": "Les lignes sélectionnées nécessitent des visites.",
-    "noDataToUpload": "Il n'y a actuellement aucune nouvelle donnée disponible.\nVeuillez revenir plus tard."
+    "visitsMinRequired": "Sélectionnez au moins une visite",
+    "noDataToUpload": "Il n'y a actuellement aucune nouvelle donnée disponible. Veuillez revenir plus tard.",
+    "description": "Cette intégration vous permettra de déchiffrer et de télécharger les réponses de cet applet dans votre base de données LORIS.",
+    "configureReportServerHint": "Pour vous connecter, vous devez d’abord configurer votre serveur sous <1>Configuration du rapport</1>.",
+    "reportServerStatusConnected": "Connecté",
+    "reportServerStatusNotConnected": "État du serveur de rapports: Non connecté.",
+    "connect": "Connecter",
+    "serverHostname": "Nom d'hôte du serveur LORIS",
+    "hostnameRequired": "Le nom d'hôte du serveur est requis",
+    "username": "Nom d'utilisateur LORIS",
+    "usernameRequired": "Le nom d'utilisateur est requis",
+    "password": "Mot de passe LORIS",
+    "project": "Nom du projet LORIS",
+    "projectsEmptyState": "Nous n'avons pas pu accéder à la liste des projets pour le compte sélectionné, probablement parce qu'elle est vide.<br/><br/>Veuillez contacter l'équipe LORIS pour obtenir de l'aide.",
+    "disconnect": "Se déconnecter de LORIS",
+    "disconnectConfirmation": "Êtes-vous sûr de vouloir déconnecter cet applet de LORIS ? Vous devrez ressaisir vos identifiants LORIS pour vous reconnecter.",
+    "connection": "Votre applet est actuellement connecté à:",
+    "dataUploadTitle": "Téléversement de données LORIS",
+    "dataUploadConfirmation": "Veuillez confirmer que vous souhaitez envoyer les nouvelles données collectées de cet applet au projet LORIS ci-dessous :",
+    "dataUploadDescription": "Toutes les données des répondants seront déchiffrées et téléversées dans la base de données LORIS.",
+    "connectionSuccessful": "Your LORIS account connection was successful. You can proceed to upload the data.",
+    "disconnectionSuccessful": "Votre compte LORIS a été déconnecté avec succès",
+    "errors": {
+      "savingConnectionFailed": "Erreur lors de l'enregistrement de la configuration LORIS. Veuillez réessayer.",
+      "fetchProjectsFailed": "Identifiants de serveur ou de nom d'hôte invalides.",
+      "appletDataMissing": "Les données de l'applet sont manquantes",
+      "projectMissing": "Le projet est manquant",
+      "appletAlreadyTied": "Cet applet est déjà lié à un projet LORIS",
+      "saveProjectFailed": "Échec de l'enregistrement du projet"
+    }
+
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
@@ -1416,6 +1451,22 @@
   "submit": "Soumettre",
   "subscale": "Sous-échelle",
   "subscaleHeader": "Sous-échelle {{index}} : {{name}}",
+  "scoreContent": {
+    "whichScoreType": "Quel type de score souhaitez-vous utiliser ?",
+    "scoreRadioBtn": {
+      "label": "Score",
+      "tooltip": "Sélectionnez « Score » pour inclure le score converti à partir de la table de recherche dans le rapport PDF. Ce score apparaîtra uniquement dans le rapport PDF et ne sera pas affiché dans l'application Web ou mobile."
+    },
+    "rawScoreRadioBtn": {
+      "label": "Score brut",
+      "tooltip": "Sélectionnez « Score brut » pour choisir les éléments utilisés pour calculer un score brut."
+    },
+    "linkedSubscaleField": {
+      "label": "Sous-échelle liée",
+      "placeholder": "Sélectionnez une sous-échelle à lier"
+    },
+    "viewSubscaleConfiguration": "Afficher la configuration de sous-échelle"
+  },
   "subscaleLookupTable": {
     "column": {
       "age": "Âge",
@@ -1631,6 +1682,7 @@
   "visibilityDecreasesOverMaxCharacters": "La visibilité diminue au-delà de {{max}} caractères",
   "waitForRespondentDataDownload": "Veuillez patienter pendant le téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
   "dataProcessing": "Traitement de {{ percentages  }}%...",
+  "webOnly": "Web uniquement",
   "week": "Semaine",
   "weekdays": "Jours de la semaine",
   "weekly": "Hebdomadaire",
