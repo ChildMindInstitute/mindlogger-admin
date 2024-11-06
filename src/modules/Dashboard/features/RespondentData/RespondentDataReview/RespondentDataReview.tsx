@@ -23,6 +23,7 @@ import { useAsync } from 'shared/hooks';
 import { StyledContainer, theme } from 'shared/styles';
 import { users } from 'redux/modules';
 import { page } from 'resources';
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { Feedback } from './Feedback';
 import { ActivityResponses } from './ActivityResponses';
@@ -305,10 +306,10 @@ export const RespondentDataReview = () => {
           />
           {!isLoading && (
             <>
-              {selectedAnswer && responsesSummary && !!sourceSubject && !error && (
+              {selectedAnswer && responsesSummary && !error && (
                 <ResponsesSummary
                   {...responsesSummary}
-                  sourceSubject={sourceSubject}
+                  sourceSubject={sourceSubject as RespondentDetails}
                   data-testid={dataTestid}
                 />
               )}

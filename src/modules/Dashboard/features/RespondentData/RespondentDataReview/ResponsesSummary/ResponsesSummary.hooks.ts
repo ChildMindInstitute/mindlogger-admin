@@ -20,7 +20,7 @@ export const useResponsesSummary = ({
     DateFormats.MonthDayYearTimeSeconds,
   );
 
-  const respondent = getRespondentName(sourceSubject.secretUserId, sourceSubject.nickname);
+  const respondent = getRespondentName(sourceSubject?.secretUserId, sourceSubject?.nickname);
 
   return [
     {
