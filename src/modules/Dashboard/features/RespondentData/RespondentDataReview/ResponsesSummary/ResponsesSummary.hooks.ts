@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
-import { useRespondentLabel } from 'shared/hooks';
+import { getRespondentName } from 'shared/utils';
 
 import { ResponsesSummaryProps } from './ResponsesSummary.types';
 import { EMPTY_IDENTIFIER } from './ResponsesSummary.const';
@@ -20,7 +20,7 @@ export const useResponsesSummary = ({
     DateFormats.MonthDayYearTimeSeconds,
   );
 
-  const respondent = useRespondentLabel({ hideLabel: true, sourceSubject });
+  const respondent = getRespondentName(sourceSubject.secretUserId, sourceSubject.nickname);
 
   return [
     {

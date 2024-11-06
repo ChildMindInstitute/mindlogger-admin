@@ -9,6 +9,15 @@ import { EMPTY_IDENTIFIER } from './ResponsesSummary.const';
 const dataTestId = 'review';
 const mockedIdentifier = 'ident-1';
 const mockedVersion = 'version-111.0.25';
+const sourceSubject = {
+  secretUserId: 'secret123',
+  nickname: 'John Doe',
+  firstName: 'John',
+  lastName: 'Doe',
+  id: '123',
+  lastSeen: '2024-04-10T10:00:00',
+  userId: '123',
+};
 const renderComponent = (props?: Partial<ResponsesSummaryProps>) =>
   renderWithProviders(
     <ResponsesSummary
@@ -17,6 +26,7 @@ const renderComponent = (props?: Partial<ResponsesSummaryProps>) =>
       identifier={mockedIdentifier}
       version={mockedVersion}
       data-testid={dataTestId}
+      sourceSubject={sourceSubject}
       {...props}
     />,
   );

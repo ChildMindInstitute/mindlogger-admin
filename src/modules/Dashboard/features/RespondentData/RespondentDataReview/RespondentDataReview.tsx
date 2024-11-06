@@ -305,7 +305,7 @@ export const RespondentDataReview = () => {
           />
           {!isLoading && (
             <>
-              {selectedAnswer && responsesSummary && !error && (
+              {selectedAnswer && responsesSummary && !!sourceSubject && !error && (
                 <ResponsesSummary
                   {...responsesSummary}
                   sourceSubject={sourceSubject}

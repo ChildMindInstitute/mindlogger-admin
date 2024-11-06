@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 
 import { users } from 'redux/modules';
+import { getRespondentName } from 'shared/utils';
 
 import { useRespondentLabel } from './useRespondentLabel';
 
@@ -80,12 +81,17 @@ describe('useRespondentLabel', () => {
     const res = {
       secretUserId: 'secret123',
       nickname: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      id: '123',
+      lastSeen: '2024-04-10T10:00:00',
+      userId: '123',
     };
 
     users.useRespondent = jest.fn().mockReturnValue({ result: res });
     users.useSubject = jest.fn().mockReturnValue({ details: undefined });
 
-    const { result } = renderHook(() => useRespondentLabel({ hideLabel: true }));
+    const { result } = renderHook(() => getRespondentName(res.secretUserId, res.nickname));
 
     expect(result.current).toBe('secret123 (John Doe)');
   });

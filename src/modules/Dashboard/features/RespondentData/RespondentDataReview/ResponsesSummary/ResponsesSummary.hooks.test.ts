@@ -1,9 +1,8 @@
-import { renderHook } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { useRespondentLabel } from 'shared/hooks';
 import { users } from 'redux/modules';
+import { getRespondentName } from 'shared/utils';
 
 import { useResponsesSummary } from './ResponsesSummary.hooks';
 
@@ -22,16 +21,21 @@ describe('useResponsesSummary', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'secret123',
-      nickname: '',
+      nickname: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      id: '123',
+      lastSeen: '2024-04-10T10:00:00',
+      userId: '123',
     };
 
     users.useRespondent = jest.fn().mockReturnValue({ result: res });
     users.useSubject = jest.fn().mockReturnValue({ details: undefined });
 
-    const { result: respondent } = renderHook(() => useRespondentLabel({ hideLabel: true }));
+    const respondent = res?.nickname ? getRespondentName(res.secretUserId, res.nickname) : '';
 
     const { result } = renderHookWithProviders(() =>
-      useResponsesSummary({ endDatetime, createdAt, identifier, version }),
+      useResponsesSummary({ endDatetime, createdAt, identifier, version, sourceSubject: res }),
     );
 
     expect(result.current).toEqual([
@@ -43,7 +47,7 @@ describe('useResponsesSummary', () => {
       {
         id: 'review-desc-2',
         title: 'Respondent:',
-        content: respondent.current,
+        content: respondent,
       },
       {
         id: 'review-desc-3',
