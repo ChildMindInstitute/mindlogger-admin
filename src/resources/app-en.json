@@ -291,6 +291,7 @@
   "assignActivityDisabledTooltip": "This activity is set to ‘Hidden’ in the Activity Builder and therefore cannot be assigned here.",
   "assignFlowDisabledTooltip": "This flow is set to ‘Hidden’ in the Activity Flow Builder and therefore cannot be assigned here.",
   "assignToTeamMemberTooltip": "The current Participant is a Team Member and therefore cannot be assigned as the subject of an Activity or Flow.",
+  "assignToLimitedRespondentTooltip": "The current Participant is a Limited Account and therefore cannot be assigned as the respondent of an Activity or Flow.",
   "assignments": "Assignments",
   "assessment": "Assessment",
   "at": "At",
