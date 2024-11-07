@@ -68,7 +68,7 @@ export const StyledTitleMedium = styled(Typography, shouldForwardProp)`
 export const StyledTitleSmall = styled(Typography)`
   font-size: ${variables.font.size.md};
   line-height: ${variables.font.lineHeight.md};
-  font-weight: ${variables.font.weight.regular};
+  font-weight: ${({ fontWeight }: StyledProps) => fontWeight || variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface_variant};
   letter-spacing: ${variables.font.letterSpacing.sm};
 `;
