@@ -6,12 +6,12 @@ import { StyledFlexAllCenter, StyledFlexColumn, StyledHeadline, variables } from
 
 import { EmptyStateProps } from './EmptyState.types';
 
-export const EmptyState = ({ icon, title, onClickAssign }: EmptyStateProps) => {
+export const EmptyState = ({ icon, title, onClickAssign, width = '50.7rem' }: EmptyStateProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'participantDetails' });
 
   return (
     <StyledFlexAllCenter sx={{ flexDirection: 'column', flex: 1, m: 'auto', textAlign: 'center' }}>
-      <StyledFlexColumn sx={{ alignItems: 'center', gap: 1.6, maxWidth: '50.7rem' }}>
+      <StyledFlexColumn sx={{ alignItems: 'center', gap: 1.6, maxWidth: width }}>
         <Svg id={icon} width="80" height="80" fill={variables.palette.outline} />
         <StyledHeadline as="h2" sx={{ color: variables.palette.outline, m: 0 }}>
           {title}

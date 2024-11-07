@@ -1089,7 +1089,7 @@
     "aboutParticipantEmpty": "Aucune activité n'est attribuée à être complétée à propos de ce participant.",
     "aboutParticipantEmptyTeamMember": "Ce participant est un membre de l'équipe et les activités ne peuvent pas être complétées à son sujet.",
     "byParticipantEmpty": "Aucune activité n'est attribuée à ce participant pour être complétée.",
-    "byParticipantEmptyLimitedAccount": "Ce participant a un compte limité et ne peut pas être assigné pour compléter des activités.",
+    "byParticipantEmptyLimitedAccount": "Ce participant a un compte limité et ne peut compléter des activités que via l'option Prendre maintenant.",
     "assignActivityButton": "Attribuer une activité",
     "activitiesAndFlows": "Activités & Flux",
     "toggleSubjectsView": "Basculer la vue des sujets",

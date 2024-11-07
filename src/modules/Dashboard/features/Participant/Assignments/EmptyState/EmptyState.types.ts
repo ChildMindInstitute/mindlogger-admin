@@ -4,4 +4,6 @@ export type EmptyStateProps = {
   icon: Icons;
   title: string;
   onClickAssign?: () => void;
+  /** @default '50.7rem' */
+  width?: string;
 };
