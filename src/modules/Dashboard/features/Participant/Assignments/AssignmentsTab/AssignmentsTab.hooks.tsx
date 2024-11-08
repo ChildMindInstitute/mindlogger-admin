@@ -199,7 +199,7 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isLimitedRespondent = !respondentSubject?.userId;
+      const isLimitedRespondent = respondentSubject && !respondentSubject.userId;
       const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>
@@ -207,9 +207,11 @@ export const useAssignmentsTab = ({
           a.respondentSubject.id === respondentSubject?.id,
       );
       const isAssignDisplayed =
-        canAssign && (!autoAssign || status === ActivityAssignmentStatus.Hidden);
+        canAssign &&
+        (!autoAssign || status === ActivityAssignmentStatus.Hidden || isLimitedRespondent);
       const isAssignDisabled = !isAssignable || isTargetTeamMember || isLimitedRespondent;
-      const isUnassignDisplayed = canAssign && isAssignable && (autoAssign || isAssigned);
+      const isUnassignDisplayed =
+        canAssign && isAssignable && (autoAssign || isAssigned) && !isLimitedRespondent;
 
       let assignTooltip: string | undefined;
       if (status === ActivityAssignmentStatus.Hidden) {
