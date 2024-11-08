@@ -136,7 +136,7 @@ const ByParticipant = () => {
               ? t('participantDetails.byParticipantEmptyLimitedAccount')
               : t('participantDetails.byParticipantEmpty')
           }
-          width={isRespondentLimited ? '57.2rem' : undefined}
+          maxWidth={isRespondentLimited ? '57.2rem' : undefined}
         />
       )}
 

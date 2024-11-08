@@ -5,5 +5,5 @@ export type EmptyStateProps = {
   title: string;
   onClickAssign?: () => void;
   /** @default '50.7rem' */
-  width?: string;
+  maxWidth?: string;
 };
