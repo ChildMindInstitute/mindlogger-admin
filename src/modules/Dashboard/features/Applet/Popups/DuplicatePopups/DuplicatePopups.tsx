@@ -1,5 +1,5 @@
 import { type AxiosResponse } from 'axios';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -10,10 +10,9 @@ import {
   Encryption,
   getEncryptionToServer,
   getPrivateKey,
-  Mixpanel,
-  publicEncrypt,
   MixpanelEventType,
-  MixpanelProps,
+  publicEncrypt,
+  trackAppletSave,
 } from 'shared/utils';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
@@ -114,7 +113,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
-  const resetEncryptionData = () => (encryptionDataRef.current = {});
+  const resetEncryptionData = useCallback(() => (encryptionDataRef.current = {}), []);
 
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
@@ -130,14 +129,17 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
-  const duplicatePopupsClose = () =>
-    dispatch(
-      popups.actions.setPopupVisible({
-        applet: currentApplet,
-        key: 'duplicatePopupsVisible',
-        value: false,
-      }),
-    );
+  const duplicatePopupsClose = useCallback(
+    () =>
+      dispatch(
+        popups.actions.setPopupVisible({
+          applet: currentApplet,
+          key: 'duplicatePopupsVisible',
+          value: false,
+        }),
+      ),
+    [currentApplet, dispatch],
+  );
 
   const nameModalClose = () => {
     setNameModalVisible(false);
@@ -154,29 +156,29 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const handleDuplicateSuccess = (res: AxiosResponse) => {
-    setPasswordModalVisible(false);
+  const handleDuplicateSuccess = useCallback(
+    ({ data }: AxiosResponse) => {
+      setPasswordModalVisible(false);
 
-    onCloseCallback?.();
-    duplicatePopupsClose();
-    resetEncryptionData();
+      onCloseCallback?.();
+      duplicatePopupsClose();
+      resetEncryptionData();
 
-    Mixpanel.track({
-      action: MixpanelEventType.AppletCreatedSuccessfully,
-      [MixpanelProps.AppletId]: currentAppletId,
-    });
+      trackAppletSave({ action: MixpanelEventType.AppletCreatedSuccessfully, applet: data.result });
 
-    dispatch(
-      banners.actions.addBanner({
-        key: 'SaveSuccessBanner',
-        bannerProps: {
-          children: t('successDuplication', {
-            appletName: res?.data?.result?.displayName ?? '',
-          }),
-        },
-      }),
-    );
-  };
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            children: t('successDuplication', {
+              appletName: data.result?.displayName ?? '',
+            }),
+          },
+        }),
+      );
+    },
+    [dispatch, duplicatePopupsClose, onCloseCallback, resetEncryptionData, t],
+  );
 
   const submitPasswordCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
