@@ -34,6 +34,8 @@ import {
   ResponsesAboutDropdownOpenedEvent,
   ResponsesAboutSelectionChangedEvent,
   TakeNowClickEvent,
+  addFeatureToEvent,
+  MixpanelFeature,
 } from 'shared/utils';
 import { useAsync, useLogout } from 'shared/hooks';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
@@ -118,10 +120,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         | TakeNowClickEvent,
       newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
-      event[MixpanelProps.Feature] = event[MixpanelProps.Feature] ?? 'Multi-informant';
       event[MixpanelProps.AppletId] = event[MixpanelProps.AppletId] ?? appletId;
       event[MixpanelProps.MultiInformantAssessmentId] =
         event[MixpanelProps.MultiInformantAssessmentId] ?? multiInformantAssessmentId;
+      addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
 

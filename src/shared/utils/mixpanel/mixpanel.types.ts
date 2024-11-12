@@ -1,4 +1,4 @@
-import { AnalyticsCalendarPrefix, ParticipantTag } from 'shared/consts';
+import { AnalyticsCalendarPrefix, ItemResponseType, ParticipantTag } from 'shared/consts';
 
 export enum MixpanelProps {
   Feature = 'Feature',
@@ -10,9 +10,15 @@ export enum MixpanelProps {
   TargetAccountType = 'Target Account Type',
   InputAccountType = 'Input Account Type',
   IsSelfReporting = 'Is Self Reporting',
+  ItemTypes = 'Item Types',
   Roles = 'Roles',
   Tag = 'Tag',
   Via = 'Via',
+}
+
+export enum MixpanelFeature {
+  MultiInformant = 'Multi-informant',
+  SSI = 'SSI',
 }
 
 export enum MixpanelEventType {
@@ -74,6 +80,11 @@ export enum MixpanelEventType {
   AddToAppletBuilderClick = 'Add to applet builder click',
 }
 
+export type MixpanelAppletSaveEventType =
+  | MixpanelEventType.AppletSaveClick
+  | MixpanelEventType.AppletCreatedSuccessfully
+  | MixpanelEventType.AppletEditSuccessful;
+
 export enum MixpanelIndividualCalendarEvent {
   ScheduleSaveClick = 'IC Schedule save click',
   ScheduleSuccessful = 'IC Schedule successful',
@@ -94,6 +105,10 @@ export const MixpanelCalendarEvent = {
 } as const;
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
+
+export type WithFeature<T = object> = T & {
+  [MixpanelProps.Feature]?: MixpanelFeature[];
+};
 
 export type MixpanelInvitationSentEvent = WithAppletId<{
   action: MixpanelEventType.InvitationSent;
@@ -143,7 +158,14 @@ export type AppletReportConfigurationClickEvent = WithAppletId<{
   action: MixpanelEventType.AppletReportConfigurationClick;
 }>;
 
-export type AppletSaveClickEvent = WithAppletId<{
+export type WithAppletSaveProps<T> = T &
+  WithFeature<
+    WithAppletId<{
+      [MixpanelProps.ItemTypes]: ItemResponseType[];
+    }>
+  >;
+
+export type AppletSaveClickEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletSaveClick;
 }>;
 
@@ -151,24 +173,30 @@ export type PasswordAddedSuccessfullyEvent = WithAppletId<{
   action: MixpanelEventType.PasswordAddedSuccessfully;
 }>;
 
-export type AppletEditSuccessfulEvent = WithAppletId<{
+export type AppletEditSuccessfulEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletEditSuccessful;
 }>;
 
-export type AppletCreatedSuccessfullyEvent = WithAppletId<{
+export type AppletCreatedSuccessfullyEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletCreatedSuccessfully;
 }>;
+
+export type AppletSaveEvent =
+  | AppletSaveClickEvent
+  | AppletEditSuccessfulEvent
+  | AppletCreatedSuccessfullyEvent;
 
 export type ExportDataClickEvent = WithAppletId<{
   action: MixpanelEventType.ExportDataClick;
 }>;
 
-type TakeNowEvent = WithAppletId<{
-  [MixpanelProps.Feature]?: 'Multi-informant';
-  [MixpanelProps.MultiInformantAssessmentId]?: string | null;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-}>;
+type TakeNowEvent = WithFeature<
+  WithAppletId<{
+    [MixpanelProps.MultiInformantAssessmentId]?: string | null;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+  }>
+>;
 
 export type TakeNowDialogClosedEvent = TakeNowEvent & {
   action: MixpanelEventType.TakeNowDialogClosed;

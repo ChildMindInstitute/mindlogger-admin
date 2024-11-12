@@ -115,7 +115,7 @@ export const AppletItem = ({ item, onPublish, enableShareToLibrary }: AppletItem
     await fetchData();
     setPasswordPopupVisible(false);
     Mixpanel.track({
-      action: MixpanelEventType.AppletCreatedSuccessfully,
+      action: MixpanelEventType.PasswordAddedSuccessfully,
       [MixpanelProps.AppletId]: appletId,
     });
   };
