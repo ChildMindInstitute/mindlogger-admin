@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { Mixpanel, MixpanelProps } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
 import { EditSubjectResponse } from 'api';
@@ -73,14 +73,16 @@ describe('EditRespondentPopup component tests', () => {
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
 
-    expect(mixpanelTrack).toBeCalledWith('Edit Limited Account form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.EditLimitedAccountFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
-    expect(mixpanelTrack).toBeCalledWith('Limited Account edited successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.LimitedAccountEditedSuccessfully,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
@@ -114,14 +116,16 @@ describe('EditRespondentPopup component tests', () => {
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
 
-    expect(mixpanelTrack).toBeCalledWith('Edit Full Account form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.EditFullAccountFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
-    expect(mixpanelTrack).toBeCalledWith('Full Account edited successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.FullAccountEditedSuccessfully,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });

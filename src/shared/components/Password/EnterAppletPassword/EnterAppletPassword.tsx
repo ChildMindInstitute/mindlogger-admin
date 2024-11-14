@@ -10,7 +10,7 @@ import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/u
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { Svg } from 'shared/components/Svg';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import { StyledController } from '../Password.styles';
 import { AppletPasswordRef } from '../Password.types';
@@ -47,8 +47,9 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
           setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
         submitCallback();
 
-        Mixpanel.track('Password added successfully', {
-          'Applet ID': appletId,
+        Mixpanel.track({
+          action: MixpanelEventType.PasswordAddedSuccessfully,
+          [MixpanelProps.AppletId]: appletId,
         });
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });

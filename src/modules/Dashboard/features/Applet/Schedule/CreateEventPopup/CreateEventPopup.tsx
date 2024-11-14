@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventForm, EventFormRef } from '../EventForm';
@@ -37,8 +37,9 @@ export const CreateEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(`${analyticsPrefix} Schedule save click`, {
-      'Applet ID': appletId,
+    Mixpanel.track({
+      action: MixpanelCalendarEvent[analyticsPrefix].ScheduleSaveClick,
+      [MixpanelProps.AppletId]: appletId,
     });
   };
 

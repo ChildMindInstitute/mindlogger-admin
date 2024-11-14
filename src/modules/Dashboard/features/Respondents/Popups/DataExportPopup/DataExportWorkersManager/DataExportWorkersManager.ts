@@ -5,6 +5,7 @@ import { EncryptionParsed } from 'shared/utils/encryption';
 import { ExportDataFilters, exportDecryptedDataSucceed } from 'shared/utils/exportData';
 import { ItemResponseType } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel/mixpanel';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel/mixpanel.types';
 
 import DecryptionWorker from '../DataExportWorker/DataExportWorker.worker';
 import { IdleWorker } from '../DataExportPopup.types';
@@ -51,7 +52,10 @@ export class DataExportWorkersManager {
     if (allPagesProcessed && allWorkersIdle) {
       this.setDataIsExporting(false);
       this.handleExportPopupClose();
-      Mixpanel.track('Export Data Successful', { 'Applet ID': this.appletId });
+      Mixpanel.track({
+        action: MixpanelEventType.ExportDataSuccessful,
+        [MixpanelProps.AppletId]: this.appletId,
+      });
     }
   };
 

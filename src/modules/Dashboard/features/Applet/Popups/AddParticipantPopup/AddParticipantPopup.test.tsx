@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
-import { expectBanner } from 'shared/utils';
+import { expectBanner, MixpanelEventType } from 'shared/utils';
 import { MixpanelProps, Mixpanel } from 'shared/utils/mixpanel';
 import { ParticipantTag } from 'shared/consts';
 
@@ -92,7 +92,8 @@ describe('AddParticipantPopup component', () => {
 
     await userEvent.click(getByText('Send Invitation'));
 
-    expect(mixpanelTrack).toBeCalledWith('Full Account invitation form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.FullAccountInvitationFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
@@ -101,7 +102,8 @@ describe('AddParticipantPopup component', () => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
 
-    expect(mixpanelTrack).toBeCalledWith('Full Account invitation created successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.FullAccountInvitationCreated,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
@@ -134,7 +136,8 @@ describe('AddParticipantPopup component', () => {
 
     await userEvent.click(getByText('Create'));
 
-    expect(mixpanelTrack).toBeCalledWith('Add Limited Account form submitted', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.AddLimitedAccountFormSubmitted,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
@@ -143,7 +146,8 @@ describe('AddParticipantPopup component', () => {
       expectBanner(store, 'AddParticipantSuccessBanner');
     });
 
-    expect(mixpanelTrack).toBeCalledWith('Limited Account created successfully', {
+    expect(mixpanelTrack).toBeCalledWith({
+      action: MixpanelEventType.LimitedAccountCreated,
       [MixpanelProps.AppletId]: mockedAppletId,
       [MixpanelProps.Tag]: 'Child',
     });
