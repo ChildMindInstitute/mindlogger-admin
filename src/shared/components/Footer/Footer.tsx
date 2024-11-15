@@ -40,11 +40,11 @@ export const Footer = () => {
         <StyledLink target="_blank" href={ABOUT_LINK}>
           {t('about')}
         </StyledLink>
-        <StyledLink target="_blank" href={PRIVACY_LINK}>
-          {t('privacy')}
-        </StyledLink>
         <StyledLink target="_blank" href={TERMS_LINK}>
           {t('terms')}
+        </StyledLink>
+        <StyledLink target="_blank" href={PRIVACY_LINK}>
+          {t('privacy')}
         </StyledLink>
         <StyledLink target="_blank" href={CREDITS_LINK}>
           {t('credits')}
