@@ -27,6 +27,7 @@ import {
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
 import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { Encryption } from './utils';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -40,7 +41,7 @@ export const mockedUserData = {
   id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
 };
 
-export const mockedEncryption = {
+export const mockedEncryption: Encryption = {
   accountId: 'c48b275d-db4b-4f79-8469-9198b45985d3',
   base: '[2]',
   prime:
