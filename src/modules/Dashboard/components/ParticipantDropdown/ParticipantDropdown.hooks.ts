@@ -37,16 +37,18 @@ export const useParticipantDropdown = ({
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
 
+  const isParticipantValid = useCallback(
+    (r: Respondent) =>
+      !r.isAnonymousRespondent && (includePendingAccounts || r.status !== RespondentStatus.Pending),
+    [includePendingAccounts],
+  );
+
   const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       if (response?.data) {
         const options = (response.data as ParticipantsData).result
-          .filter(
-            (r) =>
-              !r.isAnonymousRespondent &&
-              (includePendingAccounts || r.status !== RespondentStatus.Pending),
-          )
+          .filter(isParticipantValid)
           .map(participantToOption);
 
         setAllParticipants(options);
@@ -133,7 +135,7 @@ export const useParticipantDropdown = ({
 
   /**
    * Handle participant search. It can be a combination of team members and any participants
-   * (full account, pending, and limited), or just team members and full account participants
+   * (full and limited accounts), or just team members and full account participants
    */
   const handleSearch = useCallback(
     async (
@@ -199,20 +201,23 @@ export const useParticipantDropdown = ({
         (teamMemberResponse?.data.result as Manager[]) ?? []
       ).filter((manager) => manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)));
 
-      const participantsSearchResults = (participantsResponse?.data.result as Respondent[]) ?? [];
+      const participantsSearchResults = (
+        (participantsResponse?.data.result as Respondent[]) ?? []
+      ).filter((participant) => {
+        if (!isParticipantValid(participant)) return false;
 
-      // If there are team members in the search results, we only want to show them if they are allowed
-      return participantsSearchResults.map(participantToOption).filter((participant) => {
-        if (!participant.isTeamMember) {
-          return isAnyParticipant || !!participant.userId;
+        // If there are team members in the search results, we only want to show them if they are
+        // allowed
+        if (!participant.id || participant.details[0].subjectTag !== 'Team') {
+          return isAnyParticipant || !!participant.id;
         } else {
-          return allowedTeamMembersSearchResults.some(
-            (manager) => manager.id === participant.userId,
-          );
+          return allowedTeamMembersSearchResults.some((manager) => manager.id === participant.id);
         }
       });
+
+      return participantsSearchResults.map(participantToOption);
     },
-    [ownerId, appletId],
+    [ownerId, appletId, isParticipantValid],
   );
 
   useEffect(() => {
