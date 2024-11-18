@@ -1,4 +1,22 @@
 import { ItemResponseType } from 'shared/consts';
+import {
+  AudioAndVideoConfig,
+  AudioPlayerConfig,
+  DateAndTimeRangeConfig,
+  DrawingConfig,
+  GeolocationConfig,
+  MessageConfig,
+  MultipleSelectionConfig,
+  NumberConfig,
+  ParagraphTextInputConfig,
+  PhotoConfig,
+  PhrasalTemplateConfig,
+  SingleAndMultiplePerRowConfig,
+  SingleSelectionConfig,
+  SliderConfig,
+  SliderRowsConfig,
+  TextInputConfig,
+} from 'shared/state';
 
 import {
   DEFAULT_DISABLED_TIMER_VALUE,
@@ -29,7 +47,7 @@ export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
 ];
 export const ITEMS_WITH_DOWNLOAD_HEADER = [ItemResponseType.PhrasalTemplate];
 
-export const defaultSingleAndMultiSelectionRowsConfig = {
+export const defaultSingleAndMultiSelectionRowsConfig: SingleAndMultiplePerRowConfig = {
   removeBackButton: false,
   skippableItem: false,
   timer: 0,
@@ -38,7 +56,7 @@ export const defaultSingleAndMultiSelectionRowsConfig = {
   addTooltip: false,
 };
 
-export const defaultMultiSelectionConfig = {
+export const defaultMultiSelectionConfig: MultipleSelectionConfig = {
   removeBackButton: false,
   skippableItem: false,
   randomizeOptions: false,
@@ -54,12 +72,12 @@ export const defaultMultiSelectionConfig = {
   portraitLayout: false,
 };
 
-export const defaultSingleSelectionConfig = {
+export const defaultSingleSelectionConfig: SingleSelectionConfig = {
   ...defaultMultiSelectionConfig,
   autoAdvance: false,
 };
 
-export const defaultTextConfig = {
+export const defaultTextConfig: TextInputConfig = {
   removeBackButton: false,
   skippableItem: false,
   maxResponseLength: DEFAULT_MAX_CHARACTERS_SHORT_TEXT,
@@ -70,14 +88,14 @@ export const defaultTextConfig = {
   responseRequired: false,
 };
 
-export const defaultParagraphTextConfig = {
+export const defaultParagraphTextConfig: ParagraphTextInputConfig = {
   removeBackButton: false,
   skippableItem: false,
   maxResponseLength: DEFAULT_MAX_CHARACTERS_PARAGRAPH_TEXT,
   responseRequired: false,
 };
 
-export const defaultSliderConfig = {
+export const defaultSliderConfig: SliderConfig = {
   removeBackButton: false,
   skippableItem: false,
   addScores: false,
@@ -92,7 +110,7 @@ export const defaultSliderConfig = {
   },
 };
 
-export const defaultAudioAndVideoConfig = {
+export const defaultAudioAndVideoConfig: AudioAndVideoConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -102,7 +120,7 @@ export const defaultAudioAndVideoConfig = {
   timer: 0,
 };
 
-export const defaultAudioPlayerConfig = {
+export const defaultAudioPlayerConfig: AudioPlayerConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -112,7 +130,7 @@ export const defaultAudioPlayerConfig = {
   playOnce: false,
 };
 
-export const defaultSliderRowsConfig = {
+export const defaultSliderRowsConfig: SliderRowsConfig = {
   removeBackButton: false,
   skippableItem: false,
   addScores: false,
@@ -120,17 +138,16 @@ export const defaultSliderRowsConfig = {
   timer: 0,
 };
 
-export const defaultNumberSelectionConfig = {
+export const defaultNumberSelectionConfig: NumberConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
     textInputOption: false,
     textInputRequired: false,
   },
-  timer: 0,
 };
 
-export const defaultDateAndTimeRangeConfig = {
+export const defaultDateAndTimeRangeConfig: DateAndTimeRangeConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -140,7 +157,7 @@ export const defaultDateAndTimeRangeConfig = {
   timer: DEFAULT_DISABLED_TIMER_VALUE,
 };
 
-export const defaultDrawingConfig = {
+export const defaultDrawingConfig: DrawingConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -152,7 +169,7 @@ export const defaultDrawingConfig = {
   navigationToTop: false,
 };
 
-export const defaultPhotoConfig = {
+export const defaultPhotoConfig: PhotoConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -162,7 +179,7 @@ export const defaultPhotoConfig = {
   timer: 0,
 };
 
-export const defaultGeolocationConfig = {
+export const defaultGeolocationConfig: GeolocationConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -172,12 +189,12 @@ export const defaultGeolocationConfig = {
   timer: 0,
 };
 
-export const defaultMessageConfig = {
+export const defaultMessageConfig: MessageConfig = {
   removeBackButton: false,
   timer: 0,
 };
 
-export const defaultTimeConfig = {
+export const defaultTimeConfig: DateAndTimeRangeConfig = {
   removeBackButton: false,
   skippableItem: false,
   additionalResponseOption: {
@@ -187,14 +204,8 @@ export const defaultTimeConfig = {
   timer: 0,
 };
 
-export const defaultPhrasalTemplateConfig = {
+export const defaultPhrasalTemplateConfig: PhrasalTemplateConfig = {
   skippableItem: false,
   removeBackButton: false,
   type: 'phrasal_template',
-};
-
-export const defaultUnityConfig = {
-  removeBackButton: false,
-  skippableItem: false,
-  timer: 0,
 };
