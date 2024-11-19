@@ -41,6 +41,7 @@ export type FullTeamSearchType = 'team' | 'full-participant';
 
 export type UseParticipantDropdownProps = {
   appletId?: string;
+  includePendingAccounts?: boolean;
   skip?: boolean;
   successCallback?: (data: AxiosResponse) => void;
   errorCallback?: (data?: AxiosError<ApiErrorResponse> | null) => void;
