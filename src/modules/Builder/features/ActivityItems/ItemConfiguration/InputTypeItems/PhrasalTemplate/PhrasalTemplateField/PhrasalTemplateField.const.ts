@@ -1,25 +1,28 @@
 import { ItemResponseType } from 'shared/consts';
 
-export const DisplayModeOptions: Readonly<
-  Record<ItemResponseType, { id: string; name: string }[] | undefined> & {
-    default: undefined;
-  }
-> = {
-  [ItemResponseType.MultipleSelection]: [
-    { id: 'sentence', name: 'Sentence' },
-    { id: 'bullet_list', name: 'Bullet List' },
-  ],
+export const DisplayMode = {
+  SENTENCE: 'sentence',
+  BULLET_LIST: 'bullet_list',
+  SENTENCE_OPTION_ROW: 'sentence_option_row',
+  SENTENCE_ROW_OPTION: 'sentence_row_option',
+  BULLET_LIST_OPTION_ROW: 'bullet_list_option_row',
+  BULLET_LIST_TEXT_ROW: 'bullet_list_text_row',
+} as const;
+export type DisplayMode = (typeof DisplayMode)[keyof typeof DisplayMode];
+
+export const DisplayModeOptions: Readonly<Record<ItemResponseType, DisplayMode[] | undefined>> = {
+  [ItemResponseType.MultipleSelection]: [DisplayMode.SENTENCE, DisplayMode.BULLET_LIST],
   [ItemResponseType.SingleSelectionPerRow]: [
-    { id: 'sentence_option_row', name: 'Sentence: Option Text, Row Text' },
-    { id: 'sentence_row_option', name: 'Sentence: Row Text, Option Text' },
-    { id: 'bullet_list_option_row', name: 'Bullet List: Option Text, Row Text' },
-    { id: 'bullet_list_text_row', name: 'Bullet List: Row Text, Option Text' },
+    DisplayMode.SENTENCE_OPTION_ROW,
+    DisplayMode.SENTENCE_ROW_OPTION,
+    DisplayMode.BULLET_LIST_OPTION_ROW,
+    DisplayMode.BULLET_LIST_TEXT_ROW,
   ],
   [ItemResponseType.MultipleSelectionPerRow]: [
-    { id: 'sentence_option_row', name: 'Sentence: Option Text, Row Text' },
-    { id: 'sentence_row_option', name: 'Sentence: Row Text, Option Text' },
-    { id: 'bullet_list_option_row', name: 'Bullet List: Option Text, Row Text' },
-    { id: 'bullet_list_text_row', name: 'Bullet List: Row Text, Option Text' },
+    DisplayMode.SENTENCE_OPTION_ROW,
+    DisplayMode.SENTENCE_ROW_OPTION,
+    DisplayMode.BULLET_LIST_OPTION_ROW,
+    DisplayMode.BULLET_LIST_TEXT_ROW,
   ],
   [ItemResponseType.ABTrails]: undefined,
   [ItemResponseType.Audio]: undefined,
@@ -44,7 +47,6 @@ export const DisplayModeOptions: Readonly<
   [ItemResponseType.TouchTest]: undefined,
   [ItemResponseType.Unity]: undefined,
   [ItemResponseType.Video]: undefined,
-  default: undefined,
 };
 
 export const KEYWORDS = {
