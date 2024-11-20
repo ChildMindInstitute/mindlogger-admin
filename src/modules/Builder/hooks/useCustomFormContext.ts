@@ -4,7 +4,7 @@ export function useCustomFormContext() {
   const { setValue: originalSetValue, ...formContext } = useFormContext() || {};
 
   const setValue: UseFormSetValue<FieldValues> = (name, value, options = {}) => {
-    originalSetValue(name, value, { ...options, shouldDirty: true });
+    originalSetValue(name, value, { shouldDirty: true, ...options });
   };
 
   return { ...formContext, setValue };
