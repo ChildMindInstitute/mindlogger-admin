@@ -4,6 +4,7 @@ import { ItemResponseType } from 'shared/consts';
 import {
   AppletSaveEvent,
   MixpanelAppletSaveEventType,
+  MixpanelEventType,
   MixpanelFeature,
   MixpanelProps,
   WithFeature,
@@ -51,10 +52,12 @@ export const trackAppletSave = ({
     action,
     [MixpanelProps.AppletId]: appletId,
     [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
-    [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
-    [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
-    [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
-    [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+    ...(action === MixpanelEventType.AppletSaveClick && {
+      [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
+      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
+      [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
+      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+    }),
   };
 
   if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
