@@ -1144,7 +1144,8 @@
   },
   "phrasalTemplatePreviewPopup": {
     "title": "Preview Phrase {{index}}",
-    "responsePlaceholder": "[{{itemName}} Response]"
+    "responsePlaceholder": "[{{itemName}} response]",
+    "responsePlaceholderWithLabel": "[{{itemName}} {{indexedItemLabel}} response]"
   },
   "phrasalTemplateItem": {
     "btnAddField": "Add…",
