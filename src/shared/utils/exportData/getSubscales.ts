@@ -126,7 +126,7 @@ export const calcScores = <T>(
       if (ageAnswer) {
         if (typeof ageAnswer === 'string') {
           reportedAge = ageAnswer;
-        } else if ('value' in ageAnswer && typeof ageAnswer.value === 'number') {
+        } else if ('value' in ageAnswer && ['number', 'string'].includes(typeof ageAnswer.value)) {
           reportedAge = String(ageAnswer.value);
         }
       }

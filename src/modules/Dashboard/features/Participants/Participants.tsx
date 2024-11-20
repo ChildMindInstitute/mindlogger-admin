@@ -340,16 +340,21 @@ export const Participants = () => {
     }[status];
     const isPending = status === RespondentStatus.Pending;
 
-    const defaultOnClick = () => {
-      navigate(
-        generatePath(page.appletParticipantDetails, {
-          appletId,
-          subjectId: detail.subjectId,
-        }),
-      );
-    };
+    const onClick = isPending
+      ? undefined
+      : () => {
+          navigate(
+            generatePath(page.appletParticipantDetails, {
+              appletId,
+              subjectId: detail.subjectId,
+            }),
+          );
+        };
 
     return {
+      rowState: {
+        value: !isPending && 'has-hover',
+      },
       id: {
         value: respondentOrSubjectId,
         isHidden: true,
@@ -368,34 +373,34 @@ export const Participants = () => {
         ),
         value: '',
         width: ParticipantsColumnsWidth.Default,
-        onClick: defaultOnClick,
+        onClick,
       },
       secretIds: {
         content: () => secretId,
         value: secretId,
-        onClick: defaultOnClick,
+        onClick,
         maxWidth: ParticipantsColumnsWidth.Id,
       },
       nicknames: {
         content: () => nickname,
         value: nickname,
-        onClick: defaultOnClick,
+        onClick,
       },
       accountType: {
         content: () => <Chip color={isPending ? 'warning' : 'secondary'} title={accountType} />,
         value: accountType,
-        onClick: defaultOnClick,
+        onClick,
       },
       lastSeen: {
         content: () => <StyledMaybeEmpty>{latestActive}</StyledMaybeEmpty>,
         value: latestActive,
-        onClick: defaultOnClick,
+        onClick,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
-          onClick: defaultOnClick,
+          onClick,
         },
       }),
       actions: {

@@ -31,6 +31,11 @@ export enum MixpanelFeature {
   SSI = 'SSI',
 }
 
+export enum MixpanelFeature {
+  MultiInformant = 'Multi-informant',
+  SSI = 'SSI',
+}
+
 export enum MixpanelEventType {
   InvitationSent = 'Invitation sent successfully',
   LoginSuccessful = 'Login Successful',
@@ -208,12 +213,13 @@ export type ExportDataClickEvent = WithAppletId<{
   action: MixpanelEventType.ExportDataClick;
 }>;
 
-type TakeNowEvent = WithAppletId<{
-  [MixpanelProps.Feature]?: 'Multi-informant';
-  [MixpanelProps.MultiInformantAssessmentId]?: string | null;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-}>;
+type TakeNowEvent = WithFeature<
+  WithAppletId<{
+    [MixpanelProps.MultiInformantAssessmentId]?: string | null;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+  }>
+>;
 
 export type TakeNowDialogClosedEvent = TakeNowEvent & {
   action: MixpanelEventType.TakeNowDialogClosed;

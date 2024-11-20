@@ -20,6 +20,7 @@ import { ApiResponseCodes } from 'api';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
+import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 
 import { Participants } from './Participants';
 
@@ -72,12 +73,10 @@ const mockedResponses = {
   [RESPONDENTS_ENDPOINT]: mockSuccessfulHttpResponse({ result: [] }),
 };
 
-const getMockedGetWithParticipants = (isAnonymousRespondent = false) => ({
+const getMockedGetWithParticipants = (respondentProps?: Partial<Respondent>) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: isAnonymousRespondent
-      ? [{ ...mockedRespondent, isAnonymousRespondent: true }]
-      : [mockedRespondent],
+    result: [{ ...mockedRespondent, ...respondentProps }],
     count: 1,
   },
 });
@@ -175,6 +174,20 @@ describe('Participants component tests', () => {
     );
   });
 
+  test('participant row should not link to participant details page for pending participants', async () => {
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({ status: RespondentStatus.Pending }),
+    });
+    renderWithProviders(<Participants />, { preloadedState, route, routePath });
+    const firstParticipantSecretIdCell = await waitFor(() =>
+      screen.getByTestId('dashboard-participants-table-0-cell-secretIds'),
+    );
+    fireEvent.click(firstParticipantSecretIdCell);
+
+    expect(mockedUseNavigate).not.toHaveBeenCalled();
+  });
+
   test('should pin participant', async () => {
     mockGetRequestResponses({
       ...mockedResponses,
@@ -252,7 +265,7 @@ describe('Participants component tests', () => {
   test('actions should appear for anonymous participant', async () => {
     mockGetRequestResponses({
       ...mockedResponses,
-      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(true),
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({ isAnonymousRespondent: true }),
     });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 

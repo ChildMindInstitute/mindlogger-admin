@@ -100,6 +100,7 @@ export function mapResponseToSubmissionsTableProps(
               };
 
               return {
+                rowState: { value: 'has-hover' },
                 activity: {
                   onClick: handleClick,
                   content: () => <StyledMaybeEmpty>{activityName}</StyledMaybeEmpty>,

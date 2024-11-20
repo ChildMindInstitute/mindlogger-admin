@@ -2,18 +2,28 @@ import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { ApiResponseCodes } from 'api';
-import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
+import { mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { expectBanner, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import {
+  AppletCreatedSuccessfullyEvent,
+  AppletEditSuccessfulEvent,
+  AppletSaveClickEvent,
+  expectBanner,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+} from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { ItemResponseType } from 'shared/consts';
 import { SingleApplet } from 'shared/state';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
 
+/* Mocks
+=================================================== */
 jest.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
@@ -77,8 +87,18 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
+/* Utilities
+=================================================== */
+export const expectMixpanelTrack = (
+  event: AppletSaveClickEvent | AppletCreatedSuccessfullyEvent | AppletEditSuccessfulEvent,
+) => {
+  expect(spyMixpanelTrack).toHaveBeenCalledWith(event);
+};
+
+/* Tests
+=================================================== */
 describe('useSaveAndPublishSetup hook', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -87,7 +107,7 @@ describe('useSaveAndPublishSetup hook', () => {
       },
       resetLDContext: jest.fn(),
     });
-    mixpanelTrack.mockReset();
+    spyMixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -98,7 +118,12 @@ describe('useSaveAndPublishSetup hook', () => {
   describe('handleSaveAndPublishFirstClick', () => {
     describe('creating a new applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.post.mockResolvedValueOnce({ data: {} });
+        mockAxios.post.mockResolvedValueOnce({
+          status: ApiResponseCodes.SuccessfulResponse,
+          data: {
+            result: { ...mockedSimpleAppletFormData, id: mockedAppletId },
+          },
+        });
 
         const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
           preloadedState: getPreloadedState(),
@@ -108,18 +133,22 @@ describe('useSaveAndPublishSetup hook', () => {
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
 
-        await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletSaveClick,
+          [MixpanelProps.AppletId]: undefined,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.AutoAssignedActivityCount]: 1,
+          [MixpanelProps.AutoAssignedFlowCount]: 0,
+          [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+          [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+        });
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletCreatedSuccessfully,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
 
-        expect(mixpanelTrack).toHaveBeenCalledWith(
-          expect.objectContaining({
-            action: MixpanelEventType.AppletSaveClick,
-            [MixpanelProps.AppletId]: undefined,
-            [MixpanelProps.AutoAssignedActivityCount]: 1,
-            [MixpanelProps.AutoAssignedFlowCount]: 0,
-            [MixpanelProps.ManuallyAssignedActivityCount]: 1,
-            [MixpanelProps.ManuallyAssignedFlowCount]: 0,
-          }),
-        );
+        await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
       });
 
       test('should not show a success banner if call to save fails', async () => {
@@ -149,7 +178,7 @@ describe('useSaveAndPublishSetup hook', () => {
         mockAxios.put.mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
-            result: mockedApplet,
+            result: { ...mockedSimpleAppletFormData, id: mockedAppletId },
           },
         });
 
@@ -161,16 +190,20 @@ describe('useSaveAndPublishSetup hook', () => {
 
         await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
 
-        expect(mixpanelTrack).toHaveBeenCalledWith(
-          expect.objectContaining({
-            action: MixpanelEventType.AppletSaveClick,
-            [MixpanelProps.AppletId]: mockedAppletId,
-            [MixpanelProps.AutoAssignedActivityCount]: 1,
-            [MixpanelProps.AutoAssignedFlowCount]: 0,
-            [MixpanelProps.ManuallyAssignedActivityCount]: 1,
-            [MixpanelProps.ManuallyAssignedFlowCount]: 0,
-          }),
-        );
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletSaveClick,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.AutoAssignedActivityCount]: 1,
+          [MixpanelProps.AutoAssignedFlowCount]: 0,
+          [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+          [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+        });
+        expectMixpanelTrack({
+          action: MixpanelEventType.AppletEditSuccessful,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+        });
 
         await waitFor(() =>
           expect(

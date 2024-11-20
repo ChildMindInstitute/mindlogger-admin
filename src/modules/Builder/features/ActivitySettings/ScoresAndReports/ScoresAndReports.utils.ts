@@ -59,3 +59,9 @@ export const getTableScoreItems = (items?: ItemFormValues[]) =>
       },
     ];
   }, []);
+
+export const reportIsScore = (report: ScoreOrSection): report is ScoreReport =>
+  report.type === ScoreReportType.Score;
+
+export const reportIsSection = (report: ScoreOrSection): report is SectionReport =>
+  report.type === ScoreReportType.Section;

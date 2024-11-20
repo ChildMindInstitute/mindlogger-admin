@@ -34,6 +34,8 @@ import {
   ResponsesAboutDropdownOpenedEvent,
   ResponsesAboutSelectionChangedEvent,
   TakeNowClickEvent,
+  addFeatureToEvent,
+  MixpanelFeature,
 } from 'shared/utils';
 import { useAsync, useLogout } from 'shared/hooks';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
@@ -90,6 +92,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
     useState<ParticipantDropdownOption | null>(null);
+  const [defaultIsSelfReporting, setDefaultIsSelfReporting] = useState<boolean>(true);
   const [multiInformantAssessmentId, setMultiInformantAssessmentId] = useState<string | null>(null);
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
@@ -118,10 +121,10 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         | TakeNowClickEvent,
       newActivityOrFlow?: Activity | HydratedActivityFlow | ParticipantActivityOrFlow,
     ) => {
-      event[MixpanelProps.Feature] = event[MixpanelProps.Feature] ?? 'Multi-informant';
       event[MixpanelProps.AppletId] = event[MixpanelProps.AppletId] ?? appletId;
       event[MixpanelProps.MultiInformantAssessmentId] =
         event[MixpanelProps.MultiInformantAssessmentId] ?? multiInformantAssessmentId;
+      addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
       const trackedActivityOrFlow = newActivityOrFlow ?? activityOrFlow;
 
@@ -152,7 +155,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     const [sourceSubject, setSourceSubject] = useState<ParticipantDropdownOption | null>(
       defaultSourceSubject,
     );
-    const [isSelfReporting, setIsSelfReporting] = useState<boolean>(true);
+    const [isSelfReporting, setIsSelfReporting] = useState<boolean>(defaultIsSelfReporting);
     const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
       defaultSourceSubject?.userId ? defaultSourceSubject : null,
     );
@@ -510,7 +513,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
     if (sourceSubject) {
       setDefaultSourceSubject(sourceSubject);
-      event[MixpanelProps.SourceAccountType] = getAccountType(sourceSubject);
+      const accountType = getAccountType(sourceSubject);
+      setDefaultIsSelfReporting(accountType !== 'Limited');
+      event[MixpanelProps.SourceAccountType] = accountType;
     } else {
       setDefaultSourceSubject(enableParticipantMultiInformant ? null : loggedInTeamMember);
     }

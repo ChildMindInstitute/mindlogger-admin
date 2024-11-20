@@ -203,8 +203,8 @@ describe('AppletItem component tests', () => {
     const tableRow = await findByTestId('dashboard-applets-table-applet-row');
 
     expect(tableRow).toBeInTheDocument();
-    expect(tableRow).toHaveClass('has-hover');
-    expect(tableRow).not.toHaveClass('dragged-over');
+    expect(tableRow).toHaveClass('MuiTableRow-has-hover');
+    expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
     jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
@@ -213,6 +213,6 @@ describe('AppletItem component tests', () => {
 
     rerender(getAppletItemComponent());
 
-    expect(tableRow).toHaveClass('has-hover dragged-over');
+    expect(tableRow).toHaveClass('MuiTableRow-has-hover MuiTableRow-dragged-over');
   });
 });
