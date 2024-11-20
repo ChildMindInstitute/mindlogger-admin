@@ -67,8 +67,13 @@ export function RenderedField({
       setResponseFromOptions(responseItem.responseValues?.rows);
       setDisplayModes(undefined);
 
-      // Set default value for itemIndex if not set
-      if (typeof fieldValue.itemIndex !== 'number') setValue(`${name}.itemIndex`, 0);
+      // Set default value for itemIndex if not set, or out of range
+      if (
+        typeof fieldValue.itemIndex !== 'number' ||
+        fieldValue.itemIndex >= responseItem.responseValues?.rows.length
+      ) {
+        setValue(`${name}.itemIndex`, 0);
+      }
     } else {
       setResponseFromOptions(undefined);
       if (typeof fieldValue.itemIndex === 'number') setValue(`${name}.itemIndex`, null);
