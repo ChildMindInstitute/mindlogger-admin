@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useCallback, useState, useEffect } from 'react';
+import { Fragment, useCallback, useState, useEffect } from 'react';
 import { Control, useFieldArray } from 'react-hook-form';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 
@@ -194,9 +194,8 @@ export const PhrasalTemplatePhrase = ({
                     const hasMinimumFields = fields.length > 2;
 
                     return (
-                      <>
+                      <Fragment key={`draggable-item-${field.id}`}>
                         <PhrasalTemplateField
-                          key={`draggable-item-${field.id}`}
                           itemId={`draggable-item-${field.id}`}
                           index={fieldIndex}
                           canRemove={
@@ -208,7 +207,7 @@ export const PhrasalTemplatePhrase = ({
                           type={field.type}
                           placeholder={fieldPlaceholders[fieldIndex]}
                         />
-                      </>
+                      </Fragment>
                     );
                   })}
                 </StyledPhraseTemplateFieldSet>
