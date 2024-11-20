@@ -99,6 +99,7 @@ export const PhrasalTemplate = ({ name = '' }: { name?: string }) => {
                 handleRemovePhraseAtIndex(i);
               }}
               responseOptions={responseOptions}
+              field={field}
             />
           ))}
         </StyledPhrasalTemplateList>

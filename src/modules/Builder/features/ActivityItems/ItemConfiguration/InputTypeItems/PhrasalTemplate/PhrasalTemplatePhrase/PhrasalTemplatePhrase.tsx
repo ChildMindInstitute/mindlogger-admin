@@ -1,6 +1,6 @@
 import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { Control, useFieldArray } from 'react-hook-form';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 
@@ -31,25 +31,38 @@ import {
 import { PhrasalTemplatePhraseProps } from './PhrasalTemplatePhrase.types';
 import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.utils';
 import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
+import { PhrasalTemplateResponseValuePhraseSchema } from '../../../../../../pages/BuilderApplet/BuilderApplet.schema';
 
 export const PhrasalTemplatePhrase = ({
   name = '',
   responseOptions = [],
   index = 0,
   onRemovePhrase,
+  field,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
+  // Use `useEffect` to trigger validation when `fields` or form state changes
   const [removePopupOpen, setRemovePopupOpen] = useState(false);
   const [previewPopupOpen, setPreviewPopupOpen] = useState(false);
+  const [previewPhraseDisabled, setPreviewPhraseDisabled] = useState(false);
+
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
-
   const phraseFieldsName = `${name}.fields`;
-  const { control, setValue, getValues, formState } = useCustomFormContext();
-
+  const { control, setValue, getValues, formState, watch } = useCustomFormContext();
+  const watchedFields = watch(phraseFieldsName); // Watch all values in the field array
   const { fields, append, remove, swap } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
   });
+
+  useEffect(() => {
+    const validateField = async () => {
+      const result = await validatePhraseField(field);
+      setPreviewPhraseDisabled(result);
+    };
+
+    validateField(); // Call the async function
+  }, [formState, formState.isSubmitting]);
 
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
@@ -105,6 +118,16 @@ export const PhrasalTemplatePhrase = ({
     swap(source.index, destination.index);
   };
 
+  const validatePhraseField = async (field: Record<'id', string>) => {
+    try {
+      await PhrasalTemplateResponseValuePhraseSchema.validate(field, { abortEarly: false });
+
+      return false;
+    } catch (error) {
+      return true;
+    }
+  };
+
   return (
     <StyledAccordion defaultExpanded>
       <StyledAccordionSummary>
@@ -149,7 +172,7 @@ export const PhrasalTemplatePhrase = ({
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
               variant="text"
-              disabled={formState.isSubmitting || !formState.isValid}
+              disabled={previewPhraseDisabled}
             >
               <Svg aria-hidden height={18} id="notes" width={18} />
               {t('phrasalTemplateItem.btnPreviewPhrase')}
