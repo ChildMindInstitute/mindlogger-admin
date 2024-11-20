@@ -31,11 +31,6 @@ export enum MixpanelFeature {
   SSI = 'SSI',
 }
 
-export enum MixpanelFeature {
-  MultiInformant = 'Multi-informant',
-  SSI = 'SSI',
-}
-
 export enum MixpanelEventType {
   InvitationSent = 'Invitation sent successfully',
   LoginSuccessful = 'Login Successful',
