@@ -12,7 +12,6 @@ export const FeatureFlagsKeys = {
   enableParticipantConnections: 'enableParticipantConnections',
   enableLorisIntegration: 'enableLorisIntegration',
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
-  enableAdminAppSoftLock: 'enableAdminAppSoftLock',
   enableParagraphTextItem: 'enableParagraphTextItem',
   enablePhrasalTemplate: 'enablePhrasalTemplate',
   enableShareToLibrary: 'enableShareToLibrary',
