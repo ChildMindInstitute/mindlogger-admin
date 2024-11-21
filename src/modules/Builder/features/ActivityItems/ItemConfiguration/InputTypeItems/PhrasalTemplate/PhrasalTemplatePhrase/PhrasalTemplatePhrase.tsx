@@ -117,7 +117,7 @@ export const PhrasalTemplatePhrase = ({
     swap(source.index, destination.index);
   };
 
-  const validatePhraseField = async (field: Record<'id', string>) => {
+  const validatePhraseField = async (field: Record<'id', string>): Promise<boolean> => {
     try {
       await PhrasalTemplateResponseValuePhraseSchema.validate(field, { abortEarly: false });
 
