@@ -20,10 +20,4 @@ export const FeatureFlagsKeys = {
   enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
 };
 
-export enum FeatureFlagsIntegrations {
-  LORIS = 'enable-loris-integration',
-}
-
-export type FeatureFlagsIntegrationKeys = keyof typeof FeatureFlagsIntegrations;
-
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
