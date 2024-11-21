@@ -49,7 +49,6 @@ export const PhrasalTemplatePhrase = ({
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
   const phraseFieldsName = `${name}.fields`;
   const { control, setValue, getValues, formState, watch } = useCustomFormContext();
-  const watchedFields = watch(phraseFieldsName); // Watch all values in the field array
   const { fields, append, remove, swap } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
@@ -62,7 +61,7 @@ export const PhrasalTemplatePhrase = ({
     };
 
     validateField(); // Call the async function
-  }, [formState, formState.isSubmitting]);
+  }, [field, formState, formState.isSubmitting]);
 
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
