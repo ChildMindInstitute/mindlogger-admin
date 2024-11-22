@@ -48,7 +48,8 @@ export const PhrasalTemplatePhrase = ({
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
   const phraseFieldsName = `${name}.fields`;
   const { control, setValue, getValues, formState } = useCustomFormContext();
-  const { fields, append, remove, swap } = useFieldArray({
+
+  const { fields, append, remove, move } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
   });
@@ -106,15 +107,9 @@ export const PhrasalTemplatePhrase = ({
   };
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ destination, source }) => {
-    if (
-      !destination ||
-      source?.index === destination?.index ||
-      typeof source?.index !== 'number' ||
-      typeof destination?.index !== 'number'
-    )
-      return;
+    if (!destination || !source || source.index === destination.index) return;
 
-    swap(source.index, destination.index);
+    move(source.index, destination.index);
   };
 
   return (
@@ -217,6 +212,7 @@ export const PhrasalTemplatePhrase = ({
                     );
                   })}
                 </StyledPhraseTemplateFieldSet>
+                {provided.placeholder}
               </Box>
             )}
           </DndDroppable>
