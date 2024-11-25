@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useState, useEffect } from 'react';
@@ -31,8 +32,7 @@ import {
 import { PhrasalTemplatePhraseProps } from './PhrasalTemplatePhrase.types';
 import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.utils';
 import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
-import { PhrasalTemplateResponseValuePhraseSchema } from '../../../../../../pages/BuilderApplet/BuilderApplet.schema';
-
+import { PhrasalTemplateResponseValuePhraseSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 export const PhrasalTemplatePhrase = ({
   name = '',
   responseOptions = [],
@@ -48,7 +48,7 @@ export const PhrasalTemplatePhrase = ({
 
   const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
   const phraseFieldsName = `${name}.fields`;
-  const { control, setValue, getValues, formState, watch } = useCustomFormContext();
+  const { control, setValue, getValues, formState } = useCustomFormContext();
   const { fields, append, remove, swap } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
@@ -119,7 +119,7 @@ export const PhrasalTemplatePhrase = ({
 
   const validatePhraseField = async (field: Record<'id', string>): Promise<boolean> => {
     try {
-      await PhrasalTemplateResponseValuePhraseSchema.validate(field, { abortEarly: false });
+      await PhrasalTemplateResponseValuePhraseSchema.validate(field);
 
       return false;
     } catch (error) {
