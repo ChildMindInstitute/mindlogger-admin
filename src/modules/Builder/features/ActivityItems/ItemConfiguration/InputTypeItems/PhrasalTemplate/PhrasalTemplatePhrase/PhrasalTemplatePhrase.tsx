@@ -32,7 +32,8 @@ import {
 import { PhrasalTemplatePhraseProps } from './PhrasalTemplatePhrase.types';
 import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.utils';
 import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
-import { PhrasalTemplateResponseValuePhraseSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
+import { validatePhraseField } from './PhrasalTemplatePhrase.utils';
+
 export const PhrasalTemplatePhrase = ({
   name = '',
   responseOptions = [],
@@ -41,7 +42,6 @@ export const PhrasalTemplatePhrase = ({
   field,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
-  // Use `useEffect` to trigger validation when `fields` or form state changes
   const [removePopupOpen, setRemovePopupOpen] = useState(false);
   const [previewPopupOpen, setPreviewPopupOpen] = useState(false);
   const [previewPhraseDisabled, setPreviewPhraseDisabled] = useState(false);
@@ -54,14 +54,15 @@ export const PhrasalTemplatePhrase = ({
     name: phraseFieldsName as 'values',
   });
 
+  // Trigger validation when `fields` or form state changes to update preview button state
   useEffect(() => {
     const validateField = async () => {
-      const result = await validatePhraseField(field);
-      setPreviewPhraseDisabled(result);
+      const isValid = await validatePhraseField(field);
+      setPreviewPhraseDisabled(!isValid);
     };
 
-    validateField(); // Call the async function
-  }, [field, formState, formState.isSubmitting]);
+    validateField();
+  }, [field, formState]);
 
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
@@ -115,16 +116,6 @@ export const PhrasalTemplatePhrase = ({
       return;
 
     swap(source.index, destination.index);
-  };
-
-  const validatePhraseField = async (field: Record<'id', string>): Promise<boolean> => {
-    try {
-      await PhrasalTemplateResponseValuePhraseSchema.validate(field);
-
-      return false;
-    } catch (error) {
-      return true;
-    }
   };
 
   return (
