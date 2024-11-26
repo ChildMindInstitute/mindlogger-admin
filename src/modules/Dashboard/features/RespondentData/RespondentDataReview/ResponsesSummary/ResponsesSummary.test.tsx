@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { getRespondentName } from 'shared/utils';
 
 import { ResponsesSummary } from './ResponsesSummary';
 import { ResponsesSummaryProps } from './ResponsesSummary.types';
@@ -38,6 +39,12 @@ describe('Responses Summary', () => {
     expect(screen.getByTestId('review-description')).toBeInTheDocument();
     expect(screen.getByText('Viewing responses submitted on:')).toBeInTheDocument();
     expect(screen.getByText('Mar 14, 2024 14:33:48')).toBeInTheDocument();
+    expect(screen.getByText('Respondent:')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        getRespondentName(sourceSubject.secretUserId, sourceSubject.nickname, 'comma'),
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText('Response Identifier:')).toBeInTheDocument();
     expect(screen.getByText(mockedIdentifier)).toBeInTheDocument();
     expect(screen.queryByText(EMPTY_IDENTIFIER)).not.toBeInTheDocument();

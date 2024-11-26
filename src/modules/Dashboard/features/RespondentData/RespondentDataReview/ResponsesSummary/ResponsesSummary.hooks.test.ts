@@ -32,7 +32,9 @@ describe('useResponsesSummary', () => {
     users.useRespondent = jest.fn().mockReturnValue({ result: res });
     users.useSubject = jest.fn().mockReturnValue({ details: undefined });
 
-    const respondent = res?.nickname ? getRespondentName(res.secretUserId, res.nickname) : '';
+    const respondent = res?.nickname
+      ? getRespondentName(res.secretUserId, res.nickname, 'comma')
+      : '';
 
     const { result } = renderHookWithProviders(() =>
       useResponsesSummary({ endDatetime, createdAt, identifier, version, sourceSubject: res }),
