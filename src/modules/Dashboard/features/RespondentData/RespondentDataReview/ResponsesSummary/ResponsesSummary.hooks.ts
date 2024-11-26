@@ -20,7 +20,8 @@ export const useResponsesSummary = ({
     DateFormats.MonthDayYearTimeSeconds,
   );
 
-  const respondent = getRespondentName(sourceSubject?.secretUserId, sourceSubject?.nickname);
+  const respondent =
+    sourceSubject && getRespondentName(sourceSubject.secretUserId, sourceSubject.nickname, 'comma');
 
   return [
     {

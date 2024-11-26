@@ -30,7 +30,7 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { activityId, activityFlowId } = useParams();
-  const respondentLabel = useRespondentLabel({ isSubject: true });
+  const respondentLabel = useRespondentLabel({ isSubject: true, variant: 'comma' });
 
   const dataTestid = 'respondents-review-menu';
 
