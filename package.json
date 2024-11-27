@@ -119,6 +119,10 @@
       "last 1 safari version"
     ]
   },
+  "overrides": {
+    "crypto-js": "^4.2.0",
+    "@babel/traverse": "^7.23.2"
+  },
   "devDependencies": {
     "@types/dompurify": "^3.0.3",
     "@types/downloadjs": "^1.4.4",

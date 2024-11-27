@@ -1,26 +1,27 @@
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, FormControlLabel } from '@mui/material';
 
-import {
-  StyledBodyMedium,
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledSmallNumberInput,
-  StyledTitleMedium,
-  theme,
-} from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   MAX_THRESHOLD_DURATION,
   MIN_MILLISECONDS_DURATION,
   MIN_THRESHOLD_DURATION,
 } from 'shared/consts';
-import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
+import {
+  StyledBodyMedium,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledSmallNumberInput,
+  StyledSmallPercentageInput,
+  StyledTitleMedium,
+  theme,
+} from 'shared/styles';
 
-import { getCheckboxes } from './RoundOptions.utils';
 import { RoundOptionsProps } from './RoundOptions.types';
+import { getCheckboxes } from './RoundOptions.utils';
 
 export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: RoundOptionsProps) => {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: Rou
           <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>
             {t('flankerRound.threshold')}
           </StyledTitleMedium>
-          <StyledSmallNumberInput>
+          <StyledSmallPercentageInput>
             <InputController
               control={control}
               key={`${roundField}.minimumAccuracy`}
@@ -72,7 +73,7 @@ export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: Rou
               textAdornment="%"
               data-testid={`${dataTestid}-minimum-accuracy`}
             />
-          </StyledSmallNumberInput>
+          </StyledSmallPercentageInput>
         </StyledFlexTopCenter>
       )}
       <StyledFlexColumn sx={{ mb: theme.spacing(2.4) }}>

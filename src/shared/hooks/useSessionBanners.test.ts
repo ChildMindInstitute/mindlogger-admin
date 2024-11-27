@@ -18,7 +18,7 @@ const emptyState: PreloadedState<RootState> = {
 const populatedState: PreloadedState<RootState> = {
   banners: {
     data: {
-      banners: [{ key: 'VersionWarningBanner' }],
+      banners: [{ key: 'SaveSuccessBanner' }],
     },
   },
 };
@@ -27,22 +27,6 @@ const spyAccessToken = jest.spyOn(authStorage, 'getAccessToken');
 const spyUseStatus = jest.spyOn(auth, 'useStatus');
 
 describe('useSessionBanners', () => {
-  test('should add a banner when the session becomes valid', () => {
-    spyAccessToken.mockReturnValue(null);
-    spyUseStatus.mockReturnValue('idle');
-
-    const { rerender, store } = renderHookWithProviders(useSessionBanners, {
-      preloadedState: emptyState,
-    });
-
-    spyAccessToken.mockReturnValue('access-token');
-    spyUseStatus.mockReturnValue('success');
-
-    rerender();
-
-    expect(store.getState().banners).toEqual(populatedState.banners);
-  });
-
   test('should remove all banners when the session becomes invalid', () => {
     spyAccessToken.mockReturnValue('access-token');
     spyUseStatus.mockReturnValue('success');

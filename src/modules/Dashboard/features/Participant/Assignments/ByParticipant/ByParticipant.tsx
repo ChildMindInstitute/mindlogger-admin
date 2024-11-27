@@ -61,8 +61,7 @@ const ByParticipant = () => {
   );
 
   const handleRefetchActivities = useCallback(() => {
-    // Avoid fetching activities for respondent if respondent is a limited account
-    if (!appletId || !respondentSubject?.id || !respondentSubject.userId) return;
+    if (!appletId || !respondentSubject?.id) return;
 
     fetchActivities({ appletId, subjectId: respondentSubject.id });
   }, [appletId, fetchActivities, respondentSubject]);
@@ -137,6 +136,7 @@ const ByParticipant = () => {
               ? t('participantDetails.byParticipantEmptyLimitedAccount')
               : t('participantDetails.byParticipantEmpty')
           }
+          maxWidth={isRespondentLimited ? '57.2rem' : undefined}
         />
       )}
 
