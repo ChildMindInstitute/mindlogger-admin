@@ -39,7 +39,6 @@ export const PhrasalTemplatePhrase = ({
   responseOptions = [],
   index = 0,
   onRemovePhrase,
-  field,
 }: PhrasalTemplatePhraseProps) => {
   const { t } = useTranslation('app');
   const [removePopupOpen, setRemovePopupOpen] = useState(false);
@@ -57,12 +56,12 @@ export const PhrasalTemplatePhrase = ({
   // Trigger validation when `fields` or form state changes to update preview button state
   useEffect(() => {
     const validateField = async () => {
-      const isValid = await validatePhraseField(field);
+      const isValid = await validatePhraseField(getValues(name));
       setPreviewPhraseDisabled(!isValid);
     };
 
     validateField();
-  }, [field, formState]);
+  }, [name, getValues, formState]);
 
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);

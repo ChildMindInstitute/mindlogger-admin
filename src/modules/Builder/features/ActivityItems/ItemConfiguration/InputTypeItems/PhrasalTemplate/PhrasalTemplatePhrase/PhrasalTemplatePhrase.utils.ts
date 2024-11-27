@@ -1,8 +1,12 @@
+import { InferType } from 'yup';
+
 import { PhrasalTemplateResponseValuePhraseSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
-export const validatePhraseField = async (field: Record<'id', string>): Promise<boolean> => {
+export const validatePhraseField = async (
+  field: InferType<typeof PhrasalTemplateResponseValuePhraseSchema>,
+): Promise<boolean> => {
   try {
-    await PhrasalTemplateResponseValuePhraseSchema.validate(field);
+    await PhrasalTemplateResponseValuePhraseSchema.validate(field, { abortEarly: false });
 
     return true;
   } catch (error) {

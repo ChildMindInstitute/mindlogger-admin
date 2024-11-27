@@ -5,5 +5,4 @@ export interface PhrasalTemplatePhraseProps {
   onRemovePhrase?: () => void;
   index?: number;
   responseOptions?: Item[];
-  field: Record<'id', string>;
 }
