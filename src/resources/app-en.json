@@ -1023,6 +1023,8 @@
   "noResponseIdentifier": "No response identifier yet.",
   "viewingResponsesSubmitted": "Viewing responses submitted on:",
   "responseIdentifierWithColon": "Response Identifier:",
+  "respondentIdentifierWithColon": "Respondent:",
+  "subjectIdentifierWithColon": "Subject:",
   "versionWithColon": "Version:",
   "noRespondents": "No Respondents yet.",
   "noParticipants": "No Participants yet.",
