@@ -1,5 +1,5 @@
 import { StyledFlexColumn, StyledTitleBoldMedium, StyledTitleSmall } from 'shared/styles';
-import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
+import { StyledMaybeEmpty } from 'shared/styles';
 
 import { StatBoxProps } from './StatBox.types';
 
