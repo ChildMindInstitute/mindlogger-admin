@@ -70,19 +70,15 @@ export const SwitchCondition = ({
     ],
   });
 
-  const parsedMinDateValue = minDateValue && new Date(minDateValue);
-  const parsedMaxDateValue = maxDateValue && new Date(maxDateValue);
-  const parsedDateValue = dateValue && new Date(dateValue);
-
   useEffect(() => {
     if (dateValue && typeof dateValue === 'string') {
-      setValue(dateValueName, new Date(dateValue));
+      setValue(dateValueName, new Date(`${dateValue}T00:00:00`));
     }
     if (minDateValue && typeof minDateValue === 'string') {
-      setValue(minDateValueName, new Date(minDateValue));
+      setValue(minDateValueName, new Date(`${minDateValue}T00:00:00`));
     }
     if (maxDateValue && typeof maxDateValue === 'string') {
-      setValue(maxDateValueName, new Date(maxDateValue));
+      setValue(maxDateValueName, new Date(`${maxDateValue}T00:00:00`));
     }
   }, [
     dateValue,
@@ -238,9 +234,9 @@ export const SwitchCondition = ({
       };
 
       const onCloseStartDateCallback = () => {
-        if (!parsedMinDateValue || !parsedMaxDateValue) return;
-        if (parsedMaxDateValue < parsedMinDateValue) {
-          setValue(maxDateValueName, addDays(parsedMinDateValue, 1));
+        if (!minDateValue || !maxDateValue) return;
+        if (maxDateValue < minDateValue) {
+          setValue(maxDateValueName, addDays(minDateValue, 1));
         }
       };
 
@@ -251,7 +247,6 @@ export const SwitchCondition = ({
             <StyledFlexTopCenter>
               <DatePicker
                 name={dateValueName}
-                value={parsedDateValue}
                 data-testid={`${dataTestid}-date-value`}
                 skipMinDate
                 {...commonDateInputProps}
@@ -262,7 +257,6 @@ export const SwitchCondition = ({
             <StyledFlexTopCenter>
               <DatePicker
                 name={minDateValueName}
-                value={parsedMinDateValue}
                 key={`min-date-value-${isRangeValueShown}`}
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
@@ -272,7 +266,6 @@ export const SwitchCondition = ({
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
               <DatePicker
                 name={maxDateValueName}
-                value={parsedMaxDateValue}
                 key={`max-date-value-${isRangeValueShown}`}
                 minDate={minValue as Date}
                 data-testid={`${dataTestid}-end-date-value`}
