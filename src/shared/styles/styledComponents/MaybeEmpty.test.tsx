@@ -10,7 +10,14 @@ describe('MaybeEmpty', () => {
     expect(screen.queryByText(value)).toBeVisible();
   });
 
-  test('should render "--" when containing falsey value', () => {
+  test('should render component when containing numeric 0', () => {
+    const value = 0;
+    render(<StyledMaybeEmpty>{value}</StyledMaybeEmpty>);
+
+    expect(screen.queryByText(value)).toBeVisible();
+  });
+
+  test('should render "--" when containing falsey value != 0', () => {
     const value = null;
     const testId = 'testElement';
 
