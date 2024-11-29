@@ -34,9 +34,15 @@ const ByParticipant = () => {
 
   const {
     execute: fetchActivities,
-    isLoading: isLoadingActivities,
+    isLoading: isLoadingParticipantActivities,
     value: fetchedActivities,
-  } = useAsync(getAppletRespondentSubjectActivitiesApi, { retainValue: true });
+  } = useAsync(getAppletRespondentSubjectActivitiesApi, {
+    retainValue: true,
+    successCallback: () => {
+      if (!appletId || !respondentSubjectId) return;
+      fetchCounts({ appletId, subjectId: respondentSubjectId });
+    },
+  });
 
   const activities = fetchedActivities?.data.result ?? [];
 
@@ -77,8 +83,11 @@ const ByParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoading: isLoadingHook,
+    isLoadingActivities: isLoadingAllActivities,
     modals,
+    fetchCounts,
+    isLoadingCounts,
+    counts,
   } = useAssignmentsTab({
     appletId,
     respondentSubject,
@@ -120,11 +129,16 @@ const ByParticipant = () => {
     handleRefetchActivities();
   }, [handleRefetchActivities]);
 
-  const isLoading = isLoadingRespondentSubject || isLoadingActivities || isLoadingHook;
+  const isLoading =
+    isLoadingRespondentSubject || isLoadingParticipantActivities || isLoadingAllActivities;
   const isRespondentLimited = !respondentSubject?.userId;
 
   return (
-    <AssignmentsTab>
+    <AssignmentsTab
+      isLoadingCounts={isLoadingCounts}
+      aboutParticipantCount={counts?.targetActivitiesCount}
+      byParticipantCount={counts?.respondentActivitiesCount}
+    >
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (

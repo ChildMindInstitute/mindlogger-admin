@@ -11,7 +11,12 @@ import {
   checkIfFullAccess,
   getIsWebSupported,
 } from 'shared/utils';
-import { ActivityAssignmentStatus, getAppletActivitiesApi, ParticipantActivityOrFlow } from 'api';
+import {
+  ActivityAssignmentStatus,
+  getAppletActivitiesApi,
+  getAppletParticipantActivitiesCountsApi,
+  ParticipantActivityOrFlow,
+} from 'api';
 import { ItemResponseType } from 'shared/consts';
 import { MenuItemType, Svg } from 'shared/components';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
@@ -60,7 +65,7 @@ export const useAssignmentsTab = ({
   // https://mindlogger.atlassian.net/browse/M2-7906
   const {
     execute: fetchActivities,
-    isLoading,
+    isLoading: isLoadingActivities,
     value: fetchedActivities,
   } = useAsync(getAppletActivitiesApi, { retainValue: true });
 
@@ -68,6 +73,12 @@ export const useAssignmentsTab = ({
     () => fetchedActivities?.data?.result.activitiesDetails ?? [],
     [fetchedActivities],
   );
+
+  const {
+    execute: fetchCounts,
+    isLoading: isLoadingCounts,
+    value: counts,
+  } = useAsync(getAppletParticipantActivitiesCountsApi, { retainValue: true });
 
   useEffect(() => {
     if (!appletId) return;
@@ -370,5 +381,14 @@ export const useAssignmentsTab = ({
     </>
   );
 
-  return { getActionsMenu, onClickNavigateToData, onClickAssign, isLoading, modals };
+  return {
+    getActionsMenu,
+    onClickNavigateToData,
+    onClickAssign,
+    isLoadingActivities,
+    modals,
+    fetchCounts,
+    isLoadingCounts,
+    counts: counts?.data.result,
+  };
 };

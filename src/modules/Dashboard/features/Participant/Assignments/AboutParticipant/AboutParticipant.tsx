@@ -24,9 +24,15 @@ const AboutParticipant = () => {
 
   const {
     execute: fetchActivities,
-    isLoading: isLoadingActivities,
+    isLoading: isLoadingParticipantActivities,
     value: fetchedActivities,
-  } = useAsync(getAppletTargetSubjectActivitiesApi, { retainValue: true });
+  } = useAsync(getAppletTargetSubjectActivitiesApi, {
+    retainValue: true,
+    successCallback: () => {
+      if (!appletId || !subjectId) return;
+      fetchCounts({ appletId, subjectId });
+    },
+  });
 
   const activities = fetchedActivities?.data.result ?? [];
 
@@ -40,8 +46,11 @@ const AboutParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoading: isLoadingHook,
+    isLoadingActivities: isLoadingAllActivities,
     modals,
+    fetchCounts,
+    isLoadingCounts,
+    counts,
   } = useAssignmentsTab({ appletId, targetSubject, handleRefetch, dataTestId });
 
   const handleClickNavigateToData = (activityOrFlow: ParticipantActivityOrFlow) => {
@@ -54,11 +63,15 @@ const AboutParticipant = () => {
     handleRefetch();
   }, [handleRefetch]);
 
-  const isLoading = isLoadingSubject || isLoadingActivities || isLoadingHook;
+  const isLoading = isLoadingSubject || isLoadingParticipantActivities || isLoadingAllActivities;
   const isTargetSubjectTeam = targetSubject?.tag === 'Team';
 
   return (
-    <AssignmentsTab>
+    <AssignmentsTab
+      isLoadingCounts={isLoadingCounts}
+      aboutParticipantCount={counts?.targetActivitiesCount}
+      byParticipantCount={counts?.respondentActivitiesCount}
+    >
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (
