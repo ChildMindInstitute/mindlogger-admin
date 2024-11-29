@@ -95,6 +95,22 @@ export type AppletParticipantActivitiesResponse = {
   count: number;
 };
 
+export type ParticipantActivityOrFlowCounts = {
+  activityOrFlowId: string;
+  respondentsCount: number;
+  respondentsSubmissionsCount: number;
+  subjectsCount: number;
+  subjectsSubmissionsCount: number;
+};
+
+export type AppletParticipantActivitiesCountsResponse = {
+  result: SubjectId & {
+    respondentActivitiesCount: number;
+    targetActivitiesCount: number;
+    activitiesOrFlows: ParticipantActivityOrFlowCounts[];
+  };
+};
+
 export type RespondentId = { respondentId: string };
 
 export type TargetSubjectId = { targetSubjectId: string };
