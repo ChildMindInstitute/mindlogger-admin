@@ -83,7 +83,6 @@ const ByParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoadingActivities: isLoadingAllActivities,
     modals,
     fetchCounts,
     isLoadingCounts,
@@ -129,8 +128,7 @@ const ByParticipant = () => {
     handleRefetchActivities();
   }, [handleRefetchActivities]);
 
-  const isLoading =
-    isLoadingRespondentSubject || isLoadingParticipantActivities || isLoadingAllActivities;
+  const isLoading = isLoadingRespondentSubject || isLoadingParticipantActivities;
   const isRespondentLimited = !respondentSubject?.userId;
 
   return (

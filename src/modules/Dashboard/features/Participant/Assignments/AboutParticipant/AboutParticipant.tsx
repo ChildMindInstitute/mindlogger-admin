@@ -46,7 +46,6 @@ const AboutParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoadingActivities: isLoadingAllActivities,
     modals,
     fetchCounts,
     isLoadingCounts,
@@ -63,7 +62,7 @@ const AboutParticipant = () => {
     handleRefetch();
   }, [handleRefetch]);
 
-  const isLoading = isLoadingSubject || isLoadingParticipantActivities || isLoadingAllActivities;
+  const isLoading = isLoadingSubject || isLoadingParticipantActivities;
   const isTargetSubjectTeam = targetSubject?.tag === 'Team';
 
   return (

@@ -63,11 +63,9 @@ export const useAssignmentsTab = ({
   // TODO: We only call getAppletActivitiesApi because we need full items data for each activity.
   // Remove this and associated effect below after supportedPlatforms prop is returned by API.
   // https://mindlogger.atlassian.net/browse/M2-7906
-  const {
-    execute: fetchActivities,
-    isLoading: isLoadingActivities,
-    value: fetchedActivities,
-  } = useAsync(getAppletActivitiesApi, { retainValue: true });
+  const { execute: fetchActivities, value: fetchedActivities } = useAsync(getAppletActivitiesApi, {
+    retainValue: true,
+  });
 
   const activities: Activity[] = useMemo(
     () => fetchedActivities?.data?.result.activitiesDetails ?? [],
@@ -223,6 +221,12 @@ export const useAssignmentsTab = ({
       const isAssignDisabled = !isAssignable || isTargetTeamMember || isLimitedRespondent;
       const isUnassignDisplayed =
         canAssign && isAssignable && (autoAssign || isAssigned) && !isLimitedRespondent;
+      // TODO: Until https://mindlogger.atlassian.net/browse/M2-7906 is tackled to obviate the
+      // need to load all activities (a slow operation), to prevent that request from holding up
+      // interacting with the page (which only affects the enabled state of the Take Now menu item),
+      // just hide the Take Now menu item altogether until activities have been loaded. Remove
+      // this condition after M2-7906 has been completed.
+      const isTakeNowDisplayed = canDoTakeNow && !!activities.length;
 
       let assignTooltip: string | undefined;
       if (status === ActivityAssignmentStatus.Hidden) {
@@ -299,7 +303,7 @@ export const useAssignmentsTab = ({
               },
             }),
           icon: <Svg id="play-outline" />,
-          isDisplayed: canDoTakeNow,
+          isDisplayed: isTakeNowDisplayed,
           title: t('takeNow.menuItem'),
           disabled: !isWebSupported,
           tooltip: !isWebSupported && t('activityIsMobileOnly'),
@@ -385,7 +389,6 @@ export const useAssignmentsTab = ({
     getActionsMenu,
     onClickNavigateToData,
     onClickAssign,
-    isLoadingActivities,
     modals,
     fetchCounts,
     isLoadingCounts,

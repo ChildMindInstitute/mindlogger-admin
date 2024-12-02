@@ -21,7 +21,7 @@ export const StyledMaybeEmpty = styled(
   shouldForwardProp,
 )<PropsWithChildren<{ isLoading?: boolean }>>(({ children, isLoading = false }) => ({
   transition: variables.transitions.opacity,
-  animation: isLoading ? `${loadingAnimation} 1.5s linear infinite` : 'none',
+  animation: isLoading ? `${loadingAnimation} 1s linear infinite` : 'none',
   ...(!children &&
     children !== 0 && {
       opacity: 0.25,
