@@ -1,6 +1,7 @@
+/* eslint-disable import/order */
 import { Box, Button, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { Control, useFieldArray } from 'react-hook-form';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 
@@ -31,6 +32,7 @@ import {
 import { PhrasalTemplatePhraseProps } from './PhrasalTemplatePhrase.types';
 import { getFieldPlaceholders, getNewDefaultField } from '../PhrasalTemplate.utils';
 import { KEYWORDS } from '../PhrasalTemplateField/PhrasalTemplateField.const';
+import { validatePhraseField } from './PhrasalTemplatePhrase.utils';
 
 export const PhrasalTemplatePhrase = ({
   name = '',
@@ -41,15 +43,25 @@ export const PhrasalTemplatePhrase = ({
   const { t } = useTranslation('app');
   const [removePopupOpen, setRemovePopupOpen] = useState(false);
   const [previewPopupOpen, setPreviewPopupOpen] = useState(false);
-  const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [previewPhraseDisabled, setPreviewPhraseDisabled] = useState(false);
 
+  const [addItemMenuAnchorEl, setAddItemMenuAnchorEl] = useState<null | HTMLElement>(null);
   const phraseFieldsName = `${name}.fields`;
   const { control, setValue, getValues, formState } = useCustomFormContext();
-
   const { fields, append, remove, swap } = useFieldArray({
     control: control as unknown as Control<{ values: TPhrasalTemplateField[] }>,
     name: phraseFieldsName as 'values',
   });
+
+  // Trigger validation when `fields` or form state changes to update preview button state
+  useEffect(() => {
+    const validateField = async () => {
+      const isValid = await validatePhraseField(getValues(name));
+      setPreviewPhraseDisabled(!isValid);
+    };
+
+    validateField();
+  }, [name, getValues, formState]);
 
   const imageFieldValue = getValues(`${name}.image`) || '';
   const fieldPlaceholders = getFieldPlaceholders(fields);
@@ -149,7 +161,7 @@ export const PhrasalTemplatePhrase = ({
               onClick={handlePreviewPhrase}
               sx={{ gap: 0.8, width: 'max-content' }}
               variant="text"
-              disabled={formState.isSubmitting || !formState.isValid}
+              disabled={previewPhraseDisabled}
             >
               <Svg aria-hidden height={18} id="notes" width={18} />
               {t('phrasalTemplateItem.btnPreviewPhrase')}
