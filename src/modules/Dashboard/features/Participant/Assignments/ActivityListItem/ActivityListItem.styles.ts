@@ -29,7 +29,7 @@ export const StyledActivityListItem = styled(Box)(
 export const StyledActivityListItemInner = styled(StyledFlexTopCenter)`
   flex-wrap: wrap;
   padding: ${theme.spacing(1.5)};
-  column-gap: ${theme.spacing(4.8)};
+  column-gap: ${theme.spacing(1.6)};
   row-gap: ${theme.spacing(0.8)};
   position: relative;
   background-color: ${variables.palette.surface};

@@ -12,6 +12,7 @@ import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
 import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
+import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -50,6 +51,7 @@ const AboutParticipant = () => {
     fetchCounts,
     isLoadingCounts,
     counts,
+    countsById,
   } = useAssignmentsTab({ appletId, targetSubject, handleRefetch, dataTestId });
 
   const handleClickNavigateToData = (activityOrFlow: ParticipantActivityOrFlow) => {
@@ -92,6 +94,20 @@ const AboutParticipant = () => {
         >
           {activities.map((activity, index) => (
             <ActivityListItem key={activity.id} activityOrFlow={activity}>
+              <ActivityListItemCounter
+                icon="by-participant"
+                label={t('participantDetails.respondents')}
+                count={countsById?.[activity.id]?.respondentsCount}
+                isLoading={isLoadingCounts}
+              />
+
+              <ActivityListItemCounter
+                icon="folder-opened"
+                label={t('participantDetails.submissions')}
+                count={countsById?.[activity.id]?.subjectSubmissionsCount}
+                isLoading={isLoadingCounts}
+              />
+
               <Button
                 variant="outlined"
                 onClick={() => handleClickNavigateToData(activity)}

@@ -97,10 +97,14 @@ export type AppletParticipantActivitiesResponse = {
 
 export type ParticipantActivityOrFlowCounts = {
   activityOrFlowId: string;
+  /** # of participants who have responded about the participant or are assigned as respondent */
   respondentsCount: number;
-  respondentsSubmissionsCount: number;
+  /** # of submissions made with participant as the respondent */
+  respondentSubmissionsCount: number;
+  /** # of participants who the participant has responded about or are assigned as target subject */
   subjectsCount: number;
-  subjectsSubmissionsCount: number;
+  /** # of submissions made with participant as the target subject */
+  subjectSubmissionsCount: number;
 };
 
 export type AppletParticipantActivitiesCountsResponse = {

@@ -18,6 +18,7 @@ import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
+import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -87,6 +88,7 @@ const ByParticipant = () => {
     fetchCounts,
     isLoadingCounts,
     counts,
+    countsById,
   } = useAssignmentsTab({
     appletId,
     respondentSubject,
@@ -175,6 +177,20 @@ const ByParticipant = () => {
               }
               isLoadingExpandedView={expandedViewsLoading[activity.id]}
             >
+              <ActivityListItemCounter
+                icon="by-participant"
+                label={t('participantDetails.subjects')}
+                count={countsById?.[activity.id]?.subjectsCount}
+                isLoading={isLoadingCounts}
+              />
+
+              <ActivityListItemCounter
+                icon="folder-opened"
+                label={t('participantDetails.submissions')}
+                count={countsById?.[activity.id]?.respondentSubmissionsCount}
+                isLoading={isLoadingCounts}
+              />
+
               <ActionsMenu
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: -6, horizontal: 'right' }}

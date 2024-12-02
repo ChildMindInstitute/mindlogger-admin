@@ -16,6 +16,7 @@ import {
   getAppletActivitiesApi,
   getAppletParticipantActivitiesCountsApi,
   ParticipantActivityOrFlow,
+  ParticipantActivityOrFlowCounts,
 } from 'api';
 import { ItemResponseType } from 'shared/consts';
 import { MenuItemType, Svg } from 'shared/components';
@@ -77,6 +78,19 @@ export const useAssignmentsTab = ({
     isLoading: isLoadingCounts,
     value: counts,
   } = useAsync(getAppletParticipantActivitiesCountsApi, { retainValue: true });
+
+  const countsById = useMemo(
+    () =>
+      counts?.data.result.activitiesOrFlows.reduce(
+        (acc, counts) => {
+          acc[counts.activityOrFlowId] = counts;
+
+          return acc;
+        },
+        {} as Record<string, ParticipantActivityOrFlowCounts>,
+      ),
+    [counts?.data.result.activitiesOrFlows],
+  );
 
   useEffect(() => {
     if (!appletId) return;
@@ -393,5 +407,6 @@ export const useAssignmentsTab = ({
     fetchCounts,
     isLoadingCounts,
     counts: counts?.data.result,
+    countsById,
   };
 };
