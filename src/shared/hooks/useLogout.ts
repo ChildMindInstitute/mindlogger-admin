@@ -8,14 +8,10 @@ import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {
-    featureFlags: { enableAdminAppSoftLock },
-  } = useFeatureFlags();
 
   const userData = auth.useData();
   const { email } = userData?.user || {};
@@ -24,9 +20,6 @@ export const useLogout = () => {
   // TODO: rewrite to reset the global state data besides the data needed in LockForm (if
   // completing LockForm implementation still planned, now that auth soft-lock is present).
   return async ({ shouldSoftLock = false } = {}) => {
-    // Disable soft-lock feature (avoid logging out at all) with soft-lock feature flag disabled
-    if (shouldSoftLock && !enableAdminAppSoftLock) return;
-
     try {
       await deleteAccessTokenApi();
     } catch (e) {
