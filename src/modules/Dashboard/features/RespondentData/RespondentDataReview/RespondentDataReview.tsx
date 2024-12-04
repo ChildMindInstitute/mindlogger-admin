@@ -143,7 +143,7 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
-    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    const submitDates = datesResult.dates.map((date: string) => new Date(`${date}T00:00:00`));
     setResponseDates(submitDates);
   });
 
@@ -233,7 +233,9 @@ export const RespondentDataReview = () => {
 
     const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
     const selectedDateInParam =
-      selectedDateParam && isValid(new Date(selectedDateParam)) && new Date(selectedDateParam);
+      selectedDateParam &&
+      isValid(new Date(`${selectedDateParam}T00:00:00`)) &&
+      new Date(`${selectedDateParam}T00:00:00`);
 
     if (selectedDateInParam) {
       handleSetInitialDate(selectedDateInParam);
