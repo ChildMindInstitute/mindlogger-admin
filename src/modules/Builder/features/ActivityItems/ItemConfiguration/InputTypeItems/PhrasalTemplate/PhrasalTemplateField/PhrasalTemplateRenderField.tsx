@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
@@ -15,10 +16,11 @@ import {
   variables,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
+import { getDictionaryText } from 'shared/utils';
 
 import { StyledLineBreak } from './PhrasalTemplateField.styles';
 import { PhrasalTemplateFieldProps } from './PhrasalTemplateField.types';
-import { DisplayModeOptions, KEYWORDS } from './PhrasalTemplateField.const';
+import { DisplayMode, DisplayModeOptions, KEYWORDS } from './PhrasalTemplateField.const';
 
 export function RenderedField({
   name = '',
@@ -26,39 +28,101 @@ export function RenderedField({
   type = KEYWORDS.SENTENCE,
   ...otherProps
 }: Omit<PhrasalTemplateFieldProps, 'canRemove' | 'onRemove' | 'setAnchorPopUp'>) {
-  const [displayMode, setDisplayMode] = useState<{
-    id: string;
-    items?: Array<{ id: string; name: string }>;
-  }>();
-  const [responseFrom, setResponseFrom] = useState<{
-    name: string;
-    items?: SliderRowsItemResponseValues[];
-  }>();
+  const [displayModes, setDisplayModes] = useState<DisplayMode[]>();
+  const [responseFromOptions, setResponseFromOptions] = useState<SliderRowsItemResponseValues[]>();
   const { t } = useTranslation('app');
   const params = useParams();
-  const { control, getValues, setValue } = useCustomFormContext();
-  const fieldValue = getValues(name as string);
-  const itemsFromStore = applet.useActivityItemsFromApplet(params?.activityId || '');
-  const { question: selectedOptionQuestion } =
-    responseOptions?.find(({ name }) => fieldValue?.itemName === name) ?? {};
 
-  const isFieldValueDeleted = fieldValue?.itemName?.includes('-deleted');
+  const { control, setValue: setValueProp } = useCustomFormContext();
+  // Save setValue to ref to eliminate problematic dependency on effects, avoiding unnecessary
+  // re-renders and visible performance degradation
+  const setValueRef = useRef(setValueProp);
+  const setValue = setValueRef.current;
+
+  const fieldValue = useWatch({ control, name });
+  const itemsFromStore = applet.useActivityItemsFromApplet(params?.activityId || '');
+  const responseItem = useMemo(
+    () =>
+      type === KEYWORDS.ITEM_RESPONSE
+        ? responseOptions?.find((item) => fieldValue?.itemName === item.name)
+        : undefined,
+    [fieldValue?.itemName, responseOptions, type],
+  );
+
+  // Update secondary dropdown options based on selected response item type
+  useEffect(() => {
+    if (type !== KEYWORDS.ITEM_RESPONSE || !responseItem) {
+      setResponseFromOptions(undefined);
+      setDisplayModes(undefined);
+
+      // Remove itemIndex and displayMode if not a response item type
+      if (fieldValue.displayMode !== undefined) setValue(`${name}.displayMode`, undefined);
+      if (fieldValue.itemIndex !== undefined) setValue(`${name}.itemIndex`, undefined);
+
+      return;
+    }
+
+    // Set up dropdown for item types supporting responseFrom property (SliderRows only)
+    if (responseItem.responseType === ItemResponseType.SliderRows) {
+      setResponseFromOptions(responseItem.responseValues?.rows);
+      setDisplayModes(undefined);
+
+      // Set default value for itemIndex if not set, or out of range
+      if (
+        typeof fieldValue.itemIndex !== 'number' ||
+        fieldValue.itemIndex >= responseItem.responseValues?.rows.length
+      ) {
+        setValue(`${name}.itemIndex`, 0);
+      }
+    } else {
+      setResponseFromOptions(undefined);
+      if (typeof fieldValue.itemIndex === 'number') setValue(`${name}.itemIndex`, null);
+    }
+
+    const displayModeOptions = DisplayModeOptions[responseItem.responseType];
+
+    // Set up dropdown for item types supporting displayMode property (undefined if unsupported)
+    setDisplayModes(displayModeOptions);
+    if (fieldValue.displayMode === undefined) {
+      // Set default value for displayMode if not set
+      setValue(`${name}.displayMode`, displayModeOptions?.[0] ?? KEYWORDS.DISPLAY_SENTENCE);
+    } else if (displayModeOptions && !displayModeOptions.includes(fieldValue.displayMode)) {
+      // Reset displayMode to the first option if not supported by the selected response item type
+      setValue(`${name}.displayMode`, displayModeOptions[0]);
+    }
+  }, [
+    responseItem,
+    fieldValue.itemIndex,
+    type,
+    responseOptions,
+    name,
+    setValue,
+    fieldValue.displayMode,
+  ]);
 
   useEffect(() => {
-    if (
-      fieldValue?.itemName &&
-      type === KEYWORDS.ITEM_RESPONSE &&
-      !selectedOptionQuestion &&
-      !isFieldValueDeleted
-    ) {
-      setValue(name, {
-        displayMode: KEYWORDS.DISPLAY_SENTENCE,
-        itemName: `${fieldValue.itemName}-deleted`,
-        type: KEYWORDS.ITEM_RESPONSE,
-        itemIndex: 0,
-      });
+    if (fieldValue?.itemName && type === KEYWORDS.ITEM_RESPONSE) {
+      // Flag deleted items
+      if (!responseItem && !fieldValue.itemName.includes('-deleted')) {
+        setValue(`${name}.itemName`, `${fieldValue.itemName}-deleted`);
+      }
+
+      // Update indexed item label in form context to be consumed by PreviewPhrasePopup
+      if (fieldValue.itemIndex !== undefined && responseFromOptions) {
+        setValue(`${name}._indexedItemLabel`, responseFromOptions[fieldValue.itemIndex]?.label, {
+          shouldDirty: false,
+        });
+      }
     }
-  }, [isFieldValueDeleted, fieldValue, name, setValue, selectedOptionQuestion, type]);
+  }, [
+    fieldValue.itemName,
+    fieldValue.itemIndex,
+    responseItem,
+    type,
+    responseFromOptions,
+    name,
+    setValue,
+  ]);
 
   const getRenderedValue = (value: unknown) => {
     if (!value) {
@@ -69,54 +133,11 @@ export function RenderedField({
       );
     }
 
-    const selectedItem = responseOptions.find(({ name }) => name === value);
-
-    if (!selectedItem) {
-      const missedItem = itemsFromStore?.find((item) => {
-        if (fieldValue?.itemName?.includes(item?.name)) {
-          return item;
-        }
-
-        return null;
-      });
-
-      return missedItem?.name;
+    if (!responseItem) {
+      return itemsFromStore?.find((item) => fieldValue?.itemName?.includes(item.name))?.name;
     }
 
-    if (
-      selectedItem?.responseType !== displayMode?.id &&
-      selectedItem?.responseType !== ItemResponseType.SliderRows
-    ) {
-      const items = DisplayModeOptions[selectedItem?.responseType || 'default'];
-
-      setDisplayMode({
-        id: selectedItem?.responseType as string,
-        items,
-      });
-      setResponseFrom(undefined);
-      setValue(name, {
-        ...fieldValue,
-        itemIndex: 0,
-        displayMode: items ? fieldValue?.displayMode : KEYWORDS.DISPLAY_SENTENCE,
-      });
-    }
-
-    if (
-      selectedItem?.name !== responseFrom?.name &&
-      selectedItem?.responseType === ItemResponseType.SliderRows
-    ) {
-      setResponseFrom({
-        name: selectedItem?.name,
-        items: selectedItem?.responseValues?.rows,
-      });
-      setDisplayMode(undefined);
-      setValue(name, {
-        ...fieldValue,
-        displayMode: KEYWORDS.DISPLAY_SENTENCE,
-      });
-    }
-
-    return selectedItem?.name;
+    return responseItem.name;
   };
 
   const getDisplayModeRenderedValue = (value: unknown) => {
@@ -132,7 +153,7 @@ export function RenderedField({
   };
 
   const getResponseFromRenderedValue = (value: unknown) => {
-    if (!value && typeof Number(value) !== 'number') {
+    if (typeof value !== 'number') {
       return (
         <StyledBodyLarge color={variables.palette.outline}>
           {t('phrasalTemplateItem.fieldResponsePlaceholder')}
@@ -140,9 +161,7 @@ export function RenderedField({
       );
     }
 
-    const selectedFromResponse = responseFrom?.items?.[Number(value)];
-
-    return selectedFromResponse?.label;
+    return responseFromOptions?.[value]?.label;
   };
 
   switch (type) {
@@ -156,7 +175,8 @@ export function RenderedField({
             fullWidth
             options={responseOptions.map(({ name, question }) => ({
               labelKey: name,
-              tooltip: <StyledMdPreview modelValue={(question as unknown as string) ?? ''} />,
+              tooltip: <StyledMdPreview modelValue={getDictionaryText(question)} />,
+              tooltipPlacement: 'left',
               value: name ?? '',
             }))}
             SelectProps={{
@@ -166,44 +186,41 @@ export function RenderedField({
             }}
             TooltipProps={{
               placement: 'left',
-              tooltipTitle: selectedOptionQuestion ? (
-                <StyledMdPreview modelValue={(selectedOptionQuestion as unknown as string) ?? ''} />
+              tooltipTitle: responseItem ? (
+                <StyledMdPreview modelValue={getDictionaryText(responseItem.question)} />
               ) : null,
             }}
           />
-          {displayMode?.items && (
+          {displayModes && (
             <SelectController
               name={`${name}.displayMode`}
               control={control}
-              defaultValue=""
+              defaultValue={displayModes[0]}
               fullWidth
-              options={displayMode?.items.map(({ name, id }) => ({
+              options={displayModes.map((id) => ({
                 labelKey: t(`phrasalTemplateItem.displayModes.${id}`),
-                tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
-                value: id ?? '',
+                value: id,
               }))}
               SelectProps={{
                 displayEmpty: true,
                 renderValue: getDisplayModeRenderedValue,
-                startAdornment: <Svg aria-hidden id="commentDots" />,
               }}
             />
           )}
-          {responseFrom?.items && (
+          {responseFromOptions && (
             <SelectController
               name={`${name}.itemIndex`}
               control={control}
-              defaultValue=""
+              defaultValue={0}
               fullWidth
-              options={responseFrom?.items.map(({ label }, index) => ({
+              isLabelNeedTranslation={false}
+              options={responseFromOptions.map(({ label }, index) => ({
                 labelKey: label as string,
-                tooltip: <StyledMdPreview modelValue={(name as unknown as string) ?? ''} />,
-                value: `${index}`,
+                value: index as unknown as string,
               }))}
               SelectProps={{
                 displayEmpty: true,
                 renderValue: getResponseFromRenderedValue,
-                startAdornment: <Svg aria-hidden id="commentDots" />,
               }}
             />
           )}

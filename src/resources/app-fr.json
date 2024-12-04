@@ -1138,7 +1138,8 @@
   "phrasalTemplate": "Constructeur de phrases",
   "phrasalTemplatePreviewPopup": {
     "title": "Aperçu de la phrase {{index}}",
-    "responsePlaceholder": "[{{itemName}} réponse]"
+    "responsePlaceholder": "[{{itemName}} réponse]",
+    "responsePlaceholderWithLabel": "[{{itemName}} {{indexedItemLabel}} réponse]"
   },
   "phrasalTemplateRemovePopup": {
     "title": "Supprimer la phrase",
