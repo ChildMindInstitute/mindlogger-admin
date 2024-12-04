@@ -141,7 +141,7 @@ const result = {
   response: 'value: 2 | text: Extra info',
   reviewing_id: '',
   secret_user_id: 'secretUserId',
-  user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+  userId: '835e5277-5949-4dff-817a-d85c17a3604f',
   source_user_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
   source_user_secret_id: 'source-secret-id',
   source_user_nickname: 'Mock source user',

@@ -63,7 +63,7 @@ export const getReportCSVObject = <T>({
     activity_end_time: convertDateStampToMs(endDatetime),
     flag: getFlag(item),
     secret_user_id: respondentSecretId ?? '',
-    user_id: respondentId ?? '',
+    userId: respondentId ?? '',
     source_user_subject_id: sourceSubjectId ?? '',
     source_user_secret_id: sourceSecretId ?? '',
     source_user_nickname: sourceUserNickname ?? '',

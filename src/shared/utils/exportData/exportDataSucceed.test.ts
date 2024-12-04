@@ -53,7 +53,7 @@ describe('exportDataSucceed', () => {
         'activity_end_time',
         'flag',
         'secret_user_id',
-        'user_id',
+        'userId',
         'source_user_subject_id',
         'source_user_secret_id',
         'source_user_nickname',
