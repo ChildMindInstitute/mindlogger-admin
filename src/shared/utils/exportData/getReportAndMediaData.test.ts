@@ -689,7 +689,7 @@ describe('getReportAndMediaData', () => {
           response: 'target-secret-id-eabe2de0-9ea4-495b-a4d1-2966eece97f8-drawing.svg',
           response_option_selection_time: '1689770402756',
           secret_user_id: 'respondentSecretId',
-          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           source_user_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
           source_user_secret_id: 'source-secret-id',
           source_user_nickname: 'Mock source user',
