@@ -22,6 +22,7 @@ import { deleteAppletAssignmentsApi, PostAssignmentsParams } from 'api';
 import { ActivityFlowThumbnail, AssignmentCounts } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import {
   ActivityUnassignDrawerProps,
@@ -134,14 +135,39 @@ export const ActivityUnassignDrawer = ({
         handleSubmit(async ({ selected: selectedAssignments }) => {
           if (!appletId) return;
 
-          await deleteAssignments({
-            appletId,
-            assignments: selectedAssignments.map((a) => ({
+          let selfReports = 0;
+          let multiInformant = 0;
+
+          const assignments = selectedAssignments.map((a) => {
+            if (a.respondentSubject.id === a.targetSubject.id) {
+              selfReports++;
+            } else {
+              multiInformant++;
+            }
+
+            return {
               activityId: a.activityId,
               activityFlowId: a.activityFlowId,
               respondentSubjectId: a.respondentSubject.id,
               targetSubjectId: a.targetSubject.id,
-            })),
+            };
+          });
+
+          Mixpanel.track({
+            action: MixpanelEventType.ConfirmUnassignActivityOrFlow,
+            [MixpanelProps.AppletId]: appletId,
+            [MixpanelProps.AssignmentCount]: selfReports + multiInformant,
+            [MixpanelProps.SelfReportAssignmentCount]: selfReports,
+            [MixpanelProps.MultiInformantAssignmentCount]: multiInformant,
+            ...(activityOrFlow && {
+              [MixpanelProps.EntityType]: isFlow ? 'flow' : 'activity',
+              [isFlow ? MixpanelProps.ActivityFlowId : MixpanelProps.ActivityId]: activityOrFlow.id,
+            }),
+          });
+
+          await deleteAssignments({
+            appletId,
+            assignments,
           });
 
           onClose(true);

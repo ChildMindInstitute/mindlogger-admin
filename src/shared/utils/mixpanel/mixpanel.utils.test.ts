@@ -66,6 +66,10 @@ describe('trackAppletSave', () => {
       action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: 'applet1',
       [MixpanelProps.ItemTypes]: [ItemResponseType.Text, ItemResponseType.Date],
+      [MixpanelProps.AutoAssignedActivityCount]: 0,
+      [MixpanelProps.AutoAssignedFlowCount]: 0,
+      [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+      [MixpanelProps.ManuallyAssignedFlowCount]: 0,
     });
   });
 
@@ -86,6 +90,10 @@ describe('trackAppletSave', () => {
       [MixpanelProps.AppletId]: 'applet1',
       [MixpanelProps.ItemTypes]: [ItemResponseType.PhrasalTemplate],
       [MixpanelProps.Feature]: ['SSI'],
+      [MixpanelProps.AutoAssignedActivityCount]: 0,
+      [MixpanelProps.AutoAssignedFlowCount]: 0,
+      [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+      [MixpanelProps.ManuallyAssignedFlowCount]: 0,
     });
   });
 });

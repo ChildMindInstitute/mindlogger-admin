@@ -24,6 +24,8 @@ import { ManagersData } from 'modules/Dashboard/features';
 import { initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import { ActivityAssignDrawer } from './ActivityAssignDrawer';
 import { checkAssignment, selectParticipant } from './ActivityAssignDrawer.test-utils';
@@ -131,6 +133,8 @@ Element.prototype.scrollTo = jest.fn();
 jest.useFakeTimers();
 jest.setTimeout(10000);
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 /* Tests
 =================================================== */
 
@@ -162,6 +166,8 @@ describe('ActivityAssignDrawer', () => {
         },
       }),
     });
+
+    mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -575,6 +581,18 @@ describe('ActivityAssignDrawer', () => {
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Emails have been sent')).toBeVisible();
+
+      expect(mixpanelTrack).toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: MixpanelEventType.ConfirmAssignActivityOrFlow,
+          [MixpanelProps.AppletId]: mockedAppletId,
+          [MixpanelProps.AssignmentCount]: 2,
+          [MixpanelProps.SelfReportAssignmentCount]: 1,
+          [MixpanelProps.MultiInformantAssignmentCount]: 1,
+          [MixpanelProps.ActivityCount]: 1,
+          [MixpanelProps.FlowCount]: 0,
+        }),
+      );
 
       expect(mockAxios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
         assignments: [mockedAssignment, mockedLimitedAssignment].map((a) => ({

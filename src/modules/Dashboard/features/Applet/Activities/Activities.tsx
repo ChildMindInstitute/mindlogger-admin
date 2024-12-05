@@ -12,6 +12,7 @@ import { Activity, ActivityFlow } from 'redux/modules';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { ActivityAssignDrawer } from 'modules/Dashboard/components';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { ActivitiesSectionHeader } from './ActivitiesSectionHeader';
 import { ActivitiesToolbar } from './ActivitiesToolbar';
@@ -48,6 +49,13 @@ export const Activities = () => {
     onClickAssign: useCallback((activityId) => {
       setActivityId(activityId);
       setShowActivityAssign(true);
+      Mixpanel.track({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.ActivityId]: activityId,
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.Via]: 'Applet - Activities',
+      });
     }, []),
   });
 
@@ -69,7 +77,14 @@ export const Activities = () => {
       <ActivitiesToolbar
         appletId={appletId}
         data-testid={dataTestId}
-        onClickAssign={() => setShowActivityAssign(true)}
+        onClickAssign={() => {
+          setShowActivityAssign(true);
+          Mixpanel.track({
+            action: MixpanelEventType.StartAssignActivityOrFlow,
+            [MixpanelProps.AppletId]: appletId,
+            [MixpanelProps.Via]: 'Applet - Activities',
+          });
+        }}
         sx={{ p: 3.2, pb: 0 }}
       />
 
@@ -87,6 +102,13 @@ export const Activities = () => {
                 onClickAssign={(flowId) => {
                   setFlowId(flowId);
                   setShowActivityAssign(true);
+                  Mixpanel.track({
+                    action: MixpanelEventType.StartAssignActivityOrFlow,
+                    [MixpanelProps.AppletId]: appletId,
+                    [MixpanelProps.ActivityFlowId]: flowId,
+                    [MixpanelProps.EntityType]: 'flow',
+                    [MixpanelProps.Via]: 'Applet - Activities',
+                  });
                 }}
               />
             </StyledFlexColumn>

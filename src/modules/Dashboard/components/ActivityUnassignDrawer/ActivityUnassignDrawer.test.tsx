@@ -2,6 +2,7 @@ import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import {
+  mockedActivityId,
   mockedAppletData,
   mockedAppletId,
   mockedCurrentWorkspace,
@@ -14,7 +15,8 @@ import { Activity, initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { AssignedActivity, HydratedAssignment } from 'api';
-import { expectBanner } from 'shared/utils';
+import { expectBanner, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
 
 import { ActivityUnassignDrawer } from './ActivityUnassignDrawer';
 import { checkAssignment } from './ActivityUnassignDrawer.test-utils';
@@ -92,6 +94,8 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 /* Tests
 =================================================== */
 
@@ -103,6 +107,7 @@ describe('ActivityUnassignDrawer', () => {
     });
 
     mockAxios.delete.mockResolvedValue(mockSuccessfulHttpResponse(null));
+    mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -172,6 +177,18 @@ describe('ActivityUnassignDrawer', () => {
       await waitFor(() => {
         expectBanner(store, 'SaveSuccessBanner');
 
+        expect(mixpanelTrack).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.ConfirmUnassignActivityOrFlow,
+            [MixpanelProps.AppletId]: mockedAppletId,
+            [MixpanelProps.AssignmentCount]: 1,
+            [MixpanelProps.SelfReportAssignmentCount]: 0,
+            [MixpanelProps.MultiInformantAssignmentCount]: 1,
+            [MixpanelProps.EntityType]: 'activity',
+            [MixpanelProps.ActivityId]: mockedActivityId,
+          }),
+        );
+
         expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {
             assignments: [
@@ -221,6 +238,18 @@ describe('ActivityUnassignDrawer', () => {
 
       await waitFor(() => {
         expectBanner(store, 'SaveSuccessBanner');
+
+        expect(mixpanelTrack).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.ConfirmUnassignActivityOrFlow,
+            [MixpanelProps.AppletId]: mockedAppletId,
+            [MixpanelProps.AssignmentCount]: 1,
+            [MixpanelProps.SelfReportAssignmentCount]: 0,
+            [MixpanelProps.MultiInformantAssignmentCount]: 1,
+            [MixpanelProps.EntityType]: 'activity',
+            [MixpanelProps.ActivityId]: mockedActivityId,
+          }),
+        );
 
         expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {

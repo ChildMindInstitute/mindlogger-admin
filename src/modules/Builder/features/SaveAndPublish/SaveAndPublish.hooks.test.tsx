@@ -17,6 +17,7 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ItemResponseType } from 'shared/consts';
+import { SingleApplet } from 'shared/state';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import type { SaveAndPublishSetup } from './SaveAndPublish.types';
@@ -30,7 +31,52 @@ jest.mock('modules/Builder/hooks', () => ({
       dirtyFields: [],
       isDirty: true,
     },
-    getValues: () => mockedSimpleAppletFormData,
+    getValues: () =>
+      ({
+        ...mockedSimpleAppletFormData,
+        activities: [
+          ...mockedSimpleAppletFormData.activities,
+          {
+            name: 'Auto assigned activity',
+            autoAssign: true,
+            description: 'Test',
+            showAllAtOnce: false,
+            isSkippable: false,
+            responseIsEditable: true,
+            isHidden: false,
+            isReviewable: false,
+            items: [
+              {
+                responseType: 'text',
+                name: 'Item',
+                question: 'Test',
+                config: {
+                  removeBackButton: false,
+                  skippableItem: false,
+                  maxResponseLength: 72,
+                  correctAnswerRequired: false,
+                  correctAnswer: '',
+                  numericalResponseRequired: false,
+                  responseDataIdentifier: false,
+                  responseRequired: false,
+                },
+                isHidden: false,
+                allowEdit: true,
+                key: '03b655eb-6478-45f4-8625-5ef6bf5877db',
+                alerts: [],
+                responseValues: {},
+              },
+            ],
+            scoresAndReports: {
+              generateReport: false,
+              reports: [],
+              showScoreSummary: false,
+            },
+            conditionalLogic: [],
+            key: 'c913d560-b69d-47ec-828c-eec12c47ca24',
+          },
+        ],
+      }) as SingleApplet,
   }),
   useAppletPrivateKeySetter: jest.fn(),
 }));
@@ -61,6 +107,7 @@ describe('useSaveAndPublishSetup hook', () => {
       },
       resetLDContext: jest.fn(),
     });
+    spyMixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -90,6 +137,10 @@ describe('useSaveAndPublishSetup hook', () => {
           action: MixpanelEventType.AppletSaveClick,
           [MixpanelProps.AppletId]: undefined,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.AutoAssignedActivityCount]: 1,
+          [MixpanelProps.AutoAssignedFlowCount]: 0,
+          [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+          [MixpanelProps.ManuallyAssignedFlowCount]: 0,
         });
         expectMixpanelTrack({
           action: MixpanelEventType.AppletCreatedSuccessfully,
@@ -143,6 +194,10 @@ describe('useSaveAndPublishSetup hook', () => {
           action: MixpanelEventType.AppletSaveClick,
           [MixpanelProps.AppletId]: mockedAppletId,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.AutoAssignedActivityCount]: 1,
+          [MixpanelProps.AutoAssignedFlowCount]: 0,
+          [MixpanelProps.ManuallyAssignedActivityCount]: 1,
+          [MixpanelProps.ManuallyAssignedFlowCount]: 0,
         });
         expectMixpanelTrack({
           action: MixpanelEventType.AppletEditSuccessful,

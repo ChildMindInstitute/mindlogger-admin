@@ -18,6 +18,8 @@ import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 
 import { Participants } from './Participants';
@@ -86,12 +88,15 @@ const clickActionDots = async () => {
   fireEvent.click(actionsDots);
 };
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 describe('Participants component tests', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
       resetLDContext: jest.fn(),
     });
+    mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -223,6 +228,38 @@ describe('Participants component tests', () => {
         expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
       );
     });
+  });
+
+  test('click Assign Activity more menu item should trigger Mixpanel event', async () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        ...mockUseFeatureFlags().featureFlags,
+        enableActivityAssign: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+
+    mockGetRequestResponses({
+      ...mockedResponses,
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+    });
+    renderWithProviders(<Participants />, { preloadedState, route, routePath });
+
+    await clickActionDots();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('dashboard-participants-assign-activity')).toBeVisible(),
+    );
+
+    fireEvent.click(screen.getByTestId('dashboard-participants-assign-activity'));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.Via]: 'Applet - Participants',
+      }),
+    );
   });
 
   test('actions should appear for anonymous participant', async () => {

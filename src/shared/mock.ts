@@ -21,6 +21,7 @@ import {
   ActivitySettingsSubscaleItem,
   Item,
   MultiSelectItem,
+  SingleApplet,
   SingleSelectItem,
   SubscaleSetting,
 } from './state';
@@ -814,7 +815,7 @@ export const mockedSectionReport = {
   },
 };
 
-export const mockedSimpleAppletFormData = {
+export const mockedSimpleAppletFormData: SingleApplet = {
   displayName: 'Test',
   description: 'Test',
   themeId: '',
@@ -832,9 +833,9 @@ export const mockedSimpleAppletFormData = {
       isReviewable: false,
       items: [
         {
-          responseType: 'text',
+          responseType: ItemResponseType.Text,
           name: 'Item',
-          question: 'Test',
+          question: { en: 'Test' },
           config: {
             removeBackButton: false,
             skippableItem: false,
@@ -849,7 +850,7 @@ export const mockedSimpleAppletFormData = {
           allowEdit: true,
           key: '03b655eb-6478-45f4-8625-5ef6bf5877db',
           alerts: [],
-          responseValues: {},
+          responseValues: null,
         },
       ],
       scoresAndReports: {
@@ -857,12 +858,14 @@ export const mockedSimpleAppletFormData = {
         reports: [],
         showScoreSummary: false,
       },
-      conditionalLogic: [],
       key: 'c913d560-b69d-47ec-828c-eec12c47ca24',
     },
   ],
   activityFlows: [],
   reportEmailBody: 'Please see the report attached to this email.',
+  streamEnabled: false,
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedAppletFormData = {

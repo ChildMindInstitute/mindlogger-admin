@@ -10,6 +10,9 @@ import {
   checkIfCanManageParticipants,
   checkIfFullAccess,
   getIsWebSupported,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
 import { ActivityAssignmentStatus, getAppletActivitiesApi, ParticipantActivityOrFlow } from 'api';
 import { ItemResponseType } from 'shared/consts';
@@ -159,8 +162,21 @@ export const useAssignmentsTab = ({
     (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
       if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
       setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
-
       setShowActivityAssign(true);
+
+      const IdType = activityOrFlow?.isFlow
+        ? MixpanelProps.ActivityFlowId
+        : MixpanelProps.ActivityId;
+
+      Mixpanel.track({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Via]: 'Participant - Assignments',
+        ...(activityOrFlow && {
+          [MixpanelProps.EntityType]: activityOrFlow.isFlow ? 'flow' : 'activity',
+          [IdType]: activityOrFlow.id,
+        }),
+      });
     },
     [targetSubject],
   );
@@ -262,6 +278,20 @@ export const useAssignmentsTab = ({
           action: () => {
             setSelectedActivityOrFlow(activityOrFlow);
             setShowActivityUnassign(true);
+
+            const IdType = activityOrFlow?.isFlow
+              ? MixpanelProps.ActivityFlowId
+              : MixpanelProps.ActivityId;
+
+            Mixpanel.track({
+              action: MixpanelEventType.StartUnassignActivityOrFlow,
+              [MixpanelProps.AppletId]: appletId,
+              [MixpanelProps.Via]: 'Participant - Assignments',
+              ...(activityOrFlow && {
+                [MixpanelProps.EntityType]: activityOrFlow.isFlow ? 'flow' : 'activity',
+                [IdType]: activityOrFlow.id,
+              }),
+            });
           },
           icon: <Svg id="clear-calendar" />,
           title: isFlow ? t('unassignFlow') : t('unassignActivity'),
