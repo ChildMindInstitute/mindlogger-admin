@@ -14,9 +14,9 @@ import {
 import {
   ActivityAssignmentStatus,
   getAppletActivitiesApi,
-  getAppletParticipantActivitiesCountsApi,
+  getAppletParticipantActivitiesMetadataApi,
   ParticipantActivityOrFlow,
-  ParticipantActivityOrFlowCounts,
+  ParticipantActivityOrFlowMetadata,
 } from 'api';
 import { ItemResponseType } from 'shared/consts';
 import { MenuItemType, Svg } from 'shared/components';
@@ -77,7 +77,7 @@ export const useAssignmentsTab = ({
     execute: fetchCounts,
     isLoading: isLoadingCounts,
     value: counts,
-  } = useAsync(getAppletParticipantActivitiesCountsApi, { retainValue: true });
+  } = useAsync(getAppletParticipantActivitiesMetadataApi, { retainValue: true });
 
   const countsById = useMemo(
     () =>
@@ -87,7 +87,7 @@ export const useAssignmentsTab = ({
 
           return acc;
         },
-        {} as Record<string, ParticipantActivityOrFlowCounts>,
+        {} as Record<string, ParticipantActivityOrFlowMetadata>,
       ),
     [counts?.data.result.activitiesOrFlows],
   );

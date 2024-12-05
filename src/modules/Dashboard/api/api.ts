@@ -89,7 +89,7 @@ import {
   AppletParticipantActivitiesResponse,
   GetTargetSubjectsByRespondentParams,
   GetTargetSubjectsByRespondentResponse,
-  AppletParticipantActivitiesCountsResponse,
+  AppletParticipantActivitiesMetadataResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -951,11 +951,11 @@ export const getAppletRespondentSubjectActivitiesApi = (
     signal,
   });
 
-export const getAppletParticipantActivitiesCountsApi = (
+export const getAppletParticipantActivitiesMetadataApi = (
   { appletId, subjectId }: GetSubjectActivitiesParams,
   signal?: AbortSignal,
-): Promise<AxiosResponse<AppletParticipantActivitiesCountsResponse>> =>
-  authApiClient.get(`/activities/applet/${appletId}/subject/${subjectId}/counters`, {
+): Promise<AxiosResponse<AppletParticipantActivitiesMetadataResponse>> =>
+  authApiClient.get(`/activities/applet/${appletId}/subject/${subjectId}/metadata`, {
     signal,
   });
 

@@ -70,8 +70,8 @@ const AboutParticipant = () => {
   return (
     <AssignmentsTab
       isLoadingCounts={isLoadingCounts}
-      aboutParticipantCount={counts?.targetActivitiesCount}
-      byParticipantCount={counts?.respondentActivitiesCount}
+      aboutParticipantCount={counts?.targetActivitiesCountExisting}
+      byParticipantCount={counts?.respondentActivitiesCountExisting}
     >
       {isLoading && <Spinner />}
 

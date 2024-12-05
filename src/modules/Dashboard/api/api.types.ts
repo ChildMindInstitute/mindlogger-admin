@@ -95,7 +95,7 @@ export type AppletParticipantActivitiesResponse = {
   count: number;
 };
 
-export type ParticipantActivityOrFlowCounts = {
+export type ParticipantActivityOrFlowMetadata = {
   activityOrFlowId: string;
   /** # of participants who have responded about the participant or are assigned as respondent */
   respondentsCount: number;
@@ -107,11 +107,13 @@ export type ParticipantActivityOrFlowCounts = {
   subjectSubmissionsCount: number;
 };
 
-export type AppletParticipantActivitiesCountsResponse = {
+export type AppletParticipantActivitiesMetadataResponse = {
   result: SubjectId & {
-    respondentActivitiesCount: number;
-    targetActivitiesCount: number;
-    activitiesOrFlows: ParticipantActivityOrFlowCounts[];
+    respondentActivitiesCountExisting: number;
+    respondentActivitiesCountDeleted: number;
+    targetActivitiesCountExisting: number;
+    targetActivitiesCountDeleted: number;
+    activitiesOrFlows: ParticipantActivityOrFlowMetadata[];
   };
 };
 
