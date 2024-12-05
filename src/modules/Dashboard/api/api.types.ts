@@ -602,6 +602,7 @@ export type ActivityAnswer = {
   identifier: string | null;
   createdAt: string;
   endDatetime: string;
+  sourceSubject: RespondentDetails;
 };
 
 export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask' | 'subscaleSetting'> & {
