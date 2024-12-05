@@ -27,25 +27,22 @@ export const trackAppletSave = ({
 }) => {
   if (!applet) return;
 
-  let itemCount: number = 0;
-  let phraseBuilderItemCount: number = 0;
-  let itemsIncludedInPhraseBuilders: number = 0;
+  let itemCount = 0;
+  let phraseBuilderItemCount = 0;
+  let itemsIncludedInPhraseBuilders = 0;
   let autoAssignedActivityCount = 0;
   let manualAssignedActivityCount = 0;
   const itemTypes: ItemResponseType[] = [];
 
-  for (const activity of applet.activities ?? []) {
-    itemTypes.push(...(activity.items ?? []).map((item) => item.responseType));
+  for (const activity of applet.activities) {
     if (activity.autoAssign) {
       autoAssignedActivityCount++;
     } else {
       manualAssignedActivityCount++;
     }
-  }
 
-  (applet.activities ?? []).forEach((activity) => {
     const referencedItemNames = new Set<string>();
-    const items = activity.items ?? [];
+    const items = activity.items;
 
     for (const item of items) {
       itemTypes.push(item.responseType);
@@ -65,26 +62,21 @@ export const trackAppletSave = ({
 
     itemCount += items.length;
     itemsIncludedInPhraseBuilders += referencedItemNames.size;
-  });
+  }
 
   const uniqueItemTypes = new Set(itemTypes);
 
-  const autoAssignedActivityFlowCount = (applet.activityFlows ?? []).filter(
-    (flow) => flow.autoAssign,
-  ).length;
-  const manualAssignedActivityFlowCount =
-    autoAssignedActivityFlowCount === 0
-      ? 0
-      : applet.activityFlows.length - autoAssignedActivityFlowCount;
+  const autoAssignedFlowCount = applet.activityFlows.filter((flow) => flow.autoAssign).length;
+  const manualAssignedFlowCount = applet.activityFlows.length - autoAssignedFlowCount;
 
   const event: AppletSaveEvent = {
     action,
     [MixpanelProps.AppletId]: appletId,
     ...(action === MixpanelEventType.AppletSaveClick && {
       [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
-      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
+      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedFlowCount,
       [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
-      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedFlowCount,
     }),
     [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
     [MixpanelProps.ItemCount]: itemCount,

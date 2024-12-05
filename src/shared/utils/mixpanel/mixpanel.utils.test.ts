@@ -55,7 +55,10 @@ describe('trackAppletSave', () => {
       id: 'applet1',
       activities: [
         {
-          items: [{ responseType: ItemResponseType.Text }, { responseType: ItemResponseType.Date }],
+          items: [
+            { responseType: ItemResponseType.Text, name: 'text1' },
+            { responseType: ItemResponseType.Date, name: 'date1' },
+          ],
         },
       ],
     } as SingleApplet;
@@ -65,11 +68,15 @@ describe('trackAppletSave', () => {
     expect(Mixpanel.track).toHaveBeenCalledWith({
       action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: 'applet1',
-      [MixpanelProps.ItemTypes]: [ItemResponseType.Text, ItemResponseType.Date],
       [MixpanelProps.AutoAssignedActivityCount]: 0,
       [MixpanelProps.AutoAssignedFlowCount]: 0,
       [MixpanelProps.ManuallyAssignedActivityCount]: 1,
       [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+      [MixpanelProps.ItemTypes]: [ItemResponseType.Text, ItemResponseType.Date],
+      [MixpanelProps.ItemCount]: 2,
+      [MixpanelProps.PhraseBuilderItemCount]: 0,
+      [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
     });
   });
 
@@ -78,22 +85,95 @@ describe('trackAppletSave', () => {
       id: 'applet1',
       activities: [
         {
-          items: [{ responseType: ItemResponseType.PhrasalTemplate }],
+          items: [
+            {
+              responseType: ItemResponseType.PhrasalTemplate,
+              name: 'phrase1',
+              responseValues: { phrases: [] },
+            },
+          ],
         },
       ],
-    } as SingleApplet;
+    } as unknown as SingleApplet;
 
     trackAppletSave({ action: MixpanelEventType.AppletSaveClick, applet });
 
     expect(Mixpanel.track).toHaveBeenCalledWith({
       action: MixpanelEventType.AppletSaveClick,
       [MixpanelProps.AppletId]: 'applet1',
-      [MixpanelProps.ItemTypes]: [ItemResponseType.PhrasalTemplate],
-      [MixpanelProps.Feature]: ['SSI'],
       [MixpanelProps.AutoAssignedActivityCount]: 0,
       [MixpanelProps.AutoAssignedFlowCount]: 0,
       [MixpanelProps.ManuallyAssignedActivityCount]: 1,
       [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+      [MixpanelProps.ItemTypes]: [ItemResponseType.PhrasalTemplate],
+      [MixpanelProps.ItemCount]: 1,
+      [MixpanelProps.PhraseBuilderItemCount]: 1,
+      [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: 0,
+      [MixpanelProps.Feature]: ['SSI'],
+    });
+  });
+
+  it('should include correct item count stats related to phrase builders', () => {
+    const applet = {
+      id: 'applet1',
+      activities: [
+        {
+          items: [
+            { responseType: ItemResponseType.Text, name: 'text1' },
+            { responseType: ItemResponseType.Date, name: 'date1' },
+          ],
+        },
+        {
+          items: [
+            { responseType: ItemResponseType.Text, name: 'text1' },
+            {
+              responseType: ItemResponseType.PhrasalTemplate,
+              name: 'phrase1',
+              responseValues: {
+                phrases: [{ fields: [{ type: 'item_response', itemName: 'text1' }] }],
+              },
+            },
+            { responseType: ItemResponseType.Text, name: 'text2' },
+            {
+              responseType: ItemResponseType.PhrasalTemplate,
+              name: 'phrase2',
+              responseValues: {
+                phrases: [
+                  {
+                    fields: [
+                      { type: 'item_response', itemName: 'text1' },
+                      { type: 'item_response', itemName: 'text1' },
+                      { type: 'item_response', itemName: 'text2' },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    } as unknown as SingleApplet;
+
+    trackAppletSave({ action: MixpanelEventType.AppletSaveClick, applet });
+
+    expect(Mixpanel.track).toHaveBeenCalledWith({
+      action: MixpanelEventType.AppletSaveClick,
+      [MixpanelProps.AppletId]: 'applet1',
+      [MixpanelProps.AutoAssignedActivityCount]: 0,
+      [MixpanelProps.AutoAssignedFlowCount]: 0,
+      [MixpanelProps.ManuallyAssignedActivityCount]: 2,
+      [MixpanelProps.ManuallyAssignedFlowCount]: 0,
+      [MixpanelProps.ItemTypes]: [
+        ItemResponseType.Text,
+        ItemResponseType.Date,
+        ItemResponseType.PhrasalTemplate,
+      ],
+      [MixpanelProps.ItemCount]: 6,
+      [MixpanelProps.PhraseBuilderItemCount]: 2,
+      [MixpanelProps.ItemsIncludedInPhraseBuilders]: 2,
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: 1,
+      [MixpanelProps.Feature]: ['SSI'],
     });
   });
 });
