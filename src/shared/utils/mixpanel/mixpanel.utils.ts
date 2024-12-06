@@ -32,7 +32,6 @@ export const trackAppletSave = ({
   const itemTypes: ItemResponseType[] = [];
 
   (applet.activities ?? []).forEach((activity) => {
-    const referencedItemNames = new Set<string>();
     const items = activity.items ?? [];
 
     for (const item of items) {
@@ -40,6 +39,7 @@ export const trackAppletSave = ({
 
       if (item.responseType === ItemResponseType.PhrasalTemplate) {
         phraseBuilderItemCount++;
+        const referencedItemNames = new Set<string>();
 
         for (const phrase of item.responseValues.phrases) {
           for (const field of phrase.fields) {
@@ -48,11 +48,11 @@ export const trackAppletSave = ({
             }
           }
         }
+        itemsIncludedInPhraseBuilders += referencedItemNames.size;
       }
     }
 
     itemCount += items.length;
-    itemsIncludedInPhraseBuilders += referencedItemNames.size;
   });
   const uniqueItemTypes = new Set(itemTypes);
 
