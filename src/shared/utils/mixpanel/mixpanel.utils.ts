@@ -64,7 +64,7 @@ export const trackAppletSave = ({
     [MixpanelProps.PhraseBuilderItemCount]: phraseBuilderItemCount,
     [MixpanelProps.ItemsIncludedInPhraseBuilders]: itemsIncludedInPhraseBuilders,
     [MixpanelProps.AverageItemsPerPhraseBuilder]: phraseBuilderItemCount
-      ? itemsIncludedInPhraseBuilders / phraseBuilderItemCount
+      ? Math.round((itemsIncludedInPhraseBuilders / phraseBuilderItemCount) * 100) / 100
       : null,
   };
 
