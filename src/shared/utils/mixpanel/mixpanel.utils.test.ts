@@ -160,8 +160,8 @@ describe('trackAppletSave', () => {
       [MixpanelProps.Feature]: ['SSI'],
       [MixpanelProps.ItemCount]: 6,
       [MixpanelProps.PhraseBuilderItemCount]: 2,
-      [MixpanelProps.ItemsIncludedInPhraseBuilders]: 2,
-      [MixpanelProps.AverageItemsPerPhraseBuilder]: 1,
+      [MixpanelProps.ItemsIncludedInPhraseBuilders]: 3,
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: 1.5,
     });
   });
 });
