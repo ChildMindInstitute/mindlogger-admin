@@ -68,8 +68,8 @@ export const trackAppletSave = ({
 
   const uniqueItemTypes = new Set(itemTypes);
 
-  const autoAssignedFlowCount = applet.activityFlows.filter((flow) => flow.autoAssign).length;
-  const manualAssignedFlowCount = applet.activityFlows.length - autoAssignedFlowCount;
+  const autoAssignedFlowCount = (applet.activityFlows ?? []).filter((f) => f.autoAssign).length;
+  const manualAssignedFlowCount = (applet.activityFlows ?? []).length - autoAssignedFlowCount;
 
   const event: AppletSaveEvent = {
     action,
