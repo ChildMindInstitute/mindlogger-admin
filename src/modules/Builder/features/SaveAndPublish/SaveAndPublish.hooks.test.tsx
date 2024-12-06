@@ -90,11 +90,19 @@ describe('useSaveAndPublishSetup hook', () => {
           action: MixpanelEventType.AppletSaveClick,
           [MixpanelProps.AppletId]: undefined,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.ItemCount]: 1,
+          [MixpanelProps.PhraseBuilderItemCount]: 0,
+          [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
         });
         expectMixpanelTrack({
           action: MixpanelEventType.AppletCreatedSuccessfully,
           [MixpanelProps.AppletId]: mockedAppletId,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.ItemCount]: 1,
+          [MixpanelProps.PhraseBuilderItemCount]: 0,
+          [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
         });
 
         await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
@@ -143,11 +151,19 @@ describe('useSaveAndPublishSetup hook', () => {
           action: MixpanelEventType.AppletSaveClick,
           [MixpanelProps.AppletId]: mockedAppletId,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.ItemCount]: 1,
+          [MixpanelProps.PhraseBuilderItemCount]: 0,
+          [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
         });
         expectMixpanelTrack({
           action: MixpanelEventType.AppletEditSuccessful,
           [MixpanelProps.AppletId]: mockedAppletId,
           [MixpanelProps.ItemTypes]: [ItemResponseType.Text],
+          [MixpanelProps.ItemCount]: 1,
+          [MixpanelProps.PhraseBuilderItemCount]: 0,
+          [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
         });
 
         await waitFor(() =>
