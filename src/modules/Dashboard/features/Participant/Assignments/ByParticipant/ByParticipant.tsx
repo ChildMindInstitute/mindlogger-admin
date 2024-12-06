@@ -18,6 +18,7 @@ import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
+import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -34,9 +35,15 @@ const ByParticipant = () => {
 
   const {
     execute: fetchActivities,
-    isLoading: isLoadingActivities,
+    isLoading: isLoadingParticipantActivities,
     value: fetchedActivities,
-  } = useAsync(getAppletRespondentSubjectActivitiesApi, { retainValue: true });
+  } = useAsync(getAppletRespondentSubjectActivitiesApi, {
+    retainValue: true,
+    successCallback: () => {
+      if (!appletId || !respondentSubjectId) return;
+      fetchCounts({ appletId, subjectId: respondentSubjectId });
+    },
+  });
 
   const activities = fetchedActivities?.data.result ?? [];
 
@@ -77,8 +84,11 @@ const ByParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoading: isLoadingHook,
     modals,
+    fetchCounts,
+    isLoadingCounts,
+    counts,
+    countsById,
   } = useAssignmentsTab({
     appletId,
     respondentSubject,
@@ -120,11 +130,15 @@ const ByParticipant = () => {
     handleRefetchActivities();
   }, [handleRefetchActivities]);
 
-  const isLoading = isLoadingRespondentSubject || isLoadingActivities || isLoadingHook;
+  const isLoading = isLoadingRespondentSubject || isLoadingParticipantActivities;
   const isRespondentLimited = !respondentSubject?.userId;
 
   return (
-    <AssignmentsTab>
+    <AssignmentsTab
+      isLoadingCounts={isLoadingCounts}
+      aboutParticipantCount={counts?.targetActivitiesCountExisting}
+      byParticipantCount={counts?.respondentActivitiesCountExisting}
+    >
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (
@@ -163,6 +177,20 @@ const ByParticipant = () => {
               }
               isLoadingExpandedView={expandedViewsLoading[activity.id]}
             >
+              <ActivityListItemCounter
+                icon="by-participant"
+                label={t('participantDetails.subjects')}
+                count={countsById?.[activity.id]?.subjectsCount}
+                isLoading={isLoadingCounts}
+              />
+
+              <ActivityListItemCounter
+                icon="folder-opened"
+                label={t('participantDetails.submissions')}
+                count={countsById?.[activity.id]?.respondentSubmissionsCount}
+                isLoading={isLoadingCounts}
+              />
+
               <ActionsMenu
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: -6, horizontal: 'right' }}
