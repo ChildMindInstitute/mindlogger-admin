@@ -49,6 +49,7 @@ export const trackAppletSave = ({
 
       if (item.responseType === ItemResponseType.PhrasalTemplate) {
         phraseBuilderItemCount++;
+        const referencedItemNames = new Set<string>();
 
         for (const phrase of item.responseValues.phrases) {
           for (const field of phrase.fields) {
@@ -57,6 +58,7 @@ export const trackAppletSave = ({
             }
           }
         }
+        itemsIncludedInPhraseBuilders += referencedItemNames.size;
       }
     }
 
