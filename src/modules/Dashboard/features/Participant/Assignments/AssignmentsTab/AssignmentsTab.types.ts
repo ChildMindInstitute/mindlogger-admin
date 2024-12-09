@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
 export type AssignmentsTabProps = PropsWithChildren<{
-  isLoadingCounts: boolean;
+  isLoadingMetadata: boolean;
   aboutParticipantCount?: number;
   byParticipantCount?: number;
 }>;

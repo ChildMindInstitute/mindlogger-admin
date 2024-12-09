@@ -31,7 +31,7 @@ const AboutParticipant = () => {
     retainValue: true,
     successCallback: () => {
       if (!appletId || !subjectId) return;
-      fetchCounts({ appletId, subjectId });
+      fetchMetadata({ appletId, subjectId });
     },
   });
 
@@ -48,10 +48,10 @@ const AboutParticipant = () => {
     onClickAssign,
     onClickNavigateToData,
     modals,
-    fetchCounts,
-    isLoadingCounts,
-    counts,
-    countsById,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata,
+    metadataById,
   } = useAssignmentsTab({ appletId, targetSubject, handleRefetch, dataTestId });
 
   const handleClickNavigateToData = (activityOrFlow: ParticipantActivityOrFlow) => {
@@ -69,9 +69,9 @@ const AboutParticipant = () => {
 
   return (
     <AssignmentsTab
-      isLoadingCounts={isLoadingCounts}
-      aboutParticipantCount={counts?.targetActivitiesCountExisting}
-      byParticipantCount={counts?.respondentActivitiesCountExisting}
+      isLoadingMetadata={isLoadingMetadata}
+      aboutParticipantCount={metadata?.targetActivitiesCountExisting}
+      byParticipantCount={metadata?.respondentActivitiesCountExisting}
     >
       {isLoading && <Spinner />}
 
@@ -97,15 +97,15 @@ const AboutParticipant = () => {
               <ActivityListItemCounter
                 icon="by-participant"
                 label={t('participantDetails.respondents')}
-                count={countsById?.[activity.id]?.respondentsCount}
-                isLoading={isLoadingCounts}
+                count={metadataById?.[activity.id]?.respondentsCount}
+                isLoading={isLoadingMetadata}
               />
 
               <ActivityListItemCounter
                 icon="folder-opened"
                 label={t('participantDetails.submissions')}
-                count={countsById?.[activity.id]?.subjectSubmissionsCount}
-                isLoading={isLoadingCounts}
+                count={metadataById?.[activity.id]?.subjectSubmissionsCount}
+                isLoading={isLoadingMetadata}
               />
 
               <Button

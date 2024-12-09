@@ -41,7 +41,7 @@ const ByParticipant = () => {
     retainValue: true,
     successCallback: () => {
       if (!appletId || !respondentSubjectId) return;
-      fetchCounts({ appletId, subjectId: respondentSubjectId });
+      fetchMetadata({ appletId, subjectId: respondentSubjectId });
     },
   });
 
@@ -85,10 +85,10 @@ const ByParticipant = () => {
     onClickAssign,
     onClickNavigateToData,
     modals,
-    fetchCounts,
-    isLoadingCounts,
-    counts,
-    countsById,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata,
+    metadataById,
   } = useAssignmentsTab({
     appletId,
     respondentSubject,
@@ -135,9 +135,9 @@ const ByParticipant = () => {
 
   return (
     <AssignmentsTab
-      isLoadingCounts={isLoadingCounts}
-      aboutParticipantCount={counts?.targetActivitiesCountExisting}
-      byParticipantCount={counts?.respondentActivitiesCountExisting}
+      isLoadingMetadata={isLoadingMetadata}
+      aboutParticipantCount={metadata?.targetActivitiesCountExisting}
+      byParticipantCount={metadata?.respondentActivitiesCountExisting}
     >
       {isLoading && <Spinner />}
 
@@ -180,15 +180,15 @@ const ByParticipant = () => {
               <ActivityListItemCounter
                 icon="by-participant"
                 label={t('participantDetails.subjects')}
-                count={countsById?.[activity.id]?.subjectsCount}
-                isLoading={isLoadingCounts}
+                count={metadataById?.[activity.id]?.subjectsCount}
+                isLoading={isLoadingMetadata}
               />
 
               <ActivityListItemCounter
                 icon="folder-opened"
                 label={t('participantDetails.submissions')}
-                count={countsById?.[activity.id]?.respondentSubmissionsCount}
-                isLoading={isLoadingCounts}
+                count={metadataById?.[activity.id]?.respondentSubmissionsCount}
+                isLoading={isLoadingMetadata}
               />
 
               <ActionsMenu

@@ -11,7 +11,7 @@ import { AssignmentsTabProps } from './AssignmentsTab.types';
 
 export const AssignmentsTab = ({
   children,
-  isLoadingCounts,
+  isLoadingMetadata,
   aboutParticipantCount,
   byParticipantCount,
 }: AssignmentsTabProps) => {
@@ -31,7 +31,7 @@ export const AssignmentsTab = ({
         <StyledFlexTopCenter>
           {t('aboutParticipant')}
           {' • '}
-          <StyledMaybeEmpty isLoading={isLoadingCounts}>{aboutParticipantCount}</StyledMaybeEmpty>
+          <StyledMaybeEmpty isLoading={isLoadingMetadata}>{aboutParticipantCount}</StyledMaybeEmpty>
         </StyledFlexTopCenter>
       ),
       dataTestId: 'participant-details-filter-about-participant',
@@ -47,7 +47,7 @@ export const AssignmentsTab = ({
         <StyledFlexTopCenter>
           {t('byParticipant')}
           {' • '}
-          <StyledMaybeEmpty isLoading={isLoadingCounts}>{byParticipantCount}</StyledMaybeEmpty>
+          <StyledMaybeEmpty isLoading={isLoadingMetadata}>{byParticipantCount}</StyledMaybeEmpty>
         </StyledFlexTopCenter>
       ),
       dataTestId: 'participant-details-filter-by-participant',

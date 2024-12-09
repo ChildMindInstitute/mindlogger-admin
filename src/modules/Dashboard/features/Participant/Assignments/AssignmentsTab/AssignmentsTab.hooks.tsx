@@ -74,14 +74,14 @@ export const useAssignmentsTab = ({
   );
 
   const {
-    execute: fetchCounts,
-    isLoading: isLoadingCounts,
-    value: counts,
+    execute: fetchMetadata,
+    isLoading: isLoadingMetadata,
+    value: metadata,
   } = useAsync(getAppletParticipantActivitiesMetadataApi, { retainValue: true });
 
-  const countsById = useMemo(
+  const metadataById = useMemo(
     () =>
-      counts?.data.result.activitiesOrFlows.reduce(
+      metadata?.data.result.activitiesOrFlows.reduce(
         (acc, counts) => {
           acc[counts.activityOrFlowId] = counts;
 
@@ -89,7 +89,7 @@ export const useAssignmentsTab = ({
         },
         {} as Record<string, ParticipantActivityOrFlowMetadata>,
       ),
-    [counts?.data.result.activitiesOrFlows],
+    [metadata?.data.result.activitiesOrFlows],
   );
 
   useEffect(() => {
@@ -404,9 +404,9 @@ export const useAssignmentsTab = ({
     onClickNavigateToData,
     onClickAssign,
     modals,
-    fetchCounts,
-    isLoadingCounts,
-    counts: counts?.data.result,
-    countsById,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata: metadata?.data.result,
+    metadataById,
   };
 };
