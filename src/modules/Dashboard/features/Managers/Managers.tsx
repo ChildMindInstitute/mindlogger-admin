@@ -14,7 +14,6 @@ import {
   Spinner,
 } from 'shared/components';
 import { banners, workspaces } from 'redux/modules';
-import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
@@ -28,7 +27,7 @@ import {
   MixpanelEventType,
 } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
+import { StyledBody, StyledFlexWrap, StyledMaybeEmpty, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 
 import { AddManagerPopup, ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';

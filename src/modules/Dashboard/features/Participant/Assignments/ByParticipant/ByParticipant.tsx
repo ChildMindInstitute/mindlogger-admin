@@ -18,6 +18,7 @@ import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
+import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -34,9 +35,15 @@ const ByParticipant = () => {
 
   const {
     execute: fetchActivities,
-    isLoading: isLoadingActivities,
+    isLoading: isLoadingParticipantActivities,
     value: fetchedActivities,
-  } = useAsync(getAppletRespondentSubjectActivitiesApi, { retainValue: true });
+  } = useAsync(getAppletRespondentSubjectActivitiesApi, {
+    retainValue: true,
+    successCallback: () => {
+      if (!appletId || !respondentSubjectId) return;
+      fetchMetadata({ appletId, subjectId: respondentSubjectId });
+    },
+  });
 
   const activities = fetchedActivities?.data.result ?? [];
 
@@ -77,8 +84,11 @@ const ByParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoading: isLoadingHook,
     modals,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata,
+    metadataById,
   } = useAssignmentsTab({
     appletId,
     respondentSubject,
@@ -120,11 +130,15 @@ const ByParticipant = () => {
     handleRefetchActivities();
   }, [handleRefetchActivities]);
 
-  const isLoading = isLoadingRespondentSubject || isLoadingActivities || isLoadingHook;
+  const isLoading = isLoadingRespondentSubject || isLoadingParticipantActivities;
   const isRespondentLimited = !respondentSubject?.userId;
 
   return (
-    <AssignmentsTab>
+    <AssignmentsTab
+      isLoadingMetadata={isLoadingMetadata}
+      aboutParticipantCount={metadata?.targetActivitiesCountExisting}
+      byParticipantCount={metadata?.respondentActivitiesCountExisting}
+    >
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (
@@ -163,6 +177,20 @@ const ByParticipant = () => {
               }
               isLoadingExpandedView={expandedViewsLoading[activity.id]}
             >
+              <ActivityListItemCounter
+                icon="by-participant"
+                label={t('participantDetails.subjects')}
+                count={metadataById?.[activity.id]?.subjectsCount}
+                isLoading={isLoadingMetadata}
+              />
+
+              <ActivityListItemCounter
+                icon="folder-opened"
+                label={t('participantDetails.submissions')}
+                count={metadataById?.[activity.id]?.respondentSubmissionsCount}
+                isLoading={isLoadingMetadata}
+              />
+
               <ActionsMenu
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: -6, horizontal: 'right' }}
