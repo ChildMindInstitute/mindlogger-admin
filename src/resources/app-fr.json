@@ -1096,8 +1096,12 @@
     "activitiesAndFlows": "Activités & Flux",
     "toggleSubjectsView": "Basculer la vue des sujets",
     "subjectOfActivity": "Sujet de l'activité",
+    "respondents": "Répondants",
+    "subjects": "Sujets",
     "submissions": "Soumissions",
-    "currentlyAssigned": "Actuellement assigné"
+    "currentlyAssigned": "Actuellement assigné",
+    "lastSubmission": "Dernière activité :",
+    "noDataYet": "Pas encore de données"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
