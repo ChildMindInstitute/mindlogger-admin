@@ -5,12 +5,16 @@ export enum MixpanelProps {
   AppletId = 'Applet ID',
   ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
+  AverageItemsPerPhraseBuilder = 'Average Items per Phrase Builder',
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
   SourceAccountType = 'Source Account Type',
   TargetAccountType = 'Target Account Type',
   InputAccountType = 'Input Account Type',
   IsSelfReporting = 'Is Self Reporting',
+  ItemCount = 'Item Count',
+  ItemsIncludedInPhraseBuilders = 'Items Included in Phrase Builders',
   ItemTypes = 'Item Types',
+  PhraseBuilderItemCount = 'Phrase Builder Item Count',
   Roles = 'Roles',
   Tag = 'Tag',
   Via = 'Via',
@@ -176,6 +180,10 @@ export type WithAppletSaveProps<T> = T &
   WithFeature<
     WithAppletId<{
       [MixpanelProps.ItemTypes]: ItemResponseType[];
+      [MixpanelProps.ItemCount]: number;
+      [MixpanelProps.PhraseBuilderItemCount]: number;
+      [MixpanelProps.ItemsIncludedInPhraseBuilders]: number;
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: number | null;
     }>
   >;
 

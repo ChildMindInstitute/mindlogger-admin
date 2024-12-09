@@ -762,7 +762,7 @@ export type TouchTestItem<T = ItemCommonType> = T & {
 export type PhrasalTemplateItem<T = ItemCommonType> = T & {
   config: PhrasalTemplateConfig;
   responseType: ItemResponseType.PhrasalTemplate;
-  responseValues: null;
+  responseValues: PhrasalTemplateResponseValues;
 };
 
 export type UnityItem<T = ItemCommonType> = T & {

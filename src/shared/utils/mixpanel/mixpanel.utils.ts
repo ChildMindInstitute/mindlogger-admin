@@ -27,40 +27,69 @@ export const trackAppletSave = ({
 }) => {
   if (!applet) return;
 
-  const itemTypes: ItemResponseType[] = [];
+  let itemCount = 0;
+  let phraseBuilderItemCount = 0;
+  let itemsIncludedInPhraseBuilders = 0;
   let autoAssignedActivityCount = 0;
   let manualAssignedActivityCount = 0;
-  for (const activity of applet.activities ?? []) {
-    itemTypes.push(...(activity.items ?? []).map((item) => item.responseType));
+  const itemTypes: ItemResponseType[] = [];
+
+  for (const activity of applet.activities) {
     if (activity.autoAssign) {
       autoAssignedActivityCount++;
     } else {
       manualAssignedActivityCount++;
     }
+
+    const referencedItemNames = new Set<string>();
+    const items = activity.items;
+
+    for (const item of items) {
+      itemTypes.push(item.responseType);
+
+      if (item.responseType === ItemResponseType.PhrasalTemplate) {
+        phraseBuilderItemCount++;
+        const referencedItemNames = new Set<string>();
+
+        for (const phrase of item.responseValues.phrases) {
+          for (const field of phrase.fields) {
+            if (field.type === 'item_response') {
+              referencedItemNames.add(field.itemName);
+            }
+          }
+        }
+        itemsIncludedInPhraseBuilders += referencedItemNames.size;
+      }
+    }
+
+    itemCount += items.length;
+    itemsIncludedInPhraseBuilders += referencedItemNames.size;
   }
+
   const uniqueItemTypes = new Set(itemTypes);
 
-  const autoAssignedActivityFlowCount = (applet.activityFlows ?? []).filter(
-    (flow) => flow.autoAssign,
-  ).length;
-  const manualAssignedActivityFlowCount =
-    autoAssignedActivityFlowCount === 0
-      ? 0
-      : applet.activityFlows.length - autoAssignedActivityFlowCount;
+  const autoAssignedFlowCount = (applet.activityFlows ?? []).filter((f) => f.autoAssign).length;
+  const manualAssignedFlowCount = (applet.activityFlows ?? []).length - autoAssignedFlowCount;
 
   const event: AppletSaveEvent = {
     action,
     [MixpanelProps.AppletId]: appletId,
-    [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
     ...(action === MixpanelEventType.AppletSaveClick && {
       [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
-      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
+      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedFlowCount,
       [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
-      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedFlowCount,
     }),
+    [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
+    [MixpanelProps.ItemCount]: itemCount,
+    [MixpanelProps.PhraseBuilderItemCount]: phraseBuilderItemCount,
+    [MixpanelProps.ItemsIncludedInPhraseBuilders]: itemsIncludedInPhraseBuilders,
+    [MixpanelProps.AverageItemsPerPhraseBuilder]: phraseBuilderItemCount
+      ? Math.round((itemsIncludedInPhraseBuilders / phraseBuilderItemCount) * 100) / 100
+      : null,
   };
 
-  if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {
+  if (phraseBuilderItemCount) {
     addFeatureToEvent(event, MixpanelFeature.SSI);
   }
 
