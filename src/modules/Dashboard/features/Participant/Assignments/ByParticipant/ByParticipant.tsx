@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 import { useAsync } from 'shared/hooks';
 import {
@@ -10,8 +11,10 @@ import {
   TargetSubjectsByRespondent,
 } from 'api';
 import { users } from 'redux/modules';
-import { ActionsMenu, Spinner } from 'shared/components';
+import { ActionsMenu, Spinner, Tooltip } from 'shared/components';
 import { RespondentDetails } from 'modules/Dashboard/types';
+import { StyledFlexTopCenter } from 'shared/styles';
+import { DateFormats } from 'shared/consts';
 
 import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
 import { ActivitiesList } from '../ActivitiesList';
@@ -159,47 +162,63 @@ const ByParticipant = () => {
           title={t('participantDetails.activitiesAndFlows')}
           count={fetchedActivities?.data.count ?? 0}
         >
-          {activities.map((activity, index) => (
-            <ActivityListItem
-              key={activity.id}
-              activityOrFlow={activity}
-              onClickToggleExpandedView={(isExpanded) =>
-                handleClickToggleExpandedView(isExpanded, activity.id)
-              }
-              expandedView={
-                <ExpandedView
-                  activityOrFlow={activity}
-                  targetSubjects={expandedViewsData[activity.id]}
-                  getActionsMenu={getActionsMenu}
-                  onClickViewData={handleClickNavigateToData}
-                  data-test-id={`${dataTestId}-${index}`}
+          {activities.map((activity, index) => {
+            const lastSubmissionDate = metadataById?.[activity.id]?.respondentLastSubmissionDate;
+            const tooltip = lastSubmissionDate ? (
+              <>
+                <strong>{t('participantDetails.lastSubmission')}</strong>{' '}
+                {format(new Date(lastSubmissionDate), DateFormats.MonthDayYearTime)}
+              </>
+            ) : (
+              t('participantDetails.noDataYet')
+            );
+
+            return (
+              <ActivityListItem
+                key={activity.id}
+                activityOrFlow={activity}
+                onClickToggleExpandedView={(isExpanded) =>
+                  handleClickToggleExpandedView(isExpanded, activity.id)
+                }
+                expandedView={
+                  <ExpandedView
+                    activityOrFlow={activity}
+                    targetSubjects={expandedViewsData[activity.id]}
+                    getActionsMenu={getActionsMenu}
+                    onClickViewData={handleClickNavigateToData}
+                    data-test-id={`${dataTestId}-${index}`}
+                  />
+                }
+                isLoadingExpandedView={expandedViewsLoading[activity.id]}
+              >
+                <ActivityListItemCounter
+                  icon="by-participant"
+                  label={t('participantDetails.subjects')}
+                  count={metadataById?.[activity.id]?.subjectsCount}
+                  isLoading={isLoadingMetadata}
                 />
-              }
-              isLoadingExpandedView={expandedViewsLoading[activity.id]}
-            >
-              <ActivityListItemCounter
-                icon="by-participant"
-                label={t('participantDetails.subjects')}
-                count={metadataById?.[activity.id]?.subjectsCount}
-                isLoading={isLoadingMetadata}
-              />
 
-              <ActivityListItemCounter
-                icon="folder-opened"
-                label={t('participantDetails.submissions')}
-                count={metadataById?.[activity.id]?.respondentSubmissionsCount}
-                isLoading={isLoadingMetadata}
-              />
+                <Tooltip tooltipTitle={tooltip} placement="top">
+                  <StyledFlexTopCenter sx={{ zIndex: 1 }}>
+                    <ActivityListItemCounter
+                      icon="folder-opened"
+                      label={t('participantDetails.submissions')}
+                      count={metadataById?.[activity.id]?.respondentSubmissionsCount}
+                      isLoading={isLoadingMetadata}
+                    />
+                  </StyledFlexTopCenter>
+                </Tooltip>
 
-              <ActionsMenu
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                transformOrigin={{ vertical: -6, horizontal: 'right' }}
-                buttonColor="secondary"
-                menuItems={getActionsMenu(activity)}
-                data-testid={`${dataTestId}-${index}`}
-              />
-            </ActivityListItem>
-          ))}
+                <ActionsMenu
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: -6, horizontal: 'right' }}
+                  buttonColor="secondary"
+                  menuItems={getActionsMenu(activity)}
+                  data-testid={`${dataTestId}-${index}`}
+                />
+              </ActivityListItem>
+            );
+          })}
 
           {/* TODO: Add lazy load button
               https://mindlogger.atlassian.net/browse/M2-7827 */}
