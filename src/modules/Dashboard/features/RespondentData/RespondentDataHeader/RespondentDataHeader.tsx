@@ -15,7 +15,14 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel, checkIfFullAccess, getIsWebSupported, MixpanelEventType } from 'shared/utils';
+import {
+  Mixpanel,
+  checkIfFullAccess,
+  getIsWebSupported,
+  MixpanelEventType,
+  MixpanelProps,
+  StartAssignActivityOrFlowEvent,
+} from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
@@ -86,6 +93,21 @@ export const RespondentDataHeader = ({
 
   const handleAssignActivity = () => {
     setShowActivityAssign(true);
+    const event: StartAssignActivityOrFlowEvent = {
+      action: MixpanelEventType.StartAssignActivityOrFlow,
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.Via]: 'Data Viz',
+    };
+
+    if (activityId) {
+      event[MixpanelProps.ActivityId] = activityId;
+      event[MixpanelProps.EntityType] = 'activity';
+    } else if (activityFlowId) {
+      event[MixpanelProps.ActivityFlowId] = activityFlowId;
+      event[MixpanelProps.EntityType] = 'flow';
+    }
+
+    Mixpanel.track(event);
   };
 
   const handleOpenExport = () => {

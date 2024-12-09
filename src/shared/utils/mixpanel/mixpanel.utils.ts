@@ -4,6 +4,7 @@ import { ItemResponseType } from 'shared/consts';
 import {
   AppletSaveEvent,
   MixpanelAppletSaveEventType,
+  MixpanelEventType,
   MixpanelFeature,
   MixpanelProps,
   WithFeature,
@@ -21,21 +22,42 @@ export const trackAppletSave = ({
   appletId = applet?.id,
 }: {
   action: MixpanelAppletSaveEventType;
-  applet?: Pick<SingleApplet, 'id' | 'activities'>;
+  applet?: Pick<SingleApplet, 'id' | 'activities' | 'activityFlows'>;
   appletId?: string;
 }) => {
   if (!applet) return;
 
   const itemTypes: ItemResponseType[] = [];
-  (applet.activities ?? []).forEach((activity) => {
+  let autoAssignedActivityCount = 0;
+  let manualAssignedActivityCount = 0;
+  for (const activity of applet.activities ?? []) {
     itemTypes.push(...(activity.items ?? []).map((item) => item.responseType));
-  });
+    if (activity.autoAssign) {
+      autoAssignedActivityCount++;
+    } else {
+      manualAssignedActivityCount++;
+    }
+  }
   const uniqueItemTypes = new Set(itemTypes);
+
+  const autoAssignedActivityFlowCount = (applet.activityFlows ?? []).filter(
+    (flow) => flow.autoAssign,
+  ).length;
+  const manualAssignedActivityFlowCount =
+    autoAssignedActivityFlowCount === 0
+      ? 0
+      : applet.activityFlows.length - autoAssignedActivityFlowCount;
 
   const event: AppletSaveEvent = {
     action,
     [MixpanelProps.AppletId]: appletId,
     [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
+    ...(action === MixpanelEventType.AppletSaveClick && {
+      [MixpanelProps.AutoAssignedActivityCount]: autoAssignedActivityCount,
+      [MixpanelProps.AutoAssignedFlowCount]: autoAssignedActivityFlowCount,
+      [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
+      [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedActivityFlowCount,
+    }),
   };
 
   if (uniqueItemTypes.has(ItemResponseType.PhrasalTemplate)) {

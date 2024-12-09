@@ -14,6 +14,16 @@ export enum MixpanelProps {
   Roles = 'Roles',
   Tag = 'Tag',
   Via = 'Via',
+  EntityType = 'Entity Type',
+  AssignmentCount = 'Assignment count',
+  SelfReportAssignmentCount = 'Self-report assignment count',
+  MultiInformantAssignmentCount = 'Multi-informant assignment count',
+  ActivityCount = 'Activity count',
+  FlowCount = 'Flow count',
+  AutoAssignedActivityCount = 'Auto-assigned activity count',
+  AutoAssignedFlowCount = 'Auto-assigned flow count',
+  ManuallyAssignedActivityCount = 'Manually-assigned activity count',
+  ManuallyAssignedFlowCount = 'Manually-assigned flow count',
 }
 
 export enum MixpanelFeature {
@@ -78,6 +88,10 @@ export enum MixpanelEventType {
   AddToBasketClick = 'Add to Basket click',
   GoToBasketClick = 'Go to Basket click',
   AddToAppletBuilderClick = 'Add to applet builder click',
+  StartAssignActivityOrFlow = 'Start Assign Activity/Flow',
+  ConfirmAssignActivityOrFlow = 'Confirm Assign Activity/Flow',
+  StartUnassignActivityOrFlow = 'Start Unassign Activity/Flow',
+  ConfirmUnassignActivityOrFlow = 'Confirm Unassign Activity/Flow',
 }
 
 export type MixpanelAppletSaveEventType =
@@ -167,6 +181,10 @@ export type WithAppletSaveProps<T> = T &
 
 export type AppletSaveClickEvent = WithAppletSaveProps<{
   action: MixpanelEventType.AppletSaveClick;
+  [MixpanelProps.AutoAssignedActivityCount]?: number;
+  [MixpanelProps.AutoAssignedFlowCount]?: number;
+  [MixpanelProps.ManuallyAssignedActivityCount]?: number;
+  [MixpanelProps.ManuallyAssignedFlowCount]?: number;
 }>;
 
 export type PasswordAddedSuccessfullyEvent = WithAppletId<{
@@ -407,6 +425,46 @@ export type ScheduleImportClickEvent = WithAppletId<{
     | MixpanelGeneralCalendarEvent.ScheduleImportClick;
 }>;
 
+export type StartAssignActivityOrFlowEvent = WithAppletId<{
+  action: MixpanelEventType.StartAssignActivityOrFlow;
+  [MixpanelProps.ActivityId]?: string;
+  [MixpanelProps.ActivityFlowId]?: string;
+  [MixpanelProps.EntityType]?: 'activity' | 'flow';
+  [MixpanelProps.Via]?:
+    | 'Applet - Activities'
+    | 'Applet - Participants'
+    | 'Data Viz'
+    | 'Participant - Activities'
+    | 'Participant - Assignments';
+}>;
+
+export type ConfirmAssignActivityOrFlowEvent = WithAppletId<{
+  action: MixpanelEventType.ConfirmAssignActivityOrFlow;
+  [MixpanelProps.AssignmentCount]?: number;
+  [MixpanelProps.SelfReportAssignmentCount]?: number;
+  [MixpanelProps.MultiInformantAssignmentCount]?: number;
+  [MixpanelProps.ActivityCount]?: number;
+  [MixpanelProps.FlowCount]?: number;
+}>;
+
+export type StartUnAssignActivityOrFlowEvent = WithAppletId<{
+  action: MixpanelEventType.StartUnassignActivityOrFlow;
+  [MixpanelProps.ActivityId]?: string;
+  [MixpanelProps.ActivityFlowId]?: string;
+  [MixpanelProps.EntityType]?: 'activity' | 'flow';
+  [MixpanelProps.Via]?: 'Participant - Assignments';
+}>;
+
+export type ConfirmUnAssignActivityOrFlowEvent = WithAppletId<{
+  action: MixpanelEventType.ConfirmUnassignActivityOrFlow;
+  [MixpanelProps.ActivityId]?: string;
+  [MixpanelProps.ActivityFlowId]?: string;
+  [MixpanelProps.EntityType]?: 'activity' | 'flow';
+  [MixpanelProps.AssignmentCount]?: number;
+  [MixpanelProps.SelfReportAssignmentCount]?: number;
+  [MixpanelProps.MultiInformantAssignmentCount]?: number;
+}>;
+
 export type MixpanelEvent =
   | MixpanelInvitationSentEvent
   | LoginSuccessfulEvent
@@ -467,4 +525,8 @@ export type MixpanelEvent =
   | ScheduleSaveClickEvent
   | ScheduleSuccessfulEvent
   | ScheduleImportSuccessfulEvent
-  | ScheduleImportClickEvent;
+  | ScheduleImportClickEvent
+  | StartAssignActivityOrFlowEvent
+  | ConfirmAssignActivityOrFlowEvent
+  | StartUnAssignActivityOrFlowEvent
+  | ConfirmUnAssignActivityOrFlowEvent;

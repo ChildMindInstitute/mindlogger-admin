@@ -23,7 +23,12 @@ export const EmptyState = ({
         </StyledHeadline>
       </StyledFlexColumn>
       {!!onClickAssign && (
-        <Button variant="contained" color="primary" onClick={onClickAssign} sx={{ mt: 2.4 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => onClickAssign()}
+          sx={{ mt: 2.4 }}
+        >
           {t('assignActivityButton')}
         </Button>
       )}

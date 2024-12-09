@@ -365,12 +365,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const handleSaveChangesSaveSubmit = async () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
-    const result = await handleSaveAndPublishFirstClick();
-    trackAppletSave({
-      action: MixpanelEventType.AppletSaveClick,
-      applet: result.payload.data.result,
-      appletId,
-    });
+    await handleSaveAndPublishFirstClick();
 
     if (isLogoutInProgress && !isNewApplet) {
       await handleLogout();
