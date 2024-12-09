@@ -101,10 +101,14 @@ export type ParticipantActivityOrFlowMetadata = {
   respondentsCount: number;
   /** # of submissions made with participant as the respondent */
   respondentSubmissionsCount: number;
+  /** Date of most recent submission with participant as the respondent */
+  respondentLastSubmissionDate: string | null;
   /** # of participants who the participant has responded about or are assigned as target subject */
   subjectsCount: number;
   /** # of submissions made with participant as the target subject */
   subjectSubmissionsCount: number;
+  /** Date of most recent submission with participant as the target subject */
+  subjectLastSubmissionDate: string | null;
 };
 
 export type AppletParticipantActivitiesMetadataResponse = {
