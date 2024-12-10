@@ -143,12 +143,14 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
+    // Map each date string to a Date object, appending 'T00:00:00' to remove timezone offset
     const submitDates = datesResult.dates.map((date: string) => new Date(`${date}T00:00:00`));
+
     setResponseDates(submitDates);
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !subjectId) return;
+    if (!appletId || !subjectId || !selectedActivity?.id) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
@@ -158,6 +160,7 @@ export const RespondentDataReview = () => {
       targetSubjectId: subjectId,
       fromDate,
       toDate,
+      activityId: selectedActivity?.id,
     });
   };
 
@@ -251,7 +254,7 @@ export const RespondentDataReview = () => {
 
     handleSetInitialDate(new Date());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted]);
+  }, [lastActivityCompleted, selectedActivity?.id]);
 
   /**
    * Determines the source subject based on the presence of activity responses.
