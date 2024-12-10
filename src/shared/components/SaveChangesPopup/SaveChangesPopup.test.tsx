@@ -18,14 +18,14 @@ describe('SaveChangesPopup', () => {
   test('closes when the cancel button is clicked', () => {
     render(<SaveChangesPopup {...commonProps} />);
 
-    fireEvent.click(screen.getByText(/cancel/i));
+    fireEvent.click(screen.getByText('Cancel'));
     expect(mockOnCancel).toHaveBeenCalled();
   });
 
   test('triggers onDontSave when the do not save button is clicked', () => {
     render(<SaveChangesPopup {...commonProps} />);
 
-    fireEvent.click(screen.getByText(/dontSave/i));
+    fireEvent.click(screen.getByText("Don't Save"));
     expect(mockOnDontSave).toHaveBeenCalled();
   });
 
