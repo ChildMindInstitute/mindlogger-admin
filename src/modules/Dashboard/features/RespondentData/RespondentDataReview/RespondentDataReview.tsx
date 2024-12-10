@@ -160,7 +160,7 @@ export const RespondentDataReview = () => {
       targetSubjectId: subjectId,
       fromDate,
       toDate,
-      activityId: selectedActivity?.id,
+      activityOrFlowId: selectedActivity?.id || selectedFlow?.id,
     });
   };
 

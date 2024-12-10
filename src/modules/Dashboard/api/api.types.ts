@@ -505,7 +505,7 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
-    activityId?: string;
+    activityOrFlowId?: string;
   };
 
 export type EventId = { eventId: string };
