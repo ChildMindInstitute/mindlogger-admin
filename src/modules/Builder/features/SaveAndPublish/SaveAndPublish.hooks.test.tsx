@@ -145,7 +145,10 @@ describe('useSaveAndPublishSetup hook', () => {
           [MixpanelProps.ItemCount]: 2,
           [MixpanelProps.PhraseBuilderItemCount]: 0,
           [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: null,
           [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
+          [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: null,
+          [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: null,
         });
 
         expectMixpanelTrack({
@@ -155,7 +158,10 @@ describe('useSaveAndPublishSetup hook', () => {
           [MixpanelProps.ItemCount]: 2,
           [MixpanelProps.PhraseBuilderItemCount]: 0,
           [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: null,
           [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
+          [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: null,
+          [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: null,
         });
 
         await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
@@ -211,7 +217,10 @@ describe('useSaveAndPublishSetup hook', () => {
           [MixpanelProps.ItemCount]: 2,
           [MixpanelProps.PhraseBuilderItemCount]: 0,
           [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: null,
           [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
+          [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: null,
+          [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: null,
         });
 
         expectMixpanelTrack({
@@ -221,7 +230,10 @@ describe('useSaveAndPublishSetup hook', () => {
           [MixpanelProps.ItemCount]: 2,
           [MixpanelProps.PhraseBuilderItemCount]: 0,
           [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+          [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: null,
           [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
+          [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: null,
+          [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: null,
         });
 
         await waitFor(() =>

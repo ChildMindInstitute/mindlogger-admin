@@ -76,7 +76,10 @@ describe('trackAppletSave', () => {
       [MixpanelProps.ItemCount]: 2,
       [MixpanelProps.PhraseBuilderItemCount]: 0,
       [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+      [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: null,
       [MixpanelProps.AverageItemsPerPhraseBuilder]: null,
+      [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: null,
+      [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: null,
     });
   });
 
@@ -109,7 +112,10 @@ describe('trackAppletSave', () => {
       [MixpanelProps.ItemCount]: 1,
       [MixpanelProps.PhraseBuilderItemCount]: 1,
       [MixpanelProps.ItemsIncludedInPhraseBuilders]: 0,
+      [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: 0,
       [MixpanelProps.AverageItemsPerPhraseBuilder]: 0,
+      [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: 0,
+      [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: 0,
       [MixpanelProps.Feature]: ['SSI'],
     });
   });
@@ -122,6 +128,7 @@ describe('trackAppletSave', () => {
           items: [
             { responseType: ItemResponseType.Text, name: 'text1' },
             { responseType: ItemResponseType.Date, name: 'date1' },
+            { responseType: ItemResponseType.Date, name: 'date2', isHidden: true },
           ],
         },
         {
@@ -131,7 +138,15 @@ describe('trackAppletSave', () => {
               responseType: ItemResponseType.PhrasalTemplate,
               name: 'phrase1',
               responseValues: {
-                phrases: [{ fields: [{ type: 'item_response', itemName: 'text1' }] }],
+                phrases: [
+                  {
+                    fields: [
+                      { type: 'item_response', itemName: 'text1' },
+                      { type: 'sentence' },
+                      { type: 'line_break' },
+                    ],
+                  },
+                ],
               },
             },
             { responseType: ItemResponseType.Text, name: 'text2' },
@@ -145,6 +160,8 @@ describe('trackAppletSave', () => {
                       { type: 'item_response', itemName: 'text1' },
                       { type: 'item_response', itemName: 'text1' },
                       { type: 'item_response', itemName: 'text2' },
+                      { type: 'item_response', itemName: 'date2' },
+                      { type: 'line_break' },
                     ],
                   },
                 ],
@@ -172,7 +189,10 @@ describe('trackAppletSave', () => {
       [MixpanelProps.ItemCount]: 6,
       [MixpanelProps.PhraseBuilderItemCount]: 2,
       [MixpanelProps.ItemsIncludedInPhraseBuilders]: 3,
-      [MixpanelProps.AverageItemsPerPhraseBuilder]: 1.5,
+      [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: 1.5,
+      [MixpanelProps.AverageItemsPerPhraseBuilder]: 2,
+      [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: 1,
+      [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: 0.5,
       [MixpanelProps.Feature]: ['SSI'],
     });
   });
