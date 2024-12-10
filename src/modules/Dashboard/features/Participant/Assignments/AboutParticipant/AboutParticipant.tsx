@@ -12,6 +12,7 @@ import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
 import { ActivitiesList } from '../ActivitiesList';
 import { ActivityListItem } from '../ActivityListItem';
 import { EmptyState } from '../EmptyState';
+import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
 const dataTestId = 'participant-details-about-participant';
 
@@ -24,9 +25,15 @@ const AboutParticipant = () => {
 
   const {
     execute: fetchActivities,
-    isLoading: isLoadingActivities,
+    isLoading: isLoadingParticipantActivities,
     value: fetchedActivities,
-  } = useAsync(getAppletTargetSubjectActivitiesApi, { retainValue: true });
+  } = useAsync(getAppletTargetSubjectActivitiesApi, {
+    retainValue: true,
+    successCallback: () => {
+      if (!appletId || !subjectId) return;
+      fetchMetadata({ appletId, subjectId });
+    },
+  });
 
   const activities = fetchedActivities?.data.result ?? [];
 
@@ -40,8 +47,11 @@ const AboutParticipant = () => {
     getActionsMenu,
     onClickAssign,
     onClickNavigateToData,
-    isLoading: isLoadingHook,
     modals,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata,
+    metadataById,
   } = useAssignmentsTab({ appletId, targetSubject, handleRefetch, dataTestId });
 
   const handleClickNavigateToData = (activityOrFlow: ParticipantActivityOrFlow) => {
@@ -54,11 +64,15 @@ const AboutParticipant = () => {
     handleRefetch();
   }, [handleRefetch]);
 
-  const isLoading = isLoadingSubject || isLoadingActivities || isLoadingHook;
+  const isLoading = isLoadingSubject || isLoadingParticipantActivities;
   const isTargetSubjectTeam = targetSubject?.tag === 'Team';
 
   return (
-    <AssignmentsTab>
+    <AssignmentsTab
+      isLoadingMetadata={isLoadingMetadata}
+      aboutParticipantCount={metadata?.targetActivitiesCountExisting}
+      byParticipantCount={metadata?.respondentActivitiesCountExisting}
+    >
       {isLoading && <Spinner />}
 
       {!isLoading && !activities.length && (
@@ -80,6 +94,20 @@ const AboutParticipant = () => {
         >
           {activities.map((activity, index) => (
             <ActivityListItem key={activity.id} activityOrFlow={activity}>
+              <ActivityListItemCounter
+                icon="by-participant"
+                label={t('participantDetails.respondents')}
+                count={metadataById?.[activity.id]?.respondentsCount}
+                isLoading={isLoadingMetadata}
+              />
+
+              <ActivityListItemCounter
+                icon="folder-opened"
+                label={t('participantDetails.submissions')}
+                count={metadataById?.[activity.id]?.subjectSubmissionsCount}
+                isLoading={isLoadingMetadata}
+              />
+
               <Button
                 variant="outlined"
                 onClick={() => handleClickNavigateToData(activity)}
