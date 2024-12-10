@@ -6,6 +6,9 @@ export enum MixpanelProps {
   ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
   AverageItemsPerPhraseBuilder = 'Average Items per Phrase Builder',
+  AverageLineBreaksPerPhraseBuilder = 'Average Line Breaks per Phrase Builder',
+  AverageTextBoxesPerPhraseBuilder = 'Average Text Boxes per Phrase Builder',
+  AverageUniqueItemsPerPhraseBuilder = 'Average Unique Items per Phrase Builder',
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
   SourceAccountType = 'Source Account Type',
   TargetAccountType = 'Target Account Type',
@@ -183,7 +186,10 @@ export type WithAppletSaveProps<T> = T &
       [MixpanelProps.ItemCount]: number;
       [MixpanelProps.PhraseBuilderItemCount]: number;
       [MixpanelProps.ItemsIncludedInPhraseBuilders]: number;
+      [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: number | null;
       [MixpanelProps.AverageItemsPerPhraseBuilder]: number | null;
+      [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: number | null;
+      [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: number | null;
     }>
   >;
 

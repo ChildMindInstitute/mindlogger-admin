@@ -30,6 +30,11 @@ export const trackAppletSave = ({
   let itemCount = 0;
   let phraseBuilderItemCount = 0;
   let itemsIncludedInPhraseBuilders = 0;
+  const phraseBuilderFieldCounts = {
+    itemResponse: 0,
+    sentence: 0,
+    lineBreak: 0,
+  };
   let autoAssignedActivityCount = 0;
   let manualAssignedActivityCount = 0;
   const itemTypes: ItemResponseType[] = [];
@@ -41,10 +46,16 @@ export const trackAppletSave = ({
       manualAssignedActivityCount++;
     }
 
+    const visibleItemNames = new Set<string>();
     const referencedItemNames = new Set<string>();
     const items = activity.items;
 
     for (const item of items) {
+      // Hidden items are not included in any counts
+      if (item.isHidden) continue;
+
+      itemCount++;
+      visibleItemNames.add(item.name);
       itemTypes.push(item.responseType);
 
       if (item.responseType === ItemResponseType.PhrasalTemplate) {
@@ -54,7 +65,14 @@ export const trackAppletSave = ({
         for (const phrase of item.responseValues.phrases) {
           for (const field of phrase.fields) {
             if (field.type === 'item_response') {
-              referencedItemNames.add(field.itemName);
+              if (visibleItemNames.has(field.itemName)) {
+                referencedItemNames.add(field.itemName);
+                phraseBuilderFieldCounts.itemResponse++;
+              }
+            } else if (field.type === 'sentence') {
+              phraseBuilderFieldCounts.sentence++;
+            } else if (field.type === 'line_break') {
+              phraseBuilderFieldCounts.lineBreak++;
             }
           }
         }
@@ -62,7 +80,6 @@ export const trackAppletSave = ({
       }
     }
 
-    itemCount += items.length;
     itemsIncludedInPhraseBuilders += referencedItemNames.size;
   }
 
@@ -70,6 +87,9 @@ export const trackAppletSave = ({
 
   const autoAssignedFlowCount = (applet.activityFlows ?? []).filter((f) => f.autoAssign).length;
   const manualAssignedFlowCount = (applet.activityFlows ?? []).length - autoAssignedFlowCount;
+
+  const getPhraseBuilderAverage = (value: number) =>
+    phraseBuilderItemCount ? Math.round((value / phraseBuilderItemCount) * 100) / 100 : null;
 
   const event: AppletSaveEvent = {
     action,
@@ -84,9 +104,18 @@ export const trackAppletSave = ({
     [MixpanelProps.ItemCount]: itemCount,
     [MixpanelProps.PhraseBuilderItemCount]: phraseBuilderItemCount,
     [MixpanelProps.ItemsIncludedInPhraseBuilders]: itemsIncludedInPhraseBuilders,
-    [MixpanelProps.AverageItemsPerPhraseBuilder]: phraseBuilderItemCount
-      ? Math.round((itemsIncludedInPhraseBuilders / phraseBuilderItemCount) * 100) / 100
-      : null,
+    [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: getPhraseBuilderAverage(
+      itemsIncludedInPhraseBuilders,
+    ),
+    [MixpanelProps.AverageItemsPerPhraseBuilder]: getPhraseBuilderAverage(
+      phraseBuilderFieldCounts.itemResponse,
+    ),
+    [MixpanelProps.AverageTextBoxesPerPhraseBuilder]: getPhraseBuilderAverage(
+      phraseBuilderFieldCounts.sentence,
+    ),
+    [MixpanelProps.AverageLineBreaksPerPhraseBuilder]: getPhraseBuilderAverage(
+      phraseBuilderFieldCounts.lineBreak,
+    ),
   };
 
   if (phraseBuilderItemCount) {
