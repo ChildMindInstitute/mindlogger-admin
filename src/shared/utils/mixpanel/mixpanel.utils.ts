@@ -47,7 +47,6 @@ export const trackAppletSave = ({
     }
 
     const visibleItemNames = new Set<string>();
-    const referencedItemNames = new Set<string>();
     const items = activity.items;
 
     for (const item of items) {
@@ -79,8 +78,6 @@ export const trackAppletSave = ({
         itemsIncludedInPhraseBuilders += referencedItemNames.size;
       }
     }
-
-    itemsIncludedInPhraseBuilders += referencedItemNames.size;
   }
 
   const uniqueItemTypes = new Set(itemTypes);
