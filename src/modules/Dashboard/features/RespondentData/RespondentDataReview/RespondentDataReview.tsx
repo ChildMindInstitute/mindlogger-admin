@@ -254,7 +254,14 @@ export const RespondentDataReview = () => {
 
     handleSetInitialDate(new Date());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted, selectedActivity?.id]);
+  }, [lastActivityCompleted]);
+
+  useEffect(() => {
+    if (!selectedActivity?.id) return;
+
+    handleGetSubmitDates(new Date());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedActivity?.id]);
 
   /**
    * Determines the source subject based on the presence of activity responses.
