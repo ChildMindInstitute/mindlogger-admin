@@ -29,7 +29,7 @@ export const trackAppletSave = ({
 
   let itemCount = 0;
   let phraseBuilderItemCount = 0;
-  let itemsIncludedInPhraseBuilders = 0;
+  let countOfUniqueItemsInPhraseBuilders = 0;
   const phraseBuilderFieldCounts = {
     itemResponse: 0,
     sentence: 0,
@@ -75,7 +75,7 @@ export const trackAppletSave = ({
             }
           }
         }
-        itemsIncludedInPhraseBuilders += referencedItemNames.size;
+        countOfUniqueItemsInPhraseBuilders += referencedItemNames.size;
       }
     }
   }
@@ -98,9 +98,9 @@ export const trackAppletSave = ({
     [MixpanelProps.ItemTypes]: [...itemTypes],
     [MixpanelProps.ItemCount]: itemCount,
     [MixpanelProps.PhraseBuilderItemCount]: phraseBuilderItemCount,
-    [MixpanelProps.ItemsIncludedInPhraseBuilders]: itemsIncludedInPhraseBuilders,
+    [MixpanelProps.CountOfUniqueItemsInPhraseBuilders]: countOfUniqueItemsInPhraseBuilders,
     [MixpanelProps.AverageUniqueItemsPerPhraseBuilder]: getPhraseBuilderAverage(
-      itemsIncludedInPhraseBuilders,
+      countOfUniqueItemsInPhraseBuilders,
     ),
     [MixpanelProps.AverageItemsPerPhraseBuilder]: getPhraseBuilderAverage(
       phraseBuilderFieldCounts.itemResponse,
