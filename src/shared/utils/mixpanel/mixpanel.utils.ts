@@ -37,7 +37,7 @@ export const trackAppletSave = ({
   };
   let autoAssignedActivityCount = 0;
   let manualAssignedActivityCount = 0;
-  const itemTypes: ItemResponseType[] = [];
+  const itemTypes = new Set<ItemResponseType>();
 
   for (const activity of applet.activities) {
     if (activity.autoAssign) {
@@ -55,7 +55,7 @@ export const trackAppletSave = ({
 
       itemCount++;
       visibleItemNames.add(item.name);
-      itemTypes.push(item.responseType);
+      itemTypes.add(item.responseType);
 
       if (item.responseType === ItemResponseType.PhrasalTemplate) {
         phraseBuilderItemCount++;
@@ -80,8 +80,6 @@ export const trackAppletSave = ({
     }
   }
 
-  const uniqueItemTypes = new Set(itemTypes);
-
   const autoAssignedFlowCount = (applet.activityFlows ?? []).filter((f) => f.autoAssign).length;
   const manualAssignedFlowCount = (applet.activityFlows ?? []).length - autoAssignedFlowCount;
 
@@ -97,7 +95,7 @@ export const trackAppletSave = ({
       [MixpanelProps.ManuallyAssignedActivityCount]: manualAssignedActivityCount,
       [MixpanelProps.ManuallyAssignedFlowCount]: manualAssignedFlowCount,
     }),
-    [MixpanelProps.ItemTypes]: [...uniqueItemTypes],
+    [MixpanelProps.ItemTypes]: [...itemTypes],
     [MixpanelProps.ItemCount]: itemCount,
     [MixpanelProps.PhraseBuilderItemCount]: phraseBuilderItemCount,
     [MixpanelProps.ItemsIncludedInPhraseBuilders]: itemsIncludedInPhraseBuilders,
