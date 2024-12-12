@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 import {
   mockedApplet,
@@ -6,12 +6,15 @@ import {
   mockedRespondent,
   mockedAppletId,
   mockedRespondentId,
+  mockedActivityId,
 } from 'shared/mock';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { RespondentDetails } from 'modules/Dashboard/types';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
 import { RespondentDataHeader } from './RespondentDataHeader';
 
@@ -53,6 +56,8 @@ const mockedActivityFlow = {
   activities: [mockedActivity],
 };
 
+const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),
@@ -67,6 +72,7 @@ describe('RespondentDataHeader component tests', () => {
       },
       resetLDContext: jest.fn(),
     });
+    mixpanelTrack.mockReset();
   });
 
   test('should render applet name', () => {
@@ -167,6 +173,70 @@ describe('RespondentDataHeader component tests', () => {
     );
 
     expect(screen.queryByTestId(`${dataTestid}-assign-activity`)).toBeNull();
+  });
+
+  test('should trigger Mixpanel event when Assign toolbar button is clicked for activity', () => {
+    mockedUseParams.mockReturnValue({ ...mockedUseParams(), activityId: mockedActivityId });
+    renderWithProviders(
+      <RespondentDataHeader
+        dataTestid={dataTestid}
+        applet={mockedApplet}
+        subject={mockedSubject}
+        activityOrFlow={mockedActivity}
+      />,
+      {
+        preloadedState: getPreloadedState(Roles.SuperAdmin),
+      },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestid}-assign-activity`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.ActivityId]: mockedActivityId,
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.Via]: 'Data Viz',
+      }),
+    );
+  });
+
+  test('should trigger Mixpanel event when Assign toolbar button is clicked for activity flow', () => {
+    mockedUseParams.mockReturnValue({
+      ...mockedUseParams(),
+      activityFlowId: mockedActivityFlow.id,
+    });
+
+    const {
+      reportIncludedItemName: _reportIncludedItemName,
+      reportIncludedActivityName: _reportIncludedActivityName,
+      ...mockFlow
+    } = mockedActivityFlow;
+
+    renderWithProviders(
+      <RespondentDataHeader
+        dataTestid={dataTestid}
+        applet={mockedApplet}
+        subject={mockedSubject}
+        activityOrFlow={mockFlow}
+      />,
+      {
+        preloadedState: getPreloadedState(Roles.SuperAdmin),
+      },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestid}-assign-activity`));
+
+    expect(mixpanelTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.ActivityFlowId]: mockFlow.id,
+        [MixpanelProps.EntityType]: 'flow',
+        [MixpanelProps.Via]: 'Data Viz',
+      }),
+    );
   });
 
   describe('should show or hide take now button depending on role', () => {

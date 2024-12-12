@@ -1022,6 +1022,8 @@
   "noResponseIdentifier": "Aucun identifiant de réponse pour le moment.",
   "viewingResponsesSubmitted": "Consultation des réponses soumises le :",
   "responseIdentifierWithColon": "Identifiant de réponse :",
+  "respondentIdentifierWithColon": "Répondant :",
+  "subjectIdentifierWithColon": "Sujet :",
   "versionWithColon": "Version :",
   "noRespondents": "Pas encore de participants.",
   "noParticipants": "Aucun participant pour l'instant.",
@@ -1136,7 +1138,8 @@
   "phrasalTemplate": "Constructeur de phrases",
   "phrasalTemplatePreviewPopup": {
     "title": "Aperçu de la phrase {{index}}",
-    "responsePlaceholder": "[{{itemName}} réponse]"
+    "responsePlaceholder": "[{{itemName}} réponse]",
+    "responsePlaceholderWithLabel": "[{{itemName}} {{indexedItemLabel}} réponse]"
   },
   "phrasalTemplateRemovePopup": {
     "title": "Supprimer la phrase",

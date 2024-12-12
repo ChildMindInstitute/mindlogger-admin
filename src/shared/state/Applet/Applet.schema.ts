@@ -359,15 +359,28 @@ export type PhrasalTemplateFieldDisplayMode =
   | 'sentence_option_row'
   | 'sentence_row_option';
 
+export type PhrasalTemplateSentenceField = {
+  type: 'sentence';
+  text: string;
+};
+
+export type PhrasalTemplateItemResponseField = {
+  type: 'item_response';
+  itemName: string;
+  displayMode: PhrasalTemplateFieldDisplayMode;
+  itemIndex: number | null;
+  /** Slider label, used internally by PreviewPhrasePopup */
+  _indexedItemLabel?: string;
+};
+
+export type PhrasalTemplateLineBreakField = {
+  type: 'line_break';
+};
+
 export type PhrasalTemplateField =
-  | { type: 'sentence'; text: string }
-  | {
-      type: 'item_response';
-      itemName: string;
-      displayMode: PhrasalTemplateFieldDisplayMode;
-      itemIndex: number;
-    }
-  | { type: 'line_break' };
+  | PhrasalTemplateSentenceField
+  | PhrasalTemplateItemResponseField
+  | PhrasalTemplateLineBreakField;
 
 export type PhrasalTemplateFieldType = PhrasalTemplateField['type'];
 
@@ -749,7 +762,7 @@ export type TouchTestItem<T = ItemCommonType> = T & {
 export type PhrasalTemplateItem<T = ItemCommonType> = T & {
   config: PhrasalTemplateConfig;
   responseType: ItemResponseType.PhrasalTemplate;
-  responseValues: null;
+  responseValues: PhrasalTemplateResponseValues;
 };
 
 export type UnityItem<T = ItemCommonType> = T & {
