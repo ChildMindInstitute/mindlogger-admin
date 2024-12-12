@@ -19,6 +19,7 @@ export const FeatureFlagsKeys = {
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
   enableMeritActivityType: 'enableMeritActivityType',
   enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
+  enableDataExportRenaming: 'enableDataExportRenaming',
 };
 
 export enum FeatureFlagsIntegrations {
