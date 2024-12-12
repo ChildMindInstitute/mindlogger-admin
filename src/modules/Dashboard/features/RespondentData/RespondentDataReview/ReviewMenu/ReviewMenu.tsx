@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { DatePicker, DatePickerUiType, Spinner, SpinnerUiType } from 'shared/components';
 import { useRespondentLabel } from 'shared/hooks';
-import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
+import { StyledBodyMedium, StyledHeadlineLarge, theme } from 'shared/styles';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledHeader } from './ReviewMenu.styles';
@@ -30,7 +30,7 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { activityId, activityFlowId } = useParams();
-  const respondentLabel = useRespondentLabel({ isSubject: true });
+  const respondentLabel = useRespondentLabel({ isSubject: true, variant: 'comma' });
 
   const dataTestid = 'respondents-review-menu';
 
@@ -38,9 +38,9 @@ export const ReviewMenu = ({
     <StyledMenu data-testid={dataTestid}>
       <StyledHeader>
         <StyledHeadlineLarge>{t('responses')}</StyledHeadlineLarge>
-        <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>
+        <StyledBodyMedium sx={{ marginBottom: theme.spacing(4) }}>
           {respondentLabel}
-        </StyledLabelLarge>
+        </StyledBodyMedium>
         <DatePicker
           name="responseDate"
           control={control}

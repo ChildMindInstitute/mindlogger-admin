@@ -1,8 +1,12 @@
 import { Box, styled } from '@mui/material';
 
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-export const StyledFlexTopCenterDraggable = styled(StyledFlexTopCenter)(
+export const StyledFlexTopCenterDraggable = styled(
+  StyledFlexTopCenter,
+  shouldForwardProp,
+)(
   ({ isDragging }: { isDragging: boolean }) => `
   padding: ${theme.spacing(0.8)};
   margin: ${theme.spacing(-0.8)};

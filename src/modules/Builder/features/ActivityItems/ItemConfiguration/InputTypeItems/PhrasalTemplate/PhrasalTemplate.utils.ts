@@ -11,8 +11,6 @@ import { ItemResponseType } from 'shared/consts';
 
 import { KEYWORDS } from './PhrasalTemplateField/PhrasalTemplateField.const';
 
-// TODO: M2-7211 — Additional response types to be added with
-// additional UI for selecting discrete response values.
 const PHRASAL_TEMPLATE_COMPATIBLE_RESPONSE_TYPES = [
   ItemResponseType.Date,
   ItemResponseType.MultipleSelection,
@@ -36,7 +34,7 @@ const DEFAULT_PHRASE: PhrasalTemplateResponseValues['phrases'][number] = {
       type: KEYWORDS.ITEM_RESPONSE,
       itemName: '',
       displayMode: KEYWORDS.DISPLAY_SENTENCE,
-      itemIndex: 0,
+      itemIndex: null,
     },
     { type: KEYWORDS.SENTENCE, text: '' },
   ],
@@ -49,7 +47,12 @@ export const getNewDefaultField = (
 ): PhrasalTemplateField => {
   switch (type) {
     case KEYWORDS.ITEM_RESPONSE:
-      return { type, itemName: '', displayMode: KEYWORDS.SENTENCE, itemIndex: 0 };
+      return {
+        type,
+        itemName: '',
+        displayMode: KEYWORDS.SENTENCE,
+        itemIndex: null,
+      };
     case KEYWORDS.LINE_BREAK:
       return { type };
     case KEYWORDS.SENTENCE:

@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 
 import { users } from 'redux/modules';
+import { getRespondentName } from 'shared/utils';
 
 import { useRespondentLabel } from './useRespondentLabel';
 
@@ -46,7 +47,7 @@ describe('useRespondentLabel', () => {
     expect(result.current).toBe('Respondent: secret123');
   });
 
-  test('should construct and return the respondent label correctly for subject (User: secret123)', () => {
+  test('should construct and return the subject label correctly for subject (User: secret123)', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'subject123',
@@ -58,7 +59,7 @@ describe('useRespondentLabel', () => {
 
     const { result } = renderHook(() => useRespondentLabel({ isSubject: true }));
 
-    expect(result.current).toBe('Respondent: subject123');
+    expect(result.current).toBe('Subject: subject123');
   });
 
   test('should construct and return the respondent label correctly (User: secret123 (John Doe))', () => {
@@ -73,5 +74,25 @@ describe('useRespondentLabel', () => {
     const { result } = renderHook(useRespondentLabel);
 
     expect(result.current).toBe('Respondent: secret123 (John Doe)');
+  });
+
+  test('should construct and return the respondent without the label (secret123 (John Doe))', () => {
+    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    const res = {
+      secretUserId: 'secret123',
+      nickname: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      id: '123',
+      lastSeen: '2024-04-10T10:00:00',
+      userId: '123',
+    };
+
+    users.useRespondent = jest.fn().mockReturnValue({ result: res });
+    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+
+    const { result } = renderHook(() => getRespondentName(res.secretUserId, res.nickname));
+
+    expect(result.current).toBe('secret123 (John Doe)');
   });
 });
