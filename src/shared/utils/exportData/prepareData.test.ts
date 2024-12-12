@@ -31,6 +31,7 @@ const mockedExportDataResult = {
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',
       timezone_offset: '',
+      legacy_user_id: '',
     },
     {
       id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
@@ -57,6 +58,7 @@ const mockedExportDataResult = {
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',
       timezone_offset: '',
+      legacy_user_id: '',
     },
     {
       id: '09b0cac4-303a-4ce9-94bd-dff922c24947',
@@ -83,6 +85,7 @@ const mockedExportDataResult = {
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',
       timezone_offset: '',
+      legacy_user_id: '',
     },
   ],
   activityJourneyData: [],
