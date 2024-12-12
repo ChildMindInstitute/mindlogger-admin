@@ -127,9 +127,9 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     response: '',
     options: '',
     version,
-    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: null,
     timezone_offset: null,
+    legacy_user_id: legacyProfileId ?? '',
   });
 };
 
@@ -205,8 +205,8 @@ export const getJourneyCSVObject = <T>({
       rawAnswersObject,
     }),
     version,
-    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: scheduledEventId,
     timezone_offset: tzOffset,
+    legacy_user_id: legacyProfileId ?? '',
   });
 };

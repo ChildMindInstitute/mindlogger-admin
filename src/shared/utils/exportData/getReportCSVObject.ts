@@ -76,8 +76,8 @@ export const getReportCSVObject = <T>({
     version: version ?? '',
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedFlowSubmitId ?? reviewedAnswerId ?? '',
-    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: scheduledEventId ?? '',
     timezone_offset: tzOffset ?? '',
+    legacy_user_id: legacyProfileId ?? '',
   };
 };
