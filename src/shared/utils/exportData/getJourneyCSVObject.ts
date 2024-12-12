@@ -72,9 +72,9 @@ export const getJourneyCSVReturn = ({
   response,
   options,
   version,
-  ...(legacy_user_id && { legacy_user_id }),
   event_id,
   timezone_offset: timezone_offset ?? '',
+  legacy_user_id: legacy_user_id ?? '',
 });
 
 export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: ExtendedEvent) => {

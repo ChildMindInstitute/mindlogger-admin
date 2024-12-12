@@ -584,6 +584,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -615,6 +616,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
@@ -671,6 +673,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: null,
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -702,6 +705,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -733,6 +737,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
