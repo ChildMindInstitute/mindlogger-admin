@@ -312,11 +312,15 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [
   ConditionType.OutsideOfTimes,
 ];
 
-export const GENERAL_REPORT_NAME = 'report';
+const LEGACY_GENERAL_REPORT_NAME = 'report';
+const NEW_GENERAL_REPORT_NAME = 'responses';
+
+export const getGeneralReportName = (enableDataExportRenaming: boolean) =>
+  enableDataExportRenaming ? NEW_GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME;
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
-export const reportHeader = [
+const legacyReportHeader = [
   'id',
   'activity_flow_submission_id',
   'activity_scheduled_time',
@@ -348,7 +352,51 @@ export const reportHeader = [
   'version',
   'rawScore',
   'reviewing_id',
+  'schedule_id',
+  'timezone_offset',
 ];
+
+const newReportHeader = [
+  'target_id',
+  'target_secret_id',
+  'target_nickname',
+  'target_tag',
+  'source_id',
+  'source_secret_id',
+  'source_nickname',
+  'source_relation',
+  'source_tag',
+  'input_id',
+  'input_secret_id',
+  'input_nickname',
+  'mindlogger_account_id',
+  'login_secret_id',
+  'login_nickname',
+  'applet_id',
+  'applet_version',
+  'activity_flow_id',
+  'activity_flow_name',
+  'activity_flow_submission_id',
+  'activity_id',
+  'activity_name',
+  'activity_submission_id',
+  'activity_start_time',
+  'activity_end_time',
+  'activity_schedule_id',
+  'activity_schedule_start_time',
+  'UTC_timezone_offset',
+  'activity_submission_review_id',
+  'item_id',
+  'item_name',
+  'item_prompt',
+  'item_response_options',
+  'item_response',
+  'item_response_status',
+  'rawScore',
+];
+
+export const getReportHeader = (enableDataExportRenaming?: boolean) =>
+  enableDataExportRenaming ? newReportHeader : legacyReportHeader;
 
 export const activityJourneyHeader = [
   'id',
