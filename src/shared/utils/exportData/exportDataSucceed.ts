@@ -1,8 +1,8 @@
 import {
   activityJourneyHeader,
-  GENERAL_REPORT_NAME,
+  getGeneralReportName,
+  getReportHeader,
   JOURNEY_REPORT_NAME,
-  reportHeader,
 } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import {
@@ -27,11 +27,12 @@ const exportProcessedData = async ({
   abTrailsItemsData,
   flankerItemsData,
   suffix,
-}: AppletExportData & { suffix: string }) => {
+  enableDataExportRenaming,
+}: AppletExportData & { suffix: string; enableDataExportRenaming: boolean }) => {
   await exportTemplate({
     data: reportData,
-    fileName: GENERAL_REPORT_NAME + suffix,
-    defaultData: reportData.length > 0 ? null : reportHeader,
+    fileName: getGeneralReportName(enableDataExportRenaming) + suffix,
+    defaultData: reportData.length > 0 ? null : getReportHeader(enableDataExportRenaming),
   });
   await exportTemplate({
     data: activityJourneyData,
@@ -53,23 +54,38 @@ export const exportEncryptedDataSucceed =
     getDecryptedAnswers,
     suffix,
     filters,
+    enableDataExportRenaming,
   }: {
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
     suffix: string;
     filters?: ExportDataFilters;
+    enableDataExportRenaming: boolean;
   }) =>
   async (result: ExportDataResult) => {
     if (!result) return;
 
-    const exportData = await prepareEncryptedData(result, getDecryptedAnswers, filters);
-    await exportProcessedData({ ...exportData, suffix });
+    const exportData = await prepareEncryptedData(
+      result,
+      getDecryptedAnswers,
+      filters,
+      enableDataExportRenaming,
+    );
+    await exportProcessedData({ ...exportData, suffix, enableDataExportRenaming });
   };
 
 export const exportDecryptedDataSucceed =
-  ({ suffix, filters }: { suffix: string; filters?: ExportDataFilters }) =>
+  ({
+    suffix,
+    filters,
+    enableDataExportRenaming,
+  }: {
+    suffix: string;
+    filters?: ExportDataFilters;
+    enableDataExportRenaming: boolean;
+  }) =>
   async (parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[]) => {
     if (!parsedAnswers) return;
 
-    const exportData = await prepareDecryptedData(parsedAnswers, filters);
-    await exportProcessedData({ ...exportData, suffix });
+    const exportData = await prepareDecryptedData(parsedAnswers, filters, enableDataExportRenaming);
+    await exportProcessedData({ ...exportData, suffix, enableDataExportRenaming });
   };
