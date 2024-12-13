@@ -45,6 +45,13 @@ export const getSettings = ({
           param: SettingParam.DataRetention,
           'data-testid': `${dataTestid}-data-retention`,
         },
+        {
+          icon: <Svg id="integrations" />,
+          label: 'integrations',
+          component: <PublishConcealAppletSetting />,
+          param: SettingParam.PublishConceal,
+          'data-testid': `${dataTestid}-publish-conceal`,
+        },
       ],
     },
     {

@@ -22,7 +22,8 @@ import {
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
-import { LorisIntegration } from './IntegrationsListSetting/Integrations';
+// import { LorisIntegration } from './IntegrationsListSetting/Integrations';
+import { IntegrationsListSetting } from './IntegrationsListSetting';
 
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
@@ -32,6 +33,7 @@ export const getSettings = ({
   roles,
   enableLorisIntegration,
   enableShareToLibrary,
+  enableProlificIntegration,
   appletId,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
@@ -40,6 +42,8 @@ export const getSettings = ({
   const isShareToLibraryVisible = !!(enableShareToLibrary && canEdit);
   const isSharingVisible =
     !isNewApplet && (roles?.includes(Roles.SuperAdmin) || isShareToLibraryVisible);
+
+  const showIntegrations = enableLorisIntegration || enableProlificIntegration;
 
   return [
     {
@@ -62,18 +66,19 @@ export const getSettings = ({
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
-        ...(enableLorisIntegration
-          ? [
-              {
-                icon: <Svg id="integrations" />,
-                label: 'loris.integration',
-                component: <LorisIntegration />,
-                param: SettingParam.LorisIntegration,
-                isVisible: enableLorisIntegration,
-                'data-testid': `${dataTestid}-loris-integration`,
-              },
-            ]
-          : []),
+        {
+          icon: <Svg id="integrations" />,
+          label: 'integrations',
+          component: (
+            <IntegrationsListSetting
+              lorisIntegration={enableLorisIntegration}
+              prolificIntegration={enableProlificIntegration}
+            />
+          ),
+          param: SettingParam.Integrations,
+          isVisible: showIntegrations,
+          'data-testid': `${dataTestid}-loris-integration`,
+        },
       ],
     },
     {

@@ -931,6 +931,19 @@
       "saveProjectFailed": "Failed to save project"
     }
   },
+  "prolific": {
+    "connect": "Connect",
+    "description": "This integration will allow you to collect responses from participants recruited on Prolific via the applet's public link.",
+    "configurationPopupTitle": "Prolific Configuration",
+    "configurationPopupDescription": "Please enter your Prolific API token.",
+    "configurationPopupConnecting": "Connecting...",
+    "apiToken": "Prolific API Token",
+    "findProlificApiToken": "Where can I find your Prolific API token?",
+    "prolificConnectionStatus": "Connected",
+    "viewDashboard": "View Prolific Dashboard",
+    "disconnect": "Disconnect from Prolific",
+    "addStudy": "Add Study"
+  },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",
   "loginLink": "Login",

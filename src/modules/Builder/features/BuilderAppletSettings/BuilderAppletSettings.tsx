@@ -27,7 +27,8 @@ export const BuilderAppletSettings = () => {
             isPublished,
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             enableShareToLibrary: featureFlags.enableShareToLibrary,
-            enableLorisIntegration: featureFlags.enableLorisIntegration,
+            enableLorisIntegration: true, // featureFlags.enableLorisIntegration,
+            enableProlificIntegration: true,
             appletId: appletData?.id,
           })}
         />
