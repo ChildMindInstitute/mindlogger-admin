@@ -8,6 +8,7 @@ import { ApiResponseCodes, ParticipantActivityOrFlow } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
+  mockParticipantFlows,
   mockParticipantActivities,
   mockedAppletData,
   mockedAppletId,
@@ -36,6 +37,8 @@ import {
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { ActionsMenu } from 'shared/components';
 import { RespondentDetails } from 'modules/Dashboard/types';
+import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
+import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -215,6 +218,60 @@ describe('useAssignmentsTab hook', () => {
     });
   });
 
+  test('should navigate to appropriate edit URL for flow', async () => {
+    renderWithProviders(
+      <UseAssignmentsHookTest
+        activityOrFlow={mockParticipantFlows.autoAssignFlow}
+        targetSubject={mockedOwnerSubject}
+      />,
+      renderOptions,
+    );
+
+    const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+    if (actionDots) {
+      userEvent.click(actionDots);
+      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+
+      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+      expect(mockedUseNavigate).toHaveBeenCalledWith(
+        generatePath(page.builderAppletActivityFlowItemAbout, {
+          appletId: mockedAppletId,
+          activityFlowId: mockParticipantFlows.autoAssignFlow.id,
+        }),
+      );
+    }
+  });
+
+  test('should navigate to appropriate edit URL for performance task', async () => {
+    renderWithProviders(
+      <UseAssignmentsHookTest
+        activityOrFlow={mockParticipantActivities.performanceTaskActivity}
+        targetSubject={mockedOwnerSubject}
+      />,
+      renderOptions,
+    );
+
+    const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+    if (actionDots) {
+      userEvent.click(actionDots);
+      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+
+      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+      expect(mockedUseNavigate).toHaveBeenCalledWith(
+        generatePath(
+          getPerformanceTaskPath(
+            mockParticipantActivities.performanceTaskActivity
+              .performanceTaskType as unknown as EditablePerformanceTasksType,
+          ),
+          {
+            appletId: mockedAppletId,
+            activityId: mockParticipantActivities.performanceTaskActivity.id,
+          },
+        ),
+      );
+    }
+  });
+
   describe('Take Now', () => {
     describe('should show or hide Take Now button depending on role', () => {
       test.each`
@@ -238,7 +295,7 @@ describe('useAssignmentsTab hook', () => {
           },
         );
 
-        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+        const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
         if (actionDots && canDoTakeNow) {
           userEvent.click(actionDots);
           await waitFor(() =>
@@ -250,6 +307,28 @@ describe('useAssignmentsTab hook', () => {
           );
         }
       });
+    });
+
+    test('should be disabled for mobile-only activities', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.mobileOnlyActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) {
+        userEvent.click(actionDots);
+        await waitFor(() => {
+          expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
+          expect(screen.getByTestId(`${testId}-activity-take-now`)).toHaveAttribute(
+            'aria-disabled',
+            'true',
+          );
+        });
+      }
     });
 
     test('should pre-populate subject in Take Now modal', async () => {
