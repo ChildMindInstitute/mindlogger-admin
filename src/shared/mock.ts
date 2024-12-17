@@ -1,7 +1,7 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ActivityAssignmentStatus, Applet } from 'api';
+import { ActivityAssignmentStatus, Applet } from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import {
@@ -18,6 +18,7 @@ import {
   ConditionalLogicMatch,
   ItemResponseType,
   ParticipantTag,
+  PerfTaskType,
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
@@ -487,6 +488,68 @@ export const mockedAppletData = {
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
+    },
+    {
+      name: 'Mobile-Only Activity',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '66a4ebe4-3d7f-485c-8293-093cabf29fa4',
+      items: [
+        {
+          question: {
+            en: 'abtrails',
+          },
+          responseType: ItemResponseType.ABTrails,
+          responseValues: null,
+          config: {},
+          name: 'Item1',
+          id: '5b334484-947b-4287-941c-ed4cbf0dc956',
+          order: 1,
+        },
+      ],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: false,
+      performanceTaskType: null,
+    },
+    {
+      name: 'Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '76a4ebe4-3d7f-485c-8293-093cabf29fa5',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: 'flanker',
     },
   ],
   activityFlows: [
@@ -3350,6 +3413,22 @@ export const mockParticipantActivities = {
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
   },
+  mobileOnlyActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[2].id as string, // Mobile-only activity in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  performanceTaskActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[3].id as string, // Performance task in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: PerfTaskType.Flanker,
+  },
   manualOwnerOwnerAssignedActivity: {
     ...mockParticipantActivityBase,
     isFlow: false,
@@ -3414,7 +3493,7 @@ const mockParticipantFlowBase = {
   assignments: [],
 };
 
-export const mockAppletParticipantFlows = {
+export const mockParticipantFlows = {
   autoAssignFlow: {
     ...mockParticipantFlowBase,
     isFlow: true,
