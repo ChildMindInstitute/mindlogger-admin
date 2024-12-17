@@ -95,6 +95,28 @@ export type AppletParticipantActivitiesResponse = {
   count: number;
 };
 
+export type ParticipantActivityOrFlowMetadata = {
+  activityOrFlowId: string;
+  /** # of participants who have responded about the participant or are assigned as respondent */
+  respondentsCount: number;
+  /** # of submissions made with participant as the respondent */
+  respondentSubmissionsCount: number;
+  /** # of participants who the participant has responded about or are assigned as target subject */
+  subjectsCount: number;
+  /** # of submissions made with participant as the target subject */
+  subjectSubmissionsCount: number;
+};
+
+export type AppletParticipantActivitiesMetadataResponse = {
+  result: SubjectId & {
+    respondentActivitiesCountExisting: number;
+    respondentActivitiesCountDeleted: number;
+    targetActivitiesCountExisting: number;
+    targetActivitiesCountDeleted: number;
+    activitiesOrFlows: ParticipantActivityOrFlowMetadata[];
+  };
+};
+
 export type RespondentId = { respondentId: string };
 
 export type TargetSubjectId = { targetSubjectId: string };

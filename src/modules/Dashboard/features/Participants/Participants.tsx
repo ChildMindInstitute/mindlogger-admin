@@ -24,9 +24,8 @@ import {
   MixpanelEventType,
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody, StyledFlexWrap } from 'shared/styles';
+import { StyledBody, StyledFlexWrap, StyledMaybeEmpty } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
-import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import {
   ActivityAssignDrawer,
