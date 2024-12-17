@@ -103,6 +103,14 @@ const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 const mockHandleRefetch = jest.fn();
 
+const mockGetAppletPrivateKey = jest.fn();
+
+jest.mock('shared/hooks/useEncryptionStorage', () => ({
+  useEncryptionStorage: () => ({
+    getAppletPrivateKey: mockGetAppletPrivateKey,
+  }),
+}));
+
 /* Test Component
 =================================================== */
 
@@ -181,95 +189,142 @@ describe('useAssignmentsTab hook', () => {
     jest.clearAllMocks();
   });
 
-  describe('should show or hide edit ability depending on role', () => {
-    test.each`
-      canEdit  | role                 | description
-      ${true}  | ${Roles.Manager}     | ${'editing for Manager'}
-      ${true}  | ${Roles.SuperAdmin}  | ${'editing for SuperAdmin'}
-      ${true}  | ${Roles.Owner}       | ${'editing for Owner'}
-      ${false} | ${Roles.Coordinator} | ${'editing for Coordinator'}
-      ${true}  | ${Roles.Editor}      | ${'editing for Editor'}
-      ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
-      ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
-    `('$description', async ({ canEdit, role }) => {
+  describe('Edit', () => {
+    describe('should show or hide edit ability depending on role', () => {
+      test.each`
+        canEdit  | role                 | description
+        ${true}  | ${Roles.Manager}     | ${'editing for Manager'}
+        ${true}  | ${Roles.SuperAdmin}  | ${'editing for SuperAdmin'}
+        ${true}  | ${Roles.Owner}       | ${'editing for Owner'}
+        ${false} | ${Roles.Coordinator} | ${'editing for Coordinator'}
+        ${true}  | ${Roles.Editor}      | ${'editing for Editor'}
+        ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
+        ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
+      `('$description', async ({ canEdit, role }) => {
+        renderWithProviders(
+          <UseAssignmentsHookTest activityOrFlow={mockParticipantActivities.autoAssignActivity} />,
+          {
+            ...renderOptions,
+            preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
+          },
+        );
+
+        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+        if (actionDots && canEdit) {
+          userEvent.click(actionDots);
+          await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+
+          fireEvent.click(screen.getByTestId(`${testId}-edit`));
+          expect(mockedUseNavigate).toHaveBeenCalledWith(
+            generatePath(page.builderAppletActivity, {
+              appletId: mockedAppletId,
+              activityId: mockParticipantActivities.autoAssignActivity.id,
+            }),
+          );
+        } else {
+          await waitFor(() => expect(screen.queryByTestId(`${testId}-edit`)).toBeNull());
+        }
+      });
+    });
+
+    test('should navigate to appropriate edit URL for flow', async () => {
       renderWithProviders(
-        <UseAssignmentsHookTest activityOrFlow={mockParticipantActivities.autoAssignActivity} />,
-        {
-          ...renderOptions,
-          preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
-        },
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantFlows.autoAssignFlow}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
       );
 
-      const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
-      if (actionDots && canEdit) {
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) {
         userEvent.click(actionDots);
         await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
 
         fireEvent.click(screen.getByTestId(`${testId}-edit`));
         expect(mockedUseNavigate).toHaveBeenCalledWith(
-          generatePath(page.builderAppletActivity, {
+          generatePath(page.builderAppletActivityFlowItemAbout, {
             appletId: mockedAppletId,
-            activityId: mockParticipantActivities.autoAssignActivity.id,
+            activityFlowId: mockParticipantFlows.autoAssignFlow.id,
           }),
         );
-      } else {
-        await waitFor(() => expect(screen.queryByTestId(`${testId}-edit`)).toBeNull());
+      }
+    });
+
+    test('should navigate to appropriate edit URL for performance task', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.performanceTaskActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) {
+        userEvent.click(actionDots);
+        await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+
+        fireEvent.click(screen.getByTestId(`${testId}-edit`));
+        expect(mockedUseNavigate).toHaveBeenCalledWith(
+          generatePath(
+            getPerformanceTaskPath(
+              mockParticipantActivities.performanceTaskActivity
+                .performanceTaskType as unknown as EditablePerformanceTasksType,
+            ),
+            {
+              appletId: mockedAppletId,
+              activityId: mockParticipantActivities.performanceTaskActivity.id,
+            },
+          ),
+        );
       }
     });
   });
 
-  test('should navigate to appropriate edit URL for flow', async () => {
-    renderWithProviders(
-      <UseAssignmentsHookTest
-        activityOrFlow={mockParticipantFlows.autoAssignFlow}
-        targetSubject={mockedOwnerSubject}
-      />,
-      renderOptions,
-    );
+  describe('View Data', () => {
+    test.each`
+      activityOrFlow                                  | route                                                   | param               | description
+      ${mockParticipantActivities.autoAssignActivity} | ${page.appletParticipantActivityDetailsDataSummary}     | ${'activityId'}     | ${'activity'}
+      ${mockParticipantFlows.autoAssignFlow}          | ${page.appletParticipantActivityDetailsFlowDataSummary} | ${'activityFlowId'} | ${'flow'}
+    `(
+      'should navigate to appropriate view data URL for $description',
+      async ({ activityOrFlow, route, param }) => {
+        const { rerender } = renderWithProviders(
+          <UseAssignmentsHookTest
+            activityOrFlow={activityOrFlow}
+            targetSubject={mockedOwnerSubject}
+          />,
+          renderOptions,
+        );
 
-    const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-    if (actionDots) {
-      userEvent.click(actionDots);
-      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+        const viewDataButton = screen.getByTestId(`${testId}-view-data`);
 
-      fireEvent.click(screen.getByTestId(`${testId}-edit`));
-      expect(mockedUseNavigate).toHaveBeenCalledWith(
-        generatePath(page.builderAppletActivityFlowItemAbout, {
-          appletId: mockedAppletId,
-          activityFlowId: mockParticipantFlows.autoAssignFlow.id,
-        }),
-      );
-    }
-  });
+        // Attempt to view data without encryption key
+        fireEvent.click(viewDataButton);
+        expect(mockedUseNavigate).not.toHaveBeenCalled();
+        expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
 
-  test('should navigate to appropriate edit URL for performance task', async () => {
-    renderWithProviders(
-      <UseAssignmentsHookTest
-        activityOrFlow={mockParticipantActivities.performanceTaskActivity}
-        targetSubject={mockedOwnerSubject}
-      />,
-      renderOptions,
-    );
+        // Attempt to view data with encryption key
+        mockGetAppletPrivateKey.mockReturnValue('mockedPrivateKey');
 
-    const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-    if (actionDots) {
-      userEvent.click(actionDots);
-      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+        rerender(
+          <UseAssignmentsHookTest
+            activityOrFlow={activityOrFlow}
+            targetSubject={mockedOwnerSubject}
+          />,
+        );
 
-      fireEvent.click(screen.getByTestId(`${testId}-edit`));
-      expect(mockedUseNavigate).toHaveBeenCalledWith(
-        generatePath(
-          getPerformanceTaskPath(
-            mockParticipantActivities.performanceTaskActivity
-              .performanceTaskType as unknown as EditablePerformanceTasksType,
-          ),
-          {
+        fireEvent.click(viewDataButton);
+        expect(mockedUseNavigate).toHaveBeenCalledWith(
+          generatePath(route, {
             appletId: mockedAppletId,
-            activityId: mockParticipantActivities.performanceTaskActivity.id,
-          },
-        ),
-      );
-    }
+            subjectId: mockedOwnerSubject.id,
+            [param]: activityOrFlow.id,
+          }),
+        );
+      },
+    );
   });
 
   describe('Take Now', () => {
