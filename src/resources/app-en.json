@@ -1100,7 +1100,9 @@
     "respondents": "Respondents",
     "subjects": "Subjects",
     "submissions": "Submissions",
-    "currentlyAssigned": "Currently Assigned"
+    "currentlyAssigned": "Currently Assigned",
+    "lastSubmission": "Last activity:",
+    "noDataYet": "No data yet"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",

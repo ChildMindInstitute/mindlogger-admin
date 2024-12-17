@@ -1099,7 +1099,9 @@
     "respondents": "Répondants",
     "subjects": "Sujets",
     "submissions": "Soumissions",
-    "currentlyAssigned": "Actuellement assigné"
+    "currentlyAssigned": "Actuellement assigné",
+    "lastSubmission": "Dernière activité :",
+    "noDataYet": "Pas encore de données"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
