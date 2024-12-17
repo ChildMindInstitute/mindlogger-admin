@@ -332,7 +332,7 @@ export const useAssignmentsTab = ({
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
-          'data-testid': `${dataTestId}-take-now`,
+          'data-testid': `${dataTestId}-activity-take-now`,
           action: () =>
             openTakeNowModal(activityOrFlow, {
               sourceSubject: respondentSubject && {

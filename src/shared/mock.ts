@@ -1,10 +1,16 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Applet } from 'api';
+import { ActivityAssignmentStatus, Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import {
+  Manager,
+  Respondent,
+  RespondentDetail,
+  RespondentDetails,
+  RespondentStatus,
+} from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -55,7 +61,7 @@ export const mockedApplet = {
   encryption: mockedEncryption,
 } as Applet;
 
-export const mockedOwnerSubject = {
+export const mockedOwnerSubject: RespondentDetails = {
   id: '123e4567-e89b-12d3-a456-426614174000',
   secretUserId: 'mockedOwnerSecretId',
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
@@ -240,10 +246,20 @@ export const mockedRespondent2: Respondent = {
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';
+export const mockedLimitedSubject: RespondentDetails = {
+  id: mockedLimitedSubjectId,
+  secretUserId: 'limited-1',
+  nickname: 'Limited 1',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: null,
+  firstName: 'Limited',
+  lastName: 'One',
+};
 export const mockedLimitedRespondent = {
   id: null,
-  nicknames: ['Limited 1'],
-  secretIds: ['limited-1'],
+  nicknames: [mockedLimitedSubject.nickname],
+  secretIds: [mockedLimitedSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
@@ -257,14 +273,14 @@ export const mockedLimitedRespondent = {
       appletDisplayName: mockedApplet.displayName,
       appletImage: '',
       accessId: null,
-      respondentNickname: 'Limited 1',
-      respondentSecretId: 'limited-1',
+      respondentNickname: mockedLimitedSubject.nickname,
+      respondentSecretId: mockedLimitedSubject.secretUserId,
       hasIndividualSchedule: false,
       encryption: mockedApplet.encryption,
       subjectId: mockedLimitedSubjectId,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'Limited',
-      subjectLastName: 'One',
+      subjectTag: mockedLimitedSubject.tag,
+      subjectFirstName: mockedLimitedSubject.firstName,
+      subjectLastName: mockedLimitedSubject.lastName,
       subjectCreatedAt: '2024-07-12T13:07:25.455726',
       invitation: null,
     },
@@ -3315,3 +3331,101 @@ export const lastAssessment = [
     order: 1,
   },
 ] as Item[];
+
+const mockParticipantActivityBase = {
+  id: mockedAppletData.activities[0].id as string,
+  activityIds: null,
+  name: 'Mock Activity',
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockParticipantActivities = {
+  autoAssignActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  manualOwnerOwnerAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedOwnerSubject,
+      },
+    ],
+  },
+  manualOwnerLimitedAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a2',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  manualLimitedLimitedAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a3',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedLimitedSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  inactiveActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Inactive,
+    autoAssign: false,
+  },
+} as const;
+
+const mockParticipantFlowBase = {
+  id: mockedAppletData.activityFlows[0].id as string,
+  activityIds: mockedAppletData.activityFlows[0].items.map((item) => item.id),
+  name: 'Mock Flow',
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockAppletParticipantFlows = {
+  autoAssignFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  hiddenFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    name: 'Auto-assign Flow',
+    status: ActivityAssignmentStatus.Hidden,
+    autoAssign: true,
+  },
+} as const;
