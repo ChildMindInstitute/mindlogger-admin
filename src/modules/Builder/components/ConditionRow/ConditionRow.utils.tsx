@@ -58,26 +58,52 @@ const scoreItemTypes = [
   ItemResponseType.SingleSelection,
   ItemResponseType.MultipleSelection,
 ];
-const itemFlowItemTypes = [
-  ...scoreItemTypes,
-  ItemResponseType.Date,
-  ItemResponseType.NumberSelection,
-  ItemResponseType.Time,
-  ItemResponseType.TimeRange,
-  ItemResponseType.SingleSelectionPerRow,
-  ItemResponseType.MultipleSelectionPerRow,
-  ItemResponseType.SliderRows,
+
+const itemFlowItemGroups = [
+  [...scoreItemTypes, ItemResponseType.NumberSelection], // Group 1
+  [ItemResponseType.Date, ItemResponseType.Time, ItemResponseType.TimeRange], // Group 2
+  [
+    ItemResponseType.SingleSelectionPerRow,
+    ItemResponseType.MultipleSelectionPerRow,
+    ItemResponseType.SliderRows,
+  ], // Group 3
 ];
-const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
-  (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
+
+function getItemsSubset(includeGroup2: boolean, includeGroup3: boolean) {
+  let subset = itemFlowItemGroups[0];
+
+  if (includeGroup2) subset = [...subset, ...itemFlowItemGroups[1]];
+  if (includeGroup3) subset = [...subset, ...itemFlowItemGroups[2]];
+
+  return subset;
+}
+
+const checkIfShouldBeIncluded = (
+  responseType: ItemResponseType,
+  isItemFlow = false,
+  group2 = false,
+  group3 = false,
+) =>
+  (isItemFlow ? getItemsSubset(group2, group3) : scoreItemTypes).some(
+    (value) => value === responseType,
+  );
 
 export const getItemOptions = (
   items: ItemFormValues[],
   conditionRowType: ConditionRowType,
   isItemFlow = false,
+  enableItemFlowItemsG2 = false,
+  enableItemFlowItemsG3 = false,
 ) =>
   items?.reduce((optionList: OptionListItem[], item) => {
-    if (checkIfShouldBeIncluded(item.responseType, isItemFlow)) {
+    if (
+      checkIfShouldBeIncluded(
+        item.responseType,
+        isItemFlow,
+        enableItemFlowItemsG2,
+        enableItemFlowItemsG3,
+      )
+    ) {
       return [
         ...optionList,
         {
