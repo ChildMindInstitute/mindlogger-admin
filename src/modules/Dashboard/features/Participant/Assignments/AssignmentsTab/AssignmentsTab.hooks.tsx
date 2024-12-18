@@ -402,6 +402,7 @@ export const useAssignmentsTab = ({
               setSelectedTargetSubjectId(undefined);
             }
           }}
+          data-testid={`${dataTestId}-export-modal`}
         />
       )}
 

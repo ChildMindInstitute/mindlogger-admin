@@ -220,12 +220,13 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) userEvent.click(actionDots);
+        if (actionDots) fireEvent.click(actionDots);
 
         if (canEdit) {
-          await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+          const editButton = screen.getByTestId(`${testId}-edit`);
+          expect(editButton).toBeVisible();
 
-          fireEvent.click(screen.getByTestId(`${testId}-edit`));
+          fireEvent.click(editButton);
 
           expect(mockedUseNavigate).toHaveBeenCalledWith(
             generatePath(page.builderAppletActivity, {
@@ -234,7 +235,7 @@ describe('useAssignmentsTab hook', () => {
             }),
           );
         } else {
-          await waitFor(() => expect(screen.queryByTestId(`${testId}-edit`)).toBeNull());
+          expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
         }
       });
     });
@@ -248,9 +249,9 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+      expect(screen.getByTestId(`${testId}-edit`)).toBeVisible();
       fireEvent.click(screen.getByTestId(`${testId}-edit`));
 
       expect(mockedUseNavigate).toHaveBeenCalledWith(
@@ -270,10 +271,11 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
-      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+      const editButton = screen.getByTestId(`${testId}-edit`);
+      expect(editButton).toBeVisible();
+      fireEvent.click(editButton);
 
       expect(mockedUseNavigate).toHaveBeenCalledWith(
         generatePath(
@@ -337,6 +339,92 @@ describe('useAssignmentsTab hook', () => {
     );
   });
 
+  describe('Export Data', () => {
+    test('should hide Export Data if no target subject', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          respondentSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) fireEvent.click(actionDots);
+
+      expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
+    });
+
+    describe('should show or hide Export Data button depending on role', () => {
+      test.each`
+        canExportData | role                 | description
+        ${true}       | ${Roles.Manager}     | ${'Export Data for Manager'}
+        ${true}       | ${Roles.SuperAdmin}  | ${'Export Data for SuperAdmin'}
+        ${true}       | ${Roles.Owner}       | ${'Export Data for Owner'}
+        ${false}      | ${Roles.Coordinator} | ${'Export Data for Coordinator'}
+        ${false}      | ${Roles.Editor}      | ${'Export Data for Editor'}
+        ${false}      | ${Roles.Respondent}  | ${'Export Data for Respondent'}
+        ${true}       | ${Roles.Reviewer}    | ${'Export Data for Reviewer'}
+      `(
+        '$description',
+        async ({ canExportData, role }: { canExportData: boolean; role: Roles }) => {
+          renderWithProviders(
+            <UseAssignmentsHookTest
+              activityOrFlow={mockParticipantActivities.autoAssignActivity}
+              targetSubject={mockedOwnerSubject}
+            />,
+            {
+              ...renderOptions,
+              preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
+            },
+          );
+
+          const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+          if (actionDots) fireEvent.click(actionDots);
+
+          if (canExportData) {
+            expect(screen.getByTestId(`${testId}-export`)).toBeVisible();
+          } else {
+            expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
+          }
+        },
+      );
+    });
+
+    test('should show Export modal', async () => {
+      const { rerender } = renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await waitFor(() => expect(screen.getByTestId(`${testId}-export`)).toBeVisible());
+
+      const exportDataButton = screen.getByTestId(`${testId}-export`);
+
+      // Attempt to export data without encryption key
+      fireEvent.click(exportDataButton);
+      expect(screen.queryByTestId(`${testId}-export-modal`)).toBeNull();
+      expect(screen.queryByTestId(`${testId}-export-modal-password`)).toBeVisible();
+
+      // Attempt to view data with encryption key
+      mockGetAppletPrivateKey.mockReturnValue('mockedPrivateKey');
+
+      rerender(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+      );
+
+      expect(screen.queryByTestId(`${testId}-export-modal-password`)).toBeNull();
+      expect(screen.queryByTestId(`${testId}-export-modal`)).toBeVisible();
+    });
+  });
+
   describe('Take Now', () => {
     describe('should show or hide Take Now button depending on role', () => {
       test.each`
@@ -352,7 +440,7 @@ describe('useAssignmentsTab hook', () => {
         renderWithProviders(
           <UseAssignmentsHookTest
             activityOrFlow={mockParticipantActivities.autoAssignActivity}
-            targetSubject={mockedOwnerSubject}
+            targetSubject={mockedRespondentSubject}
           />,
           {
             ...renderOptions,
@@ -363,15 +451,13 @@ describe('useAssignmentsTab hook', () => {
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
         if (actionDots) userEvent.click(actionDots);
 
-        if (canDoTakeNow) {
-          await waitFor(() =>
-            expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible(),
-          );
-        } else {
-          await waitFor(() =>
-            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBeNull(),
-          );
-        }
+        await waitFor(() => {
+          if (canDoTakeNow) {
+            expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
+          } else {
+            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBeNull();
+          }
+        });
       });
     });
 
@@ -387,11 +473,9 @@ describe('useAssignmentsTab hook', () => {
       userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       await waitFor(() => {
-        expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
-        expect(screen.getByTestId(`${testId}-activity-take-now`)).toHaveAttribute(
-          'aria-disabled',
-          'true',
-        );
+        const takeNowButton = screen.getByTestId(`${testId}-activity-take-now`);
+        expect(takeNowButton).toBeVisible();
+        expect(takeNowButton).toHaveAttribute('aria-disabled', 'true');
       });
     });
 
@@ -491,12 +575,12 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) userEvent.click(actionDots);
+        if (actionDots) fireEvent.click(actionDots);
 
         if (canAssign) {
-          await waitFor(() => expect(screen.getByTestId(`${testId}-assign`)).toBeVisible());
+          expect(screen.getByTestId(`${testId}-assign`)).toBeVisible();
         } else {
-          await waitFor(() => expect(screen.queryByTestId(`${testId}-assign`)).toBeNull());
+          expect(screen.queryByTestId(`${testId}-assign`)).toBeNull();
         }
       });
     });
@@ -510,12 +594,11 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-      await waitFor(() => {
-        expect(screen.getByTestId(`${testId}-assign`)).toBeVisible();
-        expect(screen.getByTestId(`${testId}-assign`)).toHaveAttribute('aria-disabled', 'true');
-      });
+      const assignButton = screen.getByTestId(`${testId}-assign`);
+      expect(assignButton).toBeVisible();
+      expect(assignButton).toHaveAttribute('aria-disabled', 'true');
     });
 
     describe('should show Assign modal prepopulated with', () => {
@@ -538,12 +621,15 @@ describe('useAssignmentsTab hook', () => {
             renderOptions,
           );
 
-          userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+          fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-          await waitFor(() => expect(screen.getByTestId(`${testId}-assign`)).toBeVisible());
-          fireEvent.click(screen.getByTestId(`${testId}-assign`));
+          const assignButton = screen.getByTestId(`${testId}-assign`);
+          expect(assignButton).toBeVisible();
+          userEvent.click(assignButton);
 
-          await waitFor(() => expect(screen.getByTestId('applet-activity-assign')).toBeVisible());
+          await waitFor(() => {
+            expect(screen.getByTestId('applet-activity-assign')).toBeVisible();
+          });
 
           roles.forEach((role, index) => {
             const subjectCell = screen.getByTestId(
