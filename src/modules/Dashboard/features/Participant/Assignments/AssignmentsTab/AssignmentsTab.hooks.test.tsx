@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
@@ -18,6 +18,8 @@ import {
   mockedOwnerManager,
   mockedOwnerRespondent,
   mockedOwnerSubject,
+  mockedRespondentSubject,
+  mockedRespondent,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -60,10 +62,10 @@ const successfulGetAppletActivitiesMock = {
   },
 };
 
-const getAppletUrl = `/applets/${mockedAppletId}`;
-const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
-const getWorkspaceRespondentsUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
-const getWorkspaceManagersUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`;
+const GET_APPLET_URL = `/applets/${mockedAppletId}`;
+const GET_APPLET_ACTIVITIES_URL = `/activities/applet/${mockedAppletId}`;
+const GET_WORKSPACE_RESPONDENTS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
+const GET_WORKSPACE_MANAGERS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`;
 
 const testId = 'assignments-tab';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerRespondent.details[0].subjectId}`;
@@ -111,18 +113,23 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
   }),
 }));
 
+// Required for ActivityAssignDrawer
+Element.prototype.scrollTo = jest.fn();
+
 /* Test Component
 =================================================== */
+
+type UseAssignmentsHookTestProps = {
+  activityOrFlow: ParticipantActivityOrFlow;
+  targetSubject?: RespondentDetails;
+  respondentSubject?: RespondentDetails;
+};
 
 const UseAssignmentsHookTest = ({
   activityOrFlow,
   targetSubject,
   respondentSubject,
-}: {
-  activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: RespondentDetails;
-  respondentSubject?: RespondentDetails;
-}) => {
+}: UseAssignmentsHookTestProps) => {
   const { getActionsMenu, onClickNavigateToData, modals } = useAssignmentsTab({
     appletId: mockedAppletId,
     targetSubject,
@@ -165,10 +172,10 @@ describe('useAssignmentsTab hook', () => {
     });
 
     mockGetRequestResponses({
-      [getAppletUrl]: successfulGetAppletMock,
-      [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
-      [getWorkspaceRespondentsUrl]: ({ userId }) => {
-        const respondents = [mockedOwnerRespondent, mockedLimitedRespondent];
+      [GET_APPLET_URL]: successfulGetAppletMock,
+      [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
+      [GET_WORKSPACE_RESPONDENTS_URL]: ({ userId }) => {
+        const respondents = [mockedOwnerRespondent, mockedRespondent, mockedLimitedRespondent];
         const filteredRespondents = userId
           ? respondents.filter((r) => r.id === userId)
           : respondents;
@@ -178,7 +185,7 @@ describe('useAssignmentsTab hook', () => {
           count: filteredRespondents.length,
         });
       },
-      [getWorkspaceManagersUrl]: mockSuccessfulHttpResponse<ManagersData>({
+      [GET_WORKSPACE_MANAGERS_URL]: mockSuccessfulHttpResponse<ManagersData>({
         result: [mockedOwnerManager],
         count: 1,
       }),
@@ -202,19 +209,24 @@ describe('useAssignmentsTab hook', () => {
         ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
       `('$description', async ({ canEdit, role }) => {
         renderWithProviders(
-          <UseAssignmentsHookTest activityOrFlow={mockParticipantActivities.autoAssignActivity} />,
+          <UseAssignmentsHookTest
+            activityOrFlow={mockParticipantActivities.autoAssignActivity}
+            targetSubject={mockedOwnerSubject}
+          />,
           {
             ...renderOptions,
             preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
           },
         );
 
-        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
-        if (actionDots && canEdit) {
-          userEvent.click(actionDots);
+        const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+        if (actionDots) userEvent.click(actionDots);
+
+        if (canEdit) {
           await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
 
           fireEvent.click(screen.getByTestId(`${testId}-edit`));
+
           expect(mockedUseNavigate).toHaveBeenCalledWith(
             generatePath(page.builderAppletActivity, {
               appletId: mockedAppletId,
@@ -236,19 +248,17 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) {
-        userEvent.click(actionDots);
-        await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-        fireEvent.click(screen.getByTestId(`${testId}-edit`));
-        expect(mockedUseNavigate).toHaveBeenCalledWith(
-          generatePath(page.builderAppletActivityFlowItemAbout, {
-            appletId: mockedAppletId,
-            activityFlowId: mockParticipantFlows.autoAssignFlow.id,
-          }),
-        );
-      }
+      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+
+      expect(mockedUseNavigate).toHaveBeenCalledWith(
+        generatePath(page.builderAppletActivityFlowItemAbout, {
+          appletId: mockedAppletId,
+          activityFlowId: mockParticipantFlows.autoAssignFlow.id,
+        }),
+      );
     });
 
     test('should navigate to appropriate edit URL for performance task', async () => {
@@ -260,25 +270,23 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) {
-        userEvent.click(actionDots);
-        await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-        fireEvent.click(screen.getByTestId(`${testId}-edit`));
-        expect(mockedUseNavigate).toHaveBeenCalledWith(
-          generatePath(
-            getPerformanceTaskPath(
-              mockParticipantActivities.performanceTaskActivity
-                .performanceTaskType as unknown as EditablePerformanceTasksType,
-            ),
-            {
-              appletId: mockedAppletId,
-              activityId: mockParticipantActivities.performanceTaskActivity.id,
-            },
+      await waitFor(() => expect(screen.getByTestId(`${testId}-edit`)).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+
+      expect(mockedUseNavigate).toHaveBeenCalledWith(
+        generatePath(
+          getPerformanceTaskPath(
+            mockParticipantActivities.performanceTaskActivity
+              .performanceTaskType as unknown as EditablePerformanceTasksType,
           ),
-        );
-      }
+          {
+            appletId: mockedAppletId,
+            activityId: mockParticipantActivities.performanceTaskActivity.id,
+          },
+        ),
+      );
     });
   });
 
@@ -302,6 +310,7 @@ describe('useAssignmentsTab hook', () => {
 
         // Attempt to view data without encryption key
         fireEvent.click(viewDataButton);
+
         expect(mockedUseNavigate).not.toHaveBeenCalled();
         expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
 
@@ -316,6 +325,7 @@ describe('useAssignmentsTab hook', () => {
         );
 
         fireEvent.click(viewDataButton);
+
         expect(mockedUseNavigate).toHaveBeenCalledWith(
           generatePath(route, {
             appletId: mockedAppletId,
@@ -351,8 +361,9 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots && canDoTakeNow) {
-          userEvent.click(actionDots);
+        if (actionDots) userEvent.click(actionDots);
+
+        if (canDoTakeNow) {
           await waitFor(() =>
             expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible(),
           );
@@ -373,42 +384,58 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) {
-        userEvent.click(actionDots);
-        await waitFor(() => {
-          expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
-          expect(screen.getByTestId(`${testId}-activity-take-now`)).toHaveAttribute(
-            'aria-disabled',
-            'true',
-          );
-        });
-      }
+      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
+        expect(screen.getByTestId(`${testId}-activity-take-now`)).toHaveAttribute(
+          'aria-disabled',
+          'true',
+        );
+      });
     });
 
-    test('should pre-populate subject in Take Now modal', async () => {
-      renderWithProviders(
-        <UseAssignmentsHookTest
-          activityOrFlow={mockParticipantActivities.autoAssignActivity}
-          targetSubject={mockedOwnerSubject}
-        />,
-        renderOptions,
+    describe('should show Take Now modal prepopulated with', () => {
+      test.each`
+        roles                       | populated        | description
+        ${['respondent']}           | ${[true, false]} | ${'respondent subject'}
+        ${['target']}               | ${[false, true]} | ${'target subject'}
+        ${['respondent', 'target']} | ${[true, true]}  | ${'both respondent and target subjects'}
+      `(
+        '$description',
+        async ({
+          roles,
+          populated,
+        }: {
+          roles: Array<'respondent' | 'target'>;
+          populated: [boolean, boolean];
+        }) => {
+          const props: Partial<UseAssignmentsHookTestProps> = {};
+          roles.forEach((role) => (props[`${role}Subject`] = mockedRespondentSubject));
+
+          renderWithProviders(
+            <UseAssignmentsHookTest
+              activityOrFlow={mockParticipantActivities.autoAssignActivity}
+              {...props}
+            />,
+            renderOptions,
+          );
+
+          await openTakeNowModal(testId);
+
+          const sourceSubjectInputElement = screen
+            .getByTestId(sourceSubjectDropdownTestId(testId))
+            .querySelector('input');
+
+          const targetSubjectInputElement = screen
+            .getByTestId(targetSubjectDropdownTestId(testId))
+            .querySelector('input');
+
+          const text = `${mockedRespondentSubject.secretUserId} (${mockedRespondentSubject.nickname}) (${mockedRespondentSubject.tag})`;
+          expect(sourceSubjectInputElement).toHaveValue(populated[0] ? text : '');
+          expect(targetSubjectInputElement).toHaveValue(populated[1] ? text : '');
+        },
       );
-
-      await openTakeNowModal(testId);
-
-      const sourceSubjectInputElement = screen
-        .getByTestId(sourceSubjectDropdownTestId(testId))
-        .querySelector('input');
-
-      const targetSubjectInputElement = screen
-        .getByTestId(targetSubjectDropdownTestId(testId))
-        .querySelector('input');
-
-      const { firstName, lastName, tag } = mockedOwnerSubject;
-
-      expect(sourceSubjectInputElement).toHaveValue('');
-      expect(targetSubjectInputElement).toHaveValue(`${firstName} ${lastName} (${tag})`);
     });
 
     test('should pre-populate both respondent and subject in Take Now modal', async () => {
@@ -436,6 +463,95 @@ describe('useAssignmentsTab hook', () => {
       );
       expect(targetSubjectInputElement).toHaveValue(
         `${mockedLimitedSubject.secretUserId} (${mockedLimitedSubject.nickname}) (${mockedLimitedSubject.tag})`,
+      );
+    });
+  });
+
+  describe('Assign', () => {
+    describe('should show or hide Assign button depending on role', () => {
+      test.each`
+        canAssign | role                 | description
+        ${true}   | ${Roles.Manager}     | ${'Assign for Manager'}
+        ${true}   | ${Roles.SuperAdmin}  | ${'Assign for SuperAdmin'}
+        ${true}   | ${Roles.Owner}       | ${'Assign for Owner'}
+        ${true}   | ${Roles.Coordinator} | ${'Assign for Coordinator'}
+        ${false}  | ${Roles.Editor}      | ${'Assign for Editor'}
+        ${false}  | ${Roles.Respondent}  | ${'Assign for Respondent'}
+        ${false}  | ${Roles.Reviewer}    | ${'Assign for Reviewer'}
+      `('$description', async ({ canAssign, role }) => {
+        renderWithProviders(
+          <UseAssignmentsHookTest
+            activityOrFlow={mockParticipantActivities.manualOwnerFullAssignedActivity}
+            targetSubject={mockedOwnerSubject}
+          />,
+          {
+            ...renderOptions,
+            preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
+          },
+        );
+
+        const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+        if (actionDots) userEvent.click(actionDots);
+
+        if (canAssign) {
+          await waitFor(() => expect(screen.getByTestId(`${testId}-assign`)).toBeVisible());
+        } else {
+          await waitFor(() => expect(screen.queryByTestId(`${testId}-assign`)).toBeNull());
+        }
+      });
+    });
+
+    test('should be disabled for limited account respondents', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.manualOwnerLimitedAssignedActivity}
+          respondentSubject={mockedLimitedSubject}
+        />,
+        renderOptions,
+      );
+
+      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${testId}-assign`)).toBeVisible();
+        expect(screen.getByTestId(`${testId}-assign`)).toHaveAttribute('aria-disabled', 'true');
+      });
+    });
+
+    describe('should show Assign modal prepopulated with', () => {
+      test.each`
+        roles                       | text                                              | description
+        ${['respondent']}           | ${[mockedRespondentSubject.secretUserId]}         | ${'respondent subject'}
+        ${['target']}               | ${[mockedRespondentSubject.secretUserId]}         | ${'target subject'}
+        ${['respondent', 'target']} | ${[mockedRespondentSubject.secretUserId, 'Self']} | ${'both respondent and target subjects'}
+      `(
+        '$description',
+        async ({ roles, text }: { roles: Array<'respondent' | 'target'>; text: string[] }) => {
+          const props: Partial<UseAssignmentsHookTestProps> = {};
+          roles.forEach((role) => (props[`${role}Subject`] = mockedRespondentSubject));
+
+          renderWithProviders(
+            <UseAssignmentsHookTest
+              activityOrFlow={mockParticipantActivities.manualOwnerFullAssignedActivity}
+              {...props}
+            />,
+            renderOptions,
+          );
+
+          userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+          await waitFor(() => expect(screen.getByTestId(`${testId}-assign`)).toBeVisible());
+          fireEvent.click(screen.getByTestId(`${testId}-assign`));
+
+          await waitFor(() => expect(screen.getByTestId('applet-activity-assign')).toBeVisible());
+
+          roles.forEach((role, index) => {
+            const subjectCell = screen.getByTestId(
+              `applet-activity-assign-assignments-table-0-cell-${role}SubjectId`,
+            );
+            expect(within(subjectCell).getByText(text[index])).toBeVisible();
+          });
+        },
       );
     });
   });

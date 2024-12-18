@@ -1,7 +1,11 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ActivityAssignmentStatus, Applet } from 'modules/Dashboard/api/api.types';
+import {
+  ActivityAssignmentStatus,
+  Applet,
+  ParticipantActivityOrFlow,
+} from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import {
@@ -68,7 +72,7 @@ export const mockedOwnerSubject: RespondentDetails = {
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
   lastSeen: null,
   tag: 'Team' as ParticipantTag,
-  userId: null,
+  userId: mockedUserData.id,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
 };
@@ -185,26 +189,36 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedSubjectId1 = 'subject-id-987';
+export const mockedRespondentSubject: RespondentDetails = {
+  id: mockedSubjectId1,
+  secretUserId: 'mockedSecretId',
+  nickname: 'Mocked Respondent',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: mockedRespondentId,
+  firstName: 'John',
+  lastName: 'Doe',
+};
 export const mockedRespondentDetails: RespondentDetail = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
   appletImage: '',
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-  respondentNickname: 'Mocked Respondent',
-  respondentSecretId: 'mockedSecretId',
+  respondentNickname: mockedRespondentSubject.nickname,
+  respondentSecretId: mockedRespondentSubject.secretUserId,
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
-  subjectId: mockedSubjectId1,
-  subjectTag: 'Child' as ParticipantTag,
-  subjectFirstName: 'John',
-  subjectLastName: 'Doe',
+  subjectId: mockedRespondentSubject.id,
+  subjectTag: mockedRespondentSubject.tag,
+  subjectFirstName: mockedRespondentSubject.firstName,
+  subjectLastName: mockedRespondentSubject.lastName,
   subjectCreatedAt: '2023-09-26T12:11:46.162083',
   invitation: null,
 };
 export const mockedRespondent: Respondent = {
   id: mockedRespondentId,
-  nicknames: ['Mocked Respondent'],
-  secretIds: ['mockedSecretId'],
+  nicknames: [mockedRespondentSubject.nickname],
+  secretIds: [mockedRespondentSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
@@ -3406,7 +3420,7 @@ const mockParticipantActivityBase = {
   assignments: [],
 };
 
-export const mockParticipantActivities = {
+export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow> = {
   autoAssignActivity: {
     ...mockParticipantActivityBase,
     isFlow: false,
@@ -3429,7 +3443,7 @@ export const mockParticipantActivities = {
     isPerformanceTask: true,
     performanceTaskType: PerfTaskType.Flanker,
   },
-  manualOwnerOwnerAssignedActivity: {
+  manualOwnerFullAssignedActivity: {
     ...mockParticipantActivityBase,
     isFlow: false,
     status: ActivityAssignmentStatus.Active,
@@ -3440,7 +3454,7 @@ export const mockParticipantActivities = {
         activityId: mockedAppletData.activities[0].id as string,
         activityFlowId: null,
         respondentSubject: mockedOwnerSubject,
-        targetSubject: mockedOwnerSubject,
+        targetSubject: mockedRespondentSubject,
       },
     ],
   },
@@ -3459,28 +3473,13 @@ export const mockParticipantActivities = {
       },
     ],
   },
-  manualLimitedLimitedAssignedActivity: {
-    ...mockParticipantActivityBase,
-    isFlow: false,
-    status: ActivityAssignmentStatus.Active,
-    autoAssign: false,
-    assignments: [
-      {
-        id: 'a3',
-        activityId: mockedAppletData.activities[0].id as string,
-        activityFlowId: null,
-        respondentSubject: mockedLimitedSubject,
-        targetSubject: mockedLimitedSubject,
-      },
-    ],
-  },
   inactiveActivity: {
     ...mockParticipantActivityBase,
     isFlow: false,
     status: ActivityAssignmentStatus.Inactive,
     autoAssign: false,
   },
-} as const;
+};
 
 const mockParticipantFlowBase = {
   id: mockedAppletData.activityFlows[0].id as string,
@@ -3493,7 +3492,7 @@ const mockParticipantFlowBase = {
   assignments: [],
 };
 
-export const mockParticipantFlows = {
+export const mockParticipantFlows: Record<string, ParticipantActivityOrFlow> = {
   autoAssignFlow: {
     ...mockParticipantFlowBase,
     isFlow: true,
@@ -3507,4 +3506,4 @@ export const mockParticipantFlows = {
     status: ActivityAssignmentStatus.Hidden,
     autoAssign: true,
   },
-} as const;
+};
