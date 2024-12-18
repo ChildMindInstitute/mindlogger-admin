@@ -1,0 +1,43 @@
+name: Destroy preview environment
+
+on:
+  workflow_call:
+    inputs:
+      env-name:
+        type: string
+        description: Environment name (likely the pr number)
+        required: true
+      app-id:
+        type: string
+        description: Amplify App ID
+        required: true
+      aws-region:
+        type: string
+        default: us-east-1
+        required: false
+
+jobs:
+  destroy-preview-env:
+    runs-on: ubuntu-latest
+    name: Destroy Preview Env
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AWS_REGION: us-east-1
+    steps:
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::992382368072:role/cmiml-feature-oidc-github-role
+          role-session-name: gha-preview-env
+          aws-region: ${{ inputs.aws-region }}
+      - name: Destroy Preview env
+        run: |
+          ENV_COUNT=$(aws amplify list-branches --app-id ${{ inputs.app-id }} --query 'length(branches[?branchName==`${{ inputs.env-name }}`])')
+          if [ $ENV_COUNT -ne 0 ]; then
+            aws amplify delete-branch --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }}
+          else
+            echo "Environment ${{ inputs.env-name }} does not exist"
+            exit 1
+          fi
