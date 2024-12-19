@@ -5,7 +5,7 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
+import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { MAX_LIMIT } from 'shared/consts';
 
 import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
@@ -14,7 +14,7 @@ import { RespondentDataSummary } from './RespondentDataSummary';
 import { RespondentDataContext } from '../RespondentDataContext/RespondentDataContext.context';
 import { RespondentDataContextType } from '../RespondentDataContext/RespondentDataContext.types';
 
-const route = `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
 const mockedSetValue = jest.fn();
 
@@ -70,7 +70,7 @@ jest.mock('modules/Dashboard/hooks', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ subjectId: mockedSubjectId1, appletId: mockedAppletId }),
+  useParams: () => ({ subjectId: mockedFullSubjectId1, appletId: mockedAppletId }),
 }));
 
 jest.mock('./ReportMenu', () => ({
@@ -184,7 +184,7 @@ describe('RespondentDataSummary component', () => {
         {
           params: {
             limit: MAX_LIMIT,
-            targetSubjectId: mockedSubjectId1,
+            targetSubjectId: mockedFullSubjectId1,
           },
           signal: undefined,
         },
@@ -195,7 +195,7 @@ describe('RespondentDataSummary component', () => {
         {
           params: {
             limit: MAX_LIMIT,
-            targetSubjectId: mockedSubjectId1,
+            targetSubjectId: mockedFullSubjectId1,
           },
           signal: undefined,
         },

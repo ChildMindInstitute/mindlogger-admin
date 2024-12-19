@@ -13,10 +13,10 @@ import {
   mockedAppletId,
   mockedEncryption,
   mockedOwnerId,
-  mockedOwnerRespondent,
+  mockedOwnerParticipant,
   mockedOwnerSubject,
-  mockedRespondent,
-  mockedRespondent2,
+  mockedFullParticipant,
+  mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
@@ -101,12 +101,12 @@ const successfulEmptyHttpResponseMock: HttpResponse = {
 
 const getAppletUrl = `/applets/${mockedAppletId}`;
 const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
-const getAppletSubjectActivitiesUrl = `/activities/applet/${mockedAppletId}/subject/${mockedOwnerRespondent.details[0].subjectId}`;
+const getAppletSubjectActivitiesUrl = `/activities/applet/${mockedAppletId}/subject/${mockedOwnerParticipant.details[0].subjectId}`;
 const getWorkspaceRespondentsUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 const getWorkspaceManagersUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`;
 
 const testId = 'dashboard-applet-participant-activities';
-const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerRespondent.details[0].subjectId}`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerParticipant.details[0].subjectId}`;
 const routePath = page.appletParticipantDetails;
 
 const preloadedState: PreloadedState<RootState> = {
@@ -289,20 +289,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('should pre-populate admin and participant in Take Now modal', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
       const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
         result: [
           {
-            id: mockedOwnerRespondent.id,
+            id: mockedOwnerParticipant.id,
             firstName: mockedUserData.firstName,
             lastName: mockedUserData.lastName,
-            email: mockedOwnerRespondent.email,
+            email: mockedOwnerParticipant.email,
             roles: [Roles.Owner],
             lastSeen: new Date().toDateString(),
-            isPinned: mockedOwnerRespondent.isPinned,
+            isPinned: mockedOwnerParticipant.isPinned,
             applets: [
               {
                 id: mockedApplet.id,
@@ -332,9 +332,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
         [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
-          if (params.userId === mockedOwnerRespondent.id) {
+          if (params.userId === mockedOwnerParticipant.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
-              result: [mockedOwnerRespondent],
+              result: [mockedOwnerParticipant],
               count: 1,
             });
           }
@@ -380,20 +380,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('Full account participants cannot self-report', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
       const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
         result: [
           {
-            id: mockedOwnerRespondent.id,
+            id: mockedOwnerParticipant.id,
             firstName: mockedUserData.firstName,
             lastName: mockedUserData.lastName,
-            email: mockedOwnerRespondent.email,
+            email: mockedOwnerParticipant.email,
             roles: [Roles.Owner],
             lastSeen: new Date().toDateString(),
-            isPinned: mockedOwnerRespondent.isPinned,
+            isPinned: mockedOwnerParticipant.isPinned,
             applets: [
               {
                 id: mockedApplet.id,
@@ -423,9 +423,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
         [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
-          if (params.userId === mockedOwnerRespondent.id) {
+          if (params.userId === mockedOwnerParticipant.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
-              result: [mockedOwnerRespondent],
+              result: [mockedOwnerParticipant],
               count: 1,
             });
           }
@@ -461,7 +461,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       fireEvent.mouseDown(inputElement);
 
       const fullAccountParticipantOption = getByTestId(
-        `${sourceSubjectDropdownTestId(testId)}-option-${mockedRespondent.details[0].subjectId}`,
+        `${sourceSubjectDropdownTestId(testId)}-option-${
+          mockedFullParticipant.details[0].subjectId
+        }`,
       );
 
       fireEvent.click(fullAccountParticipantOption);
@@ -473,20 +475,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('Full account participants are not present in the inputting dropdown', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
       const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
         result: [
           {
-            id: mockedOwnerRespondent.id,
+            id: mockedOwnerParticipant.id,
             firstName: mockedUserData.firstName,
             lastName: mockedUserData.lastName,
-            email: mockedOwnerRespondent.email,
+            email: mockedOwnerParticipant.email,
             roles: [Roles.Owner],
             lastSeen: new Date().toDateString(),
-            isPinned: mockedOwnerRespondent.isPinned,
+            isPinned: mockedOwnerParticipant.isPinned,
             applets: [
               {
                 id: mockedApplet.id,
@@ -516,9 +518,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
         [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
-          if (params.userId === mockedOwnerRespondent.id) {
+          if (params.userId === mockedOwnerParticipant.id) {
             return mockSuccessfulHttpResponse<ParticipantsData>({
-              result: [mockedOwnerRespondent],
+              result: [mockedOwnerParticipant],
               count: 1,
             });
           }
@@ -550,7 +552,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [MixpanelProps.Via]: 'Applet - Participants - Activities',
       });
 
-      await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
+      await selectParticipant(testId, 'source', mockedOwnerParticipant.details[0].subjectId);
 
       expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
       expectMixpanelTrack({
@@ -587,8 +589,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           option.getAttribute('data-testid')?.replace(dropdownOptionTestIdRegex, '') || '',
       );
 
-      expect(optionsText).not.toContain(mockedRespondent.details[0].subjectId);
-      expect(optionsText).not.toContain(mockedRespondent2.details[0].subjectId);
+      expect(optionsText).not.toContain(mockedFullParticipant.details[0].subjectId);
+      expect(optionsText).not.toContain(mockedFullParticipant2.details[0].subjectId);
     });
 
     describe('featureFlags.enableParticipantMultiInformant = true', () => {
@@ -603,20 +605,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('should pre-populate only participant in Take Now modal', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
         const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
           result: [
             {
-              id: mockedOwnerRespondent.id,
+              id: mockedOwnerParticipant.id,
               firstName: mockedUserData.firstName,
               lastName: mockedUserData.lastName,
-              email: mockedOwnerRespondent.email,
+              email: mockedOwnerParticipant.email,
               roles: [Roles.Owner],
               lastSeen: new Date().toDateString(),
-              isPinned: mockedOwnerRespondent.isPinned,
+              isPinned: mockedOwnerParticipant.isPinned,
               applets: [
                 {
                   id: mockedApplet.id,
@@ -646,9 +648,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
           [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
-            if (params.userId === mockedOwnerRespondent.id) {
+            if (params.userId === mockedOwnerParticipant.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
-                result: [mockedOwnerRespondent],
+                result: [mockedOwnerParticipant],
                 count: 1,
               });
             }
@@ -693,20 +695,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('Full account participants can self-report', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
         const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
           result: [
             {
-              id: mockedOwnerRespondent.id,
+              id: mockedOwnerParticipant.id,
               firstName: mockedUserData.firstName,
               lastName: mockedUserData.lastName,
-              email: mockedOwnerRespondent.email,
+              email: mockedOwnerParticipant.email,
               roles: [Roles.Owner],
               lastSeen: new Date().toDateString(),
-              isPinned: mockedOwnerRespondent.isPinned,
+              isPinned: mockedOwnerParticipant.isPinned,
               applets: [
                 {
                   id: mockedApplet.id,
@@ -736,9 +738,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
           [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
-            if (params.userId === mockedOwnerRespondent.id) {
+            if (params.userId === mockedOwnerParticipant.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
-                result: [mockedOwnerRespondent],
+                result: [mockedOwnerParticipant],
                 count: 1,
               });
             }
@@ -765,7 +767,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         await openTakeNowModal(testId);
 
-        selectParticipant(testId, 'source', mockedRespondent.details[0].subjectId);
+        selectParticipant(testId, 'source', mockedFullParticipant.details[0].subjectId);
 
         expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
         expectMixpanelTrack({
@@ -780,20 +782,20 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('Full account participants are present in the inputting dropdown', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent],
+          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
         const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
           result: [
             {
-              id: mockedOwnerRespondent.id,
+              id: mockedOwnerParticipant.id,
               firstName: mockedUserData.firstName,
               lastName: mockedUserData.lastName,
-              email: mockedOwnerRespondent.email,
+              email: mockedOwnerParticipant.email,
               roles: [Roles.Owner],
               lastSeen: new Date().toDateString(),
-              isPinned: mockedOwnerRespondent.isPinned,
+              isPinned: mockedOwnerParticipant.isPinned,
               applets: [
                 {
                   id: mockedApplet.id,
@@ -823,9 +825,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
           [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
           [getWorkspaceRespondentsUrl]: (params) => {
-            if (params.userId === mockedOwnerRespondent.id) {
+            if (params.userId === mockedOwnerParticipant.id) {
               return mockSuccessfulHttpResponse<ParticipantsData>({
-                result: [mockedOwnerRespondent],
+                result: [mockedOwnerParticipant],
                 count: 1,
               });
             }
@@ -852,7 +854,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         await openTakeNowModal(testId);
 
-        await selectParticipant(testId, 'source', mockedOwnerRespondent.details[0].subjectId);
+        await selectParticipant(testId, 'source', mockedOwnerParticipant.details[0].subjectId);
 
         expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
         expectMixpanelTrack({
@@ -889,8 +891,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
             option.getAttribute('data-testid')?.replace(dropdownOptionTestIdRegex, '') || '',
         );
 
-        expect(optionsText).toContain(mockedRespondent.details[0].subjectId);
-        expect(optionsText).toContain(mockedRespondent2.details[0].subjectId);
+        expect(optionsText).toContain(mockedFullParticipant.details[0].subjectId);
+        expect(optionsText).toContain(mockedFullParticipant2.details[0].subjectId);
       });
     });
   });

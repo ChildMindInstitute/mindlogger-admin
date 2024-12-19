@@ -3,14 +3,14 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedApplet, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedApplet, mockedFullParticipantId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { page } from 'resources';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import ParticipantDetails from './ParticipantDetails';
 
-const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}`;
 const routePath = page.appletParticipantDetails;
 
 const mockedAppletResult = {

@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { ParticipantTag } from 'shared/consts';
 
@@ -53,8 +53,8 @@ const commonGetActionsProps = {
     sendInvitation: jest.fn(),
   },
   filteredApplets,
-  respondentId: mockedRespondentId,
-  respondentOrSubjectId: mockedRespondentId,
+  respondentId: mockedFullParticipantId,
+  respondentOrSubjectId: mockedFullParticipantId,
   appletId: mockedAppletId,
   email: mockedEmail,
 };
@@ -74,9 +74,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'View Individual Calendar',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-view-calendar',
@@ -86,9 +86,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'View Data',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-view-data',
@@ -98,9 +98,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'Export Data',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-export-data',
@@ -110,9 +110,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'Edit Respondent',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-edit',
@@ -122,9 +122,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'Send Invitation',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-invite',
@@ -134,9 +134,9 @@ describe('Respondents utils tests', () => {
           action: expect.any(Function),
           title: 'Remove from Applet',
           context: {
-            respondentId: mockedRespondentId,
+            respondentId: mockedFullParticipantId,
             email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
+            respondentOrSubjectId: mockedFullParticipantId,
           },
           isDisplayed: true,
           customItemColor: variables.palette.dark_error_container,

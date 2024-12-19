@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedRespondentId } from 'shared/mock';
+import { mockedFullParticipantId } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 
 import { StickyHeader } from './StickyHeader';
@@ -23,7 +23,7 @@ const preloadedState = {
       data: {
         result: {
           nickname: 'Mocked Respondent',
-          secretUserId: mockedRespondentId,
+          secretUserId: mockedFullParticipantId,
           lastSeen: '2023-12-11T08:40:41.424000',
         },
       },

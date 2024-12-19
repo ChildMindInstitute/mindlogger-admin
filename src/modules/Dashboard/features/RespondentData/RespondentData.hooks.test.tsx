@@ -1,4 +1,4 @@
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import * as reduxHooks from 'redux/store/hooks';
@@ -18,7 +18,7 @@ describe('Respondent Data hooks', () => {
     beforeEach(() => {
       mockedUseParams.mockReturnValue({
         appletId: mockedAppletId,
-        subjectId: mockedRespondentId,
+        subjectId: mockedFullParticipantId,
       });
     });
 
@@ -32,7 +32,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-summary',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}/dataviz/summary`,
             'data-testid': 'respondents-summary-tab-summary',
           },
           {
@@ -40,7 +40,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-responses',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}/dataviz/responses`,
             'data-testid': 'respondents-summary-tab-review',
           },
         ],
