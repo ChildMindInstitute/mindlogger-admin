@@ -1,7 +1,7 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { DatePicker } from 'shared/components/DatePicker';
@@ -55,6 +55,7 @@ export const SwitchCondition = ({
     conditionPayload,
     items,
     conditionItem,
+    dateValue,
   ] = useWatch({
     name: [
       minValueName,
@@ -65,8 +66,30 @@ export const SwitchCondition = ({
       payloadName,
       itemsName,
       itemName,
+      dateValueName,
     ],
   });
+
+  useEffect(() => {
+    if (dateValue && typeof dateValue === 'string') {
+      setValue(dateValueName, new Date(`${dateValue}T00:00:00`));
+    }
+    if (minDateValue && typeof minDateValue === 'string') {
+      setValue(minDateValueName, new Date(`${minDateValue}T00:00:00`));
+    }
+    if (maxDateValue && typeof maxDateValue === 'string') {
+      setValue(maxDateValueName, new Date(`${maxDateValue}T00:00:00`));
+    }
+  }, [
+    dateValue,
+    minDateValue,
+    maxDateValue,
+    setValue,
+    dateValueName,
+    minDateValueName,
+    maxDateValueName,
+  ]);
+
   const groupedItems = getObjectFromList<ItemFormValues>(items);
   const selectedItemForm = groupedItems[conditionItem];
 
