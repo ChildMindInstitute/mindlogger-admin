@@ -12,7 +12,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
@@ -35,7 +35,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-const mockedSubject: RespondentDetails = {
+const mockedSubject: SubjectDetails = {
   nickname: mockedRespondent.nicknames[0],
   secretUserId: mockedRespondent.secretIds[0],
   userId: mockedRespondentId,

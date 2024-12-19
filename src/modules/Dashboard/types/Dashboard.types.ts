@@ -70,7 +70,7 @@ export type Respondent = {
   status: RespondentStatus;
 };
 
-export type RespondentDetails = {
+export type SubjectDetails = {
   id: string;
   nickname: string;
   secretUserId: string;
