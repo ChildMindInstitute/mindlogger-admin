@@ -565,6 +565,31 @@ export const mockedAppletData = {
       isPerformanceTask: true,
       performanceTaskType: 'flanker',
     },
+    {
+      name: 'Uneditable Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '86a4ebe4-3d7f-485c-8293-093cabf29fa6',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: 'ABTrailsMobile',
+    },
   ],
   activityFlows: [
     {
@@ -3434,14 +3459,23 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
   },
-  performanceTaskActivity: {
+  performanceTask: {
     ...mockParticipantActivityBase,
     id: mockedAppletData.activities[3].id as string, // Performance task in mockedAppletData
     isFlow: false,
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
     isPerformanceTask: true,
-    performanceTaskType: PerfTaskType.Flanker,
+    performanceTaskType: mockedAppletData.activities[3].performanceTaskType as PerfTaskType,
+  },
+  uneditablePerformanceTask: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[4].id as string, // Uneditable performance task in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: mockedAppletData.activities[4].performanceTaskType as PerfTaskType,
   },
   manualOwnerFullAssignedActivity: {
     ...mockParticipantActivityBase,

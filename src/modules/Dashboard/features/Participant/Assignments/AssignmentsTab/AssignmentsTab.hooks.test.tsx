@@ -240,6 +240,38 @@ describe('useAssignmentsTab hook', () => {
       });
     });
 
+    test('should hide Edit button in expanded view', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          // Expanded view is when both target and respondent subjects are provided
+          respondentSubject={mockedOwnerSubject}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) fireEvent.click(actionDots);
+
+      expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
+    });
+
+    test('should hide Edit button when an uneditable performance task', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.uneditablePerformanceTask}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+      if (actionDots) fireEvent.click(actionDots);
+
+      expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
+    });
+
     test('should navigate to appropriate edit URL for flow', async () => {
       renderWithProviders(
         <UseAssignmentsHookTest
@@ -265,7 +297,7 @@ describe('useAssignmentsTab hook', () => {
     test('should navigate to appropriate edit URL for performance task', async () => {
       renderWithProviders(
         <UseAssignmentsHookTest
-          activityOrFlow={mockParticipantActivities.performanceTaskActivity}
+          activityOrFlow={mockParticipantActivities.performanceTask}
           targetSubject={mockedOwnerSubject}
         />,
         renderOptions,
@@ -280,12 +312,12 @@ describe('useAssignmentsTab hook', () => {
       expect(mockedUseNavigate).toHaveBeenCalledWith(
         generatePath(
           getPerformanceTaskPath(
-            mockParticipantActivities.performanceTaskActivity
+            mockParticipantActivities.performanceTask
               .performanceTaskType as unknown as EditablePerformanceTasksType,
           ),
           {
             appletId: mockedAppletId,
-            activityId: mockParticipantActivities.performanceTaskActivity.id,
+            activityId: mockParticipantActivities.performanceTask.id,
           },
         ),
       );
