@@ -10,8 +10,17 @@ import {
   checkIfCanManageParticipants,
   checkIfFullAccess,
   getIsWebSupported,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
 } from 'shared/utils';
-import { ActivityAssignmentStatus, getAppletActivitiesApi, ParticipantActivityOrFlow } from 'api';
+import {
+  ActivityAssignmentStatus,
+  getAppletActivitiesApi,
+  getAppletParticipantActivitiesMetadataApi,
+  ParticipantActivityOrFlow,
+  ParticipantActivityOrFlowMetadata,
+} from 'api';
 import { ItemResponseType } from 'shared/consts';
 import { MenuItemType, Svg } from 'shared/components';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
@@ -58,15 +67,32 @@ export const useAssignmentsTab = ({
   // TODO: We only call getAppletActivitiesApi because we need full items data for each activity.
   // Remove this and associated effect below after supportedPlatforms prop is returned by API.
   // https://mindlogger.atlassian.net/browse/M2-7906
-  const {
-    execute: fetchActivities,
-    isLoading,
-    value: fetchedActivities,
-  } = useAsync(getAppletActivitiesApi, { retainValue: true });
+  const { execute: fetchActivities, value: fetchedActivities } = useAsync(getAppletActivitiesApi, {
+    retainValue: true,
+  });
 
   const activities: Activity[] = useMemo(
     () => fetchedActivities?.data?.result.activitiesDetails ?? [],
     [fetchedActivities],
+  );
+
+  const {
+    execute: fetchMetadata,
+    isLoading: isLoadingMetadata,
+    value: metadata,
+  } = useAsync(getAppletParticipantActivitiesMetadataApi, { retainValue: true });
+
+  const metadataById = useMemo(
+    () =>
+      metadata?.data.result.activitiesOrFlows.reduce(
+        (acc, counts) => {
+          acc[counts.activityOrFlowId] = counts;
+
+          return acc;
+        },
+        {} as Record<string, ParticipantActivityOrFlowMetadata>,
+      ),
+    [metadata?.data.result.activitiesOrFlows],
   );
 
   useEffect(() => {
@@ -159,8 +185,21 @@ export const useAssignmentsTab = ({
     (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
       if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
       setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
-
       setShowActivityAssign(true);
+
+      const IdType = activityOrFlow?.isFlow
+        ? MixpanelProps.ActivityFlowId
+        : MixpanelProps.ActivityId;
+
+      Mixpanel.track({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Via]: 'Participant - Assignments',
+        ...(activityOrFlow && {
+          [MixpanelProps.EntityType]: activityOrFlow.isFlow ? 'flow' : 'activity',
+          [IdType]: activityOrFlow.id,
+        }),
+      });
     },
     [targetSubject],
   );
@@ -212,6 +251,12 @@ export const useAssignmentsTab = ({
       const isAssignDisabled = !isAssignable || isTargetTeamMember || isLimitedRespondent;
       const isUnassignDisplayed =
         canAssign && isAssignable && (autoAssign || isAssigned) && !isLimitedRespondent;
+      // TODO: Until https://mindlogger.atlassian.net/browse/M2-7906 is tackled to obviate the
+      // need to load all activities (a slow operation), to prevent that request from holding up
+      // interacting with the page (which only affects the enabled state of the Take Now menu item),
+      // just hide the Take Now menu item altogether until activities have been loaded. Remove
+      // this condition after M2-7906 has been completed.
+      const isTakeNowDisplayed = canDoTakeNow && !!activities.length;
 
       let assignTooltip: string | undefined;
       if (status === ActivityAssignmentStatus.Hidden) {
@@ -262,6 +307,20 @@ export const useAssignmentsTab = ({
           action: () => {
             setSelectedActivityOrFlow(activityOrFlow);
             setShowActivityUnassign(true);
+
+            const IdType = activityOrFlow?.isFlow
+              ? MixpanelProps.ActivityFlowId
+              : MixpanelProps.ActivityId;
+
+            Mixpanel.track({
+              action: MixpanelEventType.StartUnassignActivityOrFlow,
+              [MixpanelProps.AppletId]: appletId,
+              [MixpanelProps.Via]: 'Participant - Assignments',
+              ...(activityOrFlow && {
+                [MixpanelProps.EntityType]: activityOrFlow.isFlow ? 'flow' : 'activity',
+                [IdType]: activityOrFlow.id,
+              }),
+            });
           },
           icon: <Svg id="clear-calendar" />,
           title: isFlow ? t('unassignFlow') : t('unassignActivity'),
@@ -288,7 +347,7 @@ export const useAssignmentsTab = ({
               },
             }),
           icon: <Svg id="play-outline" />,
-          isDisplayed: canDoTakeNow,
+          isDisplayed: isTakeNowDisplayed,
           title: t('takeNow.menuItem'),
           disabled: !isWebSupported,
           tooltip: !isWebSupported && t('activityIsMobileOnly'),
@@ -370,5 +429,14 @@ export const useAssignmentsTab = ({
     </>
   );
 
-  return { getActionsMenu, onClickNavigateToData, onClickAssign, isLoading, modals };
+  return {
+    getActionsMenu,
+    onClickNavigateToData,
+    onClickAssign,
+    modals,
+    fetchMetadata,
+    isLoadingMetadata,
+    metadata: metadata?.data.result,
+    metadataById,
+  };
 };

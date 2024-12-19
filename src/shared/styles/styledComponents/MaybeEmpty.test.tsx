@@ -10,7 +10,14 @@ describe('MaybeEmpty', () => {
     expect(screen.queryByText(value)).toBeVisible();
   });
 
-  test('should render "--" when containing falsey value', () => {
+  test('should render component when containing numeric 0', () => {
+    const value = 0;
+    render(<StyledMaybeEmpty>{value}</StyledMaybeEmpty>);
+
+    expect(screen.queryByText(value)).toBeVisible();
+  });
+
+  test('should render "--" when containing falsey value != 0', () => {
     const value = null;
     const testId = 'testElement';
 
@@ -19,5 +26,19 @@ describe('MaybeEmpty', () => {
     );
     const el = getByTestId(testId);
     expect(window.getComputedStyle(el, '::after')['content'] === '--');
+  });
+
+  it('should render empty accessibility label when containing falsey value != 0', () => {
+    const value = null;
+    render(<StyledMaybeEmpty>{value}</StyledMaybeEmpty>);
+
+    expect(screen.getByLabelText('--')).toBeInTheDocument();
+  });
+
+  it('should render loading accessibility label when in loading state', () => {
+    const value = null;
+    render(<StyledMaybeEmpty isLoading={true}>{value}</StyledMaybeEmpty>);
+
+    expect(screen.getByLabelText('Loading...')).toBeInTheDocument();
   });
 });

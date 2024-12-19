@@ -9,8 +9,7 @@ import { GetAppletSubmissionsResponse } from 'api';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
 import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStats';
 import { Svg } from 'shared/components';
-import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
-import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
+import { StyledFlexAllCenter, StyledMaybeEmpty, theme, variables } from 'shared/styles';
 import { page } from 'resources';
 
 const getI18nLocale = (language: string): Locale => {

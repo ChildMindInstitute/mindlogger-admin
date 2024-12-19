@@ -24,7 +24,7 @@ import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
 import { workspaces } from 'shared/state';
-import { checkIfCanAccessData } from 'shared/utils';
+import { checkIfCanAccessData, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 
@@ -145,6 +145,13 @@ export const Activities = () => {
     onClickAssign: useCallback((activityId: string) => {
       setSelectedActivityOrFlowId({ activityId });
       setShowActivityAssign(true);
+      Mixpanel.track({
+        action: MixpanelEventType.StartAssignActivityOrFlow,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.ActivityId]: activityId,
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.Via]: 'Participant - Activities',
+      });
     }, []),
     onClickUnassign: useCallback((activityId: string) => {
       setSelectedActivityOrFlowId({ activityId });
@@ -210,6 +217,18 @@ export const Activities = () => {
     navigateToData(activityOrFlowId);
   };
 
+  const onClickAssignFlow = (flowId: string) => {
+    setSelectedActivityOrFlowId({ activityFlowId: flowId });
+    setShowActivityAssign(true);
+    Mixpanel.track({
+      action: MixpanelEventType.StartAssignActivityOrFlow,
+      [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.ActivityFlowId]: flowId,
+      [MixpanelProps.EntityType]: 'flow',
+      [MixpanelProps.Via]: 'Participant - Activities',
+    });
+  };
+
   const navigateToData = (activityOrFlowId: ActivityOrFlowId) => {
     if (!subjectId || !appletId) return;
 
@@ -241,7 +260,14 @@ export const Activities = () => {
         <ParticipantActivitiesToolbar
           appletId={appletId}
           data-testid={dataTestId}
-          onClickAssign={() => setShowActivityAssign(true)}
+          onClickAssign={() => {
+            setShowActivityAssign(true);
+            Mixpanel.track({
+              action: MixpanelEventType.StartAssignActivityOrFlow,
+              [MixpanelProps.AppletId]: appletId,
+              [MixpanelProps.Via]: 'Participant - Activities',
+            });
+          }}
           sx={{ p: 3.2, pb: 0 }}
         />
       )}
@@ -262,10 +288,7 @@ export const Activities = () => {
                 flows={enableActivityAssign ? assignedFlows : flows}
                 subject={subject?.result}
                 onClickItem={getClickHandler()}
-                onClickAssign={(flowId) => {
-                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
-                  setShowActivityAssign(true);
-                }}
+                onClickAssign={onClickAssignFlow}
                 onClickUnassign={(flowId) => {
                   setSelectedActivityOrFlowId({ activityFlowId: flowId });
                   setShowActivityUnassign(true);
@@ -304,10 +327,7 @@ export const Activities = () => {
                 flows={unassignedFlows}
                 subject={subject?.result}
                 onClickItem={getClickHandler()}
-                onClickAssign={(flowId) => {
-                  setSelectedActivityOrFlowId({ activityFlowId: flowId });
-                  setShowActivityAssign(true);
-                }}
+                onClickAssign={onClickAssignFlow}
               />
 
               <ActivityGrid
