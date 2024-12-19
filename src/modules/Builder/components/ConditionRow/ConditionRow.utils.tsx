@@ -60,13 +60,13 @@ const scoreItemTypes = [
 ];
 
 const itemFlowItemGroups = [
-  [...scoreItemTypes, ItemResponseType.NumberSelection], // Group 1
-  [ItemResponseType.Date, ItemResponseType.Time, ItemResponseType.TimeRange], // Group 2
+  [...scoreItemTypes, ItemResponseType.NumberSelection],
+  [ItemResponseType.Date, ItemResponseType.Time, ItemResponseType.TimeRange],
   [
     ItemResponseType.SingleSelectionPerRow,
     ItemResponseType.MultipleSelectionPerRow,
     ItemResponseType.SliderRows,
-  ], // Group 3
+  ],
 ];
 
 function getItemsSubset(includeGroup2: boolean, includeGroup3: boolean) {
