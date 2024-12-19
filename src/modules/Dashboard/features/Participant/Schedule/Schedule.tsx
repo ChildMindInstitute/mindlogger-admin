@@ -10,7 +10,7 @@ import { applets, users } from 'modules/Dashboard/state';
 import { Spinner } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
-import { Respondent } from 'modules/Dashboard/types';
+import { Participant } from 'modules/Dashboard/types';
 import { usePermissions } from 'shared/hooks';
 import { checkIfHasAccessToSchedule } from 'modules/Dashboard/features/Applet/Schedule/Schedule.utils';
 import { ScheduleProvider } from 'modules/Dashboard/features/Applet/Schedule/ScheduleProvider';
@@ -40,7 +40,7 @@ export const ParticipantSchedule = () => {
     () =>
       respondentsData?.find(({ secretIds }) =>
         subjectData ? secretIds.includes(subjectData?.secretUserId) : false,
-      ) ?? ({} as Respondent),
+      ) ?? ({} as Participant),
     [respondentsData, subjectData],
   );
 

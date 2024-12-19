@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 import * as routerDom from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
+import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
 import { SendInvitationPopup } from './SendInvitationPopup';
 import { dataTestId } from './SendInvitationPopup.const';
@@ -22,7 +22,7 @@ const mockedChosenAppletData = {
   respondentId: mockedRespondentId,
   respondentNickname: 'respondentNickname',
   ownerId: '1',
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
 };
 const commonPopupProps = {
   popupVisible: true,
@@ -54,7 +54,7 @@ describe('SendInvitationPopup', () => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
-        { email: mockedEmail, subjectId: mockedSubjectId1 },
+        { email: mockedEmail, subjectId: mockedFullSubjectId1 },
         { signal: undefined },
       );
     });
@@ -75,7 +75,7 @@ describe('SendInvitationPopup', () => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
-        { email: mockedEmail, subjectId: mockedSubjectId1 },
+        { email: mockedEmail, subjectId: mockedFullSubjectId1 },
         { signal: undefined },
       );
     });

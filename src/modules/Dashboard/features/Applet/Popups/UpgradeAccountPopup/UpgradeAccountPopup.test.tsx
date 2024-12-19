@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
+import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { Mixpanel, MixpanelProps, expectBanner, MixpanelEventType } from 'shared/utils';
 import { ParticipantTag } from 'shared/consts';
 
@@ -17,7 +17,7 @@ const props = {
   onClose: onCloseMock,
   popupVisible: true,
   appletId: mockedAppletId,
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
   secretId: 'test secret id',
   nickname: 'test nickname',
   tag: 'Child' as ParticipantTag,

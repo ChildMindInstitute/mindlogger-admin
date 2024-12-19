@@ -1,4 +1,4 @@
-import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
+import { Participant, ParticipantDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 import { MenuActionProps } from 'shared/components';
 import { ParticipantTag } from 'shared/consts';
@@ -38,14 +38,14 @@ export enum FilteredAppletsKey {
   Viewable = 'viewable',
 }
 
-export type FilteredApplets = Record<FilteredAppletsKey, RespondentDetail[]>;
+export type FilteredApplets = Record<FilteredAppletsKey, ParticipantDetail[]>;
 
 export type FilteredRespondents = {
   [key: string]: FilteredApplets;
 };
 
 export type RespondentsData = {
-  result: Respondent[];
+  result: Participant[];
   count: number;
   orderingFields: string[];
 };

@@ -11,7 +11,7 @@ import {
   StyledSmallAppletImgPlaceholder,
   variables,
 } from 'shared/styles';
-import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 import { MenuItem, MenuItemType } from 'shared/components';
@@ -98,8 +98,8 @@ export const getParticipantActions = ({
     invitation,
   };
   const canManageParticipants = checkIfCanManageParticipants(roles);
-  const isUpgradeable = status === RespondentStatus.NotInvited;
-  const isPending = status === RespondentStatus.Pending;
+  const isUpgradeable = status === ParticipantStatus.NotInvited;
+  const isPending = status === ParticipantStatus.Pending;
   const isEditable = canManageParticipants && !!filteredApplets?.editable.length;
   const isViewable = !!filteredApplets?.viewable.length;
   const showEdit = !!appletId && isEditable && !isPending;
@@ -150,12 +150,12 @@ export const getParticipantActions = ({
       action: copyEmailAddress,
       title: t('copyEmailAddress'),
       context,
-      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
+      isDisplayed: !!emailAddress && status !== ParticipantStatus.Invited,
       'data-testid': `${dataTestId}-copy-email`,
     },
     {
       type: MenuItemType.Divider,
-      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
+      isDisplayed: !!emailAddress && status !== ParticipantStatus.Invited,
     },
     {
       icon: <Svg id="format-link" width={24} height={24} />,
@@ -214,7 +214,7 @@ export const getParticipantActions = ({
 };
 
 export const getAppletsSmallTableRows = (
-  respondentAccesses: RespondentDetail[],
+  respondentAccesses: ParticipantDetail[],
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
   respondentId: string,
   ownerId: string,

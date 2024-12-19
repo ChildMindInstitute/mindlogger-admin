@@ -1,5 +1,5 @@
 import { ParticipantActivityOrFlow, TargetSubjectsByRespondent } from 'api';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import { MenuItem } from 'shared/components';
 
 export type ExpandedViewProps = {
@@ -7,11 +7,11 @@ export type ExpandedViewProps = {
   targetSubjects?: TargetSubjectsByRespondent;
   getActionsMenu: (
     activityOrFlow: ParticipantActivityOrFlow,
-    targetSubjectArg?: RespondentDetails,
+    targetSubjectArg?: SubjectDetails,
   ) => MenuItem<unknown>[];
   onClickViewData: (
     activityOrFlow: ParticipantActivityOrFlow,
-    targetSubject: RespondentDetails,
+    targetSubject: SubjectDetails,
   ) => void;
   'data-test-id': string;
 };

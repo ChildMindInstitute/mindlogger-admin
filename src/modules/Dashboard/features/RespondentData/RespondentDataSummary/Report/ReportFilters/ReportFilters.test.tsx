@@ -8,7 +8,7 @@ import * as reactHookForm from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
 import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
@@ -33,7 +33,7 @@ const versions = [
 ];
 
 const dataTestid = 'respondents-summary-filters';
-const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
 const mockedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
@@ -78,7 +78,10 @@ jest.mock('react-router-dom', () => ({
 
 describe('ReportFilters', () => {
   beforeEach(() => {
-    mockedUseParams.mockReturnValue({ appletId: mockedAppletId, subjectId: mockedRespondentId });
+    mockedUseParams.mockReturnValue({
+      appletId: mockedAppletId,
+      subjectId: mockedFullParticipantId,
+    });
   });
 
   test('renders date pickers and time pickers', async () => {
@@ -191,7 +194,7 @@ describe('ReportFilters', () => {
           params: {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedFullParticipantId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
             limit: MAX_LIMIT,
@@ -225,7 +228,7 @@ describe('ReportFilters', () => {
           params: {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedFullParticipantId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
             limit: MAX_LIMIT,

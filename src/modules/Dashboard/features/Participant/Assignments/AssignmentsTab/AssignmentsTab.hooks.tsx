@@ -31,7 +31,7 @@ import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 
 import { UseAssignmentsTabProps } from './AssignmentsTab.types';
 
@@ -182,7 +182,7 @@ export const useAssignmentsTab = ({
   );
 
   const onClickAssign = useCallback(
-    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
+    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: SubjectDetails) => {
       if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
       setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
       setShowActivityAssign(true);

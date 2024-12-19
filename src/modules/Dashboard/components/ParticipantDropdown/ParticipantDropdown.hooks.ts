@@ -4,7 +4,7 @@ import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { Manager, Respondent, RespondentStatus } from 'modules/Dashboard/types';
+import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
 
 import {
@@ -38,8 +38,9 @@ export const useParticipantDropdown = ({
   const userData = auth.useData();
 
   const isParticipantValid = useCallback(
-    (r: Respondent) =>
-      !r.isAnonymousRespondent && (includePendingAccounts || r.status !== RespondentStatus.Pending),
+    (r: Participant) =>
+      !r.isAnonymousRespondent &&
+      (includePendingAccounts || r.status !== ParticipantStatus.Pending),
     [includePendingAccounts],
   );
 
@@ -202,7 +203,7 @@ export const useParticipantDropdown = ({
       ).filter((manager) => manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)));
 
       const participantsSearchResults = (
-        (participantsResponse?.data.result as Respondent[]) ?? []
+        (participantsResponse?.data.result as Participant[]) ?? []
       ).filter((participant) => {
         if (!isParticipantValid(participant)) return false;
 

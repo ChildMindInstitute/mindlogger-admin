@@ -9,12 +9,12 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedEncryption,
-  mockedLimitedRespondent,
+  mockedLimitedParticipant,
   mockedLimitedSubjectId,
   mockedOwnerId,
-  mockedOwnerRespondent,
-  mockedRespondent,
-  mockedRespondent2,
+  mockedOwnerParticipant,
+  mockedFullParticipant,
+  mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
@@ -52,20 +52,25 @@ const mockedGetApplet = {
 };
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
-  result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent, mockedLimitedRespondent],
+  result: [
+    mockedFullParticipant,
+    mockedFullParticipant2,
+    mockedOwnerParticipant,
+    mockedLimitedParticipant,
+  ],
   count: 4,
 });
 
 const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
   result: [
     {
-      id: mockedOwnerRespondent.id,
+      id: mockedOwnerParticipant.id,
       firstName: mockedUserData.firstName,
       lastName: mockedUserData.lastName,
-      email: mockedOwnerRespondent.email,
+      email: mockedOwnerParticipant.email,
       roles: [Roles.Owner],
       lastSeen: new Date().toDateString(),
-      isPinned: mockedOwnerRespondent.isPinned,
+      isPinned: mockedOwnerParticipant.isPinned,
       applets: [
         {
           id: mockedApplet.id,
@@ -93,15 +98,15 @@ const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
 const mockedAssignment = {
   activityId: mockedAppletData.activities[0].id,
   activityFlowId: null,
-  respondentSubjectId: mockedRespondent.details[0].subjectId,
-  targetSubjectId: mockedRespondent.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant.details[0].subjectId,
+  targetSubjectId: mockedFullParticipant.details[0].subjectId,
 };
 
 const mockedLimitedAssignment = {
   activityId: mockedAppletData.activities[0].id,
   activityFlowId: null,
-  respondentSubjectId: mockedRespondent.details[0].subjectId,
-  targetSubjectId: mockedLimitedRespondent.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant.details[0].subjectId,
+  targetSubjectId: mockedLimitedParticipant.details[0].subjectId,
 };
 
 const GET_APPLET_URL = `/applets/${mockedAppletId}`;
@@ -150,9 +155,9 @@ describe('ActivityAssignDrawer', () => {
       [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
-        if (params.userId === mockedOwnerRespondent.id) {
+        if (params.userId === mockedOwnerParticipant.id) {
           return mockSuccessfulHttpResponse<ParticipantsData>({
-            result: [mockedOwnerRespondent],
+            result: [mockedOwnerParticipant],
             count: 1,
           });
         }
@@ -278,7 +283,7 @@ describe('ActivityAssignDrawer', () => {
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
-        respondentSubjectId={mockedOwnerRespondent.details[0].subjectId}
+        respondentSubjectId={mockedOwnerParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -287,7 +292,7 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      checkAssignment(`${mockedOwnerRespondent.nicknames[0]} (Team)`, '');
+      checkAssignment(`${mockedOwnerParticipant.nicknames[0]} (Team)`, '');
 
       expect(
         within(screen.getByRole('alert')).getByText(
@@ -312,10 +317,10 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      const subjectTag = t(`participantTag.${mockedLimitedRespondent.details[0].subjectTag}`);
+      const subjectTag = t(`participantTag.${mockedLimitedParticipant.details[0].subjectTag}`);
       checkAssignment(
         '',
-        `${mockedLimitedRespondent.secretIds[0]} (${mockedLimitedRespondent.nicknames[0]}) (${subjectTag})`,
+        `${mockedLimitedParticipant.secretIds[0]} (${mockedLimitedParticipant.nicknames[0]}) (${subjectTag})`,
       );
 
       expect(screen.getByText('Add Respondent')).toBeVisible();
@@ -334,8 +339,8 @@ describe('ActivityAssignDrawer', () => {
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -344,9 +349,9 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      const subjectTag = t(`participantTag.${mockedRespondent.details[0].subjectTag}`);
+      const subjectTag = t(`participantTag.${mockedFullParticipant.details[0].subjectTag}`);
       checkAssignment(
-        `${mockedRespondent.secretIds[0]} (${mockedRespondent.nicknames[0]}) (${subjectTag})`,
+        `${mockedFullParticipant.secretIds[0]} (${mockedFullParticipant.nicknames[0]}) (${subjectTag})`,
         'Self',
       );
 
@@ -365,8 +370,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedLimitedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedLimitedParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -397,8 +402,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -417,8 +422,8 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
-    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());
@@ -441,8 +446,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -479,8 +484,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -499,8 +504,8 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
-    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedFullParticipant.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());
@@ -518,7 +523,7 @@ describe('ActivityAssignDrawer', () => {
       ).toBeInTheDocument();
     });
 
-    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
     await waitFor(() => {
       expect(submitButton).toBeEnabled();
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -539,8 +544,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedRespondent.details[0].subjectId}
-        targetSubjectId={mockedRespondent.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -559,8 +564,8 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 1);
-    await selectParticipant('target-subject', mockedLimitedRespondent.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());

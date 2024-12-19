@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
 
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
 
@@ -14,7 +14,7 @@ const commonProps = {
   appletId: mockedAppletId,
   onClose: onCloseMock,
   open: true,
-  userId: mockedRespondentId,
+  userId: mockedFullParticipantId,
   userName: 'John Doe',
 };
 
@@ -46,7 +46,7 @@ describe('RemoveIndividualSchedulePopup', () => {
         fireEvent.click(screen.getByText('Remove'));
 
         expect(mockAxios.delete).toBeCalledWith(
-          `/applets/${mockedAppletId}/events/remove_individual/${mockedRespondentId}`,
+          `/applets/${mockedAppletId}/events/remove_individual/${mockedFullParticipantId}`,
           { signal: undefined },
         );
       });
@@ -94,7 +94,7 @@ describe('RemoveIndividualSchedulePopup', () => {
         fireEvent.click(screen.getByText('Remove'));
 
         expect(mockAxios.delete).toBeCalledWith(
-          `/applets/${mockedAppletId}/events/remove_individual/${mockedRespondentId}`,
+          `/applets/${mockedAppletId}/events/remove_individual/${mockedFullParticipantId}`,
           { signal: undefined },
         );
       });

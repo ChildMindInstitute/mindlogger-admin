@@ -3,7 +3,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { mockedAlert, mockedSubjectId1 } from 'shared/mock';
+import { mockedAlert, mockedFullSubjectId1 } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
@@ -98,7 +98,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
     );
   });
 
@@ -125,7 +125,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedSubjectId1}`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
     );
   });
 });

@@ -10,7 +10,7 @@ import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedRespondent,
+  mockedFullParticipant,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -26,8 +26,8 @@ const noteTestId = 'respondents-summary-feedback-notes-note';
 const newNoteValue = 'New note has been added';
 const mockedAnswerId = 'some-answer-id';
 const mockedSubmitId = 'some-submit-id';
-const routeWithAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
-const routeWithSubmitId = `/dashboard/${mockedAppletId}/participants/${mockedRespondent}/dataviz/responses?selectedDate=2023-11-27&submitId=${mockedSubmitId}`;
+const routeWithAnswerId = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipant}/dataviz/responses?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
+const routeWithSubmitId = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipant}/dataviz/responses?selectedDate=2023-11-27&submitId=${mockedSubmitId}`;
 const routePath = page.appletParticipantDataReview;
 const firstUserId = 'user-id-1';
 const preloadedState = {

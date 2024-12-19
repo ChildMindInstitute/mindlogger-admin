@@ -1,10 +1,10 @@
-import { Respondent } from 'modules/Dashboard/types';
+import { Participant } from 'modules/Dashboard/types';
 import { joinWihComma } from 'shared/utils';
 import i18n from 'i18n';
 
 import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 
-export const participantToOption = (participant: Respondent): ParticipantDropdownOption => {
+export const participantToOption = (participant: Participant): ParticipantDropdownOption => {
   const stringNicknames = joinWihComma(participant.nicknames, true);
   const stringSecretIds = joinWihComma(participant.secretIds, true);
 

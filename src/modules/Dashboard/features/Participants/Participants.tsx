@@ -25,7 +25,7 @@ import {
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, StyledMaybeEmpty } from 'shared/styles';
-import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import {
   ActivityAssignDrawer,
@@ -313,7 +313,7 @@ export const Participants = () => {
     shouldRefetch && handleReload();
   };
 
-  const formatRow = (user: Respondent): Row => {
+  const formatRow = (user: Participant): Row => {
     const {
       secretIds,
       nicknames,
@@ -333,11 +333,11 @@ export const Participants = () => {
     const tag = detail.subjectTag;
     const respondentOrSubjectId = respondentId ?? detail.subjectId;
     const accountType = {
-      [RespondentStatus.Invited]: t('full'),
-      [RespondentStatus.NotInvited]: t('limited'),
-      [RespondentStatus.Pending]: t('pendingInvite'),
+      [ParticipantStatus.Invited]: t('full'),
+      [ParticipantStatus.NotInvited]: t('limited'),
+      [ParticipantStatus.Pending]: t('pendingInvite'),
     }[status];
-    const isPending = status === RespondentStatus.Pending;
+    const isPending = status === ParticipantStatus.Pending;
 
     const onClick = isPending
       ? undefined
@@ -434,7 +434,7 @@ export const Participants = () => {
     };
   };
 
-  const filterRespondentApplets = (user: Respondent) => {
+  const filterRespondentApplets = (user: Participant) => {
     const { details } = user;
     const filteredApplets: FilteredApplets = {
       scheduling: [],
