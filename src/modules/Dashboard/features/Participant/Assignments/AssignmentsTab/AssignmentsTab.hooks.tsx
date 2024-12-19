@@ -238,7 +238,7 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isLimitedRespondent = respondentSubject && !respondentSubject.userId;
+      const isLimitedRespondent = !!respondentSubject && !respondentSubject.userId;
       const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>

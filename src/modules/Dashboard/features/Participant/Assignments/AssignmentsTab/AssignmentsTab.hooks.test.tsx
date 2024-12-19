@@ -41,6 +41,13 @@ import { ActionsMenu } from 'shared/components';
 import { RespondentDetails } from 'modules/Dashboard/types';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
+import {
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+  StartAssignActivityOrFlowEvent,
+  StartUnassignActivityOrFlowEvent,
+} from 'shared/utils';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -115,6 +122,8 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 
 // Required for ActivityAssignDrawer
 Element.prototype.scrollTo = jest.fn();
+
+const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 /* Test Component
 =================================================== */
@@ -251,8 +260,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) fireEvent.click(actionDots);
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
     });
@@ -266,8 +274,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) fireEvent.click(actionDots);
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
     });
@@ -283,8 +290,9 @@ describe('useAssignmentsTab hook', () => {
 
       fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-      expect(screen.getByTestId(`${testId}-edit`)).toBeVisible();
-      fireEvent.click(screen.getByTestId(`${testId}-edit`));
+      const editButton = screen.getByTestId(`${testId}-edit`);
+      expect(editButton).toBeVisible();
+      fireEvent.click(editButton);
 
       expect(mockedUseNavigate).toHaveBeenCalledWith(
         generatePath(page.builderAppletActivityFlowItemAbout, {
@@ -381,8 +389,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-      if (actionDots) fireEvent.click(actionDots);
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
     });
@@ -617,11 +624,57 @@ describe('useAssignmentsTab hook', () => {
       });
     });
 
+    test('should be hidden for auto-assigned activities', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      expect(screen.queryByTestId(`${testId}-assign`)).toBeNull();
+    });
+
+    test('should be disabled for hidden activities/flows', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantFlows.hiddenFlow}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      const assignButton = screen.getByTestId(`${testId}-assign`);
+      expect(assignButton).toBeVisible();
+      expect(assignButton).toHaveAttribute('aria-disabled', 'true');
+    });
+
     test('should be disabled for limited account respondents', async () => {
       renderWithProviders(
         <UseAssignmentsHookTest
           activityOrFlow={mockParticipantActivities.manualOwnerLimitedAssignedActivity}
           respondentSubject={mockedLimitedSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      const assignButton = screen.getByTestId(`${testId}-assign`);
+      expect(assignButton).toBeVisible();
+      expect(assignButton).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    test('should be disabled for team account subjects', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.manualOwnerFullAssignedActivity}
+          targetSubject={mockedOwnerSubject}
         />,
         renderOptions,
       );
@@ -663,6 +716,15 @@ describe('useAssignmentsTab hook', () => {
             expect(screen.getByTestId('applet-activity-assign')).toBeVisible();
           });
 
+          expect(spyMixpanelTrack).toHaveBeenCalledWith({
+            action: MixpanelEventType.StartAssignActivityOrFlow,
+            [MixpanelProps.AppletId]: mockedAppletId,
+            [MixpanelProps.Via]: 'Participant - Assignments',
+            [MixpanelProps.EntityType]: 'activity',
+            [MixpanelProps.ActivityId]:
+              mockParticipantActivities.manualOwnerFullAssignedActivity.id,
+          } as StartAssignActivityOrFlowEvent);
+
           roles.forEach((role, index) => {
             const subjectCell = screen.getByTestId(
               `applet-activity-assign-assignments-table-0-cell-${role}SubjectId`,
@@ -671,6 +733,180 @@ describe('useAssignmentsTab hook', () => {
           });
         },
       );
+    });
+  });
+
+  describe('Unassign', () => {
+    describe('should show or hide Unassign button depending on role', () => {
+      test.each`
+        canAssign | role                 | description
+        ${true}   | ${Roles.Manager}     | ${'Assign for Manager'}
+        ${true}   | ${Roles.SuperAdmin}  | ${'Assign for SuperAdmin'}
+        ${true}   | ${Roles.Owner}       | ${'Assign for Owner'}
+        ${true}   | ${Roles.Coordinator} | ${'Assign for Coordinator'}
+        ${false}  | ${Roles.Editor}      | ${'Assign for Editor'}
+        ${false}  | ${Roles.Respondent}  | ${'Assign for Respondent'}
+        ${false}  | ${Roles.Reviewer}    | ${'Assign for Reviewer'}
+      `('$description', async ({ canAssign, role }) => {
+        renderWithProviders(
+          <UseAssignmentsHookTest
+            activityOrFlow={mockParticipantActivities.manualOwnerFullAssignedActivity}
+            targetSubject={mockedRespondentSubject}
+          />,
+          {
+            ...renderOptions,
+            preloadedState: { ...renderOptions.preloadedState, ...getPreloadedState(role) },
+          },
+        );
+
+        const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
+        if (actionDots) fireEvent.click(actionDots);
+
+        if (canAssign) {
+          expect(screen.getByTestId(`${testId}-unassign`)).toBeVisible();
+        } else {
+          expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+        }
+      });
+    });
+
+    test('should be disabled for auto-assigned activities', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.autoAssignActivity}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      const assignButton = screen.getByTestId(`${testId}-unassign`);
+      expect(assignButton).toBeVisible();
+      expect(assignButton).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    test('should be hidden for hidden activities/flows', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantFlows.hiddenFlow}
+          targetSubject={mockedOwnerSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+    });
+
+    test('should be hidden for limited account respondents', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.manualOwnerLimitedAssignedActivity}
+          respondentSubject={mockedLimitedSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+    });
+
+    test('should be hidden for unassigned activities', async () => {
+      renderWithProviders(
+        <UseAssignmentsHookTest
+          activityOrFlow={mockParticipantActivities.inactiveActivity}
+          targetSubject={mockedLimitedSubject}
+        />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+    });
+
+    test('should show Unassign confirmation modal for single unassignment', async () => {
+      const activity = mockParticipantActivities.manualOwnerFullAssignedActivity;
+      const { respondentSubject, targetSubject } = activity.assignments[0];
+
+      renderWithProviders(
+        <UseAssignmentsHookTest activityOrFlow={activity} respondentSubject={mockedOwnerSubject} />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      const unassignButton = screen.getByTestId(`${testId}-unassign`);
+      expect(unassignButton).toBeVisible();
+      userEvent.click(unassignButton);
+
+      const modal = await waitFor(() =>
+        screen.getByTestId('applet-activity-unassign-confirmation-popup'),
+      );
+      expect(modal).toBeVisible();
+
+      expect(spyMixpanelTrack).toHaveBeenCalledWith({
+        action: MixpanelEventType.StartUnassignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.Via]: 'Participant - Assignments',
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.ActivityId]: activity.id,
+      } as StartUnassignActivityOrFlowEvent);
+
+      expect(within(modal).getByText(`Unassign ‘${activity.name}’`)).toBeVisible();
+
+      expect(
+        within(modal).getByText(`${respondentSubject.firstName} ${respondentSubject.lastName}`),
+      ).toBeVisible();
+      expect(
+        within(modal).getByText(`${targetSubject.secretUserId}, ${targetSubject.nickname}`),
+      ).toBeVisible();
+    });
+
+    test('should show Unassign drawer for multiple unassignments', async () => {
+      const activity = mockParticipantActivities.manualMultipleAssignedActivity;
+
+      renderWithProviders(
+        <UseAssignmentsHookTest activityOrFlow={activity} respondentSubject={mockedOwnerSubject} />,
+        renderOptions,
+      );
+
+      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+
+      const unassignButton = screen.getByTestId(`${testId}-unassign`);
+      expect(unassignButton).toBeVisible();
+      userEvent.click(unassignButton);
+
+      const modal = await waitFor(() => screen.getByTestId('applet-activity-unassign'));
+      expect(modal).toBeVisible();
+
+      expect(spyMixpanelTrack).toHaveBeenCalledWith({
+        action: MixpanelEventType.StartUnassignActivityOrFlow,
+        [MixpanelProps.AppletId]: mockedAppletId,
+        [MixpanelProps.Via]: 'Participant - Assignments',
+        [MixpanelProps.EntityType]: 'activity',
+        [MixpanelProps.ActivityId]: activity.id,
+      } as StartUnassignActivityOrFlowEvent);
+
+      expect(within(modal).getByText('Unassign Activity')).toBeVisible();
+
+      activity.assignments.forEach((assignment, index) => {
+        (['respondentSubject', 'targetSubject'] as const).forEach((key) => {
+          const subject = assignment[key];
+          const cell = screen.getByTestId(
+            `applet-activity-unassign-assignments-table-${index}-cell-${key}`,
+          );
+          const text =
+            subject.tag === 'Team'
+              ? `${subject.firstName} ${subject.lastName}`
+              : subject.secretUserId;
+
+          expect(within(cell).getByText(text)).toBeVisible();
+        });
+      });
     });
   });
 });

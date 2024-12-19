@@ -3507,6 +3507,28 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
       },
     ],
   },
+  manualMultipleAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedRespondentSubject,
+      },
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
   inactiveActivity: {
     ...mockParticipantActivityBase,
     isFlow: false,

@@ -174,7 +174,16 @@ export const ActivityUnassignDrawer = ({
         })();
         break;
     }
-  }, [appletId, deleteAssignments, handleSubmit, onClose, removeAllBanners, step]);
+  }, [
+    activityOrFlow,
+    appletId,
+    deleteAssignments,
+    handleSubmit,
+    isFlow,
+    onClose,
+    removeAllBanners,
+    step,
+  ]);
 
   // Reinitialize drawer form state whenever revealed, and clear banners when closed
   useEffect(() => {
