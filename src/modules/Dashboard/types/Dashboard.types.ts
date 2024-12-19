@@ -30,7 +30,7 @@ export type Manager = {
   invitationKey: string | null;
 };
 
-export type RespondentDetail = {
+export type ParticipantDetail = {
   appletId: string;
   appletDisplayName: string;
   appletImage?: string;
@@ -51,23 +51,23 @@ export type RespondentDetail = {
   invitation: Invitation | null;
 };
 
-export enum RespondentStatus {
+export enum ParticipantStatus {
   Invited = 'invited',
   NotInvited = 'not_invited',
   Pending = 'pending',
 }
 
-export type Respondent = {
+export type Participant = {
   id: string | null;
   nicknames: string[];
   role: Roles;
   secretIds: string[];
   lastSeen: string;
   isPinned?: boolean;
-  details: RespondentDetail[];
+  details: ParticipantDetail[];
   isAnonymousRespondent: boolean;
   email: string | null;
-  status: RespondentStatus;
+  status: ParticipantStatus;
 };
 
 export type SubjectDetails = {

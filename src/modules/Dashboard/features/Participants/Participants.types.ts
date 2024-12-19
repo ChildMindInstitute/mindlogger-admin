@@ -1,4 +1,4 @@
-import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
@@ -44,14 +44,14 @@ export enum FilteredAppletsKey {
   Viewable = 'viewable',
 }
 
-export type FilteredApplets = Record<FilteredAppletsKey, RespondentDetail[]>;
+export type FilteredApplets = Record<FilteredAppletsKey, ParticipantDetail[]>;
 
 export type FilteredParticipants = {
   [key: string]: FilteredApplets;
 };
 
 export type ParticipantsData = {
-  result: Respondent[];
+  result: Participant[];
   count: number;
   orderingFields?: string[];
 };
@@ -70,7 +70,7 @@ export type GetParticipantActionsProps = {
   subjectCreatedAt: string | null;
   tag?: ParticipantTag | null;
   appletId?: string;
-  status: RespondentStatus;
+  status: ParticipantStatus;
   dataTestId: string;
   canAssignActivity?: boolean;
   roles?: Roles[];

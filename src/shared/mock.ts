@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import {
+  Manager,
+  Participant,
+  ParticipantDetail,
+  ParticipantStatus,
+} from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -93,7 +98,7 @@ export const mockedOwnerRespondent = {
       invitation: null,
     },
   ],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: mockedUserData.email,
 };
 
@@ -149,7 +154,7 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedSubjectId1 = 'subject-id-987';
-export const mockedRespondentDetails: RespondentDetail = {
+export const mockedRespondentDetails: ParticipantDetail = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
   appletImage: '',
@@ -165,7 +170,7 @@ export const mockedRespondentDetails: RespondentDetail = {
   subjectCreatedAt: '2023-09-26T12:11:46.162083',
   invitation: null,
 };
-export const mockedRespondent: Respondent = {
+export const mockedRespondent: Participant = {
   id: mockedRespondentId,
   nicknames: ['Mocked Respondent'],
   secretIds: ['mockedSecretId'],
@@ -174,13 +179,13 @@ export const mockedRespondent: Respondent = {
   isPinned: false,
   role: Roles.Respondent,
   details: [mockedRespondentDetails],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
 };
 
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedSubjectId2 = 'subject-id-123';
-export const mockedRespondent2: Respondent = {
+export const mockedRespondent2: Participant = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
   secretIds: ['testSecretId'],
@@ -188,7 +193,7 @@ export const mockedRespondent2: Respondent = {
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
   details: [
     {
@@ -219,7 +224,7 @@ export const mockedLimitedRespondent = {
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.NotInvited,
+  status: ParticipantStatus.NotInvited,
   email: null,
   subjects: [mockedLimitedSubjectId],
   details: [

@@ -25,7 +25,7 @@ import {
 } from 'shared/utils/axios-mocks';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantStatus } from 'modules/Dashboard/types';
 import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   expectMixpanelTrack,
@@ -422,7 +422,7 @@ describe('Dashboard > Applet > Activities screen', () => {
             invitation: null,
           },
         ],
-        status: RespondentStatus.Invited,
+        status: ParticipantStatus.Invited,
         email: mockedUserData.email,
       };
 
@@ -563,7 +563,7 @@ describe('Dashboard > Applet > Activities screen', () => {
             invitation: null,
           },
         ],
-        status: RespondentStatus.Invited,
+        status: ParticipantStatus.Invited,
         email: mockedUserData.email,
       };
 
@@ -681,7 +681,7 @@ describe('Dashboard > Applet > Activities screen', () => {
             invitation: null,
           },
         ],
-        status: RespondentStatus.Invited,
+        status: ParticipantStatus.Invited,
         email: mockedUserData.email,
       };
 
@@ -844,7 +844,7 @@ describe('Dashboard > Applet > Activities screen', () => {
               invitation: null,
             },
           ],
-          status: RespondentStatus.Invited,
+          status: ParticipantStatus.Invited,
           email: mockedUserData.email,
         };
 
@@ -962,7 +962,7 @@ describe('Dashboard > Applet > Activities screen', () => {
               invitation: null,
             },
           ],
-          status: RespondentStatus.Invited,
+          status: ParticipantStatus.Invited,
           email: mockedUserData.email,
         };
 
@@ -1108,7 +1108,7 @@ describe('Dashboard > Applet > Activities screen', () => {
               invitation: null,
             },
           ],
-          status: RespondentStatus.Invited,
+          status: ParticipantStatus.Invited,
           email: mockedUserData.email,
         };
 

@@ -17,7 +17,7 @@ import { useParticipantDropdown } from 'modules/Dashboard/components';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ParticipantTag, Roles } from 'shared/consts';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantStatus } from 'modules/Dashboard/types';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features';
 
@@ -63,7 +63,7 @@ const mockedOwnerRespondent = {
       invitation: null,
     },
   ],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: mockedUserData.email,
 };
 

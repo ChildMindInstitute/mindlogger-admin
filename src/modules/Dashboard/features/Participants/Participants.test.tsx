@@ -20,7 +20,7 @@ import { ApiResponseCodes } from 'api';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
-import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 
 import { Participants } from './Participants';
 
@@ -73,7 +73,7 @@ const mockedResponses = {
   [RESPONDENTS_ENDPOINT]: mockSuccessfulHttpResponse({ result: [] }),
 };
 
-const getMockedGetWithParticipants = (respondentProps?: Partial<Respondent>) => ({
+const getMockedGetWithParticipants = (respondentProps?: Partial<Participant>) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: [{ ...mockedRespondent, ...respondentProps }],
@@ -177,7 +177,7 @@ describe('Participants component tests', () => {
   test('participant row should not link to participant details page for pending participants', async () => {
     mockGetRequestResponses({
       ...mockedResponses,
-      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({ status: RespondentStatus.Pending }),
+      [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({ status: ParticipantStatus.Pending }),
     });
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
     const firstParticipantSecretIdCell = await waitFor(() =>
