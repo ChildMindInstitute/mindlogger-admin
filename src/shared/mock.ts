@@ -1,10 +1,14 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Applet } from 'api';
+import {
+  ActivityAssignmentStatus,
+  Applet,
+  ParticipantActivityOrFlow,
+} from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { Manager, Participant, ParticipantStatus, SubjectDetails } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -12,6 +16,7 @@ import {
   ConditionalLogicMatch,
   ItemResponseType,
   ParticipantTag,
+  PerfTaskType,
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
@@ -55,7 +60,7 @@ export const mockedApplet = {
   encryption: mockedEncryption,
 } as Applet;
 
-export const mockedOwnerSubject = {
+export const mockedOwnerSubject: SubjectDetails = {
   id: '123e4567-e89b-12d3-a456-426614174000',
   secretUserId: 'mockedOwnerSecretId',
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
@@ -178,10 +183,20 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedFullSubjectId1 = 'subject-id-987';
+export const mockedFullSubject1: SubjectDetails = {
+  id: mockedFullSubjectId1,
+  secretUserId: 'mockedSecretId',
+  nickname: 'Mocked Respondent',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: mockedFullParticipantId1,
+  firstName: 'John',
+  lastName: 'Doe',
+};
 export const mockedFullParticipant1: Participant = {
   id: mockedFullParticipantId1,
-  nicknames: ['Mocked Respondent'],
-  secretIds: ['mockedSecretId'],
+  nicknames: [mockedFullSubject1.nickname],
+  secretIds: [mockedFullSubject1.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
@@ -192,14 +207,14 @@ export const mockedFullParticipant1: Participant = {
       appletDisplayName: 'Mocked Applet',
       appletImage: '',
       accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: 'Mocked Respondent',
-      respondentSecretId: 'mockedSecretId',
+      respondentNickname: mockedFullSubject1.nickname,
+      respondentSecretId: mockedFullSubject1.secretUserId,
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
       subjectId: mockedFullSubjectId1,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'John',
-      subjectLastName: 'Doe',
+      subjectTag: mockedFullSubject1.tag,
+      subjectFirstName: mockedFullSubject1.firstName,
+      subjectLastName: mockedFullSubject1.lastName,
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
     },
@@ -241,10 +256,20 @@ export const mockedFullParticipant2: Participant = {
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';
-export const mockedLimitedParticipant: Participant = {
+export const mockedLimitedSubject: SubjectDetails = {
+  id: mockedLimitedSubjectId,
+  secretUserId: 'limited-1',
+  nickname: 'Limited 1',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: null,
+  firstName: 'Limited',
+  lastName: 'One',
+};
+export const mockedLimitedParticipant = {
   id: null,
-  nicknames: ['Limited 1'],
-  secretIds: ['limited-1'],
+  nicknames: [mockedLimitedSubject.nickname],
+  secretIds: [mockedLimitedSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
@@ -257,14 +282,14 @@ export const mockedLimitedParticipant: Participant = {
       appletDisplayName: mockedApplet.displayName,
       appletImage: '',
       accessId: null,
-      respondentNickname: 'Limited 1',
-      respondentSecretId: 'limited-1',
+      respondentNickname: mockedLimitedSubject.nickname,
+      respondentSecretId: mockedLimitedSubject.secretUserId,
       hasIndividualSchedule: false,
       encryption: mockedApplet.encryption,
       subjectId: mockedLimitedSubjectId,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'Limited',
-      subjectLastName: 'One',
+      subjectTag: mockedLimitedSubject.tag,
+      subjectFirstName: mockedLimitedSubject.firstName,
+      subjectLastName: mockedLimitedSubject.lastName,
       subjectCreatedAt: '2024-07-12T13:07:25.455726',
       invitation: null,
     },
@@ -471,6 +496,93 @@ export const mockedAppletData = {
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
+    },
+    {
+      name: 'Mobile-Only Activity',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '66a4ebe4-3d7f-485c-8293-093cabf29fa4',
+      items: [
+        {
+          question: {
+            en: 'abtrails',
+          },
+          responseType: ItemResponseType.ABTrails,
+          responseValues: null,
+          config: {},
+          name: 'Item1',
+          id: '5b334484-947b-4287-941c-ed4cbf0dc956',
+          order: 1,
+        },
+      ],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: false,
+      performanceTaskType: null,
+    },
+    {
+      name: 'Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '76a4ebe4-3d7f-485c-8293-093cabf29fa5',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: 'flanker',
+    },
+    {
+      name: 'Uneditable Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      reportIncludedItemName: null,
+      id: '86a4ebe4-3d7f-485c-8293-093cabf29fa6',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: 'ABTrailsMobile',
     },
   ],
   activityFlows: [
@@ -3315,3 +3427,133 @@ export const lastAssessment = [
     order: 1,
   },
 ] as Item[];
+
+const mockParticipantActivityBase = {
+  id: mockedAppletData.activities[0].id as string,
+  activityIds: null,
+  name: 'Mock Activity',
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow> = {
+  autoAssignActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  mobileOnlyActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[2].id as string, // Mobile-only activity in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  performanceTask: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[3].id as string, // Performance task in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: mockedAppletData.activities[3].performanceTaskType as PerfTaskType,
+  },
+  uneditablePerformanceTask: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[4].id as string, // Uneditable performance task in mockedAppletData
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: mockedAppletData.activities[4].performanceTaskType as PerfTaskType,
+  },
+  manualOwnerFullAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedFullSubject1,
+      },
+    ],
+  },
+  manualOwnerLimitedAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a2',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  manualMultipleAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedFullSubject1,
+      },
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  inactiveActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Inactive,
+    autoAssign: false,
+  },
+};
+
+const mockParticipantFlowBase = {
+  id: mockedAppletData.activityFlows[0].id as string,
+  activityIds: mockedAppletData.activityFlows[0].items.map((item) => item.id),
+  name: 'Mock Flow',
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockParticipantFlows: Record<string, ParticipantActivityOrFlow> = {
+  autoAssignFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  hiddenFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    name: 'Auto-assign Flow',
+    status: ActivityAssignmentStatus.Hidden,
+    autoAssign: true,
+  },
+};
