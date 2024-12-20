@@ -160,6 +160,7 @@
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
     "react-app-rewired": "^2.2.1",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.0"
   }
 }
