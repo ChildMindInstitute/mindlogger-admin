@@ -97,6 +97,35 @@ export const mockedOwnerParticipant = {
   email: mockedUserData.email,
 };
 
+export const mockedOwnerManager: Manager = {
+  id: mockedOwnerParticipant.id,
+  firstName: mockedUserData.firstName,
+  lastName: mockedUserData.lastName,
+  email: mockedOwnerParticipant.email,
+  roles: [Roles.Owner],
+  lastSeen: new Date().toDateString(),
+  isPinned: mockedOwnerParticipant.isPinned,
+  applets: [
+    {
+      id: mockedApplet.id,
+      displayName: mockedApplet.displayName,
+      image: '',
+      roles: [
+        {
+          accessId: '912e17b8-195f-4685-b77b-137539b9054d',
+          role: Roles.Owner,
+        },
+      ],
+      encryption: mockedEncryption,
+    },
+  ],
+  title: null,
+  createdAt: new Date().toISOString(),
+  titles: [],
+  status: 'approved',
+  invitationKey: null,
+};
+
 export const mockedIdentifiers = [
   {
     identifier: '09a0bbf7994d5cf408292d7fb35dce18:e8051724b3f422950c1b0eb9c7013c72',
