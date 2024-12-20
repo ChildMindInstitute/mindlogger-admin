@@ -1,7 +1,7 @@
 import mockAxios from 'jest-mock-axios';
 import { renderHook } from '@testing-library/react';
 
-import { mockedActivityId, mockedAppletId, mockedFullParticipantId } from 'shared/mock';
+import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
 import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
@@ -79,7 +79,7 @@ describe('useDatavizSummaryRequests', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      subjectId: mockedFullParticipantId,
+      subjectId: mockedFullSubjectId1,
     });
     const mockedGetDecryptedIdentifiers = jest.spyOn(
       useDecryptedIdentifiersHook,

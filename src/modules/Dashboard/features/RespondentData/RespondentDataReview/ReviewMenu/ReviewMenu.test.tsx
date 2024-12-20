@@ -10,7 +10,7 @@ import {
   mockedCurrentWorkspace,
   mockedFullParticipant,
   mockedFullParticipant2,
-  mockedFullParticipantId,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -20,7 +20,7 @@ import { ReviewMenu } from './ReviewMenu';
 import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
 const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {

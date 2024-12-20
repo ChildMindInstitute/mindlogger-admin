@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 
-import { mockedActivityId, mockedAppletId, mockedFullParticipantId } from 'shared/mock';
+import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
 import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
@@ -102,7 +102,7 @@ const testIdentifierDatesChange = async () => {
           emptyIdentifiers: false,
           fromDatetime: '2024-04-06T09:00:00',
           identifiers: 'encrypted_ident_1,encrypted_ident_2,encrypted_ident_2_1',
-          targetSubjectId: mockedFullParticipantId,
+          targetSubjectId: mockedFullSubjectId1,
           toDatetime: '2024-04-12T17:00:00',
           versions: 'v3',
           limit: MAX_LIMIT,
@@ -264,7 +264,7 @@ describe('useRespondentAnswers', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      subjectId: mockedFullParticipantId,
+      subjectId: mockedFullSubjectId1,
     });
   });
 
@@ -296,7 +296,7 @@ describe('useRespondentAnswers', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-12T09:00:00',
             identifiers: undefined,
-            targetSubjectId: mockedFullParticipantId,
+            targetSubjectId: mockedFullSubjectId1,
             toDatetime: '2024-01-15T17:00:00',
             versions: 'v3',
             limit: MAX_LIMIT,
@@ -338,7 +338,7 @@ describe('useRespondentAnswers', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-12T09:00:00',
             identifiers: undefined,
-            targetSubjectId: mockedFullParticipantId,
+            targetSubjectId: mockedFullSubjectId1,
             toDatetime: '2024-01-15T17:00:00',
             versions: 'v3',
             limit: MAX_LIMIT,
@@ -428,7 +428,7 @@ describe('useRespondentAnswers', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-12T09:00:00',
             identifiers: undefined,
-            targetSubjectId: mockedFullParticipantId,
+            targetSubjectId: mockedFullSubjectId1,
             toDatetime: '2024-01-18T17:00:00',
             versions: 'v3',
             limit: MAX_LIMIT,

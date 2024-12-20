@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedFullParticipantId } from 'shared/mock';
+import { mockedFullParticipantDetail } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 
 import { StickyHeader } from './StickyHeader';
@@ -22,8 +22,8 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
-          nickname: 'Mocked Respondent',
-          secretUserId: mockedFullParticipantId,
+          nickname: mockedFullParticipantDetail.respondentNickname,
+          secretUserId: mockedFullParticipantDetail.respondentSecretId,
           lastSeen: '2023-12-11T08:40:41.424000',
         },
       },
@@ -52,7 +52,7 @@ describe('StickyHeader', () => {
     );
 
     const description = getByText(
-      'Subject: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
+      `Subject: ${mockedFullParticipantDetail.respondentSecretId} (${mockedFullParticipantDetail.respondentNickname})`,
     );
     expect(description).toBeInTheDocument();
     expect(description).toHaveStyle({ position: 'relative', padding: 0 });

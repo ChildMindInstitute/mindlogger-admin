@@ -7,6 +7,7 @@ import {
   mockedAppletId,
   mockedFullParticipantId,
   mockedActivityId,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
@@ -40,7 +41,7 @@ const mockedSubject: SubjectDetails = {
   secretUserId: mockedFullParticipant.secretIds[0],
   userId: mockedFullParticipantId,
   ...mockedFullParticipant,
-  id: mockedFullParticipantId,
+  id: mockedFullSubjectId1,
   firstName: 'John',
   lastName: 'Doe',
 };

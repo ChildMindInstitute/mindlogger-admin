@@ -9,7 +9,7 @@ import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedFullParticipantId,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { Item, initialStateData } from 'shared/state';
@@ -24,7 +24,7 @@ import { FeedbackForm } from '../Feedback.types';
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 
-const route = `/dashboard/${mockedAppletId}/participants/${mockedFullParticipantId}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-11-27&answerId=0a7bcd14-24a3-48ed-8d6b-b059a6541ae4`;
 const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {

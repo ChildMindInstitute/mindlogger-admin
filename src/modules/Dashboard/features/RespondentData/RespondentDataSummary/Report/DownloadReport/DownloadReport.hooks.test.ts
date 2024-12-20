@@ -3,7 +3,7 @@ import mockAxios from 'jest-mock-axios';
 import download from 'downloadjs';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
+import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
 import { useDownloadReport } from './DownloadReport.hooks';
 
@@ -77,7 +77,7 @@ const testDownloadReport = async (result: { current: unknown }, isFlow: boolean)
     expect(mockAxios.post).toBeCalledWith(
       `/answers/applet/${mockedAppletId}/${
         isFlow ? `flows/${flowId}` : `activities/${activityId}`
-      }/subjects/${mockedFullParticipantId}/latest_report`,
+      }/subjects/${mockedFullSubjectId1}/latest_report`,
       {},
       { responseType: 'arraybuffer', signal: undefined },
     );
@@ -93,7 +93,7 @@ describe('useDownloadReport', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      subjectId: mockedFullParticipantId,
+      subjectId: mockedFullSubjectId1,
     });
   });
   afterEach(() => {
