@@ -557,7 +557,7 @@ export const mockedAppletData = {
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: true,
-      performanceTaskType: 'flanker',
+      performanceTaskType: PerfTaskType.Flanker,
     },
     {
       name: 'Uneditable Performance Task',
@@ -582,7 +582,7 @@ export const mockedAppletData = {
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: true,
-      performanceTaskType: 'ABTrailsMobile',
+      performanceTaskType: PerfTaskType.ABTrailsMobile,
     },
   ],
   activityFlows: [
