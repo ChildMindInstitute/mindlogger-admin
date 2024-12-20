@@ -744,13 +744,13 @@ describe('useAssignmentsTab hook', () => {
     describe('should show or hide Unassign button depending on role', () => {
       test.each`
         canAssign | role                 | description
-        ${true}   | ${Roles.Manager}     | ${'Assign for Manager'}
-        ${true}   | ${Roles.SuperAdmin}  | ${'Assign for SuperAdmin'}
-        ${true}   | ${Roles.Owner}       | ${'Assign for Owner'}
-        ${true}   | ${Roles.Coordinator} | ${'Assign for Coordinator'}
-        ${false}  | ${Roles.Editor}      | ${'Assign for Editor'}
-        ${false}  | ${Roles.Respondent}  | ${'Assign for Respondent'}
-        ${false}  | ${Roles.Reviewer}    | ${'Assign for Reviewer'}
+        ${true}   | ${Roles.Manager}     | ${'Unassign for Manager'}
+        ${true}   | ${Roles.SuperAdmin}  | ${'Unassign for SuperAdmin'}
+        ${true}   | ${Roles.Owner}       | ${'Unassign for Owner'}
+        ${true}   | ${Roles.Coordinator} | ${'Unassign for Coordinator'}
+        ${false}  | ${Roles.Editor}      | ${'Unassign for Editor'}
+        ${false}  | ${Roles.Respondent}  | ${'Unassign for Respondent'}
+        ${false}  | ${Roles.Reviewer}    | ${'Unassign for Reviewer'}
       `('$description', async ({ canAssign, role }) => {
         renderWithProviders(
           <UseAssignmentsHookTest
