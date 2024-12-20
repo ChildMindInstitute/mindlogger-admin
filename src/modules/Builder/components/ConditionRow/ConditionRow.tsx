@@ -11,6 +11,7 @@ import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledErrorText, theme } from 'shared/styles';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { ConditionRowProps } from './ConditionRow.types';
 import {
@@ -38,6 +39,7 @@ export const ConditionRow = ({
   isItemFlow = false,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
+  const { enableItemFlowItemsG2, enableItemFlowItemsG3 } = useFeatureFlags().featureFlags;
   const {
     setValue,
     trigger,
@@ -72,9 +74,15 @@ export const ConditionRow = ({
   const selectedScore =
     scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
-    [ConditionRowType.Item]: getItemOptions(items, type, isItemFlow),
+    [ConditionRowType.Item]: getItemOptions(
+      items,
+      type,
+      isItemFlow,
+      enableItemFlowItemsG2,
+      enableItemFlowItemsG3,
+    ),
     [ConditionRowType.Section]: [
-      ...getItemOptions(items, type, isItemFlow),
+      ...getItemOptions(items, type, isItemFlow, enableItemFlowItemsG2, enableItemFlowItemsG3),
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
