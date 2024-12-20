@@ -13,7 +13,7 @@ import {
   mockedLimitedSubjectId,
   mockedOwnerId,
   mockedOwnerParticipant,
-  mockedFullParticipant,
+  mockedFullParticipant1,
   mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
@@ -53,7 +53,7 @@ const mockedGetApplet = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
   result: [
-    mockedFullParticipant,
+    mockedFullParticipant1,
     mockedFullParticipant2,
     mockedOwnerParticipant,
     mockedLimitedParticipant,
@@ -98,14 +98,14 @@ const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
 const mockedAssignment = {
   activityId: mockedAppletData.activities[0].id,
   activityFlowId: null,
-  respondentSubjectId: mockedFullParticipant.details[0].subjectId,
-  targetSubjectId: mockedFullParticipant.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+  targetSubjectId: mockedFullParticipant1.details[0].subjectId,
 };
 
 const mockedLimitedAssignment = {
   activityId: mockedAppletData.activities[0].id,
   activityFlowId: null,
-  respondentSubjectId: mockedFullParticipant.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
   targetSubjectId: mockedLimitedParticipant.details[0].subjectId,
 };
 
@@ -339,8 +339,8 @@ describe('ActivityAssignDrawer', () => {
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
-        targetSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant1.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -349,9 +349,9 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      const subjectTag = t(`participantTag.${mockedFullParticipant.details[0].subjectTag}`);
+      const subjectTag = t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`);
       checkAssignment(
-        `${mockedFullParticipant.secretIds[0]} (${mockedFullParticipant.nicknames[0]}) (${subjectTag})`,
+        `${mockedFullParticipant1.secretIds[0]} (${mockedFullParticipant1.nicknames[0]}) (${subjectTag})`,
         'Self',
       );
 
@@ -370,7 +370,7 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
         targetSubjectId={mockedLimitedParticipant.details[0].subjectId}
         open
         onClose={mockedOnClose}
@@ -402,8 +402,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
-        targetSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant1.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -422,7 +422,7 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant1.details[0].subjectId, 1);
     await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');
@@ -446,8 +446,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
-        targetSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant1.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -484,8 +484,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
-        targetSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant1.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -504,8 +504,8 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
-    await selectParticipant('target-subject', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant1.details[0].subjectId, 1);
+    await selectParticipant('target-subject', mockedFullParticipant1.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());
@@ -544,8 +544,8 @@ describe('ActivityAssignDrawer', () => {
       <ActivityAssignDrawer
         appletId={mockedAppletId}
         activityId={mockedAppletData.activities[0].id}
-        respondentSubjectId={mockedFullParticipant.details[0].subjectId}
-        targetSubjectId={mockedFullParticipant.details[0].subjectId}
+        respondentSubjectId={mockedFullParticipant1.details[0].subjectId}
+        targetSubjectId={mockedFullParticipant1.details[0].subjectId}
         open
         onClose={mockedOnClose}
       />,
@@ -564,7 +564,7 @@ describe('ActivityAssignDrawer', () => {
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
 
-    await selectParticipant('respondent', mockedFullParticipant.details[0].subjectId, 1);
+    await selectParticipant('respondent', mockedFullParticipant1.details[0].subjectId, 1);
     await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
 
     const submitButton = screen.getByText('Next');

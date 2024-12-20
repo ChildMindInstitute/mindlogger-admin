@@ -1,5 +1,5 @@
 import { MenuItemType, Svg } from 'shared/components';
-import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
 import { ParticipantTag, Roles } from 'shared/consts';
@@ -66,8 +66,8 @@ describe('Participants utils tests', () => {
         copyInvitationLink: jest.fn(),
       },
       filteredApplets,
-      respondentId: mockedFullParticipantId,
-      respondentOrSubjectId: mockedFullParticipantId,
+      respondentId: mockedFullParticipantId1,
+      respondentOrSubjectId: mockedFullParticipantId1,
       appletId: mockedAppletId,
       email: mockedEmail,
       secretId: 'test secret id',
@@ -83,9 +83,9 @@ describe('Participants utils tests', () => {
     };
 
     const expectedContext: ParticipantActionProps = {
-      respondentId: mockedFullParticipantId,
+      respondentId: mockedFullParticipantId1,
       email: mockedEmail,
-      respondentOrSubjectId: mockedFullParticipantId,
+      respondentOrSubjectId: mockedFullParticipantId1,
       secretId: commonGetActionsProps.secretId,
       nickname: commonGetActionsProps.nickname,
       tag: commonGetActionsProps.tag,

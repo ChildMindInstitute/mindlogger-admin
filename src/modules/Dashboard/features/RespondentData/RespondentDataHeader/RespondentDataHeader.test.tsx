@@ -3,9 +3,9 @@ import { fireEvent, screen } from '@testing-library/react';
 import {
   mockedApplet,
   mockedAppletData,
-  mockedFullParticipant,
+  mockedFullParticipant1,
   mockedAppletId,
-  mockedFullParticipantId,
+  mockedFullParticipantId1,
   mockedActivityId,
   mockedFullSubjectId1,
 } from 'shared/mock';
@@ -37,10 +37,10 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 const mockedSubject: SubjectDetails = {
-  nickname: mockedFullParticipant.nicknames[0],
-  secretUserId: mockedFullParticipant.secretIds[0],
-  userId: mockedFullParticipantId,
-  ...mockedFullParticipant,
+  nickname: mockedFullParticipant1.nicknames[0],
+  secretUserId: mockedFullParticipant1.secretIds[0],
+  userId: mockedFullParticipantId1,
+  ...mockedFullParticipant1,
   id: mockedFullSubjectId1,
   firstName: 'John',
   lastName: 'Doe',

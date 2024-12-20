@@ -15,7 +15,7 @@ import {
   mockedOwnerId,
   mockedOwnerParticipant,
   mockedOwnerSubject,
-  mockedFullParticipant,
+  mockedFullParticipant1,
   mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
@@ -289,7 +289,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('should pre-populate admin and participant in Take Now modal', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
@@ -380,7 +380,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('Full account participants cannot self-report', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
@@ -462,7 +462,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       const fullAccountParticipantOption = getByTestId(
         `${sourceSubjectDropdownTestId(testId)}-option-${
-          mockedFullParticipant.details[0].subjectId
+          mockedFullParticipant1.details[0].subjectId
         }`,
       );
 
@@ -475,7 +475,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     test('Full account participants are not present in the inputting dropdown', async () => {
       const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-        result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
         count: 3,
       });
 
@@ -589,7 +589,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           option.getAttribute('data-testid')?.replace(dropdownOptionTestIdRegex, '') || '',
       );
 
-      expect(optionsText).not.toContain(mockedFullParticipant.details[0].subjectId);
+      expect(optionsText).not.toContain(mockedFullParticipant1.details[0].subjectId);
       expect(optionsText).not.toContain(mockedFullParticipant2.details[0].subjectId);
     });
 
@@ -605,7 +605,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('should pre-populate only participant in Take Now modal', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+          result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
@@ -695,7 +695,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('Full account participants can self-report', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+          result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
@@ -767,7 +767,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         await openTakeNowModal(testId);
 
-        selectParticipant(testId, 'source', mockedFullParticipant.details[0].subjectId);
+        selectParticipant(testId, 'source', mockedFullParticipant1.details[0].subjectId);
 
         expectMixpanelTrack({ action: MixpanelEventType.ProvidingResponsesDropdownOpened });
         expectMixpanelTrack({
@@ -782,7 +782,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       test('Full account participants are present in the inputting dropdown', async () => {
         const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-          result: [mockedFullParticipant, mockedFullParticipant2, mockedOwnerParticipant],
+          result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
           count: 3,
         });
 
@@ -891,7 +891,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
             option.getAttribute('data-testid')?.replace(dropdownOptionTestIdRegex, '') || '',
         );
 
-        expect(optionsText).toContain(mockedFullParticipant.details[0].subjectId);
+        expect(optionsText).toContain(mockedFullParticipant1.details[0].subjectId);
         expect(optionsText).toContain(mockedFullParticipant2.details[0].subjectId);
       });
     });

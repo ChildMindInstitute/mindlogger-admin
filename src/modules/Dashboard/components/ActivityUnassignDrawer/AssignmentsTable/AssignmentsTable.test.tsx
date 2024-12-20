@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { t } from 'i18next';
 
-import { mockedActivityId, mockedOwnerSubject, mockedFullParticipant } from 'shared/mock';
+import { mockedActivityId, mockedOwnerSubject, mockedFullParticipant1 } from 'shared/mock';
 import { HydratedAssignment } from 'api';
 
 import { AssignmentsTable } from './AssignmentsTable';
@@ -18,14 +18,14 @@ const mockedAssignment: HydratedAssignment = {
   activityFlowId: null,
   respondentSubject: mockedOwnerSubject,
   targetSubject: {
-    id: mockedFullParticipant.details[0].subjectId,
-    userId: mockedFullParticipant.id,
-    lastSeen: mockedFullParticipant.lastSeen,
-    firstName: mockedFullParticipant.details[0].subjectFirstName,
-    lastName: mockedFullParticipant.details[0].subjectLastName,
-    secretUserId: mockedFullParticipant.details[0].respondentSecretId,
-    nickname: mockedFullParticipant.details[0].respondentNickname,
-    tag: mockedFullParticipant.details[0].subjectTag,
+    id: mockedFullParticipant1.details[0].subjectId,
+    userId: mockedFullParticipant1.id,
+    lastSeen: mockedFullParticipant1.lastSeen,
+    firstName: mockedFullParticipant1.details[0].subjectFirstName,
+    lastName: mockedFullParticipant1.details[0].subjectLastName,
+    secretUserId: mockedFullParticipant1.details[0].respondentSecretId,
+    nickname: mockedFullParticipant1.details[0].respondentNickname,
+    tag: mockedFullParticipant1.details[0].subjectTag,
   },
 };
 

@@ -5,9 +5,9 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedAppletId,
   mockedOwnerId,
-  mockedFullParticipantDetail,
-  mockedFullParticipantId,
+  mockedFullParticipantId1,
   mockedFullSubjectId1,
+  mockedFullParticipant1,
 } from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
@@ -15,8 +15,8 @@ import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 const setPopupVisibleMock = jest.fn();
 const setChosenAppletDataMock = jest.fn();
 const chosenAppletDataMock = {
-  ...mockedFullParticipantDetail,
-  respondentId: mockedFullParticipantId,
+  ...mockedFullParticipant1.details[0],
+  respondentId: mockedFullParticipantId1,
   ownerId: mockedOwnerId,
   subjectId: mockedFullSubjectId1,
 };
@@ -71,7 +71,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(mockAxios.post).toHaveBeenNthCalledWith(
       1,
-      `/applets/${mockedAppletId}/events/individual/${mockedFullParticipantId}`,
+      `/applets/${mockedAppletId}/events/individual/${mockedFullParticipantId1}`,
       {},
       { signal: undefined },
     );

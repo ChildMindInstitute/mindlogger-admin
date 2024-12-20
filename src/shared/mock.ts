@@ -4,12 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import {
-  Manager,
-  Participant,
-  ParticipantDetail,
-  ParticipantStatus,
-} from 'modules/Dashboard/types';
+import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -152,33 +147,34 @@ export const mockedCurrentWorkspace = {
     workspaceName: 'name',
   },
 };
-export const mockedFullParticipantId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedFullSubjectId1 = 'subject-id-987';
-export const mockedFullParticipantDetail: ParticipantDetail = {
-  appletId: mockedAppletId,
-  appletDisplayName: 'Mocked Applet',
-  appletImage: '',
-  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-  respondentNickname: 'Mocked Respondent',
-  respondentSecretId: 'mockedSecretId',
-  hasIndividualSchedule: false,
-  encryption: mockedEncryption,
-  subjectId: mockedFullSubjectId1,
-  subjectTag: 'Child' as ParticipantTag,
-  subjectFirstName: 'John',
-  subjectLastName: 'Doe',
-  subjectCreatedAt: '2023-09-26T12:11:46.162083',
-  invitation: null,
-};
-export const mockedFullParticipant: Participant = {
-  id: mockedFullParticipantId,
+export const mockedFullParticipant1: Participant = {
+  id: mockedFullParticipantId1,
   nicknames: ['Mocked Respondent'],
   secretIds: ['mockedSecretId'],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  details: [mockedFullParticipantDetail],
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: 'Mocked Applet',
+      appletImage: '',
+      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+      respondentNickname: 'Mocked Respondent',
+      respondentSecretId: 'mockedSecretId',
+      hasIndividualSchedule: false,
+      encryption: mockedEncryption,
+      subjectId: mockedFullSubjectId1,
+      subjectTag: 'Child' as ParticipantTag,
+      subjectFirstName: 'John',
+      subjectLastName: 'Doe',
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
+    },
+  ],
   status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
 };

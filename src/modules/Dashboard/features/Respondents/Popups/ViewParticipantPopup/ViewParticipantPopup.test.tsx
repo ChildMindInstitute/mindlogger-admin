@@ -3,11 +3,11 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
-  mockedFullParticipantDetail,
-  mockedFullParticipantId,
+  mockedFullParticipantId1,
   mockedOwnerId,
   mockedFullSubjectId1,
   mockedAppletId,
+  mockedFullParticipant1,
 } from 'shared/mock';
 import { page } from 'resources';
 
@@ -25,8 +25,8 @@ const mockedGeneratePath = jest.mocked(generatePath);
 const setChosenAppletDataMock = jest.fn();
 const setPopupVisibleMock = jest.fn();
 const chosenAppletDataMock = {
-  ...mockedFullParticipantDetail,
-  respondentId: mockedFullParticipantId,
+  ...mockedFullParticipant1.details[0],
+  respondentId: mockedFullParticipantId1,
   ownerId: mockedOwnerId,
   subjectId: mockedFullSubjectId1,
 };

@@ -9,8 +9,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedOwnerId,
-  mockedFullParticipant,
-  mockedFullParticipantId,
+  mockedFullParticipant1,
+  mockedFullParticipantId1,
   mockedFullSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
@@ -76,7 +76,7 @@ const mockedResponses = {
 const getMockedGetWithParticipants = (respondentProps?: Partial<Participant>) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: [{ ...mockedFullParticipant, ...respondentProps }],
+    result: [{ ...mockedFullParticipant1, ...respondentProps }],
     count: 1,
   },
 });
@@ -201,7 +201,7 @@ describe('Participants component tests', () => {
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(
         1,
-        `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId}/pin`,
+        `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId1}/pin`,
         {},
         { signal: undefined },
       );

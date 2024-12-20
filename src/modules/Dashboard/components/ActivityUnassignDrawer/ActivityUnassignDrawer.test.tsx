@@ -8,7 +8,7 @@ import {
   mockedCurrentWorkspace,
   mockedLimitedParticipant,
   mockedOwnerSubject,
-  mockedFullParticipant,
+  mockedFullParticipant1,
 } from 'shared/mock';
 import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { Activity, initialStateData } from 'redux/modules';
@@ -51,14 +51,14 @@ const mockedAssignment2 = {
   activityFlowId: null,
   respondentSubject: mockedOwnerSubject,
   targetSubject: {
-    id: mockedFullParticipant.details[0].subjectId,
-    nickname: mockedFullParticipant.nicknames[0],
-    tag: mockedFullParticipant.details[0].subjectTag,
-    secretUserId: mockedFullParticipant.secretIds[0],
-    lastSeen: mockedFullParticipant.lastSeen,
+    id: mockedFullParticipant1.details[0].subjectId,
+    nickname: mockedFullParticipant1.nicknames[0],
+    tag: mockedFullParticipant1.details[0].subjectTag,
+    secretUserId: mockedFullParticipant1.secretIds[0],
+    lastSeen: mockedFullParticipant1.lastSeen,
     userId: null,
-    firstName: mockedFullParticipant.details[0].subjectFirstName,
-    lastName: mockedFullParticipant.details[0].subjectLastName,
+    firstName: mockedFullParticipant1.details[0].subjectFirstName,
+    lastName: mockedFullParticipant1.details[0].subjectLastName,
   },
 };
 

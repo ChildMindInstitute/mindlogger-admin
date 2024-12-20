@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { mockedFullParticipant, mockedFullParticipant2 } from 'shared/mock';
+import { mockedFullParticipant1, mockedFullParticipant2 } from 'shared/mock';
 import { ParticipantTag, Roles } from 'shared/consts';
 
 import { AddManagerForm } from './AddManagerForm';
@@ -13,7 +13,7 @@ import { AddManagerPopupSchema } from '../AddManagerPopup.schema';
 const mockOnSubmit = jest.fn();
 const dataTestid = 'test-id';
 
-const mockedParticipants = [mockedFullParticipant, mockedFullParticipant2].map(({ details }) => {
+const mockedParticipants = [mockedFullParticipant1, mockedFullParticipant2].map(({ details }) => {
   const { respondentSecretId, respondentNickname, subjectId } = details[0];
 
   return {

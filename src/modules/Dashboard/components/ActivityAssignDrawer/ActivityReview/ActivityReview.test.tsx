@@ -9,7 +9,7 @@ import {
   mockedEncryption,
   mockedLimitedParticipant,
   mockedOwnerId,
-  mockedFullParticipant,
+  mockedFullParticipant1,
   mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
@@ -27,8 +27,8 @@ import { ActivityReview } from './ActivityReview';
 const mockActivity = mockedAppletData.activities[0] as unknown as Activity;
 const mockAssignments = [
   {
-    respondentSubjectId: mockedFullParticipant.details[0].subjectId,
-    targetSubjectId: mockedFullParticipant.details[0].subjectId,
+    respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+    targetSubjectId: mockedFullParticipant1.details[0].subjectId,
   },
   {
     respondentSubjectId: mockedFullParticipant2.details[0].subjectId,
@@ -69,7 +69,7 @@ const mockedOwnerRespondent = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
   result: [
-    mockedFullParticipant,
+    mockedFullParticipant1,
     mockedFullParticipant2,
     mockedOwnerRespondent,
     mockedLimitedParticipant,
@@ -179,10 +179,10 @@ describe('ActivityReview component', () => {
     await waitFor(() => {
       // Respondent 1
       expect(
-        screen.getByText(mockedFullParticipant.details[0].respondentSecretId),
+        screen.getByText(mockedFullParticipant1.details[0].respondentSecretId),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(mockedFullParticipant.details[0].respondentNickname),
+        screen.getByText(mockedFullParticipant1.details[0].respondentNickname),
       ).toBeInTheDocument();
 
       // Subject 1

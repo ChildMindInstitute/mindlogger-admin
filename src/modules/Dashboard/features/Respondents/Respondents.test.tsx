@@ -7,8 +7,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedOwnerId,
-  mockedFullParticipantId,
-  mockedFullParticipant,
+  mockedFullParticipantId1,
+  mockedFullParticipant1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -47,8 +47,8 @@ const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: isAnonymousRespondent
-      ? [{ ...mockedFullParticipant, isAnonymousRespondent: true }]
-      : [mockedFullParticipant],
+      ? [{ ...mockedFullParticipant1, isAnonymousRespondent: true }]
+      : [mockedFullParticipant1],
     count: 1,
   },
 });
@@ -116,7 +116,7 @@ describe('Respondents component tests', () => {
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(
         1,
-        `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId}/pin`,
+        `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId1}/pin`,
         {},
         { signal: undefined },
       );

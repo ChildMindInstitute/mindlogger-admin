@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedFullParticipantId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
@@ -46,7 +46,7 @@ describe('ClearScheduledEventsPopup', () => {
   test('should delete events for individual schedule', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(
-      <ClearScheduledEventsPopup {...basicProps} userId={mockedFullParticipantId} />,
+      <ClearScheduledEventsPopup {...basicProps} userId={mockedFullParticipantId1} />,
     );
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
@@ -59,7 +59,7 @@ describe('ClearScheduledEventsPopup', () => {
     expect(
       expect(mockAxios.delete).nthCalledWith(
         1,
-        `/applets/${mockedAppletId}/events/delete_individual/${mockedFullParticipantId}`,
+        `/applets/${mockedAppletId}/events/delete_individual/${mockedFullParticipantId1}`,
         {
           signal: undefined,
         },

@@ -12,7 +12,7 @@ import {
   mockedLimitedParticipant,
   mockedOwnerId,
   mockedOwnerParticipant,
-  mockedFullParticipant,
+  mockedFullParticipant1,
   mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
@@ -35,7 +35,7 @@ import { AssignmentsTableProps } from './AssignmentsTable.types';
 const mockOnChange = jest.fn();
 const mockTestId = 'test-id';
 const mockedAssignment = {
-  respondentSubjectId: mockedFullParticipant.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
   targetSubjectId: mockedFullParticipant2.details[0].subjectId,
 };
 
@@ -56,7 +56,7 @@ const mockedGetApplet = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
   result: [
-    mockedFullParticipant,
+    mockedFullParticipant1,
     mockedFullParticipant2,
     mockedOwnerParticipant,
     mockedLimitedParticipant,
@@ -183,14 +183,14 @@ describe('AssignmentsTable', () => {
 
     await selectParticipant(
       'respondent',
-      mockedFullParticipant.details[0].subjectId,
+      mockedFullParticipant1.details[0].subjectId,
       0,
       mockTestId,
     );
     expect(mockOnChange).toHaveBeenLastCalledWith([
       {
-        respondentSubjectId: mockedFullParticipant.details[0].subjectId,
-        targetSubjectId: mockedFullParticipant.details[0].subjectId,
+        respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+        targetSubjectId: mockedFullParticipant1.details[0].subjectId,
       },
     ]);
   });
@@ -214,12 +214,12 @@ describe('AssignmentsTable', () => {
 
     await selectParticipant(
       'target-subject',
-      mockedFullParticipant.details[0].subjectId,
+      mockedFullParticipant1.details[0].subjectId,
       0,
       mockTestId,
     );
     expect(mockOnChange).toHaveBeenLastCalledWith([
-      { targetSubjectId: mockedFullParticipant.details[0].subjectId },
+      { targetSubjectId: mockedFullParticipant1.details[0].subjectId },
     ]);
   });
 
@@ -243,7 +243,7 @@ describe('AssignmentsTable', () => {
     renderWithProviders(
       <AssignmentsTableTest
         assignments={[mockedAssignment, mockedAssignment]}
-        errors={{ duplicateRows: [`${mockedFullParticipant.id}_${mockedFullParticipant2.id}`] }}
+        errors={{ duplicateRows: [`${mockedFullParticipant1.id}_${mockedFullParticipant2.id}`] }}
         data-testid="assignments-table"
       />,
       { preloadedState },
@@ -279,14 +279,14 @@ describe('AssignmentsTable', () => {
 
     await waitFor(() => {
       expect(
-        within(respondentCell).getByText(mockedFullParticipant.secretIds[0]),
+        within(respondentCell).getByText(mockedFullParticipant1.secretIds[0]),
       ).toBeInTheDocument();
       expect(
-        within(respondentCell).getByText(mockedFullParticipant.nicknames[0]),
+        within(respondentCell).getByText(mockedFullParticipant1.nicknames[0]),
       ).toBeInTheDocument();
       expect(
         within(respondentCell).getByText(
-          t(`participantTag.${mockedFullParticipant.details[0].subjectTag}`),
+          t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`),
         ),
       ).toBeInTheDocument();
 
