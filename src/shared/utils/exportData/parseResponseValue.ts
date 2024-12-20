@@ -34,8 +34,8 @@ const getTimeRangeValue = (
   data: DecryptedDateRangeAnswer['value']['from'] | DecryptedDateRangeAnswer['value']['to'],
   hasFallback = false,
 ) => {
-  const hour = hasFallback ? data?.hour ?? 0 : data?.hour;
-  const minute = hasFallback ? data?.minute ?? 0 : data?.minute;
+  const hour = hasFallback ? (data?.hour ?? 0) : data?.hour;
+  const minute = hasFallback ? (data?.minute ?? 0) : data?.minute;
 
   return `hr ${hour}, min ${minute}`;
 };
@@ -126,9 +126,9 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
       return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
-      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${(
-        value as DecryptedGeolocationAnswer['value']
-      )?.longitude})`;
+      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
+        (value as DecryptedGeolocationAnswer['value'])?.longitude
+      })`;
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
