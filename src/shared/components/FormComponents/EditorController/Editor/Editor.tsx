@@ -42,7 +42,7 @@ export const Editor = ({
    This fix is necessary because the backend encodes these characters, but they must
    be plain text for proper quote formatting. */
   const modelValue = useMemo(
-    () => fixAngleBrackets(withDebounce ? inputValue : value ?? ''),
+    () => fixAngleBrackets(withDebounce ? inputValue : (value ?? '')),
     [withDebounce, inputValue, value],
   );
 
