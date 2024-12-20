@@ -201,7 +201,7 @@ export const useAssignmentsTab = ({
         }),
       });
     },
-    [targetSubject],
+    [appletId, targetSubject?.id],
   );
 
   /**
@@ -356,6 +356,7 @@ export const useAssignmentsTab = ({
     },
     [
       activities,
+      appletId,
       canAccessData,
       canAssign,
       canDoTakeNow,
