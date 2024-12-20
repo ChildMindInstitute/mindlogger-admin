@@ -61,7 +61,7 @@ export const mockedOwnerSubject = {
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
   lastSeen: null,
   tag: 'Team' as ParticipantTag,
-  userId: null,
+  userId: mockedUserData.id,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
 };
