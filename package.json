@@ -121,7 +121,9 @@
   },
   "overrides": {
     "crypto-js": "^4.2.0",
-    "@babel/traverse": "^7.23.2"
+    "@babel/traverse": "^7.23.2",
+    "nth-check": "2.1.1",
+    "ws": "8.17.1"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.3",
