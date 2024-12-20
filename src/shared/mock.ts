@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -61,12 +61,12 @@ export const mockedOwnerSubject = {
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
   lastSeen: null,
   tag: 'Team' as ParticipantTag,
-  userId: null,
+  userId: mockedUserData.id,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
 };
 
-export const mockedOwnerRespondent = {
+export const mockedOwnerParticipant = {
   id: mockedUserData.id,
   nicknames: [mockedOwnerSubject.nickname],
   secretIds: [mockedOwnerSubject.secretUserId],
@@ -93,7 +93,7 @@ export const mockedOwnerRespondent = {
       invitation: null,
     },
   ],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: mockedUserData.email,
 };
 
@@ -147,48 +147,49 @@ export const mockedCurrentWorkspace = {
     workspaceName: 'name',
   },
 };
-export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
-export const mockedSubjectId1 = 'subject-id-987';
-export const mockedRespondentDetails: RespondentDetail = {
-  appletId: mockedAppletId,
-  appletDisplayName: 'Mocked Applet',
-  appletImage: '',
-  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-  respondentNickname: 'Mocked Respondent',
-  respondentSecretId: 'mockedSecretId',
-  hasIndividualSchedule: false,
-  encryption: mockedEncryption,
-  subjectId: mockedSubjectId1,
-  subjectTag: 'Child' as ParticipantTag,
-  subjectFirstName: 'John',
-  subjectLastName: 'Doe',
-  subjectCreatedAt: '2023-09-26T12:11:46.162083',
-  invitation: null,
-};
-export const mockedRespondent: Respondent = {
-  id: mockedRespondentId,
+export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedFullSubjectId1 = 'subject-id-987';
+export const mockedFullParticipant1: Participant = {
+  id: mockedFullParticipantId1,
   nicknames: ['Mocked Respondent'],
   secretIds: ['mockedSecretId'],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  details: [mockedRespondentDetails],
-  status: RespondentStatus.Invited,
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: 'Mocked Applet',
+      appletImage: '',
+      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+      respondentNickname: 'Mocked Respondent',
+      respondentSecretId: 'mockedSecretId',
+      hasIndividualSchedule: false,
+      encryption: mockedEncryption,
+      subjectId: mockedFullSubjectId1,
+      subjectTag: 'Child' as ParticipantTag,
+      subjectFirstName: 'John',
+      subjectLastName: 'Doe',
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
+    },
+  ],
+  status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
 };
 
-export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
-export const mockedSubjectId2 = 'subject-id-123';
-export const mockedRespondent2: Respondent = {
-  id: mockedRespondentId2,
+export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
+export const mockedFullSubjectId2 = 'subject-id-123';
+export const mockedFullParticipant2: Participant = {
+  id: mockedFullParticipantId2,
   nicknames: ['Test Respondent'],
   secretIds: ['testSecretId'],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
   details: [
     {
@@ -200,7 +201,7 @@ export const mockedRespondent2: Respondent = {
       respondentSecretId: 'testSecretId',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
-      subjectId: mockedSubjectId2,
+      subjectId: mockedFullSubjectId2,
       subjectTag: 'Child' as ParticipantTag,
       subjectFirstName: 'John',
       subjectLastName: 'Doe',
@@ -211,7 +212,7 @@ export const mockedRespondent2: Respondent = {
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';
-export const mockedLimitedRespondent = {
+export const mockedLimitedParticipant: Participant = {
   id: null,
   nicknames: ['Limited 1'],
   secretIds: ['limited-1'],
@@ -219,9 +220,8 @@ export const mockedLimitedRespondent = {
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.NotInvited,
+  status: ParticipantStatus.NotInvited,
   email: null,
-  subjects: [mockedLimitedSubjectId],
   details: [
     {
       appletId: mockedAppletId,
@@ -509,7 +509,7 @@ export const mockedManager: Manager = {
         {
           accessId: '17ba7d95-f766-42ae-9ce6-2f8fcc3l24a',
           role: Roles.Reviewer,
-          reviewerSubjects: [mockedSubjectId1],
+          reviewerSubjects: [mockedFullSubjectId1],
         },
       ],
       encryption: mockedEncryption,
@@ -3104,7 +3104,7 @@ export const mockedAlert = {
   image:
     'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
   workspace: 'Test ML',
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
 };
 
 export const mockedAppletSummaryData = [

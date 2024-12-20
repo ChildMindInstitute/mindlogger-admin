@@ -1,7 +1,7 @@
 import { MenuItemType, Svg } from 'shared/components';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 import { variables } from 'shared/styles';
-import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Invitation } from 'shared/types';
 
@@ -16,7 +16,7 @@ describe('Participants utils tests', () => {
   describe('getParticipantActions function', () => {
     const dataTestId = 'test-id';
 
-    const applets: RespondentDetail[] = [
+    const applets: ParticipantDetail[] = [
       {
         appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
         appletDisplayName: 'Applet 1',
@@ -66,8 +66,8 @@ describe('Participants utils tests', () => {
         copyInvitationLink: jest.fn(),
       },
       filteredApplets,
-      respondentId: mockedRespondentId,
-      respondentOrSubjectId: mockedRespondentId,
+      respondentId: mockedFullParticipantId1,
+      respondentOrSubjectId: mockedFullParticipantId1,
       appletId: mockedAppletId,
       email: mockedEmail,
       secretId: 'test secret id',
@@ -78,14 +78,14 @@ describe('Participants utils tests', () => {
       firstName: 'Jane',
       lastName: 'Doe',
       subjectCreatedAt: '2021-10-01T00:00:00.000Z',
-      status: RespondentStatus.Invited,
+      status: ParticipantStatus.Invited,
       dataTestId,
     };
 
     const expectedContext: ParticipantActionProps = {
-      respondentId: mockedRespondentId,
+      respondentId: mockedFullParticipantId1,
       email: mockedEmail,
-      respondentOrSubjectId: mockedRespondentId,
+      respondentOrSubjectId: mockedFullParticipantId1,
       secretId: commonGetActionsProps.secretId,
       nickname: commonGetActionsProps.nickname,
       tag: commonGetActionsProps.tag,
@@ -217,7 +217,7 @@ describe('Participants utils tests', () => {
       };
       const actions = getParticipantActions({
         ...commonGetActionsProps,
-        status: RespondentStatus.Invited,
+        status: ParticipantStatus.Invited,
         dataTestId,
         roles: [Roles.Manager],
         invitation: approvedInvitation,
@@ -249,7 +249,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         email: null,
-        status: RespondentStatus.NotInvited,
+        status: ParticipantStatus.NotInvited,
         dataTestId,
         roles: [Roles.Manager],
       });
@@ -294,7 +294,7 @@ describe('Participants utils tests', () => {
       };
       const actions = getParticipantActions({
         ...commonGetActionsProps,
-        status: RespondentStatus.Pending,
+        status: ParticipantStatus.Pending,
         dataTestId,
         invitation: pendingInvitation,
         roles: [Roles.Manager],

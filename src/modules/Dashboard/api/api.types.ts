@@ -5,7 +5,7 @@ import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'sh
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
 
-import { RespondentDetails } from '../types';
+import { SubjectDetails } from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -47,8 +47,8 @@ export type HydratedAssignment = {
   id: string;
   activityId: string | null;
   activityFlowId: string | null;
-  respondentSubject: RespondentDetails;
-  targetSubject: RespondentDetails;
+  respondentSubject: SubjectDetails;
+  targetSubject: SubjectDetails;
 };
 
 export type AssignedActivity = Activity & { assignments?: HydratedAssignment[] };
@@ -628,7 +628,7 @@ export type ActivityAnswer = {
   identifier: string | null;
   createdAt: string;
   endDatetime: string;
-  sourceSubject: RespondentDetails;
+  sourceSubject: SubjectDetails;
 };
 
 export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask' | 'subscaleSetting'> & {
@@ -727,7 +727,7 @@ export type GetTargetSubjectsByRespondentParams = SubjectId & {
 };
 
 export type TargetSubjectsByRespondent = Array<
-  RespondentDetails &
+  SubjectDetails &
     AppletId & {
       submissionCount: number;
       currentlyAssigned: boolean;

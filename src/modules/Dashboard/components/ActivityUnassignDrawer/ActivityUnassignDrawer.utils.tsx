@@ -1,11 +1,11 @@
 import { Trans } from 'react-i18next';
 import { t } from 'i18next';
 
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 
 import { ActivityUnassignFormValues } from './ActivityUnassignDrawer.types';
 
-const getSubjectLabel = (subject?: RespondentDetails) => {
+const getSubjectLabel = (subject?: SubjectDetails) => {
   if (!subject) {
     return '';
   }
