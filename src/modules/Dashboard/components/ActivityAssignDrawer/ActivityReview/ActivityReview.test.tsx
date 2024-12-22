@@ -7,17 +7,17 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedEncryption,
-  mockedLimitedRespondent,
+  mockedLimitedParticipant,
   mockedOwnerId,
-  mockedRespondent,
-  mockedRespondent2,
+  mockedFullParticipant1,
+  mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ParticipantTag, Roles } from 'shared/consts';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantStatus } from 'modules/Dashboard/types';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features';
 
@@ -27,12 +27,12 @@ import { ActivityReview } from './ActivityReview';
 const mockActivity = mockedAppletData.activities[0] as unknown as Activity;
 const mockAssignments = [
   {
-    respondentSubjectId: mockedRespondent.details[0].subjectId,
-    targetSubjectId: mockedRespondent.details[0].subjectId,
+    respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+    targetSubjectId: mockedFullParticipant1.details[0].subjectId,
   },
   {
-    respondentSubjectId: mockedRespondent2.details[0].subjectId,
-    targetSubjectId: mockedLimitedRespondent.details[0].subjectId,
+    respondentSubjectId: mockedFullParticipant2.details[0].subjectId,
+    targetSubjectId: mockedLimitedParticipant.details[0].subjectId,
   },
 ];
 
@@ -63,12 +63,17 @@ const mockedOwnerRespondent = {
       invitation: null,
     },
   ],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: mockedUserData.email,
 };
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
-  result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent, mockedLimitedRespondent],
+  result: [
+    mockedFullParticipant1,
+    mockedFullParticipant2,
+    mockedOwnerRespondent,
+    mockedLimitedParticipant,
+  ],
   count: 4,
 });
 
@@ -173,22 +178,30 @@ describe('ActivityReview component', () => {
 
     await waitFor(() => {
       // Respondent 1
-      expect(screen.getByText(mockedRespondent.details[0].respondentSecretId)).toBeInTheDocument();
-      expect(screen.getByText(mockedRespondent.details[0].respondentNickname)).toBeInTheDocument();
+      expect(
+        screen.getByText(mockedFullParticipant1.details[0].respondentSecretId),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(mockedFullParticipant1.details[0].respondentNickname),
+      ).toBeInTheDocument();
 
       // Subject 1
       expect(screen.getByText('Self')).toBeInTheDocument();
 
       // Respondent 2
-      expect(screen.getByText(mockedRespondent2.details[0].respondentSecretId)).toBeInTheDocument();
-      expect(screen.getByText(mockedRespondent2.details[0].respondentNickname)).toBeInTheDocument();
+      expect(
+        screen.getByText(mockedFullParticipant2.details[0].respondentSecretId),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(mockedFullParticipant2.details[0].respondentNickname),
+      ).toBeInTheDocument();
 
       // Subject 2
       expect(
-        screen.getByText(mockedLimitedRespondent.details[0].respondentSecretId),
+        screen.getByText(mockedLimitedParticipant.details[0].respondentSecretId),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(mockedLimitedRespondent.details[0].respondentNickname),
+        screen.getByText(mockedLimitedParticipant.details[0].respondentNickname),
       ).toBeInTheDocument();
 
       // Assignment counts

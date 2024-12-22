@@ -7,9 +7,9 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedManager,
-  mockedRespondent,
-  mockedRespondent2,
-  mockedSubjectId1,
+  mockedFullParticipant1,
+  mockedFullParticipant2,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -38,7 +38,7 @@ const preloadedState = {
     allRespondents: {
       ...initialStateData,
       data: {
-        result: [mockedRespondent, mockedRespondent2],
+        result: [mockedFullParticipant1, mockedFullParticipant2],
         count: 2,
       },
     },
@@ -57,7 +57,7 @@ const getPopup = (withSelectedRespondents = true) => (
     appletName="testName"
     appletId={mockedAppletId}
     user={mockedManager}
-    selectedRespondents={withSelectedRespondents ? [mockedSubjectId1] : []}
+    selectedRespondents={withSelectedRespondents ? [mockedFullSubjectId1] : []}
     selectRespondentsPopupVisible={true}
     onClose={mockedCloseFn}
   />
@@ -66,7 +66,7 @@ const getPopup = (withSelectedRespondents = true) => (
 const successfulResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: [mockedRespondent, mockedRespondent2],
+    result: [mockedFullParticipant1, mockedFullParticipant2],
     count: 2,
   },
 };
@@ -107,7 +107,7 @@ describe('SelectRespondentsPopup component tests', () => {
     fireEvent.click(screen.getByText('Confirm'));
 
     await waitFor(() => {
-      expect(mockedCloseFn).toBeCalledWith([mockedSubjectId1]);
+      expect(mockedCloseFn).toBeCalledWith([mockedFullSubjectId1]);
     });
   });
 

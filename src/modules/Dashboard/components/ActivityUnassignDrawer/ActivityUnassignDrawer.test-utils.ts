@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 
 const DEFAULT_TEST_ID = 'applet-activity-unassign-assignments-table';
 
@@ -8,8 +8,8 @@ const DEFAULT_TEST_ID = 'applet-activity-unassign-assignments-table';
  * Check the values of an assignment
  */
 export const checkAssignment = (
-  respondentSubject: RespondentDetails,
-  targetSubject: RespondentDetails,
+  respondentSubject: SubjectDetails,
+  targetSubject: SubjectDetails,
   index = 0,
   testId = DEFAULT_TEST_ID,
 ) => {

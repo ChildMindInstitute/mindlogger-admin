@@ -4,7 +4,7 @@ import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 
 import { Report } from './Report';
@@ -36,7 +36,7 @@ const preloadedState = {
   },
 };
 
-const route = `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
 
 const mockedActivity = {

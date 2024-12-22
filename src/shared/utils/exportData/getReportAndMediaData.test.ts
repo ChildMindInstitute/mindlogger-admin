@@ -296,6 +296,7 @@ describe('getReportAndMediaData', () => {
           reviewing_id: '',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
@@ -344,6 +345,7 @@ describe('getReportAndMediaData', () => {
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -380,6 +382,7 @@ describe('getReportAndMediaData', () => {
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -416,6 +419,7 @@ describe('getReportAndMediaData', () => {
           version: '2.1.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
@@ -467,6 +471,7 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -503,6 +508,7 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -540,6 +546,7 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -576,6 +583,7 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_flow_submission_id: '',
@@ -612,6 +620,7 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
@@ -705,6 +714,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -746,6 +756,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });
@@ -812,6 +823,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: null,
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -853,6 +865,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
         {
           activity_end_time: '1689770404000',
@@ -894,6 +907,7 @@ describe('getReportAndMediaData', () => {
           version: '1.1.1',
           event_id: '',
           timezone_offset: '',
+          legacy_user_id: '',
         },
       ]);
     });

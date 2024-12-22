@@ -157,6 +157,7 @@ const result = {
   version: '2.0.0',
   event_id: '',
   timezone_offset: '',
+  legacy_user_id: '',
 };
 
 describe('getReportCSVObject', () => {

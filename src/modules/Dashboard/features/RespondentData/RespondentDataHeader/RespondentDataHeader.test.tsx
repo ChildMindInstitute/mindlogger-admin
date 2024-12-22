@@ -3,16 +3,17 @@ import { fireEvent, screen } from '@testing-library/react';
 import {
   mockedApplet,
   mockedAppletData,
-  mockedRespondent,
+  mockedFullParticipant1,
   mockedAppletId,
-  mockedRespondentId,
+  mockedFullParticipantId1,
   mockedActivityId,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 
@@ -35,12 +36,12 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-const mockedSubject: RespondentDetails = {
-  nickname: mockedRespondent.nicknames[0],
-  secretUserId: mockedRespondent.secretIds[0],
-  userId: mockedRespondentId,
-  ...mockedRespondent,
-  id: mockedRespondentId,
+const mockedSubject: SubjectDetails = {
+  nickname: mockedFullParticipant1.nicknames[0],
+  secretUserId: mockedFullParticipant1.secretIds[0],
+  userId: mockedFullParticipantId1,
+  ...mockedFullParticipant1,
+  id: mockedFullSubjectId1,
   firstName: 'John',
   lastName: 'Doe',
 };

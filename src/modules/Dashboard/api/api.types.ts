@@ -5,7 +5,7 @@ import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'sh
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
 
-import { RespondentDetails } from '../types';
+import { SubjectDetails } from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -47,8 +47,8 @@ export type HydratedAssignment = {
   id: string;
   activityId: string | null;
   activityFlowId: string | null;
-  respondentSubject: RespondentDetails;
-  targetSubject: RespondentDetails;
+  respondentSubject: SubjectDetails;
+  targetSubject: SubjectDetails;
 };
 
 export type AssignedActivity = Activity & { assignments?: HydratedAssignment[] };
@@ -93,6 +93,32 @@ export type ParticipantActivityOrFlow = (ParticipantActivity | ParticipantFlow) 
 export type AppletParticipantActivitiesResponse = {
   result: ParticipantActivityOrFlow[];
   count: number;
+};
+
+export type ParticipantActivityOrFlowMetadata = {
+  activityOrFlowId: string;
+  /** # of participants who have responded about the participant or are assigned as respondent */
+  respondentsCount: number;
+  /** # of submissions made with participant as the respondent */
+  respondentSubmissionsCount: number;
+  /** Date of most recent submission with participant as the respondent */
+  respondentLastSubmissionDate: string | null;
+  /** # of participants who the participant has responded about or are assigned as target subject */
+  subjectsCount: number;
+  /** # of submissions made with participant as the target subject */
+  subjectSubmissionsCount: number;
+  /** Date of most recent submission with participant as the target subject */
+  subjectLastSubmissionDate: string | null;
+};
+
+export type AppletParticipantActivitiesMetadataResponse = {
+  result: SubjectId & {
+    respondentActivitiesCountExisting: number;
+    respondentActivitiesCountDeleted: number;
+    targetActivitiesCountExisting: number;
+    targetActivitiesCountDeleted: number;
+    activitiesOrFlows: ParticipantActivityOrFlowMetadata[];
+  };
 };
 
 export type RespondentId = { respondentId: string };
@@ -602,7 +628,7 @@ export type ActivityAnswer = {
   identifier: string | null;
   createdAt: string;
   endDatetime: string;
-  sourceSubject: RespondentDetails;
+  sourceSubject: SubjectDetails;
 };
 
 export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask' | 'subscaleSetting'> & {
@@ -701,7 +727,7 @@ export type GetTargetSubjectsByRespondentParams = SubjectId & {
 };
 
 export type TargetSubjectsByRespondent = Array<
-  RespondentDetails &
+  SubjectDetails &
     AppletId & {
       submissionCount: number;
       currentlyAssigned: boolean;
