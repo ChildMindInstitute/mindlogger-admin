@@ -8,4 +8,5 @@ export type FlowSummaryCardProps<T> = Pick<BoxProps, 'component'> & {
   flow: HydratedActivityFlow;
   menuItems?: MenuItem<T>[];
   onClick?: (props: { activityFlowId: string }) => void;
+  'data-testid'?: string;
 };

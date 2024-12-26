@@ -1,10 +1,10 @@
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { Box } from '@mui/material';
 import { FieldArrayWithId } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { PhrasalTemplateField } from 'redux/modules';
+import { PhrasalTemplateField, PhrasalTemplateItemResponseField } from 'redux/modules';
 import { Modal, ModalProps } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 
@@ -20,43 +20,56 @@ export const PreviewPhrasePopup = ({
   name?: string;
   imageUrl?: string;
 }) => {
-  const { t } = useTranslation('app');
+  const { t } = useTranslation('app', { keyPrefix: 'phrasalTemplatePreviewPopup' });
   const { getValues } = useCustomFormContext();
+
+  const getPlaceholder = useCallback(
+    (fieldValue: PhrasalTemplateItemResponseField) =>
+      fieldValue._indexedItemLabel
+        ? t('responsePlaceholderWithLabel', {
+            itemName: fieldValue.itemName,
+            indexedItemLabel: fieldValue._indexedItemLabel.replace(/\s+/, '_'),
+          })
+        : t('responsePlaceholder', {
+            itemName: fieldValue.itemName,
+          }),
+    [t],
+  );
 
   const renderField = useCallback(
     (_: PhrasalTemplateField, index = 0) => {
-      const fieldValue = getValues(`${name}.${index}` as string);
+      const fieldValue = getValues(`${name}.${index}`);
 
       if (!fieldValue) {
-        return '';
+        return <Fragment key={index} />;
       }
-
-      const renderedName = ` ${t('phrasalTemplatePreviewPopup.responsePlaceholder', {
-        itemName: fieldValue?.itemName,
-      })} `;
 
       switch (fieldValue.type) {
         case 'sentence':
-          return <Box component="span">{fieldValue.text}</Box>;
+          return (
+            <Box key={index} component="span">
+              {fieldValue.text}
+            </Box>
+          );
         case 'line_break':
-          return <Box component="hr" sx={{ m: 0, height: 32, border: 'none' }} />;
+          return <Box key={index} component="hr" sx={{ m: 0, height: 32, border: 'none' }} />;
         case 'item_response':
           return ['sentence', 'sentence_option_row', 'sentence_row_option'].includes(
             fieldValue.displayMode,
           ) ? (
-            <Box component="span" fontWeight="bold">
-              {renderedName}
+            <Box key={index} component="span" fontWeight="bold">
+              {` ${getPlaceholder(fieldValue)} `}
             </Box>
           ) : (
-            <ul>
+            <ul key={index}>
               <Box component="li" fontWeight="bold">
-                {renderedName}
+                {` ${getPlaceholder(fieldValue)} `}
               </Box>
             </ul>
           );
       }
     },
-    [getValues, name, t],
+    [getPlaceholder, getValues, name],
   );
 
   return (

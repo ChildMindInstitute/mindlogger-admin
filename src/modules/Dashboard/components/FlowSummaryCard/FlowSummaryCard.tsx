@@ -45,7 +45,13 @@ export const FlowSummaryCard = <T,>({
         />
       </Box>
 
-      {menuItems && <ActionsMenu buttonColor="secondary" menuItems={menuItems} />}
+      {menuItems && (
+        <ActionsMenu
+          buttonColor="secondary"
+          menuItems={menuItems}
+          data-testid={`${otherProps['data-testid']}-actions`}
+        />
+      )}
     </StyledRoot>
   );
 };

@@ -1097,8 +1097,12 @@
     "activitiesAndFlows": "Activities & Flows",
     "toggleSubjectsView": "Toggle Subjects View",
     "subjectOfActivity": "Subject of Activity",
+    "respondents": "Respondents",
+    "subjects": "Subjects",
     "submissions": "Submissions",
-    "currentlyAssigned": "Currently Assigned"
+    "currentlyAssigned": "Currently Assigned",
+    "lastSubmission": "Last activity:",
+    "noDataYet": "No data yet"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
@@ -1144,7 +1148,8 @@
   },
   "phrasalTemplatePreviewPopup": {
     "title": "Preview Phrase {{index}}",
-    "responsePlaceholder": "[{{itemName}} Response]"
+    "responsePlaceholder": "[{{itemName}} response]",
+    "responsePlaceholderWithLabel": "[{{itemName}} {{indexedItemLabel}} response]"
   },
   "phrasalTemplateItem": {
     "btnAddField": "Add…",

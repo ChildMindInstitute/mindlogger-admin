@@ -3,9 +3,9 @@ import { PropsWithChildren } from 'react';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
 export type AssignmentsTabProps = PropsWithChildren<{
-  respondentSubject?: RespondentDetails;
-  targetSubject?: RespondentDetails;
-  'data-testid': string;
+  isLoadingMetadata: boolean;
+  aboutParticipantCount?: number;
+  byParticipantCount?: number;
 }>;
 
 export type UseAssignmentsTabProps = {

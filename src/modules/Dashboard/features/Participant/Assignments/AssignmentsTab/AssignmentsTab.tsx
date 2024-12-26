@@ -1,14 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { generatePath, Link, useLocation, useParams } from 'react-router-dom';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 import { page } from 'resources';
 import { Svg } from 'shared/components';
-import { StyledFlexColumn } from 'shared/styles';
+import { StyledFlexColumn, StyledFlexTopCenter, StyledMaybeEmpty } from 'shared/styles';
 
 import { StyledToggleButton, StyledToggleButtonGroup } from './AssignmentsTab.styles';
+import { AssignmentsTabProps } from './AssignmentsTab.types';
 
-export const AssignmentsTab = ({ children }: PropsWithChildren) => {
+export const AssignmentsTab = ({
+  children,
+  isLoadingMetadata,
+  aboutParticipantCount,
+  byParticipantCount,
+}: AssignmentsTabProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'participantDetails' });
   const { appletId, subjectId } = useParams();
   const { pathname } = useLocation();
@@ -21,9 +27,13 @@ export const AssignmentsTab = ({ children }: PropsWithChildren) => {
         subjectId,
       }),
       icon: <Svg id="about-participant" width="18" height="18" fill="currentColor" />,
-      // TODO: add total count of activities/flows to label
-      // https://mindlogger.atlassian.net/browse/M2-7890
-      label: t('aboutParticipant'),
+      label: (
+        <StyledFlexTopCenter>
+          {t('aboutParticipant')}
+          {' • '}
+          <StyledMaybeEmpty isLoading={isLoadingMetadata}>{aboutParticipantCount}</StyledMaybeEmpty>
+        </StyledFlexTopCenter>
+      ),
       dataTestId: 'participant-details-filter-about-participant',
     },
     {
@@ -33,9 +43,13 @@ export const AssignmentsTab = ({ children }: PropsWithChildren) => {
         subjectId,
       }),
       icon: <Svg id="by-participant" width="18" height="18" fill="currentColor" />,
-      // TODO: add total count of activities/flows to label
-      // https://mindlogger.atlassian.net/browse/M2-7890
-      label: t('byParticipant'),
+      label: (
+        <StyledFlexTopCenter>
+          {t('byParticipant')}
+          {' • '}
+          <StyledMaybeEmpty isLoading={isLoadingMetadata}>{byParticipantCount}</StyledMaybeEmpty>
+        </StyledFlexTopCenter>
+      ),
       dataTestId: 'participant-details-filter-by-participant',
     },
   ];
