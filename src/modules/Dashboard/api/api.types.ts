@@ -381,7 +381,7 @@ export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
 
 export type SubmitId = { submitId: string };
 
-export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
+export type Answers = AppletId & TargetSubjectId & { createdDate?: string; flowId?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
@@ -505,7 +505,7 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
-    activityOrFlowId?: string;
+    activityOrFlowId: string;
   };
 
 export type EventId = { eventId: string };

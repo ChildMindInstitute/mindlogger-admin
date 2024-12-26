@@ -7,7 +7,7 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
-import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
 import { Box } from '@mui/material';
 
 import {
@@ -60,6 +60,7 @@ export const RespondentDataReview = () => {
   const handleSelectAnswer = ({ answer, isRouteCreated }: SelectAnswerProps) => {
     setIsFeedbackOpen(false);
     setSelectedAnswer(answer);
+    console.log('🚀 ~ handleSelectAnswer ~ answer:', answer);
 
     if (isRouteCreated) return;
 
@@ -136,10 +137,13 @@ export const RespondentDataReview = () => {
 
   const dataTestid = 'respondents-review';
 
+  const activityOrFlowId = selectedActivity?.id || selectedFlow?.id;
+
   const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
     AppletSubmitDateList,
     ResponseWithObject<SubmitDates>
   >(getAppletSubmitDateListApi, ({ data }) => {
+    // getAppletSubmitDateListApi callback
     const datesResult = data?.result;
     if (!datesResult) return;
 
@@ -150,7 +154,7 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !subjectId || !selectedActivity?.id) return;
+    if (!appletId || !subjectId || !activityOrFlowId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
@@ -160,7 +164,7 @@ export const RespondentDataReview = () => {
       targetSubjectId: subjectId,
       fromDate,
       toDate,
-      activityOrFlowId: selectedActivity?.id || selectedFlow?.id,
+      activityOrFlowId,
     });
   };
 
@@ -168,6 +172,7 @@ export const RespondentDataReview = () => {
     setValue('responseDate', date);
     const createdDate = format(date, DateFormats.YearMonthDay);
     handleGetActivitiesAndFlows(createdDate);
+    console.log('🚀 ~ handleSetInitialDate ~ date:', createdDate);
     handleGetSubmitDates(date);
   };
 
@@ -231,37 +236,28 @@ export const RespondentDataReview = () => {
   }, [appletId, answerId, submitId, selectedActivity, selectedFlow, selectedAnswer]);
 
   useEffect(() => {
-    // avoid unnecessary rerender when last activity completed date state value is undefined
     if (lastActivityCompleted === undefined) return;
 
-    const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
-    const selectedDateInParam =
-      selectedDateParam &&
-      isValid(new Date(`${selectedDateParam}T00:00:00`)) &&
-      new Date(`${selectedDateParam}T00:00:00`);
+    const lastActivityResponse = responseDates?.length
+      ? responseDates[responseDates?.length - 1]
+      : null;
 
-    if (selectedDateInParam) {
-      handleSetInitialDate(selectedDateInParam);
+    console.log('rerendered', lastActivityResponse);
 
-      return;
-    }
+    handleSetInitialDate(lastActivityResponse || new Date());
 
-    if (lastActivityCompletedDate) {
-      handleSetInitialDate(lastActivityCompletedDate);
-
-      return;
-    }
-
-    handleSetInitialDate(new Date());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted]);
+  }, [responseDates?.length]);
 
   useEffect(() => {
-    if (!selectedActivity?.id) return;
+    if (!activityOrFlowId) return;
 
-    handleGetSubmitDates(new Date());
+    const responseDate = getValues('responseDate');
+    if (!responseDate) return;
+
+    handleGetSubmitDates(responseDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedActivity?.id]);
+  }, [activityOrFlowId]);
 
   /**
    * Determines the source subject based on the presence of activity responses.

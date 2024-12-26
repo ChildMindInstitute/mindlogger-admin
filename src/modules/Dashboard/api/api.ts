@@ -461,7 +461,7 @@ export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSig
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
 
 export const getReviewActivitiesApi = (
-  { appletId, targetSubjectId, createdDate }: Answers,
+  { appletId, targetSubjectId, createdDate, flowId }: Answers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<ReviewEntity>>(`/answers/applet/${appletId}/review/activities`, {
@@ -469,6 +469,7 @@ export const getReviewActivitiesApi = (
       targetSubjectId,
       createdDate,
       limit: MAX_LIMIT,
+      flowId,
     },
     signal,
   });
