@@ -54,7 +54,6 @@ import {
   DeleteSubject,
   TargetSubjectId,
   SubjectId,
-  GetActivitiesParams,
   DeleteReview,
   EncryptedActivityAnswer,
   GetWorkspaceRespondentsParams,
@@ -84,7 +83,6 @@ import {
   PostAssignmentsParams,
   GetSubjectActivitiesParams,
   AppletSubjectActivitiesResponse,
-  AppletActivitiesResponse,
   AppletAssignmentsResponse,
   AppletParticipantActivitiesResponse,
   GetTargetSubjectsByRespondentParams,
@@ -919,15 +917,6 @@ export const getSubjectDetailsApi = (
   signal?: AbortSignal,
 ): Promise<AxiosResponse<SubjectDetailsWithRoles>> =>
   authApiClient.get(`/subjects/${subjectId}`, {
-    signal,
-  });
-
-export const getAppletActivitiesApi = (
-  { params: { appletId, ...params } }: GetActivitiesParams,
-  signal?: AbortSignal,
-): Promise<AxiosResponse<AppletActivitiesResponse>> =>
-  authApiClient.get(`/activities/applet/${appletId}`, {
-    params,
     signal,
   });
 
