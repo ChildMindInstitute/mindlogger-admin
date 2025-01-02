@@ -97,8 +97,7 @@
     "test:junit": "npm run test -- --watchAll=false --reporters=default --reporters=jest-junit",
     "test:related": "sh test-related.sh",
     "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
-    "eject": "react-app-rewired eject",
-    "prepare": "husky install"
+    "eject": "react-app-rewired eject"
   },
   "jest": {
     "globalSetup": "./global-setup.js",
@@ -126,6 +125,7 @@
     "ws": "8.17.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.0",
     "@types/dompurify": "^3.0.3",
     "@types/downloadjs": "^1.4.4",
     "@types/file-saver": "^2.0.5",
@@ -155,14 +155,11 @@
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
-    "husky": "^8.0.3",
     "jest-junit": "^16.0.0",
     "jest-mock-axios": "^4.7.3",
-    "lint-staged": "^14.0.1",
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
     "react-app-rewired": "^2.2.1",
-    "worker-loader": "^3.0.8",
-    "@babel/plugin-proposal-private-property-in-object": "7.21.0"
+    "worker-loader": "^3.0.8"
   }
 }
