@@ -1,5 +1,5 @@
 import {
-  activityJourneyHeader,
+  getActivityJourneyHeader,
   getGeneralReportName,
   getReportHeader,
   JOURNEY_REPORT_NAME,
@@ -37,7 +37,8 @@ const exportProcessedData = async ({
   await exportTemplate({
     data: activityJourneyData,
     fileName: JOURNEY_REPORT_NAME + suffix,
-    defaultData: activityJourneyData.length > 0 ? null : activityJourneyHeader,
+    defaultData:
+      activityJourneyData.length > 0 ? null : getActivityJourneyHeader(enableDataExportRenaming),
   });
 
   await Promise.allSettled([
