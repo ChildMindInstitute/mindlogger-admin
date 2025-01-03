@@ -260,12 +260,10 @@ describe('Activity Items Flow', () => {
     expect(itemDropdown).toBeVisible();
 
     const items = itemDropdown.querySelectorAll('li');
-    console.log('🚀 ~ test ~ items:', items);
     expect(items).toHaveLength(3);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);
-      // TODO FAILING
       expect(item).toHaveTextContent(mockedOrderedConditionNameItems[index].name);
     });
   });
