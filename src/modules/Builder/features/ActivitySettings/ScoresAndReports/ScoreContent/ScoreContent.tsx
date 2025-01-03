@@ -99,7 +99,7 @@ export const ScoreContent = ({
   const subscaleNameField = `${name}.subscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
 
   const score: ScoreReport = useWatch({ name });
   const {
@@ -118,7 +118,7 @@ export const ScoreContent = ({
   const selectedItems = scoreItems?.filter(selectedItemsPredicate);
 
   const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
-    const hasLookupTable = !!subscaleTableData && subscaleTableData.length;
+    const hasLookupTable = !!subscaleTableData && subscaleTableData.length > 0;
 
     // Subscales can contain only nested subscales, but they need at least one activity item
     // because that's what the report score is calculated from
@@ -507,6 +507,7 @@ export const ScoreContent = ({
                         paddingX: theme.spacing(2.4),
                         borderColor: variables.palette.outline_variant2,
                       }}
+                      data-testid={`${dataTestid}-view-subscales-configuration`}
                       onClick={() => {
                         // We may not be able to navigate to a specific subscale without modifying that
                         // screen. So let's just go to the subscales screen for now.

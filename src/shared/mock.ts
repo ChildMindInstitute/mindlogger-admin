@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 import { page } from 'resources';
-import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
+import { ItemFormValuesCommonType } from 'modules/Builder/types';
 import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
@@ -24,6 +24,7 @@ import {
   MultiSelectItem,
   SingleApplet,
   SingleSelectItem,
+  SliderItem,
   SubscaleSetting,
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
@@ -524,7 +525,10 @@ export const mockedManager: Manager = {
   invitationKey: null,
 };
 
-export const mockedSingleSelectFormValues: Omit<ItemFormValues, 'id'> & { id: string } = {
+export const mockedSingleSelectFormValues: Omit<
+  SingleSelectItem<ItemFormValuesCommonType>,
+  'id'
+> & { id: string } = {
   id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
   name: 'Item1',
   responseType: ItemResponseType.SingleSelection,
@@ -594,10 +598,12 @@ export const mockedMultiSelectFormValues = {
   },
 };
 
-export const mockedSliderFormValues = {
+export const mockedSliderFormValues: Omit<SliderItem<ItemFormValuesCommonType>, 'id'> & {
+  id: string;
+} = {
   id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
   name: 'Item3',
-  responseType: 'slider',
+  responseType: ItemResponseType.Slider,
   responseValues: {
     minLabel: 'min',
     maxLabel: 'max',
@@ -612,6 +618,14 @@ export const mockedSliderFormValues = {
     showTickMarks: false,
     showTickLabels: false,
     continuousSlider: false,
+    removeBackButton: false,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    timer: 0,
+    skippableItem: false,
   },
 };
 
@@ -955,6 +969,11 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+  image: '',
+  watermark: '',
+  streamEnabled: false,
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType> = {

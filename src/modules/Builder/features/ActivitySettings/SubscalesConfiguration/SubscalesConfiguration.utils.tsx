@@ -55,7 +55,7 @@ export const getItemElements = <I extends Pick<ItemFormValues, 'id' | 'name' | '
   subscaleId: string,
   items: I[] = [],
   subscales: SubscaleFormValue[] = [],
-) => {
+): ItemElement[] => {
   if (!items) return [];
 
   const itemsMap = getObjectFromList(items);
