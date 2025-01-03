@@ -29,6 +29,7 @@ export class DataExportWorkersManager {
     private setCurrentPage: Dispatch<SetStateAction<number>>,
     private limitRef: MutableRefObject<number>,
     private finishedPagesRef: MutableRefObject<Set<number>>,
+    private enableDataExportRenaming: boolean,
   ) {
     this.initializeWorkers();
   }
@@ -68,6 +69,7 @@ export class DataExportWorkersManager {
       exportDecryptedDataSucceed({
         suffix: hasSuffix ? getExportDataSuffix(page) : '',
         filters,
+        enableDataExportRenaming: this.enableDataExportRenaming,
       })(decryptedData).then(() => {
         this.finishedPagesRef.current.add(page);
         this.handleAllTasksCompleted();
