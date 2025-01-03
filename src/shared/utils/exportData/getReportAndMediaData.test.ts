@@ -648,6 +648,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         mockedDecryptedEventsForDrawing,
+        false,
       );
       expect(result).toEqual([
         {
@@ -689,8 +690,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -731,8 +732,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });
@@ -757,6 +758,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         events,
+        false,
       );
       expect(result).toEqual([
         {
@@ -798,8 +800,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: null,
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -840,8 +842,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -882,8 +884,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });
