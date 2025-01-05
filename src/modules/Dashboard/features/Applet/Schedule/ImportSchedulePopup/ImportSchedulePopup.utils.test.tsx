@@ -18,8 +18,6 @@ import {
 import { ImportScheduleErrors } from './ImportSchedulePopup.types';
 import { dateValidationRegex } from './ImportSchedule.const';
 
-const getCurrentYear = new Date().getFullYear();
-
 describe('getInvalidActivitiesError', () => {
   const errorText1 =
     'Activity does not exist in Applet TestApplet. Please enter a valid Activity name and reupload the file.';
@@ -308,6 +306,7 @@ describe('prepareImportPayload', () => {
   const mockRespondentId = 'respondentId';
   test('returns prepared import payload with valid data', () => {
     const result = prepareImportPayload(mockUploadedEvents, mockAppletData, mockRespondentId);
+    const getCurrentYear = new Date().getFullYear();
 
     expect(result).toEqual([
       {
