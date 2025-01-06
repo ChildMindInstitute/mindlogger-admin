@@ -12,6 +12,7 @@ import {
 } from 'modules/Builder/types';
 import {
   ActivitySettingsSubscale,
+  ScoreReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleSelectItem,
 } from 'shared/state';
@@ -66,6 +67,20 @@ const commonProps: ScoreContentProps = {
   'data-testid': dataTestid,
 };
 
+const reportScore: ScoreReport = {
+  type: ScoreReportType.Score,
+  scoringType: 'raw_score',
+  name: 'score1',
+  id: 'sumScore_score1',
+  calculationType: CalculationType.Sum,
+  itemsScore: [mockedSingleSelectFormValues.id],
+  message: 'score1',
+  itemsPrint: [],
+  key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+  showMessage: true,
+  printItems: false,
+};
+
 const activity: ActivityFormValues = {
   id: uuid(),
   name: 'New Activity#1',
@@ -74,21 +89,7 @@ const activity: ActivityFormValues = {
   scoresAndReports: {
     generateReport: true,
     showScoreSummary: true,
-    reports: [
-      {
-        type: ScoreReportType.Score,
-        scoringType: 'raw_score',
-        name: 'score1',
-        id: 'sumScore_score1',
-        calculationType: CalculationType.Sum,
-        itemsScore: [mockedSingleSelectFormValues.id],
-        message: 'score1',
-        itemsPrint: [],
-        key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
-        showMessage: true,
-        printItems: false,
-      },
-    ],
+    reports: [reportScore],
   },
 };
 
@@ -591,35 +592,36 @@ describe('ScoreContent', () => {
 
   describe('scoreId should change when calculation type changes', () => {
     test.each`
-      calculationType               | expectedResult               | description
-      ${CalculationType.Sum}        | ${'sumScore_firstscore'}     | ${'for sum type should be sumScore_firstscore'}
-      ${CalculationType.Average}    | ${'averageScore_firstscore'} | ${'for average type should be averageScore_firstscore'}
-      ${CalculationType.Percentage} | ${'percentScore_firstscore'} | ${'for percentage type should be percentScore_firstscore'}
+      calculationType               | expectedResult           | description
+      ${CalculationType.Sum}        | ${'sumScore_score1'}     | ${'for sum type should be sumScore_score1'}
+      ${CalculationType.Average}    | ${'averageScore_score1'} | ${'for average type should be averageScore_score1'}
+      ${CalculationType.Percentage} | ${'percentScore_score1'} | ${'for percentage type should be percentScore_score1'}
     `('$description', async ({ calculationType, expectedResult }) => {
-      const { getByTestId, findByTestId } = renderWithAppletFormData({
+      const { getByTestId } = renderWithAppletFormData({
         children: <ScoreContent {...commonProps} />,
+        appletFormData: {
+          ...formValues,
+          activities: [
+            {
+              ...activity,
+              scoresAndReports: {
+                showScoreSummary: false,
+                generateReport: false,
+                reports: [
+                  {
+                    ...reportScore,
+                    message: 'message',
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       const selectWrapper = getByTestId(`${dataTestid}-calculation-type`);
       const input = selectWrapper.querySelector('input');
       input && fireEvent.change(input, { target: { value: calculationType } });
-
-      // Check if the change score ID popup is showing
-      try {
-        const changeScoreIdPopup = await findByTestId(`${dataTestid}-change-score-id-popup`);
-        const submitBtn = within(changeScoreIdPopup).getByTestId(
-          `${dataTestid}-change-score-id-popup-submit-button`,
-        );
-        await userEvent.click(submitBtn);
-
-        const retryOkBtn = within(changeScoreIdPopup).getByTestId(
-          `${dataTestid}-change-score-id-popup-submit-button`,
-        );
-        expect(retryOkBtn.textContent).toBe('Ok');
-        await userEvent.click(retryOkBtn);
-      } catch {
-        // If it's not showing, that's fine
-      }
 
       await waitFor(() =>
         expect(screen.getByTestId(`${dataTestid}-scoreid`)).toHaveTextContent(expectedResult),
