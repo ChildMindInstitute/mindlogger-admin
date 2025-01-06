@@ -594,7 +594,7 @@ describe('ScoreContent', () => {
       calculationType               | expectedResult               | description
       ${CalculationType.Sum}        | ${'sumScore_firstscore'}     | ${'for sum type should be sumScore_firstscore'}
       ${CalculationType.Average}    | ${'averageScore_firstscore'} | ${'for average type should be averageScore_firstscore'}
-      ${CalculationType.Percentage} | ${'percentScore_firstscore'} | ${'for percentage type should be percentScore_firtscore'}
+      ${CalculationType.Percentage} | ${'percentScore_firstscore'} | ${'for percentage type should be percentScore_firstscore'}
     `('$description', async ({ calculationType, expectedResult }) => {
       const { getByTestId, findByTestId } = renderWithAppletFormData({
         children: <ScoreContent {...commonProps} />,
