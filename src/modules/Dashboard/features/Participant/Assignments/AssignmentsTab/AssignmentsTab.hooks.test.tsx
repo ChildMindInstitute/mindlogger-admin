@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
@@ -232,22 +232,27 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) fireEvent.click(actionDots);
 
-        if (canEdit) {
-          const editButton = screen.getByTestId(`${testId}-edit`);
-          expect(editButton).toBeVisible();
+        if (actionDots) {
+          await userEvent.click(actionDots);
 
-          fireEvent.click(editButton);
+          if (canEdit) {
+            const editButton = screen.getByTestId(`${testId}-edit`);
+            expect(editButton).toBeVisible();
 
-          expect(mockedUseNavigate).toHaveBeenCalledWith(
-            generatePath(page.builderAppletActivity, {
-              appletId: mockedAppletId,
-              activityId: mockParticipantActivities.autoAssignActivity.id,
-            }),
-          );
+            await userEvent.click(editButton);
+
+            expect(mockedUseNavigate).toHaveBeenCalledWith(
+              generatePath(page.builderAppletActivity, {
+                appletId: mockedAppletId,
+                activityId: mockParticipantActivities.autoAssignActivity.id,
+              }),
+            );
+          } else {
+            expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
+          }
         } else {
-          expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
+          expect(canEdit).toBe(false);
         }
       });
     });
@@ -263,7 +268,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
     });
@@ -277,7 +282,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-edit`)).toBeNull();
     });
@@ -291,11 +296,11 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const editButton = screen.getByTestId(`${testId}-edit`);
       expect(editButton).toBeVisible();
-      fireEvent.click(editButton);
+      await userEvent.click(editButton);
 
       expect(mockedUseNavigate).toHaveBeenCalledWith(
         generatePath(page.builderAppletActivityFlowItemAbout, {
@@ -314,11 +319,11 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const editButton = screen.getByTestId(`${testId}-edit`);
       expect(editButton).toBeVisible();
-      fireEvent.click(editButton);
+      await userEvent.click(editButton);
 
       expect(mockedUseNavigate).toHaveBeenCalledWith(
         generatePath(
@@ -354,7 +359,7 @@ describe('useAssignmentsTab hook', () => {
         const viewDataButton = screen.getByTestId(`${testId}-view-data`);
 
         // Attempt to view data without encryption key
-        fireEvent.click(viewDataButton);
+        await userEvent.click(viewDataButton);
 
         expect(mockedUseNavigate).not.toHaveBeenCalled();
         expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
@@ -369,7 +374,7 @@ describe('useAssignmentsTab hook', () => {
           />,
         );
 
-        fireEvent.click(viewDataButton);
+        await userEvent.click(viewDataButton);
 
         expect(mockedUseNavigate).toHaveBeenCalledWith(
           generatePath(route, {
@@ -392,7 +397,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
     });
@@ -421,12 +426,16 @@ describe('useAssignmentsTab hook', () => {
           );
 
           const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-          if (actionDots) fireEvent.click(actionDots);
 
-          if (canExportData) {
-            expect(screen.getByTestId(`${testId}-export`)).toBeVisible();
+          if (actionDots) {
+            await userEvent.click(actionDots);
+            if (canExportData) {
+              expect(screen.getByTestId(`${testId}-export`)).toBeVisible();
+            } else {
+              expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
+            }
           } else {
-            expect(screen.queryByTestId(`${testId}-export`)).toBeNull();
+            expect(canExportData).toBe(false);
           }
         },
       );
@@ -441,13 +450,13 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
-      await waitFor(() => expect(screen.getByTestId(`${testId}-export`)).toBeVisible());
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      expect(screen.getByTestId(`${testId}-export`)).toBeVisible();
 
       const exportDataButton = screen.getByTestId(`${testId}-export`);
 
       // Attempt to export data without encryption key
-      fireEvent.click(exportDataButton);
+      await userEvent.click(exportDataButton);
       expect(screen.queryByTestId(`${testId}-export-modal`)).toBeNull();
       expect(screen.queryByTestId(`${testId}-export-modal-password`)).toBeVisible();
 
@@ -489,15 +498,18 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) userEvent.click(actionDots);
 
-        await waitFor(() => {
+        if (actionDots) {
+          await userEvent.click(actionDots);
+
           if (canDoTakeNow) {
             expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible();
           } else {
             expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBeNull();
           }
-        });
+        } else {
+          expect(canDoTakeNow).toBe(false);
+        }
       });
     });
 
@@ -510,13 +522,11 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
-      await waitFor(() => {
-        const takeNowButton = screen.getByTestId(`${testId}-activity-take-now`);
-        expect(takeNowButton).toBeVisible();
-        expect(takeNowButton).toHaveAttribute('aria-disabled', 'true');
-      });
+      const takeNowButton = screen.getByTestId(`${testId}-activity-take-now`);
+      expect(takeNowButton).toBeVisible();
+      expect(takeNowButton).toHaveAttribute('aria-disabled', 'true');
     });
 
     describe('should show Take Now modal prepopulated with', () => {
@@ -561,34 +571,6 @@ describe('useAssignmentsTab hook', () => {
         },
       );
     });
-
-    test('should pre-populate both respondent and subject in Take Now modal', async () => {
-      renderWithProviders(
-        <UseAssignmentsHookTest
-          activityOrFlow={mockParticipantActivities.autoAssignActivity}
-          respondentSubject={mockedOwnerSubject}
-          targetSubject={mockedLimitedSubject}
-        />,
-        renderOptions,
-      );
-
-      await openTakeNowModal(testId);
-
-      const sourceSubjectInputElement = screen
-        .getByTestId(sourceSubjectDropdownTestId(testId))
-        .querySelector('input');
-
-      const targetSubjectInputElement = screen
-        .getByTestId(targetSubjectDropdownTestId(testId))
-        .querySelector('input');
-
-      expect(sourceSubjectInputElement).toHaveValue(
-        `${mockedOwnerSubject.firstName} ${mockedOwnerSubject.lastName} (${mockedOwnerSubject.tag})`,
-      );
-      expect(targetSubjectInputElement).toHaveValue(
-        `${mockedLimitedSubject.secretUserId} (${mockedLimitedSubject.nickname}) (${mockedLimitedSubject.tag})`,
-      );
-    });
   });
 
   describe('Assign', () => {
@@ -614,12 +596,17 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) fireEvent.click(actionDots);
 
-        if (canAssign) {
-          expect(screen.getByTestId(`${testId}-assign`)).toBeVisible();
+        if (actionDots) {
+          await userEvent.click(actionDots);
+
+          if (canAssign) {
+            expect(screen.getByTestId(`${testId}-assign`)).toBeVisible();
+          } else {
+            expect(screen.queryByTestId(`${testId}-assign`)).toBeNull();
+          }
         } else {
-          expect(screen.queryByTestId(`${testId}-assign`)).toBeNull();
+          expect(canAssign).toBe(false);
         }
       });
     });
@@ -633,7 +620,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-assign`)).toBeNull();
     });
@@ -647,7 +634,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const assignButton = screen.getByTestId(`${testId}-assign`);
       expect(assignButton).toBeVisible();
@@ -663,7 +650,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const assignButton = screen.getByTestId(`${testId}-assign`);
       expect(assignButton).toBeVisible();
@@ -679,7 +666,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const assignButton = screen.getByTestId(`${testId}-assign`);
       expect(assignButton).toBeVisible();
@@ -706,15 +693,13 @@ describe('useAssignmentsTab hook', () => {
             renderOptions,
           );
 
-          fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+          await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
           const assignButton = screen.getByTestId(`${testId}-assign`);
           expect(assignButton).toBeVisible();
-          userEvent.click(assignButton);
+          await userEvent.click(assignButton);
 
-          await waitFor(() => {
-            expect(screen.getByTestId('applet-activity-assign')).toBeVisible();
-          });
+          expect(screen.getByTestId('applet-activity-assign')).toBeVisible();
 
           expect(spyMixpanelTrack).toHaveBeenCalledWith({
             action: MixpanelEventType.StartAssignActivityOrFlow,
@@ -759,12 +744,17 @@ describe('useAssignmentsTab hook', () => {
         );
 
         const actionDots = screen.queryByTestId(`${testId}-activity-actions-dots`);
-        if (actionDots) fireEvent.click(actionDots);
 
-        if (canAssign) {
-          expect(screen.getByTestId(`${testId}-unassign`)).toBeVisible();
+        if (actionDots) {
+          await userEvent.click(actionDots);
+
+          if (canAssign) {
+            expect(screen.getByTestId(`${testId}-unassign`)).toBeVisible();
+          } else {
+            expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+          }
         } else {
-          expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
+          expect(canAssign).toBe(false);
         }
       });
     });
@@ -778,7 +768,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const assignButton = screen.getByTestId(`${testId}-unassign`);
       expect(assignButton).toBeVisible();
@@ -794,7 +784,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
     });
@@ -808,7 +798,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
     });
@@ -822,7 +812,7 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       expect(screen.queryByTestId(`${testId}-unassign`)).toBeNull();
     });
@@ -836,15 +826,13 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const unassignButton = screen.getByTestId(`${testId}-unassign`);
       expect(unassignButton).toBeVisible();
-      userEvent.click(unassignButton);
+      await userEvent.click(unassignButton);
 
-      const modal = await waitFor(() =>
-        screen.getByTestId('applet-activity-unassign-confirmation-popup'),
-      );
+      const modal = screen.getByTestId('applet-activity-unassign-confirmation-popup');
       expect(modal).toBeVisible();
 
       expect(spyMixpanelTrack).toHaveBeenCalledWith({
@@ -873,13 +861,13 @@ describe('useAssignmentsTab hook', () => {
         renderOptions,
       );
 
-      fireEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
+      await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
 
       const unassignButton = screen.getByTestId(`${testId}-unassign`);
       expect(unassignButton).toBeVisible();
-      userEvent.click(unassignButton);
+      await userEvent.click(unassignButton);
 
-      const modal = await waitFor(() => screen.getByTestId('applet-activity-unassign'));
+      const modal = screen.getByTestId('applet-activity-unassign');
       expect(modal).toBeVisible();
 
       expect(spyMixpanelTrack).toHaveBeenCalledWith({
