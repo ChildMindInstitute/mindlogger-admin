@@ -218,7 +218,6 @@ describe('useAssignmentsTab hook', () => {
         ${true}  | ${Roles.Owner}       | ${'editing for Owner'}
         ${false} | ${Roles.Coordinator} | ${'editing for Coordinator'}
         ${true}  | ${Roles.Editor}      | ${'editing for Editor'}
-        ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
         ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
       `('$description', async ({ canEdit, role }) => {
         renderWithProviders(
@@ -406,7 +405,6 @@ describe('useAssignmentsTab hook', () => {
         ${true}       | ${Roles.Owner}       | ${'Export Data for Owner'}
         ${false}      | ${Roles.Coordinator} | ${'Export Data for Coordinator'}
         ${false}      | ${Roles.Editor}      | ${'Export Data for Editor'}
-        ${false}      | ${Roles.Respondent}  | ${'Export Data for Respondent'}
         ${true}       | ${Roles.Reviewer}    | ${'Export Data for Reviewer'}
       `(
         '$description',
@@ -477,7 +475,6 @@ describe('useAssignmentsTab hook', () => {
         ${true}      | ${Roles.Owner}       | ${'Take Now for Owner'}
         ${false}     | ${Roles.Coordinator} | ${'Take Now for Coordinator'}
         ${false}     | ${Roles.Editor}      | ${'Take Now for Editor'}
-        ${false}     | ${Roles.Respondent}  | ${'Take Now for Respondent'}
         ${false}     | ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ canDoTakeNow, role }: { canDoTakeNow: boolean; role: Roles }) => {
         renderWithProviders(
@@ -603,7 +600,6 @@ describe('useAssignmentsTab hook', () => {
         ${true}   | ${Roles.Owner}       | ${'Assign for Owner'}
         ${true}   | ${Roles.Coordinator} | ${'Assign for Coordinator'}
         ${false}  | ${Roles.Editor}      | ${'Assign for Editor'}
-        ${false}  | ${Roles.Respondent}  | ${'Assign for Respondent'}
         ${false}  | ${Roles.Reviewer}    | ${'Assign for Reviewer'}
       `('$description', async ({ canAssign, role }) => {
         renderWithProviders(
@@ -749,7 +745,6 @@ describe('useAssignmentsTab hook', () => {
         ${true}   | ${Roles.Owner}       | ${'Unassign for Owner'}
         ${true}   | ${Roles.Coordinator} | ${'Unassign for Coordinator'}
         ${false}  | ${Roles.Editor}      | ${'Unassign for Editor'}
-        ${false}  | ${Roles.Respondent}  | ${'Unassign for Respondent'}
         ${false}  | ${Roles.Reviewer}    | ${'Unassign for Reviewer'}
       `('$description', async ({ canAssign, role }) => {
         renderWithProviders(
