@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { endOfYear, format } from 'date-fns';
+import { endOfYear, format, formatISO } from 'date-fns';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DateFormats } from 'shared/consts';
@@ -307,7 +307,9 @@ describe('prepareImportPayload', () => {
   test('returns prepared import payload with valid data', () => {
     const result = prepareImportPayload(mockUploadedEvents, mockAppletData, mockRespondentId);
 
-    const endOfCurrentYear = endOfYear(new Date()).getFullYear();
+    const endOfCurrentYear = formatISO(endOfYear(new Date()), {
+      representation: 'date',
+    });
 
     expect(result).toEqual([
       {
@@ -346,7 +348,7 @@ describe('prepareImportPayload', () => {
           type: 'ALWAYS',
           selectedDate: undefined,
           startDate: '2024-02-13',
-          endDate: `${endOfCurrentYear}-12-31`,
+          endDate: endOfCurrentYear,
         },
         activityId: undefined,
         flowId: undefined,
@@ -360,7 +362,7 @@ describe('prepareImportPayload', () => {
         timerType: 'NOT_SET',
         respondentId: 'respondentId',
         periodicity: {
-          endDate: `${endOfCurrentYear}-12-31`,
+          endDate: endOfCurrentYear,
           selectedDate: undefined,
           startDate: '2024-03-07',
           type: 'ALWAYS',
