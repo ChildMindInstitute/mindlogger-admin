@@ -18,6 +18,8 @@ import {
 import { ImportScheduleErrors } from './ImportSchedulePopup.types';
 import { dateValidationRegex } from './ImportSchedule.const';
 
+const currentYear = new Date().getFullYear();
+
 describe('getInvalidActivitiesError', () => {
   const errorText1 =
     'Activity does not exist in Applet TestApplet. Please enter a valid Activity name and reupload the file.';
@@ -344,7 +346,7 @@ describe('prepareImportPayload', () => {
           type: 'ALWAYS',
           selectedDate: undefined,
           startDate: '2024-02-13',
-          endDate: '2024-12-31',
+          endDate: `${currentYear}-12-31`,
         },
         activityId: undefined,
         flowId: undefined,
@@ -358,7 +360,7 @@ describe('prepareImportPayload', () => {
         timerType: 'NOT_SET',
         respondentId: 'respondentId',
         periodicity: {
-          endDate: '2024-12-31',
+          endDate: `${currentYear}-12-31`,
           selectedDate: undefined,
           startDate: '2024-03-07',
           type: 'ALWAYS',
