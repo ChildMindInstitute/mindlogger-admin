@@ -15,6 +15,9 @@ import {
 } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { makeDrawingSpaceAdjustableFeatureFlag } from 'modules/Builder/features/ActivityItems/ItemConfiguration/InputTypeItems/Drawing/DrawingContent';
+import { NumberSelectionItem } from 'shared/state';
+import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemConfiguration } from '../ItemConfiguration';
 
@@ -285,8 +288,8 @@ export const mockedEmptyDate = {
   alerts: [],
   responseValues: {},
 };
-export const mockedEmptyNumberSelection = {
-  responseType: 'numberSelect',
+export const mockedEmptyNumberSelection: NumberSelectionItem<ItemFormValuesCommonType> = {
+  responseType: ItemResponseType.NumberSelection,
   name: 'Item',
   question: '',
   config: {
@@ -296,7 +299,6 @@ export const mockedEmptyNumberSelection = {
       textInputOption: false,
       textInputRequired: false,
     },
-    timer: 0,
   },
   isHidden: false,
   allowEdit: true,
