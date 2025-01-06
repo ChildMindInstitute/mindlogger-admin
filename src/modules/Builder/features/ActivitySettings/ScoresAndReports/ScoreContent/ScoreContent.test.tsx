@@ -19,6 +19,7 @@ import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ScoreContent } from './ScoreContent';
+import { ScoreContentProps } from './ScoreContent.types';
 
 const items = [
   {
@@ -54,13 +55,14 @@ const dataTestid = 'report-score-content-name';
 const currentActivityIndex = '0';
 const fieldName = `activities.${currentActivityIndex}`;
 
-const commonProps = {
+const commonProps: ScoreContentProps = {
   name: `${fieldName}.scoresAndReports.reports.0`,
   title: 'Score 1',
   index: 0,
   items,
   tableItems,
   scoreItems,
+  isStaticActive: false,
   'data-testid': dataTestid,
 };
 
@@ -134,7 +136,6 @@ describe('ScoreContent', () => {
   });
 
   test('should render score', () => {
-    // @ts-expect-error Ignored temporarily
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
     expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
@@ -147,7 +148,6 @@ describe('ScoreContent', () => {
     ${undefined}              | ${'-'}           | ${'should render empty score range if scoreItems is undefined'}
   `('$description', async ({ scoreItems, expectedResult }) => {
     renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} scoreItems={scoreItems} />,
       appletFormData: formValues,
     });
@@ -156,7 +156,6 @@ describe('ScoreContent', () => {
 
   test('score type radio group should be hidden by default', async () => {
     const { queryByTestId } = renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} tableItems={[]} scoreItems={[]} />,
     });
 
@@ -194,7 +193,6 @@ describe('ScoreContent', () => {
     };
 
     const { queryByTestId } = renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} tableItems={[]} scoreItems={[]} />,
       appletFormData: {
         ...formValues,
@@ -249,7 +247,6 @@ describe('ScoreContent', () => {
     });
 
     const { findByTestId } = renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} />,
       appletFormData: {
         ...formValues,
@@ -330,7 +327,6 @@ describe('ScoreContent', () => {
     });
 
     const { findByTestId, findAllByRole } = renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} />,
       appletFormData: {
         ...formValues,
@@ -492,7 +488,6 @@ describe('ScoreContent', () => {
 
       const { findByTestId, findByRole } = renderWithAppletFormData({
         children: (
-          // @ts-expect-error Ignored temporarily
           <ScoreContent
             {...commonProps}
             scoreItems={[singleSelectItem1, singleSelectItem2, singleSelectItem3]}
@@ -568,7 +563,6 @@ describe('ScoreContent', () => {
     });
 
     const { findByTestId, findByRole } = renderWithAppletFormData({
-      // @ts-expect-error Ignored temporarily
       children: <ScoreContent {...commonProps} />,
       appletFormData: {
         ...formValues,
@@ -603,7 +597,6 @@ describe('ScoreContent', () => {
       ${CalculationType.Percentage} | ${'percentScore_firstscore'} | ${'for percentage type should be percentScore_firtscore'}
     `('$description', async ({ calculationType, expectedResult }) => {
       const { getByTestId, findByTestId } = renderWithAppletFormData({
-        // @ts-expect-error Ignored temporarily
         children: <ScoreContent {...commonProps} />,
       });
 
@@ -650,7 +643,6 @@ describe('ScoreContent', () => {
         checkboxIndexes: number[];
         expectedResult: string;
       }) => {
-        // @ts-expect-error Ignored temporarily
         renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
         checkboxIndexes.forEach((index) => {
@@ -668,7 +660,6 @@ describe('ScoreContent', () => {
   });
 
   test('should change scoreId when score name changes', () => {
-    // @ts-expect-error Ignored temporarily
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
     const nameInput = screen.getByTestId(`${dataTestid}-name`);
@@ -679,7 +670,6 @@ describe('ScoreContent', () => {
   });
 
   test('should remove conditional logic', () => {
-    // @ts-expect-error Ignored temporarily
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
     fireEvent.click(screen.getByTestId(`${dataTestid}-conditional-0-remove`));
@@ -701,7 +691,6 @@ describe('ScoreContent', () => {
   });
 
   test('should add conditional logic', () => {
-    // @ts-expect-error Ignored temporarily
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
     fireEvent.click(screen.getByTestId(`${dataTestid}-add-score-conditional`));
