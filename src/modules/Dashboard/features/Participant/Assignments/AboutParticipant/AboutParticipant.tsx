@@ -108,7 +108,7 @@ const AboutParticipant = () => {
             );
 
             return (
-              <ActivityListItem key={activity.id} activityOrFlow={activity}>
+              <ActivityListItem key={activity.id} activityOrFlow={activity} dataTestId={dataTestId}>
                 <ActivityListItemCounter
                   icon="by-participant"
                   label={t('participantDetails.respondents')}

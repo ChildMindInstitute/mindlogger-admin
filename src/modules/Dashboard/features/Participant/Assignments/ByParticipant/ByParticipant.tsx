@@ -191,6 +191,7 @@ const ByParticipant = () => {
                   />
                 }
                 isLoadingExpandedView={expandedViewsLoading[activity.id]}
+                dataTestId={dataTestId}
               >
                 <ActivityListItemCounter
                   icon="by-participant"

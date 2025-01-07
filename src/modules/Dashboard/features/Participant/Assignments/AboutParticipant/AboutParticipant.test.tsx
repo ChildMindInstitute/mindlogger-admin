@@ -1,5 +1,6 @@
 import { PreloadedState } from '@reduxjs/toolkit';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
   mockedAppletData,
@@ -36,33 +37,53 @@ const successfulGetAppletActivitiesMock = mockSuccessfulHttpResponse({
   },
 });
 
+const mockActivitiesOrFlows = [
+  {
+    activityOrFlowId: mockParticipantFlows.autoAssignFlow.id,
+    respondentsCount: 1,
+    respondentSubmissionsCount: 1,
+    respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+    subjectsCount: 1,
+    subjectSubmissionsCount: 1,
+    subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+  },
+  {
+    activityOrFlowId: mockParticipantActivities.autoAssignActivity.id,
+    respondentsCount: 1,
+    respondentSubmissionsCount: 1,
+    respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+    subjectsCount: 1,
+    subjectSubmissionsCount: 1,
+    subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+  },
+  {
+    activityOrFlowId: mockParticipantActivities.inactiveActivity.id,
+    respondentsCount: 0,
+    respondentSubmissionsCount: 1,
+    respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+    subjectsCount: 0,
+    subjectSubmissionsCount: 1,
+    subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+  },
+  {
+    activityOrFlowId: mockParticipantActivities.hiddenActivity.id,
+    respondentsCount: 1,
+    respondentSubmissionsCount: 1,
+    respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+    subjectsCount: 1,
+    subjectSubmissionsCount: 1,
+    subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
+  },
+];
+
 const successfulGetAppletActivitiesMetadataMock = mockSuccessfulHttpResponse({
   result: {
     subjectId: mockedOwnerSubject.id,
-    targetActivitiesCountExisting: 2,
+    targetActivitiesCountExisting: 4,
     targetActivitiesCountDeleted: 0,
-    respondentActivitiesCountExisting: 2,
+    respondentActivitiesCountExisting: 4,
     respondentActivitiesCountDeleted: 0,
-    activitiesOrFlows: [
-      {
-        activityOrFlowId: mockParticipantFlows.autoAssignFlow.id,
-        respondentsCount: 1,
-        respondentSubmissionsCount: 1,
-        respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
-        subjectsCount: 1,
-        subjectSubmissionsCount: 1,
-        subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
-      },
-      {
-        activityOrFlowId: mockParticipantActivities.autoAssignActivity.id,
-        respondentsCount: 1,
-        respondentSubmissionsCount: 1,
-        respondentLastSubmissionDate: '2025-01-01T00:00:00.000Z',
-        subjectsCount: 1,
-        subjectSubmissionsCount: 1,
-        subjectLastSubmissionDate: '2025-01-01T00:00:00.000Z',
-      },
-    ],
+    activitiesOrFlows: mockActivitiesOrFlows,
   },
 });
 
@@ -72,8 +93,13 @@ const successfulEmptyGetAppletTargetSubjectActivitiesMock = mockSuccessfulHttpRe
 });
 
 const successfulGetAppletTargetSubjectActivitiesMock = mockSuccessfulHttpResponse({
-  result: [mockParticipantFlows.autoAssignFlow, mockParticipantActivities.autoAssignActivity],
-  count: 2,
+  result: [
+    mockParticipantFlows.autoAssignFlow,
+    mockParticipantActivities.autoAssignActivity,
+    mockParticipantActivities.inactiveActivity,
+    mockParticipantActivities.hiddenActivity,
+  ],
+  count: 4,
 });
 
 const successfulGetAppletMock = mockSuccessfulHttpResponse({
@@ -125,13 +151,6 @@ const renderOptions = {
   routePath,
 };
 
-const mockedUseNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
-
 jest.mock('shared/hooks/useFeatureFlags');
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -163,7 +182,7 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
     jest.clearAllMocks();
   });
 
-  it('should render the loading state', async () => {
+  it('should render the loading state at first', async () => {
     renderWithProviders(<AboutParticipant />, renderOptions);
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
@@ -185,5 +204,70 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
     const emptyState = await screen.findByTestId(`${testId}-empty-state`);
 
     expect(emptyState).toBeInTheDocument();
+  });
+
+  it('should show counts in the tab bar', async () => {
+    renderWithProviders(<AboutParticipant />, renderOptions);
+
+    await screen.findAllByTestId(`${testId}-activity-list-item`);
+
+    expect(screen.getByText('About Participant •').children[0]?.textContent).toBe('4');
+    expect(screen.getByText('By Participant •').children[0]?.textContent).toBe('4');
+  });
+
+  it('should render the list of activities and flows with metadata', async () => {
+    renderWithProviders(<AboutParticipant />, renderOptions);
+
+    const activitiesOrFlows = await screen.findAllByTestId(`${testId}-activity-list-item`);
+
+    expect(within(activitiesOrFlows[0]).getByText('Existing Activity Flow')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[0]).getByText('Flow')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[0]).getByText('Active')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[0]).getByText('Respondents').nextSibling?.textContent).toBe(
+      '1',
+    );
+    expect(within(activitiesOrFlows[0]).getByText('Submissions').nextSibling?.textContent).toBe(
+      '1',
+    );
+
+    expect(within(activitiesOrFlows[1]).getByText('Existing Activity')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[1]).queryByText('Flow')).toBeNull();
+    expect(within(activitiesOrFlows[1]).getByText('Active')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[1]).getByText('Respondents').nextSibling?.textContent).toBe(
+      '1',
+    );
+    expect(within(activitiesOrFlows[1]).getByText('Submissions').nextSibling?.textContent).toBe(
+      '1',
+    );
+
+    expect(within(activitiesOrFlows[2]).getByText('Inactive Activity')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[2]).queryByText('Flow')).toBeNull();
+    expect(within(activitiesOrFlows[2]).getByText('Inactive')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[2]).getByText('Respondents').nextSibling?.textContent).toBe(
+      '0',
+    );
+    expect(within(activitiesOrFlows[2]).getByText('Submissions').nextSibling?.textContent).toBe(
+      '1',
+    );
+
+    expect(within(activitiesOrFlows[3]).getByText('Hidden Activity')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[3]).queryByText('Flow')).toBeNull();
+    expect(within(activitiesOrFlows[3]).getByText('Hidden')).toBeInTheDocument();
+    expect(within(activitiesOrFlows[3]).getByText('Respondents').nextSibling?.textContent).toBe(
+      '1',
+    );
+    expect(within(activitiesOrFlows[3]).getByText('Submissions').nextSibling?.textContent).toBe(
+      '1',
+    );
+  });
+
+  it('should show Applet unlock popup when clicking View Data', async () => {
+    renderWithProviders(<AboutParticipant />, renderOptions);
+
+    const activitiesOrFlows = await screen.findAllByTestId(`${testId}-activity-list-item`);
+
+    await userEvent.click(within(activitiesOrFlows[0]).getByText('View Data'));
+
+    expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
   });
 });
