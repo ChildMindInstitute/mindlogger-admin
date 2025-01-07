@@ -201,7 +201,7 @@ export const useAssignmentsTab = ({
         }),
       });
     },
-    [targetSubject],
+    [appletId, targetSubject?.id],
   );
 
   /**
@@ -238,7 +238,7 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isLimitedRespondent = respondentSubject && !respondentSubject.userId;
+      const isLimitedRespondent = !!respondentSubject && !respondentSubject.userId;
       const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>
@@ -332,7 +332,7 @@ export const useAssignmentsTab = ({
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
-          'data-testid': `${dataTestId}-take-now`,
+          'data-testid': `${dataTestId}-activity-take-now`,
           action: () =>
             openTakeNowModal(activityOrFlow, {
               sourceSubject: respondentSubject && {
@@ -356,6 +356,7 @@ export const useAssignmentsTab = ({
     },
     [
       activities,
+      appletId,
       canAccessData,
       canAssign,
       canDoTakeNow,
@@ -401,6 +402,7 @@ export const useAssignmentsTab = ({
               setSelectedTargetSubjectId(undefined);
             }
           }}
+          data-testid={`${dataTestId}-export-modal`}
         />
       )}
 

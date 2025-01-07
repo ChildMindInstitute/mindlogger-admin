@@ -369,8 +369,10 @@ export const ActivityAssignDrawer = ({
         break;
     }
   }, [
+    activityIds.length,
     appletId,
     createAssignments,
+    flowIds.length,
     handleSubmit,
     onClose,
     removeAllBanners,
