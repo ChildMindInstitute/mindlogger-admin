@@ -87,6 +87,7 @@ const AboutParticipant = () => {
               ? t('participantDetails.aboutParticipantEmptyTeamMember')
               : t('participantDetails.aboutParticipantEmpty')
           }
+          dataTestId={dataTestId}
         />
       )}
 

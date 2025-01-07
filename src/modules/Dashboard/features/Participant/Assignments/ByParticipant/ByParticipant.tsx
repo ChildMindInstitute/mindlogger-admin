@@ -154,6 +154,7 @@ const ByParticipant = () => {
               : t('participantDetails.byParticipantEmpty')
           }
           maxWidth={isRespondentLimited ? '57.2rem' : undefined}
+          dataTestId={dataTestId}
         />
       )}
 
