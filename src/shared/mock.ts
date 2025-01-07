@@ -7,13 +7,14 @@ import {
   ParticipantActivityOrFlow,
 } from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
-import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
+import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
 import { Manager, Participant, ParticipantStatus, SubjectDetails } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
   CalculationType,
   ConditionalLogicMatch,
+  ConditionType,
   ItemResponseType,
   ParticipantTag,
   PerfTaskType,
@@ -28,10 +29,19 @@ import {
   MultiSelectItem,
   SingleApplet,
   SingleSelectItem,
+  SliderItem,
   SubscaleSetting,
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
 import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { Encryption } from './utils';
+import {
+  defaultMultiSelectionConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
+} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -45,7 +55,7 @@ export const mockedUserData = {
   id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
 };
 
-export const mockedEncryption = {
+export const mockedEncryption: Encryption = {
   accountId: 'c48b275d-db4b-4f79-8469-9198b45985d3',
   base: '[2]',
   prime:
@@ -296,7 +306,7 @@ export const mockedLimitedParticipant = {
   ],
 };
 
-export const mockedAppletData = {
+export const mockedAppletData: SingleApplet = {
   displayName: 'dataviz',
   description: {
     en: '',
@@ -307,8 +317,6 @@ export const mockedAppletData = {
   image: '',
   watermark: '',
   themeId: '9b023afd-e5f9-403c-b154-fc8f35fcf3ab',
-  link: null,
-  requireLogin: true,
   pinnedAt: null,
   retentionPeriod: null,
   retentionType: null,
@@ -344,14 +352,13 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
       items: [
         {
           question: {
             en: 'ss',
           },
-          responseType: 'singleSelect',
+          responseType: ItemResponseType.SingleSelection,
           responseValues: {
             options: [
               {
@@ -368,7 +375,7 @@ export const mockedAppletData = {
               },
             ],
           },
-          config: {},
+          config: defaultSingleSelectionConfig,
           name: 'Item1',
           id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
           order: 1,
@@ -377,7 +384,7 @@ export const mockedAppletData = {
           question: {
             en: 'ms',
           },
-          responseType: 'multiSelect',
+          responseType: ItemResponseType.MultipleSelection,
           responseValues: {
             options: [
               {
@@ -400,14 +407,14 @@ export const mockedAppletData = {
               },
             ],
           },
-          config: {},
+          config: defaultMultiSelectionConfig,
           name: 'Item2',
           conditionalLogic: {
             match: ConditionalLogicMatch.Any,
             conditions: [
               {
                 itemName: 'Item1',
-                type: 'EQUAL_TO_OPTION',
+                type: ConditionType.EqualToOption,
                 payload: {
                   optionValue: '0',
                 },
@@ -421,21 +428,21 @@ export const mockedAppletData = {
           question: {
             en: 'slider',
           },
-          responseType: 'slider',
+          responseType: ItemResponseType.Slider,
           responseValues: {
             minLabel: 'min',
             maxLabel: 'max',
             minValue: 1,
             maxValue: 4,
           },
-          config: {},
+          config: defaultSliderConfig,
           name: 'Item3',
           conditionalLogic: {
-            match: 'any',
+            match: ConditionalLogicMatch.Any,
             conditions: [
               {
                 itemName: 'Item2',
-                type: 'NOT_INCLUDES_OPTION',
+                type: ConditionType.NotIncludesOption,
                 payload: {
                   optionValue: '0',
                 },
@@ -449,9 +456,9 @@ export const mockedAppletData = {
           question: {
             en: 'time',
           },
-          responseType: 'time',
+          responseType: ItemResponseType.Time,
           responseValues: null,
-          config: {},
+          config: defaultTimeConfig,
           name: 'Item4',
           id: '4b334484-947b-4287-941c-ed4cbf0dc955',
           order: 4,
@@ -460,9 +467,9 @@ export const mockedAppletData = {
           question: {
             en: 'text',
           },
-          responseType: 'text',
+          responseType: ItemResponseType.Text,
           responseValues: null,
-          config: {},
+          config: defaultTextConfig,
           name: 'Item5',
           id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
           order: 5,
@@ -490,7 +497,6 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       key: uuidv4(),
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
@@ -515,7 +521,6 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       id: '66a4ebe4-3d7f-485c-8293-093cabf29fa4',
       items: [
         {
@@ -524,7 +529,10 @@ export const mockedAppletData = {
           },
           responseType: ItemResponseType.ABTrails,
           responseValues: null,
-          config: {},
+          config: {
+            deviceType: DeviceType.Mobile,
+            orderName: OrderName.First,
+          },
           name: 'Item1',
           id: '5b334484-947b-4287-941c-ed4cbf0dc956',
           order: 1,
@@ -552,7 +560,6 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       id: '76a4ebe4-3d7f-485c-8293-093cabf29fa5',
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
@@ -577,7 +584,6 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       id: '86a4ebe4-3d7f-485c-8293-093cabf29fa6',
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
@@ -593,8 +599,6 @@ export const mockedAppletData = {
       },
       isSingleReport: false,
       hideBadge: false,
-      reportIncludedActivityName: null,
-      reportIncludedItemName: null,
       isHidden: false,
       id: 'c109d25c-7ecc-4dae-b8c9-7334bc427c34',
       items: [
@@ -614,8 +618,6 @@ export const mockedAppletData = {
       },
       isSingleReport: false,
       hideBadge: false,
-      reportIncludedActivityName: null,
-      reportIncludedItemName: null,
       isHidden: false,
       key: uuidv4(),
       items: [
@@ -629,6 +631,8 @@ export const mockedAppletData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
@@ -662,7 +666,10 @@ export const mockedManager: Manager = {
   invitationKey: null,
 };
 
-export const mockedSingleSelectFormValues: Omit<ItemFormValues, 'id'> & { id: string } = {
+export const mockedSingleSelectFormValues: Omit<
+  SingleSelectItem<ItemFormValuesCommonType>,
+  'id'
+> & { id: string } = {
   id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
   name: 'Item1',
   responseType: ItemResponseType.SingleSelection,
@@ -732,10 +739,12 @@ export const mockedMultiSelectFormValues = {
   },
 };
 
-export const mockedSliderFormValues = {
+export const mockedSliderFormValues: Omit<SliderItem<ItemFormValuesCommonType>, 'id'> & {
+  id: string;
+} = {
   id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
   name: 'Item3',
-  responseType: 'slider',
+  responseType: ItemResponseType.Slider,
   responseValues: {
     minLabel: 'min',
     maxLabel: 'max',
@@ -750,6 +759,14 @@ export const mockedSliderFormValues = {
     showTickMarks: false,
     showTickLabels: false,
     continuousSlider: false,
+    removeBackButton: false,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    timer: 0,
+    skippableItem: false,
   },
 };
 
@@ -1093,6 +1110,11 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+  image: '',
+  watermark: '',
+  streamEnabled: false,
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType> = {
@@ -3533,7 +3555,7 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
 
 const mockParticipantFlowBase = {
   id: mockedAppletData.activityFlows[0].id as string,
-  activityIds: mockedAppletData.activityFlows[0].items.map((item) => item.id),
+  activityIds: mockedAppletData.activityFlows[0].items?.map((item) => item.id) as string[],
   name: 'Mock Flow',
   description: '',
   images: [],
