@@ -74,6 +74,13 @@ const mockedOrderedConditionNameItems = [
   mockedMultiActivityItem,
   mockedSliderActivityItem,
 ];
+const mockedOrderedFlowSequenceNameItems = [
+  mockedSingleActivityItem,
+  mockedMultiActivityItem,
+  mockedTextActivityItem,
+  mockedSliderActivityItem,
+  mockedMessageActivityItem,
+];
 
 const renderActivityItemsFlow = (formData) => {
   const ref = createRef();
@@ -260,11 +267,11 @@ describe('Activity Items Flow', () => {
     expect(itemDropdown).toBeVisible();
 
     const items = itemDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(3);
+    expect(items).toHaveLength(mockedOrderedFlowSequenceNameItems.length);
 
     items.forEach((item, index) => {
-      expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);
-      expect(item).toHaveTextContent(mockedOrderedConditionNameItems[index].name);
+      expect(item).toHaveAttribute('data-value', mockedOrderedFlowSequenceNameItems[index].id);
+      expect(item).toHaveTextContent(mockedOrderedFlowSequenceNameItems[index].name);
     });
   });
 
