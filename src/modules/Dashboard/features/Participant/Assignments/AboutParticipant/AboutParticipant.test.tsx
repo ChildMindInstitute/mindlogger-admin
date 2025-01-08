@@ -24,6 +24,7 @@ import {
 } from 'shared/utils/axios-mocks';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { Roles } from 'shared/consts';
 
 import AboutParticipant from './AboutParticipant';
 
@@ -132,8 +133,8 @@ const testId = 'participant-details-about-participant';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerSubject.id}`;
 const routePath = page.appletParticipantDetails;
 
-const preloadedState: PreloadedState<RootState> = {
-  ...getPreloadedState(),
+const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
+  ...getPreloadedState(role),
   users: {
     respondentDetails: mockSchema(null),
     allRespondents: mockSchema(null, {
@@ -143,10 +144,10 @@ const preloadedState: PreloadedState<RootState> = {
       result: mockedOwnerSubject,
     }),
   },
-};
+});
 
 const renderOptions = {
-  preloadedState,
+  preloadedState: preloadedState(),
   route,
   routePath,
 };
@@ -269,5 +270,18 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
     await userEvent.click(within(activitiesOrFlows[0]).getByText('View Data'));
 
     expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
+  });
+
+  it('should disable the view data button for coordinators', async () => {
+    renderWithProviders(<AboutParticipant />, {
+      ...renderOptions,
+      preloadedState: preloadedState(Roles.Coordinator),
+    });
+
+    const activitiesOrFlows = await screen.findAllByTestId(`${testId}-activity-list-item`);
+
+    const viewDataButton = within(activitiesOrFlows[0]).getByText('View Data');
+
+    expect(viewDataButton).toBeDisabled();
   });
 });
