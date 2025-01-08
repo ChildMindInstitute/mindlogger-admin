@@ -92,6 +92,7 @@ const AboutParticipant = () => {
               ? t('participantDetails.aboutParticipantEmptyTeamMember')
               : t('participantDetails.aboutParticipantEmpty')
           }
+          dataTestId={dataTestId}
         />
       )}
 
@@ -112,7 +113,7 @@ const AboutParticipant = () => {
             );
 
             return (
-              <ActivityListItem key={activity.id} activityOrFlow={activity}>
+              <ActivityListItem key={activity.id} activityOrFlow={activity} dataTestId={dataTestId}>
                 <ActivityListItemCounter
                   icon="by-participant"
                   label={t('participantDetails.respondents')}

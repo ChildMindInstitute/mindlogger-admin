@@ -15,7 +15,7 @@ export const ExpandedView = ({
   targetSubjects = [],
   getActionsMenu,
   onClickViewData,
-  'data-test-id': dataTestId,
+  'data-testid': dataTestId,
 }: ExpandedViewProps) => {
   const { t } = useTranslation('app');
 

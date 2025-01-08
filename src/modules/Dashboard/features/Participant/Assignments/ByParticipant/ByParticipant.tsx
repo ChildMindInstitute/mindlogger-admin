@@ -23,7 +23,7 @@ import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
 import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
-const dataTestId = 'participant-details-about-participant';
+const dataTestId = 'participant-details-by-participant';
 
 const ByParticipant = () => {
   const { t } = useTranslation('app');
@@ -154,6 +154,7 @@ const ByParticipant = () => {
               : t('participantDetails.byParticipantEmpty')
           }
           maxWidth={isRespondentLimited ? '57.2rem' : undefined}
+          dataTestId={dataTestId}
         />
       )}
 
@@ -186,10 +187,11 @@ const ByParticipant = () => {
                     targetSubjects={expandedViewsData[activity.id]}
                     getActionsMenu={getActionsMenu}
                     onClickViewData={handleClickNavigateToData}
-                    data-test-id={`${dataTestId}-${index}`}
+                    data-testid={`${dataTestId}-${index}-expanded-view`}
                   />
                 }
                 isLoadingExpandedView={expandedViewsLoading[activity.id]}
+                dataTestId={dataTestId}
               >
                 <ActivityListItemCounter
                   icon="by-participant"
