@@ -731,6 +731,7 @@ export type TargetSubjectsByRespondent = Array<
     AppletId & {
       submissionCount: number;
       currentlyAssigned: boolean;
+      teamMemberCanViewData: boolean;
     }
 >;
 
