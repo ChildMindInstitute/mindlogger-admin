@@ -6,10 +6,11 @@ import { format } from 'date-fns';
 
 import { useAsync } from 'shared/hooks';
 import { getAppletTargetSubjectActivitiesApi, ParticipantActivityOrFlow } from 'api';
-import { users } from 'redux/modules';
-import { ActionsMenu, Spinner, Svg, Tooltip } from 'shared/components';
+import { users, workspaces } from 'redux/modules';
+import { ActionsMenu, OptionalTooltipWrapper, Spinner, Svg, Tooltip } from 'shared/components';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
+import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 
 import { AssignmentsTab, useAssignmentsTab } from '../AssignmentsTab';
 import { ActivitiesList } from '../ActivitiesList';
@@ -25,6 +26,10 @@ const AboutParticipant = () => {
   const { useSubject, useSubjectStatus } = users;
   const isLoadingSubject = useSubjectStatus() !== 'success';
   const { result: targetSubject } = useSubject() ?? {};
+
+  const rolesData = workspaces.useRolesData();
+  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
+  const canViewData = hasPermissionToViewData(roles);
 
   const {
     execute: fetchActivities,
@@ -126,17 +131,25 @@ const AboutParticipant = () => {
                   </StyledFlexTopCenter>
                 </Tooltip>
 
-                <Button
-                  variant="outlined"
-                  onClick={() => handleClickNavigateToData(activity)}
-                  sx={{ mr: 0.4 }}
-                  className="primary-button"
-                  disableRipple
-                  data-testid={`${dataTestId}-${index}-view-data`}
+                <OptionalTooltipWrapper
+                  tooltipTitle={!canViewData ? t('subjectDataUnavailable') : ''}
                 >
-                  <Svg id="chart" width="18" height="18" fill="currentColor" />
-                  {t('viewData')}
-                </Button>
+                  {/*https://mui.com/material-ui/react-tooltip/#disabled-elements*/}
+                  <span>
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleClickNavigateToData(activity)}
+                      sx={{ mr: 0.4 }}
+                      className="primary-button"
+                      disableRipple
+                      data-testid={`${dataTestId}-${index}-view-data`}
+                      disabled={!canViewData}
+                    >
+                      <Svg id="chart" width="18" height="18" fill="currentColor" />
+                      {t('viewData')}
+                    </Button>
+                  </span>
+                </OptionalTooltipWrapper>
 
                 <ActionsMenu
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
