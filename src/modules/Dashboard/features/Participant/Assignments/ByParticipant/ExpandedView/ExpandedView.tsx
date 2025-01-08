@@ -53,7 +53,7 @@ export const ExpandedView = ({
               return (
                 <StyledFlexTopCenter sx={{ gap: 0.8 }}>
                   <OptionalTooltipWrapper tooltipTitle={tooltipTitle}>
-                    {/*https://mui.com/material-ui/react-tooltip/#disabled-elements*/}
+                    {/* https://mui.com/material-ui/react-tooltip/#disabled-elements */}
                     <span>
                       <Button
                         variant="outlined"
