@@ -77,7 +77,7 @@ export const ActivityListItem = ({
                 <CircularProgress size={24} />
               ) : (
                 <Svg
-                  aria-label={t('reviewToggleButton')}
+                  aria-label={t('toggleSubjectsView')}
                   id={isExpanded ? 'navigate-up' : 'navigate-down'}
                   fill={variables.palette.on_surface_variant}
                 />

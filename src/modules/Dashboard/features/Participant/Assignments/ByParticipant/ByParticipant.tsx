@@ -23,7 +23,7 @@ import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
 import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
-const dataTestId = 'participant-details-about-participant';
+const dataTestId = 'participant-details-by-participant';
 
 const ByParticipant = () => {
   const { t } = useTranslation('app');
@@ -187,7 +187,7 @@ const ByParticipant = () => {
                     targetSubjects={expandedViewsData[activity.id]}
                     getActionsMenu={getActionsMenu}
                     onClickViewData={handleClickNavigateToData}
-                    data-test-id={`${dataTestId}-${index}`}
+                    data-testid={`${dataTestId}-${index}-expanded-view`}
                   />
                 }
                 isLoadingExpandedView={expandedViewsLoading[activity.id]}

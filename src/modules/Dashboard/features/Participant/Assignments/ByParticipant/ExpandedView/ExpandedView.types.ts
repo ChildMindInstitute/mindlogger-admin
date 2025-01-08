@@ -13,7 +13,7 @@ export type ExpandedViewProps = {
     activityOrFlow: ParticipantActivityOrFlow,
     targetSubject: SubjectDetails,
   ) => void;
-  'data-test-id': string;
+  'data-testid': string;
 };
 
 export type ExpandedViewHandle = {
