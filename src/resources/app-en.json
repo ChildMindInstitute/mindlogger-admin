@@ -1759,5 +1759,5 @@
   "autoAssignActivityDisabled": "This activity is set to ‘Auto-assign’ in the Activity Builder and therefore cannot be assigned here.",
   "autoAssignFlowDisabled": "This flow is set to ‘Auto-assign’ in the Activity Flow Builder and therefore cannot be assigned here.",
   "goToDashboard": "Go to Dashboard",
-  "subjectDataUnavailable": "Data for this user is unavailable as they are not assigned to you"
+  "subjectDataUnavailable": "You are not allowed to view the data for this user"
 }

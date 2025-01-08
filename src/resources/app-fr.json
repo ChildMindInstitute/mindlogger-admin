@@ -1758,5 +1758,5 @@
   "autoAssignActivityDisabled": "Cette activité est paramétrée sur « Attribution automatique » dans le générateur d'activités et ne peut donc pas être attribuée ici.",
   "autoAssignFlowDisabled": "Ce flux est défini sur « Auto-assign » dans l'Activity Flow Builder et ne peut donc pas être affecté ici.",
   "goToDashboard": "Aller au tableau de bord",
-  "subjectDataUnavailable": "Les données de cet utilisateur ne sont pas disponibles car elles ne vous sont pas attribuées"
+  "subjectDataUnavailable": "Vous n'êtes pas autorisé à afficher les données de cet utilisateur"
 }
