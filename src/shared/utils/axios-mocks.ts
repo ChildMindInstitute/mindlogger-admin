@@ -23,6 +23,11 @@ export const mockGetRequestResponses = (
 
       return Promise.resolve(responses[url]);
     } else {
+      // Must explain that the request was unmocked via a console log statement, else you only
+      // receive a contextless UnhandledPromiseRejection error.
+      // eslint-disable-next-line no-console
+      console.log(`No response provided for ${url}`);
+
       throw new Error(`No response provided for ${url}`);
     }
   });

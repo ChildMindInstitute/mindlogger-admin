@@ -3453,7 +3453,7 @@ export const lastAssessment = [
 const mockParticipantActivityBase = {
   id: mockedAppletData.activities[0].id as string,
   activityIds: null,
-  name: 'Mock Activity',
+  name: mockedAppletData.activities[0].name,
   description: '',
   images: [],
   isPerformanceTask: false,
@@ -3471,6 +3471,7 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
   mobileOnlyActivity: {
     ...mockParticipantActivityBase,
     id: mockedAppletData.activities[2].id as string, // Mobile-only activity in mockedAppletData
+    name: mockedAppletData.activities[2].name,
     isFlow: false,
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
@@ -3478,6 +3479,7 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
   performanceTask: {
     ...mockParticipantActivityBase,
     id: mockedAppletData.activities[3].id as string, // Performance task in mockedAppletData
+    name: mockedAppletData.activities[3].name,
     isFlow: false,
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
@@ -3487,6 +3489,7 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
   uneditablePerformanceTask: {
     ...mockParticipantActivityBase,
     id: mockedAppletData.activities[4].id as string, // Uneditable performance task in mockedAppletData
+    name: mockedAppletData.activities[4].name,
     isFlow: false,
     status: ActivityAssignmentStatus.Active,
     autoAssign: true,
@@ -3547,16 +3550,26 @@ export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow
   },
   inactiveActivity: {
     ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[2].id as string,
+    name: 'Inactive Activity',
     isFlow: false,
     status: ActivityAssignmentStatus.Inactive,
     autoAssign: false,
+  },
+  hiddenActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[3].id as string,
+    name: 'Hidden Activity',
+    isFlow: false,
+    status: ActivityAssignmentStatus.Hidden,
+    autoAssign: true,
   },
 };
 
 const mockParticipantFlowBase = {
   id: mockedAppletData.activityFlows[0].id as string,
   activityIds: mockedAppletData.activityFlows[0].items?.map((item) => item.id) as string[],
-  name: 'Mock Flow',
+  name: mockedAppletData.activityFlows[0].name,
   description: '',
   images: [],
   isPerformanceTask: false,

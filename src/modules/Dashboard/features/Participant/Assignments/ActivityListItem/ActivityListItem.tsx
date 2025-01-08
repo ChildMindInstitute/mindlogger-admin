@@ -33,6 +33,7 @@ export const ActivityListItem = ({
   expandedView,
   isLoadingExpandedView,
   children,
+  dataTestId,
 }: ActivityListItemProps) => {
   const { t } = useTranslation('app', { keyPrefix: 'participantDetails' });
   const { isFlow, images, name, status } = activityOrFlow;
@@ -45,7 +46,7 @@ export const ActivityListItem = ({
   };
 
   return (
-    <StyledActivityListItem>
+    <StyledActivityListItem data-testid={`${dataTestId}-activity-list-item`}>
       <StyledActivityListItemInner>
         <StyledFlexTopCenter sx={{ gap: 0.8 }}>
           <StyledActivityThumbnailContainer sx={{ width: '5.6rem', height: '5.6rem', mr: 0.8 }}>
@@ -76,7 +77,7 @@ export const ActivityListItem = ({
                 <CircularProgress size={24} />
               ) : (
                 <Svg
-                  aria-label={t('reviewToggleButton')}
+                  aria-label={t('toggleSubjectsView')}
                   id={isExpanded ? 'navigate-up' : 'navigate-down'}
                   fill={variables.palette.on_surface_variant}
                 />
