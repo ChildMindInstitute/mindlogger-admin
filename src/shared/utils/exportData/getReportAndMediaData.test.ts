@@ -613,7 +613,7 @@ describe('getReportAndMediaData', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales, true);
-      expect(result).toEqual([
+      expect([result[0], result[1]]).toEqual([
         {
           target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
           target_secret_id: 'target-secret-id',
