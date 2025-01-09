@@ -75,7 +75,11 @@ export const ExpandedView = ({
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     transformOrigin={{ vertical: -6, horizontal: 'right' }}
                     buttonColor="secondary"
-                    menuItems={getActionsMenu(filteredActivityOrFlow, subject)}
+                    menuItems={getActionsMenu({
+                      activityOrFlow: filteredActivityOrFlow,
+                      targetSubject: subject,
+                      teamMemberCanViewData,
+                    })}
                     data-testid={`${dataTestId}-subject-${index}`}
                   />
                 </StyledFlexTopCenter>

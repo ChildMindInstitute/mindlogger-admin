@@ -156,7 +156,7 @@ const AboutParticipant = () => {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: -6, horizontal: 'right' }}
                   buttonColor="secondary"
-                  menuItems={getActionsMenu(activity)}
+                  menuItems={getActionsMenu({ activityOrFlow: activity })}
                   data-testid={`${dataTestId}-${index}`}
                 />
               </ActivityListItem>

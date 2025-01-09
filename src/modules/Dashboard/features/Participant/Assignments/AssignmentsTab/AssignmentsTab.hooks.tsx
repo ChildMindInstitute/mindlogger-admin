@@ -33,7 +33,7 @@ import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 import { SubjectDetails } from 'modules/Dashboard/types';
 
-import { UseAssignmentsTabProps } from './AssignmentsTab.types';
+import { GetActionsMenuParams, UseAssignmentsTabProps } from './AssignmentsTab.types';
 
 export const useAssignmentsTab = ({
   appletId,
@@ -215,7 +215,11 @@ export const useAssignmentsTab = ({
    * the current respondent).
    */
   const getActionsMenu = useCallback(
-    (activityOrFlow: ParticipantActivityOrFlow, targetSubjectArg = targetSubject) => {
+    ({
+      activityOrFlow,
+      targetSubject: targetSubjectArg = targetSubject,
+      teamMemberCanViewData = true,
+    }: GetActionsMenuParams) => {
       const { id, autoAssign, assignments, isFlow, performanceTaskType, status } = activityOrFlow;
 
       // TODO: Remove extra steps below after supportedPlatforms prop is returned by API
@@ -258,6 +262,9 @@ export const useAssignmentsTab = ({
       // this condition after M2-7906 has been completed.
       const isTakeNowDisplayed = canDoTakeNow && !!activities.length;
 
+      const isExportDisabled = !id || !teamMemberCanViewData;
+      const exportDisabledTooltip = !teamMemberCanViewData ? t('subjectDataUnavailable') : '';
+
       let assignTooltip: string | undefined;
       if (status === ActivityAssignmentStatus.Hidden) {
         assignTooltip = isFlow
@@ -288,7 +295,8 @@ export const useAssignmentsTab = ({
             setSelectedTargetSubjectId(targetSubjectArg?.id);
             setShowExportData(true);
           },
-          disabled: !id,
+          disabled: isExportDisabled,
+          tooltip: exportDisabledTooltip,
           icon: <Svg id="export" />,
           title: t('exportData'),
           isDisplayed: canAccessData && !!targetSubjectArg,

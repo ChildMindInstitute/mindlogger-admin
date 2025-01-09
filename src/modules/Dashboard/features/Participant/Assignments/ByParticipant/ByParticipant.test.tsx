@@ -369,5 +369,57 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
       const viewDataButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-view-data`);
       expect(viewDataButton).toBeDisabled();
     });
+
+    it('should default the export data menu item to enabled when visible', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: undefined,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const actionsMenuButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-dots`);
+      await userEvent.click(actionsMenuButton);
+
+      const exportDataMenuItem = screen.getByTestId(`${testId}-export`);
+
+      expect(exportDataMenuItem).toBeEnabled();
+    });
+
+    it('should disable the export data menu item according to API data', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: false,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const actionsMenuButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-dots`);
+      await userEvent.click(actionsMenuButton);
+
+      const exportDataMenuItem = screen.getByTestId(`${testId}-export`);
+
+      expect(exportDataMenuItem).toBeEnabled();
+    });
   });
 });
