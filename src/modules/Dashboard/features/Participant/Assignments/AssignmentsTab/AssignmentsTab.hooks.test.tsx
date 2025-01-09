@@ -158,7 +158,7 @@ const UseAssignmentsHookTest = ({
         </Button>
       )}
       <ActionsMenu
-        menuItems={getActionsMenu(activityOrFlow)}
+        menuItems={getActionsMenu({ activityOrFlow })}
         data-testid={`${testId}-activity-actions`}
       />
 
