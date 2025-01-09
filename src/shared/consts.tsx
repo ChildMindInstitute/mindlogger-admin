@@ -404,11 +404,20 @@ export const enum LookupTableItems {
   Gender_screen = 'gender_screen',
 }
 
-export const enum FinalSubscale {
+enum LegacyFinalSubscale {
   Key = 'finalSubScale',
   FinalSubScaleScore = 'Final SubScale Score',
   OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
 }
+
+enum NewFinalSubscale {
+  Key = 'finalSubScale',
+  FinalSubScaleScore = 'activity_score',
+  OptionalTextForFinalSubScaleScore = 'activity_score_optional_text',
+}
+
+export const getFinalSubscale = (enableDataExportRenaming: boolean) =>
+  enableDataExportRenaming ? NewFinalSubscale : LegacyFinalSubscale;
 
 export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;
 
