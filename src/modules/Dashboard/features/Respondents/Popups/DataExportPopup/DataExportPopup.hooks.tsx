@@ -4,6 +4,7 @@ import { getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { ExportDataResult } from 'shared/types/answer';
 import { isProduction } from 'shared/utils/env';
 import { SessionStorageKeys } from 'shared/utils/storage';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { MultipleDecryptWorkersProps } from './DataExportPopup.types';
 import { DataExportWorkersManager as DataExportWorkersManagerClass } from './DataExportWorkersManager';
@@ -21,6 +22,9 @@ export const useMultipleDecryptWorkers = ({
   const limitRef = useRef(1);
   const finishedPagesRef = useRef<Set<number>>(new Set());
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
+  const {
+    featureFlags: { enableDataExportRenaming },
+  } = useFeatureFlags();
 
   const shouldLogDataInDebugMode =
     !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
@@ -37,6 +41,7 @@ export const useMultipleDecryptWorkers = ({
       setCurrentPage,
       limitRef,
       finishedPagesRef,
+      enableDataExportRenaming,
     ),
   ).current;
 

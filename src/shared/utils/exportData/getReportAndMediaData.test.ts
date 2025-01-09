@@ -150,18 +150,6 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-2',
         name: 'itemName-2',
       },
-      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-      sourceSecretId: 'source-secret-id',
-      sourceUserNickname: 'Mock source user',
-      sourceUserTag: 'Mock Tag',
-      relation: 'admin',
-      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-      targetSecretId: 'target-secret-id',
-      targetUserNickname: 'Mock target user',
-      targetUserTag: 'Mock Tag',
-      inputSubjectId: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
-      inputSecretId: 'input-secret-id',
-      inputUserNickname: 'Mock input user',
     };
     const textUndefinedAnswerItem = {
       ...textItem,
@@ -171,18 +159,6 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-3',
         name: 'itemName-3',
       },
-      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-      sourceSecretId: 'source-secret-id',
-      sourceUserNickname: 'Mock source user',
-      sourceUserTag: 'Mock Tag',
-      relation: 'admin',
-      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-      targetSecretId: 'target-secret-id',
-      targetUserNickname: 'Mock target user',
-      targetUserTag: 'Mock Tag',
-      inputSubjectId: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
-      inputSecretId: 'input-secret-id',
-      inputUserNickname: 'Mock input user',
     };
     const decryptedAnswers = [
       textItem,
@@ -672,6 +648,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         mockedDecryptedEventsForDrawing,
+        false,
       );
       expect(result).toEqual([
         {
@@ -713,8 +690,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -755,8 +732,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });
@@ -781,6 +758,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         events,
+        false,
       );
       expect(result).toEqual([
         {
@@ -822,8 +800,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: null,
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -864,8 +842,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -906,8 +884,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });

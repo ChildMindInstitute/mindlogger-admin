@@ -20,7 +20,7 @@ import {
   MixpanelEventType,
   MixpanelProps,
 } from 'shared/utils';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
@@ -44,6 +44,9 @@ export const DataExportPopup = ({
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
+  const {
+    featureFlags: { enableDataExportRenaming },
+  } = useFeatureFlags();
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -101,6 +104,7 @@ export const DataExportPopup = ({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
           filters,
+          enableDataExportRenaming,
         })(firstPageData);
 
         if (pageLimit > 1) {
@@ -118,6 +122,7 @@ export const DataExportPopup = ({
               getDecryptedAnswers,
               suffix: getExportDataSuffix(page),
               filters,
+              enableDataExportRenaming,
             })(nextPageData);
           }
         }
