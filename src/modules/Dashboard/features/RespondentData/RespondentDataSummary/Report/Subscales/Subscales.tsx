@@ -3,8 +3,9 @@ import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
 import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
-import { FinalSubscale } from 'shared/consts';
+import { getFinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { Subscale } from './Subscale';
@@ -31,6 +32,10 @@ export const Subscales = ({
   flowResponsesIndex,
 }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
+  const {
+    featureFlags: { enableDataExportRenaming },
+  } = useFeatureFlags();
+  const finalSubscale = getFinalSubscale(!!enableDataExportRenaming);
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
     () =>
@@ -50,7 +55,9 @@ export const Subscales = ({
           const calculatedTotalScore =
             item?.subscaleSetting?.calculateTotalScore &&
             activityItems &&
-            calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
+            calcTotalScore(item.subscaleSetting, activityItems, enableDataExportRenaming)?.[
+              finalSubscale.Key
+            ];
 
           if (calculatedTotalScore) {
             acc.latestFinalScore = calculatedTotalScore?.score;
@@ -100,7 +107,7 @@ export const Subscales = ({
           allSubscalesToRender: {},
         },
       ),
-    [answers],
+    [answers, enableDataExportRenaming, finalSubscale],
   );
 
   const currentActivityCompletion =
@@ -166,7 +173,7 @@ export const Subscales = ({
           ? [
               {
                 score: calculatedTotalScore.score,
-                label: FinalSubscale.FinalSubScaleScore,
+                label: finalSubscale.FinalSubScaleScore,
               },
             ]
           : []),
@@ -181,8 +188,8 @@ export const Subscales = ({
     ...(finalScores?.length
       ? [
           {
-            id: FinalSubscale.FinalSubScaleScore,
-            name: FinalSubscale.FinalSubScaleScore,
+            id: finalSubscale.FinalSubScaleScore,
+            name: finalSubscale.FinalSubScaleScore,
             activityCompletions: finalScores,
           },
         ]
