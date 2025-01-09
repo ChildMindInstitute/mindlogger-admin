@@ -326,6 +326,28 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
       expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
     });
 
+    it('should default the View Data button to enabled', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: undefined,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const viewDataButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-view-data`);
+      expect(viewDataButton).toBeEnabled();
+    });
+
     it('should disable the View Data button according to the API data', async () => {
       mockGetRequestResponses({
         ...getRequestResponses,

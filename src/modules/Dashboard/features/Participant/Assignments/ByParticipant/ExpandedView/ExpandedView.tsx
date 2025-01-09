@@ -22,7 +22,10 @@ export const ExpandedView = ({
   const rows: Row[] = useMemo(
     () =>
       targetSubjects.map(
-        ({ submissionCount, currentlyAssigned, teamMemberCanViewData, ...subject }, index) => ({
+        (
+          { submissionCount, currentlyAssigned, teamMemberCanViewData = true, ...subject },
+          index,
+        ) => ({
           id: {
             value: subject.id,
             content: () => <ParticipantSnippet {...subject} secretId={subject.secretUserId} />,
