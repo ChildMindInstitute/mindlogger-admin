@@ -507,7 +507,7 @@ enum LegacyFinalSubscale {
 enum NewFinalSubscale {
   Key = 'finalSubScale',
   FinalSubScaleScore = 'activity_score',
-  OptionalTextForFinalSubScaleScore = 'activity_score_optional_text',
+  OptionalTextForFinalSubScaleScore = 'activity_score_lookup_text',
 }
 
 export const getFinalSubscale = (enableDataExportRenaming: boolean) =>

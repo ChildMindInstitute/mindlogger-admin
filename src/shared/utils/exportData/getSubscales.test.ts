@@ -115,7 +115,7 @@ const itemsOnlyLegacyFilledSubscaleScores = {
 };
 const newFilledSubscaleScores = {
   activity_score: 5,
-  activity_score_optional_text: 'Description #2 for range 4~20',
+  activity_score_lookup_text: 'Description #2 for range 4~20',
   'subscale_name_ss-1': 5,
   'subscale_name_ss-2': 6,
 };
