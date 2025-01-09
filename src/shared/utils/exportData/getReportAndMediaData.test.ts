@@ -399,14 +399,19 @@ describe('getReportAndMediaData', () => {
         },
       ]);
     });
-    test('should return an array with items and subscale calculation in first item', () => {
+    test('should return an array with items and subscale calculation in first item (legacy naming)', () => {
       const rawAnswersObject = getObjectFromList(
         mockedDecryptedAnswersWithSubscales,
         (item) => item.activityItem.name,
       );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales);
+      const result = getReportData(
+        [],
+        rawAnswersObject,
+        mockedDecryptedAnswersWithSubscales,
+        false,
+      );
       expect(result).toEqual([
         {
           'Final SubScale Score': 5,
@@ -580,6 +585,63 @@ describe('getReportAndMediaData', () => {
           response: '25',
           reviewing_id: '',
           secret_user_id: 'respondentSecretId',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          source_user_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          source_user_secret_id: 'source-secret-id',
+          source_user_nickname: 'Mock source user',
+          source_user_relation: 'admin',
+          source_user_tag: 'Mock Tag',
+          target_user_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+          target_user_secret_id: 'target-secret-id',
+          target_user_nickname: 'Mock target user',
+          target_user_tag: 'Mock Tag',
+          input_user_subject_id: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
+          input_user_secret_id: 'input-secret-id',
+          input_user_nickname: 'Mock input user',
+          version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
+          legacy_user_id: '',
+        },
+      ]);
+    });
+    test('should return an array with items and subscale calculation (new naming)', () => {
+      const rawAnswersObject = getObjectFromList(
+        mockedDecryptedAnswersWithSubscales,
+        (item) => item.activityItem.name,
+      );
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getReportData(
+        [],
+        rawAnswersObject,
+        mockedDecryptedAnswersWithSubscales,
+        true,
+      )[0];
+      expect(result).toEqual([
+        {
+          activity_score: 5,
+          activity_score_optional_text: 'Description #2 for range 4~20',
+          activity_flow_submission_id: '',
+          activity_end_time: '1698673935278',
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'single',
+          item_id: 'e3d95ec0-32cd-4dff-8f81-6a0debfe7099',
+          options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
+          prompt: 'single',
+          rawScore: 9,
+          response: 'value: 2',
+          reviewing_id: '',
+          secret_user_id: 'respondentSecretId',
+          'subscale_name_ss-1': 5,
+          'subscale_name_ss-2': 6,
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           source_user_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
           source_user_secret_id: 'source-secret-id',
