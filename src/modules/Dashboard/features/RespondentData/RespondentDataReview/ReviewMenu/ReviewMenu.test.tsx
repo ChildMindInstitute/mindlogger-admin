@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { PreloadedState } from '@reduxjs/toolkit';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
-  mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedFullParticipant1,
@@ -14,6 +14,7 @@ import {
 } from 'shared/mock';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
+import { RootState } from 'redux/store';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { ReviewMenu } from './ReviewMenu';
@@ -22,7 +23,7 @@ import { ReviewMenuProps } from './ReviewMenu.types';
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
 const routePath = page.appletParticipantDataReview;
-const preloadedState = {
+const preloadedState: PreloadedState<RootState> = {
   workspaces: {
     workspaces: initialStateData,
     currentWorkspace: {
@@ -35,7 +36,6 @@ const preloadedState = {
         [mockedAppletId]: [Roles.Manager],
       },
     },
-    applet: mockedApplet,
     workspacesRoles: initialStateData,
   },
   users: {
@@ -61,6 +61,7 @@ const preloadedState = {
           userId: null,
           firstName: 'John',
           lastName: 'Doe',
+          roles: [],
         },
       },
     },

@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ParticipantDropdownOption } from 'modules/Dashboard/components';
+import { Roles } from 'shared/consts';
 
 import { TakeNowDropdown } from './TakeNowDropdown';
 
@@ -78,11 +79,12 @@ describe('TakeNowDropdown', () => {
   });
 
   test('Uses value if provided', () => {
-    const testValue = {
+    const testValue: ParticipantDropdownOption = {
       id: 'id',
       nickname: 'nickname',
       secretId: 'secretId',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByDisplayValue } = renderWithProviders(
@@ -104,10 +106,11 @@ describe('TakeNowDropdown', () => {
   });
 
   test('Renders value correctly without nickname', () => {
-    const testValue = {
+    const testValue: ParticipantDropdownOption = {
       id: 'id',
       secretId: 'secretId',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByDisplayValue } = renderWithProviders(
@@ -123,7 +126,7 @@ describe('TakeNowDropdown', () => {
       />,
     );
 
-    expect(queryByDisplayValue(testValue.secretId)).toBeInTheDocument();
+    expect(queryByDisplayValue(testValue.secretId!)).toBeInTheDocument();
   });
 
   test('Does not show warning message when the value is not present', () => {
@@ -150,6 +153,7 @@ describe('TakeNowDropdown', () => {
       userId: 'user-id',
       tag: 'Team',
       isTeamMember: true,
+      roles: [Roles.Owner, Roles.Respondent],
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -175,6 +179,7 @@ describe('TakeNowDropdown', () => {
       userId: 'user-id',
       tag: 'Teacher',
       isTeamMember: false,
+      roles: [Roles.Respondent],
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -199,6 +204,7 @@ describe('TakeNowDropdown', () => {
       id: 'subject-id',
       tag: 'Child',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -223,6 +229,7 @@ describe('TakeNowDropdown', () => {
       id: 'subject-id',
       tag: 'Child',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByTestId } = renderWithProviders(
@@ -258,6 +265,7 @@ describe('TakeNowDropdown', () => {
         userId: 'user-id',
         tag: 'Team',
         isTeamMember: true,
+        roles: [Roles.Owner, Roles.Respondent],
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -283,6 +291,7 @@ describe('TakeNowDropdown', () => {
         userId: 'user-id',
         tag: 'Teacher',
         isTeamMember: false,
+        roles: [Roles.Respondent],
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -307,6 +316,7 @@ describe('TakeNowDropdown', () => {
         id: 'subject-id',
         tag: 'Child',
         isTeamMember: false,
+        roles: [],
       };
 
       const { queryByTestId } = renderWithProviders(
@@ -331,6 +341,7 @@ describe('TakeNowDropdown', () => {
         id: 'subject-id',
         tag: 'Child',
         isTeamMember: false,
+        roles: [],
       };
 
       const { queryByTestId } = renderWithProviders(

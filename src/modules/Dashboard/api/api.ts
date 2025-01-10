@@ -93,6 +93,7 @@ import {
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
+import { SubjectDetailsWithRoles } from '../types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -913,7 +914,10 @@ export const getRespondentDetailsApi = (
     signal,
   });
 
-export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSignal) =>
+export const getSubjectDetailsApi = (
+  { subjectId }: SubjectId,
+  signal?: AbortSignal,
+): Promise<AxiosResponse<SubjectDetailsWithRoles>> =>
   authApiClient.get(`/subjects/${subjectId}`, {
     signal,
   });

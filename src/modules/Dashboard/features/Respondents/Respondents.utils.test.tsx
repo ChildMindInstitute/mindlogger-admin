@@ -4,8 +4,9 @@ import { variables } from 'shared/styles';
 import { ParticipantTag } from 'shared/consts';
 
 import { getRespondentActions, getHeadCells } from './Respondents.utils';
+import { ParticipantDetail } from '../../types';
 
-const applets = [
+const applets: ParticipantDetail[] = [
   {
     appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
     appletDisplayName: 'Applet 1',
@@ -19,6 +20,7 @@ const applets = [
     subjectLastName: 'Doe',
     subjectCreatedAt: '2023-09-26T12:11:46.162083',
     invitation: null,
+    roles: [],
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -33,6 +35,7 @@ const applets = [
     subjectLastName: 'Doe',
     subjectCreatedAt: '2023-09-26T12:11:46.162083',
     invitation: null,
+    roles: [],
   },
 ];
 

@@ -4,8 +4,8 @@ import { Box, Button } from '@mui/material';
 
 import {
   DashboardTableProps,
-  FullTeamSearchType,
   ParticipantDropdownOption,
+  SearchResultUserTypes,
 } from 'modules/Dashboard/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Svg } from 'shared/components';
@@ -75,9 +75,9 @@ export const AssignmentsTable = ({
 
   const handleRespondentSearch = useCallback(
     async (query: string) => {
-      const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = ['team'];
+      const participantSearchTypes: SearchResultUserTypes = { team: true };
       if (enableParticipantMultiInformant) {
-        participantSearchTypes.push('full-participant');
+        participantSearchTypes.fullParticipant = true;
       }
 
       return handleSearch(query, participantSearchTypes);
@@ -87,7 +87,10 @@ export const AssignmentsTable = ({
 
   const handleSubjectSearch = useCallback(
     async (query: string, selfOption: ParticipantDropdownOption | null) => {
-      const results = await handleSearch(query, ['any-participant']);
+      const results = await handleSearch(query, {
+        fullParticipant: true,
+        limitedParticipant: true,
+      });
 
       if (selfOption) {
         // Filter out self option from search results as it's already included by the base options.

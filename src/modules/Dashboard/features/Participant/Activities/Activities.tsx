@@ -191,6 +191,7 @@ export const Activities = () => {
                   nickname: subject.result.nickname,
                   tag: subject.result.tag,
                   isTeamMember: subject.result.tag === 'Team',
+                  roles: subject.result.roles,
                 };
               }
 

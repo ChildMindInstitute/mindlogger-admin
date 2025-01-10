@@ -1,7 +1,9 @@
 import { screen } from '@testing-library/react';
 
+import { SubjectDetailsWithRoles } from 'modules/Dashboard/types';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { getRespondentName } from 'shared/utils';
+import { Roles } from 'shared/consts';
 
 import { ResponsesSummary } from './ResponsesSummary';
 import { ResponsesSummaryProps } from './ResponsesSummary.types';
@@ -10,7 +12,7 @@ import { EMPTY_IDENTIFIER } from './ResponsesSummary.const';
 const dataTestId = 'review';
 const mockedIdentifier = 'ident-1';
 const mockedVersion = 'version-111.0.25';
-const sourceSubject = {
+const sourceSubject: SubjectDetailsWithRoles = {
   secretUserId: 'secret123',
   nickname: 'John Doe',
   firstName: 'John',
@@ -18,6 +20,7 @@ const sourceSubject = {
   id: '123',
   lastSeen: '2024-04-10T10:00:00',
   userId: '123',
+  roles: [Roles.Respondent],
 };
 const renderComponent = (props?: Partial<ResponsesSummaryProps>) =>
   renderWithProviders(

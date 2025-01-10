@@ -7,17 +7,17 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedEncryption,
-  mockedLimitedParticipant,
-  mockedOwnerId,
   mockedFullParticipant1,
   mockedFullParticipant2,
+  mockedLimitedParticipant,
+  mockedOwnerId,
   mockedUserData,
 } from 'shared/mock';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ParticipantTag, Roles } from 'shared/consts';
-import { ParticipantStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { ManagersData } from 'modules/Dashboard/features';
 
@@ -36,15 +36,13 @@ const mockAssignments = [
   },
 ];
 
-const mockedOwnerRespondent = {
+const mockedOwnerRespondent: Participant = {
   id: mockedUserData.id,
   nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
   secretIds: ['mockedOwnerSecretId'],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-  role: Roles.Owner,
   details: [
     {
       appletId: mockedAppletId,
@@ -61,6 +59,7 @@ const mockedOwnerRespondent = {
       subjectLastName: 'Doe',
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
+      roles: [Roles.Owner, Roles.Respondent],
     },
   ],
   status: ParticipantStatus.Invited,
@@ -80,10 +79,10 @@ const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>
 const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
   result: [
     {
-      id: mockedOwnerRespondent.id,
+      id: mockedOwnerRespondent.id!,
       firstName: mockedUserData.firstName,
       lastName: mockedUserData.lastName,
-      email: mockedOwnerRespondent.email,
+      email: mockedOwnerRespondent.email!,
       roles: [Roles.Owner],
       lastSeen: new Date().toDateString(),
       isPinned: mockedOwnerRespondent.isPinned,

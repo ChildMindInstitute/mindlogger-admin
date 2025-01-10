@@ -87,6 +87,7 @@ export const RespondentDataHeader = ({
         secretId: subject.secretUserId,
         nickname: subject.nickname,
         isTeamMember: subject.tag === 'Team',
+        roles: subject.roles,
       },
     });
   };
