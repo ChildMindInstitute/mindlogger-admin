@@ -1,17 +1,23 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Applet } from 'api';
+import {
+  ActivityAssignmentStatus,
+  Applet,
+  ParticipantActivityOrFlow,
+} from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
-import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { Manager, Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
+import { Manager, Participant, ParticipantStatus, SubjectDetails } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
   CalculationType,
   ConditionalLogicMatch,
+  ConditionType,
   ItemResponseType,
   ParticipantTag,
+  PerfTaskType,
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
@@ -23,10 +29,19 @@ import {
   MultiSelectItem,
   SingleApplet,
   SingleSelectItem,
+  SliderItem,
   SubscaleSetting,
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
 import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { Encryption } from './utils';
+import {
+  defaultMultiSelectionConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
+} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -40,7 +55,7 @@ export const mockedUserData = {
   id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
 };
 
-export const mockedEncryption = {
+export const mockedEncryption: Encryption = {
   accountId: 'c48b275d-db4b-4f79-8469-9198b45985d3',
   base: '[2]',
   prime:
@@ -55,18 +70,18 @@ export const mockedApplet = {
   encryption: mockedEncryption,
 } as Applet;
 
-export const mockedOwnerSubject = {
+export const mockedOwnerSubject: SubjectDetails = {
   id: '123e4567-e89b-12d3-a456-426614174000',
   secretUserId: 'mockedOwnerSecretId',
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
   lastSeen: null,
   tag: 'Team' as ParticipantTag,
-  userId: null,
+  userId: mockedUserData.id,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
 };
 
-export const mockedOwnerRespondent = {
+export const mockedOwnerParticipant = {
   id: mockedUserData.id,
   nicknames: [mockedOwnerSubject.nickname],
   secretIds: [mockedOwnerSubject.secretUserId],
@@ -93,8 +108,37 @@ export const mockedOwnerRespondent = {
       invitation: null,
     },
   ],
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: mockedUserData.email,
+};
+
+export const mockedOwnerManager: Manager = {
+  id: mockedOwnerParticipant.id,
+  firstName: mockedUserData.firstName,
+  lastName: mockedUserData.lastName,
+  email: mockedOwnerParticipant.email,
+  roles: [Roles.Owner],
+  lastSeen: new Date().toDateString(),
+  isPinned: mockedOwnerParticipant.isPinned,
+  applets: [
+    {
+      id: mockedApplet.id,
+      displayName: mockedApplet.displayName,
+      image: '',
+      roles: [
+        {
+          accessId: '912e17b8-195f-4685-b77b-137539b9054d',
+          role: Roles.Owner,
+        },
+      ],
+      encryption: mockedEncryption,
+    },
+  ],
+  title: null,
+  createdAt: new Date().toISOString(),
+  titles: [],
+  status: 'approved',
+  invitationKey: null,
 };
 
 export const mockedIdentifiers = [
@@ -147,48 +191,59 @@ export const mockedCurrentWorkspace = {
     workspaceName: 'name',
   },
 };
-export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
-export const mockedSubjectId1 = 'subject-id-987';
-export const mockedRespondentDetails: RespondentDetail = {
-  appletId: mockedAppletId,
-  appletDisplayName: 'Mocked Applet',
-  appletImage: '',
-  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-  respondentNickname: 'Mocked Respondent',
-  respondentSecretId: 'mockedSecretId',
-  hasIndividualSchedule: false,
-  encryption: mockedEncryption,
-  subjectId: mockedSubjectId1,
-  subjectTag: 'Child' as ParticipantTag,
-  subjectFirstName: 'John',
-  subjectLastName: 'Doe',
-  subjectCreatedAt: '2023-09-26T12:11:46.162083',
-  invitation: null,
+export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedFullSubjectId1 = 'subject-id-987';
+export const mockedFullSubject1: SubjectDetails = {
+  id: mockedFullSubjectId1,
+  secretUserId: 'mockedSecretId',
+  nickname: 'Mocked Respondent',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: mockedFullParticipantId1,
+  firstName: 'John',
+  lastName: 'Doe',
 };
-export const mockedRespondent: Respondent = {
-  id: mockedRespondentId,
-  nicknames: ['Mocked Respondent'],
-  secretIds: ['mockedSecretId'],
+export const mockedFullParticipant1: Participant = {
+  id: mockedFullParticipantId1,
+  nicknames: [mockedFullSubject1.nickname],
+  secretIds: [mockedFullSubject1.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  details: [mockedRespondentDetails],
-  status: RespondentStatus.Invited,
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: 'Mocked Applet',
+      appletImage: '',
+      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+      respondentNickname: mockedFullSubject1.nickname,
+      respondentSecretId: mockedFullSubject1.secretUserId,
+      hasIndividualSchedule: false,
+      encryption: mockedEncryption,
+      subjectId: mockedFullSubjectId1,
+      subjectTag: mockedFullSubject1.tag,
+      subjectFirstName: mockedFullSubject1.firstName,
+      subjectLastName: mockedFullSubject1.lastName,
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      invitation: null,
+    },
+  ],
+  status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
 };
 
-export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
-export const mockedSubjectId2 = 'subject-id-123';
-export const mockedRespondent2: Respondent = {
-  id: mockedRespondentId2,
+export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
+export const mockedFullSubjectId2 = 'subject-id-123';
+export const mockedFullParticipant2: Participant = {
+  id: mockedFullParticipantId2,
   nicknames: ['Test Respondent'],
   secretIds: ['testSecretId'],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.Invited,
+  status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
   details: [
     {
@@ -200,7 +255,7 @@ export const mockedRespondent2: Respondent = {
       respondentSecretId: 'testSecretId',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
-      subjectId: mockedSubjectId2,
+      subjectId: mockedFullSubjectId2,
       subjectTag: 'Child' as ParticipantTag,
       subjectFirstName: 'John',
       subjectLastName: 'Doe',
@@ -211,38 +266,47 @@ export const mockedRespondent2: Respondent = {
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';
-export const mockedLimitedRespondent = {
+export const mockedLimitedSubject: SubjectDetails = {
+  id: mockedLimitedSubjectId,
+  secretUserId: 'limited-1',
+  nickname: 'Limited 1',
+  lastSeen: null,
+  tag: 'Child' as ParticipantTag,
+  userId: null,
+  firstName: 'Limited',
+  lastName: 'One',
+};
+export const mockedLimitedParticipant = {
   id: null,
-  nicknames: ['Limited 1'],
-  secretIds: ['limited-1'],
+  nicknames: [mockedLimitedSubject.nickname],
+  secretIds: [mockedLimitedSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  status: RespondentStatus.NotInvited,
+  status: ParticipantStatus.NotInvited,
   email: null,
-  subjects: [mockedLimitedSubjectId],
   details: [
     {
       appletId: mockedAppletId,
       appletDisplayName: mockedApplet.displayName,
       appletImage: '',
       accessId: null,
-      respondentNickname: 'Limited 1',
-      respondentSecretId: 'limited-1',
+      respondentNickname: mockedLimitedSubject.nickname,
+      respondentSecretId: mockedLimitedSubject.secretUserId,
       hasIndividualSchedule: false,
       encryption: mockedApplet.encryption,
       subjectId: mockedLimitedSubjectId,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'Limited',
-      subjectLastName: 'One',
+      subjectTag: mockedLimitedSubject.tag,
+      subjectFirstName: mockedLimitedSubject.firstName,
+      subjectLastName: mockedLimitedSubject.lastName,
       subjectCreatedAt: '2024-07-12T13:07:25.455726',
       invitation: null,
     },
   ],
 };
 
-export const mockedAppletData = {
+export const mockedAppletData: SingleApplet = {
   displayName: 'dataviz',
   description: {
     en: '',
@@ -253,8 +317,6 @@ export const mockedAppletData = {
   image: '',
   watermark: '',
   themeId: '9b023afd-e5f9-403c-b154-fc8f35fcf3ab',
-  link: null,
-  requireLogin: true,
   pinnedAt: null,
   retentionPeriod: null,
   retentionType: null,
@@ -290,14 +352,13 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
       items: [
         {
           question: {
             en: 'ss',
           },
-          responseType: 'singleSelect',
+          responseType: ItemResponseType.SingleSelection,
           responseValues: {
             options: [
               {
@@ -314,7 +375,7 @@ export const mockedAppletData = {
               },
             ],
           },
-          config: {},
+          config: defaultSingleSelectionConfig,
           name: 'Item1',
           id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
           order: 1,
@@ -323,7 +384,7 @@ export const mockedAppletData = {
           question: {
             en: 'ms',
           },
-          responseType: 'multiSelect',
+          responseType: ItemResponseType.MultipleSelection,
           responseValues: {
             options: [
               {
@@ -346,14 +407,14 @@ export const mockedAppletData = {
               },
             ],
           },
-          config: {},
+          config: defaultMultiSelectionConfig,
           name: 'Item2',
           conditionalLogic: {
             match: ConditionalLogicMatch.Any,
             conditions: [
               {
                 itemName: 'Item1',
-                type: 'EQUAL_TO_OPTION',
+                type: ConditionType.EqualToOption,
                 payload: {
                   optionValue: '0',
                 },
@@ -367,21 +428,21 @@ export const mockedAppletData = {
           question: {
             en: 'slider',
           },
-          responseType: 'slider',
+          responseType: ItemResponseType.Slider,
           responseValues: {
             minLabel: 'min',
             maxLabel: 'max',
             minValue: 1,
             maxValue: 4,
           },
-          config: {},
+          config: defaultSliderConfig,
           name: 'Item3',
           conditionalLogic: {
-            match: 'any',
+            match: ConditionalLogicMatch.Any,
             conditions: [
               {
                 itemName: 'Item2',
-                type: 'NOT_INCLUDES_OPTION',
+                type: ConditionType.NotIncludesOption,
                 payload: {
                   optionValue: '0',
                 },
@@ -395,9 +456,9 @@ export const mockedAppletData = {
           question: {
             en: 'time',
           },
-          responseType: 'time',
+          responseType: ItemResponseType.Time,
           responseValues: null,
-          config: {},
+          config: defaultTimeConfig,
           name: 'Item4',
           id: '4b334484-947b-4287-941c-ed4cbf0dc955',
           order: 4,
@@ -406,9 +467,9 @@ export const mockedAppletData = {
           question: {
             en: 'text',
           },
-          responseType: 'text',
+          responseType: ItemResponseType.Text,
           responseValues: null,
-          config: {},
+          config: defaultTextConfig,
           name: 'Item5',
           id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
           order: 5,
@@ -436,12 +497,98 @@ export const mockedAppletData = {
         reports: [],
       },
       subscaleSetting: null,
-      reportIncludedItemName: null,
       key: uuidv4(),
       items: [],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
+    },
+    {
+      name: 'Mobile-Only Activity',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      id: '66a4ebe4-3d7f-485c-8293-093cabf29fa4',
+      items: [
+        {
+          question: {
+            en: 'abtrails',
+          },
+          responseType: ItemResponseType.ABTrails,
+          responseValues: null,
+          config: {
+            deviceType: DeviceType.Mobile,
+            orderName: OrderName.First,
+          },
+          name: 'Item1',
+          id: '5b334484-947b-4287-941c-ed4cbf0dc956',
+          order: 1,
+        },
+      ],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: false,
+      performanceTaskType: null,
+    },
+    {
+      name: 'Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      id: '76a4ebe4-3d7f-485c-8293-093cabf29fa5',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: PerfTaskType.Flanker,
+    },
+    {
+      name: 'Uneditable Performance Task',
+      description: {
+        en: '',
+      },
+      splashScreen: '',
+      image: '',
+      showAllAtOnce: false,
+      isSkippable: false,
+      isReviewable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [],
+      },
+      subscaleSetting: null,
+      id: '86a4ebe4-3d7f-485c-8293-093cabf29fa6',
+      items: [],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: true,
+      performanceTaskType: PerfTaskType.ABTrailsMobile,
     },
   ],
   activityFlows: [
@@ -452,8 +599,6 @@ export const mockedAppletData = {
       },
       isSingleReport: false,
       hideBadge: false,
-      reportIncludedActivityName: null,
-      reportIncludedItemName: null,
       isHidden: false,
       id: 'c109d25c-7ecc-4dae-b8c9-7334bc427c34',
       items: [
@@ -473,8 +618,6 @@ export const mockedAppletData = {
       },
       isSingleReport: false,
       hideBadge: false,
-      reportIncludedActivityName: null,
-      reportIncludedItemName: null,
       isHidden: false,
       key: uuidv4(),
       items: [
@@ -488,6 +631,8 @@ export const mockedAppletData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
@@ -509,7 +654,7 @@ export const mockedManager: Manager = {
         {
           accessId: '17ba7d95-f766-42ae-9ce6-2f8fcc3l24a',
           role: Roles.Reviewer,
-          reviewerSubjects: [mockedSubjectId1],
+          reviewerSubjects: [mockedFullSubjectId1],
         },
       ],
       encryption: mockedEncryption,
@@ -521,7 +666,10 @@ export const mockedManager: Manager = {
   invitationKey: null,
 };
 
-export const mockedSingleSelectFormValues: Omit<ItemFormValues, 'id'> & { id: string } = {
+export const mockedSingleSelectFormValues: Omit<
+  SingleSelectItem<ItemFormValuesCommonType>,
+  'id'
+> & { id: string } = {
   id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
   name: 'Item1',
   responseType: ItemResponseType.SingleSelection,
@@ -591,10 +739,12 @@ export const mockedMultiSelectFormValues = {
   },
 };
 
-export const mockedSliderFormValues = {
+export const mockedSliderFormValues: Omit<SliderItem<ItemFormValuesCommonType>, 'id'> & {
+  id: string;
+} = {
   id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
   name: 'Item3',
-  responseType: 'slider',
+  responseType: ItemResponseType.Slider,
   responseValues: {
     minLabel: 'min',
     maxLabel: 'max',
@@ -609,6 +759,14 @@ export const mockedSliderFormValues = {
     showTickMarks: false,
     showTickLabels: false,
     continuousSlider: false,
+    removeBackButton: false,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    timer: 0,
+    skippableItem: false,
   },
 };
 
@@ -952,6 +1110,11 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+  image: '',
+  watermark: '',
+  streamEnabled: false,
+  streamIpAddress: null,
+  streamPort: null,
 };
 
 export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType> = {
@@ -3104,7 +3267,7 @@ export const mockedAlert = {
   image:
     'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
   workspace: 'Test ML',
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
 };
 
 export const mockedAppletSummaryData = [
@@ -3286,3 +3449,146 @@ export const lastAssessment = [
     order: 1,
   },
 ] as Item[];
+
+const mockParticipantActivityBase = {
+  id: mockedAppletData.activities[0].id as string,
+  activityIds: null,
+  name: mockedAppletData.activities[0].name,
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockParticipantActivities: Record<string, ParticipantActivityOrFlow> = {
+  autoAssignActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  mobileOnlyActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[2].id as string, // Mobile-only activity in mockedAppletData
+    name: mockedAppletData.activities[2].name,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  performanceTask: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[3].id as string, // Performance task in mockedAppletData
+    name: mockedAppletData.activities[3].name,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: mockedAppletData.activities[3].performanceTaskType as PerfTaskType,
+  },
+  uneditablePerformanceTask: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[4].id as string, // Uneditable performance task in mockedAppletData
+    name: mockedAppletData.activities[4].name,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+    isPerformanceTask: true,
+    performanceTaskType: mockedAppletData.activities[4].performanceTaskType as PerfTaskType,
+  },
+  manualOwnerFullAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedFullSubject1,
+      },
+    ],
+  },
+  manualOwnerLimitedAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a2',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  manualMultipleAssignedActivity: {
+    ...mockParticipantActivityBase,
+    isFlow: false,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: false,
+    assignments: [
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedFullSubject1,
+      },
+      {
+        id: 'a1',
+        activityId: mockedAppletData.activities[0].id as string,
+        activityFlowId: null,
+        respondentSubject: mockedOwnerSubject,
+        targetSubject: mockedLimitedSubject,
+      },
+    ],
+  },
+  inactiveActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[2].id as string,
+    name: 'Inactive Activity',
+    isFlow: false,
+    status: ActivityAssignmentStatus.Inactive,
+    autoAssign: false,
+  },
+  hiddenActivity: {
+    ...mockParticipantActivityBase,
+    id: mockedAppletData.activities[3].id as string,
+    name: 'Hidden Activity',
+    isFlow: false,
+    status: ActivityAssignmentStatus.Hidden,
+    autoAssign: true,
+  },
+};
+
+const mockParticipantFlowBase = {
+  id: mockedAppletData.activityFlows[0].id as string,
+  activityIds: mockedAppletData.activityFlows[0].items?.map((item) => item.id) as string[],
+  name: mockedAppletData.activityFlows[0].name,
+  description: '',
+  images: [],
+  isPerformanceTask: false,
+  performanceTaskType: null,
+  assignments: [],
+};
+
+export const mockParticipantFlows: Record<string, ParticipantActivityOrFlow> = {
+  autoAssignFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    status: ActivityAssignmentStatus.Active,
+    autoAssign: true,
+  },
+  hiddenFlow: {
+    ...mockParticipantFlowBase,
+    isFlow: true,
+    name: 'Auto-assign Flow',
+    status: ActivityAssignmentStatus.Hidden,
+    autoAssign: true,
+  },
+};

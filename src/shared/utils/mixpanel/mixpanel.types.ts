@@ -461,7 +461,7 @@ export type ConfirmAssignActivityOrFlowEvent = WithAppletId<{
   [MixpanelProps.FlowCount]?: number;
 }>;
 
-export type StartUnAssignActivityOrFlowEvent = WithAppletId<{
+export type StartUnassignActivityOrFlowEvent = WithAppletId<{
   action: MixpanelEventType.StartUnassignActivityOrFlow;
   [MixpanelProps.ActivityId]?: string;
   [MixpanelProps.ActivityFlowId]?: string;
@@ -542,5 +542,5 @@ export type MixpanelEvent =
   | ScheduleImportClickEvent
   | StartAssignActivityOrFlowEvent
   | ConfirmAssignActivityOrFlowEvent
-  | StartUnAssignActivityOrFlowEvent
+  | StartUnassignActivityOrFlowEvent
   | ConfirmUnAssignActivityOrFlowEvent;

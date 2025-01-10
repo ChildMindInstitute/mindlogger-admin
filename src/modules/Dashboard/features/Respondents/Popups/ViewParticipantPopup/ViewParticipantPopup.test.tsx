@@ -3,11 +3,11 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
-  mockedRespondentDetails,
-  mockedRespondentId,
+  mockedFullParticipantId1,
   mockedOwnerId,
-  mockedSubjectId1,
+  mockedFullSubjectId1,
   mockedAppletId,
+  mockedFullParticipant1,
 } from 'shared/mock';
 import { page } from 'resources';
 
@@ -25,10 +25,10 @@ const mockedGeneratePath = jest.mocked(generatePath);
 const setChosenAppletDataMock = jest.fn();
 const setPopupVisibleMock = jest.fn();
 const chosenAppletDataMock = {
-  ...mockedRespondentDetails,
-  respondentId: mockedRespondentId,
+  ...mockedFullParticipant1.details[0],
+  respondentId: mockedFullParticipantId1,
   ownerId: mockedOwnerId,
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
 };
 const tableRowsMock = [
   {
@@ -91,7 +91,7 @@ describe('ViewParticipantPopup', () => {
 
     expect(mockedGeneratePath).toBeCalledWith(page.appletParticipantDetails, {
       appletId: mockedAppletId,
-      subjectId: mockedSubjectId1,
+      subjectId: mockedFullSubjectId1,
     });
     expect(navigateMock).toBeCalledTimes(1);
   });

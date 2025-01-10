@@ -109,3 +109,12 @@ export const Tooltip = ({
     </StyledTooltip>
   );
 };
+
+export const OptionalTooltipWrapper = ({ children, tooltipTitle, ...props }: TooltipProps) =>
+  tooltipTitle ? (
+    <Tooltip tooltipTitle={tooltipTitle} {...props}>
+      {children}
+    </Tooltip>
+  ) : (
+    children
+  );

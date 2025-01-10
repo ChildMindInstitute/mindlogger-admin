@@ -1,12 +1,26 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { v4 as uuid } from 'uuid';
 
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
-import { mockedSingleSelectFormValues, mockedSliderFormValues } from 'shared/mock';
-import { CalculationType } from 'shared/consts';
+import { mockedAppletId, mockedSingleSelectFormValues, mockedSliderFormValues } from 'shared/mock';
+import { CalculationType, ScoreReportType, SubscaleTotalScore } from 'shared/consts';
+import {
+  ActivityFormValues,
+  AppletFormValues,
+  ItemFormValuesCommonType,
+} from 'modules/Builder/types';
+import {
+  ActivitySettingsSubscale,
+  ScoreReport,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleSelectItem,
+} from 'shared/state';
+import { getEntityKey } from 'shared/utils';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ScoreContent } from './ScoreContent';
+import { ScoreContentProps } from './ScoreContent.types';
 
 const items = [
   {
@@ -39,42 +53,89 @@ const tableItems = [
 ];
 
 const dataTestid = 'report-score-content-name';
-const commonProps = {
-  name: 'activities.0.scoresAndReports.reports.0',
+const currentActivityIndex = '0';
+const fieldName = `activities.${currentActivityIndex}`;
+
+const commonProps: ScoreContentProps = {
+  name: `${fieldName}.scoresAndReports.reports.0`,
   title: 'Score 1',
   index: 0,
   items,
   tableItems,
   scoreItems,
+  isStaticActive: false,
   'data-testid': dataTestid,
 };
-const formValues = {
-  activities: [
-    {
-      name: 'New Activity#1',
-      scoresAndReports: {
-        generateReport: true,
-        showScoreSummary: true,
-        reports: [
-          {
-            type: 'score',
-            name: 'score1',
-            id: 'sumScore_score1',
-            calculationType: 'sum',
-            itemsScore: [mockedSingleSelectFormValues.id],
-            message: 'score1',
-            itemsPrint: [],
-            key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
-            showMessage: true,
-            printItems: false,
-          },
-        ],
-      },
-    },
-  ],
+
+const reportScore: ScoreReport = {
+  type: ScoreReportType.Score,
+  scoringType: 'raw_score',
+  name: 'score1',
+  id: 'sumScore_score1',
+  calculationType: CalculationType.Sum,
+  itemsScore: [mockedSingleSelectFormValues.id],
+  message: 'score1',
+  itemsPrint: [],
+  key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+  showMessage: true,
+  printItems: false,
 };
 
+const activity: ActivityFormValues = {
+  id: uuid(),
+  name: 'New Activity#1',
+  description: '',
+  items: [],
+  scoresAndReports: {
+    generateReport: true,
+    showScoreSummary: true,
+    reports: [reportScore],
+  },
+};
+
+const formValues: AppletFormValues = {
+  displayName: '',
+  description: '',
+  about: '',
+  image: '',
+  watermark: '',
+  activities: [activity],
+  activityFlows: [],
+  streamEnabled: false,
+  streamIpAddress: null,
+  streamPort: null,
+};
+
+const mockUseNavigate = jest.fn();
+const mockUseParams = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUseNavigate,
+  useParams: () => mockUseParams(),
+}));
+
+jest.mock('modules/Builder/hooks', () => ({
+  ...jest.requireActual('modules/Builder/hooks'),
+  useCurrentActivity: jest.fn(),
+}));
+
+const mockUseCurrentActivity = jest.mocked(useCurrentActivity);
+
 describe('ScoreContent', () => {
+  beforeEach(() => {
+    mockUseCurrentActivity.mockReturnValue({
+      fieldName,
+      activity,
+      activityObjField: `activities[${currentActivityIndex}]`,
+    });
+    mockUseParams.mockReturnValue({
+      appletId: mockedAppletId,
+      activityId: activity.id,
+    });
+    mockUseNavigate.mockClear();
+  });
+
   test('should render score', () => {
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
@@ -88,22 +149,477 @@ describe('ScoreContent', () => {
     ${undefined}              | ${'-'}           | ${'should render empty score range if scoreItems is undefined'}
   `('$description', async ({ scoreItems, expectedResult }) => {
     renderWithAppletFormData({
-      children: <ScoreContent {...{ ...commonProps, scoreItems }} />,
+      children: <ScoreContent {...commonProps} scoreItems={scoreItems} />,
       appletFormData: formValues,
     });
     expect(screen.getByTestId(`${dataTestid}-score-range`)).toHaveTextContent(expectedResult);
   });
 
+  test('score type radio group should be hidden by default', async () => {
+    const { queryByTestId } = renderWithAppletFormData({
+      children: <ScoreContent {...commonProps} tableItems={[]} scoreItems={[]} />,
+    });
+
+    expect(queryByTestId(`${dataTestid}-score-type-toggle`)).toBeNull();
+  });
+
+  test('score type radio group is hidden with ineligible subscales', async () => {
+    const subscaleWithoutLookupTable: ActivitySettingsSubscale<string> = {
+      id: 'sum-subscale',
+      name: 'Sum subscale',
+      items: [getEntityKey(mockedSingleSelectFormValues)],
+      scoring: SubscaleTotalScore.Sum,
+
+      // No lookup table
+      subscaleTableData: null,
+    };
+
+    const parentSubscale: ActivitySettingsSubscale<string> = {
+      name: 'Parent subscale',
+
+      // Has a lookup table, but contains only nested subscales
+      items: [getEntityKey(subscaleWithoutLookupTable)],
+      scoring: SubscaleTotalScore.Sum,
+      subscaleTableData: [
+        {
+          id: 'row-1',
+          score: '50',
+          rawScore: '5~10',
+          optionalText: '',
+          age: '16',
+          sex: 'M',
+          severity: null,
+        },
+      ],
+    };
+
+    const { queryByTestId } = renderWithAppletFormData({
+      children: <ScoreContent {...commonProps} tableItems={[]} scoreItems={[]} />,
+      appletFormData: {
+        ...formValues,
+        activities: [
+          {
+            ...activity,
+            subscaleSetting: {
+              calculateTotalScore: null,
+              subscales: [subscaleWithoutLookupTable, parentSubscale],
+              totalScoresTableData: null,
+            },
+          },
+        ],
+      },
+    });
+
+    expect(queryByTestId(`${dataTestid}-score-type-toggle`)).toBeNull();
+  });
+
+  test('score type radio group defaults to raw score with eligible subscales', async () => {
+    const sumSubscale: ActivitySettingsSubscale<string> = {
+      id: 'sum-subscale',
+      name: 'Sum subscale',
+      items: [getEntityKey(mockedSingleSelectFormValues)],
+      scoring: SubscaleTotalScore.Sum,
+      subscaleTableData: [
+        {
+          id: 'row-1',
+          score: '50',
+          rawScore: '5~10',
+          optionalText: '',
+          age: '16',
+          sex: 'M',
+          severity: null,
+        },
+      ],
+    };
+
+    const activityWithSubscaleSetting: ActivityFormValues = {
+      ...activity,
+      subscaleSetting: {
+        calculateTotalScore: null,
+        subscales: [sumSubscale],
+        totalScoresTableData: null,
+      },
+    };
+
+    mockUseCurrentActivity.mockReturnValue({
+      fieldName,
+      activity: activityWithSubscaleSetting,
+      activityObjField: `activities[${currentActivityIndex}]`,
+    });
+
+    const { findByTestId } = renderWithAppletFormData({
+      children: <ScoreContent {...commonProps} />,
+      appletFormData: {
+        ...formValues,
+        activities: [activityWithSubscaleSetting],
+      },
+    });
+
+    const scoreTypeRadioGroup = await findByTestId(`${dataTestid}-score-type-toggle`);
+    expect(scoreTypeRadioGroup).not.toBeNull();
+    const radios = within(scoreTypeRadioGroup).getAllByRole<HTMLInputElement>('radio');
+    const selected = radios.find((radio) => radio.checked);
+    expect(selected).not.toBeUndefined();
+    expect(selected?.value).toEqual('raw_score');
+  });
+
+  test('should offer only eligible subscales to be linked', async () => {
+    const sumSubscale: ActivitySettingsSubscale<string> = {
+      id: 'sum-subscale',
+      name: 'Sum subscale',
+      items: [getEntityKey(mockedSingleSelectFormValues)],
+      scoring: SubscaleTotalScore.Sum,
+      subscaleTableData: [
+        {
+          id: 'row-1',
+          score: '50',
+          rawScore: '5~10',
+          optionalText: '',
+          age: '16',
+          sex: 'M',
+          severity: null,
+        },
+      ],
+    };
+
+    const subscaleWithoutLookupTable: ActivitySettingsSubscale<string> = {
+      id: 'subscale-wo-lookup-table',
+      name: 'Sum subscale',
+      items: [getEntityKey(mockedSingleSelectFormValues)],
+      scoring: SubscaleTotalScore.Sum,
+
+      // No lookup table
+      subscaleTableData: null,
+    };
+
+    const subscaleWithNoActivityItems: ActivitySettingsSubscale<string> = {
+      id: 'subscale-with-no-activity-items',
+      name: 'Parent subscale',
+
+      // Has a lookup table, but contains only nested subscales
+      items: [getEntityKey(subscaleWithoutLookupTable)],
+      scoring: SubscaleTotalScore.Sum,
+      subscaleTableData: [
+        {
+          id: 'row-1',
+          score: '50',
+          rawScore: '5~10',
+          optionalText: '',
+          age: '16',
+          sex: 'M',
+          severity: null,
+        },
+      ],
+    };
+
+    const activityWithSubscaleSetting: ActivityFormValues = {
+      ...activity,
+      subscaleSetting: {
+        calculateTotalScore: null,
+        subscales: [sumSubscale, subscaleWithoutLookupTable, subscaleWithNoActivityItems],
+        totalScoresTableData: null,
+      },
+    };
+
+    mockUseCurrentActivity.mockReturnValue({
+      fieldName,
+      activity: activityWithSubscaleSetting,
+      activityObjField: `activities[${currentActivityIndex}]`,
+    });
+
+    const { findByTestId, findAllByRole } = renderWithAppletFormData({
+      children: <ScoreContent {...commonProps} />,
+      appletFormData: {
+        ...formValues,
+        activities: [activityWithSubscaleSetting],
+      },
+    });
+
+    const scoreTypeRadioGroup = await findByTestId(`${dataTestid}-score-type-toggle`);
+
+    // Change the scoring type to 'Score'
+    await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
+
+    const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
+    await userEvent.click(within(dropdown).getByRole('button'));
+
+    const options = await findAllByRole('option');
+    expect(options).toHaveLength(1);
+    expect(options[0].textContent).toEqual(sumSubscale.name);
+  });
+
+  test.each`
+    subscaleScoringType           | expectedCalculationType | expectedScoreRange
+    ${SubscaleTotalScore.Sum}     | ${'Sum'}                | ${'10.00 ~ 90.00'}
+    ${SubscaleTotalScore.Average} | ${'Average'}            | ${'10.00 ~ 50.00'}
+  `(
+    'calculation type and score range should reflect linked subscale ($expectedCalculationType)',
+    async ({
+      subscaleScoringType,
+      expectedCalculationType,
+      expectedScoreRange,
+    }: {
+      subscaleScoringType: SubscaleTotalScore;
+      expectedCalculationType: string;
+      expectedScoreRange: string;
+    }) => {
+      const getResponseValues = (): SingleAndMultipleSelectItemResponseValues => ({
+        options: [
+          {
+            id: uuid(),
+            text: 'Option 1',
+            score: 20,
+            value: 0,
+          },
+          {
+            id: uuid(),
+            text: 'Option 2',
+            score: 25,
+            value: 1,
+          },
+          {
+            id: uuid(),
+            text: 'Option 3',
+            score: 30,
+            value: 2,
+          },
+        ],
+      });
+
+      const singleSelectItem1: Omit<SingleSelectItem<ItemFormValuesCommonType>, 'id'> & {
+        id: string;
+      } = {
+        ...mockedSingleSelectFormValues,
+        id: uuid(),
+        order: 1,
+        responseValues: getResponseValues(),
+      };
+
+      const singleSelectItem2: Omit<SingleSelectItem<ItemFormValuesCommonType>, 'id'> & {
+        id: string;
+      } = {
+        ...mockedSingleSelectFormValues,
+        id: uuid(),
+        order: 2,
+        responseValues: getResponseValues(),
+      };
+
+      const singleSelectItem3: Omit<SingleSelectItem<ItemFormValuesCommonType>, 'id'> & {
+        id: string;
+      } = {
+        ...mockedSingleSelectFormValues,
+        id: uuid(),
+        order: 2,
+        responseValues: getResponseValues(),
+      };
+
+      const sumSubscale: ActivitySettingsSubscale<string> = {
+        id: `${subscaleScoringType}-subscale`,
+        name: `${expectedCalculationType} subscale`,
+        items: [
+          getEntityKey(singleSelectItem1),
+          getEntityKey(singleSelectItem2),
+          getEntityKey(singleSelectItem3),
+        ],
+        scoring: subscaleScoringType,
+        subscaleTableData: [
+          {
+            id: `row-1`,
+            score: '10',
+            rawScore: '1',
+            optionalText: '',
+            age: '15',
+            sex: 'M',
+            severity: null,
+          },
+          {
+            id: `row-2`,
+            score: '20',
+            rawScore: '2',
+            optionalText: '',
+            age: '15',
+            sex: 'M',
+            severity: null,
+          },
+          {
+            id: `row-3`,
+            score: '30',
+            rawScore: '3',
+            optionalText: '',
+            age: '15',
+            sex: 'M',
+            severity: null,
+          },
+          {
+            id: `row-4`,
+            score: '40',
+            rawScore: '4',
+            optionalText: '',
+            age: '15',
+            sex: 'M',
+            severity: null,
+          },
+          {
+            id: `row-5`,
+            score: '50',
+            rawScore: '5',
+            optionalText: '',
+            age: '15',
+            sex: 'M',
+            severity: null,
+          },
+        ],
+      };
+
+      const activityWithSubscaleSetting: ActivityFormValues = {
+        ...activity,
+        items: [singleSelectItem1, singleSelectItem2, singleSelectItem3],
+        subscaleSetting: {
+          calculateTotalScore: null,
+          subscales: [sumSubscale],
+          totalScoresTableData: null,
+        },
+      };
+
+      mockUseCurrentActivity.mockReturnValue({
+        fieldName,
+        activity: activityWithSubscaleSetting,
+        activityObjField: `activities[${currentActivityIndex}]`,
+      });
+
+      const { findByTestId, findByRole } = renderWithAppletFormData({
+        children: (
+          <ScoreContent
+            {...commonProps}
+            scoreItems={[singleSelectItem1, singleSelectItem2, singleSelectItem3]}
+          />
+        ),
+        appletFormData: {
+          ...formValues,
+          activities: [activityWithSubscaleSetting],
+        },
+      });
+
+      const scoreTypeRadioGroup = await findByTestId(`${dataTestid}-score-type-toggle`);
+
+      // Change the scoring type to 'Score'
+      await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
+      const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
+      await userEvent.click(within(dropdown).getByRole('button'));
+
+      // Select the subscale from the dropdown
+      const option = await findByRole('option');
+      await userEvent.click(option);
+
+      await findByTestId(`${dataTestid}-view-subscales-configuration`);
+
+      const calculationType = await findByTestId(`${dataTestid}-calculation-type`);
+      expect(within(calculationType).getByRole('button').textContent).toEqual(
+        expectedCalculationType,
+      );
+
+      // The calculation type selection is fixed
+      const input = calculationType.querySelector('input');
+      expect(input).not.toBeNull();
+      expect(input?.disabled).toEqual(true);
+
+      const scoreRange = await findByTestId(`${dataTestid}-score-range`);
+      expect(scoreRange.textContent).toEqual(expectedScoreRange);
+    },
+  );
+
+  test('should navigate to subscales screen when view subscales configuration button is pressed', async () => {
+    const sumSubscale: ActivitySettingsSubscale<string> = {
+      id: `$sum-subscale`,
+      name: `Sum subscale`,
+      items: [getEntityKey(mockedSingleSelectFormValues)],
+      scoring: SubscaleTotalScore.Sum,
+      subscaleTableData: [
+        {
+          id: `row-1`,
+          score: '50',
+          rawScore: '5~10',
+          optionalText: '',
+          age: '15',
+          sex: 'M',
+          severity: null,
+        },
+      ],
+    };
+
+    const activityWithSubscaleSetting: ActivityFormValues = {
+      ...activity,
+      items: [mockedSingleSelectFormValues],
+      subscaleSetting: {
+        calculateTotalScore: null,
+        subscales: [sumSubscale],
+        totalScoresTableData: null,
+      },
+    };
+
+    mockUseCurrentActivity.mockReturnValue({
+      fieldName,
+      activity: activityWithSubscaleSetting,
+      activityObjField: `activities[${currentActivityIndex}]`,
+    });
+
+    const { findByTestId, findByRole } = renderWithAppletFormData({
+      children: <ScoreContent {...commonProps} />,
+      appletFormData: {
+        ...formValues,
+        activities: [activityWithSubscaleSetting],
+      },
+    });
+
+    const scoreTypeRadioGroup = await findByTestId(`${dataTestid}-score-type-toggle`);
+
+    // Change the scoring type to 'Score'
+    await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
+    const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
+    await userEvent.click(within(dropdown).getByRole('button'));
+
+    // Select the subscale from the dropdown
+    const option = await findByRole('option');
+    await userEvent.click(option);
+
+    const viewSubscalesConfigBtn = await findByTestId(`${dataTestid}-view-subscales-configuration`);
+    await userEvent.click(viewSubscalesConfigBtn);
+
+    expect(mockUseNavigate).toBeCalledWith(
+      `/builder/${mockedAppletId}/activities/${activityWithSubscaleSetting.id}/settings/subscales-configuration`,
+    );
+  });
+
   describe('scoreId should change when calculation type changes', () => {
     test.each`
-      calculationType               | expectedResult               | description
-      ${CalculationType.Sum}        | ${'sumScore_firstscore'}     | ${'for sum type should be sumScore_firstscore'}
-      ${CalculationType.Average}    | ${'averageScore_firstscore'} | ${'for average type should be averageScore_firstscore'}
-      ${CalculationType.Percentage} | ${'percentScore_firstscore'} | ${'for percentage type should be percentScore_firtscore'}
+      calculationType               | expectedResult           | description
+      ${CalculationType.Sum}        | ${'sumScore_score1'}     | ${'for sum type should be sumScore_score1'}
+      ${CalculationType.Average}    | ${'averageScore_score1'} | ${'for average type should be averageScore_score1'}
+      ${CalculationType.Percentage} | ${'percentScore_score1'} | ${'for percentage type should be percentScore_score1'}
     `('$description', async ({ calculationType, expectedResult }) => {
-      renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
+      const { getByTestId } = renderWithAppletFormData({
+        children: <ScoreContent {...commonProps} />,
+        appletFormData: {
+          ...formValues,
+          activities: [
+            {
+              ...activity,
+              scoresAndReports: {
+                showScoreSummary: false,
+                generateReport: false,
+                reports: [
+                  {
+                    ...reportScore,
+                    message: 'message',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
 
-      const selectWrapper = screen.getByTestId(`${dataTestid}-calculation-type`);
+      const selectWrapper = getByTestId(`${dataTestid}-calculation-type`);
       const input = selectWrapper.querySelector('input');
       input && fireEvent.change(input, { target: { value: calculationType } });
 

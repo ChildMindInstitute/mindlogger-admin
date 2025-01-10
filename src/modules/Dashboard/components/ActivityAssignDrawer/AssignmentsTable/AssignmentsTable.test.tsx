@@ -9,11 +9,11 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedEncryption,
-  mockedLimitedRespondent,
+  mockedLimitedParticipant,
   mockedOwnerId,
-  mockedOwnerRespondent,
-  mockedRespondent,
-  mockedRespondent2,
+  mockedOwnerParticipant,
+  mockedFullParticipant1,
+  mockedFullParticipant2,
   mockedUserData,
 } from 'shared/mock';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
@@ -35,8 +35,8 @@ import { AssignmentsTableProps } from './AssignmentsTable.types';
 const mockOnChange = jest.fn();
 const mockTestId = 'test-id';
 const mockedAssignment = {
-  respondentSubjectId: mockedRespondent.details[0].subjectId,
-  targetSubjectId: mockedRespondent2.details[0].subjectId,
+  respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+  targetSubjectId: mockedFullParticipant2.details[0].subjectId,
 };
 
 const mockedGetAppletActivities = {
@@ -55,20 +55,25 @@ const mockedGetApplet = {
 };
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
-  result: [mockedRespondent, mockedRespondent2, mockedOwnerRespondent, mockedLimitedRespondent],
+  result: [
+    mockedFullParticipant1,
+    mockedFullParticipant2,
+    mockedOwnerParticipant,
+    mockedLimitedParticipant,
+  ],
   count: 4,
 });
 
 const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
   result: [
     {
-      id: mockedOwnerRespondent.id,
+      id: mockedOwnerParticipant.id,
       firstName: mockedUserData.firstName,
       lastName: mockedUserData.lastName,
-      email: mockedOwnerRespondent.email,
+      email: mockedOwnerParticipant.email,
       roles: [Roles.Owner],
       lastSeen: new Date().toDateString(),
-      isPinned: mockedOwnerRespondent.isPinned,
+      isPinned: mockedOwnerParticipant.isPinned,
       applets: [
         {
           id: mockedApplet.id,
@@ -151,9 +156,9 @@ describe('AssignmentsTable', () => {
       [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
-        if (params.userId === mockedOwnerRespondent.id) {
+        if (params.userId === mockedOwnerParticipant.id) {
           return mockSuccessfulHttpResponse<ParticipantsData>({
-            result: [mockedOwnerRespondent],
+            result: [mockedOwnerParticipant],
             count: 1,
           });
         }
@@ -176,11 +181,16 @@ describe('AssignmentsTable', () => {
   it('when full account respondent is selected, should set both assignment respondent and target subject', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('respondent', mockedRespondent.details[0].subjectId, 0, mockTestId);
+    await selectParticipant(
+      'respondent',
+      mockedFullParticipant1.details[0].subjectId,
+      0,
+      mockTestId,
+    );
     expect(mockOnChange).toHaveBeenLastCalledWith([
       {
-        respondentSubjectId: mockedRespondent.details[0].subjectId,
-        targetSubjectId: mockedRespondent.details[0].subjectId,
+        respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
+        targetSubjectId: mockedFullParticipant1.details[0].subjectId,
       },
     ]);
   });
@@ -190,21 +200,26 @@ describe('AssignmentsTable', () => {
 
     await selectParticipant(
       'respondent',
-      mockedOwnerRespondent.details[0].subjectId,
+      mockedOwnerParticipant.details[0].subjectId,
       0,
       mockTestId,
     );
     expect(mockOnChange).toHaveBeenLastCalledWith([
-      { respondentSubjectId: mockedOwnerRespondent.details[0].subjectId },
+      { respondentSubjectId: mockedOwnerParticipant.details[0].subjectId },
     ]);
   });
 
   it('when full account target subject is selected, should set assignment target subject', async () => {
     renderWithProviders(<AssignmentsTableTest assignments={[{}]} />, { preloadedState });
 
-    await selectParticipant('target-subject', mockedRespondent.details[0].subjectId, 0, mockTestId);
+    await selectParticipant(
+      'target-subject',
+      mockedFullParticipant1.details[0].subjectId,
+      0,
+      mockTestId,
+    );
     expect(mockOnChange).toHaveBeenLastCalledWith([
-      { targetSubjectId: mockedRespondent.details[0].subjectId },
+      { targetSubjectId: mockedFullParticipant1.details[0].subjectId },
     ]);
   });
 
@@ -213,12 +228,12 @@ describe('AssignmentsTable', () => {
 
     await selectParticipant(
       'target-subject',
-      mockedLimitedRespondent.details[0].subjectId,
+      mockedLimitedParticipant.details[0].subjectId,
       0,
       mockTestId,
     );
     expect(mockOnChange).toHaveBeenLastCalledWith([
-      { targetSubjectId: mockedLimitedRespondent.details[0].subjectId },
+      { targetSubjectId: mockedLimitedParticipant.details[0].subjectId },
     ]);
 
     expect(screen.getByText('Add Respondent')).toBeInTheDocument();
@@ -228,7 +243,7 @@ describe('AssignmentsTable', () => {
     renderWithProviders(
       <AssignmentsTableTest
         assignments={[mockedAssignment, mockedAssignment]}
-        errors={{ duplicateRows: [`${mockedRespondent.id}_${mockedRespondent2.id}`] }}
+        errors={{ duplicateRows: [`${mockedFullParticipant1.id}_${mockedFullParticipant2.id}`] }}
         data-testid="assignments-table"
       />,
       { preloadedState },
@@ -263,19 +278,27 @@ describe('AssignmentsTable', () => {
     const subjectCell = screen.getByTestId(`${mockTestId}-0-cell-targetSubjectId`);
 
     await waitFor(() => {
-      expect(within(respondentCell).getByText(mockedRespondent.secretIds[0])).toBeInTheDocument();
-      expect(within(respondentCell).getByText(mockedRespondent.nicknames[0])).toBeInTheDocument();
+      expect(
+        within(respondentCell).getByText(mockedFullParticipant1.secretIds[0]),
+      ).toBeInTheDocument();
+      expect(
+        within(respondentCell).getByText(mockedFullParticipant1.nicknames[0]),
+      ).toBeInTheDocument();
       expect(
         within(respondentCell).getByText(
-          t(`participantTag.${mockedRespondent.details[0].subjectTag}`),
+          t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`),
         ),
       ).toBeInTheDocument();
 
-      expect(within(subjectCell).getByText(mockedRespondent2.secretIds[0])).toBeInTheDocument();
-      expect(within(subjectCell).getByText(mockedRespondent2.nicknames[0])).toBeInTheDocument();
+      expect(
+        within(subjectCell).getByText(mockedFullParticipant2.secretIds[0]),
+      ).toBeInTheDocument();
+      expect(
+        within(subjectCell).getByText(mockedFullParticipant2.nicknames[0]),
+      ).toBeInTheDocument();
       expect(
         within(subjectCell).getByText(
-          t(`participantTag.${mockedRespondent2.details[0].subjectTag}`),
+          t(`participantTag.${mockedFullParticipant2.details[0].subjectTag}`),
         ),
       ).toBeInTheDocument();
     });

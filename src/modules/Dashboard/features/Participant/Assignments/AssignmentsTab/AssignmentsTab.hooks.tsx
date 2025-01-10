@@ -31,9 +31,9 @@ import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 
-import { UseAssignmentsTabProps } from './AssignmentsTab.types';
+import { GetActionsMenuParams, UseAssignmentsTabProps } from './AssignmentsTab.types';
 
 export const useAssignmentsTab = ({
   appletId,
@@ -182,7 +182,7 @@ export const useAssignmentsTab = ({
   );
 
   const onClickAssign = useCallback(
-    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
+    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: SubjectDetails) => {
       if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
       setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
       setShowActivityAssign(true);
@@ -201,7 +201,7 @@ export const useAssignmentsTab = ({
         }),
       });
     },
-    [targetSubject],
+    [appletId, targetSubject?.id],
   );
 
   /**
@@ -215,7 +215,11 @@ export const useAssignmentsTab = ({
    * the current respondent).
    */
   const getActionsMenu = useCallback(
-    (activityOrFlow: ParticipantActivityOrFlow, targetSubjectArg = targetSubject) => {
+    ({
+      activityOrFlow,
+      targetSubject: targetSubjectArg = targetSubject,
+      teamMemberCanViewData = true,
+    }: GetActionsMenuParams) => {
       const { id, autoAssign, assignments, isFlow, performanceTaskType, status } = activityOrFlow;
 
       // TODO: Remove extra steps below after supportedPlatforms prop is returned by API
@@ -238,7 +242,7 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isLimitedRespondent = respondentSubject && !respondentSubject.userId;
+      const isLimitedRespondent = !!respondentSubject && !respondentSubject.userId;
       const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>
@@ -257,6 +261,9 @@ export const useAssignmentsTab = ({
       // just hide the Take Now menu item altogether until activities have been loaded. Remove
       // this condition after M2-7906 has been completed.
       const isTakeNowDisplayed = canDoTakeNow && !!activities.length;
+
+      const isExportDisabled = !id || !teamMemberCanViewData;
+      const exportDisabledTooltip = !teamMemberCanViewData ? t('subjectDataUnavailable') : '';
 
       let assignTooltip: string | undefined;
       if (status === ActivityAssignmentStatus.Hidden) {
@@ -288,7 +295,8 @@ export const useAssignmentsTab = ({
             setSelectedTargetSubjectId(targetSubjectArg?.id);
             setShowExportData(true);
           },
-          disabled: !id,
+          disabled: isExportDisabled,
+          tooltip: exportDisabledTooltip,
           icon: <Svg id="export" />,
           title: t('exportData'),
           isDisplayed: canAccessData && !!targetSubjectArg,
@@ -332,7 +340,7 @@ export const useAssignmentsTab = ({
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
-          'data-testid': `${dataTestId}-take-now`,
+          'data-testid': `${dataTestId}-activity-take-now`,
           action: () =>
             openTakeNowModal(activityOrFlow, {
               sourceSubject: respondentSubject && {
@@ -356,6 +364,7 @@ export const useAssignmentsTab = ({
     },
     [
       activities,
+      appletId,
       canAccessData,
       canAssign,
       canDoTakeNow,
@@ -401,6 +410,7 @@ export const useAssignmentsTab = ({
               setSelectedTargetSubjectId(undefined);
             }
           }}
+          data-testid={`${dataTestId}-export-modal`}
         />
       )}
 

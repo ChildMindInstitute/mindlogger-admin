@@ -15,7 +15,15 @@ export const ActivityFlowThumbnail = ({
   return (
     <StyledRoot {...otherProps}>
       {images.map(
-        (image, i) => image && <StyledActivityThumbnail aria-hidden key={i} src={image} />,
+        (image, i) =>
+          image && (
+            <StyledActivityThumbnail
+              aria-hidden
+              key={i}
+              src={image}
+              data-testid="activity-thumbnail"
+            />
+          ),
       )}
 
       {itemsCount > 4 && <StyledItemCount>{itemsCount}</StyledItemCount>}

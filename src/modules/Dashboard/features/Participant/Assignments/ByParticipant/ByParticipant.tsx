@@ -12,7 +12,7 @@ import {
 } from 'api';
 import { users } from 'redux/modules';
 import { ActionsMenu, Spinner, Tooltip } from 'shared/components';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
 
@@ -23,7 +23,7 @@ import { EmptyState } from '../EmptyState';
 import { ExpandedView } from './ExpandedView';
 import { ActivityListItemCounter } from '../ActivityListItemCounter';
 
-const dataTestId = 'participant-details-about-participant';
+const dataTestId = 'participant-details-by-participant';
 
 const ByParticipant = () => {
   const { t } = useTranslation('app');
@@ -101,7 +101,7 @@ const ByParticipant = () => {
 
   const handleClickNavigateToData = (
     activityOrFlow: ParticipantActivityOrFlow,
-    targetSubject: RespondentDetails,
+    targetSubject: SubjectDetails,
   ) => {
     if (!respondentSubject) return;
 
@@ -154,6 +154,7 @@ const ByParticipant = () => {
               : t('participantDetails.byParticipantEmpty')
           }
           maxWidth={isRespondentLimited ? '57.2rem' : undefined}
+          dataTestId={dataTestId}
         />
       )}
 
@@ -186,10 +187,11 @@ const ByParticipant = () => {
                     targetSubjects={expandedViewsData[activity.id]}
                     getActionsMenu={getActionsMenu}
                     onClickViewData={handleClickNavigateToData}
-                    data-test-id={`${dataTestId}-${index}`}
+                    data-testid={`${dataTestId}-${index}-expanded-view`}
                   />
                 }
                 isLoadingExpandedView={expandedViewsLoading[activity.id]}
+                dataTestId={dataTestId}
               >
                 <ActivityListItemCounter
                   icon="by-participant"
@@ -213,7 +215,7 @@ const ByParticipant = () => {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: -6, horizontal: 'right' }}
                   buttonColor="secondary"
-                  menuItems={getActionsMenu(activity)}
+                  menuItems={getActionsMenu({ activityOrFlow: activity })}
                   data-testid={`${dataTestId}-${index}`}
                 />
               </ActivityListItem>

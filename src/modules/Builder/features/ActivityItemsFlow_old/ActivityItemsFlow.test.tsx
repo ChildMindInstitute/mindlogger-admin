@@ -74,25 +74,12 @@ const mockedOrderedConditionNameItems = [
   mockedMultiActivityItem,
   mockedSliderActivityItem,
 ];
-const mockedOrderedSummaryItemItems = [
+const mockedOrderedFlowSequenceNameItems = [
   mockedSingleActivityItem,
   mockedMultiActivityItem,
-  mockedDateActivityItem,
   mockedTextActivityItem,
-  mockedTimeActivityItem,
-  mockedAudioActivityItem,
-  mockedPhotoActivityItem,
-  mockedVideoActivityItem,
   mockedSliderActivityItem,
-  mockedDrawingActivityItem,
   mockedMessageActivityItem,
-  mockedTimeRangeActivityItem,
-  mockedSliderRowsActivityItem,
-  mockedAudioPlayerActivityItem,
-  mockedNumberSelectActivityItem,
-  mockedParagraphTextActivityItem,
-  mockedMultiSelectRowsActivityItem,
-  mockedSingleSelectRowsActivityItem,
 ];
 
 const renderActivityItemsFlow = (formData) => {
@@ -280,11 +267,11 @@ describe('Activity Items Flow', () => {
     expect(itemDropdown).toBeVisible();
 
     const items = itemDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(18);
+    expect(items).toHaveLength(mockedOrderedFlowSequenceNameItems.length);
 
     items.forEach((item, index) => {
-      expect(item).toHaveAttribute('data-value', mockedOrderedSummaryItemItems[index].id);
-      expect(item).toHaveTextContent(mockedOrderedSummaryItemItems[index].name);
+      expect(item).toHaveAttribute('data-value', mockedOrderedFlowSequenceNameItems[index].id);
+      expect(item).toHaveTextContent(mockedOrderedFlowSequenceNameItems[index].name);
     });
   });
 

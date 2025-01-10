@@ -35,7 +35,7 @@ import {
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
-import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 
 import {
   RespondentsTableHeader,
@@ -293,7 +293,7 @@ export const Respondents = () => {
     shouldReFetch && handleReload();
   };
 
-  const formatRow = (user: Respondent): Row => {
+  const formatRow = (user: Participant): Row => {
     const {
       secretIds,
       nicknames,
@@ -312,11 +312,11 @@ export const Respondents = () => {
     const stringSecretIds = joinWihComma(secretIds, true);
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
-      [RespondentStatus.Invited]: t('full'),
-      [RespondentStatus.NotInvited]: t('limited'),
-      [RespondentStatus.Pending]: t('pendingInvite'),
+      [ParticipantStatus.Invited]: t('full'),
+      [ParticipantStatus.NotInvited]: t('limited'),
+      [ParticipantStatus.Pending]: t('pendingInvite'),
     }[status];
-    const isPending = status === RespondentStatus.Pending;
+    const isPending = status === ParticipantStatus.Pending;
 
     return {
       id: {
@@ -372,9 +372,9 @@ export const Respondents = () => {
               respondentOrSubjectId,
               appletId,
               email,
-              isInviteEnabled: status === RespondentStatus.NotInvited,
+              isInviteEnabled: status === ParticipantStatus.NotInvited,
               isViewCalendarEnabled:
-                !!respondentId && status === RespondentStatus.Invited && !isAnonymousRespondent,
+                !!respondentId && status === ParticipantStatus.Invited && !isAnonymousRespondent,
             })}
             data-testid="dashboard-respondents-table-actions"
           />
@@ -384,7 +384,7 @@ export const Respondents = () => {
     };
   };
 
-  const filterRespondentApplets = (user: Respondent) => {
+  const filterRespondentApplets = (user: Participant) => {
     const { details } = user;
     const filteredApplets: FilteredApplets = {
       scheduling: [],
