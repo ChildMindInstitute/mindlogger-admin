@@ -6,9 +6,9 @@ import {
   mockedAppletData,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedLimitedRespondent,
+  mockedLimitedParticipant,
   mockedOwnerSubject,
-  mockedRespondent,
+  mockedFullParticipant1,
 } from 'shared/mock';
 import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { Activity, initialStateData } from 'redux/modules';
@@ -34,14 +34,14 @@ const mockedAssignment1: HydratedAssignment = {
   activityFlowId: null,
   respondentSubject: mockedOwnerSubject,
   targetSubject: {
-    id: mockedLimitedRespondent.details[0].subjectId,
-    nickname: mockedLimitedRespondent.nicknames[0],
-    tag: mockedLimitedRespondent.details[0].subjectTag,
-    secretUserId: mockedLimitedRespondent.secretIds[0],
-    lastSeen: mockedLimitedRespondent.lastSeen,
+    id: mockedLimitedParticipant.details[0].subjectId,
+    nickname: mockedLimitedParticipant.nicknames[0],
+    tag: mockedLimitedParticipant.details[0].subjectTag,
+    secretUserId: mockedLimitedParticipant.secretIds[0],
+    lastSeen: mockedLimitedParticipant.lastSeen,
     userId: null,
-    firstName: mockedLimitedRespondent.details[0].subjectFirstName,
-    lastName: mockedLimitedRespondent.details[0].subjectLastName,
+    firstName: mockedLimitedParticipant.details[0].subjectFirstName,
+    lastName: mockedLimitedParticipant.details[0].subjectLastName,
   },
 };
 
@@ -51,14 +51,14 @@ const mockedAssignment2 = {
   activityFlowId: null,
   respondentSubject: mockedOwnerSubject,
   targetSubject: {
-    id: mockedRespondent.details[0].subjectId,
-    nickname: mockedRespondent.nicknames[0],
-    tag: mockedRespondent.details[0].subjectTag,
-    secretUserId: mockedRespondent.secretIds[0],
-    lastSeen: mockedRespondent.lastSeen,
+    id: mockedFullParticipant1.details[0].subjectId,
+    nickname: mockedFullParticipant1.nicknames[0],
+    tag: mockedFullParticipant1.details[0].subjectTag,
+    secretUserId: mockedFullParticipant1.secretIds[0],
+    lastSeen: mockedFullParticipant1.lastSeen,
     userId: null,
-    firstName: mockedRespondent.details[0].subjectFirstName,
-    lastName: mockedRespondent.details[0].subjectLastName,
+    firstName: mockedFullParticipant1.details[0].subjectFirstName,
+    lastName: mockedFullParticipant1.details[0].subjectLastName,
   },
 };
 

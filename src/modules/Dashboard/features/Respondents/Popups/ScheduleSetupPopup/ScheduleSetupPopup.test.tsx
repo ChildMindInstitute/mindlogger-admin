@@ -5,9 +5,9 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedAppletId,
   mockedOwnerId,
-  mockedRespondentDetails,
-  mockedRespondentId,
-  mockedSubjectId1,
+  mockedFullParticipantId1,
+  mockedFullSubjectId1,
+  mockedFullParticipant1,
 } from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
@@ -15,10 +15,10 @@ import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 const setPopupVisibleMock = jest.fn();
 const setChosenAppletDataMock = jest.fn();
 const chosenAppletDataMock = {
-  ...mockedRespondentDetails,
-  respondentId: mockedRespondentId,
+  ...mockedFullParticipant1.details[0],
+  respondentId: mockedFullParticipantId1,
   ownerId: mockedOwnerId,
-  subjectId: mockedSubjectId1,
+  subjectId: mockedFullSubjectId1,
 };
 
 const tableRowsMock = [
@@ -71,13 +71,13 @@ describe('ScheduleSetupPopup', () => {
 
     expect(mockAxios.post).toHaveBeenNthCalledWith(
       1,
-      `/applets/${mockedAppletId}/events/individual/${mockedRespondentId}`,
+      `/applets/${mockedAppletId}/events/individual/${mockedFullParticipantId1}`,
       {},
       { signal: undefined },
     );
     await waitFor(() =>
       expect(mockedUseNavigate).toBeCalledWith(
-        `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/schedule`,
+        `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/schedule`,
       ),
     );
   });
@@ -100,7 +100,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/schedule`,
+      `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/schedule`,
     );
   });
 });

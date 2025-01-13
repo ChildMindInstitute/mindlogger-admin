@@ -2,39 +2,46 @@
 // @ts-nocheck
 import { createRef, RefObject } from 'react';
 import { generatePath } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { v4 as uuidv4, v4 as uuid } from 'uuid';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { setMockLookupTableFileData } from '__mocks__/LookupTableUploader';
+import userEvent from '@testing-library/user-event';
 
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { page } from 'resources';
 import {
   mockedAppletFormData,
-  mockedSingleActivityItem,
-  mockedMultiActivityItem,
-  mockedDateActivityItem,
-  mockedTextActivityItem,
-  mockedTimeActivityItem,
   mockedAudioActivityItem,
-  mockedPhotoActivityItem,
-  mockedVideoActivityItem,
-  mockedSliderActivityItem,
+  mockedAudioPlayerActivityItem,
+  mockedDateActivityItem,
   mockedDrawingActivityItem,
   mockedMessageActivityItem,
-  mockedTimeRangeActivityItem,
-  mockedSliderRowsActivityItem,
-  mockedAudioPlayerActivityItem,
-  mockedNumberSelectActivityItem,
+  mockedMultiActivityItem,
   mockedMultiSelectRowsActivityItem,
-  mockedSingleSelectRowsActivityItem,
-  mockedPhrasalTemplateActivityItem,
+  mockedNumberSelectActivityItem,
   mockedParagraphTextActivityItem,
+  mockedPhotoActivityItem,
+  mockedPhrasalTemplateActivityItem,
+  mockedSingleActivityItem,
+  mockedSingleSelectRowsActivityItem,
+  mockedSliderActivityItem,
+  mockedSliderRowsActivityItem,
+  mockedTextActivityItem,
+  mockedTimeActivityItem,
+  mockedTimeRangeActivityItem,
+  mockedVideoActivityItem,
 } from 'shared/mock';
-import { SettingParam, isSystemItem } from 'shared/utils';
+import { getEntityKey, isSystemItem, SettingParam } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
-import { LookupTableItems } from 'shared/consts';
-import { ItemFormValues } from 'modules/Builder/types';
+import {
+  CalculationType,
+  LookupTableItems,
+  ScoreReportType,
+  SubscaleTotalScore,
+} from 'shared/consts';
+import { AppletFormValues, ItemFormValues } from 'modules/Builder/types';
+import { ScoreReport } from 'shared/state';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 
@@ -453,6 +460,333 @@ describe('SubscalesConfiguration', () => {
     expect(
       screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`)),
     ).toHaveLength(3);
+  });
+
+  test('Removing lookup table updates linked report score', async () => {
+    const ref = createRef<ReturnType<typeof useForm>>();
+
+    const formData: AppletFormValues = {
+      ...mockedAppletWithAllItemTypes,
+      activities: [
+        {
+          ...mockedAppletWithAllItemTypes.activities[0],
+          items: [mockedSingleActivityItem],
+          scoresAndReports: {
+            generateReport: false,
+            showScoreSummary: false,
+            reports: [
+              {
+                type: ScoreReportType.Score,
+                scoringType: 'score',
+                subscaleName: 'Sum',
+                name: 'From this test',
+                id: 'sumScore_score1',
+                calculationType: CalculationType.Sum,
+                itemsScore: [mockedSingleActivityItem.id],
+                message: 'score1',
+                itemsPrint: [],
+                key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+                showMessage: true,
+                printItems: false,
+              },
+            ],
+          },
+          subscaleSetting: {
+            subscales: [
+              {
+                id: uuid(),
+                name: 'Sum',
+                scoring: SubscaleTotalScore.Sum,
+                items: [getEntityKey(mockedSingleActivityItem)],
+                subscaleTableData: [
+                  {
+                    score: '10',
+                    rawScore: '1',
+                    age: '15',
+                    sex: 'M',
+                    optionalText:
+                      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+                    id: '68171c94-9452-47ec-9df5-09ea47142461',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const { getByTestId } = renderWithAppletFormData({
+      appletFormData: formData,
+      children: <SubscalesConfiguration />,
+      formRef: ref,
+      options: {
+        routePath: page.builderAppletActivitySettingsItem,
+        route: generatePath(page.builderAppletActivitySettingsItem, {
+          appletId: formData.id,
+          activityId: formData.activities[0].id,
+          setting: SettingParam.SubscalesConfiguration,
+        }),
+      },
+    });
+
+    // Open lookup table popup
+    await userEvent.click(getByTestId(`${mockedTestid}-0-lookup-table`));
+
+    // Click the delete button
+    await userEvent.click(getByTestId(`${mockedTestid}-0-lookup-table-popup-secondary-button`));
+
+    // Confirm deletion
+    await userEvent.click(getByTestId(`${mockedTestid}-0-lookup-table-popup-submit-button`));
+
+    await waitFor(() => {
+      const reportScore: ScoreReport = ref.current.getValues(
+        'activities.0.scoresAndReports.reports.0',
+      );
+      expect(reportScore.scoringType).toEqual('raw_score');
+      expect(reportScore.subscaleName).toEqual('');
+    });
+  });
+
+  test('Deleting subscale updates linked report score', async () => {
+    const ref = createRef<ReturnType<typeof useForm>>();
+
+    const formData: AppletFormValues = {
+      ...mockedAppletWithAllItemTypes,
+      activities: [
+        {
+          ...mockedAppletWithAllItemTypes.activities[0],
+          items: [mockedSingleActivityItem],
+          scoresAndReports: {
+            generateReport: false,
+            showScoreSummary: false,
+            reports: [
+              {
+                type: ScoreReportType.Score,
+                scoringType: 'score',
+                subscaleName: 'Sum',
+                name: 'From this test',
+                id: 'sumScore_score1',
+                calculationType: CalculationType.Sum,
+                itemsScore: [mockedSingleActivityItem.id],
+                message: 'score1',
+                itemsPrint: [],
+                key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+                showMessage: true,
+                printItems: false,
+              },
+            ],
+          },
+          subscaleSetting: {
+            subscales: [
+              {
+                id: uuid(),
+                name: 'Sum',
+                scoring: SubscaleTotalScore.Sum,
+                items: [getEntityKey(mockedSingleActivityItem)],
+                subscaleTableData: [
+                  {
+                    score: '10',
+                    rawScore: '1',
+                    age: '15',
+                    sex: 'M',
+                    optionalText:
+                      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+                    id: '68171c94-9452-47ec-9df5-09ea47142461',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const { getByTestId } = renderWithAppletFormData({
+      appletFormData: formData,
+      children: <SubscalesConfiguration />,
+      formRef: ref,
+      options: {
+        routePath: page.builderAppletActivitySettingsItem,
+        route: generatePath(page.builderAppletActivitySettingsItem, {
+          appletId: formData.id,
+          activityId: formData.activities[0].id,
+          setting: SettingParam.SubscalesConfiguration,
+        }),
+      },
+    });
+
+    // Click the remove subscale button
+    await userEvent.click(getByTestId(`${mockedTestid}-0-remove`));
+
+    await waitFor(() => {
+      const reportScore: ScoreReport = ref.current.getValues(
+        'activities.0.scoresAndReports.reports.0',
+      );
+      expect(reportScore.scoringType).toEqual('raw_score');
+      expect(reportScore.subscaleName).toEqual('');
+    });
+  });
+
+  test('Removing non-subscale items updates linked report score', async () => {
+    const ref = createRef<ReturnType<typeof useForm>>();
+
+    const formData: AppletFormValues = {
+      ...mockedAppletWithAllItemTypes,
+      activities: [
+        {
+          ...mockedAppletWithAllItemTypes.activities[0],
+          items: [mockedSingleActivityItem],
+          scoresAndReports: {
+            generateReport: false,
+            showScoreSummary: false,
+            reports: [
+              {
+                type: ScoreReportType.Score,
+                scoringType: 'score',
+                subscaleName: 'Sum',
+                name: 'From this test',
+                id: 'sumScore_score1',
+                calculationType: CalculationType.Sum,
+                itemsScore: [mockedSingleActivityItem.id],
+                message: 'score1',
+                itemsPrint: [],
+                key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+                showMessage: true,
+                printItems: false,
+              },
+            ],
+          },
+          subscaleSetting: {
+            subscales: [
+              {
+                id: uuid(),
+                name: 'Sum',
+                scoring: SubscaleTotalScore.Sum,
+                items: [getEntityKey(mockedSingleActivityItem)],
+                subscaleTableData: [
+                  {
+                    score: '10',
+                    rawScore: '1',
+                    age: '15',
+                    sex: 'M',
+                    optionalText:
+                      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+                    id: '68171c94-9452-47ec-9df5-09ea47142461',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const { getByTestId } = renderWithAppletFormData({
+      appletFormData: formData,
+      children: <SubscalesConfiguration />,
+      formRef: ref,
+      options: {
+        routePath: page.builderAppletActivitySettingsItem,
+        route: generatePath(page.builderAppletActivitySettingsItem, {
+          appletId: formData.id,
+          activityId: formData.activities[0].id,
+          setting: SettingParam.SubscalesConfiguration,
+        }),
+      },
+    });
+
+    // Remove the item in the subscale (uncheck the checkbox)
+    await userEvent.click(
+      getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
+    );
+
+    await waitFor(() => {
+      const reportScore: ScoreReport = ref.current.getValues(
+        'activities.0.scoresAndReports.reports.0',
+      );
+      expect(reportScore.scoringType).toEqual('raw_score');
+      expect(reportScore.subscaleName).toEqual('');
+    });
+  });
+
+  test('Renaming a subscale updates linked report score', async () => {
+    const ref = createRef<ReturnType<typeof useForm>>();
+
+    const formData: AppletFormValues = {
+      ...mockedAppletWithAllItemTypes,
+      activities: [
+        {
+          ...mockedAppletWithAllItemTypes.activities[0],
+          items: [mockedSingleActivityItem],
+          scoresAndReports: {
+            generateReport: false,
+            showScoreSummary: false,
+            reports: [
+              {
+                type: ScoreReportType.Score,
+                scoringType: 'score',
+                subscaleName: 'Sum',
+                name: 'From this test',
+                id: 'sumScore_score1',
+                calculationType: CalculationType.Sum,
+                itemsScore: [mockedSingleActivityItem.id],
+                message: 'score1',
+                itemsPrint: [],
+                key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+                showMessage: true,
+                printItems: false,
+              },
+            ],
+          },
+          subscaleSetting: {
+            subscales: [
+              {
+                id: uuid(),
+                name: 'Sum',
+                scoring: SubscaleTotalScore.Sum,
+                items: [getEntityKey(mockedSingleActivityItem)],
+                subscaleTableData: [
+                  {
+                    score: '10',
+                    rawScore: '1',
+                    age: '15',
+                    sex: 'M',
+                    optionalText:
+                      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+                    id: '68171c94-9452-47ec-9df5-09ea47142461',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const { getByTestId } = renderWithAppletFormData({
+      appletFormData: formData,
+      children: <SubscalesConfiguration />,
+      formRef: ref,
+      options: {
+        routePath: page.builderAppletActivitySettingsItem,
+        route: generatePath(page.builderAppletActivitySettingsItem, {
+          appletId: formData.id,
+          activityId: formData.activities[0].id,
+          setting: SettingParam.SubscalesConfiguration,
+        }),
+      },
+    });
+
+    // Add the text " Subscale" to the subscale name, which should now be "Sum Subscale"
+    await userEvent.type(getByTestId(`${mockedTestid}-0-name`).querySelector('input'), ' Subscale');
+
+    await waitFor(() => {
+      const reportScore: ScoreReport = ref.current.getValues(
+        'activities.0.scoresAndReports.reports.0',
+      );
+      expect(reportScore.subscaleName).toEqual('Sum Subscale');
+    });
   });
 
   describe('Validations', () => {

@@ -9,9 +9,9 @@ import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedRespondent,
-  mockedRespondent2,
-  mockedRespondentId,
+  mockedFullParticipant1,
+  mockedFullParticipant2,
+  mockedFullSubjectId1,
 } from 'shared/mock';
 import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -23,9 +23,9 @@ import { RespondentDataReview } from './RespondentDataReview';
 const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
-const route1 = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
-const route2 = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
-const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`;
+const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-27`;
+const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
 const routePath = page.appletParticipantDataReview;
 const preloadedState = {
   workspaces: {
@@ -53,7 +53,7 @@ const preloadedState = {
     allRespondents: {
       ...initialStateData,
       data: {
-        result: [mockedRespondent, mockedRespondent2],
+        result: [mockedFullParticipant1, mockedFullParticipant2],
         count: 2,
       },
     },
@@ -63,10 +63,10 @@ const preloadedState = {
         result: {
           id: '1',
           nickname: 'Mocked Respondent',
-          secretUserId: mockedRespondentId,
+          secretUserId: mockedFullSubjectId1,
           lastSeen: '2023-12-15T23:29:36.150182',
           tag: 'Child' as ParticipantTag,
-          userId: mockedRespondentId,
+          userId: mockedFullSubjectId1,
           firstName: 'John',
           lastName: 'Doe',
         },
@@ -389,7 +389,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -402,7 +402,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -413,7 +413,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
               activityOrFlowId: '951145fa-3053-4428-a970-70531e383d89', // Make sure this matches mockActivity.id
@@ -491,7 +491,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -504,7 +504,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -631,7 +631,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -644,7 +644,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: MAX_LIMIT,
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
@@ -655,7 +655,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              targetSubjectId: mockedRespondentId,
+              targetSubjectId: mockedFullSubjectId1,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -709,7 +709,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: MAX_LIMIT,
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedFullSubjectId1,
           },
           signal: undefined,
         },
@@ -722,7 +722,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: MAX_LIMIT,
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedFullSubjectId1,
           },
           signal: undefined,
         },

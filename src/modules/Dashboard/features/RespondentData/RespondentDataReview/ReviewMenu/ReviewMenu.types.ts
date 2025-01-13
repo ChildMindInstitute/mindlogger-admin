@@ -1,7 +1,7 @@
 import { Control } from 'react-hook-form';
 
 import { AnswerDate, ReviewEntity } from 'modules/Dashboard/api';
-import { RespondentDetails } from 'modules/Dashboard/types/Dashboard.types';
+import { SubjectDetails } from 'modules/Dashboard/types/Dashboard.types';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { OnSelectActivityOrFlow, OnSelectAnswer } from '../RespondentDataReview.types';
@@ -18,7 +18,7 @@ export type ReviewMenuProps = {
   onDateChange: (date?: Date | null) => void;
   isDatePickerLoading: boolean;
   onSelectAnswer: OnSelectAnswer;
-  lastActivityCompleted?: RespondentDetails['lastSeen'];
+  lastActivityCompleted?: SubjectDetails['lastSeen'];
   isActivitiesFlowsLoading: boolean;
   onSelectActivity: OnSelectActivityOrFlow;
   onSelectFlow: OnSelectActivityOrFlow;

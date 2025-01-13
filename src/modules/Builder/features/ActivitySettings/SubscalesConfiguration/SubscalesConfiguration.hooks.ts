@@ -187,7 +187,7 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
   });
 
   const subscalesField = `${currentActivityFieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField, defaultValue: [] }) ?? [];
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
 
   const hasNonSubscaleItems = useCallback(
     (subscaleItems: ActivitySettingsSubscale<string>['items']) => {

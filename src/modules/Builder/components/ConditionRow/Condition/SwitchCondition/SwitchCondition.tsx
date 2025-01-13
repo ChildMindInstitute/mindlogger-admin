@@ -126,8 +126,15 @@ export const SwitchCondition = ({
           [fieldName]: value,
         });
 
+        if (selectedItem.type === 'multiSelectRows') {
+          setValue(rowIndexName, e.target.value);
+
+          return;
+        }
+
         setValue(payloadName, payload);
       },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue, selectedItem, conditionPayload, payloadName, state, selectedItemForm],
   );
 

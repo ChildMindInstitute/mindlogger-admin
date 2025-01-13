@@ -31,7 +31,7 @@ import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 
 import { UseAssignmentsTabProps } from './AssignmentsTab.types';
 
@@ -182,7 +182,7 @@ export const useAssignmentsTab = ({
   );
 
   const onClickAssign = useCallback(
-    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: RespondentDetails) => {
+    (activityOrFlow?: ParticipantActivityOrFlow, targetSubjectArg?: SubjectDetails) => {
       if (activityOrFlow) setSelectedActivityOrFlow(activityOrFlow);
       setSelectedTargetSubjectId(targetSubjectArg?.id ?? targetSubject?.id);
       setShowActivityAssign(true);
@@ -201,7 +201,7 @@ export const useAssignmentsTab = ({
         }),
       });
     },
-    [targetSubject],
+    [appletId, targetSubject?.id],
   );
 
   /**
@@ -238,7 +238,7 @@ export const useAssignmentsTab = ({
           EditablePerformanceTasks.includes(performanceTaskType ?? ''));
       const isAssignable =
         status === ActivityAssignmentStatus.Active || status === ActivityAssignmentStatus.Inactive;
-      const isLimitedRespondent = respondentSubject && !respondentSubject.userId;
+      const isLimitedRespondent = !!respondentSubject && !respondentSubject.userId;
       const isTargetTeamMember = targetSubjectArg?.tag === 'Team';
       const isAssigned = !!assignments?.some(
         (a) =>
@@ -332,7 +332,7 @@ export const useAssignmentsTab = ({
         },
         { type: MenuItemType.Divider, isDisplayed: showDivider },
         {
-          'data-testid': `${dataTestId}-take-now`,
+          'data-testid': `${dataTestId}-activity-take-now`,
           action: () =>
             openTakeNowModal(activityOrFlow, {
               sourceSubject: respondentSubject && {
@@ -356,6 +356,7 @@ export const useAssignmentsTab = ({
     },
     [
       activities,
+      appletId,
       canAccessData,
       canAssign,
       canDoTakeNow,
@@ -401,6 +402,7 @@ export const useAssignmentsTab = ({
               setSelectedTargetSubjectId(undefined);
             }
           }}
+          data-testid={`${dataTestId}-export-modal`}
         />
       )}
 

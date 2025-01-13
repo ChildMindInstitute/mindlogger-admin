@@ -12,7 +12,7 @@ import {
 } from 'api';
 import { users } from 'redux/modules';
 import { ActionsMenu, Spinner, Tooltip } from 'shared/components';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
 
@@ -101,7 +101,7 @@ const ByParticipant = () => {
 
   const handleClickNavigateToData = (
     activityOrFlow: ParticipantActivityOrFlow,
-    targetSubject: RespondentDetails,
+    targetSubject: SubjectDetails,
   ) => {
     if (!respondentSubject) return;
 

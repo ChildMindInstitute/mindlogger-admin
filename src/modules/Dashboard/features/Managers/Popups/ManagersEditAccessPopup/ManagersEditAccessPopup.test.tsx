@@ -9,8 +9,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedOwnerId,
-  mockedSubjectId1,
-  mockedSubjectId2,
+  mockedFullSubjectId1,
+  mockedFullSubjectId2,
   mockedUserData,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
@@ -71,7 +71,7 @@ const preloadedState = {
                 accessId: 'f49a8aa2-bc9c-46cc-a9b5-03f191d908a2',
                 respondentNickname: 'John Doe',
                 respondentSecretId: '66947648-8eea-4106-9081-4b66117ef2e6',
-                subjectId: mockedSubjectId1,
+                subjectId: mockedFullSubjectId1,
               },
             ],
           },
@@ -87,7 +87,7 @@ const preloadedState = {
                 accessId: '71d4840d-ab38-4b88-a65e-417918d8d329',
                 respondentNickname: 'Sam Carter',
                 respondentSecretId: '78ec50c9-cac8-46fe-9232-352c4c561a33',
-                subjectId: mockedSubjectId2,
+                subjectId: mockedFullSubjectId2,
               },
             ],
           },
