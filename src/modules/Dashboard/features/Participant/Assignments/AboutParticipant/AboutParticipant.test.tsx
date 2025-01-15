@@ -141,7 +141,10 @@ const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: {
+        ...mockedOwnerSubject,
+        teamMemberCanViewData: true,
+      },
     }),
   },
 });

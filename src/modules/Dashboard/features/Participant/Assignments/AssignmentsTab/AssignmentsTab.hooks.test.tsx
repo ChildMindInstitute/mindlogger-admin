@@ -86,7 +86,10 @@ const preloadedState: PreloadedState<RootState> = {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: {
+        ...mockedOwnerSubject,
+        teamMemberCanViewData: true,
+      },
     }),
   },
 };

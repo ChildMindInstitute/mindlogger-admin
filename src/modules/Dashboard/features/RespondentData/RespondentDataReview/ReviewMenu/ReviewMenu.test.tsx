@@ -61,6 +61,7 @@ const preloadedState = {
           userId: null,
           firstName: 'John',
           lastName: 'Doe',
+          teamMemberCanViewData: true,
         },
       },
     },
