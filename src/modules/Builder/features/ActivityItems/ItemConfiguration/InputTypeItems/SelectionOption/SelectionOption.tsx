@@ -16,6 +16,7 @@ import {
   StyledIconButton,
   StyledBodyMedium,
   variables,
+  StyledFlexTopStart,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList, toggleBooleanState } from 'shared/utils';
@@ -59,7 +60,7 @@ export const SelectionOption = ({
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const { setValue, watch, control, getValues } = useCustomFormContext();
+  const { setValue, watch, control, getValues, trigger } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const [settings, responseType, option] = useWatch({
     control,
@@ -74,8 +75,7 @@ export const SelectionOption = ({
   const optionTextMaxLength = usePortraitLayout
     ? SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT
     : SELECT_OPTION_TEXT_MAX_LENGTH;
-  const { text = '', isHidden = false, score, color, isNoneAbove = false } = option || {};
-  const scoreString = score?.toString();
+  const { text = '', isHidden = false, color, isNoneAbove = false } = option || {};
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
@@ -106,9 +106,7 @@ export const SelectionOption = ({
   };
 
   const handleScoreChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (event.target.value === '') return setValue(scoreName, 0);
-
-    setValue(scoreName, +event.target.value);
+    setValue(scoreName, event.target.value);
   };
 
   const handleOptionTextChange = useFieldLengthError();
@@ -235,53 +233,63 @@ export const SelectionOption = ({
                 {t('descriptionForNoneOption')}
               </StyledBodyMedium>
             )}
-            <StyledFlexTopCenter sx={{ m: theme.spacing(1.5, 0, hasTooltipsChecked ? 4 : 2.4) }}>
-              <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
-                <Svg id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'} />
-              </StyledSvgWrapper>
-              <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-                <Uploader
-                  uiType={UploaderUiType.Secondary}
-                  width={5.6}
-                  height={5.6}
-                  setValue={(val: string) => setValue(`${optionName}.image`, val || undefined)}
-                  getValue={() => imageSrc || ''}
-                  data-testid={`${dataTestid}-image`}
-                />
-              </StyledFlexTopCenter>
-              <StyledTextInputWrapper hasScores={!!scoreString}>
-                <InputController
-                  withDebounce
-                  {...commonInputProps}
-                  name={optionTextName}
-                  label={t('optionText')}
-                  placeholder={placeholder}
-                  onChange={(event) =>
-                    handleOptionTextChange({
-                      event,
-                      fieldName: optionTextName,
-                      maxLength: optionTextMaxLength,
-                    })
-                  }
-                  maxLength={optionTextMaxLength}
-                  data-testid={`${dataTestid}-text`}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </StyledTextInputWrapper>
-              {scoreString && (
-                <StyledScoreWrapper>
-                  <InputController
-                    {...commonInputProps}
-                    name={scoreName}
-                    type="number"
-                    label={t('score')}
-                    minNumberValue={Number.MIN_SAFE_INTEGER}
-                    onChange={handleScoreChange}
-                    data-testid={`${dataTestid}-score`}
+            <StyledFlexTopStart sx={{ m: theme.spacing(1.5, 0, hasTooltipsChecked ? 4 : 2.4) }}>
+              <StyledFlexTopCenter>
+                <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
+                  <Svg
+                    id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'}
                   />
-                </StyledScoreWrapper>
-              )}
-            </StyledFlexTopCenter>
+                </StyledSvgWrapper>
+                <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
+                  <Uploader
+                    uiType={UploaderUiType.Secondary}
+                    width={5.6}
+                    height={5.6}
+                    setValue={(val: string) => setValue(`${optionName}.image`, val || undefined)}
+                    getValue={() => imageSrc || ''}
+                    data-testid={`${dataTestid}-image`}
+                  />
+                </StyledFlexTopCenter>
+              </StyledFlexTopCenter>
+              <StyledFlexTopStart sx={{ width: '100%' }}>
+                <StyledTextInputWrapper hasScores={settings.addScores}>
+                  <InputController
+                    withDebounce
+                    {...commonInputProps}
+                    name={optionTextName}
+                    label={t('optionText')}
+                    placeholder={placeholder}
+                    onChange={(event) =>
+                      handleOptionTextChange({
+                        event,
+                        fieldName: optionTextName,
+                        maxLength: optionTextMaxLength,
+                      })
+                    }
+                    maxLength={optionTextMaxLength}
+                    data-testid={`${dataTestid}-text`}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </StyledTextInputWrapper>
+                {settings.addScores && (
+                  <StyledScoreWrapper>
+                    <InputController
+                      {...commonInputProps}
+                      name={scoreName}
+                      type="text"
+                      inputProps={{
+                        pattern: '^-?\\d*(\\.\\d+)?$',
+                        inputMode: 'decimal',
+                      }}
+                      onBlur={() => trigger(scoreName)}
+                      label={t('score')}
+                      onChange={handleScoreChange}
+                      data-testid={`${dataTestid}-score`}
+                    />
+                  </StyledScoreWrapper>
+                )}
+              </StyledFlexTopStart>
+            </StyledFlexTopStart>
             {hasTooltipsChecked && (
               <StyledTooltipWrapper>
                 <InputController
