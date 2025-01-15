@@ -80,6 +80,7 @@ describe('Participants utils tests', () => {
       subjectCreatedAt: '2021-10-01T00:00:00.000Z',
       status: ParticipantStatus.Invited,
       dataTestId,
+      teamMemberCanViewData: true,
     };
 
     const expectedContext: ParticipantActionProps = {
@@ -175,6 +176,8 @@ describe('Participants utils tests', () => {
       context: { ...expectedContext, ...options?.context },
       isDisplayed: options?.isDisplayed ?? true,
       'data-testid': `${dataTestId}-export-data`,
+      disabled: false,
+      tooltip: '',
     });
 
     const removeParticipantAction = (options?: MenuActionOptions) => ({

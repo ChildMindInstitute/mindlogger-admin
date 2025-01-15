@@ -67,8 +67,8 @@ export type Participant = {
   role: Roles;
   secretIds: string[];
   lastSeen: string;
-  isPinned?: boolean;
   details: ParticipantDetail[];
+  isPinned?: boolean;
   isAnonymousRespondent: boolean;
   email: string | null;
   status: ParticipantStatus;
