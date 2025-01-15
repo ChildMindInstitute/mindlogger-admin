@@ -6,4 +6,5 @@ export type EmptyStateProps = {
   onClickAssign?: () => void;
   /** @default '50.7rem' */
   maxWidth?: string;
+  dataTestId: string;
 };

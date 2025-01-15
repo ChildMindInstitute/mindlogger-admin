@@ -105,11 +105,13 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const { execute: executeGetName, isLoading: isGetNameLoading } = useAsync(
     getAppletUniqueNameApi,
-    (res) => {
-      setValue('name', res?.data?.result?.name ?? '');
-    },
-    () => {
-      setErrorModalVisible(true);
+    {
+      successCallback: (res) => {
+        setValue('name', res?.data?.result?.name ?? '');
+      },
+      errorCallback: () => {
+        setErrorModalVisible(true);
+      },
     },
   );
 
@@ -345,6 +347,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
                       label={<StyledBodyLarge>{t('duplicateAppletReportServer')}</StyledBodyLarge>}
                       sxLabelProps={{ ml: 0 }}
                       sx={{ pl: 0 }}
+                      data-testid={`${dataTestid}-include-report-server`}
                     />
                     {nameError && (
                       <StyledErrorText marginTop={0.5} marginBottom={0}>

@@ -10,7 +10,7 @@ import {
   StyledFlexTopCenter,
   variables,
 } from 'shared/styles';
-import { RespondentDetail } from 'modules/Dashboard/types';
+import { ParticipantDetail } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 
@@ -86,7 +86,7 @@ export const getRespondentActions = ({
 ];
 
 export const getAppletsSmallTableRows = (
-  respondentAccesses: RespondentDetail[],
+  respondentAccesses: ParticipantDetail[],
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
   respondentId: string,
   ownerId: string,

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { PreloadedState } from '@reduxjs/toolkit';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
 import { RootState } from 'redux/store';
@@ -12,7 +12,7 @@ import { initialStateData } from 'shared/state';
 import { ChartTooltip } from './ChartTooltip';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';
 
-const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
 
 const dataTestid = 'scatter-chart';
@@ -94,7 +94,7 @@ const testPositiveFlowWithNavigate = async (text: string, search: string) => {
   await userEvent.click(reviewButton);
 
   expect(mockedNavigate).toBeCalledWith({
-    pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
+    pathname: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`,
     search,
   });
 };
@@ -115,7 +115,7 @@ describe('ChartTooltip', () => {
     await viewResponseButtonClick();
 
     expect(mockedNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
+      pathname: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`,
       search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=false`,
     });
   });
@@ -128,7 +128,7 @@ describe('ChartTooltip', () => {
     await viewResponseButtonClick();
 
     expect(mockedNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
+      pathname: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`,
       search: `selectedDate=2023-12-20&submitId=${flowSubmitId}&isFeedbackVisible=false`,
     });
   });

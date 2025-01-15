@@ -1,19 +1,18 @@
 import { ParticipantActivityOrFlow, TargetSubjectsByRespondent } from 'api';
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
 import { MenuItem } from 'shared/components';
+
+import { GetActionsMenuParams } from '../../AssignmentsTab/AssignmentsTab.types';
 
 export type ExpandedViewProps = {
   activityOrFlow: ParticipantActivityOrFlow;
   targetSubjects?: TargetSubjectsByRespondent;
-  getActionsMenu: (
-    activityOrFlow: ParticipantActivityOrFlow,
-    targetSubjectArg?: RespondentDetails,
-  ) => MenuItem<unknown>[];
+  getActionsMenu: (params: GetActionsMenuParams) => MenuItem<unknown>[];
   onClickViewData: (
     activityOrFlow: ParticipantActivityOrFlow,
-    targetSubject: RespondentDetails,
+    targetSubject: SubjectDetails,
   ) => void;
-  'data-test-id': string;
+  'data-testid': string;
 };
 
 export type ExpandedViewHandle = {

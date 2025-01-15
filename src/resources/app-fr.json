@@ -1757,5 +1757,6 @@
   "autoAssignTooltip": "Gardez cette case cochée pour attribuer automatiquement cette activité ou ce flux à tous les nouveaux participants. Si, à la place, vous souhaitez attribuer manuellement des activités ou des flux à vos participants (pour une déclaration automatique ou une déclaration multi-informateurs), décochez cette case. Vous pourrez ensuite attribuer des activités ou des flux à partir de l'onglet Activités de votre applet.",
   "autoAssignActivityDisabled": "Cette activité est paramétrée sur « Attribution automatique » dans le générateur d'activités et ne peut donc pas être attribuée ici.",
   "autoAssignFlowDisabled": "Ce flux est défini sur « Auto-assign » dans l'Activity Flow Builder et ne peut donc pas être affecté ici.",
-  "goToDashboard": "Aller au tableau de bord"
+  "goToDashboard": "Aller au tableau de bord",
+  "subjectDataUnavailable": "Vous n'êtes pas autorisé à afficher les données de cet utilisateur"
 }

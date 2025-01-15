@@ -15,4 +15,5 @@ export type ActivityListItemProps = {
    * `disableRipple` prop to such a button for a better user experience.
    */
   children?: ReactNode;
+  dataTestId: string;
 };

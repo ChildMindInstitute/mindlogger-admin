@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import { RespondentDetails } from 'modules/Dashboard/types';
+import { SubjectDetails } from 'modules/Dashboard/types';
+import { ParticipantActivityOrFlow } from 'modules/Dashboard/api';
 
 export type AssignmentsTabProps = PropsWithChildren<{
   isLoadingMetadata: boolean;
@@ -10,8 +11,14 @@ export type AssignmentsTabProps = PropsWithChildren<{
 
 export type UseAssignmentsTabProps = {
   appletId?: string;
-  targetSubject?: RespondentDetails;
-  respondentSubject?: RespondentDetails;
+  targetSubject?: SubjectDetails;
+  respondentSubject?: SubjectDetails;
   handleRefetch?: () => void;
   dataTestId: string;
+};
+
+export type GetActionsMenuParams = {
+  activityOrFlow: ParticipantActivityOrFlow;
+  targetSubject?: SubjectDetails;
+  teamMemberCanViewData?: boolean;
 };
