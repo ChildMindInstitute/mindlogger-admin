@@ -79,6 +79,6 @@ describe('ParticipantDropdown', () => {
       />,
     );
 
-    expect(queryByDisplayValue(testValue.secretId!)).toBeInTheDocument();
+    expect(queryByDisplayValue(testValue.secretId as string)).toBeInTheDocument();
   });
 });

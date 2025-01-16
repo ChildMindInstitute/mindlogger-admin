@@ -30,7 +30,7 @@ import { page } from 'resources';
 import { palette } from 'shared/styles/variables/palette';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { NavigationEyebrow } from 'shared/components/NavigationEyebrow';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, TEAM_MEMBER_ROLES } from 'shared/consts';
 import { ActivityFlowThumbnail, ActivityAssignDrawer } from 'modules/Dashboard/components';
 
 import { RespondentDataHeaderProps } from './RespondentDataHeader.types';
@@ -86,7 +86,7 @@ export const RespondentDataHeader = ({
         userId: subject.userId,
         secretId: subject.secretUserId,
         nickname: subject.nickname,
-        isTeamMember: subject.tag === 'Team',
+        isTeamMember: subject.roles.some((role) => TEAM_MEMBER_ROLES.includes(role)),
         roles: subject.roles,
       },
     });
