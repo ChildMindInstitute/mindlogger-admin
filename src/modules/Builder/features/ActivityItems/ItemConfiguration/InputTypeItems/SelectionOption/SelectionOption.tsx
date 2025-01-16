@@ -75,7 +75,8 @@ export const SelectionOption = ({
   const optionTextMaxLength = usePortraitLayout
     ? SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT
     : SELECT_OPTION_TEXT_MAX_LENGTH;
-  const { text = '', isHidden = false, color, isNoneAbove = false } = option || {};
+  const { text = '', isHidden = false, score, color, isNoneAbove = false } = option || {};
+  const scoreString = score?.toString();
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
@@ -107,6 +108,14 @@ export const SelectionOption = ({
 
   const handleScoreChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue(scoreName, event.target.value);
+  };
+
+  const handleScoreFieldBlur = async () => {
+    const valid = await trigger(scoreName);
+    if (valid) {
+      const score = getValues(scoreName);
+      setValue(scoreName, parseFloat(score));
+    }
   };
 
   const handleOptionTextChange = useFieldLengthError();
@@ -281,7 +290,7 @@ export const SelectionOption = ({
                         pattern: '^-?\\d*(\\.\\d+)?$',
                         inputMode: 'decimal',
                       }}
-                      onBlur={() => trigger(scoreName)}
+                      onBlur={handleScoreFieldBlur}
                       label={t('score')}
                       onChange={handleScoreChange}
                       data-testid={`${dataTestid}-score`}
