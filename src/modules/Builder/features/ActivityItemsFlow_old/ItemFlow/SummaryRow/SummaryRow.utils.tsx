@@ -28,7 +28,7 @@ const allowedResponseTypes = [
   ItemResponseType.Message,
 ];
 
-export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOptionsProps) => {
+export const getItemsOptions = ({ items, itemsInUsage, conditions = [] }: GetItemsOptionsProps) => {
   const itemsObject = getObjectFromList(items, undefined, true);
   const conditionItemsInUsageSet = new Set(conditions.map((condition) => condition.itemName));
   const maxUsedItemIndex = Math.max(
