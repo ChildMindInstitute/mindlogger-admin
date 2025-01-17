@@ -40,7 +40,7 @@ import {
   StyledTextInputWrapper,
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
-import { SelectionOptionProps } from './SelectionOption.types';
+import { OptionActions, SelectionOptionProps } from './SelectionOption.types';
 import { getActions, getDependentConditions } from './SelectionOption.utils';
 import { useSetSelectionOptionValue } from './SelectionOption.hooks';
 import { RemoveOptionPopup } from './RemoveOptionPopup';
@@ -75,8 +75,7 @@ export const SelectionOption = ({
   const optionTextMaxLength = usePortraitLayout
     ? SELECT_OPTION_TEXT_MAX_LENGTH_PORTRAIT
     : SELECT_OPTION_TEXT_MAX_LENGTH;
-  const { text = '', isHidden = false, score, color, isNoneAbove = false } = option || {};
-  const scoreString = score?.toString();
+  const { text = '', isHidden = false, color, isNoneAbove = false } = option || {};
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
@@ -158,7 +157,7 @@ export const SelectionOption = ({
     handleRemoveModalClose();
   };
 
-  const actions = {
+  const actions: OptionActions['actions'] = {
     optionHide: () => setValue(`${optionName}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
