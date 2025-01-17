@@ -30,6 +30,7 @@ describe('Participants utils tests', () => {
         subjectLastName: 'Doe',
         subjectCreatedAt: '2021-10-01T00:00:00.000Z',
         invitation: null,
+        roles: [],
       },
       {
         appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -44,6 +45,7 @@ describe('Participants utils tests', () => {
         subjectLastName: 'Doe',
         subjectCreatedAt: '2021-10-01T00:00:00.000Z',
         invitation: null,
+        roles: [],
       },
     ];
 

@@ -8,7 +8,13 @@ import {
 } from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
 import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
-import { Manager, Participant, ParticipantStatus, SubjectDetails } from 'modules/Dashboard/types';
+import {
+  Manager,
+  Participant,
+  ParticipantDetail,
+  ParticipantStatus,
+  SubjectDetailsWithRoles,
+} from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -23,6 +29,7 @@ import {
   SubscaleTotalScore,
 } from './consts';
 import {
+  Activity,
   ActivitySettingsSubscale,
   ActivitySettingsSubscaleItem,
   Item,
@@ -70,7 +77,7 @@ export const mockedApplet = {
   encryption: mockedEncryption,
 } as Applet;
 
-export const mockedOwnerSubject: SubjectDetails = {
+export const mockedOwnerSubject: SubjectDetailsWithRoles = {
   id: '123e4567-e89b-12d3-a456-426614174000',
   secretUserId: 'mockedOwnerSecretId',
   nickname: `${mockedUserData.firstName} ${mockedUserData.lastName}`,
@@ -79,17 +86,16 @@ export const mockedOwnerSubject: SubjectDetails = {
   userId: mockedUserData.id,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
+  roles: [Roles.Owner, Roles.Respondent],
 };
 
-export const mockedOwnerParticipant = {
+export const mockedOwnerParticipant: Participant = {
   id: mockedUserData.id,
   nicknames: [mockedOwnerSubject.nickname],
   secretIds: [mockedOwnerSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-  role: Roles.Owner,
   details: [
     {
       appletId: mockedApplet.id,
@@ -106,6 +112,7 @@ export const mockedOwnerParticipant = {
       subjectLastName: mockedOwnerSubject.lastName,
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
+      roles: [Roles.Owner, Roles.Respondent],
     },
   ],
   status: ParticipantStatus.Invited,
@@ -113,10 +120,10 @@ export const mockedOwnerParticipant = {
 };
 
 export const mockedOwnerManager: Manager = {
-  id: mockedOwnerParticipant.id,
+  id: mockedOwnerParticipant.id!,
   firstName: mockedUserData.firstName,
   lastName: mockedUserData.lastName,
-  email: mockedOwnerParticipant.email,
+  email: mockedOwnerParticipant.email!,
   roles: [Roles.Owner],
   lastSeen: new Date().toDateString(),
   isPinned: mockedOwnerParticipant.isPinned,
@@ -193,7 +200,7 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedFullSubjectId1 = 'subject-id-987';
-export const mockedFullSubject1: SubjectDetails = {
+export const mockedFullSubject1: SubjectDetailsWithRoles = {
   id: mockedFullSubjectId1,
   secretUserId: 'mockedSecretId',
   nickname: 'Mocked Respondent',
@@ -202,7 +209,27 @@ export const mockedFullSubject1: SubjectDetails = {
   userId: mockedFullParticipantId1,
   firstName: 'John',
   lastName: 'Doe',
+  roles: [Roles.Respondent],
 };
+
+export const mockedFullParticipant1Details: ParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: 'Mocked Applet',
+  appletImage: '',
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  respondentNickname: mockedFullSubject1.nickname,
+  respondentSecretId: mockedFullSubject1.secretUserId,
+  hasIndividualSchedule: false,
+  encryption: mockedEncryption,
+  subjectId: mockedFullSubjectId1,
+  subjectTag: mockedFullSubject1.tag,
+  subjectFirstName: mockedFullSubject1.firstName,
+  subjectLastName: mockedFullSubject1.lastName,
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
+  roles: [Roles.Respondent],
+};
+
 export const mockedFullParticipant1: Participant = {
   id: mockedFullParticipantId1,
   nicknames: [mockedFullSubject1.nickname],
@@ -210,25 +237,7 @@ export const mockedFullParticipant1: Participant = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  role: Roles.Respondent,
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: 'Mocked Applet',
-      appletImage: '',
-      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: mockedFullSubject1.nickname,
-      respondentSecretId: mockedFullSubject1.secretUserId,
-      hasIndividualSchedule: false,
-      encryption: mockedEncryption,
-      subjectId: mockedFullSubjectId1,
-      subjectTag: mockedFullSubject1.tag,
-      subjectFirstName: mockedFullSubject1.firstName,
-      subjectLastName: mockedFullSubject1.lastName,
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-    },
-  ],
+  details: [mockedFullParticipant1Details],
   status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
 };
@@ -242,7 +251,6 @@ export const mockedFullParticipant2: Participant = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  role: Roles.Respondent,
   status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
   details: [
@@ -261,12 +269,13 @@ export const mockedFullParticipant2: Participant = {
       subjectLastName: 'Doe',
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
+      roles: [Roles.Respondent],
     },
   ],
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';
-export const mockedLimitedSubject: SubjectDetails = {
+export const mockedLimitedSubject: SubjectDetailsWithRoles = {
   id: mockedLimitedSubjectId,
   secretUserId: 'limited-1',
   nickname: 'Limited 1',
@@ -275,35 +284,183 @@ export const mockedLimitedSubject: SubjectDetails = {
   userId: null,
   firstName: 'Limited',
   lastName: 'One',
+  roles: [],
 };
-export const mockedLimitedParticipant = {
+
+export const mockedLimitedParticipantDetails: ParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: mockedApplet.displayName,
+  appletImage: '',
+  accessId: null,
+  respondentNickname: mockedLimitedSubject.nickname,
+  respondentSecretId: mockedLimitedSubject.secretUserId,
+  hasIndividualSchedule: false,
+  encryption: mockedApplet.encryption,
+  subjectId: mockedLimitedSubjectId,
+  subjectTag: mockedLimitedSubject.tag,
+  subjectFirstName: mockedLimitedSubject.firstName,
+  subjectLastName: mockedLimitedSubject.lastName,
+  subjectCreatedAt: '2024-07-12T13:07:25.455726',
+  invitation: null,
+  roles: [],
+};
+
+export const mockedLimitedParticipant: Participant = {
   id: null,
   nicknames: [mockedLimitedSubject.nickname],
   secretIds: [mockedLimitedSubject.secretUserId],
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
-  role: Roles.Respondent,
   status: ParticipantStatus.NotInvited,
   email: null,
-  details: [
+  details: [mockedLimitedParticipantDetails],
+};
+
+export const mockedAppletDataExistingActivity: Activity = {
+  name: 'Existing Activity',
+  description: {
+    en: '',
+  },
+  splashScreen: '',
+  image: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: true,
+  isHidden: false,
+  scoresAndReports: {
+    generateReport: false,
+    showScoreSummary: false,
+    reports: [],
+  },
+  subscaleSetting: null,
+  id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+  items: [
     {
-      appletId: mockedAppletId,
-      appletDisplayName: mockedApplet.displayName,
-      appletImage: '',
-      accessId: null,
-      respondentNickname: mockedLimitedSubject.nickname,
-      respondentSecretId: mockedLimitedSubject.secretUserId,
-      hasIndividualSchedule: false,
-      encryption: mockedApplet.encryption,
-      subjectId: mockedLimitedSubjectId,
-      subjectTag: mockedLimitedSubject.tag,
-      subjectFirstName: mockedLimitedSubject.firstName,
-      subjectLastName: mockedLimitedSubject.lastName,
-      subjectCreatedAt: '2024-07-12T13:07:25.455726',
-      invitation: null,
+      question: {
+        en: 'ss',
+      },
+      responseType: ItemResponseType.SingleSelection,
+      responseValues: {
+        options: [
+          {
+            id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+            text: 's1',
+            score: 2,
+            value: 0,
+          },
+          {
+            id: 'e3ca9405-71e9-4627-8311-d405f383246e',
+            text: 's23333333',
+            score: 4,
+            value: 1,
+          },
+        ],
+      },
+      config: defaultSingleSelectionConfig,
+      name: 'Item1',
+      id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+      order: 1,
+    },
+    {
+      question: {
+        en: 'ms',
+      },
+      responseType: ItemResponseType.MultipleSelection,
+      responseValues: {
+        options: [
+          {
+            id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+            text: 'm1',
+            score: 1,
+            value: 0,
+          },
+          {
+            id: '188fc535-1e45-444d-88ec-91cb29737b03',
+            text: 'm2',
+            score: 1,
+            value: 1,
+          },
+          {
+            id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
+            text: 'm3',
+            score: 1,
+            value: 2,
+          },
+        ],
+      },
+      config: defaultMultiSelectionConfig,
+      name: 'Item2',
+      conditionalLogic: {
+        match: ConditionalLogicMatch.Any,
+        conditions: [
+          {
+            itemName: 'Item1',
+            type: ConditionType.EqualToOption,
+            payload: {
+              optionValue: '0',
+            },
+          },
+        ],
+      },
+      id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+      order: 2,
+    },
+    {
+      question: {
+        en: 'slider',
+      },
+      responseType: ItemResponseType.Slider,
+      responseValues: {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 4,
+      },
+      config: defaultSliderConfig,
+      name: 'Item3',
+      conditionalLogic: {
+        match: ConditionalLogicMatch.Any,
+        conditions: [
+          {
+            itemName: 'Item2',
+            type: ConditionType.NotIncludesOption,
+            payload: {
+              optionValue: '0',
+            },
+          },
+        ],
+      },
+      id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+      order: 3,
+    },
+    {
+      question: {
+        en: 'time',
+      },
+      responseType: ItemResponseType.Time,
+      responseValues: null,
+      config: defaultTimeConfig,
+      name: 'Item4',
+      id: '4b334484-947b-4287-941c-ed4cbf0dc955',
+      order: 4,
+    },
+    {
+      question: {
+        en: 'text',
+      },
+      responseType: ItemResponseType.Text,
+      responseValues: null,
+      config: defaultTextConfig,
+      name: 'Item5',
+      id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
+      order: 5,
     },
   ],
+  createdAt: '2023-10-19T08:29:43.180317',
+  isPerformanceTask: false,
+  performanceTaskType: null,
 };
 
 export const mockedAppletData: SingleApplet = {
@@ -334,151 +491,7 @@ export const mockedAppletData: SingleApplet = {
   updatedAt: '2023-10-19T08:29:43.167613',
   isPublished: false,
   activities: [
-    {
-      name: 'Existing Activity',
-      description: {
-        en: '',
-      },
-      splashScreen: '',
-      image: '',
-      showAllAtOnce: false,
-      isSkippable: false,
-      isReviewable: false,
-      responseIsEditable: true,
-      isHidden: false,
-      scoresAndReports: {
-        generateReport: false,
-        showScoreSummary: false,
-        reports: [],
-      },
-      subscaleSetting: null,
-      id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
-      items: [
-        {
-          question: {
-            en: 'ss',
-          },
-          responseType: ItemResponseType.SingleSelection,
-          responseValues: {
-            options: [
-              {
-                id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
-                text: 's1',
-                score: 2,
-                value: 0,
-              },
-              {
-                id: 'e3ca9405-71e9-4627-8311-d405f383246e',
-                text: 's23333333',
-                score: 4,
-                value: 1,
-              },
-            ],
-          },
-          config: defaultSingleSelectionConfig,
-          name: 'Item1',
-          id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
-          order: 1,
-        },
-        {
-          question: {
-            en: 'ms',
-          },
-          responseType: ItemResponseType.MultipleSelection,
-          responseValues: {
-            options: [
-              {
-                id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
-                text: 'm1',
-                score: 1,
-                value: 0,
-              },
-              {
-                id: '188fc535-1e45-444d-88ec-91cb29737b03',
-                text: 'm2',
-                score: 1,
-                value: 1,
-              },
-              {
-                id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
-                text: 'm3',
-                score: 1,
-                value: 2,
-              },
-            ],
-          },
-          config: defaultMultiSelectionConfig,
-          name: 'Item2',
-          conditionalLogic: {
-            match: ConditionalLogicMatch.Any,
-            conditions: [
-              {
-                itemName: 'Item1',
-                type: ConditionType.EqualToOption,
-                payload: {
-                  optionValue: '0',
-                },
-              },
-            ],
-          },
-          id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
-          order: 2,
-        },
-        {
-          question: {
-            en: 'slider',
-          },
-          responseType: ItemResponseType.Slider,
-          responseValues: {
-            minLabel: 'min',
-            maxLabel: 'max',
-            minValue: 1,
-            maxValue: 4,
-          },
-          config: defaultSliderConfig,
-          name: 'Item3',
-          conditionalLogic: {
-            match: ConditionalLogicMatch.Any,
-            conditions: [
-              {
-                itemName: 'Item2',
-                type: ConditionType.NotIncludesOption,
-                payload: {
-                  optionValue: '0',
-                },
-              },
-            ],
-          },
-          id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
-          order: 3,
-        },
-        {
-          question: {
-            en: 'time',
-          },
-          responseType: ItemResponseType.Time,
-          responseValues: null,
-          config: defaultTimeConfig,
-          name: 'Item4',
-          id: '4b334484-947b-4287-941c-ed4cbf0dc955',
-          order: 4,
-        },
-        {
-          question: {
-            en: 'text',
-          },
-          responseType: ItemResponseType.Text,
-          responseValues: null,
-          config: defaultTextConfig,
-          name: 'Item5',
-          id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
-          order: 5,
-        },
-      ],
-      createdAt: '2023-10-19T08:29:43.180317',
-      isPerformanceTask: false,
-      performanceTaskType: null,
-    },
+    mockedAppletDataExistingActivity,
     {
       name: 'Newly added activity',
       description: {

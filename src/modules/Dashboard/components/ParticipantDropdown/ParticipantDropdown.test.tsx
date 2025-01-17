@@ -2,6 +2,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ParticipantDropdown } from './ParticipantDropdown';
+import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 
 jest.mock('shared/hooks/useFeatureFlags');
 
@@ -35,11 +36,12 @@ describe('ParticipantDropdown', () => {
   });
 
   test('Uses value if provided', () => {
-    const testValue = {
+    const testValue: ParticipantDropdownOption = {
       id: 'id',
       nickname: 'nickname',
       secretId: 'secretId',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByDisplayValue } = renderWithProviders(
@@ -59,10 +61,11 @@ describe('ParticipantDropdown', () => {
   });
 
   test('Renders value correctly without nickname', () => {
-    const testValue = {
+    const testValue: ParticipantDropdownOption = {
       id: 'id',
       secretId: 'secretId',
       isTeamMember: false,
+      roles: [],
     };
 
     const { queryByDisplayValue } = renderWithProviders(
@@ -76,6 +79,6 @@ describe('ParticipantDropdown', () => {
       />,
     );
 
-    expect(queryByDisplayValue(testValue.secretId)).toBeInTheDocument();
+    expect(queryByDisplayValue(testValue.secretId as string)).toBeInTheDocument();
   });
 });
