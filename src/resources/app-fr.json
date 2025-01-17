@@ -929,6 +929,25 @@
       "saveProjectFailed": "Échec de l'enregistrement du projet"
     }
   },
+  "prolific": {
+    "connect": "Se connecter",
+    "description": "Cette intégration vous permettra de collecter les réponses de participants recrutés sur Prolific via le lien public de l'applet.",
+    "configurationPopupTitle": "Configuration Prolific",
+    "configurationPopupDescription": "Veuillez entrer votre token API de Prolific.",
+    "configurationPopupConnecting": "Connexion…",
+    "apiToken": "Token API de Prolific",
+    "findProlificApiToken": "Où puis-je trouver mon token API de Prolific ?",
+    "prolificConnectionStatus": "Connecté",
+    "viewDashboard": "Afficher le tableau de bord Prolific",
+    "disconnect": "Se déconnecter de Prolific",
+    "delete": "Supprimer le token API de Prolific",
+    "addStudy": "Ajouter une étude",
+    "deleteToken": "Supprimer le token",
+    "deleting": "Suppression…",
+    "deletionWarning": "Êtes-vous sûr de vouloir déconnecter Prolific de cet applet ?",
+    "show": "Montrer",
+    "hide": "Cacher"
+  },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
   "loginLink": "Connexion",

@@ -1,10 +1,23 @@
 import { LorisIntegration } from './Integrations';
+import { ProlificIntegration } from './Integrations/ProlificIntegration/ProlificIntegration';
 import { StyledIntegrationContainer } from './IntegrationsListSetting.styles';
+import { IntegrationSettings } from './IntegrationsListSetting.types';
 
-export const IntegrationsListSetting = () => (
+export const IntegrationsListSetting = ({
+  lorisIntegration,
+  prolificIntegration,
+}: IntegrationSettings) => (
   <>
-    <StyledIntegrationContainer>
-      <LorisIntegration />
-    </StyledIntegrationContainer>
+    {lorisIntegration && (
+      <StyledIntegrationContainer>
+        <LorisIntegration />
+      </StyledIntegrationContainer>
+    )}
+
+    {prolificIntegration && (
+      <StyledIntegrationContainer>
+        <ProlificIntegration />
+      </StyledIntegrationContainer>
+    )}
   </>
 );

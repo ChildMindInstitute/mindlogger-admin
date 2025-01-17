@@ -468,4 +468,5 @@ export const observerStyles = {
 
 export const enum IntegrationTypes {
   Loris = 'LORIS',
+  Prolific = 'PROLIFIC',
 }
