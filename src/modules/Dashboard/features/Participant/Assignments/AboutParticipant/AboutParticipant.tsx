@@ -29,7 +29,7 @@ const AboutParticipant = () => {
 
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
-  const canViewData = hasPermissionToViewData(roles);
+  const canViewData = targetSubject?.teamMemberCanViewData ?? hasPermissionToViewData(roles);
 
   const {
     execute: fetchActivities,
@@ -156,7 +156,10 @@ const AboutParticipant = () => {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: -6, horizontal: 'right' }}
                   buttonColor="secondary"
-                  menuItems={getActionsMenu({ activityOrFlow: activity })}
+                  menuItems={getActionsMenu({
+                    activityOrFlow: activity,
+                    teamMemberCanViewData: canViewData,
+                  })}
                   data-testid={`${dataTestId}-${index}`}
                 />
               </ActivityListItem>

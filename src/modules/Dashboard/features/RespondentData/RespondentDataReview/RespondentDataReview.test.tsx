@@ -69,6 +69,7 @@ const preloadedState = {
           userId: mockedFullSubjectId1,
           firstName: 'John',
           lastName: 'Doe',
+          teamMemberCanViewData: true,
         },
       },
     },

@@ -8,7 +8,16 @@ import {
 } from 'modules/Dashboard/api/api.types';
 import { page } from 'resources';
 import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
-import { Manager, Participant, ParticipantStatus, SubjectDetails } from 'modules/Dashboard/types';
+import {
+  Manager,
+  Participant,
+  ParticipantDetail,
+  ParticipantDetailWithDataAccess,
+  ParticipantStatus,
+  ParticipantWithDataAccess,
+  SubjectDetails,
+  SubjectDetailsWithDataAccess,
+} from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -81,6 +90,33 @@ export const mockedOwnerSubject: SubjectDetails = {
   lastName: mockedUserData.lastName,
 };
 
+export const mockedOwnerSubjectWithDataAccess: SubjectDetailsWithDataAccess = {
+  ...mockedOwnerSubject,
+  teamMemberCanViewData: true,
+};
+
+export const mockedOwnerParticipantDetail = {
+  appletId: mockedApplet.id,
+  appletDisplayName: mockedApplet.displayName,
+  appletImage: '',
+  accessId: '912e17b8-195f-4685-b77b-137539b9054d',
+  respondentNickname: mockedOwnerSubject.nickname,
+  respondentSecretId: mockedOwnerSubject.secretUserId,
+  hasIndividualSchedule: false,
+  encryption: mockedApplet.encryption,
+  subjectId: mockedOwnerSubject.id,
+  subjectTag: mockedOwnerSubject.tag,
+  subjectFirstName: mockedOwnerSubject.firstName,
+  subjectLastName: mockedOwnerSubject.lastName,
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
+};
+
+export const mockedOwnerParticipantDetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedOwnerParticipantDetail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedOwnerParticipant = {
   id: mockedUserData.id,
   nicknames: [mockedOwnerSubject.nickname],
@@ -90,26 +126,14 @@ export const mockedOwnerParticipant = {
   isPinned: false,
   accessId: '912e17b8-195f-4685-b77b-137539b9054d',
   role: Roles.Owner,
-  details: [
-    {
-      appletId: mockedApplet.id,
-      appletDisplayName: mockedApplet.displayName,
-      appletImage: '',
-      accessId: '912e17b8-195f-4685-b77b-137539b9054d',
-      respondentNickname: mockedOwnerSubject.nickname,
-      respondentSecretId: mockedOwnerSubject.secretUserId,
-      hasIndividualSchedule: false,
-      encryption: mockedApplet.encryption,
-      subjectId: mockedOwnerSubject.id,
-      subjectTag: mockedOwnerSubject.tag,
-      subjectFirstName: mockedOwnerSubject.firstName,
-      subjectLastName: mockedOwnerSubject.lastName,
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-    },
-  ],
+  details: [mockedOwnerParticipantDetail],
   status: ParticipantStatus.Invited,
   email: mockedUserData.email,
+};
+
+export const mockedOwnerParticipantWithDataAccess: ParticipantWithDataAccess = {
+  ...mockedOwnerParticipant,
+  details: [mockedOwnerParticipantDetailWithDataAccess],
 };
 
 export const mockedOwnerManager: Manager = {
@@ -203,6 +227,29 @@ export const mockedFullSubject1: SubjectDetails = {
   firstName: 'John',
   lastName: 'Doe',
 };
+
+export const mockedFullParticipant1Detail: ParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: 'Mocked Applet',
+  appletImage: '',
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  respondentNickname: mockedFullSubject1.nickname,
+  respondentSecretId: mockedFullSubject1.secretUserId,
+  hasIndividualSchedule: false,
+  encryption: mockedEncryption,
+  subjectId: mockedFullSubjectId1,
+  subjectTag: mockedFullSubject1.tag,
+  subjectFirstName: mockedFullSubject1.firstName,
+  subjectLastName: mockedFullSubject1.lastName,
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
+};
+
+export const mockedFullParticipant1DetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedFullParticipant1Detail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedFullParticipant1: Participant = {
   id: mockedFullParticipantId1,
   nicknames: [mockedFullSubject1.nickname],
@@ -211,26 +258,14 @@ export const mockedFullParticipant1: Participant = {
   lastSeen: new Date().toDateString(),
   isPinned: false,
   role: Roles.Respondent,
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: 'Mocked Applet',
-      appletImage: '',
-      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: mockedFullSubject1.nickname,
-      respondentSecretId: mockedFullSubject1.secretUserId,
-      hasIndividualSchedule: false,
-      encryption: mockedEncryption,
-      subjectId: mockedFullSubjectId1,
-      subjectTag: mockedFullSubject1.tag,
-      subjectFirstName: mockedFullSubject1.firstName,
-      subjectLastName: mockedFullSubject1.lastName,
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-    },
-  ],
+  details: [mockedFullParticipant1Detail],
   status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
+};
+
+export const mockedFullParticipant1WithDataAccess: ParticipantWithDataAccess = {
+  ...mockedFullParticipant1,
+  details: [mockedFullParticipant1DetailWithDataAccess],
 };
 
 export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
@@ -276,6 +311,29 @@ export const mockedLimitedSubject: SubjectDetails = {
   firstName: 'Limited',
   lastName: 'One',
 };
+
+export const mockedLimitedParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: mockedApplet.displayName,
+  appletImage: '',
+  accessId: null,
+  respondentNickname: mockedLimitedSubject.nickname,
+  respondentSecretId: mockedLimitedSubject.secretUserId,
+  hasIndividualSchedule: false,
+  encryption: mockedApplet.encryption,
+  subjectId: mockedLimitedSubjectId,
+  subjectTag: mockedLimitedSubject.tag,
+  subjectFirstName: mockedLimitedSubject.firstName,
+  subjectLastName: mockedLimitedSubject.lastName,
+  subjectCreatedAt: '2024-07-12T13:07:25.455726',
+  invitation: null,
+};
+
+export const mockedLimitedParticipantDetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedLimitedParticipantDetail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedLimitedParticipant = {
   id: null,
   nicknames: [mockedLimitedSubject.nickname],
@@ -286,24 +344,12 @@ export const mockedLimitedParticipant = {
   role: Roles.Respondent,
   status: ParticipantStatus.NotInvited,
   email: null,
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: mockedApplet.displayName,
-      appletImage: '',
-      accessId: null,
-      respondentNickname: mockedLimitedSubject.nickname,
-      respondentSecretId: mockedLimitedSubject.secretUserId,
-      hasIndividualSchedule: false,
-      encryption: mockedApplet.encryption,
-      subjectId: mockedLimitedSubjectId,
-      subjectTag: mockedLimitedSubject.tag,
-      subjectFirstName: mockedLimitedSubject.firstName,
-      subjectLastName: mockedLimitedSubject.lastName,
-      subjectCreatedAt: '2024-07-12T13:07:25.455726',
-      invitation: null,
-    },
-  ],
+  details: [mockedLimitedParticipantDetail],
+};
+
+export const mockedLimitedParticipantWithDataAccess: ParticipantWithDataAccess = {
+  ...mockedLimitedParticipant,
+  details: [mockedLimitedParticipantDetailWithDataAccess],
 };
 
 export const mockedAppletData: SingleApplet = {

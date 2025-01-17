@@ -19,6 +19,7 @@ import {
   mockedUserData,
   mockedFullSubjectId1,
   mockedFullSubjectId2,
+  mockedOwnerSubjectWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -118,7 +119,7 @@ const preloadedState: PreloadedState<RootState> = {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 };

@@ -33,12 +33,16 @@ export const mockGetRequestResponses = (
   });
 };
 
+export type HttpResponseWithData<D> = Omit<HttpResponse, 'data'> & { data: D };
+
 /**
  * Easily mock a successful HttpResponse by just providing the data
  * @param data
  */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const mockSuccessfulHttpResponse = <T extends unknown>(data: T): HttpResponse => ({
+export const mockSuccessfulHttpResponse = <T extends unknown>(
+  data: T,
+): HttpResponseWithData<T> => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data,
 });

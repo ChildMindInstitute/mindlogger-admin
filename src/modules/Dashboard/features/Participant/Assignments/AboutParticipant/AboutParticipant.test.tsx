@@ -5,12 +5,13 @@ import userEvent from '@testing-library/user-event';
 import {
   mockedAppletData,
   mockedAppletId,
-  mockedFullParticipant1,
-  mockedLimitedParticipant,
+  mockedFullParticipant1WithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
   mockedOwnerId,
   mockedOwnerManager,
-  mockedOwnerParticipant,
+  mockedOwnerParticipantWithDataAccess,
   mockedOwnerSubject,
+  mockedOwnerSubjectWithDataAccess,
   mockParticipantActivities,
   mockParticipantFlows,
 } from 'shared/mock';
@@ -25,6 +26,7 @@ import {
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
+import { ParticipantWithDataAccess } from 'modules/Dashboard/types';
 
 import AboutParticipant from './AboutParticipant';
 
@@ -108,7 +110,11 @@ const successfulGetAppletMock = mockSuccessfulHttpResponse({
 });
 
 const successfulGetWorkspaceRespondentsMock = ({ userId }: Record<string, string>) => {
-  const respondents = [mockedOwnerParticipant, mockedFullParticipant1, mockedLimitedParticipant];
+  const respondents: ParticipantWithDataAccess[] = [
+    mockedOwnerParticipantWithDataAccess,
+    mockedFullParticipant1WithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
+  ];
   const filteredRespondents = userId ? respondents.filter((r) => r.id === userId) : respondents;
 
   return mockSuccessfulHttpResponse({
@@ -141,7 +147,7 @@ const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 });
@@ -150,6 +156,15 @@ const renderOptions = {
   preloadedState: preloadedState(),
   route,
   routePath,
+};
+
+const getRequestResponses = {
+  [GET_APPLET_URL]: successfulGetAppletMock,
+  [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
+  [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
+  [GET_APPLET_TARGET_SUBJECT_ACTIVITIES_URL]: successfulGetAppletTargetSubjectActivitiesMock,
+  [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
+  [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
 };
 
 jest.mock('shared/hooks/useFeatureFlags');
@@ -169,14 +184,7 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
       resetLDContext: jest.fn(),
     });
 
-    mockGetRequestResponses({
-      [GET_APPLET_URL]: successfulGetAppletMock,
-      [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
-      [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
-      [GET_APPLET_TARGET_SUBJECT_ACTIVITIES_URL]: successfulGetAppletTargetSubjectActivitiesMock,
-      [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
-      [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
-    });
+    mockGetRequestResponses(getRequestResponses);
   });
 
   afterEach(() => {
@@ -191,13 +199,9 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
 
   it('should render the empty state', async () => {
     mockGetRequestResponses({
-      [GET_APPLET_URL]: successfulGetAppletMock,
-      [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
-      [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
+      ...getRequestResponses,
       [GET_APPLET_TARGET_SUBJECT_ACTIVITIES_URL]:
         successfulEmptyGetAppletTargetSubjectActivitiesMock,
-      [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
-      [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
     });
 
     renderWithProviders(<AboutParticipant />, renderOptions);
@@ -272,10 +276,15 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
     expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
   });
 
-  it('should disable the view data button for coordinators', async () => {
+  it('should disable the view data button according to API data', async () => {
+    const localPreloadedState = preloadedState();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    localPreloadedState.users!.subjectDetails.data!.result.teamMemberCanViewData = false;
+
     renderWithProviders(<AboutParticipant />, {
       ...renderOptions,
-      preloadedState: preloadedState(Roles.Coordinator),
+      preloadedState: localPreloadedState,
     });
 
     const activitiesOrFlows = await screen.findAllByTestId(`${testId}-activity-list-item`);
