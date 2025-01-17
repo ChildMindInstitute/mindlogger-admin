@@ -28,9 +28,9 @@ import {
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
+import { ParticipantWithDataAccess } from 'modules/Dashboard/types';
 
 import AboutParticipant from './AboutParticipant';
-import { ParticipantWithDataAccess } from '../../../../types';
 
 /* Mocks
 =================================================== */
