@@ -5,15 +5,13 @@ import userEvent from '@testing-library/user-event';
 import {
   mockedAppletData,
   mockedAppletId,
-  mockedFullParticipant1,
-  mockedFullParticipant1Detail,
-  mockedLimitedParticipant,
-  mockedLimitedParticipantDetail,
+  mockedFullParticipant1WithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
   mockedOwnerId,
   mockedOwnerManager,
-  mockedOwnerParticipant,
-  mockedOwnerParticipantDetail,
+  mockedOwnerParticipantWithDataAccess,
   mockedOwnerSubject,
+  mockedOwnerSubjectWithDataAccess,
   mockParticipantActivities,
   mockParticipantFlows,
 } from 'shared/mock';
@@ -113,18 +111,9 @@ const successfulGetAppletMock = mockSuccessfulHttpResponse({
 
 const successfulGetWorkspaceRespondentsMock = ({ userId }: Record<string, string>) => {
   const respondents: ParticipantWithDataAccess[] = [
-    {
-      ...mockedOwnerParticipant,
-      details: [{ ...mockedOwnerParticipantDetail, teamMemberCanViewData: true }],
-    },
-    {
-      ...mockedFullParticipant1,
-      details: [{ ...mockedFullParticipant1Detail, teamMemberCanViewData: true }],
-    },
-    {
-      ...mockedLimitedParticipant,
-      details: [{ ...mockedLimitedParticipantDetail, teamMemberCanViewData: true }],
-    },
+    mockedOwnerParticipantWithDataAccess,
+    mockedFullParticipant1WithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
   ];
   const filteredRespondents = userId ? respondents.filter((r) => r.id === userId) : respondents;
 
@@ -158,10 +147,7 @@ const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: {
-        ...mockedOwnerSubject,
-        teamMemberCanViewData: true,
-      },
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 });

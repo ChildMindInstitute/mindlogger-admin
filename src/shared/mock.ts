@@ -12,8 +12,11 @@ import {
   Manager,
   Participant,
   ParticipantDetail,
+  ParticipantDetailWithDataAccess,
   ParticipantStatus,
+  ParticipantWithDataAccess,
   SubjectDetails,
+  SubjectDetailsWithDataAccess,
 } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
@@ -87,6 +90,11 @@ export const mockedOwnerSubject: SubjectDetails = {
   lastName: mockedUserData.lastName,
 };
 
+export const mockedOwnerSubjectWithDataAccess: SubjectDetailsWithDataAccess = {
+  ...mockedOwnerSubject,
+  teamMemberCanViewData: true,
+};
+
 export const mockedOwnerParticipantDetail = {
   appletId: mockedApplet.id,
   appletDisplayName: mockedApplet.displayName,
@@ -104,6 +112,11 @@ export const mockedOwnerParticipantDetail = {
   invitation: null,
 };
 
+export const mockedOwnerParticipantDetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedOwnerParticipantDetail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedOwnerParticipant = {
   id: mockedUserData.id,
   nicknames: [mockedOwnerSubject.nickname],
@@ -116,6 +129,11 @@ export const mockedOwnerParticipant = {
   details: [mockedOwnerParticipantDetail],
   status: ParticipantStatus.Invited,
   email: mockedUserData.email,
+};
+
+export const mockedOwnerParticipantWithDataAccess: ParticipantWithDataAccess = {
+  ...mockedOwnerParticipant,
+  details: [mockedOwnerParticipantDetailWithDataAccess],
 };
 
 export const mockedOwnerManager: Manager = {
@@ -227,6 +245,11 @@ export const mockedFullParticipant1Detail: ParticipantDetail = {
   invitation: null,
 };
 
+export const mockedFullParticipant1DetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedFullParticipant1Detail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedFullParticipant1: Participant = {
   id: mockedFullParticipantId1,
   nicknames: [mockedFullSubject1.nickname],
@@ -238,6 +261,11 @@ export const mockedFullParticipant1: Participant = {
   details: [mockedFullParticipant1Detail],
   status: ParticipantStatus.Invited,
   email: 'resp1@mail.com',
+};
+
+export const mockedFullParticipant1WithDataAccess: ParticipantWithDataAccess = {
+  ...mockedFullParticipant1,
+  details: [mockedFullParticipant1DetailWithDataAccess],
 };
 
 export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
@@ -301,6 +329,11 @@ export const mockedLimitedParticipantDetail = {
   invitation: null,
 };
 
+export const mockedLimitedParticipantDetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedLimitedParticipantDetail,
+  teamMemberCanViewData: true,
+};
+
 export const mockedLimitedParticipant = {
   id: null,
   nicknames: [mockedLimitedSubject.nickname],
@@ -312,6 +345,11 @@ export const mockedLimitedParticipant = {
   status: ParticipantStatus.NotInvited,
   email: null,
   details: [mockedLimitedParticipantDetail],
+};
+
+export const mockedLimitedParticipantWithDataAccess: ParticipantWithDataAccess = {
+  ...mockedLimitedParticipant,
+  details: [mockedLimitedParticipantDetailWithDataAccess],
 };
 
 export const mockedAppletData: SingleApplet = {

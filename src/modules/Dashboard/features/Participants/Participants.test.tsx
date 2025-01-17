@@ -12,7 +12,7 @@ import {
   mockedFullParticipant1,
   mockedFullParticipantId1,
   mockedFullSubjectId1,
-  mockedFullParticipant1Detail,
+  mockedFullParticipant1DetailWithDataAccess,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -295,7 +295,7 @@ describe('Participants component tests', () => {
       mockGetRequestResponses({
         ...mockedResponses,
         [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({
-          details: [{ ...mockedFullParticipant1Detail, teamMemberCanViewData: true }],
+          details: [mockedFullParticipant1DetailWithDataAccess],
         }),
       });
       renderWithProviders(<Participants />, { preloadedState, route, routePath });
