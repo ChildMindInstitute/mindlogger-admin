@@ -60,6 +60,7 @@ export const useReviewActivitiesAndFlows = ({
     if (!appletId || !subjectId) {
       return;
     }
+    const activityFlowIdSend = selectedFlow?.id || activityFlowId;
 
     const requestBody = {
       appletId,
@@ -68,7 +69,7 @@ export const useReviewActivitiesAndFlows = ({
     };
 
     getReviewFlows(requestBody);
-    getReviewActivities(requestBody);
+    getReviewActivities({ ...requestBody, flowId: activityFlowIdSend });
   };
 
   useEffect(() => {

@@ -325,11 +325,42 @@ const RespondentDataReviewWithForm = () => {
 };
 
 describe('RespondentDataReview', () => {
+  const mockActivity = {
+    id: '951145fa-3053-4428-a970-70531e383d89',
+    name: 'Activity 1',
+    description: 'Test activity description',
+    items: [],
+    answerDates: [],
+  };
+
   test(
     'renders component correctly with all child components when isFeedbackVisible param is false',
     async () => {
+      // Update route to include activityId
+      const routeWithActivityId = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses/${mockActivity.id}?selectedDate=2023-12-27`;
+
+      // Update preloaded state to include the activity
+      const testPreloadedState = {
+        ...preloadedState,
+        applet: {
+          applet: {
+            ...initialStateData,
+            data: {
+              result: {
+                ...mockedApplet,
+                activities: [mockActivity],
+              },
+            },
+          },
+        },
+      };
+
       mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
+      mockAxios.get.mockResolvedValueOnce({
+        data: {
+          result: [mockActivity], // Return our mock activity
+        },
+      });
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
@@ -345,9 +376,9 @@ describe('RespondentDataReview', () => {
       dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: route1,
-        routePath,
+        preloadedState: testPreloadedState,
+        route: routeWithActivityId, // Use updated route
+        routePath: page.appletParticipantActivityDetailsDataReview, // Use activity details route
       });
 
       window.HTMLElement.prototype.scrollTo = () => {};
@@ -387,6 +418,8 @@ describe('RespondentDataReview', () => {
               targetSubjectId: mockedFullSubjectId1,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
+              activityOrFlowId: '951145fa-3053-4428-a970-70531e383d89', // Make sure this matches mockActivity.id
+              limit: 10000,
             },
             signal: undefined,
           },
