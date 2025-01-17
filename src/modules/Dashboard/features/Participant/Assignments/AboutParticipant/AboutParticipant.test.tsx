@@ -292,6 +292,8 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
 
   it('should disable the view data button according to API data', async () => {
     const localPreloadedState = preloadedState();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     localPreloadedState.users!.subjectDetails.data!.result.teamMemberCanViewData = false;
 
     renderWithProviders(<AboutParticipant />, {
