@@ -5,6 +5,7 @@ import { parse, format as dateFnsFormat, isValid } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { DEFAULT_END_TIME, DateFormats } from 'shared/consts';
+
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { HandleChange, InputOnChange, TimePickerProps } from './TimePicker.types';
 import { cleanInput, formatInput, validateInput } from './TimePicker.utils';
@@ -16,6 +17,7 @@ function safeParseTimeString(timeString: string, formatStr: string = 'HH:mm'): D
   if (!timeString) return null;
   try {
     const date = parse(timeString, formatStr, new Date());
+
     return isValid(date) ? date : null;
   } catch {
     return null;
@@ -45,6 +47,7 @@ export const TimePicker = <T extends FieldValues>({
     if (!value || value.trim() === '' || value.includes('undefined')) {
       setInputValue('');
       onChange('');
+
       return;
     }
 
@@ -110,7 +113,7 @@ export const TimePicker = <T extends FieldValues>({
                     label={label}
                     error={!!error}
                     helperText={error?.message || null}
-                    value={inputValue} 
+                    value={inputValue}
                     inputProps={{
                       maxLength: TIME_PICKER_MAX_LENGTH,
                     }}

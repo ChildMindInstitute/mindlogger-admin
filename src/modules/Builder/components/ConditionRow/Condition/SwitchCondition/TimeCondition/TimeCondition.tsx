@@ -76,6 +76,7 @@ export const TimeCondition = ({
       if (Number(startTimeHours) === MAX_HOURS && Number(startTimeMinutes) === MAX_MINUTES) {
         setValue(maxTimeValueName, time);
         persistTime(maxTimeValueName, time);
+
         return;
       }
       const endTimeDate = addMinutes(resultDate, 1);
