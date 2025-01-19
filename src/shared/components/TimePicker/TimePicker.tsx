@@ -1,17 +1,26 @@
 import { KeyboardEvent, lazy, Suspense, useState, ChangeEvent } from 'react';
 import { TextField } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
-import { parse, format as dateFnsFormat } from 'date-fns';
+import { parse, format as dateFnsFormat, isValid } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { DEFAULT_END_TIME, DateFormats } from 'shared/consts';
-
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { HandleChange, InputOnChange, TimePickerProps } from './TimePicker.types';
 import { cleanInput, formatInput, validateInput } from './TimePicker.utils';
 import { TIME_PICKER_MAX_LENGTH } from './TimePicker.const';
 
 const ReactDatePicker = lazy(() => import('react-datepicker'));
+
+function safeParseTimeString(timeString: string, formatStr: string = 'HH:mm'): Date | null {
+  if (!timeString) return null;
+  try {
+    const date = parse(timeString, formatStr, new Date());
+    return isValid(date) ? date : null;
+  } catch {
+    return null;
+  }
+}
 
 export const TimePicker = <T extends FieldValues>({
   control,
@@ -32,15 +41,23 @@ export const TimePicker = <T extends FieldValues>({
 
   const updateInputValue = (value: string, onChange: InputOnChange) => {
     onCustomChange?.(value);
+
+    if (!value || value.trim() === '' || value.includes('undefined')) {
+      setInputValue('');
+      onChange('');
+      return;
+    }
+
     setInputValue(value);
     onChange(value);
   };
 
   const handleInputValue = (onChange: InputOnChange) => {
     if (!inputValue) return;
-    const cleanedInput = cleanInput(inputValue);
-    const validatedInput = validateInput(defaultTime, cleanedInput);
-    updateInputValue(formatInput(validatedInput), onChange);
+    const cleaned = cleanInput(inputValue);
+    const validated = validateInput(defaultTime, cleaned);
+    const finalValue = formatInput(validated);
+    updateInputValue(finalValue, onChange);
   };
 
   const handleKeyDownEnter = (event: KeyboardEvent<HTMLDivElement>, onChange: InputOnChange) => {
@@ -53,7 +70,6 @@ export const TimePicker = <T extends FieldValues>({
     if (isSelectedFromDropdown && date) {
       return updateInputValue(dateFnsFormat(date, DateFormats.Time), onChange);
     }
-
     setInputValue(event.target.value);
   };
 
@@ -62,14 +78,16 @@ export const TimePicker = <T extends FieldValues>({
       control={control}
       name={name}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const selected = value ? parse(value, DateFormats.Time, new Date()) : value;
+        const selected = value ? safeParseTimeString(value, format) : null;
+        if (value && value !== inputValue) {
+          setInputValue(value);
+        }
 
         return (
           <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
             <Suspense>
               <ReactDatePicker
-                className="date-picker"
-                selected={selected as Date | null | undefined}
+                selected={selected as Date | null}
                 onChange={(date: Date | null, event: ChangeEvent<HTMLInputElement>) =>
                   handleChange({ date, event, onChange })
                 }
@@ -78,19 +96,21 @@ export const TimePicker = <T extends FieldValues>({
                 showTimeSelect
                 showTimeSelectOnly
                 timeIntervals={timeIntervals}
-                showPopperArrow={false}
                 dateFormat={format}
                 timeFormat={format}
                 minTime={minTime}
                 maxTime={maxTime}
                 placeholderText={placeholder}
                 autoComplete="off"
+                showPopperArrow={false}
+                className="date-picker"
                 customInput={
                   <TextField
                     variant="outlined"
                     label={label}
                     error={!!error}
                     helperText={error?.message || null}
+                    value={inputValue} 
                     inputProps={{
                       maxLength: TIME_PICKER_MAX_LENGTH,
                     }}
