@@ -2,46 +2,35 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { IntegrationsListSetting } from './IntegrationsListSetting';
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
-}));
-
 describe('IntegrationsListSetting', () => {
   test('should render LORIS when enableLorisIntegration is true', () => {
-    useFeatureFlags.mockReturnValue({
-      enableLorisIntegration: true,
-      enableProlificIntegration: false,
-    });
-    renderWithProviders(<IntegrationsListSetting />);
+    renderWithProviders(
+      <IntegrationsListSetting lorisIntegration={true} prolificIntegration={false} />,
+    );
 
     expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
-    expect(screen.getByTestId('prolific-integration')).not().toBeInTheDocument();
+    expect(screen.queryByTestId('prolific-integration')).toBeNull();
   });
 
   test('should render Prolific integration when enableProlificIntegration is true', () => {
-    useFeatureFlags.mockReturnValue({
-      enableLorisIntegration: false,
-      enableProlificIntegration: true,
-    });
-    renderWithProviders(<IntegrationsListSetting />);
+    renderWithProviders(
+      <IntegrationsListSetting lorisIntegration={false} prolificIntegration={true} />,
+    );
 
-    expect(screen.getByTestId('loris-integration')).not().toBeInTheDocument();
+    expect(screen.queryByTestId('loris-integration')).toBeNull();
     expect(screen.getByTestId('prolific-integration')).toBeInTheDocument();
   });
 
   test('should render LORIS and Prolific integrations', () => {
-    useFeatureFlags.mockReturnValue({
-      enableLorisIntegration: true,
-      enableProlificIntegration: true,
-    });
-    renderWithProviders(<IntegrationsListSetting />);
+    renderWithProviders(
+      <IntegrationsListSetting lorisIntegration={true} prolificIntegration={true} />,
+    );
 
-    expect(screen.getByTestId('loris-integration')).not().toBeInTheDocument();
+    expect(screen.getByTestId('loris-integration')).toBeInTheDocument();
     expect(screen.getByTestId('prolific-integration')).toBeInTheDocument();
   });
 });

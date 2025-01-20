@@ -15,7 +15,7 @@ export const IntegrationsListSetting = ({
     )}
 
     {prolificIntegration && (
-      <StyledIntegrationContainer>
+      <StyledIntegrationContainer data-testid="prolific-integration">
         <ProlificIntegration />
       </StyledIntegrationContainer>
     )}
