@@ -235,7 +235,7 @@ export const RespondentDataReview = () => {
     const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
 
     if (selectedDateParam) {
-      // Map each date string to a Date object, appending 'T00:00:00' to remove timezone offset
+      // Map the date string to a Date object, appending 'T00:00:00' to remove timezone offset
       const selectedDate = new Date(`${selectedDateParam}T00:00:00`);
       if (isValid(selectedDate)) {
         handleSetInitialDate(selectedDate);
