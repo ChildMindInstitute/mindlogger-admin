@@ -21,9 +21,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features';
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 
 import { selectParticipant } from '../ActivityAssignDrawer.test-utils';
 import { AssignmentsTable } from './AssignmentsTable';
@@ -54,7 +52,7 @@ const mockedGetApplet = {
   data: { result: mockedAppletData },
 };
 
-const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
+const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
     mockedFullParticipant1,
     mockedFullParticipant2,
@@ -64,7 +62,7 @@ const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>
   count: 4,
 });
 
-const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
+const mockedGetAppletManagers = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
   result: [
     {
       id: mockedOwnerParticipant.id as string,
@@ -157,7 +155,7 @@ describe('AssignmentsTable', () => {
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerParticipant.id) {
-          return mockSuccessfulHttpResponse<ParticipantsData>({
+          return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
             result: [mockedOwnerParticipant],
             count: 1,
           });

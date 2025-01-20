@@ -7,9 +7,3 @@ export type ManagersActions = {
   copyEmailAddressAction: ({ context }: MenuActionProps<Manager>) => void;
   copyInvitationLinkAction: ({ context }: MenuActionProps<Manager>) => void;
 };
-
-export type ManagersData = {
-  result: Manager[];
-  count: number;
-  orderingFields?: string[];
-};
