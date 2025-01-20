@@ -17,7 +17,7 @@ import { getReviewOption } from './ChartTooltip.utils';
 export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { appletId, subjectId } = useParams();
+  const { appletId, subjectId, activityId, activityFlowId } = useParams();
   const { appletMeta } = applet.useAppletData() ?? {};
 
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
@@ -30,7 +30,14 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
     if (!data) return;
 
     const selectedDate = format(new Date(data.parsed.x), DateFormats.YearMonthDay);
-    const pathname = generatePath(page.appletParticipantDataReview, { appletId, subjectId });
+
+    let route: string;
+    if (activityId) route = page.appletParticipantActivityDetailsDataReview;
+    else if (activityFlowId) route = page.appletParticipantActivityDetailsFlowDataReview;
+    else route = page.appletParticipantDataReview;
+
+    const pathname = generatePath(route, { appletId, subjectId, activityId, activityFlowId });
+
     const search = createSearchParams({
       selectedDate,
       ...(isFlow ? { submitId: id } : { answerId: id }),
