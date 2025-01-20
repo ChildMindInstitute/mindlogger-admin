@@ -56,7 +56,6 @@ import {
   SubjectId,
   DeleteReview,
   EncryptedActivityAnswer,
-  GetWorkspaceRespondentsParams,
   GetAppletSubmissionsParams,
   GetAppletSubmissionsResponse,
   ReviewEntity,
@@ -92,7 +91,6 @@ import {
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
 import { SubjectDetailsWithDataAccess } from '../types';
-import { ParticipantsDataWithDataAccess } from '../features/Participants';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -130,33 +128,6 @@ export const getFilteredWorkspaceAppletsApi = (
     params: restParams,
     signal,
   });
-};
-
-export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
-};
-
-export const getWorkspaceRespondentsApi = (
-  { params }: GetWorkspaceRespondentsParams,
-  signal?: AbortSignal,
-): Promise<AxiosResponse<ParticipantsDataWithDataAccess>> => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>

@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 
 import { ApiErrorResponse } from 'shared/state/Base';
 import {
-  getWorkspaceRespondentsApi,
   GetAppletsParams,
   getRespondentDetailsApi,
   GetRespondentDetailsParams,
@@ -12,15 +11,20 @@ import {
 } from 'api';
 import { MAX_LIMIT } from 'shared/consts';
 import { getApiErrorResult } from 'shared/utils/errors';
+import { store } from 'redux/store';
+import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
 
 export const getAllWorkspaceRespondents = createAsyncThunk(
   'users/getAllWorkspaceRespondents',
-  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
+  async ({ params }: GetAppletsParams, { rejectWithValue }) => {
     try {
-      const { data } = await getWorkspaceRespondentsApi(
-        { params: { ...params, limit: MAX_LIMIT } },
-        signal,
+      const promise = store.dispatch(
+        apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
+          params: { ...params, limit: MAX_LIMIT },
+        }),
       );
+      const { data } = await promise;
+      promise.unsubscribe();
 
       return { data };
     } catch (exception) {
