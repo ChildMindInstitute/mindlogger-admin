@@ -150,18 +150,6 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-2',
         name: 'itemName-2',
       },
-      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-      sourceSecretId: 'source-secret-id',
-      sourceUserNickname: 'Mock source user',
-      sourceUserTag: 'Mock Tag',
-      relation: 'admin',
-      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-      targetSecretId: 'target-secret-id',
-      targetUserNickname: 'Mock target user',
-      targetUserTag: 'Mock Tag',
-      inputSubjectId: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
-      inputSecretId: 'input-secret-id',
-      inputUserNickname: 'Mock input user',
     };
     const textUndefinedAnswerItem = {
       ...textItem,
@@ -171,18 +159,6 @@ describe('getReportAndMediaData', () => {
         id: 'itemId-3',
         name: 'itemName-3',
       },
-      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
-      sourceSecretId: 'source-secret-id',
-      sourceUserNickname: 'Mock source user',
-      sourceUserTag: 'Mock Tag',
-      relation: 'admin',
-      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
-      targetSecretId: 'target-secret-id',
-      targetUserNickname: 'Mock target user',
-      targetUserTag: 'Mock Tag',
-      inputSubjectId: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
-      inputSecretId: 'input-secret-id',
-      inputUserNickname: 'Mock input user',
     };
     const decryptedAnswers = [
       textItem,
@@ -423,14 +399,19 @@ describe('getReportAndMediaData', () => {
         },
       ]);
     });
-    test('should return an array with items and subscale calculation in first item', () => {
+    test('should return an array with items and subscale calculation in first item (legacy naming)', () => {
       const rawAnswersObject = getObjectFromList(
         mockedDecryptedAnswersWithSubscales,
         (item) => item.activityItem.name,
       );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales);
+      const result = getReportData(
+        [],
+        rawAnswersObject,
+        mockedDecryptedAnswersWithSubscales,
+        false,
+      );
       expect(result).toEqual([
         {
           'Final SubScale Score': 5,
@@ -624,6 +605,95 @@ describe('getReportAndMediaData', () => {
         },
       ]);
     });
+    test('should return an array with items and subscale calculation in first item (new naming)', () => {
+      const rawAnswersObject = getObjectFromList(
+        mockedDecryptedAnswersWithSubscales,
+        (item) => item.activityItem.name,
+      );
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales, true);
+      expect([result[0], result[1]]).toEqual([
+        {
+          target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+          target_secret_id: 'target-secret-id',
+          target_nickname: 'Mock target user',
+          target_tag: 'Mock Tag',
+          source_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          source_secret_id: 'source-secret-id',
+          source_nickname: 'Mock source user',
+          source_tag: 'Mock Tag',
+          source_relation: 'admin',
+          input_id: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
+          input_secret_id: 'input-secret-id',
+          input_nickname: 'Mock input user',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          secret_user_id: 'respondentSecretId',
+          legacy_user_id: '',
+          applet_version: '1.2.0',
+          activity_flow_id: '',
+          activity_flow_name: '',
+          activity_flow_submission_id: '',
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_submission_id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          activity_start_time: '1698673918439',
+          activity_end_time: '1698673935278',
+          activity_schedule_id: '',
+          activity_schedule_start_time: 'not scheduled',
+          utc_timezone_offset: '',
+          activity_submission_review_id: '',
+          item_id: 'e3d95ec0-32cd-4dff-8f81-6a0debfe7099',
+          item_name: 'single',
+          item_prompt: 'single',
+          item_response_options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
+          item_response: 'value: 2',
+          item_response_status: 'completed',
+          'Final SubScale Score': 5,
+          'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
+          'ss-1': 5,
+          'ss-2': 6,
+          rawScore: 9,
+        },
+        {
+          target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+          target_secret_id: 'target-secret-id',
+          target_nickname: 'Mock target user',
+          target_tag: 'Mock Tag',
+          source_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+          source_secret_id: 'source-secret-id',
+          source_nickname: 'Mock source user',
+          source_tag: 'Mock Tag',
+          source_relation: 'admin',
+          input_id: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
+          input_secret_id: 'input-secret-id',
+          input_nickname: 'Mock input user',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          secret_user_id: 'respondentSecretId',
+          legacy_user_id: '',
+          applet_version: '1.2.0',
+          activity_flow_id: '',
+          activity_flow_name: '',
+          activity_flow_submission_id: '',
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_submission_id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          activity_start_time: '1698673918439',
+          activity_end_time: '1698673935278',
+          activity_schedule_id: '',
+          activity_schedule_start_time: 'not scheduled',
+          utc_timezone_offset: '',
+          activity_submission_review_id: '',
+          item_id: '16a50393-7952-4fcb-8e3b-5f042ab05ed9',
+          item_name: 'multi',
+          item_prompt: 'multi',
+          item_response_options: 'Opt1: 0 (score: 1), Opt2: 1 (score: 3), Opt3: 2 (score: 0)',
+          item_response: 'value: 0',
+          item_response_status: 'completed',
+          rawScore: 4,
+        },
+      ]);
+    });
   });
   describe('getMediaData', () => {
     const answersForRegularItems = mockedParsedAnswers[0].decryptedAnswers;
@@ -672,6 +742,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         mockedDecryptedEventsForDrawing,
+        false,
       );
       expect(result).toEqual([
         {
@@ -713,8 +784,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -755,8 +826,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });
@@ -781,6 +852,7 @@ describe('getReportAndMediaData', () => {
         rawAnswersObject,
         decryptedAnswers,
         events,
+        false,
       );
       expect(result).toEqual([
         {
@@ -822,8 +894,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: null,
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -864,8 +936,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
         {
           activity_end_time: '1689770404000',
@@ -906,8 +978,8 @@ describe('getReportAndMediaData', () => {
           input_user_nickname: 'Mock input user',
           version: '1.1.1',
           event_id: '',
-          timezone_offset: '',
-          legacy_user_id: '',
+          timezone_offset: null,
+          legacy_user_id: null,
         },
       ]);
     });
