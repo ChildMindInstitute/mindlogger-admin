@@ -18,8 +18,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features';
+import { WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 
 import { ActivityReviewProps } from './ActivityReview.types';
 import { ActivityReview } from './ActivityReview';
@@ -66,7 +65,7 @@ const mockedOwnerRespondent: Participant = {
   email: mockedUserData.email,
 };
 
-const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
+const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
     mockedFullParticipant1,
     mockedFullParticipant2,
@@ -76,7 +75,7 @@ const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>
   count: 4,
 });
 
-const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
+const mockedGetAppletManagers = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
   result: [
     {
       id: mockedOwnerRespondent.id as string,
@@ -155,7 +154,7 @@ describe('ActivityReview component', () => {
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerRespondent.id) {
-          return mockSuccessfulHttpResponse<ParticipantsData>({
+          return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
             result: [mockedOwnerRespondent],
             count: 1,
           });
