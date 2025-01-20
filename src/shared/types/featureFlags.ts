@@ -11,6 +11,7 @@ export const FeatureFlagsKeys = {
   // TODO: https://mindlogger.atlassian.net/browse/M2-6523 Participant Connections flag cleanup
   enableParticipantConnections: 'enableParticipantConnections',
   enableLorisIntegration: 'enableLorisIntegration',
+  enableProlificIntegration: 'enableProlificIntegration',
   enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
   enableItemFlowItemsG2: 'enableItemFlowItemsG2',
   enableItemFlowItemsG3: 'enableItemFlowItemsG3',
