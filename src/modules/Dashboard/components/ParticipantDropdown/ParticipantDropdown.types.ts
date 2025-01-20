@@ -1,8 +1,6 @@
 import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
-import { AxiosError, AxiosResponse } from 'axios';
 
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
-import { ApiErrorResponse } from 'redux/modules';
 import { AtLeastOne } from 'shared/types';
 import { Roles } from 'shared/consts';
 
@@ -51,7 +49,4 @@ export type UseParticipantDropdownProps = {
   appletId?: string;
   includePendingAccounts?: boolean;
   skip?: boolean;
-  successCallback?: (data: AxiosResponse) => void;
-  errorCallback?: (data?: AxiosError<ApiErrorResponse> | null) => void;
-  finallyCallback?: () => void;
 };

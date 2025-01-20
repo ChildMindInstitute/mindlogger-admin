@@ -56,7 +56,6 @@ import {
   SubjectId,
   DeleteReview,
   EncryptedActivityAnswer,
-  GetWorkspaceRespondentsParams,
   GetAppletSubmissionsParams,
   GetAppletSubmissionsResponse,
   ReviewEntity,
@@ -129,33 +128,6 @@ export const getFilteredWorkspaceAppletsApi = (
     params: restParams,
     signal,
   });
-};
-
-export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
-};
-
-export const getWorkspaceRespondentsApi = (
-  { params }: GetWorkspaceRespondentsParams,
-  signal?: AbortSignal,
-) => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>

@@ -25,6 +25,6 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   // TODO: replace baseQuery with expired access token logic
   baseQuery,
-  tagTypes: ['Applet'],
+  tagTypes: ['Applet', 'Respondent', 'Manager'],
   endpoints: (builder) => ({}),
 });

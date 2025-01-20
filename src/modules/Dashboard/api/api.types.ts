@@ -5,7 +5,7 @@ import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'sh
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
 
-import { SubjectDetails, SubjectDetailsWithRoles } from '../types';
+import { Manager, Participant, SubjectDetails, SubjectDetailsWithRoles } from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -20,10 +20,24 @@ export type GetAppletsParams = {
   };
 };
 
+export type GetWorkspaceManagersParams = GetAppletsParams;
+
+export type WorkspaceManagersResponse = {
+  result: Manager[];
+  count: number;
+  orderingFields?: string[];
+};
+
 export type GetWorkspaceRespondentsParams = GetAppletsParams & {
   params: {
     userId?: string;
   };
+};
+
+export type WorkspaceRespondentsResponse = {
+  result: Participant[];
+  count: number;
+  orderingFields?: string[];
 };
 
 export type GetActivitiesParams = {
