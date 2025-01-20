@@ -130,7 +130,7 @@ const getPreparedProperties = ({
     rawAnswersObject: getObjectFromList([event], (event) => event.activityItem.name),
   };
 };
-const result = {
+const legacyResult = {
   activity_end_time: '1689756087000',
   activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
   activity_name: 'New Activity#1',
@@ -169,12 +169,55 @@ const result = {
   input_user_nickname: 'Mock input user',
   version: '2.0.0',
   event_id: null,
-  timezone_offset: '',
-  legacy_user_id: '',
+  timezone_offset: null,
+  legacy_user_id: null,
+};
+
+const newResult = {
+  target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  target_secret_id: 'target-secret-id',
+  target_nickname: 'Mock target user',
+  target_tag: 'Mock Tag',
+  source_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  source_secret_id: 'source-secret-id',
+  source_nickname: 'Mock source user',
+  source_tag: 'Mock Tag',
+  source_relation: 'admin',
+  input_id: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
+  input_secret_id: 'input-secret-id',
+  input_nickname: 'Mock input user',
+  user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+  secret_user_id: 'secretUserId',
+  legacy_user_id: null,
+  applet_version: '2.0.0',
+  activity_flow_id: null,
+  activity_flow_name: null,
+  activity_flow_submission_id: '',
+  activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
+  activity_name: 'New Activity#1',
+  activity_submission_id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
+  activity_start_time: '1689755822000',
+  activity_end_time: '1689756087000',
+  activity_schedule_id: null,
+  activity_schedule_start_time: 'not scheduled',
+  utc_timezone_offset: null,
+  item_id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
+  item_name: 'single_text_score',
+  item_prompt: 'single  ',
+  item_response_options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
+  item_response: 'value: 2 | text: Extra info',
+  press_next_time: '',
+  press_popup_skip_time: '',
+  press_popup_keep_time: '',
+  press_back_time: '',
+  press_undo_time: '',
+  press_skip_time: '',
+  press_done_time: '',
+  response_option_selection_time: '1689755869391',
 };
 
 describe('getJourneyCSVObject', () => {
-  test('returns correct result', () => {
+  test('returns correct result with legacy naming', () => {
     expect(
       getJourneyCSVObject({
         ...getPreparedProperties({
@@ -186,8 +229,26 @@ describe('getJourneyCSVObject', () => {
           decryptedData: decryptedSingleSelection,
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
-    ).toStrictEqual(result);
+    ).toStrictEqual(legacyResult);
+  });
+
+  test('returns correct result with new naming', () => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: decryptedSingleSelection,
+        }),
+        index: 0,
+        enableDataExportRenaming: true,
+      }),
+    ).toStrictEqual(newResult);
   });
 
   test('returns object with scheduled time', () => {
@@ -205,9 +266,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       activity_scheduled_time: '1689755822000',
     });
   });
@@ -227,9 +289,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       legacy_user_id: 'legacy-profile-id',
     });
   });
@@ -249,9 +312,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       event_id: 'scheduled-event-id',
     });
   });
@@ -271,9 +335,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       timezone_offset: -300,
     });
   });
@@ -294,9 +359,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       activity_flow_submission_id: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
       activity_flow_id: 'some flow ID 222',
       activity_flow_name: 'test flow name',
@@ -329,9 +395,10 @@ describe('getJourneyCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       ...expectedResult,
       response: '',
       response_option_selection_time: '',

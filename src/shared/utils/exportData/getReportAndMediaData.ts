@@ -44,6 +44,7 @@ export const getReportData = (
   reportData: AppletExportData['reportData'],
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
+  enableDataExportRenaming: boolean,
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
@@ -55,6 +56,7 @@ export const getReportData = (
           item,
           rawAnswersObject,
           index,
+          enableDataExportRenaming,
         }),
       );
     },
@@ -65,7 +67,7 @@ export const getReportData = (
   if (subscaleSetting?.subscales?.length) {
     answers.splice(0, 1, {
       ...answers[0],
-      ...getSubscales(subscaleSetting, rawAnswersObject),
+      ...getSubscales(subscaleSetting, rawAnswersObject, enableDataExportRenaming),
     });
   }
 
@@ -120,6 +122,7 @@ export const getActivityJourneyData = (
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
   decryptedEvents: EventDTO[],
+  enableDataExportRenaming: boolean,
 ) => {
   const decryptedFilteredEvents = decryptedEvents.filter(isSuccessEvent);
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
@@ -147,6 +150,7 @@ export const getActivityJourneyData = (
       rawAnswersObject,
       index:
         event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
+      enableDataExportRenaming,
     });
   });
 
