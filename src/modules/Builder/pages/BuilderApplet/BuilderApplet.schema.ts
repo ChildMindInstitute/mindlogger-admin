@@ -107,6 +107,24 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
+export const ResponseValuesOptionsWithScoreSchema = () =>
+  yup.array().of(
+    yup.object({
+      text: yup.string().required(getIsRequiredValidateMessage('optionText')),
+      score: yup
+        .number()
+        .required(getIsRequiredValidateMessage('score'))
+        .min(Number.MIN_SAFE_INTEGER, t('scoreTooLow'))
+        .max(Number.MAX_SAFE_INTEGER, t('scoreTooHigh'))
+        .test('precision', t('scorePrecisionError'), (number) => {
+          const decimalPlaces = number.toString().split('.')[1]?.length ?? 0;
+
+          return decimalPlaces <= 2;
+        })
+        .typeError(t('scoreMustBeNumber')),
+    }),
+  );
+
 export const ResponseValuesAudio = () => ({
   maxDuration: yup.mixed().test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne),
 });
@@ -412,43 +430,50 @@ export const ItemSchema = () =>
           t('validationMessages.variableReferringToNotExistedItem') as string,
           (itemName, context) => testFunctionForNotExistedItems(itemName ?? '', context),
         ),
-      responseValues: yup.object({}).when('responseType', ([responseType], schema) => {
-        if (
-          responseType === ItemResponseType.SingleSelection ||
-          responseType === ItemResponseType.MultipleSelection
-        )
-          return schema.shape({ options: ResponseValuesOptionsSchema() });
+      responseValues: yup
+        .object({})
+        .when(['responseType', 'config'], ([responseType, config], schema) => {
+          if (
+            responseType === ItemResponseType.SingleSelection ||
+            responseType === ItemResponseType.MultipleSelection
+          ) {
+            if (config.addScores) {
+              return schema.shape({ options: ResponseValuesOptionsWithScoreSchema() });
+            } else {
+              return schema.shape({ options: ResponseValuesOptionsSchema() });
+            }
+          }
 
-        if (responseType === ItemResponseType.NumberSelection)
-          return schema.shape(ResponseValuesNumberSelectionSchema());
+          if (responseType === ItemResponseType.NumberSelection)
+            return schema.shape(ResponseValuesNumberSelectionSchema());
 
-        if (
-          responseType === ItemResponseType.SingleSelectionPerRow ||
-          responseType === ItemResponseType.MultipleSelectionPerRow
-        ) {
-          return schema.shape({
-            rows: yup.array().of(ResponseValuesSelectionRowsSchema()),
-            options: yup.array().of(ResponseValuesSelectionOptionsSchema()),
-          });
-        }
+          if (
+            responseType === ItemResponseType.SingleSelectionPerRow ||
+            responseType === ItemResponseType.MultipleSelectionPerRow
+          ) {
+            return schema.shape({
+              rows: yup.array().of(ResponseValuesSelectionRowsSchema()),
+              options: yup.array().of(ResponseValuesSelectionOptionsSchema()),
+            });
+          }
 
-        if (responseType === ItemResponseType.AudioPlayer)
-          return schema.shape(ResponseValuesAudioPlayer());
+          if (responseType === ItemResponseType.AudioPlayer)
+            return schema.shape(ResponseValuesAudioPlayer());
 
-        if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
+          if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
-        if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesSliderSchema());
+          if (responseType === ItemResponseType.Slider)
+            return schema.shape(ResponseValuesSliderSchema());
 
-        if (responseType === ItemResponseType.SliderRows)
-          return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
+          if (responseType === ItemResponseType.SliderRows)
+            return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
 
-        if (responseType === ItemResponseType.PhrasalTemplate) {
-          return schema.shape(PhrasalTemplateResponseValue);
-        }
+          if (responseType === ItemResponseType.PhrasalTemplate) {
+            return schema.shape(PhrasalTemplateResponseValue);
+          }
 
-        return schema.nullable();
-      }),
+          return schema.nullable();
+        }),
       alerts: yup
         .array()
         .when('responseType', ([responseType], schema) => {

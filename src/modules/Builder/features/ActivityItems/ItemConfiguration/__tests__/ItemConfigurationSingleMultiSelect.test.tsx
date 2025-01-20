@@ -542,31 +542,68 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
   });
 
   describe('Add Scores:', () => {
-    test('Sets correct data when changed', async () => {
-      const ref = createRef();
+    describe('Score field correctly validates input:', () => {
+      test.each`
+        userInput              | expectedStoredValue    | expectedFieldValue     | expectedError
+        ${'13'}                | ${13}                  | ${'13'}                | ${null}
+        ${'-5'}                | ${-5}                  | ${'-5'}                | ${null}
+        ${'0.4'}               | ${0.4}                 | ${'0.4'}               | ${null}
+        ${'0.456'}             | ${'0.456'}             | ${'0.456'}             | ${'The score must be a number with a maximum of 2 decimal places'}
+        ${'1e-4'}              | ${'1e-4'}              | ${'1e-4'}              | ${'The score must be a number with a maximum of 2 decimal places'}
+        ${'-9007199254740992'} | ${'-9007199254740992'} | ${'-9007199254740992'} | ${'This score is too low. Please enter a higher number.'}
+        ${'9007199254740992'}  | ${'9007199254740992'}  | ${'9007199254740992'}  | ${'This score is too high. Please enter a lower number.'}
+        ${'-'}                 | ${'-'}                 | ${'-'}                 | ${'The score must be a number'}
+      `(
+        '$userInput',
+        async ({ userInput, expectedStoredValue, expectedFieldValue, expectedError }) => {
+          const ref = createRef();
 
-      renderWithAppletFormData({
-        children: renderItemConfiguration(),
-        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
-        formRef: ref,
-      });
+          const { getByTestId } = renderWithAppletFormData({
+            children: renderItemConfiguration(),
+            appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+            formRef: ref,
+          });
 
-      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+          await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      const scoreInput = screen
-        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)
-        .querySelector('input');
-      expect(scoreInput).toHaveValue(0);
+          const scoreInput = getByTestId(
+            `${mockedSingleAndMultiSelectOptionTestid}-score`,
+          ).querySelector('input');
+          expect(scoreInput).toHaveValue('0');
 
-      fireEvent.change(scoreInput, { target: { value: 13 } });
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(13);
+          const expectStoredValue = async (value: string) => {
+            await waitFor(() => {
+              expect(
+                ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`),
+              ).toEqual(value);
+            });
+          };
 
-      fireEvent.change(scoreInput, { target: { value: -5 } });
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(-5);
+          const expectFieldToHave = (value: string) => expect(scoreInput).toHaveValue(value);
 
-      fireEvent.change(scoreInput, { target: { value: 0.4 } });
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(
-        0.4,
+          const expectError = async (value: string) => {
+            await waitFor(() => {
+              expect(
+                getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`).querySelector('p'),
+              ).toHaveTextContent(value);
+            });
+          };
+
+          const expectNoError = async () => {
+            await waitFor(() => {
+              expect(
+                getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`).querySelector('p'),
+              ).toBeNull();
+            });
+          };
+
+          await userEvent.clear(scoreInput);
+          await userEvent.type(scoreInput, userInput);
+          scoreInput.blur();
+          await expectStoredValue(expectedStoredValue);
+          expectFieldToHave(expectedFieldValue);
+          await (expectedError ? expectError(expectedError) : expectNoError());
+        },
       );
     });
 

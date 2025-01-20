@@ -881,6 +881,10 @@
   "defaultIpAddress": "Adresse IP par défaut",
   "defaultPort": "Port par défaut",
   "invalidIpAddress": "Adresse IP invalide",
+  "scoreTooLow": "Ce score est trop faible. Veuillez saisir un nombre plus élevé.",
+  "scoreTooHigh": "Ce score est trop élevé. Veuillez saisir un nombre inférieur.",
+  "scoreMustBeNumber": "Le score doit être un nombre",
+  "scorePrecisionError": "Le score doit être un nombre avec un maximum de 2 décimales",
   "integrations": "Intégrations",
   "loris": {
     "configurationPopupTitle": "Configuration de LORIS",
