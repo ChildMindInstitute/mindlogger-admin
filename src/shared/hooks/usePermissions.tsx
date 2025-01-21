@@ -6,10 +6,17 @@ import { EmptyState } from 'shared/components/EmptyState';
 import { ApiResponseCodes } from 'shared/api';
 import { ErrorResponseType } from 'shared/types';
 
-type FunctionResponse = {
-  response?: { status?: ApiResponseCodes };
-  status?: ApiResponseCodes;
-};
+type FunctionResponse =
+  | {
+      // Axios response
+      response?: { status?: ApiResponseCodes };
+      status?: ApiResponseCodes;
+    }
+  | {
+      // Fetch response
+      status: string;
+      error: string;
+    };
 
 export const usePermissions = (
   asyncFunc: () => Promise<any> | undefined,
@@ -22,8 +29,10 @@ export const usePermissions = (
 
   const handlePermissionCheck = (response: FunctionResponse) => {
     if (
-      response?.response?.status === ApiResponseCodes.Forbidden ||
-      response?.status === ApiResponseCodes.Forbidden ||
+      ('error' in response && response.error === ApiResponseCodes.Forbidden.toString()) ||
+      ('response' in response &&
+        (response?.response?.status === ApiResponseCodes.Forbidden ||
+          response?.status === ApiResponseCodes.Forbidden)) ||
       (Array.isArray(response) &&
         response.some((data) => data.type === ErrorResponseType.AccessDenied))
     ) {
@@ -39,9 +48,9 @@ export const usePermissions = (
     (async () => {
       try {
         setIsLoading(true);
-        const { payload } = await asyncFunc();
-
-        handlePermissionCheck(payload);
+        const result = await asyncFunc();
+        const { payload, error } = result;
+        handlePermissionCheck(error ?? payload);
       } catch (error) {
         handlePermissionCheck(error as FunctionResponse);
       } finally {
