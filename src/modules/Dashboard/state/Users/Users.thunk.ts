@@ -8,23 +8,19 @@ import {
   GetRespondentDetailsParams,
   SubjectId,
   getSubjectDetailsApi,
+  getWorkspaceRespondentsApi,
 } from 'api';
 import { MAX_LIMIT } from 'shared/consts';
 import { getApiErrorResult } from 'shared/utils/errors';
-import { store } from 'redux/store';
-import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
 
 export const getAllWorkspaceRespondents = createAsyncThunk(
   'users/getAllWorkspaceRespondents',
-  async ({ params }: GetAppletsParams, { rejectWithValue }) => {
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
-      const promise = store.dispatch(
-        apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-          params: { ...params, limit: MAX_LIMIT },
-        }),
+      const { data } = await getWorkspaceRespondentsApi(
+        { params: { ...params, limit: MAX_LIMIT } },
+        signal,
       );
-      const { data } = await promise;
-      promise.unsubscribe();
 
       return { data };
     } catch (exception) {
