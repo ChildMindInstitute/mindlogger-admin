@@ -14,7 +14,7 @@ import {
 import { SettingParam, expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
-import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
+import { mockGetRequestResponses } from 'shared/utils/httpMocks';
 
 import { DuplicateAppletSettings } from './DuplicateAppletSettings';
 

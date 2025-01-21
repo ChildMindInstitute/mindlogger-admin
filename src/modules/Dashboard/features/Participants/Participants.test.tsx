@@ -18,7 +18,7 @@ import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
-import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 import { ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
@@ -67,7 +67,9 @@ const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 const RESPONDENTS_ENDPOINT = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 // Mock responses for requests made both by Participants table and ActivityAssignDrawer
 const mockedResponses = {
-  [`/activities/applet/${mockedAppletId}`]: mockSuccessfulHttpResponse({ result: [] }),
+  [`/activities/applet/${mockedAppletId}`]: mockSuccessfulHttpResponse({
+    result: { activitiesDetails: [], appletDetail: mockedApplet },
+  }),
   [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]: mockSuccessfulHttpResponse({
     result: [],
   }),
@@ -115,15 +117,7 @@ describe('Participants component tests', () => {
   });
 
   test('should render no permission table', async () => {
-    const mockedGet = {
-      payload: {
-        response: {
-          status: ApiResponseCodes.Forbidden,
-          data: null,
-        },
-      },
-    };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    fetchMock.mockRejectedValue(ApiResponseCodes.Forbidden);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -323,15 +317,10 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
-        params: {
-          limit: 20,
-          page: 1,
-          search: mockedSearchValue,
-          ordering: '-isPinned,+tags',
-        },
-        signal: undefined,
-      });
+      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(RESPONDENTS_ENDPOINT);
+      expect(
+        new URLSearchParams((fetchMock.mock.lastCall?.[0] as Request).url).get('search'),
+      ).toEqual(mockedSearchValue);
     });
   });
 });

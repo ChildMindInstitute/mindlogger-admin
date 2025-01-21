@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { workspaces } from 'shared/state/Workspaces';
 import { EmptyState } from 'shared/components/EmptyState';
@@ -7,16 +8,13 @@ import { ApiResponseCodes } from 'shared/api';
 import { ErrorResponseType } from 'shared/types';
 
 type FunctionResponse =
+  // Axios response
   | {
-      // Axios response
       response?: { status?: ApiResponseCodes };
       status?: ApiResponseCodes;
     }
-  | {
-      // Fetch response
-      status: string;
-      error: string;
-    };
+  // Fetch response
+  | FetchBaseQueryError;
 
 export const usePermissions = (
   asyncFunc: () => Promise<any> | undefined,
@@ -29,10 +27,9 @@ export const usePermissions = (
 
   const handlePermissionCheck = (response: FunctionResponse) => {
     if (
+      ('status' in response && response.status === ApiResponseCodes.Forbidden) ||
       ('error' in response && response.error === ApiResponseCodes.Forbidden.toString()) ||
-      ('response' in response &&
-        (response?.response?.status === ApiResponseCodes.Forbidden ||
-          response?.status === ApiResponseCodes.Forbidden)) ||
+      ('response' in response && response.response?.status === ApiResponseCodes.Forbidden) ||
       (Array.isArray(response) &&
         response.some((data) => data.type === ErrorResponseType.AccessDenied))
     ) {

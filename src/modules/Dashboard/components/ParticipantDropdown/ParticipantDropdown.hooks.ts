@@ -59,7 +59,7 @@ export const useParticipantDropdown = ({
       {
         skip,
         selectFromResult: ({ data, ...rest }) => ({
-          data: data ? participantToOption(data.result[0]) : null,
+          data: data?.result.length ? participantToOption(data.result[0]) : null,
           ...rest,
         }),
       },

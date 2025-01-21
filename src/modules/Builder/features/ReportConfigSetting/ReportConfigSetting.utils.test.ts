@@ -66,16 +66,6 @@ describe('getActivityItemsOptions', () => {
 });
 
 describe('verifyReportServer', () => {
-  const originalFetch = global.fetch;
-
-  beforeAll(() => {
-    global.fetch = jest.fn();
-  });
-
-  afterAll(() => {
-    global.fetch = originalFetch;
-  });
-
   afterAll(() => {
     jest.resetAllMocks();
   });
@@ -87,30 +77,21 @@ describe('verifyReportServer', () => {
 
     await verifyReportServer({ url, publicKey, token });
 
-    expect(fetch).toHaveBeenCalledWith('http://example.com/verify', {
-      method: 'PUT',
-      headers: {
-        map: {
-          'content-type': 'application/json',
-          token: 'testToken',
-        },
+    expect(fetchMock.mock.lastCall).toEqual([
+      'http://example.com/verify',
+      {
+        method: 'PUT',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Token: 'testToken',
+        }),
+        body: JSON.stringify({ publicKey }),
       },
-      body: JSON.stringify({ publicKey }),
-    });
+    ]);
   });
 });
 
 describe('setPasswordReportServer', () => {
-  const originalFetch = global.fetch;
-
-  beforeAll(() => {
-    global.fetch = jest.fn();
-  });
-
-  afterAll(() => {
-    global.fetch = originalFetch;
-  });
-
   afterAll(() => {
     jest.resetAllMocks();
   });
@@ -124,16 +105,17 @@ describe('setPasswordReportServer', () => {
 
     await setPasswordReportServer({ url, appletId, ownerId, password, token });
 
-    expect(fetch).toHaveBeenCalledWith('http://example.com/set-password', {
-      method: 'POST',
-      headers: {
-        map: {
-          'content-type': 'application/json',
-          token: 'testToken',
-        },
+    expect(fetchMock.mock.lastCall).toEqual([
+      'http://example.com/set-password',
+      {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Token: 'testToken',
+        }),
+        body: JSON.stringify({ appletId, workspaceId: ownerId, password }),
       },
-      body: JSON.stringify({ appletId, workspaceId: ownerId, password }),
-    });
+    ]);
   });
 });
 
