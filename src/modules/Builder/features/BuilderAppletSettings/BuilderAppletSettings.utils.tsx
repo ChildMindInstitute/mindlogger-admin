@@ -65,18 +65,22 @@ export const getSettings = ({
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
-        {
-          icon: <Svg id="integrations" />,
-          label: 'integrations',
-          component: (
-            <IntegrationsListSetting
-              lorisIntegration={enableLorisIntegration}
-              prolificIntegration={enableProlificIntegration}
-            />
-          ),
-          param: SettingParam.Integrations,
-          isVisible: showIntegrations,
-        },
+        ...(showIntegrations
+          ? [
+              {
+                icon: <Svg id="integrations" />,
+                label: 'integrations',
+                component: (
+                  <IntegrationsListSetting
+                    lorisIntegration={enableLorisIntegration}
+                    prolificIntegration={enableProlificIntegration}
+                  />
+                ),
+                param: SettingParam.Integrations,
+                isVisible: showIntegrations,
+              },
+            ]
+          : []),
       ],
     },
     {
