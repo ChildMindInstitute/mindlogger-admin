@@ -26,7 +26,7 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
@@ -174,7 +174,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(getAppletActivitiesUrl);
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });

@@ -21,7 +21,7 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';

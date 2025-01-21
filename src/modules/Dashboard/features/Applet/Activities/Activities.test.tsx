@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios, { HttpResponse } from 'jest-mock-axios';
+import { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
@@ -22,7 +22,7 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   expectMixpanelTrack,
@@ -146,7 +146,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(getAppletActivitiesUrl);
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });

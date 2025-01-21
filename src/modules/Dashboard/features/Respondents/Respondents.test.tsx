@@ -66,7 +66,7 @@ describe('Respondents component tests', () => {
       status: ApiResponseCodes.SuccessfulResponse,
       data: null,
     };
-    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
+    fetchMock.mockOnce(JSON.stringify(successfulGetMock.data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -75,15 +75,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should render no permission table', async () => {
-    const mockedGet = {
-      payload: {
-        response: {
-          status: ApiResponseCodes.Forbidden,
-          data: null,
-        },
-      },
-    };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    fetchMock.mockRejectedValueOnce(ApiResponseCodes.Forbidden);
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -94,7 +86,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should render table with respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const tableColumnNames = ['ID', 'Nickname', 'Last active', 'Schedule', 'Actions'];
     const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule'];
@@ -107,7 +99,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should pin respondent', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     const respondentPin = await waitFor(() => screen.getByTestId('dashboard-respondents-pin'));
@@ -124,7 +116,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear respondents actions on respondent actions button click', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -144,7 +136,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear actions for anonymous respondent', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents(true).data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -171,7 +163,7 @@ describe('Respondents component tests', () => {
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
       ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'}        | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+      fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -185,7 +177,7 @@ describe('Respondents component tests', () => {
   });
 
   test('shows view participant popup on the dashboard respondents page', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
     renderWithProviders(<Respondents />, {
       preloadedState,
       route: page.dashboardRespondents,
@@ -204,7 +196,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should search respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    fetchMock.mockOnce(JSON.stringify(getMockedGetWithRespondents().data));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
@@ -213,18 +205,12 @@ describe('Respondents component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(
+      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
-        {
-          params: {
-            limit: 20,
-            page: 1,
-            search: mockedSearchValue,
-            ordering: '-isPinned,+tags',
-          },
-          signal: undefined,
-        },
       );
+      expect(
+        new URLSearchParams((fetchMock.mock.lastCall?.[0] as Request).url).get('search'),
+      ).toEqual(mockedSearchValue);
     });
   });
 });

@@ -1,5 +1,8 @@
 import 'mock-local-storage';
 import '@testing-library/jest-dom';
+import { enableFetchMocks } from 'jest-fetch-mock';
+
+enableFetchMocks();
 
 jest.mock('react-secure-storage', () => ({
   setItem: jest.fn(() => Promise.resolve()),

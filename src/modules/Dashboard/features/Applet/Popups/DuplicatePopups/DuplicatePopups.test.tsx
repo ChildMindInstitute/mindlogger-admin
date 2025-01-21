@@ -6,7 +6,7 @@ import { expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletData, mockedAppletId, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
-import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
+import { mockGetRequestResponses } from 'shared/utils/httpMocks';
 import { SingleApplet } from 'shared/state';
 import { applet } from 'redux/modules';
 

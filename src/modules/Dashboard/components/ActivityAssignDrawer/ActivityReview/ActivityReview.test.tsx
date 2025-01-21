@@ -15,7 +15,7 @@ import {
 } from 'shared/mock';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
