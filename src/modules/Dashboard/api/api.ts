@@ -87,6 +87,7 @@ import {
   GetTargetSubjectsByRespondentParams,
   GetTargetSubjectsByRespondentResponse,
   AppletParticipantActivitiesMetadataResponse,
+  GetWorkspaceRespondentsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { ApiSuccessResponse } from './base.types';
@@ -128,6 +129,21 @@ export const getFilteredWorkspaceAppletsApi = (
     params: restParams,
     signal,
   });
+};
+
+export const getWorkspaceRespondentsApi = (
+  { params }: GetWorkspaceRespondentsParams,
+  signal?: AbortSignal,
+) => {
+  const { ownerId, appletId, ...restParams } = params;
+
+  return authApiClient.get(
+    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
