@@ -9,7 +9,7 @@ import { ITEMS_RESPONSE_TYPES_TO_SHOW } from '../SummaryRow.const';
 
 const { t } = i18n;
 
-export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOptionsProps) => {
+export const getItemsOptions = ({ items, itemsInUsage, conditions = [] }: GetItemsOptionsProps) => {
   const itemsObject = getObjectFromList(items, undefined, true);
   const conditionItemsInUsageSet = new Set(
     conditions !== undefined ? conditions.map((condition) => condition.itemName) : [],
