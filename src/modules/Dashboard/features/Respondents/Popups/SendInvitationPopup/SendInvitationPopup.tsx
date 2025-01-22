@@ -6,10 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage, Mixpanel, MixpanelEventType } from 'shared/utils';
-import { useAsync } from 'shared/hooks/useAsync';
-import { postSubjectInvitationApi } from 'api';
 import { InputController } from 'shared/components/FormComponents';
 import { useFormError } from 'modules/Dashboard/hooks';
+import { useCreateSubjectInvitationMutation } from 'modules/Dashboard/api/apiSlice';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
@@ -33,21 +32,23 @@ export const SendInvitationPopup = ({
     defaultValues: { email: email || '' },
   });
 
-  const { execute, error, isLoading } = useAsync(postSubjectInvitationApi, () => {
-    setChosenAppletData(null);
-    onClose(true);
-  });
+  const [execute, { error, isLoading }] = useCreateSubjectInvitationMutation();
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
-    onClose(false);
+    onClose();
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (!appletId || !subjectId) return;
     Mixpanel.track({ action: MixpanelEventType.SubjectInvitationClick });
     setHasCommonError(false);
-    execute({ appletId, subjectId, email: getValues('email') });
+
+    const response = await execute({ appletId, subjectId, email: getValues('email') });
+
+    if ('data' in response) {
+      handlePopupClose();
+    }
   };
 
   const getTitle = () => {

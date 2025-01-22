@@ -277,28 +277,24 @@ export const Participants = () => {
     updateSubjectsPin({ ownerId, userId: subjectId });
   };
 
-  const addParticipantOnClose = (shouldRefetch: boolean) => {
+  const addParticipantOnClose = () => {
     handleToggleAddParticipant();
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
-  const editRespondentOnClose = (shouldRefetch: boolean) => {
+  const editRespondentOnClose = () => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+  const removeRespondentAccessOnClose = () => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
-  const handleUpgradeAccountPopupClose = (shouldRefetch?: boolean) => {
+  const handleUpgradeAccountPopupClose = () => {
     setInvitationPopupVisible(false);
     setParticipantDetails(null);
-    shouldRefetch && handleReload();
   };
 
   const formatRow = (user: ParticipantWithDataAccess): Row => {

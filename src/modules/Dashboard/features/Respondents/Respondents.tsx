@@ -254,22 +254,19 @@ export const Respondents = () => {
     updateSubjectsPin({ ownerId, userId: subjectId });
   };
 
-  const editRespondentOnClose = (shouldReFetch: boolean) => {
+  const editRespondentOnClose = () => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldReFetch?: boolean) => {
+  const removeRespondentAccessOnClose = () => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
   };
 
-  const handleInvitationPopupClose = (shouldReFetch?: boolean) => {
+  const handleInvitationPopupClose = () => {
     setInvitationPopupVisible(false);
     setRespondentEmail(null);
-    shouldReFetch && handleReload();
   };
 
   const formatRow = (user: Participant): Row => {
