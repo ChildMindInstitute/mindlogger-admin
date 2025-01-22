@@ -6,7 +6,7 @@ import { ChosenAppletData } from '../../Respondents.types';
 
 export type SendInvitationPopupProps = {
   popupVisible: boolean;
-  onClose: (shouldReFetch: boolean) => void;
+  onClose: () => void;
   tableRows?: Row[];
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;

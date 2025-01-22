@@ -5,7 +5,7 @@ export type RemoveRespondentPopupProps = {
   popupVisible: boolean;
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;
-  onClose: (shouldReFetch?: boolean) => void;
+  onClose: () => void;
 };
 
 export type GetScreen = (respondentName: string, appletName: string) => JSX.Element;
@@ -22,7 +22,7 @@ export type ScreensParams = {
   isRemoved: boolean;
   submitPassword: () => void;
   removeAccess: () => void;
-  onClose: (shouldReFetch?: boolean) => void;
+  onClose: () => void;
 };
 
 export type Screen = {

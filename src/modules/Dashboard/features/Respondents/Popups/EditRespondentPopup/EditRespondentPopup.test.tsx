@@ -97,6 +97,8 @@ describe('EditRespondentPopup component tests', () => {
       nickname: 'respondentNickname',
       lastSeen: null,
       tag: chosenAppletData.subjectTag,
+      firstName: null,
+      lastName: null,
     };
 
     mockAxios.put.mockResolvedValueOnce({

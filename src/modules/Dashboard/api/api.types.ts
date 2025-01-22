@@ -299,6 +299,10 @@ export type EditSubjectResponse = {
   secretUserId: string;
   nickname: string | null;
   tag: ParticipantTag | null;
+  firstName: string | null;
+  lastName: string | null;
+  title?: string | null;
+  role?: Roles | null;
 };
 
 export type DeleteSubject = SubjectId & {
@@ -320,7 +324,7 @@ export type AppletInvitationOptions = {
 };
 
 export type AppletInvitationData = AppletId & {
-  url: string;
+  url: 'respondent' | 'reviewer' | 'managers';
   options: AppletInvitationOptions;
 };
 
