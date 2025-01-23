@@ -62,6 +62,7 @@ const preloadedState: PreloadedState<RootState> = {
           firstName: 'John',
           lastName: 'Doe',
           roles: [],
+          teamMemberCanViewData: true,
         },
       },
     },

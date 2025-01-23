@@ -2,7 +2,7 @@ import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
+import { ApiResponseCodes, WorkspaceRespondentsResponse, WorkspaceManagersResponse } from 'api';
 import {
   mockedApplet,
   mockedAppletData,

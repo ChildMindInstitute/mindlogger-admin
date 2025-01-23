@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import { SubjectDetailsWithRoles } from 'modules/Dashboard/types';
 import { ParticipantActivityOrFlow } from 'modules/Dashboard/api';
+import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 export type AssignmentsTabProps = PropsWithChildren<{
   isLoadingMetadata: boolean;
@@ -11,14 +11,14 @@ export type AssignmentsTabProps = PropsWithChildren<{
 
 export type UseAssignmentsTabProps = {
   appletId?: string;
-  targetSubject?: SubjectDetailsWithRoles;
-  respondentSubject?: SubjectDetailsWithRoles;
+  targetSubject?: SubjectDetailsWithDataAccess;
+  respondentSubject?: SubjectDetailsWithDataAccess;
   handleRefetch?: () => void;
   dataTestId: string;
 };
 
 export type GetActionsMenuParams = {
   activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: SubjectDetailsWithRoles;
+  targetSubject?: Omit<SubjectDetailsWithDataAccess, 'teamMemberCanViewData'>;
   teamMemberCanViewData?: boolean;
 };

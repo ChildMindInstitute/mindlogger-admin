@@ -87,6 +87,7 @@ export const getParticipantActions = ({
   firstName,
   lastName,
   subjectCreatedAt,
+  teamMemberCanViewData,
 }: GetParticipantActionsProps) => {
   const context = {
     respondentId,
@@ -187,6 +188,8 @@ export const getParticipantActions = ({
       title: t('exportData'),
       context,
       isDisplayed: showExport,
+      disabled: !teamMemberCanViewData,
+      tooltip: teamMemberCanViewData ? '' : t('subjectDataUnavailable'),
       'data-testid': `${dataTestId}-export-data`,
     },
     {

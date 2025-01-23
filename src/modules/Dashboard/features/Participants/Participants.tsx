@@ -19,7 +19,7 @@ import {
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, StyledMaybeEmpty } from 'shared/styles';
-import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import {
   ActivityAssignDrawer,
@@ -297,7 +297,7 @@ export const Participants = () => {
     setParticipantDetails(null);
   };
 
-  const formatRow = (user: Participant): Row => {
+  const formatRow = (user: ParticipantWithDataAccess): Row => {
     const {
       secretIds,
       nicknames,
@@ -408,6 +408,7 @@ export const Participants = () => {
               firstName: detail.subjectFirstName,
               lastName: detail.subjectLastName,
               subjectCreatedAt: detail.subjectCreatedAt,
+              teamMemberCanViewData: detail.teamMemberCanViewData,
             })}
             data-testid={`${dataTestId}-table-actions`}
           />

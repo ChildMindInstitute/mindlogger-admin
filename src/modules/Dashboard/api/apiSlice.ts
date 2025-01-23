@@ -3,7 +3,7 @@ import {
   GetActivitiesParams,
   GetWorkspaceManagersParams,
   GetWorkspaceRespondentsParams,
-  WorkspaceRespondentsResponse,
+  WorkspaceRespondentsResponseWithDataAccess,
   WorkspaceManagersResponse,
   AppletInvitationData,
   AppletShellAccountData,
@@ -42,7 +42,7 @@ export const apiDashboardSlice = apiSlice.injectEndpoints({
     }),
 
     getWorkspaceRespondents: builder.query<
-      WorkspaceRespondentsResponse,
+      WorkspaceRespondentsResponseWithDataAccess,
       GetWorkspaceRespondentsParams
     >({
       query: ({ params: { ownerId, appletId, ...rest } }) => ({

@@ -5,7 +5,13 @@ import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'sh
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
 
-import { Manager, Participant, SubjectDetails, SubjectDetailsWithRoles } from '../types';
+import {
+  Manager,
+  Participant,
+  ParticipantWithDataAccess,
+  SubjectDetails,
+  SubjectDetailsWithDataAccess,
+} from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -38,6 +44,13 @@ export type WorkspaceRespondentsResponse = {
   result: Participant[];
   count: number;
   orderingFields?: string[];
+};
+
+export type WorkspaceRespondentsResponseWithDataAccess = Omit<
+  WorkspaceRespondentsResponse,
+  'result'
+> & {
+  result: ParticipantWithDataAccess[];
 };
 
 export type GetActivitiesParams = {
@@ -745,11 +758,10 @@ export type GetTargetSubjectsByRespondentParams = SubjectId & {
 };
 
 export type TargetSubjectsByRespondent = Array<
-  SubjectDetailsWithRoles &
+  SubjectDetailsWithDataAccess &
     AppletId & {
       submissionCount: number;
       currentlyAssigned: boolean;
-      teamMemberCanViewData: boolean;
     }
 >;
 

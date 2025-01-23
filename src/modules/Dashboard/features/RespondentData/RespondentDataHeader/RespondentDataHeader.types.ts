@@ -1,12 +1,12 @@
 import {
   HydratedActivityFlow,
-  SubjectDetailsWithRoles,
+  SubjectDetailsWithDataAccess,
 } from 'modules/Dashboard/types/Dashboard.types';
 import { Activity, SingleApplet } from 'redux/modules';
 
 export interface RespondentDataHeaderProps {
   applet: SingleApplet;
-  subject: SubjectDetailsWithRoles;
+  subject: SubjectDetailsWithDataAccess;
   activityOrFlow?: Activity | HydratedActivityFlow;
   dataTestid: string;
 }

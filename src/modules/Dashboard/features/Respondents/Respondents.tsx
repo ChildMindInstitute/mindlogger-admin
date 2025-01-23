@@ -20,18 +20,18 @@ import { DashboardTable } from 'modules/Dashboard/components';
 import { GetAppletsParams, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import {
+  checkIfCanManageParticipants,
   checkIfCanViewParticipants,
   getDateInUserTimezone,
-  isManagerOrOwner,
   joinWihComma,
   Mixpanel,
   MixpanelEventType,
   MixpanelProps,
 } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
-import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
+import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 
 import {
   RespondentsTableHeader,
@@ -360,7 +360,7 @@ export const Respondents = () => {
     };
   };
 
-  const filterRespondentApplets = (user: Participant) => {
+  const filterRespondentApplets = (user: ParticipantWithDataAccess) => {
     const { details } = user;
     const filteredApplets: FilteredApplets = {
       scheduling: [],
@@ -371,18 +371,13 @@ export const Respondents = () => {
 
     for (const detail of details) {
       const appletRoles = rolesData?.data?.[detail.appletId];
-      if (isManagerOrOwner(appletRoles?.[0])) {
+      if (!appletRoles) continue;
+      if (checkIfCanManageParticipants(appletRoles)) {
         editable.push(detail);
-        viewable.push(detail);
         scheduling.push(detail);
-        continue;
       }
-      if (appletRoles?.includes(Roles.Reviewer)) {
+      if (detail.teamMemberCanViewData ?? checkIfCanViewParticipants(appletRoles)) {
         viewable.push(detail);
-      }
-      if (appletRoles?.includes(Roles.Coordinator)) {
-        scheduling.push(detail);
-        editable.push(detail);
       }
     }
 

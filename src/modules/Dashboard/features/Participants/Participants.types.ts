@@ -68,6 +68,7 @@ export type GetParticipantActionsProps = {
   dataTestId: string;
   canAssignActivity?: boolean;
   roles?: Roles[];
+  teamMemberCanViewData?: boolean;
 };
 
 export type HandlePinClick = {

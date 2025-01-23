@@ -15,10 +15,10 @@ import {
 } from 'shared/mock';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import { ParticipantTag, Roles } from 'shared/consts';
-import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
+import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 
 import { ActivityReviewProps } from './ActivityReview.types';
 import { ActivityReview } from './ActivityReview';
@@ -35,7 +35,7 @@ const mockAssignments = [
   },
 ];
 
-const mockedOwnerRespondent: Participant = {
+const mockedOwnerRespondent: ParticipantWithDataAccess = {
   id: mockedUserData.id,
   nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
   secretIds: ['mockedOwnerSecretId'],
@@ -59,6 +59,7 @@ const mockedOwnerRespondent: Participant = {
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
       roles: [Roles.Owner, Roles.Respondent],
+      teamMemberCanViewData: true,
     },
   ],
   status: ParticipantStatus.Invited,

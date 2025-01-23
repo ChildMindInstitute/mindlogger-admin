@@ -82,9 +82,10 @@ import {
   GetTargetSubjectsByRespondentResponse,
   AppletParticipantActivitiesMetadataResponse,
   GetWorkspaceRespondentsParams,
+  WorkspaceRespondentsResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
-import { SubjectDetailsWithRoles } from '../types';
+import { SubjectDetailsWithDataAccess } from '../types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -127,7 +128,7 @@ export const getFilteredWorkspaceAppletsApi = (
 export const getWorkspaceRespondentsApi = (
   { params }: GetWorkspaceRespondentsParams,
   signal?: AbortSignal,
-) => {
+): Promise<AxiosResponse<WorkspaceRespondentsResponse>> => {
   const { ownerId, appletId, ...restParams } = params;
 
   return authApiClient.get(
@@ -837,7 +838,7 @@ export const getRespondentDetailsApi = (
 export const getSubjectDetailsApi = (
   { subjectId }: SubjectId,
   signal?: AbortSignal,
-): Promise<AxiosResponse<SubjectDetailsWithRoles>> =>
+): Promise<AxiosResponse<SubjectDetailsWithDataAccess>> =>
   authApiClient.get(`/subjects/${subjectId}`, {
     signal,
   });
