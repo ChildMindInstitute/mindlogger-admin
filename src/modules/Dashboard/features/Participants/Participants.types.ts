@@ -1,4 +1,9 @@
-import { Participant, ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
+import {
+  Participant,
+  ParticipantDetail,
+  ParticipantStatus,
+  ParticipantWithDataAccess,
+} from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
@@ -56,6 +61,10 @@ export type ParticipantsData = {
   orderingFields?: string[];
 };
 
+export type ParticipantsDataWithDataAccess = Omit<ParticipantsData, 'result'> & {
+  result: ParticipantWithDataAccess[];
+};
+
 export type GetParticipantActionsProps = {
   actions: ParticipantActions;
   filteredApplets: FilteredApplets;
@@ -74,6 +83,7 @@ export type GetParticipantActionsProps = {
   dataTestId: string;
   canAssignActivity?: boolean;
   roles?: Roles[];
+  teamMemberCanViewData?: boolean;
 };
 
 export type HandlePinClick = {

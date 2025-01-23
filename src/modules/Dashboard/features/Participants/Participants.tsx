@@ -24,7 +24,7 @@ import {
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, StyledMaybeEmpty } from 'shared/styles';
-import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import {
   ActivityAssignDrawer,
@@ -47,10 +47,10 @@ import {
   FilteredParticipants,
   HandleUpgradeAccount,
   HandlePinClick,
-  ParticipantsData,
   ParticipantActionProps,
   SetDataForAppletPage,
   ParticipantActions,
+  ParticipantsDataWithDataAccess,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
 import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
@@ -65,7 +65,9 @@ export const Participants = () => {
   const { featureFlags } = useFeatureFlags();
   const [showActivityAssign, setShowActivityAssign] = useState(false);
 
-  const [respondentsData, setRespondentsData] = useState<ParticipantsData | null>(null);
+  const [respondentsData, setRespondentsData] = useState<ParticipantsDataWithDataAccess | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
@@ -312,7 +314,7 @@ export const Participants = () => {
     shouldRefetch && handleReload();
   };
 
-  const formatRow = (user: Participant): Row => {
+  const formatRow = (user: ParticipantWithDataAccess): Row => {
     const {
       secretIds,
       nicknames,
@@ -423,6 +425,7 @@ export const Participants = () => {
               firstName: detail.subjectFirstName,
               lastName: detail.subjectLastName,
               subjectCreatedAt: detail.subjectCreatedAt,
+              teamMemberCanViewData: detail.teamMemberCanViewData,
             })}
             data-testid={`${dataTestId}-table-actions`}
           />
