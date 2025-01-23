@@ -72,4 +72,6 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Build admin app
+        env:
+          CI: false
         run: npm run build
