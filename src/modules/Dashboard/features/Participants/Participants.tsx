@@ -17,13 +17,12 @@ import {
   checkIfCanManageParticipants,
   checkIfCanViewParticipants,
   getDateInUserTimezone,
-  isManagerOrOwner,
   joinWihComma,
   Mixpanel,
   MixpanelProps,
   MixpanelEventType,
 } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, StyledMaybeEmpty } from 'shared/styles';
 import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
@@ -448,18 +447,14 @@ export const Participants = () => {
 
     for (const detail of details) {
       const appletRoles = rolesData?.data?.[detail.appletId];
-      if (isManagerOrOwner(appletRoles?.[0])) {
+      if (!appletRoles) continue;
+      if (checkIfCanManageParticipants([appletRoles[0]])) {
         editable.push(detail);
-        viewable.push(detail);
         scheduling.push(detail);
-        continue;
       }
-      if (appletRoles?.includes(Roles.Reviewer)) {
+
+      if (checkIfCanViewParticipants(appletRoles)) {
         viewable.push(detail);
-      }
-      if (appletRoles?.includes(Roles.Coordinator)) {
-        scheduling.push(detail);
-        editable.push(detail);
       }
     }
 

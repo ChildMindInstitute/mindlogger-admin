@@ -39,7 +39,6 @@ import {
   targetSubjectDropdownTestId,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { ActionsMenu } from 'shared/components';
-import { SubjectDetails } from 'modules/Dashboard/types';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 import {
@@ -49,6 +48,7 @@ import {
   StartAssignActivityOrFlowEvent,
   StartUnassignActivityOrFlowEvent,
 } from 'shared/utils';
+import { SubjectDetailsWithRoles } from 'modules/Dashboard/types';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -131,8 +131,8 @@ const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 type UseAssignmentsHookTestProps = {
   activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: SubjectDetails;
-  respondentSubject?: SubjectDetails;
+  targetSubject?: SubjectDetailsWithRoles;
+  respondentSubject?: SubjectDetailsWithRoles;
 };
 
 const UseAssignmentsHookTest = ({

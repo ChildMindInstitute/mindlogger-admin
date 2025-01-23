@@ -27,6 +27,7 @@ import { workspaces } from 'shared/state';
 import { checkIfCanAccessData, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
+import { TEAM_MEMBER_ROLES } from 'shared/consts';
 
 import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
@@ -190,7 +191,10 @@ export const Activities = () => {
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
                   tag: subject.result.tag,
-                  isTeamMember: subject.result.tag === 'Team',
+                  isTeamMember: subject.result.roles.some((role) =>
+                    TEAM_MEMBER_ROLES.includes(role),
+                  ),
+                  roles: subject.result.roles,
                 };
               }
 

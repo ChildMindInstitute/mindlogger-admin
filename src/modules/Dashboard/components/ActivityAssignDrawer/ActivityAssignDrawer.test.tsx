@@ -64,10 +64,10 @@ const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>
 const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
   result: [
     {
-      id: mockedOwnerParticipant.id,
+      id: mockedOwnerParticipant.id as string,
       firstName: mockedUserData.firstName,
       lastName: mockedUserData.lastName,
-      email: mockedOwnerParticipant.email,
+      email: mockedOwnerParticipant.email as string,
       roles: [Roles.Owner],
       lastSeen: new Date().toDateString(),
       isPinned: mockedOwnerParticipant.isPinned,

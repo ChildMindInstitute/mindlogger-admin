@@ -3,6 +3,8 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
 import { ApiErrorResponse } from 'redux/modules';
+import { AtLeastOne } from 'shared/types';
+import { Roles } from 'shared/consts';
 
 export enum ParticipantDropdownVariant {
   Outlined = 'outlined',
@@ -14,6 +16,7 @@ export type ParticipantDropdownOption = ParticipantSnippetInfo & {
   id: string;
   userId?: string | null;
   isTeamMember: boolean;
+  roles: Roles[];
 };
 
 export type ParticipantDropdownProps = Omit<
@@ -36,8 +39,13 @@ export type ParticipantDropdownProps = Omit<
   variant?: ParticipantDropdownVariant;
 };
 
-export type AnyTeamSearchType = 'team' | 'any-participant';
-export type FullTeamSearchType = 'team' | 'full-participant';
+export type SearchResultUserTypes = AtLeastOne<{
+  team?: boolean;
+  fullParticipant?: boolean;
+  limitedParticipant?: boolean;
+  pendingInvitedParticipant?: boolean;
+  anonymousParticipant?: boolean;
+}>;
 
 export type UseParticipantDropdownProps = {
   appletId?: string;

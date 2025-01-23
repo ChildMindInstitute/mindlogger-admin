@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
+import { PreloadedState } from '@reduxjs/toolkit';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -17,6 +18,7 @@ import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
+import { RootState } from 'redux/store';
 
 import { RespondentDataReview } from './RespondentDataReview';
 
@@ -27,7 +29,7 @@ const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1
 const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
 const routePath = page.appletParticipantDataReview;
-const preloadedState = {
+const preloadedState: PreloadedState<RootState> = {
   workspaces: {
     workspaces: initialStateData,
     currentWorkspace: {
@@ -40,7 +42,6 @@ const preloadedState = {
         [mockedAppletId]: [Roles.Manager],
       },
     },
-    applet: mockedApplet,
     workspacesRoles: initialStateData,
   },
   applet: {
@@ -69,6 +70,7 @@ const preloadedState = {
           userId: mockedFullSubjectId1,
           firstName: 'John',
           lastName: 'Doe',
+          roles: [Roles.Respondent],
           teamMemberCanViewData: true,
         },
       },
