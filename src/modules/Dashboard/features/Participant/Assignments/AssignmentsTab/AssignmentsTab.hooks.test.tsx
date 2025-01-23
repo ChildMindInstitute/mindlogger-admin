@@ -48,7 +48,7 @@ import {
   StartAssignActivityOrFlowEvent,
   StartUnassignActivityOrFlowEvent,
 } from 'shared/utils';
-import { SubjectDetailsWithRoles } from 'modules/Dashboard/types';
+import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -131,8 +131,8 @@ const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 type UseAssignmentsHookTestProps = {
   activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: SubjectDetailsWithRoles;
-  respondentSubject?: SubjectDetailsWithRoles;
+  targetSubject?: SubjectDetailsWithDataAccess;
+  respondentSubject?: SubjectDetailsWithDataAccess;
 };
 
 const UseAssignmentsHookTest = ({
