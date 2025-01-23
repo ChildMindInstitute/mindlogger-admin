@@ -12,6 +12,7 @@ import {
   mockedFullParticipant1,
   mockedFullParticipantId1,
   mockedFullSubjectId1,
+  mockedFullParticipant1DetailWithDataAccess,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -20,7 +21,7 @@ import { ApiResponseCodes } from 'api';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
-import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 
 import { Participants } from './Participants';
 
@@ -73,7 +74,7 @@ const mockedResponses = {
   [RESPONDENTS_ENDPOINT]: mockSuccessfulHttpResponse({ result: [] }),
 };
 
-const getMockedGetWithParticipants = (respondentProps?: Partial<Participant>) => ({
+const getMockedGetWithParticipants = (respondentProps?: Partial<ParticipantWithDataAccess>) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: [{ ...mockedFullParticipant1, ...respondentProps }],
@@ -293,7 +294,9 @@ describe('Participants component tests', () => {
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
       mockGetRequestResponses({
         ...mockedResponses,
-        [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
+        [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants({
+          details: [mockedFullParticipant1DetailWithDataAccess],
+        }),
       });
       renderWithProviders(<Participants />, { preloadedState, route, routePath });
 

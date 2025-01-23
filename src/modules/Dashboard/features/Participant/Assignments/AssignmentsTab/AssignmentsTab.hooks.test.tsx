@@ -20,6 +20,7 @@ import {
   mockedOwnerSubject,
   mockedFullParticipant1,
   mockedFullSubject1,
+  mockedOwnerSubjectWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -47,7 +48,7 @@ import {
   StartAssignActivityOrFlowEvent,
   StartUnassignActivityOrFlowEvent,
 } from 'shared/utils';
-import { SubjectDetailsWithRoles } from 'modules/Dashboard/types';
+import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -86,7 +87,7 @@ const preloadedState: PreloadedState<RootState> = {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 };
@@ -130,8 +131,8 @@ const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 type UseAssignmentsHookTestProps = {
   activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: SubjectDetailsWithRoles;
-  respondentSubject?: SubjectDetailsWithRoles;
+  targetSubject?: SubjectDetailsWithDataAccess;
+  respondentSubject?: SubjectDetailsWithDataAccess;
 };
 
 const UseAssignmentsHookTest = ({
