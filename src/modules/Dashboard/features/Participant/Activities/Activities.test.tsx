@@ -175,7 +175,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(getAppletActivitiesUrl);
+      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
