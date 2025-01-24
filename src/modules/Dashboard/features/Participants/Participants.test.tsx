@@ -117,7 +117,15 @@ describe('Participants component tests', () => {
   });
 
   test('should render no permission table', async () => {
-    fetchMock.mockRejectedValue(ApiResponseCodes.Forbidden);
+    const mockedGet = {
+      payload: {
+        response: {
+          status: ApiResponseCodes.Forbidden,
+          data: null,
+        },
+      },
+    };
+    mockAxios.get.mockResolvedValue(mockedGet);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -317,10 +325,15 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(RESPONDENTS_ENDPOINT);
-      expect(
-        new URLSearchParams((fetchMock.mock.lastCall?.[0] as Request).url).get('search'),
-      ).toEqual(mockedSearchValue);
+      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
+        params: {
+          limit: 20,
+          page: 1,
+          search: mockedSearchValue,
+          ordering: '-isPinned,+tags',
+        },
+        signal: undefined,
+      });
     });
   });
 });

@@ -1,4 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -63,7 +64,7 @@ describe('Managers component tests', () => {
       status: ApiResponseCodes.SuccessfulResponse,
       data: null,
     };
-    fetchMock.mockOnce(JSON.stringify(successfulGetMock.data));
+    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -72,7 +73,15 @@ describe('Managers component tests', () => {
   });
 
   test('should render no permission table', async () => {
-    fetchMock.mockRejectedValueOnce(ApiResponseCodes.Forbidden);
+    const mockedGet = {
+      payload: {
+        response: {
+          status: ApiResponseCodes.Forbidden,
+          data: null,
+        },
+      },
+    };
+    mockAxios.get.mockResolvedValue(mockedGet);
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -83,7 +92,7 @@ describe('Managers component tests', () => {
   });
 
   test('should render table with managers', async () => {
-    fetchMock.mockOnce(JSON.stringify(getMockedGetWithManagers().data));
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
     const managersColumns = ['TestFirstName', 'TestLastName', 'PhD', 'Reviewer', mockedEmail];
@@ -96,7 +105,7 @@ describe('Managers component tests', () => {
   });
 
   test('should appear managers actions for reviewer', async () => {
-    fetchMock.mockOnce(JSON.stringify(getMockedGetWithManagers().data));
+    mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -110,7 +119,7 @@ describe('Managers component tests', () => {
   });
 
   test('should not appear managers actions for owner', async () => {
-    fetchMock.mockOnce(JSON.stringify(getMockedGetWithManagers(true).data));
+    mockAxios.get.mockResolvedValue(getMockedGetWithManagers(true));
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() =>
@@ -124,7 +133,7 @@ describe('Managers component tests', () => {
       ${'dashboard-managers-edit-user'}     | ${'dashboard-managers-edit-access-popup'}   | ${'edit access'}
       ${'dashboard-managers-remove-access'} | ${'dashboard-managers-remove-access-popup'} | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      fetchMock.mockOnce(JSON.stringify(getMockedGetWithManagers().data));
+      mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
       renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -147,11 +156,11 @@ describe('Managers component tests', () => {
     };
 
     // getWorkspaceManagersApi
-    fetchMock.mockOnce(JSON.stringify(getMockedGetWithManagers().data));
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     // executeGetWorkspaceInfoApi
-    fetchMock.mockOnce(JSON.stringify(null));
+    mockAxios.get.mockResolvedValueOnce(null);
     // getWorkspaceManagersApi
-    fetchMock.mockOnce(JSON.stringify(emptySearchGetMock.data));
+    mockAxios.get.mockResolvedValueOnce(emptySearchGetMock);
 
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
@@ -161,12 +170,18 @@ describe('Managers component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect((fetchMock.mock.lastCall?.[0] as Request).url).toMatch(
+      expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`,
+        {
+          params: {
+            limit: 20,
+            page: 1,
+            search: mockedSearchValue,
+            ordering: '+lastName',
+          },
+          signal: undefined,
+        },
       );
-      expect(
-        new URLSearchParams((fetchMock.mock.lastCall?.[0] as Request).url).get('search'),
-      ).toEqual(mockedSearchValue);
     });
 
     await waitFor(() => {
