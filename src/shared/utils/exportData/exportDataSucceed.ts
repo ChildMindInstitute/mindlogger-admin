@@ -1,8 +1,11 @@
 import {
-  getActivityJourneyHeader,
-  getGeneralReportName,
-  getReportHeader,
   JOURNEY_REPORT_NAME,
+  LEGACY_GENERAL_REPORT_NAME,
+  legacyActivityJourneyHeader,
+  legacyReportHeader,
+  NEW_GENERAL_REPORT_NAME,
+  activityJourneyHeader,
+  reportHeader,
 } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import {
@@ -29,16 +32,20 @@ const exportProcessedData = async ({
   suffix,
   enableDataExportRenaming,
 }: AppletExportData & { suffix: string; enableDataExportRenaming: boolean }) => {
+  const reportHeaders = enableDataExportRenaming
+    ? { general: reportHeader, activity: activityJourneyHeader }
+    : { general: legacyReportHeader, activity: legacyActivityJourneyHeader };
+
   await exportTemplate({
     data: reportData,
-    fileName: getGeneralReportName(enableDataExportRenaming) + suffix,
-    defaultData: reportData.length > 0 ? null : getReportHeader(enableDataExportRenaming),
+    fileName:
+      (enableDataExportRenaming ? NEW_GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
+    defaultData: reportData.length > 0 ? null : reportHeaders.general,
   });
   await exportTemplate({
     data: activityJourneyData,
     fileName: JOURNEY_REPORT_NAME + suffix,
-    defaultData:
-      activityJourneyData.length > 0 ? null : getActivityJourneyHeader(enableDataExportRenaming),
+    defaultData: activityJourneyData.length > 0 ? null : reportHeaders.activity,
   });
 
   await Promise.allSettled([
