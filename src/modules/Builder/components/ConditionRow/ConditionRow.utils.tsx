@@ -362,7 +362,11 @@ export const getPayload = ({
           DEFAULT_PAYLOAD_MAX_VALUE,
       };
     default:
-      return {};
+      return formTimeType
+        ? {
+            fieldName: formTimeType,
+          }
+        : {};
   }
 };
 
