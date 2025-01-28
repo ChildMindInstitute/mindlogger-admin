@@ -14,7 +14,12 @@ export const createProlificIntegration = async (apiToken: string, appletId?: str
       },
     });
   } catch (e) {
-    throw new Error('Invalid Prolific API Token');
+    if (e instanceof AxiosError && e.response?.status === 400) {
+      throw new Error('Prolific integration already exists');
+    } else if (e instanceof AxiosError && e.response?.status === 401) {
+      throw new Error('Invalid Prolific API Token');
+    }
+    throw new Error('Internal Server Error');
   }
 };
 

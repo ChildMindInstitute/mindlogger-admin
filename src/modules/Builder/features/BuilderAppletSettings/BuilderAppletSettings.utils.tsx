@@ -70,12 +70,7 @@ export const getSettings = ({
               {
                 icon: <Svg id="integrations" />,
                 label: 'integrations',
-                component: (
-                  <IntegrationsListSetting
-                    lorisIntegration={enableLorisIntegration}
-                    prolificIntegration={enableProlificIntegration}
-                  />
-                ),
+                component: <IntegrationsListSetting />,
                 param: SettingParam.Integrations,
                 isVisible: showIntegrations,
               },

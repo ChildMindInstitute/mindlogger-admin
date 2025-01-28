@@ -17,12 +17,9 @@ import {
 
 import { ConfigurationPopup } from './ConfigurationPopup/ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup/DisconnectionPopup';
-import {
-  StyledLinkConfiguration,
-  StyledProlificIntegration,
-  StyledStatusChip,
-} from './ProlificIntegration.styles';
+import { StyledLinkConfiguration } from './ProlificIntegration.styles';
 import { prolificIntegrationExists } from './ProlificIntegration.utils';
+import { StyledIntegration, StyledStatusChip } from '../../IntegrationsListSetting.styles';
 
 type ProlificIntegrationState = {
   apiTokenExists: boolean;
@@ -92,7 +89,7 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
   const { t } = useTranslation('app');
 
   return (
-    <StyledProlificIntegration data-testid="prolific-integration">
+    <StyledIntegration data-testid="prolific-integration">
       <Box>
         <Svg width={130} height={100} id="prolific-integration" />
       </Box>
@@ -163,6 +160,6 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
           data-testid="prolific-disconnection-popup"
         />
       )}
-    </StyledProlificIntegration>
+    </StyledIntegration>
   );
 };

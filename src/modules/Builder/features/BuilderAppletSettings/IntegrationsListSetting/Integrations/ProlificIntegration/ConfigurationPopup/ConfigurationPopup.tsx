@@ -6,9 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { IntegrationTypes } from 'shared/consts';
-import { StyledBodyMedium, StyledModalWrapper, theme, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledModalWrapper,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 
-import { StyledLink } from '../ProlificIntegration.styles';
+import { StyledLink } from '../../../IntegrationsListSetting.styles';
 import { createProlificIntegration } from '../ProlificIntegration.utils';
 import type { PopupProps as ConfigurationPopupProps } from '../ProlificIntegration.types';
 import { ConfigurationPopupState, ProlificApiToken } from './ConfigurationPopup.types';
@@ -68,6 +74,8 @@ export const ConfigurationPopup = ({
       if (e instanceof Error) {
         setState({ kind: 'error', message: e.message });
       }
+
+      throw e;
     }
   };
 
@@ -96,14 +104,14 @@ export const ConfigurationPopup = ({
         height="60rem"
       >
         <StyledModalWrapper>
-          <StyledBodyMedium
+          <StyledTitleMedium
             sx={{ color: variables.palette.on_surface, mb: theme.spacing(1.2) }}
             data-testid="prolific-description-popup"
           >
             {state.kind === 'submitting'
               ? t('prolific.configurationPopupConnecting')
               : t('prolific.configurationPopupDescription')}
-          </StyledBodyMedium>
+          </StyledTitleMedium>
           <StyledApiInputWithButton>
             <InputController
               name={inputNameApiToken}
@@ -132,7 +140,10 @@ export const ConfigurationPopup = ({
           )}
 
           <StyledBodyMedium sx={{ color: variables.palette.on_surface, mt: theme.spacing(1.2) }}>
-            <StyledLink href="https://docs.prolific.com/docs/api-docs/public/#tag/Introduction/Authentication">
+            <StyledLink
+              href="https://docs.prolific.com/docs/api-docs/public/#tag/Introduction/Authentication"
+              target="_blank"
+            >
               {t('prolific.findProlificApiToken')}
             </StyledLink>
           </StyledBodyMedium>

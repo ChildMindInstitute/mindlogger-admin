@@ -1,23 +1,25 @@
+import { useFeatureFlags } from 'shared/hooks';
+
 import { LorisIntegration } from './Integrations';
 import { ProlificIntegration } from './Integrations/ProlificIntegration/ProlificIntegration';
 import { StyledIntegrationContainer } from './IntegrationsListSetting.styles';
-import { IntegrationSettings } from './IntegrationsListSetting.types';
 
-export const IntegrationsListSetting = ({
-  lorisIntegration,
-  prolificIntegration,
-}: IntegrationSettings) => (
-  <>
-    {lorisIntegration && (
-      <StyledIntegrationContainer>
-        <LorisIntegration />
-      </StyledIntegrationContainer>
-    )}
+export const IntegrationsListSetting = () => {
+  const { enableLorisIntegration, enableProlificIntegration } = useFeatureFlags().featureFlags;
 
-    {prolificIntegration && (
-      <StyledIntegrationContainer data-testid="prolific-integration">
-        <ProlificIntegration />
-      </StyledIntegrationContainer>
-    )}
-  </>
-);
+  return (
+    <>
+      {enableLorisIntegration && (
+        <StyledIntegrationContainer>
+          <LorisIntegration />
+        </StyledIntegrationContainer>
+      )}
+
+      {enableProlificIntegration && (
+        <StyledIntegrationContainer data-testid="prolific-integration">
+          <ProlificIntegration />
+        </StyledIntegrationContainer>
+      )}
+    </>
+  );
+};
