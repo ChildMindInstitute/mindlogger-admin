@@ -16,7 +16,7 @@ const axiosBaseQuery: BaseQueryFn<
   },
   unknown,
   FetchBaseQueryError
-> = async ({ url: urlProp, method: methodProp, body, params, headers }) => {
+> = async ({ url: urlProp, method: methodProp, body, params, headers }, { signal }) => {
   const url = urlProp.startsWith('/') ? urlProp : `/${urlProp}`;
 
   // Choose the axios function based on the method prop, defaulting to get
@@ -28,28 +28,28 @@ const axiosBaseQuery: BaseQueryFn<
     // Use appropriate axios method to preserve support for mockAxios spies in unit tests
     switch (method) {
       case 'get':
-        promise = authApiClient.get(url, { params, headers, data: body });
+        promise = authApiClient.get(url, { params, headers, data: body, signal });
         break;
       case 'delete':
-        promise = authApiClient.delete(url, { params, headers, data: body });
+        promise = authApiClient.delete(url, { params, headers, data: body, signal });
         break;
       case 'head':
-        promise = authApiClient.head(url, { params, headers, data: body });
+        promise = authApiClient.head(url, { params, headers, data: body, signal });
         break;
       case 'options':
-        promise = authApiClient.options(url, { params, headers, data: body });
+        promise = authApiClient.options(url, { params, headers, data: body, signal });
         break;
       case 'post':
-        promise = authApiClient.post(url, body, { params, headers });
+        promise = authApiClient.post(url, body, { params, headers, signal });
         break;
       case 'put':
-        promise = authApiClient.put(url, body, { params, headers });
+        promise = authApiClient.put(url, body, { params, headers, signal });
         break;
       case 'patch':
-        promise = authApiClient.patch(url, body, { params, headers });
+        promise = authApiClient.patch(url, body, { params, headers, signal });
         break;
       default:
-        promise = authApiClient.request({ url, method, data: body, params, headers });
+        promise = authApiClient.request({ url, method, data: body, params, headers, signal });
     }
 
     const returnVal = await promise;

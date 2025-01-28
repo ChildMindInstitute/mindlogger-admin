@@ -195,7 +195,7 @@ describe('EditRespondentPopup component tests', () => {
           secretUserId: chosenAppletData.respondentSecretId,
           tag: 'Parent',
         },
-        { signal: undefined },
+        { signal: expect.anything() },
       );
     });
   });

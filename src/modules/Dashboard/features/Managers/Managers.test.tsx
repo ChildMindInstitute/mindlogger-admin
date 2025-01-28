@@ -172,15 +172,14 @@ describe('Managers component tests', () => {
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`,
-        {
+        expect.objectContaining({
           params: {
             limit: 20,
             page: 1,
             search: mockedSearchValue,
             ordering: '+lastName',
           },
-          signal: undefined,
-        },
+        }),
       );
     });
 

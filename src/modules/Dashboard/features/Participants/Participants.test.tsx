@@ -325,15 +325,17 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
-        params: {
-          limit: 20,
-          page: 1,
-          search: mockedSearchValue,
-          ordering: '-isPinned,+tags',
-        },
-        signal: undefined,
-      });
+      expect(mockAxios.get).toHaveBeenCalledWith(
+        RESPONDENTS_ENDPOINT,
+        expect.objectContaining({
+          params: {
+            limit: 20,
+            page: 1,
+            search: mockedSearchValue,
+            ordering: '-isPinned,+tags',
+          },
+        }),
+      );
     });
   });
 });
