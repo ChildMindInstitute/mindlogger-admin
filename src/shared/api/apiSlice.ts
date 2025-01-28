@@ -28,16 +28,16 @@ const axiosBaseQuery: BaseQueryFn<
     // Use appropriate axios method to preserve support for mockAxios spies in unit tests
     switch (method) {
       case 'get':
-        promise = authApiClient.get(url, { params, headers });
+        promise = authApiClient.get(url, { params, headers, data: body });
         break;
       case 'delete':
-        promise = authApiClient.delete(url, { params, headers });
+        promise = authApiClient.delete(url, { params, headers, data: body });
         break;
       case 'head':
-        promise = authApiClient.head(url, { params, headers });
+        promise = authApiClient.head(url, { params, headers, data: body });
         break;
       case 'options':
-        promise = authApiClient.options(url, { params, headers });
+        promise = authApiClient.options(url, { params, headers, data: body });
         break;
       case 'post':
         promise = authApiClient.post(url, body, { params, headers });
