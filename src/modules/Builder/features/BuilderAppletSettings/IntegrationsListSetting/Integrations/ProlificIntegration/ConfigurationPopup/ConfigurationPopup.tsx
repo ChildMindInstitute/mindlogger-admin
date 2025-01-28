@@ -74,8 +74,6 @@ export const ConfigurationPopup = ({
       if (e instanceof Error) {
         setState({ kind: 'error', message: e.message });
       }
-
-      throw e;
     }
   };
 
