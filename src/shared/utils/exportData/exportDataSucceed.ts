@@ -3,7 +3,7 @@ import {
   LEGACY_GENERAL_REPORT_NAME,
   legacyActivityJourneyHeader,
   legacyReportHeader,
-  NEW_GENERAL_REPORT_NAME,
+  GENERAL_REPORT_NAME,
   activityJourneyHeader,
   reportHeader,
 } from 'shared/consts';
@@ -39,7 +39,7 @@ const exportProcessedData = async ({
   await exportTemplate({
     data: reportData,
     fileName:
-      (enableDataExportRenaming ? NEW_GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
+      (enableDataExportRenaming ? GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
     defaultData: reportData.length > 0 ? null : reportHeaders.general,
   });
   await exportTemplate({

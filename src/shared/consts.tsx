@@ -313,7 +313,7 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [
 ];
 
 export const LEGACY_GENERAL_REPORT_NAME = 'report';
-export const NEW_GENERAL_REPORT_NAME = 'responses';
+export const GENERAL_REPORT_NAME = 'responses';
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
