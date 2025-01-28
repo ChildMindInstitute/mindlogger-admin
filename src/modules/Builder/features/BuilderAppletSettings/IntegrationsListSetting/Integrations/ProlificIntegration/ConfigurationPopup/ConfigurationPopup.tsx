@@ -99,7 +99,7 @@ export const ConfigurationPopup = ({
         onLeftBtnSubmit={onClose}
         leftBtnText={t('cancel')}
         data-testid="prolific-configuration-popup"
-        height="60rem"
+        height="45rem"
       >
         <StyledModalWrapper>
           <StyledTitleMedium
