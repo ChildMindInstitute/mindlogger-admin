@@ -33,6 +33,8 @@ import {
   TimeRangeIntervalValueCondition,
   TimeSingleValueCondition,
   TimeRangeSingleValueCondition,
+  DateSingleValueCondition,
+  DateRangeValueCondition,
 } from 'shared/state';
 import {
   createArray,
@@ -96,6 +98,8 @@ import {
 import {
   ALLOWED_TYPES_IN_VARIABLES,
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  DATE_INTERVAL_CONDITION_TYPES,
+  DATE_SINGLE_CONDITION_TYPES,
   defaultFlankerBtnObj,
   ordinalStrings,
   SAMPLE_SIZE,
@@ -783,8 +787,31 @@ const formatTime = (hours: number, minutes: number) => {
   return `${formattedHours}:${formattedMinutes}`;
 };
 
+const formatDate = (dateValue: string) => {
+  const date = dateValue ? new Date(`${dateValue}T00:00:00`) : undefined;
+
+  return date;
+};
+
 const getConditionPayload = (item: Item, condition: Condition) => {
   const conditionType = condition.type as ConditionType;
+  if (DATE_SINGLE_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as DateSingleValueCondition['payload'];
+
+    return {
+      ...conditionPayload,
+      date: formatDate(conditionPayload.date),
+    };
+  }
+  if (DATE_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as DateRangeValueCondition['payload'];
+
+    return {
+      ...conditionPayload,
+      minDate: formatDate(conditionPayload.minDate),
+      maxDate: formatDate(conditionPayload.maxDate),
+    };
+  }
   if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
     const conditionPayload = condition.payload as
       | TimeSingleValueCondition<string>['payload']
