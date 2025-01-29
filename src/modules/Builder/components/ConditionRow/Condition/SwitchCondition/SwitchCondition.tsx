@@ -245,6 +245,7 @@ export const SwitchCondition = ({
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
                 skipMinDate
+                maxDate={maxDateValue}
                 {...commonDateInputProps}
               />
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
