@@ -13,6 +13,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
   min-height: ${height};
   max-height: ${height};
+  margin-bottom: ${theme.spacing(2)};
 
   .MuiTableCell-root {
     background-color: transparent;

@@ -1,3 +1,6 @@
+import { SubscaleFormValue } from 'modules/Builder/types';
+import { AgeFieldType } from 'redux/modules';
+
 export const enum SubscaleColumns {
   Name = 'name',
 }
@@ -17,4 +20,11 @@ export type SubscaleContentProps = {
   name: string;
   notUsedElements: ItemElement[];
   'data-testid'?: string;
+};
+
+export type UseSubscalesSystemItemsSetupProps = {
+  subscales: SubscaleFormValue[];
+  ageFieldType: AgeFieldType;
+  isAgeVisible: boolean;
+  isGenderVisible: boolean;
 };

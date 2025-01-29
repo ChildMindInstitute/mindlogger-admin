@@ -4,7 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController } from 'shared/components/FormComponents';
-import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
+import {
+  StyledContainerWithBg,
+  StyledFlexTopCenter,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
@@ -131,14 +137,25 @@ export const SubscalesConfiguration = () => {
   }, [!!calculateTotalScore]);
 
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
+
   const ageScreenItem = items?.find(
     (item) => isSystemItem(item) && item.name === LookupTableItems.Age_screen,
+  );
+  const [isAgeVisible, setIsAgeVisible] = useState<boolean>(
+    ageScreenItem ? !ageScreenItem.isHidden : true,
   );
   const [ageFieldType, setAgeFieldType] = useState<AgeFieldType>(
     ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text',
   );
 
-  useSubscalesSystemItemsSetup(subscales, ageFieldType);
+  const genderScreenItem = items?.find(
+    (item) => isSystemItem(item) && item.name === LookupTableItems.Gender_screen,
+  );
+  const [isGenderVisible, setIsGenderVisible] = useState<boolean>(
+    genderScreenItem ? !genderScreenItem.isHidden : true,
+  );
+
+  useSubscalesSystemItemsSetup({ subscales, ageFieldType, isAgeVisible, isGenderVisible });
   const hasLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
 
   return (
@@ -204,30 +221,48 @@ export const SubscalesConfiguration = () => {
             data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
           {hasLookupTable && (
-            <FormControl sx={{ mt: 2, flexDirection: 'row', alignItems: 'center', gap: 1.6 }}>
-              <FormLabel id="age-field-type-radio-btns-label">
-                <StyledTitleMedium>{t('ageFieldTypeLabel')}</StyledTitleMedium>
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="age-field-type-radio-btns-label"
-                value={ageFieldType}
-                onChange={(e) => setAgeFieldType(e.target.value as AgeFieldType)}
-              >
-                <FormControlLabel
-                  value="text"
-                  control={<Radio />}
-                  label={t('ageFieldTypeText')}
-                  data-testid={`${dataTestid}-age-field-type-text`}
+            <>
+              <SwitchWithState
+                checked={isGenderVisible}
+                handleChange={(e) => setIsGenderVisible(e.target.checked)}
+                label={t('genderFieldLabel')}
+                data-testid={`${dataTestid}-gender-field-visible`}
+              />
+              <FormControl sx={{ flexDirection: 'row', alignItems: 'center', gap: 1.6 }}>
+                <SwitchWithState
+                  checked={isAgeVisible}
+                  handleChange={(e) => setIsAgeVisible(e.target.checked)}
+                  label={t('ageFieldLabel')}
+                  data-testid={`${dataTestid}-age-field-visible`}
                 />
-                <FormControlLabel
-                  value="dropdown"
-                  control={<Radio />}
-                  label={t('ageFieldTypeDropdown')}
-                  data-testid={`${dataTestid}-age-field-type-dropdown`}
-                />
-              </RadioGroup>
-            </FormControl>
+                <StyledFlexTopCenter sx={{ gap: 1.6 }}>
+                  <FormLabel id="age-field-type-radio-btns-label" disabled={!isAgeVisible}>
+                    {t('fieldType')}
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="age-field-type-radio-btns-label"
+                    value={ageFieldType}
+                    onChange={(e) => setAgeFieldType(e.target.value as AgeFieldType)}
+                  >
+                    <FormControlLabel
+                      value="text"
+                      control={<Radio />}
+                      disabled={!isAgeVisible}
+                      label={t('ageFieldTypeText')}
+                      data-testid={`${dataTestid}-age-field-type-text`}
+                    />
+                    <FormControlLabel
+                      value="dropdown"
+                      control={<Radio />}
+                      disabled={!isAgeVisible}
+                      label={t('ageFieldTypeDropdown')}
+                      data-testid={`${dataTestid}-age-field-type-dropdown`}
+                    />
+                  </RadioGroup>
+                </StyledFlexTopCenter>
+              </FormControl>
+            </>
           )}
           <SwitchWithState
             checked={calculateTotalScoreSwitch}
