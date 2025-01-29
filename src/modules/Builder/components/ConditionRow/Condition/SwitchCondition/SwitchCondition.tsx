@@ -251,7 +251,7 @@ export const SwitchCondition = ({
               <DatePicker
                 name={maxDateValueName}
                 key={`max-date-value-${isRangeValueShown}`}
-                minDate={minValue as Date}
+                minDate={minDateValue}
                 data-testid={`${dataTestid}-end-date-value`}
                 {...commonDateInputProps}
               />
