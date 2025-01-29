@@ -19,8 +19,6 @@ export const createProlificIntegration = async (apiToken: string, appletId?: str
     } else if (e instanceof AxiosError && e.response?.status === 401) {
       throw new Error('Invalid Prolific API Token');
     }
-
-    throw new Error('Internal Server Error');
   }
 };
 
