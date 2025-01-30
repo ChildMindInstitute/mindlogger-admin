@@ -6,7 +6,7 @@ import { IntegrationTypes } from 'shared/consts';
 
 export const createProlificIntegration = async (apiToken: string, appletId?: string) => {
   try {
-    await authApiClient.post('/integrations/', {
+    await authApiClient.post('/integrations', {
       integrationType: IntegrationTypes.Prolific,
       appletId,
       configuration: {
@@ -19,6 +19,8 @@ export const createProlificIntegration = async (apiToken: string, appletId?: str
     } else if (e instanceof AxiosError && e.response?.status === 401) {
       throw new Error('Invalid Prolific API Token');
     }
+
+    throw new Error('Internal Server Error');
   }
 };
 
@@ -30,7 +32,7 @@ const ProlificIntegrationStatus = object({
 
 export const prolificIntegrationExists = async (appletId: string): Promise<boolean> => {
   try {
-    const response = await authApiClient.get('/integrations/', {
+    const response = await authApiClient.get('/integrations', {
       params: { applet_id: appletId, integration_type: IntegrationTypes.Prolific },
     });
 
