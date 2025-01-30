@@ -173,7 +173,7 @@ const legacyResult = {
   legacy_user_id: null,
 };
 
-const newResult = {
+const result = {
   target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
   target_secret_id: 'target-secret-id',
   target_nickname: 'Mock target user',
@@ -248,7 +248,7 @@ describe('getJourneyCSVObject', () => {
         index: 0,
         enableDataExportRenaming: true,
       }),
-    ).toStrictEqual(newResult);
+    ).toStrictEqual(result);
   });
 
   test('returns object with scheduled time', () => {

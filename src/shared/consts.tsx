@@ -312,15 +312,12 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [
   ConditionType.OutsideOfTimes,
 ];
 
-const LEGACY_GENERAL_REPORT_NAME = 'report';
-const NEW_GENERAL_REPORT_NAME = 'responses';
-
-export const getGeneralReportName = (enableDataExportRenaming: boolean) =>
-  enableDataExportRenaming ? NEW_GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME;
+export const LEGACY_GENERAL_REPORT_NAME = 'report';
+export const GENERAL_REPORT_NAME = 'responses';
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
-const legacyReportHeader = [
+export const legacyReportHeader = [
   'id',
   'activity_flow_submission_id',
   'activity_scheduled_time',
@@ -357,7 +354,7 @@ const legacyReportHeader = [
   'legacy_user_id',
 ];
 
-const newReportHeader = [
+export const reportHeader = [
   'target_id',
   'target_secret_id',
   'target_nickname',
@@ -394,9 +391,6 @@ const newReportHeader = [
   'item_response_status',
   'rawScore',
 ];
-
-export const getReportHeader = (enableDataExportRenaming?: boolean) =>
-  enableDataExportRenaming ? newReportHeader : legacyReportHeader;
 
 export const legacyActivityJourneyHeader = [
   'id',
@@ -435,7 +429,7 @@ export const legacyActivityJourneyHeader = [
   'version',
 ];
 
-export const newActivityJourneyHeader = [
+export const activityJourneyHeader = [
   'target_id',
   'target_secret_id',
   'target_nickname',
@@ -477,9 +471,6 @@ export const newActivityJourneyHeader = [
   'press_done_time',
   'response_option_selection_time',
 ];
-
-export const getActivityJourneyHeader = (enableDataExportRenaming?: boolean) =>
-  enableDataExportRenaming ? newActivityJourneyHeader : legacyActivityJourneyHeader;
 
 export const enum ActivityStatus {
   Missed = 'missed',

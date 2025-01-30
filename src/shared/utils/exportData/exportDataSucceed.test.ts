@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { getActivityJourneyHeader, getReportHeader } from 'shared/consts';
+import {
+  legacyActivityJourneyHeader,
+  legacyReportHeader,
+  activityJourneyHeader,
+  reportHeader,
+} from 'shared/consts';
 
 import { exportEncryptedDataSucceed, exportDecryptedDataSucceed } from './exportDataSucceed';
 import * as prepareDataUtils from './prepareData';
@@ -49,12 +54,12 @@ describe('exportDataSucceed', () => {
     expect(exportTemplateUtils.exportTemplate).toHaveBeenCalledTimes(2);
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: [],
-      defaultData: getReportHeader(enableDataExportRenaming),
+      defaultData: enableDataExportRenaming ? reportHeader : legacyReportHeader,
       fileName,
     });
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(2, {
       data: [],
-      defaultData: getActivityJourneyHeader(enableDataExportRenaming),
+      defaultData: enableDataExportRenaming ? activityJourneyHeader : legacyActivityJourneyHeader,
       fileName: 'activity_user_journey-test',
     });
     expect(exportCsvZipUtils.exportCsvZip).toHaveBeenCalledTimes(4);
