@@ -883,6 +883,10 @@
   "defaultPort": "Default Port",
   "invalidIpAddress": "Invalid IP Address",
   "invalidPort": "Invalid Port",
+  "scoreTooLow": "This score is too low. Please enter a higher number.",
+  "scoreTooHigh": "This score is too high. Please enter a lower number.",
+  "scoreMustBeNumber": "The score must be a number",
+  "scorePrecisionError": "The score must be a number with a maximum of 2 decimal places",
   "integrations": "Integrations",
   "loris": {
     "configurationPopupTitle": "LORIS Configuration",

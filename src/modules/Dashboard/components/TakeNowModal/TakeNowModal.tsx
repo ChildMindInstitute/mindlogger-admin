@@ -42,8 +42,8 @@ import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   ActivityFlowThumbnail,
-  FullTeamSearchType,
   ParticipantDropdownOption,
+  SearchResultUserTypes,
   useParticipantDropdown,
 } from 'modules/Dashboard/components';
 
@@ -402,7 +402,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                     setIsSelfReporting(selfReportingCondition);
                   }}
                   data-testid={`${dataTestId}-take-now-modal-source-subject-dropdown`}
-                  handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
+                  handleSearch={(query) =>
+                    handleSearch(query, {
+                      team: true,
+                      fullParticipant: true,
+                      limitedParticipant: true,
+                    })
+                  }
                   canShowWarningMessage={true}
                   showGroups
                 />
@@ -454,11 +460,11 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   }}
                   data-testid={`${dataTestId}-take-now-modal-logged-in-user-dropdown`}
                   handleSearch={(query) => {
-                    const participantSearchTypes: [FullTeamSearchType, ...FullTeamSearchType[]] = [
-                      'team',
-                    ];
+                    const participantSearchTypes: SearchResultUserTypes = {
+                      team: true,
+                    };
                     if (enableParticipantMultiInformant) {
-                      participantSearchTypes.push('full-participant');
+                      participantSearchTypes.fullParticipant = true;
                     }
 
                     return handleSearch(query, participantSearchTypes);
@@ -484,7 +490,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 setTargetSubject(option);
               }}
               data-testid={`${dataTestId}-take-now-modal-target-subject-dropdown`}
-              handleSearch={(query) => handleSearch(query, ['team', 'any-participant'])}
+              handleSearch={(query) =>
+                handleSearch(query, { team: true, fullParticipant: true, limitedParticipant: true })
+              }
             />
             <SubjectRelationError />
           </StyledFlexColumn>

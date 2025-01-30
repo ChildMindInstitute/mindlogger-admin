@@ -11,6 +11,7 @@ import {
   mockedOwnerManager,
   mockedOwnerParticipant,
   mockedOwnerSubject,
+  mockedOwnerSubjectWithDataAccess,
   mockParticipantActivities,
   mockParticipantFlows,
 } from 'shared/mock';
@@ -170,7 +171,7 @@ const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 });

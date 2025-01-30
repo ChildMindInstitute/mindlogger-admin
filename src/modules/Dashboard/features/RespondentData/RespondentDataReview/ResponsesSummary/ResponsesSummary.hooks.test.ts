@@ -3,6 +3,8 @@ import * as routerDom from 'react-router-dom';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
+import { Roles } from 'shared/consts';
+import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { useResponsesSummary } from './ResponsesSummary.hooks';
 
@@ -19,7 +21,7 @@ describe('useResponsesSummary', () => {
 
   test('should return a correct array with review description objects', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
-    const res = {
+    const res: SubjectDetailsWithDataAccess = {
       secretUserId: 'secret123',
       nickname: 'John Doe',
       firstName: 'John',
@@ -27,6 +29,8 @@ describe('useResponsesSummary', () => {
       id: '123',
       lastSeen: '2024-04-10T10:00:00',
       userId: '123',
+      roles: [Roles.Respondent],
+      teamMemberCanViewData: true,
     };
 
     users.useRespondent = jest.fn().mockReturnValue({ result: res });

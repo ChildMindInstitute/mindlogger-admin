@@ -143,7 +143,8 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
-    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    // Map each date string to a Date object, appending 'T00:00:00' to remove timezone offset
+    const submitDates = datesResult.dates.map((date: string) => new Date(`${date}T00:00:00`));
     setResponseDates(submitDates);
   });
 
@@ -232,13 +233,15 @@ export const RespondentDataReview = () => {
     if (lastActivityCompleted === undefined) return;
 
     const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
-    const selectedDateInParam =
-      selectedDateParam && isValid(new Date(selectedDateParam)) && new Date(selectedDateParam);
 
-    if (selectedDateInParam) {
-      handleSetInitialDate(selectedDateInParam);
+    if (selectedDateParam) {
+      // Map the date string to a Date object, appending 'T00:00:00' to remove timezone offset
+      const selectedDate = new Date(`${selectedDateParam}T00:00:00`);
+      if (isValid(selectedDate)) {
+        handleSetInitialDate(selectedDate);
 
-      return;
+        return;
+      }
     }
 
     if (lastActivityCompletedDate) {

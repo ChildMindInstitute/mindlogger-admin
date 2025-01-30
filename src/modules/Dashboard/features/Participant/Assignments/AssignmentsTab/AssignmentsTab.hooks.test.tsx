@@ -20,6 +20,7 @@ import {
   mockedOwnerSubject,
   mockedFullParticipant1,
   mockedFullSubject1,
+  mockedOwnerSubjectWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -38,7 +39,6 @@ import {
   targetSubjectDropdownTestId,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { ActionsMenu } from 'shared/components';
-import { SubjectDetails } from 'modules/Dashboard/types';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 import {
@@ -48,6 +48,7 @@ import {
   StartAssignActivityOrFlowEvent,
   StartUnassignActivityOrFlowEvent,
 } from 'shared/utils';
+import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { useAssignmentsTab } from './AssignmentsTab.hooks';
 
@@ -86,7 +87,7 @@ const preloadedState: PreloadedState<RootState> = {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
 };
@@ -130,8 +131,8 @@ const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 type UseAssignmentsHookTestProps = {
   activityOrFlow: ParticipantActivityOrFlow;
-  targetSubject?: SubjectDetails;
-  respondentSubject?: SubjectDetails;
+  targetSubject?: SubjectDetailsWithDataAccess;
+  respondentSubject?: SubjectDetailsWithDataAccess;
 };
 
 const UseAssignmentsHookTest = ({
