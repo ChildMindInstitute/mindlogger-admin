@@ -3,7 +3,7 @@
 import { addDays, endOfYear, setHours, setMinutes, setSeconds } from 'date-fns';
 
 import { Periodicity, TimerType } from 'modules/Dashboard/api';
-import { formatToYearMonthDate } from 'shared/utils/dateFormat';
+import { formatToYearMonthDate, parseDateToMidnightUTC } from 'shared/utils/dateFormat';
 
 import {
   getEventsWithHiddenInTimeView,
@@ -325,9 +325,9 @@ describe('getEventEndDateTime', () => {
   const dateString = '2023-12-15';
   const dateStringNextYear = '2024-07-15';
   const endTime = '16:30:00';
-  const eventStart = new Date(`${dateString}T00:00:00`);
+  const eventStart = parseDateToMidnightUTC(dateString);
+  const eventStartNextYear = parseDateToMidnightUTC(dateStringNextYear);
   const eventStartWithTime = new Date(`${dateString}T${endTime}`);
-  const eventStartNextYear = new Date(`${dateStringNextYear}T00:00:00`);
   const currentYear = '2023';
 
   test.each`

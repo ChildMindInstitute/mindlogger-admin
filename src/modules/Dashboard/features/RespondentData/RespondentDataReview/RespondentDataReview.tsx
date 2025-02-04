@@ -23,6 +23,7 @@ import { useAsync } from 'shared/hooks';
 import { StyledContainer, theme } from 'shared/styles';
 import { users } from 'redux/modules';
 import { page } from 'resources';
+import { parseDateToMidnightUTC } from 'shared/utils';
 
 import { Feedback } from './Feedback';
 import { ActivityResponses } from './ActivityResponses';
@@ -143,8 +144,7 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
-    // Map each date string to a Date object, appending 'T00:00:00' to remove timezone offset
-    const submitDates = datesResult.dates.map((date: string) => new Date(`${date}T00:00:00`));
+    const submitDates = datesResult.dates.map(parseDateToMidnightUTC);
     setResponseDates(submitDates);
   });
 
@@ -235,8 +235,7 @@ export const RespondentDataReview = () => {
     const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
 
     if (selectedDateParam) {
-      // Map the date string to a Date object, appending 'T00:00:00' to remove timezone offset
-      const selectedDate = new Date(`${selectedDateParam}T00:00:00`);
+      const selectedDate = parseDateToMidnightUTC(selectedDateParam);
       if (isValid(selectedDate)) {
         handleSetInitialDate(selectedDate);
 

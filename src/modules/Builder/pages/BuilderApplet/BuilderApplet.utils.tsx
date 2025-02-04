@@ -44,6 +44,7 @@ import {
   getTextBetweenBrackets,
   INTERVAL_SYMBOL,
   isSystemItem,
+  parseDateToMidnightUTC,
   Path,
   pluck,
 } from 'shared/utils';
@@ -788,7 +789,7 @@ const formatTime = (hours: number, minutes: number) => {
 };
 
 const formatDate = (dateValue: string) => {
-  const date = dateValue ? new Date(`${dateValue}T00:00:00`) : undefined;
+  const date = dateValue ? parseDateToMidnightUTC(dateValue) : undefined;
 
   return date;
 };
