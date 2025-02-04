@@ -245,13 +245,14 @@ export const SwitchCondition = ({
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
                 skipMinDate
+                maxDate={maxDateValue}
                 {...commonDateInputProps}
               />
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
               <DatePicker
                 name={maxDateValueName}
                 key={`max-date-value-${isRangeValueShown}`}
-                minDate={minValue as Date}
+                minDate={minDateValue}
                 data-testid={`${dataTestid}-end-date-value`}
                 {...commonDateInputProps}
               />
