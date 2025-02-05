@@ -9,7 +9,8 @@ import {
   SubscaleSetting,
 } from 'shared/state';
 import {
-  getFinalSubscale,
+  LegacyFinalSubscale,
+  FinalSubscale,
   ItemResponseType,
   LookupTableItems,
   Sex,
@@ -179,7 +180,7 @@ export const calcTotalScore = (
 
   return calcScores(
     {
-      name: getFinalSubscale(enableDataExportRenaming).Key,
+      name: enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
       items: Object.keys(activityItems).reduce((acc: ActivitySettingsSubscaleItem[], item) => {
         const itemType = activityItems[item].activityItem.responseType;
         const allowEdit = activityItems[item].activityItem.allowEdit;
@@ -244,7 +245,7 @@ export const getSubscales = (
     subscaleSetting.calculateTotalScore &&
     calcTotalScore(subscaleSetting, activityItems, enableDataExportRenaming);
 
-  const finalSubscale = getFinalSubscale(enableDataExportRenaming);
+  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
 
   return {
     ...(calculatedTotalScore && {

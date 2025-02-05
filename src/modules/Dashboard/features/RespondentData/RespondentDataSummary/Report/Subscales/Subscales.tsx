@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
 import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
-import { getFinalSubscale } from 'shared/consts';
+import { FinalSubscale, LegacyFinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { useFeatureFlags } from 'shared/hooks';
 
@@ -35,7 +35,7 @@ export const Subscales = ({
   const {
     featureFlags: { enableDataExportRenaming },
   } = useFeatureFlags();
-  const finalSubscale = getFinalSubscale(!!enableDataExportRenaming);
+  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
     () =>
