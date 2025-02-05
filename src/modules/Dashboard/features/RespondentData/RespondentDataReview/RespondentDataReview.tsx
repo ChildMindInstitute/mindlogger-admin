@@ -23,6 +23,7 @@ import { useAsync } from 'shared/hooks';
 import { StyledContainer, theme } from 'shared/styles';
 import { users } from 'redux/modules';
 import { page } from 'resources';
+import { parseDateToMidnightUTC } from 'shared/utils';
 
 import { Feedback } from './Feedback';
 import { ActivityResponses } from './ActivityResponses';
@@ -143,7 +144,7 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
-    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    const submitDates = datesResult.dates.map(parseDateToMidnightUTC);
     setResponseDates(submitDates);
   });
 
@@ -232,13 +233,14 @@ export const RespondentDataReview = () => {
     if (lastActivityCompleted === undefined) return;
 
     const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
-    const selectedDateInParam =
-      selectedDateParam && isValid(new Date(selectedDateParam)) && new Date(selectedDateParam);
 
-    if (selectedDateInParam) {
-      handleSetInitialDate(selectedDateInParam);
+    if (selectedDateParam) {
+      const selectedDate = parseDateToMidnightUTC(selectedDateParam);
+      if (isValid(selectedDate)) {
+        handleSetInitialDate(selectedDate);
 
-      return;
+        return;
+      }
     }
 
     if (lastActivityCompletedDate) {

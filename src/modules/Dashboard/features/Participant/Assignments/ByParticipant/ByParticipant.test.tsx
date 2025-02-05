@@ -11,6 +11,7 @@ import {
   mockedOwnerManager,
   mockedOwnerParticipant,
   mockedOwnerSubject,
+  mockedOwnerSubjectWithDataAccess,
   mockParticipantActivities,
   mockParticipantFlows,
 } from 'shared/mock';
@@ -24,6 +25,7 @@ import {
 } from 'shared/utils/axios-mocks';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { Roles } from 'shared/consts';
 
 import ByParticipant from './ByParticipant';
 
@@ -106,7 +108,11 @@ const successfulGetAppletRespondentSubjectActivitiesMock = mockSuccessfulHttpRes
 
 const successfulGetTargetSubjectsByRespondentMock = ({
   activityOrFlowId,
-}: Record<string, string>) => {
+  teamMemberCanViewData,
+}: Partial<{
+  activityOrFlowId: string;
+  teamMemberCanViewData: boolean;
+}>) => {
   const participantActivityOrFlow = mockParticipantActivitiesOrFlows.find(
     (a) => a.id === activityOrFlowId,
   );
@@ -120,6 +126,7 @@ const successfulGetTargetSubjectsByRespondentMock = ({
         ...mockedOwnerSubject,
         submissionCount: activityOrFlowMetadata?.respondentSubmissionsCount,
         currentlyAssigned: participantActivityOrFlow?.status === 'active',
+        teamMemberCanViewData: teamMemberCanViewData ?? true,
       },
     ],
     count: 1,
@@ -156,23 +163,37 @@ const testId = 'participant-details-by-participant';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedOwnerSubject.id}`;
 const routePath = page.appletParticipantDetails;
 
-const preloadedState: PreloadedState<RootState> = {
-  ...getPreloadedState(),
+const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
+  ...getPreloadedState(role),
   users: {
     respondentDetails: mockSchema(null),
     allRespondents: mockSchema(null, {
       status: 'idle',
     }),
     subjectDetails: mockSchema({
-      result: mockedOwnerSubject,
+      result: mockedOwnerSubjectWithDataAccess,
     }),
   },
-};
+});
 
 const renderOptions = {
-  preloadedState,
+  preloadedState: preloadedState(),
   route,
   routePath,
+};
+
+const getRequestResponses = {
+  [GET_APPLET_URL]: successfulGetAppletMock,
+  [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
+  [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
+  [GET_APPLET_RESPONDENT_SUBJECT_ACTIVITIES_URL]:
+    successfulGetAppletRespondentSubjectActivitiesMock,
+  [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+    successfulGetTargetSubjectsByRespondentMock({
+      activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+    }),
+  [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
+  [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
 };
 
 jest.mock('shared/hooks/useFeatureFlags');
@@ -192,15 +213,7 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
       resetLDContext: jest.fn(),
     });
 
-    mockGetRequestResponses({
-      [GET_APPLET_URL]: successfulGetAppletMock,
-      [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
-      [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
-      [GET_APPLET_RESPONDENT_SUBJECT_ACTIVITIES_URL]:
-        successfulGetAppletRespondentSubjectActivitiesMock,
-      [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
-      [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
-    });
+    mockGetRequestResponses(getRequestResponses);
   });
 
   afterEach(() => {
@@ -215,13 +228,9 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
 
   it('should render the empty state', async () => {
     mockGetRequestResponses({
-      [GET_APPLET_URL]: successfulGetAppletMock,
-      [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
-      [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
+      ...getRequestResponses,
       [GET_APPLET_RESPONDENT_SUBJECT_ACTIVITIES_URL]:
         successfulEmptyGetAppletRespondentSubjectActivitiesMock,
-      [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
-      [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
     });
 
     renderWithProviders(<ByParticipant />, renderOptions);
@@ -280,22 +289,6 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
   });
 
   describe('expanded view', () => {
-    beforeEach(() => {
-      mockGetRequestResponses({
-        [GET_APPLET_URL]: successfulGetAppletMock,
-        [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
-        [GET_APPLET_ACTIVITIES_METADATA_URL]: successfulGetAppletActivitiesMetadataMock,
-        [GET_APPLET_RESPONDENT_SUBJECT_ACTIVITIES_URL]:
-          successfulGetAppletRespondentSubjectActivitiesMock,
-        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
-          successfulGetTargetSubjectsByRespondentMock({
-            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
-          }),
-        [GET_WORKSPACE_RESPONDENTS_URL]: successfulGetWorkspaceRespondentsMock,
-        [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
-      });
-    });
-
     it('should be expanded when clicking activity/flow card', async () => {
       renderWithProviders(<ByParticipant />, renderOptions);
 
@@ -332,6 +325,102 @@ describe('Dashboard > Applet > Participant > Assignments > By Participant screen
       await userEvent.click(viewDataButton);
 
       expect(screen.getByTestId('unlock-applet-data-popup')).toBeVisible();
+    });
+
+    it('should default the View Data button to enabled', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: undefined,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const viewDataButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-view-data`);
+      expect(viewDataButton).toBeEnabled();
+    });
+
+    it('should disable the View Data button according to the API data', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: false,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const viewDataButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-view-data`);
+      expect(viewDataButton).toBeDisabled();
+    });
+
+    it('should default the export data menu item to enabled when visible', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: undefined,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const actionsMenuButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-dots`);
+      await userEvent.click(actionsMenuButton);
+
+      const exportDataMenuItem = screen.getByTestId(`${testId}-export`);
+
+      expect(exportDataMenuItem).toBeEnabled();
+    });
+
+    it('should disable the export data menu item according to API data', async () => {
+      mockGetRequestResponses({
+        ...getRequestResponses,
+        [`${GET_TARGET_SUBJECTS_BY_RESPONDENT_URL}/${mockParticipantActivitiesOrFlows[0].id}`]:
+          successfulGetTargetSubjectsByRespondentMock({
+            activityOrFlowId: mockParticipantActivitiesOrFlows[0].id,
+            teamMemberCanViewData: false,
+          }),
+      });
+
+      renderWithProviders(<ByParticipant />, renderOptions);
+
+      const activityOrFlow = (await screen.findAllByTestId(`${testId}-activity-list-item`))[0];
+
+      const toggleButton = within(activityOrFlow).getByLabelText('Toggle Subjects View');
+
+      await userEvent.click(toggleButton);
+
+      const actionsMenuButton = screen.getByTestId(`${testId}-0-expanded-view-subject-0-dots`);
+      await userEvent.click(actionsMenuButton);
+
+      const exportDataMenuItem = screen.getByTestId(`${testId}-export`);
+
+      expect(exportDataMenuItem).toBeEnabled();
     });
   });
 });

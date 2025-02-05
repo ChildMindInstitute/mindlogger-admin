@@ -95,6 +95,15 @@ export enum Roles {
   SuperAdmin = 'super_admin',
 }
 
+export const TEAM_MEMBER_ROLES = [
+  Roles.SuperAdmin,
+  Roles.Owner,
+  Roles.Manager,
+  Roles.Coordinator,
+  Roles.Editor,
+  Roles.Reviewer,
+];
+
 export enum ItemResponseType {
   ABTrails = 'ABTrails',
   Audio = 'audio',

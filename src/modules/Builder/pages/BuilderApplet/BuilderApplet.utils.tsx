@@ -33,6 +33,8 @@ import {
   TimeRangeIntervalValueCondition,
   TimeSingleValueCondition,
   TimeRangeSingleValueCondition,
+  DateSingleValueCondition,
+  DateRangeValueCondition,
 } from 'shared/state';
 import {
   createArray,
@@ -42,6 +44,7 @@ import {
   getTextBetweenBrackets,
   INTERVAL_SYMBOL,
   isSystemItem,
+  parseDateToMidnightUTC,
   Path,
   pluck,
 } from 'shared/utils';
@@ -96,6 +99,8 @@ import {
 import {
   ALLOWED_TYPES_IN_VARIABLES,
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  DATE_INTERVAL_CONDITION_TYPES,
+  DATE_SINGLE_CONDITION_TYPES,
   defaultFlankerBtnObj,
   ordinalStrings,
   SAMPLE_SIZE,
@@ -783,16 +788,38 @@ const formatTime = (hours: number, minutes: number) => {
   return `${formattedHours}:${formattedMinutes}`;
 };
 
+const formatDate = (dateValue: string) => {
+  const date = dateValue ? parseDateToMidnightUTC(dateValue) : undefined;
+
+  return date;
+};
+
 const getConditionPayload = (item: Item, condition: Condition) => {
   const conditionType = condition.type as ConditionType;
-  if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
-    const conditionPayload = condition.payload as
-      | TimeSingleValueCondition<Time>['payload']
-      | TimeRangeSingleValueCondition<Time>['payload'];
+  if (DATE_SINGLE_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as DateSingleValueCondition['payload'];
 
     return {
       ...conditionPayload,
-      time: formatTime(conditionPayload.time.hours, conditionPayload.time.minutes),
+      date: formatDate(conditionPayload.date),
+    };
+  }
+  if (DATE_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as DateRangeValueCondition['payload'];
+
+    return {
+      ...conditionPayload,
+      minDate: formatDate(conditionPayload.minDate),
+      maxDate: formatDate(conditionPayload.maxDate),
+    };
+  }
+  if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
+    const conditionPayload = condition.payload as
+      | TimeSingleValueCondition<string>['payload']
+      | TimeRangeSingleValueCondition<string>['payload'];
+
+    return {
+      ...conditionPayload,
     };
   }
   if (TIME_INTERVAL_CONDITION_TYPES.includes(conditionType)) {

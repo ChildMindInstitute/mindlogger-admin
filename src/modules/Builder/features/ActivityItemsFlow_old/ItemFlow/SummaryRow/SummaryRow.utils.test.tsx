@@ -1,4 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
+import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
 import { getItemsOptions, getItemsInUsage } from './SummaryRow.utils';
 
@@ -221,6 +222,20 @@ describe('SummaryRow.utils', () => {
         tooltip:
           "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions.",
         value: 'item-3',
+        tooltipPlacement: 'right',
+      },
+      {
+        disabled: false,
+        labelKey: 't1',
+        value: 'item-4',
+        tooltip: <StyledMdPreview modelValue="item-4" />,
+        tooltipPlacement: 'right',
+      },
+      {
+        disabled: false,
+        labelKey: 'Message',
+        value: 'item-17',
+        tooltip: <StyledMdPreview modelValue="item-17" />,
         tooltipPlacement: 'right',
       },
     ];

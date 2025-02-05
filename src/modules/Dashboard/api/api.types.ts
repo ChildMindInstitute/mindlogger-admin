@@ -5,7 +5,7 @@ import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'sh
 import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
 
-import { SubjectDetails } from '../types';
+import { SubjectDetails, SubjectDetailsWithDataAccess } from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -727,7 +727,7 @@ export type GetTargetSubjectsByRespondentParams = SubjectId & {
 };
 
 export type TargetSubjectsByRespondent = Array<
-  SubjectDetails &
+  SubjectDetailsWithDataAccess &
     AppletId & {
       submissionCount: number;
       currentlyAssigned: boolean;

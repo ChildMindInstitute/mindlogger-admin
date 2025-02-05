@@ -20,7 +20,15 @@ export const getMatchOptions = () => [
   },
 ];
 
-export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOptionsProps) => {
+const allowedResponseTypes = [
+  ItemResponseType.Slider,
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+  ItemResponseType.Text,
+  ItemResponseType.Message,
+];
+
+export const getItemsOptions = ({ items, itemsInUsage, conditions = [] }: GetItemsOptionsProps) => {
   const itemsObject = getObjectFromList(items, undefined, true);
   const conditionItemsInUsageSet = new Set(conditions.map((condition) => condition.itemName));
   const maxUsedItemIndex = Math.max(
@@ -28,11 +36,7 @@ export const getItemsOptions = ({ items, itemsInUsage, conditions }: GetItemsOpt
   );
 
   return items?.reduce((optionList: { value: string; labelKey: string }[], item, index) => {
-    if (
-      item.responseType !== ItemResponseType.Slider &&
-      item.responseType !== ItemResponseType.SingleSelection &&
-      item.responseType !== ItemResponseType.MultipleSelection
-    ) {
+    if (!allowedResponseTypes.includes(item.responseType)) {
       return optionList;
     }
 

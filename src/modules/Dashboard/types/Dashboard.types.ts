@@ -44,11 +44,16 @@ export type ParticipantDetail = {
   subjectFirstName: string;
   subjectLastName: string;
   subjectCreatedAt: string;
+  roles: Roles[];
 
   /**
    * The `key` in `/invitations/{key}`. This is `null` after the invitation is approved
    */
   invitation: Invitation | null;
+};
+
+export type ParticipantDetailWithDataAccess = ParticipantDetail & {
+  teamMemberCanViewData: boolean;
 };
 
 export enum ParticipantStatus {
@@ -60,7 +65,6 @@ export enum ParticipantStatus {
 export type Participant = {
   id: string | null;
   nicknames: string[];
-  role: Roles;
   secretIds: string[];
   lastSeen: string;
   isPinned?: boolean;
@@ -68,6 +72,10 @@ export type Participant = {
   isAnonymousRespondent: boolean;
   email: string | null;
   status: ParticipantStatus;
+};
+
+export type ParticipantWithDataAccess = Omit<Participant, 'details'> & {
+  details: ParticipantDetailWithDataAccess[];
 };
 
 export type SubjectDetails = {
@@ -79,6 +87,11 @@ export type SubjectDetails = {
   userId: string | null;
   firstName: string;
   lastName: string;
+};
+
+export type SubjectDetailsWithDataAccess = SubjectDetails & {
+  roles: Roles[];
+  teamMemberCanViewData: boolean;
 };
 
 export enum AccountType {

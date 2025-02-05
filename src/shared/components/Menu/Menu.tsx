@@ -4,7 +4,7 @@ import { Box, Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
-import { Tooltip } from 'shared/components/Tooltip';
+import { OptionalTooltipWrapper } from 'shared/components/Tooltip';
 
 import { StyledMenu, StyledMenuItemContent } from './Menu.styles';
 import { MenuItemType, MenuProps } from './Menu.types';
@@ -69,17 +69,8 @@ export const Menu = <T = unknown,>({
             onClose();
           };
 
-          const TooltipWrapper = ({ children }: { children: JSX.Element }) =>
-            tooltip ? (
-              <Tooltip tooltipTitle={tooltip} placement="right">
-                {children}
-              </Tooltip>
-            ) : (
-              children
-            );
-
           const menuItemContent = (
-            <TooltipWrapper>
+            <OptionalTooltipWrapper tooltipTitle={tooltip} placement="right">
               <StyledMenuItemContent customItemColor={customItemColor}>
                 {icon && <ListItemIcon>{icon}</ListItemIcon>}
                 {!!title && (
@@ -92,7 +83,7 @@ export const Menu = <T = unknown,>({
                   </StyledBodyLarge>
                 )}
               </StyledMenuItemContent>
-            </TooltipWrapper>
+            </OptionalTooltipWrapper>
           );
 
           switch (type) {

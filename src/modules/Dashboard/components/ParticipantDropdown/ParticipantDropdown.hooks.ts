@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, Roles, TEAM_MEMBER_ROLES } from 'shared/consts';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
+import { getWorkspaceRespondentsApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { Manager, Participant, ParticipantStatus } from 'modules/Dashboard/types';
+import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
 
 import {
   ParticipantDropdownOption,
   UseParticipantDropdownProps,
-  AnyTeamSearchType,
-  FullTeamSearchType,
+  SearchResultUserTypes,
 } from './ParticipantDropdown.types';
 import { participantToOption } from './ParticipantDropdown.utils';
 
@@ -30,7 +29,6 @@ export const useParticipantDropdown = ({
   finallyCallback,
 }: UseParticipantDropdownProps) => {
   const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [loggedInTeamMember, setLoggedInTeamMember] = useState<ParticipantDropdownOption | null>(
     null,
   );
@@ -54,16 +52,6 @@ export const useParticipantDropdown = ({
 
         setAllParticipants(options);
       }
-      successCallback?.(response);
-    },
-    errorCallback,
-    finallyCallback,
-  );
-
-  const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
-    getWorkspaceManagersApi,
-    (response) => {
-      setAllTeamMembers(response?.data?.result || []);
       successCallback?.(response);
     },
     errorCallback,
@@ -96,12 +84,14 @@ export const useParticipantDropdown = ({
     finallyCallback,
   );
 
-  const allowedTeamMembers = useMemo(
-    () =>
-      allTeamMembers.filter((manager) =>
-        manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
-      ),
-    [allTeamMembers],
+  const isTeamMember = useCallback(
+    (roles: Roles[]): boolean => roles.some((role) => TEAM_MEMBER_ROLES.includes(role)),
+    [],
+  );
+
+  const isAllowedTeamMember = useCallback(
+    (roles: Roles[]): boolean => roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
+    [],
   );
 
   const participantsOnly = useMemo(
@@ -110,13 +100,8 @@ export const useParticipantDropdown = ({
   );
 
   const teamMembersOnly = useMemo(
-    () =>
-      allParticipants.filter(
-        (participant) =>
-          participant.isTeamMember &&
-          allowedTeamMembers.some((manager) => manager.id === participant.userId),
-      ),
-    [allParticipants, allowedTeamMembers],
+    () => allParticipants.filter((participant) => isAllowedTeamMember(participant.roles)),
+    [allParticipants, isAllowedTeamMember],
   );
 
   const participantsAndTeamMembers = useMemo(
@@ -141,84 +126,43 @@ export const useParticipantDropdown = ({
   const handleSearch = useCallback(
     async (
       query: string,
-      types:
-        | [AnyTeamSearchType, ...AnyTeamSearchType[]]
-        | [FullTeamSearchType, ...FullTeamSearchType[]],
+      includedUserTypes: SearchResultUserTypes,
     ): Promise<ParticipantDropdownOption[]> => {
-      const requests = [];
-
-      // @ts-expect-error Yes, the array can in fact contain this value
-      const isAnyParticipant = types.includes('any-participant');
-
-      // @ts-expect-error Yes, the array can in fact contain this value
-      const isFullParticipant = types.includes('full-participant');
-
-      if (types.includes('team')) {
-        requests.push(
-          getWorkspaceManagersApi({
-            params: {
-              ownerId,
-              appletId,
-              search: query,
-              limit: DEFAULT_ROWS_PER_PAGE,
-            },
-          }),
-        );
-      }
-
-      if (isAnyParticipant) {
-        requests.push(
-          getWorkspaceRespondentsApi({
-            params: {
-              ownerId,
-              appletId,
-              search: query,
-              limit: DEFAULT_ROWS_PER_PAGE,
-            },
-          }),
-        );
-      } else if (isFullParticipant) {
-        requests.push(
-          getWorkspaceRespondentsApi({
-            params: {
-              ownerId,
-              appletId,
-              search: query,
-              limit: DEFAULT_ROWS_PER_PAGE,
-              shell: isFullParticipant ? false : undefined,
-            },
-          }),
-        );
-      }
-
-      const responses = await Promise.all(requests);
-
-      const participantsResponse =
-        isAnyParticipant || isFullParticipant ? responses.pop() : undefined;
-      const teamMemberResponse = types.includes('team') ? responses.pop() : undefined;
-
-      // Filter the search results by allowed team members
-      const allowedTeamMembersSearchResults = (
-        (teamMemberResponse?.data.result as Manager[]) ?? []
-      ).filter((manager) => manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)));
-
-      const participantsSearchResults = (
-        (participantsResponse?.data.result as Participant[]) ?? []
-      ).filter((participant) => {
-        if (!isParticipantValid(participant)) return false;
-
-        // If there are team members in the search results, we only want to show them if they are
-        // allowed
-        if (!participant.id || participant.details[0].subjectTag !== 'Team') {
-          return isAnyParticipant || !!participant.id;
-        } else {
-          return allowedTeamMembersSearchResults.some((manager) => manager.id === participant.id);
-        }
+      const response = await getWorkspaceRespondentsApi({
+        params: {
+          ownerId,
+          appletId,
+          search: query,
+          limit: DEFAULT_ROWS_PER_PAGE,
+          shell: includedUserTypes.limitedParticipant,
+        },
       });
+
+      const participantsSearchResults = ((response?.data.result as Participant[]) ?? []).filter(
+        (participant) => {
+          if (participant.isAnonymousRespondent) return includedUserTypes.anonymousParticipant;
+
+          if (participant.status === ParticipantStatus.Pending) {
+            return includePendingAccounts && includedUserTypes.pendingInvitedParticipant;
+          }
+
+          const participantAppletDetails = participant.details[0];
+
+          if (isTeamMember(participantAppletDetails.roles)) {
+            return includedUserTypes.team && isAllowedTeamMember(participantAppletDetails.roles);
+          }
+
+          if (participantAppletDetails.roles.length === 0) {
+            return includedUserTypes.limitedParticipant;
+          }
+
+          return includedUserTypes.fullParticipant;
+        },
+      );
 
       return participantsSearchResults.map(participantToOption);
     },
-    [ownerId, appletId, isParticipantValid],
+    [ownerId, appletId, isTeamMember, includePendingAccounts, isAllowedTeamMember],
   );
 
   useEffect(() => {
@@ -226,14 +170,6 @@ export const useParticipantDropdown = ({
 
     if (allParticipants.length === 0 && !isFetchingParticipants) {
       fetchParticipants({
-        params: {
-          ownerId,
-          appletId,
-          limit: 100,
-        },
-      });
-    } else if (allParticipants.length > 0 && allTeamMembers.length === 0 && !isFetchingManagers) {
-      fetchManagers({
         params: {
           ownerId,
           appletId,
@@ -257,18 +193,15 @@ export const useParticipantDropdown = ({
     ownerId,
     userData,
     allParticipants,
-    allTeamMembers,
     loggedInTeamMemberResponse,
     isFetchingParticipants,
-    isFetchingManagers,
     isFetchingLoggedInTeamMember,
     fetchParticipants,
-    fetchManagers,
     fetchLoggedInTeamMember,
     skip,
   ]);
 
-  const isLoading = isFetchingParticipants || isFetchingManagers || isFetchingLoggedInTeamMember;
+  const isLoading = isFetchingParticipants || isFetchingLoggedInTeamMember;
 
   return {
     allParticipants,

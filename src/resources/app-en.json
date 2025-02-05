@@ -883,6 +883,10 @@
   "defaultPort": "Default Port",
   "invalidIpAddress": "Invalid IP Address",
   "invalidPort": "Invalid Port",
+  "scoreTooLow": "This score is too low. Please enter a higher number.",
+  "scoreTooHigh": "This score is too high. Please enter a lower number.",
+  "scoreMustBeNumber": "The score must be a number",
+  "scorePrecisionError": "The score must be a number with a maximum of 2 decimal places",
   "integrations": "Integrations",
   "loris": {
     "configurationPopupTitle": "LORIS Configuration",
@@ -1758,5 +1762,6 @@
   "autoAssignTooltip": "Keep this box selected to automatically assign this Activity or Flow to all new Participants. If instead you’d like to manually assign Activities or Flows to your Participants (for either Self-Reporting or Multi-Informant reporting) unselect this box. You’ll then be able to assign Activities or Flows from the Activities Tab in your Applet.",
   "autoAssignActivityDisabled": "This activity is set to ‘Auto-assign’ in the Activity Builder and therefore cannot be assigned here.",
   "autoAssignFlowDisabled": "This flow is set to ‘Auto-assign’ in the Activity Flow Builder and therefore cannot be assigned here.",
-  "goToDashboard": "Go to Dashboard"
+  "goToDashboard": "Go to Dashboard",
+  "subjectDataUnavailable": "You are not allowed to view the data for this user"
 }

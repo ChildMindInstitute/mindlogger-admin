@@ -32,6 +32,7 @@ import {
 import { createArray, getEntityKey } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActivityItemsFlow } from './ActivityItemsFlow';
 
@@ -105,6 +106,12 @@ const mockedOrderedSummaryItemItems = [
   mockedPhrasalTemplateActivityItem,
 ];
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+
 const renderActivityItemsFlow = (formData) => {
   const ref = createRef();
 
@@ -127,6 +134,16 @@ const renderActivityItemsFlow = (formData) => {
 describe('Activity Items Flow', () => {
   beforeEach(() => {
     mockIntersectionObserver();
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableItemFlowExtendedItems: true,
+      },
+      resetLDContext: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   test.each`
@@ -260,6 +277,13 @@ describe('Activity Items Flow', () => {
   });
 
   test('Condition Item: all items except Text/ParagraphText/Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableItemFlowItemsG2: true,
+        enableItemFlowItemsG3: true,
+      },
+    });
+
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -276,6 +300,104 @@ describe('Activity Items Flow', () => {
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);
       expect(item).toHaveTextContent(mockedOrderedConditionNameItems[index].name);
+    });
+  });
+
+  test('Condition Item: Group 1 items Single/Multiple/Slider/Number Select are available', () => {
+    const mockedItems = [
+      mockedSingleActivityItem,
+      mockedMultiActivityItem,
+      mockedSliderActivityItem,
+      mockedNumberSelectActivityItem,
+    ];
+
+    renderActivityItemsFlow(mockedAppletWithAllItemTypes);
+
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+
+    fireEvent.mouseDown(
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+    );
+    const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
+    expect(nameDropdown).toBeVisible();
+
+    const items = nameDropdown.querySelectorAll('li');
+    expect(items).toHaveLength(mockedItems.length);
+
+    items.forEach((item, index) => {
+      expect(item).toHaveAttribute('data-value', mockedItems[index].id);
+      expect(item).toHaveTextContent(mockedItems[index].name);
+    });
+  });
+
+  test('Condition Item: Group 1 + Group 2 items Date/Time/TimeRange are available', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableItemFlowItemsG2: true,
+      },
+    });
+    const mockedItems = [
+      mockedSingleActivityItem,
+      mockedMultiActivityItem,
+      mockedDateActivityItem,
+      mockedTimeActivityItem,
+      mockedSliderActivityItem,
+      mockedTimeRangeActivityItem,
+      mockedNumberSelectActivityItem,
+    ];
+
+    renderActivityItemsFlow(mockedAppletWithAllItemTypes);
+
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+
+    fireEvent.mouseDown(
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+    );
+    const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
+    expect(nameDropdown).toBeVisible();
+
+    const items = nameDropdown.querySelectorAll('li');
+    expect(items).toHaveLength(mockedItems.length);
+
+    items.forEach((item, index) => {
+      expect(item).toHaveAttribute('data-value', mockedItems[index].id);
+      expect(item).toHaveTextContent(mockedItems[index].name);
+    });
+  });
+
+  test('Condition Item: Group 1 + Group 3 items MatrixSliders/MatrxMultiSelect/MatrixSingleSelect are available', () => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
+        enableItemFlowItemsG3: true,
+      },
+    });
+
+    const mockedItems = [
+      mockedSingleActivityItem,
+      mockedMultiActivityItem,
+      mockedSliderActivityItem,
+      mockedSliderRowsActivityItem,
+      mockedNumberSelectActivityItem,
+      mockedMultiSelectRowsActivityItem,
+      mockedSingleSelectRowsActivityItem,
+    ];
+
+    renderActivityItemsFlow(mockedAppletWithAllItemTypes);
+
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
+
+    fireEvent.mouseDown(
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+    );
+    const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
+    expect(nameDropdown).toBeVisible();
+
+    const items = nameDropdown.querySelectorAll('li');
+    expect(items).toHaveLength(mockedItems.length);
+
+    items.forEach((item, index) => {
+      expect(item).toHaveAttribute('data-value', mockedItems[index].id);
+      expect(item).toHaveTextContent(mockedItems[index].name);
     });
   });
 
