@@ -20,6 +20,7 @@ export const FeatureFlagsKeys = {
   enableDataExportSpeedUp: 'enableDataExportSpeedUp',
   enableMeritActivityType: 'enableMeritActivityType',
   enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
+  enableDataExportRenaming: 'enableDataExportRenaming',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

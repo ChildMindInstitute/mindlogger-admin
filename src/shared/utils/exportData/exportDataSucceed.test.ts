@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
+import {
+  legacyActivityJourneyHeader,
+  legacyReportHeader,
+  activityJourneyHeader,
+  reportHeader,
+} from 'shared/consts';
+
 import { exportEncryptedDataSucceed, exportDecryptedDataSucceed } from './exportDataSucceed';
 import * as prepareDataUtils from './prepareData';
 import * as exportTemplateUtils from '../exportTemplate';
@@ -41,83 +48,18 @@ describe('exportDataSucceed', () => {
     },
   ];
 
-  const checkCommonActions = () => {
+  const checkCommonActions = (enableDataExportRenaming: boolean = false) => {
+    const fileName = enableDataExportRenaming ? 'responses-test' : 'report-test';
+
     expect(exportTemplateUtils.exportTemplate).toHaveBeenCalledTimes(2);
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: [],
-      defaultData: [
-        'id',
-        'activity_flow_submission_id',
-        'activity_scheduled_time',
-        'activity_start_time',
-        'activity_end_time',
-        'flag',
-        'secret_user_id',
-        'userId',
-        'source_user_subject_id',
-        'source_user_secret_id',
-        'source_user_nickname',
-        'source_user_relation',
-        'source_user_tag',
-        'target_user_subject_id',
-        'target_user_secret_id',
-        'target_user_nickname',
-        'target_user_tag',
-        'input_user_subject_id',
-        'input_user_secret_id',
-        'input_user_nickname',
-        'activity_id',
-        'activity_name',
-        'activity_flow_id',
-        'activity_flow_name',
-        'item',
-        'response',
-        'prompt',
-        'options',
-        'version',
-        'rawScore',
-        'reviewing_id',
-      ],
-      fileName: 'report-test',
+      defaultData: enableDataExportRenaming ? reportHeader : legacyReportHeader,
+      fileName,
     });
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(2, {
       data: [],
-      defaultData: [
-        'id',
-        'activity_flow_submission_id',
-        'activity_scheduled_time',
-        'activity_start_time',
-        'activity_end_time',
-        'press_next_time',
-        'press_back_time',
-        'press_undo_time',
-        'press_skip_time',
-        'press_done_time',
-        'response_option_selection_time',
-        'secret_user_id',
-        'user_id',
-        'source_user_subject_id',
-        'source_user_secret_id',
-        'source_user_nickname',
-        'source_user_relation',
-        'source_user_tag',
-        'target_user_subject_id',
-        'target_user_secret_id',
-        'target_user_nickname',
-        'target_user_tag',
-        'input_user_subject_id',
-        'input_user_secret_id',
-        'input_user_nickname',
-        'activity_id',
-        'activity_flow_id',
-        'activity_flow_name',
-        'activity_name',
-        'item',
-        'prompt',
-        'response',
-        'options',
-        'version',
-      ],
+      defaultData: enableDataExportRenaming ? activityJourneyHeader : legacyActivityJourneyHeader,
       fileName: 'activity_user_journey-test',
     });
     expect(exportCsvZipUtils.exportCsvZip).toHaveBeenCalledTimes(4);
@@ -181,7 +123,7 @@ describe('exportDataSucceed', () => {
     expect(prepareDataUtils.prepareDecryptedData).not.toHaveBeenCalled();
   });
 
-  test('exportEncryptedDataSucceed: check actions with default data', async () => {
+  test('exportEncryptedDataSucceed: check actions with default data with legacy naming', async () => {
     await exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
@@ -191,12 +133,13 @@ describe('exportDataSucceed', () => {
       mockedExportData,
       mockedGetDecryptedAnswers,
       undefined,
+      undefined,
     );
 
     checkCommonActions();
   });
 
-  test('exportDecryptedDataSucceed: check actions with default data', async () => {
+  test('exportDecryptedDataSucceed: check actions with default data with legacy naming', async () => {
     await exportDecryptedDataSucceed({
       suffix: '-test',
     })(mockedDecryptedExportData);
@@ -204,9 +147,42 @@ describe('exportDataSucceed', () => {
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
       mockedDecryptedExportData,
       undefined,
+      undefined,
     );
 
     checkCommonActions();
+  });
+
+  test('exportEncryptedDataSucceed: check actions with default data with new naming', async () => {
+    await exportEncryptedDataSucceed({
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      suffix: '-test',
+      enableDataExportRenaming: true,
+    })(mockedExportData);
+
+    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
+      mockedExportData,
+      mockedGetDecryptedAnswers,
+      undefined,
+      true,
+    );
+
+    checkCommonActions(true);
+  });
+
+  test('exportDecryptedDataSucceed: check actions with default data with new naming', async () => {
+    await exportDecryptedDataSucceed({
+      suffix: '-test',
+      enableDataExportRenaming: true,
+    })(mockedDecryptedExportData);
+
+    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
+      mockedDecryptedExportData,
+      undefined,
+      true,
+    );
+
+    checkCommonActions(true);
   });
 
   test("exportEncryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {

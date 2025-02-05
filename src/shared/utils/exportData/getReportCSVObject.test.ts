@@ -122,7 +122,7 @@ const getPreparedProperties = ({
     rawAnswersObject: getObjectFromList([item], (item) => item.activityItem.name),
   };
 };
-const result = {
+const legacyResult = {
   activity_end_time: '1689756087000',
   activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
   activity_name: 'New Activity#1',
@@ -160,8 +160,46 @@ const result = {
   legacy_user_id: '',
 };
 
+const result = {
+  target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  target_secret_id: 'target-secret-id',
+  target_nickname: 'Mock target user',
+  target_tag: 'Mock Tag',
+  source_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  source_secret_id: 'source-secret-id',
+  source_nickname: 'Mock source user',
+  source_tag: 'Mock Tag',
+  source_relation: 'admin',
+  input_id: '0a7544d8-bae2-4ed9-9e83-80401e537cd9',
+  input_secret_id: 'input-secret-id',
+  input_nickname: 'Mock input user',
+  userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  secret_user_id: 'secretUserId',
+  legacy_user_id: '',
+  applet_version: '2.0.0',
+  activity_flow_id: '',
+  activity_flow_name: '',
+  activity_flow_submission_id: '',
+  activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
+  activity_name: 'New Activity#1',
+  activity_submission_id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
+  activity_start_time: '1689755822000',
+  activity_end_time: '1689756087000',
+  activity_schedule_id: '',
+  activity_schedule_start_time: 'not scheduled',
+  utc_timezone_offset: '',
+  activity_submission_review_id: '',
+  item_id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
+  item_name: 'single_text_score',
+  item_prompt: 'single  ',
+  item_response_options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
+  item_response: 'value: 2 | text: Extra info',
+  item_response_status: 'completed',
+  rawScore: 6,
+};
+
 describe('getReportCSVObject', () => {
-  test('returns correct result', () => {
+  test('returns correct result with legacy naming', () => {
     expect(
       getReportCSVObject({
         ...getPreparedProperties({
@@ -173,6 +211,24 @@ describe('getReportCSVObject', () => {
           decryptedData: decryptedSingleSelection,
         }),
         index: 0,
+        enableDataExportRenaming: false,
+      }),
+    ).toStrictEqual(legacyResult);
+  });
+
+  test('returns correct result with new naming', () => {
+    expect(
+      getReportCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: decryptedSingleSelection,
+        }),
+        index: 0,
+        enableDataExportRenaming: true,
       }),
     ).toStrictEqual(result);
   });
@@ -192,9 +248,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       activity_scheduled_time: '1689755822000',
     });
   });
@@ -214,9 +271,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       legacy_user_id: 'legacy-profile-id',
     });
   });
@@ -236,9 +294,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       event_id: 'scheduled-event-id',
     });
   });
@@ -258,9 +317,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       timezone_offset: -300,
     });
   });
@@ -281,9 +341,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       activity_flow_submission_id: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
       activity_flow_name: 'test flow name',
       activity_flow_id: 'some flow ID 222',
@@ -305,9 +366,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       reviewing_id: 'some-answer-id',
     });
   });
@@ -327,9 +389,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       reviewing_id: 'some-submission-id',
     });
   });
@@ -351,9 +414,10 @@ describe('getReportCSVObject', () => {
           },
         }),
         index: 0,
+        enableDataExportRenaming: false,
       }),
     ).toStrictEqual({
-      ...result,
+      ...legacyResult,
       activity_flow_name: 'test flow name',
       activity_flow_id: 'some flow ID 222',
       reviewing_id: 'some-submission-id',
