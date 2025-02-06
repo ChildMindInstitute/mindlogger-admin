@@ -113,11 +113,21 @@ const itemsOnlyLegacyFilledSubscaleScores = {
   'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
   'ss-1': 5,
 };
-const newFilledSubscaleScores = {
+const filledSubscaleScores = {
   activity_score: 5,
   activity_score_lookup_text: 'Description #2 for range 4~20',
   'subscale_name_ss-1': 5,
   'subscale_name_ss-2': 6,
+};
+const filledSubscaleScoresWithAverageCalculation = {
+  activity_score: 5,
+  activity_score_lookup_text: 'Description #2 for range 4~20',
+  'subscale_name_ss-1': 1.67,
+};
+const itemsOnlyFilledSubscaleScores = {
+  activity_score: 5,
+  activity_score_lookup_text: 'Description #2 for range 4~20',
+  'subscale_name_ss-1': 5,
 };
 
 describe('getSubscales', () => {
@@ -230,14 +240,20 @@ describe('getSubscales', () => {
 
   describe('getSubscales (new naming)', () => {
     test.each`
-      subscales            | activityItems    | expected                   | description
-      ${itemsAndSubscales} | ${activityItems} | ${newFilledSubscaleScores} | ${'should return filled scores: items and subscale'}
+      subscales                                  | activityItems    | expected                                      | description
+      ${itemsAndSubscales}                       | ${activityItems} | ${filledSubscaleScores}                       | ${'should return filled scores: items and subscale'}
+      ${itemsAndSubscalesWithAverageCalculation} | ${activityItems} | ${filledSubscaleScoresWithAverageCalculation} | ${'should return filled scores with average calculation: items and subscale'}
+      ${itemsOnly}                               | ${activityItems} | ${itemsOnlyFilledSubscaleScores}              | ${'should return filled scores: items only'}
+      ${itemsAndSubscales}                       | ${{}}            | ${{}}                                         | ${'should return empty object'}
+      ${{}}                                      | ${activityItems} | ${{}}                                         | ${'should return empty object'}
+      ${{}}                                      | ${{}}            | ${{}}                                         | ${'should return empty object'}
+      ${null}                                    | ${null}          | ${{}}                                         | ${'should return empty object'}
     `('$description', ({ subscales, activityItems, expected }) => {
       const settings = {
         ...mockedSubscaleSetting,
         subscales,
       };
-      expect(getSubscales(settings, activityItems, true)).toEqual(expected);
+      expect(getSubscales(settings, activityItems, false)).toEqual(expected);
     });
   });
 });
