@@ -787,12 +787,11 @@ const getConditionPayload = (item: Item, condition: Condition) => {
   const conditionType = condition.type as ConditionType;
   if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
     const conditionPayload = condition.payload as
-      | TimeSingleValueCondition<Time>['payload']
-      | TimeRangeSingleValueCondition<Time>['payload'];
+      | TimeSingleValueCondition<string>['payload']
+      | TimeRangeSingleValueCondition<string>['payload'];
 
     return {
       ...conditionPayload,
-      time: formatTime(conditionPayload.time.hours, conditionPayload.time.minutes),
     };
   }
   if (TIME_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
