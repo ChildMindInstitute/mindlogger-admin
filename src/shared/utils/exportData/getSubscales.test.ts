@@ -253,7 +253,7 @@ describe('getSubscales', () => {
         ...mockedSubscaleSetting,
         subscales,
       };
-      expect(getSubscales(settings, activityItems, false)).toEqual(expected);
+      expect(getSubscales(settings, activityItems, true)).toEqual(expected);
     });
   });
 });
