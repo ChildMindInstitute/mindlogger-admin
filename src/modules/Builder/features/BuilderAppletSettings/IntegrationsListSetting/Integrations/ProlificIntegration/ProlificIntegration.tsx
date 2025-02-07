@@ -73,13 +73,15 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
 
   useEffect(() => {
     const checkProlificApiToken = async () => {
-      const apiTokenExists =
+      const hasLocalProlificIntegration =
         appletData.integrations?.some((i) => i.integrationType === IntegrationTypes.Prolific) ??
-        (await prolificIntegrationExists(appletData.id));
+        false;
+
+      const hasRemoteProlificIntegration = await prolificIntegrationExists(appletData.id);
 
       setState((prevState) => ({
         ...prevState,
-        apiTokenExists,
+        apiTokenExists: hasLocalProlificIntegration || hasRemoteProlificIntegration,
       }));
     };
 
