@@ -67,7 +67,7 @@ export const getReportData = (
   if (subscaleSetting?.subscales?.length) {
     answers.splice(0, 1, {
       ...answers[0],
-      ...getSubscales(subscaleSetting, rawAnswersObject),
+      ...getSubscales(subscaleSetting, rawAnswersObject, enableDataExportRenaming),
     });
   }
 

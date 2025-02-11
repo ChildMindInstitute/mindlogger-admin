@@ -9,6 +9,7 @@ import {
   SubscaleSetting,
 } from 'shared/state';
 import {
+  LegacyFinalSubscale,
   FinalSubscale,
   ItemResponseType,
   LookupTableItems,
@@ -173,12 +174,13 @@ export const calcScores = <T>(
 export const calcTotalScore = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
+  enableDataExportRenaming: boolean,
 ) => {
   if (!subscaleSetting?.calculateTotalScore) return {};
 
   return calcScores(
     {
-      name: FinalSubscale.Key,
+      name: enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
       items: Object.keys(activityItems).reduce((acc: ActivitySettingsSubscaleItem[], item) => {
         const itemType = activityItems[item].activityItem.responseType;
         const allowEdit = activityItems[item].activityItem.allowEdit;
@@ -209,6 +211,7 @@ export const calcTotalScore = (
 export const getSubscales = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
+  enableDataExportRenaming: boolean,
 ) => {
   if (!subscaleSetting?.subscales?.length || !Object.keys(activityItems).length) return {};
 
@@ -217,24 +220,38 @@ export const getSubscales = (
     (item) => item.name,
   );
 
+  const cleanName = (name: string) => name.replace(/[^a-zA-Z0-9-]/g, '_');
+
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
     const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
-    acc[item.name] = calculatedSubscale[item.name].score;
-    if (calculatedSubscale?.[item.name]?.optionText) {
-      acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
+    const cleanedName = cleanName(item.name);
+
+    if (enableDataExportRenaming) {
+      acc[`subscale_name_${cleanedName}`] = calculatedSubscale[item.name].score;
+      if (calculatedSubscale?.[item.name]?.optionText) {
+        acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale[item.name].optionText;
+      }
+    } else {
+      acc[item.name] = calculatedSubscale[item.name].score;
+      if (calculatedSubscale?.[item.name]?.optionText) {
+        acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
+      }
     }
 
     return acc;
   }, {});
 
   const calculatedTotalScore =
-    subscaleSetting.calculateTotalScore && calcTotalScore(subscaleSetting, activityItems);
+    subscaleSetting.calculateTotalScore &&
+    calcTotalScore(subscaleSetting, activityItems, enableDataExportRenaming);
+
+  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
 
   return {
     ...(calculatedTotalScore && {
-      [FinalSubscale.FinalSubScaleScore]: calculatedTotalScore[FinalSubscale.Key].score,
-      [FinalSubscale.OptionalTextForFinalSubScaleScore]:
-        calculatedTotalScore[FinalSubscale.Key].optionText,
+      [finalSubscale.FinalSubScaleScore]: calculatedTotalScore[finalSubscale.Key].score,
+      [finalSubscale.OptionalTextForFinalSubScaleScore]:
+        calculatedTotalScore[finalSubscale.Key].optionText,
     }),
     ...parsedSubscales,
   };
