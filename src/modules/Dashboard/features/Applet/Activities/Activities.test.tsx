@@ -1,9 +1,10 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios, { HttpResponse } from 'jest-mock-axios';
+import { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
+import mockAxios from '__mocks__/axios';
 
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
@@ -22,10 +23,8 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   expectMixpanelTrack,
   openTakeNowModal,
@@ -346,12 +345,13 @@ describe('Dashboard > Applet > Activities screen', () => {
   });
 
   describe('Take now modal', () => {
-    const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-      result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
-      count: 3,
-    });
+    const successfulGetAppletParticipantsMock =
+      mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
+        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
+        count: 3,
+      });
 
-    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
+    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
       result: [mockedOwnerManager],
       count: 1,
     });
@@ -377,7 +377,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
         [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]: (params) => {
           if (params.userId === mockedOwnerParticipant.id) {
-            return mockSuccessfulHttpResponse<ParticipantsData>({
+            return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
               result: [mockedOwnerParticipant],
               count: 1,
             });

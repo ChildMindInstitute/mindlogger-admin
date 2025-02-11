@@ -4,7 +4,7 @@ import mockAxios, { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
@@ -27,11 +27,9 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   expectMixpanelTrack,
   openTakeNowModal,
@@ -251,12 +249,13 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   describe('Take Now modal', () => {
-    const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-      result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
-      count: 3,
-    });
+    const successfulGetAppletParticipantsMock =
+      mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
+        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
+        count: 3,
+      });
 
-    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
+    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
       result: [mockedOwnerManager],
       count: 1,
     });
@@ -283,7 +282,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
           if (params.userId === mockedOwnerParticipant.id) {
-            return mockSuccessfulHttpResponse<ParticipantsData>({
+            return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
               result: [mockedOwnerParticipant],
               count: 1,
             });

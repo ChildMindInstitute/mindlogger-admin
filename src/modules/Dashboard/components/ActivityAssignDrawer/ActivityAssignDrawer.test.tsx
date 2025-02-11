@@ -2,7 +2,7 @@ import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceRespondentsResponse, WorkspaceManagersResponse } from 'api';
 import {
   mockedApplet,
   mockedAppletData,
@@ -18,9 +18,7 @@ import {
   mockedUserData,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
-import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features';
+import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import { initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -51,7 +49,7 @@ const mockedGetApplet = {
   data: { result: mockedAppletData },
 };
 
-const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
+const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
     mockedFullParticipant1,
     mockedFullParticipant2,
@@ -61,7 +59,7 @@ const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>
   count: 4,
 });
 
-const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
+const mockedGetAppletManagers = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
   result: [
     {
       id: mockedOwnerParticipant.id as string,
@@ -156,7 +154,7 @@ describe('ActivityAssignDrawer', () => {
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerParticipant.id) {
-          return mockSuccessfulHttpResponse<ParticipantsData>({
+          return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
             result: [mockedOwnerParticipant],
             count: 1,
           });

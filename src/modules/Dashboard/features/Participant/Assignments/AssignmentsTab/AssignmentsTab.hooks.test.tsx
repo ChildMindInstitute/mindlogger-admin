@@ -4,7 +4,12 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
 import userEvent from '@testing-library/user-event';
 
-import { ApiResponseCodes, ParticipantActivityOrFlow } from 'api';
+import {
+  ApiResponseCodes,
+  ParticipantActivityOrFlow,
+  WorkspaceManagersResponse,
+  WorkspaceRespondentsResponse,
+} from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
@@ -28,11 +33,9 @@ import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-} from 'shared/utils/axios-mocks';
+} from 'shared/utils/httpMocks';
 import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   openTakeNowModal,
   sourceSubjectDropdownTestId,
@@ -194,12 +197,12 @@ describe('useAssignmentsTab hook', () => {
           ? respondents.filter((r) => r.id === userId)
           : respondents;
 
-        return mockSuccessfulHttpResponse<ParticipantsData>({
+        return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
           result: filteredRespondents,
           count: filteredRespondents.length,
         });
       },
-      [GET_WORKSPACE_MANAGERS_URL]: mockSuccessfulHttpResponse<ManagersData>({
+      [GET_WORKSPACE_MANAGERS_URL]: mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
         result: [mockedOwnerManager],
         count: 1,
       }),
