@@ -32,10 +32,8 @@ export const Subscales = ({
   flowResponsesIndex,
 }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
-  const {
-    featureFlags: { enableDataExportRenaming },
-  } = useFeatureFlags();
-  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
+  const { featureFlags: flags } = useFeatureFlags();
+  const finalSubscale = flags.enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
     () =>
@@ -55,9 +53,7 @@ export const Subscales = ({
           const calculatedTotalScore =
             item?.subscaleSetting?.calculateTotalScore &&
             activityItems &&
-            calcTotalScore(item.subscaleSetting, activityItems, enableDataExportRenaming)?.[
-              finalSubscale.Key
-            ];
+            calcTotalScore(item.subscaleSetting, activityItems, flags)?.[finalSubscale.Key];
 
           if (calculatedTotalScore) {
             acc.latestFinalScore = calculatedTotalScore?.score;
@@ -75,14 +71,16 @@ export const Subscales = ({
           for (const subscale of item.subscaleSetting.subscales) {
             getAllSubscalesToRender(acc.allSubscalesToRender, item, subscale, activityItems);
 
-            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
-            const { [subscale.name]: _removed, ...restScores } = calculatedSubscale;
+            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, flags);
+            const { [subscale.name]: currentScore, ...restScores } = calculatedSubscale;
+
+            if (!currentScore) continue;
 
             const activityCompletion: ParsedSubscale = {
               date: new Date(item.endDatetime),
-              score: calculatedSubscale[subscale.name].score,
-              optionText: calculatedSubscale[subscale.name].optionText,
-              severity: calculatedSubscale[subscale.name].severity,
+              score: currentScore.score,
+              optionText: currentScore.optionText,
+              severity: currentScore.severity,
               activityCompletionID: item.answerId,
               activityItems,
               subscalesObject,
@@ -107,7 +105,7 @@ export const Subscales = ({
           allSubscalesToRender: {},
         },
       ),
-    [answers, enableDataExportRenaming, finalSubscale],
+    [answers, finalSubscale.Key, flags],
   );
 
   const currentActivityCompletion =
@@ -129,7 +127,7 @@ export const Subscales = ({
         },
         item,
       ) => {
-        const subscale = allSubscalesScores[item.name].activityCompletions.find(
+        const subscale = allSubscalesScores[item.name]?.activityCompletions.find(
           (el) => el.activityCompletionID === currentActivityCompletion.answerId,
         );
 

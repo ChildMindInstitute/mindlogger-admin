@@ -24,6 +24,7 @@ import {
   ElementType,
 } from 'shared/types';
 import { CalculatedSubscaleScores } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
@@ -31,7 +32,7 @@ import { getObjectFromList } from '../getObjectFromList';
 
 const getRoundTo2Decimal = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
 
-export const getSubScaleScore = (
+export const getSubscaleScore = (
   subscalesSum: number,
   type: SubscaleTotalScore,
   length: number,
@@ -49,18 +50,30 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-  result: CalculatedSubscaleScores,
+  flags: FeatureFlags,
+  result: CalculatedSubscaleScores = {},
 ): CalculatedSubscaleScores => {
   let itemCount = 0;
 
-  const sumScore = data.items.reduce((acc, item) => {
-    const isHidden = activityItems[item.name]?.activityItem?.isHidden;
+  // TODO: Remove `treatNullAsZero`, `nullScore` when feature flag is removed
+  // https://mindlogger.atlassian.net/browse/M2-8635
+  const treatNullAsZero = !flags.enableSubscaleNullWhenSkipped;
+  const nullScore = treatNullAsZero ? 0 : null;
 
-    if (!isSystemItem(item) && !isHidden) {
+  const sumScore = data.items.reduce((acc, item) => {
+    const activityItem = activityItems[item.name];
+
+    const isSkipped =
+      item.type === ElementType.Item &&
+      (activityItem?.activityItem.isHidden ||
+        activityItem?.answer === null ||
+        activityItem?.answer === undefined);
+
+    if (!isSystemItem(item) && !isSkipped) {
       itemCount++;
     }
 
-    if (!item?.type || isHidden) {
+    if (!item.type || isSkipped) {
       return acc;
     }
 
@@ -69,19 +82,25 @@ export const calcScores = <T>(
         subscalesObject[item.name],
         activityItems,
         subscalesObject,
+        flags,
         result,
       )[item.name];
 
-      result[item.name] = calculatedNestedSubscale;
+      if (typeof calculatedNestedSubscale?.score === 'number') {
+        result[item.name] = calculatedNestedSubscale;
 
-      return acc + calculatedNestedSubscale.score;
+        return (acc ?? 0) + calculatedNestedSubscale.score;
+      }
+
+      return acc;
     }
 
-    const answer = activityItems[item.name]?.answer as
+    const answer = activityItem?.answer as
+      | undefined
       | DecryptedMultiSelectionAnswer
       | DecryptedSingleSelectionAnswer
       | DecryptedSliderAnswer;
-    const typedOptions = activityItems[item.name]?.activityItem
+    const typedOptions = activityItem?.activityItem
       .responseValues as SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues;
     let value = 0;
 
@@ -95,9 +114,9 @@ export const calcScores = <T>(
       }, {});
 
       if (Array.isArray(answer?.value)) {
-        value = answer.value?.reduce((res: number, item) => res + scoresObject[item], 0);
+        value = answer?.value?.reduce((res: number, item) => res + scoresObject[item], 0) || 0;
       } else {
-        value = scoresObject[answer?.value] || 0;
+        value = (answer && scoresObject[answer?.value]) || 0;
       }
     }
 
@@ -110,16 +129,17 @@ export const calcScores = <T>(
       value = scores[options.findIndex((item) => item === answer?.value)] || 0;
     }
 
-    return acc + value;
-  }, 0);
+    return (acc ?? 0) + value;
+  }, nullScore);
 
-  const calculatedScore = getSubScaleScore(sumScore, data.scoring, itemCount);
+  const calculatedScore =
+    sumScore === null ? null : getSubscaleScore(sumScore, data.scoring, itemCount);
 
-  if (data?.subscaleTableData) {
+  if (calculatedScore !== null && data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
       const genderAnswer = activityItems[LookupTableItems.Gender_screen]
         ?.answer as DecryptedSingleSelectionAnswer;
-      const withSex = sex ? parseSex(sex) === String(genderAnswer?.value) : true;
+      const withSex = !sex || parseSex(sex) === String(genderAnswer?.value);
 
       const ageAnswer = activityItems[LookupTableItems.Age_screen]?.answer;
       let reportedAge: string | undefined;
@@ -167,20 +187,22 @@ export const calcScores = <T>(
 
   return {
     ...result,
-    [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+    ...(typeof calculatedScore === 'number' && {
+      [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+    }),
   };
 };
 
 export const calcTotalScore = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
-  enableDataExportRenaming: boolean,
+  flags: FeatureFlags,
 ) => {
   if (!subscaleSetting?.calculateTotalScore) return {};
 
   return calcScores(
     {
-      name: enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
+      name: flags.enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
       items: Object.keys(activityItems).reduce((acc: ActivitySettingsSubscaleItem[], item) => {
         const itemType = activityItems[item].activityItem.responseType;
         const allowEdit = activityItems[item].activityItem.allowEdit;
@@ -204,14 +226,14 @@ export const calcTotalScore = (
     } as ActivitySettingsSubscale,
     activityItems,
     {},
-    {},
+    flags,
   );
 };
 
 export const getSubscales = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
-  enableDataExportRenaming: boolean,
+  flags: FeatureFlags,
 ) => {
   if (!subscaleSetting?.subscales?.length || !Object.keys(activityItems).length) return {};
 
@@ -223,10 +245,15 @@ export const getSubscales = (
   const cleanName = (name: string) => name.replace(/[^a-zA-Z0-9-]/g, '_');
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
+    const calculatedSubscale = calcScores(
+      item,
+      activityItems,
+      subscalesObject,
+      flags.enableSubscaleNullWhenSkipped,
+    );
     const cleanedName = cleanName(item.name);
 
-    if (enableDataExportRenaming) {
+    if (flags.enableDataExportRenaming) {
       acc[`subscale_name_${cleanedName}`] = calculatedSubscale[item.name].score;
       if (calculatedSubscale?.[item.name]?.optionText) {
         acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale[item.name].optionText;
@@ -241,17 +268,17 @@ export const getSubscales = (
     return acc;
   }, {});
 
-  const calculatedTotalScore =
-    subscaleSetting.calculateTotalScore &&
-    calcTotalScore(subscaleSetting, activityItems, enableDataExportRenaming);
+  const result =
+    subscaleSetting.calculateTotalScore && calcTotalScore(subscaleSetting, activityItems, flags);
 
-  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
+  const finalSubscale = flags.enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
+
+  const calculatedTotalScore = result?.[finalSubscale.Key];
 
   return {
-    ...(calculatedTotalScore && {
-      [finalSubscale.FinalSubScaleScore]: calculatedTotalScore[finalSubscale.Key].score,
-      [finalSubscale.OptionalTextForFinalSubScaleScore]:
-        calculatedTotalScore[finalSubscale.Key].optionText,
+    ...(typeof calculatedTotalScore?.score === 'number' && {
+      [finalSubscale.FinalSubScaleScore]: calculatedTotalScore.score,
+      [finalSubscale.OptionalTextForFinalSubScaleScore]: calculatedTotalScore.optionText,
     }),
     ...parsedSubscales,
   };

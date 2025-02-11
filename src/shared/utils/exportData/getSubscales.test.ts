@@ -9,7 +9,7 @@ import {
 import { ItemResponseType } from 'shared/consts';
 
 import {
-  getSubScaleScore,
+  getSubscaleScore,
   parseSex,
   calcScores,
   calcTotalScore,
@@ -141,7 +141,7 @@ describe('getSubscales', () => {
     `(
       'returns "$expected" when subscalesSum="$subscalesSum", type="$type"',
       ({ subscalesSum, type, length, expected }) => {
-        expect(getSubScaleScore(subscalesSum, type, length)).toBe(expected);
+        expect(getSubscaleScore(subscalesSum, type, length)).toBe(expected);
       },
     );
   });
@@ -185,7 +185,11 @@ describe('getSubscales', () => {
       ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData}  | ${itemsWithoutTypeExpected}         | ${'should return score=0'}
     `('$description', ({ subscaleItems, subscaleTableData, expected }) => {
       const subscaleData = { ...data, subscaleTableData, items: subscaleItems };
-      expect(calcScores(subscaleData, activityItems, subscaleObject, {})).toEqual(expected);
+      expect(
+        calcScores(subscaleData, activityItems, subscaleObject, {
+          enableSubscaleNullWhenSkipped: false,
+        }),
+      ).toEqual(expected);
     });
   });
 
@@ -199,9 +203,11 @@ describe('getSubscales', () => {
       ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData} | ${itemsWithoutTypeExpected}                            | ${'should return score=0'}
     `('$description', ({ subscaleItems, subscaleTableData, expected }) => {
       const subscaleData = { ...data, subscaleTableData, items: subscaleItems };
-      expect(calcScores(subscaleData, activityItemsWithoutHiddenItems, subscaleObject, {})).toEqual(
-        expected,
-      );
+      expect(
+        calcScores(subscaleData, activityItemsWithoutHiddenItems, subscaleObject, {
+          enableSubscaleNullWhenSkipped: false,
+        }),
+      ).toEqual(expected);
     });
   });
 
@@ -215,7 +221,12 @@ describe('getSubscales', () => {
       ${{}}                                          | ${{}}            | ${{}}                                             | ${'should return empty object'}
       ${null}                                        | ${null}          | ${{}}                                             | ${'should return empty object'}
     `('$description', ({ subscaleSetting, activityItems, expected }) => {
-      expect(calcTotalScore(subscaleSetting, activityItems, false)).toEqual(expected);
+      expect(
+        calcTotalScore(subscaleSetting, activityItems, {
+          enableDataExportRenaming: false,
+          enableSubscaleNullWhenSkipped: false,
+        }),
+      ).toEqual(expected);
     });
   });
 
@@ -234,7 +245,12 @@ describe('getSubscales', () => {
         ...mockedSubscaleSetting,
         subscales,
       };
-      expect(getSubscales(settings, activityItems, false)).toEqual(expected);
+      expect(
+        getSubscales(settings, activityItems, {
+          enableDataExportRenaming: false,
+          enableSubscaleNullWhenSkipped: false,
+        }),
+      ).toEqual(expected);
     });
   });
 
@@ -253,7 +269,12 @@ describe('getSubscales', () => {
         ...mockedSubscaleSetting,
         subscales,
       };
-      expect(getSubscales(settings, activityItems, true)).toEqual(expected);
+      expect(
+        getSubscales(settings, activityItems, {
+          enableDataExportRenaming: true,
+          enableSubscaleNullWhenSkipped: false,
+        }),
+      ).toEqual(expected);
     });
   });
 });
