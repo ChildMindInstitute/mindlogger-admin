@@ -55,29 +55,18 @@ export const calcScores = <T>(
 ): CalculatedSubscaleScores => {
   let itemCount = 0;
 
-  // TODO: Remove `treatNullAsZero`, `nullScore` when feature flag is removed
+  // TODO: Remove this when feature flag is removed
   // https://mindlogger.atlassian.net/browse/M2-8635
-  const treatNullAsZero = !flags.enableSubscaleNullWhenSkipped;
-  const nullScore = treatNullAsZero ? 0 : null;
+  const defaultScore = flags.enableSubscaleNullWhenSkipped ? null : 0;
 
   const sumScore = data.items.reduce((acc, item) => {
-    const activityItem = activityItems[item.name];
+    if (!item.type) return acc;
 
-    const isSkipped =
-      item.type === ElementType.Item &&
-      (activityItem?.activityItem.isHidden ||
-        activityItem?.answer === null ||
-        activityItem?.answer === undefined);
-
-    if (!isSystemItem(item) && !isSkipped) {
-      itemCount++;
-    }
-
-    if (!item.type || isSkipped) {
-      return acc;
-    }
-
+    /* Handle nested subscales
+    =================================================== */
     if (item.type === ElementType.Subscale) {
+      itemCount++;
+
       const calculatedNestedSubscale = calcScores(
         subscalesObject[item.name],
         activityItems,
@@ -95,18 +84,30 @@ export const calcScores = <T>(
       return acc;
     }
 
+    /* Handle activity items
+    =================================================== */
+    const activityItem = activityItems[item.name];
+
+    // Both system and hidden items are skipped and do not influence scoring.
+    if (isSystemItem(item) || activityItem?.activityItem.isHidden) {
+      return acc;
+    }
+
     const answer = activityItem?.answer as
       | undefined
       | DecryptedMultiSelectionAnswer
       | DecryptedSingleSelectionAnswer
       | DecryptedSliderAnswer;
-    const typedOptions = activityItem?.activityItem
-      .responseValues as SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues;
-    let value = 0;
+    const typedOptions = activityItem?.activityItem.responseValues as
+      | SingleAndMultipleSelectItemResponseValues
+      | SliderItemResponseValues;
 
-    if (typedOptions?.options?.length) {
-      const scoresObject = typedOptions.options?.reduce((acc: ScoresObject, item) => {
-        if (item?.value !== undefined && item?.score !== undefined) {
+    let value: number | null = null;
+
+    if ('options' in typedOptions && typedOptions.options.length) {
+      // Single & Multiple Select
+      const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
+        if (item.value !== undefined && item.score !== undefined) {
           acc[item.value as keyof ScoresObject] = item.score;
         }
 
@@ -114,23 +115,40 @@ export const calcScores = <T>(
       }, {});
 
       if (Array.isArray(answer?.value)) {
-        value = answer?.value?.reduce((res: number, item) => res + scoresObject[item], 0) || 0;
-      } else {
-        value = (answer && scoresObject[answer?.value]) || 0;
-      }
-    }
+        value =
+          answer?.value.reduce((result: null | number, val) => {
+            if (scoresObject[val] === null) return result;
 
-    if (typedOptions?.scores?.length) {
+            return (result ?? 0) + scoresObject[val];
+          }, null) ?? null;
+      } else {
+        value = (answer && scoresObject[answer.value]) ?? null;
+      }
+    } else if ('scores' in typedOptions && typedOptions.scores?.length) {
+      // Slider
       const min = Number(typedOptions.minValue);
       const max = Number(typedOptions.maxValue);
       const scores = typedOptions.scores;
       const options = createArrayFromMinToMax(min, max);
 
-      value = scores[options.findIndex((item) => item === answer?.value)] || 0;
+      value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
     }
 
+    // New feature-flagged behaviour also treats skipped responses as null.
+    // TODO: When feature flag is removed, logic can be simplified.
+    // https://mindlogger.atlassian.net/browse/M2-8635
+    if (value === null) {
+      if (flags.enableSubscaleNullWhenSkipped) {
+        return acc;
+      } else {
+        value = 0;
+      }
+    }
+
+    itemCount++;
+
     return (acc ?? 0) + value;
-  }, nullScore);
+  }, defaultScore);
 
   const calculatedScore =
     sumScore === null ? null : getSubscaleScore(sumScore, data.scoring, itemCount);
@@ -245,12 +263,7 @@ export const getSubscales = (
   const cleanName = (name: string) => name.replace(/[^a-zA-Z0-9-]/g, '_');
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculatedSubscale = calcScores(
-      item,
-      activityItems,
-      subscalesObject,
-      flags.enableSubscaleNullWhenSkipped,
-    );
+    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, flags);
     const cleanedName = cleanName(item.name);
 
     if (flags.enableDataExportRenaming) {
