@@ -12,4 +12,5 @@ export const StyledApiTokenButton = styled(Button)`
   top: 0;
   height: 100%;
   borderradius: 0;
+  padding-left: 10px;
 `;
