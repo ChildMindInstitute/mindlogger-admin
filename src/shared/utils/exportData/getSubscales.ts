@@ -263,18 +263,20 @@ export const getSubscales = (
   const cleanName = (name: string) => name.replace(/[^a-zA-Z0-9-]/g, '_');
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, flags);
+    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, flags)[item.name];
+    if (!calculatedSubscale) return acc;
+
     const cleanedName = cleanName(item.name);
 
     if (flags.enableDataExportRenaming) {
-      acc[`subscale_name_${cleanedName}`] = calculatedSubscale[item.name].score;
-      if (calculatedSubscale?.[item.name]?.optionText) {
-        acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale[item.name].optionText;
+      acc[`subscale_name_${cleanedName}`] = calculatedSubscale?.score;
+      if (calculatedSubscale?.optionText) {
+        acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale.optionText;
       }
     } else {
-      acc[item.name] = calculatedSubscale[item.name].score;
-      if (calculatedSubscale?.[item.name]?.optionText) {
-        acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
+      acc[item.name] = calculatedSubscale?.score;
+      if (calculatedSubscale?.optionText) {
+        acc[`Optional text for ${item.name}`] = calculatedSubscale.optionText;
       }
     }
 
