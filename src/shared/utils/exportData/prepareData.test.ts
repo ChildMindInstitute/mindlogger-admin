@@ -4,6 +4,11 @@ import { prepareDecryptedData, prepareEncryptedData } from './prepareData';
 import * as getParsedAnswersFunctions from '../getParsedAnswers';
 import { mockedParsedAnswers } from '../../mock';
 
+const mockFlags = {
+  enableDataExportRenaming: false,
+  enableSubscaleNullWhenSkipped: false,
+};
+
 const mockedExportDataResult = {
   reportData: [
     {
@@ -396,12 +401,12 @@ describe('prepareData', () => {
       .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
       .mockImplementationOnce(() => mockedParsedAnswers);
 
-    const result = await prepareEncryptedData(data, getDecryptedAnswers);
+    const result = await prepareEncryptedData(data, getDecryptedAnswers, mockFlags);
     expect(result).toEqual(mockedExportDataResult);
   });
 
   test('prepareDecryptedData should return filled in reportData', async () => {
-    const result = await prepareDecryptedData(mockedParsedAnswers);
+    const result = await prepareDecryptedData(mockedParsedAnswers, mockFlags);
     expect(result).toEqual(mockedExportDataResult);
   });
 });
