@@ -75,6 +75,7 @@ export const defaultMultiSelectionConfig: MultipleSelectionConfig = {
 export const defaultSingleSelectionConfig: SingleSelectionConfig = {
   ...defaultMultiSelectionConfig,
   autoAdvance: false,
+  responseDataIdentifier: false,
 };
 
 export const defaultTextConfig: TextInputConfig = {

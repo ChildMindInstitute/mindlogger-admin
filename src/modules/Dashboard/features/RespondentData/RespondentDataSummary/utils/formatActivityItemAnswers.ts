@@ -143,6 +143,8 @@ export const formatActivityItemAnswers = (
             }),
           ),
         },
+        responseDataIdentifier: (currentActivityItem as SingleSelectItem).config
+          .responseDataIdentifier,
       };
 
       const isValueCorrect =
