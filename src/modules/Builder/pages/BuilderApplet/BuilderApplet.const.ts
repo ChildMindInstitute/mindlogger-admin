@@ -28,6 +28,16 @@ export const TIME_INTERVAL_CONDITION_TYPES = [
   ConditionType.BetweenTimesRange,
   ConditionType.OutsideOfTimesRange,
 ];
+export const DATE_SINGLE_CONDITION_TYPES = [
+  ConditionType.GreaterThanDate,
+  ConditionType.LessThanDate,
+  ConditionType.EqualToDate,
+  ConditionType.NotEqualToDate,
+];
+export const DATE_INTERVAL_CONDITION_TYPES = [
+  ConditionType.BetweenDates,
+  ConditionType.OutsideOfDates,
+];
 export const SLIDER_ROWS_CONDITION_TYPES = [
   ConditionType.GreaterThanSliderRows,
   ConditionType.LessThanSliderRows,

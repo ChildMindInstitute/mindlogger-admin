@@ -321,11 +321,12 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [
   ConditionType.OutsideOfTimes,
 ];
 
-export const GENERAL_REPORT_NAME = 'report';
+export const LEGACY_GENERAL_REPORT_NAME = 'report';
+export const GENERAL_REPORT_NAME = 'responses';
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
-export const reportHeader = [
+export const legacyReportHeader = [
   'id',
   'activity_flow_submission_id',
   'activity_scheduled_time',
@@ -357,9 +358,50 @@ export const reportHeader = [
   'version',
   'rawScore',
   'reviewing_id',
+  'schedule_id',
+  'timezone_offset',
+  'legacy_user_id',
 ];
 
-export const activityJourneyHeader = [
+export const reportHeader = [
+  'target_id',
+  'target_secret_id',
+  'target_nickname',
+  'target_tag',
+  'source_id',
+  'source_secret_id',
+  'source_nickname',
+  'source_tag',
+  'source_relation',
+  'input_id',
+  'input_secret_id',
+  'input_nickname',
+  'userId',
+  'secret_user_id',
+  'legacy_user_id',
+  'applet_version',
+  'activity_flow_id',
+  'activity_flow_name',
+  'activity_flow_submission_id',
+  'activity_id',
+  'activity_name',
+  'activity_submission_id',
+  'activity_start_time',
+  'activity_end_time',
+  'activity_schedule_id',
+  'activity_schedule_start_time',
+  'utc_timezone_offset',
+  'activity_submission_review_id',
+  'item_id',
+  'item_name',
+  'item_prompt',
+  'item_response_options',
+  'item_response',
+  'item_response_status',
+  'rawScore',
+];
+
+export const legacyActivityJourneyHeader = [
   'id',
   'activity_flow_submission_id',
   'activity_scheduled_time',
@@ -394,6 +436,49 @@ export const activityJourneyHeader = [
   'response',
   'options',
   'version',
+];
+
+export const activityJourneyHeader = [
+  'target_id',
+  'target_secret_id',
+  'target_nickname',
+  'target_tag',
+  'source_id',
+  'source_secret_id',
+  'source_nickname',
+  'source_tag',
+  'source_relation',
+  'input_id',
+  'input_secret_id',
+  'input_nickname',
+  'user_id',
+  'secret_user_id',
+  'legacy_user_id',
+  'applet_version',
+  'activity_flow_id',
+  'activity_flow_name',
+  'activity_flow_submission_id',
+  'activity_id',
+  'activity_name',
+  'activity_submission_id',
+  'activity_start_time',
+  'activity_end_time',
+  'activity_schedule_id',
+  'activity_schedule_start_time',
+  'utc_timezone_offset',
+  'item_id',
+  'item_name',
+  'item_prompt',
+  'item_response_options',
+  'item_response',
+  'press_next_time',
+  'press_popup_skip_time',
+  'press_popup_keep_time',
+  'press_back_time',
+  'press_undo_time',
+  'press_skip_time',
+  'press_done_time',
+  'response_option_selection_time',
 ];
 
 export const enum ActivityStatus {

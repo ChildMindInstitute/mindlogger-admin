@@ -58,6 +58,7 @@ export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
 export const prepareDecryptedData = async (
   parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
   filters?: ExportDataFilters,
+  enableDataExportRenaming?: boolean,
 ) => {
   logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const filteredParsedAnswers = parsedAnswers.filter(getParsedAnswersFilterFn(filters));
@@ -71,13 +72,19 @@ export const prepareDecryptedData = async (
       (item) => item.activityItem.name,
     );
 
-    const reportData = getReportData(acc.reportData, rawAnswersObject, data.decryptedAnswers);
+    const reportData = getReportData(
+      acc.reportData,
+      rawAnswersObject,
+      data.decryptedAnswers,
+      !!enableDataExportRenaming,
+    );
     const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
     const activityJourneyData = getActivityJourneyData(
       acc.activityJourneyData,
       rawAnswersObject,
       data.decryptedAnswers,
       data.decryptedEvents,
+      !!enableDataExportRenaming,
     );
     const drawingItemsData = await getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
     const stabilityTrackerItemsData = await getStabilityTrackerItemsData(
@@ -108,8 +115,9 @@ export const prepareEncryptedData = async (
   data: ExportDataResult,
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
   filters?: ExportDataFilters,
+  enableDataExportRenaming?: boolean,
 ) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
 
-  return prepareDecryptedData(parsedAnswers, filters);
+  return prepareDecryptedData(parsedAnswers, filters, enableDataExportRenaming);
 };
