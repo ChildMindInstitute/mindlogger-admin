@@ -14,6 +14,7 @@ import {
   ExtendedExportAnswerWithoutEncryption,
   DecryptedActivityData,
 } from 'shared/types';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { exportTemplate } from '../exportTemplate';
 import { exportCsvZip } from './exportCsvZip';
@@ -30,16 +31,16 @@ const exportProcessedData = async ({
   abTrailsItemsData,
   flankerItemsData,
   suffix,
-  enableDataExportRenaming,
-}: AppletExportData & { suffix: string; enableDataExportRenaming: boolean }) => {
-  const reportHeaders = enableDataExportRenaming
+  flags,
+}: AppletExportData & { suffix: string; flags: FeatureFlags }) => {
+  const reportHeaders = flags.enableDataExportRenaming
     ? { general: reportHeader, activity: activityJourneyHeader }
     : { general: legacyReportHeader, activity: legacyActivityJourneyHeader };
 
   await exportTemplate({
     data: reportData,
     fileName:
-      (enableDataExportRenaming ? GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
+      (flags.enableDataExportRenaming ? GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
     defaultData: reportData.length > 0 ? null : reportHeaders.general,
   });
   await exportTemplate({
@@ -62,38 +63,33 @@ export const exportEncryptedDataSucceed =
     getDecryptedAnswers,
     suffix,
     filters,
-    enableDataExportRenaming,
+    flags,
   }: {
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
     suffix: string;
     filters?: ExportDataFilters;
-    enableDataExportRenaming: boolean;
+    flags: FeatureFlags;
   }) =>
   async (result: ExportDataResult) => {
     if (!result) return;
 
-    const exportData = await prepareEncryptedData(
-      result,
-      getDecryptedAnswers,
-      filters,
-      enableDataExportRenaming,
-    );
-    await exportProcessedData({ ...exportData, suffix, enableDataExportRenaming });
+    const exportData = await prepareEncryptedData(result, getDecryptedAnswers, flags, filters);
+    await exportProcessedData({ ...exportData, suffix, flags });
   };
 
 export const exportDecryptedDataSucceed =
   ({
     suffix,
     filters,
-    enableDataExportRenaming,
+    flags,
   }: {
     suffix: string;
     filters?: ExportDataFilters;
-    enableDataExportRenaming: boolean;
+    flags: FeatureFlags;
   }) =>
   async (parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[]) => {
     if (!parsedAnswers) return;
 
-    const exportData = await prepareDecryptedData(parsedAnswers, filters, enableDataExportRenaming);
-    await exportProcessedData({ ...exportData, suffix, enableDataExportRenaming });
+    const exportData = await prepareDecryptedData(parsedAnswers, flags, filters);
+    await exportProcessedData({ ...exportData, suffix, flags });
   };

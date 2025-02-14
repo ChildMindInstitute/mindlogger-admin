@@ -17,6 +17,7 @@ import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getR
 import { ItemsWithFileResponses } from 'shared/consts';
 import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { getObjectFromList } from '../getObjectFromList';
 
@@ -44,7 +45,7 @@ export const getReportData = (
   reportData: AppletExportData['reportData'],
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
-  enableDataExportRenaming: boolean,
+  flags: FeatureFlags,
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
@@ -56,7 +57,7 @@ export const getReportData = (
           item,
           rawAnswersObject,
           index,
-          enableDataExportRenaming,
+          enableDataExportRenaming: flags.enableDataExportRenaming,
         }),
       );
     },
@@ -67,7 +68,7 @@ export const getReportData = (
   if (subscaleSetting?.subscales?.length) {
     answers.splice(0, 1, {
       ...answers[0],
-      ...getSubscales(subscaleSetting, rawAnswersObject, enableDataExportRenaming),
+      ...getSubscales(subscaleSetting, rawAnswersObject, flags),
     });
   }
 
@@ -122,7 +123,7 @@ export const getActivityJourneyData = (
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
   decryptedEvents: EventDTO[],
-  enableDataExportRenaming: boolean,
+  { enableDataExportRenaming }: FeatureFlags,
 ) => {
   const decryptedFilteredEvents = decryptedEvents.filter(isSuccessEvent);
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);

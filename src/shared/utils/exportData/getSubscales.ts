@@ -24,6 +24,7 @@ import {
   ElementType,
 } from 'shared/types';
 import { CalculatedSubscaleScores } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
@@ -31,7 +32,7 @@ import { getObjectFromList } from '../getObjectFromList';
 
 const getRoundTo2Decimal = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
 
-export const getSubScaleScore = (
+export const getSubscaleScore = (
   subscalesSum: number,
   type: SubscaleTotalScore,
   length: number,
@@ -49,45 +50,64 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-  result: CalculatedSubscaleScores,
+  flags: FeatureFlags,
+  result: CalculatedSubscaleScores = {},
 ): CalculatedSubscaleScores => {
   let itemCount = 0;
 
+  // TODO: Remove this when feature flag is removed
+  // https://mindlogger.atlassian.net/browse/M2-8635
+  const defaultScore = flags.enableSubscaleNullWhenSkipped ? null : 0;
+
   const sumScore = data.items.reduce((acc, item) => {
-    const isHidden = activityItems[item.name]?.activityItem?.isHidden;
+    if (!item.type) return acc;
 
-    if (!isSystemItem(item) && !isHidden) {
-      itemCount++;
-    }
-
-    if (!item?.type || isHidden) {
-      return acc;
-    }
-
+    /* Handle nested subscales
+    =================================================== */
     if (item.type === ElementType.Subscale) {
+      itemCount++;
+
       const calculatedNestedSubscale = calcScores(
         subscalesObject[item.name],
         activityItems,
         subscalesObject,
+        flags,
         result,
       )[item.name];
 
-      result[item.name] = calculatedNestedSubscale;
+      if (typeof calculatedNestedSubscale?.score === 'number') {
+        result[item.name] = calculatedNestedSubscale;
 
-      return acc + calculatedNestedSubscale.score;
+        return (acc ?? 0) + calculatedNestedSubscale.score;
+      }
+
+      return acc;
     }
 
-    const answer = activityItems[item.name]?.answer as
+    /* Handle activity items
+    =================================================== */
+    const activityItem = activityItems[item.name];
+
+    // Both system and hidden items are skipped and do not influence scoring.
+    if (isSystemItem(item) || activityItem?.activityItem.isHidden) {
+      return acc;
+    }
+
+    const answer = activityItem?.answer as
+      | undefined
       | DecryptedMultiSelectionAnswer
       | DecryptedSingleSelectionAnswer
       | DecryptedSliderAnswer;
-    const typedOptions = activityItems[item.name]?.activityItem
-      .responseValues as SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues;
-    let value = 0;
+    const typedOptions = activityItem?.activityItem.responseValues as
+      | SingleAndMultipleSelectItemResponseValues
+      | SliderItemResponseValues;
 
-    if (typedOptions?.options?.length) {
-      const scoresObject = typedOptions.options?.reduce((acc: ScoresObject, item) => {
-        if (item?.value !== undefined && item?.score !== undefined) {
+    let value: number | null = null;
+
+    if ('options' in typedOptions && typedOptions.options.length) {
+      // Single & Multiple Select
+      const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
+        if (item.value !== undefined && item.score !== undefined) {
           acc[item.value as keyof ScoresObject] = item.score;
         }
 
@@ -95,31 +115,49 @@ export const calcScores = <T>(
       }, {});
 
       if (Array.isArray(answer?.value)) {
-        value = answer.value?.reduce((res: number, item) => res + scoresObject[item], 0);
-      } else {
-        value = scoresObject[answer?.value] || 0;
-      }
-    }
+        value =
+          answer?.value.reduce((result: null | number, val) => {
+            if (scoresObject[val] === null) return result;
 
-    if (typedOptions?.scores?.length) {
+            return (result ?? 0) + scoresObject[val];
+          }, null) ?? null;
+      } else {
+        value = (answer && scoresObject[answer.value]) ?? null;
+      }
+    } else if ('scores' in typedOptions && typedOptions.scores?.length) {
+      // Slider
       const min = Number(typedOptions.minValue);
       const max = Number(typedOptions.maxValue);
       const scores = typedOptions.scores;
       const options = createArrayFromMinToMax(min, max);
 
-      value = scores[options.findIndex((item) => item === answer?.value)] || 0;
+      value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
     }
 
-    return acc + value;
-  }, 0);
+    // New feature-flagged behaviour also treats skipped responses as null.
+    // TODO: When feature flag is removed, logic can be simplified.
+    // https://mindlogger.atlassian.net/browse/M2-8635
+    if (value === null) {
+      if (flags.enableSubscaleNullWhenSkipped) {
+        return acc;
+      } else {
+        value = 0;
+      }
+    }
 
-  const calculatedScore = getSubScaleScore(sumScore, data.scoring, itemCount);
+    itemCount++;
 
-  if (data?.subscaleTableData) {
+    return (acc ?? 0) + value;
+  }, defaultScore);
+
+  const calculatedScore =
+    sumScore === null ? null : getSubscaleScore(sumScore, data.scoring, itemCount);
+
+  if (calculatedScore !== null && data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
       const genderAnswer = activityItems[LookupTableItems.Gender_screen]
         ?.answer as DecryptedSingleSelectionAnswer;
-      const withSex = sex ? parseSex(sex) === String(genderAnswer?.value) : true;
+      const withSex = !sex || parseSex(sex) === String(genderAnswer?.value);
 
       const ageAnswer = activityItems[LookupTableItems.Age_screen]?.answer;
       let reportedAge: string | undefined;
@@ -167,20 +205,22 @@ export const calcScores = <T>(
 
   return {
     ...result,
-    [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+    ...(typeof calculatedScore === 'number' && {
+      [data.name]: { score: getRoundTo2Decimal(calculatedScore), optionText: '', severity: null },
+    }),
   };
 };
 
 export const calcTotalScore = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
-  enableDataExportRenaming: boolean,
+  flags: FeatureFlags,
 ) => {
   if (!subscaleSetting?.calculateTotalScore) return {};
 
   return calcScores(
     {
-      name: enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
+      name: flags.enableDataExportRenaming ? FinalSubscale.Key : LegacyFinalSubscale.Key,
       items: Object.keys(activityItems).reduce((acc: ActivitySettingsSubscaleItem[], item) => {
         const itemType = activityItems[item].activityItem.responseType;
         const allowEdit = activityItems[item].activityItem.allowEdit;
@@ -204,14 +244,14 @@ export const calcTotalScore = (
     } as ActivitySettingsSubscale,
     activityItems,
     {},
-    {},
+    flags,
   );
 };
 
 export const getSubscales = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
-  enableDataExportRenaming: boolean,
+  flags: FeatureFlags,
 ) => {
   if (!subscaleSetting?.subscales?.length || !Object.keys(activityItems).length) return {};
 
@@ -223,35 +263,37 @@ export const getSubscales = (
   const cleanName = (name: string) => name.replace(/[^a-zA-Z0-9-]/g, '_');
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
+    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, flags)[item.name];
+    if (!calculatedSubscale) return acc;
+
     const cleanedName = cleanName(item.name);
 
-    if (enableDataExportRenaming) {
-      acc[`subscale_name_${cleanedName}`] = calculatedSubscale[item.name].score;
-      if (calculatedSubscale?.[item.name]?.optionText) {
-        acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale[item.name].optionText;
+    if (flags.enableDataExportRenaming) {
+      acc[`subscale_name_${cleanedName}`] = calculatedSubscale?.score;
+      if (calculatedSubscale?.optionText) {
+        acc[`subscale_lookup_text_${cleanedName}`] = calculatedSubscale.optionText;
       }
     } else {
-      acc[item.name] = calculatedSubscale[item.name].score;
-      if (calculatedSubscale?.[item.name]?.optionText) {
-        acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
+      acc[item.name] = calculatedSubscale?.score;
+      if (calculatedSubscale?.optionText) {
+        acc[`Optional text for ${item.name}`] = calculatedSubscale.optionText;
       }
     }
 
     return acc;
   }, {});
 
-  const calculatedTotalScore =
-    subscaleSetting.calculateTotalScore &&
-    calcTotalScore(subscaleSetting, activityItems, enableDataExportRenaming);
+  const result =
+    subscaleSetting.calculateTotalScore && calcTotalScore(subscaleSetting, activityItems, flags);
 
-  const finalSubscale = enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
+  const finalSubscale = flags.enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
+
+  const calculatedTotalScore = result?.[finalSubscale.Key];
 
   return {
-    ...(calculatedTotalScore && {
-      [finalSubscale.FinalSubScaleScore]: calculatedTotalScore[finalSubscale.Key].score,
-      [finalSubscale.OptionalTextForFinalSubScaleScore]:
-        calculatedTotalScore[finalSubscale.Key].optionText,
+    ...(typeof calculatedTotalScore?.score === 'number' && {
+      [finalSubscale.FinalSubScaleScore]: calculatedTotalScore.score,
+      [finalSubscale.OptionalTextForFinalSubScaleScore]: calculatedTotalScore.optionText,
     }),
     ...parsedSubscales,
   };
