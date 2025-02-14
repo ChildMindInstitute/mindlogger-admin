@@ -4,17 +4,20 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { getEntityKey, isSystemItem } from 'shared/utils';
-import { ActivitySettingsSubscale, AgeFieldType, ScoreOrSection, ScoreReport } from 'shared/state';
+import { ActivitySettingsSubscale, ScoreOrSection, ScoreReport } from 'shared/state';
 import { LookupTableItems } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { reportIsScore } from 'modules/Builder/features/ActivitySettings/ScoresAndReports/ScoresAndReports.utils';
 
 import { ageDropdownItem, ageTextItem, genderItem } from './SubscalesConfiguration.const';
+import { UseSubscalesSystemItemsSetupProps } from './SubscalesConfiguration.types';
 
-export const useSubscalesSystemItemsSetup = (
-  subscales: SubscaleFormValue[],
-  ageFieldType: AgeFieldType,
-) => {
+export const useSubscalesSystemItemsSetup = ({
+  subscales,
+  ageFieldType,
+  isAgeVisible,
+  isGenderVisible,
+}: UseSubscalesSystemItemsSetupProps) => {
   const { fieldName: activityFieldName } = useCurrentActivity();
   const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
@@ -124,22 +127,40 @@ export const useSubscalesSystemItemsSetup = (
     const hasSystemItems = items?.some((item) => isSystemItem(item));
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
+    // Update Age item
     const ageScreenItem = items?.find(
       (item) => isSystemItem(item) && item.name === LookupTableItems.Age_screen,
     );
+    const oldAgeVisible = ageScreenItem ? !ageScreenItem.isHidden : false;
     const oldAgeFieldType = ageScreenItem?.responseType === 'numberSelect' ? 'dropdown' : 'text';
-    const ageFieldTypeChanged = oldAgeFieldType !== ageFieldType;
-    const shouldEditSubscaleSystemItems =
-      hasSubscaleLookupTable && hasSystemItems && ageFieldTypeChanged;
+    const ageFieldChanged = oldAgeVisible !== isAgeVisible || oldAgeFieldType !== ageFieldType;
 
-    const ageField: ItemFormValues = ageFieldType === 'dropdown' ? ageDropdownItem : ageTextItem;
+    const updatedAgeItem: ItemFormValues = {
+      ...(ageFieldType === 'dropdown' ? ageDropdownItem : ageTextItem),
+      isHidden: !isAgeVisible,
+    };
+
+    // Update Gender item
+    const genderScreenItem = items?.find(
+      (item) => isSystemItem(item) && item.name === LookupTableItems.Gender_screen,
+    );
+    const oldGenderVisible = genderScreenItem ? !genderScreenItem.isHidden : false;
+    const genderFieldChanged = oldGenderVisible !== isGenderVisible;
+
+    const updatedGenderItem = {
+      ...genderItem,
+      isHidden: !isGenderVisible,
+    };
+
+    const shouldEditSubscaleSystemItems =
+      hasSubscaleLookupTable && hasSystemItems && (ageFieldChanged || genderFieldChanged);
 
     if (shouldAddSubscaleSystemItems) {
-      appendSystemItems([genderItem, ageField]);
+      appendSystemItems([updatedGenderItem, updatedAgeItem]);
 
       return;
     } else if (shouldEditSubscaleSystemItems) {
-      replaceSystemItems([genderItem, ageField]);
+      replaceSystemItems([updatedGenderItem, updatedAgeItem]);
 
       return;
     }
@@ -147,7 +168,8 @@ export const useSubscalesSystemItemsSetup = (
     if (hasSubscaleLookupTable) return;
 
     removeSystemItems();
-  }, [subscales, ageFieldType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscales, ageFieldType, isAgeVisible, isGenderVisible]);
 };
 
 type UseLinkedScoreReportsReturn = {
