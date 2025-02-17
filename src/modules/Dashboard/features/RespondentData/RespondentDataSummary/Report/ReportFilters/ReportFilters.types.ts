@@ -17,6 +17,7 @@ export enum FiltersChangeType {
   FilterByIdentifier,
   Identifiers,
   Versions,
+  Skipped,
 }
 
 export type OnFiltersChangeParams = {

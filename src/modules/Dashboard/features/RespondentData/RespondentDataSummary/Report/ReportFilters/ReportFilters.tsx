@@ -1,25 +1,41 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
-import { DatePicker, TimePicker } from 'shared/components';
-import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
+import { DatePicker, TimePicker, Tooltip } from 'shared/components';
+import {
+  StyledBodyLarge,
+  StyledFlexTopCenter,
+  StyledTitleTooltipIcon,
+  theme,
+  variables,
+} from 'shared/styles';
+import {
+  CheckboxController,
+  Switch,
+  TagsAutocompleteController,
+} from 'shared/components/FormComponents';
 import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
 import { getUniqueIdentifierOptions } from './ReportFilters.utils';
-import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
+import {
+  StyledFiltersContainer,
+  StyledMoreFilters,
+  StyledTimeText,
+  StyledCheckboxTitle,
+} from './ReportFilters.styles';
 import {
   FiltersChangeType,
   OnFiltersChangeParams,
   ReportFiltersProps,
 } from './ReportFilters.types';
 import { MIN_DATE } from './ReportFilters.const';
+import { useDatavizSkippedFilter } from '../../hooks/useDatavizSkippedFilter';
 
 export const ReportFilters = ({
   identifiers = [],
@@ -39,6 +55,7 @@ export const ReportFilters = ({
   ] = useWatch({
     name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate'],
   });
+  const { hideSkipped, setSkipped } = useDatavizSkippedFilter();
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
   const identifiersOptions = getUniqueIdentifierOptions(identifiers);
@@ -88,6 +105,11 @@ export const ReportFilters = ({
     await fetchAnswers(fetchParams);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    setValue('hideSkipped', hideSkipped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form>
@@ -212,6 +234,25 @@ export const ReportFilters = ({
                   })
                 }
                 data-testid={`${dataTestid}-versions`}
+              />
+            </Box>
+            <Box sx={{ width: '24rem', ml: theme.spacing(2.4) }}>
+              <CheckboxController
+                name="hideSkipped"
+                control={control}
+                label={
+                  <StyledCheckboxTitle>
+                    {t('hideSkipped')}
+                    <Tooltip tooltipTitle={t('hideSkippedTooltip')}>
+                      <span>
+                        <StyledTitleTooltipIcon id="more-info-outlined" />
+                      </span>
+                    </Tooltip>
+                  </StyledCheckboxTitle>
+                }
+                data-testid={`${dataTestid}-hide-skipped`}
+                sx={{ mr: theme.spacing(0) }}
+                onCustomChange={() => setSkipped(!hideSkipped)}
               />
             </Box>
           </StyledFlexTopCenter>

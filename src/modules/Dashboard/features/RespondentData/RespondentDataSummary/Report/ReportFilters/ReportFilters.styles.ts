@@ -21,3 +21,14 @@ export const StyledMoreFilters = styled(Button)`
   height: 5.5rem;
   margin-left: ${theme.spacing(1.2)};
 `;
+
+export const StyledCheckboxTitle = styled(StyledBodyMedium)`
+  display: flex;
+  align-items: center;
+
+  svg {
+    height: 1.6rem;
+    margin-left: ${theme.spacing(0.4)};
+    margin-top: ${theme.spacing(0.4)};
+  }
+`;
