@@ -195,6 +195,7 @@ export const mockedEmptySingleSelection = {
     },
     autoAdvance: false,
     portraitLayout: false,
+    responseDataIdentifier: false,
   },
   isHidden: false,
   allowEdit: true,

@@ -63,6 +63,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
       },
       autoAdvance: false,
       portraitLayout: false,
+      responseDataIdentifier: false,
     },
     responseType: ItemResponseType.SingleSelection,
     responseValues: {

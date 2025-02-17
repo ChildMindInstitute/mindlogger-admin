@@ -86,6 +86,7 @@ export type MultipleSelectionConfig = {
 
 export type SingleSelectionConfig = MultipleSelectionConfig & {
   autoAdvance: boolean;
+  responseDataIdentifier: boolean;
 };
 
 export type SliderConfig = {
