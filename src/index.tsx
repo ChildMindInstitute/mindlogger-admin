@@ -13,8 +13,8 @@ import { isUat } from './shared/utils/env';
 
 if (isUat) {
   datadogRum.init({
-    applicationId: '7b4fea5b-07e7-4485-8ec4-87f864191e50',
-    clientToken: 'pubf10b5ef30b579361798ba7155c5a9f83',
+    applicationId: `${process.env.REACT_APP_DD_APP_ID}`,
+    clientToken: `${process.env.REACT_APP_DD_CLIENT_TOKEN}`,
     // `site` refers to the Datadog site parameter of your organization
     // see https://docs.datadoghq.com/getting_started/site/
     site: 'datadoghq.com',
