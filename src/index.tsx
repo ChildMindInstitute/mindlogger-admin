@@ -2,12 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
+import { datadogRum } from '@datadog/browser-rum';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
+import { isUat } from './shared/utils/env';
+
+if (isUat) {
+  datadogRum.init({
+    applicationId: '7b4fea5b-07e7-4485-8ec4-87f864191e50',
+    clientToken: 'pubf10b5ef30b579361798ba7155c5a9f83',
+    // `site` refers to the Datadog site parameter of your organization
+    // see https://docs.datadoghq.com/getting_started/site/
+    site: 'datadoghq.com',
+    service: 'mindlogger-admin',
+    env: 'uat',
+    // Specify a version number to identify the deployed version of your application in Datadog
+    // version: '1.0.0',
+    sessionSampleRate: 100,
+    sessionReplaySampleRate: 0,
+    defaultPrivacyLevel: 'mask-user-input',
+  });
+}
 
 Sentry.init({
   dsn: process.env.REACT_APP_DSN || '',
