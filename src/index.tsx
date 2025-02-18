@@ -9,24 +9,29 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
-import { isUat } from './shared/utils/env';
+// import { isUat } from './shared/utils/env';
 
-if (isUat) {
-  datadogRum.init({
-    applicationId: `${process.env.REACT_APP_DD_APP_ID}`,
-    clientToken: `${process.env.REACT_APP_DD_CLIENT_TOKEN}`,
-    // `site` refers to the Datadog site parameter of your organization
-    // see https://docs.datadoghq.com/getting_started/site/
-    site: 'datadoghq.com',
-    service: 'mindlogger-admin',
-    env: 'uat',
-    // Specify a version number to identify the deployed version of your application in Datadog
-    // version: '1.0.0',
-    sessionSampleRate: 100,
-    sessionReplaySampleRate: 0,
-    defaultPrivacyLevel: 'mask-user-input',
-  });
-}
+// eslint-disable-next-line no-constant-condition
+// if (isUat || true) {
+datadogRum.init({
+  applicationId: process.env.REACT_APP_DD_APP_ID as string,
+  clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN as string,
+  // `site` refers to the Datadog site parameter of your organization
+  // see https://docs.datadoghq.com/getting_started/site/
+  site: 'datadoghq.com',
+  service: 'mindlogger-admin',
+  env: 'uat',
+  // Specify a version number to identify the deployed version of your application in Datadog
+  version: process.env.REACT_APP_DD_VERSION,
+  sessionSampleRate: 100,
+  sessionReplaySampleRate: 20,
+  defaultPrivacyLevel: 'mask',
+  trackResources: true,
+  trackLongTasks: true,
+  trackUserInteractions: true,
+  allowedTracingUrls: ['http://localhost:3000'],
+});
+// }
 
 Sentry.init({
   dsn: process.env.REACT_APP_DSN || '',
