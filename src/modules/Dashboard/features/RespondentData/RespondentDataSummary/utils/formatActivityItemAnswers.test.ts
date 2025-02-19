@@ -147,6 +147,7 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
               textInputRequired: false,
             },
             autoAdvance: true,
+            responseDataIdentifier: false,
           },
           name: 'single_extraText_and_NO_SCORES',
           isHidden: false,
@@ -179,6 +180,7 @@ describe('Respondent Data Summary: formatActivityItemAnswers with helper functio
             },
           ],
         },
+        responseDataIdentifier: false,
       },
       answers: [
         {
