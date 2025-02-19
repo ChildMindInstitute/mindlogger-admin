@@ -25,6 +25,7 @@ import { ReportHeader } from './ReportHeader';
 import { NoData } from './NoData';
 import { EntityResponses } from './EntitiyResponses';
 import { useRespondentDataContext } from '../../RespondentDataContext';
+import { useDatavizSkippedFilter } from '../hooks/useDatavizSkippedFilter';
 
 export const Report = () => {
   const { t } = useTranslation('app');
@@ -45,6 +46,7 @@ export const Report = () => {
   const versions: AutocompleteOption[] = useWatch({
     name: 'versions',
   });
+  const { hideSkipped } = useDatavizSkippedFilter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
@@ -76,12 +78,22 @@ export const Report = () => {
       ? answers?.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)
       : answers;
 
-    const { subscalesFrequency, formattedResponses } = getFormattedResponses(responses);
+    const filtered = !hideSkipped
+      ? responses
+      : responses
+          .map((response) => {
+            const answerItems = response.decryptedAnswer.filter(({ answer }) => answer);
+
+            return { ...response, decryptedAnswer: answerItems };
+          })
+          .filter(Boolean);
+
+    const { subscalesFrequency, formattedResponses } = getFormattedResponses(filtered);
 
     setResponseOptions(formattedResponses);
     setSubscalesFrequency(subscalesFrequency);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentActivityCompletionData]);
+  }, [currentActivityCompletionData, hideSkipped, answers]);
 
   return (
     <>
