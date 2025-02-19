@@ -28,7 +28,6 @@ export const StyledCheckboxTitle = styled(StyledBodyMedium)`
 
   svg {
     height: 1.6rem;
-    margin-left: ${theme.spacing(0.4)};
-    margin-top: ${theme.spacing(0.4)};
+    display: block;
   }
 `;

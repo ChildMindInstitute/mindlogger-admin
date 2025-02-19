@@ -236,7 +236,7 @@ export const ReportFilters = ({
                 data-testid={`${dataTestid}-versions`}
               />
             </Box>
-            <Box sx={{ width: '24rem', ml: theme.spacing(2.4) }}>
+            <Box sx={{ whiteSpace: 'nowrap', ml: 2.4 }}>
               <CheckboxController
                 name="hideSkipped"
                 control={control}
@@ -251,7 +251,7 @@ export const ReportFilters = ({
                   </StyledCheckboxTitle>
                 }
                 data-testid={`${dataTestid}-hide-skipped`}
-                sx={{ mr: theme.spacing(0) }}
+                sx={{ mr: 0 }}
                 onCustomChange={() => setSkipped(!hideSkipped)}
               />
             </Box>
