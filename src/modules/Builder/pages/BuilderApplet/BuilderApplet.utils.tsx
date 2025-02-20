@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 import * as yup from 'yup';
+import { parseISO } from 'date-fns';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -44,7 +45,6 @@ import {
   getTextBetweenBrackets,
   INTERVAL_SYMBOL,
   isSystemItem,
-  parseDateToMidnightUTC,
   Path,
   pluck,
 } from 'shared/utils';
@@ -789,7 +789,7 @@ const formatTime = (hours: number, minutes: number) => {
 };
 
 const formatDate = (dateValue: string) => {
-  const date = dateValue ? parseDateToMidnightUTC(dateValue) : undefined;
+  const date = dateValue ? parseISO(dateValue) : undefined;
 
   return date;
 };
