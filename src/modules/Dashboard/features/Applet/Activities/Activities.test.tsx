@@ -16,6 +16,9 @@ import {
   mockedFullParticipant2,
   mockedUserData,
   mockedOwnerParticipant,
+  mockedFullParticipant1WithDataAccess,
+  mockedFullParticipant2WithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -347,7 +350,11 @@ describe('Dashboard > Applet > Activities screen', () => {
   describe('Take now modal', () => {
     const successfulGetAppletParticipantsMock =
       mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
-        result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
+        result: [
+          mockedFullParticipant1WithDataAccess,
+          mockedFullParticipant2WithDataAccess,
+          mockedOwnerParticipantWithDataAccess,
+        ],
         count: 3,
       });
 
@@ -378,7 +385,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]: (params) => {
           if (params.userId === mockedOwnerParticipant.id) {
             return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
-              result: [mockedOwnerParticipant],
+              result: [mockedOwnerParticipantWithDataAccess],
               count: 1,
             });
           }

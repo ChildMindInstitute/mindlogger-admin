@@ -276,6 +276,30 @@ export const mockedFullParticipant1WithDataAccess: ParticipantWithDataAccess = {
 
 export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedFullSubjectId2 = 'subject-id-123';
+
+export const mockedFullParticipant2Details: ParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: 'Mocked Applet',
+  appletImage: '',
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  respondentNickname: 'Test Respondent',
+  respondentSecretId: 'testSecretId',
+  hasIndividualSchedule: false,
+  encryption: mockedEncryption,
+  subjectId: mockedFullSubjectId2,
+  subjectTag: 'Child' as ParticipantTag,
+  subjectFirstName: 'John',
+  subjectLastName: 'Doe',
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
+  roles: [Roles.Respondent],
+};
+
+export const mockedFullParticipant2DetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedFullParticipant2Details,
+  teamMemberCanViewData: true,
+};
+
 export const mockedFullParticipant2: Participant = {
   id: mockedFullParticipantId2,
   nicknames: ['Test Respondent'],
@@ -285,25 +309,12 @@ export const mockedFullParticipant2: Participant = {
   isPinned: false,
   status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: 'Mocked Applet',
-      appletImage: '',
-      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: 'Test Respondent',
-      respondentSecretId: 'testSecretId',
-      hasIndividualSchedule: false,
-      encryption: mockedEncryption,
-      subjectId: mockedFullSubjectId2,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'John',
-      subjectLastName: 'Doe',
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-      roles: [Roles.Respondent],
-    },
-  ],
+  details: [mockedFullParticipant2Details],
+};
+
+export const mockedFullParticipant2WithDataAccess: ParticipantWithDataAccess = {
+  ...mockedFullParticipant2,
+  details: [mockedFullParticipant2DetailWithDataAccess],
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';

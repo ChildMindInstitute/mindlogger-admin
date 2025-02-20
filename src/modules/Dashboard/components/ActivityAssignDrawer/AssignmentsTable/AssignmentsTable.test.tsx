@@ -15,6 +15,10 @@ import {
   mockedFullParticipant1,
   mockedFullParticipant2,
   mockedUserData,
+  mockedFullParticipant1WithDataAccess,
+  mockedFullParticipant2WithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
 } from 'shared/mock';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -54,10 +58,10 @@ const mockedGetApplet = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
-    mockedFullParticipant1,
-    mockedFullParticipant2,
-    mockedOwnerParticipant,
-    mockedLimitedParticipant,
+    mockedFullParticipant1WithDataAccess,
+    mockedFullParticipant2WithDataAccess,
+    mockedOwnerParticipantWithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
   ],
   count: 4,
 });
@@ -156,7 +160,7 @@ describe('AssignmentsTable', () => {
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerParticipant.id) {
           return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
-            result: [mockedOwnerParticipant],
+            result: [mockedOwnerParticipantWithDataAccess],
             count: 1,
           });
         }

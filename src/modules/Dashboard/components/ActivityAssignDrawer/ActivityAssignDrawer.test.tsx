@@ -14,8 +14,11 @@ import {
   mockedOwnerId,
   mockedOwnerParticipant,
   mockedFullParticipant1,
-  mockedFullParticipant2,
   mockedUserData,
+  mockedFullParticipant1WithDataAccess,
+  mockedFullParticipant2WithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
@@ -51,10 +54,10 @@ const mockedGetApplet = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
-    mockedFullParticipant1,
-    mockedFullParticipant2,
-    mockedOwnerParticipant,
-    mockedLimitedParticipant,
+    mockedFullParticipant1WithDataAccess,
+    mockedFullParticipant2WithDataAccess,
+    mockedOwnerParticipantWithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
   ],
   count: 4,
 });
@@ -155,7 +158,7 @@ describe('ActivityAssignDrawer', () => {
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerParticipant.id) {
           return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
-            result: [mockedOwnerParticipant],
+            result: [mockedOwnerParticipantWithDataAccess],
             count: 1,
           });
         }

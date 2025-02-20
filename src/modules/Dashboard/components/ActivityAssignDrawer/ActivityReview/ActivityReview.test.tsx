@@ -8,9 +8,13 @@ import {
   mockedCurrentWorkspace,
   mockedEncryption,
   mockedFullParticipant1,
+  mockedFullParticipant1WithDataAccess,
   mockedFullParticipant2,
+  mockedFullParticipant2WithDataAccess,
   mockedLimitedParticipant,
+  mockedLimitedParticipantWithDataAccess,
   mockedOwnerId,
+  mockedOwnerParticipantWithDataAccess,
   mockedUserData,
 } from 'shared/mock';
 import { useParticipantDropdown } from 'modules/Dashboard/components';
@@ -67,10 +71,10 @@ const mockedOwnerRespondent: Participant = {
 
 const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
-    mockedFullParticipant1,
-    mockedFullParticipant2,
-    mockedOwnerRespondent,
-    mockedLimitedParticipant,
+    mockedFullParticipant1WithDataAccess,
+    mockedFullParticipant2WithDataAccess,
+    mockedOwnerParticipantWithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
   ],
   count: 4,
 });
@@ -155,7 +159,7 @@ describe('ActivityReview component', () => {
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerRespondent.id) {
           return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
-            result: [mockedOwnerRespondent],
+            result: [mockedOwnerParticipantWithDataAccess],
             count: 1,
           });
         }

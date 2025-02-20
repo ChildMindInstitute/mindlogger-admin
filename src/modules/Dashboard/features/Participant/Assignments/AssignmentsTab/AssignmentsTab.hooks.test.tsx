@@ -17,15 +17,16 @@ import {
   mockParticipantActivities,
   mockedAppletData,
   mockedAppletId,
-  mockedLimitedParticipant,
   mockedLimitedSubject,
   mockedOwnerId,
   mockedOwnerManager,
   mockedOwnerParticipant,
   mockedOwnerSubject,
-  mockedFullParticipant1,
   mockedFullSubject1,
   mockedOwnerSubjectWithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
+  mockedFullParticipant1WithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -189,9 +190,9 @@ describe('useAssignmentsTab hook', () => {
       [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
       [GET_WORKSPACE_RESPONDENTS_URL]: ({ userId }) => {
         const respondents = [
-          mockedOwnerParticipant,
-          mockedFullParticipant1,
-          mockedLimitedParticipant,
+          mockedOwnerParticipantWithDataAccess,
+          mockedFullParticipant1WithDataAccess,
+          mockedLimitedParticipantWithDataAccess,
         ];
         const filteredRespondents = userId
           ? respondents.filter((r) => r.id === userId)
