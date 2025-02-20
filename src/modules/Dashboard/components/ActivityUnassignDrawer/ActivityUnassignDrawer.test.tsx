@@ -10,7 +10,7 @@ import {
   mockedOwnerSubject,
   mockedFullParticipant1,
 } from 'shared/mock';
-import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import { mockSuccessfulHttpResponse } from 'shared/utils/httpMocks';
 import { Activity, initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';

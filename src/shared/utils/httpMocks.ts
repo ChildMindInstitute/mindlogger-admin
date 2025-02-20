@@ -6,7 +6,9 @@ import { ApiResponseCodes } from '../api';
 /**
  * Provide URL-response pairs for any HTTP GET requests performed within a test. Don't forget
  * to reset it afterward
- * @param responses A object keyed by URL and containing their respective HttpResponse values
+ *
+ * @param responses Object keyed by URL mapped to respective HttpResponse or function that
+ *                  receives query parameters and returns HttpResponse
  */
 export const mockGetRequestResponses = (
   responses: Record<string, HttpResponse | ((params: Record<string, string>) => HttpResponse)>,
@@ -14,16 +16,15 @@ export const mockGetRequestResponses = (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   mockAxios.get.mockImplementation((url: string, options?: { params: Record<string, string> }) => {
-    if (url && responses[url]) {
-      const response = responses[url];
-
+    const response = responses[url];
+    if (response) {
       if (typeof response === 'function') {
         return Promise.resolve(response(options?.params ?? {}));
       }
 
-      return Promise.resolve(responses[url]);
+      return Promise.resolve(response);
     } else {
-      // Must explain that the request was unmocked via a console log statement, else you only
+      // Must explain that mock request was not provided via console log statement, else you only
       // receive a contextless UnhandledPromiseRejection error.
       // eslint-disable-next-line no-console
       console.log(`No response provided for ${url}`);

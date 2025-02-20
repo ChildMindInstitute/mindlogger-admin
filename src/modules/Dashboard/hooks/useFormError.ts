@@ -1,12 +1,14 @@
 import { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { AxiosError } from 'axios';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
 
 import { ApiError, ApiErrorResponse } from 'shared/state';
 import { getErrorData, getErrorMessage } from 'shared/utils';
 
 type UseFormError<T extends FieldValues> = {
-  error: AxiosError<ApiErrorResponse> | null;
+  error?: AxiosError<ApiErrorResponse> | FetchBaseQueryError | SerializedError | null;
   setError: UseFormSetError<T>;
   setHasCommonError: Dispatch<SetStateAction<boolean>>;
   fields: Record<string, string>;
