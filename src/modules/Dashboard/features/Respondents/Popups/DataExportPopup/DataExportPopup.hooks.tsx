@@ -22,9 +22,7 @@ export const useMultipleDecryptWorkers = ({
   const limitRef = useRef(1);
   const finishedPagesRef = useRef<Set<number>>(new Set());
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
-  const {
-    featureFlags: { enableDataExportRenaming },
-  } = useFeatureFlags();
+  const { featureFlags } = useFeatureFlags();
 
   const shouldLogDataInDebugMode =
     !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
@@ -41,7 +39,7 @@ export const useMultipleDecryptWorkers = ({
       setCurrentPage,
       limitRef,
       finishedPagesRef,
-      enableDataExportRenaming,
+      featureFlags,
     ),
   ).current;
 

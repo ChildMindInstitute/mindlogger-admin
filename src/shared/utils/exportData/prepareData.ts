@@ -5,6 +5,7 @@ import {
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types/answer';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { getObjectFromList } from '../getObjectFromList';
 import {
@@ -57,8 +58,8 @@ export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
 
 export const prepareDecryptedData = async (
   parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
+  flags: FeatureFlags,
   filters?: ExportDataFilters,
-  enableDataExportRenaming?: boolean,
 ) => {
   logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const filteredParsedAnswers = parsedAnswers.filter(getParsedAnswersFilterFn(filters));
@@ -76,7 +77,7 @@ export const prepareDecryptedData = async (
       acc.reportData,
       rawAnswersObject,
       data.decryptedAnswers,
-      !!enableDataExportRenaming,
+      flags,
     );
     const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
     const activityJourneyData = getActivityJourneyData(
@@ -84,7 +85,7 @@ export const prepareDecryptedData = async (
       rawAnswersObject,
       data.decryptedAnswers,
       data.decryptedEvents,
-      !!enableDataExportRenaming,
+      flags,
     );
     const drawingItemsData = await getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
     const stabilityTrackerItemsData = await getStabilityTrackerItemsData(
@@ -114,10 +115,10 @@ export const prepareDecryptedData = async (
 export const prepareEncryptedData = async (
   data: ExportDataResult,
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
+  flags: FeatureFlags,
   filters?: ExportDataFilters,
-  enableDataExportRenaming?: boolean,
 ) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
 
-  return prepareDecryptedData(parsedAnswers, filters, enableDataExportRenaming);
+  return prepareDecryptedData(parsedAnswers, flags, filters);
 };

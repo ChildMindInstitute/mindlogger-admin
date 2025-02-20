@@ -134,7 +134,7 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     case ItemResponseType.ABTrails:
       return getABTrailsCsvName(index, item);
     case ItemResponseType.SingleSelectionPerRow: {
-      const rows = activityItem?.responseValues.rows;
+      const { rows } = activityItem.responseValues;
 
       return rows
         .map(
@@ -146,19 +146,21 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
         .join('\n');
     }
     case ItemResponseType.MultipleSelectionPerRow: {
-      const rows = activityItem?.responseValues.rows;
+      const { rows } = activityItem.responseValues;
 
       return rows
         .map(
           (row, index) =>
             `${row.rowName}: ${
-              (value as DecryptedMultiSelectionPerRowAnswer['value'])[index]?.join(', ') ?? ''
+              value === 'null'
+                ? ''
+                : (value as DecryptedMultiSelectionPerRowAnswer['value'])[index]?.join(', ') ?? ''
             }`,
         )
         .join('\n');
     }
     case ItemResponseType.SliderRows: {
-      const rows = activityItem?.responseValues.rows;
+      const { rows } = activityItem.responseValues;
 
       return rows
         .map(

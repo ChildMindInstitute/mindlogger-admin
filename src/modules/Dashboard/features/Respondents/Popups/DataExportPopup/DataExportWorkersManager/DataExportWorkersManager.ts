@@ -6,6 +6,7 @@ import { ExportDataFilters, exportDecryptedDataSucceed } from 'shared/utils/expo
 import { ItemResponseType } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel/mixpanel.types';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import DecryptionWorker from '../DataExportWorker/DataExportWorker.worker';
 import { IdleWorker } from '../DataExportPopup.types';
@@ -29,7 +30,7 @@ export class DataExportWorkersManager {
     private setCurrentPage: Dispatch<SetStateAction<number>>,
     private limitRef: MutableRefObject<number>,
     private finishedPagesRef: MutableRefObject<Set<number>>,
-    private enableDataExportRenaming: boolean,
+    private flags: FeatureFlags,
   ) {
     this.initializeWorkers();
   }
@@ -69,7 +70,7 @@ export class DataExportWorkersManager {
       exportDecryptedDataSucceed({
         suffix: hasSuffix ? getExportDataSuffix(page) : '',
         filters,
-        enableDataExportRenaming: this.enableDataExportRenaming,
+        flags: this.flags,
       })(decryptedData).then(() => {
         this.finishedPagesRef.current.add(page);
         this.handleAllTasksCompleted();

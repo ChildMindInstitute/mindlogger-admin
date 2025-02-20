@@ -21,6 +21,7 @@ export const FeatureFlagsKeys = {
   enableMeritActivityType: 'enableMeritActivityType',
   enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
   enableDataExportRenaming: 'enableDataExportRenaming',
+  enableSubscaleNullWhenSkipped: 'enableSubscaleNullWhenSkipped',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;

@@ -3,8 +3,9 @@ import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
 import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
-import { FinalSubscale } from 'shared/consts';
+import { FinalSubscale, LegacyFinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { Subscale } from './Subscale';
@@ -31,6 +32,8 @@ export const Subscales = ({
   flowResponsesIndex,
 }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
+  const { featureFlags: flags } = useFeatureFlags();
+  const finalSubscale = flags.enableDataExportRenaming ? FinalSubscale : LegacyFinalSubscale;
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
     () =>
@@ -50,7 +53,7 @@ export const Subscales = ({
           const calculatedTotalScore =
             item?.subscaleSetting?.calculateTotalScore &&
             activityItems &&
-            calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
+            calcTotalScore(item.subscaleSetting, activityItems, flags)?.[finalSubscale.Key];
 
           if (calculatedTotalScore) {
             acc.latestFinalScore = calculatedTotalScore?.score;
@@ -68,14 +71,16 @@ export const Subscales = ({
           for (const subscale of item.subscaleSetting.subscales) {
             getAllSubscalesToRender(acc.allSubscalesToRender, item, subscale, activityItems);
 
-            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
-            const { [subscale.name]: _removed, ...restScores } = calculatedSubscale;
+            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, flags);
+            const { [subscale.name]: currentScore, ...restScores } = calculatedSubscale;
+
+            if (!currentScore) continue;
 
             const activityCompletion: ParsedSubscale = {
               date: new Date(item.endDatetime),
-              score: calculatedSubscale[subscale.name].score,
-              optionText: calculatedSubscale[subscale.name].optionText,
-              severity: calculatedSubscale[subscale.name].severity,
+              score: currentScore.score,
+              optionText: currentScore.optionText,
+              severity: currentScore.severity,
               activityCompletionID: item.answerId,
               activityItems,
               subscalesObject,
@@ -100,7 +105,7 @@ export const Subscales = ({
           allSubscalesToRender: {},
         },
       ),
-    [answers],
+    [answers, finalSubscale.Key, flags],
   );
 
   const currentActivityCompletion =
@@ -122,7 +127,7 @@ export const Subscales = ({
         },
         item,
       ) => {
-        const subscale = allSubscalesScores[item.name].activityCompletions.find(
+        const subscale = allSubscalesScores[item.name]?.activityCompletions.find(
           (el) => el.activityCompletionID === currentActivityCompletion.answerId,
         );
 
@@ -166,7 +171,7 @@ export const Subscales = ({
           ? [
               {
                 score: calculatedTotalScore.score,
-                label: FinalSubscale.FinalSubScaleScore,
+                label: finalSubscale.FinalSubScaleScore,
               },
             ]
           : []),
@@ -181,8 +186,8 @@ export const Subscales = ({
     ...(finalScores?.length
       ? [
           {
-            id: FinalSubscale.FinalSubScaleScore,
-            name: FinalSubscale.FinalSubScaleScore,
+            id: finalSubscale.FinalSubScaleScore,
+            name: finalSubscale.FinalSubScaleScore,
             activityCompletions: finalScores,
           },
         ]

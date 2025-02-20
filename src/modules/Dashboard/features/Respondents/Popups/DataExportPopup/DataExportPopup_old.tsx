@@ -44,9 +44,7 @@ export const DataExportPopup = ({
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
-  const {
-    featureFlags: { enableDataExportRenaming },
-  } = useFeatureFlags();
+  const { featureFlags } = useFeatureFlags();
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -78,6 +76,16 @@ export const DataExportPopup = ({
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting && !hasEncryptionCheck;
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
+  const handlePopupClose = useCallback(() => {
+    setChosenAppletData?.(null);
+    setPopupVisible(false);
+  }, [setChosenAppletData, setPopupVisible]);
+
+  const handleRetry = () => {
+    setActiveModal(Modals.DataExport);
+    handleDataExportSubmit();
+  };
+
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
@@ -104,7 +112,7 @@ export const DataExportPopup = ({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
           filters,
-          enableDataExportRenaming,
+          flags: featureFlags,
         })(firstPageData);
 
         if (pageLimit > 1) {
@@ -122,7 +130,7 @@ export const DataExportPopup = ({
               getDecryptedAnswers,
               suffix: getExportDataSuffix(page),
               filters,
-              enableDataExportRenaming,
+              flags: featureFlags,
             })(nextPageData);
           }
         }
@@ -142,17 +150,8 @@ export const DataExportPopup = ({
         setDataIsExporting(false);
       }
     },
-    [getDecryptedAnswers],
+    [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose],
   );
-
-  const handlePopupClose = () => {
-    setChosenAppletData?.(null);
-    setPopupVisible(false);
-  };
-  const handleRetry = () => {
-    setActiveModal(Modals.DataExport);
-    handleDataExportSubmit();
-  };
 
   const renderDataExportContent = () => {
     if (dataIsExporting) {

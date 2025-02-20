@@ -13,6 +13,11 @@ import * as exportTemplateUtils from '../exportTemplate';
 import * as exportCsvZipUtils from './exportCsvZip';
 import * as exportMediaZipUtils from './exportMediaZip';
 
+const mockFlags = {
+  enableDataExportRenaming: false,
+  enableSubscaleNullWhenSkipped: false,
+};
+
 describe('exportDataSucceed', () => {
   beforeAll(() => {
     jest.useFakeTimers();
@@ -110,6 +115,7 @@ describe('exportDataSucceed', () => {
     await exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '',
+      flags: mockFlags,
     })(undefined);
 
     expect(prepareDataUtils.prepareEncryptedData).not.toHaveBeenCalled();
@@ -118,6 +124,7 @@ describe('exportDataSucceed', () => {
   test('exportDecryptedDataSucceed: check actions with empty data', async () => {
     await exportDecryptedDataSucceed({
       suffix: '',
+      flags: mockFlags,
     })(undefined);
 
     expect(prepareDataUtils.prepareDecryptedData).not.toHaveBeenCalled();
@@ -127,12 +134,13 @@ describe('exportDataSucceed', () => {
     await exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
+      flags: mockFlags,
     })(mockedExportData);
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
       mockedExportData,
       mockedGetDecryptedAnswers,
-      undefined,
+      mockFlags,
       undefined,
     );
 
@@ -142,11 +150,12 @@ describe('exportDataSucceed', () => {
   test('exportDecryptedDataSucceed: check actions with default data with legacy naming', async () => {
     await exportDecryptedDataSucceed({
       suffix: '-test',
+      flags: mockFlags,
     })(mockedDecryptedExportData);
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
       mockedDecryptedExportData,
-      undefined,
+      mockFlags,
       undefined,
     );
 
@@ -157,14 +166,14 @@ describe('exportDataSucceed', () => {
     await exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
-      enableDataExportRenaming: true,
+      flags: { ...mockFlags, enableDataExportRenaming: true },
     })(mockedExportData);
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
       mockedExportData,
       mockedGetDecryptedAnswers,
+      { ...mockFlags, enableDataExportRenaming: true },
       undefined,
-      true,
     );
 
     checkCommonActions(true);
@@ -173,13 +182,13 @@ describe('exportDataSucceed', () => {
   test('exportDecryptedDataSucceed: check actions with default data with new naming', async () => {
     await exportDecryptedDataSucceed({
       suffix: '-test',
-      enableDataExportRenaming: true,
+      flags: { ...mockFlags, enableDataExportRenaming: true },
     })(mockedDecryptedExportData);
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
       mockedDecryptedExportData,
+      { ...mockFlags, enableDataExportRenaming: true },
       undefined,
-      true,
     );
 
     checkCommonActions(true);
@@ -196,6 +205,7 @@ describe('exportDataSucceed', () => {
     await exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '',
+      flags: mockFlags,
     })(mockedExportData);
 
     checkExportTemplateDefaultData();
@@ -213,6 +223,7 @@ describe('exportDataSucceed', () => {
     );
     await exportDecryptedDataSucceed({
       suffix: '',
+      flags: mockFlags,
     })(mockedDecryptedExportData);
 
     checkExportTemplateDefaultData();
