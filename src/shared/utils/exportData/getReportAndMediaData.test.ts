@@ -235,7 +235,10 @@ describe('getReportAndMediaData', () => {
     test('should return filtered out array with items without empty answers', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      const result = getReportData([], rawAnswersObject, decryptedAnswers);
+      const result = getReportData([], rawAnswersObject, decryptedAnswers, {
+        enableDataExportRenaming: false,
+        enableSubscaleNullWhenSkipped: false,
+      });
       expect(result).toEqual([
         {
           id: undefined,
@@ -284,7 +287,10 @@ describe('getReportAndMediaData', () => {
       );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      const result = getReportData([], rawAnswersObject, decryptedAnswers);
+      const result = getReportData([], rawAnswersObject, decryptedAnswers, {
+        enableDataExportRenaming: false,
+        enableSubscaleNullWhenSkipped: false,
+      });
       expect(result).toEqual([
         {
           activity_flow_submission_id: '',
@@ -404,14 +410,10 @@ describe('getReportAndMediaData', () => {
         mockedDecryptedAnswersWithSubscales,
         (item) => item.activityItem.name,
       );
-      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      const result = getReportData(
-        [],
-        rawAnswersObject,
-        mockedDecryptedAnswersWithSubscales,
-        false,
-      );
+      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales, {
+        enableDataExportRenaming: false,
+        enableSubscaleNullWhenSkipped: false,
+      });
       expect(result).toEqual([
         {
           'Final SubScale Score': 5,
@@ -610,9 +612,10 @@ describe('getReportAndMediaData', () => {
         mockedDecryptedAnswersWithSubscales,
         (item) => item.activityItem.name,
       );
-      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales, true);
+      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales, {
+        enableDataExportRenaming: true,
+        enableSubscaleNullWhenSkipped: false,
+      });
       expect([result[0], result[1]]).toEqual([
         {
           target_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
@@ -649,10 +652,10 @@ describe('getReportAndMediaData', () => {
           item_response_options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
           item_response: 'value: 2',
           item_response_status: 'completed',
-          'Final SubScale Score': 5,
-          'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
-          'ss-1': 5,
-          'ss-2': 6,
+          activity_score: 5,
+          activity_score_lookup_text: 'Description #2 for range 4~20',
+          'subscale_name_ss-1': 5,
+          'subscale_name_ss-2': 6,
           rawScore: 9,
         },
         {
