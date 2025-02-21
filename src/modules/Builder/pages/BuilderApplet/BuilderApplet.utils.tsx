@@ -788,7 +788,7 @@ const formatTime = (hours: number, minutes: number) => {
   return `${formattedHours}:${formattedMinutes}`;
 };
 
-const formatDate = (dateValue: string) => {
+const parseDate = (dateValue: string) => {
   const date = dateValue ? parseISO(dateValue) : undefined;
 
   return date;
