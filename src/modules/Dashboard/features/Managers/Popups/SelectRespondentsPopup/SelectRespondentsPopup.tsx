@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
-import { users, workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
+import { workspaces } from 'redux/modules';
+import { useGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
@@ -22,13 +22,17 @@ export const SelectRespondentsPopup = ({
 }: SelectRespondentsPopupProps) => {
   const name = `${firstName} ${lastName}`;
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useAllRespondentsData();
+
+  const { data: respondentsData } = useGetWorkspaceRespondentsQuery(
+    { params: { appletId, ownerId } },
+    { skip: !ownerId },
+  );
+
   const respondents = useMemo(
     () =>
-      respondentsData?.result?.reduce(
+      respondentsData?.result.reduce(
         (acc: Respondent[], { nicknames, secretIds, isAnonymousRespondent, details }) => {
           if (!isAnonymousRespondent) {
             acc.push({
@@ -59,17 +63,6 @@ export const SelectRespondentsPopup = ({
 
     onClose(selectedRespondents);
   };
-
-  useEffect(() => {
-    if (!ownerId) return;
-
-    const { getAllWorkspaceRespondents } = users.thunk;
-    dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
-      }),
-    );
-  }, [ownerId]);
 
   useEffect(() => {
     if (!respondents?.length) return;
