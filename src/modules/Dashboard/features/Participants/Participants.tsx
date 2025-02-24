@@ -296,16 +296,14 @@ export const Participants = () => {
     shouldRefetch && handleReload();
   };
 
-  const editRespondentOnClose = (shouldRefetch: boolean) => {
+  const editRespondentOnClose = () => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+  const removeRespondentAccessOnClose = () => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
   const handleUpgradeAccountPopupClose = (shouldRefetch?: boolean) => {
