@@ -5,7 +5,7 @@ import { UserSelectableParticipantTag } from 'shared/consts';
 export type AddParticipantPopupProps = {
   popupVisible: boolean;
   appletId: string | null;
-  onClose?: (shouldRefetch: boolean) => void;
+  onClose?: () => void;
   'data-testid': string;
 };
 

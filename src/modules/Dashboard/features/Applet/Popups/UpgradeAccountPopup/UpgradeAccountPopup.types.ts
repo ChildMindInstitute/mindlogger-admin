@@ -5,7 +5,7 @@ export type UpgradeAccountPopupProps = {
   popupVisible: boolean;
   appletId: string | null;
   subjectId: string;
-  onClose?: (shouldRefetch: boolean) => void;
+  onClose?: () => void;
   'data-testid'?: string;
 } & ParticipantSnippetInfo;
 

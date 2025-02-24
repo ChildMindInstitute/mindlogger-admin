@@ -290,10 +290,9 @@ export const Participants = () => {
     updateSubjectsPin({ ownerId, userId: subjectId });
   };
 
-  const addParticipantOnClose = (shouldRefetch: boolean) => {
+  const addParticipantOnClose = () => {
     handleToggleAddParticipant();
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
   };
 
   const editRespondentOnClose = () => {
@@ -306,10 +305,9 @@ export const Participants = () => {
     setChosenAppletData(null);
   };
 
-  const handleUpgradeAccountPopupClose = (shouldRefetch?: boolean) => {
+  const handleUpgradeAccountPopupClose = () => {
     setInvitationPopupVisible(false);
     setParticipantDetails(null);
-    shouldRefetch && handleReload();
   };
 
   const formatRow = (user: ParticipantWithDataAccess): Row => {
