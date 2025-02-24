@@ -3,7 +3,7 @@ import { Avatar as MuiAvatar, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { GetAppletsParams, getWorkspaceInfoApi, getWorkspaceManagersApi } from 'api';
+import { GetAppletsParams, getWorkspaceInfoApi } from 'api';
 import {
   ActionsMenu,
   Avatar,
@@ -29,18 +29,17 @@ import {
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, StyledMaybeEmpty, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
+import { useLazyGetWorkspaceManagersQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { AddManagerPopup, ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
-import { ManagersActions, ManagersData } from './Managers.types';
+import { ManagersActions } from './Managers.types';
 import { getManagerActions, getHeadCells } from './Managers.utils';
 
 export const Managers = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
-  const [managersData, setManagersData] = useState<ManagersData | null>(null);
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const dataTestId = 'dashboard-managers';
 
   const rolesData = workspaces.useRolesData();
@@ -53,21 +52,14 @@ export const Managers = () => {
   // Coordinators can add reviewers for other participants
   const canAddReviewers = checkIfCanManageParticipants(roles);
 
-  const { execute } = useAsync(
-    getWorkspaceManagersApi,
-    (response) => {
-      setManagersData(response?.data || null);
-    },
-    undefined,
-    () => setIsLoading(false),
-  );
+  const [execute, { data: managersData, isLoading }] = useLazyGetWorkspaceManagersQuery();
+
   const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
     setWorkspaceInfo(res?.data?.result || null);
   });
 
   const getWorkspaceManagers = (args?: GetAppletsParams) => {
     if (!canViewTeam) return Promise.resolve();
-    setIsLoading(true);
 
     const ordering = args?.params.ordering ?? '+lastName,+firstName';
 
