@@ -1,6 +1,8 @@
 import { PreloadedState, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions } from '@testing-library/react';
 
+import { apiSlice } from 'shared/api/apiSlice';
+
 import { rootReducer } from './reducers';
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
@@ -18,7 +20,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
             /^calendarEvents\.(events\.data|processedEvents\.data\.eventsToShow)\.\d+\.end$/,
           ],
         },
-      }),
+      }).concat(apiSlice.middleware),
     preloadedState,
   });
 
