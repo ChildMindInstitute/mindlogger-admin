@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -17,12 +17,7 @@ import {
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import {
-  GetAppletsParams,
-  getWorkspaceRespondentsApi,
-  updateRespondentsPinApi,
-  updateSubjectsPinApi,
-} from 'api';
+import { GetAppletsParams, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import {
   checkIfCanManageParticipants,
@@ -36,6 +31,7 @@ import {
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
+import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 
 import {
   RespondentsTableHeader,
@@ -63,18 +59,12 @@ import {
   SendInvitationPopup,
   ViewParticipantPopup,
 } from './Popups';
-import { ParticipantsDataWithDataAccess } from '../Participants';
 
 export const Respondents = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
-
-  const [respondentsData, setRespondentsData] = useState<ParticipantsDataWithDataAccess | null>(
-    null,
-  );
-  const [isLoading, setIsLoading] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
@@ -84,18 +74,10 @@ export const Respondents = () => {
       : [...new Set(Object.values(rolesData.data || []).flat())];
   const canViewParticipants = checkIfCanViewParticipants(roles);
 
-  const { execute } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      setRespondentsData(response?.data || null);
-    },
-    undefined,
-    () => setIsLoading(false),
-  );
+  const [execute, { data: respondentsData, isLoading: isRespondentsLoading }] =
+    useLazyGetWorkspaceRespondentsQuery();
 
   const getWorkspaceRespondents = (args?: GetAppletsParams) => {
-    setIsLoading(true);
-
     // Always sort by pinned first
     const ordering = ['-isPinned'];
     ordering.push(args?.params.ordering ?? '+tags,+secretIds');
@@ -252,22 +234,17 @@ export const Respondents = () => {
     },
   };
 
-  const { execute: updateRespondentsPin } = useAsync(
+  const { execute: updateRespondentsPin, isLoading: isRespondentsPinLoading } = useAsync(
     updateRespondentsPinApi,
     handleReload,
-    undefined,
-    () => setIsLoading(false),
   );
 
-  const { execute: updateSubjectsPin } = useAsync(
+  const { execute: updateSubjectsPin, isLoading: isSubjectsPinLoading } = useAsync(
     updateSubjectsPinApi,
     handleReload,
-    undefined,
-    () => setIsLoading(false),
   );
 
   const handlePinClick = ({ respondentId, subjectId }: HandlePinClick) => {
-    setIsLoading(true);
     if (respondentId) {
       updateRespondentsPin({ ownerId, userId: respondentId });
 
@@ -423,13 +400,6 @@ export const Respondents = () => {
       [respondentsData, t],
     );
 
-  useEffect(
-    () => () => {
-      setRespondentsData(null);
-    },
-    [],
-  );
-
   const chosenRespondentsItems = respondentKey ? filteredRespondents[respondentKey] : undefined;
 
   const getAppletsSmallTable = (key: FilteredAppletsKey) =>
@@ -446,6 +416,8 @@ export const Respondents = () => {
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-respondents';
+
+  const isLoading = isRespondentsLoading || isRespondentsPinLoading || isSubjectsPinLoading;
 
   // If there are no roles available we're looking at our own empty workspace
   const showsForbiddenComponent = isForbidden || (roles.length && !canViewParticipants);
