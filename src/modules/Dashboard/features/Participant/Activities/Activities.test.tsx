@@ -4,7 +4,7 @@ import mockAxios, { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
@@ -20,6 +20,9 @@ import {
   mockedFullSubjectId1,
   mockedFullSubjectId2,
   mockedOwnerSubjectWithDataAccess,
+  mockedFullParticipant1WithDataAccess,
+  mockedFullParticipant2WithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -30,8 +33,6 @@ import {
 } from 'shared/utils/axios-mocks';
 import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   expectMixpanelTrack,
   openTakeNowModal,
@@ -115,9 +116,6 @@ const preloadedState: PreloadedState<RootState> = {
   ...getPreloadedState(),
   users: {
     respondentDetails: mockSchema(null),
-    allRespondents: mockSchema(null, {
-      status: 'idle',
-    }),
     subjectDetails: mockSchema({
       result: mockedOwnerSubjectWithDataAccess,
     }),
@@ -251,12 +249,17 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   describe('Take Now modal', () => {
-    const successfulGetAppletParticipantsMock = mockSuccessfulHttpResponse<ParticipantsData>({
-      result: [mockedFullParticipant1, mockedFullParticipant2, mockedOwnerParticipant],
-      count: 3,
-    });
+    const successfulGetAppletParticipantsMock =
+      mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
+        result: [
+          mockedFullParticipant1WithDataAccess,
+          mockedFullParticipant2WithDataAccess,
+          mockedOwnerParticipantWithDataAccess,
+        ],
+        count: 3,
+      });
 
-    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<ManagersData>({
+    const successfulGetAppletManagersMock = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
       result: [mockedOwnerManager],
       count: 1,
     });
@@ -283,8 +286,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         [getAppletSubjectActivitiesUrl]: successfulGetAppletSubjectActivitiesMock,
         [getWorkspaceRespondentsUrl]: (params) => {
           if (params.userId === mockedOwnerParticipant.id) {
-            return mockSuccessfulHttpResponse<ParticipantsData>({
-              result: [mockedOwnerParticipant],
+            return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
+              result: [mockedOwnerParticipantWithDataAccess],
               count: 1,
             });
           }
