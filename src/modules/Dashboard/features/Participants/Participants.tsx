@@ -6,12 +6,7 @@ import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboard
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Search, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
-import {
-  GetAppletsParams,
-  getWorkspaceRespondentsApi,
-  updateRespondentsPinApi,
-  updateSubjectsPinApi,
-} from 'api';
+import { GetAppletsParams, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import {
   checkIfCanManageParticipants,
@@ -32,6 +27,7 @@ import {
   ParticipantTagChip,
 } from 'modules/Dashboard/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
@@ -50,7 +46,6 @@ import {
   ParticipantActionProps,
   SetDataForAppletPage,
   ParticipantActions,
-  ParticipantsDataWithDataAccess,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
 import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
@@ -64,11 +59,6 @@ export const Participants = () => {
   const timeAgo = useTimeAgo();
   const { featureFlags } = useFeatureFlags();
   const [showActivityAssign, setShowActivityAssign] = useState(false);
-
-  const [respondentsData, setRespondentsData] = useState<ParticipantsDataWithDataAccess | null>(
-    null,
-  );
-  const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
@@ -98,18 +88,10 @@ export const Participants = () => {
     );
   };
 
-  const { execute } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      setRespondentsData(response?.data || null);
-    },
-    undefined,
-    () => setIsLoading(false),
-  );
+  const [execute, { data: respondentsData, isLoading: isRespondentsLoading }] =
+    useLazyGetWorkspaceRespondentsQuery();
 
   const getWorkspaceRespondents = (args?: GetAppletsParams) => {
-    setIsLoading(true);
-
     // Always sort by pinned first
     const ordering = ['-isPinned'];
     ordering.push(args?.params.ordering ?? '+tags,+secretIds');
@@ -275,12 +257,17 @@ export const Participants = () => {
     },
   };
 
-  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload);
+  const { execute: updateRespondentsPin, isLoading: isRespondentsPinLoading } = useAsync(
+    updateRespondentsPinApi,
+    handleReload,
+  );
 
-  const { execute: updateSubjectsPin } = useAsync(updateSubjectsPinApi, handleReload);
+  const { execute: updateSubjectsPin, isLoading: isSubjectsPinLoading } = useAsync(
+    updateSubjectsPinApi,
+    handleReload,
+  );
 
   const handlePinClick = ({ respondentId, subjectId }: HandlePinClick) => {
-    setIsLoading(true);
     if (respondentId) {
       updateRespondentsPin({ ownerId, userId: respondentId });
 
@@ -491,6 +478,8 @@ export const Participants = () => {
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const dataTestId = 'dashboard-participants';
   const canAddParticipant = appletId && checkIfCanManageParticipants(roles);
+
+  const isLoading = isRespondentsLoading || isRespondentsPinLoading || isSubjectsPinLoading;
 
   if (isForbidden || !canViewParticipants) return noPermissionsComponent;
 
