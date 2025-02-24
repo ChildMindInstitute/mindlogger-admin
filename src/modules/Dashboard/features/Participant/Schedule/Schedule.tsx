@@ -10,56 +10,46 @@ import { applets, users } from 'modules/Dashboard/state';
 import { Spinner } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
-import { Participant } from 'modules/Dashboard/types';
 import { usePermissions } from 'shared/hooks';
 import { checkIfHasAccessToSchedule } from 'modules/Dashboard/features/Applet/Schedule/Schedule.utils';
 import { ScheduleProvider } from 'modules/Dashboard/features/Applet/Schedule/ScheduleProvider';
 import { getRespondentName } from 'shared/utils';
+import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 
 export const ParticipantSchedule = () => {
   const { appletId } = useParams();
-  const { getAllWorkspaceRespondents } = users.thunk;
   const { getEvents } = applets.thunk;
   const { ownerId } = workspaces.useData() || {};
   const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { result: respondentsData } = users.useAllRespondentsData() || {};
-  const { result: subjectData } = users.useSubject() ?? {};
+  const [getWorkspaceRespondents, { data: respondentsData, isLoading: isRespondentsLoading }] =
+    useLazyGetWorkspaceRespondentsQuery();
+  const subject = users.useSubject();
+  const userId = subject?.result?.userId;
 
-  const allRespondentsLoadingStatus = users.useAllRespondentsStatus();
   const dispatch = useAppDispatch();
   const preparedEvents = usePreparedEvents(appletData);
   const subjectLoadingStatus = users.useSubjectStatus();
   const isLoading =
-    allRespondentsLoadingStatus === 'idle' ||
-    allRespondentsLoadingStatus === 'loading' ||
-    subjectLoadingStatus === 'idle' ||
-    subjectLoadingStatus === 'loading';
+    isRespondentsLoading || subjectLoadingStatus === 'idle' || subjectLoadingStatus === 'loading';
 
-  const selectedRespondent = useMemo(
-    () =>
-      respondentsData?.find(({ secretIds }) =>
-        subjectData ? secretIds.includes(subjectData?.secretUserId) : false,
-      ) ?? ({} as Participant),
-    [respondentsData, subjectData],
-  );
+  const selectedRespondent = useMemo(() => respondentsData?.result[0], [respondentsData]);
 
-  const { details, id: userId } = selectedRespondent ?? {};
-  const respondentDetails = details?.[0] ?? {};
-  const { respondentSecretId, hasIndividualSchedule, respondentNickname } = respondentDetails;
+  const { respondentSecretId, hasIndividualSchedule, respondentNickname } =
+    selectedRespondent?.details[0] ?? {};
   const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
   const respondentName = getRespondentName(respondentSecretId || '', respondentNickname);
 
   useEffect(() => {
-    if (!appletId || !ownerId || !hasAccess) return;
+    if (!appletId || !ownerId || !userId || !hasAccess) return;
 
-    dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId, shell: false } }));
-  }, [appletId, dispatch, getAllWorkspaceRespondents, hasAccess, ownerId]);
+    getWorkspaceRespondents({ params: { ownerId, appletId, userId } });
+  }, [appletId, dispatch, getWorkspaceRespondents, hasAccess, ownerId, userId]);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
-    if (!appletId || !ownerId || !hasAccess) return;
+    if (!appletId || !ownerId || !userId || !hasAccess) return;
 
-    return dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId, shell: false } }));
+    return getWorkspaceRespondents({ params: { ownerId, appletId, userId } });
   });
 
   useEffect(() => {
