@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Activity, applet, workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, useFeatureFlags } from 'shared/hooks';
@@ -16,7 +16,6 @@ import {
 } from 'shared/utils';
 import {
   ActivityAssignmentStatus,
-  getAppletActivitiesApi,
   getAppletParticipantActivitiesMetadataApi,
   ParticipantActivityOrFlow,
   ParticipantActivityOrFlowMetadata,
@@ -32,6 +31,7 @@ import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeN
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 import { SubjectDetails } from 'modules/Dashboard/types';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { GetActionsMenuParams, UseAssignmentsTabProps } from './AssignmentsTab.types';
 
@@ -67,12 +67,13 @@ export const useAssignmentsTab = ({
   // TODO: We only call getAppletActivitiesApi because we need full items data for each activity.
   // Remove this and associated effect below after supportedPlatforms prop is returned by API.
   // https://mindlogger.atlassian.net/browse/M2-7906
-  const { execute: fetchActivities, value: fetchedActivities } = useAsync(getAppletActivitiesApi, {
-    retainValue: true,
-  });
+  const { data: fetchedActivities } = useGetAppletActivitiesQuery(
+    { params: { appletId: appletId as string } },
+    { skip: !appletId },
+  );
 
   const activities: Activity[] = useMemo(
-    () => fetchedActivities?.data?.result.activitiesDetails ?? [],
+    () => fetchedActivities?.activitiesDetails ?? [],
     [fetchedActivities],
   );
 
@@ -94,12 +95,6 @@ export const useAssignmentsTab = ({
       ),
     [metadata?.data.result.activitiesOrFlows],
   );
-
-  useEffect(() => {
-    if (!appletId) return;
-
-    fetchActivities({ params: { appletId } });
-  }, [appletId, fetchActivities]);
 
   const handleCloseDrawer = (shouldRefetch?: boolean) => {
     setShowActivityAssign(false);
