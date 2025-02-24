@@ -1,8 +1,9 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import { ApiErrorResponse, ApiErrorReturn } from 'shared/state/Base';
 
-type ErrorData = Error | AxiosError<ApiErrorResponse> | unknown;
+type ErrorData = Error | AxiosError<ApiErrorResponse> | FetchBaseQueryError | unknown;
 
 export const isError = (error: unknown): error is Error => error instanceof Error;
 
@@ -15,6 +16,10 @@ export const getErrorData = (error: ErrorData) => {
     return error;
   } else if (typeof error === 'object') {
     const err = error as AxiosResponse;
+
+    if (err?.data?.result?.length) {
+      return err?.data?.result[0];
+    }
 
     return err?.data;
   }
