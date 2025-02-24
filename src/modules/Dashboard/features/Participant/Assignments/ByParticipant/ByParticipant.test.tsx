@@ -167,9 +167,6 @@ const preloadedState: (role?: Roles) => PreloadedState<RootState> = (role) => ({
   ...getPreloadedState(role),
   users: {
     respondentDetails: mockSchema(null),
-    allRespondents: mockSchema(null, {
-      status: 'idle',
-    }),
     subjectDetails: mockSchema({
       result: mockedOwnerSubjectWithDataAccess,
     }),

@@ -4,7 +4,12 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
 import userEvent from '@testing-library/user-event';
 
-import { ApiResponseCodes, ParticipantActivityOrFlow } from 'api';
+import {
+  ApiResponseCodes,
+  ParticipantActivityOrFlow,
+  WorkspaceManagersResponse,
+  WorkspaceRespondentsResponse,
+} from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
@@ -12,15 +17,16 @@ import {
   mockParticipantActivities,
   mockedAppletData,
   mockedAppletId,
-  mockedLimitedParticipant,
   mockedLimitedSubject,
   mockedOwnerId,
   mockedOwnerManager,
   mockedOwnerParticipant,
   mockedOwnerSubject,
-  mockedFullParticipant1,
   mockedFullSubject1,
   mockedOwnerSubjectWithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
+  mockedFullParticipant1WithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -31,8 +37,6 @@ import {
 } from 'shared/utils/axios-mocks';
 import { RootState } from 'redux/store';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features/Managers';
 import {
   openTakeNowModal,
   sourceSubjectDropdownTestId,
@@ -83,9 +87,6 @@ const preloadedState: PreloadedState<RootState> = {
   ...getPreloadedState(),
   users: {
     respondentDetails: mockSchema(null),
-    allRespondents: mockSchema(null, {
-      status: 'idle',
-    }),
     subjectDetails: mockSchema({
       result: mockedOwnerSubjectWithDataAccess,
     }),
@@ -186,20 +187,20 @@ describe('useAssignmentsTab hook', () => {
       [GET_APPLET_ACTIVITIES_URL]: successfulGetAppletActivitiesMock,
       [GET_WORKSPACE_RESPONDENTS_URL]: ({ userId }) => {
         const respondents = [
-          mockedOwnerParticipant,
-          mockedFullParticipant1,
-          mockedLimitedParticipant,
+          mockedOwnerParticipantWithDataAccess,
+          mockedFullParticipant1WithDataAccess,
+          mockedLimitedParticipantWithDataAccess,
         ];
         const filteredRespondents = userId
           ? respondents.filter((r) => r.id === userId)
           : respondents;
 
-        return mockSuccessfulHttpResponse<ParticipantsData>({
+        return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
           result: filteredRespondents,
           count: filteredRespondents.length,
         });
       },
-      [GET_WORKSPACE_MANAGERS_URL]: mockSuccessfulHttpResponse<ManagersData>({
+      [GET_WORKSPACE_MANAGERS_URL]: mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
         result: [mockedOwnerManager],
         count: 1,
       }),
