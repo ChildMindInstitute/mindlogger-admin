@@ -6,8 +6,8 @@ import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks/useAsync';
-import { applets, users } from 'modules/Dashboard/state';
-import { workspaces } from 'shared/state';
+import { applets } from 'modules/Dashboard/state';
+import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
 
 import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
 import { Steps } from './RemoveIndividualSchedule.types';
@@ -25,8 +25,6 @@ export const RemoveIndividualSchedulePopup = ({
   const { t } = useTranslation();
   const [step, setStep] = useState<Steps>(0);
   const dispatch = useAppDispatch();
-  const { getAllWorkspaceRespondents } = users.thunk;
-  const { ownerId } = workspaces.useData() || {};
 
   const { execute, error, isLoading } = useAsync(removeIndividualEventsApi, () => {
     if (!appletId || !userId) return;
@@ -45,13 +43,10 @@ export const RemoveIndividualSchedulePopup = ({
   const handleRemovedScheduleClose = () => {
     onClose();
 
-    if (!appletId || !ownerId) return;
-
-    dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId, shell: false },
-      }),
-    );
+    // Refresh current user after deleting schedule to update the hasIndividualSchedule flag.
+    // TODO: When removeIndividualEventsApi has been migrated to RTK Query and configured to
+    // invalidate the associated user, this can be removed:
+    dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'User', id: userId }]));
   };
 
   const screens = getScreens({

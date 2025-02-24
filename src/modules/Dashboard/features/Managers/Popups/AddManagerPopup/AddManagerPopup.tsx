@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { EmptyState, Modal, Spinner } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { Roles } from 'shared/consts';
+import { MAX_LIMIT, Roles } from 'shared/consts';
 import {
   Mixpanel,
   MixpanelProps,
@@ -16,8 +16,7 @@ import {
 } from 'shared/utils';
 import { ApiLanguages } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks';
-import { banners, users, workspaces } from 'redux/modules';
+import { banners, workspaces } from 'redux/modules';
 import {
   useCreateInvitationMutation,
   useGetWorkspaceRespondentsQuery,
@@ -43,22 +42,31 @@ export const AddManagerPopup = ({
   const isWorkspaceNameVisible = !!workspaceInfo && !workspaceInfo.hasManagers;
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useAllRespondentsData();
-  const participants = (respondentsData?.result ?? []).map(({ details }) => {
-    const {
-      subjectId,
-      respondentSecretId: secretId,
-      respondentNickname: nickname,
-      subjectTag: tag,
-    } = details[0];
 
-    return {
-      subjectId,
-      secretId,
-      nickname,
-      tag,
-    };
-  });
+  const { data: participants, isLoading: isLoadingParticipants } = useGetWorkspaceRespondentsQuery(
+    { params: { appletId: appletId as string, ownerId, limit: MAX_LIMIT } },
+    {
+      skip: !appletId,
+      selectFromResult: ({ data, ...rest }) => ({
+        data: (data?.result ?? []).map(({ details }) => {
+          const {
+            subjectId,
+            respondentSecretId: secretId,
+            respondentNickname: nickname,
+            subjectTag: tag,
+          } = details[0];
+
+          return {
+            subjectId,
+            secretId,
+            nickname,
+            tag,
+          };
+        }),
+        ...rest,
+      }),
+    },
+  );
 
   const defaults = {
     ...defaultValues(appletRoles),
@@ -94,7 +102,7 @@ export const AddManagerPopup = ({
 
   const resetForm = () => reset(defaults);
 
-  const [createInvitation, { error, isLoading }] =
+  const [createInvitation, { error, isLoading: isLoadingInvitation }] =
     useCreateInvitationMutation();
 
   const handleSubmitForm = async (values: AddManagerFormValues) => {
@@ -156,18 +164,6 @@ export const AddManagerPopup = ({
   });
 
   useEffect(() => {
-    if (!ownerId || !appletId) return;
-
-    const { getAllWorkspaceRespondents } = users.thunk;
-
-    dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
-      }),
-    );
-  }, [ownerId, appletId, dispatch]);
-
-  useEffect(() => {
     if (role === Roles.Reviewer) {
       register(Fields.participants, { value: [] });
     } else {
@@ -183,6 +179,8 @@ export const AddManagerPopup = ({
       unregister(Fields.workspaceName);
     }
   }, [isWorkspaceNameVisible]);
+
+  const isLoading = isLoadingParticipants || isLoadingInvitation;
 
   if (
     !appletRoles ||
