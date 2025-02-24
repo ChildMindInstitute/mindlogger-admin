@@ -20,22 +20,6 @@ export const users = {
   thunk,
   slice,
   actions: slice.actions,
-  useAllRespondentsData: (): UsersSchema['allRespondents']['data'] =>
-    useAppSelector(
-      ({
-        users: {
-          allRespondents: { data },
-        },
-      }) => data,
-    ),
-  useAllRespondentsStatus: (): UsersSchema['allRespondents']['status'] =>
-    useAppSelector(
-      ({
-        users: {
-          allRespondents: { status },
-        },
-      }) => status,
-    ),
   useRespondent: (): UsersSchema['respondentDetails']['data'] | undefined =>
     useAppSelector(
       ({
