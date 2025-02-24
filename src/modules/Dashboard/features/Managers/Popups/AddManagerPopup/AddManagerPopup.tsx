@@ -14,10 +14,14 @@ import {
   isManagerOrOwner,
   MixpanelEventType,
 } from 'shared/utils';
-import { ApiLanguages, postAppletInvitationApi } from 'api';
+import { ApiLanguages } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners, users, workspaces } from 'redux/modules';
+import {
+  useCreateInvitationMutation,
+  useGetWorkspaceRespondentsQuery,
+} from 'modules/Dashboard/api/apiSlice';
 
 import { USER_ALREADY_INVITED, defaultValues } from './AddManagerPopup.const';
 import { AddManagerPopupSchema } from './AddManagerPopup.schema';
@@ -82,40 +86,18 @@ export const AddManagerPopup = ({
   const dispatch = useAppDispatch();
   const [hasCommonError, setHasCommonError] = useState(false);
 
-  const handleClose = (shouldRefetch = false) => {
+  const handleClose = () => {
     resetForm();
     setHasCommonError(false);
-    onClose?.(shouldRefetch);
+    onClose?.();
   };
 
   const resetForm = () => reset(defaults);
 
-  const {
-    error,
-    execute: createInvitation,
-    isLoading,
-  } = useAsync(postAppletInvitationApi, async ({ data }) => {
-    const { firstName, lastName, title, role } = data.result ?? {};
+  const [createInvitation, { error, isLoading }] =
+    useCreateInvitationMutation();
 
-    dispatch(
-      banners.actions.addBanner({
-        key: 'AddParticipantSuccessBanner',
-        bannerProps: {
-          id: `${firstName} ${lastName}${title ? `, ${title}` : ''}`,
-        },
-      }),
-    );
-
-    Mixpanel.track({
-      action: MixpanelEventType.TeamMemberInvitedSuccessfully,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.Roles]: [role],
-    });
-
-    handleClose(true);
-  });
-
-  const handleSubmitForm = (values: AddManagerFormValues) => {
+  const handleSubmitForm = async (values: AddManagerFormValues) => {
     if (!appletId) return;
 
     const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
@@ -126,7 +108,7 @@ export const AddManagerPopup = ({
       [MixpanelProps.Roles]: [role],
     });
 
-    createInvitation({
+    const response = await createInvitation({
       url: role === Roles.Reviewer ? 'reviewer' : 'managers',
       appletId,
       options: {
@@ -136,6 +118,27 @@ export const AddManagerPopup = ({
         ...rest,
       },
     });
+
+    if ('data' in response) {
+      const { firstName, lastName, title, role } = response.data.result ?? {};
+
+      dispatch(
+        banners.actions.addBanner({
+          key: 'AddParticipantSuccessBanner',
+          bannerProps: {
+            id: `${firstName} ${lastName}${title ? `, ${title}` : ''}`,
+          },
+        }),
+      );
+
+      Mixpanel.track({
+        action: MixpanelEventType.TeamMemberInvitedSuccessfully,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Roles]: [String(role)],
+      });
+
+      handleClose();
+    }
   };
 
   useFormError({
@@ -189,9 +192,9 @@ export const AddManagerPopup = ({
       <Modal
         open={popupVisible}
         width="73.6"
-        onClose={() => handleClose(false)}
+        onClose={handleClose}
         title={t('addTeamMember')}
-        onSubmit={() => handleClose(false)}
+        onSubmit={handleClose}
         buttonText={t('back')}
         data-testid={`${dataTestid}-add-manager-popup`}
       >
@@ -206,7 +209,7 @@ export const AddManagerPopup = ({
     <Modal
       open={popupVisible}
       width="73.6"
-      onClose={() => handleClose(false)}
+      onClose={handleClose}
       onBackdropClick={null}
       onSubmit={handleSubmit(handleSubmitForm)}
       title={t('addTeamMember')}

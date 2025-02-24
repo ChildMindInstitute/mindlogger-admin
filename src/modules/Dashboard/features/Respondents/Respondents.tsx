@@ -287,10 +287,9 @@ export const Respondents = () => {
     setChosenAppletData(null);
   };
 
-  const handleInvitationPopupClose = (shouldReFetch?: boolean) => {
+  const handleInvitationPopupClose = () => {
     setInvitationPopupVisible(false);
     setRespondentEmail(null);
-    shouldReFetch && handleReload();
   };
 
   const formatRow = (user: Participant): Row => {

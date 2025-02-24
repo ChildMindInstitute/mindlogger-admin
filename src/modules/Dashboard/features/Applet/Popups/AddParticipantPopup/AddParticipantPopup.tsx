@@ -9,11 +9,15 @@ import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/style
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { MixpanelProps, Mixpanel, getErrorMessage, MixpanelEventType } from 'shared/utils';
-import { ApiLanguages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
+import { ApiLanguages } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+import {
+  apiDashboardSlice,
+  useCreateInvitationMutation,
+  useCreateShellAccountMutation,
+} from 'modules/Dashboard/api/apiSlice';
 
 import {
   RESPONDENT_ALREADY_INVITED,
@@ -60,62 +64,21 @@ export const AddParticipantPopup = ({
   const [hasCommonError, setHasCommonError] = useState(false);
   const [publicLinkDialogOpen, setPublicLinkDialogOpen] = useState(false);
   const [hasPublicLink, setHasPublicLink] = useState(false);
-  const [refetchOnClose, setRefetchOnClose] = useState(false);
 
-  const handleClose = (shouldRefetch = false) => {
+  const handleClose = () => {
     resetForm();
     setHasCommonError(false);
-    onClose?.(shouldRefetch);
+    onClose?.();
   };
 
   const resetForm = () => reset({ ...defaults, accountType });
 
-  const {
-    error: invitationError,
-    execute: createInvitation,
-    isLoading: isInvitationLoading,
-  } = useAsync(postAppletInvitationApi, async ({ data }) => {
-    dispatch(
-      banners.actions.addBanner({
-        key: 'AddParticipantSuccessBanner',
-        bannerProps: {
-          accountType: AccountType.Full,
-          id: data?.result?.secretUserId,
-        },
-      }),
-    );
+  const [createInvitation, { error: invitationError, isLoading: isInvitationLoading }] =
+    useCreateInvitationMutation();
 
-    Mixpanel.track({
-      action: MixpanelEventType.FullAccountInvitationCreated,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
-    });
+  const [createShellAccount, { error: shellAccountError, isLoading: isShellAccountLoading }] =
+    useCreateShellAccountMutation();
 
-    handleClose(true);
-  });
-  const {
-    error: shellAccountError,
-    execute: createShellAccount,
-    isLoading: isShellAccountLoading,
-  } = useAsync(postAppletShellAccountApi, async ({ data }) => {
-    dispatch(
-      banners.actions.addBanner({
-        key: 'AddParticipantSuccessBanner',
-        bannerProps: {
-          accountType: AccountType.Limited,
-          id: data?.result?.secretUserId,
-        },
-      }),
-    );
-
-    Mixpanel.track({
-      action: MixpanelEventType.LimitedAccountCreated,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.Tag]: data?.result?.tag || null, // Normalize empty string tag to null
-    });
-
-    handleClose(true);
-  });
   const isLoading = isInvitationLoading || isShellAccountLoading;
 
   const handleNext = () => {
@@ -123,7 +86,7 @@ export const AddParticipantPopup = ({
     resetForm();
   };
 
-  const handleSubmitForm = (values: AddParticipantFormValues) => {
+  const handleSubmitForm = async (values: AddParticipantFormValues) => {
     if (!appletId) return;
 
     const { email, nickname, tag, ...rest } = values;
@@ -135,7 +98,7 @@ export const AddParticipantPopup = ({
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
 
-      createInvitation({
+      const response = await createInvitation({
         url: 'respondent',
         appletId,
         options: {
@@ -148,6 +111,26 @@ export const AddParticipantPopup = ({
           ...rest,
         },
       });
+
+      if ('data' in response) {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'AddParticipantSuccessBanner',
+            bannerProps: {
+              accountType: AccountType.Full,
+              id: response.data.result?.secretUserId,
+            },
+          }),
+        );
+
+        Mixpanel.track({
+          action: MixpanelEventType.FullAccountInvitationCreated,
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.Tag]: response.data.result?.tag || null, // Normalize empty string tag to null
+        });
+
+        handleClose();
+      }
     } else {
       Mixpanel.track({
         action: MixpanelEventType.AddLimitedAccountFormSubmitted,
@@ -155,7 +138,7 @@ export const AddParticipantPopup = ({
         [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
       });
 
-      createShellAccount({
+      const response = await createShellAccount({
         appletId,
         options: {
           email: email || null,
@@ -164,6 +147,26 @@ export const AddParticipantPopup = ({
           ...rest,
         },
       });
+
+      if ('data' in response) {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'AddParticipantSuccessBanner',
+            bannerProps: {
+              accountType: AccountType.Limited,
+              id: response.data?.result?.secretUserId,
+            },
+          }),
+        );
+
+        Mixpanel.track({
+          action: MixpanelEventType.LimitedAccountCreated,
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.Tag]: response.data?.result?.tag || null, // Normalize empty string tag to null
+        });
+
+        handleClose();
+      }
     }
   };
 
@@ -199,7 +202,7 @@ export const AddParticipantPopup = ({
             hasActions={false}
             open={popupVisible && !publicLinkDialogOpen}
             width="73.6"
-            onClose={() => handleClose(refetchOnClose)}
+            onClose={handleClose}
             onBackdropClick={null}
             footer={
               <StyledFlexEnd sx={{ width: '100%' }}>
@@ -243,8 +246,8 @@ export const AddParticipantPopup = ({
             onClose={(shouldRefetch = false) => {
               setPublicLinkDialogOpen(false);
 
-              if (!refetchOnClose) {
-                setRefetchOnClose(shouldRefetch);
+              if (shouldRefetch) {
+                dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'Subject', id: 'LIST' }]));
               }
             }}
           />
@@ -256,7 +259,7 @@ export const AddParticipantPopup = ({
         <Modal
           open={popupVisible}
           width="73.6"
-          onClose={() => handleClose(refetchOnClose)}
+          onClose={handleClose}
           onBackdropClick={null}
           onSubmit={handleSubmit(handleSubmitForm)}
           title={t(isFullAccount ? 'fullAccount' : 'limitedAccount')}
