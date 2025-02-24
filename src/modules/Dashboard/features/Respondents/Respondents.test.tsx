@@ -215,15 +215,14 @@ describe('Respondents component tests', () => {
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
-        {
+        expect.objectContaining({
           params: {
             limit: 20,
             page: 1,
             search: mockedSearchValue,
             ordering: '-isPinned,+tags',
           },
-          signal: undefined,
-        },
+        }),
       );
     });
   });
