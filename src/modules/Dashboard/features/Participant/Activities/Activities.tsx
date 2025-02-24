@@ -2,12 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import {
-  AssignedActivity,
-  AssignedActivityFlow,
-  getAppletActivitiesApi,
-  getAppletSubjectActivitiesApi,
-} from 'api';
+import { AssignedActivity, AssignedActivityFlow, getAppletSubjectActivitiesApi } from 'api';
 import { useAsync, useEncryptionStorage, useFeatureFlags } from 'shared/hooks';
 import {
   ActivityActionProps,
@@ -28,6 +23,7 @@ import { checkIfCanAccessData, Mixpanel, MixpanelEventType, MixpanelProps } from
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { TEAM_MEMBER_ROLES } from 'shared/consts';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
@@ -59,11 +55,10 @@ export const Activities = () => {
     featureFlags: { enableActivityAssign },
   } = useFeatureFlags();
 
-  const {
-    execute: fetchActivities,
-    isLoading: isLoadingActivities,
-    value: fetchedActivities,
-  } = useAsync(getAppletActivitiesApi, { retainValue: true });
+  const { data: fetchedActivities, isLoading: isLoadingActivities } = useGetAppletActivitiesQuery(
+    { params: { appletId: appletId as string } },
+    { skip: !appletId },
+  );
 
   const {
     execute: fetchAssignedActivities,
@@ -72,7 +67,7 @@ export const Activities = () => {
   } = useAsync(getAppletSubjectActivitiesApi, { retainValue: true });
 
   const flows: AssignedActivityFlow[] = useMemo(
-    () => fetchedActivities?.data?.result.appletDetail.activityFlows ?? [],
+    () => fetchedActivities?.appletDetail.activityFlows ?? [],
     [fetchedActivities],
   );
   const assignedFlows: AssignedActivityFlow[] = useMemo(
@@ -88,7 +83,7 @@ export const Activities = () => {
   );
 
   const activities: AssignedActivity[] = useMemo(
-    () => fetchedActivities?.data?.result.activitiesDetails ?? [],
+    () => fetchedActivities?.activitiesDetails ?? [],
     [fetchedActivities],
   );
   const assignedActivities: AssignedActivity[] = useMemo(
@@ -167,11 +162,10 @@ export const Activities = () => {
   useEffect(() => {
     if (!appletId || !subjectId) return;
 
-    fetchActivities({ params: { appletId } });
     if (enableActivityAssign) {
       fetchAssignedActivities({ appletId, subjectId });
     }
-  }, [appletId, enableActivityAssign, fetchActivities, fetchAssignedActivities, subjectId]);
+  }, [appletId, enableActivityAssign, fetchAssignedActivities, subjectId]);
 
   const formatActivities = useCallback(
     (activities: AssignedActivity[]) =>
@@ -321,7 +315,7 @@ export const Activities = () => {
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader
                 title={t('unassigned')}
-                count={unassignedFlows.length + unassignedActivities.length ?? 0}
+                count={unassignedFlows.length + unassignedActivities.length}
               />
 
               <FlowGrid
