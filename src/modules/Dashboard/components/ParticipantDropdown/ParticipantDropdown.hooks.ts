@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { DEFAULT_ROWS_PER_PAGE, Roles, TEAM_MEMBER_ROLES } from 'shared/consts';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { getWorkspaceRespondentsApi } from 'api';
-import { useAsync } from 'shared/hooks';
 import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
+import {
+  useGetWorkspaceRespondentsQuery,
+  useLazyGetWorkspaceRespondentsQuery,
+} from 'modules/Dashboard/api/apiSlice';
+import { WorkspaceRespondentsResponse } from 'api';
 
 import {
   ParticipantDropdownOption,
@@ -24,14 +26,7 @@ export const useParticipantDropdown = ({
   appletId,
   includePendingAccounts = false,
   skip = false,
-  successCallback,
-  errorCallback,
-  finallyCallback,
 }: UseParticipantDropdownProps) => {
-  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [loggedInTeamMember, setLoggedInTeamMember] = useState<ParticipantDropdownOption | null>(
-    null,
-  );
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
 
@@ -42,47 +37,36 @@ export const useParticipantDropdown = ({
     [includePendingAccounts],
   );
 
-  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const options = (response.data as ParticipantsData).result
-          .filter(isParticipantValid)
-          .map(participantToOption);
-
-        setAllParticipants(options);
-      }
-      successCallback?.(response);
+  const { data: participants, isLoading: isFetchingParticipants } = useGetWorkspaceRespondentsQuery(
+    { params: { appletId, ownerId, limit: 100 } },
+    {
+      skip,
+      selectFromResult: ({ data, ...rest }) => ({
+        data: data?.result ?? [],
+        ...rest,
+      }),
     },
-    errorCallback,
-    finallyCallback,
   );
 
-  const {
-    execute: fetchLoggedInTeamMember,
-    isLoading: isFetchingLoggedInTeamMember,
-    value: loggedInTeamMemberResponse,
-  } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const loggedInTeamMember = participantToOption(
-          (response.data as ParticipantsData).result[0],
-        );
-        setLoggedInTeamMember(loggedInTeamMember);
-        setAllParticipants((prev) => {
-          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-            return prev;
-          }
-
-          return [loggedInTeamMember, ...prev];
-        });
-      }
-      successCallback?.(response);
-    },
-    errorCallback,
-    finallyCallback,
+  const allParticipants = useMemo(
+    () => participants.filter(isParticipantValid).map(participantToOption),
+    [isParticipantValid, participants],
   );
+
+  const { data: loggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } =
+    useGetWorkspaceRespondentsQuery(
+      { params: { appletId, ownerId, userId: userData?.user.id, limit: 1 } },
+      {
+        skip,
+        selectFromResult: ({ data, ...rest }) => ({
+          data: data?.result.length ? participantToOption(data.result[0]) : null,
+          ...rest,
+        }),
+      },
+    );
+
+  // Lazy fetcher for search
+  const [fetchParticipants] = useLazyGetWorkspaceRespondentsQuery();
 
   const isTeamMember = useCallback(
     (roles: Roles[]): boolean => roles.some((role) => TEAM_MEMBER_ROLES.includes(role)),
@@ -110,7 +94,7 @@ export const useParticipantDropdown = ({
   );
 
   const fullAccountParticipantsOnly = useMemo(
-    () => participantsOnly.filter((participant) => !!participant.userId),
+    () => participantsOnly.filter(({ userId }) => !!userId),
     [participantsOnly],
   );
 
@@ -128,7 +112,7 @@ export const useParticipantDropdown = ({
       query: string,
       includedUserTypes: SearchResultUserTypes,
     ): Promise<ParticipantDropdownOption[]> => {
-      const response = await getWorkspaceRespondentsApi({
+      const response = await fetchParticipants({
         params: {
           ownerId,
           appletId,
@@ -138,68 +122,39 @@ export const useParticipantDropdown = ({
         },
       });
 
-      const participantsSearchResults = ((response?.data.result as Participant[]) ?? []).filter(
-        (participant) => {
-          if (participant.isAnonymousRespondent) return includedUserTypes.anonymousParticipant;
+      const participantsSearchResults = (
+        response?.data as WorkspaceRespondentsResponse
+      ).result.filter((participant) => {
+        if (participant.isAnonymousRespondent) return includedUserTypes.anonymousParticipant;
 
-          if (participant.status === ParticipantStatus.Pending) {
-            return includePendingAccounts && includedUserTypes.pendingInvitedParticipant;
-          }
+        if (participant.status === ParticipantStatus.Pending) {
+          return includePendingAccounts && includedUserTypes.pendingInvitedParticipant;
+        }
 
-          const participantAppletDetails = participant.details[0];
+        const participantAppletDetails = participant.details[0];
 
-          if (isTeamMember(participantAppletDetails.roles)) {
-            return includedUserTypes.team && isAllowedTeamMember(participantAppletDetails.roles);
-          }
+        if (isTeamMember(participantAppletDetails.roles)) {
+          return includedUserTypes.team && isAllowedTeamMember(participantAppletDetails.roles);
+        }
 
-          if (participantAppletDetails.roles.length === 0) {
-            return includedUserTypes.limitedParticipant;
-          }
+        if (participantAppletDetails.roles.length === 0) {
+          return includedUserTypes.limitedParticipant;
+        }
 
-          return includedUserTypes.fullParticipant;
-        },
-      );
+        return includedUserTypes.fullParticipant;
+      });
 
       return participantsSearchResults.map(participantToOption);
     },
-    [ownerId, appletId, isTeamMember, includePendingAccounts, isAllowedTeamMember],
+    [
+      fetchParticipants,
+      ownerId,
+      appletId,
+      isTeamMember,
+      includePendingAccounts,
+      isAllowedTeamMember,
+    ],
   );
-
-  useEffect(() => {
-    if (skip || !appletId) return;
-
-    if (allParticipants.length === 0 && !isFetchingParticipants) {
-      fetchParticipants({
-        params: {
-          ownerId,
-          appletId,
-          limit: 100,
-        },
-      });
-    }
-
-    if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
-      fetchLoggedInTeamMember({
-        params: {
-          ownerId,
-          appletId,
-          userId: userData.user.id,
-          limit: 1,
-        },
-      });
-    }
-  }, [
-    appletId,
-    ownerId,
-    userData,
-    allParticipants,
-    loggedInTeamMemberResponse,
-    isFetchingParticipants,
-    isFetchingLoggedInTeamMember,
-    fetchParticipants,
-    fetchLoggedInTeamMember,
-    skip,
-  ]);
 
   const isLoading = isFetchingParticipants || isFetchingLoggedInTeamMember;
 
