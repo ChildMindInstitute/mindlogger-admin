@@ -18,13 +18,13 @@ export const StyledPinButton = styled(Button, shouldForwardProp)`
   :focus {
     background: ${variables.palette.on_surface_variant_alfa8};
 
-    svg {
+    && svg {
       fill: ${({ isPinned = false }: { isPinned?: boolean }) =>
         isPinned ? variables.palette.on_surface_variant : variables.palette.outline_variant};
     }
   }
 
-  svg {
+  && svg {
     fill: ${({ isPinned = false }: { isPinned?: boolean }) =>
       isPinned ? variables.palette.on_surface_variant : variables.palette.surface_variant};
   }
