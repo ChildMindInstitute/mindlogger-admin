@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 import * as yup from 'yup';
+import { parseISO } from 'date-fns';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -44,7 +45,6 @@ import {
   getTextBetweenBrackets,
   INTERVAL_SYMBOL,
   isSystemItem,
-  parseDateToMidnightUTC,
   Path,
   pluck,
 } from 'shared/utils';
@@ -788,8 +788,8 @@ const formatTime = (hours: number, minutes: number) => {
   return `${formattedHours}:${formattedMinutes}`;
 };
 
-const formatDate = (dateValue: string) => {
-  const date = dateValue ? parseDateToMidnightUTC(dateValue) : undefined;
+const parseDate = (dateValue: string) => {
+  const date = dateValue ? parseISO(dateValue) : undefined;
 
   return date;
 };
@@ -801,7 +801,7 @@ const getConditionPayload = (item: Item, condition: Condition) => {
 
     return {
       ...conditionPayload,
-      date: formatDate(conditionPayload.date),
+      date: parseDate(conditionPayload.date),
     };
   }
   if (DATE_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
@@ -809,8 +809,8 @@ const getConditionPayload = (item: Item, condition: Condition) => {
 
     return {
       ...conditionPayload,
-      minDate: formatDate(conditionPayload.minDate),
-      maxDate: formatDate(conditionPayload.maxDate),
+      minDate: parseDate(conditionPayload.minDate),
+      maxDate: parseDate(conditionPayload.maxDate),
     };
   }
   if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
