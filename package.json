@@ -6,7 +6,8 @@
     "node": "18.x"
   },
   "dependencies": {
-    "@datadog/browser-rum": "^5.35.1",
+    "@datadog/browser-logs": "^6.3.0",
+    "@datadog/browser-rum": "^6.3.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.1",

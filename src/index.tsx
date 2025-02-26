@@ -3,35 +3,48 @@ import ReactDOM from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
 import { datadogRum } from '@datadog/browser-rum';
+import { datadogLogs } from '@datadog/browser-logs'
+
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
-// import { isUat } from './shared/utils/env';
+import { isDev, isProduction } from './shared/utils/env';
 
-// eslint-disable-next-line no-constant-condition
-// if (isUat || true) {
-datadogRum.init({
-  applicationId: process.env.REACT_APP_DD_APP_ID as string,
+datadogLogs.init({
   clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN as string,
-  // `site` refers to the Datadog site parameter of your organization
-  // see https://docs.datadoghq.com/getting_started/site/
   site: 'datadoghq.com',
-  service: 'mindlogger-admin',
-  env: 'uat',
-  // Specify a version number to identify the deployed version of your application in Datadog
-  version: process.env.REACT_APP_DD_VERSION,
+  forwardErrorsToLogs: true,
   sessionSampleRate: 100,
-  sessionReplaySampleRate: 20,
-  defaultPrivacyLevel: 'mask',
-  trackResources: true,
-  trackLongTasks: true,
-  trackUserInteractions: true,
-  allowedTracingUrls: ['http://localhost:3000'],
+  service: 'mindlogger-admin',
+  env: process.env.REACT_APP_ENV,
+  version: process.env.REACT_APP_DD_VERSION,
 });
-// }
+
+if (isDev || isProduction) {
+  datadogRum.init({
+    applicationId: process.env.REACT_APP_DD_APP_ID as string,
+    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN as string,
+    // `site` refers to the Datadog site parameter of your organization
+    // see https://docs.datadoghq.com/getting_started/site/
+    site: 'datadoghq.com',
+    service: 'mindlogger-admin',
+    env: process.env.REACT_APP_ENV,
+    // Specify a version number to identify the deployed version of your application in Datadog
+    version: process.env.REACT_APP_DD_VERSION,
+    sessionSampleRate: 100,
+    sessionReplaySampleRate: 20,
+    defaultPrivacyLevel: 'mask',
+    trackResources: true,
+    trackLongTasks: true,
+    trackUserInteractions: false,
+    allowedTracingUrls: (process.env.REACT_APP_DD_TRACING_URLS as string)
+      .split(',')
+      .map((it: string) => it.trim()),
+  });
+}
 
 Sentry.init({
   dsn: process.env.REACT_APP_DSN || '',
