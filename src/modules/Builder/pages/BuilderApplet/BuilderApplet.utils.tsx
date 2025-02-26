@@ -801,7 +801,7 @@ const getConditionPayload = (item: Item, condition: Condition) => {
 
     return {
       ...conditionPayload,
-      date: formatDate(conditionPayload.date),
+      date: parseDate(conditionPayload.date),
     };
   }
   if (DATE_INTERVAL_CONDITION_TYPES.includes(conditionType)) {
@@ -809,8 +809,8 @@ const getConditionPayload = (item: Item, condition: Condition) => {
 
     return {
       ...conditionPayload,
-      minDate: formatDate(conditionPayload.minDate),
-      maxDate: formatDate(conditionPayload.maxDate),
+      minDate: parseDate(conditionPayload.minDate),
+      maxDate: parseDate(conditionPayload.maxDate),
     };
   }
   if (TIME_SINGLE_CONDITION_TYPES.includes(conditionType)) {
