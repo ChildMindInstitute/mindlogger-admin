@@ -6,7 +6,19 @@ import { TEAM_MEMBER_ROLES } from 'shared/consts';
 import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 
 export const participantToOption = (participant: Participant): ParticipantDropdownOption => {
-  const stringNicknames = joinWihComma(participant.nicknames, true);
+  const isTeamMember = participant.details[0].roles.some((role) =>
+    TEAM_MEMBER_ROLES.includes(role),
+  );
+
+  let stringNicknames = joinWihComma(participant.nicknames, true);
+  // Due to a BE bug, for certain edge cases, it's possible for Team Members to lack nicknames; if
+  // so, fall back to full name (which is what the BE should be doing consistently).
+  if (!stringNicknames && isTeamMember) {
+    stringNicknames = joinWihComma(
+      participant.details.map((d) => `${d.subjectFirstName} ${d.subjectLastName}`),
+      true,
+    );
+  }
   const stringSecretIds = joinWihComma(participant.secretIds, true);
 
   return {
@@ -15,7 +27,7 @@ export const participantToOption = (participant: Participant): ParticipantDropdo
     secretId: stringSecretIds,
     nickname: stringNicknames,
     tag: participant.details[0].subjectTag,
-    isTeamMember: participant.details[0].roles.some((role) => TEAM_MEMBER_ROLES.includes(role)),
+    isTeamMember,
     roles: participant.details[0].roles,
   };
 };
