@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
 import { datadogRum } from '@datadog/browser-rum';
-import { datadogLogs } from '@datadog/browser-logs'
-
+import { datadogLogs } from '@datadog/browser-logs';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
