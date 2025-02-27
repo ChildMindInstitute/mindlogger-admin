@@ -40,6 +40,7 @@ import {
   SingleSelectItem,
   SliderItem,
   SubscaleSetting,
+  TextItem,
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
 import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
@@ -761,6 +762,7 @@ export const mockedSingleSelectFormValues: Omit<
     randomizeOptions: false,
     autoAdvance: false,
     portraitLayout: false,
+    responseDataIdentifier: false,
   },
 };
 
@@ -1218,6 +1220,7 @@ export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType
     },
     autoAdvance: false,
     portraitLayout: false,
+    responseDataIdentifier: false,
   },
   name: 'single_text_score',
   isHidden: false,
@@ -1552,9 +1555,9 @@ export const mockedSliderRowsActivityItem = {
   id: '9361e8b1-2fd8-42b3-8f28-a3d7150334bb',
 };
 
-export const mockedTextActivityItem = {
+export const mockedTextActivityItem: TextItem<ItemFormValuesCommonType> = {
   question: 'text',
-  responseType: 'text',
+  responseType: ItemResponseType.Text,
   responseValues: null,
   config: {
     removeBackButton: false,
@@ -1565,11 +1568,9 @@ export const mockedTextActivityItem = {
     numericalResponseRequired: false,
     responseDataIdentifier: false,
     responseRequired: false,
-    isIdentifier: null,
   },
   name: 'text',
   isHidden: false,
-  conditionalLogic: null,
   allowEdit: true,
   id: '5bad6e4a-7035-4ddd-9c54-375604025a1f',
 };
@@ -2462,6 +2463,7 @@ export const mockedItemsSettingsForSubscale: Item[] = [
       },
       autoAdvance: false,
       portraitLayout: false,
+      responseDataIdentifier: false,
     },
     name: 'single',
     isHidden: false,
@@ -2581,6 +2583,7 @@ export const mockedItemsSettingsForSubscale: Item[] = [
       },
       autoAdvance: false,
       portraitLayout: false,
+      responseDataIdentifier: false,
     },
     name: 'gender_screen',
     isHidden: false,
@@ -2654,6 +2657,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
         },
         autoAdvance: false,
         portraitLayout: false,
+        responseDataIdentifier: false,
       },
       name: 'single',
       isHidden: false,
@@ -2890,6 +2894,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
         },
         autoAdvance: false,
         portraitLayout: false,
+        responseDataIdentifier: false,
       },
       name: 'gender_screen',
       isHidden: false,

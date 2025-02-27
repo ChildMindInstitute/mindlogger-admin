@@ -56,6 +56,7 @@ const activityItems = {
           textInputRequired: false,
         },
         autoAdvance: false,
+        responseDataIdentifier: false,
       },
       name: 'single',
       isHidden: false,
@@ -261,6 +262,7 @@ const item = {
             textInputRequired: false,
           },
           autoAdvance: false,
+          responseDataIdentifier: false,
         },
         name: 'single',
         isHidden: false,
@@ -418,6 +420,7 @@ const allSubscalesToRenderFirstSubscaleResult = {
               },
             ],
           },
+          responseDataIdentifier: false,
         },
         answers: [
           {
@@ -549,6 +552,7 @@ const allSubscalesToRenderFinalResult = {
               },
             ],
           },
+          responseDataIdentifier: false,
         },
         answers: [
           {
@@ -717,6 +721,7 @@ describe('Subscales.utils', () => {
             textInputRequired: false,
           },
           autoAdvance: false,
+          responseDataIdentifier: false,
         },
         name: 'ss',
         isHidden: false,
@@ -1011,6 +1016,7 @@ describe('Subscales.utils', () => {
                 },
               ],
             },
+            responseDataIdentifier: false,
           },
           answers: [
             {
@@ -1097,6 +1103,7 @@ describe('Subscales.utils', () => {
                 },
               ],
             },
+            responseDataIdentifier: false,
           },
           answers: [
             {
@@ -1194,6 +1201,7 @@ describe('Subscales.utils', () => {
                   question: {
                     en: 'ss',
                   },
+                  responseDataIdentifier: false,
                   responseType: 'singleSelect',
                   responseValues: {
                     options: [
@@ -1281,6 +1289,7 @@ describe('Subscales.utils', () => {
                   question: {
                     en: 'ss',
                   },
+                  responseDataIdentifier: false,
                   responseType: 'singleSelect',
                   responseValues: {
                     options: [

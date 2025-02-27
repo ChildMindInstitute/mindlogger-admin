@@ -18,7 +18,11 @@ import {
 } from 'shared/styles';
 import { IntegrationTypes } from 'shared/consts';
 
-import { StyledLink, StyledLorisIntegration, StyledStatusChip } from './LorisIntegration.styles';
+import {
+  StyledLink,
+  StyledIntegration,
+  StyledStatusChip,
+} from '../../IntegrationsListSetting.styles';
 import { ConfigurationPopup } from './ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup';
 import { UploadPopup } from './UploadPopup';
@@ -72,7 +76,7 @@ export const LorisIntegration = () => {
 
   return (
     <FormProvider {...methods}>
-      <StyledLorisIntegration data-testid="loris-integration">
+      <StyledIntegration data-testid="loris-integration">
         <Box>
           <Svg width={94} height={94} id="loris-integration" />
         </Box>
@@ -152,7 +156,7 @@ export const LorisIntegration = () => {
             </Button>
           )}
         </StyledFlexAllCenter>
-      </StyledLorisIntegration>
+      </StyledIntegration>
       {isConfigurationPopupVisible && (
         <ConfigurationPopup
           open={isConfigurationPopupVisible}

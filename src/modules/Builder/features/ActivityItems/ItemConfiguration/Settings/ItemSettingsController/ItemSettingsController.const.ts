@@ -21,6 +21,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
         ItemConfigurationSettings.PortraitLayout,
+        ItemConfigurationSettings.HasResponseDataIdentifier,
       ],
     },
     {

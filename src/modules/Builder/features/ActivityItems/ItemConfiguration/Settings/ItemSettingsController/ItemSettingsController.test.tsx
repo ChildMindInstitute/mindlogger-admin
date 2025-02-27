@@ -140,6 +140,7 @@ const mockedSettingsByType = {
     ItemConfigurationSettings.HasColorPalette,
     ItemConfigurationSettings.HasTooltips,
     ItemConfigurationSettings.PortraitLayout,
+    ItemConfigurationSettings.HasResponseDataIdentifier,
     ItemConfigurationSettings.HasTextInput,
     ItemConfigurationSettings.IsTextInputRequired,
     ItemConfigurationSettings.HasTimer,
