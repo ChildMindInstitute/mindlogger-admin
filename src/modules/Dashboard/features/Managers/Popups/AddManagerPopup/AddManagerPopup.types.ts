@@ -5,7 +5,7 @@ import { Roles } from 'shared/consts';
 export type AddManagerPopupProps = {
   popupVisible: boolean;
   appletId: string | null;
-  onClose?: (shouldRefetch: boolean) => void;
+  onClose?: () => void;
   workspaceInfo: WorkspaceInfo | null;
   'data-testid'?: string;
 };

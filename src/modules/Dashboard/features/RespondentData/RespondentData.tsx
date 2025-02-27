@@ -10,10 +10,10 @@ import { Activity, ActivityFlow, users, workspaces } from 'redux/modules';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { HydratedActivityFlow } from 'modules/Dashboard/types';
 import { getEntityKey } from 'shared/utils';
-import { useAsync, useEncryptionStorage } from 'shared/hooks';
-import { getAppletActivitiesApi } from 'api';
+import { useEncryptionStorage } from 'shared/hooks';
 import { UnlockAppletPopup } from 'modules/Dashboard/features/Respondents/Popups/UnlockAppletPopup';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 import { RespondentsDataFormValues } from './RespondentData.types';
@@ -35,10 +35,14 @@ export const RespondentData = () => {
   const { useAppletData } = appletState;
   const { result: appletData } = useAppletData() ?? {};
 
-  const { execute: getActivitiesAndFlows, isLoading, value } = useAsync(getAppletActivitiesApi);
+  const { data, isLoading } = useGetAppletActivitiesQuery(
+    { params: { appletId: appletId as string } },
+    { skip: !appletId },
+  );
+
   const activityOrFlow = useMemo((): Activity | HydratedActivityFlow | undefined => {
-    const activities: Activity[] = value?.data?.result?.activitiesDetails ?? [];
-    const activityFlows: ActivityFlow[] = value?.data?.result?.appletDetail?.activityFlows ?? [];
+    const activities: Activity[] = data?.activitiesDetails ?? [];
+    const activityFlows: ActivityFlow[] = data?.appletDetail?.activityFlows ?? [];
 
     if (activityId) {
       return activities.find((activity) => getEntityKey(activity) === activityId);
@@ -49,7 +53,7 @@ export const RespondentData = () => {
 
       return flow && hydrateActivityFlows([flow], activities)[0];
     }
-  }, [value, activityId, activityFlowId]);
+  }, [data, activityId, activityFlowId]);
 
   const { useSubject } = users;
   const { result: subject } = useSubject() ?? {};
@@ -60,12 +64,6 @@ export const RespondentData = () => {
   });
 
   const canViewData = hasPermissionToViewData(appletRoles) && hasEncryptionCheck;
-
-  useEffect(() => {
-    if (appletId) {
-      getActivitiesAndFlows({ params: { appletId } });
-    }
-  }, [appletId, getActivitiesAndFlows]);
 
   useEffect(() => {
     if (!hasEncryptionCheck) {

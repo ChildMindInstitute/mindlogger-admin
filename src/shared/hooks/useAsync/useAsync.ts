@@ -14,6 +14,11 @@ import {
 /**
  * Utility hook to handle async operations with loading state, error state, and callbacks.
  *
+ * @deprecated This is legacy code used for handling API calls, but notably lacks caching support
+ * and uses awkward syntax that requires bulky code in components. From now on, please use RTK Query
+ * querying and mutation functions, found in `apiSlice.ts` files corresponding to each module.
+ * Use of this hook is now discouraged and existing usage will be replaced over time.
+ *
  * @param asyncFunction Async function to be called
  * @param options Options object with the following properties:
  * - `successCallback`: Callback to be called on success

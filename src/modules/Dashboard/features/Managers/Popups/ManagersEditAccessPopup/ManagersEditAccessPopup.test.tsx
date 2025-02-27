@@ -9,9 +9,9 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedOwnerId,
-  mockedFullSubjectId1,
-  mockedFullSubjectId2,
   mockedUserData,
+  mockedFullParticipant1,
+  mockedFullParticipant2,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -55,45 +55,11 @@ const preloadedState = {
       },
     },
   },
-  users: {
-    allRespondents: {
-      data: {
-        result: [
-          {
-            id: '429fe361-478b-49f0-b681-d476eaec5c52',
-            nicknames: ['John Doe'],
-            secretIds: ['66947648-8eea-4106-9081-4b66117ef2e6'],
-            isAnonymousRespondent: false,
-            details: [
-              {
-                appletId: mockedAppletId,
-                appletDisplayName: 'Mock Applet',
-                accessId: 'f49a8aa2-bc9c-46cc-a9b5-03f191d908a2',
-                respondentNickname: 'John Doe',
-                respondentSecretId: '66947648-8eea-4106-9081-4b66117ef2e6',
-                subjectId: mockedFullSubjectId1,
-              },
-            ],
-          },
-          {
-            id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
-            nicknames: ['Sam Carter'],
-            secretIds: ['78ec50c9-cac8-46fe-9232-352c4c561a33'],
-            isAnonymousRespondent: false,
-            details: [
-              {
-                appletId: mockedAppletId,
-                appletDisplayName: 'Mock Applet',
-                accessId: '71d4840d-ab38-4b88-a65e-417918d8d329',
-                respondentNickname: 'Sam Carter',
-                respondentSecretId: '78ec50c9-cac8-46fe-9232-352c4c561a33',
-                subjectId: mockedFullSubjectId2,
-              },
-            ],
-          },
-        ],
-      },
-    },
+};
+
+const mockedRespondents = {
+  data: {
+    result: [mockedFullParticipant1, mockedFullParticipant2],
   },
 };
 
@@ -221,7 +187,7 @@ describe('EditAccessPopup component', () => {
       ),
     ).toBeInTheDocument();
 
-    mockAxios.get.mockResolvedValue(preloadedState.users.allRespondents);
+    mockAxios.get.mockResolvedValue(mockedRespondents);
 
     const editRole = screen.getByTestId(`${dataTestid}-access-edit-role`);
     expect(editRole).toBeInTheDocument();

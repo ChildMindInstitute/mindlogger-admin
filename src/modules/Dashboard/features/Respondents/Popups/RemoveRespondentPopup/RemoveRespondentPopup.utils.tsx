@@ -105,8 +105,6 @@ export const getScreens = ({
   removeAccess,
   onClose,
 }: ScreensParams): Screen[] => {
-  const onCloseHandler = () => onClose(true);
-
   const getResultScreen = (
     getSuccessScreen: GetScreen,
     getErrorScreen: GetScreen,
@@ -118,8 +116,8 @@ export const getScreens = ({
           buttonText: 'ok',
           hasSecondBtn: false,
           title,
-          submitForm: onCloseHandler,
-          onClose: onCloseHandler,
+          submitForm: onClose,
+          onClose,
         }
       : {
           component: getErrorScreen(respondentName, appletName),
