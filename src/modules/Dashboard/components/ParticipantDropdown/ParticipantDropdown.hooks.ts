@@ -3,11 +3,9 @@ import { useCallback, useMemo } from 'react';
 import { DEFAULT_ROWS_PER_PAGE, Roles, TEAM_MEMBER_ROLES } from 'shared/consts';
 import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
-import {
-  useGetWorkspaceRespondentsQuery,
-  useLazyGetWorkspaceRespondentsQuery,
-} from 'modules/Dashboard/api/apiSlice';
+import { apiDashboardSlice, useGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 import { WorkspaceRespondentsResponse } from 'api';
+import { useAppDispatch } from 'redux/store';
 
 import {
   ParticipantDropdownOption,
@@ -29,6 +27,7 @@ export const useParticipantDropdown = ({
 }: UseParticipantDropdownProps) => {
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
+  const dispatch = useAppDispatch();
 
   const isParticipantValid = useCallback(
     (r: Participant) =>
@@ -37,36 +36,27 @@ export const useParticipantDropdown = ({
     [includePendingAccounts],
   );
 
-  const { data: participants, isLoading: isFetchingParticipants } = useGetWorkspaceRespondentsQuery(
-    { params: { appletId, ownerId, limit: 100 } },
-    {
-      skip,
-      selectFromResult: ({ data, ...rest }) => ({
-        data: data?.result ?? [],
-        ...rest,
-      }),
-    },
-  );
+  const { data: participantsData, isLoading: isFetchingParticipants } =
+    useGetWorkspaceRespondentsQuery({ params: { appletId, ownerId, limit: 100 } }, { skip });
+  const participants = useMemo(() => participantsData?.result ?? [], [participantsData]);
 
   const allParticipants = useMemo(
     () => participants.filter(isParticipantValid).map(participantToOption),
     [isParticipantValid, participants],
   );
 
-  const { data: loggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } =
+  const { data: loggedInTeamMemberData, isLoading: isFetchingLoggedInTeamMember } =
     useGetWorkspaceRespondentsQuery(
       { params: { appletId, ownerId, userId: userData?.user.id, limit: 1 } },
-      {
-        skip,
-        selectFromResult: ({ data, ...rest }) => ({
-          data: data?.result.length ? participantToOption(data.result[0]) : null,
-          ...rest,
-        }),
-      },
+      { skip },
     );
-
-  // Lazy fetcher for search
-  const [fetchParticipants] = useLazyGetWorkspaceRespondentsQuery();
+  const loggedInTeamMember = useMemo(
+    () =>
+      loggedInTeamMemberData?.result.length
+        ? participantToOption(loggedInTeamMemberData.result[0])
+        : null,
+    [loggedInTeamMemberData],
+  );
 
   const isTeamMember = useCallback(
     (roles: Roles[]): boolean => roles.some((role) => TEAM_MEMBER_ROLES.includes(role)),
@@ -112,15 +102,22 @@ export const useParticipantDropdown = ({
       query: string,
       includedUserTypes: SearchResultUserTypes,
     ): Promise<ParticipantDropdownOption[]> => {
-      const response = await fetchParticipants({
-        params: {
-          ownerId,
-          appletId,
-          search: query,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          shell: includedUserTypes.limitedParticipant,
-        },
-      });
+      // Use imperative RTK Query API to avoid unnecessary re-renders, which is problematic for
+      // TakeNowModal in particular because of how it's recreated each time the useTakeNow hook
+      // needs to re-run, resulting in a very jarring modal refresh with form state completely lost.
+      // At some point TakeNowModal should be defined separately from useTakeNow to gracefully
+      // accommodate possible re-renders.
+      const response = await dispatch(
+        apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
+          params: {
+            ownerId,
+            appletId,
+            search: query,
+            limit: DEFAULT_ROWS_PER_PAGE,
+            shell: includedUserTypes.limitedParticipant,
+          },
+        }),
+      );
 
       const participantsSearchResults = (
         response?.data as WorkspaceRespondentsResponse
@@ -146,14 +143,7 @@ export const useParticipantDropdown = ({
 
       return participantsSearchResults.map(participantToOption);
     },
-    [
-      fetchParticipants,
-      ownerId,
-      appletId,
-      isTeamMember,
-      includePendingAccounts,
-      isAllowedTeamMember,
-    ],
+    [dispatch, ownerId, appletId, isTeamMember, includePendingAccounts, isAllowedTeamMember],
   );
 
   const isLoading = isFetchingParticipants || isFetchingLoggedInTeamMember;
