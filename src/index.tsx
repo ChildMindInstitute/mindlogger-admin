@@ -34,7 +34,7 @@ if (isDev || isProduction) {
     // Specify a version number to identify the deployed version of your application in Datadog
     version: process.env.REACT_APP_DD_VERSION,
     sessionSampleRate: 100,
-    sessionReplaySampleRate: 20,
+    sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask',
     trackResources: true,
     trackLongTasks: true,
