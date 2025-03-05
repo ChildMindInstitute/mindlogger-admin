@@ -734,6 +734,8 @@
   "hideBadge": "Cacher le badge",
   "hideBadgeTooltip": "L'identifiant du Flux d'Activité sera caché aux participants",
   "hideFromCalendar": "Cacher dans le calendrier",
+  "hideSkipped": "Masquer les réponses ignorées",
+  "hideSkippedTooltip": "Ce filtre persiste pour cet applet jusqu'à la déconnexion.",
   "htmlPreview": "Aperçu HTML",
   "idleTime": "Temps d'inactivité",
   "if": "Si",

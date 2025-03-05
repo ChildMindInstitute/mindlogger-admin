@@ -734,6 +734,8 @@
   "hideBadge": "Hide badge",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",
   "hideFromCalendar": "Hide from calendar",
+  "hideSkipped": "Hide skipped answers",
+  "hideSkippedTooltip": "This filter persists for this applet until logout.",
   "htmlPreview": "Html preview",
   "idleTime": "Idle time",
   "if": "If",
