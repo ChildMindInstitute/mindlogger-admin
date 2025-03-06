@@ -149,7 +149,8 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !subjectId) return;
+    const activityOrFlowId = activityId || activityFlowId;
+    if (!appletId || !subjectId || !activityOrFlowId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
@@ -159,6 +160,7 @@ export const RespondentDataReview = () => {
       targetSubjectId: subjectId,
       fromDate,
       toDate,
+      activityOrFlowId,
     });
   };
 
