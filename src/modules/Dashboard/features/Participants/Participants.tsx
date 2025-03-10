@@ -260,7 +260,7 @@ export const Participants = () => {
       const { invitation } = context || {};
       if (!invitation?.key) return;
 
-      const url = new URL(`invitation/${invitation.key}`, `${process.env.REACT_APP_WEB_URI}/`);
+      const url = new URL(`invitation/${invitation.key}`, `${import.meta.env.REACT_APP_WEB_URI}/`);
       navigator.clipboard.writeText(url.toString());
     },
   };

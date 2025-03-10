@@ -2,12 +2,15 @@ import { MixpanelEvent } from 'shared/utils/mixpanel/mixpanel.types';
 
 import { isProduction, isStaging, isUat, isDev } from '../env';
 
-const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
-const isJest = !!process.env.JEST_WORKER_ID;
+const PROJECT_TOKEN = import.meta.env.REACT_APP_MIXPANEL_TOKEN;
+const isJest = !!import.meta.env.JEST_WORKER_ID;
 const shouldEnableMixpanel =
   PROJECT_TOKEN &&
   !isJest &&
-  (isProduction || isStaging || isUat || process.env.REACT_APP_MIXPANEL_FORCE_ENABLE === 'true');
+  (isProduction ||
+    isStaging ||
+    isUat ||
+    import.meta.env.REACT_APP_MIXPANEL_FORCE_ENABLE === 'true');
 
 export const Mixpanel = {
   init() {
@@ -38,7 +41,7 @@ export const Mixpanel = {
         mixpanel.identify(userId);
         mixpanel.people.set({
           'User ID': userId,
-          'App Build Number': process.env.REACT_APP_DEVELOP_BUILD_VERSION,
+          'App Build Number': import.meta.env.REACT_APP_DEVELOP_BUILD_VERSION,
         });
       });
     }
