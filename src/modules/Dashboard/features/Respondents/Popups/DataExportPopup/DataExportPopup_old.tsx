@@ -26,6 +26,9 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { workspaces } from 'shared/state';
+import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
+import { FlowItemHistoryExporter } from 'shared/utils/exportData/exporters/FlowItemHistoryExporter';
 
 import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -47,6 +50,7 @@ export const DataExportPopup = ({
   const { featureFlags } = useFeatureFlags();
   const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
+  const { ownerId } = workspaces.useData() ?? {};
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
@@ -105,21 +109,21 @@ export const DataExportPopup = ({
           toDate,
         };
         const firstPageResponse = await getExportDataApi(body);
-        const { result: firstPageData, count = 0 } = firstPageResponse.data;
-        const pageLimit = getExportPageAmount(count);
+        const { result: firstPageData, count: exportDataTotalCount = 0 } = firstPageResponse.data;
+        const exportDataPages = getExportPageAmount(exportDataTotalCount);
 
         await exportEncryptedDataSucceed({
           getDecryptedAnswers,
-          suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
+          suffix: exportDataPages > 1 ? getExportDataSuffix(1) : '',
           filters,
           flags: featureFlags,
         })(firstPageData);
 
-        if (pageLimit > 1) {
-          for (let page = 2; page <= pageLimit; page++) {
+        if (exportDataPages > 1) {
+          for (let page = 2; page <= exportDataPages; page++) {
             setRequestedPage({
               currentPage: page,
-              limit: pageLimit,
+              limit: exportDataPages,
             });
             const nextPageResponse = await getExportDataApi({
               ...body,
@@ -133,6 +137,26 @@ export const DataExportPopup = ({
               flags: featureFlags,
             })(nextPageData);
           }
+        }
+
+        if (featureFlags.enableEmaExtraFiles) {
+          if (ownerId) {
+            await new ScheduleHistoryExporter(ownerId).exportData({
+              appletId,
+              fromDate,
+              toDate,
+            });
+          } else {
+            console.warn(
+              `No owner ID found for current workspace. Schedule history export skipped.`,
+            );
+          }
+
+          await new FlowItemHistoryExporter(appletId).exportData({
+            appletId,
+            fromDate,
+            toDate,
+          });
         }
 
         handlePopupClose();

@@ -23,6 +23,7 @@ export const FeatureFlagsKeys = {
   enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
   enableDataExportRenaming: 'enableDataExportRenaming',
   enableSubscaleNullWhenSkipped: 'enableSubscaleNullWhenSkipped',
+  enableEmaExtraFiles: 'enableEmaExtraFiles',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
