@@ -3,6 +3,13 @@ import { AxiosError } from 'axios';
 
 import { authApiClient } from 'shared/api/apiConfig';
 import { IntegrationTypes } from 'shared/consts';
+import {
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+  ProlificConnectClickEvent,
+  ProlificConnectSuccessfulEvent,
+} from 'shared/utils';
 
 export const createProlificIntegration = async (apiToken: string, appletId?: string) => {
   try {
@@ -61,4 +68,17 @@ export const deleteProlificIntegration = async (appletId: string) => {
   if (response.status !== 204) {
     throw new Error('Failed to delete Prolific API Token');
   }
+};
+
+type ProlificEvent = ProlificConnectClickEvent | ProlificConnectSuccessfulEvent;
+type ProlificEventType =
+  | MixpanelEventType.ProlificConnectClick
+  | MixpanelEventType.ProlificConnectSuccessful;
+
+export const trackProlificEvent = (action: ProlificEventType, userId: string | null) => {
+  if (!userId) return;
+  const event: ProlificEvent = { action };
+  event[MixpanelProps.UserId] = userId;
+
+  Mixpanel.track(event);
 };
