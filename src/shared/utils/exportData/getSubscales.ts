@@ -104,7 +104,7 @@ export const calcScores = <T>(
 
     let value: number | null = null;
 
-    if ('options' in typedOptions && typedOptions.options.length) {
+    if (typedOptions && 'options' in typedOptions && typedOptions.options.length) {
       // Single & Multiple Select
       const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
         if (item.value !== undefined && item.score !== undefined) {
@@ -124,7 +124,7 @@ export const calcScores = <T>(
       } else {
         value = (answer && scoresObject[answer.value]) ?? null;
       }
-    } else if ('scores' in typedOptions && typedOptions.scores?.length) {
+    } else if (typedOptions && 'scores' in typedOptions && typedOptions.scores?.length) {
       // Slider
       const min = Number(typedOptions.minValue);
       const max = Number(typedOptions.maxValue);
