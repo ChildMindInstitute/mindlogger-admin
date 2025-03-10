@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MixpanelEventType } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
 import { IntegrationTypes } from 'shared/consts';
@@ -14,17 +15,19 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { getUserDetailsApi } from 'api';
 
 import { ConfigurationPopup } from './ConfigurationPopup/ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup/DisconnectionPopup';
 import { StyledLinkConfiguration } from './ProlificIntegration.styles';
-import { prolificIntegrationExists } from './ProlificIntegration.utils';
+import { prolificIntegrationExists, trackProlificEvent } from './ProlificIntegration.utils';
 import { StyledIntegration, StyledStatusChip } from '../../IntegrationsListSetting.styles';
 
 type ProlificIntegrationState = {
   apiTokenExists: boolean;
   isConfigurationPopupVisible: boolean;
   isDisconnectPopupVisible: boolean;
+  userId: string | null;
 };
 
 export const ProlificIntegration = () => {
@@ -42,14 +45,19 @@ type ProlificIntegrationAppletProps = {
 };
 
 const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps) => {
-  const [{ apiTokenExists, isConfigurationPopupVisible, isDisconnectPopupVisible }, setState] =
-    useState<ProlificIntegrationState>({
-      apiTokenExists: false,
-      isConfigurationPopupVisible: false,
-      isDisconnectPopupVisible: false,
-    });
+  const [
+    { apiTokenExists, isConfigurationPopupVisible, isDisconnectPopupVisible, userId },
+    setState,
+  ] = useState<ProlificIntegrationState>({
+    apiTokenExists: false,
+    isConfigurationPopupVisible: false,
+    isDisconnectPopupVisible: false,
+    userId: null,
+  });
 
   const handleConnect = () => {
+    trackProlificEvent(MixpanelEventType.ProlificConnectClick, userId);
+
     setState((prevState) => ({
       ...prevState,
       isConfigurationPopupVisible: true,
@@ -69,6 +77,8 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
 
   const updateAppletData = (newAppletData: SingleApplet) => {
     dispatch(updateApplet(newAppletData));
+
+    trackProlificEvent(MixpanelEventType.ProlificConnectSuccessful, userId);
   };
 
   useEffect(() => {
@@ -85,7 +95,16 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
       }));
     };
 
+    const getCurrentUser = async () => {
+      const user = await getUserDetailsApi();
+
+      if (user.data?.result) {
+        setState((prevState) => ({ ...prevState, userId: user.data.result.id }));
+      }
+    };
+
     checkProlificApiToken();
+    getCurrentUser();
   }, [appletData.id, appletData.integrations]);
 
   const { t } = useTranslation('app');

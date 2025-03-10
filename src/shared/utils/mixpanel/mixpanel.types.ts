@@ -5,6 +5,7 @@ export enum MixpanelProps {
   AppletId = 'Applet ID',
   ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
+  UserId = 'User ID',
   AverageItemsPerPhraseBuilder = 'Average Items per Phrase Builder',
   AverageLineBreaksPerPhraseBuilder = 'Average Line Breaks per Phrase Builder',
   AverageTextBoxesPerPhraseBuilder = 'Average Text Boxes per Phrase Builder',
@@ -99,6 +100,8 @@ export enum MixpanelEventType {
   ConfirmAssignActivityOrFlow = 'Confirm Assign Activity/Flow',
   StartUnassignActivityOrFlow = 'Start Unassign Activity/Flow',
   ConfirmUnassignActivityOrFlow = 'Confirm Unassign Activity/Flow',
+  ProlificConnectClick = 'Prolific Connect clicked',
+  ProlificConnectSuccessful = 'Prolific Connect successful',
 }
 
 export type MixpanelAppletSaveEventType =
@@ -126,6 +129,7 @@ export const MixpanelCalendarEvent = {
 } as const;
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
+type WithUserId<T> = T & { [MixpanelProps.UserId]?: string | null };
 
 export type WithFeature<T = object> = T & {
   [MixpanelProps.Feature]?: MixpanelFeature[];
@@ -479,6 +483,14 @@ export type ConfirmUnAssignActivityOrFlowEvent = WithAppletId<{
   [MixpanelProps.MultiInformantAssignmentCount]?: number;
 }>;
 
+export type ProlificConnectClickEvent = WithUserId<{
+  action: MixpanelEventType.ProlificConnectClick;
+}>;
+
+export type ProlificConnectSuccessfulEvent = WithUserId<{
+  action: MixpanelEventType.ProlificConnectSuccessful;
+}>;
+
 export type MixpanelEvent =
   | MixpanelInvitationSentEvent
   | LoginSuccessfulEvent
@@ -543,4 +555,6 @@ export type MixpanelEvent =
   | StartAssignActivityOrFlowEvent
   | ConfirmAssignActivityOrFlowEvent
   | StartUnassignActivityOrFlowEvent
-  | ConfirmUnAssignActivityOrFlowEvent;
+  | ConfirmUnAssignActivityOrFlowEvent
+  | ProlificConnectClickEvent
+  | ProlificConnectSuccessfulEvent;
