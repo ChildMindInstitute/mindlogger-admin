@@ -1,5 +1,5 @@
 import { config } from 'md-editor-rt';
-import emoji from 'markdown-it-emoji';
+import * as emojiPlugin from 'markdown-it-emoji';
 import sub from 'markdown-it-sub';
 import sup from 'markdown-it-sup';
 import deflist from 'markdown-it-deflist';
@@ -12,10 +12,9 @@ import container from 'markdown-it-container';
 import katex from 'markdown-it-katex-external';
 import miip from 'markdown-it-images-preview';
 import html5Embed from 'markdown-it-html5-embed';
-import markdownItImSize from 'markdown-it-imsize';
+import markdownItImSize from 'markdown-it-imsize/dist/markdown-it-imsize.js';
 
-import i18n from 'i18n';
-
+import i18n from '../../../i18n';
 import { LANGUAGE_BY_DEFAULT, VIDEO_LINK_REGEX } from './MarkDownEditor.const';
 
 const { t } = i18n;
@@ -77,7 +76,8 @@ config({
         typographer: true,
         quotes: '“”‘’',
       })
-      .use(emoji)
+      // @ts-expect-error - Type mismatch between markdown-it versions
+      .use(emojiPlugin.full)
       .use(taskLists)
       .use(sup)
       .use(sub)
