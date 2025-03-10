@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import React, { lazy, useEffect } from 'react';
 import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch } from 'redux/store';
@@ -19,7 +19,7 @@ import history from './history';
 const BaseLayout = lazy(() => import('shared/layouts/BaseLayout'));
 const AuthLayout = lazy(() => import('modules/Auth/layouts/AuthLayout'));
 
-export const AppRoutes = () => {
+const AppRoutes = () => {
   const token = authStorage.getAccessToken();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
@@ -61,3 +61,5 @@ export const AppRoutes = () => {
     </>
   );
 };
+
+export default AppRoutes;

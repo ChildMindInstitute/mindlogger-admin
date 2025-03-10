@@ -5,14 +5,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 
-import { store } from 'redux/store';
-import { theme } from 'shared/styles';
-import { Spinner } from 'shared/components';
-import { AppRoutes } from 'routes';
-import { ErrorFallback } from 'shared/components/ErrorFallback';
-import svgBuilder from 'shared/utils/svgBuilder';
-import { injectStoreToApiClient } from 'shared/api/api.client';
-import { FeatureFlags } from 'shared/utils/featureFlags';
+import { store } from './redux/store';
+import { theme } from './shared/styles';
+import { Spinner } from './shared/components';
+import AppRoutes from './routes';
+import { ErrorFallback } from './shared/components/ErrorFallback';
+import svgBuilder from './shared/utils/svgBuilder';
+import { injectStoreToApiClient } from './shared/api/api.client';
+import { FeatureFlags } from './shared/utils/featureFlags';
 
 // injecting store to avoid importing the store directly into other codebase files
 injectStoreToApiClient(store);
@@ -20,8 +20,13 @@ injectStoreToApiClient(store);
 const App = () => {
   useEffect(() => {
     (async () => {
-      const svgSprite = await import('svgSprite');
-      document.body.appendChild(svgBuilder(svgSprite.default));
+      try {
+        // In Vite, dynamic imports work differently than in CRA
+        const svgSprite = await import('./svgSprite');
+        document.body.appendChild(svgBuilder(svgSprite.default));
+      } catch (error) {
+        console.error('Error loading SVG sprite:', error);
+      }
     })();
   }, []);
 

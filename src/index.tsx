@@ -12,51 +12,51 @@ import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { isDev, isProduction } from './shared/utils/env';
 
-if (process.env.REACT_APP_DD_CLIENT_TOKEN) {
+if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
-    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN,
+    clientToken: import.meta.env.REACT_APP_DD_CLIENT_TOKEN as string,
     site: 'datadoghq.com',
     forwardErrorsToLogs: true,
     sessionSampleRate: 100,
     service: 'mindlogger-admin',
-    env: process.env.REACT_APP_ENV,
-    version: process.env.REACT_APP_DD_VERSION,
+    env: import.meta.env.REACT_APP_ENV,
+    version: import.meta.env.REACT_APP_DD_VERSION,
   });
 }
 
 if (
-  process.env.REACT_APP_DD_APP_ID &&
-  process.env.REACT_APP_DD_CLIENT_TOKEN &&
+  import.meta.env.REACT_APP_DD_APP_ID &&
+  import.meta.env.REACT_APP_DD_CLIENT_TOKEN &&
   (isDev || isProduction)
 ) {
   datadogRum.init({
-    applicationId: process.env.REACT_APP_DD_APP_ID,
-    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN,
+    applicationId: import.meta.env.REACT_APP_DD_APP_ID as string,
+    clientToken: import.meta.env.REACT_APP_DD_CLIENT_TOKEN as string,
     // `site` refers to the Datadog site parameter of your organization
     // see https://docs.datadoghq.com/getting_started/site/
     site: 'datadoghq.com',
     service: 'mindlogger-admin',
-    env: process.env.REACT_APP_ENV,
+    env: import.meta.env.REACT_APP_ENV,
     // Specify a version number to identify the deployed version of your application in Datadog
-    version: process.env.REACT_APP_DD_VERSION,
+    version: import.meta.env.REACT_APP_DD_VERSION,
     sessionSampleRate: 100,
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask',
     trackResources: true,
     trackLongTasks: true,
     trackUserInteractions: false,
-    allowedTracingUrls: (process.env.REACT_APP_DD_TRACING_URLS ?? '')
+    allowedTracingUrls: (import.meta.env.REACT_APP_DD_TRACING_URLS as string)
       .split(',')
       .map((it: string) => it.trim()),
   });
 }
 
 Sentry.init({
-  dsn: process.env.REACT_APP_DSN || '',
+  dsn: import.meta.env.REACT_APP_DSN || '',
   integrations: [
     Sentry.browserTracingIntegration({
-      tracePropagationTargets: process.env.REACT_APP_TRACE_PROPAGATION_TARGETS
-        ? JSON.parse(process.env.REACT_APP_TRACE_PROPAGATION_TARGETS)
+      tracePropagationTargets: import.meta.env.REACT_APP_TRACE_PROPAGATION_TARGETS
+        ? JSON.parse(import.meta.env.REACT_APP_TRACE_PROPAGATION_TARGETS as string)
         : [],
     }),
     Sentry.replayIntegration({
@@ -71,18 +71,34 @@ Sentry.init({
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-const LDProvider = await asyncWithLDProvider({
-  clientSideID: process.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
-});
-
 Mixpanel.init();
 
-root.render(
-  <React.StrictMode>
-    <LDProvider>
-      <App />
-    </LDProvider>
-  </React.StrictMode>,
-);
+// Initialize LaunchDarkly and render the app
+const initApp = async () => {
+  try {
+    const LDProvider = await asyncWithLDProvider({
+      clientSideID: import.meta.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
+    });
+
+    root.render(
+      <React.StrictMode>
+        <LDProvider>
+          <App />
+        </LDProvider>
+      </React.StrictMode>,
+    );
+  } catch (error) {
+    console.error('Failed to initialize LaunchDarkly:', error);
+    // Render app without LaunchDarkly in case of initialization failure
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+    );
+  }
+};
+
+// Start the application
+initApp();
 
 reportWebVitals();
