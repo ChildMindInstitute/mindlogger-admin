@@ -10,7 +10,7 @@ export const DEFAULT_CONFIG = {
   },
 };
 
-export const BASE_API_URL = process.env.REACT_APP_API_DOMAIN;
+export const BASE_API_URL = import.meta.env.REACT_APP_API_DOMAIN;
 
 export enum ApiResponseCodes {
   SuccessfulResponse = 200,
