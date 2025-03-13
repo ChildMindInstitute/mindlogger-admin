@@ -1543,6 +1543,7 @@
   "subscaleScoring": "Notation de sous-échelle",
   "subscaleScoringAverage": "Moyenne",
   "subscaleScoringSum": "Somme",
+  "subscaleScoringPercentage": "Pourcentage",
   "subscript": "Indice",
   "successDuplication": "Votre applet {{appletName}} a été créée avec succès !",
   "successRemoveConditionalLogic": "La logique conditionnelle a été supprimée avec succès.",

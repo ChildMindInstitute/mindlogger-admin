@@ -1545,6 +1545,7 @@
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringAverage": "Average",
   "subscaleScoringSum": "Sum",
+  "subscaleScoringPercentage": "Percentage",
   "subscript": "Subscript",
   "successDuplication": "Your applet {{appletName}} was successfully created!",
   "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",
