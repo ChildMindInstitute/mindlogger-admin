@@ -1,9 +1,9 @@
-import { ActivityId, AppletId } from 'shared/api';
-import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
-import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
-import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
+import { ActivityId, AppletId } from 'shared/api';
+import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
+import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
+import { EncryptedAnswerSharedProps, ExportActivity, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils';
 
 import { SubjectDetails, SubjectDetailsWithDataAccess } from '../types';
 
@@ -531,6 +531,7 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
+    activityOrFlowId: string;
   };
 
 export type EventId = { eventId: string };

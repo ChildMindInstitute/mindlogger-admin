@@ -1,4 +1,7 @@
+import { Box } from '@mui/material';
+import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import {
   createSearchParams,
   generatePath,
@@ -6,40 +9,39 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
-import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
-import { Box } from '@mui/material';
 
 import {
-  getAppletSubmitDateListApi,
-  AppletSubmitDateList,
-  SubmitDates,
   AnswerDate,
+  AppletSubmitDateList,
+  getAppletSubmitDateListApi,
+  SubmitDates,
 } from 'modules/Dashboard/api';
+import { users } from 'redux/modules';
+import { page } from 'resources';
 import { ResponseWithObject } from 'shared/api';
-import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
+import { DateFormats } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { StyledContainer, theme } from 'shared/styles';
 import { parseDateToMidnightLocal } from 'shared/utils';
 
-import { Feedback } from './Feedback';
+import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ActivityResponses } from './ActivityResponses';
-import { ReviewMenu } from './ReviewMenu';
-import { ResponsesHeader } from './ResponsesHeader';
+import { EmptyResponses } from './EmptyResponses';
+import { Feedback } from './Feedback';
+import { FlowResponses } from './FlowResponses';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
+import { StyledReviewContainer } from './RespondentDataReview.styles';
 import {
-  SelectAnswerProps,
   FeedbackTabs,
   OnSelectActivityOrFlow,
+  SelectAnswerProps,
 } from './RespondentDataReview.types';
-import { StyledReviewContainer } from './RespondentDataReview.styles';
-import { RespondentsDataFormValues } from '../RespondentData.types';
+import { ResponsesHeader } from './ResponsesHeader';
 import { ResponsesSummary } from './ResponsesSummary';
+import { ReviewMenu } from './ReviewMenu';
 import { useActivityAnswersAndAssessment } from './hooks/useActivityAnswersAndAssessment/useActivityAnswersAndAssessment';
 import { useReviewActivitiesAndFlows } from './hooks/useReviewActivitiesAndFlows/useReviewActivitiesAndFlows';
-import { EmptyResponses } from './EmptyResponses';
-import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
   const { appletId, subjectId, activityId, activityFlowId } = useParams();
@@ -147,7 +149,8 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !subjectId) return;
+    const activityOrFlowId = activityId || activityFlowId;
+    if (!appletId || !subjectId || !activityOrFlowId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
@@ -157,6 +160,7 @@ export const RespondentDataReview = () => {
       targetSubjectId: subjectId,
       fromDate,
       toDate,
+      activityOrFlowId,
     });
   };
 
