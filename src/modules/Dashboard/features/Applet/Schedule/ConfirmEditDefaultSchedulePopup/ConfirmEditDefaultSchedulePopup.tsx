@@ -42,7 +42,8 @@ export const ConfirmEditDefaultSchedulePopup = ({
     if (ownerId) {
       // Refresh current user after creating schedule to update hasIndividualSchedule flag.
       // TODO: When createIndividualEventsApi has been migrated to RTK Query and configured to
-      // invalidate the associated user, this can be removed:
+      // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this can
+      // be removed:
       dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'User', id: userId }]));
     }
 
