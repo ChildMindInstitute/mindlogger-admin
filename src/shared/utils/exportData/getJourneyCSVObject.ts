@@ -1,13 +1,13 @@
-import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { AnswerDTO, ExtendedEvent, JourneyCSVReturnProps, UserActionType } from 'shared/types';
-import { getDictionaryText } from 'shared/utils/forms';
 import { SuccessedEventDTO } from 'shared/types/answer';
+import { getDictionaryText } from 'shared/utils/forms';
 
+import { convertDateStampToMs } from './convertDateStampToMs';
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
-import { convertDateStampToMs } from './convertDateStampToMs';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
@@ -55,6 +55,7 @@ export const getJourneyCSVReturn = (
     response,
     options,
     version = '',
+    item_type,
     legacy_user_id = null,
     event_id = '',
     timezone_offset = null,
@@ -94,6 +95,7 @@ export const getJourneyCSVReturn = (
         item_prompt: prompt,
         item_response_options: options,
         item_response: response,
+        item_type,
         press_next_time,
         press_popup_skip_time,
         press_popup_keep_time,
@@ -141,6 +143,7 @@ export const getJourneyCSVReturn = (
         response,
         options,
         version,
+        item_type,
         event_id,
         timezone_offset,
         legacy_user_id,
@@ -149,6 +152,7 @@ export const getJourneyCSVReturn = (
 
 export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: ExtendedEvent) => {
   const {
+    activityItem,
     id,
     scheduledDatetime,
     startDatetime,
@@ -217,6 +221,7 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     response: '',
     options: '',
     version,
+    item_type: activityItem.responseType,
     event_id: null,
     timezone_offset: null,
     legacy_user_id: legacyProfileId,
@@ -318,6 +323,7 @@ export const getJourneyCSVObject = <T>({
         rawAnswersObject,
       }),
       version,
+      item_type: activityItem.responseType,
       event_id: scheduledEventId,
       timezone_offset: tzOffset,
       legacy_user_id: legacyProfileId,
