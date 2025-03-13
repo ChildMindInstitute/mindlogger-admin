@@ -167,8 +167,12 @@ export class ScheduleHistoryExporter extends DataExporter<
   }
 
   /**
-   * Find which schedule events were applicable for a given day for a particular user. Multiple schedule events
-   * can apply if the event was updated during the day.
+   * Find which scheduled events were applicable for a given day for a particular user. Multiple schedule events
+   * can apply in a number of scenarios, including:
+   *
+   * - An event was updated during the day in question
+   * - There are multiple events for a single activity or flow
+   * - There are multiple activities or flows
    */
   public findSchedulesForDay(
     day: string,
@@ -195,21 +199,21 @@ export class ScheduleHistoryExporter extends DataExporter<
       );
 
       const filteredByVersion: ScheduleHistoryData[] = [];
-      const date = DateTime.fromISO(day);
 
       for (let i = 0; i < filteredByPeriodicity.length; i++) {
         const schedule = filteredByPeriodicity[i];
-        const schedulesAhead = filteredByPeriodicity.slice(i + 1);
+        const schedulesAhead = filteredByUser.slice(filteredByUser.indexOf(schedule) + 1);
+        const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
 
         let isSupersededOnThisDate = false;
         for (let j = 0; j < schedulesAhead.length; j++) {
           const scheduleAhead = schedulesAhead[j];
-          const nestedScheduleCreationDate = DateTime.fromISO(scheduleAhead.eventVersionCreatedAt);
+          const scheduleAheadCreationDate = DateTime.fromISO(scheduleAhead.eventVersionCreatedAt);
 
           const isSameScheduleType = scheduleAhead.userId === schedule.userId;
           const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
           const isSameEvent = scheduleAhead.eventId === schedule.eventId;
-          const isCreatedBeforeDate = nestedScheduleCreationDate.startOf('day') <= date;
+          const isCreatedBeforeDate = scheduleAheadCreationDate <= startTimeOnDay;
 
           if (
             isSameScheduleType &&
