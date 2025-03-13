@@ -6,6 +6,7 @@ import {
   getDayName,
   getMonthName,
   getMoreText,
+  parseDateToMidnightLocal,
   parseDateToMidnightUTC,
 } from './dateFormat';
 
@@ -88,5 +89,40 @@ describe('parseDateToMidnightUTC', () => {
     expect(result.getUTCDate()).toBe(15);
     expect(result.getUTCMonth()).toBe(5);
     expect(result.getUTCFullYear()).toBe(2024);
+  });
+});
+
+describe('parseDateToMidnightLocal', () => {
+  it('should return a Date object for a valid date string', () => {
+    const dateStr = '2025-01-01';
+    const result = parseDateToMidnightLocal(dateStr);
+    expect(result).toBeInstanceOf(Date);
+    expect(result.toISOString()).toBe('2025-01-01T00:00:00.000');
+  });
+
+  test('should throw error for invalid formats', () => {
+    expect(() => parseDateToMidnightLocal('2025/01/01')).toThrow(
+      '[parseDateToMidnightLocal] Invalid date string format',
+    );
+    expect(() => parseDateToMidnightLocal('2025-01')).toThrow(
+      '[parseDateToMidnightLocal] Invalid date string format',
+    );
+    expect(() => parseDateToMidnightLocal('invalid-date')).toThrow(
+      '[parseDateToMidnightLocal] Invalid date string format',
+    );
+    expect(() => parseDateToMidnightLocal('')).toThrow(
+      '[parseDateToMidnightLocal] Invalid date string format',
+    );
+  });
+
+  it('should preserve the local date without timezone offset', () => {
+    const dateStr = '2024-06-15';
+    const result = parseDateToMidnightLocal(dateStr);
+    expect(result.getDate()).toBe(15);
+    expect(result.getMonth()).toBe(5); // June is 5 (zero-based)
+    expect(result.getFullYear()).toBe(2024);
+    expect(result.getHours()).toBe(0);
+    expect(result.getMinutes()).toBe(0);
+    expect(result.getSeconds()).toBe(0);
   });
 });
