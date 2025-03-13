@@ -1,4 +1,3 @@
-import { DecryptedAnswerData, UserActionType } from 'shared/types';
 import {
   mockedDecryptedAnswersWithSubscales,
   mockedDecryptedEventsForDrawing,
@@ -8,7 +7,10 @@ import {
   mockedDecryptedObjectForVideo,
   mockedParsedAnswers,
 } from 'shared/mock';
+import { DecryptedAnswerData, UserActionType } from 'shared/types';
 
+import { ItemResponseType } from '../../consts';
+import { getObjectFromList } from '../getObjectFromList';
 import {
   checkIfHasGithubImportedEventScreen,
   getActivityJourneyData,
@@ -16,8 +18,6 @@ import {
   getMediaData,
   getReportData,
 } from './getReportAndMediaData';
-import { ItemResponseType } from '../../consts';
-import { getObjectFromList } from '../getObjectFromList';
 
 describe('getReportAndMediaData', () => {
   describe('getDecryptedAnswersObject', () => {
@@ -271,6 +271,7 @@ describe('getReportAndMediaData', () => {
           prompt: '',
           options: '',
           version: '',
+          item_type: 'text',
           rawScore: '',
           reviewing_id: '',
           event_id: '',
@@ -307,6 +308,7 @@ describe('getReportAndMediaData', () => {
           item_id: '5470cf91-76bf-48b4-b3da-4a615313c257',
           options: 'Opt1: 0, Opt2: 1, Opt3: 2',
           prompt: 'single',
+          item_type: 'singleSelect',
           rawScore: '',
           response: 'value: 0',
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
@@ -344,6 +346,7 @@ describe('getReportAndMediaData', () => {
           item_id: 'dd9c96ad-b57c-4440-b284-27c7f1351fd0',
           options: 'Opt1: 0, Opt2: 1, Opt3: 2',
           prompt: 'multi',
+          item_type: 'multiSelect',
           rawScore: '',
           response: 'value: 0',
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
@@ -381,6 +384,7 @@ describe('getReportAndMediaData', () => {
           item_id: 'ab47ab74-1ae5-475b-b1cb-bc868ead793f',
           options: '0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5',
           prompt: 'slider',
+          item_type: 'slider',
           rawScore: '',
           response: 'value: 5',
           reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
@@ -432,6 +436,7 @@ describe('getReportAndMediaData', () => {
           item_id: 'e3d95ec0-32cd-4dff-8f81-6a0debfe7099',
           options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
           prompt: 'single',
+          item_type: 'singleSelect',
           rawScore: 9,
           response: 'value: 2',
           reviewing_id: '',
@@ -471,6 +476,7 @@ describe('getReportAndMediaData', () => {
           item_id: '16a50393-7952-4fcb-8e3b-5f042ab05ed9',
           options: 'Opt1: 0 (score: 1), Opt2: 1 (score: 3), Opt3: 2 (score: 0)',
           prompt: 'multi',
+          item_type: 'multiSelect',
           rawScore: 4,
           response: 'value: 0',
           reviewing_id: '',
@@ -509,6 +515,7 @@ describe('getReportAndMediaData', () => {
           options:
             '0: 0 (score: 1), 1: 1 (score: 2), 2: 2 (score: 3), 3: 3 (score: 4), 4: 4 (score: 5), 5: 5 (score: 6)',
           prompt: 'slider',
+          item_type: 'slider',
           rawScore: 21,
           response: 'value: 2',
           reviewing_id: '',
@@ -546,6 +553,7 @@ describe('getReportAndMediaData', () => {
           item_id: 'ac8643f5-3c98-4ce7-b94c-8735a8bd2943',
           options: 'Male: 0, Female: 1',
           prompt: 'How do you describe yourself?',
+          item_type: 'singleSelect',
           rawScore: '',
           response: 'value: 0',
           reviewing_id: '',
@@ -583,6 +591,7 @@ describe('getReportAndMediaData', () => {
           item_id: '028d9ee5-68cc-4c6f-9e13-60e7aa52a412',
           options: '',
           prompt: 'How old are you?',
+          item_type: 'text',
           rawScore: '',
           response: '25',
           reviewing_id: '',
@@ -652,6 +661,7 @@ describe('getReportAndMediaData', () => {
           item_response_options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
           item_response: 'value: 2',
           item_response_status: 'completed',
+          item_type: 'singleSelect',
           activity_score: 5,
           activity_score_lookup_text: 'Description #2 for range 4~20',
           'subscale_name_ss-1': 5,
@@ -693,6 +703,7 @@ describe('getReportAndMediaData', () => {
           item_response_options: 'Opt1: 0 (score: 1), Opt2: 1 (score: 3), Opt3: 2 (score: 0)',
           item_response: 'value: 0',
           item_response_status: 'completed',
+          item_type: 'multiSelect',
           rawScore: 4,
         },
       ]);
@@ -761,6 +772,7 @@ describe('getReportAndMediaData', () => {
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
+          item_type: 'drawing',
           press_back_time: '',
           press_popup_skip_time: '',
           press_popup_keep_time: '',
@@ -803,6 +815,7 @@ describe('getReportAndMediaData', () => {
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
+          item_type: 'drawing',
           press_back_time: '',
           press_popup_skip_time: '',
           press_popup_keep_time: '',
@@ -871,6 +884,7 @@ describe('getReportAndMediaData', () => {
           item: 'Splash Screen',
           item_id: '',
           options: '',
+          item_type: 'drawing',
           press_back_time: '',
           press_popup_skip_time: '',
           press_popup_keep_time: '',
@@ -913,6 +927,7 @@ describe('getReportAndMediaData', () => {
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
+          item_type: 'drawing',
           press_back_time: '',
           press_popup_skip_time: '',
           press_popup_keep_time: '',
@@ -955,6 +970,7 @@ describe('getReportAndMediaData', () => {
           item: 'drawing',
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
+          item_type: 'drawing',
           press_back_time: '',
           press_popup_skip_time: '',
           press_popup_keep_time: '',
