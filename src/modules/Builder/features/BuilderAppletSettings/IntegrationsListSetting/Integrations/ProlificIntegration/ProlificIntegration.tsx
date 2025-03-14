@@ -15,7 +15,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { getUserDetailsApi } from 'api';
+import { auth } from 'redux/modules';
 
 import { ConfigurationPopup } from './ConfigurationPopup/ConfigurationPopup';
 import { DisconnectionPopup } from './DisconnectionPopup/DisconnectionPopup';
@@ -81,6 +81,8 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
     trackProlificEvent(MixpanelEventType.ProlificConnectSuccessful, userId);
   };
 
+  const user = auth.useData()?.user;
+
   useEffect(() => {
     const checkProlificApiToken = async () => {
       const hasLocalProlificIntegration =
@@ -95,17 +97,10 @@ const ProlifcIntegrationApplet = ({ appletData }: ProlificIntegrationAppletProps
       }));
     };
 
-    const getCurrentUser = async () => {
-      const user = await getUserDetailsApi();
-
-      if (user.data?.result) {
-        setState((prevState) => ({ ...prevState, userId: user.data.result.id }));
-      }
-    };
-
     checkProlificApiToken();
-    getCurrentUser();
-  }, [appletData.id, appletData.integrations]);
+
+    setState((prevState) => ({ ...prevState, userId: user?.id ?? null }));
+  }, [appletData.id, appletData.integrations, user]);
 
   const { t } = useTranslation('app');
 
