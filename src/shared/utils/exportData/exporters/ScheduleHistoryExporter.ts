@@ -291,12 +291,15 @@ export class ScheduleHistoryExporter extends DataExporter<
           return false;
         }
 
-        const startDate = DateTime.fromISO(schedule.startDate);
-        const selectedDate = DateTime.fromISO(schedule.selectedDate);
+        const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
+
+        const isDateInInterval =
+          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
+        const isCorrectDayOfWeek = date.weekday === DateTime.fromISO(schedule.selectedDate).weekday;
 
         // This schedule applies every week on the selected date, between the indicated start and end dates
         // Check if the date in question falls inside a weekly recurrence of the selected date
-        return startDate <= date && selectedDate <= date && date.weekday === selectedDate.weekday;
+        return isDateInInterval && isCorrectDayOfWeek;
       }
       case 'WEEKDAYS': {
         if (schedule.startDate === null || schedule.endDate === null) {
@@ -305,14 +308,14 @@ export class ScheduleHistoryExporter extends DataExporter<
 
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
+        const isDateInInterval =
+          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
+
+        // Using !date.isWeekend here is not sufficient because some locales consider Sunday a weekday
+        const isDateWeekday = date.weekday !== 6 && date.weekday !== 7;
+
         // This schedule applies every weekday between the indicated start and end dates (inclusive)
-        return (
-          // Using !targetDate.isWeekend here is not sufficient because some locales consider Sunday a weekday
-          date.weekday !== 6 &&
-          date.weekday !== 7 &&
-          interval.isValid &&
-          (interval.contains(date) || interval.end.hasSame(date, 'day'))
-        );
+        return isDateInInterval && isDateWeekday;
       }
       case 'MONTHLY': {
         if (
@@ -323,18 +326,21 @@ export class ScheduleHistoryExporter extends DataExporter<
           return false;
         }
 
-        const startDate = DateTime.fromISO(schedule.startDate);
+        const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
+
+        const isDateInInterval =
+          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
+
         const selectedDate = DateTime.fromISO(schedule.selectedDate);
 
-        // This schedule applies every month on the selected date, between the indicated start and end dates
         // Check if the date in question falls inside a monthly recurrence of the selected date
-        // Handling edge cases where the selected date is the 31st and the target date is the 30th
-        return (
-          startDate <= date &&
-          selectedDate <= date &&
-          (selectedDate.day === date.day ||
-            (date.day === date.daysInMonth && selectedDate.day > date.day))
-        );
+        // Handling edge cases where the selected date is greater than the last day of the month
+        const isCorrectDayOfMonth =
+          selectedDate.day === date.day ||
+          (date.day === date.daysInMonth && selectedDate.day > date.day);
+
+        // This schedule applies every month on the selected date, between the indicated start and end dates
+        return isDateInInterval && isCorrectDayOfMonth;
       }
     }
 
