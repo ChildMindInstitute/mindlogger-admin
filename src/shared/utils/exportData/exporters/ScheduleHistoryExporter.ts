@@ -105,8 +105,7 @@ export class ScheduleHistoryExporter extends DataExporter<
     const periodStartDate = new Date(
       params?.fromDate ?? sortedDeviceScheduleHistoryData[0].createdAt,
     );
-    // const periodEndDate = new Date(params?.toDate ?? DateTime.now().toISO());
-    const periodEndDate = DateTime.fromISO('2025-03-14').toJSDate();
+    const periodEndDate = new Date(params?.toDate ?? DateTime.now().toISO());
 
     const days = this.daysBetweenInterval(
       DateTime.fromJSDate(periodStartDate),
