@@ -294,7 +294,531 @@ describe('ScheduleHistoryExporter', () => {
             });
 
             it('ALWAYS -> DAILY', () => {
-              // TODO: Implement
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'individual-schedule-event-1',
+                  eventVersion: 'v1',
+                  userId: individualScheduleUser,
+                  subjectId: individualScheduleUserSubject,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Daily,
+                  startDate: '2025-03-15',
+                  startTime: '00:00:00',
+                  endDate: '2025-03-19',
+                  endTime: '23:59:00',
+                  selectedDate: null,
+                }),
+              );
+
+              // Default schedule applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // Individual schedule applies after
+              ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
+                (day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  expect(foundSchedules).toEqual([
+                    expect.objectContaining({
+                      eventId: 'individual-schedule-event-1',
+                      eventVersion: 'v1',
+                      periodicity: Periodicity.Daily,
+                    }),
+                  ]);
+                },
+              );
+
+              // Nothing applies after the end date
+              const theDayAfter = DateTime.fromISO('2025-03-20');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
+            });
+
+            it('ALWAYS -> WEEKLY', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'individual-schedule-event-1',
+                  eventVersion: 'v1',
+                  userId: individualScheduleUser,
+                  subjectId: individualScheduleUserSubject,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Weekly,
+                  startDate: '2025-03-20',
+                  startTime: '00:00:00',
+                  endDate: '2025-03-31',
+                  endTime: '23:59:00',
+                  selectedDate: '2025-03-20',
+                }),
+              );
+
+              // Default schedule applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // Nothing applies until the start date of the Individual schedule
+              ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
+                (day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  expect(foundSchedules).toEqual([]);
+                },
+              );
+
+              // Individual schedule applies after
+              const applicableDays = ['2025-03-20', '2025-03-27'];
+              exporter
+                .daysBetweenInterval(DateTime.fromISO('2025-03-20'), DateTime.fromISO('2025-03-31'))
+                .forEach((day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  if (applicableDays.includes(day)) {
+                    expect(foundSchedules).toEqual([
+                      expect.objectContaining({
+                        eventId: 'individual-schedule-event-1',
+                        eventVersion: 'v1',
+                        periodicity: Periodicity.Weekly,
+                      }),
+                    ]);
+                  } else {
+                    expect(foundSchedules).toEqual([]);
+                  }
+                });
+
+              // Nothing applies after the end date
+              const theDayAfter = DateTime.fromISO('2025-04-01');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
+            });
+
+            it('ALWAYS -> WEEKDAYS', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'individual-schedule-event-1',
+                  eventVersion: 'v1',
+                  userId: individualScheduleUser,
+                  subjectId: individualScheduleUserSubject,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Weekdays,
+                  startDate: '2025-03-15',
+                  startTime: '00:00:00',
+                  endDate: '2025-03-20',
+                  endTime: '23:59:00',
+                  selectedDate: null,
+                }),
+              );
+
+              // Default schedule applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // Individual schedule applies after
+              const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
+              exporter
+                .daysBetweenInterval(DateTime.fromISO('2025-03-15'), DateTime.fromISO('2025-03-20'))
+                .forEach((day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  if (applicableDays.includes(day)) {
+                    expect(foundSchedules).toEqual([
+                      expect.objectContaining({
+                        eventId: 'individual-schedule-event-1',
+                        eventVersion: 'v1',
+                        periodicity: Periodicity.Weekdays,
+                      }),
+                    ]);
+                  } else {
+                    expect(foundSchedules).toEqual([]);
+                  }
+                });
+
+              // Nothing applies after the end date
+              const theDayAfter = DateTime.fromISO('2025-03-21');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
+            });
+
+            it('ALWAYS -> MONTHLY', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'individual-schedule-event-1',
+                  eventVersion: 'v1',
+                  userId: individualScheduleUser,
+                  subjectId: individualScheduleUserSubject,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Monthly,
+                  startDate: '2025-05-01',
+                  startTime: '00:00:00',
+                  endDate: '2025-12-31',
+                  endTime: '23:59:00',
+                  selectedDate: '2025-05-01',
+                }),
+              );
+
+              // Default schedule applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // Nothing applies until the start date of the Individual schedule
+              exporter
+                .daysBetweenInterval(DateTime.fromISO('2025-03-15'), DateTime.fromISO('2025-04-30'))
+                .forEach((day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  expect(foundSchedules).toEqual([]);
+                });
+
+              // Individual schedule applies after
+              const applicableDays = [
+                '2025-05-01',
+                '2025-06-01',
+                '2025-07-01',
+                '2025-08-01',
+                '2025-09-01',
+                '2025-10-01',
+                '2025-11-01',
+                '2025-12-01',
+              ];
+              exporter
+                .daysBetweenInterval(DateTime.fromISO('2025-05-01'), DateTime.fromISO('2025-12-31'))
+                .forEach((day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    individualScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  if (applicableDays.includes(day)) {
+                    expect(foundSchedules).toEqual([
+                      expect.objectContaining({
+                        eventId: 'individual-schedule-event-1',
+                        eventVersion: 'v1',
+                        periodicity: Periodicity.Monthly,
+                      }),
+                    ]);
+                  } else {
+                    expect(foundSchedules).toEqual([]);
+                  }
+                });
+
+              // Nothing applies after the end date
+              const theDayAfter = DateTime.fromISO('2026-01-01');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
+            });
+          });
+
+          describe('is overridden by new schedule version', () => {
+            it('ALWAYS -> ALWAYS', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v2',
+                  userId: null,
+                  subjectId: null,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  oneTimeCompletion: true,
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Always,
+                  startDate: null,
+                  startTime: '00:00:00',
+                  endDate: null,
+                  endTime: '23:59:00',
+                  selectedDate: null,
+                }),
+              );
+
+              // v1 applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  defaultScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // v2 applies after
+              const v2CreationDay = DateTime.fromISO('2025-03-15');
+              const tenYearsAfterCreation = v2CreationDay.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(v2CreationDay, tenYearsAfterCreation).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  defaultScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v2',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+            });
+
+            it('ALWAYS -> ONCE', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v2',
+                  userId: null,
+                  subjectId: null,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  oneTimeCompletion: true,
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Once,
+                  startDate: null,
+                  startTime: '00:00:00',
+                  endDate: null,
+                  endTime: '23:59:00',
+                  selectedDate: '2025-03-15',
+                }),
+              );
+
+              // v1 applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  defaultScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // v2 applies on the selected date
+              const foundSchedules = exporter.findSchedulesForDay(
+                '2025-03-15',
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v2',
+                  periodicity: Periodicity.Once,
+                }),
+              ]);
+
+              // Nothing applies after the selected date
+              const theDayAfter = DateTime.fromISO('2025-03-16');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
+            });
+
+            it('ALWAYS -> DAILY', () => {
+              scheduleHistoryData.push(
+                scheduleData({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v2',
+                  userId: null,
+                  subjectId: null,
+                  eventVersionCreatedAt: '2025-03-15T00:00:00',
+                  eventVersionUpdatedAt: '2025-03-15T00:00:00',
+                  oneTimeCompletion: true,
+                  eventVersionIsDeleted: false,
+                  periodicity: Periodicity.Daily,
+                  startDate: '2025-03-15',
+                  startTime: '00:00:00',
+                  endDate: '2025-03-19',
+                  endTime: '23:59:00',
+                  selectedDate: null,
+                }),
+              );
+
+              // v1 applies at first
+              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  defaultScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Always,
+                  }),
+                ]);
+              });
+
+              // v2 applies after
+              ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
+                (day) => {
+                  const foundSchedules = exporter.findSchedulesForDay(
+                    day,
+                    defaultScheduleUser,
+                    scheduleHistoryData,
+                  );
+
+                  expect(foundSchedules).toEqual([
+                    expect.objectContaining({
+                      eventId: 'default-schedule-event-1',
+                      eventVersion: 'v2',
+                      periodicity: Periodicity.Daily,
+                    }),
+                  ]);
+                },
+              );
+
+              // Nothing applies after the end date
+              const theDayAfter = DateTime.fromISO('2025-03-20');
+              const tenYearsAfter = theDayAfter.plus({ years: 10 });
+
+              exporter.daysBetweenInterval(theDayAfter, tenYearsAfter).forEach((day) => {
+                const foundSchedules = exporter.findSchedulesForDay(
+                  day,
+                  individualScheduleUser,
+                  scheduleHistoryData,
+                );
+
+                expect(foundSchedules).toEqual([]);
+              });
             });
 
             it('ALWAYS -> WEEKLY', () => {
