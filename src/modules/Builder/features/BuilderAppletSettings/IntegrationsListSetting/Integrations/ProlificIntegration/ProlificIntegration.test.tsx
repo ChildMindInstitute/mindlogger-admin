@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from '@reduxjs/toolkit';
 
 import { mockedApplet } from 'shared/mock';
-import { getUserDetailsApi } from 'api';
+import { auth } from 'redux/modules';
 
 import { ProlificIntegration } from './ProlificIntegration';
 import { prolificIntegrationExists } from './ProlificIntegration.utils';
@@ -13,9 +13,7 @@ jest.mock('./ProlificIntegration.utils', () => ({
   prolificIntegrationExists: jest.fn(),
 }));
 
-jest.mock('api', () => ({
-  getUserDetailsApi: jest.fn(),
-}));
+jest.mock('redux/modules');
 
 const preloadedStateWithoutIntegration = {
   applet: {
@@ -44,7 +42,7 @@ describe('ProlificIntegration', () => {
 
   test('should render the ProlificIntegration component when api token does not exist', () => {
     (prolificIntegrationExists as jest.Mock).mockResolvedValue(false);
-    (getUserDetailsApi as jest.Mock).mockResolvedValue({ data: { result: { id: '123' } } });
+    (auth.useData as jest.Mock).mockResolvedValue({ user: { id: '123' } });
 
     renderWithStore(preloadedStateWithoutIntegration);
 
@@ -59,7 +57,7 @@ describe('ProlificIntegration', () => {
 
   test('should render the ProlificIntegration connected component when api token exists', async () => {
     (prolificIntegrationExists as jest.Mock).mockResolvedValue(true);
-    (getUserDetailsApi as jest.Mock).mockResolvedValue({ data: { result: { id: '123' } } });
+    (auth.useData as jest.Mock).mockResolvedValue({ user: { id: '123' } });
 
     renderWithStore(preloadedStateWithoutIntegration);
 
