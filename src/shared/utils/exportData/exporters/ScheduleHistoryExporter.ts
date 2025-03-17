@@ -114,7 +114,6 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     for (const day of days) {
       for (const participant of fullAccountParticipants) {
-        // This contains the history of both default and individual schedules
         const schedulesForDay = this.findSchedulesForDay(
           day,
           participant.id,
@@ -128,7 +127,6 @@ export class ScheduleHistoryExporter extends DataExporter<
             sortedDeviceScheduleHistoryData,
           );
 
-          // TODO: Figure out which schedule applies here, individual vs default
           rows.push({
             applet_id: appletId,
             applet_version: schedule.appletVersion,
@@ -191,9 +189,33 @@ export class ScheduleHistoryExporter extends DataExporter<
         (schedule) => schedule.userId === userId || schedule.userId === null,
       );
 
+      // Check if the user had an individual schedule on this day, irrespective of its periodicity
+      const hasNonDeletedIndividualSchedule = filteredByUser.some((schedule) => {
+        const isIndividualSchedule = schedule.userId !== null;
+
+        const createdTodayOrBefore =
+          DateTime.fromISO(schedule.eventVersionCreatedAt) <= DateTime.fromISO(day).endOf('day');
+
+        const deletionDate = DateTime.fromISO(
+          schedule.eventVersionIsDeleted ? schedule.eventVersionUpdatedAt : '',
+        );
+
+        const notDeleted = !deletionDate.isValid;
+
+        const deletedTodayOrAfter =
+          deletionDate.isValid && deletionDate >= DateTime.fromISO(day).startOf('day');
+
+        return isIndividualSchedule && createdTodayOrBefore && (notDeleted || deletedTodayOrAfter);
+      });
+
+      const filterDefaultSchedules = filteredByUser.filter(
+        // If the user had a non-deleted individual schedule on this day, then default schedules don't apply
+        (schedule) => schedule.userId !== null || !hasNonDeletedIndividualSchedule,
+      );
+
       // This removes events that don't apply based strictly on periodicity
       // It will contain duplicates
-      const filteredByPeriodicity = filteredByUser.filter((schedule) =>
+      const filteredByPeriodicity = filterDefaultSchedules.filter((schedule) =>
         this.isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(day, schedule),
       );
 
@@ -201,7 +223,9 @@ export class ScheduleHistoryExporter extends DataExporter<
 
       for (let i = 0; i < filteredByPeriodicity.length; i++) {
         const schedule = filteredByPeriodicity[i];
-        const schedulesAhead = filteredByUser.slice(filteredByUser.indexOf(schedule) + 1);
+        const schedulesAhead = filterDefaultSchedules.slice(
+          filterDefaultSchedules.indexOf(schedule) + 1,
+        );
         const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
 
         let isSupersededOnThisDate = false;
