@@ -38,11 +38,10 @@ export const useParticipantDropdown = ({
 
   const { data: participantsData, isLoading: isFetchingParticipants } =
     useGetWorkspaceRespondentsQuery({ params: { appletId, ownerId, limit: 100 } }, { skip });
-  const participants = useMemo(() => participantsData?.result ?? [], [participantsData]);
 
   const allParticipants = useMemo(
-    () => participants.filter(isParticipantValid).map(participantToOption),
-    [isParticipantValid, participants],
+    () => (participantsData?.result ?? []).filter(isParticipantValid).map(participantToOption),
+    [isParticipantValid, participantsData?.result],
   );
 
   const { data: loggedInTeamMemberData, isLoading: isFetchingLoggedInTeamMember } =
