@@ -247,7 +247,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
           const isSameScheduleType = scheduleAhead.userId === schedule.userId;
           const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
-          const isCreatedBeforeDate = scheduleAheadCreationDate <= startTimeOnDay;
+          const isCreatedBeforeStartTime = scheduleAheadCreationDate <= startTimeOnDay;
           const isSameEvent = scheduleAhead.eventId === schedule.eventId;
           const isOneAlwaysAvailable =
             schedule.periodicity === 'ALWAYS' || scheduleAhead.periodicity === 'ALWAYS';
@@ -255,7 +255,7 @@ export class ScheduleHistoryExporter extends DataExporter<
           if (
             isSameScheduleType &&
             isSameEntity &&
-            isCreatedBeforeDate &&
+            isCreatedBeforeStartTime &&
             (isSameEvent || isOneAlwaysAvailable)
           ) {
             isSupersededOnThisDate = true;
