@@ -1,13 +1,13 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
+import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
 import {
   ActivityAssignmentStatus,
   Applet,
   ParticipantActivityOrFlow,
 } from 'modules/Dashboard/api/api.types';
-import { page } from 'resources';
-import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 import {
   Manager,
   Participant,
@@ -17,8 +17,16 @@ import {
   ParticipantWithDataAccess,
   SubjectDetailsWithDataAccess,
 } from 'modules/Dashboard/types';
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
+import { page } from 'resources';
 
+import {
+  defaultMultiSelectionConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
+} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 import {
   CalculationType,
   ConditionalLogicMatch,
@@ -43,20 +51,14 @@ import {
   TextItem,
 } from './state';
 import { DecryptedAnswerData, ElementType, Invitations } from './types';
-import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 import { Encryption } from './utils';
-import {
-  defaultMultiSelectionConfig,
-  defaultSingleSelectionConfig,
-  defaultSliderConfig,
-  defaultTextConfig,
-  defaultTimeConfig,
-} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
 export const mockedAppletId = '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a';
 export const mockedActivityId = '56a4ebe4-3d7f-485c-8293-093cabf29fa3';
+export const mockedActivityId2 = '96d06b8f-4709-43de-8362-574f070a2269';
+export const mockedActivityFlowId = '646653e0-699b-481d-9261-5065c5693f52';
 
 export const mockedUserData = {
   email: mockedEmail,
