@@ -6,7 +6,6 @@ import { Spinner } from 'shared/components';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
-import { Activity, ActivityFlow } from 'redux/modules';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { ActivityAssignDrawer } from 'modules/Dashboard/components';
@@ -32,8 +31,8 @@ export const Activities = () => {
     { skip: !appletId },
   );
 
-  const activities: Activity[] = useMemo(() => data?.activitiesDetails ?? [], [data]);
-  const flows: ActivityFlow[] = useMemo(() => data?.appletDetail.activityFlows ?? [], [data]);
+  const activities = data?.activitiesDetails ?? [];
+  const flows = data?.appletDetail.activityFlows ?? [];
   const showContent = !isLoading || !!activities.length;
 
   const { formatRow, TakeNowModal } = useActivityGrid({
@@ -63,8 +62,8 @@ export const Activities = () => {
   });
 
   const formattedActivities = useMemo(
-    () => activities.map((activity) => formatRow(activity)),
-    [activities, formatRow],
+    () => (data?.activitiesDetails ?? []).map((activity) => formatRow(activity)),
+    [data?.activitiesDetails, formatRow],
   );
 
   return (
