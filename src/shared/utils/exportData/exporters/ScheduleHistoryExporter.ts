@@ -190,7 +190,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       );
 
       // Check if the user had an individual schedule on this day, irrespective of its periodicity
-      const hasNonDeletedIndividualSchedule = filteredByUser.some((schedule) => {
+      const nonDeletedIndividualSchedules = filteredByUser.filter((schedule) => {
         const isIndividualSchedule = schedule.userId !== null;
 
         const createdTodayOrBefore =
@@ -202,16 +202,33 @@ export class ScheduleHistoryExporter extends DataExporter<
 
         const notDeleted = !deletionDate.isValid;
 
-        const deletedTodayOrAfter =
-          deletionDate.isValid && deletionDate >= DateTime.fromISO(day).startOf('day');
+        const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
 
-        return isIndividualSchedule && createdTodayOrBefore && (notDeleted || deletedTodayOrAfter);
+        const deletedStartTimeOrAfter = deletionDate.isValid && deletionDate >= startTimeOnDay;
+
+        return (
+          isIndividualSchedule && createdTodayOrBefore && (notDeleted || deletedStartTimeOrAfter)
+        );
       });
 
-      const filterDefaultSchedules = filteredByUser.filter(
-        // If the user had a non-deleted individual schedule on this day, then default schedules don't apply
-        (schedule) => schedule.userId !== null || !hasNonDeletedIndividualSchedule,
-      );
+      // Default schedules only survive if there are no individual ones, or if the individual ones have all been deleted
+      // before the end time of the default schedule on this day
+      const filterDefaultSchedules = filteredByUser.filter((schedule) => {
+        if (schedule.userId !== null || nonDeletedIndividualSchedules.length === 0) {
+          // Keep individual schedule events, and default events with no competition
+          return true;
+        }
+
+        return nonDeletedIndividualSchedules.every((competition) => {
+          const deletionDate = DateTime.fromISO(
+            competition.eventVersionIsDeleted ? competition.eventVersionUpdatedAt : '',
+          );
+
+          const endTimeOnDay = DateTime.fromISO(`${day}T${schedule.endTime}`);
+
+          return deletionDate.isValid && deletionDate <= endTimeOnDay;
+        });
+      });
 
       // This removes events that don't apply based strictly on periodicity
       // It will contain duplicates
