@@ -43,6 +43,11 @@ type ScheduleHistoryExportOptions = DataExporterOptions & {
   respondentIds?: string;
 };
 
+/**
+ * A helper class to export enumerated schedule history data for a single applet to a CSV file. Enumerated history
+ * means that for each day between two given dates (inclusive), we use the periodicity of each event version of each
+ * schedule (both default and individual) to determine which schedules were applicable for each user in the applet on that day.
+ */
 export class ScheduleHistoryExporter extends DataExporter<
   ScheduleHistoryExportRow,
   ScheduleHistoryExportOptions

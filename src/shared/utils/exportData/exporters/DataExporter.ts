@@ -11,6 +11,10 @@ export type DataExporterOptions = {
   toDate?: string;
 };
 
+/**
+ * A base helper class for generating CSV files from data. It contains common methods for fetching data from the
+ * API, and generating the actual CSV file.
+ */
 export abstract class DataExporter<D, O extends DataExporterOptions = DataExporterOptions> {
   protected constructor(public fileNamePrefix: string) {}
 
