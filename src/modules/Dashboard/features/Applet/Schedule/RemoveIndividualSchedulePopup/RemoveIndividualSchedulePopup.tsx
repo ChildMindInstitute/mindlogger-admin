@@ -7,7 +7,7 @@ import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks/useAsync';
 import { applets } from 'modules/Dashboard/state';
-import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
 import { Steps } from './RemoveIndividualSchedule.types';
@@ -47,7 +47,7 @@ export const RemoveIndividualSchedulePopup = ({
     // TODO: When removeIndividualEventsApi has been migrated to RTK Query and configured to
     // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this can be
     // removed:
-    dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'User', id: userId }]));
+    dispatch(apiSlice.util.invalidateTags([{ type: 'User', id: userId }]));
   };
 
   const screens = getScreens({

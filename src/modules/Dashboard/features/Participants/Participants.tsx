@@ -28,6 +28,8 @@ import {
 } from 'modules/Dashboard/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
+import { useAppDispatch } from 'redux/store';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
@@ -59,6 +61,7 @@ export const Participants = () => {
   const timeAgo = useTimeAgo();
   const { featureFlags } = useFeatureFlags();
   const [showActivityAssign, setShowActivityAssign] = useState(false);
+  const dispatch = useAppDispatch();
 
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
@@ -92,6 +95,9 @@ export const Participants = () => {
     useLazyGetWorkspaceRespondentsQuery();
 
   const getWorkspaceRespondents = (args?: GetAppletsParams) => {
+    // Keep cache in sync with any changes to participants to ensure lists are all aligned
+    dispatch(apiSlice.util.invalidateTags([{ type: 'Subject', id: 'LIST' }]));
+
     // Always sort by pinned first
     const ordering = ['-isPinned'];
     ordering.push(args?.params.ordering ?? '+tags,+secretIds');

@@ -16,7 +16,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents } from 'modules/Dashboard/state';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import {
   EventFormProps,
@@ -116,7 +116,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         // TODO: When createIndividualEventsApi has been migrated to RTK Query and configured to
         // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this
         // can be removed:
-        dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'User', id: userId }]));
+        dispatch(apiSlice.util.invalidateTags([{ type: 'User', id: userId }]));
       }
     };
 

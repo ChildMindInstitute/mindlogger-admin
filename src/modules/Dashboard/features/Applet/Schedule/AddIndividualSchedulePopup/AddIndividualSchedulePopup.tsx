@@ -9,7 +9,7 @@ import { useAsync } from 'shared/hooks';
 import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { workspaces } from 'redux/modules';
-import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import { AddIndividualSchedulePopupProps } from './AddIndividualSchedulePopup.types';
 
@@ -39,7 +39,7 @@ export const AddIndividualSchedulePopup = ({
       // TODO: When createIndividualEventsApi has been migrated to RTK Query and configured to
       // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this can
       // be removed:
-      dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'User', id: userId }]));
+      dispatch(apiSlice.util.invalidateTags([{ type: 'User', id: userId }]));
     }
 
     onClose?.();

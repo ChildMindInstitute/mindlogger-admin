@@ -14,10 +14,10 @@ import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 import {
-  apiDashboardSlice,
   useCreateInvitationMutation,
   useCreateShellAccountMutation,
 } from 'modules/Dashboard/api/apiSlice';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import {
   RESPONDENT_ALREADY_INVITED,
@@ -247,7 +247,7 @@ export const AddParticipantPopup = ({
               setPublicLinkDialogOpen(false);
 
               if (shouldRefetch) {
-                dispatch(apiDashboardSlice.util.invalidateTags([{ type: 'Subject', id: 'LIST' }]));
+                dispatch(apiSlice.util.invalidateTags([{ type: 'Subject', id: 'LIST' }]));
               }
             }}
           />
