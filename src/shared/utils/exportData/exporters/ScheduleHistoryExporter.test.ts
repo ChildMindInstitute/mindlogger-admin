@@ -3859,6 +3859,59 @@ describe('ScheduleHistoryExporter', () => {
             });
           });
         });
+
+        it('is not present when missing from individual schedule', () => {
+          scheduleHistoryData.push(
+            scheduleData({
+              eventId: 'individual-schedule-event-1',
+              eventVersion: 'v1',
+              userId: individualScheduleUser,
+              subjectId: individualScheduleUserSubject,
+              eventVersionCreatedAt: '2025-03-12T00:00:00',
+              eventVersionUpdatedAt: '2025-03-12T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Always,
+              startDate: null,
+              startTime: '00:00:00',
+              endDate: null,
+              endTime: '23:59:00',
+              selectedDate: null,
+            }),
+            // This default schedule event is for a different activity
+            scheduleData({
+              activityOrFlowId: 'activity-or-flow-id-2',
+              activityOrFlowName: 'Activity or Flow 2',
+              eventId: 'default-schedule-event-2',
+              eventVersion: 'v1',
+              userId: null,
+              subjectId: null,
+              eventVersionCreatedAt: '2025-03-12T00:00:00',
+              eventVersionUpdatedAt: '2025-03-12T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Always,
+              startDate: null,
+              startTime: '00:00:00',
+              endDate: null,
+              endTime: '23:59:00',
+              selectedDate: null,
+            }),
+          );
+
+          // Default schedule event 2 should not be present for the individual schedule user
+          const foundSchedules = exporter.findSchedulesForDay(
+            '2025-03-12',
+            individualScheduleUser,
+            scheduleHistoryData,
+          );
+
+          expect(foundSchedules).toEqual([
+            expect.objectContaining({
+              eventId: 'individual-schedule-event-1',
+              eventVersion: 'v1',
+              periodicity: Periodicity.Always,
+            }),
+          ]);
+        });
       });
 
       describe('ONCE', () => {

@@ -181,22 +181,17 @@ export class ScheduleHistoryExporter extends DataExporter<
     userId: string,
     scheduleHistoryData: ScheduleHistoryData[],
   ): ScheduleHistoryData[] {
+    // Removes events that couldn't apply to the user
+    const filteredByUser = scheduleHistoryData.filter(
+      (schedule) => schedule.userId === userId || schedule.userId === null,
+    );
+
     const applicableSchedules: ScheduleHistoryData[] = [];
 
-    Object.entries(groupBy(scheduleHistoryData, 'activityOrFlowId')).forEach(([_, schedules]) => {
-      const sortedSchedules = schedules.sort(
-        (a, b) =>
-          new Date(a.eventVersionCreatedAt).getTime() - new Date(b.eventVersionCreatedAt).getTime(),
-      );
-
-      // Removes events that couldn't apply to the user
-      const filteredByUser = sortedSchedules.filter(
-        (schedule) => schedule.userId === userId || schedule.userId === null,
-      );
-
+    Object.entries(groupBy(filteredByUser, 'activityOrFlowId')).forEach(([_, groupedSchedules]) => {
       // Default schedules only survive if there are no individual ones, or if the individual ones have all been deleted
       // before the end time of the default schedule on this day
-      const filterDefaultSchedules = filteredByUser.filter((schedule) => {
+      const filterDefaultSchedules = groupedSchedules.filter((schedule) => {
         if (schedule.userId !== null) {
           // Keep individual schedule events
           return true;
