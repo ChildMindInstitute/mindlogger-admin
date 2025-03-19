@@ -88,6 +88,7 @@ export const calcScores = <T>(
 
       if (typeof calculatedNestedSubscale?.score === 'number') {
         result[item.name] = calculatedNestedSubscale;
+        maxScore += calculatedNestedSubscale.score;
 
         return (acc ?? 0) + calculatedNestedSubscale.score;
       }
