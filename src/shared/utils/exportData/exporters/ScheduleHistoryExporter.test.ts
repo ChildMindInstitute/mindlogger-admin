@@ -4497,23 +4497,27 @@ describe('ScheduleHistoryExporter', () => {
       });
 
       describe('MONTHLY', () => {
-        const scheduleHistoryData: ScheduleHistoryData[] = [
-          scheduleData({
-            eventId: 'default-schedule-event-1',
-            eventVersion: 'v1',
-            userId: null,
-            subjectId: null,
-            eventVersionCreatedAt: '2025-03-01T00:00:00',
-            eventVersionUpdatedAt: '2025-03-01T00:00:00',
-            eventVersionIsDeleted: false,
-            periodicity: Periodicity.Monthly,
-            startDate: '2025-05-01',
-            startTime: '00:00:00',
-            endDate: '2025-12-31',
-            endTime: '23:59:00',
-            selectedDate: '2025-05-01',
-          }),
-        ];
+        let scheduleHistoryData: ScheduleHistoryData[] = [];
+
+        beforeEach(() => {
+          scheduleHistoryData = [
+            scheduleData({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              userId: null,
+              subjectId: null,
+              eventVersionCreatedAt: '2025-03-01T00:00:00',
+              eventVersionUpdatedAt: '2025-03-01T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Monthly,
+              startDate: '2025-05-01',
+              startTime: '00:00:00',
+              endDate: '2025-12-31',
+              endTime: '23:59:00',
+              selectedDate: '2025-05-01',
+            }),
+          ];
+        });
 
         it('does not apply before the start date', () => {
           exporter
@@ -4543,6 +4547,63 @@ describe('ScheduleHistoryExporter', () => {
 
           exporter
             .daysBetweenInterval(DateTime.fromISO('2025-05-01'), DateTime.fromISO('2025-12-31'))
+            .forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Monthly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+        });
+
+        it('truncates at the end of the month for shorter months', () => {
+          scheduleHistoryData = [
+            scheduleData({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              userId: null,
+              subjectId: null,
+              eventVersionCreatedAt: '2025-01-01T00:00:00',
+              eventVersionUpdatedAt: '2025-01-01T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Monthly,
+              startDate: '2025-01-31',
+              startTime: '00:00:00',
+              endDate: '2025-12-31',
+              endTime: '23:59:00',
+              selectedDate: '2025-01-31',
+            }),
+          ];
+
+          const applicableDays = [
+            '2025-01-31',
+            '2025-02-28',
+            '2025-03-31',
+            '2025-04-30',
+            '2025-05-31',
+            '2025-06-30',
+            '2025-07-31',
+            '2025-08-31',
+            '2025-09-30',
+            '2025-10-31',
+            '2025-11-30',
+            '2025-12-31',
+          ];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-01'), DateTime.fromISO('2025-12-31'))
             .forEach((day) => {
               const foundSchedules = exporter.findSchedulesForDay(
                 day,
