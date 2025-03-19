@@ -134,6 +134,27 @@ export const mockedGetWithFlows1 = {
   },
 };
 
+export const mockedGetWithFlows2 = {
+  data: {
+    result: [
+      {
+        id: mockedActivityFlowId,
+        name: 'flow 1',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T19:11:40.017524',
+            answerId: 'answer-id-1-1',
+          },
+          {
+            createdAt: '2023-12-15T21:01:42.250242',
+            answerId: 'answer-id-1-2',
+          },
+        ],
+      },
+    ],
+  },
+};
+
 const activity1 = {
   id: mockedActivityId,
   name: 'Activity 1',
@@ -187,6 +208,33 @@ export const mockedGetWithActivities3 = {
           {
             createdAt: '2023-12-15T05:10:10.111222',
             answerId: 'answer-id-3-1',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+export const mockedGetWithActivities4 = {
+  data: {
+    result: [
+      activity1,
+      {
+        id: mockedActivityId2,
+        name: 'Activity 2',
+        lastAnswerDate: '2023-12-15T06:23:56.489090',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T05:01:20.275869',
+            answerId: 'answer-id-1-1',
+          },
+          {
+            createdAt: '2023-12-15T05:10:38.940534',
+            answerId: 'answer-id-1-2',
+          },
+          {
+            createdAt: '2023-12-15T06:23:56.489090',
+            answerId: 'answer-id-1-3',
           },
         ],
       },
