@@ -12,20 +12,26 @@ import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { isDev, isProduction } from './shared/utils/env';
 
-datadogLogs.init({
-  clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN as string,
-  site: 'datadoghq.com',
-  forwardErrorsToLogs: true,
-  sessionSampleRate: 100,
-  service: 'mindlogger-admin',
-  env: process.env.REACT_APP_ENV,
-  version: process.env.REACT_APP_DD_VERSION,
-});
+if (process.env.REACT_APP_DD_CLIENT_TOKEN) {
+  datadogLogs.init({
+    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN,
+    site: 'datadoghq.com',
+    forwardErrorsToLogs: true,
+    sessionSampleRate: 100,
+    service: 'mindlogger-admin',
+    env: process.env.REACT_APP_ENV,
+    version: process.env.REACT_APP_DD_VERSION,
+  });
+}
 
-if (isDev || isProduction) {
+if (
+  process.env.REACT_APP_DD_APP_ID &&
+  process.env.REACT_APP_DD_CLIENT_TOKEN &&
+  (isDev || isProduction)
+) {
   datadogRum.init({
-    applicationId: process.env.REACT_APP_DD_APP_ID as string,
-    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN as string,
+    applicationId: process.env.REACT_APP_DD_APP_ID,
+    clientToken: process.env.REACT_APP_DD_CLIENT_TOKEN,
     // `site` refers to the Datadog site parameter of your organization
     // see https://docs.datadoghq.com/getting_started/site/
     site: 'datadoghq.com',
@@ -39,7 +45,7 @@ if (isDev || isProduction) {
     trackResources: true,
     trackLongTasks: true,
     trackUserInteractions: false,
-    allowedTracingUrls: (process.env.REACT_APP_DD_TRACING_URLS as string)
+    allowedTracingUrls: (process.env.REACT_APP_DD_TRACING_URLS ?? '')
       .split(',')
       .map((it: string) => it.trim()),
   });
