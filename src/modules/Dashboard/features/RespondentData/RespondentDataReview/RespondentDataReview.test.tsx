@@ -20,8 +20,10 @@ import {
   mockedGetWithActivities1,
   mockedGetWithActivities2,
   mockedGetWithActivities3,
+  mockedGetWithActivities4,
   mockedGetWithDates,
   mockedGetWithFlows1,
+  mockedGetWithFlows2,
   mockedGetWithResponses,
   preloadedState,
 } from 'shared/mock/RespondetDataReview.mock';
@@ -43,55 +45,18 @@ const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1
 )}&answerId=answer-id-2-2&isFeedbackVisible=true`;
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
 const routePath = page.appletParticipantDataReview;
-const preloadedState: PreloadedState<RootState> = {
-  workspaces: {
-    workspaces: initialStateData,
-    currentWorkspace: {
-      ...initialStateData,
-      ...mockedCurrentWorkspace,
-    },
-    roles: {
-      ...initialStateData,
-      data: {
-        [mockedAppletId]: [Roles.Manager],
-      },
-    },
-    workspacesRoles: initialStateData,
-  },
-  applet: {
-    applet: {
-      ...initialStateData,
-      data: { result: mockedApplet },
-    },
-  },
-  users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
-    subjectDetails: {
-      ...initialStateData,
-      data: {
-        result: {
-          id: '1',
-          nickname: 'Mocked Respondent',
-          secretUserId: mockedFullSubjectId1,
-          lastSeen: '2023-12-15T23:29:36.150182',
-          tag: 'Child' as ParticipantTag,
-          userId: mockedFullSubjectId1,
-          firstName: 'John',
-          lastName: 'Doe',
-          roles: [Roles.Respondent],
-          teamMemberCanViewData: true,
-        },
-      },
-    },
-    respondentDetails: initialStateData,
-  },
-};
+
+const activityRoute1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/responses?selectedDate=${format(
+  date2,
+  DateFormats.YearMonthDay,
+)}`;
+const activityRoutePath = page.appletParticipantActivityDetailsDataReview;
+
+const flowRoute1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activityFlows/${mockedActivityFlowId}/responses?selectedDate=${format(
+  date2,
+  DateFormats.YearMonthDay,
+)}`;
+const flowRoutePath = page.appletParticipantActivityDetailsFlowDataReview;
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
