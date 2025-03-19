@@ -25,8 +25,8 @@ import {
   defaultSliderConfig,
   defaultTextConfig,
   defaultTimeConfig,
-} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
-import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+} from '../../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+import { LookupTableDataItem } from '../../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 import {
   CalculationType,
   ConditionalLogicMatch,
@@ -37,7 +37,7 @@ import {
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
-} from './consts';
+} from '../consts';
 import {
   Activity,
   ActivitySettingsSubscale,
@@ -49,9 +49,9 @@ import {
   SliderItem,
   SubscaleSetting,
   TextItem,
-} from './state';
-import { DecryptedAnswerData, ElementType, Invitations } from './types';
-import { Encryption } from './utils';
+} from '../state';
+import { DecryptedAnswerData, ElementType, Invitations } from '../types';
+import { Encryption } from '../utils';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
