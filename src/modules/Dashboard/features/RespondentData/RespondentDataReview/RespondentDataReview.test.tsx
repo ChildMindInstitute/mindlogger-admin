@@ -23,7 +23,6 @@ import {
   mockedGetWithActivities4,
   mockedGetWithDates,
   mockedGetWithFlows1,
-  mockedGetWithFlows2,
   mockedGetWithResponses,
   preloadedState,
 } from 'shared/mock/RespondetDataReview.mock';
@@ -86,6 +85,100 @@ const RespondentDataReviewWithForm = () => {
 };
 
 describe('RespondentDataReview', () => {
+  describe('Activity view', () => {
+    test('properly displays correct dates for selected activity', async () => {
+      mockAxios.get
+        .mockResolvedValueOnce(mockedGetWithFlows1)
+        .mockResolvedValueOnce(mockedGetWithActivities4)
+        .mockResolvedValueOnce(mockedGetWithDates)
+        .mockResolvedValueOnce(mockedGetWithResponses)
+        .mockResolvedValueOnce(mockAssessment);
+
+      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+
+      renderWithProviders(<RespondentDataReviewWithForm />, {
+        preloadedState,
+        route: activityRoute1,
+        routePath: activityRoutePath,
+      });
+
+      window.HTMLElement.prototype.scrollTo = () => {};
+
+      await waitFor(() => {
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          1,
+          `/answers/applet/${mockedAppletId}/review/flows`,
+          {
+            params: {
+              createdDate: format(date2, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          2,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: format(date2, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
+          `/answers/applet/${mockedAppletId}/dates`,
+          expect.objectContaining({
+            params: {
+              targetSubjectId: mockedFullSubjectId1,
+              fromDate: startOfMonth(date2).getTime().toString(),
+              toDate: endOfMonth(date2).getTime().toString(),
+              activityOrFlowId: mockedActivityId2,
+            },
+          }),
+        );
+      });
+
+      expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
+      expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
+      expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
+
+      const activityLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-\d+-select$/,
+      );
+      expect(activityLength).toHaveLength(1);
+
+      const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
+
+      await act(async () => {
+        await userEvent.click(activity);
+      });
+
+      // check that the correct amount of timestamps are in the selected activity
+      const timestampLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-0-completion-time-\d+$/,
+      );
+      expect(timestampLength).toHaveLength(3);
+
+      const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
+      expect(inputContainer).toBeInTheDocument();
+
+      const input = inputContainer.querySelector('input') as HTMLInputElement;
+      expect(input).toBeInTheDocument();
+      expect(input.value).toEqual('15 Dec 2023');
+    });
+  });
+
   test(
     'renders component correctly with all child components when isFeedbackVisible param is false',
     async () => {
@@ -358,7 +451,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
-              createdDate: '2023-12-15',
+              createdDate: format(date2, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -371,7 +464,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
-              createdDate: '2023-12-15',
+              createdDate: format(date2, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -385,8 +478,8 @@ describe('RespondentDataReview', () => {
           expect.objectContaining({
             params: {
               targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
+              fromDate: startOfMonth(date2).getTime().toString(),
+              toDate: endOfMonth(date2).getTime().toString(),
             },
           }),
         );
