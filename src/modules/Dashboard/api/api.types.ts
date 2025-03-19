@@ -531,7 +531,8 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
-    activityOrFlowId: string;
+    // TODO: Remove optional param once tests for dataviz have been updated (M2-8891)
+    activityOrFlowId?: string;
   };
 
 export type EventId = { eventId: string };

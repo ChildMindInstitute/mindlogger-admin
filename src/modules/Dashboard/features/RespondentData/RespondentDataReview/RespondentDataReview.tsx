@@ -150,7 +150,8 @@ export const RespondentDataReview = () => {
 
   const handleGetSubmitDates = (date: Date) => {
     const activityOrFlowId = activityId || activityFlowId;
-    if (!appletId || !subjectId || !activityOrFlowId) return;
+    // TODO: Add !activityOrFlowId to the if statement after dataviz tests have been updated (M2-8891)
+    if (!appletId || !subjectId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
