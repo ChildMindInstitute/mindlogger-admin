@@ -199,7 +199,12 @@ export class ScheduleHistoryExporter extends DataExporter<
           return true;
         }
 
-        const endTimeOnDay = DateTime.fromISO(`${day}T${schedule.endTime}`);
+        const extendsPastDay =
+          DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
+
+        const endTimeOnDay = extendsPastDay
+          ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
+          : DateTime.fromISO(`${day}T${schedule.endTime}`);
 
         return (
           filteredByUser.filter((competition) => {
