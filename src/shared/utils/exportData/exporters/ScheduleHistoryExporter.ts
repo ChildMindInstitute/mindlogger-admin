@@ -248,7 +248,9 @@ export class ScheduleHistoryExporter extends DataExporter<
               const schedulesAhead = filterDefaultSchedules.slice(
                 filterDefaultSchedules.indexOf(schedule) + 1,
               );
-              const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
+              const startTimeOnDay = schedule.accessBeforeSchedule
+                ? DateTime.fromISO(day)
+                : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
               let isSupersededOnThisDate = false;
               for (let j = 0; j < schedulesAhead.length; j++) {
@@ -281,7 +283,9 @@ export class ScheduleHistoryExporter extends DataExporter<
             }
 
             const filteredByDeletion = filteredByVersion.filter((schedule) => {
-              const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
+              const startTimeOnDay = schedule.accessBeforeSchedule
+                ? DateTime.fromISO(day)
+                : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
               const deletionDate = DateTime.fromISO(
                 schedule.eventVersionIsDeleted ? schedule.eventVersionUpdatedAt : '',
