@@ -190,103 +190,111 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     const applicableSchedules: ScheduleHistoryData[] = [];
 
-    Object.entries(groupBy(filteredByUser, 'activityOrFlowId')).forEach(([_, groupedSchedules]) => {
-      // Default schedules only survive if there are no individual ones, or if the individual ones have all been deleted
-      // before the end time of the default schedule on this day
-      const filterDefaultSchedules = groupedSchedules.filter((schedule) => {
-        if (schedule.userId !== null) {
-          // Keep individual schedule events
-          return true;
-        }
+    Object.entries(groupBy(filteredByUser, 'appletVersion')).forEach(
+      ([_, appletVersionGroupedSchedules]) => {
+        Object.entries(groupBy(appletVersionGroupedSchedules, 'activityOrFlowId')).forEach(
+          ([_, entityGroupedSchedules]) => {
+            // Default schedules only survive if there are no individual ones, or if the individual ones have all been deleted
+            // before the end time of the default schedule on this day
+            const filterDefaultSchedules = entityGroupedSchedules.filter((schedule) => {
+              if (schedule.userId !== null) {
+                // Keep individual schedule events
+                return true;
+              }
 
-        const extendsPastDay =
-          DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
+              const extendsPastDay =
+                DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
 
-        const endTimeOnDay = extendsPastDay
-          ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
-          : DateTime.fromISO(`${day}T${schedule.endTime}`);
+              const endTimeOnDay = extendsPastDay
+                ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
+                : DateTime.fromISO(`${day}T${schedule.endTime}`);
 
-        return (
-          filteredByUser.filter((competition) => {
-            const isIndividualSchedule = competition.userId !== null;
+              return (
+                appletVersionGroupedSchedules.filter((competition) => {
+                  const isIndividualSchedule = competition.userId !== null;
 
-            const createdTodayOrBefore =
-              DateTime.fromISO(competition.eventVersionCreatedAt) <=
-              DateTime.fromISO(day).endOf('day');
+                  const createdTodayOrBefore =
+                    DateTime.fromISO(competition.eventVersionCreatedAt) <=
+                    DateTime.fromISO(day).endOf('day');
 
-            const deletionDate = DateTime.fromISO(
-              competition.eventVersionIsDeleted ? competition.eventVersionUpdatedAt : '',
+                  const deletionDate = DateTime.fromISO(
+                    competition.eventVersionIsDeleted ? competition.eventVersionUpdatedAt : '',
+                  );
+
+                  const notDeleted = !deletionDate.isValid;
+
+                  const deletedAfterDefaultScheduleEndTime =
+                    deletionDate.isValid && deletionDate > endTimeOnDay;
+
+                  return (
+                    isIndividualSchedule &&
+                    createdTodayOrBefore &&
+                    (notDeleted || deletedAfterDefaultScheduleEndTime)
+                  );
+                }).length === 0
+              );
+            });
+
+            // This removes events that don't apply based strictly on periodicity
+            // It will contain duplicates
+            const filteredByPeriodicity = filterDefaultSchedules.filter((schedule) =>
+              this.isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(day, schedule),
             );
 
-            const notDeleted = !deletionDate.isValid;
+            const filteredByVersion: ScheduleHistoryData[] = [];
 
-            const deletedAfterDefaultScheduleEndTime =
-              deletionDate.isValid && deletionDate > endTimeOnDay;
+            for (let i = 0; i < filteredByPeriodicity.length; i++) {
+              const schedule = filteredByPeriodicity[i];
+              const schedulesAhead = filterDefaultSchedules.slice(
+                filterDefaultSchedules.indexOf(schedule) + 1,
+              );
+              const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
 
-            return (
-              isIndividualSchedule &&
-              createdTodayOrBefore &&
-              (notDeleted || deletedAfterDefaultScheduleEndTime)
-            );
-          }).length === 0
+              let isSupersededOnThisDate = false;
+              for (let j = 0; j < schedulesAhead.length; j++) {
+                const scheduleAhead = schedulesAhead[j];
+                const scheduleAheadCreationDate = DateTime.fromISO(
+                  scheduleAhead.eventVersionCreatedAt,
+                );
+
+                const isSameScheduleType = scheduleAhead.userId === schedule.userId;
+                const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
+                const isCreatedBeforeStartTime = scheduleAheadCreationDate <= startTimeOnDay;
+                const isSameEvent = scheduleAhead.eventId === schedule.eventId;
+                const isOneAlwaysAvailable =
+                  schedule.periodicity === 'ALWAYS' || scheduleAhead.periodicity === 'ALWAYS';
+
+                if (
+                  isSameScheduleType &&
+                  isSameEntity &&
+                  isCreatedBeforeStartTime &&
+                  (isSameEvent || isOneAlwaysAvailable)
+                ) {
+                  isSupersededOnThisDate = true;
+                  break;
+                }
+              }
+
+              if (!isSupersededOnThisDate) {
+                filteredByVersion.push(schedule);
+              }
+            }
+
+            const filteredByDeletion = filteredByVersion.filter((schedule) => {
+              const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
+
+              const deletionDate = DateTime.fromISO(
+                schedule.eventVersionIsDeleted ? schedule.eventVersionUpdatedAt : '',
+              );
+
+              return !deletionDate.isValid || deletionDate >= startTimeOnDay;
+            });
+
+            applicableSchedules.push(...filteredByDeletion);
+          },
         );
-      });
-
-      // This removes events that don't apply based strictly on periodicity
-      // It will contain duplicates
-      const filteredByPeriodicity = filterDefaultSchedules.filter((schedule) =>
-        this.isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(day, schedule),
-      );
-
-      const filteredByVersion: ScheduleHistoryData[] = [];
-
-      for (let i = 0; i < filteredByPeriodicity.length; i++) {
-        const schedule = filteredByPeriodicity[i];
-        const schedulesAhead = filterDefaultSchedules.slice(
-          filterDefaultSchedules.indexOf(schedule) + 1,
-        );
-        const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
-
-        let isSupersededOnThisDate = false;
-        for (let j = 0; j < schedulesAhead.length; j++) {
-          const scheduleAhead = schedulesAhead[j];
-          const scheduleAheadCreationDate = DateTime.fromISO(scheduleAhead.eventVersionCreatedAt);
-
-          const isSameScheduleType = scheduleAhead.userId === schedule.userId;
-          const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
-          const isCreatedBeforeStartTime = scheduleAheadCreationDate <= startTimeOnDay;
-          const isSameEvent = scheduleAhead.eventId === schedule.eventId;
-          const isOneAlwaysAvailable =
-            schedule.periodicity === 'ALWAYS' || scheduleAhead.periodicity === 'ALWAYS';
-
-          if (
-            isSameScheduleType &&
-            isSameEntity &&
-            isCreatedBeforeStartTime &&
-            (isSameEvent || isOneAlwaysAvailable)
-          ) {
-            isSupersededOnThisDate = true;
-            break;
-          }
-        }
-
-        if (!isSupersededOnThisDate) {
-          filteredByVersion.push(schedule);
-        }
-      }
-
-      const filteredByDeletion = filteredByVersion.filter((schedule) => {
-        const startTimeOnDay = DateTime.fromISO(`${day}T${schedule.startTime}`);
-
-        const deletionDate = DateTime.fromISO(
-          schedule.eventVersionIsDeleted ? schedule.eventVersionUpdatedAt : '',
-        );
-
-        return !deletionDate.isValid || deletionDate >= startTimeOnDay;
-      });
-
-      applicableSchedules.push(...filteredByDeletion);
-    });
+      },
+    );
 
     return applicableSchedules;
   }
