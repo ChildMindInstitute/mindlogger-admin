@@ -28,6 +28,7 @@ describe('ScheduleHistoryExporter', () => {
       eventType: 'activity',
       activityOrFlowId: 'activity-or-flow-id',
       activityOrFlowName: 'Activity or Flow',
+      activityOrFlowHidden: false,
       eventUpdatedBy: 'some-admin-user-id',
       userId: null,
       subjectId: null,

@@ -599,6 +599,7 @@ export type ScheduleHistoryData = {
   eventUpdatedBy: string;
   activityOrFlowId: string;
   activityOrFlowName: string;
+  activityOrFlowHidden: boolean;
   accessBeforeSchedule: boolean | null;
   oneTimeCompletion: boolean | null;
   periodicity: Periodicity;
