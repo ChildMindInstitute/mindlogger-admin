@@ -31,7 +31,11 @@ export const BuilderApplet = () => {
   const hiddenHeader = !!params.activityId || !!params.activityFlowId;
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
+  const removeAppletData = useRemoveAppletData();
   const isNewApplet = useCheckIfNewApplet();
+  if (isNewApplet) {
+    removeAppletData();
+  }
   const redirectedFromBuilder = forbiddenState.useData()?.redirectedFromBuilder ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
@@ -44,7 +48,6 @@ export const BuilderApplet = () => {
     appletResponseType === 'applet/getAppletWithItems' &&
     !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
-  const removeAppletData = useRemoveAppletData();
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary, isFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
