@@ -1,6 +1,14 @@
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
+import {
+  defaultMultiSelectionConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+import { LookupTableDataItem } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
 import {
   ActivityAssignmentStatus,
@@ -19,14 +27,6 @@ import {
 } from 'modules/Dashboard/types';
 import { page } from 'resources';
 
-import {
-  defaultMultiSelectionConfig,
-  defaultSingleSelectionConfig,
-  defaultSliderConfig,
-  defaultTextConfig,
-  defaultTimeConfig,
-} from '../../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
-import { LookupTableDataItem } from '../../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
 import {
   CalculationType,
   ConditionalLogicMatch,
