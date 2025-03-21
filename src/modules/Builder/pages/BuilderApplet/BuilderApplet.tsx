@@ -31,13 +31,10 @@ export const BuilderApplet = () => {
   const hiddenHeader = !!params.activityId || !!params.activityFlowId;
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
-  const removeAppletData = useRemoveAppletData();
   const isNewApplet = useCheckIfNewApplet();
-  if (isNewApplet) {
-    removeAppletData();
-  }
   const redirectedFromBuilder = forbiddenState.useData()?.redirectedFromBuilder ?? {};
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { result: appletDataResult } = applet.useAppletData() ?? {};
+  const appletData = !isNewApplet ? appletDataResult : undefined;
   const { getAppletWithItems } = applet.thunk;
   const { result: themesList = [] } = themes.useThemesData() || {};
   const loadingStatus = applet.useResponseStatus();
@@ -48,6 +45,7 @@ export const BuilderApplet = () => {
     appletResponseType === 'applet/getAppletWithItems' &&
     !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
+  const removeAppletData = useRemoveAppletData();
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary, isFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
