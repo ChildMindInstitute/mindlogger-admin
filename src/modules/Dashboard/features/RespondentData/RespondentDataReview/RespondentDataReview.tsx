@@ -149,7 +149,7 @@ export const RespondentDataReview = () => {
   });
 
   const handleGetSubmitDates = (date: Date) => {
-    const activityOrFlowId = activityId || activityFlowId;
+    const activityOrFlowId = activityFlowId || activityId;
     // TODO: Add !activityOrFlowId to the if statement after dataviz tests have been updated (M2-8891)
     if (!appletId || !subjectId) return;
 
