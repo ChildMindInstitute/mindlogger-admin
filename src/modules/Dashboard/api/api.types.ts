@@ -619,7 +619,9 @@ export type DeviceScheduleHistoryData = {
   startTime: string;
   endDate: string | null;
   endTime: string;
+  accessBeforeSchedule: boolean | null;
   createdAt: string;
+  userTimeZone: string | null;
 };
 
 export type FlowItemHistoryParams = AppletId & {

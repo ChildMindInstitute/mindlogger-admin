@@ -1,4 +1,4 @@
-import { DateTime, Interval } from 'luxon';
+import { DateTime, IANAZone, Interval } from 'luxon';
 
 import {
   DeviceScheduleHistoryData,
@@ -29,12 +29,15 @@ export type ScheduleHistoryExportRow = {
   schedule_date: string;
   schedule_start_time: string;
   schedule_end_time: string;
+  access_before_schedule_start_time: string;
   mobile_device_schedule_version: string | null;
   mobile_device_schedule_start_date: string | null;
   mobile_device_schedule_end_date: string | null;
   mobile_device_schedule_start_time: string | null;
   mobile_device_schedule_end_time: string | null;
+  mobile_device_schedule_access_before_start_time: string | null;
   mobile_device_schedule_download_timestamp: string | null;
+  mobile_device_schedule_utc_timezone_offset: string | null;
 };
 
 type FullAccountParticipant = Omit<ParticipantWithDataAccess, 'id'> & { id: string };
@@ -130,6 +133,17 @@ export class ScheduleHistoryExporter extends DataExporter<
             sortedDeviceScheduleHistoryData,
           );
 
+          let mobileDeviceScheduleAccessBeforeStartTime = null;
+
+          if (
+            deviceSchedule?.accessBeforeSchedule !== null &&
+            deviceSchedule?.accessBeforeSchedule !== undefined
+          ) {
+            mobileDeviceScheduleAccessBeforeStartTime = deviceSchedule.accessBeforeSchedule
+              ? 'yes'
+              : 'no';
+          }
+
           rows.push({
             applet_id: appletId,
             applet_version: schedule.appletVersion,
@@ -153,12 +167,18 @@ export class ScheduleHistoryExporter extends DataExporter<
             schedule_date: day,
             schedule_start_time: schedule.startTime,
             schedule_end_time: schedule.endTime,
+            access_before_schedule_start_time: schedule.accessBeforeSchedule ? 'yes' : 'no',
             mobile_device_schedule_version: deviceSchedule?.eventVersion ?? null,
             mobile_device_schedule_start_date: deviceSchedule?.startDate ?? null,
             mobile_device_schedule_end_date: deviceSchedule?.endDate ?? null,
             mobile_device_schedule_start_time: deviceSchedule?.startTime ?? null,
             mobile_device_schedule_end_time: deviceSchedule?.endTime ?? null,
+            mobile_device_schedule_access_before_start_time:
+              mobileDeviceScheduleAccessBeforeStartTime,
             mobile_device_schedule_download_timestamp: deviceSchedule?.createdAt ?? null,
+            mobile_device_schedule_utc_timezone_offset: deviceSchedule?.userTimeZone
+              ? `${IANAZone.create(deviceSchedule.userTimeZone).offset(Date.now())}`
+              : null,
           });
         });
       }
@@ -521,12 +541,15 @@ export class ScheduleHistoryExporter extends DataExporter<
       'schedule_date',
       'schedule_start_time',
       'schedule_end_time',
+      'access_before_schedule_start_time',
       'mobile_device_schedule_version',
       'mobile_device_schedule_start_date',
       'mobile_device_schedule_end_date',
       'mobile_device_schedule_start_time',
       'mobile_device_schedule_end_time',
+      'mobile_device_schedule_access_before_start_time',
       'mobile_device_schedule_download_timestamp',
+      'mobile_device_schedule_utc_timezone_offset',
     ];
   }
 }
