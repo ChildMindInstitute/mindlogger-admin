@@ -118,7 +118,8 @@ export class ScheduleHistoryExporter extends DataExporter<
       DateTime.fromJSDate(periodEndDate),
     );
 
-    for (const day of days) {
+    for (let i = days.length - 1; i >= 0; i--) {
+      const day = days[i];
       for (const participant of fullAccountParticipants) {
         const schedulesForDay = this.findSchedulesForDay(
           day,
