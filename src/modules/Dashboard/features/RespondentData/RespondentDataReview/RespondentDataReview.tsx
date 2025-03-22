@@ -246,6 +246,12 @@ export const RespondentDataReview = () => {
       }
     }
 
+    if (responseDates?.length) {
+      handleSetInitialDate(responseDates[responseDates.length - 1]);
+
+      return;
+    }
+
     if (lastActivityCompletedDate) {
       handleSetInitialDate(lastActivityCompletedDate);
 
