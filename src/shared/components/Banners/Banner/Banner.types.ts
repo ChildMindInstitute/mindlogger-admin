@@ -5,6 +5,6 @@ export type BannerProps = {
   duration?: number | null;
   /** @default !!onClose */
   hasCloseButton?: boolean;
-  onClose?: () => void;
+  onClose?: (reason?: 'timeout' | 'manual') => void;
 } & Pick<AlertProps, 'severity' | 'color' | 'children' | 'iconMapping'> &
   Record<string, unknown>; // Custom banner props
