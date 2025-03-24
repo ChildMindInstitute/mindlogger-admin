@@ -883,6 +883,11 @@ export const theme = createTheme({
     info: {
       main: variables.palette.blue,
     },
+    infoAlt: {
+      main: variables.palette.purple,
+      dark: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa8),
+      light: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa12),
+    },
     success: {
       main: variables.palette.green,
     },
@@ -914,6 +919,21 @@ declare module '@mui/material/IconButton' {
 declare module '@mui/material/Autocomplete' {
   interface AutocompletePropsSizeOverrides {
     large: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    infoAlt: Palette['primary'];
+  }
+  interface PaletteOptions {
+    infoAlt?: PaletteOptions['primary'];
+  }
+}
+
+declare module '@mui/material/Alert' {
+  interface AlertPropsColorOverrides {
+    infoAlt: true;
   }
 }
 
