@@ -1,0 +1,2 @@
+export const EHR_LEARN_MORE_URL = '#TODO_LEARN_MORE_URL';
+export const EHR_CONTACT_URL = '#TODO_CONTACT_URL';

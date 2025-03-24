@@ -556,6 +556,10 @@
   "editParticipant": "Edit Participant",
   "editRespondents": "Edit Respondents",
   "editUser": "Edit User",
+  "ehr": {
+    "bannerAvailable": "Now you can collect participants' Health Care Data in studies! <0>Learn more</0>",
+    "bannerActive": "Your Electronic Health Data Integration is active. If you have any questions or issues, <0>contact us</0>."
+  },
   "element": "Element",
   "elementsAssociatedWithSubscales": "Elements associated with one or more subscales",
   "elementsNotIncludedInSubscale": "Elements not included in any subscale",
