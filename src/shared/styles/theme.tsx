@@ -745,7 +745,7 @@ export const theme = createTheme({
     },
     MuiAlert: {
       styleOverrides: {
-        root: ({ ownerState: { variant, severity } }) => ({
+        root: ({ ownerState: { variant, severity, color } }) => ({
           fontSize: variables.font.size.lg,
           lineHeight: variables.font.lineHeight.lg,
           letterSpacing: variables.font.letterSpacing.md,
@@ -765,6 +765,9 @@ export const theme = createTheme({
             }),
             ...(severity === 'error' && {
               backgroundColor: variables.palette.error_container,
+            }),
+            ...(color === 'infoAlt' && {
+              backgroundColor: variables.palette.purple_alfa30,
             }),
           }),
           '.MuiAlert-action': {
