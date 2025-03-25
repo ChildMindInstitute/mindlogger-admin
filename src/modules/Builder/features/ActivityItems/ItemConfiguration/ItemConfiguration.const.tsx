@@ -114,6 +114,15 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     ],
   },
   {
+    groupName: 'import',
+    groupOptions: [
+      {
+        value: ItemResponseType.RequestHealthRecordData,
+        icon: itemsTypeIcons[ItemResponseType.RequestHealthRecordData],
+      },
+    ],
+  },
+  {
     groupName: 'record',
     groupOptions: [
       {

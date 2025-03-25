@@ -53,21 +53,12 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const availableItemsTypeOptions = itemsTypeOptions.reduce(
-    (options: ItemsOptionGroup[], { groupName, groupOptions }) => {
-      if (groupName === 'downloadable' && !isReviewable) {
-        return [
-          ...options,
-          {
-            groupName,
-            groupOptions: groupOptions.filter(
-              ({ value }) => value !== 'phrasalTemplate' || featureFlags.enablePhrasalTemplate,
-            ),
-          },
-        ];
-      }
-
+  const availableItemsTypeOptions = itemsTypeOptions
+    .reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
       if (isReviewable) {
+        // Reviewable activities only support 3 possible item types in the 'select' group:
+        // single selection, multiple selection, and slider. Skip all other groups and item types.
+
         if (groupName !== 'select') return options;
 
         return [
@@ -80,23 +71,39 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         ];
       }
 
-      if (groupName === 'input') {
-        return [
-          ...options,
-          {
-            groupName,
-            groupOptions: groupOptions.filter(
-              ({ value }) =>
-                value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
-            ),
-          },
-        ];
+      let newGroupOptions = groupOptions;
+
+      switch (groupName) {
+        case 'downloadable':
+          newGroupOptions = groupOptions.filter(
+            ({ value }) =>
+              value !== ItemResponseType.PhrasalTemplate || featureFlags.enablePhrasalTemplate,
+          );
+          break;
+        case 'input':
+          newGroupOptions = groupOptions.filter(
+            ({ value }) =>
+              value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
+          );
+          break;
+        case 'import':
+          newGroupOptions = groupOptions.filter(
+            ({ value }) =>
+              value !== ItemResponseType.RequestHealthRecordData ||
+              featureFlags.enableEhrHealthData === 'active',
+          );
+          break;
       }
 
-      return [...options, { groupName, groupOptions }];
-    },
-    [],
-  );
+      return [
+        ...options,
+        {
+          groupName,
+          groupOptions: newGroupOptions,
+        },
+      ];
+    }, [])
+    .filter(({ groupOptions }) => groupOptions.length > 0);
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
