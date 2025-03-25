@@ -33,7 +33,8 @@ export const BuilderApplet = () => {
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const redirectedFromBuilder = forbiddenState.useData()?.redirectedFromBuilder ?? {};
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { result: appletDataResult } = applet.useAppletData() ?? {};
+  const appletData = !isNewApplet ? appletDataResult : undefined;
   const { getAppletWithItems } = applet.thunk;
   const { result: themesList = [] } = themes.useThemesData() || {};
   const loadingStatus = applet.useResponseStatus();
