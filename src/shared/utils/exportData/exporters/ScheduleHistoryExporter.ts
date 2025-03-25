@@ -109,7 +109,7 @@ export class ScheduleHistoryExporter extends DataExporter<
     );
 
     const periodStartDate = new Date(
-      params?.fromDate ?? sortedDeviceScheduleHistoryData[0].createdAt,
+      params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt,
     );
     const periodEndDate = new Date(params?.toDate ?? DateTime.now().toISO());
 
