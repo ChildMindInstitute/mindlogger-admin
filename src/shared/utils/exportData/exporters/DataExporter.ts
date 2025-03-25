@@ -82,7 +82,7 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
    * @param endDate
    */
   daysBetweenInterval(startDate: DateTime, endDate: DateTime): string[] {
-    return Interval.fromDateTimes(startDate, endDate)
+    return Interval.fromDateTimes(startDate, endDate.plus({ day: 1 }))
       .splitBy({ day: 1 })
       .map((d) => d.start?.toISODate())
       .filter((d): d is string => d !== undefined);

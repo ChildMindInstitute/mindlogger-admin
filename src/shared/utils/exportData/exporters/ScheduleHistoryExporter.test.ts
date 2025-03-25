@@ -4,6 +4,8 @@ import { Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
 describe('ScheduleHistoryExporter', () => {
+  const exporter = new ScheduleHistoryExporter('applet-id');
+
   describe('findSchedulesForDays', () => {
     const scheduleData = (
       override: Partial<ScheduleHistoryData> &
@@ -38,8 +40,6 @@ describe('ScheduleHistoryExporter', () => {
       oneTimeCompletion: false,
       ...override,
     });
-
-    const exporter = new ScheduleHistoryExporter('applet-id');
 
     describe('Default schedule', () => {
       const defaultScheduleUser = 'default-schedule-user';
@@ -4638,6 +4638,44 @@ describe('ScheduleHistoryExporter', () => {
           });
         });
       });
+    });
+  });
+
+  describe('daysBetweenInterval', () => {
+    it('returns an array of ISO strings for each day between the start and end dates inclusive', () => {
+      const start = DateTime.fromISO('2025-03-12');
+      const end = DateTime.fromISO('2025-03-15');
+
+      const days = exporter.daysBetweenInterval(start, end);
+
+      expect(days).toEqual(['2025-03-12', '2025-03-13', '2025-03-14', '2025-03-15']);
+    });
+
+    it('works for a single day', () => {
+      const start = DateTime.fromISO('2025-03-12');
+      const end = DateTime.fromISO('2025-03-12');
+
+      const days = exporter.daysBetweenInterval(start, end);
+
+      expect(days).toEqual(['2025-03-12']);
+    });
+
+    it('works across months', () => {
+      const start = DateTime.fromISO('2025-03-31');
+      const end = DateTime.fromISO('2025-04-01');
+
+      const days = exporter.daysBetweenInterval(start, end);
+
+      expect(days).toEqual(['2025-03-31', '2025-04-01']);
+    });
+
+    it("doesn't work backwards", () => {
+      const start = DateTime.fromISO('2025-03-15');
+      const end = DateTime.fromISO('2025-03-12');
+
+      const days = exporter.daysBetweenInterval(start, end);
+
+      expect(days).toEqual([]);
     });
   });
 });
