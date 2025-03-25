@@ -5,6 +5,8 @@ export const enum LocalStorageKeys {
   LibraryPreparedData = 'libraryPreparedData',
   IsFromLibrary = 'isFromLibrary',
   LibraryUrl = 'libraryPath',
+  EHRBannerAvailableDismissed = 'EHRBannerAvailableDismissed',
+  EHRBannerActiveDismissed = 'EHRBannerActiveDismissed',
 }
 
 export const enum SessionStorageKeys {
