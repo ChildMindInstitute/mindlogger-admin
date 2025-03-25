@@ -1294,6 +1294,7 @@
   "reportConfiguration": "Report Configuration",
   "reportEmailBody": "Please see the report attached to this email.",
   "reports": "Reports",
+  "requestHealthRecordData": "Request Health Record Data",
   "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",
   "requiredField": "Field is required",
   "requireToCreateAccount": "Do you want to require the respondent to create an account?",

@@ -1293,6 +1293,7 @@
   "reportConfiguration": "Configuration du rapport",
   "reportEmailBody": "Veuillez consulter le rapport joint à cet e-mail.",
   "reports": "Rapports",
+  "requestHealthRecordData": "Demander des données de santé",
   "requestTransferOwnershipSuccess": "<0>Votre demande a été envoyée avec succès à <1>{{email}}</1>. Veuillez attendre que le destinataire accepte votre demande.</0>",
   "requiredField": "Champ requis",
   "requireToCreateAccount": "Voulez-vous exiger que le participant crée un compte?",
