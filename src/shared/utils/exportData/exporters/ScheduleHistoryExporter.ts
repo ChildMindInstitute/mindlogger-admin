@@ -124,6 +124,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
         schedulesForDay.forEach((schedule) => {
           const deviceSchedule = this.findLatestMobileSchedule(
+            day,
             participant.id,
             schedule,
             sortedDeviceScheduleHistoryData,
@@ -404,22 +405,29 @@ export class ScheduleHistoryExporter extends DataExporter<
    * device on this day, the latest one will be returned.
    */
   private findLatestMobileSchedule(
+    day: string,
     userId: string,
     scheduleHistoryEvent: ScheduleHistoryData,
     sortedDeviceScheduleHistoryData: DeviceScheduleHistoryData[],
   ): DeviceScheduleHistoryData | null {
     // We just need to find the versions of this schedule that the user has downloaded
     // that aren't newer than the event version we're looking at
+    // and was downloaded before its start time
+
+    const startTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.startTime}`);
+
     const schedulesFound = sortedDeviceScheduleHistoryData.filter((schedule) => {
       const [deviceDatePart, deviceNumberPart] = schedule.eventVersion.split('-');
       const [eventDatePart, eventNumberPart] = scheduleHistoryEvent.eventVersion.split('-');
+      const downloadDate = DateTime.fromISO(schedule.createdAt);
 
       return (
         schedule.userId === userId &&
         schedule.eventId === scheduleHistoryEvent.eventId &&
         DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <=
           DateTime.fromFormat(eventDatePart, 'yyyyMMdd') &&
-        parseInt(deviceNumberPart) <= parseInt(eventNumberPart)
+        parseInt(deviceNumberPart) <= parseInt(eventNumberPart) &&
+        downloadDate < startTimeOnDay
       );
     });
 
