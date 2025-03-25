@@ -14,7 +14,7 @@ export const useItemContent = () => {
   const {
     featureFlags: { enableParagraphTextItem },
   } = useFeatureFlags();
-  const itemResponseTypes = getItemResponseTypes(enableParagraphTextItem);
+  const itemResponseTypes = getItemResponseTypes(!!enableParagraphTextItem);
 
   return (item: Item, search: string) => {
     switch (item.responseType) {
