@@ -446,7 +446,8 @@ export const theme = createTheme({
           borderRadius: variables.borderRadius.md,
           fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
           fontWeight: variables.font.weight.regular,
-          letterSpacing: size === 'small' ? 0 : variables.font.letterSpacing.xxl,
+          letterSpacing:
+            size === 'small' ? variables.font.letterSpacing.lg : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
           lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],

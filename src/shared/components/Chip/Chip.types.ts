@@ -2,6 +2,7 @@ import { ChipOwnProps } from '@mui/material';
 
 export enum ChipShape {
   Rectangular = 'rectangular',
+  RectangularLarge = 'rectangular-large',
   Rounded = 'rounded',
 }
 
