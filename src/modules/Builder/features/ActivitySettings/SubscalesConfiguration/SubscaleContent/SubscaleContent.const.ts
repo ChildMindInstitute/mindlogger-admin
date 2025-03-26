@@ -7,4 +7,8 @@ export const scoreValues = [
     value: 'average',
     labelKey: 'subscaleScoringAverage',
   },
+  {
+    value: 'percentage',
+    labelKey: 'subscaleScoringPercentage',
+  },
 ];

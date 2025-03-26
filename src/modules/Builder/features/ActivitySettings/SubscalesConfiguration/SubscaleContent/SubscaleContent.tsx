@@ -17,6 +17,7 @@ import { DataTable } from 'shared/components/DataTable';
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
 import { useLinkedScoreReports } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/SubscalesConfiguration.hooks';
+import { SubscaleTotalScore } from 'shared/consts';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -34,15 +35,20 @@ export const SubscaleContent = ({
   'data-testid': dataTestid,
 }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
-  const { control } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
-  const subscaleName: string = useWatch({ name: `${name}.name` });
+  const [subscaleName, scoringType, selectedItems]: [string, SubscaleTotalScore, string[]] =
+    useWatch({
+      name: [`${name}.name`, `${name}.scoring`, `${name}.items`],
+    });
+
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
     subscales || [],
+    scoringType,
   );
 
   const { updateSubscaleNameInReports, hasNonSubscaleItems, removeReportScoreLink } =
@@ -60,6 +66,18 @@ export const SubscaleContent = ({
       removeReportScoreLink(subscale);
     }
   }, [hasNonSubscaleItems, removeReportScoreLink, subscaleId, subscales]);
+
+  useEffect(() => {
+    // Removes and prevents adding nested subscales when Percentage is selected
+    if (scoringType === SubscaleTotalScore.Percentage) {
+      const subscaleIds = subscales.map((subscale) => subscale.id ?? '');
+      const filteredItems = selectedItems.filter((id) => !subscaleIds.includes(id));
+
+      if (filteredItems.length !== selectedItems.length) {
+        setValue(`${name}.items`, filteredItems);
+      }
+    }
+  }, [scoringType, selectedItems, subscales, setValue, name]);
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>

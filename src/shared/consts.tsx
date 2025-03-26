@@ -208,6 +208,7 @@ export const itemsTypeIcons = {
 export const enum SubscaleTotalScore {
   Sum = 'sum',
   Average = 'average',
+  Percentage = 'percentage',
 }
 
 export const locales = {
