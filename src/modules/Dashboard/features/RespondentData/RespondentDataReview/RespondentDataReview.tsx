@@ -169,7 +169,6 @@ export const RespondentDataReview = () => {
     setValue('responseDate', date);
     const createdDate = format(date, DateFormats.YearMonthDay);
     handleGetActivitiesAndFlows(createdDate);
-    handleGetSubmitDates(date);
   };
 
   const handleResponseDateChange = (date?: Date | null) => {
@@ -232,35 +231,35 @@ export const RespondentDataReview = () => {
   }, [appletId, answerId, submitId, selectedActivity, selectedFlow, selectedAnswer]);
 
   useEffect(() => {
-    // avoid unnecessary rerender when last activity completed date state value is undefined
     if (lastActivityCompleted === undefined) return;
 
-    const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
+    let initialDate: Date;
+    if (selectedDateParam) {
+      const parsedDate = parseDateToMidnightLocal(selectedDateParam);
+      initialDate = isValid(parsedDate) ? parsedDate : new Date();
+    } else {
+      initialDate = new Date();
+    }
+
+    handleGetSubmitDates(initialDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastActivityCompleted]);
+
+  useEffect(() => {
+    if (!responseDates?.length) return;
 
     if (selectedDateParam) {
       const selectedDate = parseDateToMidnightLocal(selectedDateParam);
-      if (isValid(selectedDate)) {
+      if (responseDates.includes(selectedDate)) {
         handleSetInitialDate(selectedDate);
 
         return;
       }
     }
 
-    if (responseDates?.length) {
-      handleSetInitialDate(responseDates[responseDates.length - 1]);
-
-      return;
-    }
-
-    if (lastActivityCompletedDate) {
-      handleSetInitialDate(lastActivityCompletedDate);
-
-      return;
-    }
-
-    handleSetInitialDate(new Date());
+    handleSetInitialDate(responseDates[responseDates.length - 1]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted]);
+  }, [responseDates, selectedDateParam]);
 
   /**
    * Determines the source subject based on the presence of activity responses.
