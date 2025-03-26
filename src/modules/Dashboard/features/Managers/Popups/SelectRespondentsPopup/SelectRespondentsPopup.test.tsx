@@ -35,13 +35,6 @@ const preloadedState = {
     workspacesRoles: initialStateData,
   },
   users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
     respondentDetails: {
       ...initialStateData,
     },
@@ -72,10 +65,13 @@ const successfulResponse = {
 };
 
 describe('SelectRespondentsPopup component tests', () => {
-  test('should appear popup without selected respondents', async () => {
+  beforeEach(() => {
     mockAxios.get.mockResolvedValueOnce(successfulResponse);
+  });
+
+  test('should appear popup without selected respondents', async () => {
     renderWithProviders(getPopup(false), { preloadedState });
-    const tableRows = screen.queryAllByTestId(/table-row-\d+/);
+    const tableRows = await screen.findAllByTestId(/table-row-\d+/);
     const select = screen.getByTestId('select-respondents-popup-search-across');
     const selectInput = await waitFor(() => select.querySelector('input'));
 
@@ -92,7 +88,6 @@ describe('SelectRespondentsPopup component tests', () => {
   });
 
   test('should appear popup with selected respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulResponse);
     renderWithProviders(getPopup(), { preloadedState });
 
     await waitFor(() => {
@@ -101,19 +96,17 @@ describe('SelectRespondentsPopup component tests', () => {
   });
 
   test('should confirm popup with selected respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulResponse);
     renderWithProviders(getPopup(), { preloadedState });
+
+    await screen.findAllByTestId(/table-row-\d+/);
 
     fireEvent.click(screen.getByText('Confirm'));
 
-    await waitFor(() => {
-      expect(mockedCloseFn).toBeCalledWith([mockedFullSubjectId1]);
-    });
+    expect(mockedCloseFn).toBeCalledWith([mockedFullSubjectId1]);
   });
 
   describe('should search respondents', () => {
     test('across all', async () => {
-      mockAxios.get.mockResolvedValueOnce(successfulResponse);
       renderWithProviders(getPopup(), { preloadedState });
       const mockedSearchValue = 'mockedSearchValue';
 
@@ -133,7 +126,6 @@ describe('SelectRespondentsPopup component tests', () => {
     });
 
     test('across selected', async () => {
-      mockAxios.get.mockResolvedValueOnce(successfulResponse);
       renderWithProviders(getPopup(), { preloadedState });
 
       const select = screen.getByTestId('select-respondents-popup-search-across');
@@ -148,7 +140,6 @@ describe('SelectRespondentsPopup component tests', () => {
     });
 
     test('across unselected', async () => {
-      mockAxios.get.mockResolvedValueOnce(successfulResponse);
       renderWithProviders(getPopup(), { preloadedState });
 
       const select = screen.getByTestId('select-respondents-popup-search-across');

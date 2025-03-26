@@ -25,7 +25,6 @@ import { useAsync, useModalBanners } from 'shared/hooks';
 import {
   AppletAssignmentsResponse,
   Assignment,
-  getAppletActivitiesApi,
   getAppletAssignmentsApi,
   GetAssignmentsParams,
   postAppletAssignmentsApi,
@@ -35,6 +34,7 @@ import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
 import { AssignmentCounts, useParticipantDropdown } from 'modules/Dashboard/components';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { ActivityReview } from './ActivityReview';
 import { AssignmentsTable } from './AssignmentsTable';
@@ -95,13 +95,12 @@ export const ActivityAssignDrawer = ({
   });
 
   const {
-    execute: getActivities,
+    data: activitiesData,
     isLoading: isLoadingActivities,
-    value: activitiesData,
-  } = useAsync(
-    getAppletActivitiesApi,
-    () => removeBanner('NetworkErrorBanner'),
-    () => addBanner('NetworkErrorBanner'),
+    isError: isActivitiesError,
+  } = useGetAppletActivitiesQuery(
+    { params: { appletId: appletId as string } },
+    { skip: !appletId },
   );
 
   const { execute: getAssignments, isLoading: isLoadingGetAssignments } = useAsync<
@@ -124,9 +123,9 @@ export const ActivityAssignDrawer = ({
 
   const isLoading = isLoadingParticipants || isLoadingActivities || isLoadingGetAssignments;
 
-  const activities: Activity[] = activitiesData?.data?.result?.activitiesDetails ?? [];
+  const activities: Activity[] = activitiesData?.activitiesDetails ?? [];
   const flows: HydratedActivityFlow[] = hydrateActivityFlows(
-    activitiesData?.data?.result?.appletDetail?.activityFlows ?? [],
+    activitiesData?.appletDetail?.activityFlows ?? [],
     activities,
   );
 
@@ -388,12 +387,13 @@ export const ActivityAssignDrawer = ({
     setStep((step) => step - 1);
   }, []);
 
-  // Initialize activities/flows data
   useEffect(() => {
-    if (!appletId) return;
+    if (isActivitiesError) {
+      addBanner('NetworkErrorBanner');
+    }
 
-    getActivities({ params: { appletId } });
-  }, [appletId, getActivities]);
+    return () => removeBanner('NetworkErrorBanner');
+  }, [isActivitiesError, addBanner, removeBanner]);
 
   // Reinitialize drawer form state whenever revealed, and clear banners when closed
   useEffect(() => {

@@ -13,11 +13,6 @@ import { StickyHeader } from './StickyHeader';
 const preloadedState = {
   ...getPreloadedState(),
   users: {
-    allRespondents: {
-      data: {
-        result: [],
-      },
-    },
     subjectDetails: {
       ...initialStateData,
       data: {

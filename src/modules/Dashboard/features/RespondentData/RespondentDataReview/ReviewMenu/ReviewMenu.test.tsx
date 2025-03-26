@@ -5,13 +5,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import {
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedFullParticipant1,
-  mockedFullParticipant2,
-  mockedFullSubjectId1,
-} from 'shared/mock';
+import { mockedAppletId, mockedCurrentWorkspace, mockedFullSubjectId1 } from 'shared/mock';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { RootState } from 'redux/store';
@@ -39,13 +33,6 @@ const preloadedState: PreloadedState<RootState> = {
     workspacesRoles: initialStateData,
   },
   users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
     respondentDetails: {
       ...initialStateData,
     },
