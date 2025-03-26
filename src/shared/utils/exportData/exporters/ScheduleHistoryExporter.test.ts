@@ -4,7 +4,7 @@ import { Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
 describe('ScheduleHistoryExporter', () => {
-  const exporter = new ScheduleHistoryExporter('applet-id');
+  const exporter = new ScheduleHistoryExporter('owner-id');
 
   describe('findSchedulesForDays', () => {
     const scheduleData = (
@@ -4335,6 +4335,81 @@ describe('ScheduleHistoryExporter', () => {
           });
         });
 
+        it('does not apply before the creation date', () => {
+          // A version of a schedule that has a start date before its creation date.
+          // This can happen when this is a new version of an existing schedule
+          const scheduleHistoryData = [
+            scheduleData({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              userId: null,
+              subjectId: null,
+              eventVersionCreatedAt: '2025-01-03T00:00:00',
+              eventVersionUpdatedAt: '2025-01-03T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Daily,
+              startDate: '2025-01-03',
+              startTime: '00:00:00',
+              endDate: '2025-12-31',
+              endTime: '23:59:00',
+              selectedDate: null,
+            }),
+            scheduleData({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v2',
+              userId: null,
+              subjectId: null,
+              eventVersionCreatedAt: '2025-12-30T00:00:00',
+              eventVersionUpdatedAt: '2025-12-30T00:00:00',
+              eventVersionIsDeleted: false,
+              periodicity: Periodicity.Daily,
+              startDate: '2025-01-03',
+              startTime: '00:00:00',
+              endDate: '2025-12-31',
+              endTime: '23:59:00',
+              selectedDate: null,
+            }),
+          ];
+
+          // v1 shows up at first
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-03'), DateTime.fromISO('2025-12-29'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Daily,
+                }),
+              ]);
+            });
+
+          // v2 shows up on the days after it was created
+          ['2025-12-30', '2025-12-31'].forEach((day) => {
+            // Schedule does not apply before creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              day,
+              defaultScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v2',
+                periodicity: Periodicity.Daily,
+              }),
+            ]);
+          });
+        });
+
         it('applies daily between the start and end date', () => {
           ['2025-03-14', '2025-03-15'].forEach((day) => {
             const foundSchedules = exporter.findSchedulesForDay(
@@ -4396,6 +4471,97 @@ describe('ScheduleHistoryExporter', () => {
               );
 
               expect(foundSchedules).toEqual([]);
+            });
+        });
+
+        it('does not apply before the creation date', () => {
+          // A version of a schedule that has a start date before its creation date.
+          // This can happen when this is a new version of an existing schedule
+          const event = scheduleData({
+            eventId: 'default-schedule-event-1',
+            eventVersion: '',
+            userId: null,
+            subjectId: null,
+            eventVersionCreatedAt: '2025-01-03T00:00:00',
+            eventVersionUpdatedAt: '2025-01-03T00:00:00',
+            eventVersionIsDeleted: false,
+            periodicity: Periodicity.Weekly,
+            startDate: '2025-01-03',
+            startTime: '00:00:00',
+            endDate: '2025-04-03',
+            endTime: '23:59:00',
+            selectedDate: '2025-01-03',
+          });
+
+          const scheduleHistoryData = [
+            { ...event, eventVersion: 'v1' },
+            {
+              ...event,
+              eventVersion: 'v2',
+              eventVersionCreatedAt: '2025-03-03T00:00:00',
+              eventVersionUpdatedAt: '2025-03-03T00:00:00',
+              endTime: '23:59:59',
+            },
+          ];
+
+          let applicableDays = [
+            '2025-01-03',
+            '2025-01-10',
+            '2025-01-17',
+            '2025-01-24',
+            '2025-01-31',
+            '2025-02-07',
+            '2025-02-14',
+            '2025-02-21',
+            '2025-02-28',
+          ];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-03'), DateTime.fromISO('2025-03-03'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Weekly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+
+          applicableDays = ['2025-03-07', '2025-03-14', '2025-03-21', '2025-03-28'];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-03-03'), DateTime.fromISO('2025-04-03'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v2',
+                    periodicity: Periodicity.Weekly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
             });
         });
 
@@ -4468,6 +4634,100 @@ describe('ScheduleHistoryExporter', () => {
           });
         });
 
+        it('does not apply before the creation date', () => {
+          // A version of a schedule that has a start date before its creation date.
+          // This can happen when this is a new version of an existing schedule
+          const event = scheduleData({
+            eventId: 'default-schedule-event-1',
+            eventVersion: '',
+            userId: null,
+            subjectId: null,
+            eventVersionCreatedAt: '2025-01-03T00:00:00',
+            eventVersionUpdatedAt: '2025-01-03T00:00:00',
+            eventVersionIsDeleted: false,
+            periodicity: Periodicity.Weekdays,
+            startDate: '2025-01-03',
+            startTime: '00:00:00',
+            endDate: '2025-01-17',
+            endTime: '23:59:00',
+            selectedDate: null,
+          });
+
+          const scheduleHistoryData = [
+            { ...event, eventVersion: 'v1' },
+            {
+              ...event,
+              eventVersion: 'v2',
+              eventVersionCreatedAt: '2025-01-10T00:00:00',
+              eventVersionUpdatedAt: '2025-01-10T00:00:00',
+              endTime: '23:59:59',
+            },
+          ];
+
+          let applicableDays = [
+            '2025-01-03',
+            '2025-01-06',
+            '2025-01-07',
+            '2025-01-08',
+            '2025-01-09',
+          ];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-03'), DateTime.fromISO('2025-01-09'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Weekdays,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+
+          applicableDays = [
+            '2025-01-10',
+            '2025-01-13',
+            '2025-01-14',
+            '2025-01-15',
+            '2025-01-16',
+            '2025-01-17',
+          ];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-10'), DateTime.fromISO('2025-01-17'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v2',
+                    periodicity: Periodicity.Weekdays,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+        });
+
         it('applies to weekdays between the start and end dates', () => {
           ['2025-03-10', '2025-03-11', '2025-03-12', '2025-03-13'].forEach((day) => {
             const foundSchedules = exporter.findSchedulesForDay(
@@ -4531,6 +4791,87 @@ describe('ScheduleHistoryExporter', () => {
               );
 
               expect(foundSchedules).toEqual([]);
+            });
+        });
+
+        it('does not apply before the creation date', () => {
+          // A version of a schedule that has a start date before its creation date.
+          // This can happen when this is a new version of an existing schedule
+          const event = scheduleData({
+            eventId: 'default-schedule-event-1',
+            eventVersion: '',
+            userId: null,
+            subjectId: null,
+            eventVersionCreatedAt: '2025-01-03T00:00:00',
+            eventVersionUpdatedAt: '2025-01-03T00:00:00',
+            eventVersionIsDeleted: false,
+            periodicity: Periodicity.Monthly,
+            startDate: '2025-01-03',
+            startTime: '00:00:00',
+            endDate: '2025-04-03',
+            endTime: '23:59:00',
+            selectedDate: '2025-01-03',
+          });
+
+          const scheduleHistoryData = [
+            { ...event, eventVersion: 'v1' },
+            {
+              ...event,
+              eventVersion: 'v2',
+              eventVersionCreatedAt: '2025-03-03T00:00:00',
+              eventVersionUpdatedAt: '2025-03-03T00:00:00',
+              endTime: '23:59:59',
+            },
+          ];
+
+          let applicableDays = ['2025-01-03', '2025-02-03'];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-01-03'), DateTime.fromISO('2025-03-02'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Monthly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+
+          applicableDays = ['2025-03-03', '2025-04-03'];
+
+          exporter
+            .daysBetweenInterval(DateTime.fromISO('2025-03-03'), DateTime.fromISO('2025-04-03'))
+            .forEach((day) => {
+              // Schedule does not apply before creation date
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'default-schedule-event-1',
+                    eventVersion: 'v2',
+                    periodicity: Periodicity.Monthly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
             });
         });
 

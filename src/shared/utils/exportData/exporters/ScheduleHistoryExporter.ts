@@ -305,6 +305,7 @@ export class ScheduleHistoryExporter extends DataExporter<
     schedule: ScheduleHistoryData,
   ): boolean {
     const date = DateTime.fromISO(day);
+    const creationDay = DateTime.fromISO(schedule.eventVersionCreatedAt).startOf('day');
 
     // The next version of this event displaces its applicability only when
     // it is created before this event's time period on the day in question
@@ -312,7 +313,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     switch (schedule.periodicity) {
       case 'ALWAYS': {
-        return DateTime.fromISO(schedule.eventVersionCreatedAt).startOf('day') <= date;
+        return creationDay <= date;
       }
       case 'ONCE': {
         // This schedule applies only on the day it is scheduled for
@@ -328,6 +329,7 @@ export class ScheduleHistoryExporter extends DataExporter<
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
         return (
+          creationDay <= date &&
           interval.isValid &&
           // This schedule applies every day, between the indicated start and end dates
           // Intervals are not inclusive of the end date, so we need to explicitly check if the target date is the
@@ -352,7 +354,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
         // This schedule applies every week on the selected date, between the indicated start and end dates
         // Check if the date in question falls inside a weekly recurrence of the selected date
-        return isDateInInterval && isCorrectDayOfWeek;
+        return creationDay <= date && isDateInInterval && isCorrectDayOfWeek;
       }
       case 'WEEKDAYS': {
         if (schedule.startDate === null || schedule.endDate === null) {
@@ -368,7 +370,7 @@ export class ScheduleHistoryExporter extends DataExporter<
         const isDateWeekday = date.weekday !== 6 && date.weekday !== 7;
 
         // This schedule applies every weekday between the indicated start and end dates (inclusive)
-        return isDateInInterval && isDateWeekday;
+        return creationDay <= date && isDateInInterval && isDateWeekday;
       }
       case 'MONTHLY': {
         if (
@@ -393,7 +395,7 @@ export class ScheduleHistoryExporter extends DataExporter<
           (date.day === date.daysInMonth && selectedDate.day > date.day);
 
         // This schedule applies every month on the selected date, between the indicated start and end dates
-        return isDateInInterval && isCorrectDayOfMonth;
+        return creationDay <= date && isDateInInterval && isCorrectDayOfMonth;
       }
     }
 
