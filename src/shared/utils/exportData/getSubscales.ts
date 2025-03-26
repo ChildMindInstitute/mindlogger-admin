@@ -104,34 +104,36 @@ export const calcScores = <T>(
 
     let value: number | null = null;
 
-    if ('options' in typedOptions && typedOptions.options.length) {
-      // Single & Multiple Select
-      const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
-        if (item.value !== undefined && item.score !== undefined) {
-          acc[item.value as keyof ScoresObject] = item.score;
+    if (typedOptions) {
+      if ('options' in typedOptions && typedOptions.options.length) {
+        // Single & Multiple Select
+        const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
+          if (item.value !== undefined && item.score !== undefined) {
+            acc[item.value as keyof ScoresObject] = item.score;
+          }
+
+          return acc;
+        }, {});
+
+        if (Array.isArray(answer?.value)) {
+          value =
+            answer?.value.reduce((result: null | number, val) => {
+              if (scoresObject[val] === null) return result;
+
+              return (result ?? 0) + scoresObject[val];
+            }, null) ?? null;
+        } else {
+          value = (answer && scoresObject[answer.value]) ?? null;
         }
+      } else if ('scores' in typedOptions && typedOptions.scores?.length) {
+        // Slider
+        const min = Number(typedOptions.minValue);
+        const max = Number(typedOptions.maxValue);
+        const scores = typedOptions.scores;
+        const options = createArrayFromMinToMax(min, max);
 
-        return acc;
-      }, {});
-
-      if (Array.isArray(answer?.value)) {
-        value =
-          answer?.value.reduce((result: null | number, val) => {
-            if (scoresObject[val] === null) return result;
-
-            return (result ?? 0) + scoresObject[val];
-          }, null) ?? null;
-      } else {
-        value = (answer && scoresObject[answer.value]) ?? null;
+        value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
       }
-    } else if ('scores' in typedOptions && typedOptions.scores?.length) {
-      // Slider
-      const min = Number(typedOptions.minValue);
-      const max = Number(typedOptions.maxValue);
-      const scores = typedOptions.scores;
-      const options = createArrayFromMinToMax(min, max);
-
-      value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
     }
 
     // New feature-flagged behaviour also treats skipped responses as null.
