@@ -1,5 +1,6 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
+import { ReactNode } from 'react';
 
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
@@ -47,6 +48,7 @@ export type Alert = {
 export type ItemsOption = {
   value: ItemResponseTypeNoPerfTasks;
   icon: JSX.Element;
+  chip?: ReactNode;
 };
 
 export type ItemsOptionGroup = {

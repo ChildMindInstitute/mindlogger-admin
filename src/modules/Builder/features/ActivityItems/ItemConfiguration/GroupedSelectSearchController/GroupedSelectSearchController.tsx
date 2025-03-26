@@ -4,11 +4,11 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { StyledClearedButton, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Chip } from 'shared/components';
+import { Chip, ChipShape } from 'shared/components';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
@@ -28,11 +28,13 @@ const SelectItemContent = ({
   label,
   sx,
   value,
+  chip,
   ...otherProps
 }: {
   icon?: React.ReactNode;
   label: React.ReactNode;
   value: ItemResponseType;
+  chip?: React.ReactNode;
 } & BoxProps) => {
   const { t } = useTranslation('app');
   const isMobileOnly = getIsMobileOnly(value);
@@ -42,15 +44,11 @@ const SelectItemContent = ({
     <StyledFlexTopCenter sx={{ ...sx, gap: 1, maxHeight: 24 }} {...otherProps}>
       {icon}
       {label}
+      {chip}
       {(isMobileOnly || isWebOnly) && (
         <Chip
           data-testid={isMobileOnly ? 'mobile-only-label' : 'web-only-label'}
-          sx={{
-            borderRadius: variables.borderRadius.xs,
-            color: 'currentcolor',
-            height: 36,
-            px: 1.2,
-          }}
+          shape={ChipShape.RectangularLarge}
           title={isMobileOnly ? t('mobileOnly') : t('webOnly')}
         />
       )}
@@ -195,7 +193,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
-                  ...groupOptions.map(({ value, icon }) => {
+                  ...groupOptions.map(({ value, icon, chip }) => {
                     const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
                     return (
@@ -213,6 +211,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                           icon={<StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>}
                           label={getGroupValueText(searchTerm, value)}
                           value={value}
+                          chip={chip}
                         />
                       </StyledMenuItem>
                     );

@@ -27,8 +27,7 @@ import {
   ItemsOptionGroup,
   UseWatchItemConfiguration,
 } from './ItemConfiguration.types';
-import { itemsTypeOptions } from './ItemConfiguration.const';
-import { getInputTypeTooltip } from './ItemConfiguration.utils';
+import { getItemsTypeOptions, getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
@@ -53,7 +52,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const availableItemsTypeOptions = itemsTypeOptions
+  const availableItemsTypeOptions = getItemsTypeOptions({ featureFlags })
     .reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
       if (isReviewable) {
         // Reviewable activities only support 3 possible item types in the 'select' group:
