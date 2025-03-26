@@ -5018,5 +5018,56 @@ describe('ScheduleHistoryExporter', () => {
 
       expect(days).toEqual([]);
     });
+
+    it('works in forward timezones', () => {
+      // GMT+2
+      process.env.TZ = 'Europe/Kyiv';
+
+      const startDateString = '2025-03-20T08:49:51';
+      const endDateString = '2025-03-26T01:00:00';
+
+      const startDate = DateTime.fromISO(startDateString);
+      const endDate = DateTime.fromISO(endDateString);
+
+      const days = exporter.daysBetweenInterval(startDate, endDate);
+      expect(days).toEqual([
+        '2025-03-20',
+        '2025-03-21',
+        '2025-03-22',
+        '2025-03-23',
+        '2025-03-24',
+        '2025-03-25',
+        '2025-03-26',
+      ]);
+    });
+
+    it('works in backward timezones', () => {
+      // GMT-5
+      process.env.TZ = 'America/Jamaica';
+      const startDateString = '2025-03-20T18:00:00';
+      const endDateString = '2025-03-26T01:00:00';
+
+      const startDate = DateTime.fromISO(startDateString);
+      const endDate = DateTime.fromISO(endDateString);
+
+      const days = exporter.daysBetweenInterval(startDate, endDate);
+      expect(days).toEqual([
+        '2025-03-20',
+        '2025-03-21',
+        '2025-03-22',
+        '2025-03-23',
+        '2025-03-24',
+        '2025-03-25',
+        '2025-03-26',
+      ]);
+    });
+
+    it('does not work with invalid dates', () => {
+      const start = DateTime.fromISO('2025-01-01');
+      const end = DateTime.fromISO('2025-02-31');
+
+      const days = exporter.daysBetweenInterval(start, end);
+      expect(days).toEqual([]);
+    });
   });
 });

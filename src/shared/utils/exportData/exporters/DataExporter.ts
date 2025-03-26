@@ -82,10 +82,26 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
    * @param endDate
    */
   daysBetweenInterval(startDate: DateTime, endDate: DateTime): string[] {
-    return Interval.fromDateTimes(startDate, endDate.plus({ day: 1 }))
-      .splitBy({ day: 1 })
-      .map((d) => d.start?.toISODate())
-      .filter((d): d is string => d !== undefined);
+    if (!startDate.isValid || !endDate.isValid) {
+      return [];
+    }
+
+    const startISODate = startDate.toISODate() as string;
+    const endISODate = endDate.toISODate() as string;
+
+    if (startISODate === endISODate) {
+      return [startISODate];
+    }
+
+    const interval = Interval.fromDateTimes(startDate, endDate);
+
+    const splitInterval = interval.splitBy({ day: 1 });
+    const mappedInterval = splitInterval.map((d) => [d.start?.toISODate(), d.end?.toISODate()]);
+    const flatMappedInterval = mappedInterval.flatMap((d) => d);
+    const filteredInterval = flatMappedInterval.filter((d): d is string => d !== undefined);
+    const dedupedInterval = [...new Set(filteredInterval)];
+
+    return dedupedInterval;
   }
 
   abstract getCSVHeaders(): string[];
