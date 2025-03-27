@@ -24,7 +24,7 @@ export const Banner = ({
   useEffect(() => {
     if (!duration || !onClose || isHovering || !isWindowFocused) return;
 
-    const timeoutId = setTimeout(onClose, duration);
+    const timeoutId = setTimeout(() => onClose?.('timeout'), duration);
 
     return () => {
       clearTimeout(timeoutId);
@@ -42,7 +42,7 @@ export const Banner = ({
           children: <Svg id="close" />,
         },
       }}
-      onClose={hasCloseButton ? onClose : undefined}
+      onClose={hasCloseButton ? () => onClose?.('manual') : undefined}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       severity={severity}

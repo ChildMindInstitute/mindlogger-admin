@@ -745,7 +745,7 @@ export const theme = createTheme({
     },
     MuiAlert: {
       styleOverrides: {
-        root: ({ ownerState: { variant, severity } }) => ({
+        root: ({ ownerState: { variant, severity, color } }) => ({
           fontSize: variables.font.size.lg,
           lineHeight: variables.font.lineHeight.lg,
           letterSpacing: variables.font.letterSpacing.md,
@@ -765,6 +765,9 @@ export const theme = createTheme({
             }),
             ...(severity === 'error' && {
               backgroundColor: variables.palette.error_container,
+            }),
+            ...(color === 'infoAlt' && {
+              backgroundColor: variables.palette.purple_alfa30,
             }),
           }),
           '.MuiAlert-action': {
@@ -883,6 +886,11 @@ export const theme = createTheme({
     info: {
       main: variables.palette.blue,
     },
+    infoAlt: {
+      main: variables.palette.purple,
+      dark: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa8),
+      light: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa12),
+    },
     success: {
       main: variables.palette.green,
     },
@@ -914,6 +922,21 @@ declare module '@mui/material/IconButton' {
 declare module '@mui/material/Autocomplete' {
   interface AutocompletePropsSizeOverrides {
     large: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    infoAlt: Palette['primary'];
+  }
+  interface PaletteOptions {
+    infoAlt?: PaletteOptions['primary'];
+  }
+}
+
+declare module '@mui/material/Alert' {
+  interface AlertPropsColorOverrides {
+    infoAlt: true;
   }
 }
 

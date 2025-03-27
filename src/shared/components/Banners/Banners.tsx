@@ -6,9 +6,13 @@ import { AppDispatch, useAppDispatch } from 'redux/store';
 
 import { BannerComponents } from './Banners.const';
 
-const handlePureClose = (dispatch: AppDispatch, { key, bannerProps }: BannerPayload) => {
+const handlePureClose = (
+  dispatch: AppDispatch,
+  { key, bannerProps }: BannerPayload,
+  reason?: 'timeout' | 'manual',
+) => {
   dispatch(banners.actions.removeBanner({ key }));
-  bannerProps?.onClose?.();
+  bannerProps?.onClose?.(reason);
 };
 
 export const Banners = () => {
@@ -24,7 +28,7 @@ export const Banners = () => {
           <Collapse key={key}>
             <BannerComponent
               {...bannerProps}
-              onClose={() => handlePureClose(dispatch, { key, bannerProps })}
+              onClose={(reason) => handlePureClose(dispatch, { key, bannerProps }, reason)}
             />
           </Collapse>
         );
