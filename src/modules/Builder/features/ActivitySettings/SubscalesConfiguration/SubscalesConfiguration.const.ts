@@ -20,6 +20,10 @@ export const getOptions = () => [
     value: SubscaleTotalScore.Average,
     label: t('averageOfScores'),
   },
+  {
+    value: SubscaleTotalScore.Percentage,
+    label: t('percentageOfScores'),
+  },
 ];
 
 export const getTotalScoreTableColumnData = () => [

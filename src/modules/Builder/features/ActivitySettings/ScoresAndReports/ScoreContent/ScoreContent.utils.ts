@@ -148,8 +148,17 @@ export const getScoreRange = ({
         maxScore: maxAverageScore,
       };
     }
-    case CalculationType.Percentage:
-      return { minScore: totalMaxScore ? (totalMinScore / totalMaxScore) * 100 : 0, maxScore: 100 };
+    case CalculationType.Percentage: {
+      const minScore = isNaN(lookupTableMinScore)
+        ? totalMinScore
+        : Math.min(totalMinScore, lookupTableMinScore);
+
+      const maxScore = isNaN(lookupTableMaxScore)
+        ? totalMaxScore
+        : Math.max(totalMaxScore, lookupTableMaxScore);
+
+      return { minScore: maxScore ? (minScore / maxScore) * 100 : 0, maxScore: 100 };
+    }
   }
 };
 

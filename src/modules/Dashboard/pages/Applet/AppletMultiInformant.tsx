@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 
@@ -15,7 +14,7 @@ import {
 } from 'shared/styles';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
-import { usePermissions, useRemoveAppletData } from 'shared/hooks';
+import { usePermissions } from 'shared/hooks';
 import { palette } from 'shared/styles/variables/palette';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
@@ -24,7 +23,6 @@ import { useMultiInformantAppletTabs } from './Applet.hooks';
 
 export const AppletMultiInformant = () => {
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
-  const { t } = useTranslation('app');
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -34,16 +32,15 @@ export const AppletMultiInformant = () => {
 
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLoadingStatus = applet.useResponseStatus();
-  const removeAppletData = useRemoveAppletData();
 
   const hiddenHeader = location.pathname.includes('dataviz');
   const { getApplet } = applet.thunk;
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    appletId ? dispatch(getApplet({ appletId })) : undefined,
+  const { isForbidden, noPermissionsComponent } = usePermissions(
+    () => (appletId ? dispatch(getApplet({ appletId })) : undefined),
+    // Refetch applet data when appletId changes
+    [appletId],
   );
-
-  useEffect(() => removeAppletData, []);
 
   if (isForbidden) return noPermissionsComponent;
 

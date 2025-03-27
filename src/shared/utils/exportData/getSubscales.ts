@@ -33,13 +33,23 @@ import { getObjectFromList } from '../getObjectFromList';
 const getRoundTo2Decimal = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
 
 export const getSubscaleScore = (
-  subscalesSum: number,
+  subscalesSum: number | null,
   type: SubscaleTotalScore,
   length: number,
+  maxScore: number,
 ) => {
-  if (type === SubscaleTotalScore.Average && length === 0) return 0;
+  if (subscalesSum === null) return null;
 
-  return type === SubscaleTotalScore.Sum ? subscalesSum : getRoundTo2Decimal(subscalesSum / length);
+  switch (type) {
+    case SubscaleTotalScore.Sum:
+      return subscalesSum;
+    case SubscaleTotalScore.Average:
+      return length === 0 ? 0 : getRoundTo2Decimal(subscalesSum / length);
+    case SubscaleTotalScore.Percentage:
+      return maxScore === 0 ? 0 : getRoundTo2Decimal((subscalesSum * 100) / maxScore);
+    default:
+      return 0;
+  }
 };
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '0' : '1');
@@ -54,6 +64,7 @@ export const calcScores = <T>(
   result: CalculatedSubscaleScores = {},
 ): CalculatedSubscaleScores => {
   let itemCount = 0;
+  let maxScore = 0;
 
   // TODO: Remove this when feature flag is removed
   // https://mindlogger.atlassian.net/browse/M2-8635
@@ -104,34 +115,43 @@ export const calcScores = <T>(
 
     let value: number | null = null;
 
-    if ('options' in typedOptions && typedOptions.options.length) {
-      // Single & Multiple Select
-      const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
-        if (item.value !== undefined && item.score !== undefined) {
-          acc[item.value as keyof ScoresObject] = item.score;
+    if (typedOptions) {
+      if ('options' in typedOptions && typedOptions.options.length) {
+        // Single & Multiple Select
+        const scoresObject = typedOptions.options.reduce((acc: ScoresObject, item) => {
+          if (item.value !== undefined && item.score !== undefined) {
+            acc[item.value as keyof ScoresObject] = item.score;
+          }
+
+          return acc;
+        }, {});
+
+        if ('type' in typedOptions && typedOptions.type === 'singleSelect') {
+          maxScore += Math.max(...Object.values(scoresObject));
+        } else {
+          maxScore += Object.values(scoresObject).reduce((acc, result) => acc + result, 0);
         }
 
-        return acc;
-      }, {});
+        if (Array.isArray(answer?.value)) {
+          value =
+            answer?.value.reduce((result: null | number, val) => {
+              if (scoresObject[val] === null) return result;
 
-      if (Array.isArray(answer?.value)) {
-        value =
-          answer?.value.reduce((result: null | number, val) => {
-            if (scoresObject[val] === null) return result;
+              return (result ?? 0) + scoresObject[val];
+            }, null) ?? null;
+        } else {
+          value = (answer && scoresObject[answer.value]) ?? null;
+        }
+      } else if ('scores' in typedOptions && typedOptions.scores?.length) {
+        // Slider
+        const min = Number(typedOptions.minValue);
+        const max = Number(typedOptions.maxValue);
+        const scores = typedOptions.scores;
+        const options = createArrayFromMinToMax(min, max);
+        maxScore += Math.max(...scores);
 
-            return (result ?? 0) + scoresObject[val];
-          }, null) ?? null;
-      } else {
-        value = (answer && scoresObject[answer.value]) ?? null;
+        value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
       }
-    } else if ('scores' in typedOptions && typedOptions.scores?.length) {
-      // Slider
-      const min = Number(typedOptions.minValue);
-      const max = Number(typedOptions.maxValue);
-      const scores = typedOptions.scores;
-      const options = createArrayFromMinToMax(min, max);
-
-      value = scores[options.findIndex((item) => item === answer?.value)] ?? null;
     }
 
     // New feature-flagged behaviour also treats skipped responses as null.
@@ -150,8 +170,7 @@ export const calcScores = <T>(
     return (acc ?? 0) + value;
   }, defaultScore);
 
-  const calculatedScore =
-    sumScore === null ? null : getSubscaleScore(sumScore, data.scoring, itemCount);
+  const calculatedScore = getSubscaleScore(sumScore, data.scoring, itemCount, maxScore);
 
   if (calculatedScore !== null && data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
