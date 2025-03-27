@@ -11,7 +11,7 @@ import { ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 import { groupBy } from 'shared/utils/array';
 
-type ScheduleHistoryExportRow = {
+export type ScheduleHistoryExportRow = {
   applet_id: string;
   applet_version: string;
   user_id: string;
@@ -192,8 +192,34 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     const applicableSchedules: ScheduleHistoryData[] = [];
 
-    Object.entries(groupBy(filteredByUser, 'appletVersion')).forEach(
-      ([_, appletVersionGroupedSchedules]) => {
+    const appletVersionLinkDates = Object.entries(
+      filteredByUser.reduce<Record<string, DateTime<true>>>((result, schedule) => {
+        if (!result[schedule.appletVersion]) {
+          result[schedule.appletVersion] = DateTime.fromISO(
+            schedule.linkedWithAppletAt,
+          ) as DateTime<true>;
+        } else {
+          const existingDate = result[schedule.appletVersion];
+          const newDate = DateTime.fromISO(schedule.linkedWithAppletAt) as DateTime<true>;
+          if (newDate < existingDate) {
+            result[schedule.appletVersion] = newDate;
+          }
+        }
+
+        return result;
+      }, {}),
+    );
+
+    Object.entries(groupBy(filteredByUser, 'appletVersion'))
+      .reverse()
+      .forEach(([appletVersion, appletVersionGroupedSchedules]) => {
+        // TODO: Find out if this applet version has been succeeded by another on this day using the link date. Don't produce records if it has
+        const indexOfAppletVersion = appletVersionLinkDates.findIndex(
+          ([version]) => version === appletVersion,
+        );
+
+        const hasNextAppletVersion = indexOfAppletVersion < appletVersionLinkDates.length - 1;
+
         Object.entries(groupBy(appletVersionGroupedSchedules, 'activityOrFlowId')).forEach(
           ([_, entityGroupedSchedules]) => {
             // Default schedules only survive if there are no individual ones, or if the individual ones have all been deleted
@@ -242,7 +268,7 @@ export class ScheduleHistoryExporter extends DataExporter<
               this.isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(day, schedule),
             );
 
-            const filteredByVersion: ScheduleHistoryData[] = [];
+            const filteredByEventVersion: ScheduleHistoryData[] = [];
 
             for (let i = 0; i < filteredByPeriodicity.length; i++) {
               const schedule = filteredByPeriodicity[i];
@@ -279,11 +305,11 @@ export class ScheduleHistoryExporter extends DataExporter<
               }
 
               if (!isSupersededOnThisDate) {
-                filteredByVersion.push(schedule);
+                filteredByEventVersion.push(schedule);
               }
             }
 
-            const filteredByDeletion = filteredByVersion.filter((schedule) => {
+            const filteredByDeletion = filteredByEventVersion.filter((schedule) => {
               const startTimeOnDay = schedule.accessBeforeSchedule
                 ? startOfTheDay
                 : DateTime.fromISO(`${day}T${schedule.startTime}`);
@@ -295,13 +321,44 @@ export class ScheduleHistoryExporter extends DataExporter<
               return !deletionDate.isValid || deletionDate >= startTimeOnDay;
             });
 
-            applicableSchedules.push(...filteredByDeletion);
+            const filteredByAppletVersion = filteredByDeletion.filter((schedule) => {
+              const startTimeOnDay = schedule.accessBeforeSchedule
+                ? startOfTheDay
+                : DateTime.fromISO(`${day}T${schedule.startTime}`);
+
+              const scheduleLinkDate = DateTime.fromISO(schedule.linkedWithAppletAt);
+              if (scheduleLinkDate > startTimeOnDay) {
+                return false;
+              }
+              if (hasNextAppletVersion) {
+                const [_, appletVersionLinkDate] = appletVersionLinkDates[indexOfAppletVersion + 1];
+
+                // If the creationDate of the next applet version comes before this event, skip it
+                return appletVersionLinkDate > startTimeOnDay;
+              } else {
+                return true;
+              }
+            });
+
+            applicableSchedules.push(...filteredByAppletVersion);
           },
         );
-      },
-    );
+      });
 
-    return applicableSchedules;
+    return applicableSchedules.sort((a, b) => {
+      const startTimeDiff =
+        DateTime.fromISO(`${day}T${a.startTime}`).valueOf() -
+        DateTime.fromISO(`${day}T${b.startTime}`).valueOf();
+
+      if (startTimeDiff !== 0) {
+        return startTimeDiff;
+      } else {
+        return (
+          DateTime.fromISO(`${day}T${a.endTime}`).valueOf() -
+          DateTime.fromISO(`${day}T${b.endTime}`).valueOf()
+        );
+      }
+    });
   }
 
   private isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(
