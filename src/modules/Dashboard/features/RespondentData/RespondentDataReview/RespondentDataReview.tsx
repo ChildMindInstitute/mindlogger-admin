@@ -233,8 +233,15 @@ export const RespondentDataReview = () => {
       activityId: selectedActivity?.id,
       flowId: selectedFlow?.id,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appletId, answerId, submitId, selectedActivity, selectedFlow, selectedAnswer]);
+  }, [
+    appletId,
+    answerId,
+    submitId,
+    selectedActivity,
+    selectedFlow,
+    selectedAnswer,
+    getAnswersAndAssessment,
+  ]);
 
   useEffect(() => {
     if (lastActivityCompleted === undefined) return;
