@@ -9,6 +9,7 @@ export type Workspace = {
   image?: string;
   useArbitrary?: boolean;
   integrations?: Integration[] | null;
+  areFeatureFlagsLoaded?: boolean;
 };
 
 export type AppletRoles = Record<string, Roles[]>;

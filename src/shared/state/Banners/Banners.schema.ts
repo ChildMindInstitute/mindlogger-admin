@@ -10,8 +10,6 @@ export enum BannerType {
   PasswordResetSuccessfulBanner,
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
-  EHRBannerAvailable,
-  EHRBannerActive,
 }
 
 export type BannerPayload = {

@@ -9,13 +9,14 @@ import { EHR_LEARN_MORE_URL } from './EHRBanners.const';
 
 export const EHRBannerAvailable = (props: BannerProps) => (
   <Banner
-    {...props}
     duration={null}
     severity="info"
     color="infoAlt"
     iconMapping={{
       info: <Svg id="stethoscope" width={32} height={32} fill="currentColor" />,
     }}
+    data-testid="ehr-banner-available"
+    {...props}
   >
     <Trans i18nKey="ehr.bannerAvailable">
       <>Now you can collect participants' Health Care Data in studies!</>

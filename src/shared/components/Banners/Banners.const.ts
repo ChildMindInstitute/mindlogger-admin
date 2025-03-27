@@ -13,7 +13,6 @@ import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBa
 import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
 import { AddParticipantSuccessBanner } from 'modules/Dashboard/components/Banners';
 
-import { EHRBannerAvailable, EHRBannerActive } from './EHRBanners';
 import { BannerProps } from './Banner';
 
 export const BannerComponents: Record<keyof typeof BannerType, ComponentType<BannerProps>> = {
@@ -26,6 +25,4 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   TransferOwnershipSuccessBanner,
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
-  EHRBannerAvailable,
-  EHRBannerActive,
 };
