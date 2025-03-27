@@ -248,8 +248,7 @@ export const RespondentDataReview = () => {
     }
 
     handleGetSubmitDates(initialDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted]);
+  }, [lastActivityCompleted, selectedDateParam, handleGetSubmitDates]);
 
   useEffect(() => {
     if (!responseDates?.length) return;
@@ -264,8 +263,7 @@ export const RespondentDataReview = () => {
     }
 
     handleSetInitialDate(responseDates[responseDates.length - 1]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseDates, selectedDateParam]);
+  }, [responseDates, selectedDateParam, handleSetInitialDate]);
 
   /**
    * Determines the source subject based on the presence of activity responses.
