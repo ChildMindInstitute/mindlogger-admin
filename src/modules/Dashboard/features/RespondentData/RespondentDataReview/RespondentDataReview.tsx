@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   createSearchParams,
@@ -148,28 +148,34 @@ export const RespondentDataReview = () => {
     setResponseDates(submitDates);
   });
 
-  const handleGetSubmitDates = (date: Date) => {
-    const activityOrFlowId = activityFlowId || activityId;
-    // TODO: Add !activityOrFlowId to the if statement after dataviz tests have been updated (M2-8891)
-    if (!appletId || !subjectId) return;
+  const handleGetSubmitDates = useCallback(
+    (date: Date) => {
+      const activityOrFlowId = activityFlowId || activityId;
+      // TODO: Add !activityOrFlowId to the if statement after dataviz tests have been updated (M2-8891)
+      if (!appletId || !subjectId) return;
 
-    const fromDate = startOfMonth(date).getTime().toString();
-    const toDate = endOfMonth(date).getTime().toString();
+      const fromDate = startOfMonth(date).getTime().toString();
+      const toDate = endOfMonth(date).getTime().toString();
 
-    getAppletSubmitDateList({
-      appletId,
-      targetSubjectId: subjectId,
-      fromDate,
-      toDate,
-      activityOrFlowId,
-    });
-  };
+      getAppletSubmitDateList({
+        appletId,
+        targetSubjectId: subjectId,
+        fromDate,
+        toDate,
+        activityOrFlowId,
+      });
+    },
+    [appletId, subjectId, activityFlowId, activityId, getAppletSubmitDateList],
+  );
 
-  const handleSetInitialDate = (date: Date) => {
-    setValue('responseDate', date);
-    const createdDate = format(date, DateFormats.YearMonthDay);
-    handleGetActivitiesAndFlows(createdDate);
-  };
+  const handleSetInitialDate = useCallback(
+    (date: Date) => {
+      setValue('responseDate', date);
+      const createdDate = format(date, DateFormats.YearMonthDay);
+      handleGetActivitiesAndFlows(createdDate);
+    },
+    [setValue, handleGetActivitiesAndFlows],
+  );
 
   const handleResponseDateChange = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
