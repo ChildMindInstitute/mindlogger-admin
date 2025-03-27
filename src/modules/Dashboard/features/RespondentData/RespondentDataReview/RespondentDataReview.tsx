@@ -250,6 +250,8 @@ export const RespondentDataReview = () => {
     if (selectedDateParam) {
       const parsedDate = parseDateToMidnightLocal(selectedDateParam);
       initialDate = isValid(parsedDate) ? parsedDate : new Date();
+    } else if (lastActivityCompleted) {
+      initialDate = new Date(lastActivityCompleted);
     } else {
       initialDate = new Date();
     }
