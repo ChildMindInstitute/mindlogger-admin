@@ -23,23 +23,27 @@ describe('ScheduleHistoryExporter', () => {
           | 'endTime'
           | 'selectedDate'
         >,
-    ): ScheduleHistoryData => ({
-      appletId: '4a8ccced-51db-44d2-8a76-21a12bfd27ed',
-      appletVersion: '1.1.0',
-      appletName: 'Applet',
-      eventType: 'activity',
-      activityOrFlowId: 'activity-or-flow-id',
-      activityOrFlowName: 'Activity or Flow',
-      activityOrFlowHidden: false,
-      eventUpdatedBy: 'some-admin-user-id',
-      userId: null,
-      subjectId: null,
+    ): ScheduleHistoryData => {
+      const linkedWithAppletAt = override.eventVersionCreatedAt ?? '2025-03-12T00:00:00';
 
-      linkedWithAppletAt: '2025-03-12T22:46:47.275941',
-      accessBeforeSchedule: false,
-      oneTimeCompletion: false,
-      ...override,
-    });
+      return {
+        appletId: '4a8ccced-51db-44d2-8a76-21a12bfd27ed',
+        appletVersion: '1.1.0',
+        appletName: 'Applet',
+        eventType: 'activity',
+        activityOrFlowId: 'activity-or-flow-id',
+        activityOrFlowName: 'Activity or Flow',
+        activityOrFlowHidden: false,
+        eventUpdatedBy: 'some-admin-user-id',
+        userId: null,
+        subjectId: null,
+
+        linkedWithAppletAt,
+        accessBeforeSchedule: false,
+        oneTimeCompletion: false,
+        ...override,
+      };
+    };
 
     describe('Default schedule', () => {
       const defaultScheduleUser = 'default-schedule-user';
