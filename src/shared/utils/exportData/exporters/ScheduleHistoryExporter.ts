@@ -213,7 +213,6 @@ export class ScheduleHistoryExporter extends DataExporter<
     Object.entries(groupBy(filteredByUser, 'appletVersion'))
       .reverse()
       .forEach(([appletVersion, appletVersionGroupedSchedules]) => {
-        // TODO: Find out if this applet version has been succeeded by another on this day using the link date. Don't produce records if it has
         const indexOfAppletVersion = appletVersionLinkDates.findIndex(
           ([version]) => version === appletVersion,
         );
