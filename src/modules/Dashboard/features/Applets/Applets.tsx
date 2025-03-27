@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -11,16 +11,11 @@ import {
   PublishConcealAppletPopup,
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
-import { auth, banners, popups, workspaces } from 'redux/modules';
+import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
-import { useTable, useCheckIfAppletHasNotFoundError, useFeatureFlags } from 'shared/hooks';
+import { useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import {
-  checkIfCanAccessData,
-  checkIfCanEdit,
-  getIsAddAppletBtnVisible,
-  LocalStorageKeys,
-} from 'shared/utils';
+import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
 
 import { AppletsTable } from './AppletsTable';
@@ -43,17 +38,6 @@ export const Applets = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { ownerId } = workspaces.useData() || {};
-
-  const { featureFlags } = useFeatureFlags();
-
-  const canSeeEhrBanner = useMemo(
-    () =>
-      rolesData.data &&
-      Object.values(rolesData.data).some(
-        (roles) => checkIfCanEdit(roles) || checkIfCanAccessData(roles),
-      ),
-    [rolesData.data],
-  );
 
   const {
     duplicatePopupsVisible,
@@ -142,51 +126,6 @@ export const Applets = () => {
     if (!hasAppletNotFoundError) return;
     fetchData();
   }, [hasAppletNotFoundError]);
-
-  useEffect(() => {
-    // Do not add banners until loading has completed and workspace is defined, as without these
-    // checks there can be jarring banner changes during navigation or login
-    if (isLoading || !currentWorkspace || !canSeeEhrBanner) return;
-
-    if (featureFlags.enableEhrHealthData === 'available') {
-      const isDismissed = Boolean(
-        localStorage.getItem(LocalStorageKeys.EHRBannerAvailableDismissed),
-      );
-
-      if (!isDismissed) {
-        dispatch(
-          banners.actions.addBanner({
-            key: 'EHRBannerAvailable',
-            bannerProps: {
-              onClose: (reason) =>
-                reason === 'manual' &&
-                localStorage.setItem(LocalStorageKeys.EHRBannerAvailableDismissed, 'true'),
-            },
-          }),
-        );
-      }
-    } else if (featureFlags.enableEhrHealthData === 'active') {
-      const isDismissed = Boolean(localStorage.getItem(LocalStorageKeys.EHRBannerActiveDismissed));
-
-      if (!isDismissed) {
-        dispatch(
-          banners.actions.addBanner({
-            key: 'EHRBannerActive',
-            bannerProps: {
-              onClose: (reason) =>
-                reason === 'manual' &&
-                localStorage.setItem(LocalStorageKeys.EHRBannerActiveDismissed, 'true'),
-            },
-          }),
-        );
-      }
-    }
-
-    return () => {
-      dispatch(banners.actions.removeBanner({ key: 'EHRBannerAvailable' }));
-      dispatch(banners.actions.removeBanner({ key: 'EHRBannerActive' }));
-    };
-  }, [featureFlags.enableEhrHealthData, currentWorkspace, dispatch, canSeeEhrBanner, isLoading]);
 
   return (
     <StyledBody>
