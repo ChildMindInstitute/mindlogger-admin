@@ -180,6 +180,11 @@ export class ScheduleHistoryExporter extends DataExporter<
     userId: string,
     scheduleHistoryData: ScheduleHistoryData[],
   ): ScheduleHistoryData[] {
+    // The `day` variable is an ISO string of the form 'YYYY-MM-DD', which becomes the start of the day (00:00:00)
+    // when parsed by Luxon
+    const startOfTheDay = DateTime.fromISO(day);
+    const endOfTheDay = startOfTheDay.endOf('day');
+
     // Removes events that couldn't apply to the user
     const filteredByUser = scheduleHistoryData.filter(
       (schedule) => schedule.userId === userId || schedule.userId === null,
@@ -211,8 +216,7 @@ export class ScheduleHistoryExporter extends DataExporter<
                   const isIndividualSchedule = competition.userId !== null;
 
                   const createdTodayOrBefore =
-                    DateTime.fromISO(competition.eventVersionCreatedAt) <=
-                    DateTime.fromISO(day).endOf('day');
+                    DateTime.fromISO(competition.eventVersionCreatedAt) <= endOfTheDay;
 
                   const deletionDate = DateTime.fromISO(
                     competition.eventVersionIsDeleted ? competition.eventVersionUpdatedAt : '',
@@ -246,7 +250,7 @@ export class ScheduleHistoryExporter extends DataExporter<
                 filterDefaultSchedules.indexOf(schedule) + 1,
               );
               const startTimeOnDay = schedule.accessBeforeSchedule
-                ? DateTime.fromISO(day)
+                ? startOfTheDay
                 : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
               let isSupersededOnThisDate = false;
@@ -281,7 +285,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
             const filteredByDeletion = filteredByVersion.filter((schedule) => {
               const startTimeOnDay = schedule.accessBeforeSchedule
-                ? DateTime.fromISO(day)
+                ? startOfTheDay
                 : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
               const deletionDate = DateTime.fromISO(
@@ -304,7 +308,7 @@ export class ScheduleHistoryExporter extends DataExporter<
     day: string,
     schedule: ScheduleHistoryData,
   ): boolean {
-    const date = DateTime.fromISO(day);
+    const startOfTheDay = DateTime.fromISO(day);
     const creationDay = DateTime.fromISO(schedule.eventVersionCreatedAt).startOf('day');
 
     // The next version of this event displaces its applicability only when
@@ -313,7 +317,7 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     switch (schedule.periodicity) {
       case 'ALWAYS': {
-        return creationDay <= date;
+        return creationDay <= startOfTheDay;
       }
       case 'ONCE': {
         // This schedule applies only on the day it is scheduled for
@@ -329,12 +333,12 @@ export class ScheduleHistoryExporter extends DataExporter<
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
         return (
-          creationDay <= date &&
+          creationDay <= startOfTheDay &&
           interval.isValid &&
           // This schedule applies every day, between the indicated start and end dates
           // Intervals are not inclusive of the end date, so we need to explicitly check if the target date is the
           // same as the end date
-          (interval.contains(date) || interval.end.hasSame(date, 'day'))
+          (interval.contains(startOfTheDay) || interval.end.hasSame(startOfTheDay, 'day'))
         );
       }
       case 'WEEKLY': {
@@ -349,12 +353,14 @@ export class ScheduleHistoryExporter extends DataExporter<
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
         const isDateInInterval =
-          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
-        const isCorrectDayOfWeek = date.weekday === DateTime.fromISO(schedule.selectedDate).weekday;
+          interval.isValid &&
+          (interval.contains(startOfTheDay) || interval.end.hasSame(startOfTheDay, 'day'));
+        const isCorrectDayOfWeek =
+          startOfTheDay.weekday === DateTime.fromISO(schedule.selectedDate).weekday;
 
         // This schedule applies every week on the selected date, between the indicated start and end dates
         // Check if the date in question falls inside a weekly recurrence of the selected date
-        return creationDay <= date && isDateInInterval && isCorrectDayOfWeek;
+        return creationDay <= startOfTheDay && isDateInInterval && isCorrectDayOfWeek;
       }
       case 'WEEKDAYS': {
         if (schedule.startDate === null || schedule.endDate === null) {
@@ -364,13 +370,14 @@ export class ScheduleHistoryExporter extends DataExporter<
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
         const isDateInInterval =
-          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
+          interval.isValid &&
+          (interval.contains(startOfTheDay) || interval.end.hasSame(startOfTheDay, 'day'));
 
         // Using !date.isWeekend here is not sufficient because some locales consider Sunday a weekday
-        const isDateWeekday = date.weekday !== 6 && date.weekday !== 7;
+        const isDateWeekday = startOfTheDay.weekday !== 6 && startOfTheDay.weekday !== 7;
 
         // This schedule applies every weekday between the indicated start and end dates (inclusive)
-        return creationDay <= date && isDateInInterval && isDateWeekday;
+        return creationDay <= startOfTheDay && isDateInInterval && isDateWeekday;
       }
       case 'MONTHLY': {
         if (
@@ -384,18 +391,19 @@ export class ScheduleHistoryExporter extends DataExporter<
         const interval = Interval.fromISO(`${schedule.startDate}/${schedule.endDate}`);
 
         const isDateInInterval =
-          interval.isValid && (interval.contains(date) || interval.end.hasSame(date, 'day'));
+          interval.isValid &&
+          (interval.contains(startOfTheDay) || interval.end.hasSame(startOfTheDay, 'day'));
 
         const selectedDate = DateTime.fromISO(schedule.selectedDate);
 
         // Check if the date in question falls inside a monthly recurrence of the selected date
         // Handling edge cases where the selected date is greater than the last day of the month
         const isCorrectDayOfMonth =
-          selectedDate.day === date.day ||
-          (date.day === date.daysInMonth && selectedDate.day > date.day);
+          selectedDate.day === startOfTheDay.day ||
+          (startOfTheDay.day === startOfTheDay.daysInMonth && selectedDate.day > startOfTheDay.day);
 
         // This schedule applies every month on the selected date, between the indicated start and end dates
-        return creationDay <= date && isDateInInterval && isCorrectDayOfMonth;
+        return creationDay <= startOfTheDay && isDateInInterval && isCorrectDayOfMonth;
       }
     }
 
