@@ -177,7 +177,9 @@ export class ScheduleHistoryExporter extends DataExporter<
               mobileDeviceScheduleAccessBeforeStartTime,
             mobile_device_schedule_download_timestamp: deviceSchedule?.createdAt ?? null,
             mobile_device_schedule_utc_timezone_offset: deviceSchedule?.userTimeZone
-              ? `${IANAZone.create(deviceSchedule.userTimeZone).offset(Date.now())}`
+              ? `${IANAZone.create(deviceSchedule.userTimeZone).offset(
+                  DateTime.fromISO(`${deviceSchedule.createdAt}Z`).toMillis(),
+                )}`
               : null,
           });
         });
@@ -500,12 +502,24 @@ export class ScheduleHistoryExporter extends DataExporter<
     // that aren't newer than the event version we're looking at
     // and was downloaded before its start time
 
-    const startTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.startTime}`);
+    const localStartTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.startTime}`);
 
     const schedulesFound = sortedDeviceScheduleHistoryData.filter((schedule) => {
+      if (!schedule.userTimeZone) {
+        return false;
+      }
+
+      const userTimeZone = IANAZone.create(schedule.userTimeZone);
+
+      if (!userTimeZone.isValid) {
+        return false;
+      }
+
       const [deviceDatePart, deviceNumberPart] = schedule.eventVersion.split('-');
       const [eventDatePart, eventNumberPart] = scheduleHistoryEvent.eventVersion.split('-');
-      const downloadDate = DateTime.fromISO(schedule.createdAt);
+      const utcDownloadTimestamp = DateTime.fromISO(`${schedule.createdAt}Z`);
+      const offset = userTimeZone.offset(utcDownloadTimestamp.toMillis());
+      const localDownloadTimestamp = utcDownloadTimestamp.plus({ minutes: offset });
 
       return (
         schedule.userId === userId &&
@@ -513,7 +527,7 @@ export class ScheduleHistoryExporter extends DataExporter<
         DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <=
           DateTime.fromFormat(eventDatePart, 'yyyyMMdd') &&
         parseInt(deviceNumberPart) <= parseInt(eventNumberPart) &&
-        downloadDate < startTimeOnDay
+        localDownloadTimestamp < localStartTimeOnDay
       );
     });
 
