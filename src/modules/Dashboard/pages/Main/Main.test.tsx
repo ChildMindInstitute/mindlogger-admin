@@ -1,13 +1,14 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks';
-import { LocalStorageKeys } from 'shared/utils';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { Roles } from 'shared/consts';
+import { AuthSchema, initialStateData } from 'redux/modules';
+import { mockedOwnerId } from 'shared/mock';
 
-import { Main } from './Main';
+import { getDismissedKey, Main } from './Main';
 
 jest.mock('shared/hooks', () => ({
   useFeatureFlags: jest.fn(),
@@ -21,6 +22,24 @@ describe('Main', () => {
     localStorage.clear();
   });
 
+  const mockAuthState: { auth: AuthSchema } = {
+    auth: {
+      authentication: {
+        ...initialStateData,
+        data: {
+          user: {
+            id: mockedOwnerId,
+            firstName: 'Test',
+            lastName: 'User',
+            email: 'test@example.com',
+          },
+        },
+      },
+      isAuthorized: true,
+      isLogoutInProgress: false,
+    },
+  };
+
   describe('EHR Banner behavior', () => {
     test('shows available banner when feature flag is available and not dismissed', () => {
       mockUseFeatureFlags.mockReturnValue({
@@ -28,7 +47,10 @@ describe('Main', () => {
       });
 
       renderWithProviders(<Main />, {
-        preloadedState: getPreloadedState(Roles.Manager),
+        preloadedState: {
+          ...getPreloadedState(Roles.Manager),
+          ...mockAuthState,
+        },
       });
 
       expect(screen.getByTestId('ehr-banner-available')).toBeInTheDocument();
@@ -41,7 +63,10 @@ describe('Main', () => {
       });
 
       renderWithProviders(<Main />, {
-        preloadedState: getPreloadedState(Roles.Manager),
+        preloadedState: {
+          ...getPreloadedState(Roles.Manager),
+          ...mockAuthState,
+        },
       });
 
       expect(screen.getByTestId('ehr-banner-active')).toBeInTheDocument();
@@ -54,7 +79,10 @@ describe('Main', () => {
       });
 
       renderWithProviders(<Main />, {
-        preloadedState: getPreloadedState(Roles.Manager),
+        preloadedState: {
+          ...getPreloadedState(Roles.Manager),
+          ...mockAuthState,
+        },
       });
 
       const banner = screen.getByTestId('ehr-banner-available');
@@ -64,7 +92,9 @@ describe('Main', () => {
       await userEvent.click(within(banner).getByRole('button'));
 
       // Check localStorage was set
-      expect(localStorage.getItem(LocalStorageKeys.EHRBannerAvailableDismissed)).toBe('true');
+      expect(localStorage.getItem(getDismissedKey(mockedOwnerId, mockedOwnerId, 'available'))).toBe(
+        'true',
+      );
     });
 
     test('hides active banner when dismissed', async () => {
@@ -73,7 +103,10 @@ describe('Main', () => {
       });
 
       renderWithProviders(<Main />, {
-        preloadedState: getPreloadedState(Roles.Manager),
+        preloadedState: {
+          ...getPreloadedState(Roles.Manager),
+          ...mockAuthState,
+        },
       });
 
       const banner = screen.getByTestId('ehr-banner-active');
@@ -82,8 +115,13 @@ describe('Main', () => {
       // Click close button
       await userEvent.click(within(banner).getByRole('button'));
 
+      // Check that banner is hidden
+      await waitFor(() => expect(banner).not.toBeInTheDocument());
+
       // Check localStorage was set
-      expect(localStorage.getItem(LocalStorageKeys.EHRBannerActiveDismissed)).toBe('true');
+      expect(localStorage.getItem(getDismissedKey(mockedOwnerId, mockedOwnerId, 'active'))).toBe(
+        'true',
+      );
     });
 
     test('does not show banners when feature flag is not set', () => {
@@ -92,7 +130,10 @@ describe('Main', () => {
       });
 
       renderWithProviders(<Main />, {
-        preloadedState: getPreloadedState(Roles.Manager),
+        preloadedState: {
+          ...getPreloadedState(Roles.Manager),
+          ...mockAuthState,
+        },
       });
 
       expect(screen.queryByTestId('ehr-banner-available')).not.toBeInTheDocument();
