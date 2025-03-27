@@ -145,6 +145,7 @@ export const DataExportPopup = ({
               appletId,
               fromDate,
               toDate,
+              subjectIds: targetSubjectIds,
             });
           } else {
             console.warn(
