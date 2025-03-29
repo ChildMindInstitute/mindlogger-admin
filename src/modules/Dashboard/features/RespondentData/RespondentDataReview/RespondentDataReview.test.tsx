@@ -607,49 +607,51 @@ describe('RespondentDataReview', () => {
       JEST_TEST_TIMEOUT,
     );
 
-  test('renders component with chosen last answer date', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+    test('renders component with chosen last answer date', async () => {
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
 
-    renderWithProviders(<RespondentDataReviewWithForm />, {
-      preloadedState,
-      route: routeWithoutSelectedDate,
-      routePath,
-    });
+      renderWithProviders(<RespondentDataReviewWithForm />, {
+        preloadedState,
+        route: routeWithoutSelectedDate,
+        routePath,
+      });
 
-    window.HTMLElement.prototype.scrollTo = () => {};
+      window.HTMLElement.prototype.scrollTo = () => {};
 
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/review/flows`,
-        {
-          params: {
-            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
-            limit: MAX_LIMIT,
-            targetSubjectId: mockedFullSubjectId1,
+      await waitFor(() => {
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          2,
+          `/answers/applet/${mockedAppletId}/review/flows`,
+          {
+            params: {
+              createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
           },
-          signal: undefined,
-        },
-      );
+        );
 
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        2,
-        `/answers/applet/${mockedAppletId}/review/activities`,
-        {
-          params: {
-            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
-            limit: MAX_LIMIT,
-            targetSubjectId: mockedFullSubjectId1,
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
           },
-          signal: undefined,
-        },
-      );
+        );
 
-      const activityLength = screen.queryAllByTestId(
-        /respondents-review-menu-activity-\d+-select$/,
-      );
-      expect(activityLength).toHaveLength(3);
+        const activityLength = screen.queryAllByTestId(
+          /respondents-review-menu-activity-\d+-select$/,
+        );
+        expect(activityLength).toHaveLength(3);
+      });
 
       const timestampLength = screen.queryAllByTestId(
         /respondents-review-menu-activity-1-completion-time-\d+$/,
@@ -666,7 +668,6 @@ describe('RespondentDataReview', () => {
       expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
       expect(timestamp3).toHaveTextContent('23:29:36');
     });
-  });
 
   test('test if default review date is equal to last activity completed date', async () => {
     renderWithProviders(<RespondentDataReviewWithForm />, {
