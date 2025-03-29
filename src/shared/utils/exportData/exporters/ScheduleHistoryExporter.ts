@@ -343,16 +343,23 @@ export class ScheduleHistoryExporter extends DataExporter<
             });
 
             const filteredByAppletVersion = filteredByDeletion.filter((schedule) => {
-              const startTimeOnDay = schedule.accessBeforeSchedule
-                ? startOfTheDay
-                : DateTime.fromISO(`${day}T${schedule.startTime}`);
-
               const scheduleLinkDate = DateTime.fromISO(schedule.linkedWithAppletAt);
-              if (scheduleLinkDate > startTimeOnDay) {
+              const extendsPastDay =
+                DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
+
+              const endTimeOnDay = extendsPastDay
+                ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
+                : DateTime.fromISO(`${day}T${schedule.endTime}`);
+
+              if (scheduleLinkDate > endTimeOnDay) {
                 return false;
               }
               if (hasNextAppletVersion) {
                 const [_, appletVersionLinkDate] = appletVersionLinkDates[indexOfAppletVersion + 1];
+
+                const startTimeOnDay = schedule.accessBeforeSchedule
+                  ? startOfTheDay
+                  : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
                 // If the creationDate of the next applet version comes before this event, skip it
                 return appletVersionLinkDate > startTimeOnDay;
