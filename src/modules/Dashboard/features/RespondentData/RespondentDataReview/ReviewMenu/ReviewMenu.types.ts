@@ -11,7 +11,7 @@ export type ReviewMenuProps = {
   responseDates?: Date[];
   onMonthChange: (date: Date) => void;
   activities: ReviewEntity[];
-  flows: ReviewEntity[] | null;
+  flows: ReviewEntity[];
   selectedAnswer: AnswerDate | null;
   selectedActivityId?: string;
   selectedFlowId?: string;

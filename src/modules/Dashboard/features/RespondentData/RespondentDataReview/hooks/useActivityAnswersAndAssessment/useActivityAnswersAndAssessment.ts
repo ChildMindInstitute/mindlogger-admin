@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -8,21 +8,21 @@ import {
   getFlowAnswersApi,
   getFlowAssessmentApi,
 } from 'modules/Dashboard/api';
-import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
+import { useDecryptedIdentifiers } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDecryptedIdentifiers';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
+import { Item } from 'shared/state';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 import { getErrorMessage } from 'shared/utils/errors';
 import { getObjectFromList } from 'shared/utils/getObjectFromList';
-import { EncryptedAnswerSharedProps } from 'shared/types';
-import { Item } from 'shared/state';
-import { useAsync } from 'shared/hooks/useAsync';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { useDecryptedIdentifiers } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDecryptedIdentifiers';
+import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
 
 import {
-  ResponsesSummary,
   ActivityItemAnswers,
-  FlowAnswers,
   AssessmentActivityItem,
   FeedbackTabs,
+  FlowAnswers,
+  ResponsesSummary,
 } from '../../RespondentDataReview.types';
 import {
   ActivityAnswersAssessmentProps,
@@ -121,61 +121,72 @@ export const useActivityAnswersAndAssessment = ({
     },
   );
 
-  const getAnswersAndAssessment = async ({
-    hasSelectedAnswer,
-    activityId,
-    flowId,
-  }: GetAnswersAssessmentProps) => {
-    if (!appletId || (!activityId && !flowId) || !hasSelectedAnswer || (!answerId && !submitId)) {
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      let assessmentResult;
-      if (flowId && submitId) {
-        await getFlowAnswers({ appletId, flowId, submitId });
-        const response = await getFlowAssessmentApi({ appletId, submitId });
-        assessmentResult = response?.data?.result;
-      } else if (activityId && answerId) {
-        await getActivityAnswer({ appletId, answerId, activityId });
-        const response = await getAssessmentApi({ appletId, answerId });
-        assessmentResult = response?.data?.result;
+  const getAnswersAndAssessment = useCallback(
+    async ({ hasSelectedAnswer, activityId, flowId }: GetAnswersAssessmentProps) => {
+      if (!appletId || (!activityId && !flowId) || !hasSelectedAnswer || (!answerId && !submitId)) {
+        return;
       }
 
-      if (!assessmentResult) {
-        return setIsLoading(false);
-      }
+      try {
+        setIsLoading(true);
+        let assessmentResult;
+        if (flowId && submitId) {
+          await getFlowAnswers({ appletId, flowId, submitId });
+          const response = await getFlowAssessmentApi({ appletId, submitId });
+          assessmentResult = response?.data?.result;
+        } else if (activityId && answerId) {
+          await getActivityAnswer({ appletId, answerId, activityId });
+          const response = await getAssessmentApi({ appletId, answerId });
+          assessmentResult = response?.data?.result;
+        }
 
-      const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } = assessmentResult;
-      const encryptedData = {
-        ...assessmentData,
+        if (!assessmentResult) {
+          return setIsLoading(false);
+        }
+
+        const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } =
+          assessmentResult;
+        const encryptedData = {
+          ...assessmentData,
+          // sorting in case the items received from the backend are in the wrong order
+          items: sortItemsByOrder(items),
+          userPublicKey: reviewerPublicKey,
+        } as EncryptedAnswerSharedProps;
+        const decryptedAssessment = await getDecryptedActivityData(encryptedData);
+        setItemIds(assessmentData.itemIds || []);
+        setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
+
         // sorting in case the items received from the backend are in the wrong order
-        items: sortItemsByOrder(items),
-        userPublicKey: reviewerPublicKey,
-      } as EncryptedAnswerSharedProps;
-      const decryptedAssessment = await getDecryptedActivityData(encryptedData);
-      setItemIds(assessmentData.itemIds || []);
-      setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
+        setLastAssessment(sortItemsByOrder(itemsLast));
+        setAssessmentVersions(versions);
+        setIsBannerVisible(!!(itemsLast?.length && versions));
 
-      // sorting in case the items received from the backend are in the wrong order
-      setLastAssessment(sortItemsByOrder(itemsLast));
-      setAssessmentVersions(versions);
-      setIsBannerVisible(!!(itemsLast?.length && versions));
-
-      if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
-        setIsFeedbackOpen(true);
-        setActiveTab(FeedbackTabs.Reviews);
+        if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
+          setIsFeedbackOpen(true);
+          setActiveTab(FeedbackTabs.Reviews);
+        }
+      } catch (error) {
+        setAssessmentError(getErrorMessage(error));
+      } finally {
+        containerRef.current?.scrollTo({
+          top: 0,
+        });
+        setIsLoading(false);
       }
-    } catch (error) {
-      setAssessmentError(getErrorMessage(error));
-    } finally {
-      containerRef.current?.scrollTo({
-        top: 0,
-      });
-      setIsLoading(false);
-    }
-  };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      answerId,
+      appletId,
+      containerRef,
+      getActivityAnswer,
+      getFlowAnswers,
+      isFeedbackVisible,
+      setActiveTab,
+      setIsFeedbackOpen,
+      submitId,
+    ],
+  );
 
   const answersError = getAnswerError || getFlowAnswersError;
 

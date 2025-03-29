@@ -27,7 +27,19 @@ export default {
     '/dashboard/:appletId/participants/:subjectId/activityFlows/:activityFlowId/responses',
   appletParticipantConnections: '/dashboard/:appletId/participants/:subjectId/connections',
   appletParticipantSchedule: '/dashboard/:appletId/participants/:subjectId/schedule',
+  /**
+   * @deprecated
+   * This pre-multiinformant version of a respondant view is activity/flow-agnostic and
+   * should no longer be referenced. Use appletParticipantActivityDetailsData{Summary/Review} or
+   * appletParticipantActivityDetailsFlowData{Summary/Review} instead.
+   */
   appletRespondentData: '/dashboard/:appletId/respondents/:respondentId/dataviz',
+  /**
+   * @deprecated
+   * This pre-multiinformant version of the Summary tab is activity/flow-agnostic and
+   * should no longer be referenced. Use appletParticipantActivityDetailsDataSummary or
+   * appletParticipantActivityDetailsFlowDataSummary instead.
+   */
   appletParticipantDataSummary: '/dashboard/:appletId/participants/:subjectId/dataviz/summary',
   /**
    * @deprecated
