@@ -513,97 +513,99 @@ describe('RespondentDataReview', () => {
     JEST_TEST_TIMEOUT,
   );
 
-  test(
-    'renders component correctly with all child components when isFeedbackVisible param is true',
-    async () => {
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-      mockAxios.get.mockResolvedValueOnce({
-        data: {
-          result: {},
-        },
-      });
+    test(
+      'renders component correctly with all child components when isFeedbackVisible param is true',
+      async () => {
+        mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
+        mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
+        mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+        mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
+        mockAxios.get.mockResolvedValueOnce({
+          data: {
+            result: {},
+          },
+        });
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+        const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: route2,
-        routePath,
-      });
+        renderWithProviders(<RespondentDataReviewWithForm />, {
+          preloadedState,
+          route: route2,
+          routePath,
+        });
 
-      window.HTMLElement.prototype.scrollTo = () => {};
+        window.HTMLElement.prototype.scrollTo = () => {};
 
-      await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/answers/applet/${mockedAppletId}/review/flows`,
-          {
-            params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
+        await waitFor(() => {
+          expect(mockAxios.get).toHaveBeenNthCalledWith(
+            1,
+            `/answers/applet/${mockedAppletId}/dates`,
+            expect.objectContaining({
+              params: {
+                targetSubjectId: mockedFullSubjectId1,
+                fromDate: startOfMonth(date2).getTime().toString(),
+                toDate: endOfMonth(date2).getTime().toString(),
+              },
+            }),
+          );
+
+          expect(mockAxios.get).toHaveBeenNthCalledWith(
+            2,
+            `/answers/applet/${mockedAppletId}/review/flows`,
+            {
+              params: {
+                createdDate: format(date2, DateFormats.YearMonthDay),
+                limit: MAX_LIMIT,
+                targetSubjectId: mockedFullSubjectId1,
+              },
+              signal: undefined,
             },
+          );
+
+          expect(mockAxios.get).toHaveBeenNthCalledWith(
+            3,
+            `/answers/applet/${mockedAppletId}/review/activities`,
+            {
+              params: {
+                createdDate: format(date2, DateFormats.YearMonthDay),
+                limit: MAX_LIMIT,
+                targetSubjectId: mockedFullSubjectId1,
+              },
+              signal: undefined,
+            },
+          );
+
+          expect(mockAxios.get).toHaveBeenNthCalledWith(
+            4,
+            `/answers/applet/${mockedAppletId}/activities/${mockedActivityId2}/answers/answer-id-2-2`,
+            {
+              params: {
+                limit: MAX_LIMIT,
+              },
+              signal: undefined,
+            },
+          );
+        });
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          5,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
+          {
             signal: undefined,
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
-          `/answers/applet/${mockedAppletId}/review/activities`,
-          {
-            params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date2).getTime().toString(),
-              toDate: endOfMonth(date2).getTime().toString(),
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          4,
-          `/answers/applet/${mockedAppletId}/activities/${mockedActivityId2}/answers/answer-id-2-2`,
-          {
-            params: {
-              limit: MAX_LIMIT,
-            },
-            signal: undefined,
-          },
-        );
-      });
-
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        5,
-        `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
-        {
-          signal: undefined,
-        },
-      );
-
-      // check that the Feedback Reviews tab is open
-      expect(screen.getByTestId('respondents-data-summary-feedback-reviewed')).toBeInTheDocument();
-    },
-    JEST_TEST_TIMEOUT,
-  );
+        // check that the Feedback Reviews tab is open
+        expect(
+          screen.getByTestId('respondents-data-summary-feedback-reviewed'),
+        ).toBeInTheDocument();
+      },
+      JEST_TEST_TIMEOUT,
+    );
 
   test('renders component with chosen last answer date', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
