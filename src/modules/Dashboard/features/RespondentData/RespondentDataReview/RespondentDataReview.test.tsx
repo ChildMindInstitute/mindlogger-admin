@@ -669,18 +669,19 @@ describe('RespondentDataReview', () => {
       expect(timestamp3).toHaveTextContent('23:29:36');
     });
 
-  test('test if default review date is equal to last activity completed date', async () => {
-    renderWithProviders(<RespondentDataReviewWithForm />, {
-      preloadedState,
-      route: routeWithoutSelectedDate,
-      routePath,
+    test('test if default review date is empty by default', async () => {
+      renderWithProviders(<RespondentDataReviewWithForm />, {
+        preloadedState,
+        route: routeWithoutSelectedDate,
+        routePath,
+      });
+
+      const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
+      expect(inputContainer).toBeInTheDocument();
+
+      const input = inputContainer.querySelector('input') as HTMLInputElement;
+      expect(input).toBeInTheDocument();
+      expect(input.value).toEqual('');
     });
-
-    const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
-    expect(inputContainer).toBeInTheDocument();
-
-    const input = inputContainer.querySelector('input') as HTMLInputElement;
-    expect(input).toBeInTheDocument();
-    expect(input.value).toEqual('15 Dec 2023');
   });
 });
