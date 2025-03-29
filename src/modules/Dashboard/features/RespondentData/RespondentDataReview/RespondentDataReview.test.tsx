@@ -89,9 +89,9 @@ describe('RespondentDataReview', () => {
   describe('Activity view', () => {
     test('properly displays correct dates for selected activity', async () => {
       mockAxios.get
+        .mockResolvedValueOnce(mockedGetWithDates)
         .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities4)
-        .mockResolvedValueOnce(mockedGetWithDates);
+        .mockResolvedValueOnce(mockedGetWithActivities4);
 
       const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
@@ -110,6 +110,19 @@ describe('RespondentDataReview', () => {
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           1,
+          `/answers/applet/${mockedAppletId}/dates`,
+          expect.objectContaining({
+            params: {
+              targetSubjectId: mockedFullSubjectId1,
+              fromDate: startOfMonth(date2).getTime().toString(),
+              toDate: endOfMonth(date2).getTime().toString(),
+              activityOrFlowId: mockedActivityId2,
+            },
+          }),
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          2,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
@@ -122,7 +135,7 @@ describe('RespondentDataReview', () => {
         );
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
+          3,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
@@ -132,19 +145,6 @@ describe('RespondentDataReview', () => {
             },
             signal: undefined,
           },
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date2).getTime().toString(),
-              toDate: endOfMonth(date2).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
         );
       });
 
@@ -157,11 +157,14 @@ describe('RespondentDataReview', () => {
       );
       expect(activityLength).toHaveLength(1);
 
-      const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
-
-      await act(async () => {
-        await userEvent.click(activity);
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`),
+          ).toBeInTheDocument();
+        },
+        { timeout: JEST_TEST_TIMEOUT },
+      );
 
       // check that the correct amount of timestamps are in the selected activity
       const timestampLength = screen.queryAllByTestId(
