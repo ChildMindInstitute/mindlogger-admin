@@ -31,8 +31,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RespondentDataReview } from './RespondentDataReview';
 
-const date = new Date('2023-12-27');
-const date2 = new Date('2023-12-15');
+const date = new Date('2023-12-15');
 const dataTestid = 'respondents-review';
 
 const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=${format(
@@ -40,20 +39,20 @@ const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1
   DateFormats.YearMonthDay,
 )}`;
 const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=${format(
-  date2,
+  date,
   DateFormats.YearMonthDay,
 )}&answerId=answer-id-2-2&isFeedbackVisible=true`;
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
 const routePath = page.appletParticipantDataReview;
 
 const activityRoute1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/responses?selectedDate=${format(
-  date2,
+  date,
   DateFormats.YearMonthDay,
 )}`;
 const activityRoutePath = page.appletParticipantActivityDetailsDataReview;
 
 const flowRoute1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activityFlows/${mockedActivityFlowId}/responses?selectedDate=${format(
-  date2,
+  date,
   DateFormats.YearMonthDay,
 )}`;
 const flowRoutePath = page.appletParticipantActivityDetailsFlowDataReview;
@@ -91,7 +90,7 @@ describe('RespondentDataReview', () => {
       mockAxios.get
         .mockResolvedValueOnce(mockedGetWithDates)
         .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities4);
+        .mockResolvedValueOnce(mockedGetWithActivities3);
 
       const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
@@ -114,8 +113,8 @@ describe('RespondentDataReview', () => {
           expect.objectContaining({
             params: {
               targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date2).getTime().toString(),
-              toDate: endOfMonth(date2).getTime().toString(),
+              fromDate: startOfMonth(date).getTime().toString(),
+              toDate: endOfMonth(date).getTime().toString(),
               activityOrFlowId: mockedActivityId2,
             },
           }),
@@ -126,7 +125,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -139,7 +138,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -186,7 +185,7 @@ describe('RespondentDataReview', () => {
       mockAxios.get
         .mockResolvedValueOnce(mockedGetWithDates)
         .mockResolvedValueOnce(mockedGetWithFlows2)
-        .mockResolvedValueOnce(mockedGetWithActivities4);
+        .mockResolvedValueOnce(mockedGetWithActivities3);
 
       const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
@@ -209,8 +208,8 @@ describe('RespondentDataReview', () => {
           expect.objectContaining({
             params: {
               targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date2).getTime().toString(),
-              toDate: endOfMonth(date2).getTime().toString(),
+              fromDate: startOfMonth(date).getTime().toString(),
+              toDate: endOfMonth(date).getTime().toString(),
               activityOrFlowId: mockedActivityFlowId,
             },
           }),
@@ -221,7 +220,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -234,7 +233,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
-              createdDate: format(date2, DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -518,7 +517,7 @@ describe('RespondentDataReview', () => {
       async () => {
         mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
         mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+        mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
         mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
         mockAxios.get.mockResolvedValueOnce({
           data: {
@@ -547,8 +546,8 @@ describe('RespondentDataReview', () => {
             expect.objectContaining({
               params: {
                 targetSubjectId: mockedFullSubjectId1,
-                fromDate: startOfMonth(date2).getTime().toString(),
-                toDate: endOfMonth(date2).getTime().toString(),
+                fromDate: startOfMonth(date).getTime().toString(),
+                toDate: endOfMonth(date).getTime().toString(),
               },
             }),
           );
@@ -558,7 +557,7 @@ describe('RespondentDataReview', () => {
             `/answers/applet/${mockedAppletId}/review/flows`,
             {
               params: {
-                createdDate: format(date2, DateFormats.YearMonthDay),
+                createdDate: format(date, DateFormats.YearMonthDay),
                 limit: MAX_LIMIT,
                 targetSubjectId: mockedFullSubjectId1,
               },
@@ -571,7 +570,7 @@ describe('RespondentDataReview', () => {
             `/answers/applet/${mockedAppletId}/review/activities`,
             {
               params: {
-                createdDate: format(date2, DateFormats.YearMonthDay),
+                createdDate: format(date, DateFormats.YearMonthDay),
                 limit: MAX_LIMIT,
                 targetSubjectId: mockedFullSubjectId1,
               },
@@ -610,7 +609,7 @@ describe('RespondentDataReview', () => {
     test('renders component with chosen last answer date', async () => {
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
         preloadedState,
@@ -626,7 +625,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
-              createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -639,7 +638,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
-              createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },

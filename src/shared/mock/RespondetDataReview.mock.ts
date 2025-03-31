@@ -110,18 +110,6 @@ const items = [
   },
 ];
 
-export const mockedGetWithActivities1 = {
-  data: {
-    result: [
-      {
-        id: mockedActivityId,
-        name: 'Activity 1',
-        answerDates: [],
-      },
-    ],
-  },
-};
-
 export const mockedGetWithFlows1 = {
   data: {
     result: [
@@ -171,13 +159,13 @@ const activity1 = {
   ],
 };
 
-export const mockedGetWithActivities2 = {
+export const mockedGetWithActivities1 = {
   data: {
     result: [activity1],
   },
 };
 
-export const mockedGetWithActivities3 = {
+export const mockedGetWithActivities2 = {
   data: {
     result: [
       activity1,
@@ -215,7 +203,7 @@ export const mockedGetWithActivities3 = {
   },
 };
 
-export const mockedGetWithActivities4 = {
+export const mockedGetWithActivities3 = {
   data: {
     result: [
       activity1,
