@@ -1,9 +1,4 @@
-import {
-  Participant,
-  ParticipantDetail,
-  ParticipantStatus,
-  ParticipantWithDataAccess,
-} from 'modules/Dashboard/types';
+import { ParticipantDetail, ParticipantStatus } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
@@ -53,16 +48,6 @@ export type FilteredApplets = Record<FilteredAppletsKey, ParticipantDetail[]>;
 
 export type FilteredParticipants = {
   [key: string]: FilteredApplets;
-};
-
-export type ParticipantsData = {
-  result: Participant[];
-  count: number;
-  orderingFields?: string[];
-};
-
-export type ParticipantsDataWithDataAccess = Omit<ParticipantsData, 'result'> & {
-  result: ParticipantWithDataAccess[];
 };
 
 export type GetParticipantActionsProps = {

@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { usePermissions } from 'shared/hooks';
 import { applet, workspaces } from 'shared/state';
-import { applets, users } from 'modules/Dashboard/state';
+import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Spinner } from 'shared/components';
-import { StyledBody } from 'shared/styles';
+import { usePermissions } from 'shared/hooks';
 
 import { Calendar } from './Calendar';
 import { Legend } from './Legend';
@@ -21,21 +19,10 @@ export const Schedule = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { ownerId } = workspaces.useData() || {};
-  const loadingStatus = users.useAllRespondentsStatus();
-  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
-  const { getAllWorkspaceRespondents, getRespondentDetails } = users.thunk;
   const preparedEvents = usePreparedEvents(appletData);
   const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
-    if (!appletId || !hasAccess) return;
-
-    return dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId, shell: false },
-      }),
-    );
-  });
+  const { noPermissionsComponent } = usePermissions(() => undefined);
 
   useEffect(() => {
     if (!appletId || !hasAccess) return;
@@ -45,15 +32,11 @@ export const Schedule = () => {
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, dispatch, getRespondentDetails, hasAccess, ownerId]);
+  }, [appletId, dispatch, hasAccess, ownerId]);
 
-  if (isForbidden || !hasAccess) return noPermissionsComponent;
+  if (!hasAccess) return noPermissionsComponent;
 
-  return isLoading ? (
-    <StyledBody>
-      <Spinner />
-    </StyledBody>
-  ) : (
+  return (
     <ScheduleProvider appletId={appletId} appletName={appletData?.displayName}>
       <StyledSchedule>
         <StyledLeftPanel>

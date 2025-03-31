@@ -52,12 +52,8 @@ export const Overview = () => {
     [appletId, getAppletPrivateKey, navigate],
   );
 
-  const handleAddPopupClose = (shouldRefetch = false) => {
+  const handleAddPopupClose = () => {
     setAddPopupOpen(false);
-
-    if (!!appletId && shouldRefetch) {
-      execute({ appletId, limit });
-    }
   };
 
   const dashboardTableProps = useMemo(

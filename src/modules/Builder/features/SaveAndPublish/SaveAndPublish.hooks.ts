@@ -42,6 +42,7 @@ import { banners } from 'shared/state/Banners';
 import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import {
   getActivityItems,
@@ -513,8 +514,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       checkIfAppletBeingCreatedOrUpdatedRef.current = true;
       if ((isNewApplet || !appletId) && ownerId) {
         result = await dispatch(createApplet({ ownerId, body }));
-      }
-      if (!isNewApplet && appletId) {
+      } else if (!isNewApplet && appletId) {
         result = await dispatch(updateApplet({ appletId, body }));
       }
       checkIfAppletBeingCreatedOrUpdatedRef.current = false;
@@ -523,6 +523,10 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
+      // TODO: Remove this when applet mutations are migrated to RTK Query
+      // https://mindlogger.atlassian.net/browse/M2-8898
+      dispatch(apiSlice.util.invalidateTags([{ type: 'Applet', id: appletId }]));
+
       trackAppletSave({
         action: MixpanelEventType.AppletEditSuccessful,
         applet: result.payload.data.result,

@@ -97,6 +97,8 @@ describe('EditRespondentPopup component tests', () => {
       nickname: 'respondentNickname',
       lastSeen: null,
       tag: chosenAppletData.subjectTag,
+      firstName: null,
+      lastName: null,
     };
 
     mockAxios.put.mockResolvedValueOnce({
@@ -193,7 +195,7 @@ describe('EditRespondentPopup component tests', () => {
           secretUserId: chosenAppletData.respondentSecretId,
           tag: 'Parent',
         },
-        { signal: undefined },
+        { signal: expect.anything() },
       );
     });
   });

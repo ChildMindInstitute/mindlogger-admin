@@ -10,8 +10,6 @@ import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedFullParticipant1,
-  mockedFullParticipant2,
   mockedFullSubjectId1,
 } from 'shared/mock';
 import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from 'shared/consts';
@@ -51,13 +49,6 @@ const preloadedState: PreloadedState<RootState> = {
     },
   },
   users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
     subjectDetails: {
       ...initialStateData,
       data: {
