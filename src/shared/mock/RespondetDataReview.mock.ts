@@ -9,8 +9,6 @@ import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
-  mockedFullParticipant1,
-  mockedFullParticipant2,
   mockedFullSubjectId1,
 } from 'shared/mock';
 import { initialStateData } from 'shared/state';
@@ -37,13 +35,6 @@ export const preloadedState: PreloadedState<RootState> = {
     },
   },
   users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
     subjectDetails: {
       ...initialStateData,
       data: {
