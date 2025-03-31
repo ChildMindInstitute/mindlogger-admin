@@ -6,13 +6,7 @@ import { useForm } from 'react-hook-form';
 import { RootState } from 'redux/store';
 import { page } from 'resources';
 import { ParticipantTag, Roles } from 'shared/consts';
-import {
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedFullParticipant1,
-  mockedFullParticipant2,
-  mockedFullSubjectId1,
-} from 'shared/mock';
+import { mockedAppletId, mockedCurrentWorkspace, mockedFullSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -39,13 +33,6 @@ const preloadedState: PreloadedState<RootState> = {
     workspacesRoles: initialStateData,
   },
   users: {
-    allRespondents: {
-      ...initialStateData,
-      data: {
-        result: [mockedFullParticipant1, mockedFullParticipant2],
-        count: 2,
-      },
-    },
     respondentDetails: {
       ...initialStateData,
     },

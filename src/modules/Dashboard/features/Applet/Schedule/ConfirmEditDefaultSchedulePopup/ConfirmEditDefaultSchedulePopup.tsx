@@ -2,8 +2,7 @@ import { Box, Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { createIndividualEventsApi } from 'api';
-import { applets, users } from 'modules/Dashboard/state';
-import { workspaces } from 'redux/modules';
+import { applets } from 'modules/Dashboard/state';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import {
   StyledBody,
@@ -16,6 +15,8 @@ import {
 import { useAsync } from 'shared/hooks';
 import { getErrorMessage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
+import { workspaces } from 'redux/modules';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import { ConfirmEditDefaultSchedulePopupProps } from './ConfirmEditDefaultSchedulePopup.types';
 
@@ -39,9 +40,11 @@ export const ConfirmEditDefaultSchedulePopup = ({
     dispatch(applets.thunk.getEvents({ appletId, respondentId: userId }));
 
     if (ownerId) {
-      dispatch(
-        users.thunk.getAllWorkspaceRespondents({ params: { ownerId, appletId, shell: false } }),
-      );
+      // Refresh current user after creating schedule to update hasIndividualSchedule flag.
+      // TODO: When createIndividualEventsApi has been migrated to RTK Query and configured to
+      // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this can
+      // be removed:
+      dispatch(apiSlice.util.invalidateTags([{ type: 'User', id: userId }]));
     }
 
     onOpenFollowUpPopup?.();

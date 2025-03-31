@@ -22,8 +22,8 @@ export const usePermissions = (
 
   const handlePermissionCheck = (response: FunctionResponse) => {
     if (
-      response?.response?.status === ApiResponseCodes.Forbidden ||
-      response?.status === ApiResponseCodes.Forbidden ||
+      ('status' in response && response.status === ApiResponseCodes.Forbidden) ||
+      ('response' in response && response.response?.status === ApiResponseCodes.Forbidden) ||
       (Array.isArray(response) &&
         response.some((data) => data.type === ErrorResponseType.AccessDenied))
     ) {
@@ -39,9 +39,9 @@ export const usePermissions = (
     (async () => {
       try {
         setIsLoading(true);
-        const { payload } = await asyncFunc();
+        const { payload, error } = await asyncFunc();
 
-        handlePermissionCheck(payload);
+        handlePermissionCheck(error ?? payload);
       } catch (error) {
         handlePermissionCheck(error as FunctionResponse);
       } finally {

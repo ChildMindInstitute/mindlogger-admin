@@ -8,17 +8,10 @@ import { Modal, Spinner, SpinnerUiType, Svg } from 'shared/components';
 import { PARTICIPANT_TAG_ICONS, USER_SELECTABLE_PARTICIPANT_TAGS } from 'shared/consts';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { useAsync } from 'shared/hooks/useAsync';
-import { editSubjectApi } from 'api';
-import {
-  MixpanelProps,
-  Mixpanel,
-  falseReturnFunc,
-  getErrorMessage,
-  MixpanelEventType,
-} from 'shared/utils';
+import { MixpanelProps, Mixpanel, getErrorMessage, MixpanelEventType } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
+import { useEditSubjectMutation } from 'modules/Dashboard/api/apiSlice';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
@@ -34,8 +27,6 @@ export const EditRespondentPopup = ({
 
   const [isServerErrorVisible, setIsServerErrorVisible] = useState(true);
 
-  const onCloseHandler = (shouldRefetch = false) => onClose(shouldRefetch);
-
   const { handleSubmit, control, setValue, getValues, trigger } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
     defaultValues: {
@@ -47,32 +38,9 @@ export const EditRespondentPopup = ({
 
   const dataTestid = 'dashboard-respondents-edit-popup';
 
-  const {
-    execute: editRespondent,
-    isLoading,
-    error,
-  } = useAsync(
-    editSubjectApi,
-    ({ data }) => {
-      const { userId, appletId, tag } = data?.result ?? {};
-      Mixpanel.track({
-        action: userId
-          ? MixpanelEventType.FullAccountEditedSuccessfully
-          : MixpanelEventType.LimitedAccountEditedSuccessfully,
-        [MixpanelProps.AppletId]: appletId,
-        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
-      });
+  const [editRespondent, { isLoading, error }] = useEditSubjectMutation();
 
-      onCloseHandler(true);
-      dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
-    },
-    falseReturnFunc,
-    () => {
-      setIsServerErrorVisible(true);
-    },
-  );
-
-  const submitForm = () => {
+  const submitForm = async () => {
     if (!chosenAppletData) return;
 
     const { secretUserId, nickname, tag } = getValues();
@@ -86,7 +54,7 @@ export const EditRespondentPopup = ({
       [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
     });
 
-    editRespondent({
+    const response = await editRespondent({
       values: {
         secretUserId: secretUserId.trim(),
         nickname: nickname?.trim(),
@@ -94,6 +62,22 @@ export const EditRespondentPopup = ({
       },
       subjectId,
     });
+
+    if ('data' in response) {
+      const { userId, appletId, tag } = response.data.result ?? {};
+      Mixpanel.track({
+        action: userId
+          ? MixpanelEventType.FullAccountEditedSuccessfully
+          : MixpanelEventType.LimitedAccountEditedSuccessfully,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Tag]: tag || null, // Normalize empty string tag to null
+      });
+
+      onClose();
+      dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
+    } else {
+      setIsServerErrorVisible(true);
+    }
   };
 
   const handleChangeSecretId = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -107,13 +91,13 @@ export const EditRespondentPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={() => onCloseHandler(false)}
+      onClose={onClose}
       onSubmit={handleSubmit(submitForm)}
       disabledSubmit={isLoading}
       title={t('editParticipant')}
       buttonText={t('save')}
       hasLeftBtn
-      onLeftBtnSubmit={() => onCloseHandler(false)}
+      onLeftBtnSubmit={onClose}
       leftBtnText={t('cancel')}
       data-testid={dataTestid}
       width="56"

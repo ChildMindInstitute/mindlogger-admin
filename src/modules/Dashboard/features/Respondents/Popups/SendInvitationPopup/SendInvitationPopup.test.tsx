@@ -55,7 +55,7 @@ describe('SendInvitationPopup', () => {
         1,
         `/invitations/${mockedAppletId}/subject`,
         { email: mockedEmail, subjectId: mockedFullSubjectId1 },
-        { signal: undefined },
+        { signal: expect.anything() },
       );
     });
   });
@@ -76,7 +76,7 @@ describe('SendInvitationPopup', () => {
         1,
         `/invitations/${mockedAppletId}/subject`,
         { email: mockedEmail, subjectId: mockedFullSubjectId1 },
-        { signal: undefined },
+        { signal: expect.anything() },
       );
     });
   });

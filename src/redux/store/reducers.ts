@@ -13,6 +13,7 @@ import { reportConfig } from 'modules/Builder/state/ReportConfig';
 import { auth } from 'modules/Auth/state';
 import { workspaces } from 'shared/state/Workspaces';
 import { forbiddenState } from 'shared/state/ForbiddenState';
+import { apiSlice } from 'shared/api/apiSlice';
 
 export const rootReducer = combineReducers({
   alerts: alerts.slice.reducer,
@@ -28,4 +29,5 @@ export const rootReducer = combineReducers({
   users: users.slice.reducer,
   workspaces: workspaces.slice.reducer,
   forbiddenState: forbiddenState.slice.reducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 });

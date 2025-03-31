@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getAppletActivitiesApi } from 'api';
 import { Spinner } from 'shared/components';
-import { useAsync } from 'shared/hooks';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
-import { Activity, ActivityFlow } from 'redux/modules';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { ActivityAssignDrawer } from 'modules/Dashboard/components';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
 import { ActivitiesSectionHeader } from './ActivitiesSectionHeader';
 import { ActivitiesToolbar } from './ActivitiesToolbar';
@@ -27,13 +25,14 @@ export const Activities = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const { t } = useTranslation('app');
-  const { execute, isLoading, value } = useAsync(getAppletActivitiesApi, { retainValue: true });
 
-  const activities: Activity[] = useMemo(() => value?.data.result.activitiesDetails ?? [], [value]);
-  const flows: ActivityFlow[] = useMemo(
-    () => value?.data.result.appletDetail.activityFlows ?? [],
-    [value],
+  const { data, isLoading } = useGetAppletActivitiesQuery(
+    { params: { appletId: appletId as string } },
+    { skip: !appletId },
   );
+
+  const activities = data?.activitiesDetails ?? [];
+  const flows = data?.appletDetail.activityFlows ?? [];
   const showContent = !isLoading || !!activities.length;
 
   const { formatRow, TakeNowModal } = useActivityGrid({
@@ -46,29 +45,26 @@ export const Activities = () => {
       setActivityId(activityId);
       setShowExportPopup(true);
     }, []),
-    onClickAssign: useCallback((activityId) => {
-      setActivityId(activityId);
-      setShowActivityAssign(true);
-      Mixpanel.track({
-        action: MixpanelEventType.StartAssignActivityOrFlow,
-        [MixpanelProps.AppletId]: appletId,
-        [MixpanelProps.ActivityId]: activityId,
-        [MixpanelProps.EntityType]: 'activity',
-        [MixpanelProps.Via]: 'Applet - Activities',
-      });
-    }, []),
+    onClickAssign: useCallback(
+      (activityId) => {
+        setActivityId(activityId);
+        setShowActivityAssign(true);
+        Mixpanel.track({
+          action: MixpanelEventType.StartAssignActivityOrFlow,
+          [MixpanelProps.AppletId]: appletId,
+          [MixpanelProps.ActivityId]: activityId,
+          [MixpanelProps.EntityType]: 'activity',
+          [MixpanelProps.Via]: 'Applet - Activities',
+        });
+      },
+      [appletId],
+    ),
   });
 
   const formattedActivities = useMemo(
-    () => activities.map((activity) => formatRow(activity)),
-    [activities, formatRow],
+    () => (data?.activitiesDetails ?? []).map((activity) => formatRow(activity)),
+    [data?.activitiesDetails, formatRow],
   );
-
-  useEffect(() => {
-    if (!appletId) return;
-
-    execute({ params: { appletId } });
-  }, [appletId, execute]);
 
   return (
     <StyledFlexColumn sx={{ gap: 2.4, height: '100%' }}>
