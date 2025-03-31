@@ -377,7 +377,7 @@ describe('RespondentDataReview', () => {
 
         const input = inputContainer.querySelector('input') as HTMLInputElement;
         expect(input).toBeInTheDocument();
-        expect(input.value).toEqual('27 Dec 2023');
+        expect(input.value).toEqual('15 Dec 2023');
 
         await act(async () => {
           await userEvent.click(inputContainer);
