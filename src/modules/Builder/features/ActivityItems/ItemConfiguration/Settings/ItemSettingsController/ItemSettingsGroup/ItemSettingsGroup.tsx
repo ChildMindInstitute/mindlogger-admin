@@ -303,7 +303,8 @@ export const ItemSettingsGroup = ({
                   isAlerts &&
                   ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType) &&
                   inputType !== ItemResponseType.PhrasalTemplate &&
-                  inputType !== ItemResponseType.Unity
+                  inputType !== ItemResponseType.Unity &&
+                  inputType !== ItemResponseType.RequestHealthRecordData
                 ) {
                   const hasAlerts = event.target.checked;
 
