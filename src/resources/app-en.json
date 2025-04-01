@@ -1300,12 +1300,12 @@
   "requestHealthRecordDataSettings": {
     "introText": "Participants will be permitted to opt-in or -out of sharing their health care data with you or not. Type the labels you want to use on those radio button options.",
     "labels": {
-      "opt-in": "Opt-in label",
-      "opt-out": "Opt-out label"
+      "opt_in": "Opt-in label",
+      "opt_out": "Opt-out label"
     },
     "placeholders": {
-      "opt-in": "Text",
-      "opt-out": "Text"
+      "opt_in": "Text",
+      "opt_out": "Text"
     }
   },
   "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",

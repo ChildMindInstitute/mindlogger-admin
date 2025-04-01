@@ -205,8 +205,8 @@ export const useSettingsSetup = ({
           case ItemResponseType.RequestHealthRecordData:
             setValue(`${name}.responseValues`, {
               optInOutOptions: [
-                { id: 'opt-in', label: '' },
-                { id: 'opt-out', label: '' },
+                { id: 'opt_in', label: '' },
+                { id: 'opt_out', label: '' },
               ],
             });
             setConfig(defaultRequestHealthRecordDataConfig);
