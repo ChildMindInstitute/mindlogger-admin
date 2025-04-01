@@ -11,6 +11,7 @@ import {
   ParagraphTextInputConfig,
   PhotoConfig,
   PhrasalTemplateConfig,
+  RequestHealthRecordDataConfig,
   SingleAndMultiplePerRowConfig,
   SingleSelectionConfig,
   SliderConfig,
@@ -44,6 +45,7 @@ export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
   ItemResponseType.Drawing,
   ItemResponseType.Photo,
   ItemResponseType.Video,
+  ItemResponseType.RequestHealthRecordData,
 ];
 export const ITEMS_WITH_DOWNLOAD_HEADER = [ItemResponseType.PhrasalTemplate];
 
@@ -193,6 +195,10 @@ export const defaultGeolocationConfig: GeolocationConfig = {
 export const defaultMessageConfig: MessageConfig = {
   removeBackButton: false,
   timer: 0,
+};
+
+export const defaultRequestHealthRecordDataConfig: RequestHealthRecordDataConfig = {
+  removeBackButton: false,
 };
 
 export const defaultTimeConfig: DateAndTimeRangeConfig = {

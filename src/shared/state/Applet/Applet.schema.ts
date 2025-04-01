@@ -343,7 +343,7 @@ export type PhotoResponseValues = null;
 export type GeolocationResponseValues = null;
 export type MessageResponseValues = null;
 
-type RequestHealthRecordDataOption<IdType extends 'opt-in' | 'opt-out'> = {
+export type RequestHealthRecordDataOption<IdType extends string = string> = {
   id: IdType;
   label: string;
 };
