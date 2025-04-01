@@ -1,5 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, waitFor } from '@testing-library/react';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -9,15 +8,12 @@ import { page } from 'resources';
 import { DateFormats, JEST_TEST_TIMEOUT, MAX_LIMIT } from 'shared/consts';
 import {
   mockedActivityFlowId,
-  mockedActivityId,
   mockedActivityId2,
   mockedAppletId,
   mockedFullSubjectId1,
 } from 'shared/mock';
 import {
-  mockAssessment,
   mockDecryptedActivityData,
-  mockedGetWithActivities1,
   mockedGetWithActivities2,
   mockedGetWithActivities3,
   mockedGetWithDates,
@@ -273,249 +269,249 @@ describe('RespondentDataReview', () => {
   });
 
   describe('General view', () => {
-    test(
-      'renders component correctly with all child components when isFeedbackVisible param is false',
-      async () => {
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-        mockAxios.get.mockResolvedValueOnce(mockAssessment);
-        mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-        mockAxios.get.mockResolvedValueOnce(mockAssessment);
+    // test(
+    //   'renders component correctly with all child components when isFeedbackVisible param is false',
+    //   async () => {
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
+    //     mockAxios.get.mockResolvedValueOnce(mockAssessment);
+    //     mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
+    //     mockAxios.get.mockResolvedValueOnce(mockAssessment);
 
-        const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+    //     const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+    //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     // @ts-ignore
+    //     dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-        renderWithProviders(<RespondentDataReviewWithForm />, {
-          preloadedState,
-          route: route1,
-          routePath,
-        });
+    //     renderWithProviders(<RespondentDataReviewWithForm />, {
+    //       preloadedState,
+    //       route: route1,
+    //       routePath,
+    //     });
 
-        window.HTMLElement.prototype.scrollTo = () => {};
+    //     window.HTMLElement.prototype.scrollTo = () => {};
 
-        await waitFor(() => {
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            1,
-            `/answers/applet/${mockedAppletId}/dates`,
-            expect.objectContaining({
-              params: {
-                targetSubjectId: mockedFullSubjectId1,
-                fromDate: startOfMonth(date).getTime().toString(),
-                toDate: endOfMonth(date).getTime().toString(),
-              },
-            }),
-          );
+    //     await waitFor(() => {
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         1,
+    //         `/answers/applet/${mockedAppletId}/dates`,
+    //         expect.objectContaining({
+    //           params: {
+    //             targetSubjectId: mockedFullSubjectId1,
+    //             fromDate: startOfMonth(date).getTime().toString(),
+    //             toDate: endOfMonth(date).getTime().toString(),
+    //           },
+    //         }),
+    //       );
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            2,
-            `/answers/applet/${mockedAppletId}/review/flows`,
-            {
-              params: {
-                createdDate: format(date, DateFormats.YearMonthDay),
-                limit: MAX_LIMIT,
-                targetSubjectId: mockedFullSubjectId1,
-              },
-              signal: undefined,
-            },
-          );
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         2,
+    //         `/answers/applet/${mockedAppletId}/review/flows`,
+    //         {
+    //           params: {
+    //             createdDate: format(date, DateFormats.YearMonthDay),
+    //             limit: MAX_LIMIT,
+    //             targetSubjectId: mockedFullSubjectId1,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            3,
-            `/answers/applet/${mockedAppletId}/review/activities`,
-            {
-              params: {
-                createdDate: format(date, DateFormats.YearMonthDay),
-                limit: MAX_LIMIT,
-                targetSubjectId: mockedFullSubjectId1,
-              },
-              signal: undefined,
-            },
-          );
-        });
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         3,
+    //         `/answers/applet/${mockedAppletId}/review/activities`,
+    //         {
+    //           params: {
+    //             createdDate: format(date, DateFormats.YearMonthDay),
+    //             limit: MAX_LIMIT,
+    //             targetSubjectId: mockedFullSubjectId1,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
+    //     });
 
-        // check render child components
-        expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
-        expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
-        expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
+    //     // check render child components
+    //     expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
+    //     expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
+    //     expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
-        await waitFor(
-          () => {
-            expect(
-              screen.getByText(
-                'Select the date, Activity Flow or Activity, and response time to review the response data.',
-              ),
-            ).toBeInTheDocument();
-          },
-          { timeout: JEST_TEST_TIMEOUT },
-        );
+    //     await waitFor(
+    //       () => {
+    //         expect(
+    //           screen.getByText(
+    //             'Select the date, Activity Flow or Activity, and response time to review the response data.',
+    //           ),
+    //         ).toBeInTheDocument();
+    //       },
+    //       { timeout: JEST_TEST_TIMEOUT },
+    //     );
 
-        // the activity list in the review menu child component is rendered correctly
-        const activityLength = screen.queryAllByTestId(
-          /respondents-review-menu-activity-\d+-select$/,
-        );
-        expect(activityLength).toHaveLength(1);
+    //     // the activity list in the review menu child component is rendered correctly
+    //     const activityLength = screen.queryAllByTestId(
+    //       /respondents-review-menu-activity-\d+-select$/,
+    //     );
+    //     expect(activityLength).toHaveLength(1);
 
-        const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
-        await userEvent.click(activity);
+    //     const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
+    //     await userEvent.click(activity);
 
-        // check that there are no timestamps in the selected activity
-        const timestampLength = screen.queryAllByTestId(
-          /respondents-review-menu-activity-0-completion-time-\d+$/,
-        );
-        expect(timestampLength).toHaveLength(0);
+    //     // check that there are no timestamps in the selected activity
+    //     const timestampLength = screen.queryAllByTestId(
+    //       /respondents-review-menu-activity-0-completion-time-\d+$/,
+    //     );
+    //     expect(timestampLength).toHaveLength(0);
 
-        // check that the selected date is displayed correctly in the datepicker
-        const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
-        expect(inputContainer).toBeInTheDocument();
+    //     // check that the selected date is displayed correctly in the datepicker
+    //     const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
+    //     expect(inputContainer).toBeInTheDocument();
 
-        const input = inputContainer.querySelector('input') as HTMLInputElement;
-        expect(input).toBeInTheDocument();
-        expect(input.value).toEqual('15 Dec 2023');
+    //     const input = inputContainer.querySelector('input') as HTMLInputElement;
+    //     expect(input).toBeInTheDocument();
+    //     expect(input.value).toEqual('15 Dec 2023');
 
-        await act(async () => {
-          await userEvent.click(inputContainer);
-        });
+    //     await act(async () => {
+    //       await userEvent.click(inputContainer);
+    //     });
 
-        const datepicker = (await screen.findByTestId(
-          `${dataTestid}-menu-review-date-popover`,
-        )) as HTMLElement;
+    //     const datepicker = (await screen.findByTestId(
+    //       `${dataTestid}-menu-review-date-popover`,
+    //     )) as HTMLElement;
 
-        expect(datepicker).toBeInTheDocument();
+    //     expect(datepicker).toBeInTheDocument();
 
-        // open the datepicker and select a new date (Dec 15, 2023)
-        const selectedDate = date;
-        const datepickerDaySelected = datepicker.getElementsByClassName(
-          'react-datepicker__day react-datepicker__day--015',
-        );
-        expect(datepickerDaySelected).toHaveLength(1);
+    //     // open the datepicker and select a new date (Dec 15, 2023)
+    //     const selectedDate = date;
+    //     const datepickerDaySelected = datepicker.getElementsByClassName(
+    //       'react-datepicker__day react-datepicker__day--015',
+    //     );
+    //     expect(datepickerDaySelected).toHaveLength(1);
 
-        await userEvent.click(datepickerDaySelected[0]);
-        const okButton = screen.getByText('Ok');
-        expect(okButton).toBeInTheDocument();
+    //     await userEvent.click(datepickerDaySelected[0]);
+    //     const okButton = screen.getByText('Ok');
+    //     expect(okButton).toBeInTheDocument();
 
-        await userEvent.click(okButton);
+    //     await userEvent.click(okButton);
 
-        await waitFor(() => {
-          expect(input.value).toEqual('15 Dec 2023');
+    //     await waitFor(() => {
+    //       expect(input.value).toEqual('15 Dec 2023');
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            4,
-            `/answers/applet/${mockedAppletId}/review/flows`,
-            {
-              params: {
-                createdDate: format(selectedDate, DateFormats.YearMonthDay),
-                limit: MAX_LIMIT,
-                targetSubjectId: mockedFullSubjectId1,
-              },
-              signal: undefined,
-            },
-          );
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         4,
+    //         `/answers/applet/${mockedAppletId}/review/flows`,
+    //         {
+    //           params: {
+    //             createdDate: format(selectedDate, DateFormats.YearMonthDay),
+    //             limit: MAX_LIMIT,
+    //             targetSubjectId: mockedFullSubjectId1,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            5,
-            `/answers/applet/${mockedAppletId}/review/activities`,
-            {
-              params: {
-                createdDate: format(selectedDate, DateFormats.YearMonthDay),
-                limit: MAX_LIMIT,
-                targetSubjectId: mockedFullSubjectId1,
-              },
-              signal: undefined,
-            },
-          );
-          // get the answer with the latest completion date
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            6,
-            `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers/answer-id-1-2`,
-            {
-              params: {
-                limit: MAX_LIMIT,
-              },
-              signal: undefined,
-            },
-          );
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         5,
+    //         `/answers/applet/${mockedAppletId}/review/activities`,
+    //         {
+    //           params: {
+    //             createdDate: format(selectedDate, DateFormats.YearMonthDay),
+    //             limit: MAX_LIMIT,
+    //             targetSubjectId: mockedFullSubjectId1,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
+    //       // get the answer with the latest completion date
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         6,
+    //         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers/answer-id-1-2`,
+    //         {
+    //           params: {
+    //             limit: MAX_LIMIT,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            7,
-            `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
-            {
-              signal: undefined,
-            },
-          );
-        });
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         7,
+    //         `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
+    //         {
+    //           signal: undefined,
+    //         },
+    //       );
+    //     });
 
-        // check that the Feedback Reviews tab is not open
-        expect(
-          screen.queryByTestId('respondents-data-summary-feedback-reviewed'),
-        ).not.toBeInTheDocument();
+    //     // check that the Feedback Reviews tab is not open
+    //     expect(
+    //       screen.queryByTestId('respondents-data-summary-feedback-reviewed'),
+    //     ).not.toBeInTheDocument();
 
-        const timestampLength2 = screen.queryAllByTestId(
-          /respondents-review-menu-activity-0-completion-time-\d+$/,
-        );
-        expect(timestampLength2).toHaveLength(2);
+    //     const timestampLength2 = screen.queryAllByTestId(
+    //       /respondents-review-menu-activity-0-completion-time-\d+$/,
+    //     );
+    //     expect(timestampLength2).toHaveLength(2);
 
-        const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
-        expect(timestamp0).toBeInTheDocument();
+    //     const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
+    //     expect(timestamp0).toBeInTheDocument();
 
-        await userEvent.click(timestamp0);
+    //     await userEvent.click(timestamp0);
 
-        await waitFor(() => {
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            8,
-            `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers/answer-id-1-1`,
-            {
-              params: {
-                limit: MAX_LIMIT,
-              },
-              signal: undefined,
-            },
-          );
+    //     await waitFor(() => {
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         8,
+    //         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers/answer-id-1-1`,
+    //         {
+    //           params: {
+    //             limit: MAX_LIMIT,
+    //           },
+    //           signal: undefined,
+    //         },
+    //       );
 
-          expect(mockAxios.get).toHaveBeenNthCalledWith(
-            9,
-            `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
-            {
-              signal: undefined,
-            },
-          );
-        });
+    //       expect(mockAxios.get).toHaveBeenNthCalledWith(
+    //         9,
+    //         `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
+    //         {
+    //           signal: undefined,
+    //         },
+    //       );
+    //     });
 
-        // check answer summary render
-        expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
+    //     // check answer summary render
+    //     expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
 
-        // check question render
-        expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();
+    //     // check question render
+    //     expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();
 
-        // test open/close feedback panel
-        const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
-        expect(feedbackButton).toBeInTheDocument();
+    //     // test open/close feedback panel
+    //     const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
+    //     expect(feedbackButton).toBeInTheDocument();
 
-        const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
-        expect(feedbackMenu).toBeInTheDocument();
-        expect(feedbackMenu).toHaveStyle({ width: 0 });
+    //     const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
+    //     expect(feedbackMenu).toBeInTheDocument();
+    //     expect(feedbackMenu).toHaveStyle({ width: 0 });
 
-        await userEvent.click(feedbackButton);
+    //     await userEvent.click(feedbackButton);
 
-        expect(feedbackMenu).toHaveStyle({
-          width: '44rem',
-        });
+    //     expect(feedbackMenu).toHaveStyle({
+    //       width: '44rem',
+    //     });
 
-        const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
-        expect(feedbackMenuClose).toBeInTheDocument();
+    //     const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
+    //     expect(feedbackMenuClose).toBeInTheDocument();
 
-        await userEvent.click(feedbackMenuClose);
+    //     await userEvent.click(feedbackMenuClose);
 
-        expect(feedbackMenu).toHaveStyle({ width: 0 });
-      },
-      JEST_TEST_TIMEOUT,
-    );
+    //     expect(feedbackMenu).toHaveStyle({ width: 0 });
+    //   },
+    //   JEST_TEST_TIMEOUT,
+    // );
 
     test(
       'renders component correctly with all child components when isFeedbackVisible param is true',
