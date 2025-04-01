@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestHealthRecordDataOption } from 'shared/state';
 import { InputController } from 'shared/components/FormComponents';
-import { useCustomFormContext, useFieldLengthError } from 'modules/Builder/hooks';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledFlexAllCenter, StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 import { Svg } from 'shared/components';
 
@@ -20,8 +20,6 @@ export const OptionField = ({ name, index, option }: OptionFieldProps) => {
 
   const fieldName = `${name}.responseValues.optInOutOptions.${index}.label`;
 
-  const handleOptionTextChange = useFieldLengthError();
-
   return (
     <StyledFlexTopStart sx={{ m: 2.4, gap: 1.2 }}>
       <StyledFlexTopCenter>
@@ -36,13 +34,6 @@ export const OptionField = ({ name, index, option }: OptionFieldProps) => {
         name={fieldName}
         label={t(`labels.${option.id}`)}
         placeholder={t(`placeholders.${option.id}`)}
-        onChange={(event) =>
-          handleOptionTextChange({
-            event,
-            fieldName,
-            maxLength: SELECT_OPTION_TEXT_MAX_LENGTH,
-          })
-        }
         maxLength={SELECT_OPTION_TEXT_MAX_LENGTH}
         data-testid={`request-health-record-data-option-${option.id}`}
         InputLabelProps={{ shrink: true }}
