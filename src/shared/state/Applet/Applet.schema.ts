@@ -350,8 +350,8 @@ export type RequestHealthRecordDataOption<IdType extends string = string> = {
 
 export type RequestHealthRecordDataResponseValues = {
   optInOutOptions: [
-    RequestHealthRecordDataOption<'opt-in'>,
-    RequestHealthRecordDataOption<'opt-out'>,
+    RequestHealthRecordDataOption<'opt_in'>,
+    RequestHealthRecordDataOption<'opt_out'>,
   ];
 };
 
