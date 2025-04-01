@@ -1294,6 +1294,18 @@
   "reportEmailBody": "Veuillez consulter le rapport joint à cet e-mail.",
   "reports": "Rapports",
   "requestHealthRecordData": "Demander des données de santé",
+  "requestHealthRecordDataHint": "Invite les répondants à partager leurs informations de soins de santé avec vous.",
+  "requestHealthRecordDataSettings": {
+    "introText": "Les participants pourront choisir de partager ou non leurs informations de soins de santé avec vous. Entrez les libellés que vous souhaitez utiliser pour ces options de bouton radio.",
+    "labels": {
+      "opt-in": "Label d'acceptation",
+      "opt-out": "Label de refus"
+    },
+    "placeholders": {
+      "opt-in": "Texte",
+      "opt-out": "Texte"
+    }
+  },
   "requestTransferOwnershipSuccess": "<0>Votre demande a été envoyée avec succès à <1>{{email}}</1>. Veuillez attendre que le destinataire accepte votre demande.</0>",
   "requiredField": "Champ requis",
   "requireToCreateAccount": "Voulez-vous exiger que le participant crée un compte?",
