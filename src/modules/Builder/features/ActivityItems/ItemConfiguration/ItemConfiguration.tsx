@@ -139,6 +139,11 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const hasSameNameInSystemItemsError =
     getFieldState(`${name}.name`)?.error?.type === ItemTestFunctions.ExistingNameInSystemItem;
 
+  const placeholder =
+    responseType === ItemResponseType.RequestHealthRecordData
+      ? t('requestHealthRecordDataSettings.placeholder')
+      : undefined;
+
   return (
     <>
       <BuilderContainer
@@ -190,6 +195,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           withDebounce
           name={`${name}.question`}
           control={control}
+          placeholder={placeholder}
           data-testid="builder-activity-items-item-configuration-description"
         />
         <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
