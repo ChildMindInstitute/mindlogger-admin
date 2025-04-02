@@ -4,6 +4,9 @@ import {
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
 } from 'modules/Builder/consts';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
+
+import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_DISABLED_TIMER_VALUE = 0;
@@ -35,6 +38,125 @@ export const DEFAULT_MAX_CHARACTERS_SHORT_TEXT = 72;
 export const DEFAULT_MAX_CHARACTERS_TEXT = 300;
 export const DEFAULT_MAX_CHARACTERS_PARAGRAPH_TEXT = 1000;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
+
+export const itemsTypeOptions: ItemsOptionGroup[] = [
+  {
+    groupName: 'select',
+    groupOptions: [
+      {
+        value: ItemResponseType.SingleSelection,
+        icon: itemsTypeIcons[ItemResponseType.SingleSelection],
+      },
+      {
+        value: ItemResponseType.MultipleSelection,
+        icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
+      },
+      {
+        value: ItemResponseType.Slider,
+        icon: itemsTypeIcons[ItemResponseType.Slider],
+      },
+      {
+        value: ItemResponseType.Date,
+        icon: itemsTypeIcons[ItemResponseType.Date],
+      },
+      {
+        value: ItemResponseType.NumberSelection,
+        icon: itemsTypeIcons[ItemResponseType.NumberSelection],
+      },
+      {
+        value: ItemResponseType.Time,
+        icon: itemsTypeIcons[ItemResponseType.Time],
+      },
+      {
+        value: ItemResponseType.TimeRange,
+        icon: itemsTypeIcons[ItemResponseType.TimeRange],
+      },
+    ],
+  },
+  {
+    groupName: 'matrixSelect',
+    groupOptions: [
+      {
+        value: ItemResponseType.SingleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
+      },
+      {
+        value: ItemResponseType.MultipleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
+      },
+      {
+        value: ItemResponseType.SliderRows,
+        icon: itemsTypeIcons[ItemResponseType.SliderRows],
+      },
+    ],
+  },
+  {
+    groupName: 'input',
+    groupOptions: [
+      { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
+      {
+        value: ItemResponseType.ParagraphText,
+        icon: itemsTypeIcons[ItemResponseType.ParagraphText],
+      },
+      {
+        value: ItemResponseType.Drawing,
+        icon: itemsTypeIcons[ItemResponseType.Drawing],
+      },
+      {
+        value: ItemResponseType.Photo,
+        icon: itemsTypeIcons[ItemResponseType.Photo],
+      },
+      {
+        value: ItemResponseType.Video,
+        icon: itemsTypeIcons[ItemResponseType.Video],
+      },
+    ],
+  },
+  {
+    groupName: 'import',
+    groupOptions: [
+      {
+        value: ItemResponseType.RequestHealthRecordData,
+        icon: itemsTypeIcons[ItemResponseType.RequestHealthRecordData],
+      },
+    ],
+  },
+  {
+    groupName: 'record',
+    groupOptions: [
+      {
+        value: ItemResponseType.Geolocation,
+        icon: itemsTypeIcons[ItemResponseType.Geolocation],
+      },
+      {
+        value: ItemResponseType.Audio,
+        icon: itemsTypeIcons[ItemResponseType.Audio],
+      },
+    ],
+  },
+  {
+    groupName: 'display',
+    groupOptions: [
+      {
+        value: ItemResponseType.Message,
+        icon: itemsTypeIcons[ItemResponseType.Message],
+      },
+      {
+        value: ItemResponseType.AudioPlayer,
+        icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
+      },
+    ],
+  },
+  {
+    groupName: 'downloadable',
+    groupOptions: [
+      {
+        value: ItemResponseType.PhrasalTemplate,
+        icon: itemsTypeIcons[ItemResponseType.PhrasalTemplate],
+      },
+    ],
+  },
+];
 
 export const SELECTION_OPTIONS_COLOR_PALETTE = [
   {

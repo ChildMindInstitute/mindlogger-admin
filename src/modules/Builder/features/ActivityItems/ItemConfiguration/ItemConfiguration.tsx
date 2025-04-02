@@ -27,12 +27,13 @@ import {
   ItemsOptionGroup,
   UseWatchItemConfiguration,
 } from './ItemConfiguration.types';
-import { getItemsTypeOptions, getInputTypeTooltip } from './ItemConfiguration.utils';
+import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
 import { ConfigurationHeader } from './ConfigurationHeader';
 import { EditItemModal } from './EditItemModal';
+import { itemsTypeOptions } from './ItemConfiguration.const';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
@@ -52,7 +53,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const availableItemsTypeOptions = getItemsTypeOptions({ featureFlags })
+  const availableItemsTypeOptions = itemsTypeOptions
     .reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
       if (isReviewable) {
         // Reviewable activities only support 3 possible item types in the 'select' group:

@@ -9,6 +9,7 @@ import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Chip, ChipShape } from 'shared/components';
+import { useFeatureFlags } from 'shared/hooks';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
@@ -20,6 +21,7 @@ import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
 import { handleSearchKeyDown } from './GroupedSelectSearchController.utils';
 import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
+import { getItemsTypeChip } from '../ItemConfiguration.utils';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
 
@@ -65,6 +67,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
   const {
     getItemLanguageKey,
     getIsNotHaveSearchValue,
@@ -149,6 +152,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     icon={itemsTypeIcons[value]}
                     label={t(getItemLanguageKey(value))}
                     value={value}
+                    chip={getItemsTypeChip({ value, featureFlags })}
                   />
                 )}
                 open={selectOpen}
@@ -193,7 +197,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
-                  ...groupOptions.map(({ value, icon, chip }) => {
+                  ...groupOptions.map(({ value, icon }) => {
                     const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
                     return (
@@ -211,7 +215,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                           icon={<StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>}
                           label={getGroupValueText(searchTerm, value)}
                           value={value}
-                          chip={chip}
+                          chip={getItemsTypeChip({ value, featureFlags })}
                         />
                       </StyledMenuItem>
                     );
