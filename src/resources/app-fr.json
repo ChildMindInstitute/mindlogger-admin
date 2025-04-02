@@ -1297,6 +1297,7 @@
   "requestHealthRecordDataHint": "Invite les répondants à partager leurs informations de soins de santé avec vous.",
   "requestHealthRecordDataSettings": {
     "introText": "Les participants pourront choisir de partager ou non leurs informations de soins de santé avec vous. Entrez les libellés que vous souhaitez utiliser pour ces options de bouton Label.",
+    "placeholder": "Entrez une brève description des données de santé que vous souhaitez demander au participant.\nIl verra ce message avant de se connecter à son compte de soins de santé.",
     "label": "Label",
     "labels": {
       "opt_in": "Label d'acceptation",
