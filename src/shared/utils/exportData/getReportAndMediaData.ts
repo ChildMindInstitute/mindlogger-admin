@@ -57,7 +57,7 @@ export const getReportData = (
           item,
           rawAnswersObject,
           index,
-          enableDataExportRenaming: flags.enableDataExportRenaming,
+          enableDataExportRenaming: !!flags.enableDataExportRenaming,
         }),
       );
     },
@@ -151,7 +151,7 @@ export const getActivityJourneyData = (
       rawAnswersObject,
       index:
         event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
-      enableDataExportRenaming,
+      enableDataExportRenaming: !!enableDataExportRenaming,
     });
   });
 
