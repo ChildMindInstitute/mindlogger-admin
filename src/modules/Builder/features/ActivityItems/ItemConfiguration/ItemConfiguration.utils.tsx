@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
+import { ReactNode } from 'react';
 
 import i18n from 'i18n';
-import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
@@ -22,145 +23,9 @@ import {
   SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
 import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
-import {
-  ItemConfigurationSettings,
-  GetEmptyAlert,
-  ItemsOptionGroup,
-} from './ItemConfiguration.types';
+import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
 
 const { t } = i18n;
-
-export const getItemsTypeOptions = ({
-  featureFlags,
-}: {
-  featureFlags: FeatureFlags;
-}): ItemsOptionGroup[] => [
-  {
-    groupName: 'select',
-    groupOptions: [
-      {
-        value: ItemResponseType.SingleSelection,
-        icon: itemsTypeIcons[ItemResponseType.SingleSelection],
-      },
-      {
-        value: ItemResponseType.MultipleSelection,
-        icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
-      },
-      {
-        value: ItemResponseType.Slider,
-        icon: itemsTypeIcons[ItemResponseType.Slider],
-      },
-      {
-        value: ItemResponseType.Date,
-        icon: itemsTypeIcons[ItemResponseType.Date],
-      },
-      {
-        value: ItemResponseType.NumberSelection,
-        icon: itemsTypeIcons[ItemResponseType.NumberSelection],
-      },
-      {
-        value: ItemResponseType.Time,
-        icon: itemsTypeIcons[ItemResponseType.Time],
-      },
-      {
-        value: ItemResponseType.TimeRange,
-        icon: itemsTypeIcons[ItemResponseType.TimeRange],
-      },
-    ],
-  },
-  {
-    groupName: 'matrixSelect',
-    groupOptions: [
-      {
-        value: ItemResponseType.SingleSelectionPerRow,
-        icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
-      },
-      {
-        value: ItemResponseType.MultipleSelectionPerRow,
-        icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
-      },
-      {
-        value: ItemResponseType.SliderRows,
-        icon: itemsTypeIcons[ItemResponseType.SliderRows],
-      },
-    ],
-  },
-  {
-    groupName: 'input',
-    groupOptions: [
-      { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
-      {
-        value: ItemResponseType.ParagraphText,
-        icon: itemsTypeIcons[ItemResponseType.ParagraphText],
-      },
-      {
-        value: ItemResponseType.Drawing,
-        icon: itemsTypeIcons[ItemResponseType.Drawing],
-      },
-      {
-        value: ItemResponseType.Photo,
-        icon: itemsTypeIcons[ItemResponseType.Photo],
-      },
-      {
-        value: ItemResponseType.Video,
-        icon: itemsTypeIcons[ItemResponseType.Video],
-      },
-    ],
-  },
-  {
-    groupName: 'import',
-    groupOptions: [
-      {
-        value: ItemResponseType.RequestHealthRecordData,
-        icon: itemsTypeIcons[ItemResponseType.RequestHealthRecordData],
-        chip:
-          featureFlags.enableEhrHealthData === 'active' ? (
-            <Chip
-              title={t('active')}
-              color="success"
-              shape={ChipShape.RectangularLarge}
-              canRemove={false}
-            />
-          ) : undefined,
-      },
-    ],
-  },
-  {
-    groupName: 'record',
-    groupOptions: [
-      {
-        value: ItemResponseType.Geolocation,
-        icon: itemsTypeIcons[ItemResponseType.Geolocation],
-      },
-      {
-        value: ItemResponseType.Audio,
-        icon: itemsTypeIcons[ItemResponseType.Audio],
-      },
-    ],
-  },
-  {
-    groupName: 'display',
-    groupOptions: [
-      {
-        value: ItemResponseType.Message,
-        icon: itemsTypeIcons[ItemResponseType.Message],
-      },
-      {
-        value: ItemResponseType.AudioPlayer,
-        icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
-      },
-    ],
-  },
-  {
-    groupName: 'downloadable',
-    groupOptions: [
-      {
-        value: ItemResponseType.PhrasalTemplate,
-        icon: itemsTypeIcons[ItemResponseType.PhrasalTemplate],
-      },
-    ],
-  },
-];
 
 export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, string> => ({
   [ItemResponseType.SingleSelection]: t('singleSelectionHint'),
@@ -185,6 +50,23 @@ export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, strin
   [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.PhrasalTemplate]: t('phrasalTemplateHint'),
 });
+
+export const getItemsTypeChip = ({
+  value,
+  featureFlags,
+}: {
+  value: ItemResponseType;
+  featureFlags: FeatureFlags;
+}): ReactNode =>
+  value === ItemResponseType.RequestHealthRecordData &&
+  featureFlags.enableEhrHealthData === 'active' ? (
+    <Chip
+      title={t('active')}
+      color="success"
+      shape={ChipShape.RectangularLarge}
+      canRemove={false}
+    />
+  ) : undefined;
 
 export const getEmptySliderOption = ({
   isMultiple,
