@@ -8,7 +8,7 @@ import { Roles } from 'shared/consts';
 import { AuthSchema, initialStateData } from 'redux/modules';
 import { mockedOwnerId } from 'shared/mock';
 
-import { getDismissedKey, Main } from './Main';
+import { EHRBanners, getDismissedKey } from './EHRBanners';
 
 jest.mock('shared/hooks', () => ({
   useFeatureFlags: jest.fn(),
@@ -16,7 +16,7 @@ jest.mock('shared/hooks', () => ({
 
 const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
 
-describe('Main', () => {
+describe('EHRBanners', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
@@ -46,7 +46,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: 'available' },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: {
           ...getPreloadedState(Roles.Manager),
           ...mockAuthState,
@@ -62,7 +62,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: 'active' },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: {
           ...getPreloadedState(Roles.Manager),
           ...mockAuthState,
@@ -78,7 +78,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: 'available' },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: {
           ...getPreloadedState(Roles.Manager),
           ...mockAuthState,
@@ -102,7 +102,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: 'active' },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: {
           ...getPreloadedState(Roles.Manager),
           ...mockAuthState,
@@ -129,7 +129,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: undefined },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: {
           ...getPreloadedState(Roles.Manager),
           ...mockAuthState,
@@ -145,7 +145,7 @@ describe('Main', () => {
         featureFlags: { enableEhrHealthData: 'available' },
       });
 
-      renderWithProviders(<Main />, {
+      renderWithProviders(<EHRBanners />, {
         preloadedState: getPreloadedState(Roles.Coordinator),
       });
 
