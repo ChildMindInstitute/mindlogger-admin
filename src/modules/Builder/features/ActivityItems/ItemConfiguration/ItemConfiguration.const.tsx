@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import { createArray } from 'shared/utils';
 import {
   DEFAULT_SLIDER_MAX_NUMBER,
@@ -157,6 +159,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     ],
   },
 ];
+
+export const itemsTypePlaceholders: { [key in ItemResponseType]?: string } = {
+  [ItemResponseType.RequestHealthRecordData]: t('requestHealthRecordDataSettings.placeholder'),
+};
 
 export const SELECTION_OPTIONS_COLOR_PALETTE = [
   {
