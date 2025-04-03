@@ -1299,6 +1299,7 @@
   "requestHealthRecordDataHint": "Prompts respondents to share their health care information with you.",
   "requestHealthRecordDataSettings": {
     "introText": "Participants will be permitted to opt-in or -out of sharing their health care data with you or not. Type the labels you want to use on those radio button options.",
+    "disabledTooltip": "A Request Health Record Data item type already exists in this activity.",
     "placeholder": "Type a brief description of what EHR data you want from the participant.\nThey will see this message before being asked to sign into their Health Care account(s).",
     "label": "Label",
     "labels": {

@@ -15,6 +15,7 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
+import { getEntityKey } from 'shared/utils';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
@@ -33,7 +34,7 @@ import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.co
 import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
 import { ConfigurationHeader } from './ConfigurationHeader';
 import { EditItemModal } from './EditItemModal';
-import { itemsTypeOptions } from './ItemConfiguration.const';
+import { itemsTypeOptions, itemsTypePlaceholders } from './ItemConfiguration.const';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
@@ -51,6 +52,12 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
     activity?.conditionalLogic,
+  );
+
+  const hasExistingHealthRecordItem = activity?.items?.some(
+    (item) =>
+      item.responseType === ItemResponseType.RequestHealthRecordData &&
+      getEntityKey(item) !== getEntityKey(currentItem),
   );
 
   const availableItemsTypeOptions = itemsTypeOptions
@@ -92,6 +99,19 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               value !== ItemResponseType.RequestHealthRecordData ||
               featureFlags.enableEhrHealthData === 'active',
           );
+
+          // Add disabled flag & tooltip to RequestHealthRecordData option if such an item exists
+          if (hasExistingHealthRecordItem) {
+            newGroupOptions = newGroupOptions.map((option) =>
+              option.value === ItemResponseType.RequestHealthRecordData
+                ? {
+                    ...option,
+                    disabled: true,
+                    tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
+                  }
+                : option,
+            );
+          }
           break;
       }
 

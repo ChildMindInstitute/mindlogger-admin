@@ -636,7 +636,8 @@ export const theme = createTheme({
           '.MuiMenuItem-root': {
             padding: '1.2rem 2rem',
             transition: variables.transitions.bgColor,
-            '&.Mui-disabled': {
+            // Enable hover events (for tooltips) without enabling click events
+            '&.Mui-disabled:not(:active)': {
               pointerEvents: 'auto',
             },
             '&:hover': {

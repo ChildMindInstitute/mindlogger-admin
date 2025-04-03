@@ -47,6 +47,8 @@ export type Alert = {
 export type ItemsOption = {
   value: ItemResponseTypeNoPerfTasks;
   icon: JSX.Element;
+  disabled?: boolean;
+  tooltip?: React.ReactNode;
 };
 
 export type ItemsOptionGroup = {
