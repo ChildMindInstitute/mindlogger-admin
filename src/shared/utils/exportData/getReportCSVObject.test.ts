@@ -1,5 +1,5 @@
-import { DecryptedAnswerData } from 'shared/types';
 import { ItemFormValues } from 'modules/Builder/types';
+import { DecryptedAnswerData } from 'shared/types';
 
 import { getObjectFromList } from '../getObjectFromList';
 import { getReportCSVObject } from './getReportCSVObject';
@@ -137,6 +137,7 @@ const legacyResult = {
   item_id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
   options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
   prompt: 'single  ',
+  item_type: 'singleSelect',
   rawScore: 6,
   response: 'value: 2 | text: Extra info',
   reviewing_id: '',
@@ -195,6 +196,7 @@ const result = {
   item_response_options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
   item_response: 'value: 2 | text: Extra info',
   item_response_status: 'completed',
+  item_type: 'singleSelect',
   rawScore: 6,
 };
 

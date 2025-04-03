@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { prepareDecryptedData, prepareEncryptedData } from './prepareData';
-import * as getParsedAnswersFunctions from '../getParsedAnswers';
 import { mockedParsedAnswers } from '../../mock';
+import * as getParsedAnswersFunctions from '../getParsedAnswers';
+import { prepareDecryptedData, prepareEncryptedData } from './prepareData';
 
 const mockFlags = {
   enableDataExportRenaming: false,
@@ -42,6 +42,7 @@ const mockedExportDataResult = {
       prompt: 'single',
       options: 'Opt1: 0, Opt2: 1, Opt3: 2',
       version: '2.1.0',
+      item_type: 'singleSelect',
       rawScore: '',
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',
@@ -79,6 +80,7 @@ const mockedExportDataResult = {
       prompt: 'multi',
       options: 'Opt1: 0, Opt2: 1, Opt3: 2',
       version: '2.1.0',
+      item_type: 'multiSelect',
       rawScore: '',
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',
@@ -116,6 +118,7 @@ const mockedExportDataResult = {
       prompt: 'slider',
       options: '0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5',
       version: '2.1.0',
+      item_type: 'slider',
       rawScore: '',
       reviewing_id: 'c482d1fd-5b0f-4cae-b10d-77cbb4151386',
       event_id: '',

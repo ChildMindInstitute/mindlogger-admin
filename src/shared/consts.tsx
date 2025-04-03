@@ -208,6 +208,7 @@ export const itemsTypeIcons = {
 export const enum SubscaleTotalScore {
   Sum = 'sum',
   Average = 'average',
+  Percentage = 'percentage',
 }
 
 export const locales = {
@@ -356,6 +357,7 @@ export const legacyReportHeader = [
   'prompt',
   'options',
   'version',
+  'item_type',
   'rawScore',
   'reviewing_id',
   'schedule_id',
@@ -398,6 +400,7 @@ export const reportHeader = [
   'item_response_options',
   'item_response',
   'item_response_status',
+  'item_type',
   'rawScore',
 ];
 
@@ -436,6 +439,7 @@ export const legacyActivityJourneyHeader = [
   'response',
   'options',
   'version',
+  'item_type',
 ];
 
 export const activityJourneyHeader = [
@@ -471,6 +475,7 @@ export const activityJourneyHeader = [
   'item_prompt',
   'item_response_options',
   'item_response',
+  'item_type',
   'press_next_time',
   'press_popup_skip_time',
   'press_popup_keep_time',
