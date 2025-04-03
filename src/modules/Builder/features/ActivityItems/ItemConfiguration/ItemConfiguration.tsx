@@ -15,38 +15,33 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
-import { getEntityKey } from 'shared/utils';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
-import { ItemResponseType } from 'shared/consts';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import {
-  ItemConfigurationProps,
-  ItemsOptionGroup,
-  UseWatchItemConfiguration,
-} from './ItemConfiguration.types';
+import { ItemConfigurationProps } from './ItemConfiguration.types';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
-import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
-import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
+import {
+  useCheckIfItemHasVariables,
+  useGetAvailableItemTypeOptions,
+} from './ItemConfiguration.hooks';
 import { ConfigurationHeader } from './ConfigurationHeader';
 import { EditItemModal } from './EditItemModal';
-import { itemsTypeOptions, itemsTypePlaceholders } from './ItemConfiguration.const';
+import { itemsTypePlaceholders } from './ItemConfiguration.const';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
-  const { featureFlags } = useFeatureFlags();
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
   const { control, getFieldState, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
-  const [isReviewable, responseType, currentItem]: UseWatchItemConfiguration = useWatch({
-    name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
+  const [responseType, currentItem]: [ItemResponseTypeNoPerfTasks, ItemFormValues] = useWatch({
+    name: [`${name}.responseType`, name],
   });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
   const conditionalLogicForItem = getItemConditionDependencies(
@@ -54,76 +49,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const hasExistingHealthRecordItem = activity?.items?.some(
-    (item) =>
-      item.responseType === ItemResponseType.RequestHealthRecordData &&
-      getEntityKey(item) !== getEntityKey(currentItem),
-  );
-
-  const availableItemsTypeOptions = itemsTypeOptions
-    .reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
-      if (isReviewable) {
-        // Reviewable activities only support 3 possible item types in the 'select' group:
-        // single selection, multiple selection, and slider. Skip all other groups and item types.
-
-        if (groupName !== 'select') return options;
-
-        return [
-          {
-            groupName,
-            groupOptions: groupOptions.filter(({ value }) =>
-              itemsForReviewableActivity.includes(value),
-            ),
-          },
-        ];
-      }
-
-      let newGroupOptions = groupOptions;
-
-      switch (groupName) {
-        case 'downloadable':
-          newGroupOptions = groupOptions.filter(
-            ({ value }) =>
-              value !== ItemResponseType.PhrasalTemplate || featureFlags.enablePhrasalTemplate,
-          );
-          break;
-        case 'input':
-          newGroupOptions = groupOptions.filter(
-            ({ value }) =>
-              value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
-          );
-          break;
-        case 'import':
-          newGroupOptions = groupOptions.filter(
-            ({ value }) =>
-              value !== ItemResponseType.RequestHealthRecordData ||
-              featureFlags.enableEhrHealthData === 'active',
-          );
-
-          // Add disabled flag & tooltip to RequestHealthRecordData option if such an item exists
-          if (hasExistingHealthRecordItem) {
-            newGroupOptions = newGroupOptions.map((option) =>
-              option.value === ItemResponseType.RequestHealthRecordData
-                ? {
-                    ...option,
-                    disabled: true,
-                    tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
-                  }
-                : option,
-            );
-          }
-          break;
-      }
-
-      return [
-        ...options,
-        {
-          groupName,
-          groupOptions: newGroupOptions,
-        },
-      ];
-    }, [])
-    .filter(({ groupOptions }) => groupOptions.length > 0);
+  const availableItemsTypeOptions = useGetAvailableItemTypeOptions(name);
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
