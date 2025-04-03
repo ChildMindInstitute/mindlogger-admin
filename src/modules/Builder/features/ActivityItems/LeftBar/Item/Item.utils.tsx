@@ -8,11 +8,13 @@ export const getActions = ({
   onChangeVisibility,
   isItemHidden,
   hasHiddenOption,
+  hasDuplicateOption,
   'data-testid': dataTestid,
 }: ActionsType) => [
   {
     icon: <Svg id="duplicate" />,
     action: () => onDuplicateItem(),
+    isDisplayed: hasDuplicateOption,
     'data-testid': `${dataTestid}-duplicate`,
   },
   {
