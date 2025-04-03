@@ -1,14 +1,14 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
+import { Box, BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Chip, ChipShape } from 'shared/components';
+import { Chip, ChipShape, OptionalTooltipWrapper } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
@@ -197,7 +197,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
-                  ...groupOptions.map(({ value, icon }) => {
+                  ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
                     const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
                     return (
@@ -208,15 +208,22 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
                         key={value}
-                        value={value}
+                        value={disabled ? undefined : value}
+                        disabled={disabled}
                         data-testid={`${dataTestid}-option-${value}`}
                       >
-                        <SelectItemContent
-                          icon={<StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>}
-                          label={getGroupValueText(searchTerm, value)}
-                          value={value}
-                          chip={getItemsTypeChip({ value, featureFlags })}
-                        />
+                        <OptionalTooltipWrapper tooltipTitle={tooltip} placement="left">
+                          <Box sx={{ position: 'relative', ml: -1.2, pl: 1.2 }}>
+                            <SelectItemContent
+                              icon={
+                                <StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>
+                              }
+                              label={getGroupValueText(searchTerm, value)}
+                              value={value}
+                              chip={getItemsTypeChip({ value, featureFlags })}
+                            />
+                          </Box>
+                        </OptionalTooltipWrapper>
                       </StyledMenuItem>
                     );
                   }),
