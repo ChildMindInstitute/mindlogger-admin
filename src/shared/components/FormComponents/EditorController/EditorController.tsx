@@ -16,6 +16,7 @@ export const EditorController = <T extends FieldValues>({
   editorId,
   disabled = false,
   withDebounce = false,
+  placeholder,
   'data-testid': dataTestid,
 }: EditorControllerProps<T>) => {
   const dispatch = useAppDispatch();
@@ -73,6 +74,7 @@ export const EditorController = <T extends FieldValues>({
           error={error}
           disabled={disabled}
           withDebounce={withDebounce}
+          placeholder={placeholder}
           data-testid={dataTestid}
         />
       )}

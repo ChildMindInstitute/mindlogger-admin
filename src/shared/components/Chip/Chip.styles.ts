@@ -9,7 +9,18 @@ import { ChipShape } from './Chip.types';
 
 export const StyledChip = styled(Chip)`
   border-radius: ${({ shape }: { shape: ChipShape }) =>
-    shape === ChipShape.Rounded ? variables.borderRadius.xxl : variables.borderRadius.md};
+    ({
+      [ChipShape.Rounded]: variables.borderRadius.xxl,
+      [ChipShape.Rectangular]: variables.borderRadius.md,
+      [ChipShape.RectangularLarge]: variables.borderRadius.xs,
+    })[shape]};
+
+  ${({ shape }) =>
+    shape === ChipShape.RectangularLarge &&
+    `
+      padding: ${theme.spacing(0.6, 1.2)};
+      height: auto;
+    `}
 
   &.MuiButtonBase-root.MuiChip-root {
     margin: ${theme.spacing(0.4, 0, 0.4, 0.6)};

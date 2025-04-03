@@ -189,6 +189,10 @@ export type MessageConfig = {
   timer: number | null;
 };
 
+export type RequestHealthRecordDataConfig = {
+  removeBackButton: boolean;
+};
+
 export type SliderRowsConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -339,6 +343,18 @@ export type PhotoResponseValues = null;
 export type GeolocationResponseValues = null;
 export type MessageResponseValues = null;
 
+export type RequestHealthRecordDataOption<IdType extends string = string> = {
+  id: IdType;
+  label: string;
+};
+
+export type RequestHealthRecordDataResponseValues = {
+  optInOutOptions: [
+    RequestHealthRecordDataOption<'opt_in'>,
+    RequestHealthRecordDataOption<'opt_out'>,
+  ];
+};
+
 export type NumberItemResponseValues = {
   minValue: number;
   maxValue: number;
@@ -419,6 +435,7 @@ export type ResponseValues =
   | PhotoResponseValues
   | GeolocationResponseValues
   | MessageResponseValues
+  | RequestHealthRecordDataResponseValues
   | PhrasalTemplateResponseValues;
 
 export type Config =
@@ -437,6 +454,7 @@ export type Config =
   | PhotoConfig
   | GeolocationConfig
   | MessageConfig
+  | RequestHealthRecordDataConfig
   | GyroscopeConfig
   | TouchConfig
   | FlankerConfig
@@ -593,6 +611,7 @@ export type Item<T = ItemCommonType> =
   | DrawingItem<T>
   | FlankerItem<T>
   | MessageItem<T>
+  | RequestHealthRecordDataItem<T>
   | SingleSelectionPerRowItem<T>
   | MultipleSelectionPerRowItem<T>
   | NumberSelectionItem<T>
@@ -704,6 +723,12 @@ export type MessageItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.Message;
   config: MessageConfig;
   responseValues: MessageResponseValues;
+};
+
+export type RequestHealthRecordDataItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.RequestHealthRecordData;
+  config: RequestHealthRecordDataConfig;
+  responseValues: RequestHealthRecordDataResponseValues;
 };
 
 export type SingleSelectionPerRowItem<T = ItemCommonType> = T & {

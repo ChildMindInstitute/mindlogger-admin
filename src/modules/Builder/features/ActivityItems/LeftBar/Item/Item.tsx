@@ -5,7 +5,7 @@ import { useWatch } from 'react-hook-form';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
-import { itemsTypeIcons } from 'shared/consts';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
@@ -34,7 +34,8 @@ export const Item = ({
   const item: ItemFormValues = useWatch({ name: name! });
 
   const hasHiddenOption = !!getItemConditionDependencies(item, activity?.conditionalLogic)?.length;
-  const isItemHidden = name ? item?.isHidden : false;
+  const hasDuplicateOption = item.responseType !== ItemResponseType.RequestHealthRecordData;
+  const isItemHidden = name ? item.isHidden : false;
 
   const actionsSxProps = {
     justifyContent: 'flex-end',
@@ -48,6 +49,7 @@ export const Item = ({
     onChangeVisibility: () => onChangeItemVisibility?.(),
     isItemHidden,
     hasHiddenOption,
+    hasDuplicateOption,
     'data-testid': `builder-activity-items-item-${index}`,
   });
 

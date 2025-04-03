@@ -18,34 +18,30 @@ import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilter
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
-import { ItemResponseType } from 'shared/consts';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import {
-  ItemConfigurationProps,
-  ItemsOptionGroup,
-  UseWatchItemConfiguration,
-} from './ItemConfiguration.types';
-import { itemsTypeOptions } from './ItemConfiguration.const';
+import { ItemConfigurationProps } from './ItemConfiguration.types';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
-import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
-import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
+import {
+  useCheckIfItemHasVariables,
+  useGetAvailableItemTypeOptions,
+} from './ItemConfiguration.hooks';
 import { ConfigurationHeader } from './ConfigurationHeader';
 import { EditItemModal } from './EditItemModal';
+import { itemsTypePlaceholders } from './ItemConfiguration.const';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
-  const { featureFlags } = useFeatureFlags();
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
   const { control, getFieldState, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
-  const [isReviewable, responseType, currentItem]: UseWatchItemConfiguration = useWatch({
-    name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
+  const [responseType, currentItem]: [ItemResponseTypeNoPerfTasks, ItemFormValues] = useWatch({
+    name: [`${name}.responseType`, name],
   });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
   const conditionalLogicForItem = getItemConditionDependencies(
@@ -53,50 +49,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     activity?.conditionalLogic,
   );
 
-  const availableItemsTypeOptions = itemsTypeOptions.reduce(
-    (options: ItemsOptionGroup[], { groupName, groupOptions }) => {
-      if (groupName === 'downloadable' && !isReviewable) {
-        return [
-          ...options,
-          {
-            groupName,
-            groupOptions: groupOptions.filter(
-              ({ value }) => value !== 'phrasalTemplate' || featureFlags.enablePhrasalTemplate,
-            ),
-          },
-        ];
-      }
-
-      if (isReviewable) {
-        if (groupName !== 'select') return options;
-
-        return [
-          {
-            groupName,
-            groupOptions: groupOptions.filter(({ value }) =>
-              itemsForReviewableActivity.includes(value),
-            ),
-          },
-        ];
-      }
-
-      if (groupName === 'input') {
-        return [
-          ...options,
-          {
-            groupName,
-            groupOptions: groupOptions.filter(
-              ({ value }) =>
-                value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
-            ),
-          },
-        ];
-      }
-
-      return [...options, { groupName, groupOptions }];
-    },
-    [],
-  );
+  const availableItemsTypeOptions = useGetAvailableItemTypeOptions(name);
 
   useCheckAndTriggerOnNameUniqueness({
     currentPath: name,
@@ -184,6 +137,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           withDebounce
           name={`${name}.question`}
           control={control}
+          placeholder={itemsTypePlaceholders[responseType]}
           data-testid="builder-activity-items-item-configuration-description"
         />
         <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />

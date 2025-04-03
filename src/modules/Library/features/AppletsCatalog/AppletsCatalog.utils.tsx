@@ -73,4 +73,8 @@ export const getItemResponseTypes = (enableParagraphTextItem: boolean) => ({
     title: ItemResponseType.PhrasalTemplate,
   },
   [ItemResponseType.Unity]: { icon: null, title: ItemResponseType.Unity },
+  [ItemResponseType.RequestHealthRecordData]: {
+    icon: <Svg id="exchange" />,
+    title: ItemResponseType.RequestHealthRecordData,
+  },
 });
