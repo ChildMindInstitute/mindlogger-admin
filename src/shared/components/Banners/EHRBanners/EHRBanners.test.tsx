@@ -10,6 +10,9 @@ import { mockedOwnerId } from 'shared/mock';
 
 import { EHRBanners, getDismissedKey } from './EHRBanners';
 
+const activeTestId = 'ehr-banner-active';
+const availableTestId = 'ehr-banner-available';
+
 jest.mock('shared/hooks', () => ({
   useFeatureFlags: jest.fn(),
 }));
@@ -53,8 +56,8 @@ describe('EHRBanners', () => {
         },
       });
 
-      expect(screen.getByTestId('ehr-banner-available')).toBeInTheDocument();
-      expect(screen.queryByTestId('ehr-banner-active')).not.toBeInTheDocument();
+      expect(screen.getByTestId(availableTestId)).toBeInTheDocument();
+      expect(screen.queryByTestId(activeTestId)).not.toBeInTheDocument();
     });
 
     test('shows active banner when feature flag is active and not dismissed', () => {
@@ -69,8 +72,8 @@ describe('EHRBanners', () => {
         },
       });
 
-      expect(screen.getByTestId('ehr-banner-active')).toBeInTheDocument();
-      expect(screen.queryByTestId('ehr-banner-available')).not.toBeInTheDocument();
+      expect(screen.getByTestId(activeTestId)).toBeInTheDocument();
+      expect(screen.queryByTestId(availableTestId)).not.toBeInTheDocument();
     });
 
     test('hides available banner when dismissed', async () => {
@@ -85,7 +88,7 @@ describe('EHRBanners', () => {
         },
       });
 
-      const banner = screen.getByTestId('ehr-banner-available');
+      const banner = screen.getByTestId(availableTestId);
       expect(banner).toBeInTheDocument();
 
       // Click close button
@@ -109,7 +112,7 @@ describe('EHRBanners', () => {
         },
       });
 
-      const banner = screen.getByTestId('ehr-banner-active');
+      const banner = screen.getByTestId(activeTestId);
       expect(banner).toBeInTheDocument();
 
       // Click close button
@@ -136,8 +139,8 @@ describe('EHRBanners', () => {
         },
       });
 
-      expect(screen.queryByTestId('ehr-banner-available')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('ehr-banner-active')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(availableTestId)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(activeTestId)).not.toBeInTheDocument();
     });
 
     test('does not show banners when user has no edit or data access', () => {
@@ -149,8 +152,8 @@ describe('EHRBanners', () => {
         preloadedState: getPreloadedState(Roles.Coordinator),
       });
 
-      expect(screen.queryByTestId('ehr-banner-available')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('ehr-banner-active')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(availableTestId)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(activeTestId)).not.toBeInTheDocument();
     });
   });
 });

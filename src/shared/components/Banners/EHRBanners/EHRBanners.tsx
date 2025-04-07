@@ -41,7 +41,7 @@ export const EHRBanners = () => {
 
   useEffect(() => {
     // We have to prevent the banner from showing when feature flags or roles are still being
-    // loaded to prevent flickering of underisable banner states.
+    // loaded to prevent flickering of undesirable banner states.
     if (!areFeatureFlagsLoaded || rolesStatus === 'loading' || !roles || !userId || !ownerId)
       return;
 
