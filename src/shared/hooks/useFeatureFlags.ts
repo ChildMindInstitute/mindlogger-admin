@@ -1,6 +1,7 @@
 import { useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
 
-import { FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
+import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
@@ -20,9 +21,9 @@ export const useFeatureFlags = () => {
   };
 
   const featureFlags = () => {
-    const keys = Object.keys(FeatureFlagsKeys) as (keyof typeof FeatureFlagsKeys)[];
+    const keys = Object.keys(FeatureFlagDefaults) as (keyof typeof FeatureFlagDefaults)[];
     const features: FeatureFlags = {};
-    keys.forEach((key) => (features[key] = flags[FeatureFlagsKeys[key]]));
+    keys.forEach((key) => (features[key] = flags[key] ?? FeatureFlagDefaults[key]));
 
     return features;
   };

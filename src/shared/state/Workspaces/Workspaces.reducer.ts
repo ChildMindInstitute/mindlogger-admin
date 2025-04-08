@@ -10,6 +10,11 @@ export const reducers = {
   setCurrentWorkspace: (state: WorkspacesSchema, action: PayloadAction<Workspace | null>): void => {
     state.currentWorkspace.data = action.payload;
   },
+  setFeatureFlagsLoaded: (state: WorkspacesSchema, action: PayloadAction<boolean>): void => {
+    if (state.currentWorkspace.data) {
+      state.currentWorkspace.data.areFeatureFlagsLoaded = action.payload;
+    }
+  },
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>): void => {
