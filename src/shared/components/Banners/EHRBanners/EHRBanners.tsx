@@ -45,8 +45,12 @@ export const EHRBanners = () => {
     if (!areFeatureFlagsLoaded || rolesStatus === 'loading' || !roles || !userId || !ownerId)
       return;
 
-    // Hide banner if user has no roles that allow access to EHR data
-    if (!Object.values(roles).some((role) => checkIfCanEdit(role) || checkIfCanAccessData(role))) {
+    // Hide banner if user is in a workspace other than their own and has no roles that allow
+    // creating EHR item types or accessing EHR data
+    if (
+      userId !== ownerId &&
+      !Object.values(roles).some((role) => checkIfCanEdit(role) || checkIfCanAccessData(role))
+    ) {
       return setEhrBanner(null);
     }
 
