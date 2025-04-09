@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -36,7 +37,7 @@ const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1
 const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=${format(
   date,
   DateFormats.YearMonthDay,
-)}&answerId=answer-id-2-2&isFeedbackVisible=true`;
+)}&answerId=answer-id-2-3`;
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
 const routePath = page.appletParticipantDataReview;
 
@@ -514,7 +515,7 @@ describe('RespondentDataReview', () => {
     // );
 
     test(
-      'renders component correctly with all child components when isFeedbackVisible param is true',
+      'renders the feedback panel correctly after clicking the Feedback button',
       async () => {
         mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
         mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
@@ -581,7 +582,7 @@ describe('RespondentDataReview', () => {
 
           expect(mockAxios.get).toHaveBeenNthCalledWith(
             4,
-            `/answers/applet/${mockedAppletId}/activities/${mockedActivityId2}/answers/answer-id-2-2`,
+            `/answers/applet/${mockedAppletId}/activities/${mockedActivityId2}/answers/answer-id-2-3`,
             {
               params: {
                 limit: MAX_LIMIT,
@@ -593,16 +594,27 @@ describe('RespondentDataReview', () => {
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           5,
-          `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-2-3/assessment`,
           {
             signal: undefined,
           },
         );
 
-        // check that the Feedback Reviews tab is open
-        expect(
-          screen.getByTestId('respondents-data-summary-feedback-reviewed'),
-        ).toBeInTheDocument();
+        // test open/close feedback panel
+        const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
+        expect(feedbackButton).toBeInTheDocument();
+
+        const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
+        expect(feedbackMenu).toBeInTheDocument();
+        expect(feedbackMenu).toHaveStyle({
+          width: 0,
+        });
+
+        await userEvent.click(feedbackButton);
+
+        expect(feedbackMenu).toHaveStyle({
+          width: '44rem',
+        });
       },
       JEST_TEST_TIMEOUT,
     );
@@ -652,8 +664,6 @@ describe('RespondentDataReview', () => {
         );
         expect(activityLength).toHaveLength(3);
       });
-
-      screen.debug();
 
       const timestampLength = screen.queryAllByTestId(
         /respondents-review-menu-activity-1-completion-time-\d+$/,
