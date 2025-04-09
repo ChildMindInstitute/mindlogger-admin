@@ -96,8 +96,18 @@ export const useReviewActivitiesAndFlows = ({
       selectedEntityByDefault = flows.filter((e) => e.id === activityFlowId)[0];
       setSelectedFlow(selectedEntityByDefault);
     } else {
-      const reviewEntities = getConcatenatedEntities({ activities, flows });
-      selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
+      // This only supports the legacy access through the /dataviz endpoint
+
+      const reviewEntitiesWithAnswers = getConcatenatedEntities({ activities, flows }).filter(
+        (entity) => entity.answerDates?.length > 0,
+      );
+
+      if (reviewEntitiesWithAnswers.length === 0) {
+        return;
+      }
+
+      selectedEntityByDefault =
+        getEntityWithLatestAnswer(reviewEntitiesWithAnswers) || reviewEntitiesWithAnswers[0];
 
       selectedEntityByDefault.isFlow
         ? setSelectedFlow(selectedEntityByDefault)
