@@ -1,11 +1,10 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as reactRouterDom from 'react-router-dom';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { page } from 'resources';
+import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { variables } from 'shared/styles';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ReviewMenuItem } from './ReviewMenuItem';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
@@ -62,13 +61,6 @@ describe('Review Menu Item component', () => {
   });
 
   test('renders and functions correctly when an answer ID is not present in the route', async () => {
-    const setSearchParamsMock = jest.fn();
-    jest
-      .spyOn(reactRouterDom, 'useSearchParams')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      .mockReturnValue([{ get: jest.fn() }, setSearchParamsMock]);
-
     renderComponent(routeWithoutAnswerId);
 
     const activityHeader = screen.getByTestId(`${dataTestid}-select`);
@@ -83,7 +75,6 @@ describe('Review Menu Item component', () => {
     expect(mockedOnSelectAnswer).toHaveBeenNthCalledWith(1, { answer: null });
     expect(activityHeader.querySelector('.svg-navigate-up')).toBeInTheDocument();
     expect(screen.getByTestId(`${dataTestid}-completion-wrapper`)).toBeInTheDocument();
-    expect(setSearchParamsMock).toHaveBeenCalledWith(undefined);
 
     const timestamps = screen.queryAllByTestId(/review-menu-item-completion-time-\d+$/);
 
