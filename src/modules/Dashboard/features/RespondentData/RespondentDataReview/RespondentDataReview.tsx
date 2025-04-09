@@ -204,13 +204,11 @@ export const RespondentDataReview = () => {
   const handleActivitySelect: OnSelectActivityOrFlow = (item) => {
     setSelectedActivity(item);
     setSelectedFlow(null);
-    setFlowAnswers(null);
   };
 
   const handleFlowSelect: OnSelectActivityOrFlow = (item) => {
     setSelectedFlow(item);
     setSelectedActivity(null);
-    setActivityAnswers(null);
   };
 
   const hasAnswers = !!activityAnswers || !!flowAnswers;
