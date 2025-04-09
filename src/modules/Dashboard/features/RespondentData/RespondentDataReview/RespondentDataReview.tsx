@@ -173,6 +173,7 @@ export const RespondentDataReview = () => {
       setValue('responseDate', date);
       const createdDate = format(date, DateFormats.YearMonthDay);
       handleGetActivitiesAndFlows(createdDate);
+      prevSelectedDateRef.current = createdDate;
     },
     [setValue, handleGetActivitiesAndFlows],
   );
@@ -180,22 +181,24 @@ export const RespondentDataReview = () => {
   const handleResponseDateChange = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
     // if the date hasn't changed, exit the function early
-    if (!createdDate || prevSelectedDateRef.current === createdDate) {
+    if (!createdDate || selectedDateParam === createdDate) {
       return;
     }
+
     // reset all state values to default
     setActivities([]);
     setFlows([]);
     setSelectedActivity(null);
     setSelectedFlow(null);
     setSelectedAnswer(null);
-    setSearchParams(undefined);
+    setSearchParams(() => ({
+      selectedDate: createdDate,
+    }));
     setActivityAnswers(null);
     setFlowAnswers(null);
 
-    handleGetActivitiesAndFlows(createdDate);
-
     prevSelectedDateRef.current = createdDate;
+    handleGetActivitiesAndFlows(createdDate);
   };
 
   const handleActivitySelect: OnSelectActivityOrFlow = (item) => {
@@ -262,16 +265,19 @@ export const RespondentDataReview = () => {
   useEffect(() => {
     if (!responseDates?.length) return;
 
-    if (selectedDateParam) {
-      const selectedDate = parseDateToMidnightLocal(selectedDateParam);
-      if (responseDates.includes(selectedDate)) {
-        handleSetInitialDate(selectedDate);
+    if (!selectedDateParam) {
+      handleSetInitialDate(responseDates[responseDates.length - 1]);
 
-        return;
-      }
+      return;
     }
 
-    handleSetInitialDate(responseDates[responseDates.length - 1]);
+    const selectedDate = parseDateToMidnightLocal(selectedDateParam);
+    if (
+      prevSelectedDateRef.current !== selectedDateParam &&
+      responseDates.some((date) => date.getTime() === selectedDate.getTime())
+    ) {
+      handleSetInitialDate(selectedDate);
+    }
   }, [responseDates, selectedDateParam, handleSetInitialDate]);
 
   /**
