@@ -653,6 +653,8 @@ describe('RespondentDataReview', () => {
         expect(activityLength).toHaveLength(3);
       });
 
+      screen.debug();
+
       const timestampLength = screen.queryAllByTestId(
         /respondents-review-menu-activity-1-completion-time-\d+$/,
       );

@@ -170,11 +170,11 @@ export const mockedGetWithActivities2 = {
             answerId: 'answer-id-2-1',
           },
           {
-            createdAt: '2023-12-15T23:29:36.150182',
+            createdAt: '2023-12-15T22:20:30.150182',
             answerId: 'answer-id-2-2',
           },
           {
-            createdAt: '2023-12-15T22:20:30.150182',
+            createdAt: '2023-12-15T23:29:36.150182',
             answerId: 'answer-id-2-3',
           },
         ],
@@ -205,15 +205,15 @@ export const mockedGetWithActivities3 = {
         answerDates: [
           {
             createdAt: '2023-12-15T05:01:20.275869',
-            answerId: 'answer-id-1-1',
+            answerId: 'answer-id-2-1',
           },
           {
             createdAt: '2023-12-15T05:10:38.940534',
-            answerId: 'answer-id-1-2',
+            answerId: 'answer-id-2-2',
           },
           {
             createdAt: '2023-12-15T06:23:56.489090',
-            answerId: 'answer-id-1-3',
+            answerId: 'answer-id-2-3',
           },
         ],
       },
