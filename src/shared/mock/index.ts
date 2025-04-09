@@ -219,6 +219,7 @@ export const mockedCurrentWorkspace = {
   data: {
     ownerId: mockedOwnerId,
     workspaceName: 'name',
+    areFeatureFlagsLoaded: true,
   },
 };
 export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
