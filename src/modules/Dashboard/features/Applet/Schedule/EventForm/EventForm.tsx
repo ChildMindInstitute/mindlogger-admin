@@ -14,8 +14,9 @@ import { applet, workspaces } from 'shared/state';
 import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
-import { calendarEvents, users } from 'modules/Dashboard/state';
+import { calendarEvents } from 'modules/Dashboard/state';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { apiSlice } from 'shared/api/apiSlice';
 
 import {
   EventFormProps,
@@ -111,15 +112,11 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) return;
       dispatch(applets.thunk.getEvents({ appletId, respondentId: userId }));
       if (userId && ownerId && eventsData.length === 0) {
-        dispatch(
-          users.thunk.getAllWorkspaceRespondents({
-            params: {
-              ownerId,
-              appletId,
-              shell: false,
-            },
-          }),
-        );
+        // Refresh current user after deleting all events to update the hasIndividualSchedule flag.
+        // TODO: When createIndividualEventsApi has been migrated to RTK Query and configured to
+        // invalidate the associated user (https://mindlogger.atlassian.net/browse/M2-8879), this
+        // can be removed:
+        dispatch(apiSlice.util.invalidateTags([{ type: 'User', id: userId }]));
       }
     };
 

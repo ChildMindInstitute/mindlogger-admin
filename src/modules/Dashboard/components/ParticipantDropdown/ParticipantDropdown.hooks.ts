@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { DEFAULT_ROWS_PER_PAGE, Roles, TEAM_MEMBER_ROLES } from 'shared/consts';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { getWorkspaceRespondentsApi } from 'api';
-import { useAsync } from 'shared/hooks';
 import { Participant, ParticipantStatus } from 'modules/Dashboard/types';
 import { auth, workspaces } from 'redux/modules';
+import { apiDashboardSlice, useGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
+import { WorkspaceRespondentsResponse } from 'api';
+import { useAppDispatch } from 'redux/store';
 
 import {
   ParticipantDropdownOption,
@@ -24,16 +24,10 @@ export const useParticipantDropdown = ({
   appletId,
   includePendingAccounts = false,
   skip = false,
-  successCallback,
-  errorCallback,
-  finallyCallback,
 }: UseParticipantDropdownProps) => {
-  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [loggedInTeamMember, setLoggedInTeamMember] = useState<ParticipantDropdownOption | null>(
-    null,
-  );
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
+  const dispatch = useAppDispatch();
 
   const isParticipantValid = useCallback(
     (r: Participant) =>
@@ -42,46 +36,25 @@ export const useParticipantDropdown = ({
     [includePendingAccounts],
   );
 
-  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const options = (response.data as ParticipantsData).result
-          .filter(isParticipantValid)
-          .map(participantToOption);
+  const { data: participantsData, isLoading: isFetchingParticipants } =
+    useGetWorkspaceRespondentsQuery({ params: { appletId, ownerId, limit: 100 } }, { skip });
 
-        setAllParticipants(options);
-      }
-      successCallback?.(response);
-    },
-    errorCallback,
-    finallyCallback,
+  const allParticipants = useMemo(
+    () => (participantsData?.result ?? []).filter(isParticipantValid).map(participantToOption),
+    [isParticipantValid, participantsData?.result],
   );
 
-  const {
-    execute: fetchLoggedInTeamMember,
-    isLoading: isFetchingLoggedInTeamMember,
-    value: loggedInTeamMemberResponse,
-  } = useAsync(
-    getWorkspaceRespondentsApi,
-    (response) => {
-      if (response?.data) {
-        const loggedInTeamMember = participantToOption(
-          (response.data as ParticipantsData).result[0],
-        );
-        setLoggedInTeamMember(loggedInTeamMember);
-        setAllParticipants((prev) => {
-          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-            return prev;
-          }
-
-          return [loggedInTeamMember, ...prev];
-        });
-      }
-      successCallback?.(response);
-    },
-    errorCallback,
-    finallyCallback,
+  const { data: loggedInTeamMemberData, isLoading: isFetchingLoggedInTeamMember } =
+    useGetWorkspaceRespondentsQuery(
+      { params: { appletId, ownerId, userId: userData?.user.id, limit: 1 } },
+      { skip },
+    );
+  const loggedInTeamMember = useMemo(
+    () =>
+      loggedInTeamMemberData?.result.length
+        ? participantToOption(loggedInTeamMemberData.result[0])
+        : null,
+    [loggedInTeamMemberData],
   );
 
   const isTeamMember = useCallback(
@@ -110,7 +83,7 @@ export const useParticipantDropdown = ({
   );
 
   const fullAccountParticipantsOnly = useMemo(
-    () => participantsOnly.filter((participant) => !!participant.userId),
+    () => participantsOnly.filter(({ userId }) => !!userId),
     [participantsOnly],
   );
 
@@ -128,78 +101,49 @@ export const useParticipantDropdown = ({
       query: string,
       includedUserTypes: SearchResultUserTypes,
     ): Promise<ParticipantDropdownOption[]> => {
-      const response = await getWorkspaceRespondentsApi({
-        params: {
-          ownerId,
-          appletId,
-          search: query,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          shell: includedUserTypes.limitedParticipant,
-        },
-      });
-
-      const participantsSearchResults = ((response?.data.result as Participant[]) ?? []).filter(
-        (participant) => {
-          if (participant.isAnonymousRespondent) return includedUserTypes.anonymousParticipant;
-
-          if (participant.status === ParticipantStatus.Pending) {
-            return includePendingAccounts && includedUserTypes.pendingInvitedParticipant;
-          }
-
-          const participantAppletDetails = participant.details[0];
-
-          if (isTeamMember(participantAppletDetails.roles)) {
-            return includedUserTypes.team && isAllowedTeamMember(participantAppletDetails.roles);
-          }
-
-          if (participantAppletDetails.roles.length === 0) {
-            return includedUserTypes.limitedParticipant;
-          }
-
-          return includedUserTypes.fullParticipant;
-        },
+      // Use imperative RTK Query API to avoid unnecessary re-renders, which is problematic for
+      // TakeNowModal in particular because of how it's recreated each time the useTakeNow hook
+      // needs to re-run, resulting in a very jarring modal refresh with form state completely lost.
+      // At some point TakeNowModal should be defined separately from useTakeNow to gracefully
+      // accommodate possible re-renders.
+      const response = await dispatch(
+        apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
+          params: {
+            ownerId,
+            appletId,
+            search: query,
+            limit: DEFAULT_ROWS_PER_PAGE,
+            shell: includedUserTypes.limitedParticipant,
+          },
+        }),
       );
+
+      const participantsSearchResults = (
+        response?.data as WorkspaceRespondentsResponse
+      ).result.filter((participant) => {
+        if (participant.isAnonymousRespondent) return includedUserTypes.anonymousParticipant;
+
+        if (participant.status === ParticipantStatus.Pending) {
+          return includePendingAccounts && includedUserTypes.pendingInvitedParticipant;
+        }
+
+        const participantAppletDetails = participant.details[0];
+
+        if (isTeamMember(participantAppletDetails.roles)) {
+          return includedUserTypes.team && isAllowedTeamMember(participantAppletDetails.roles);
+        }
+
+        if (participantAppletDetails.roles.length === 0) {
+          return includedUserTypes.limitedParticipant;
+        }
+
+        return includedUserTypes.fullParticipant;
+      });
 
       return participantsSearchResults.map(participantToOption);
     },
-    [ownerId, appletId, isTeamMember, includePendingAccounts, isAllowedTeamMember],
+    [dispatch, ownerId, appletId, isTeamMember, includePendingAccounts, isAllowedTeamMember],
   );
-
-  useEffect(() => {
-    if (skip || !appletId) return;
-
-    if (allParticipants.length === 0 && !isFetchingParticipants) {
-      fetchParticipants({
-        params: {
-          ownerId,
-          appletId,
-          limit: 100,
-        },
-      });
-    }
-
-    if (userData && loggedInTeamMemberResponse === null && !isFetchingLoggedInTeamMember) {
-      fetchLoggedInTeamMember({
-        params: {
-          ownerId,
-          appletId,
-          userId: userData.user.id,
-          limit: 1,
-        },
-      });
-    }
-  }, [
-    appletId,
-    ownerId,
-    userData,
-    allParticipants,
-    loggedInTeamMemberResponse,
-    isFetchingParticipants,
-    isFetchingLoggedInTeamMember,
-    fetchParticipants,
-    fetchLoggedInTeamMember,
-    skip,
-  ]);
 
   const isLoading = isFetchingParticipants || isFetchingLoggedInTeamMember;
 

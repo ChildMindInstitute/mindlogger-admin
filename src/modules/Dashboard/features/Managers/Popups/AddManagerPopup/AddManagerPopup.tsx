@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { EmptyState, Modal, Spinner } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { Roles } from 'shared/consts';
+import { MAX_LIMIT, Roles } from 'shared/consts';
 import {
   Mixpanel,
   MixpanelProps,
@@ -14,10 +14,13 @@ import {
   isManagerOrOwner,
   MixpanelEventType,
 } from 'shared/utils';
-import { ApiLanguages, postAppletInvitationApi } from 'api';
+import { ApiLanguages } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks';
-import { banners, users, workspaces } from 'redux/modules';
+import { banners, workspaces } from 'redux/modules';
+import {
+  useCreateInvitationMutation,
+  useGetWorkspaceRespondentsQuery,
+} from 'modules/Dashboard/api/apiSlice';
 
 import { USER_ALREADY_INVITED, defaultValues } from './AddManagerPopup.const';
 import { AddManagerPopupSchema } from './AddManagerPopup.schema';
@@ -39,22 +42,31 @@ export const AddManagerPopup = ({
   const isWorkspaceNameVisible = !!workspaceInfo && !workspaceInfo.hasManagers;
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useAllRespondentsData();
-  const participants = (respondentsData?.result ?? []).map(({ details }) => {
-    const {
-      subjectId,
-      respondentSecretId: secretId,
-      respondentNickname: nickname,
-      subjectTag: tag,
-    } = details[0];
 
-    return {
-      subjectId,
-      secretId,
-      nickname,
-      tag,
-    };
-  });
+  const { data: participants, isLoading: isLoadingParticipants } = useGetWorkspaceRespondentsQuery(
+    { params: { appletId: appletId as string, ownerId, limit: MAX_LIMIT } },
+    {
+      skip: !appletId,
+      selectFromResult: ({ data, ...rest }) => ({
+        data: (data?.result ?? []).map(({ details }) => {
+          const {
+            subjectId,
+            respondentSecretId: secretId,
+            respondentNickname: nickname,
+            subjectTag: tag,
+          } = details[0];
+
+          return {
+            subjectId,
+            secretId,
+            nickname,
+            tag,
+          };
+        }),
+        ...rest,
+      }),
+    },
+  );
 
   const defaults = {
     ...defaultValues(appletRoles),
@@ -82,40 +94,18 @@ export const AddManagerPopup = ({
   const dispatch = useAppDispatch();
   const [hasCommonError, setHasCommonError] = useState(false);
 
-  const handleClose = (shouldRefetch = false) => {
+  const handleClose = () => {
     resetForm();
     setHasCommonError(false);
-    onClose?.(shouldRefetch);
+    onClose?.();
   };
 
   const resetForm = () => reset(defaults);
 
-  const {
-    error,
-    execute: createInvitation,
-    isLoading,
-  } = useAsync(postAppletInvitationApi, async ({ data }) => {
-    const { firstName, lastName, title, role } = data.result ?? {};
+  const [createInvitation, { error, isLoading: isLoadingInvitation }] =
+    useCreateInvitationMutation();
 
-    dispatch(
-      banners.actions.addBanner({
-        key: 'AddParticipantSuccessBanner',
-        bannerProps: {
-          id: `${firstName} ${lastName}${title ? `, ${title}` : ''}`,
-        },
-      }),
-    );
-
-    Mixpanel.track({
-      action: MixpanelEventType.TeamMemberInvitedSuccessfully,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.Roles]: [role],
-    });
-
-    handleClose(true);
-  });
-
-  const handleSubmitForm = (values: AddManagerFormValues) => {
+  const handleSubmitForm = async (values: AddManagerFormValues) => {
     if (!appletId) return;
 
     const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
@@ -126,7 +116,7 @@ export const AddManagerPopup = ({
       [MixpanelProps.Roles]: [role],
     });
 
-    createInvitation({
+    const response = await createInvitation({
       url: role === Roles.Reviewer ? 'reviewer' : 'managers',
       appletId,
       options: {
@@ -136,6 +126,27 @@ export const AddManagerPopup = ({
         ...rest,
       },
     });
+
+    if ('data' in response) {
+      const { firstName, lastName, title, role } = response.data.result ?? {};
+
+      dispatch(
+        banners.actions.addBanner({
+          key: 'AddParticipantSuccessBanner',
+          bannerProps: {
+            id: `${firstName} ${lastName}${title ? `, ${title}` : ''}`,
+          },
+        }),
+      );
+
+      Mixpanel.track({
+        action: MixpanelEventType.TeamMemberInvitedSuccessfully,
+        [MixpanelProps.AppletId]: appletId,
+        [MixpanelProps.Roles]: [String(role)],
+      });
+
+      handleClose();
+    }
   };
 
   useFormError({
@@ -151,18 +162,6 @@ export const AddManagerPopup = ({
       },
     ],
   });
-
-  useEffect(() => {
-    if (!ownerId || !appletId) return;
-
-    const { getAllWorkspaceRespondents } = users.thunk;
-
-    dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
-      }),
-    );
-  }, [ownerId, appletId, dispatch]);
 
   useEffect(() => {
     if (role === Roles.Reviewer) {
@@ -181,6 +180,8 @@ export const AddManagerPopup = ({
     }
   }, [isWorkspaceNameVisible]);
 
+  const isLoading = isLoadingParticipants || isLoadingInvitation;
+
   if (
     !appletRoles ||
     (!isManagerOrOwner(appletRoles[0]) && !appletRoles.includes(Roles.Coordinator))
@@ -189,9 +190,9 @@ export const AddManagerPopup = ({
       <Modal
         open={popupVisible}
         width="73.6"
-        onClose={() => handleClose(false)}
+        onClose={handleClose}
         title={t('addTeamMember')}
-        onSubmit={() => handleClose(false)}
+        onSubmit={handleClose}
         buttonText={t('back')}
         data-testid={`${dataTestid}-add-manager-popup`}
       >
@@ -206,7 +207,7 @@ export const AddManagerPopup = ({
     <Modal
       open={popupVisible}
       width="73.6"
-      onClose={() => handleClose(false)}
+      onClose={handleClose}
       onBackdropClick={null}
       onSubmit={handleSubmit(handleSubmitForm)}
       title={t('addTeamMember')}
