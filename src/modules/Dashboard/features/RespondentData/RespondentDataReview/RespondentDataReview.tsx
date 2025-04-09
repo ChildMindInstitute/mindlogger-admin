@@ -246,6 +246,7 @@ export const RespondentDataReview = () => {
     getAnswersAndAssessment,
   ]);
 
+  // Effect to get submit dates
   useEffect(() => {
     if (lastActivityCompleted === undefined) return;
 
@@ -262,6 +263,7 @@ export const RespondentDataReview = () => {
     handleGetSubmitDates(initialDate);
   }, [lastActivityCompleted, selectedDateParam, handleGetSubmitDates]);
 
+  // Effect to point current view to either selected date or last submit date after response dates are loaded
   useEffect(() => {
     if (!responseDates?.length) return;
 
