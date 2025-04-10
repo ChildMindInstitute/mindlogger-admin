@@ -8,8 +8,8 @@ import {
   ScheduleHistoryData,
 } from 'modules/Dashboard/api';
 import { ParticipantWithDataAccess } from 'modules/Dashboard/types';
-import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 import { groupBy } from 'shared/utils/array';
+import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -309,16 +309,37 @@ export class ScheduleHistoryExporter extends DataExporter<
 
                 const isSameScheduleType = scheduleAhead.userId === schedule.userId;
                 const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
-                const isCreatedBeforeStartTime = scheduleAheadCreationDate <= startTimeOnDay;
                 const isSameEvent = scheduleAhead.eventId === schedule.eventId;
                 const isOneAlwaysAvailable =
                   schedule.periodicity === 'ALWAYS' || scheduleAhead.periodicity === 'ALWAYS';
 
+                // Calculate if schedules overlap in time
+                const scheduleEndTime = DateTime.fromISO(`${day}T${schedule.endTime}`);
+                const scheduleAheadStartTime = scheduleAhead.accessBeforeSchedule
+                  ? startOfTheDay
+                  : DateTime.fromISO(`${day}T${scheduleAhead.startTime}`);
+                const scheduleAheadEndTime = DateTime.fromISO(`${day}T${scheduleAhead.endTime}`);
+
+                // Handle cross-day events
+                const adjustedScheduleEndTime =
+                  scheduleEndTime < startTimeOnDay
+                    ? scheduleEndTime.plus({ days: 1 })
+                    : scheduleEndTime;
+                const adjustedScheduleAheadEndTime =
+                  scheduleAheadEndTime < scheduleAheadStartTime
+                    ? scheduleAheadEndTime.plus({ days: 1 })
+                    : scheduleAheadEndTime;
+
+                const timePeriodsOverlap =
+                  startTimeOnDay < adjustedScheduleAheadEndTime &&
+                  scheduleAheadStartTime < adjustedScheduleEndTime;
+
                 if (
                   isSameScheduleType &&
                   isSameEntity &&
-                  isCreatedBeforeStartTime &&
-                  (isSameEvent || isOneAlwaysAvailable)
+                  (isSameEvent || isOneAlwaysAvailable) &&
+                  scheduleAheadCreationDate <= adjustedScheduleEndTime &&
+                  timePeriodsOverlap
                 ) {
                   isSupersededOnThisDate = true;
                   break;
