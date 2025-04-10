@@ -196,50 +196,53 @@ export class ScheduleHistoryExporter extends DataExporter<
    * - An event was updated during the day in question
    * - There are multiple events for a single activity or flow
    * - There are multiple activities or flows
+   * @param day - ISO string date in format 'YYYY-MM-DD'
+   * @param userId - ID of the user to find schedules for
+   * @param scheduleHistoryData - Array of all schedule history data
+   * @returns Array of applicable schedules for the day, sorted by start time
    */
   public findSchedulesForDay(
     day: string,
     userId: string,
     scheduleHistoryData: ScheduleHistoryData[],
   ): ScheduleHistoryData[] {
-    // The `day` variable is an ISO string of the form 'YYYY-MM-DD', which becomes the start of the day (00:00:00)
-    // when parsed by Luxon
+    // The `day` variable becomes the start of the day (00:00:00) when parsed
     const startOfTheDay = DateTime.fromISO(day);
     const endOfTheDay = startOfTheDay.endOf('day');
 
-    // Removes events that couldn't apply to the user
+    // Pre-filter events that couldn't apply to the user
     const filteredByUser = scheduleHistoryData.filter(
       (schedule) => schedule.userId === userId || schedule.userId === null,
     );
 
+    // Early return if no applicable schedules
+    if (filteredByUser.length === 0) {
+      return [];
+    }
+
     const applicableSchedules: ScheduleHistoryData[] = [];
 
-    const appletVersionLinkDates = Object.entries(
-      filteredByUser.reduce<Record<string, DateTime<true>>>((result, schedule) => {
-        if (!result[schedule.appletVersion]) {
-          result[schedule.appletVersion] = DateTime.fromISO(
-            schedule.linkedWithAppletAt,
-          ) as DateTime<true>;
-        } else {
-          const existingDate = result[schedule.appletVersion];
-          const newDate = DateTime.fromISO(schedule.linkedWithAppletAt) as DateTime<true>;
-          if (newDate < existingDate) {
-            result[schedule.appletVersion] = newDate;
-          }
-        }
+    const appletVersionLinkDates = new Map<string, DateTime<true>>();
+    for (const schedule of filteredByUser) {
+      const newDate = DateTime.fromISO(schedule.linkedWithAppletAt) as DateTime<true>;
+      const existingDate = appletVersionLinkDates.get(schedule.appletVersion);
+      if (!existingDate || newDate < existingDate) {
+        appletVersionLinkDates.set(schedule.appletVersion, newDate);
+      }
+    }
 
-        return result;
-      }, {}),
+    const sortedAppletVersions = Array.from(appletVersionLinkDates.entries()).sort(
+      ([, dateA], [, dateB]) => dateA.toMillis() - dateB.toMillis(),
     );
 
     Object.entries(groupBy(filteredByUser, 'appletVersion'))
       .reverse()
       .forEach(([appletVersion, appletVersionGroupedSchedules]) => {
-        const indexOfAppletVersion = appletVersionLinkDates.findIndex(
+        const indexOfAppletVersion = sortedAppletVersions.findIndex(
           ([version]) => version === appletVersion,
         );
 
-        const hasNextAppletVersion = indexOfAppletVersion < appletVersionLinkDates.length - 1;
+        const hasNextAppletVersion = indexOfAppletVersion < sortedAppletVersions.length - 1;
 
         Object.entries(groupBy(appletVersionGroupedSchedules, 'activityOrFlowId')).forEach(
           ([_, entityGroupedSchedules]) => {
@@ -259,7 +262,7 @@ export class ScheduleHistoryExporter extends DataExporter<
                 : DateTime.fromISO(`${day}T${schedule.endTime}`);
 
               return (
-                appletVersionGroupedSchedules.filter((competition) => {
+                entityGroupedSchedules.filter((competition) => {
                   const isIndividualSchedule = competition.userId !== null;
 
                   const createdTodayOrBefore =
@@ -284,7 +287,6 @@ export class ScheduleHistoryExporter extends DataExporter<
             });
 
             // This removes events that don't apply based strictly on periodicity
-            // It will contain duplicates
             const filteredByPeriodicity = filterDefaultSchedules.filter((schedule) =>
               this.isSchedulePotentiallyApplicableForDayBasedOnPeriodicity(day, schedule),
             );
@@ -377,7 +379,7 @@ export class ScheduleHistoryExporter extends DataExporter<
                 return false;
               }
               if (hasNextAppletVersion) {
-                const [_, appletVersionLinkDate] = appletVersionLinkDates[indexOfAppletVersion + 1];
+                const [_, appletVersionLinkDate] = sortedAppletVersions[indexOfAppletVersion + 1];
 
                 // Keep this version if:
                 // 1. The next applet version is linked after this event's end time, OR
