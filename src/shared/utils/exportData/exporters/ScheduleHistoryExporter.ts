@@ -368,15 +368,23 @@ export class ScheduleHistoryExporter extends DataExporter<
                 ? startOfTheDay
                 : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
+              const endTimeOnDay = DateTime.fromISO(`${day}T${schedule.endTime}`);
+              const adjustedEndTimeOnDay =
+                endTimeOnDay < startTimeOnDay ? endTimeOnDay.plus({ days: 1 }) : endTimeOnDay;
+
               const scheduleLinkDate = DateTime.fromISO(schedule.linkedWithAppletAt);
-              if (scheduleLinkDate > startTimeOnDay) {
+              if (scheduleLinkDate > adjustedEndTimeOnDay) {
                 return false;
               }
               if (hasNextAppletVersion) {
                 const [_, appletVersionLinkDate] = appletVersionLinkDates[indexOfAppletVersion + 1];
 
-                // If the creationDate of the next applet version comes before this event, skip it
-                return appletVersionLinkDate > startTimeOnDay;
+                // Keep this version if:
+                // 1. The next applet version is linked after this event's end time, OR
+                // 2. This event starts after the next applet version is linked
+                return (
+                  appletVersionLinkDate > startTimeOnDay || scheduleLinkDate > appletVersionLinkDate
+                );
               } else {
                 return true;
               }
