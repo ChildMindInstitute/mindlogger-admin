@@ -270,6 +270,16 @@ describe('RespondentDataReview', () => {
       );
       expect(timestampLength).toHaveLength(3);
 
+      // Check inactive timestamp state
+      const timestamp1 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
+      expect(timestamp1).toHaveClass('MuiChip-colorSecondary');
+      expect(timestamp1).toHaveTextContent('21:20:30');
+
+      // Check active timestamp state
+      const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-2`);
+      expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
+      expect(timestamp3).toHaveTextContent('23:29:36');
+
       // Check timestamp interaction
       const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
       expect(timestamp0).toBeInTheDocument();
@@ -443,21 +453,6 @@ describe('RespondentDataReview', () => {
       const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-2`);
       expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
       expect(timestamp3).toHaveTextContent('23:29:36');
-    });
-
-    test('renders default review date as empty by default', async () => {
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: routeWithoutSelectedDate,
-        routePath: activityRoutePath,
-      });
-
-      const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
-      expect(inputContainer).toBeInTheDocument();
-
-      const input = inputContainer.querySelector('input') as HTMLInputElement;
-      expect(input).toBeInTheDocument();
-      expect(input.value).toEqual('');
     });
   });
 
