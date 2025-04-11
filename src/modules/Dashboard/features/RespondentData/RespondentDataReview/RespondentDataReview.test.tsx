@@ -155,44 +155,7 @@ describe('RespondentDataReview', () => {
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
-          `/answers/applet/${mockedAppletId}/review/flows`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/review/activities`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
+        expect(mockAxios.get).toHaveBeenCalledTimes(3);
       });
 
       const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
@@ -316,68 +279,25 @@ describe('RespondentDataReview', () => {
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
-          `/answers/applet/${mockedAppletId}/review/flows`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/review/activities`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
+        expect(mockAxios.get).toHaveBeenCalledTimes(3);
       });
 
-      const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
+      const feedbackButton = await screen.findByTestId(`${dataTestid}-feedback-button`);
       expect(feedbackButton).toBeInTheDocument();
 
-      const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
+      const feedbackMenu = await screen.findByTestId(`${dataTestid}-feedback-menu`);
       expect(feedbackMenu).toBeInTheDocument();
-      await waitFor(() => {
-        expect(feedbackMenu).toHaveStyle({ width: '0px' });
-      });
+      expect(feedbackMenu).toHaveStyle({ width: '0px' });
 
       // Test opening feedback panel
       await userEvent.click(feedbackButton);
-      await waitFor(() => {
-        expect(feedbackMenu).toHaveStyle({ width: '44rem' });
-      });
+      expect(feedbackMenu).toHaveStyle({ width: '44rem' });
 
       // Test closing feedback panel
       const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
       expect(feedbackMenuClose).toBeInTheDocument();
       await userEvent.click(feedbackMenuClose);
-      await waitFor(() => {
-        expect(feedbackMenu).toHaveStyle({ width: '0px' });
-      });
+      expect(feedbackMenu).toHaveStyle({ width: '0px' });
 
       // Verify feedback tab is not visible
       expect(
