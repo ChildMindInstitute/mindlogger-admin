@@ -350,6 +350,12 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       groupOptions: [ItemConfigurationSettings.HasTimer, ItemConfigurationSettings.IsGoBackRemoved],
     },
   ],
+  [ItemResponseType.RequestHealthRecordData]: [
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+      groupOptions: [ItemConfigurationSettings.IsGoBackRemoved],
+    },
+  ],
   [ItemResponseType.AudioPlayer]: [
     {
       groupName: ItemSettingsGroupNames.AudioPlayerOptions,

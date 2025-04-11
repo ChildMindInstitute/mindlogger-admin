@@ -14,6 +14,7 @@ export const universalSupportedResponseTypes = [
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.NumberSelection,
   ItemResponseType.ParagraphText,
+  ItemResponseType.RequestHealthRecordData,
   ItemResponseType.SingleSelection,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.Slider,

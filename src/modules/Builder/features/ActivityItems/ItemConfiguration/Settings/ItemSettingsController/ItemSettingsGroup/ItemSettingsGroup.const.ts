@@ -30,6 +30,6 @@ export const ITEM_TYPES_TO_HAVE_ALERTS = [
   ItemResponseType.MultipleSelection,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.MultipleSelectionPerRow,
-];
+] as const;
 
 export const DEFAULT_ACTIVE_TIMER_VALUE = 1;

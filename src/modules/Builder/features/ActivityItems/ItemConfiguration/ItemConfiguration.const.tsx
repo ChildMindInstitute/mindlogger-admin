@@ -1,11 +1,12 @@
-import { itemsTypeIcons } from 'shared/consts';
-import { ItemResponseType } from 'shared/consts';
+import { t } from 'i18next';
+
 import { createArray } from 'shared/utils';
 import {
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
 } from 'modules/Builder/consts';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
@@ -114,6 +115,15 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     ],
   },
   {
+    groupName: 'import',
+    groupOptions: [
+      {
+        value: ItemResponseType.RequestHealthRecordData,
+        icon: itemsTypeIcons[ItemResponseType.RequestHealthRecordData],
+      },
+    ],
+  },
+  {
     groupName: 'record',
     groupOptions: [
       {
@@ -149,6 +159,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     ],
   },
 ];
+
+export const itemsTypePlaceholders: { [key in ItemResponseType]?: string } = {
+  [ItemResponseType.RequestHealthRecordData]: t('requestHealthRecordDataSettings.placeholder'),
+};
 
 export const SELECTION_OPTIONS_COLOR_PALETTE = [
   {

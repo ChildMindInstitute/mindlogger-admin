@@ -28,4 +28,5 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.TouchPractice,
   ItemResponseType.TouchTest,
   ItemResponseType.ABTrails,
+  ItemResponseType.RequestHealthRecordData,
 ];

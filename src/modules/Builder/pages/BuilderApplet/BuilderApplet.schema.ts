@@ -165,6 +165,22 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
+export const ResponseValuesRequestHealthRecordDataSchema = () => ({
+  optInOutOptions: yup
+    .array()
+    .of(
+      yup.object({
+        id: yup.string().required(),
+        label: yup
+          .string()
+          .required(getIsRequiredValidateMessage('requestHealthRecordDataSettings.label'))
+          .max(75, t('validationMessages.maxCharacters', { count: 75 })),
+      }),
+    )
+    .required()
+    .length(2),
+});
+
 const flankerImageOrNameValidation = (validateMessage?: string) =>
   yup
     .string()
@@ -470,6 +486,10 @@ export const ItemSchema = () =>
 
           if (responseType === ItemResponseType.PhrasalTemplate) {
             return schema.shape(PhrasalTemplateResponseValue);
+          }
+
+          if (responseType === ItemResponseType.RequestHealthRecordData) {
+            return schema.shape(ResponseValuesRequestHealthRecordDataSchema());
           }
 
           return schema.nullable();

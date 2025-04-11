@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
+import { ReactNode } from 'react';
 
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
@@ -12,6 +13,8 @@ import {
   DEFAULT_NUMBER_SELECT_MIN_VALUE,
   DEFAULT_NUMBER_SELECT_MAX_VALUE,
 } from 'modules/Builder/consts';
+import { FeatureFlags } from 'shared/types/featureFlags';
+import { Chip, ChipShape } from 'shared/components';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -42,10 +45,28 @@ export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, strin
   [ItemResponseType.Geolocation]: t('geolocationHint'),
   [ItemResponseType.Audio]: t('audioHint'),
   [ItemResponseType.Message]: t('messageHint'),
+  [ItemResponseType.RequestHealthRecordData]: t('requestHealthRecordDataHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.PhrasalTemplate]: t('phrasalTemplateHint'),
 });
+
+export const getItemsTypeChip = ({
+  value,
+  featureFlags,
+}: {
+  value: ItemResponseType;
+  featureFlags: FeatureFlags;
+}): ReactNode =>
+  value === ItemResponseType.RequestHealthRecordData &&
+  featureFlags.enableEhrHealthData === 'active' ? (
+    <Chip
+      title={t('active')}
+      color="success"
+      shape={ChipShape.RectangularLarge}
+      canRemove={false}
+    />
+  ) : undefined;
 
 export const getEmptySliderOption = ({
   isMultiple,

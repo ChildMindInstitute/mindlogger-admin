@@ -657,6 +657,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
     case ItemResponseType.PhrasalTemplate:
+    case ItemResponseType.RequestHealthRecordData:
       return item.responseValues;
     default:
       return null;
@@ -1224,7 +1225,12 @@ export const testFunctionForSkippedItems = (value: string, context: yup.TestCont
   const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
-  return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
+  return !items.some(
+    (item) =>
+      variableNames.includes(item.name) &&
+      'skippableItem' in item.config &&
+      item.config.skippableItem,
+  );
 };
 
 export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {

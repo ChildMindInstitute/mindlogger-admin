@@ -28,6 +28,7 @@ export const Editor = ({
   error,
   disabled,
   withDebounce,
+  placeholder,
   'data-testid': dataTestid,
 }: EditorProps) => {
   const { t } = useTranslation('app');
@@ -59,7 +60,7 @@ export const Editor = ({
         onFocus={handleFocus}
         language={LANGUAGE_BY_DEFAULT}
         disabled={disabled}
-        placeholder={t('textPlaceholder')}
+        placeholder={placeholder ?? t('textPlaceholder')}
         defToolbars={getDefToolbars({
           onInsert,
           onChange,
