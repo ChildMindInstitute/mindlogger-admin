@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
-import { Svg } from 'shared/components/Svg';
-import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
+import { page } from 'resources';
+import { Svg } from 'shared/components/Svg';
 import { applet as appletState } from 'shared/state';
 
 export const useRespondentDataSetup = () => {
@@ -41,6 +41,8 @@ export const useRespondentDataSetup = () => {
       page.appletParticipantActivityDetailsFlowDataReview,
     );
   } else {
+    // TODO: Remove deprecated routes once tests catch on (M2-8891)
+    // https://mindlogger.atlassian.net/browse/M2-8891
     routes.push(page.appletParticipantDataSummary, page.appletParticipantDataReview);
   }
 
