@@ -361,17 +361,23 @@ describe('RespondentDataReview', () => {
 
       const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
       expect(feedbackMenu).toBeInTheDocument();
-      expect(feedbackMenu).toHaveStyle({ width: 0 });
+      await waitFor(() => {
+        expect(feedbackMenu).toHaveStyle({ width: '0px' });
+      });
 
       // Test opening feedback panel
       await userEvent.click(feedbackButton);
-      expect(feedbackMenu).toHaveStyle({ width: '44rem' });
+      await waitFor(() => {
+        expect(feedbackMenu).toHaveStyle({ width: '44rem' });
+      });
 
       // Test closing feedback panel
       const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
       expect(feedbackMenuClose).toBeInTheDocument();
       await userEvent.click(feedbackMenuClose);
-      expect(feedbackMenu).toHaveStyle({ width: 0 });
+      await waitFor(() => {
+        expect(feedbackMenu).toHaveStyle({ width: '0px' });
+      });
 
       // Verify feedback tab is not visible
       expect(
