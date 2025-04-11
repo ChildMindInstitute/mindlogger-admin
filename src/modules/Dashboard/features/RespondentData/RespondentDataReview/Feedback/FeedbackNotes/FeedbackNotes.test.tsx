@@ -1,26 +1,26 @@
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import mockAxios from 'jest-mock-axios';
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
-import userEvent from '@testing-library/user-event';
 
-import { waitForTheUpdate } from 'shared/utils';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { ApiResponseCodes } from 'api';
+import { page } from 'resources';
+import { Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedFullSubjectId1,
 } from 'shared/mock';
-import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
-import { page } from 'resources';
-import { ApiResponseCodes } from 'api';
+import { waitForTheUpdate } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
-import { FeedbackNotes } from './FeedbackNotes';
-import { FeedbackForm, SelectedEntity } from '../Feedback.types';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { RespondentDataReviewContextType } from '../../RespondentDataReview.types';
+import { FeedbackForm, SelectedEntity } from '../Feedback.types';
+import { FeedbackNotes } from './FeedbackNotes';
 
 const noteTestId = 'respondents-summary-feedback-notes-note';
 const newNoteValue = 'New note has been added';
@@ -169,36 +169,34 @@ const testNoteCreation = async (apiCallRoute: string) => {
 };
 
 const testNoteEditing = async (apiCallRoute: string) => {
-  await waitFor(async () => {
-    const hiddenEditAction = screen.queryByTestId(`${noteTestId}-0-edit`);
+  const noteHeader = await screen.findByTestId(`${noteTestId}-0-header`);
 
-    expect(hiddenEditAction).toBeNull();
+  // Hover and find edit button
+  await userEvent.hover(noteHeader);
+  const editButton = await screen.findByTestId(`${noteTestId}-0-edit`);
+  expect(editButton).toBeInTheDocument();
 
-    const noteHeader = screen.queryByTestId(`${noteTestId}-0-header`) as HTMLElement;
-    await userEvent.hover(noteHeader);
-    const visibleEditAction = screen.queryByTestId(`${noteTestId}-0-edit`) as HTMLElement;
+  // Click edit button
+  await userEvent.click(editButton);
 
-    expect(visibleEditAction).toBeInTheDocument();
+  // Find and edit textarea
+  const noteContainer = await screen.findByTestId(`${noteTestId}-0-text`);
+  const textarea = noteContainer.querySelector('textarea') as HTMLElement;
+  await userEvent.clear(textarea);
+  await userEvent.type(textarea, newNoteValue);
 
-    await userEvent.click(visibleEditAction);
-  });
+  // Setup mock before clicking save
+  mockAxios.put.mockResolvedValueOnce(null);
 
-  await waitFor(async () => {
-    const noteContainer = screen.queryByTestId(`${noteTestId}-0-text`) as HTMLElement;
-    const textarea = noteContainer.querySelector('textarea') as HTMLElement;
-    await userEvent.clear(textarea);
-    await userEvent.type(textarea, newNoteValue);
-    await userEvent.click(screen.getByTestId(`${noteTestId}-0-save`));
-    mockAxios.post.mockResolvedValueOnce(null);
-  });
+  // Click save
+  const saveButton = await screen.findByTestId(`${noteTestId}-0-save`);
+  await userEvent.click(saveButton);
 
+  // Verify API call
   await waitFor(() => {
-    expect(mockAxios.put).nthCalledWith(
-      1,
+    expect(mockAxios.put).toHaveBeenCalledWith(
       apiCallRoute,
-      {
-        note: newNoteValue,
-      },
+      { note: newNoteValue },
       { signal: undefined },
     );
   });

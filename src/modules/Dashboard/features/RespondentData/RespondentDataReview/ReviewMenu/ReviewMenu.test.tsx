@@ -1,14 +1,14 @@
-import { useForm } from 'react-hook-form';
+import { PreloadedState } from '@reduxjs/toolkit';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { PreloadedState } from '@reduxjs/toolkit';
+import { useForm } from 'react-hook-form';
 
-import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedCurrentWorkspace, mockedFullSubjectId1 } from 'shared/mock';
-import { ParticipantTag, Roles } from 'shared/consts';
-import { initialStateData } from 'shared/state';
 import { RootState } from 'redux/store';
+import { page } from 'resources';
+import { ParticipantTag, Roles } from 'shared/consts';
+import { mockedAppletId, mockedCurrentWorkspace, mockedFullSubjectId1 } from 'shared/mock';
+import { initialStateData } from 'shared/state';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { ReviewMenu } from './ReviewMenu';
@@ -105,7 +105,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
         ],
       },
     ],
-    flows: null,
+    flows: [],
     selectedActivity: null,
     onSelectActivity,
     selectedFlow: null,

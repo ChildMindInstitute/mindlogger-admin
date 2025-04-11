@@ -3,24 +3,24 @@
 import { addDays, endOfYear, setHours, setMinutes, setSeconds } from 'date-fns';
 
 import { Periodicity, TimerType } from 'modules/Dashboard/api';
-import { formatToYearMonthDate, parseDateToMidnightUTC } from 'shared/utils/dateFormat';
+import { formatToYearMonthDate, parseDateToMidnightLocal } from 'shared/utils/dateFormat';
 
 import {
-  getEventsWithHiddenInTimeView,
-  getNotHiddenEvents,
-  getNextDayComparison,
-  getStartEndComparison,
-  removeSecondsFromTime,
-  getPreparedEvents,
-  getStartOfYearDateTime,
-  getEndOfYearDateTime,
-  getDateFromDateTimeString,
+  createEvents,
   getDateFromDateStringTimeString,
-  getEventStartDateTime,
+  getDateFromDateTimeString,
+  getDaysInMonthlyPeriodicity,
+  getEndOfYearDateTime,
   getEventEndDateTime,
   getEventsArrayFromDates,
-  createEvents,
-  getDaysInMonthlyPeriodicity,
+  getEventStartDateTime,
+  getEventsWithHiddenInTimeView,
+  getNextDayComparison,
+  getNotHiddenEvents,
+  getPreparedEvents,
+  getStartEndComparison,
+  getStartOfYearDateTime,
+  removeSecondsFromTime,
 } from './CalendarEvents.utils';
 
 describe('getNextDayComparison', () => {
@@ -325,8 +325,8 @@ describe('getEventEndDateTime', () => {
   const dateString = '2023-12-15';
   const dateStringNextYear = '2024-07-15';
   const endTime = '16:30:00';
-  const eventStart = parseDateToMidnightUTC(dateString);
-  const eventStartNextYear = parseDateToMidnightUTC(dateStringNextYear);
+  const eventStart = parseDateToMidnightLocal(dateString);
+  const eventStartNextYear = parseDateToMidnightLocal(dateStringNextYear);
   const eventStartWithTime = new Date(`${dateString}T${endTime}`);
   const currentYear = '2023';
 
