@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
 export const Footer = () => {
   const { t } = useTranslation('app');
 
-  const { REACT_APP_DEVELOP_BUILD_VERSION } = process.env;
+  const { REACT_APP_DEVELOP_BUILD_VERSION } = import.meta.env;
 
   return (
     <StyledFooter>
