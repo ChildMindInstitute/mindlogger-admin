@@ -151,9 +151,7 @@ export const RespondentDataReview = () => {
   const handleGetSubmitDates = useCallback(
     (date: Date) => {
       const activityOrFlowId = activityFlowId || activityId;
-      // TODO: Add !activityOrFlowId to the if statement after dataviz tests have been updated
-      // https://mindlogger.atlassian.net/browse/M2-8891
-      if (!appletId || !subjectId) return;
+      if (!appletId || !subjectId || !activityOrFlowId) return;
 
       const fromDate = startOfMonth(date).getTime().toString();
       const toDate = endOfMonth(date).getTime().toString();

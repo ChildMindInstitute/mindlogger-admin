@@ -554,9 +554,7 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
-    // TODO: Change to required param once tests for dataviz have been updated (M2-8891)
-    // https://mindlogger.atlassian.net/browse/M2-8891
-    activityOrFlowId?: string;
+    activityOrFlowId: string;
   };
 
 export type EventId = { eventId: string };
