@@ -10,7 +10,7 @@ import { ItemFormValues } from 'modules/Builder/types';
 
 import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
 import { itemsTypeOptions } from './ItemConfiguration.const';
-import { ItemsOptionGroup } from './ItemConfiguration.types';
+import { ItemsOption, ItemsOptionGroup } from './ItemConfiguration.types';
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
@@ -53,12 +53,12 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
   );
 
   const availableItemsTypeOptions = itemsTypeOptions
-    .reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
+    .reduce((groups: ItemsOptionGroup[], { groupName, groupOptions }) => {
       if (isReviewable) {
         // Reviewable activities only support 3 possible item types in the 'select' group:
         // single selection, multiple selection, and slider. Skip all other groups and item types.
 
-        if (groupName !== 'select') return options;
+        if (groupName !== 'select') return groups;
 
         return [
           {
@@ -70,48 +70,43 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
         ];
       }
 
-      let newGroupOptions = groupOptions;
-
-      switch (groupName) {
-        case 'downloadable':
-          newGroupOptions = groupOptions.filter(
+      const transformers: Record<string, (options: ItemsOption[]) => ItemsOption[]> = {
+        downloadable: (options: ItemsOption[]) =>
+          options.filter(
             ({ value }) =>
               value !== ItemResponseType.PhrasalTemplate || featureFlags.enablePhrasalTemplate,
-          );
-          break;
-        case 'input':
-          newGroupOptions = groupOptions.filter(
+          ),
+        input: (options: ItemsOption[]) =>
+          options.filter(
             ({ value }) =>
               value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
-          );
-          break;
-        case 'import':
-          newGroupOptions = groupOptions.filter(
+          ),
+        import: (options: ItemsOption[]) => {
+          const filteredOptions = options.filter(
             ({ value }) =>
               value !== ItemResponseType.RequestHealthRecordData ||
               featureFlags.enableEhrHealthData === 'active',
           );
 
-          // Add disabled flag & tooltip to RequestHealthRecordData option if such an item exists
-          if (hasExistingHealthRecordItem) {
-            newGroupOptions = newGroupOptions.map((option) =>
-              option.value === ItemResponseType.RequestHealthRecordData
-                ? {
-                    ...option,
-                    disabled: true,
-                    tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
-                  }
-                : option,
-            );
-          }
-          break;
-      }
+          return hasExistingHealthRecordItem
+            ? filteredOptions.map((option) =>
+                option.value === ItemResponseType.RequestHealthRecordData
+                  ? {
+                      ...option,
+                      disabled: true,
+                      tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
+                    }
+                  : option,
+              )
+            : filteredOptions;
+        },
+      };
 
       return [
-        ...options,
+        ...groups,
         {
           groupName,
-          groupOptions: newGroupOptions,
+          groupOptions: transformers[groupName]?.(groupOptions) ?? groupOptions,
         },
       ];
     }, [])
