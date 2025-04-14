@@ -60,35 +60,62 @@ export class ScheduleHistoryExporter extends DataExporter<
     super('schedule_history');
   }
 
-  async exportData({
+  async exportData(params: ScheduleHistoryExportOptions): Promise<void> {
+    const rows = await this.generateExportData(params);
+
+    await this.downloadAsCSV(rows);
+  }
+
+  async getScheduleHistoryData(
+    appletId: string,
+    subjectIds?: string,
+    respondentIds?: string,
+  ): Promise<ScheduleHistoryData[]> {
+    return this.requestAllPagesConcurrently(
+      (page) => getScheduleHistory({ appletId, subjectIds, respondentIds, page }),
+      5,
+    );
+  }
+
+  async getDeviceScheduleHistoryData(
+    appletId: string,
+    respondentIds?: string,
+  ): Promise<DeviceScheduleHistoryData[]> {
+    return this.requestAllPagesConcurrently(
+      (page) => getDeviceScheduleHistory({ appletId, respondentIds, page }),
+      5,
+    );
+  }
+
+  async getRespondentData(appletId: string): Promise<ParticipantWithDataAccess[]> {
+    return this.requestAllPagesConcurrently(
+      (page) => getWorkspaceRespondentsApi({ params: { ownerId: this.ownerId, appletId, page } }),
+      5,
+    );
+  }
+
+  async generateExportData({
     appletId,
     subjectIds,
     ...params
-  }: ScheduleHistoryExportOptions): Promise<void> {
-    const rows: ScheduleHistoryExportRow[] = [];
-
-    const unsortedScheduleHistoryData = await this.requestAllPagesConcurrently(
-      (page) => getScheduleHistory({ appletId, subjectIds, ...params, page }),
-      5,
+  }: ScheduleHistoryExportOptions): Promise<ScheduleHistoryExportRow[]> {
+    const unsortedScheduleHistoryData = await this.getScheduleHistoryData(
+      appletId,
+      subjectIds,
+      params.respondentIds,
     );
 
     if (unsortedScheduleHistoryData.length === 0) {
       // Nothing to export
-      return;
+      return [];
     }
 
-    const unsortedDeviceScheduleHistoryData = await this.requestAllPagesConcurrently(
-      (page) => getDeviceScheduleHistory({ appletId, ...params, page }),
-      5,
+    const unsortedDeviceScheduleHistoryData = await this.getDeviceScheduleHistoryData(
+      appletId,
+      params.respondentIds,
     );
 
-    const respondents = await this.requestAllPagesConcurrently(
-      (page) =>
-        getWorkspaceRespondentsApi({
-          params: { ownerId: this.ownerId, appletId, page },
-        }),
-      5,
-    );
+    const respondents = await this.getRespondentData(appletId);
 
     const fullAccountParticipants = respondents.filter(
       (it): it is FullAccountParticipant => !!it.id,
@@ -115,6 +142,8 @@ export class ScheduleHistoryExporter extends DataExporter<
       DateTime.fromISO(params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt),
       DateTime.fromISO(params?.toDate ?? DateTime.now().toISO()),
     );
+
+    const rows: ScheduleHistoryExportRow[] = [];
 
     for (let i = days.length - 1; i >= 0; i--) {
       const day = days[i];
@@ -186,7 +215,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       }
     }
 
-    await this.downloadAsCSV(rows);
+    return rows;
   }
 
   /**
