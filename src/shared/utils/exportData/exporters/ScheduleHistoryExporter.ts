@@ -96,12 +96,12 @@ export class ScheduleHistoryExporter extends DataExporter<
 
   async generateExportData({
     appletId,
-    subjectIds,
+    subjectIds: subjectIdsString,
     ...params
   }: ScheduleHistoryExportOptions): Promise<ScheduleHistoryExportRow[]> {
     const unsortedScheduleHistoryData = await this.getScheduleHistoryData(
       appletId,
-      subjectIds,
+      subjectIdsString,
       params.respondentIds,
     );
 
@@ -117,9 +117,23 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     const respondents = await this.getRespondentData(appletId);
 
-    const fullAccountParticipants = respondents.filter(
-      (it): it is FullAccountParticipant => !!it.id,
-    );
+    const subjectIds = subjectIdsString
+      ? subjectIdsString.split(',').map((it) => it.trim())
+      : undefined;
+    const fullAccountParticipants = respondents
+      .filter((it): it is FullAccountParticipant => !!it.id)
+      .filter((it) => {
+        if (!subjectIds) {
+          return true;
+        }
+
+        const detail = it.details.find((detail) => detail.appletId === appletId);
+        if (!detail) {
+          return false;
+        }
+
+        return subjectIds.includes(detail.subjectId);
+      });
 
     const sortedScheduleHistoryData = unsortedScheduleHistoryData.sort((a, b) => {
       const aEventVersionCreatedAt = new Date(a.eventVersionCreatedAt);
