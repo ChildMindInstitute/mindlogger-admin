@@ -138,10 +138,14 @@ export class ScheduleHistoryExporter extends DataExporter<
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
 
-    const days = this.daysBetweenInterval(
-      DateTime.fromISO(params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt),
-      DateTime.fromISO(params?.toDate ?? DateTime.now().toISO()),
-    );
+    const fromDate: string = params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt;
+    let toDate: string = params?.toDate ?? '';
+
+    if (!toDate) {
+      toDate = DateTime.now().toUTC().toFormat(`yyyy-MM-dd'T'HH:mm:ss`);
+    }
+
+    const days = this.daysBetweenInterval(DateTime.fromISO(fromDate), DateTime.fromISO(toDate));
 
     const rows: ScheduleHistoryExportRow[] = [];
 
