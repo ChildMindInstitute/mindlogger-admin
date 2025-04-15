@@ -355,7 +355,10 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     };
   }
 
-  if (responseType === ItemResponseType.PhrasalTemplate) {
+  if (
+    responseType === ItemResponseType.PhrasalTemplate ||
+    responseType === ItemResponseType.RequestHealthRecordData
+  ) {
     return responseValues;
   }
 

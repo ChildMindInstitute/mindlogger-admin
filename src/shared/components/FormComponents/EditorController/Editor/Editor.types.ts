@@ -19,6 +19,7 @@ export type EditorProps = {
   error?: FieldError;
   disabled?: boolean;
   withDebounce?: boolean;
+  placeholder?: string;
   'data-testid'?: string;
 };
 
