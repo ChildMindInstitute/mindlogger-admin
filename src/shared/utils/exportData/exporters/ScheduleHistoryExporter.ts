@@ -556,8 +556,6 @@ export class ScheduleHistoryExporter extends DataExporter<
     // that aren't newer than the event version we're looking at
     // and was downloaded before its start time
 
-    const localStartTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.startTime}`);
-
     const schedulesFound = sortedDeviceScheduleHistoryData.filter((schedule) => {
       if (!schedule.userTimeZone) {
         return false;
@@ -569,19 +567,33 @@ export class ScheduleHistoryExporter extends DataExporter<
         return false;
       }
 
+      let localEndTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.endTime}`, {
+        zone: userTimeZone,
+      });
+
+      const extendsPastDay =
+        DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
+
+      if (extendsPastDay) {
+        localEndTimeOnDay = localEndTimeOnDay.plus({ days: 1 });
+      }
+
       const [deviceDatePart, deviceNumberPart] = schedule.eventVersion.split('-');
       const [eventDatePart, eventNumberPart] = scheduleHistoryEvent.eventVersion.split('-');
-      const utcDownloadTimestamp = DateTime.fromISO(`${schedule.createdAt}Z`);
-      const offset = userTimeZone.offset(utcDownloadTimestamp.toMillis());
-      const localDownloadTimestamp = utcDownloadTimestamp.plus({ minutes: offset });
+      const downloadTimestamp = DateTime.fromISO(`${schedule.createdAt}Z`);
+
+      const sameDay = deviceDatePart === eventDatePart;
+
+      const deviceVersionOlderOrSameAsEventVersion =
+        DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <=
+          DateTime.fromFormat(eventDatePart, 'yyyyMMdd') ||
+        (sameDay && parseInt(deviceNumberPart) <= parseInt(eventNumberPart));
 
       return (
         schedule.userId === userId &&
         schedule.eventId === scheduleHistoryEvent.eventId &&
-        DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <=
-          DateTime.fromFormat(eventDatePart, 'yyyyMMdd') &&
-        parseInt(deviceNumberPart) <= parseInt(eventNumberPart) &&
-        localDownloadTimestamp < localStartTimeOnDay
+        deviceVersionOlderOrSameAsEventVersion &&
+        downloadTimestamp < localEndTimeOnDay
       );
     });
 
