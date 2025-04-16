@@ -57,7 +57,7 @@ describe('RemoveOptionPopup', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders RemoveOptionPopup component', async () => {

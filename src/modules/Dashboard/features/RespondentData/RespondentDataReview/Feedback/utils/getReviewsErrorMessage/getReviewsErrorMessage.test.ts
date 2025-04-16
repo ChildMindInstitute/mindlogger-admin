@@ -18,7 +18,7 @@ describe('getReviewsErrorMessage', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return the error message for reviewsError', () => {

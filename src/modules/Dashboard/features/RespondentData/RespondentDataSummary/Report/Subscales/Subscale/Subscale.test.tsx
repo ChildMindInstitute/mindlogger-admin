@@ -207,7 +207,7 @@ const subscale = {
 
 describe('Subscale component', () => {
   test('renders component with correct data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
     const props = {
       isNested,
       name,

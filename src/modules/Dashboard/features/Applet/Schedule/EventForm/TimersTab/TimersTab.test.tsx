@@ -33,7 +33,7 @@ const FormWrapper = () => {
 
 describe('TimersTab component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render TimersTab component, TimerType = NotSet', async () => {

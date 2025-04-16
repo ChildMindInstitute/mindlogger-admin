@@ -47,7 +47,7 @@ const testRecurringEvents = ({ isOncePeriodicity = false } = {}) => {
 
 describe('AvailabilityTab component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render AvailabilityTab component when alwaysAvailable = true and test periodicity change', async () => {
@@ -194,7 +194,7 @@ describe('AvailabilityTab component', () => {
 
     const user = userEvent.setup({ delay: null });
 
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     jest.setSystemTime(new Date('03-14-2024'));
 
     await act(async () => {

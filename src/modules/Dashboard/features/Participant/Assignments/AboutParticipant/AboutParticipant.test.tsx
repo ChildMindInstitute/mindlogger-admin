@@ -185,7 +185,7 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render the loading state at first', async () => {

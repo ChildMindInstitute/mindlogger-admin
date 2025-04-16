@@ -128,7 +128,7 @@ const setActivitiesVisible = vi.fn();
 
 describe('getActivities', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return updated activities with expanded state based on search (no match)', () => {

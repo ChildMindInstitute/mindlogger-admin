@@ -50,7 +50,7 @@ jest.mock('react-hook-form', () => ({
 
 describe('useRedirectIfNoMatchedActivity', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

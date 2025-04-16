@@ -110,7 +110,7 @@ describe('getUploadedTime', () => {
 
 describe('getEndOfYearDate', () => {
   beforeAll(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     jest.setSystemTime(new Date('2000-01-01'));
   });
 

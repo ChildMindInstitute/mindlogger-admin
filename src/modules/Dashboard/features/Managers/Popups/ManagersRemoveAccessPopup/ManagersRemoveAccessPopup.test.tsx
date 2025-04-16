@@ -65,7 +65,7 @@ describe('ManagersRemoveAccessPopup component tests', () => {
   });
 
   test('ManagersRemoveAccessPopup should remove access without appletId', async () => {
-    const useAsyncSpy = jest.spyOn(useAsyncHooks, 'useAsync');
+    const useAsyncSpy = vi.spyOn(useAsyncHooks, 'useAsync');
     const mockExecute = vi.fn();
     useAsyncSpy.mockImplementation(() => ({
       execute: mockExecute,

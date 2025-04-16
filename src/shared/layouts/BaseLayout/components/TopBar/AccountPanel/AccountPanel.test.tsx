@@ -32,10 +32,10 @@ jest.mock('redux/store/hooks', () => ({
 
 describe('AccountPanel', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-    jest.spyOn(auth, 'useUserInitials').mockReturnValue('JD');
-    jest.spyOn(alerts, 'useAlertsData').mockReturnValue({ notWatched });
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
+    vi.spyOn(auth, 'useUserInitials').mockReturnValue('JD');
+    vi.spyOn(alerts, 'useAlertsData').mockReturnValue({ notWatched });
   });
 
   test('renders user information and logout button', () => {
@@ -48,7 +48,7 @@ describe('AccountPanel', () => {
   });
 
   test('triggers logout when the logout button is clicked', async () => {
-    jest.spyOn(hooksModule, 'useLogout').mockImplementation(() => mockHandleLogout);
+    vi.spyOn(hooksModule, 'useLogout').mockImplementation(() => mockHandleLogout);
     renderWithProviders(<AccountPanel setVisibleDrawer={mockSetVisibleDrawer} visibleDrawer />);
 
     const logoutButton = screen.getByText('Log out');

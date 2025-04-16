@@ -85,7 +85,7 @@ describe('ExportDataSetting', () => {
     `('$description', async ({ exportType, expectedFromTime }) => {
       const mockOnClose = vi.fn();
 
-      jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
+      vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
         Promise.resolve({
           getPublicKey: getPublicKeyMock,
         }),

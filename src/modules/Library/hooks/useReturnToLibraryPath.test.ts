@@ -22,7 +22,7 @@ jest.mock('shared/utils', () => ({
 
 describe('useReturnToLibraryPath', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should remove item from storage if authorized', () => {

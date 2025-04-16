@@ -136,10 +136,10 @@ const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 Element.prototype.scrollTo = vi.fn();
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 jest.setTimeout(10000);
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 /* Tests
 =================================================== */

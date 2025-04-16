@@ -149,11 +149,11 @@ jest.mock('modules/Library/hooks', () => ({
 
 describe('Cart', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   test('renders loading spinner when applets are loading', () => {
@@ -247,7 +247,7 @@ describe('Cart', () => {
 
   test('calls navigateToBuilder when authorized user adds to builder', async () => {
     const mockNavigateToBuilder = vi.fn();
-    jest.spyOn(cartUtils, 'navigateToBuilder').mockImplementationOnce(mockNavigateToBuilder);
+    vi.spyOn(cartUtils, 'navigateToBuilder').mockImplementationOnce(mockNavigateToBuilder);
 
     renderWithProviders(<Cart />, {
       preloadedState: getPreloadedState({

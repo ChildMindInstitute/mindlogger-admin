@@ -7,7 +7,7 @@ describe('navigateToLibrary', () => {
     const fakeNavigate = vi.fn();
     const libraryUrl = 'https://example.com/library';
 
-    const getItemMock = jest.spyOn(storage, 'getItem');
+    const getItemMock = vi.spyOn(storage, 'getItem');
     getItemMock.mockReturnValue(libraryUrl);
 
     navigateToLibrary(fakeNavigate);
@@ -19,7 +19,7 @@ describe('navigateToLibrary', () => {
   test('should not navigate if the library URL is not present in storage', () => {
     const fakeNavigate = vi.fn();
 
-    const getItemMock = jest.spyOn(storage, 'getItem');
+    const getItemMock = vi.spyOn(storage, 'getItem');
     getItemMock.mockReturnValue(null);
 
     navigateToLibrary(fakeNavigate);

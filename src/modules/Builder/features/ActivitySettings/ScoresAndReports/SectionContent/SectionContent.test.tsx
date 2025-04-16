@@ -53,7 +53,7 @@ const formDataWithoutSectionConditions = {
 
 describe('SectionContent', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render section', () => {

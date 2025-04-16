@@ -557,9 +557,9 @@ describe('usePreparedEvents hook', () => {
 
   test('should dispatch create calendar events and set create events data for same year', async () => {
     const mockedYear = 2025;
-    jest.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
+    vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
     (dateFns.getYear as jest.Mock).mockReturnValue(mockedYear);
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {
@@ -584,9 +584,9 @@ describe('usePreparedEvents hook', () => {
   test('should dispatch set create events data and create next year events for different year', async () => {
     const mockedYear = 2024;
     const mockedNextYear = 2025;
-    jest.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
+    vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
     (dateFns.getYear as jest.Mock).mockReturnValue(mockedNextYear);
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {

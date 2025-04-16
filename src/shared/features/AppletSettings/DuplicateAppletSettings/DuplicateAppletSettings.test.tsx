@@ -80,7 +80,7 @@ describe('DuplicateAppletSettings', () => {
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValueOnce(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValueOnce(
       Promise.resolve({
         getPrivateKey: () => [],
       }),

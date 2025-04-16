@@ -40,11 +40,11 @@ describe('Uploader component', () => {
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders without errors', () => {
@@ -61,7 +61,7 @@ describe('Uploader component', () => {
     expect(await screen.findByText('test-image.png')).toBeInTheDocument();
     expect(screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
 
-    const mockCropImage = jest.spyOn(CropPopupUtils, 'cropImage');
+    const mockCropImage = vi.spyOn(CropPopupUtils, 'cropImage');
     mockCropImage.mockImplementation(({ onReady }) => {
       const mockedBlob = new Blob();
       onReady(mockedBlob);

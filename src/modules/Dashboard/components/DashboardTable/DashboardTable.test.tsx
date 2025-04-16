@@ -64,7 +64,7 @@ const getTable = (props?: Partial<DashboardTablePropsWithPagination>) => (
 
 describe('DashboardTable component tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('When `enablePagination` is `false`', () => {

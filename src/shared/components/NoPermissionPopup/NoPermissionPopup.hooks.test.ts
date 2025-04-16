@@ -129,7 +129,7 @@ const successfulGetAlertsMock = {
 
 describe('useNoPermissionPopup', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockAxios.reset();
   });
 

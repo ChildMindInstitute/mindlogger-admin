@@ -26,7 +26,7 @@ const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> 
 
 describe('NoPermissionPopup', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render for a dashboard and submit', async () => {

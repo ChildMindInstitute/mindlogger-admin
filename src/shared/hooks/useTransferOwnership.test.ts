@@ -61,7 +61,7 @@ describe('useTransferOwnership', () => {
   });
 
   test('should show success banner when transferring ownership succeeds', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+    const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
     const { result, rerender, store } = renderHookWithProviders(
       () => useTransferOwnership(appletId),
       {

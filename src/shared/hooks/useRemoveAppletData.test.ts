@@ -10,7 +10,7 @@ jest.mock('redux/store', () => ({
 
 describe('useRemoveAppletData hook tests', () => {
   test('should remove keys from storage', () => {
-    const spyStorage = jest.spyOn(storage, 'removeItem');
+    const spyStorage = vi.spyOn(storage, 'removeItem');
     const { result } = renderHook(() => useRemoveAppletData());
     act(() => {
       result.current();

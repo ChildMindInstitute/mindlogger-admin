@@ -74,7 +74,7 @@ const fetchWorkspacesData = async () => {
 
 describe('useWorkspaceList', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should set item in storage if not authorized (success)', () => {

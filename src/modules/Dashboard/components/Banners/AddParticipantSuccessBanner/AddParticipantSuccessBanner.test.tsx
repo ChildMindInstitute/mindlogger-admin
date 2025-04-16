@@ -21,7 +21,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('AddParticipantSuccessBanner', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render', () => {

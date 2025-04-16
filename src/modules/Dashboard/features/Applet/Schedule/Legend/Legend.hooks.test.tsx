@@ -47,7 +47,7 @@ jest.mock('modules/Dashboard/state/CalendarEvents', () => {
 
 describe('useExpandedLists', () => {
   test('returns correct data with legend events', () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockedUseAppDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockedUseAppDispatch);
     mockedUseParams.mockReturnValue({ appletId: 'mockedAppletId' });
     const clearAllScheduledEventsAction = vi.fn();
     const onCreateActivitySchedule = vi.fn();

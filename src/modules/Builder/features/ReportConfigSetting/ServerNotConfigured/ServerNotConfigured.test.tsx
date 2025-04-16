@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('ServerNotConfigured', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders correctly', () => {

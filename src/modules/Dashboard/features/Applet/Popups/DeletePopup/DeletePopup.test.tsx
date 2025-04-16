@@ -29,7 +29,7 @@ const onCloseMock = vi.fn();
 describe('DeletePopup', () => {
   afterEach(() => {
     mockAxios.reset();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('DeletePopup should open the password check modal initially', async () => {
@@ -42,7 +42,7 @@ describe('DeletePopup', () => {
 
   test('DeletePopup should show success banner', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPublicKey: getPublicKeyMock,
       }),

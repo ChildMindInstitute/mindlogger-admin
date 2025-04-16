@@ -51,7 +51,7 @@ describe('SelectionOption', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render first regular option expanded', () => {

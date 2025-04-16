@@ -88,7 +88,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 /* Utilities
 =================================================== */

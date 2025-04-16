@@ -60,7 +60,7 @@ const mockedActivityFlow = {
   activities: [mockedActivity],
 };
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -141,7 +141,7 @@ describe('ExportSettingsPopup', () => {
 
     beforeEach(() => {
       const origDateConstructor = global.Date;
-      spy = jest.spyOn(global, 'Date');
+      spy = vi.spyOn(global, 'Date');
       mockDate = (dateString) => spy.mockImplementation(() => new origDateConstructor(dateString));
     });
 

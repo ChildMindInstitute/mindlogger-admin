@@ -56,7 +56,7 @@ const selectOption = (panelIndex, optionIndex) => {
 
 describe('ItemConfiguration: Slider & Slider Rows', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

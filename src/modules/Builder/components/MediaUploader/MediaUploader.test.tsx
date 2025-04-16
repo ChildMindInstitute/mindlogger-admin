@@ -25,7 +25,7 @@ const renderComponent = (props: MediaUploaderProps) => render(<MediaUploader {..
 
 describe('MediaUploader', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render component', () => {

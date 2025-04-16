@@ -24,7 +24,7 @@ const singleItem = {
 describe('getReportName', () => {
   describe('getReportZipName', () => {
     beforeAll(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       jest.setSystemTime(new Date('2000-01-01'));
     });
     afterAll(() => {

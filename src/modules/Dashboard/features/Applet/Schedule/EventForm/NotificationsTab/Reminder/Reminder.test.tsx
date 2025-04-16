@@ -28,7 +28,7 @@ const FormWrapper = ({ defaultValues }) => {
 
 describe('Reminder component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render Reminder component, periodicity = WEEKLY', async () => {

@@ -6,14 +6,14 @@ import { useIsServerConfigured } from './useIsServerConfigured';
 
 describe('useIsServerConfigured hook tests', () => {
   test('should return false', () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
+    vi.spyOn(applet, 'useAppletData').mockReturnValue(null);
     const { result } = renderHook(() => useIsServerConfigured());
 
     expect(result.current).toBeFalsy();
   });
 
   test('should return true', () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({
       result: {
         reportServerIp: 'mockReportServerIp',
         reportPublicKey: 'mockReportPublicKey',

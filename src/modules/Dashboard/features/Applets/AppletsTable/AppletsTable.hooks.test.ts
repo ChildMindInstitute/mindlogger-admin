@@ -31,7 +31,7 @@ describe('useAppletsDnd', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('returns initial state', () => {

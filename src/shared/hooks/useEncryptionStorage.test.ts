@@ -15,7 +15,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => mockedUseParams(),
 }));
 
-const spyUseData = jest.spyOn(auth, 'useData');
+const spyUseData = vi.spyOn(auth, 'useData');
 
 describe('useEncryptionStorage', () => {
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe('useEncryptionStorage', () => {
   });
 
   test('getAppletPrivateKey clears previously set value if error appears while trying to JSON.parse', () => {
-    jest.spyOn(JSON, 'parse').mockImplementationOnce(() => {
+    vi.spyOn(JSON, 'parse').mockImplementationOnce(() => {
       throw new Error();
     });
 
@@ -72,7 +72,7 @@ describe('useEncryptionStorage', () => {
   });
 
   test('getAppletPrivateKey returns empty string if error appears while trying to JSON.parse', () => {
-    jest.spyOn(JSON, 'parse').mockImplementationOnce(() => {
+    vi.spyOn(JSON, 'parse').mockImplementationOnce(() => {
       throw new Error();
     });
 

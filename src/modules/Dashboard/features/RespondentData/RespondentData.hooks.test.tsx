@@ -52,9 +52,9 @@ describe('Respondent Data hooks', () => {
       const mockDispatch = vi.fn();
       const mockGetSubjectDetails = vi.fn();
       const mockGetAppletData = vi.fn();
-      jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-      jest.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
-      jest.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
+      vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+      vi.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
+      vi.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
       renderHookWithProviders(useRespondentDataSetup, {
         preloadedState: getPreloadedState(),
       });
