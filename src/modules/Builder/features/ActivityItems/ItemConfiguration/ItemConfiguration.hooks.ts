@@ -3,15 +3,15 @@ import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { doubleBrackets, getEntityKey } from 'shared/utils';
-import { useFeatureFlags } from 'shared/hooks';
-import { ItemResponseType } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
+import { doubleBrackets, getEntityKey } from 'shared/utils';
 
-import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
+import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { ItemsOption, ItemsOptionGroup } from './ItemConfiguration.types';
-import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
+import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -83,22 +83,35 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
           ),
         import: (options: ItemsOption[]) => {
           const filteredOptions = options.filter(
-            ({ value }) =>
-              value !== ItemResponseType.RequestHealthRecordData ||
-              featureFlags.enableEhrHealthData === 'active',
+            ({ value }) => value !== ItemResponseType.RequestHealthRecordData,
           );
 
-          return hasExistingHealthRecordItem
-            ? filteredOptions.map((option) =>
-                option.value === ItemResponseType.RequestHealthRecordData
-                  ? {
-                      ...option,
-                      disabled: true,
-                      tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
-                    }
-                  : option,
-              )
-            : filteredOptions;
+          const processedHealthOption = options.find(
+            ({ value }) => value === ItemResponseType.RequestHealthRecordData,
+          );
+
+          // This should always be true, doing this for type safety
+          if (processedHealthOption) {
+            if (hasExistingHealthRecordItem) {
+              return [
+                ...filteredOptions,
+                {
+                  ...processedHealthOption,
+                  disabled: true,
+                  tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
+                },
+              ];
+            }
+
+            if (
+              featureFlags.enableEhrHealthData === 'active' ||
+              featureFlags.enableEhrHealthData === 'available'
+            ) {
+              return [...filteredOptions, processedHealthOption];
+            }
+          }
+
+          return filteredOptions;
         },
       };
 
