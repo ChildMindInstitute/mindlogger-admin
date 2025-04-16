@@ -8,10 +8,10 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { NavigationMenu } from './NavigationMenu';
 import { Svg } from '../Svg';
 
-const mockOnClick = jest.fn();
-const mockClose = jest.fn();
-const mockOnSetActiveItem = jest.fn();
-const mockedUseNavigate = jest.fn();
+const mockOnClick = vi.fn();
+const mockClose = vi.fn();
+const mockOnSetActiveItem = vi.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -124,7 +124,7 @@ const activities = [
   },
 ];
 
-const setActivitiesVisible = jest.fn();
+const setActivitiesVisible = vi.fn();
 
 describe('getActivities', () => {
   afterEach(() => {

@@ -15,7 +15,7 @@ const renderTextResponse = () => renderItemConfigurationByType(ItemResponseType.
 const renderParagraphTextResponse = () =>
   renderItemConfigurationByType(ItemResponseType.ParagraphText);
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
@@ -25,7 +25,7 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 

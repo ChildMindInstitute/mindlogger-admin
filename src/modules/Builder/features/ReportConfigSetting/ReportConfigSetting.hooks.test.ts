@@ -14,18 +14,18 @@ import {
 } from './ReportConfigSetting.const';
 
 jest.mock('react-router-dom', () => ({
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 
 jest.mock('shared/utils/authStorage', () => ({
   authStorage: {
-    getAccessToken: jest.fn(),
+    getAccessToken: vi.fn(),
   },
 }));
 
 jest.mock('./ReportConfigSetting.utils', () => ({
-  verifyReportServer: jest.fn(),
-  setPasswordReportServer: jest.fn(),
+  verifyReportServer: vi.fn(),
+  setPasswordReportServer: vi.fn(),
 }));
 
 const mockUrl = 'http://example.com';

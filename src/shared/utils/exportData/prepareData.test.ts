@@ -161,7 +161,7 @@ describe('prepareData', () => {
 
   test('prepareEncryptedData should return an object with the correct keys', async () => {
     const data = { activities: [], answers: [] };
-    const getDecryptedAnswers = jest.fn();
+    const getDecryptedAnswers = vi.fn();
     const result = await prepareEncryptedData(data, getDecryptedAnswers);
 
     testCorrectKeys(result);
@@ -403,7 +403,7 @@ describe('prepareData', () => {
         },
       ],
     };
-    const getDecryptedAnswers = jest.fn();
+    const getDecryptedAnswers = vi.fn();
     jest
       .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
       .mockImplementationOnce(() => mockedParsedAnswers);

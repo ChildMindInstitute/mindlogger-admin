@@ -9,7 +9,7 @@ jest.mock('redux/modules', () => ({
 }));
 
 describe('useTable hook tests', () => {
-  const mockAsyncFn = jest.fn();
+  const mockAsyncFn = vi.fn();
 
   test('should return initial searchValue, order and page', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));

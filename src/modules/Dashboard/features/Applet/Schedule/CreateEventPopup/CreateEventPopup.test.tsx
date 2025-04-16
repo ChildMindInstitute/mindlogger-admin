@@ -12,7 +12,7 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { CreateEventPopup } from './CreateEventPopup';
 
-const mockSetCreateEventPopupVisible = jest.fn();
+const mockSetCreateEventPopupVisible = vi.fn();
 const dataTestid = 'dashboard-calendar-create-event-popup';
 const mockDefaultStartDate = new Date('03-18-2024');
 const mockAppletId = 'a341e3d7-0170-4894-8823-798c58456130';

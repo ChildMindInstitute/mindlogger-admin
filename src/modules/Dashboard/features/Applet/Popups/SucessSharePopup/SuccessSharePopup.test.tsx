@@ -5,7 +5,7 @@ import { mockedApplet } from 'shared/mock';
 
 import { SuccessSharePopup } from './SuccessSharePopup';
 
-const setSharePopupVisibleMock = jest.fn();
+const setSharePopupVisibleMock = vi.fn();
 const dataTestId = 'applet-settings-share-to-library-success-popup';
 
 describe('SuccessSharePopup', () => {

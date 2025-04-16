@@ -10,14 +10,14 @@ import { MAX_LIMIT } from 'shared/consts';
 
 import { useRespondentAnswers } from './useRespondentAnswers';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),
 }));
 
-const mockedGetValues = jest.fn();
-const mockedSetValue = jest.fn();
+const mockedGetValues = vi.fn();
+const mockedSetValue = vi.fn();
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
@@ -28,15 +28,15 @@ jest.mock('react-hook-form', () => ({
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
+  useDecryptedActivityData: vi.fn(),
 }));
 
-const mockedSetFlowSubmissions = jest.fn();
-const mockedSetFlowResponses = jest.fn();
-const mockedSetFlowResponseOptionsCount = jest.fn();
-const mockedSetAnswers = jest.fn();
-const mockedSetResponseOptions = jest.fn();
-const mockedSetSubscalesFrequency = jest.fn();
+const mockedSetFlowSubmissions = vi.fn();
+const mockedSetFlowResponses = vi.fn();
+const mockedSetFlowResponseOptionsCount = vi.fn();
+const mockedSetAnswers = vi.fn();
+const mockedSetResponseOptions = vi.fn();
+const mockedSetSubscalesFrequency = vi.fn();
 const identifiers = [
   {
     decryptedValue: 'ident_1',
@@ -273,7 +273,7 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should fetch answers and update form values on successful API call (no identifier is chosen)', async () => {
-    const mockedGetDecryptedActivityData = jest.fn();
+    const mockedGetDecryptedActivityData = vi.fn();
     jest
       .spyOn(dashboardHooks, 'useDecryptedActivityData')
       .mockReturnValue(mockedGetDecryptedActivityData);
@@ -315,7 +315,7 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should fetch answers and update form values on successful API call for Activity Flow', async () => {
-    const mockedGetDecryptedActivityData = jest.fn();
+    const mockedGetDecryptedActivityData = vi.fn();
     jest
       .spyOn(dashboardHooks, 'useDecryptedActivityData')
       .mockReturnValue(mockedGetDecryptedActivityData);

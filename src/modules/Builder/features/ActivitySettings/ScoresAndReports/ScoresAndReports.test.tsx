@@ -20,7 +20,7 @@ import { ScoresAndReports } from './ScoresAndReports';
 const route = `/builder/${mockedAppletId}/activities/${mockedActivityId}/settings/scores-and-reports`;
 const routePath = page.builderAppletActivitySettingsItem;
 const dataTestid = 'builder-activity-settings-scores-and-reports';
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -36,9 +36,9 @@ jest.mock('react-beautiful-dnd', () => ({
           draggableId: {},
           index: {},
           style: {},
-          onDragEnd: jest.fn(),
+          onDragEnd: vi.fn(),
         },
-        innerRef: jest.fn(),
+        innerRef: vi.fn(),
       },
       {},
     ),
@@ -48,7 +48,7 @@ jest.mock('react-beautiful-dnd', () => ({
         draggableProps: {
           style: {},
         },
-        innerRef: jest.fn(),
+        innerRef: vi.fn(),
       },
       {},
     ),

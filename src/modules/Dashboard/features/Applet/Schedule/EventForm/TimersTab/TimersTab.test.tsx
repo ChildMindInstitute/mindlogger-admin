@@ -8,8 +8,8 @@ import { TimerType } from 'modules/Dashboard/api';
 import { TimersTab } from './TimersTab';
 
 const dataTestid = 'timers-tab';
-const mockWatch = jest.fn();
-const mockSetValue = jest.fn();
+const mockWatch = vi.fn();
+const mockSetValue = vi.fn();
 
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),

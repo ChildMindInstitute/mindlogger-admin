@@ -2,7 +2,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 
 import { ActivityFlowHeader } from '.';
 
-const mockOnAddActivityFlow = jest.fn();
+const mockOnAddActivityFlow = vi.fn();
 const renderComponent = () =>
   render(
     <ActivityFlowHeader headerProps={{ onAddActivityFlow: mockOnAddActivityFlow }}>

@@ -150,12 +150,12 @@ const commonDataVizTest = ({ home, applet, user, viewData }) => {
 
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
-  useFormContext: jest.fn(),
+  useFormContext: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
   ...jest.requireActual('shared/hooks/useFeatureFlags'),
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedAppletProp }) => {

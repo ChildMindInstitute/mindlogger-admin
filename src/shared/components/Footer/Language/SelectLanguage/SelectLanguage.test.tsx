@@ -8,7 +8,7 @@ import { UiLanguages } from 'shared/ui';
 import { SelectLanguage } from './SelectLanguage';
 import { languages } from '../Language.const';
 
-const onClose = jest.fn();
+const onClose = vi.fn();
 const props = {
   open: true,
   onClose,

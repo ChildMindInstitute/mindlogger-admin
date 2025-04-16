@@ -21,8 +21,8 @@ const resetAuthorizationPayload = {
   type: 'auth/resetAuthorization',
 };
 
-const mockedUseAppDispatch = jest.fn();
-const mockedUseNavigate = jest.fn();
+const mockedUseAppDispatch = vi.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('redux/store', () => ({
   ...jest.requireActual('redux/store'),

@@ -84,7 +84,7 @@ describe('getIsScoreIdVariable', () => {
 });
 
 describe('updateMessagesWithVariable', () => {
-  const mockedSetValue = jest.fn();
+  const mockedSetValue = vi.fn();
 
   test.each`
     name            | newScoreId       | description

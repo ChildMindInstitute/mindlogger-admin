@@ -198,7 +198,7 @@ jest.mock('shared/components/FileUploader/FileUploader', () => ({
 }));
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -209,7 +209,7 @@ describe('SubscalesConfiguration', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -832,7 +832,7 @@ describe('SubscalesConfiguration', () => {
           featureFlags: {
             enableCahmiSubscaleScoring: true,
           },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         await setUpLookupTable();
@@ -855,7 +855,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with severity column when enableCahmiSubscaleScoring is true', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -887,7 +887,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with empty severity column', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -908,7 +908,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with incomplete severity column', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -950,7 +950,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table fails with invalid severity value', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -987,7 +987,7 @@ describe('SubscalesConfiguration', () => {
         `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
           mockUseFeatureFlags.mockReturnValue({
             featureFlags: { enableCahmiSubscaleScoring },
-            resetLDContext: jest.fn(),
+            resetLDContext: vi.fn(),
           });
 
           setMockLookupTableFileData([
@@ -1017,7 +1017,7 @@ describe('SubscalesConfiguration', () => {
         `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
           mockUseFeatureFlags.mockReturnValue({
             featureFlags: { enableCahmiSubscaleScoring },
-            resetLDContext: jest.fn(),
+            resetLDContext: vi.fn(),
           });
 
           setMockLookupTableFileData([

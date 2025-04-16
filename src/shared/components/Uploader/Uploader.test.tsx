@@ -13,7 +13,7 @@ const mockImageUrl = 'https://example.com/test-image.png';
 
 jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
   useMediaUpload: ({ callback }: { callback: (url: string) => void }) => ({
-    executeMediaUpload: jest.fn().mockImplementation(() => {
+    executeMediaUpload: vi.fn().mockImplementation(() => {
       callback(mockImageUrl);
     }),
     isLoading: false,
@@ -21,8 +21,8 @@ jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
 }));
 
 const renderComponent = (props: UploaderProps) => renderWithProviders(<Uploader {...props} />);
-const mockSetValue = jest.fn();
-const mockGetValue = jest.fn();
+const mockSetValue = vi.fn();
+const mockGetValue = vi.fn();
 const mockImageFile = new File(['(⌐□_□)'], 'test-image.png', { type: 'image/png' });
 const descriptionText = 'Upload an Image';
 const uploaderProps = {
@@ -73,7 +73,7 @@ describe('Uploader component', () => {
   });
 
   test('handles image delete', async () => {
-    const getImageValueMock = jest.fn().mockReturnValue(mockImageUrl);
+    const getImageValueMock = vi.fn().mockReturnValue(mockImageUrl);
     renderComponent({ ...uploaderProps, getValue: getImageValueMock });
 
     const uploaderContainer = screen.getByTestId('image-uploader');

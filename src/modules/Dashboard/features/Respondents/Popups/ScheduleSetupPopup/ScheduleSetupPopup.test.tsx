@@ -12,8 +12,8 @@ import {
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 
-const setPopupVisibleMock = jest.fn();
-const setChosenAppletDataMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
+const setChosenAppletDataMock = vi.fn();
 const chosenAppletDataMock = {
   ...mockedFullParticipant1.details[0],
   respondentId: mockedFullParticipantId1,
@@ -42,7 +42,7 @@ const tableRowsMock = [
   },
 ];
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

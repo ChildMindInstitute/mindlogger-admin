@@ -11,7 +11,7 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 import { AppletsCatalog } from './AppletsCatalog';
 
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const mockPublishedApplets = {
   count: 16,
@@ -93,13 +93,13 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('redux/store/hooks', () => ({
   ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
+  useAppDispatch: vi.fn(),
 }));
 
 jest.mock('modules/Library/hooks', () => ({
   ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: jest.fn(),
-  useReturnToLibraryPath: jest.fn(),
+  useAppletsFromCart: vi.fn(),
+  useReturnToLibraryPath: vi.fn(),
 }));
 
 describe('AppletsCatalog', () => {

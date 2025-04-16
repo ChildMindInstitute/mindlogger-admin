@@ -16,8 +16,8 @@ const mockedExistingKeydActivity = {
   activityObjField: 'activities[1]',
 };
 
-const mockedUseParams = jest.fn();
-const mockedWatch = jest.fn();
+const mockedUseParams = vi.fn();
+const mockedWatch = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

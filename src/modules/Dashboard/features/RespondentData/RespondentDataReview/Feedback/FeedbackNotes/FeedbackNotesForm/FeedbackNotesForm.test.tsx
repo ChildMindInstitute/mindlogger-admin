@@ -8,7 +8,7 @@ import { FeedbackNotesFormProps } from './FeedbackNotesForm.types';
 import { FeedbackNotesForm } from './FeedbackNotesForm';
 
 const dataTestId = 'feedback-notes-form';
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 const FormWrapper = (props?: Partial<FeedbackNotesFormProps>) => {
   const methods = useForm();
 

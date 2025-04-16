@@ -104,8 +104,8 @@ export const preloadedState = {
 };
 
 describe('EditEventPopup', () => {
-  const mockSetEditEventPopupVisible = jest.fn();
-  const mockOnClose = jest.fn();
+  const mockSetEditEventPopupVisible = vi.fn();
+  const mockOnClose = vi.fn();
 
   const dataTestid = 'dashboard-calendar-edit-event';
   const mockDefaultStartDate = new Date('03-18-2024');

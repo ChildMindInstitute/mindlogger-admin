@@ -6,7 +6,7 @@ import { mockedEmail } from 'shared/mock';
 
 import { Confirmation } from '.';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

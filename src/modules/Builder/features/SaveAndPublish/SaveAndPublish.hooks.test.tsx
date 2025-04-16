@@ -79,11 +79,11 @@ jest.mock('modules/Builder/hooks', () => ({
     },
     getValues: () => mockedAppletData,
   }),
-  useAppletPrivateKeySetter: jest.fn(),
+  useAppletPrivateKeySetter: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -106,7 +106,7 @@ describe('useSaveAndPublishSetup hook', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     spyMixpanelTrack.mockReset();
   });

@@ -62,7 +62,7 @@ describe('useIntersectionObserver', () => {
           instanceMap.delete(element);
           observerMap.delete(element);
         }),
-        disconnect: jest.fn(),
+        disconnect: vi.fn(),
       };
 
       return instance;
@@ -85,7 +85,7 @@ describe('useIntersectionObserver', () => {
   });
 
   test('loadNextPage should be called if component is on the screen', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     render(<Observed callback={callback} />);
     const target = screen.getByTestId('observed');
     intersect(target, true);
@@ -94,7 +94,7 @@ describe('useIntersectionObserver', () => {
   });
 
   test('loadNextPage shouldnt be called if component isnt on the screen', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     render(<Observed callback={callback} />);
     const target = screen.getByTestId('observed');
     intersect(target, false);
@@ -103,7 +103,7 @@ describe('useIntersectionObserver', () => {
   });
 
   test('loadNextPage should be called if isActive=false', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const { rerender } = render(<Observed callback={callback} isActive={false} />);
     intersect(screen.getByTestId('observed'), true);
 

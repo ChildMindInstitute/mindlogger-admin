@@ -50,7 +50,7 @@ const activityItem = {
 };
 
 const dataTestid = 'multi-select';
-const onChange = jest.fn();
+const onChange = vi.fn();
 
 describe('MultipleSelection', () => {
   test(

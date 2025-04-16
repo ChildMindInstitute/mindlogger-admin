@@ -4,7 +4,7 @@ import { ActivitiesHeader } from '.';
 
 describe('ActivitiesHeader - Interaction Tests', () => {
   test('calls onAddActivity when the Add Activity button is clicked', () => {
-    const mockOnAddActivity = jest.fn();
+    const mockOnAddActivity = vi.fn();
 
     render(
       <ActivitiesHeader headerProps={{ onAddActivity: mockOnAddActivity }}>

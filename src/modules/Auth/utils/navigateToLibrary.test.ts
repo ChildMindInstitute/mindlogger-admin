@@ -4,7 +4,7 @@ import { navigateToLibrary } from './navigateToLibrary';
 
 describe('navigateToLibrary', () => {
   test('should navigate to the library URL when it is present in storage', () => {
-    const fakeNavigate = jest.fn();
+    const fakeNavigate = vi.fn();
     const libraryUrl = 'https://example.com/library';
 
     const getItemMock = jest.spyOn(storage, 'getItem');
@@ -17,7 +17,7 @@ describe('navigateToLibrary', () => {
   });
 
   test('should not navigate if the library URL is not present in storage', () => {
-    const fakeNavigate = jest.fn();
+    const fakeNavigate = vi.fn();
 
     const getItemMock = jest.spyOn(storage, 'getItem');
     getItemMock.mockReturnValue(null);

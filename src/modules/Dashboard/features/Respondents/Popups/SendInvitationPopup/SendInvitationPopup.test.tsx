@@ -11,7 +11,7 @@ import { dataTestId } from './SendInvitationPopup.const';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 const mockedSecretUserId = '123';
 const mockedRespondentId = '456';
@@ -27,9 +27,9 @@ const mockedChosenAppletData = {
 };
 const commonPopupProps = {
   popupVisible: true,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
   chosenAppletData: mockedChosenAppletData,
-  setChosenAppletData: jest.fn(),
+  setChosenAppletData: vi.fn(),
 };
 
 describe('SendInvitationPopup', () => {

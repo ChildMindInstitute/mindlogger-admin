@@ -105,7 +105,7 @@ describe('ActivityCardItem', () => {
   });
 
   test('calls toNextStep when "Next" button is clicked', async () => {
-    const toNextStepMock = jest.fn();
+    const toNextStepMock = vi.fn();
     render(
       <FormComponent assessment={[mockActivityItem]}>
         <ActivityCardItem
@@ -130,7 +130,7 @@ describe('ActivityCardItem', () => {
   });
 
   test('calls toPrevStep when "Back" button is clicked', async () => {
-    const toPrevStepMock = jest.fn();
+    const toPrevStepMock = vi.fn();
     render(
       <FormComponent assessment={[mockActivityItem]}>
         <ActivityCardItem

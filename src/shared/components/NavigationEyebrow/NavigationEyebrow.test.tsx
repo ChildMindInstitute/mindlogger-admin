@@ -4,7 +4,7 @@ import { NavigationEyebrow } from './NavigationEyebrow';
 
 describe('NavigationEyebrow', () => {
   test('handle click event', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<NavigationEyebrow title="Clickable NavigationEyebrow" onClick={handleClick} />);
 
     fireEvent.click(screen.getByText('Clickable NavigationEyebrow'));

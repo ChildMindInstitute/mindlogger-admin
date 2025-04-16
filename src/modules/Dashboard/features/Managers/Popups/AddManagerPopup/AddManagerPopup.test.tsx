@@ -28,7 +28,7 @@ const preloadedState = {
 };
 
 const dataTestId = 'test-id';
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const mockWorkspaceInfo = {

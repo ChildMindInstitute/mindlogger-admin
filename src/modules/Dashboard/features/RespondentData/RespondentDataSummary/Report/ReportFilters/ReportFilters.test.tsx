@@ -65,12 +65,12 @@ const FormComponent = () => {
 
   return (
     <FormProvider {...methods}>
-      <ReportFilters identifiers={identifiers} versions={versions} setIsLoading={jest.fn()} />
+      <ReportFilters identifiers={identifiers} versions={versions} setIsLoading={vi.fn()} />
     </FormProvider>
   );
 };
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),

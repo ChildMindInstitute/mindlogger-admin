@@ -130,7 +130,7 @@ const successfulEmptyGetMock = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

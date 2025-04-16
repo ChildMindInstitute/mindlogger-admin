@@ -43,7 +43,7 @@ const activityItem = {
 };
 
 const dataTestid = 'single-select';
-const onChange = jest.fn();
+const onChange = vi.fn();
 
 describe('SingleSelection', () => {
   test('renders the single selection component with images and labels', async () => {

@@ -11,7 +11,7 @@ import { Cart } from './Cart';
 
 const dataTestid = 'library-cart';
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const mockWorkspaces = [
   {
@@ -137,7 +137,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('redux/store/hooks', () => ({
   ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
+  useAppDispatch: vi.fn(),
 }));
 
 jest.mock('modules/Library/hooks', () => ({
@@ -246,7 +246,7 @@ describe('Cart', () => {
   });
 
   test('calls navigateToBuilder when authorized user adds to builder', async () => {
-    const mockNavigateToBuilder = jest.fn();
+    const mockNavigateToBuilder = vi.fn();
     jest.spyOn(cartUtils, 'navigateToBuilder').mockImplementationOnce(mockNavigateToBuilder);
 
     renderWithProviders(<Cart />, {

@@ -4,8 +4,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ConfirmScheduledAccessPopup } from './ConfirmScheduledAccessPopup';
 
-const onCloseMock = jest.fn();
-const onSubmitMock = jest.fn();
+const onCloseMock = vi.fn();
+const onSubmitMock = vi.fn();
 
 describe('ConfirmScheduledAccessPopup', () => {
   test('should render and submit', () => {

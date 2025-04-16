@@ -20,8 +20,8 @@ import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { RespondentDataHeader } from './RespondentDataHeader';
 
-const mockUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -32,7 +32,7 @@ jest.mock('react-router-dom', () => ({
 const dataTestid = 'respondent-data-header';
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -74,7 +74,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
@@ -83,7 +83,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({});
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -109,7 +109,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({ activityId: mockedActivity.id });
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -161,7 +161,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(

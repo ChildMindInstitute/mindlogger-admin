@@ -9,8 +9,8 @@ import { page } from 'resources';
 
 import { ActivityFlowSettings } from './ActivityFlowSettings';
 
-const mockWatch = jest.fn();
-const mockUseNavigate = jest.fn();
+const mockWatch = vi.fn();
+const mockUseNavigate = vi.fn();
 
 const routePath = page.builderAppletActivityFlowItemSettings;
 const dataTestid = 'builder-activity-flows-settings-report-config';
@@ -30,8 +30,8 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('modules/Builder/hooks', () => ({
   ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
-  useRedirectIfNoMatchedActivityFlow: jest.fn(),
+  useCustomFormContext: vi.fn(),
+  useRedirectIfNoMatchedActivityFlow: vi.fn(),
 }));
 
 const testActivityFlowSettings = async ({ disableButton }) => {

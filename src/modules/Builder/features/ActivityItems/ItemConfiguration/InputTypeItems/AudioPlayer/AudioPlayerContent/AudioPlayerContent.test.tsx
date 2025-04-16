@@ -20,14 +20,14 @@ const mockMedia = {
   name: 'media-name',
   uploaded: true,
 };
-const mockSetMedia = jest.fn();
-const mockSetValue = jest.fn();
-const mockWatch = jest.fn();
-const mockGetFieldState = jest.fn();
+const mockSetMedia = vi.fn();
+const mockSetValue = vi.fn();
+const mockWatch = vi.fn();
+const mockGetFieldState = vi.fn();
 
 jest.mock('modules/Builder/hooks', () => ({
   ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
+  useCustomFormContext: vi.fn(),
 }));
 
 jest.mock('modules/Builder/components/MLPlayer', () => ({

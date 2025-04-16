@@ -14,7 +14,7 @@ import { Item } from './Item';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 const dataTestid = 'activity-item';
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
 jest.mock('./Item.styles', () => ({
   ...jest.requireActual('./Item.styles'),

@@ -8,7 +8,7 @@ import { getEncryptionStorageKey, useEncryptionStorage } from './useEncryptionSt
 
 const EMPTY_PRIVATE_KEY = '';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -29,10 +29,10 @@ describe('getActions', () => {
     const actions = getActions({
       key: 'key1',
       isActivityHidden: false,
-      onEdit: jest.fn(),
-      onDuplicate: jest.fn(),
-      onVisibilityChange: jest.fn(),
-      onRemove: jest.fn(),
+      onEdit: vi.fn(),
+      onDuplicate: vi.fn(),
+      onVisibilityChange: vi.fn(),
+      onRemove: vi.fn(),
       isEditVisible: true,
       'data-testid': 'test-id',
     });
@@ -66,10 +66,10 @@ describe('getActions', () => {
     const actions = getActions({
       key: 'key1',
       isActivityHidden: false,
-      onEdit: jest.fn(),
-      onDuplicate: jest.fn(),
-      onVisibilityChange: jest.fn(),
-      onRemove: jest.fn(),
+      onEdit: vi.fn(),
+      onDuplicate: vi.fn(),
+      onVisibilityChange: vi.fn(),
+      onRemove: vi.fn(),
       isEditVisible: false,
       'data-testid': 'test-id',
     });

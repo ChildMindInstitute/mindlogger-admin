@@ -11,9 +11,9 @@ const mockApplet = {
   roles: [{ role: Roles.Reviewer, reviewerSubjects: ['User1', 'User2'] }],
 };
 
-const addRoleMock = jest.fn();
-const removeRoleMock = jest.fn();
-const handleAddSelectedRespondentsMock = jest.fn();
+const addRoleMock = vi.fn();
+const removeRoleMock = vi.fn();
+const handleAddSelectedRespondentsMock = vi.fn();
 const defaultRoles = mockedManager.applets[0].roles;
 
 const renderComponent = (roles = defaultRoles) =>

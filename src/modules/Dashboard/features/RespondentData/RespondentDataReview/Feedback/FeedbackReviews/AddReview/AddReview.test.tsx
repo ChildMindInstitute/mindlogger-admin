@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { AddReview } from './AddReview';
 
-const mockOnAddReview = jest.fn();
+const mockOnAddReview = vi.fn();
 const renderComponent = () =>
   renderWithProviders(<AddReview userName="John Doe" onAddReview={mockOnAddReview} />);
 

@@ -20,16 +20,16 @@ const props = {
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-  useParams: jest.fn(),
+  useNavigate: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 const mockedUseParams = useParams as jest.MockedFunction<typeof useParams>;
 const mockedUseNavigate = useNavigate as jest.MockedFunction<typeof useNavigate>;
 
 jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
-  useAppSelector: jest.fn(),
+  useAppDispatch: vi.fn(),
+  useAppSelector: vi.fn(),
 }));
 
 describe('useActivityGrid', () => {
@@ -113,7 +113,7 @@ describe('useActivityGrid', () => {
   });
 
   test('editActivity should navigate to correct the activity builder page', () => {
-    const mockedNavigate = jest.fn();
+    const mockedNavigate = vi.fn();
     mockedUseNavigate.mockReturnValue(mockedNavigate);
 
     const {

@@ -4,8 +4,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RemoveAllScheduledEventsPopup } from './RemoveAllScheduledEventsPopup';
 
-const onCloseMock = jest.fn();
-const onSubmitMock = jest.fn();
+const onCloseMock = vi.fn();
+const onSubmitMock = vi.fn();
 
 describe('RemoveAllScheduledEventsPopup', () => {
   test('should render and submit', () => {

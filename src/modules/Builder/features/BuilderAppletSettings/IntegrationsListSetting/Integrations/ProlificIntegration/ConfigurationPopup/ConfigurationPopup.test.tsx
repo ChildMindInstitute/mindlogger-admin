@@ -9,7 +9,7 @@ import { PopupProps } from '../ProlificIntegration.types';
 import { createProlificIntegration } from '../ProlificIntegration.utils';
 
 jest.mock('../ProlificIntegration.utils', () => ({
-  createProlificIntegration: jest.fn(),
+  createProlificIntegration: vi.fn(),
 }));
 
 type ConfigurationPopupProps = PopupProps;
@@ -36,9 +36,9 @@ describe('ProlificIntegration', () => {
   test('should render the DisconnectionPopup', () => {
     const defaultProps: ConfigurationPopupProps = {
       open: true,
-      onClose: jest.fn(),
+      onClose: vi.fn(),
       applet: defaultApplet,
-      updateAppletData: jest.fn(),
+      updateAppletData: vi.fn(),
     };
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />);
@@ -57,8 +57,8 @@ describe('ProlificIntegration', () => {
   test('should close popup and update applet when clicking submit', async () => {
     (createProlificIntegration as jest.Mock).mockImplementation();
 
-    const onClose = jest.fn();
-    const updateAppletData = jest.fn();
+    const onClose = vi.fn();
+    const updateAppletData = vi.fn();
 
     renderWithProviders(
       <ConfigurationPopup
@@ -90,8 +90,8 @@ describe('ProlificIntegration', () => {
       throw new Error('Invalid API token');
     });
 
-    const onClose = jest.fn();
-    const updateAppletData = jest.fn();
+    const onClose = vi.fn();
+    const updateAppletData = vi.fn();
 
     renderWithProviders(
       <ConfigurationPopup

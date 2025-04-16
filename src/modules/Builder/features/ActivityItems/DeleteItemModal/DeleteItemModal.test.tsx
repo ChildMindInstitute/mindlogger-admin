@@ -2,22 +2,22 @@ import { render, fireEvent } from '@testing-library/react';
 
 import { DeleteItemModal } from '.';
 
-const mockOnRemoveItem = jest.fn();
-const mockOnClose = jest.fn();
+const mockOnRemoveItem = vi.fn();
+const mockOnClose = vi.fn();
 
 const props = {
   itemIdToDelete: '123',
   activeItemIndex: 0,
   onClose: mockOnClose,
   onRemoveItem: mockOnRemoveItem,
-  onSetActiveItem: jest.fn(),
+  onSetActiveItem: vi.fn(),
 };
 
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
-    watch: () => jest.fn()(),
-    setValue: () => jest.fn(),
+    watch: () => vi.fn()(),
+    setValue: () => vi.fn(),
   }),
 }));
 

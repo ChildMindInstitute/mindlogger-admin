@@ -107,7 +107,7 @@ describe('SectionContent', () => {
   });
 
   test('should set correct default conditional logic value', async () => {
-    const mockedSetValue = jest.fn();
+    const mockedSetValue = vi.fn();
     jest
       .spyOn(useCustomFormContextHook, 'useCustomFormContext')
       .mockReturnValue({ setValue: mockedSetValue });

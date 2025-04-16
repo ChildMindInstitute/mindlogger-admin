@@ -2,12 +2,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { Modal } from './Modal';
 
-const mockOnClose = jest.fn();
-const mockOnBackdropClick = jest.fn();
-const mockOnSubmit = jest.fn();
-const mockOnSecondBtnSubmit = jest.fn();
-const mockOnThirdBtnSubmit = jest.fn();
-const mockOnLeftBtnSubmit = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnBackdropClick = vi.fn();
+const mockOnSubmit = vi.fn();
+const mockOnSecondBtnSubmit = vi.fn();
+const mockOnThirdBtnSubmit = vi.fn();
+const mockOnLeftBtnSubmit = vi.fn();
 
 const commonProps = {
   'data-testid': 'modal-test-id',

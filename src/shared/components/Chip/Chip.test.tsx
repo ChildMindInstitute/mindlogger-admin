@@ -4,7 +4,7 @@ import { Chip } from './Chip';
 
 describe('Chip', () => {
   test('handles click event', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Chip title="Clickable Chip" onClick={handleClick} />);
 
     fireEvent.click(screen.getByText('Clickable Chip'));
@@ -12,7 +12,7 @@ describe('Chip', () => {
   });
 
   test('remove button click calls onRemove', () => {
-    const handleRemove = jest.fn();
+    const handleRemove = vi.fn();
     render(<Chip title="Removable Chip" data-testid="chip" onRemove={handleRemove} canRemove />);
 
     fireEvent.click(screen.getByTestId('chip-close-button'));

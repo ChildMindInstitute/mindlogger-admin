@@ -5,7 +5,7 @@ import { setDefaultFormValues } from './ReportMenu.utils';
 describe('ReportMenu utils', () => {
   describe('setDefaultFormValues', () => {
     test('should set default values for form fields', () => {
-      const setValueMock = jest.fn();
+      const setValueMock = vi.fn();
       setDefaultFormValues(setValueMock);
 
       expect(setValueMock).toHaveBeenCalledTimes(5);

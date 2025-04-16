@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 
 import { useCustomFormContext } from './useCustomFormContext';
 
-const mockedSetValue = jest.fn();
+const mockedSetValue = vi.fn();
 
 jest.mock('react-hook-form', () => ({
   useFormContext: () => ({

@@ -26,7 +26,7 @@ import { ActivityUnassignDrawerProps } from './ActivityUnassignDrawer.types';
 =================================================== */
 
 const dataTestId = 'applet-activity-unassign';
-const mockedOnClose = jest.fn();
+const mockedOnClose = vi.fn();
 
 const mockedAssignment1: HydratedAssignment = {
   id: 'test-assignment-id-1',
@@ -89,7 +89,7 @@ const preloadedState = {
 const APPLET_ASSIGNMENTS_URL = `/assignments/applet/${mockedAppletId}`;
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -103,7 +103,7 @@ describe('ActivityUnassignDrawer', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockAxios.delete.mockResolvedValue(mockSuccessfulHttpResponse(null));

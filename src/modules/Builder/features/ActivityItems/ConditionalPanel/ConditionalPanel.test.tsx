@@ -5,8 +5,8 @@ import { ConditionalLogic } from 'redux/modules';
 
 import { ConditionalPanel } from '.';
 
-const mockedWatch = jest.fn();
-const mockedUseParams = jest.fn();
+const mockedWatch = vi.fn();
+const mockedUseParams = vi.fn();
 
 const mockCondition = mockedAppletData.activities[0].items[0].conditionalLogic as ConditionalLogic;
 
@@ -18,7 +18,7 @@ jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
     watch: () => mockedWatch(),
-    setValue: () => jest.fn(),
+    setValue: () => vi.fn(),
   }),
 }));
 

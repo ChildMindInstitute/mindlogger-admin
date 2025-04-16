@@ -31,16 +31,16 @@ const mockedParticipantResult = {
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
+  useNavigate: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
   ...jest.requireActual('shared/hooks/useFeatureFlags'),
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 describe('Participant Details page', () => {
-  const navigate: jest.Mock = jest.fn();
+  const navigate: jest.Mock = vi.fn();
 
   beforeEach(() => {
     jest.mocked(useNavigate).mockImplementation(() => navigate);
@@ -48,7 +48,7 @@ describe('Participant Details page', () => {
       featureFlags: {
         enableParticipantConnections: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -128,7 +128,7 @@ describe('Participant Details page', () => {
       featureFlags: {
         enableParticipantConnections: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     const { queryByTestId } = renderWithProviders(<ParticipantDetails />, {

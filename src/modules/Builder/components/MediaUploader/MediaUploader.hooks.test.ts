@@ -3,8 +3,8 @@ import { renderHook } from '@testing-library/react';
 
 import { useMediaUploader } from './MediaUploader.hooks';
 
-const mockOnUpload = jest.fn();
-const mockedExecuteMediaUpload = jest.fn();
+const mockOnUpload = vi.fn();
+const mockedExecuteMediaUpload = vi.fn();
 const uploadError = 'Upload failed';
 jest.mock('shared/hooks/useMediaUpload', () => ({
   useMediaUpload: () => ({
@@ -86,8 +86,8 @@ describe('useMediaUploader', () => {
     const { result } = renderHook(() => useMediaUploader({ onUpload: mockOnUpload }));
     const event = {
       dataTransfer: { files: [file] },
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
     } as unknown as DragEvent<HTMLElement>;
 
     result.current.dragEvents.onDrop(event);

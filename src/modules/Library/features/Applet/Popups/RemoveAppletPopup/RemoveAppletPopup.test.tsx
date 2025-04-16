@@ -8,7 +8,7 @@ import { RemoveAppletPopup } from './RemoveAppletPopup';
 
 const route = page.libraryCart;
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 describe('RemoveAppletPopup library component tests', () => {
   test('should remove applet form cart', async () => {

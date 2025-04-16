@@ -7,7 +7,7 @@ import { Identifier as IdentifierResponse } from 'api';
 import { Identifier } from '../../RespondentData.types';
 import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),

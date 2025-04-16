@@ -9,8 +9,8 @@ import { page } from 'resources';
 
 import { EditItemModal } from './EditItemModal';
 
-const mockOnClose = jest.fn();
-const mockOnSubmit = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnSubmit = vi.fn();
 
 const dataTestid = 'builder-activity-items-edit-item-popup';
 const routePath = page.builderAppletActivityItem;

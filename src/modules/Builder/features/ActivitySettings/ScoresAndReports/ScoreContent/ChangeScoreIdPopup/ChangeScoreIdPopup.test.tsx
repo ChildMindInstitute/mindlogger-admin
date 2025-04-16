@@ -4,8 +4,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 
-const onCloseMock = jest.fn();
-const onChangeMock = jest.fn();
+const onCloseMock = vi.fn();
+const onChangeMock = vi.fn();
 
 describe('ChangeScoreIdPopup', () => {
   test('should change scoreId', () => {

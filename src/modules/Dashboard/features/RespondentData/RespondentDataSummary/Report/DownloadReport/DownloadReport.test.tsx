@@ -14,7 +14,7 @@ const renderComponent = (props?: Partial<DownloadReportProps>) =>
     <DownloadReport id="activity-id" isFlow={false} data-testid={dataTestId} {...props} />,
   );
 
-const mockDownloadReportHandler = jest.fn();
+const mockDownloadReportHandler = vi.fn();
 
 const checkPositiveScenario = async (buttonText: string) => {
   expect(screen.getByTestId(dataTestId)).toBeInTheDocument();

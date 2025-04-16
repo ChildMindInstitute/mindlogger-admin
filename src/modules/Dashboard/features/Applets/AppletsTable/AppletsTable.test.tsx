@@ -49,11 +49,11 @@ const mockedRows = [
 
 const mockContext = {
   rows: mockedRows,
-  setRows: jest.fn(),
+  setRows: vi.fn(),
   expandedFolders: [],
-  reloadData: jest.fn(),
-  handleFolderClick: jest.fn(),
-  fetchData: jest.fn(),
+  reloadData: vi.fn(),
+  handleFolderClick: vi.fn(),
+  fetchData: vi.fn(),
 };
 
 const getAppletsTable = (props: Partial<AppletsTableProps> = {}) => (
@@ -65,13 +65,13 @@ const getAppletsTable = (props: Partial<AppletsTableProps> = {}) => (
       order="asc"
       orderBy=""
       emptyComponent={<>empty state</>}
-      handleRequestSort={jest.fn()}
+      handleRequestSort={vi.fn()}
       page={1}
       count={2}
       rowsPerPage={30}
-      handleChangePage={jest.fn()}
+      handleChangePage={vi.fn()}
       headerContent={<>test header content</>}
-      handleReload={jest.fn()}
+      handleReload={vi.fn()}
       {...props}
     />
   </AppletsContext.Provider>

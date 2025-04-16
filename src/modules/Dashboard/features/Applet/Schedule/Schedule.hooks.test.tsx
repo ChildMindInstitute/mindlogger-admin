@@ -519,7 +519,7 @@ const expectedResult = {
 
 jest.mock('date-fns', () => ({
   ...jest.requireActual('date-fns'),
-  getYear: jest.fn(),
+  getYear: vi.fn(),
 }));
 
 const getWrapper =
@@ -530,11 +530,11 @@ const getWrapper =
     return <Provider store={store}>{children}</Provider>;
   };
 
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
 describe('usePreparedEvents hook', () => {
   jest.mock('redux/store/hooks', () => ({
-    useAppDispatch: jest.fn(),
+    useAppDispatch: vi.fn(),
   }));
 
   afterEach(() => {

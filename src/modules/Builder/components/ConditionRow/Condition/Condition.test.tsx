@@ -19,9 +19,9 @@ import { getItemOptions, getValueOptionsList } from '../ConditionRow.utils';
 import { Condition } from './Condition';
 import { ConditionItemType } from './Condition.const';
 
-const mockedRemove = jest.fn();
-const mockedItemNameChange = jest.fn();
-const mockedStateChange = jest.fn();
+const mockedRemove = vi.fn();
+const mockedItemNameChange = vi.fn();
+const mockedStateChange = vi.fn();
 
 const mockedScoreId = uuidv4();
 const mockedScoreConditionId = uuidv4();

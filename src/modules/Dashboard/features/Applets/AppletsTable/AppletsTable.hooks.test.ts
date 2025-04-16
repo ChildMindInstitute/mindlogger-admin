@@ -9,25 +9,25 @@ import { useAppletsDnd } from './AppletsTable.hooks';
 
 const mockAppletContextValue = {
   rows: [],
-  fetchData: jest.fn(),
+  fetchData: vi.fn(),
 };
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
-  useContext: jest.fn(),
+  useContext: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useAsync', () => ({
-  useAsync: jest.fn(),
+  useAsync: vi.fn(),
 }));
 
 jest.mock('api', () => ({
-  setFolderApi: jest.fn(),
+  setFolderApi: vi.fn(),
 }));
 
 describe('useAppletsDnd', () => {
   beforeEach(() => {
-    (useAsync as jest.Mock).mockReturnValue({ execute: jest.fn() });
+    (useAsync as jest.Mock).mockReturnValue({ execute: vi.fn() });
   });
 
   afterAll(() => {
@@ -46,7 +46,7 @@ describe('useAppletsDnd', () => {
   });
 
   test('onDragLeave updates isDragOver to false', () => {
-    const onDragLeaveParams = { preventDefault: jest.fn(), persist: jest.fn() };
+    const onDragLeaveParams = { preventDefault: vi.fn(), persist: vi.fn() };
     (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
 
     const { result } = renderHook(useAppletsDnd);
@@ -57,7 +57,7 @@ describe('useAppletsDnd', () => {
   });
 
   test('onDragOver updates isDragOver to true', () => {
-    const onDragOverParams = { preventDefault: jest.fn() };
+    const onDragOverParams = { preventDefault: vi.fn() };
     (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
 
     const { result } = renderHook(useAppletsDnd);
@@ -69,12 +69,12 @@ describe('useAppletsDnd', () => {
 
   test('onDragEnd calls setFolder and fetchData if drag effect is none and applet has parent id', async () => {
     const mockedEvent = {
-      preventDefault: jest.fn(),
+      preventDefault: vi.fn(),
       dataTransfer: { dropEffect: 'none' },
     };
     const mockApplet = { id: 'mockedAppletId', parentId: 'mockedParentId' };
-    const mockFetchData = jest.fn();
-    const mockSetFolder = jest.fn().mockResolvedValueOnce(undefined);
+    const mockFetchData = vi.fn();
+    const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
 
     (useContext as jest.Mock).mockReturnValue({
       ...mockAppletContextValue,
@@ -93,8 +93,8 @@ describe('useAppletsDnd', () => {
 
   test('onDrop handles moving applet within the same folder correctly', async () => {
     const mockedEvent = {
-      preventDefault: jest.fn(),
-      persist: jest.fn(),
+      preventDefault: vi.fn(),
+      persist: vi.fn(),
       dataTransfer: {
         getData: () => 'draggedItemId',
       },
@@ -103,7 +103,7 @@ describe('useAppletsDnd', () => {
     const folder = { id: 'folderId', isFolder: true };
     const previousFolder = { id: 'folderId' };
 
-    const mockSetFolder = jest.fn().mockResolvedValueOnce(undefined);
+    const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
     (useContext as jest.Mock).mockReturnValue({
       ...mockAppletContextValue,
       rows: [draggedItem, folder, previousFolder],
@@ -121,8 +121,8 @@ describe('useAppletsDnd', () => {
 
   test('onDrop handles moving applet to a new folder correctly', async () => {
     const mockedEvent = {
-      preventDefault: jest.fn(),
-      persist: jest.fn(),
+      preventDefault: vi.fn(),
+      persist: vi.fn(),
       dataTransfer: {
         getData: () => 'draggedItemId',
       },
@@ -131,7 +131,7 @@ describe('useAppletsDnd', () => {
     const folder = { id: 'folderId', isFolder: true };
     const previousFolder = { id: 'previousFolderId' };
 
-    const mockSetFolder = jest.fn().mockResolvedValueOnce(undefined);
+    const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
     (useContext as jest.Mock).mockReturnValue({
       ...mockAppletContextValue,
       rows: [draggedItem, folder, previousFolder],

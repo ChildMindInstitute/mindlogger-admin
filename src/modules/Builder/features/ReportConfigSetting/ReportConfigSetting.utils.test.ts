@@ -8,7 +8,7 @@ import {
   setSubjectData,
 } from './ReportConfigSetting.utils';
 
-const setValue = jest.fn();
+const setValue = vi.fn();
 const getParams = (newParams = {}) => ({
   setValue,
   appletName: 'Test Applet',
@@ -69,7 +69,7 @@ describe('verifyReportServer', () => {
   const originalFetch = global.fetch;
 
   beforeAll(() => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   afterAll(() => {
@@ -104,7 +104,7 @@ describe('setPasswordReportServer', () => {
   const originalFetch = global.fetch;
 
   beforeAll(() => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   afterAll(() => {

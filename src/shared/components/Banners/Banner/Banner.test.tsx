@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Banner } from './Banner';
 
-const mockOnClose = jest.fn();
-const mockUseWindowFocus = jest.fn();
+const mockOnClose = vi.fn();
+const mockUseWindowFocus = vi.fn();
 
 const props = {
   children: 'Test banner',

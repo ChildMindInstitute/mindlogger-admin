@@ -24,7 +24,7 @@ describe('DataTable Component', () => {
   });
 
   test('calls onSelect with correct parameters when a row is selected', () => {
-    const onSelectMock = jest.fn();
+    const onSelectMock = vi.fn();
 
     const { getByTestId } = render(<DataTable onSelect={onSelectMock} {...commonProps} />);
 
@@ -34,7 +34,7 @@ describe('DataTable Component', () => {
   });
 
   test('calls onSelectAll when the select all checkbox is clicked', () => {
-    const onSelectAllMock = jest.fn();
+    const onSelectAllMock = vi.fn();
 
     const { getByTestId } = render(
       <DataTable selectAll onSelectAll={onSelectAllMock} {...commonProps} />,

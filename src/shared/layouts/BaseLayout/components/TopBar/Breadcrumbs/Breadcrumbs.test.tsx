@@ -10,7 +10,7 @@ import { Breadcrumbs } from './Breadcrumbs';
 
 jest.mock('./Breadcrumbs.hooks', () => ({
   ...jest.requireActual('./Breadcrumbs.hooks'),
-  useBreadcrumbs: jest.fn(),
+  useBreadcrumbs: vi.fn(),
 }));
 
 describe('Breadcrumbs Component', () => {

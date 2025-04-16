@@ -55,7 +55,7 @@ describe('SwitchWorkspace component tests', () => {
   });
 
   test('should close drawer', () => {
-    const setVisibleDrawerMockFn = jest.fn();
+    const setVisibleDrawerMockFn = vi.fn();
     renderWithProviders(
       <SwitchWorkspace
         setVisibleDrawer={setVisibleDrawerMockFn}

@@ -51,18 +51,18 @@ const preloadedStateWithIntegration = {
 };
 
 jest.mock('react-router-dom', () => ({
-  useNavigate: jest.fn(),
-  useParams: jest.fn(),
-  generatePath: jest.fn(),
+  useNavigate: vi.fn(),
+  useParams: vi.fn(),
+  generatePath: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useIsServerConfigured', () => ({
-  useIsServerConfigured: jest.fn(),
+  useIsServerConfigured: vi.fn(),
 }));
 
 jest.mock('redux/modules', () => ({
   applet: {
-    useAppletData: jest.fn(),
+    useAppletData: vi.fn(),
   },
 }));
 
@@ -74,7 +74,7 @@ const renderWithStore = (preloadedState) =>
   );
 
 describe('LorisIntegration', () => {
-  const navigate = jest.fn();
+  const navigate = vi.fn();
 
   beforeEach(() => {
     useNavigate.mockReturnValue(navigate);

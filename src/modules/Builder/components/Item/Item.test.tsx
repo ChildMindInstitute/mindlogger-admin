@@ -14,7 +14,7 @@ const defaultProps = {
   getActions: () => [
     {
       icon: <></>,
-      action: jest.fn(),
+      action: vi.fn(),
       tooltipTitle: 'Action 1',
       'data-testid': actionDataTestId,
     },
@@ -43,7 +43,7 @@ describe('Item', () => {
   });
 
   test('calls onItemClick on click', () => {
-    const mockOnItemClick = jest.fn();
+    const mockOnItemClick = vi.fn();
 
     render(<Item {...defaultProps} onItemClick={mockOnItemClick} />);
 

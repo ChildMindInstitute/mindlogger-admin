@@ -147,7 +147,7 @@ jest.mock('./ResponseOptions', () => ({
   ResponseOptions: () => <div data-testid="report-response-options"></div>,
 }));
 
-jest.mock('downloadjs', () => jest.fn());
+jest.mock('downloadjs', () => vi.fn());
 
 const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(
@@ -155,8 +155,8 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       value={{
-        setResponseOptions: jest.fn(),
-        setSubscalesFrequency: jest.fn(),
+        setResponseOptions: vi.fn(),
+        setSubscalesFrequency: vi.fn(),
         answers: [],
         flowSubmissions: [],
         responseOptions: {},
@@ -178,7 +178,7 @@ describe('Report component', () => {
   beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: jest.fn() });
+    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: vi.fn() });
   });
   afterEach(() => {
     jest.resetAllMocks();

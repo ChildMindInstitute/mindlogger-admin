@@ -62,7 +62,7 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

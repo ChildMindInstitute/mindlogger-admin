@@ -5,8 +5,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { SourceLinkModal } from './SourceLinkModal';
 
-const mockHandleClose = jest.fn();
-const mockHandleSubmit = jest.fn();
+const mockHandleClose = vi.fn();
+const mockHandleSubmit = vi.fn();
 const dataTestid = 'md-editor-source-link-popup';
 
 const props = {

@@ -24,7 +24,7 @@ const preloadedState = {
 };
 
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 describe('DeletePopup', () => {
   afterEach(() => {

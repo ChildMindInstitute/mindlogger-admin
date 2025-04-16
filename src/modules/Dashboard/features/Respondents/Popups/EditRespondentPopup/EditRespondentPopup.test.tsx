@@ -10,7 +10,7 @@ import { EditSubjectResponse } from 'api';
 
 import { EditRespondentPopup } from '.';
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const chosenAppletData = {

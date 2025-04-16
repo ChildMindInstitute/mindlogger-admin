@@ -68,7 +68,7 @@ describe('useTransferOwnership', () => {
         preloadedState: emptyState,
       },
     );
-    const mockedCallback = jest.fn();
+    const mockedCallback = vi.fn();
 
     expect(store.getState().banners).toEqual(emptyState.banners);
     expect(screen.queryByTestId('testId')).toBeNull();

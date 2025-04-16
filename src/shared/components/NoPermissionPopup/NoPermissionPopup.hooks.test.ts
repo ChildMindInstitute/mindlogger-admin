@@ -15,7 +15,7 @@ import { state as popupState } from 'modules/Dashboard/state/Popups/Popups.state
 import { useNoPermissionPopup } from './NoPermissionPopup.hooks';
 import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -194,7 +194,7 @@ describe('useNoPermissionPopup', () => {
     mockAxios.get.mockResolvedValueOnce({
       data: workspacesData,
     });
-    const reloadSpy = jest.fn();
+    const reloadSpy = vi.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: reloadSpy },
       writable: true,

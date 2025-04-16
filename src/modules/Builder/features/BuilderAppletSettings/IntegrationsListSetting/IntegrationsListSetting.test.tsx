@@ -8,7 +8,7 @@ import { useFeatureFlags } from 'shared/hooks';
 import { IntegrationsListSetting } from './IntegrationsListSetting';
 
 jest.mock('shared/hooks', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 describe('IntegrationsListSetting', () => {

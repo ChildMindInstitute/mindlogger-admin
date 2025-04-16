@@ -5,7 +5,7 @@ import { useCheckIfNewApplet } from './useCheckIfNewApplet';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 
 describe('useCheckIfNewApplet hook tests', () => {

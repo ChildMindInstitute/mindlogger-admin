@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { VersionWarningBanner } from './VersionWarningBanner';
 import { VERSION_WARNING_BANNER_LINK } from './VersionWarningBanner.const';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 
 describe('VersionWarningBanner', () => {
   test('should render', () => {

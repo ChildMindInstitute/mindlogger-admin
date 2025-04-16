@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as hooks from '../Popups.hooks';
 import { UnlockAppletPopup } from './UnlockAppletPopup';
 
-const setPopupVisibleMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
 
 const useCheckIfHasEncryptionMock = jest.spyOn(hooks, 'useCheckIfHasEncryption');
 

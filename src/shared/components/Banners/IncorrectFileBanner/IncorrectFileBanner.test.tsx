@@ -8,7 +8,7 @@ import { IncorrectFileBanner } from './IncorrectFileBanner';
 const props = {
   errorType: UploadFileError.Size,
   fileType: MediaType.Image,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
 };
 
 describe('IncorrectFileBanner', () => {

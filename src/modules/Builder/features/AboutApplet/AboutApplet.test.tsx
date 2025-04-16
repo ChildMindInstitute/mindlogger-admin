@@ -62,7 +62,7 @@ const preloadedState = {
 
 describe('AboutApplet', () => {
   beforeEach(() => {
-    const mockIntersectionObserver = jest.fn();
+    const mockIntersectionObserver = vi.fn();
     mockIntersectionObserver.mockReturnValue({
       observe: () => null,
       unobserve: () => null,

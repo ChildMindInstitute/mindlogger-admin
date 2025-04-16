@@ -62,7 +62,7 @@ const renderActivityFlowAboutWithTwoFlows = () =>
   renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -74,7 +74,7 @@ describe('ActivityFlowAbout', () => {
       featureFlags: {
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -158,7 +158,7 @@ describe('ActivityFlowAbout', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderActivityFlowAbout();

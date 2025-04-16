@@ -6,9 +6,9 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { FeedbackReviewerHeaderProps } from './FeedbackReviewerHeader.types';
 import { FeedbackReviewerHeader } from './FeedbackReviewerHeader';
 
-const mockedOnToggleVisibility = jest.fn();
-const mockedOnRemove = jest.fn();
-const mockedOnEdit = jest.fn();
+const mockedOnToggleVisibility = vi.fn();
+const mockedOnRemove = vi.fn();
+const mockedOnEdit = vi.fn();
 const dataTestid = 'reviewer-header';
 const renderComponent = (props?: Partial<FeedbackReviewerHeaderProps>) =>
   renderWithProviders(

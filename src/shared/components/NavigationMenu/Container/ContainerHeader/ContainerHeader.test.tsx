@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ContainerHeader } from './ContainerHeader';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 const mockHeaderProps = {
   onClose: mockOnClose,
 };

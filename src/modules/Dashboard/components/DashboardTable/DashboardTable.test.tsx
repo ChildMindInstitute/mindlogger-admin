@@ -19,7 +19,7 @@ const mockColumns = [
   },
 ];
 
-const actionsContentFn = jest.fn();
+const actionsContentFn = vi.fn();
 
 const getMockRows = (arrayLength = 15) =>
   createArray(arrayLength, (index) => ({
@@ -42,8 +42,8 @@ const getMockRows = (arrayLength = 15) =>
     },
   }));
 
-const mockSortFn = jest.fn();
-const mockChangePageFn = jest.fn();
+const mockSortFn = vi.fn();
+const mockChangePageFn = vi.fn();
 const mockDataTestId = 'mockDataTestId';
 
 const getTable = (props?: Partial<DashboardTablePropsWithPagination>) => (
