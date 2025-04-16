@@ -1318,7 +1318,7 @@
     "modal": {
       "title": "Request Health Record Data",
       "content": "<0>Now it is possible to import participants' Electronic Health Care Data, and use that data with what you collect in your Mindlogger Activities.</0> <1>Please check out the website for more information.</1>",
-      "cta": "Go to website"
+      "cta": "Go to Website"
     }
   },
   "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",
