@@ -569,539 +569,291 @@ describe('ScheduleHistoryExporter', () => {
         });
 
         describe('takes precedence over a deleted individual schedule', () => {
-          describe('ALWAYS', () => {
-            describe('deleted before start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T00:00:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '08:00:00',
-                    endDate: null,
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
+          it('ALWAYS', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '00:00:00',
+                endDate: null,
+                endTime: '23:59:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-03-20T00:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '08:00:00',
+                endDate: null,
+                endTime: '09:00:00',
+                selectedDate: null,
+              }),
+            ];
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until it is deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
-                  (day) => {
-                    const foundSchedules = exporter.findSchedulesForDay(
-                      day,
-                      individualScheduleUser,
-                      scheduleHistoryData,
-                    );
-
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Always,
-                      }),
-                    ]);
-                  },
-                );
-
-                // Default schedule applies again thereafter
-                exporter.daysBetweenInterval('2025-03-20', '2035-03-20').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T07:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '08:00:00',
-                    endDate: null,
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until it is deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
-                  (day) => {
-                    const foundSchedules = exporter.findSchedulesForDay(
-                      day,
-                      individualScheduleUser,
-                      scheduleHistoryData,
-                    );
-
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Always,
-                      }),
-                    ]);
-                  },
-                );
-
-                // Nothing applies on deletion day because the individual schedule was deleted after the default
-                // schedule end time, and before its own start time
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-20',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([]);
-
-                // Default schedule applies again thereafter
-                exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
             });
 
-            describe('deleted after start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '08:00:00',
-                    endDate: null,
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
+            // One day of overlap
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
 
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
+            // Individual schedule applies until it is deleted
+            ['2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                // Individual schedule applies until it is deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
-                  (day) => {
-                    const foundSchedules = exporter.findSchedulesForDay(
-                      day,
-                      individualScheduleUser,
-                      scheduleHistoryData,
-                    );
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'individual-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
+            });
 
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Always,
-                      }),
-                    ]);
-                  },
-                );
+            // One day of overlap
+            const foundSchedules2 = exporter.findSchedulesForDay(
+              '2025-03-20',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
 
-                // Both schedules apply on the 20th
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-20',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
+            expect(foundSchedules2).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
 
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                  expect.objectContaining({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                ]);
+            // Default schedule applies again thereafter
+            exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                // Default schedule applies again thereafter
-                exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '08:00:00',
-                    endDate: null,
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until it is deleted, including on deletion day
-                [
-                  '2025-03-15',
-                  '2025-03-16',
-                  '2025-03-17',
-                  '2025-03-18',
-                  '2025-03-19',
-                  '2025-03-20',
-                ].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'individual-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Default schedule applies again thereafter
-                exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
             });
           });
 
-          describe('ONCE', () => {
-            it('deleted before default schedule end time', () => {
-              scheduleHistoryData = [
-                scheduleData({
-                  eventId: 'default-schedule-event-1',
-                  eventVersion: 'v1',
-                  userId: null,
-                  subjectId: null,
-                  eventVersionCreatedAt: '2025-03-12T00:00:00',
-                  eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                  eventVersionIsDeleted: false,
-                  periodicity: Periodicity.Always,
-                  startDate: null,
-                  startTime: '08:00:00',
-                  endDate: null,
-                  endTime: '09:00:00',
-                  selectedDate: null,
-                }),
-                scheduleData({
-                  eventId: 'individual-schedule-event-1',
-                  eventVersion: 'v1',
-                  userId: individualScheduleUser,
-                  subjectId: individualScheduleUserSubject,
-                  eventVersionCreatedAt: '2025-03-15T00:00:00',
-                  eventVersionUpdatedAt: '2025-03-16T00:00:00',
-                  eventVersionIsDeleted: true,
-                  periodicity: Periodicity.Once,
-                  startDate: null,
-                  startTime: '08:00:00',
-                  endDate: null,
-                  endTime: '09:00:00',
-                  selectedDate: '2025-03-15',
-                }),
-              ];
+          it('ONCE', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '08:00:00',
+                endDate: null,
+                endTime: '09:00:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-03-17T00:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Once,
+                startDate: null,
+                startTime: '08:00:00',
+                endDate: null,
+                endTime: '09:00:00',
+                selectedDate: '2025-03-16',
+              }),
+            ];
 
-              // Default schedule applies at first
-              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                ]);
-              });
-
-              // Individual schedule applies on the selected date
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14', '2025-03-15'].forEach((day) => {
               const foundSchedules = exporter.findSchedulesForDay(
-                '2025-03-15',
+                day,
                 individualScheduleUser,
                 scheduleHistoryData,
               );
 
               expect(foundSchedules).toEqual([
                 expect.objectContaining({
-                  eventId: 'individual-schedule-event-1',
+                  eventId: 'default-schedule-event-1',
                   eventVersion: 'v1',
-                  periodicity: Periodicity.Once,
+                  periodicity: Periodicity.Always,
                 }),
               ]);
-
-              // Default schedule applies after the selected date, including on the 16th because the individual
-              // schedule event was deleted before the default schedule event's end time
-              exporter.daysBetweenInterval('2025-03-16', '2035-03-16').forEach((day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                ]);
-              });
             });
 
-            it('deleted after default schedule end time', () => {
-              scheduleHistoryData = [
-                scheduleData({
+            // Individual schedule applies on the selected date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-16',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Once,
+              }),
+            ]);
+
+            // Default schedule applies after the individual schedule's deletion, including on the deletion day
+            exporter.daysBetweenInterval('2025-03-17', '2035-03-17').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
                   eventId: 'default-schedule-event-1',
                   eventVersion: 'v1',
-                  userId: null,
-                  subjectId: null,
-                  eventVersionCreatedAt: '2025-03-12T00:00:00',
-                  eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                  eventVersionIsDeleted: false,
                   periodicity: Periodicity.Always,
-                  startDate: null,
-                  startTime: '08:00:00',
-                  endDate: null,
-                  endTime: '09:00:00',
-                  selectedDate: null,
                 }),
-                scheduleData({
-                  eventId: 'individual-schedule-event-1',
+              ]);
+            });
+          });
+
+          it('DAILY', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '06:00:00',
+                endDate: null,
+                endTime: '07:00:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-03-18T00:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Daily,
+                startDate: '2025-03-15',
+                startTime: '08:00:00',
+                endDate: '2025-03-19',
+                endTime: '09:00:00',
+                selectedDate: null,
+              }),
+            ];
+
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
                   eventVersion: 'v1',
-                  userId: individualScheduleUser,
-                  subjectId: individualScheduleUserSubject,
-                  eventVersionCreatedAt: '2025-03-15T00:00:00',
-                  eventVersionUpdatedAt: '2025-03-16T09:30:00',
-                  eventVersionIsDeleted: true,
-                  periodicity: Periodicity.Once,
-                  startDate: null,
-                  startTime: '08:00:00',
-                  endDate: null,
-                  endTime: '09:00:00',
-                  selectedDate: '2025-03-15',
+                  periodicity: Periodicity.Always,
                 }),
-              ];
+              ]);
+            });
 
-              // Default schedule applies at first
-              ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
+            // One day of overlap
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
 
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                ]);
-              });
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Daily,
+              }),
+            ]);
 
-              // Individual schedule applies on the selected date
-              let foundSchedules = exporter.findSchedulesForDay(
-                '2025-03-15',
+            // Individual schedule applies until deleted
+            ['2025-03-16', '2025-03-17'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
                 individualScheduleUser,
                 scheduleHistoryData,
               );
@@ -1110,1687 +862,380 @@ describe('ScheduleHistoryExporter', () => {
                 expect.objectContaining({
                   eventId: 'individual-schedule-event-1',
                   eventVersion: 'v1',
-                  periodicity: Periodicity.Once,
+                  periodicity: Periodicity.Daily,
                 }),
               ]);
+            });
 
-              // Nothing applies on the deletion date (16th), since the periodicity is ONCE, and it was deleted
-              // after the default schedule event's end time
-              foundSchedules = exporter.findSchedulesForDay(
-                '2025-03-16',
+            // One more day of overlap on the deletion day
+            const foundSchedules2 = exporter.findSchedulesForDay(
+              '2025-03-18',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules2).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Daily,
+              }),
+            ]);
+
+            // Default schedule applies afterwards
+            exporter.daysBetweenInterval('2025-03-19', '2035-03-18').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
+            });
+          });
+
+          it('WEEKLY', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '00:00:00',
+                endDate: null,
+                endTime: '23:59:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-03-27T07:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Weekly,
+                startDate: '2025-03-20',
+                startTime: '08:00:00',
+                endDate: '2025-03-31',
+                endTime: '09:00:00',
+                selectedDate: '2025-03-20',
+              }),
+            ];
+
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14', '2025-03-15'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
+            });
+
+            const applicableDays = ['2025-03-20'];
+
+            // Individual schedule applies until deleted
+            exporter.daysBetweenInterval('2025-03-16', '2025-03-26').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'individual-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Weekly,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+
+            // The two schedules overlap on the deletion day because they are both applicable
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-27',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Weekly,
+              }),
+            ]);
+
+            // Default schedule applies afterwards
+            exporter.daysBetweenInterval('2025-03-28', '2035-03-28').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
+            });
+          });
+
+          it('WEEKDAYS', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '00:00:00',
+                endDate: null,
+                endTime: '23:59:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-03-27T07:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Weekdays,
+                startDate: '2025-03-15',
+                startTime: '08:00:00',
+                endDate: '2025-03-20',
+                endTime: '09:00:00',
+                selectedDate: null,
+              }),
+            ];
+
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
+            });
+
+            const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
+
+            // One day of overlap on the 15th, but the weekday schedule doesn't show up because
+            // the 15th isn't a weekday
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              individualScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
+
+            // Individual schedule applies until end date
+            exporter.daysBetweenInterval('2025-03-16', '2025-03-26').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
+
+              if (applicableDays.includes(day)) {
+                expect(foundSchedules).toEqual([
+                  expect.objectContaining({
+                    eventId: 'individual-schedule-event-1',
+                    eventVersion: 'v1',
+                    periodicity: Periodicity.Weekdays,
+                  }),
+                ]);
+              } else {
+                expect(foundSchedules).toEqual([]);
+              }
+            });
+
+            // Nothing applies until the individual schedule deletion date
+            exporter.daysBetweenInterval('2025-03-21', '2025-03-26').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
                 individualScheduleUser,
                 scheduleHistoryData,
               );
 
               expect(foundSchedules).toEqual([]);
+            });
 
-              // Default schedule applies after the selected date because the individual schedule event
-              // was deleted before its start time
-              exporter.daysBetweenInterval('2025-03-17', '2035-03-17').forEach((day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
+            // Default schedule applies on the deletion date and afterwards
+            exporter.daysBetweenInterval('2025-03-27', '2035-03-27').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                ]);
-              });
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
             });
           });
 
-          describe('DAILY', () => {
-            describe('deleted before start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-18T00:00:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Daily,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-19',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
+          it('MONTHLY', () => {
+            scheduleHistoryData = [
+              scheduleData({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                userId: null,
+                subjectId: null,
+                eventVersionCreatedAt: '2025-03-12T00:00:00',
+                eventVersionUpdatedAt: '2025-03-12T00:00:00',
+                eventVersionIsDeleted: false,
+                periodicity: Periodicity.Always,
+                startDate: null,
+                startTime: '00:00:00',
+                endDate: null,
+                endTime: '23:59:00',
+                selectedDate: null,
+              }),
+              scheduleData({
+                eventId: 'individual-schedule-event-1',
+                eventVersion: 'v1',
+                userId: individualScheduleUser,
+                subjectId: individualScheduleUserSubject,
+                eventVersionCreatedAt: '2025-03-15T00:00:00',
+                eventVersionUpdatedAt: '2025-08-10T07:00:00',
+                eventVersionIsDeleted: true,
+                periodicity: Periodicity.Monthly,
+                startDate: '2025-05-01',
+                startTime: '08:00:00',
+                endDate: '2025-12-31',
+                endTime: '09:00:00',
+                selectedDate: '2025-05-01',
+              }),
+            ];
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
+            // Default schedule applies at first
+            ['2025-03-12', '2025-03-13', '2025-03-14', '2025-03-15'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'individual-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Daily,
-                    }),
-                  ]);
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-03-18', '2035-03-18').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-18T07:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Daily,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-19',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'individual-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Daily,
-                    }),
-                  ]);
-                });
-
-                // Nothing applies on the 18th because the individual schedule event was deleted after what would have
-                // been the end of the default schedule event
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-18',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([]);
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-19', '2035-03-19').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
             });
 
-            describe('deleted after start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '11:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-18T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Daily,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-19',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
+            // Nothing applies until the start date
+            exporter.daysBetweenInterval('2025-03-16', '2025-04-30').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until deleted
-                ['2025-03-15', '2025-03-16', '2025-03-17'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'individual-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Daily,
-                    }),
-                  ]);
-                });
-
-                // Both schedules apply on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-18',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                  expect.objectContaining({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Daily,
-                  }),
-                ]);
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-19', '2035-03-19').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-18T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Daily,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-19',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Individual schedule applies until deleted, including deletion day
-                ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'individual-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Daily,
-                    }),
-                  ]);
-                });
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-19', '2035-03-19').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-            });
-          });
-
-          describe('WEEKLY', () => {
-            describe('deleted before start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T07:00:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekly,
-                    startDate: '2025-03-20',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-03-20',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-20'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-03-27', '2035-03-27').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T07:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekly,
-                    startDate: '2025-03-20',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-03-20',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-20'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Nothing applies on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-27',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([]);
-
-                // Default schedule applies after deletion date
-                exporter.daysBetweenInterval('2025-03-28', '2035-03-28').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              expect(foundSchedules).toEqual([]);
             });
 
-            describe('deleted after start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekly,
-                    startDate: '2025-03-20',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-03-20',
-                  }),
-                ];
+            const applicableDays = ['2025-05-01', '2025-06-01', '2025-07-01', '2025-08-01'];
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
+            // Individual schedule applies until deleted
+            exporter.daysBetweenInterval('2025-03-16', '2025-08-09').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-20'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Both schedules apply on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-27',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                  expect.objectContaining({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Weekly,
-                  }),
-                ]);
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-28', '2035-03-28').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekly,
-                    startDate: '2025-03-20',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-03-20',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-20'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Individual schedule applies on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-27',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
+              if (applicableDays.includes(day)) {
                 expect(foundSchedules).toEqual([
                   expect.objectContaining({
                     eventId: 'individual-schedule-event-1',
                     eventVersion: 'v1',
-                    periodicity: Periodicity.Weekly,
+                    periodicity: Periodicity.Monthly,
                   }),
                 ]);
-
-                // Default schedule applies after deletion date
-                exporter.daysBetweenInterval('2025-03-28', '2035-03-28').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-            });
-          });
-
-          describe('WEEKDAYS', () => {
-            describe('deleted before start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T07:00:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekdays,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-20',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
-
-                // Individual schedule applies until end date
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekdays,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Nothing applies until the individual schedule deletion date
-                exporter.daysBetweenInterval('2025-03-21', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-03-27', '2035-03-27').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-27T07:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekdays,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-20',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
-
-                // Individual schedule applies until end date
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-26').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekdays,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Nothing applies until the individual schedule deletion date (including on that date)
-                exporter.daysBetweenInterval('2025-03-21', '2025-03-27').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-03-28', '2035-03-28').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-            });
-
-            describe('deleted after start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekdays,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-20',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19'];
-
-                // Individual schedule applies until deletion date
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-19').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekdays,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Both schedules apply on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-03-20',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Always,
-                  }),
-                  expect.objectContaining({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Weekdays,
-                  }),
-                ]);
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-20T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Weekdays,
-                    startDate: '2025-03-15',
-                    startTime: '08:00:00',
-                    endDate: '2025-03-20',
-                    endTime: '09:00:00',
-                    selectedDate: null,
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
-
-                // Individual schedule applies until deletion date (including the date itself)
-                exporter.daysBetweenInterval('2025-03-15', '2025-03-20').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Weekdays,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Default schedule applies after the deletion date
-                exporter.daysBetweenInterval('2025-03-21', '2035-03-21').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-            });
-          });
-
-          describe('MONTHLY', () => {
-            describe('deleted before start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '00:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-08-10T07:00:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Monthly,
-                    startDate: '2025-05-01',
-                    startTime: '08:00:00',
-                    endDate: '2025-12-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-05-01',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Nothing applies until the start date
-                exporter.daysBetweenInterval('2025-03-15', '2025-04-30').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                const applicableDays = ['2025-05-01', '2025-06-01', '2025-07-01', '2025-08-01'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-08-09').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Monthly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-08-10', '2035-08-10').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-08-10T07:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Monthly,
-                    startDate: '2025-05-01',
-                    startTime: '08:00:00',
-                    endDate: '2025-12-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-05-01',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Nothing applies until the start date
-                exporter.daysBetweenInterval('2025-03-15', '2025-04-30').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                const applicableDays = ['2025-05-01', '2025-06-01', '2025-07-01', '2025-08-01'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-08-09').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Monthly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Nothing applies on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-08-10',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
+              } else {
                 expect(foundSchedules).toEqual([]);
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-08-11', '2035-08-11').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              }
             });
 
-            describe('deleted after start time', () => {
-              it('deleted before default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '07:00:00',
-                    endDate: null,
-                    endTime: '23:59:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-08-10T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Monthly,
-                    startDate: '2025-05-01',
-                    startTime: '08:00:00',
-                    endDate: '2025-12-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-05-01',
-                  }),
-                ];
+            // Default schedule applies on the deletion date and afterwards
+            exporter.daysBetweenInterval('2025-08-10', '2035-08-10').forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                individualScheduleUser,
+                scheduleHistoryData,
+              );
 
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Nothing applies until the start date
-                exporter.daysBetweenInterval('2025-03-15', '2025-04-30').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                const applicableDays = ['2025-05-01', '2025-06-01', '2025-07-01', '2025-08-01'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-08-09').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Monthly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-08-10', '2035-08-10').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
-
-              it('deleted after default schedule end time', () => {
-                scheduleHistoryData = [
-                  scheduleData({
-                    eventId: 'default-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: null,
-                    subjectId: null,
-                    eventVersionCreatedAt: '2025-03-12T00:00:00',
-                    eventVersionUpdatedAt: '2025-03-12T00:00:00',
-                    eventVersionIsDeleted: false,
-                    periodicity: Periodicity.Always,
-                    startDate: null,
-                    startTime: '06:00:00',
-                    endDate: null,
-                    endTime: '07:00:00',
-                    selectedDate: null,
-                  }),
-                  scheduleData({
-                    eventId: 'individual-schedule-event-1',
-                    eventVersion: 'v1',
-                    userId: individualScheduleUser,
-                    subjectId: individualScheduleUserSubject,
-                    eventVersionCreatedAt: '2025-03-15T00:00:00',
-                    eventVersionUpdatedAt: '2025-08-10T08:30:00',
-                    eventVersionIsDeleted: true,
-                    periodicity: Periodicity.Monthly,
-                    startDate: '2025-05-01',
-                    startTime: '08:00:00',
-                    endDate: '2025-12-31',
-                    endTime: '09:00:00',
-                    selectedDate: '2025-05-01',
-                  }),
-                ];
-
-                // Default schedule applies at first
-                ['2025-03-12', '2025-03-13', '2025-03-14'].forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-
-                // Nothing applies until the start date
-                exporter.daysBetweenInterval('2025-03-15', '2025-04-30').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([]);
-                });
-
-                const applicableDays = ['2025-05-01', '2025-06-01', '2025-07-01', '2025-08-01'];
-
-                // Individual schedule applies until deleted
-                exporter.daysBetweenInterval('2025-03-15', '2025-08-09').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  if (applicableDays.includes(day)) {
-                    expect(foundSchedules).toEqual([
-                      expect.objectContaining({
-                        eventId: 'individual-schedule-event-1',
-                        eventVersion: 'v1',
-                        periodicity: Periodicity.Monthly,
-                      }),
-                    ]);
-                  } else {
-                    expect(foundSchedules).toEqual([]);
-                  }
-                });
-
-                // Nothing applies on the deletion date
-                const foundSchedules = exporter.findSchedulesForDay(
-                  '2025-08-10',
-                  individualScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([]);
-
-                // Default schedule applies on the deletion date and afterwards
-                exporter.daysBetweenInterval('2025-08-11', '2035-08-11').forEach((day) => {
-                  const foundSchedules = exporter.findSchedulesForDay(
-                    day,
-                    individualScheduleUser,
-                    scheduleHistoryData,
-                  );
-
-                  expect(foundSchedules).toEqual([
-                    expect.objectContaining({
-                      eventId: 'default-schedule-event-1',
-                      eventVersion: 'v1',
-                      periodicity: Periodicity.Always,
-                    }),
-                  ]);
-                });
-              });
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-1',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Always,
+                }),
+              ]);
             });
           });
         });

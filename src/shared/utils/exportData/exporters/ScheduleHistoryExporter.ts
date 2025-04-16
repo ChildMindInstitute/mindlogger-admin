@@ -328,12 +328,12 @@ export class ScheduleHistoryExporter extends DataExporter<
 
                   // If the individual schedule was deleted at any point today, the default schedule starts applying
                   // again
-                  const deletedTodayOrAfter = deletionDate.isValid && deletionDate > startOfTheDay;
+                  const deletedAfterToday = deletionDate.isValid && deletionDate > endOfTheDay;
 
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedTodayOrAfter)
+                    (notDeleted || deletedAfterToday)
                   );
                 }).length === 0
               );
