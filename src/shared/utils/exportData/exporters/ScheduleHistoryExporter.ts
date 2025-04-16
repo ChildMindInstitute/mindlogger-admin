@@ -152,14 +152,18 @@ export class ScheduleHistoryExporter extends DataExporter<
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
 
-    const fromDate: string = params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt;
-    let toDate: string = params?.toDate ?? '';
+    const fromDate = DateTime.fromISO(
+      params?.fromDate ?? sortedScheduleHistoryData[0].eventVersionCreatedAt,
+      { zone: 'UTC' },
+    ).toFormat('yyyy-MM-dd');
 
-    if (!toDate) {
-      toDate = DateTime.now().toUTC().toFormat(`yyyy-MM-dd'T'HH:mm:ss`);
-    }
+    const toDateTime = params?.toDate
+      ? DateTime.fromISO(params.toDate, { zone: 'UTC' })
+      : DateTime.now().toUTC();
 
-    const days = this.daysBetweenInterval(DateTime.fromISO(fromDate), DateTime.fromISO(toDate));
+    const toDate = toDateTime.toFormat('yyyy-MM-dd');
+
+    const days = this.daysBetweenInterval(fromDate, toDate);
 
     const rows: ScheduleHistoryExportRow[] = [];
 

@@ -77,17 +77,26 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
   }
 
   /**
-   * Generate a list of every date between two dates inclusive
-   * @param startDate
-   * @param endDate
+   * Generate a list of every date between two dates inclusive. The data parameters must be valid dates in the format
+   * YYYY-MM-DD
+   * @param startISODate The start of the interval
+   * @param endISODate The end of the interval
    */
-  daysBetweenInterval(startDate: DateTime, endDate: DateTime): string[] {
-    if (!startDate.isValid || !endDate.isValid) {
+  daysBetweenInterval(startISODate: string, endISODate: string): string[] {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (!dateRegex.test(startISODate) || !dateRegex.test(endISODate)) {
+      // The dates are invalid, so return nothing
       return [];
     }
 
-    const startISODate = startDate.toISODate() as string;
-    const endISODate = endDate.toISODate() as string;
+    const startDate = DateTime.fromISO(startISODate, { zone: 'UTC' });
+    const endDate = DateTime.fromISO(endISODate, { zone: 'UTC' });
+
+    if (!startDate.isValid || !endDate.isValid) {
+      // The dates are invalid, so return nothing
+      return [];
+    }
 
     if (startISODate === endISODate) {
       return [startISODate];
