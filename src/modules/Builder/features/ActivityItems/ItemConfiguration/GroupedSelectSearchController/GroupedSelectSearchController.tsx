@@ -1,27 +1,27 @@
-import { ChangeEvent, MouseEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Controller, FieldValues } from 'react-hook-form';
 import { Box, BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
+import { ChangeEvent, MouseEvent, useState } from 'react';
+import { Controller, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
-import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
-import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Chip, ChipShape, OptionalTooltipWrapper } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks';
+import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
+import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 
-import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
+import { getItemsTypeChip } from '../ItemConfiguration.utils';
+import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
 import {
   StyledListSubheader,
   StyledMenuItem,
   StyledSelect,
 } from './GroupedSelectSearchController.styles';
-import { ItemTypeTooltip } from './ItemTypeTooltip';
-import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import { handleSearchKeyDown } from './GroupedSelectSearchController.utils';
-import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
-import { getItemsTypeChip } from '../ItemConfiguration.utils';
+import { ItemTypeTooltip } from './ItemTypeTooltip';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
 
@@ -64,6 +64,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   options,
   setValue,
   fieldName,
+  onBeforeChange,
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -120,6 +121,12 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           const handleOnSelectChange = (...props: unknown[]) => {
+            const newValue = (props[0] as { target: { value: ItemResponseType } }).target.value;
+
+            if (onBeforeChange && !onBeforeChange(newValue)) {
+              return;
+            }
+
             if (checkIfSelectChangePopupIsVisible) {
               checkIfSelectChangePopupIsVisible(() => {
                 onChange(...props);
