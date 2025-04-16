@@ -11,7 +11,7 @@ import { ParticipantTag } from 'shared/consts';
 import { AddParticipantPopup } from './AddParticipantPopup';
 
 const dataTestId = 'test-id';
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
 
 const props = {

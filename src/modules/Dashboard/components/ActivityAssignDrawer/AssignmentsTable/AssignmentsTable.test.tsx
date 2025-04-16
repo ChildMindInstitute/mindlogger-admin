@@ -34,7 +34,7 @@ import { AssignmentsTableProps } from './AssignmentsTable.types';
 /* Mock data
 =================================================== */
 
-const mockOnChange = jest.fn();
+const mockOnChange = vi.fn();
 const mockTestId = 'test-id';
 const mockedAssignment = {
   respondentSubjectId: mockedFullParticipant1.details[0].subjectId,
@@ -118,7 +118,7 @@ const preloadedState = {
 };
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -150,7 +150,7 @@ describe('AssignmentsTable', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({

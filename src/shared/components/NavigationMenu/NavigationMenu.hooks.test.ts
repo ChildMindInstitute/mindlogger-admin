@@ -6,7 +6,7 @@ import { mockedAppletId } from 'shared/mock';
 
 import { useSettingsRedirection } from './NavigationMenu.hooks';
 
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 const items = [
   { label: 'Users and data', items: [{ label: 'Data retention', param: 'data-retention' }] },
   { label: 'Applet content', items: [] },
@@ -30,7 +30,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('shared/hooks/useCheckIfNewApplet', () => ({
-  useCheckIfNewApplet: jest.fn(),
+  useCheckIfNewApplet: vi.fn(),
 }));
 
 describe('useSettingsRedirection', () => {

@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { SaveSuccessBanner } from './SaveSuccessBanner';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 
 describe('SaveSuccessBanner', () => {
   test('should render', () => {

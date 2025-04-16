@@ -10,7 +10,7 @@ import { CompletedChartProps } from './CompletedChart.types';
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
-    watch: () => jest.fn(),
+    watch: () => vi.fn(),
   }),
 }));
 

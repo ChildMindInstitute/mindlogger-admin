@@ -202,7 +202,7 @@ describe('Legend', () => {
     let mockRequest: jest.Mock;
 
     beforeEach(() => {
-      mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
+      mockRequest = vi.fn().mockReturnValue(new Promise((res) => res(null)));
 
       renderWithProvidersUtils.renderWithProviders(
         <ScheduleProvider
@@ -302,7 +302,7 @@ describe('Legend', () => {
     let mockRequest: jest.Mock;
 
     beforeEach(() => {
-      mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
+      mockRequest = vi.fn().mockReturnValue(new Promise((res) => res(null)));
       renderWithProvidersUtils.renderWithProviders(
         <ScheduleProvider
           appletId={mockedAppletId}

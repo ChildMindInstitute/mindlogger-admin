@@ -11,7 +11,7 @@ import { auth } from 'modules/Auth/state';
 
 import { useAppletPrivateKeySetter } from './useAppletPrivateKeySetter';
 
-const mockedSetAppletPrivateKey = jest.fn();
+const mockedSetAppletPrivateKey = vi.fn();
 
 jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
 jest.mock('shared/hooks', () => ({

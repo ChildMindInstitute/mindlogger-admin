@@ -5,7 +5,7 @@ import { getErrorMessage } from 'shared/utils';
 import { getReviewsErrorMessage } from './getReviewsErrorMessage';
 
 jest.mock('shared/utils', () => ({
-  getErrorMessage: jest.fn(),
+  getErrorMessage: vi.fn(),
 }));
 
 describe('getReviewsErrorMessage', () => {

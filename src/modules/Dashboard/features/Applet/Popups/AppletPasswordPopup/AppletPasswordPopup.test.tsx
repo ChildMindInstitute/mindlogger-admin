@@ -6,7 +6,7 @@ import { mockedAppletId, mockedEncryption, mockedPassword } from 'shared/mock';
 import { AppletPasswordPopup } from './AppletPasswordPopup';
 import { AppletPasswordPopupProps, AppletPasswordPopupType } from './AppletPasswordPopup.types';
 
-const mockCloseFn = jest.fn();
+const mockCloseFn = vi.fn();
 const mockedDataTestId = 'mockedDataTestId';
 
 const getPopup = (props: Partial<AppletPasswordPopupProps> = {}) => (

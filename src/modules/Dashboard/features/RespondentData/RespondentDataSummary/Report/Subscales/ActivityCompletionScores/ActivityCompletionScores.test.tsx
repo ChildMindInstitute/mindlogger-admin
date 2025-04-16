@@ -24,7 +24,7 @@ describe('ActivityCompletionScores component', () => {
       { label: 'Subscale 2', score: 30 },
     ];
 
-    const setCurrentActivityCompletionData = jest.fn();
+    const setCurrentActivityCompletionData = vi.fn();
 
     renderWithProviders(
       <ReportContext.Provider

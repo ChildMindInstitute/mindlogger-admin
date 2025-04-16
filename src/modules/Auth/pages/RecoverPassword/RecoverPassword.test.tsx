@@ -10,7 +10,7 @@ import { recoveryPasswordDataTestid } from './RecoverPassword.const';
 
 const mockKey = 'key';
 const mockEmail = 'jdoe@test.com';
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

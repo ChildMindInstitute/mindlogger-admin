@@ -278,7 +278,7 @@ describe('getSelectedAppletData', () => {
   });
 
   test('navigateToBuilder', () => {
-    const navigateMock = jest.fn();
+    const navigateMock = vi.fn();
     const appletId = 'appletId';
     const data = {
       appletId,

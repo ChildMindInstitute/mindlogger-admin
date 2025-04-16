@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ResponseDataIdentifier } from './ResponseDataIdentifier';
 
-const onRemoveMock = jest.fn();
+const onRemoveMock = vi.fn();
 
 describe('ResponseDataIdentifier Component', () => {
   test('renders component with correct labels and calls onRemove callback when remove button is clicked', () => {

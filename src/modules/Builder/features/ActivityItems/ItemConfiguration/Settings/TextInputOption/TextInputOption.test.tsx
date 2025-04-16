@@ -3,7 +3,7 @@ import { screen, fireEvent, render } from '@testing-library/react';
 
 import { TextInputOption } from './TextInputOption';
 
-const onRemove = jest.fn();
+const onRemove = vi.fn();
 
 const TextInputOptionComponent = ({ required = false }: { required?: boolean }) => {
   const methods = useForm({

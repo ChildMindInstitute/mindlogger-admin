@@ -50,27 +50,27 @@ const preloadedState = {
   },
 };
 
-const mockedSetItemIds = jest.fn();
+const mockedSetItemIds = vi.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
   isLastVersion: boolean,
 ) => ({
   assessment,
-  setAssessment: jest.fn(),
+  setAssessment: vi.fn(),
   lastAssessment,
   assessmentVersions,
   isLastVersion,
-  setIsLastVersion: jest.fn(),
+  setIsLastVersion: vi.fn(),
   isBannerVisible: false,
-  setIsBannerVisible: jest.fn(),
+  setIsBannerVisible: vi.fn(),
   itemIds,
   setItemIds: mockedSetItemIds,
   isFeedbackOpen: true,
 });
 
 jest.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
-  useEncryptedAnswers: jest.fn(),
+  useEncryptedAnswers: vi.fn(),
 }));
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
@@ -95,10 +95,10 @@ const FormComponent = ({
 };
 
 const mockedUserName = 'User Name (Me)';
-const mockedSubmitCallback = jest.fn();
-const mockedSetAssessmentStep = jest.fn();
-const mockedSetIsLoading = jest.fn();
-const mockedSetError = jest.fn();
+const mockedSubmitCallback = vi.fn();
+const mockedSetAssessmentStep = vi.fn();
+const mockedSetIsLoading = vi.fn();
+const mockedSetError = vi.fn();
 const getFeedbackAssessmentComponent = ({
   assessment,
   lastAssessment,
@@ -141,7 +141,7 @@ const renderComponent = (props?: Partial<FeedbackAssessmentProps>) => {
 
 describe('FeedbackAssessment', () => {
   beforeEach(() => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(jest.fn());
+    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
     jest.restoreAllMocks();
   });
 
@@ -165,7 +165,7 @@ describe('FeedbackAssessment', () => {
   });
 
   test('should submit assessment', async () => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(jest.fn());
+    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));

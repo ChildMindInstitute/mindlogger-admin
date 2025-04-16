@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { DeleteActivityModal } from '.';
 
-const mockOnModalClose = jest.fn();
-const mockOnModalSubmit = jest.fn();
+const mockOnModalClose = vi.fn();
+const mockOnModalSubmit = vi.fn();
 const activityName = 'Sample Activity';
 
 const renderComponent = () =>

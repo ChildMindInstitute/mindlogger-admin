@@ -6,7 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DisconnectionPopup } from './DisconnectionPopup';
 
 describe('DisconnectionPopup', () => {
-  const mockOnClose = jest.fn();
+  const mockOnClose = vi.fn();
 
   test('should render the DisconnectionPopup component', () => {
     renderWithProviders(<DisconnectionPopup open={true} onClose={mockOnClose} />);

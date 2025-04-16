@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { AssessmentBanner } from './AssessmentBanner';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 
 describe('AssessmentBanner component', () => {
   test('renders correctly when banner is visible', () => {

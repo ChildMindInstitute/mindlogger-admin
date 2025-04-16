@@ -59,18 +59,18 @@ const preloadedState = {
 };
 
 describe('Calendar Component', () => {
-  const mockDispatch = jest.fn();
-  const clickEditEventMock = jest.fn();
-  const clickCreateEventMock = jest.fn();
+  const mockDispatch = vi.fn();
+  const clickEditEventMock = vi.fn();
+  const clickCreateEventMock = vi.fn();
 
   jest.mock('redux/store/hooks', () => ({
-    useAppDispatch: jest.fn(),
+    useAppDispatch: vi.fn(),
   }));
 
   jest.mock(
     'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
     () => ({
-      useSchedule: jest.fn(),
+      useSchedule: vi.fn(),
     }),
   );
 

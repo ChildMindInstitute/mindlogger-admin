@@ -6,7 +6,7 @@ import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const dataTestid = 'remove-schedule-popup';
 
 const commonProps = {

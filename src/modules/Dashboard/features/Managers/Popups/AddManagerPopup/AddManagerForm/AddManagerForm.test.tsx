@@ -10,7 +10,7 @@ import { AddManagerFormValues } from '../AddManagerPopup.types';
 import { defaultValues } from '../AddManagerPopup.const';
 import { AddManagerPopupSchema } from '../AddManagerPopup.schema';
 
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 const dataTestid = 'test-id';
 
 const mockedParticipants = [mockedFullParticipant1, mockedFullParticipant2].map(({ details }) => {

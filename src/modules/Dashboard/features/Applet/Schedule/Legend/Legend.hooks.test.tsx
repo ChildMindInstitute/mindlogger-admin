@@ -6,9 +6,9 @@ import * as calendarEventsModule from 'modules/Dashboard/state/CalendarEvents';
 
 import { useExpandedLists } from './Legend.hooks';
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedUseAppDispatch = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedUseAppDispatch = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -23,11 +23,11 @@ jest.mock('redux/store/hooks', () => ({
 
 jest.mock('modules/Dashboard/state/CalendarEvents', () => {
   const originalModule = jest.requireActual('modules/Dashboard/state/CalendarEvents');
-  const useScheduledVisibilityData = jest.fn().mockReturnValue(true);
-  const useAvailableVisibilityData = jest.fn().mockReturnValue(true);
-  const setAvailableVisibility = jest.fn();
-  const setScheduledVisibility = jest.fn();
-  const createCalendarEvents = jest.fn();
+  const useScheduledVisibilityData = vi.fn().mockReturnValue(true);
+  const useAvailableVisibilityData = vi.fn().mockReturnValue(true);
+  const setAvailableVisibility = vi.fn();
+  const setScheduledVisibility = vi.fn();
+  const createCalendarEvents = vi.fn();
 
   return {
     ...originalModule,
@@ -49,8 +49,8 @@ describe('useExpandedLists', () => {
   test('returns correct data with legend events', () => {
     jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockedUseAppDispatch);
     mockedUseParams.mockReturnValue({ appletId: 'mockedAppletId' });
-    const clearAllScheduledEventsAction = jest.fn();
-    const onCreateActivitySchedule = jest.fn();
+    const clearAllScheduledEventsAction = vi.fn();
+    const onCreateActivitySchedule = vi.fn();
 
     const { result } = renderHookWithProviders(() =>
       useExpandedLists(
@@ -110,8 +110,8 @@ describe('useExpandedLists', () => {
 
   test('returns undefined when legend events are null', () => {
     mockedUseParams.mockReturnValue({ appletId: 'mockedAppletId' });
-    const clearAllScheduledEventsAction = jest.fn();
-    const onCreateActivitySchedule = jest.fn();
+    const clearAllScheduledEventsAction = vi.fn();
+    const onCreateActivitySchedule = vi.fn();
 
     const { result } = renderHookWithProviders(() =>
       useExpandedLists(null, clearAllScheduledEventsAction, onCreateActivitySchedule),

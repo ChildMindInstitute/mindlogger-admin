@@ -26,8 +26,8 @@ const preloadedState = {
   },
 };
 
-const mockOnClose = jest.fn();
-const mockOnExport = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnExport = vi.fn();
 
 type FormComponentProps = {
   children: React.ReactNode;

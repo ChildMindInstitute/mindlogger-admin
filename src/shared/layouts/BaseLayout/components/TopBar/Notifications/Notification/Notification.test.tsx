@@ -9,14 +9,14 @@ import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
 import { Notification } from './Notification';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUseNavigate,
 }));
 
 describe('Notification', () => {
-  const mockedSetCurrentId = jest.fn();
+  const mockedSetCurrentId = vi.fn();
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -76,7 +76,7 @@ describe('Notification', () => {
     expect(mockedSetCurrentId).toBeCalledWith('');
   });
   test('should navigate when click on response data button without existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('');
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('');
     jest
       .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
       .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
@@ -103,7 +103,7 @@ describe('Notification', () => {
   });
 
   test('should navigate when click on response data button with existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('123');
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('123');
     jest
       .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
       .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });

@@ -11,14 +11,14 @@ import * as hooksModule from 'shared/hooks';
 
 import { AccountPanel } from './AccountPanel';
 
-const mockDispatch = jest.fn();
-const mockSetVisibleDrawer = jest.fn();
-const mockHandleLogout = jest.fn();
+const mockDispatch = vi.fn();
+const mockSetVisibleDrawer = vi.fn();
+const mockHandleLogout = vi.fn();
 const notWatched = 34;
 
 jest.mock('shared/hooks', () => ({
   ...jest.requireActual('shared/hooks'),
-  useLogout: jest.fn(),
+  useLogout: vi.fn(),
 }));
 
 jest.mock('../Notifications', () => ({
@@ -27,7 +27,7 @@ jest.mock('../Notifications', () => ({
 }));
 
 jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
+  useAppDispatch: vi.fn(),
 }));
 
 describe('AccountPanel', () => {

@@ -7,14 +7,14 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { PublicLinkPopup } from './PublicLinkPopup';
 
 const mockedAxios = axios.create();
-const fakeRequest = jest.fn();
+const fakeRequest = vi.fn();
 
 const testId = 'public-link-popup';
 const commonProps = {
   open: true,
   appletId: 'test-applet-id',
   'data-testid': testId,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
 };
 
 describe('PublicLinkPopup', () => {

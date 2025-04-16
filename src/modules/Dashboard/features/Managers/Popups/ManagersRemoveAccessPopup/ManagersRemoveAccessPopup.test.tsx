@@ -11,8 +11,8 @@ import * as useAsyncHooks from 'shared/hooks/useAsync/useAsync';
 
 import { ManagersRemoveAccessPopup } from '.';
 
-const refetchManagersMock = jest.fn();
-const onCloseMock = jest.fn();
+const refetchManagersMock = vi.fn();
+const onCloseMock = vi.fn();
 
 const dataTestid = 'dashboard-managers-remove-access-popup';
 const routeWithAppletId = `/dashboard/${mockedAppletId}/managers`;
@@ -66,10 +66,10 @@ describe('ManagersRemoveAccessPopup component tests', () => {
 
   test('ManagersRemoveAccessPopup should remove access without appletId', async () => {
     const useAsyncSpy = jest.spyOn(useAsyncHooks, 'useAsync');
-    const mockExecute = jest.fn();
+    const mockExecute = vi.fn();
     useAsyncSpy.mockImplementation(() => ({
       execute: mockExecute,
-      setError: jest.fn(),
+      setError: vi.fn(),
       error: 'Error message',
     }));
 

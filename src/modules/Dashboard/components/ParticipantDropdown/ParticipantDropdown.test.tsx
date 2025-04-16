@@ -21,7 +21,7 @@ describe('ParticipantDropdown', () => {
       featureFlags: {
         enableParticipantMultiInformant: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -32,7 +32,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={null}
         placeholder="Test Placeholder"
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -55,7 +55,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -79,7 +79,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );

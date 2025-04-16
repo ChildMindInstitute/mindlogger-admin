@@ -24,7 +24,7 @@ const getAlertsPreloadedState = (data: AlertsSchema['alerts']['data'] = null) =>
 describe('Notifications', () => {
   const intersectionObserverOriginal = global.IntersectionObserver;
   beforeEach(() => {
-    const mockIntersectionObserver = jest.fn();
+    const mockIntersectionObserver = vi.fn();
     mockIntersectionObserver.mockReturnValue({
       observe: () => null,
       unobserve: () => null,

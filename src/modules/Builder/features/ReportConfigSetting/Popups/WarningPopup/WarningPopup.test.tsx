@@ -4,8 +4,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { WarningPopup } from './WarningPopup';
 
-const setPopupVisibleMock = jest.fn();
-const submitCallbackMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
+const submitCallbackMock = vi.fn();
 
 describe('WarningPopup', () => {
   test('should render', () => {

@@ -10,7 +10,7 @@ import { usePermissions } from './usePermissions';
 jest.mock('react-i18next', () => mockI18Next);
 
 describe('usePermissions hook tests', () => {
-  const mockAsyncFunc = jest.fn();
+  const mockAsyncFunc = vi.fn();
 
   test('should not call asyncFn without owner', async () => {
     jest.spyOn(workspaces, 'useData').mockReturnValue({} as Workspace);

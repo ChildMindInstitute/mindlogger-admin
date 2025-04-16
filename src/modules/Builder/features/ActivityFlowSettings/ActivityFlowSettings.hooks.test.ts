@@ -10,11 +10,11 @@ const routePath = page.builderAppletActivityFlowItemSettings;
 
 jest.mock('modules/Builder/hooks', () => ({
   ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
+  useCustomFormContext: vi.fn(),
 }));
 
 describe('useActivityFlow', () => {
-  const mockWatch = jest.fn();
+  const mockWatch = vi.fn();
   const mockActivityFlows = [
     {
       id: '123',

@@ -6,7 +6,7 @@ import { ItemSettingsDrawer } from './ItemSettingsDrawer';
 
 const dataTestid = 'builder-activity-items-item';
 
-const onClose = jest.fn();
+const onClose = vi.fn();
 const props = {
   open: true,
   onClose,

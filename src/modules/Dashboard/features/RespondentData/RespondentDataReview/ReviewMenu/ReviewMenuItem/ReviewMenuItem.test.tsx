@@ -34,8 +34,8 @@ const mockedActivity = {
   lastAnswerDate: '2023-12-15T23:29:36.150182',
   answerDates: [firstAnswer, latestAnswer, preselectedAnswer],
 };
-const mockedOnSelectItem = jest.fn();
-const mockedOnSelectAnswer = jest.fn();
+const mockedOnSelectItem = vi.fn();
+const mockedOnSelectAnswer = vi.fn();
 const dataTestid = 'review-menu-item';
 
 const renderComponent = (route: string, props?: Partial<ReviewMenuItemProps>) =>
@@ -62,12 +62,12 @@ describe('Review Menu Item component', () => {
   });
 
   test('renders and functions correctly when an answer ID is not present in the route', async () => {
-    const setSearchParamsMock = jest.fn();
+    const setSearchParamsMock = vi.fn();
     jest
       .spyOn(reactRouterDom, 'useSearchParams')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      .mockReturnValue([{ get: jest.fn() }, setSearchParamsMock]);
+      .mockReturnValue([{ get: vi.fn() }, setSearchParamsMock]);
 
     renderComponent(routeWithoutAnswerId);
 

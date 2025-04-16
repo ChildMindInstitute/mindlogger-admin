@@ -5,7 +5,7 @@ import { findVisitErrorMessage, getHeadCells, getMatchOptions } from './Visits.u
 describe('getHeadCells', () => {
   test('should return correct head cells', () => {
     const selectAllChecked = true;
-    const onSelectAllClick = jest.fn();
+    const onSelectAllClick = vi.fn();
     const headCells = getHeadCells(selectAllChecked, onSelectAllClick);
     expect(headCells).toEqual([
       { id: 'selected', label: expect.any(Object), enableSort: false },

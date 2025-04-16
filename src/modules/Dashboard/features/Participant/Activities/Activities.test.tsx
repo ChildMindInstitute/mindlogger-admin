@@ -122,7 +122,7 @@ const preloadedState: PreloadedState<RootState> = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -130,7 +130,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
@@ -142,7 +142,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         enableParticipantMultiInformant: false,
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -186,7 +186,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         enableParticipantMultiInformant: false,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mockGetRequestResponses({
       [getAppletUrl]: successfulGetAppletMock,
@@ -433,7 +433,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           featureFlags: {
             enableParticipantMultiInformant: true,
           },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
       });
 

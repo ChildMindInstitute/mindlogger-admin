@@ -72,7 +72,7 @@ const preloadedState: PreloadedState<RootState> = {
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
+  useDecryptedActivityData: vi.fn(),
 }));
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
@@ -330,7 +330,7 @@ describe('RespondentDataReview', () => {
       mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
       mockAxios.get.mockResolvedValueOnce(mockAssessment);
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+      const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -570,7 +570,7 @@ describe('RespondentDataReview', () => {
         },
       });
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+      const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

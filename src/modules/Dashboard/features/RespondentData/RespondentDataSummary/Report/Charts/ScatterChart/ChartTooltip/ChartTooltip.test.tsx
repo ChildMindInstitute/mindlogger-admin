@@ -35,18 +35,18 @@ const getProps = (props?: Partial<ScatterTooltipRowData>) => ({
       x: date,
     },
   },
-  onMouseEnter: jest.fn(),
-  onMouseLeave: jest.fn(),
+  onMouseEnter: vi.fn(),
+  onMouseLeave: vi.fn(),
   'data-testid': dataTestid,
 });
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedNavigate,
 }));
 
-const setCurrentActivityCompletionData = jest.fn();
+const setCurrentActivityCompletionData = vi.fn();
 
 const getPreloadedState = (hasAssessment = false) => ({
   applet: {

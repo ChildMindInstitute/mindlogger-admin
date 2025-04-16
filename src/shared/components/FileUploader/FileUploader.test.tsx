@@ -7,8 +7,8 @@ import i18n from 'i18n';
 import { FileUploader } from './FileUploader';
 import { FileUploaderProps } from './FileUploader.types';
 
-const mockOnFileReady = jest.fn();
-const mockOnDownloadTemplate = jest.fn();
+const mockOnFileReady = vi.fn();
+const mockOnDownloadTemplate = vi.fn();
 export const mockInvalidFileFormatError = <span>Invalid file format.</span>;
 const fileUploaderProps = {
   onFileReady: mockOnFileReady,

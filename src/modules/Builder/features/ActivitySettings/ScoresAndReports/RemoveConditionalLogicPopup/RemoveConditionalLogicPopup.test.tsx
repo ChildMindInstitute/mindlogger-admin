@@ -10,8 +10,8 @@ jest.mock('modules/Builder/hooks', () => ({
   }),
 }));
 
-const onCloseMock = jest.fn();
-const onRemoveMock = jest.fn();
+const onCloseMock = vi.fn();
+const onRemoveMock = vi.fn();
 
 describe('RemoveConditionalLogicPopup', () => {
   test('should remove conditional logic', () => {

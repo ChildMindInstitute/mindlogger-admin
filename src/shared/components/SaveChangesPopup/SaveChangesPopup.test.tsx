@@ -2,9 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { SaveChangesPopup } from './SaveChangesPopup';
 
-const mockOnCancel = jest.fn();
-const mockOnDontSave = jest.fn();
-const mockOnSave = jest.fn();
+const mockOnCancel = vi.fn();
+const mockOnDontSave = vi.fn();
+const mockOnSave = vi.fn();
 
 const commonProps = {
   popupVisible: true,

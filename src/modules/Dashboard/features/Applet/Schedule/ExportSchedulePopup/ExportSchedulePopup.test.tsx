@@ -6,8 +6,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { ExportSchedulePopup } from './ExportSchedulePopup';
 
 const dataTestid = 'export-schedule-popup';
-const mockOnClose = jest.fn();
-const mockOnSubmit = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnSubmit = vi.fn();
 
 const mockProps = {
   open: true,

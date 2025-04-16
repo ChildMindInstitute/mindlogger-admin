@@ -7,7 +7,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { WorkspaceGroup } from './WorkspaceGroup';
 
-const mockOnChangeWorkspace = jest.fn();
+const mockOnChangeWorkspace = vi.fn();
 
 const workspacesGroup = {
   groupName: 'Group Name',

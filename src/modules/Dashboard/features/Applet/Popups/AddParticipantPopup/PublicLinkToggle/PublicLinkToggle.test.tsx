@@ -7,13 +7,13 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { PublicLinkToggle } from './PublicLinkToggle';
 
 const mockedAxios = axios.create();
-const fakeRequest = jest.fn();
+const fakeRequest = vi.fn();
 
 const testId = 'public-link-toggle';
 const commonProps = {
   'data-testid': testId,
   appletId: 'test-applet-id',
-  onConfirmPublicLink: jest.fn(),
+  onConfirmPublicLink: vi.fn(),
 };
 const testResponse = {
   data: {

@@ -9,8 +9,8 @@ import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { AssessmentActivityItem, FeedbackTabs } from '../RespondentDataReview.types';
 
 const mockActiveTab = FeedbackTabs.Notes;
-const mockSetActiveTab = jest.fn();
-const mockOnClose = jest.fn();
+const mockSetActiveTab = vi.fn();
+const mockOnClose = vi.fn();
 const activityItem = {
   question: {
     en: 'How was a response?',

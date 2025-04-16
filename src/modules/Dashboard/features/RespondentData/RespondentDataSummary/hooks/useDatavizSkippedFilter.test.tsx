@@ -6,7 +6,7 @@ import { mockedAppletId } from 'shared/mock';
 
 import { useDatavizSkippedFilter } from './useDatavizSkippedFilter';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => ({
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
-    useWatch: () => jest.fn(),
+    useWatch: () => vi.fn(),
   }),
 }));
 

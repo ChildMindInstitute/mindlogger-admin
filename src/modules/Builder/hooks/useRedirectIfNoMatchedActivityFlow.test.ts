@@ -34,9 +34,9 @@ const pathToActivityFlowsNewApplet = generatePath(page.builderAppletActivityFlow
   appletId: mockedParamsNewAppletWithActivityFlow.appletId,
 });
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedGetValues = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedGetValues = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

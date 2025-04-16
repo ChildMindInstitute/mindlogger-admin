@@ -8,7 +8,7 @@ import { Roles } from 'shared/consts';
 
 import { HeaderOptions } from './HeaderOptions';
 
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 const mockedUseParams = () => ({ appletId: mockedAppletId });
 
 jest.mock('react-router-dom', () => ({

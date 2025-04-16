@@ -20,7 +20,7 @@ describe('TakeNowDropdown', () => {
       featureFlags: {
         enableParticipantMultiInformant: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -33,7 +33,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={null}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -50,7 +50,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={null}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -70,7 +70,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={null}
         placeholder="Test Placeholder"
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -95,7 +95,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -121,7 +121,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -138,7 +138,7 @@ describe('TakeNowDropdown', () => {
         options={[]}
         value={null}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
         canShowWarningMessage={true}
       />,
@@ -164,7 +164,7 @@ describe('TakeNowDropdown', () => {
         options={[option]}
         value={option}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
         canShowWarningMessage={true}
       />,
@@ -190,7 +190,7 @@ describe('TakeNowDropdown', () => {
         options={[option]}
         value={option}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
         canShowWarningMessage={true}
       />,
@@ -215,7 +215,7 @@ describe('TakeNowDropdown', () => {
         options={[option]}
         value={option}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
         canShowWarningMessage={true}
       />,
@@ -240,7 +240,7 @@ describe('TakeNowDropdown', () => {
         options={[option]}
         value={option}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
         canShowWarningMessage={false}
       />,
@@ -255,7 +255,7 @@ describe('TakeNowDropdown', () => {
         featureFlags: {
           enableParticipantMultiInformant: true,
         },
-        resetLDContext: jest.fn(),
+        resetLDContext: vi.fn(),
       });
     });
 
@@ -276,7 +276,7 @@ describe('TakeNowDropdown', () => {
           options={[option]}
           value={option}
           placeholder=""
-          onChange={jest.fn()}
+          onChange={vi.fn()}
           data-testid={dataTestId}
           canShowWarningMessage={true}
         />,
@@ -302,7 +302,7 @@ describe('TakeNowDropdown', () => {
           options={[option]}
           value={option}
           placeholder=""
-          onChange={jest.fn()}
+          onChange={vi.fn()}
           data-testid={dataTestId}
           canShowWarningMessage={true}
         />,
@@ -327,7 +327,7 @@ describe('TakeNowDropdown', () => {
           options={[option]}
           value={option}
           placeholder=""
-          onChange={jest.fn()}
+          onChange={vi.fn()}
           data-testid={dataTestId}
           canShowWarningMessage={true}
         />,
@@ -352,7 +352,7 @@ describe('TakeNowDropdown', () => {
           options={[option]}
           value={option}
           placeholder=""
-          onChange={jest.fn()}
+          onChange={vi.fn()}
           data-testid={dataTestId}
           canShowWarningMessage={false}
         />,

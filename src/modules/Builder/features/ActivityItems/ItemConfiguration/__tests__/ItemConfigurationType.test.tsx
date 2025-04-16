@@ -46,7 +46,7 @@ import {
 } from '../__mocks__';
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
@@ -56,7 +56,7 @@ describe('ItemConfiguration: Item Type', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 

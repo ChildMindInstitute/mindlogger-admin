@@ -106,8 +106,8 @@ const formValues: AppletFormValues = {
   streamPort: null,
 };
 
-const mockUseNavigate = jest.fn();
-const mockUseParams = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockUseParams = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -117,7 +117,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('modules/Builder/hooks', () => ({
   ...jest.requireActual('modules/Builder/hooks'),
-  useCurrentActivity: jest.fn(),
+  useCurrentActivity: vi.fn(),
 }));
 
 const mockUseCurrentActivity = jest.mocked(useCurrentActivity);

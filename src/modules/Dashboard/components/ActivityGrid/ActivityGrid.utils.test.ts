@@ -13,11 +13,11 @@ describe('getActivityActions', () => {
   const dataTestId = 'test';
 
   const actions: ActionsObject = {
-    editActivity: jest.fn(),
-    exportData: jest.fn(),
-    assignActivity: jest.fn(),
-    unassignActivity: jest.fn(),
-    takeNow: jest.fn(),
+    editActivity: vi.fn(),
+    exportData: vi.fn(),
+    assignActivity: vi.fn(),
+    unassignActivity: vi.fn(),
+    takeNow: vi.fn(),
   } as const;
 
   type Action = keyof ActionsObject;

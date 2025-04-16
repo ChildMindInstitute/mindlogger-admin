@@ -5,7 +5,7 @@ import history from 'routes/history';
 
 import { useBlocker } from './useBlocker';
 
-const mockBlocker = jest.fn();
+const mockBlocker = vi.fn();
 const spyHistoryBlock = jest.spyOn(history, 'block');
 
 describe('useBlocker', () => {
@@ -23,7 +23,7 @@ describe('useBlocker', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     const blockingFunction = spyHistoryBlock.mock.calls[0][0];
     const mockTransition = {
-      retry: jest.fn(),
+      retry: vi.fn(),
       action: Action.Pop,
       location: {
         state: 'some-state',

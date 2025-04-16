@@ -44,7 +44,7 @@ const preloadedState = {
   },
 };
 
-const mockedCloseFn = jest.fn();
+const mockedCloseFn = vi.fn();
 const getPopup = (withSelectedRespondents = true) => (
   <SelectRespondentsPopup
     appletName="testName"

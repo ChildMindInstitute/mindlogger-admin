@@ -12,7 +12,7 @@ const mockSessionStorageSelectedKey = 'mockSessionStorageSelectedKey';
 const mockDispatch = () => Promise.resolve('');
 
 jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
+  useAppDispatch: vi.fn(),
 }));
 
 describe('useClearCart', () => {

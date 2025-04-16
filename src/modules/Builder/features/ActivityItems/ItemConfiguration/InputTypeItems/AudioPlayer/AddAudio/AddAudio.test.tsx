@@ -21,7 +21,7 @@ describe('AddAudio component', () => {
   });
 
   test('calls onUploadAudio on menu item click', async () => {
-    const mockOnUploadAudio = jest.fn();
+    const mockOnUploadAudio = vi.fn();
     renderWithProviders(<AddAudio onUploadAudio={mockOnUploadAudio} onRecordAudio={() => {}} />);
 
     await testAddAudio();
@@ -31,7 +31,7 @@ describe('AddAudio component', () => {
   });
 
   test('calls onRecordAudio on menu item click', async () => {
-    const mockOnRecordAudio = jest.fn();
+    const mockOnRecordAudio = vi.fn();
     renderWithProviders(<AddAudio onUploadAudio={() => {}} onRecordAudio={mockOnRecordAudio} />);
 
     await testAddAudio();

@@ -9,7 +9,7 @@ import { UploadPopup } from './UploadPopup';
 
 const props = {
   open: true,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
 };
 
 const visitsResponse = { data: { visits: ['V1', 'V2', 'V3', 'V4', 'V5'] } };

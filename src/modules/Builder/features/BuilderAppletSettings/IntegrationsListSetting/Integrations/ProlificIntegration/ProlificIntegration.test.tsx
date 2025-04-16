@@ -10,7 +10,7 @@ import { ProlificIntegration } from './ProlificIntegration';
 import { prolificIntegrationExists } from './ProlificIntegration.utils';
 
 jest.mock('./ProlificIntegration.utils', () => ({
-  prolificIntegrationExists: jest.fn(),
+  prolificIntegrationExists: vi.fn(),
 }));
 
 jest.mock('redux/modules');

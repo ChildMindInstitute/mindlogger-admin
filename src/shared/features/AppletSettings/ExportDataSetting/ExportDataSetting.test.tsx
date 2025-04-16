@@ -27,7 +27,7 @@ const preloadedState = {
 
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 
-const mockedExportDataApi = jest.fn();
+const mockedExportDataApi = vi.fn();
 
 jest.mock('modules/Dashboard/api', () => ({
   getExportDataApi: (body: ExportData) => mockedExportDataApi(body),
@@ -35,7 +35,7 @@ jest.mock('modules/Dashboard/api', () => ({
 
 describe('ExportDataSetting', () => {
   it('should not render export settings model if isExportSettingsOpen is false', async () => {
-    const mockOnClose = jest.fn();
+    const mockOnClose = vi.fn();
 
     renderWithProviders(
       <ExportDataSetting isExportSettingsOpen={false} onExportSettingsClose={mockOnClose} />,
@@ -51,7 +51,7 @@ describe('ExportDataSetting', () => {
   });
 
   it('should call close callback and open the export popup if the settings download button is clicked', async () => {
-    const mockOnClose = jest.fn();
+    const mockOnClose = vi.fn();
 
     renderWithProviders(
       <ExportDataSetting isExportSettingsOpen onExportSettingsClose={mockOnClose} />,
@@ -81,7 +81,7 @@ describe('ExportDataSetting', () => {
       ${ExportDateType.LastWeek}  | ${addDays(new Date(), -7)}  | ${'use correct dates for last week'}
       ${ExportDateType.LastMonth} | ${addDays(new Date(), -30)} | ${'use correct dates for last month'}
     `('$description', async ({ exportType, expectedFromTime }) => {
-      const mockOnClose = jest.fn();
+      const mockOnClose = vi.fn();
 
       jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
         Promise.resolve({

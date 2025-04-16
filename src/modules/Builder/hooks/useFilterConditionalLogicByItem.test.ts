@@ -57,10 +57,10 @@ const mockedSetValueArgsWithoutTwoDependentConditions = [
   mockedActivity.conditionalLogic.slice(2),
 ];
 
-const mockedWatch = jest.fn();
-const mockedSetValue = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedUseCurrentActivity = jest.fn();
+const mockedWatch = vi.fn();
+const mockedSetValue = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedUseCurrentActivity = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -10,7 +10,7 @@ import { useResponsesSummary } from './ResponsesSummary.hooks';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 
 describe('useResponsesSummary', () => {
@@ -33,8 +33,8 @@ describe('useResponsesSummary', () => {
       teamMemberCanViewData: true,
     };
 
-    users.useRespondent = jest.fn().mockReturnValue({ result: res });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ result: res });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const respondent = res?.nickname
       ? getRespondentName(res.secretUserId, res.nickname, 'comma')

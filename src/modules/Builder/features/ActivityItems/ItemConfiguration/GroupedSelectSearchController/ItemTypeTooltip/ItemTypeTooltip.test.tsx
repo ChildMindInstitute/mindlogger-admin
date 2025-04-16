@@ -15,7 +15,7 @@ const renderWithExistenceCheck = (uiType) => {
   expect(screen.getByTestId(tooltipPresentationDataTestid)).toBeInTheDocument();
 };
 jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
@@ -47,7 +47,7 @@ describe('ItemTypeTooltip', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 

@@ -10,8 +10,8 @@ import * as appletsTableHooks from '../AppletsTable.hooks';
 import { AppletsContext } from '../../Applets.context';
 import { AppletItem } from './AppletItem';
 
-const mockReloadData = jest.fn();
-const mockHandleFolderClick = jest.fn();
+const mockReloadData = vi.fn();
+const mockHandleFolderClick = vi.fn();
 
 const getMockedApplet = (isAppletInFolder = false, hasEncryption = true) => ({
   ...mockedApplet,
@@ -22,11 +22,11 @@ const getMockedApplet = (isAppletInFolder = false, hasEncryption = true) => ({
 
 const mockContext = {
   rows: [getMockedApplet()],
-  setRows: jest.fn(),
+  setRows: vi.fn(),
   expandedFolders: [],
   reloadData: mockReloadData,
   handleFolderClick: mockHandleFolderClick,
-  fetchData: jest.fn(),
+  fetchData: vi.fn(),
 };
 
 const getAppletItemComponent = (isAppletInFolder = false, hasEncryption = true) => (
@@ -46,7 +46,7 @@ const clickActionDots = async () => {
   fireEvent.click(actionsDots);
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -188,10 +188,10 @@ describe('AppletItem component tests', () => {
 
   test('should have correct classnames for hover and for isDragOver', async () => {
     const commonUseDndProps = {
-      onDragLeave: jest.fn(),
-      onDragOver: jest.fn(),
-      onDrop: jest.fn(),
-      onDragEnd: jest.fn(),
+      onDragLeave: vi.fn(),
+      onDragOver: vi.fn(),
+      onDrop: vi.fn(),
+      onDragEnd: vi.fn(),
     };
     jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,

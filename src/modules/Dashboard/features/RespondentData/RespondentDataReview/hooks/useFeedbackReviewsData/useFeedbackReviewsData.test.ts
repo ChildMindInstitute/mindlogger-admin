@@ -9,11 +9,11 @@ import { GetFeedbackReviewsProps } from '../FeedbackReviews.types';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
 jest.mock('modules/Dashboard/hooks', () => ({
-  useDecryptedActivityData: jest.fn(),
+  useDecryptedActivityData: vi.fn(),
 }));
 
 describe('useFeedbackReviewsData', () => {
-  const mockGetDecryptedActivityData = jest.fn();
+  const mockGetDecryptedActivityData = vi.fn();
 
   beforeEach(() => {
     (useDecryptedActivityData as jest.Mock).mockReturnValue(mockGetDecryptedActivityData);

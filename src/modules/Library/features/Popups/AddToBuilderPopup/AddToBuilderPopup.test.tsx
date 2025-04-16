@@ -15,9 +15,9 @@ import * as cartUtils from 'modules/Library/features/Cart/Cart.utils';
 import { AddToBuilderPopup } from './AddToBuilderPopup';
 
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
-const mockNavigateToBuilder = jest.fn();
-const mockSetAddToBuilderPopupVisible = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockNavigateToBuilder = vi.fn();
+const mockSetAddToBuilderPopupVisible = vi.fn();
 const dataTestid = 'library-cart-add-to-builder-popup';
 
 const mockWorkspaces = [
@@ -113,7 +113,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('redux/store/hooks', () => ({
   ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
+  useAppDispatch: vi.fn(),
 }));
 
 jest.mock('shared/hooks', () => ({

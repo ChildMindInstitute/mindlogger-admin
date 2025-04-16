@@ -10,7 +10,7 @@ import { useEncryptedAnswers } from './useEncryptedAnswers';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 
 jest.mock('shared/hooks/useEncryptionStorage', () => ({

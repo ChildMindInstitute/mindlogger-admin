@@ -20,7 +20,7 @@ const chosenAppletData = {
   subjectId: mockedFullSubjectId1,
 };
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 const commonProps = {
   onClose: onCloseMock,

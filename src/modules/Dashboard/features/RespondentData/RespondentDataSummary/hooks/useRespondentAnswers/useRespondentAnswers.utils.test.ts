@@ -62,7 +62,7 @@ describe('respondent answers utils', () => {
   });
 
   describe('processIdentifiersChange', () => {
-    const setValue = jest.fn();
+    const setValue = vi.fn();
     const props = {
       isIdentifiersChange: true,
       adjustStartEndDates: true,

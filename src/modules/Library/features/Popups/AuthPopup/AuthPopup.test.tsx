@@ -7,7 +7,7 @@ import { AuthPopup } from './AuthPopup';
 
 const route = page.libraryCart;
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 describe('AuthPopup library component tests', () => {
   test('should remove applet form cart', async () => {

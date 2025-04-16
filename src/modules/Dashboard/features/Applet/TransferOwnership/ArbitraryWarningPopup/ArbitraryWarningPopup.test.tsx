@@ -9,8 +9,8 @@ import { ArbitraryWarningPopup } from './ArbitraryWarningPopup';
 import { SUPPORT_LINK } from './ArbitraryWarningPopup.const';
 
 const dataTestId = 'arbitrary-warning-popup';
-const mockedOnSubmit = jest.fn();
-const mockedOnClose = jest.fn();
+const mockedOnSubmit = vi.fn();
+const mockedOnClose = vi.fn();
 const mockedAppletName = 'Applet Name';
 const renderComponent = () =>
   renderWithProviders(

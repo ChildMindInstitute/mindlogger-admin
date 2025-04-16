@@ -7,8 +7,8 @@ import { ImportSchedulePopup } from './ImportSchedulePopup';
 import * as importSchedulePopupFunc from './ImportSchedulePopup.utils';
 
 describe('ImportSchedulePopup', () => {
-  const mockedOnClose = jest.fn();
-  const mockedOnDownloadTemplate = jest.fn();
+  const mockedOnClose = vi.fn();
+  const mockedOnDownloadTemplate = vi.fn();
   const props = {
     isIndividual: false,
     appletName: 'applet',

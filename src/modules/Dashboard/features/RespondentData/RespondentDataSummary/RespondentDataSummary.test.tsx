@@ -16,7 +16,7 @@ import { RespondentDataContextType } from '../RespondentDataContext/RespondentDa
 
 const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
-const mockedSetValue = jest.fn();
+const mockedSetValue = vi.fn();
 
 const mockedSelectedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
@@ -52,7 +52,7 @@ const mockedSummaryFlows = [
     lastAnswerDate: null,
   },
 ];
-const mockedSetSelectedEntity = jest.fn();
+const mockedSetSelectedEntity = vi.fn();
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
@@ -154,8 +154,8 @@ describe('RespondentDataSummary component', () => {
   );
 
   test('should fetch activities and flows', async () => {
-    const mockedSetSummaryActivities = jest.fn();
-    const mockedSetSummaryFlows = jest.fn();
+    const mockedSetSummaryActivities = vi.fn();
+    const mockedSetSummaryFlows = vi.fn();
 
     mockAxios.get.mockResolvedValueOnce({
       data: {
@@ -208,8 +208,8 @@ describe('RespondentDataSummary component', () => {
   });
 
   test('should choose the activity or flow with latest answers and fetch answers for it', async () => {
-    const mockGetIdentifiersVersions = jest.fn();
-    const mockFetchAnswers = jest.fn();
+    const mockGetIdentifiersVersions = vi.fn();
+    const mockFetchAnswers = vi.fn();
     jest
       .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
       .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });

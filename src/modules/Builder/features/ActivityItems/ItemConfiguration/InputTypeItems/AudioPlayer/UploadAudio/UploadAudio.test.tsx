@@ -6,9 +6,9 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { UploadAudio } from './UploadAudio';
 import { uploadAudioPopupDataTestid } from './UploadAudio.const';
 
-const mockOnUpload = jest.fn();
-const mockOnClose = jest.fn();
-const mockOnChange = jest.fn();
+const mockOnUpload = vi.fn();
+const mockOnClose = vi.fn();
+const mockOnChange = vi.fn();
 
 describe('UploadAudio', () => {
   test('render popup when media is nullable and test button clicks', async () => {

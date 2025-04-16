@@ -6,8 +6,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { RemoveAudioPopup } from './RemoveAudioPopup';
 import { removeAudioPopupDataTestid } from './RemoveAudioPopup.const';
 
-const mockOnClose = jest.fn();
-const mockOnRemove = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnRemove = vi.fn();
 
 describe('RemoveAudioPopup', () => {
   test('test popup with button clicks', async () => {

@@ -155,7 +155,7 @@ const items = [
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
+  useDecryptedActivityData: vi.fn(),
 }));
 
 const mockedGetWithEmptyReviews = {
@@ -256,9 +256,9 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   )),
 }));
 
-const setIsLastVersion = jest.fn();
-const setIsBannerVisible = jest.fn();
-const setAssessment = jest.fn();
+const setIsLastVersion = vi.fn();
+const setIsBannerVisible = vi.fn();
+const setAssessment = vi.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
@@ -274,7 +274,7 @@ const getMockedContext = (
   isBannerVisible,
   setIsBannerVisible,
   itemIds,
-  setItemIds: jest.fn(),
+  setItemIds: vi.fn(),
   isFeedbackOpen: true,
 });
 
@@ -314,7 +314,7 @@ const renderComponent = (
   );
 
 const getDecryptedActivityData = () => {
-  const getDecryptedActivityDataMock = jest.fn().mockReturnValue(
+  const getDecryptedActivityDataMock = vi.fn().mockReturnValue(
     Promise.resolve({
       decryptedAnswers: [
         {
@@ -592,7 +592,7 @@ describe('FeedbackReviewed', () => {
   test('should render empty state', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWithEmptyReviews);
 
-    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
+    const getDecryptedActivityDataMock = vi.fn().mockReturnValue({
       decryptedAnswers: [],
     });
 

@@ -7,10 +7,10 @@ import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
 import { RespondentDataContext } from '../../../RespondentDataContext/RespondentDataContext.context';
 
-const mockedGetValues = jest.fn();
-const mockedSetValue = jest.fn();
-const mockedSetIdentifiers = jest.fn();
-const mockedSetVersions = jest.fn();
+const mockedGetValues = vi.fn();
+const mockedSetValue = vi.fn();
+const mockedSetIdentifiers = vi.fn();
+const mockedSetVersions = vi.fn();
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
@@ -19,7 +19,7 @@ jest.mock('react-hook-form', () => ({
   }),
 }));
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),

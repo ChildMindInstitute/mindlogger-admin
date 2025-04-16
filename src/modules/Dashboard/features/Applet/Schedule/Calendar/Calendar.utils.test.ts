@@ -94,10 +94,10 @@ describe('Schedule.utils.tsx', () => {
   describe('getCalendarComponents', () => {
     test('returns object with expected parameters', () => {
       const date = new Date();
-      const setActiveViewMock = jest.fn();
-      const setDateMock = jest.fn();
-      const setEventsMock = jest.fn();
-      const setIsAllDayEventsVisibleMock = jest.fn();
+      const setActiveViewMock = vi.fn();
+      const setDateMock = vi.fn();
+      const setEventsMock = vi.fn();
+      const setIsAllDayEventsVisibleMock = vi.fn();
 
       const result = getCalendarComponents({
         activeView: CalendarViews.Month,

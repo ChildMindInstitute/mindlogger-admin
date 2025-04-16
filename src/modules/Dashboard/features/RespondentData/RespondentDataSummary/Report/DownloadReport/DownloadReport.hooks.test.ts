@@ -7,7 +7,7 @@ import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
 import { useDownloadReport } from './DownloadReport.hooks';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),

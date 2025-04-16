@@ -6,7 +6,7 @@ import { DndDroppable } from '.';
 const renderComponent = () => <DndDroppable droppableId="droppableId">{() => <></>}</DndDroppable>;
 
 jest.mock('react-beautiful-dnd', () => ({
-  Droppable: jest.fn().mockImplementation(({ children }) => <>{children}</>),
+  Droppable: vi.fn().mockImplementation(({ children }) => <>{children}</>),
 }));
 
 describe('DndDroppable', () => {

@@ -10,7 +10,7 @@ import { EditAppletSetting } from './EditAppletSetting';
 const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.EditApplet}`;
 const routePath = page.appletSettingsItem;
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

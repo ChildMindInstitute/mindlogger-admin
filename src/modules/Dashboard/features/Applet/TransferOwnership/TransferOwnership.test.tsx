@@ -9,8 +9,8 @@ import { Roles } from 'shared/consts';
 
 import { TransferOwnership } from './TransferOwnership';
 
-const mockedSetIsSubmitted = jest.fn();
-const mockedSetEmailTransferred = jest.fn();
+const mockedSetIsSubmitted = vi.fn();
+const mockedSetEmailTransferred = vi.fn();
 const dataTestid = 'transfer-ownership';
 
 const transferOwnershipComponent = (

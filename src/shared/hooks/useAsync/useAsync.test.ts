@@ -9,9 +9,9 @@ const mockAsyncFunction = () => Promise.resolve(mockedData) as Promise<AxiosResp
 const mockAsyncFunctionReject = () =>
   Promise.reject(errorResponse) as Promise<AxiosResponse<unknown>>;
 
-const mockCallback = jest.fn();
-const mockErrorCallback = jest.fn();
-const mockFinallyCallback = jest.fn();
+const mockCallback = vi.fn();
+const mockErrorCallback = vi.fn();
+const mockFinallyCallback = vi.fn();
 
 describe('useAsync', () => {
   test('should execute async function and update state on success', async () => {

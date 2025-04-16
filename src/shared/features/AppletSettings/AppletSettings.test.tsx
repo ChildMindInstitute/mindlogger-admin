@@ -11,8 +11,8 @@ import { AppletSettings } from './AppletSettings';
 
 const dataTestid = 'applet-settings';
 
-const mockOnClick = jest.fn();
-const mockUseNavigate = jest.fn();
+const mockOnClick = vi.fn();
+const mockUseNavigate = vi.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

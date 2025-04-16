@@ -10,7 +10,7 @@ import { AssignmentsTableProps } from './AssignmentsTable.types';
 /* Mock data
 =================================================== */
 
-const mockOnChange = jest.fn();
+const mockOnChange = vi.fn();
 const mockTestId = 'test-id';
 const mockedAssignment: HydratedAssignment = {
   id: '1',

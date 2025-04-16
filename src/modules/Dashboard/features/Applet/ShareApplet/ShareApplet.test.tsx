@@ -11,14 +11,14 @@ import { ShareApplet } from './ShareApplet';
 const dataTestid = 'share-applet';
 const appletName = 'displayName';
 
-const onAppletSharedMock = jest.fn();
+const onAppletSharedMock = vi.fn();
 
 const defaultProps = {
   applet: mockedApplet,
   onAppletShared: onAppletSharedMock,
-  onDisableSubmit: jest.fn(),
+  onDisableSubmit: vi.fn(),
   isSubmitted: false,
-  setIsSubmitted: jest.fn(),
+  setIsSubmitted: vi.fn(),
   showSuccess: true,
   'data-testid': dataTestid,
 };
@@ -33,7 +33,7 @@ const checkAppletNameInLibraryMock = () =>
 
 Object.assign(navigator, {
   clipboard: {
-    writeText: jest.fn(),
+    writeText: vi.fn(),
   },
 });
 

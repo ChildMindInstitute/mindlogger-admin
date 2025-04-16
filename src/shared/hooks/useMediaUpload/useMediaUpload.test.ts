@@ -8,13 +8,13 @@ import { useMediaUpload } from './useMediaUpload';
 import { UseMediaUploadReturn } from './useMediaUpload.types';
 
 const mockedAxios = axios.create();
-const mockGetMediaUploadUrl = jest.fn();
+const mockGetMediaUploadUrl = vi.fn();
 jest.mock('shared/hooks/useAsync', () => ({
   useAsync: () => ({ execute: mockGetMediaUploadUrl }),
 }));
-const mockCallback = jest.fn();
-const mockErrorCallback = jest.fn();
-const mockFinallyCallback = jest.fn();
+const mockCallback = vi.fn();
+const mockErrorCallback = vi.fn();
+const mockFinallyCallback = vi.fn();
 const url = 'https://example.com/image.jpg';
 const uploadUrl = 'https://example.com/upload';
 const file = new File(['file contents'], 'test.jpg', { type: 'image/jpeg' });

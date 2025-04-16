@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { AddIndividualSchedulePopup } from './AddIndividualSchedulePopup';
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const dataTestid = 'add-individual-schedule-popup';
 const testAppletId = 'test-applet-id';
 const testUserId = 'test-user-id';

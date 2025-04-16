@@ -4,8 +4,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ErrorPopup } from './ErrorPopup';
 
-const setPopupVisibleMock = jest.fn();
-const retryCallbackMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
+const retryCallbackMock = vi.fn();
 
 describe('ErrorPopup', () => {
   test('should render and retry', () => {

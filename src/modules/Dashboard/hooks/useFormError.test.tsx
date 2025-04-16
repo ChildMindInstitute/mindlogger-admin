@@ -4,8 +4,8 @@ import { renderHook } from '@testing-library/react';
 
 import { useFormError } from './useFormError';
 
-const setHasCommonError = jest.fn();
-const setError = jest.fn();
+const setHasCommonError = vi.fn();
+const setError = vi.fn();
 const commonProps = { setError, setHasCommonError };
 const fieldName = 'email';
 const mockedApiErrorMessage = 'some message';
