@@ -128,7 +128,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleOnSelectChange = (event: SelectChangeEvent<unknown>, _: ReactNode) => {
+          const handleOnSelectChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
             const newValue = event.target.value as ItemResponseType;
 
             if (onBeforeChange && !onBeforeChange(newValue)) {
@@ -137,14 +137,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
             if (checkIfSelectChangePopupIsVisible) {
               checkIfSelectChangePopupIsVisible(() => {
-                onChange(event);
+                onChange(event, child);
                 processItemType(event as ChangeEvent<HTMLInputElement>);
               });
 
               return;
             }
 
-            onChange(event);
+            onChange(event, child);
             processItemType(event as ChangeEvent<HTMLInputElement>);
           };
 
