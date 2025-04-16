@@ -1,8 +1,6 @@
 import { Box } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { variables } from 'shared/styles';
-
 import { Modal } from '../Modal';
 import { EHRAvailableModalProps } from './EHRAvailableModal.types';
 import { EHR_GO_TO_WEBSITE_URL } from './EHRModals.const';
@@ -27,11 +25,6 @@ export const EHRAvailableModal = ({ open, onClose }: EHRAvailableModalProps) => 
       onSecondBtnSubmit={onClose}
       width="61"
       data-testid="ehr-available-modal"
-      sxProps={{
-        '.MuiPaper-root': {
-          backgroundColor: variables.palette.surface3,
-        },
-      }}
     >
       <Box sx={{ px: 3.2 }}>
         <Trans i18nKey="requestHealthRecordDataSettings.modal.content">
