@@ -1,5 +1,13 @@
-import { Box, BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import {
+  Box,
+  BoxProps,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -120,8 +128,8 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleOnSelectChange = (...props: unknown[]) => {
-            const newValue = (props[0] as { target: { value: ItemResponseType } }).target.value;
+          const handleOnSelectChange = (event: SelectChangeEvent<unknown>, _: ReactNode) => {
+            const newValue = event.target.value as ItemResponseType;
 
             if (onBeforeChange && !onBeforeChange(newValue)) {
               return;
@@ -129,15 +137,15 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
             if (checkIfSelectChangePopupIsVisible) {
               checkIfSelectChangePopupIsVisible(() => {
-                onChange(...props);
-                processItemType(props[0] as ChangeEvent<HTMLInputElement>);
+                onChange(event);
+                processItemType(event as ChangeEvent<HTMLInputElement>);
               });
 
               return;
             }
 
-            onChange(...props);
-            processItemType(props[0] as ChangeEvent<HTMLInputElement>);
+            onChange(event);
+            processItemType(event as ChangeEvent<HTMLInputElement>);
           };
 
           return (
