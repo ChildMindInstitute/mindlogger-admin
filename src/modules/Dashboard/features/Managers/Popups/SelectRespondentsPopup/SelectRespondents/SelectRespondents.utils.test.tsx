@@ -1,8 +1,10 @@
+import { vi } from 'vitest';
+
 import { getHeadCells } from './SelectRespondents.utils';
 
 describe('getHeadCells', () => {
   test('returns an array of HeadCell objects with correct properties', () => {
-    const onSelectAllClick = jest.fn();
+    const onSelectAllClick = vi.fn();
     const selectAllChecked = true;
 
     const headCells = getHeadCells(onSelectAllClick, selectAllChecked);
