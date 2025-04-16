@@ -154,7 +154,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "jest-junit": "^16.0.0",
