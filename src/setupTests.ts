@@ -1,25 +1,26 @@
 import 'mock-local-storage';
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
-jest.mock('react-secure-storage', () => ({
-  setItem: jest.fn(() => Promise.resolve()),
-  getItem: jest.fn(() => Promise.resolve('')),
-  removeItem: jest.fn(() => Promise.resolve()),
-  clear: jest.fn(() => Promise.resolve()),
+vi.mock('react-secure-storage', () => ({
+  setItem: vi.fn(() => Promise.resolve()),
+  getItem: vi.fn(() => Promise.resolve('')),
+  removeItem: vi.fn(() => Promise.resolve()),
+  clear: vi.fn(() => Promise.resolve()),
 }));
 
-jest.mock('shared/utils/encryption', () => ({
+vi.mock('shared/utils/encryption', () => ({
   __esModule: true,
-  ...jest.requireActual('shared/utils/encryption'),
+  ...vi.importActual('shared/utils/encryption'),
 }));
 
-jest.spyOn(global.console, 'warn').mockImplementation((message) => {
+vi.spyOn(global.console, 'warn').mockImplementation((message) => {
   if (message?.includes('You have provided an out-of-range value')) return;
 
   return message;
 });
 
-jest.spyOn(global.console, 'error').mockImplementation((message) => {
+vi.spyOn(global.console, 'error').mockImplementation((message) => {
   if (
     message?.includes('A component is changing an uncontrolled input to be controlled') ||
     message?.includes('`children` must be passed')
@@ -29,6 +30,6 @@ jest.spyOn(global.console, 'error').mockImplementation((message) => {
   return message;
 });
 
-jest.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles', () => ({
-  ...jest.requireActual('__mocks__/EditorController'),
+vi.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles', () => ({
+  ...vi.importActual('__mocks__/EditorController'),
 }));
