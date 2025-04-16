@@ -352,20 +352,21 @@ export class ScheduleHistoryExporter extends DataExporter<
               const schedulesAhead = filterDefaultSchedules.slice(
                 filterDefaultSchedules.indexOf(schedule) + 1,
               );
-              const startTimeOnDay = schedule.accessBeforeSchedule
-                ? startOfTheDay
-                : DateTime.fromISO(`${day}T${schedule.startTime}`);
 
               let isSupersededOnThisDate = false;
               for (let j = 0; j < schedulesAhead.length; j++) {
                 const scheduleAhead = schedulesAhead[j];
-                const scheduleAheadCreationDate = DateTime.fromISO(
+
+                // We add 1 day to the creation time so that the previous schedule version will still show up
+                // on its actual creation day
+                const offsetScheduleAheadCreationDate = DateTime.fromISO(
                   scheduleAhead.eventVersionCreatedAt,
-                );
+                  { zone: 'UTC' },
+                ).plus({ days: 1 });
 
                 const isSameScheduleType = scheduleAhead.userId === schedule.userId;
                 const isSameEntity = scheduleAhead.activityOrFlowId === schedule.activityOrFlowId;
-                const isCreatedBeforeStartTime = scheduleAheadCreationDate <= startTimeOnDay;
+                const isCreatedTodayOrBefore = offsetScheduleAheadCreationDate <= endOfTheDay;
                 const isSameEvent = scheduleAhead.eventId === schedule.eventId;
                 const isOneAlwaysAvailable =
                   schedule.periodicity === 'ALWAYS' || scheduleAhead.periodicity === 'ALWAYS';
@@ -373,7 +374,7 @@ export class ScheduleHistoryExporter extends DataExporter<
                 if (
                   isSameScheduleType &&
                   isSameEntity &&
-                  isCreatedBeforeStartTime &&
+                  isCreatedTodayOrBefore &&
                   (isSameEvent || isOneAlwaysAvailable)
                 ) {
                   isSupersededOnThisDate = true;
