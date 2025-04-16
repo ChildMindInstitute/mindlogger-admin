@@ -67,6 +67,16 @@ export const getChipStyleOverrides = ({
           backgroundColor: isFilled ? variables.palette.on_surface_variant_alfa8 : undefined,
         },
       };
+    case 'infoAlt':
+      return {
+        color: variables.palette.on_secondary_container,
+        [key]: variables.palette.purple_alfa30,
+
+        '&[tabindex="0"]:hover': {
+          borderColor: variables.palette.purple_alfa30,
+          backgroundColor: isFilled ? variables.palette.purple_alfa30 : undefined,
+        },
+      };
     default:
       return {};
   }

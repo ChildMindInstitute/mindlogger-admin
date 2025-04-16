@@ -3,15 +3,15 @@ import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { doubleBrackets, getEntityKey } from 'shared/utils';
-import { useFeatureFlags } from 'shared/hooks';
-import { ItemResponseType } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
+import { doubleBrackets, getEntityKey } from 'shared/utils';
 
-import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
+import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { ItemsOption, ItemsOptionGroup } from './ItemConfiguration.types';
-import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
+import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -82,14 +82,16 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
               value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
           ),
         import: (options: ItemsOption[]) => {
-          const filteredOptions = options.filter(
+          const shouldUseHealthOption = options.some(
             ({ value }) =>
-              value !== ItemResponseType.RequestHealthRecordData ||
-              featureFlags.enableEhrHealthData === 'active',
+              value === ItemResponseType.RequestHealthRecordData &&
+              !!featureFlags.enableEhrHealthData &&
+              featureFlags.enableEhrHealthData !== 'unavailable',
           );
 
-          return hasExistingHealthRecordItem
-            ? filteredOptions.map((option) =>
+          if (shouldUseHealthOption) {
+            if (hasExistingHealthRecordItem) {
+              return options.map((option) =>
                 option.value === ItemResponseType.RequestHealthRecordData
                   ? {
                       ...option,
@@ -97,8 +99,13 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
                       tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
                     }
                   : option,
-              )
-            : filteredOptions;
+              );
+            }
+
+            return options;
+          }
+
+          return options.filter(({ value }) => value !== ItemResponseType.RequestHealthRecordData);
         },
       };
 

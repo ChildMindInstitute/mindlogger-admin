@@ -1,10 +1,20 @@
-import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
 import { Grid } from '@mui/material';
+import { useRef, useState } from 'react';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
+import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { EditorController, InputController } from 'shared/components/FormComponents';
+import { Modal } from 'shared/components/Modal';
+import { EHRAvailableModal } from 'shared/components/Modal/EHRModals';
+import { ItemResponseType } from 'shared/consts';
+import { BuilderContainer } from 'shared/features';
+import { useFeatureFlags } from 'shared/hooks';
 import {
   StyledBodyMedium,
   StyledModalWrapper,
@@ -12,28 +22,23 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { BuilderContainer } from 'shared/features';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
-import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
-import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
+import { ConfigurationHeader } from './ConfigurationHeader';
+import { EditItemModal } from './EditItemModal';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { ItemConfigurationProps } from './ItemConfiguration.types';
-import { getInputTypeTooltip } from './ItemConfiguration.utils';
-import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
+import { itemsTypePlaceholders } from './ItemConfiguration.const';
 import {
   useCheckIfItemHasVariables,
   useGetAvailableItemTypeOptions,
 } from './ItemConfiguration.hooks';
-import { ConfigurationHeader } from './ConfigurationHeader';
-import { EditItemModal } from './EditItemModal';
-import { itemsTypePlaceholders } from './ItemConfiguration.const';
+import { ItemConfigurationProps } from './ItemConfiguration.types';
+import { getInputTypeTooltip } from './ItemConfiguration.utils';
+import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');
+  const [isEhrModalOpen, setIsEhrModalOpen] = useState(false);
+  const { featureFlags } = useFeatureFlags();
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
@@ -59,6 +64,19 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const handleModalSubmit = () => {
     selectChangeRef.current?.();
     filterConditionalLogicByItem();
+  };
+
+  const handleBeforeChange = (newValue: ItemResponseType) => {
+    if (
+      newValue === ItemResponseType.RequestHealthRecordData &&
+      featureFlags.enableEhrHealthData === 'available'
+    ) {
+      setIsEhrModalOpen(true);
+
+      return false;
+    }
+
+    return true;
   };
 
   const prepareSelectChangePopup = (handleOnChange: () => void) => {
@@ -108,6 +126,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               setValue={setValue}
               fieldName={name}
               data-testid="builder-activity-items-item-configuration-response-type"
+              onBeforeChange={handleBeforeChange}
             />
             <StyledBodyMedium
               sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
@@ -155,6 +174,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           <StyledModalWrapper>{t(message)}</StyledModalWrapper>
         </Modal>
       )}
+      <EHRAvailableModal open={isEhrModalOpen} onClose={() => setIsEhrModalOpen(false)} />
       {isEditItemPopupVisible && (
         <EditItemModal
           open
