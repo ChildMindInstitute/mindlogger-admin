@@ -556,6 +556,10 @@
   "editParticipant": "Modifier un participant",
   "editRespondents": "Modifier les participants",
   "editUser": "Modifier l'utilisateur",
+  "ehr": {
+    "bannerAvailable": "<0>Vous pouvez maintenant collecter les données de soins de santé des participants dans les études !</0> <1>En savoir plus</1>",
+    "bannerActive": "<0>Votre intégration de données de soins de santé électroniques est active. Si vous avez des questions ou des problèmes,</0> <1>contactez-nous</1><2>.</2>"
+  },
   "el": "Grec",
   "element": "Élément",
   "elementsAssociatedWithSubscales": "Éléments associés à une ou plusieurs sous-échelles",

@@ -1,28 +1,25 @@
-import { LDFlagValue } from 'launchdarkly-react-client-sdk';
-
 // These keys use the camelCase representation of the feature flag value
 // e.g. enable-participant-multi-informant in LaunchDarky becomes enableParticipantMultiInformant
-export const FeatureFlagsKeys = {
-  enableParticipantMultiInformant: 'enableParticipantMultiInformant',
+export type FeatureFlags = Partial<{
+  enableParticipantMultiInformant: boolean;
   // TODO: https://mindlogger.atlassian.net/browse/M2-6519 Activity Filter Sort flag cleanup
-  enableActivityFilterSort: 'enableActivityFilterSort',
+  enableActivityFilterSort: boolean;
   // TODO: https://mindlogger.atlassian.net/browse/M2-6518 Assign Activity flag cleanup
-  enableActivityAssign: 'enableActivityAssign',
+  enableActivityAssign: boolean;
   // TODO: https://mindlogger.atlassian.net/browse/M2-6523 Participant Connections flag cleanup
-  enableParticipantConnections: 'enableParticipantConnections',
-  enableLorisIntegration: 'enableLorisIntegration',
-  enableProlificIntegration: 'enableProlificIntegration',
-  enableItemFlowExtendedItems: 'enableItemFlowExtendedItems',
-  enableItemFlowItemsG2: 'enableItemFlowItemsG2',
-  enableItemFlowItemsG3: 'enableItemFlowItemsG3',
-  enableParagraphTextItem: 'enableParagraphTextItem',
-  enablePhrasalTemplate: 'enablePhrasalTemplate',
-  enableShareToLibrary: 'enableShareToLibrary',
-  enableDataExportSpeedUp: 'enableDataExportSpeedUp',
-  enableMeritActivityType: 'enableMeritActivityType',
-  enableCahmiSubscaleScoring: 'enableCahmiSubscaleScoring',
-  enableDataExportRenaming: 'enableDataExportRenaming',
-  enableSubscaleNullWhenSkipped: 'enableSubscaleNullWhenSkipped',
-};
-
-export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
+  enableParticipantConnections: boolean;
+  enableLorisIntegration: boolean;
+  enableProlificIntegration: boolean;
+  enableItemFlowExtendedItems: boolean;
+  enableItemFlowItemsG2: boolean;
+  enableItemFlowItemsG3: boolean;
+  enableParagraphTextItem: boolean;
+  enablePhrasalTemplate: boolean;
+  enableShareToLibrary: boolean;
+  enableDataExportSpeedUp: boolean;
+  enableMeritActivityType: boolean;
+  enableCahmiSubscaleScoring: boolean;
+  enableDataExportRenaming: boolean;
+  enableSubscaleNullWhenSkipped: boolean;
+  enableEhrHealthData: 'unavailable' | 'available' | 'active';
+}>;
