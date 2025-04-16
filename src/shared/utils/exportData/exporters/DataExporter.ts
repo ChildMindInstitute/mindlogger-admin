@@ -77,15 +77,20 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
   }
 
   /**
+   * Check if a date is in the format YYYY-MM-DD
+   */
+  isISODate(date: string): boolean {
+    return /^\d{4}-\d{2}-\d{2}$/.test(date);
+  }
+
+  /**
    * Generate a list of every date between two dates inclusive. The data parameters must be valid dates in the format
    * YYYY-MM-DD
    * @param startISODate The start of the interval
    * @param endISODate The end of the interval
    */
   daysBetweenInterval(startISODate: string, endISODate: string): string[] {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-    if (!dateRegex.test(startISODate) || !dateRegex.test(endISODate)) {
+    if (!this.isISODate(startISODate) || !this.isISODate(endISODate)) {
       // The dates are invalid, so return nothing
       return [];
     }

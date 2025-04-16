@@ -253,10 +253,9 @@ export class ScheduleHistoryExporter extends DataExporter<
     userId: string,
     scheduleHistoryData: ScheduleHistoryData[],
   ): ScheduleHistoryData[] {
-    // The `day` variable is an ISO string of the form 'YYYY-MM-DD', which becomes the start of the day (00:00:00)
-    // when parsed by Luxon
-    const startOfTheDay = DateTime.fromISO(day);
-    const endOfTheDay = startOfTheDay.endOf('day');
+    if (!this.isISODate(day)) {
+      return [];
+    }
 
     // Removes events that couldn't apply to the user
     const filteredByUser = scheduleHistoryData.filter(
@@ -283,6 +282,11 @@ export class ScheduleHistoryExporter extends DataExporter<
       }, {}),
     );
 
+    // The `day` parameter is an ISO string of the form 'YYYY-MM-DD', which becomes the start of the day (00:00:00)
+    // when parsed by Luxon
+    const startOfTheDay = DateTime.fromISO(`${day}`, { zone: 'UTC' });
+    const endOfTheDay = startOfTheDay.endOf('day');
+
     Object.entries(groupBy(filteredByUser, 'appletVersion'))
       .reverse()
       .forEach(([appletVersion, appletVersionGroupedSchedules]) => {
@@ -302,33 +306,34 @@ export class ScheduleHistoryExporter extends DataExporter<
                 return true;
               }
 
-              const extendsPastDay =
-                DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
-
-              const endTimeOnDay = extendsPastDay
-                ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
-                : DateTime.fromISO(`${day}T${schedule.endTime}`);
-
               return (
                 appletVersionGroupedSchedules.filter((competition) => {
                   const isIndividualSchedule = competition.userId !== null;
 
-                  const createdTodayOrBefore =
-                    DateTime.fromISO(competition.eventVersionCreatedAt) <= endOfTheDay;
+                  // We add 1 day to the creation time so that the default schedule will still show up
+                  // on its actual creation day
+                  const offsetScheduleCreationDate = DateTime.fromISO(
+                    competition.eventVersionCreatedAt,
+                    { zone: 'UTC' },
+                  ).plus({ days: 1 });
+
+                  const createdTodayOrBefore = offsetScheduleCreationDate <= endOfTheDay;
 
                   const deletionDate = DateTime.fromISO(
                     competition.eventVersionIsDeleted ? competition.eventVersionUpdatedAt : '',
+                    { zone: 'UTC' },
                   );
 
                   const notDeleted = !deletionDate.isValid;
 
-                  const deletedAfterDefaultScheduleEndTime =
-                    deletionDate.isValid && deletionDate > endTimeOnDay;
+                  // If the individual schedule was deleted at any point today, the default schedule starts applying
+                  // again
+                  const deletedTodayOrAfter = deletionDate.isValid && deletionDate > startOfTheDay;
 
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedAfterDefaultScheduleEndTime)
+                    (notDeleted || deletedTodayOrAfter)
                   );
                 }).length === 0
               );
