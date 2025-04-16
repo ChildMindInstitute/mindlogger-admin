@@ -19,7 +19,7 @@ describe('Notification', () => {
   const mockedSetCurrentId = vi.fn();
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should render component', () => {

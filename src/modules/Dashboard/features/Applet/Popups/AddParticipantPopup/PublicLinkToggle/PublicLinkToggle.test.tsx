@@ -26,12 +26,12 @@ const testResponse = {
 
 describe('PublicLinkToggle', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
+    vi.useFakeTimers();
+    vi.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
     jest.clearAllTimers();
   });
 

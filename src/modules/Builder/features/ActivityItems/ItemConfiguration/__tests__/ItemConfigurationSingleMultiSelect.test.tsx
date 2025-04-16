@@ -36,7 +36,7 @@ jest.mock('react-color', () => ({
 
 describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

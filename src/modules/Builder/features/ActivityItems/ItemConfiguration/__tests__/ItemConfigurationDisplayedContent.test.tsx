@@ -42,7 +42,7 @@ const renderItemConfig = (item) => {
 
 describe('ItemConfiguration: Displayed Content', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

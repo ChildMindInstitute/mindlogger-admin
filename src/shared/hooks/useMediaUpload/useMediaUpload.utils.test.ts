@@ -63,17 +63,17 @@ describe('useMediaUpload.utils', () => {
     const mockedOnStopRecursion = vi.fn();
 
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
       jest.clearAllTimers();
-      jest.restoreAllMocks();
-      jest.clearAllMocks();
+      vi.restoreAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should call onSuccess when file exists', async () => {
-      jest.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
+      vi.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
 
       await checkFileExists({
         url,
@@ -93,8 +93,8 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should retry after a timeout if response status is Forbidden', async () => {
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
-      const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
+      const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
@@ -108,7 +108,7 @@ describe('useMediaUpload.utils', () => {
 
     test('should call onError when an error occurs', async () => {
       const error = new Error('Network error');
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce(error);
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce(error);
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
@@ -122,8 +122,8 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should clear timeout when stopChecking is called', async () => {
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
-      const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
+      const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
 
       const { stopChecking } = await checkFileExists({
         url,

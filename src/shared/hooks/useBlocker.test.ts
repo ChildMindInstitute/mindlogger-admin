@@ -6,7 +6,7 @@ import history from 'routes/history';
 import { useBlocker } from './useBlocker';
 
 const mockBlocker = vi.fn();
-const spyHistoryBlock = jest.spyOn(history, 'block');
+const spyHistoryBlock = vi.spyOn(history, 'block');
 
 describe('useBlocker', () => {
   test('should call history.block when "when" is true', () => {

@@ -31,7 +31,7 @@ const commonProps = {
 
 describe('Modal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the modal with all elements', () => {

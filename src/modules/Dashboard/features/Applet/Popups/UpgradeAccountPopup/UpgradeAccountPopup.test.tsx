@@ -11,7 +11,7 @@ import { UpgradeAccountPopup } from './UpgradeAccountPopup';
 
 const dataTestid = 'test-id';
 const onCloseMock = vi.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,

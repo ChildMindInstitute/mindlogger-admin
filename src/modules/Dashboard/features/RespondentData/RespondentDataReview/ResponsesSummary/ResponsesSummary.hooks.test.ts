@@ -20,7 +20,7 @@ describe('useResponsesSummary', () => {
   const version = '1.0';
 
   test('should return a correct array with review description objects', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res: SubjectDetailsWithDataAccess = {
       secretUserId: 'secret123',
       nickname: 'John Doe',

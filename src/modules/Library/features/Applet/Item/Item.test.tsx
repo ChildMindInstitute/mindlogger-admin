@@ -66,18 +66,15 @@ const ItemComponent = (
 
 describe('Item', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders checkbox and header', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(
-      library.actions,
-      'setAddToBuilderBtnDisabled',
-    );
+    const setAddToBuilderBtnDisabledMock = vi.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
 
     renderWithProviders(ItemComponent, {
       route: '/library/cart',

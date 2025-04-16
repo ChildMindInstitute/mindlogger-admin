@@ -20,7 +20,7 @@ const mockFlags = {
 
 describe('exportDataSucceed', () => {
   beforeAll(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     jest.setSystemTime(new Date('2000-01-01'));
   });
   beforeEach(() => {
@@ -30,12 +30,12 @@ describe('exportDataSucceed', () => {
     jest
       .spyOn(prepareDataUtils, 'prepareDecryptedData')
       .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
-    jest.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
-    jest.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
-    jest.spyOn(exportMediaZipUtils, 'exportMediaZip').mockImplementation();
+    vi.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
+    vi.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
+    vi.spyOn(exportMediaZipUtils, 'exportMediaZip').mockImplementation();
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   afterAll(() => {
     jest.useRealTimers();
@@ -195,7 +195,7 @@ describe('exportDataSucceed', () => {
   });
 
   test("exportEncryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
-    jest.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
+    vi.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
       Promise.resolve({
         ...prepareDataUtils.getDefaultExportData(),
         reportData,
@@ -214,7 +214,7 @@ describe('exportDataSucceed', () => {
   test("exportDecryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
     const reportData = [{ id: 'test' }];
     const activityJourneyData = [{ id: 'test' }];
-    jest.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
+    vi.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
       Promise.resolve({
         ...prepareDataUtils.getDefaultExportData(),
         reportData,

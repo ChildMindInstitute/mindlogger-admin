@@ -11,11 +11,11 @@ const callbackMock = vi.fn();
 
 describe('useCheckIfHasEncryption', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should call callback and return true if hasEncryptionCheck is true', () => {
-    jest.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
+    vi.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
       getAppletPrivateKey: () => mockedPrivateKey,
     });
     const { result } = renderHook(() =>
@@ -31,7 +31,7 @@ describe('useCheckIfHasEncryption', () => {
   });
 
   test('should not call callback and return false if hasEncryptionCheck is false', () => {
-    jest.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
+    vi.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
       getAppletPrivateKey: () => undefined,
     });
     const { result } = renderHook(() =>
@@ -47,7 +47,7 @@ describe('useCheckIfHasEncryption', () => {
   });
 
   test('should not call callback and return true if appletData is null and hasEncryptionCheck is true', () => {
-    jest.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
+    vi.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
       getAppletPrivateKey: () => mockedPrivateKey,
     });
     const { result } = renderHook(() =>

@@ -59,7 +59,7 @@ describe('ActivityFlowSettings', () => {
   beforeEach(() => {
     useCustomFormContext.mockReturnValue({ watch: mockWatch });
     mockWatch.mockReturnValueOnce(mockActivityFlows);
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders ActivityFlowSettings component with mock data and enabled report config', () => {

@@ -39,7 +39,7 @@ const abortSignal = { signal: undefined };
 describe('DuplicatePopups', () => {
   afterEach(() => {
     mockAxios.reset();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should show an error if the name already exists in database', async () => {
@@ -70,7 +70,7 @@ describe('DuplicatePopups', () => {
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
@@ -151,7 +151,7 @@ describe('DuplicatePopups', () => {
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
@@ -239,7 +239,7 @@ describe('DuplicatePopups', () => {
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),

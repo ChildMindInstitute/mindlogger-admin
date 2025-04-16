@@ -35,7 +35,7 @@ describe('useActivityFlow', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return currentActivityFlow based on activityFlowId', () => {

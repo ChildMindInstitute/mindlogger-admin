@@ -91,18 +91,15 @@ jest.mock('../Item/Item.styles', () => ({
 
 describe('Activity Component', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders normal activity', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(
-      library.actions,
-      'setAddToBuilderBtnDisabled',
-    );
+    const setAddToBuilderBtnDisabledMock = vi.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
 
     renderComponent({
       activity: mockedNormalActivity,
@@ -162,10 +159,7 @@ describe('Activity Component', () => {
   });
 
   test('renders performance task', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(
-      library.actions,
-      'setAddToBuilderBtnDisabled',
-    );
+    const setAddToBuilderBtnDisabledMock = vi.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
 
     renderComponent({
       activity: mockedPerformanceTask,

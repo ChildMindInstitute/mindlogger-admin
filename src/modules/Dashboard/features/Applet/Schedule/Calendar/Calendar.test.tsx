@@ -75,7 +75,7 @@ describe('Calendar Component', () => {
   );
 
   beforeEach(() => {
-    jest.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
+    vi.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
       onClickCreateEvent: clickCreateEventMock,
       onClickEditEvent: clickEditEventMock,
     });
@@ -167,7 +167,7 @@ describe('Calendar Component', () => {
   });
 
   test('should dispatch setCalendarCurrentYear', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
     await act(async () => {
       renderWithProviders(<Calendar />, {
         preloadedState,

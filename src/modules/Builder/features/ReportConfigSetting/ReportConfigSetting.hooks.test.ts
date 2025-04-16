@@ -68,7 +68,7 @@ const renderDefaultValuesHook = (appletData = {}, params) => {
 
 describe('useCheckReportServer', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('onVerify returns true when server responds with OK_MESSAGE', async () => {
@@ -170,7 +170,7 @@ describe('useCheckReportServer', () => {
 
 describe('useDefaultValues', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('returns initialValues when no appletData provided', () => {

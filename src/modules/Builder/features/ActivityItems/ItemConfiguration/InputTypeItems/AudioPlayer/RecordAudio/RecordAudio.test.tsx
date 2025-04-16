@@ -37,12 +37,12 @@ describe('RecordAudio', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render RecordAudio component, test remove record', async () => {
-    const useAudioRecorderSpy = jest.spyOn(audioRecorderHooks, 'useAudioRecorder');
-    const useMediaUploadSpy = jest.spyOn(useMediaUploadHooks, 'useMediaUpload');
+    const useAudioRecorderSpy = vi.spyOn(audioRecorderHooks, 'useAudioRecorder');
+    const useMediaUploadSpy = vi.spyOn(useMediaUploadHooks, 'useMediaUpload');
 
     useAudioRecorderSpy.mockImplementation(({ setFile }) => ({
       startRecording: vi.fn(),
@@ -105,8 +105,8 @@ describe('RecordAudio', () => {
   });
 
   test('render RecordAudio component, test upload record', async () => {
-    const useAudioRecorderSpy = jest.spyOn(audioRecorderHooks, 'useAudioRecorder');
-    const useMediaUploadSpy = jest.spyOn(useMediaUploadHooks, 'useMediaUpload');
+    const useAudioRecorderSpy = vi.spyOn(audioRecorderHooks, 'useAudioRecorder');
+    const useMediaUploadSpy = vi.spyOn(useMediaUploadHooks, 'useMediaUpload');
     useAudioRecorderSpy.mockImplementation(({ setFile }) => ({
       startRecording: vi.fn(),
       stopRecording: () => {

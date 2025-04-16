@@ -62,7 +62,7 @@ jest.mock('react-router-dom', () => ({
 describe('DeleteAppletSetting', () => {
   test('should render and submit', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
       getPublicKey: getPublicKeyMock,
     }));
     const { store } = renderWithProviders(<DeleteAppletSetting />, {

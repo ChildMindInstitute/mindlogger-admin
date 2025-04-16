@@ -125,7 +125,7 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 // Required for ActivityAssignDrawer
 Element.prototype.scrollTo = vi.fn();
 
-const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 /* Test Component
 =================================================== */
@@ -208,7 +208,7 @@ describe('useAssignmentsTab hook', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Edit', () => {

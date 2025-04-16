@@ -30,7 +30,7 @@ const defaultApplet = preloadedStateWithIntegration.applet.applet.data.result;
 
 describe('ProlificIntegration', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the DisconnectionPopup', () => {

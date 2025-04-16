@@ -66,7 +66,7 @@ const workspaceLabelNames = [...labelNames, ...onlyWorkspaceLabelNames];
 
 describe('AddManagerForm component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('The form has expected fields with Manager role and workspace disabled', () => {

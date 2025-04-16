@@ -12,7 +12,7 @@ import { AddParticipantPopup } from './AddParticipantPopup';
 
 const dataTestId = 'test-id';
 const onCloseMock = vi.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,

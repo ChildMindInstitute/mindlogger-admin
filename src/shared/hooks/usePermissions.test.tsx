@@ -13,7 +13,7 @@ describe('usePermissions hook tests', () => {
   const mockAsyncFunc = vi.fn();
 
   test('should not call asyncFn without owner', async () => {
-    jest.spyOn(workspaces, 'useData').mockReturnValue({} as Workspace);
+    vi.spyOn(workspaces, 'useData').mockReturnValue({} as Workspace);
     const { result } = renderHook(() => usePermissions(mockAsyncFunc));
 
     await waitFor(() => {
@@ -24,7 +24,7 @@ describe('usePermissions hook tests', () => {
   });
 
   test('should re-call asyncFn when dependencies change', async () => {
-    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    vi.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
     let testDeps = [0];
     const { rerender } = renderHook(() => usePermissions(mockAsyncFunc, testDeps));
 
@@ -43,7 +43,7 @@ describe('usePermissions hook tests', () => {
   });
 
   test('should not be forbidden for successful response', async () => {
-    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    vi.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
     mockAsyncFunc.mockResolvedValue({
       payload: {
         response: {
@@ -63,7 +63,7 @@ describe('usePermissions hook tests', () => {
   });
 
   test('should be forbidden for forbidden response', async () => {
-    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    vi.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
     mockAsyncFunc.mockResolvedValue({
       payload: {
         response: {

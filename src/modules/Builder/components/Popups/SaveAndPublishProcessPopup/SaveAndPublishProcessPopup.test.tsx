@@ -24,7 +24,7 @@ const commonProps = {
 
 describe('SaveAndPublishProcessPopup', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('renders correctly for a beingCreated', () => {
@@ -61,7 +61,7 @@ describe('SaveAndPublishProcessPopup', () => {
   });
 
   test('dispatches correct action on report config save', () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
 
     renderWithProviders(
       <SaveAndPublishProcessPopup step={SaveAndPublishSteps.ReportConfigSave} {...commonProps} />,

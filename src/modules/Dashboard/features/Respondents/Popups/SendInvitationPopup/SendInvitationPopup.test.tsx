@@ -33,7 +33,7 @@ const commonPopupProps = {
 
 describe('SendInvitationPopup', () => {
   test('renders the component with no email, submit after correct email enter', async () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
     const { getByTestId, getByText, getByLabelText } = renderWithProviders(
       <SendInvitationPopup {...commonPopupProps} email={null} />,
     );
@@ -61,7 +61,7 @@ describe('SendInvitationPopup', () => {
   });
 
   test('renders and submit the component with email', async () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
     const { getByTestId, getByText } = renderWithProviders(
       <SendInvitationPopup {...commonPopupProps} email={mockedEmail} />,
     );

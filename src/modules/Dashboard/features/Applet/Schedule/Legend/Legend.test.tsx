@@ -218,7 +218,7 @@ describe('Legend', () => {
     });
 
     test('Should Clear all scheduled events for the default schedule', async () => {
-      jest.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
+      vi.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
       const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
 
       await userEvent.click(clearAllScheduledEventsButton);
@@ -233,7 +233,7 @@ describe('Legend', () => {
     });
 
     test('Creates events for the default schedule', async () => {
-      jest.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
+      vi.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
       const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
         .firstChild as unknown as Element;
 
@@ -319,7 +319,7 @@ describe('Legend', () => {
     });
 
     test('Should Clear all scheduled events for the default schedule', async () => {
-      jest.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
+      vi.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
       const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
 
       await userEvent.click(clearAllScheduledEventsButton);
@@ -337,7 +337,7 @@ describe('Legend', () => {
     });
 
     test('Creates events for the individual schedule', async () => {
-      jest.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
+      vi.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
       const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
         .firstChild as unknown as Element;
 

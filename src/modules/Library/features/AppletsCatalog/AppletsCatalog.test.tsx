@@ -104,21 +104,21 @@ jest.mock('modules/Library/hooks', () => ({
 
 describe('AppletsCatalog', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
   });
 
   test(
     'renders loading spinner when applets are loading',
     () => {
-      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-      jest.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
-      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
-      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
+      const spyGetPublishedApplets = vi.spyOn(library.thunk, 'getPublishedApplets');
+      vi.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
+      vi.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
+      vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
 
       renderWithProviders(<AppletsCatalog />);
 
@@ -131,10 +131,10 @@ describe('AppletsCatalog', () => {
   test(
     'renders applets and pagination correctly when applets are loaded',
     async () => {
-      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-      jest.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
-      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
-      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
+      const spyGetPublishedApplets = vi.spyOn(library.thunk, 'getPublishedApplets');
+      vi.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
+      vi.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
+      vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
       renderWithProviders(<AppletsCatalog />);
 

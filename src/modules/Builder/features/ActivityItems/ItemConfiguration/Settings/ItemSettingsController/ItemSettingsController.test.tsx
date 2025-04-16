@@ -362,7 +362,7 @@ const mockedSettingGroupsByType = {
 
 describe('ItemSettingsController', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("doesn't render if inputType is not provided", () => {

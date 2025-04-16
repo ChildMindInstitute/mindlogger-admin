@@ -29,7 +29,7 @@ describe('ImportSchedulePopup', () => {
 
   // Here we test high-level logic of the stepper, not the internal conditions of the hook logic.
   // Need to mock the schedule export data to pass successfully when file is ready
-  jest.spyOn(importSchedulePopupFunc, 'getUploadedScheduleErrors').mockImplementation(() => ({
+  vi.spyOn(importSchedulePopupFunc, 'getUploadedScheduleErrors').mockImplementation(() => ({
     notExistentActivities: [],
     invalidStartTimeField: { data: null, id: 'invalid-start-time' },
     invalidEndTimeField: { data: null, id: 'invalid-end-time' },
@@ -43,7 +43,7 @@ describe('ImportSchedulePopup', () => {
 
   afterAll(() => {
     jest.resetAllMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should render default schedule step=0', () => {

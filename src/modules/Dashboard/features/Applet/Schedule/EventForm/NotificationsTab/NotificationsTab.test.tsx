@@ -23,7 +23,7 @@ const FormWrapper = () => {
 
 describe('NotificationsTab component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render NotificationsTab component, test Notification', async () => {

@@ -136,7 +136,7 @@ const mockedExportDataResult = {
 
 describe('prepareData', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   const testCorrectKeys = (result) => {

@@ -178,7 +178,7 @@ describe('Report component', () => {
   beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: vi.fn() });
+    vi.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: vi.fn() });
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -188,7 +188,7 @@ describe('Report component', () => {
     mockAxios.post.mockResolvedValueOnce({
       data: 'data',
     });
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
 
     renderComponent({
       answers: mockedAnswers as unknown as ActivityCompletion[],
@@ -210,7 +210,7 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
 
     renderComponent({
       selectedEntity: mockedActivity,
@@ -221,7 +221,7 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with empty version filter', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
 
     renderComponent({
       selectedEntity: mockedActivity,
@@ -236,7 +236,7 @@ describe('Report component', () => {
       ...mockedActivity,
       hasAnswer: false,
     };
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
     renderComponent({
       selectedEntity: activityMocked,
     });

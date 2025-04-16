@@ -29,7 +29,7 @@ describe('ArbitraryWarningPopup', () => {
   test('renders first screen correctly', async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const windowOpenMock = jest.spyOn(window, 'open').mockImplementation(() => {});
+    const windowOpenMock = vi.spyOn(window, 'open').mockImplementation(() => {});
     renderComponent();
 
     // first screen content
@@ -81,7 +81,7 @@ describe('ArbitraryWarningPopup', () => {
   test('transfer ownership successfully if Applet password is correct', async () => {
     const getPublicKeyMock = () =>
       Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPublicKey: getPublicKeyMock,
       }),

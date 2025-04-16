@@ -24,7 +24,7 @@ const labelNames = ['Email Address', 'Invitation Language'];
 
 describe('AddParticipantForm component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('The form has all fields', () => {

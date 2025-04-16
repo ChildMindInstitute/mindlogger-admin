@@ -97,7 +97,7 @@ describe('useDownloadReport', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

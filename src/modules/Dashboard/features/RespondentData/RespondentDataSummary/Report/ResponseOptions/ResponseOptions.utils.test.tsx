@@ -4,7 +4,7 @@ jest.mock('chartjs-adapter-date-fns', () => ({}));
 
 describe('ResponseOptions.utils', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe(`getResponseItem`, () => {

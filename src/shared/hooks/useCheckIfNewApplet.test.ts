@@ -10,14 +10,14 @@ jest.mock('react-router-dom', () => ({
 
 describe('useCheckIfNewApplet hook tests', () => {
   test('should return false', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
     const { result } = renderHook(useCheckIfNewApplet);
 
     expect(result.current).toBeTruthy();
   });
 
   test('should return true', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'mockAppletId' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'mockAppletId' });
     const { result } = renderHook(useCheckIfNewApplet);
 
     expect(result.current).toBeFalsy();

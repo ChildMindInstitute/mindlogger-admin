@@ -166,7 +166,7 @@ const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedApplet
 
 describe('useBreadcrumbs', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should generate correct breadcrumbs for dashboard (applets tab)', () => {

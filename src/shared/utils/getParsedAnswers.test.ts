@@ -8,10 +8,10 @@ describe('getParsedAnswers', () => {
   const mockedAxios = axios.create();
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
   beforeAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('remapFailedAnswers', () => {
@@ -91,7 +91,7 @@ describe('getParsedAnswers', () => {
 
   describe('getAnswersWithPublicUrls', () => {
     test('should return answers with public urls', async () => {
-      jest.spyOn(mockedAxios, 'post').mockImplementation(
+      vi.spyOn(mockedAxios, 'post').mockImplementation(
         () =>
           new Promise((res) =>
             res({

@@ -271,7 +271,7 @@ describe('EditEventPopup', () => {
     'event removal',
     async () => {
       mockAxios.delete.mockResolvedValueOnce(null);
-      const spyGetEvents = jest.spyOn(applets.thunk, 'getEvents');
+      const spyGetEvents = vi.spyOn(applets.thunk, 'getEvents');
 
       renderWithProviders(
         <EditEventPopup

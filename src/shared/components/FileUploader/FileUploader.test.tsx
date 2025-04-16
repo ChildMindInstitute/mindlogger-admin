@@ -26,7 +26,7 @@ const renderComponent = (props: FileUploaderProps) => render(<FileUploader {...p
 
 describe('FileUploader', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders with default values', () => {

@@ -72,7 +72,7 @@ describe('respondent answers utils', () => {
     };
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should return null if isIdentifiersChange is false', () => {

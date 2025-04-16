@@ -69,7 +69,7 @@ const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
 describe('ActivityFlowAbout', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
         enableActivityAssign: true,

@@ -141,8 +141,8 @@ const renderComponent = (props?: Partial<FeedbackAssessmentProps>) => {
 
 describe('FeedbackAssessment', () => {
   beforeEach(() => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
-    jest.restoreAllMocks();
+    vi.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
+    vi.restoreAllMocks();
   });
 
   test('should render and the 3rd option (id: 7cdc4381-af6d-4bbb-baf7-bf4fe73448d0) is checked', () => {
@@ -165,7 +165,7 @@ describe('FeedbackAssessment', () => {
   });
 
   test('should submit assessment', async () => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
+    vi.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));
