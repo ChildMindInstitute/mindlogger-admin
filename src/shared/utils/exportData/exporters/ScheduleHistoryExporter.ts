@@ -387,16 +387,16 @@ export class ScheduleHistoryExporter extends DataExporter<
               }
             }
 
+            // An event is valid up to and including the day it is deleted
             const filteredByDeletion = filteredByEventVersion.filter((schedule) => {
-              const startTimeOnDay = schedule.accessBeforeSchedule
-                ? startOfTheDay
-                : DateTime.fromISO(`${day}T${schedule.startTime}`);
-
               const deletionDate = DateTime.fromISO(
                 schedule.eventVersionIsDeleted ? schedule.eventVersionUpdatedAt : '',
+                { zone: 'UTC' },
               );
 
-              return !deletionDate.isValid || deletionDate >= startTimeOnDay;
+              const isDeleted = deletionDate.isValid;
+
+              return !isDeleted || deletionDate >= startOfTheDay;
             });
 
             const filteredByAppletVersion = filteredByDeletion.filter((schedule) => {
