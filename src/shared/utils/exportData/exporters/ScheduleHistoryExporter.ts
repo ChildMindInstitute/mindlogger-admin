@@ -400,29 +400,26 @@ export class ScheduleHistoryExporter extends DataExporter<
             });
 
             const filteredByAppletVersion = filteredByDeletion.filter((schedule) => {
+              // Keep newer applet versions from appearing in the export file for days before they are applicable
+              // This is relevant in cases where a newer applet version has been linked to an older event
               const scheduleLinkDate = DateTime.fromISO(schedule.linkedWithAppletAt);
-              const extendsPastDay =
-                DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
-
-              const endTimeOnDay = extendsPastDay
-                ? DateTime.fromISO(`${day}T${schedule.endTime}`).plus({ days: 1 })
-                : DateTime.fromISO(`${day}T${schedule.endTime}`);
-
-              if (scheduleLinkDate > endTimeOnDay) {
+              if (scheduleLinkDate > endOfTheDay) {
                 return false;
               }
+
               if (hasNextAppletVersion) {
                 const [_, appletVersionLinkDate] = appletVersionLinkDates[indexOfAppletVersion + 1];
 
-                const startTimeOnDay = schedule.accessBeforeSchedule
-                  ? startOfTheDay
-                  : DateTime.fromISO(`${day}T${schedule.startTime}`);
+                // Offset by 1 day to keep the older applet version showing up on the day the new version
+                // is linked
+                const offsetAppletVersionLinkDate = appletVersionLinkDate.plus({ days: 1 });
 
-                // If the creationDate of the next applet version comes before this event, skip it
-                return appletVersionLinkDate > startTimeOnDay;
-              } else {
-                return true;
+                // Keep older applet versions from appearing in the export file for days after a new applet version
+                // is linked
+                return offsetAppletVersionLinkDate > endOfTheDay;
               }
+
+              return true;
             });
 
             applicableSchedules.push(...filteredByAppletVersion);
