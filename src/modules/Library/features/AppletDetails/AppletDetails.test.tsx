@@ -105,18 +105,18 @@ jest.mock('modules/Library/hooks', () => ({
 
 describe('AppletDetails', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders loading spinner when cart applets are loading', () => {
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
+    vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
     renderWithProviders(<AppletDetails />, { route, routePath });
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   test('renders details and buttons when cart applets are loaded', async () => {
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
+    vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
     mockAxios.get.mockResolvedValueOnce({
       data: {

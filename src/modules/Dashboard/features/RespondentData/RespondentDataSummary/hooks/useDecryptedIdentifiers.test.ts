@@ -21,7 +21,7 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 
 describe('useDecryptedIdentifiers', () => {
   test('should return null when useAppletData is null', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
+    vi.spyOn(applet, 'useAppletData').mockReturnValue(null);
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);
@@ -30,7 +30,7 @@ describe('useDecryptedIdentifiers', () => {
   });
 
   test('should return an array of identifiers for decrypted data (userPublicKey: null)', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const identifiers = [
@@ -68,7 +68,7 @@ describe('useDecryptedIdentifiers', () => {
   });
 
   test('should return an array of identifiers for encrypted data', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);

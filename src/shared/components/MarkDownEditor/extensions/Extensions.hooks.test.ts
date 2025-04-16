@@ -16,7 +16,7 @@ jest.mock('shared/hooks/useMediaUpload', () => ({
 }));
 
 const setPopupVisibleAndSetError = async (props: UploadMethodsProps) => {
-  jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
+  vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
   const { result, rerender } = renderHook(() => useUploadMethods(props));
   expect(result.current.sourceError).toBe('');
   expect(result.current.isPopupVisible).toBeFalsy();
@@ -75,7 +75,7 @@ describe('Extensions.hooks', () => {
   });
 
   test('should set invalid link error on submit', async () => {
-    jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
+    vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
     const { result, rerender } = renderHook(() => useUploadMethods(props));
     expect(result.current.sourceError).toBe('');
 
@@ -93,7 +93,7 @@ describe('Extensions.hooks', () => {
     const { result, rerender } = await setPopupVisibleAndSetError(props);
     expect(mockedInsertHandler).toBeCalledTimes(0);
 
-    jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(true));
+    vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(true));
     const succeedFormData = {
       label: 'label',
       address: 'succeed address',

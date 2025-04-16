@@ -31,7 +31,7 @@ const mockedAppletFormDataWithSystemItems = {
 
 describe('ItemConfiguration: Item Name', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

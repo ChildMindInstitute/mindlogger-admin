@@ -35,7 +35,7 @@ jest.mock('shared/hooks/useCheckIfNewApplet', () => ({
 
 describe('useSettingsRedirection', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('no redirect if status is loading and items is an empty array', () => {

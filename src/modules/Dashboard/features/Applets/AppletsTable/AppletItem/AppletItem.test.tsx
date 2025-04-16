@@ -193,7 +193,7 @@ describe('AppletItem component tests', () => {
       onDrop: jest.fn(),
       onDragEnd: jest.fn(),
     };
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });
@@ -206,7 +206,7 @@ describe('AppletItem component tests', () => {
     expect(tableRow).toHaveClass('MuiTableRow-has-hover');
     expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
       ...commonUseDndProps,
     });

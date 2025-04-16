@@ -13,7 +13,7 @@ jest.mock('shared/hooks', () => ({
 
 describe('IntegrationsListSetting', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render LORIS when enableLorisIntegration is true', () => {

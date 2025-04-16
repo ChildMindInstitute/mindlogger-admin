@@ -24,7 +24,7 @@ jest.mock('modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks', () => 
 
 describe('Description Component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('nothing is rendered if the step is not of type SaveAndPublishSteps', () => {

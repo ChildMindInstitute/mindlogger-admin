@@ -122,10 +122,10 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
 
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
+    vi.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
   });
 
   test('renders correctly with selected activity and summary activities', async () => {

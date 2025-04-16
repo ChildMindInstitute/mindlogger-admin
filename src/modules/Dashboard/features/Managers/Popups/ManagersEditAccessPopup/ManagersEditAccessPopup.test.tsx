@@ -20,8 +20,8 @@ import { Mixpanel, MixpanelProps, expectBanner, MixpanelEventType } from 'shared
 
 import { EditAccessPopup } from './ManagersEditAccessPopup';
 
-const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const onCloseMock = vi.fn();
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const user = {
   ...mockedUserData,

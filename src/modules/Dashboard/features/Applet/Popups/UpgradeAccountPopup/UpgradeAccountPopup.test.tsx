@@ -10,8 +10,8 @@ import { ParticipantTag } from 'shared/consts';
 import { UpgradeAccountPopup } from './UpgradeAccountPopup';
 
 const dataTestid = 'test-id';
-const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const onCloseMock = vi.fn();
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,

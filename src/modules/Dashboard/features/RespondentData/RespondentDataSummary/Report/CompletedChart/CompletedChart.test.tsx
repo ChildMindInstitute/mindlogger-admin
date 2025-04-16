@@ -45,7 +45,7 @@ const hoverTooltip = async () => {
 
 describe('CompletedChart', () => {
   beforeEach(() => {
-    jest.spyOn(useDatavizFiltersHook, 'useDatavizFilters').mockReturnValue({
+    vi.spyOn(useDatavizFiltersHook, 'useDatavizFilters').mockReturnValue({
       minDate: new Date('2023-12-27'),
       maxDate: new Date('2023-12-30'),
       filteredVersions: [],

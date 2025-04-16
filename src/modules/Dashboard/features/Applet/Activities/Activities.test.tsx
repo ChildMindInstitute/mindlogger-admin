@@ -95,7 +95,7 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 describe('Dashboard > Applet > Activities screen', () => {
   beforeEach(() => {

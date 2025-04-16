@@ -28,7 +28,7 @@ const testErrorFlow = () => {
 
 describe('useMediaUploader', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should upload file on valid selection', async () => {

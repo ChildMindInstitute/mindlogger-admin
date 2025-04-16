@@ -5,11 +5,11 @@ import { ErrorResponseType } from 'shared/types';
 
 import { useCheckIfAppletHasNotFoundError } from './useCheckIfAppletHasNotFoundError';
 
-const spyUseResponseError: jest.SpyInstance = jest.spyOn(applet, 'useResponseError');
+const spyUseResponseError: jest.SpyInstance = vi.spyOn(applet, 'useResponseError');
 
 describe('useCheckIfAppletHasNotFoundError', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

@@ -223,7 +223,7 @@ describe('FolderItem component tests', () => {
   });
 
   test('should have correct classnames for hover and for isDragOver', async () => {
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });
@@ -236,7 +236,7 @@ describe('FolderItem component tests', () => {
     expect(tableRow).toHaveClass('MuiTableRow-has-hover');
     expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
       ...commonUseDndProps,
     });
@@ -247,7 +247,7 @@ describe('FolderItem component tests', () => {
   });
 
   test('should not have classname for hover if folder is empty', async () => {
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });

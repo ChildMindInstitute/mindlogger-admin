@@ -91,7 +91,7 @@ const clickActionDots = async () => {
   fireEvent.click(actionsDots);
 };
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 describe('Participants component tests', () => {
   beforeEach(() => {

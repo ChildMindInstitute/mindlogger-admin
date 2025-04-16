@@ -8,14 +8,14 @@ import { useRespondentLabel } from './useRespondentLabel';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: vi.fn(),
 }));
 
 describe('useRespondentLabel', () => {
   test('should return an empty string when respondentId is not provided', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: undefined });
-    users.useRespondent = jest.fn().mockReturnValue({ details: undefined });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ details: undefined });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(useRespondentLabel);
 
@@ -23,9 +23,9 @@ describe('useRespondentLabel', () => {
   });
 
   test('should return an empty string when details are not available', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
-    users.useRespondent = jest.fn().mockReturnValue({ details: undefined });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    users.useRespondent = vi.fn().mockReturnValue({ details: undefined });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(useRespondentLabel);
 
@@ -33,14 +33,14 @@ describe('useRespondentLabel', () => {
   });
 
   test('should construct and return the respondent label correctly (Respondent: secret123)', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'secret123',
       nickname: '',
     };
 
-    users.useRespondent = jest.fn().mockReturnValue({ result: res });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ result: res });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(useRespondentLabel);
 
@@ -48,14 +48,14 @@ describe('useRespondentLabel', () => {
   });
 
   test('should construct and return the subject label correctly for subject (User: secret123)', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'subject123',
       nickname: '',
     };
 
-    users.useSubject = jest.fn().mockReturnValue({ result: res });
-    users.useRespondent = jest.fn().mockReturnValue({ details: undefined });
+    users.useSubject = vi.fn().mockReturnValue({ result: res });
+    users.useRespondent = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(() => useRespondentLabel({ isSubject: true }));
 
@@ -63,13 +63,13 @@ describe('useRespondentLabel', () => {
   });
 
   test('should construct and return the respondent label correctly (User: secret123 (John Doe))', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'secret123',
       nickname: 'John Doe',
     };
-    users.useRespondent = jest.fn().mockReturnValue({ result: res });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ result: res });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(useRespondentLabel);
 
@@ -77,7 +77,7 @@ describe('useRespondentLabel', () => {
   });
 
   test('should construct and return the respondent without the label (secret123 (John Doe))', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'secret123',
       nickname: 'John Doe',
@@ -88,8 +88,8 @@ describe('useRespondentLabel', () => {
       userId: '123',
     };
 
-    users.useRespondent = jest.fn().mockReturnValue({ result: res });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ result: res });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const { result } = renderHook(() => getRespondentName(res.secretUserId, res.nickname));
 

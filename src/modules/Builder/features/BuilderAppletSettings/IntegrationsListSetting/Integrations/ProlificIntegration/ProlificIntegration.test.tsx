@@ -37,7 +37,7 @@ const renderWithStore = (preloadedState: AppletState) =>
 
 describe('ProlificIntegration', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the ProlificIntegration component when api token does not exist', () => {

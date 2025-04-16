@@ -17,7 +17,7 @@ const routePath = page.builderAppletActivityItem;
 
 describe('EditItemModal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders modal with correct title, buttons and conditional logic', async () => {

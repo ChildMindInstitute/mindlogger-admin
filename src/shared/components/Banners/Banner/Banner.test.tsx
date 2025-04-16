@@ -38,7 +38,7 @@ describe('Banner', () => {
   });
 
   test('banner auto-closes after 5 seconds if window in focus', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockUseWindowFocus.mockReturnValue(true);
 
     render(<Banner {...props} />);
@@ -48,7 +48,7 @@ describe('Banner', () => {
   });
 
   test('banner does not auto-close if window unfocused', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockUseWindowFocus.mockReturnValue(false);
 
     render(<Banner {...props} />);

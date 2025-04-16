@@ -175,7 +175,7 @@ const renderAddToBuilderPopup = ({
   workspaces,
   checkIfHasAccessToWorkspace,
 }) => {
-  jest.spyOn(libraryHooks, 'useWorkspaceList').mockReturnValue({
+  vi.spyOn(libraryHooks, 'useWorkspaceList').mockReturnValue({
     workspaces,
     isLoading,
     checkIfHasAccessToWorkspace: () => checkIfHasAccessToWorkspace,
@@ -192,15 +192,15 @@ const renderAddToBuilderPopup = ({
 
 describe('AddToBuilderPopup', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders component and test loading, cancel button', async () => {
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     renderAddToBuilderPopup({
       isLoading: true,
@@ -223,7 +223,7 @@ describe('AddToBuilderPopup', () => {
 
   test('test steps when workspaces length = 1 (skip workspace select step)', async () => {
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
     const workspaces = mockWorkspaces[0];
 
     renderAddToBuilderPopup({
@@ -245,7 +245,7 @@ describe('AddToBuilderPopup', () => {
 
   test('test steps: workspace selection (with error) -> add to builder actions -> navigate to new applet', async () => {
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -296,7 +296,7 @@ describe('AddToBuilderPopup', () => {
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -412,7 +412,7 @@ describe('AddToBuilderPopup', () => {
 
     const actionContainer1 = screen.getByTestId(`${dataTestid}-select-action-1`);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(false);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(false);
 
     await userEvent.click(actionContainer1.querySelector('input')); // select "add to an existing applet"
     await userEvent.click(confirmButton);
@@ -441,7 +441,7 @@ describe('AddToBuilderPopup', () => {
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
     mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,

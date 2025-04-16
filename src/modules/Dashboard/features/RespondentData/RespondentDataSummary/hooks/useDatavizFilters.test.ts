@@ -9,7 +9,7 @@ describe('useDatavizFilters', () => {
   const mockFormReturnValues = [new Date('2023-01-10'), new Date('2023-01-15'), '00:00', '23:59'];
 
   beforeEach(() => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(mockFormReturnValues);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(mockFormReturnValues);
   });
 
   test('should calculate minDate, maxDate correctly and return empty versions', () => {

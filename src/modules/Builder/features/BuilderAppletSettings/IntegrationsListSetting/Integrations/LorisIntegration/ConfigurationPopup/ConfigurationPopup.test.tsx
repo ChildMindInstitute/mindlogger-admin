@@ -71,7 +71,7 @@ const selectProject = async () => {
 
 describe('ConfigurationPopup', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders the modal with the correct title', () => {
@@ -148,7 +148,7 @@ describe('ConfigurationPopup', () => {
   test('saves the project and closes the modal', async () => {
     (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
     (saveLorisProject as jest.Mock).mockResolvedValue({ result: [{ message: 'Success' }] });
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
       preloadedState,
@@ -165,7 +165,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('displays an error message when saving the project fails', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
     (saveLorisProject as jest.Mock).mockRejectedValueOnce(new Error('Save failed'));
 
@@ -185,7 +185,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('displays an error message when the applet is already tied to a project', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
     (saveLorisProject as jest.Mock).mockResolvedValueOnce({
       result: [{ message: 'This project has previously been tied to applet' }],

@@ -19,14 +19,14 @@ const commonProps = {
 
 describe('PublicLinkPopup', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('When `hasPublicLink` is `true`', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} hasPublicLink />);
 
-      jest.spyOn(mockedAxios, 'delete').mockImplementation(fakeRequest);
+      vi.spyOn(mockedAxios, 'delete').mockImplementation(fakeRequest);
       fakeRequest.mockReturnValue(new Promise((res) => res(null)));
     });
 
@@ -51,7 +51,7 @@ describe('PublicLinkPopup', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} />);
 
-      jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
+      vi.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
       fakeRequest.mockReturnValue(new Promise((res) => res(null)));
     });
 

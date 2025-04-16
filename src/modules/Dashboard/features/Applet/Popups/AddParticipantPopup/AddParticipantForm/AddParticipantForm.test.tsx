@@ -36,7 +36,7 @@ const fullAccountLabelNames = [...limitedAccountLabelNames, ...onlyFullAccountLa
 
 describe('AddParticipantForm component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('The form has fields according to the account type', () => {

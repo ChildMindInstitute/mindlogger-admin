@@ -32,12 +32,12 @@ describe('useAppletsFromCart', () => {
   ];
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(library.thunk, 'postAppletsToCart').mockReturnValue(mockPostAppletsToCart);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(library.thunk, 'postAppletsToCart').mockReturnValue(mockPostAppletsToCart);
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should call postAppletsToCart if authorized with applets from storage', async () => {

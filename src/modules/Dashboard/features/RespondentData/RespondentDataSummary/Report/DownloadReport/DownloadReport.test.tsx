@@ -35,7 +35,7 @@ const checkPositiveScenario = async (buttonText: string) => {
 
 describe('DownloadReport', () => {
   test('renders component correctly for Activity (isFlow="false", isDownloadReportDisabled="false")', async () => {
-    jest.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
+    vi.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
       downloadReportHandler: mockDownloadReportHandler,
       downloadReportError: null,
       isDownloadReportDisabled: false,
@@ -48,7 +48,7 @@ describe('DownloadReport', () => {
   });
 
   test('renders component correctly for Activity Flow (isFlow="true", isDownloadReportDisabled="false")', async () => {
-    jest.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
+    vi.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
       downloadReportHandler: mockDownloadReportHandler,
       downloadReportError: null,
       isDownloadReportDisabled: false,
@@ -61,7 +61,7 @@ describe('DownloadReport', () => {
   });
 
   test('renders component correctly if isDownloadReportDisabled is true', async () => {
-    jest.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
+    vi.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
       downloadReportHandler: mockDownloadReportHandler,
       downloadReportError: null,
       isDownloadReportDisabled: true,
@@ -84,7 +84,7 @@ describe('DownloadReport', () => {
   });
 
   test('renders component correctly if isDownloadReportLoading is true', async () => {
-    jest.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
+    vi.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
       downloadReportHandler: mockDownloadReportHandler,
       downloadReportError: null,
       isDownloadReportDisabled: false,
@@ -98,7 +98,7 @@ describe('DownloadReport', () => {
   });
 
   test('renders component correctly if there is an error', async () => {
-    jest.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
+    vi.spyOn(useDownloadReportHook, 'useDownloadReport').mockReturnValue({
       downloadReportHandler: mockDownloadReportHandler,
       downloadReportError: 'some error',
       isDownloadReportDisabled: false,

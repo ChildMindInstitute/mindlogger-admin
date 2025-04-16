@@ -81,7 +81,7 @@ describe('useDatavizSummaryRequests', () => {
       appletId: mockedAppletId,
       subjectId: mockedFullSubjectId1,
     });
-    const mockedGetDecryptedIdentifiers = jest.spyOn(
+    const mockedGetDecryptedIdentifiers = vi.spyOn(
       useDecryptedIdentifiersHook,
       'useDecryptedIdentifiers',
     );

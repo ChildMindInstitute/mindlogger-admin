@@ -7,7 +7,7 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),
@@ -49,12 +49,12 @@ describe('Respondent Data hooks', () => {
     });
 
     test('launches getSubjectDetails', () => {
-      const mockDispatch = jest.fn();
-      const mockGetSubjectDetails = jest.fn();
-      const mockGetAppletData = jest.fn();
-      jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-      jest.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
-      jest.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
+      const mockDispatch = vi.fn();
+      const mockGetSubjectDetails = vi.fn();
+      const mockGetAppletData = vi.fn();
+      vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+      vi.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
+      vi.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
       renderHookWithProviders(useRespondentDataSetup, {
         preloadedState: getPreloadedState(),
       });

@@ -91,7 +91,7 @@ const preloadedState = {
 
 describe('ScoreAndReports', () => {
   beforeEach(() => {
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => cb());
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => cb());
   });
 
   afterEach(() => {
