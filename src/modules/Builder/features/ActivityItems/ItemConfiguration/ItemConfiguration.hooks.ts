@@ -82,36 +82,30 @@ export const useGetAvailableItemTypeOptions = (name: string) => {
               value !== ItemResponseType.ParagraphText || featureFlags.enableParagraphTextItem,
           ),
         import: (options: ItemsOption[]) => {
-          const filteredOptions = options.filter(
-            ({ value }) => value !== ItemResponseType.RequestHealthRecordData,
+          const shouldUseHealthOption = options.some(
+            ({ value }) =>
+              value === ItemResponseType.RequestHealthRecordData &&
+              !!featureFlags.enableEhrHealthData &&
+              featureFlags.enableEhrHealthData !== 'unavailable',
           );
 
-          const processedHealthOption = options.find(
-            ({ value }) => value === ItemResponseType.RequestHealthRecordData,
-          );
-
-          // This should always be true, doing this for type safety
-          if (processedHealthOption) {
+          if (shouldUseHealthOption) {
             if (hasExistingHealthRecordItem) {
-              return [
-                ...filteredOptions,
-                {
-                  ...processedHealthOption,
-                  disabled: true,
-                  tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
-                },
-              ];
+              return options.map((option) =>
+                option.value === ItemResponseType.RequestHealthRecordData
+                  ? {
+                      ...option,
+                      disabled: true,
+                      tooltip: t('requestHealthRecordDataSettings.disabledTooltip'),
+                    }
+                  : option,
+              );
             }
 
-            if (
-              featureFlags.enableEhrHealthData === 'active' ||
-              featureFlags.enableEhrHealthData === 'available'
-            ) {
-              return [...filteredOptions, processedHealthOption];
-            }
+            return options;
           }
 
-          return filteredOptions;
+          return options.filter(({ value }) => value !== ItemResponseType.RequestHealthRecordData);
         },
       };
 
