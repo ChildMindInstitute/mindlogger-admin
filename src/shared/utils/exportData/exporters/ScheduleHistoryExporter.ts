@@ -450,10 +450,6 @@ export class ScheduleHistoryExporter extends DataExporter<
     const startOfTheDay = DateTime.fromISO(day);
     const creationDay = DateTime.fromISO(schedule.eventVersionCreatedAt).startOf('day');
 
-    // The next version of this event displaces its applicability only when
-    // it is created before this event's time period on the day in question
-    // const nextVersionOverrides = nextVersionCreatedDate.isValid && nextVersionCreatedDate < targetDate;
-
     switch (schedule.periodicity) {
       case 'ALWAYS': {
         return creationDay <= startOfTheDay;
