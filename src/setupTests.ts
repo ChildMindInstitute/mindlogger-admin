@@ -30,6 +30,12 @@ vi.spyOn(global.console, 'error').mockImplementation((message) => {
   return message;
 });
 
-vi.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles', () => ({
-  ...vi.importActual('__mocks__/EditorController'),
-}));
+vi.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles', async () => {
+  const actual = await vi.importActual<typeof import('./__mocks__/EditorController')>(
+    './__mocks__/EditorController',
+  );
+
+  return {
+    StyledMdEditor: actual.StyledMdEditor,
+  };
+});
