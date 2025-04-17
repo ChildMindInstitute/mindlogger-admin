@@ -3,7 +3,13 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      babel: {
+        plugins: ['babel-plugin-macros'],
+      },
+    }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -26,6 +32,7 @@ export default defineConfig({
       shared: resolve(__dirname, 'src/shared'),
       svgSprite: resolve(__dirname, 'src/svgSprite'),
       i18n: resolve(__dirname, 'src/i18n'),
+      __mocks__: resolve(__dirname, 'src/__mocks__'),
     },
   },
 });
