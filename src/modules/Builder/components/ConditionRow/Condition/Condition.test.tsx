@@ -154,7 +154,7 @@ const mockedStateOptionLabels = () => {
 
 describe('Condition', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('empty condition is rendered', () => {
