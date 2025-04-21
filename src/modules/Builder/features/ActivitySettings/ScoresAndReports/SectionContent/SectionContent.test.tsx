@@ -108,9 +108,9 @@ describe('SectionContent', () => {
 
   test('should set correct default conditional logic value', async () => {
     const mockedSetValue = vi.fn();
-    jest
-      .spyOn(useCustomFormContextHook, 'useCustomFormContext')
-      .mockReturnValue({ setValue: mockedSetValue });
+    vi.spyOn(useCustomFormContextHook, 'useCustomFormContext').mockReturnValue({
+      setValue: mockedSetValue,
+    });
 
     const { getByTestId } = renderWithAppletFormData({
       children: <SectionContent {...commonProps} />,

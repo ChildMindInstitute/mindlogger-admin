@@ -400,9 +400,9 @@ describe('prepareData', () => {
       ],
     };
     const getDecryptedAnswers = vi.fn();
-    jest
-      .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
-      .mockImplementationOnce(() => mockedParsedAnswers);
+    vi.spyOn(getParsedAnswersFunctions, 'getParsedAnswers').mockImplementationOnce(
+      () => mockedParsedAnswers,
+    );
 
     const result = await prepareEncryptedData(data, getDecryptedAnswers, mockFlags);
     expect(result).toEqual(mockedExportDataResult);

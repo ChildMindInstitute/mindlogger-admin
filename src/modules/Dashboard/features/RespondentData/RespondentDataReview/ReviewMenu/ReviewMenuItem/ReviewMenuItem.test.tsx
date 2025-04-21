@@ -63,11 +63,10 @@ describe('Review Menu Item component', () => {
 
   test('renders and functions correctly when an answer ID is not present in the route', async () => {
     const setSearchParamsMock = vi.fn();
-    jest
-      .spyOn(reactRouterDom, 'useSearchParams')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      .mockReturnValue([{ get: vi.fn() }, setSearchParamsMock]);
+    vi.spyOn(reactRouterDom, 'useSearchParams').mockReturnValue([
+      { get: vi.fn() },
+      setSearchParamsMock,
+    ]);
 
     renderComponent(routeWithoutAnswerId);
 
