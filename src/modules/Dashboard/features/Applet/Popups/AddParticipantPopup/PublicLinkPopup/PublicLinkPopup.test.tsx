@@ -1,13 +1,22 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import { authApiClient } from 'shared/api/apiConfig';
 
 import { PublicLinkPopup } from './PublicLinkPopup';
 
-const mockedAxios = axios.create();
-const fakeRequest = vi.fn();
+// Mock the API modules
+vi.mock('shared/api/apiConfig', () => ({
+  authApiClient: {
+    delete: vi.fn(),
+    post: vi.fn(),
+  },
+}));
+
+// Import the mocked module after mocking
 
 const testId = 'public-link-popup';
 const commonProps = {
@@ -19,15 +28,16 @@ const commonProps = {
 
 describe('PublicLinkPopup', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('When `hasPublicLink` is `true`', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} hasPublicLink />);
 
-      vi.spyOn(mockedAxios, 'delete').mockImplementation(fakeRequest);
-      fakeRequest.mockReturnValue(new Promise((res) => res(null)));
+      vi.mocked(authApiClient.delete).mockResolvedValue(
+        mockSuccessfulHttpResponse({ status: 204 }),
+      );
     });
 
     test('It renders in the correct state', async () => {
@@ -41,9 +51,12 @@ describe('PublicLinkPopup', () => {
 
       await userEvent.click(deleteBtn);
 
-      expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
-        signal: undefined,
-      });
+      expect(vi.mocked(authApiClient.delete)).toBeCalledWith(
+        `/applets/${commonProps.appletId}/access_link`,
+        {
+          signal: undefined,
+        },
+      );
     });
   });
 
@@ -51,8 +64,7 @@ describe('PublicLinkPopup', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} />);
 
-      vi.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
-      fakeRequest.mockReturnValue(new Promise((res) => res(null)));
+      vi.mocked(authApiClient.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
     });
 
     test('It renders in the correct state', async () => {
@@ -67,7 +79,7 @@ describe('PublicLinkPopup', () => {
 
         await userEvent.click(createBtn);
 
-        expect(fakeRequest).toBeCalledWith(
+        expect(vi.mocked(authApiClient.post)).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,
           { requireLogin: true },
           { signal: undefined },
@@ -81,7 +93,7 @@ describe('PublicLinkPopup', () => {
 
         await userEvent.click(createBtn);
 
-        expect(fakeRequest).toBeCalledWith(
+        expect(vi.mocked(authApiClient.post)).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,
           { requireLogin: false },
           { signal: undefined },

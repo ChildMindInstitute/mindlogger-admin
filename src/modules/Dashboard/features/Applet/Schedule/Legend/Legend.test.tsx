@@ -1,20 +1,56 @@
+import { vi } from 'vitest';
+// Now import everything else after the mocks
 import { PreloadedState } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
 
-import { preloadedState } from 'modules/Dashboard/features/Applet/Schedule/CreateEventPopup/CreateEventPopup.test';
-import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
 import { RootState } from 'redux/store';
+import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
+import {
+  createEventApi,
+  deleteIndividualEventsApi,
+  deleteScheduledEventsApi,
+} from 'modules/Dashboard/api/api';
 
 import { Legend } from './Legend';
 import { PreparedEvents } from '../Schedule.types';
 import { ScheduleProvider } from '../ScheduleProvider';
 
+// Mock the API client module with simple mocks
+vi.mock('shared/api/apiConfig', () => ({
+  authApiClient: {
+    post: vi.fn(),
+    delete: vi.fn(),
+  },
+}));
+
+// Mock the specific API functions with simple mocks
+vi.mock('modules/Dashboard/api/api', () => ({
+  deleteScheduledEventsApi: vi.fn(),
+  deleteIndividualEventsApi: vi.fn(),
+  createEventApi: vi.fn(),
+}));
+
+// Mock shared components
+vi.mock('shared/components', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    Table: () => <div>table component</div>,
+  };
+});
+
+// Constants
 const dataTestid = 'dashboard-calendar-schedule-legend';
 const testUserId = 'test-user-id';
+const mockEventId1 = '8a0a2abd-d8e2-4fb6-91bb-65aecfc5396a';
+const mockEventId2 = '9a0a2abd-d8e2-4fb6-91bb-65aecfc5396b';
+const mockAppletId = 'a341e3d7-0170-4894-8823-798c58456130';
+const initialStateData = {};
+const mockedCurrentWorkspace = {};
 
-const legendEvents = {
+const legendEvents: PreparedEvents = {
   alwaysAvailableEvents: [
     {
       id: '147fb738-5f3d-432f-b686-d6919f445795',
@@ -93,15 +129,102 @@ const legendEvents = {
       frequency: 'Weekly',
     },
   ],
-} as unknown as PreparedEvents;
+};
 
-jest.mock('shared/components', () => ({
-  ...jest.requireActual('shared/components'),
-  Table: () => <div>table component</div>,
-}));
+export const preloadedState = {
+  workspaces: {
+    workspaces: initialStateData,
+    currentWorkspace: {
+      ...initialStateData,
+      ...mockedCurrentWorkspace,
+    },
+  },
+  calendarEvents: {
+    alwaysAvailableVisible: { data: true },
+    scheduledVisible: { data: true },
+    createEventsData: {
+      data: [
+        {
+          activityOrFlowId: '96d889e2-2264-4e76-8c60-744600e770fe',
+          eventId: mockEventId1,
+          activityOrFlowName: 'Mock Activity 1',
+          periodicityType: 'WEEKLY',
+          selectedDate: '2024-03-18',
+          startDate: '2024-03-18',
+          endDate: '2024-12-31',
+          startTime: '10:00:00',
+          endTime: '12:00:00',
+          isAlwaysAvailable: false,
+          colors: ['#0b6e99', 'rgba(11, 110, 153, 0.3)'],
+          flowId: null,
+          nextYearDateString: null,
+          currentYear: 2024,
+          oneTimeCompletion: null,
+          accessBeforeSchedule: false,
+          timerType: 'NOT_SET',
+          timer: null,
+          notification: null,
+        },
+        {
+          activityOrFlowId: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
+          eventId: mockEventId2,
+          activityOrFlowName: 'Mock Activity 2',
+          periodicityType: 'ALWAYS',
+          selectedDate: '2024-03-18',
+          startDate: null,
+          endDate: null,
+          startTime: '00:00:00',
+          endTime: '23:59:00',
+          isAlwaysAvailable: true,
+          colors: ['#0b6e99', 'rgba(11, 110, 153, 0.3)'],
+          flowId: null,
+          nextYearDateString: null,
+          currentYear: 2024,
+          oneTimeCompletion: false,
+          accessBeforeSchedule: null,
+          timerType: 'NOT_SET',
+          timer: null,
+          notification: null,
+        },
+      ],
+    },
+  },
+  applet: {
+    applet: {
+      data: {
+        result: {
+          displayName: 'Mock Applet',
+          description: 'Applet Description...',
+          id: mockAppletId,
+          version: '3.0.0',
+          createdAt: '2024-02-13T18:10:20.530872',
+          updatedAt: '2024-03-05T18:58:21.012829',
+          activities: [
+            {
+              name: 'Mock Activity 1',
+              description: 'Activity Description...',
+              id: '96d889e2-2264-4e76-8c60-744600e770fe',
+              createdAt: '2024-03-05T18:58:21.029663',
+            },
+            {
+              name: 'Mock Activity 2',
+              description: 'Activity Description...',
+              id: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
+              createdAt: '2024-03-05T19:20:21.029663',
+            },
+          ],
+        },
+      },
+    },
+  },
+};
 
 describe('Legend', () => {
   const mockedAppletId = preloadedState.applet.applet.data.result.id;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   describe('Renders the appropriate controls', () => {
     beforeEach(() => {
@@ -195,15 +318,11 @@ describe('Legend', () => {
   });
 
   describe('When showing the default schedule ', () => {
-    const mockedAxios = axios.create();
     const mockedActivityId = preloadedState.calendarEvents.createEventsData.data.find(
       ({ isAlwaysAvailable }) => !!isAlwaysAvailable,
     )?.activityOrFlowId;
-    let mockRequest: jest.Mock;
 
     beforeEach(() => {
-      mockRequest = vi.fn().mockReturnValue(new Promise((res) => res(null)));
-
       renderWithProvidersUtils.renderWithProviders(
         <ScheduleProvider
           appletId={mockedAppletId}
@@ -218,7 +337,6 @@ describe('Legend', () => {
     });
 
     test('Should Clear all scheduled events for the default schedule', async () => {
-      vi.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
       const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
 
       await userEvent.click(clearAllScheduledEventsButton);
@@ -229,11 +347,10 @@ describe('Legend', () => {
 
       await userEvent.click(submitBttn);
 
-      expect(mockRequest).toBeCalledWith(`/applets/${mockedAppletId}/events`, expect.anything());
+      expect(deleteScheduledEventsApi).toHaveBeenCalledWith({ appletId: mockedAppletId });
     });
 
     test('Creates events for the default schedule', async () => {
-      vi.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
       const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
         .firstChild as unknown as Element;
 
@@ -252,10 +369,14 @@ describe('Legend', () => {
 
       await userEvent.click(confirmBttn);
 
-      expect(mockRequest).toBeCalledWith(
-        `/applets/${mockedAppletId}/events`,
-        expect.objectContaining({ activityId: mockedActivityId, respondentId: undefined }),
-        expect.anything(),
+      expect(createEventApi).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appletId: mockedAppletId,
+          body: expect.objectContaining({
+            activityId: mockedActivityId,
+            respondentId: undefined,
+          }),
+        }),
       );
     });
 
@@ -295,14 +416,11 @@ describe('Legend', () => {
   });
 
   describe('When showing an individual schedule', () => {
-    const mockedAxios = axios.create();
     const mockedActivityId = preloadedState.calendarEvents.createEventsData.data.find(
       ({ isAlwaysAvailable }) => !!isAlwaysAvailable,
     )?.activityOrFlowId;
-    let mockRequest: jest.Mock;
 
     beforeEach(() => {
-      mockRequest = vi.fn().mockReturnValue(new Promise((res) => res(null)));
       renderWithProvidersUtils.renderWithProviders(
         <ScheduleProvider
           appletId={mockedAppletId}
@@ -318,8 +436,7 @@ describe('Legend', () => {
       );
     });
 
-    test('Should Clear all scheduled events for the default schedule', async () => {
-      vi.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
+    test('Should Clear all scheduled events for the individual schedule', async () => {
       const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
 
       await userEvent.click(clearAllScheduledEventsButton);
@@ -330,14 +447,13 @@ describe('Legend', () => {
 
       await userEvent.click(submitBttn);
 
-      expect(mockRequest).toBeCalledWith(
-        `/applets/${mockedAppletId}/events/delete_individual/${testUserId}`,
-        expect.anything(),
-      );
+      expect(deleteIndividualEventsApi).toHaveBeenCalledWith({
+        appletId: mockedAppletId,
+        respondentId: testUserId,
+      });
     });
 
     test('Creates events for the individual schedule', async () => {
-      vi.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
       const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
         .firstChild as unknown as Element;
 
@@ -356,10 +472,14 @@ describe('Legend', () => {
 
       await userEvent.click(confirmBttn);
 
-      expect(mockRequest).toBeCalledWith(
-        `/applets/${mockedAppletId}/events`,
-        expect.objectContaining({ activityId: mockedActivityId, respondentId: testUserId }),
-        expect.anything(),
+      expect(createEventApi).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appletId: mockedAppletId,
+          body: expect.objectContaining({
+            activityId: mockedActivityId,
+            respondentId: testUserId,
+          }),
+        }),
       );
     });
 

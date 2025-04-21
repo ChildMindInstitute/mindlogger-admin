@@ -6,9 +6,11 @@ import { waitForTheUpdate } from 'shared/utils/testUtils';
 
 import { uploadFileToS3, getFormDataToUpload, checkFileExists } from './useMediaUpload.utils';
 
-describe('useMediaUpload.utils', () => {
-  const mockedAxios = axios.create();
+// Mock axios at the module level
+vi.mock('axios');
+const mockedAxios = vi.mocked(axios);
 
+describe('useMediaUpload.utils', () => {
   describe('uploadFileToS3', () => {
     const uploadUrl = 'https://example.com/upload';
     const body = new FormData();
