@@ -32,7 +32,7 @@ describe('PublicLinkToggle', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    jest.clearAllTimers();
+    vi.clearAllTimers();
   });
 
   describe('When no public link is returned', () => {
