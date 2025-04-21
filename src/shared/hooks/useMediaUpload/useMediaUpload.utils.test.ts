@@ -22,9 +22,9 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should throw an error if axios.post fails', async () => {
-      jest
-        .spyOn(mockedAxios, 'post')
-        .mockImplementation(() => Promise.reject(new Error('Upload failed')));
+      vi.spyOn(mockedAxios, 'post').mockImplementation(() =>
+        Promise.reject(new Error('Upload failed')),
+      );
 
       await expect(uploadFileToS3({ body, uploadUrl })).rejects.toThrow('Upload failed');
     });

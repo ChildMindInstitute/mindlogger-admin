@@ -210,12 +210,12 @@ describe('RespondentDataSummary component', () => {
   test('should choose the activity or flow with latest answers and fetch answers for it', async () => {
     const mockGetIdentifiersVersions = vi.fn();
     const mockFetchAnswers = vi.fn();
-    jest
-      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
-      .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
-    jest
-      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
-      .mockReturnValue({ fetchAnswers: mockFetchAnswers });
+    vi.spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests').mockReturnValue({
+      getIdentifiersVersions: mockGetIdentifiersVersions,
+    });
+    vi.spyOn(useRespondentAnswersHook, 'useRespondentAnswers').mockReturnValue({
+      fetchAnswers: mockFetchAnswers,
+    });
 
     renderComponent({
       selectedEntity: null,

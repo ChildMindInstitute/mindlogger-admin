@@ -274,9 +274,9 @@ describe('useRespondentAnswers', () => {
 
   test('should fetch answers and update form values on successful API call (no identifier is chosen)', async () => {
     const mockedGetDecryptedActivityData = vi.fn();
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(mockedGetDecryptedActivityData);
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
     mockAxios.get.mockResolvedValue({
@@ -316,9 +316,9 @@ describe('useRespondentAnswers', () => {
 
   test('should fetch answers and update form values on successful API call for Activity Flow', async () => {
     const mockedGetDecryptedActivityData = vi.fn();
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(mockedGetDecryptedActivityData);
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
     mockAxios.get.mockResolvedValue({

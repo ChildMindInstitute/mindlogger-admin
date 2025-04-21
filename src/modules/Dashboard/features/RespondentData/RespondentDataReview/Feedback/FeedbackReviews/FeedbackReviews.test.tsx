@@ -417,9 +417,9 @@ const getDecryptedActivityData = () => {
     }),
   );
 
-  jest
-    .spyOn(dashboardHooks, 'useDecryptedActivityData')
-    .mockReturnValue(getDecryptedActivityDataMock);
+  vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+    getDecryptedActivityDataMock,
+  );
 };
 
 describe('FeedbackReviewed', () => {
@@ -596,9 +596,9 @@ describe('FeedbackReviewed', () => {
       decryptedAnswers: [],
     });
 
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(getDecryptedActivityDataMock);
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      getDecryptedActivityDataMock,
+    );
 
     renderComponent(assessment, lastAssessment, false, true);
 

@@ -77,9 +77,9 @@ describe('Notification', () => {
   });
   test('should navigate when click on response data button without existed encryption', async () => {
     const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification
@@ -104,9 +104,9 @@ describe('Notification', () => {
 
   test('should navigate when click on response data button with existed encryption', async () => {
     const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('123');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification

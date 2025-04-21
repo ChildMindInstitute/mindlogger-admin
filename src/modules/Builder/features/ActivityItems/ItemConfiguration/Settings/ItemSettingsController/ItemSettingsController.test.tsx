@@ -714,12 +714,13 @@ describe('ItemSettingsController', () => {
     'set activity skippable to false if $settingKey input field is checked',
     async ({ settingKey, item }) => {
       const mockedSetValue = vi.fn();
-      jest
-        .spyOn(useCustomFormContextHook, 'useCustomFormContext')
-        .mockReturnValue({ setValue: mockedSetValue, getValues: vi.fn() });
-      jest
-        .spyOn(useCurrentActivityHook, 'useCurrentActivity')
-        .mockReturnValue({ fieldName: 'activities.0' });
+      vi.spyOn(useCustomFormContextHook, 'useCustomFormContext').mockReturnValue({
+        setValue: mockedSetValue,
+        getValues: vi.fn(),
+      });
+      vi.spyOn(useCurrentActivityHook, 'useCurrentActivity').mockReturnValue({
+        fieldName: 'activities.0',
+      });
 
       renderWithAppletFormData({
         children: (
