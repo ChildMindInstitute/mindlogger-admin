@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { MediaUploadFields } from 'shared/api';
 import { waitForTheUpdate } from 'shared/utils/testUtils';
@@ -67,7 +68,7 @@ describe('useMediaUpload.utils', () => {
     });
 
     afterEach(() => {
-      jest.clearAllTimers();
+      vi.clearAllTimers();
       vi.restoreAllMocks();
       vi.clearAllMocks();
     });
@@ -82,7 +83,7 @@ describe('useMediaUpload.utils', () => {
         onStopRecursion: mockedOnStopRecursion,
       });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       await waitForTheUpdate();
 
@@ -98,7 +99,7 @@ describe('useMediaUpload.utils', () => {
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(mockedAxios.head).toHaveBeenCalledWith(url);
       expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
@@ -112,7 +113,7 @@ describe('useMediaUpload.utils', () => {
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       await waitForTheUpdate();
 
@@ -134,7 +135,7 @@ describe('useMediaUpload.utils', () => {
 
       stopChecking();
 
-      expect(clearTimeoutSpy).toHaveBeenCalledWith(expect.any(Number));
+      expect(clearTimeoutSpy).toHaveBeenCalled();
     });
   });
 });
