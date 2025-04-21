@@ -1,12 +1,21 @@
-import axios from 'axios';
+import { vi, describe, test, expect, afterEach, beforeAll } from 'vitest';
+
+import { authApiClient } from 'shared/api/apiConfig';
 
 import { remapFailedAnswers, getAnswersWithPublicUrls } from './getParsedAnswers';
+import { mockSuccessfulHttpResponse } from './axios-mocks';
 
-jest.mock('api');
+// Mock the api module
+vi.mock('api');
+
+// Mock the authApiClient that's used by postFilePresignApi
+vi.mock('shared/api/apiConfig', () => ({
+  authApiClient: {
+    post: vi.fn(),
+  },
+}));
 
 describe('getParsedAnswers', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -91,15 +100,11 @@ describe('getParsedAnswers', () => {
 
   describe('getAnswersWithPublicUrls', () => {
     test('should return answers with public urls', async () => {
-      vi.spyOn(mockedAxios, 'post').mockImplementation(
-        () =>
-          new Promise((res) =>
-            res({
-              data: {
-                result: ['publicDrawingUrl', 'publicAudioUrl', 'publicVideoUrl', 'publicPhotoUrl'],
-              },
-            }),
-          ),
+      // Setup the mock response for authApiClient.post using the mockSuccessfulHttpResponse utility
+      vi.mocked(authApiClient.post).mockResolvedValue(
+        mockSuccessfulHttpResponse({
+          result: ['publicDrawingUrl', 'publicAudioUrl', 'publicVideoUrl', 'publicPhotoUrl'],
+        }),
       );
 
       const parsedAnswers = [
