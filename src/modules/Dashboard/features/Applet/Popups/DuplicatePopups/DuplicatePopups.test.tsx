@@ -67,9 +67,9 @@ describe('DuplicatePopups', () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
     vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
@@ -137,9 +137,7 @@ describe('DuplicatePopups', () => {
       reportRecipients: ['reportrecipient@example.com'],
     };
 
-    jest
-      .spyOn(applet, 'useAppletData')
-      .mockReturnValue({ result: mockedAppletDataWithReportServer });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletDataWithReportServer });
 
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletDataWithReportServer } },
@@ -148,9 +146,9 @@ describe('DuplicatePopups', () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
 
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
     vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
@@ -218,9 +216,7 @@ describe('DuplicatePopups', () => {
       reportRecipients: ['reportrecipient@example.com'],
     };
 
-    jest
-      .spyOn(applet, 'useAppletData')
-      .mockReturnValue({ result: mockedAppletDataWithReportServer });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletDataWithReportServer });
 
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletDataWithReportServer } },
@@ -228,25 +224,21 @@ describe('DuplicatePopups', () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest
-      .spyOn(global, 'fetch')
-      .mockImplementation(
-        vi.fn(() =>
-          Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) }),
-        ) as jest.Mock,
-      );
+    vi.spyOn(global, 'fetch').mockImplementation(
+      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) })) as jest.Mock,
+    );
 
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
     vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
     );
-    jest
-      .spyOn(encryptionFunctions, 'publicEncrypt')
-      .mockReturnValue(Promise.resolve(btoa('Encrypted password')));
+    vi.spyOn(encryptionFunctions, 'publicEncrypt').mockReturnValue(
+      Promise.resolve(btoa('Encrypted password')),
+    );
 
     const {
       getByTestId,

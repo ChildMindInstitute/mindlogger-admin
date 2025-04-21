@@ -57,7 +57,7 @@ const renderComponent = (route: string, props?: Partial<ReviewMenuItemProps>) =>
 
 describe('Review Menu Item component', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   test('renders and functions correctly when an answer ID is not present in the route', async () => {

@@ -170,9 +170,12 @@ describe('ReportFilters', () => {
         ],
       },
     });
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([
+      true,
+      false,
+      new Date('2024-01-04'),
+      new Date('2024-01-10'),
+    ]);
 
     await act(async () => {
       renderWithProviders(
@@ -206,9 +209,12 @@ describe('ReportFilters', () => {
   });
 
   test('fetch answers on filters change when the entity is Flow', async () => {
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([
+      true,
+      false,
+      new Date('2024-01-04'),
+      new Date('2024-01-10'),
+    ]);
 
     renderWithProviders(
       <RespondentDataContext.Provider value={{ selectedEntity: mockedFlow }}>

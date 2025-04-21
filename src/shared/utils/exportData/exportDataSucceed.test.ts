@@ -24,12 +24,12 @@ describe('exportDataSucceed', () => {
     jest.setSystemTime(new Date('2000-01-01'));
   });
   beforeEach(() => {
-    jest
-      .spyOn(prepareDataUtils, 'prepareEncryptedData')
-      .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
-    jest
-      .spyOn(prepareDataUtils, 'prepareDecryptedData')
-      .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
+    vi.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
+      Promise.resolve(prepareDataUtils.getDefaultExportData()),
+    );
+    vi.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
+      Promise.resolve(prepareDataUtils.getDefaultExportData()),
+    );
     vi.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
     vi.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
     vi.spyOn(exportMediaZipUtils, 'exportMediaZip').mockImplementation();

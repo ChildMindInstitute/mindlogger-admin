@@ -9,14 +9,14 @@ import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
 import { Notification } from './Notification';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUseNavigate,
 }));
 
 describe('Notification', () => {
-  const mockedSetCurrentId = jest.fn();
+  const mockedSetCurrentId = vi.fn();
 
   afterEach(() => {
     vi.restoreAllMocks();
@@ -76,10 +76,10 @@ describe('Notification', () => {
     expect(mockedSetCurrentId).toBeCalledWith('');
   });
   test('should navigate when click on response data button without existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('');
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification
@@ -98,15 +98,15 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
     );
   });
 
   test('should navigate when click on response data button with existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('123');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('123');
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification
@@ -125,7 +125,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
     );
   });
 });
