@@ -36,7 +36,7 @@ const uploaderProps = {
 
 describe('Uploader component', () => {
   beforeAll(() => {
-    global.URL.createObjectURL = jest.fn(() => 'mocked-url://mocked-url');
+    global.URL.createObjectURL = vi.fn(() => 'mocked-url://mocked-url');
   });
 
   afterAll(() => {

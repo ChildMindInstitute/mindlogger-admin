@@ -143,7 +143,7 @@ export const setItemConfigSetting = async (setting) => {
 };
 
 export const renderItemConfiguration = (name = mockedItemName) => (
-  <ItemConfiguration name={name} onClose={jest.fn()} />
+  <ItemConfiguration name={name} onClose={vi.fn()} />
 );
 
 export const renderItemConfigurationByType = (responseType) => {

@@ -137,7 +137,7 @@ describe('useFeedbackReviews', () => {
     });
 
     (useAsync as jest.Mock).mockImplementation((apiFunction, onSuccess) => ({
-      execute: jest.fn(async (params) => {
+      execute: vi.fn(async (params) => {
         const result = await apiFunction(params);
         await onSuccess(result);
       }),

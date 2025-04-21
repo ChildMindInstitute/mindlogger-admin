@@ -1,7 +1,7 @@
 import { getInfinityScrollData } from './getInfinityScrollData';
 
 describe('getInfinityScrollData', () => {
-  const action = jest.fn((nextPage: number) => nextPage);
+  const action = vi.fn((nextPage: number) => nextPage);
 
   test.each`
     action    | totalSize | listSize | limit | isLoading | expectedCalls | expectedArgument | description

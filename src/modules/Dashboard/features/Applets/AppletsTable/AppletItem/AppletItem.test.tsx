@@ -33,7 +33,7 @@ const getAppletItemComponent = (isAppletInFolder = false, hasEncryption = true) 
   <AppletsContext.Provider value={mockContext}>
     <table>
       <tbody>
-        <AppletItem item={getMockedApplet(isAppletInFolder, hasEncryption)} onPublish={jest.fn} />
+        <AppletItem item={getMockedApplet(isAppletInFolder, hasEncryption)} onPublish={vi.fn} />
       </tbody>
     </table>
   </AppletsContext.Provider>
