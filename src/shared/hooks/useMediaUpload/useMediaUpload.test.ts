@@ -56,7 +56,7 @@ const testUploadFlow = async (
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-  jest.runAllTimers();
+  vi.runAllTimers();
   await waitForTheUpdate();
 
   expect(result.current.isLoading).toBe(false);
@@ -92,7 +92,7 @@ describe('useMediaUpload', () => {
   });
 
   afterEach(() => {
-    jest.clearAllTimers();
+    vi.clearAllTimers();
   });
 
   test('should upload file and set mediaUrl on successful upload', async () => testSuccessUpload());
