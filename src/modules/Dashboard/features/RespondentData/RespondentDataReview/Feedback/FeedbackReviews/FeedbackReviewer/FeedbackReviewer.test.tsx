@@ -9,7 +9,7 @@ import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
+  CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
   )),
 }));

@@ -21,10 +21,10 @@ describe('SwitchWorkspace component tests', () => {
   test('should appear empty drawer', () => {
     renderWithProviders(
       <SwitchWorkspace
-        setVisibleDrawer={jest.fn}
+        setVisibleDrawer={vi.fn}
         visibleDrawer={true}
         workspaces={[]}
-        onChangeWorkspace={jest.fn}
+        onChangeWorkspace={vi.fn}
         data-testid={mockedDataTestId}
       />,
       { preloadedState },
@@ -39,9 +39,9 @@ describe('SwitchWorkspace component tests', () => {
   test('should appear drawer with shared workspace', () => {
     renderWithProviders(
       <SwitchWorkspace
-        setVisibleDrawer={jest.fn}
+        setVisibleDrawer={vi.fn}
         visibleDrawer={true}
-        onChangeWorkspace={jest.fn}
+        onChangeWorkspace={vi.fn}
         workspaces={mockedWorkspaces}
         data-testid={mockedDataTestId}
       />,
@@ -61,7 +61,7 @@ describe('SwitchWorkspace component tests', () => {
         setVisibleDrawer={setVisibleDrawerMockFn}
         visibleDrawer={true}
         workspaces={mockedWorkspaces}
-        onChangeWorkspace={jest.fn}
+        onChangeWorkspace={vi.fn}
         data-testid={mockedDataTestId}
       />,
       { preloadedState },

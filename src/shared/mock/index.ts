@@ -3377,14 +3377,14 @@ export const mockedAppletSummaryData = [
 ];
 
 export const mockIntersectionObserver = () => {
-  global.IntersectionObserver = jest.fn((_, options = {}) => ({
+  global.IntersectionObserver = vi.fn((_, options = {}) => ({
     thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold || 0],
     root: options.root || null,
     rootMargin: options.rootMargin || '',
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-    takeRecords: jest.fn(),
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+    takeRecords: vi.fn(),
   }));
 };
 

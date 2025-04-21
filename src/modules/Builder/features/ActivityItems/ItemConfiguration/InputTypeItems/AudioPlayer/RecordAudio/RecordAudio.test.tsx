@@ -67,7 +67,7 @@ describe('RecordAudio', () => {
       error: {
         data: 'Mock Error',
       },
-      stopUpload: jest.fn,
+      stopUpload: vi.fn,
     }));
 
     renderWithProviders(
@@ -127,7 +127,7 @@ describe('RecordAudio', () => {
       },
       isLoading: false,
       error: null,
-      stopUpload: jest.fn,
+      stopUpload: vi.fn,
     }));
 
     renderWithProviders(

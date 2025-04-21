@@ -5,7 +5,7 @@ import { LocalStorageKeys, storage } from 'shared/utils';
 import { useRemoveAppletData } from './useRemoveAppletData';
 
 jest.mock('redux/store', () => ({
-  useAppDispatch: jest.fn,
+  useAppDispatch: vi.fn,
 }));
 
 describe('useRemoveAppletData hook tests', () => {
