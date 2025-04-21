@@ -49,16 +49,16 @@ describe('useIntersectionObserver', () => {
   /* eslint-disable @typescript-eslint/ban-ts-comment */
   beforeEach(() => {
     // @ts-ignore
-    global.IntersectionObserver = jest.fn((cb, options = {}) => {
+    global.IntersectionObserver = vi.fn((cb, options = {}) => {
       const instance = {
         thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
         root: options.root,
         rootMargin: options.rootMargin,
-        observe: jest.fn((element: Element) => {
+        observe: vi.fn((element: Element) => {
           instanceMap.set(element, instance);
           observerMap.set(element, cb);
         }),
-        unobserve: jest.fn((element: Element) => {
+        unobserve: vi.fn((element: Element) => {
           instanceMap.delete(element);
           observerMap.delete(element);
         }),

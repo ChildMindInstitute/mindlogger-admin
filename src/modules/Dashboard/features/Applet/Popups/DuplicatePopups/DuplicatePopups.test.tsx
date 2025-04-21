@@ -231,7 +231,7 @@ describe('DuplicatePopups', () => {
     jest
       .spyOn(global, 'fetch')
       .mockImplementation(
-        jest.fn(() =>
+        vi.fn(() =>
           Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) }),
         ) as jest.Mock,
       );
