@@ -1,7 +1,7 @@
 import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import { PreloadedState } from '@reduxjs/toolkit';
 
@@ -320,15 +320,15 @@ describe('RespondentDataReview', () => {
   test(
     'renders component correctly with all child components when isFeedbackVisible param is false',
     async () => {
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-      mockAxios.get.mockResolvedValueOnce(mockAssessment);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-      mockAxios.get.mockResolvedValueOnce(mockAssessment);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithDates);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities2);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockAssessment);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockAssessment);
 
       const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
 
@@ -345,7 +345,7 @@ describe('RespondentDataReview', () => {
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           1,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
@@ -358,7 +358,7 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           2,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
@@ -371,18 +371,14 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/dates`,
-          {
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-            },
-            signal: undefined,
+        expect(axios.get).toHaveBeenNthCalledWith(3, `/answers/applet/${mockedAppletId}/dates`, {
+          params: {
+            targetSubjectId: mockedFullSubjectId1,
+            fromDate: startOfMonth(date).getTime().toString(),
+            toDate: endOfMonth(date).getTime().toString(),
           },
-        );
+          signal: undefined,
+        });
       });
 
       // check render child components
@@ -445,7 +441,7 @@ describe('RespondentDataReview', () => {
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           4,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
@@ -458,7 +454,7 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           5,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
@@ -471,7 +467,7 @@ describe('RespondentDataReview', () => {
           },
         );
         // get the answer with the latest completion date
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           6,
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-2`,
           {
@@ -482,7 +478,7 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           7,
           `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
           {
@@ -507,7 +503,7 @@ describe('RespondentDataReview', () => {
       await userEvent.click(timestamp0);
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           8,
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-1`,
           {
@@ -518,7 +514,7 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           9,
           `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
           {
@@ -560,11 +556,11 @@ describe('RespondentDataReview', () => {
   test(
     'renders component correctly with all child components when isFeedbackVisible param is true',
     async () => {
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
-      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
-      mockAxios.get.mockResolvedValueOnce({
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities3);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithDates);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce({
         data: {
           result: {},
         },
@@ -585,7 +581,7 @@ describe('RespondentDataReview', () => {
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           1,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
@@ -598,7 +594,7 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           2,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
@@ -611,20 +607,16 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/dates`,
-          {
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-            },
-            signal: undefined,
+        expect(axios.get).toHaveBeenNthCalledWith(3, `/answers/applet/${mockedAppletId}/dates`, {
+          params: {
+            targetSubjectId: mockedFullSubjectId1,
+            fromDate: startOfMonth(date).getTime().toString(),
+            toDate: endOfMonth(date).getTime().toString(),
           },
-        );
+          signal: undefined,
+        });
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           4,
           `/answers/applet/${mockedAppletId}/activities/2/answers/answer-id-2-2`,
           {
@@ -636,7 +628,7 @@ describe('RespondentDataReview', () => {
         );
       });
 
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         5,
         `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
         {
@@ -651,8 +643,8 @@ describe('RespondentDataReview', () => {
   );
 
   test('renders component with chosen last answer date', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithFlows1);
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities3);
 
     renderWithProviders(<RespondentDataReviewWithForm />, {
       preloadedState,
@@ -663,7 +655,7 @@ describe('RespondentDataReview', () => {
     window.HTMLElement.prototype.scrollTo = () => {};
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/review/flows`,
         {
@@ -676,7 +668,7 @@ describe('RespondentDataReview', () => {
         },
       );
 
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         2,
         `/answers/applet/${mockedAppletId}/review/activities`,
         {

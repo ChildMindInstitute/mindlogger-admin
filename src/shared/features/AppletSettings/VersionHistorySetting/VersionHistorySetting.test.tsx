@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -105,7 +105,7 @@ describe('VersionHistorySetting', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.VersionHistory}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.VersionHistory}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      mockAxios.get.mockImplementation((url) => {
+      vi.mocked(axios.get).mockImplementation((url) => {
         switch (true) {
           case url?.endsWith('/versions'):
             return Promise.resolve(versionsMock);

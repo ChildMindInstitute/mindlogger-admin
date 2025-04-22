@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -45,7 +45,7 @@ describe('ShareAppletSetting', () => {
       const dataTestid = 'applet-settings-share-to-library';
       const libraryUrl = 'library-url';
 
-      mockAxios.post.mockResolvedValueOnce({
+      vi.mocked(axios.post).mockResolvedValueOnce({
         payload: {
           response: {
             status: ApiResponseCodes.SuccessfulResponse,
@@ -54,7 +54,7 @@ describe('ShareAppletSetting', () => {
         },
       });
 
-      mockAxios.get.mockResolvedValueOnce({
+      vi.mocked(axios.get).mockResolvedValueOnce({
         data: {
           result: {
             url: libraryUrl,
@@ -68,7 +68,7 @@ describe('ShareAppletSetting', () => {
         preloadedState,
       });
 
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
+      expect(axios.post).toHaveBeenNthCalledWith(
         1,
         '/library/check_name',
         { name: 'displayName' },
@@ -95,20 +95,16 @@ describe('ShareAppletSetting', () => {
       fireEvent.click(screen.getByText('Share'));
 
       await waitFor(() => {
-        expect(mockAxios.post).toHaveBeenNthCalledWith(
+        expect(axios.post).toHaveBeenNthCalledWith(
           3,
           '/library',
           { appletId: mockedAppletId, name: 'displayName', keywords: [mockedKeyword] },
           { signal: undefined },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/applets/${mockedApplet.id}/library_link`,
-          {
-            signal: undefined,
-          },
-        );
+        expect(axios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
+          signal: undefined,
+        });
       });
 
       const successPopup = await screen.findByTestId(`${dataTestid}-share-success-popup`);

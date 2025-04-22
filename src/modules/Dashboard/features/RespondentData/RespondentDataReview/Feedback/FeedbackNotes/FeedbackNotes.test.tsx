@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 
 import { waitForTheUpdate } from 'shared/utils';
@@ -133,7 +133,7 @@ const renderFeedbackNotes = (entity: SelectedEntity, route: string) =>
   );
 
 const mockGetWithNotes = () => {
-  mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
+  vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithNotes);
 };
 
 const testNotesRender = async () =>
@@ -154,10 +154,10 @@ const testNoteCreation = async (apiCallRoute: string) => {
 
   await userEvent.type(screen.getByLabelText(/Add a New Note/i), newNoteValue);
   await userEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
-  mockAxios.post.mockResolvedValueOnce(null);
+  vi.mocked(axios.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(mockAxios.post).nthCalledWith(
+    expect(axios.post).nthCalledWith(
       1,
       apiCallRoute,
       {
@@ -189,11 +189,11 @@ const testNoteEditing = async (apiCallRoute: string) => {
     await userEvent.clear(textarea);
     await userEvent.type(textarea, newNoteValue);
     await userEvent.click(screen.getByTestId(`${noteTestId}-0-save`));
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
   });
 
   await waitFor(() => {
-    expect(mockAxios.put).nthCalledWith(
+    expect(axios.put).nthCalledWith(
       1,
       apiCallRoute,
       {
@@ -218,10 +218,10 @@ const testNoteRemoving = async (apiCallRoute: string) => {
     await userEvent.click(visibleRemoveAction);
   });
 
-  mockAxios.post.mockResolvedValueOnce(null);
+  vi.mocked(axios.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(mockAxios.delete).nthCalledWith(
+    expect(axios.delete).nthCalledWith(
       1,
       apiCallRoute,
 

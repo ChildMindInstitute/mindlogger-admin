@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { PreloadedState } from '@reduxjs/toolkit';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { RootState } from 'redux/store';
 import { AlertType, Workspace } from 'shared/state';
@@ -139,8 +139,8 @@ describe('useNoPermissionPopup', () => {
   });
 
   test('should return correct values and call dispatch on handleSubmit', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
     const { result, store } = renderHookWithProviders(useNoPermissionPopup, {
@@ -171,7 +171,7 @@ describe('useNoPermissionPopup', () => {
       count: 0,
       notWatched: 0,
     });
-    expect(mockAxios.get).nthCalledWith(1, `/alerts`, {
+    expect(axios.get).nthCalledWith(1, `/alerts`, {
       params: {
         limit: DEFAULT_ROWS_PER_PAGE,
       },
@@ -180,7 +180,7 @@ describe('useNoPermissionPopup', () => {
     expect(store.getState().popups.data).toStrictEqual({
       ...popupState.data,
     });
-    expect(mockAxios.get).nthCalledWith(2, `/workspaces`, {
+    expect(axios.get).nthCalledWith(2, `/workspaces`, {
       signal: expect.any(Object),
     });
     expect(store.getState().workspaces.currentWorkspace.data).toStrictEqual(
@@ -195,8 +195,8 @@ describe('useNoPermissionPopup', () => {
   });
 
   test('should reload window when on dashboard applets page if current user workspace is active', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
     const reloadSpy = vi.fn();
@@ -254,8 +254,8 @@ describe('useNoPermissionPopup', () => {
     expect(store.getState().forbiddenState.data.redirectedFromBuilder).toBeTruthy();
 
     // set redirectedFromBuilder to false after setting the workspace and navigating to the dashboard
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
 

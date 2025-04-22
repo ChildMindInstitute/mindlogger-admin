@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -64,7 +64,7 @@ describe('Managers component tests', () => {
       status: ApiResponseCodes.SuccessfulResponse,
       data: null,
     };
-    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetMock);
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -81,7 +81,7 @@ describe('Managers component tests', () => {
         },
       },
     };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    vi.mocked(axios.get).mockResolvedValue(mockedGet);
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -92,7 +92,7 @@ describe('Managers component tests', () => {
   });
 
   test('should render table with managers', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
+    vi.mocked(axios.get).mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
     const managersColumns = ['TestFirstName', 'TestLastName', 'PhD', 'Reviewer', mockedEmail];
@@ -105,7 +105,7 @@ describe('Managers component tests', () => {
   });
 
   test('should appear managers actions for reviewer', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -119,7 +119,7 @@ describe('Managers component tests', () => {
   });
 
   test('should not appear managers actions for owner', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithManagers(true));
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithManagers(true));
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() =>
@@ -133,7 +133,7 @@ describe('Managers component tests', () => {
       ${'dashboard-managers-edit-user'}     | ${'dashboard-managers-edit-access-popup'}   | ${'edit access'}
       ${'dashboard-managers-remove-access'} | ${'dashboard-managers-remove-access-popup'} | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
+      vi.mocked(axios.get).mockResolvedValue(getMockedGetWithManagers());
       renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -156,11 +156,11 @@ describe('Managers component tests', () => {
     };
 
     // getWorkspaceManagersApi
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
+    vi.mocked(axios.get).mockResolvedValueOnce(getMockedGetWithManagers());
     // executeGetWorkspaceInfoApi
-    mockAxios.get.mockResolvedValueOnce(null);
+    vi.mocked(axios.get).mockResolvedValueOnce(null);
     // getWorkspaceManagersApi
-    mockAxios.get.mockResolvedValueOnce(emptySearchGetMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(emptySearchGetMock);
 
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
@@ -170,7 +170,7 @@ describe('Managers component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(
+      expect(axios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`,
         expect.objectContaining({
           params: {

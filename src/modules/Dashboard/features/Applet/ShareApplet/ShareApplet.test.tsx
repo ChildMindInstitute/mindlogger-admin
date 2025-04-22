@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { mockedApplet } from 'shared/mock';
 import { ApiResponseCodes } from 'api';
@@ -24,7 +24,7 @@ const defaultProps = {
 };
 
 const checkAppletNameInLibraryMock = () =>
-  expect(mockAxios.post).toHaveBeenNthCalledWith(
+  expect(axios.post).toHaveBeenNthCalledWith(
     1,
     '/library/check_name',
     { name: appletName },
@@ -52,7 +52,7 @@ describe('ShareApplet Component', () => {
   });
 
   test('applet name is not taken', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       payload: {
         response: {
           status: ApiResponseCodes.SuccessfulResponse,
@@ -72,7 +72,7 @@ describe('ShareApplet Component', () => {
   });
 
   test('handles applet name already taken error', async () => {
-    mockAxios.post.mockRejectedValueOnce({
+    vi.mocked(axios.post).mockRejectedValueOnce({
       payload: {
         response: {
           status: ApiResponseCodes.Forbidden,
@@ -105,7 +105,7 @@ describe('ShareApplet Component', () => {
 
   test('handle share applet and copy applet link', async () => {
     const libraryUrl = 'library-url';
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: {
           url: libraryUrl,
@@ -129,14 +129,14 @@ describe('ShareApplet Component', () => {
     rerender(<ShareApplet {...defaultProps} isSubmitted />);
 
     await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
+      expect(axios.post).toHaveBeenNthCalledWith(
         3,
         '/library',
         { appletId: mockedApplet.id, name: appletName, keywords: [mockedKeyword] },
         { signal: undefined },
       );
 
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
+      expect(axios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
         signal: undefined,
       });
     });

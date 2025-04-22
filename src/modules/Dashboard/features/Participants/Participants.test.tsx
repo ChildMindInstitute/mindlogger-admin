@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { generatePath } from 'react-router-dom';
 
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -130,7 +130,7 @@ describe('Participants component tests', () => {
         },
       },
     };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    vi.mocked(axios.get).mockResolvedValue(mockedGet);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -207,7 +207,7 @@ describe('Participants component tests', () => {
     fireEvent.click(participantPin);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId1}/pin`,
         {},
@@ -330,7 +330,7 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(
+      expect(axios.get).toHaveBeenCalledWith(
         RESPONDENTS_ENDPOINT,
         expect.objectContaining({
           params: {

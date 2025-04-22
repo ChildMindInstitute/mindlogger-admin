@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -66,7 +66,7 @@ describe('Respondents component tests', () => {
       status: ApiResponseCodes.SuccessfulResponse,
       data: null,
     };
-    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetMock);
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -83,7 +83,7 @@ describe('Respondents component tests', () => {
         },
       },
     };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    vi.mocked(axios.get).mockResolvedValue(mockedGet);
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -94,7 +94,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should render table with respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const tableColumnNames = ['ID', 'Nickname', 'Last active', 'Schedule', 'Actions'];
     const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule'];
@@ -107,14 +107,14 @@ describe('Respondents component tests', () => {
   });
 
   test('should pin respondent', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     const respondentPin = await waitFor(() => screen.getByTestId('dashboard-respondents-pin'));
     fireEvent.click(respondentPin);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId1}/pin`,
         {},
@@ -124,7 +124,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear respondents actions on respondent actions button click', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -144,7 +144,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear actions for anonymous respondent', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithRespondents(true));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -171,7 +171,7 @@ describe('Respondents component tests', () => {
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
       ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'}        | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+      vi.mocked(axios.get).mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -185,7 +185,7 @@ describe('Respondents component tests', () => {
   });
 
   test('shows view participant popup on the dashboard respondents page', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, {
       preloadedState,
       route: page.dashboardRespondents,
@@ -204,7 +204,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should search respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
@@ -213,7 +213,7 @@ describe('Respondents component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(
+      expect(axios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
         expect.objectContaining({
           params: {

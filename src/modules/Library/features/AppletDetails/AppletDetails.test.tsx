@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { library } from 'redux/modules';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -123,7 +123,7 @@ describe('AppletDetails', () => {
   test('renders details and buttons when cart applets are loaded', async () => {
     vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockAppletDetails,
       },
@@ -134,7 +134,7 @@ describe('AppletDetails', () => {
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/library/${mockedAppletId}`, {
+      expect(axios.get).toHaveBeenNthCalledWith(1, `/library/${mockedAppletId}`, {
         signal: undefined,
       });
     });

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -173,19 +173,19 @@ describe('FeedbackAssessment', () => {
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();
-    expect(mockAxios.post).toHaveBeenCalled();
+    expect(axios.post).toHaveBeenCalled();
     expect(mockedSetAssessmentStep).toHaveBeenCalledWith(0);
     expect(mockedSubmitCallback).toHaveBeenCalled();
     expect(mockedSetError).not.toHaveBeenCalled();
   });
 
   test('set error if API call is failed on submit assessment', async () => {
-    mockAxios.post.mockRejectedValue(new Error('some error'));
+    vi.mocked(axios.post).mockRejectedValue(new Error('some error'));
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));
 
-    expect(mockAxios.post).toHaveBeenCalled();
+    expect(axios.post).toHaveBeenCalled();
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();

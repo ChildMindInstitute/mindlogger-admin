@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -79,9 +79,9 @@ describe('DuplicateAppletSettings', () => {
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
     });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
     vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
       Promise.resolve(mockedEncryption),
     );

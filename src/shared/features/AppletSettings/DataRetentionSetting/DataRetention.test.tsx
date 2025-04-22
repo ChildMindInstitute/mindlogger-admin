@@ -1,6 +1,6 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { expectBanner, SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -87,7 +87,7 @@ describe('DataRetention component tests', () => {
   });
 
   test('should successfully save changes', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     const { container, store } = renderWithProviders(<DataRetention isDashboard />, {
       preloadedState: getPreloadedState(),
       route,
@@ -101,7 +101,7 @@ describe('DataRetention component tests', () => {
       fireEvent.change(retentionTypeInput, { target: { value: retentionType } });
     await userEvent.click(screen.getByTestId(`${dataTestid}-save`));
 
-    expect(mockAxios.post).nthCalledWith(
+    expect(axios.post).nthCalledWith(
       1,
       `/applets/${mockedAppletId}/retentions`,
       { period: retentionPeriod, retention: retentionType },

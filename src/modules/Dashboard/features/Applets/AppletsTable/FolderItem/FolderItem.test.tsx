@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } from 'shared/mock';
@@ -105,14 +105,14 @@ describe('FolderItem component tests', () => {
   });
 
   test('should delete empty folder', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
     await clickActionDots();
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
-      expect(mockAxios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
+      expect(axios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
         signal: undefined,
       });
       expect(mockReloadData).toBeCalled();
@@ -120,14 +120,14 @@ describe('FolderItem component tests', () => {
   });
 
   test('should delete new empty folder', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(true, true), { preloadedState });
 
     await clickActionDots();
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
-      expect(mockAxios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
+      expect(axios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
         signal: undefined,
       });
       expect(mockReloadData).toBeCalled();
@@ -154,7 +154,7 @@ describe('FolderItem component tests', () => {
   });
 
   test('should rename folder', async () => {
-    mockAxios.put.mockResolvedValueOnce(null);
+    vi.mocked(axios.put).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
     await clickActionDots();
@@ -170,7 +170,7 @@ describe('FolderItem component tests', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 13, charCode: 13 });
 
     await waitFor(() => {
-      expect(mockAxios.put).nthCalledWith(
+      expect(axios.put).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/folders/testId`,
         { name: newFolderName },
@@ -201,7 +201,7 @@ describe('FolderItem component tests', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13, charCode: 13 });
 
     await waitFor(() => {
-      expect(mockAxios.post).toBeCalled();
+      expect(axios.post).toBeCalled();
       expect(mockReloadData).toBeCalled();
     });
   });
@@ -214,7 +214,7 @@ describe('FolderItem component tests', () => {
       },
     });
 
-    expect(mockAxios.post).nthCalledWith(
+    expect(axios.post).nthCalledWith(
       1,
       '/applets/set_folder',
       { appletId: mockedAppletId, folderId: 'testId' },

@@ -1,6 +1,6 @@
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
@@ -53,7 +53,7 @@ describe('EditRespondentPopup component tests', () => {
       ...commonProps,
       chosenAppletData: limitedAppletData,
     };
-    mockAxios.put.mockResolvedValueOnce({
+    vi.mocked(axios.put).mockResolvedValueOnce({
       data: {
         result: {
           ...limitedAppletData,
@@ -101,7 +101,7 @@ describe('EditRespondentPopup component tests', () => {
       lastName: null,
     };
 
-    mockAxios.put.mockResolvedValueOnce({
+    vi.mocked(axios.put).mockResolvedValueOnce({
       data: {
         result,
       },
@@ -167,7 +167,7 @@ describe('EditRespondentPopup component tests', () => {
     });
 
     test('It accepts changes to the subjectʼs tag value', async () => {
-      mockAxios.put.mockResolvedValueOnce({
+      vi.mocked(axios.put).mockResolvedValueOnce({
         data: {
           result: {
             ...chosenAppletData,
@@ -188,7 +188,7 @@ describe('EditRespondentPopup component tests', () => {
       await userEvent.click(dropdownOption as HTMLElement);
       await userEvent.click(submitBtn);
 
-      expect(mockAxios.put).toBeCalledWith(
+      expect(axios.put).toBeCalledWith(
         `/subjects/${chosenAppletData.subjectId}`,
         {
           nickname: chosenAppletData.respondentNickname,
