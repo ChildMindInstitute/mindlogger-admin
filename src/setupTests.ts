@@ -60,6 +60,7 @@ vi.mock('axios', () => {
   const mockPost = vi.fn();
   const mockGet = vi.fn();
   const mockDelete = vi.fn();
+  const mockIsAxiosError = vi.fn();
 
   return {
     default: {
@@ -67,6 +68,7 @@ vi.mock('axios', () => {
       post: mockPost,
       get: mockGet,
       delete: mockDelete,
+      isAxiosError: mockIsAxiosError,
     },
   };
 });

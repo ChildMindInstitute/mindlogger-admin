@@ -1,4 +1,5 @@
 import * as routerDom from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { users } from 'redux/modules';
@@ -8,10 +9,15 @@ import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { useResponsesSummary } from './ResponsesSummary.hooks';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 
 describe('useResponsesSummary', () => {
   const endDatetime = '2024-04-10T10:00:00';
@@ -33,8 +39,8 @@ describe('useResponsesSummary', () => {
       teamMemberCanViewData: true,
     };
 
-    users.useRespondent = jest.fn().mockReturnValue({ result: res });
-    users.useSubject = jest.fn().mockReturnValue({ details: undefined });
+    users.useRespondent = vi.fn().mockReturnValue({ result: res });
+    users.useSubject = vi.fn().mockReturnValue({ details: undefined });
 
     const respondent = res?.nickname
       ? getRespondentName(res.secretUserId, res.nickname, 'comma')

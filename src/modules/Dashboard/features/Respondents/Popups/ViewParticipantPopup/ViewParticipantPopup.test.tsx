@@ -13,17 +13,22 @@ import { page } from 'resources';
 
 import { ViewParticipantPopup } from './ViewParticipantPopup';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-  generatePath: jest.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    generatePath: () => vi.fn(),
+  };
+});
 
 const mockedUseNavigate = jest.mocked(useNavigate);
 const mockedGeneratePath = jest.mocked(generatePath);
 
-const setChosenAppletDataMock = jest.fn();
-const setPopupVisibleMock = jest.fn();
+const setChosenAppletDataMock = vi.fn();
+const setPopupVisibleMock = vi.fn();
 const chosenAppletDataMock = {
   ...mockedFullParticipant1.details[0],
   respondentId: mockedFullParticipantId1,
@@ -52,7 +57,7 @@ const tableRowsMock = [
 ];
 
 describe('ViewParticipantPopup', () => {
-  const navigateMock = jest.fn();
+  const navigateMock = vi.fn();
 
   beforeEach(() => {
     mockedUseNavigate.mockReturnValue(navigateMock);

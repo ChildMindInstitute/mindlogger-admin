@@ -50,19 +50,26 @@ const preloadedStateWithIntegration = {
   },
 };
 
-jest.mock('react-router-dom', () => ({
-  useNavigate: jest.fn(),
-  useParams: jest.fn(),
-  generatePath: jest.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    useParams: () => vi.fn(),
+    generatePath: () => vi.fn(),
+  };
+});
 
 jest.mock('shared/hooks/useIsServerConfigured', () => ({
-  useIsServerConfigured: jest.fn(),
+  useIsServerConfigured: vi.fn(),
 }));
 
 jest.mock('redux/modules', () => ({
   applet: {
-    useAppletData: jest.fn(),
+    useAppletData: vi.fn(),
   },
 }));
 
@@ -74,7 +81,7 @@ const renderWithStore = (preloadedState) =>
   );
 
 describe('LorisIntegration', () => {
-  const navigate = jest.fn();
+  const navigate = vi.fn();
 
   beforeEach(() => {
     useNavigate.mockReturnValue(navigate);

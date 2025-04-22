@@ -10,10 +10,15 @@ const EMPTY_PRIVATE_KEY = '';
 
 const mockedUseParams = jest.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams,
+  };
+});
 
 const spyUseData = vi.spyOn(auth, 'useData');
 
