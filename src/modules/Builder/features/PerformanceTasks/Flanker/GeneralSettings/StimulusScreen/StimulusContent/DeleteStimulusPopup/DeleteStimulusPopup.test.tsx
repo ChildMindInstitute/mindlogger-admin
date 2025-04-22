@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 

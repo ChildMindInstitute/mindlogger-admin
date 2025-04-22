@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 
@@ -162,12 +162,12 @@ describe('RespondentDataSummary component', () => {
     const mockedSetSummaryActivities = vi.fn();
     const mockedSetSummaryFlows = vi.fn();
 
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockedSummaryFlows,
       },
     });
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockedSummaryActivities,
       },
@@ -183,7 +183,7 @@ describe('RespondentDataSummary component', () => {
     });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/summary/flows`,
         {
@@ -194,7 +194,7 @@ describe('RespondentDataSummary component', () => {
           signal: undefined,
         },
       );
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         2,
         `/answers/applet/${mockedAppletId}/summary/activities`,
         {

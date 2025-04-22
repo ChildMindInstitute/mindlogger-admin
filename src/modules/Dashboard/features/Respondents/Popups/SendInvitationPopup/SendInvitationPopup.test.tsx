@@ -1,6 +1,6 @@
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import * as routerDom from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -50,14 +50,14 @@ describe('SendInvitationPopup', () => {
     const submitBtn = getByText('Send Invitation');
     await userEvent.click(submitBtn);
 
-    expect(mockAxios.post).not.toHaveBeenCalled();
+    expect(axios.post).not.toHaveBeenCalled();
 
     const emailInput = getByLabelText(/Email address/i);
     await userEvent.type(emailInput, mockedEmail);
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
+      expect(axios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
         { email: mockedEmail, subjectId: mockedFullSubjectId1 },
@@ -78,7 +78,7 @@ describe('SendInvitationPopup', () => {
     await userEvent.click(getByText('Send Invitation'));
 
     await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
+      expect(axios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
         { email: mockedEmail, subjectId: mockedFullSubjectId1 },

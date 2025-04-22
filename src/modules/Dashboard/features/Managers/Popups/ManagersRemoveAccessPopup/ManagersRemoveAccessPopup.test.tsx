@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
@@ -48,7 +48,7 @@ describe('ManagersRemoveAccessPopup component tests', () => {
   });
 
   test('ManagersRemoveAccessPopup should remove access with appletId', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
 
     renderWithProviders(<ManagersRemoveAccessPopup {...commonProps} />, {
       route: routeWithAppletId,

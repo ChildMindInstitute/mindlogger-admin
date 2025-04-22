@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
@@ -46,7 +46,7 @@ describe('useLogout', () => {
 
   test('deleting access token navigates to login', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     await waitFor(() => {
       result.current();
@@ -57,7 +57,7 @@ describe('useLogout', () => {
 
   test('deleting access token resets all data', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     await waitFor(() => {
       result.current();
@@ -70,14 +70,14 @@ describe('useLogout', () => {
 
   test('delete refresh token api is called if delete access token rejects with Unauthorized status code', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockRejectedValueOnce({
+    vi.mocked(axios.post).mockRejectedValueOnce({
       response: {
         status: ApiResponseCodes.Unauthorized,
       },
     });
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    mockAxios.post.mockImplementation((url: string) => {
+    vi.mocked(axios.post).mockImplementation((url: string) => {
       expect(url).toBe('auth/logout2');
     });
 

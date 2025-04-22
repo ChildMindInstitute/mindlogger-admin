@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { initialStateData } from 'shared/state';
 import { mockedApplet } from 'shared/mock';
@@ -38,7 +38,7 @@ describe('PublishConcealAppletPopup', () => {
   });
 
   test('should show publish success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     const { store } = renderWithProviders(<PublishConcealAppletPopup />, {
       preloadedState: getPreloadedState(true),
@@ -49,7 +49,7 @@ describe('PublishConcealAppletPopup', () => {
   });
 
   test('should show conceal success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     const { store } = renderWithProviders(<PublishConcealAppletPopup />, {
       preloadedState: getPreloadedState(false),

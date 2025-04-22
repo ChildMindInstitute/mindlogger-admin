@@ -1,4 +1,4 @@
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -72,8 +72,8 @@ describe('Participant Details page', () => {
   });
 
   test('should redirect to activity participants if participantId does not exists', async () => {
-    mockAxios.get.mockRejectedValue(null);
-    mockAxios.get.mockRejectedValue(null);
+    vi.mocked(axios.get).mockRejectedValue(null);
+    vi.mocked(axios.get).mockRejectedValue(null);
 
     renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
@@ -91,8 +91,8 @@ describe('Participant Details page', () => {
   });
 
   test('should render participant activities', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedAppletResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedParticipantResult);
 
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
@@ -103,8 +103,8 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-activities'));
   });
   test('should render participant connections', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedAppletResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedParticipantResult);
 
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
@@ -115,8 +115,8 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-connections'));
   });
   test('should render participant schedules', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedAppletResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedParticipantResult);
 
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
@@ -127,8 +127,8 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-schedule'));
   });
   test('should not render participant connections if the feature flag is disabled', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedAppletResult);
+    vi.mocked(axios.get).mockResolvedValue(mockedParticipantResult);
     jest.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: false,

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 
 import { expectBanner, SettingParam } from 'shared/utils';
@@ -66,7 +66,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('DeleteAppletSetting', () => {
   test('should render and submit', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
       getPublicKey: getPublicKeyMock,
     }));

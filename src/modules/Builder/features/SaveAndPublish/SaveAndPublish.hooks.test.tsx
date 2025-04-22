@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { ApiResponseCodes } from 'api';
 import { mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
@@ -119,7 +119,7 @@ describe('useSaveAndPublishSetup hook', () => {
   describe('handleSaveAndPublishFirstClick', () => {
     describe('creating a new applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.post.mockResolvedValueOnce({
+        vi.mocked(axios.post).mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
             result: { ...mockedAppletData, id: mockedAppletId },
@@ -168,7 +168,7 @@ describe('useSaveAndPublishSetup hook', () => {
       });
 
       test('should not show a success banner if call to save fails', async () => {
-        mockAxios.post.mockRejectedValueOnce({});
+        vi.mocked(axios.post).mockRejectedValueOnce({});
 
         const { result, rerender, store } = renderHookWithProviders(useSaveAndPublishSetup, {
           preloadedState: getPreloadedState(),
@@ -191,7 +191,7 @@ describe('useSaveAndPublishSetup hook', () => {
 
     describe('updating an existing applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.put.mockResolvedValueOnce({
+        vi.mocked(axios.put).mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
             result: { ...mockedAppletData, id: mockedAppletId },

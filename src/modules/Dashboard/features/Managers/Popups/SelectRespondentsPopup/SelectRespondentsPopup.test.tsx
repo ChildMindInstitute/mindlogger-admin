@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -66,7 +66,7 @@ const successfulResponse = {
 
 describe('SelectRespondentsPopup component tests', () => {
   beforeEach(() => {
-    mockAxios.get.mockResolvedValueOnce(successfulResponse);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulResponse);
   });
 
   test('should appear popup without selected respondents', async () => {

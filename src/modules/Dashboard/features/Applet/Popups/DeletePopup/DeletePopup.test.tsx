@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
@@ -41,7 +41,7 @@ describe('DeletePopup', () => {
   });
 
   test('DeletePopup should show success banner', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPublicKey: getPublicKeyMock,

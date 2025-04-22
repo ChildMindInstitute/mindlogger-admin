@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
@@ -245,7 +245,7 @@ describe('EditEventPopup', () => {
       expect(submitButton).not.toBeDisabled();
       await userEvent.click(submitButton);
 
-      expect(mockAxios.put).toBeCalledWith(
+      expect(axios.put).toBeCalledWith(
         `/applets/${mockAppletId}/events/${mockEventId1}`,
         {
           accessBeforeSchedule: false,
@@ -270,7 +270,7 @@ describe('EditEventPopup', () => {
   test(
     'event removal',
     async () => {
-      mockAxios.delete.mockResolvedValueOnce(null);
+      vi.mocked(axios.delete).mockResolvedValueOnce(null);
       const spyGetEvents = vi.spyOn(applets.thunk, 'getEvents');
 
       renderWithProviders(
@@ -319,7 +319,7 @@ describe('EditEventPopup', () => {
       await userEvent.click(removePopupConfirmButton);
 
       await waitFor(() => {
-        expect(mockAxios.delete).toBeCalledWith(`/applets/${mockAppletId}/events/${mockEventId1}`, {
+        expect(axios.delete).toBeCalledWith(`/applets/${mockAppletId}/events/${mockEventId1}`, {
           signal: undefined,
         });
       });
@@ -390,7 +390,7 @@ describe('EditEventPopup', () => {
       expect(removeButton).toBeInTheDocument();
       await userEvent.click(removeButton);
 
-      expect(mockAxios.put).toBeCalledWith(
+      expect(axios.put).toBeCalledWith(
         `/applets/${mockAppletId}/events/${mockEventId1}`,
         {
           endTime: '23:59:00',
@@ -470,7 +470,7 @@ describe('EditEventPopup', () => {
       expect(confirmButton).toBeInTheDocument();
       await userEvent.click(confirmButton);
 
-      expect(mockAxios.put).toBeCalledWith(
+      expect(axios.put).toBeCalledWith(
         `/applets/${mockAppletId}/events/${mockEventId2}`,
         {
           accessBeforeSchedule: false,

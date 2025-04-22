@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -65,8 +65,8 @@ describe('RemoveRespondentPopup component tests', () => {
   });
 
   test('RemoveRespondentPopup should remove access with appletId', async () => {
-    mockAxios.post.mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
-    mockAxios.delete.mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.post).mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.delete).mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
 
     renderWithProviders(<RemoveRespondentPopup {...commonProps} />, {
       route,
