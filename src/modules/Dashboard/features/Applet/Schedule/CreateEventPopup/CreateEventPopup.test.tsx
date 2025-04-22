@@ -3,6 +3,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
@@ -10,16 +11,8 @@ import { mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
 import { JEST_TEST_TIMEOUT } from 'shared/consts';
 import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
-import { authApiClient } from 'shared/api/apiConfig';
 
 import { CreateEventPopup } from './CreateEventPopup';
-
-// Mock the API modules
-vi.mock('shared/api/apiConfig', () => ({
-  authApiClient: {
-    post: vi.fn(),
-  },
-}));
 
 const mockSetCreateEventPopupVisible = vi.fn();
 const dataTestid = 'dashboard-calendar-create-event-popup';
@@ -119,7 +112,7 @@ export const preloadedState = {
 describe('CreateEventPopup', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authApiClient.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
+    vi.mocked(axios.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
   });
 
   test(
@@ -196,7 +189,7 @@ describe('CreateEventPopup', () => {
       expect(removeButton).toBeInTheDocument();
       await userEvent.click(removeButton);
 
-      expect(vi.mocked(authApiClient.post)).toBeCalledWith(
+      expect(vi.mocked(axios.post)).toBeCalledWith(
         `/applets/${mockAppletId}/events`,
         {
           activityId: '96d889e2-2264-4e76-8c60-744600e770fe',
@@ -270,7 +263,7 @@ describe('CreateEventPopup', () => {
       expect(confirmButton).toBeInTheDocument();
       await userEvent.click(confirmButton);
 
-      expect(vi.mocked(authApiClient.post)).toBeCalledWith(
+      expect(vi.mocked(axios.post)).toBeCalledWith(
         `/applets/${mockAppletId}/events`,
         {
           accessBeforeSchedule: false,
