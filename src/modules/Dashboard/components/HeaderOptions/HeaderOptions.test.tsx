@@ -10,11 +10,17 @@ import { HeaderOptions } from './HeaderOptions';
 const mockUseNavigate = vi.fn();
 const mockedUseParams = () => ({ appletId: mockedAppletId });
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-  useParams: () => mockedUseParams(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+    useParams: () => mockedUseParams,
+  };
+});
 
 describe('HeaderOptions', () => {
   beforeEach(() => {

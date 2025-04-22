@@ -13,9 +13,16 @@ import {
   defaultValues as initialValues,
 } from './ReportConfigSetting.const';
 
-jest.mock('react-router-dom', () => ({
-  useParams: vi.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 
 jest.mock('shared/utils/authStorage', () => ({
   authStorage: {

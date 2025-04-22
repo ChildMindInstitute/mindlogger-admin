@@ -6,10 +6,15 @@ import { getRespondentName } from 'shared/utils';
 
 import { useRespondentLabel } from './useRespondentLabel';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: vi.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 
 describe('useRespondentLabel', () => {
   test('should return an empty string when respondentId is not provided', () => {

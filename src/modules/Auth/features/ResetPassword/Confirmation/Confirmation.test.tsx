@@ -8,10 +8,16 @@ import { Confirmation } from '.';
 
 const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 describe('Confirmation component tests', () => {
   test('renders confirmation component with email', () => {

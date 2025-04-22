@@ -8,10 +8,15 @@ import { mockedApplet, mockedPrivateKey, mockedUserData } from 'shared/mock';
 
 import { useEncryptedAnswers } from './useEncryptedAnswers';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: vi.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 
 jest.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({

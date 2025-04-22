@@ -10,10 +10,15 @@ import { NoPermissionPopup } from './NoPermissionPopup';
 
 const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> => ({
   forbiddenState: {

@@ -24,10 +24,15 @@ const getPreloadedState = (status: 'loading' | 'success') => ({
   },
 });
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 jest.mock('shared/hooks/useCheckIfNewApplet', () => ({
   useCheckIfNewApplet: vi.fn(),

@@ -29,10 +29,15 @@ const mockedParticipantResult = {
   },
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: vi.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+  };
+});
 
 jest.mock('shared/hooks/useFeatureFlags', () => ({
   ...jest.requireActual('shared/hooks/useFeatureFlags'),

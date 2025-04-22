@@ -17,10 +17,15 @@ import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
 
 const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 const userId = 'a9990d0a-7a95-45ed-86ad-1509a9d62614';
 const workspacesData = {

@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { LocationStateKeys } from 'shared/types';
@@ -12,14 +13,20 @@ const mockKey = 'key';
 const mockEmail = 'jdoe@test.com';
 const mockUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 describe('RecoverForm', () => {
   test('test email inputs (with error), test success request', async () => {
-    mockAxios.post.mockResolvedValueOnce({ data: {} });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: {} });
 
     renderWithProviders(<RecoverForm email={mockEmail} resetKey={mockKey} />);
 
@@ -59,7 +66,7 @@ describe('RecoverForm', () => {
 
     await userEvent.click(submitButton);
 
-    expect(mockAxios.post).toBeCalledWith(
+    expect(axios.post).toBeCalledWith(
       '/users/me/password/recover/approve',
       { email: mockEmail, key: mockKey, password: 'New_Password' },
       { signal: undefined },
@@ -71,7 +78,7 @@ describe('RecoverForm', () => {
   });
 
   test('test error request', async () => {
-    mockAxios.post.mockRejectedValue(new Error('Mock error'));
+    vi.mocked(axios.post).mockRejectedValue(new Error('Mock error'));
 
     renderWithProviders(<RecoverForm email={mockEmail} resetKey={mockKey} />);
 
@@ -90,7 +97,7 @@ describe('RecoverForm', () => {
 
     await userEvent.click(submitButton);
 
-    expect(mockAxios.post).toBeCalledWith(
+    expect(axios.post).toBeCalledWith(
       '/users/me/password/recover/approve',
       { email: mockEmail, key: mockKey, password: 'New_Password' },
       { signal: undefined },
