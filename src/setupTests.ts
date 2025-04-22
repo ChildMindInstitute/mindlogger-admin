@@ -39,3 +39,18 @@ vi.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles'
     StyledMdEditor: actual.StyledMdEditor,
   };
 });
+
+vi.mock('axios', () => {
+  const mockPost = vi.fn();
+  const mockGet = vi.fn();
+  const mockDelete = vi.fn();
+
+  return {
+    default: {
+      create: () => ({ post: mockPost, get: mockGet, delete: mockDelete }),
+      post: mockPost,
+      get: mockGet,
+      delete: mockDelete,
+    },
+  };
+});

@@ -1,35 +1,15 @@
 import { vi } from 'vitest';
-// Now import everything else after the mocks
+import axios from 'axios';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { RootState } from 'redux/store';
 import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
-import {
-  createEventApi,
-  deleteIndividualEventsApi,
-  deleteScheduledEventsApi,
-} from 'modules/Dashboard/api/api';
 
 import { Legend } from './Legend';
 import { PreparedEvents } from '../Schedule.types';
 import { ScheduleProvider } from '../ScheduleProvider';
-
-// Mock the API client module with simple mocks
-vi.mock('shared/api/apiConfig', () => ({
-  authApiClient: {
-    post: vi.fn(),
-    delete: vi.fn(),
-  },
-}));
-
-// Mock the specific API functions with simple mocks
-vi.mock('modules/Dashboard/api/api', () => ({
-  deleteScheduledEventsApi: vi.fn(),
-  deleteIndividualEventsApi: vi.fn(),
-  createEventApi: vi.fn(),
-}));
 
 // Mock shared components
 vi.mock('shared/components', async (importOriginal) => {
@@ -38,9 +18,9 @@ vi.mock('shared/components', async (importOriginal) => {
   return {
     ...actual,
     Table: () => <div>table component</div>,
+    Svg: () => <div>svg component</div>,
   };
 });
-
 // Constants
 const dataTestid = 'dashboard-calendar-schedule-legend';
 const testUserId = 'test-user-id';
@@ -347,7 +327,11 @@ describe('Legend', () => {
 
       await userEvent.click(submitBttn);
 
-      expect(deleteScheduledEventsApi).toHaveBeenCalledWith({ appletId: mockedAppletId });
+      expect(axios.delete).toHaveBeenCalledTimes(1);
+      expect(axios.delete).toHaveBeenCalledWith(
+        `/applets/${mockedAppletId}/events`,
+        expect.objectContaining({ signal: undefined }),
+      );
     });
 
     test('Creates events for the default schedule', async () => {
@@ -369,14 +353,13 @@ describe('Legend', () => {
 
       await userEvent.click(confirmBttn);
 
-      expect(createEventApi).toHaveBeenCalledWith(
+      expect(axios.post).toHaveBeenCalledTimes(1);
+      expect(axios.post).toHaveBeenCalledWith(
+        `/applets/${mockedAppletId}/events`,
         expect.objectContaining({
-          appletId: mockedAppletId,
-          body: expect.objectContaining({
-            activityId: mockedActivityId,
-            respondentId: undefined,
-          }),
+          activityId: mockedActivityId,
         }),
+        expect.anything(),
       );
     });
 
@@ -447,10 +430,11 @@ describe('Legend', () => {
 
       await userEvent.click(submitBttn);
 
-      expect(deleteIndividualEventsApi).toHaveBeenCalledWith({
-        appletId: mockedAppletId,
-        respondentId: testUserId,
-      });
+      expect(axios.delete).toHaveBeenCalledTimes(1);
+      expect(axios.delete).toHaveBeenCalledWith(
+        `/applets/${mockedAppletId}/events/delete_individual/${testUserId}`,
+        expect.objectContaining({ signal: undefined }),
+      );
     });
 
     test('Creates events for the individual schedule', async () => {
@@ -472,14 +456,14 @@ describe('Legend', () => {
 
       await userEvent.click(confirmBttn);
 
-      expect(createEventApi).toHaveBeenCalledWith(
+      expect(axios.post).toHaveBeenCalledTimes(1);
+      expect(axios.post).toHaveBeenCalledWith(
+        `/applets/${mockedAppletId}/events`,
         expect.objectContaining({
-          appletId: mockedAppletId,
-          body: expect.objectContaining({
-            activityId: mockedActivityId,
-            respondentId: testUserId,
-          }),
+          activityId: mockedActivityId,
+          respondentId: testUserId,
         }),
+        expect.anything(),
       );
     });
 
