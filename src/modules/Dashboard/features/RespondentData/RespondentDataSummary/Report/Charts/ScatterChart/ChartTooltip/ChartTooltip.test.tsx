@@ -41,10 +41,15 @@ const getProps = (props?: Partial<ScatterTooltipRowData>) => ({
 });
 
 const mockedNavigate = vi.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedNavigate,
+  };
+});
 
 const setCurrentActivityCompletionData = vi.fn();
 

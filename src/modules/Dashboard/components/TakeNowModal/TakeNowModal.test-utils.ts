@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import {
@@ -17,7 +18,7 @@ import {
   TakeNowClickEvent,
 } from 'shared/utils';
 
-const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 export const takeNowModalTestId = (testId: string) => `${testId}-take-now-modal`;
 

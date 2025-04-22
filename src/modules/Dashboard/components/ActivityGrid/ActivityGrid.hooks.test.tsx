@@ -18,11 +18,17 @@ const props = {
   },
 } as UseActivityGridProps;
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: vi.fn(),
-  useParams: vi.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    useParams: () => vi.fn(),
+  };
+});
 
 const mockedUseParams = useParams as jest.MockedFunction<typeof useParams>;
 const mockedUseNavigate = useNavigate as jest.MockedFunction<typeof useNavigate>;

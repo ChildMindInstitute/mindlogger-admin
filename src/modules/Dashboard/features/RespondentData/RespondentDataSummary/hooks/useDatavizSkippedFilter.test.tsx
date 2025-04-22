@@ -8,10 +8,15 @@ import { useDatavizSkippedFilter } from './useDatavizSkippedFilter';
 
 const mockedUseParams = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams,
+  };
+});
 
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),

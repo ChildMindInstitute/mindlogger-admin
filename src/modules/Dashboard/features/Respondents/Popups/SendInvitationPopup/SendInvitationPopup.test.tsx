@@ -9,10 +9,15 @@ import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { SendInvitationPopup } from './SendInvitationPopup';
 import { dataTestId } from './SendInvitationPopup.const';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: vi.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 const mockedSecretUserId = '123';
 const mockedRespondentId = '456';
 const mockedEmail = 'test@test.com';

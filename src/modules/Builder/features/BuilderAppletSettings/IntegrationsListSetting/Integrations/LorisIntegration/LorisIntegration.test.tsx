@@ -50,11 +50,18 @@ const preloadedStateWithIntegration = {
   },
 };
 
-jest.mock('react-router-dom', () => ({
-  useNavigate: vi.fn(),
-  useParams: vi.fn(),
-  generatePath: vi.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    useParams: () => vi.fn(),
+    generatePath: () => vi.fn(),
+  };
+});
 
 jest.mock('shared/hooks/useIsServerConfigured', () => ({
   useIsServerConfigured: vi.fn(),

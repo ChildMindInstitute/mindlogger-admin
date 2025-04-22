@@ -1,11 +1,12 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { applet } from 'shared/state';
 import { ErrorResponseType } from 'shared/types';
 
 import { useCheckIfAppletHasNotFoundError } from './useCheckIfAppletHasNotFoundError';
 
-const spyUseResponseError: jest.SpyInstance = vi.spyOn(applet, 'useResponseError');
+const spyUseResponseError = vi.spyOn(applet, 'useResponseError');
 
 describe('useCheckIfAppletHasNotFoundError', () => {
   beforeEach(() => {
