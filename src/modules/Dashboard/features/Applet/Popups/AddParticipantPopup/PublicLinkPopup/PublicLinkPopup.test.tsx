@@ -1,22 +1,12 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
-import { authApiClient } from 'shared/api/apiConfig';
 
 import { PublicLinkPopup } from './PublicLinkPopup';
-
-// Mock the API modules
-vi.mock('shared/api/apiConfig', () => ({
-  authApiClient: {
-    delete: vi.fn(),
-    post: vi.fn(),
-  },
-}));
-
-// Import the mocked module after mocking
 
 const testId = 'public-link-popup';
 const commonProps = {
@@ -35,9 +25,7 @@ describe('PublicLinkPopup', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} hasPublicLink />);
 
-      vi.mocked(authApiClient.delete).mockResolvedValue(
-        mockSuccessfulHttpResponse({ status: 204 }),
-      );
+      vi.mocked(axios.delete).mockResolvedValue(mockSuccessfulHttpResponse({ status: 204 }));
     });
 
     test('It renders in the correct state', async () => {
@@ -51,7 +39,7 @@ describe('PublicLinkPopup', () => {
 
       await userEvent.click(deleteBtn);
 
-      expect(vi.mocked(authApiClient.delete)).toBeCalledWith(
+      expect(vi.mocked(axios.delete)).toBeCalledWith(
         `/applets/${commonProps.appletId}/access_link`,
         {
           signal: undefined,
@@ -64,7 +52,7 @@ describe('PublicLinkPopup', () => {
     beforeEach(() => {
       renderWithProviders(<PublicLinkPopup {...commonProps} />);
 
-      vi.mocked(authApiClient.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
+      vi.mocked(axios.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
     });
 
     test('It renders in the correct state', async () => {
@@ -79,7 +67,7 @@ describe('PublicLinkPopup', () => {
 
         await userEvent.click(createBtn);
 
-        expect(vi.mocked(authApiClient.post)).toBeCalledWith(
+        expect(vi.mocked(axios.post)).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,
           { requireLogin: true },
           { signal: undefined },
@@ -93,7 +81,7 @@ describe('PublicLinkPopup', () => {
 
         await userEvent.click(createBtn);
 
-        expect(vi.mocked(authApiClient.post)).toBeCalledWith(
+        expect(vi.mocked(axios.post)).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,
           { requireLogin: false },
           { signal: undefined },
