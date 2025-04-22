@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
@@ -43,9 +43,9 @@ const usersVisitsResponse = {
 
 describe('UploadPopup', () => {
   test('test CurrentConnectionInfo -> SelectVisits -> Success flow', async () => {
-    mockAxios.get.mockResolvedValueOnce(visitsResponse);
-    mockAxios.get.mockResolvedValueOnce(usersVisitsResponse);
-    mockAxios.post.mockResolvedValueOnce({ data: {} });
+    vi.mocked(axios.get).mockResolvedValueOnce(visitsResponse);
+    vi.mocked(axios.get).mockResolvedValueOnce(usersVisitsResponse);
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: {} });
 
     renderWithProviders(<UploadPopup {...props} />, {
       route: `/builder/123/settings/loris-integration`,
@@ -75,8 +75,8 @@ describe('UploadPopup', () => {
     expect(confirmButton).toHaveTextContent('Confirm');
     await userEvent.click(confirmButton);
 
-    expect(mockAxios.get).toBeCalledWith('/integrations/loris/123/visits', { signal: undefined }); // Failing
-    expect(mockAxios.get).toBeCalledWith('/integrations/loris/123/users/visits', {
+    expect(axios.get).toBeCalledWith('/integrations/loris/123/visits', { signal: undefined }); // Failing
+    expect(axios.get).toBeCalledWith('/integrations/loris/123/users/visits', {
       signal: undefined,
     });
 
@@ -115,7 +115,7 @@ describe('UploadPopup', () => {
     expect(submitButton).toBeInTheDocument();
     await userEvent.click(submitButton);
 
-    expect(mockAxios.post).toBeCalledWith(
+    expect(axios.post).toBeCalledWith(
       '/integrations/loris/publish',
       [
         {

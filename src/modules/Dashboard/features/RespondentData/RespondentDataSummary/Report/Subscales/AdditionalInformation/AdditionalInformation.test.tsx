@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -97,7 +97,7 @@ describe('AdditionalInformation component', () => {
   });
 
   test('renders AdditionalInformation component with link and fetches additional information', async () => {
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: mockedLinkResponse,
     });
 
@@ -112,7 +112,7 @@ describe('AdditionalInformation component', () => {
     expect(screen.queryByText('Additional Information')).not.toBeNull();
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, mockedLinkOptionText);
+      expect(axios.get).toHaveBeenNthCalledWith(1, mockedLinkOptionText);
     });
 
     expect(screen.queryByText(mockedLinkResponse)).not.toBeNull();

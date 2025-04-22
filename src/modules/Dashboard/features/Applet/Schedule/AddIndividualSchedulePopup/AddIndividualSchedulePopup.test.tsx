@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -37,13 +37,13 @@ describe('AddIndividualSchedulePopup', () => {
 
   describe('When pressing Confirm', () => {
     beforeEach(() => {
-      mockAxios.post.mockResolvedValueOnce(null);
+      vi.mocked(axios.post).mockResolvedValueOnce(null);
     });
 
     test('Should call the appropriate endpoint', () => {
       fireEvent.click(screen.getByText('Confirm'));
 
-      expect(mockAxios.post).toBeCalledWith(
+      expect(axios.post).toBeCalledWith(
         `/applets/${testAppletId}/events/individual/${testUserId}`,
         {},
         { signal: undefined },

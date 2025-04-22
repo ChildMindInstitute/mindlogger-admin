@@ -1,4 +1,4 @@
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { renderHook } from '@testing-library/react';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -101,7 +101,7 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   const testApiCallsAndSetValues = () => {
-    expect(mockAxios.get).toHaveBeenCalledTimes(2);
+    expect(axios.get).toHaveBeenCalledTimes(2);
     expect(mockedSetIdentifiers).toHaveBeenCalledWith(mockedDecryptedIdentifiersResult);
     expect(mockedSetValue).toHaveBeenCalledWith('versions', [
       { id: 'v1', label: 'v1' },
@@ -111,10 +111,10 @@ describe('useDatavizSummaryRequests', () => {
   };
 
   test('should call APIs and set form values for Activity', async () => {
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: 'some data' },
     });
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
 
@@ -127,10 +127,10 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   test('should call APIs and set form values for Flow', async () => {
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: 'some data' },
     });
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
 
@@ -153,17 +153,17 @@ describe('useDatavizSummaryRequests', () => {
     const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: { ...mockedActivity, ...activityProps } });
 
-    expect(mockAxios.get).not.toHaveBeenCalled();
+    expect(axios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
   });
 
   test('should handle errors gracefully', async () => {
-    mockAxios.get.mockRejectedValue(new Error('API Error'));
+    vi.mocked(axios.get).mockRejectedValue(new Error('API Error'));
 
     const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: mockedActivity });
 
-    expect(mockAxios.get).toHaveBeenCalled();
+    expect(axios.get).toHaveBeenCalled();
     expect(console.warn).toHaveBeenCalled();
   });
 });

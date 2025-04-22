@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -100,7 +100,7 @@ const testIdentifierDatesChange = async () => {
   expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'endDate', endDate);
 
   await waitFor(() => {
-    expect(mockAxios.get).toHaveBeenNthCalledWith(
+    expect(axios.get).toHaveBeenNthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
       {
@@ -285,7 +285,7 @@ describe('useRespondentAnswers', () => {
     );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: [{ version: 'v1' }, { version: 'v2' }] },
     });
 
@@ -294,7 +294,7 @@ describe('useRespondentAnswers', () => {
 
     expect(mockedGetValues).toHaveBeenCalled();
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
         {
@@ -327,7 +327,7 @@ describe('useRespondentAnswers', () => {
     );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: encryptedFlowSubmissions },
     });
 
@@ -336,7 +336,7 @@ describe('useRespondentAnswers', () => {
 
     expect(mockedGetValues).toHaveBeenCalled();
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/flows/${mockedFlowId}/submissions`,
         {
@@ -426,7 +426,7 @@ describe('useRespondentAnswers', () => {
     expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'endDate', endDate);
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
         {
@@ -452,18 +452,18 @@ describe('useRespondentAnswers', () => {
     await fetchAnswers(mockedFetchParams);
 
     expect(mockedGetValues).not.toHaveBeenCalled();
-    expect(mockAxios.get).not.toHaveBeenCalled();
+    expect(axios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
   });
 
   test('should handle errors gracefully', async () => {
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockRejectedValue(new Error('API Error'));
+    vi.mocked(axios.get).mockRejectedValue(new Error('API Error'));
 
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParams);
 
-    expect(mockAxios.get).toHaveBeenCalled();
+    expect(axios.get).toHaveBeenCalled();
     expect(console.warn).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import userEvent from '@testing-library/user-event';
 
@@ -439,12 +439,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render array of reviews with empty review, show feedback assessment on add button click', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(false));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(false));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -475,11 +475,11 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render reviews with no permission', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviewsNoAnswers);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviewsNoAnswers);
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -498,12 +498,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render array of reviews with review of current user, should delete review', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(true));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -544,7 +544,7 @@ describe('FeedbackReviewed', () => {
     expect(submitPopupButton).toBeInTheDocument();
     await userEvent.click(submitPopupButton);
 
-    expect(mockAxios.delete).nthCalledWith(
+    expect(axios.delete).nthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/assessment/review-id-2`,
       { signal: undefined },
@@ -558,7 +558,7 @@ describe('FeedbackReviewed', () => {
       { activityItem: lastAssessment[0], answer: undefined },
     ]);
 
-    expect(mockAxios.get).nthCalledWith(
+    expect(axios.get).nthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
       { signal: undefined },
@@ -566,12 +566,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should edit review', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(true));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -590,7 +590,7 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render empty state', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithEmptyReviews);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithEmptyReviews);
 
     const getDecryptedActivityDataMock = vi.fn().mockReturnValue({
       decryptedAnswers: [],

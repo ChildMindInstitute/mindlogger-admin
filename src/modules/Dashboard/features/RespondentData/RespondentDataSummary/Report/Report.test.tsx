@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
@@ -185,7 +185,7 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with data', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: 'data',
     });
     vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);

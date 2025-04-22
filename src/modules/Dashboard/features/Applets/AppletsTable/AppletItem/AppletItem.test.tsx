@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedOwnerId, mockedPassword } from 'shared/mock';
@@ -126,7 +126,7 @@ describe('AppletItem component tests', () => {
     act(() => fireEvent.click(screen.getByText('Submit')));
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/applets/${mockedAppletId}/encryption`,
         expect.anything(),
@@ -160,14 +160,14 @@ describe('AppletItem component tests', () => {
   });
 
   test('should pin applet in folder', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(getAppletItemComponent(true), { preloadedState: getPreloadedState() });
 
     const appletPin = await waitFor(() => screen.getByTestId('dashboard-applets-pin'));
     fireEvent.click(appletPin);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/folders/mockedParentId/pin/${mockedAppletId}`,
         {},
@@ -183,7 +183,7 @@ describe('AppletItem component tests', () => {
     fireEvent.click(screen.getByTestId('dashboard-applets-applet-remove-from-folder'));
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         '/applets/set_folder',
         { appletId: mockedAppletId, folderId: undefined },

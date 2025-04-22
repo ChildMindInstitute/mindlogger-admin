@@ -1,5 +1,5 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import {
   mockedActivityId,
@@ -106,7 +106,7 @@ describe('ActivityUnassignDrawer', () => {
       resetLDContext: vi.fn(),
     });
 
-    mockAxios.delete.mockResolvedValue(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.delete).mockResolvedValue(mockSuccessfulHttpResponse(null));
     mixpanelTrack.mockReset();
   });
 
@@ -189,7 +189,7 @@ describe('ActivityUnassignDrawer', () => {
           }),
         );
 
-        expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+        expect(axios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {
             assignments: [
               {
@@ -251,7 +251,7 @@ describe('ActivityUnassignDrawer', () => {
           }),
         );
 
-        expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+        expect(axios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {
             assignments: [
               {

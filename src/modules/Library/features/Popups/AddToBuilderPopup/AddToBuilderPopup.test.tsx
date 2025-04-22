@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { MAX_LIMIT } from 'shared/consts';
@@ -152,7 +152,7 @@ const testStep2 = async ({ rerender, title }) => {
   const selectActions = await screen.findByTestId(`${dataTestid}-select-action`);
   expect(selectActions).toBeInTheDocument();
 
-  expect(mockAxios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+  expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
     params: {
       flatList: true,
       limit: MAX_LIMIT,
@@ -227,7 +227,7 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps when workspaces length = 1 (skip workspace select step)', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
     vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
     const workspaces = mockWorkspaces[0];
 
@@ -249,7 +249,7 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps: workspace selection (with error) -> add to builder actions -> navigate to new applet', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
     vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
@@ -297,9 +297,9 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps: workspace selection -> add to builder actions -> select applet -> navigate to existing applet', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
     vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
@@ -340,16 +340,13 @@ describe('AddToBuilderPopup', () => {
 
     // back to step 2: add to builder actions
     expect(screen.getByTestId(`${dataTestid}-step-2`)).toBeInTheDocument();
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
 
     rerender(
       <AddToBuilderPopup
@@ -372,16 +369,13 @@ describe('AddToBuilderPopup', () => {
     await userEvent.click(confirmButton);
 
     // handleAddToExistingApplet
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
 
     // navigate to existing applet
     expect(mockNavigateToBuilder).toHaveBeenCalledWith(
@@ -393,8 +387,8 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps (with offline mode): workspace selection -> add to builder actions -> select applet -> error', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -430,21 +424,18 @@ describe('AddToBuilderPopup', () => {
 
     await userEvent.click(confirmButton);
 
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
   });
 
   test('test steps (with no access): workspace selection -> add to builder actions -> error', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
     vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 

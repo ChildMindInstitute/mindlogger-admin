@@ -1,6 +1,6 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import {
@@ -502,7 +502,7 @@ describe('ActivityAssignDrawer', () => {
   });
 
   it('successfully submits assignments to the API', async () => {
-    mockAxios.post.mockResolvedValue(
+    vi.mocked(axios.post).mockResolvedValue(
       mockSuccessfulHttpResponse({
         result: {
           appletId: mockedAppletId,
@@ -566,7 +566,7 @@ describe('ActivityAssignDrawer', () => {
         }),
       );
 
-      expect(mockAxios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+      expect(axios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
         assignments: [mockedAssignment, mockedLimitedAssignment].map((a) => ({
           activity_id: a.activityId,
           activity_flow_id: a.activityFlowId,

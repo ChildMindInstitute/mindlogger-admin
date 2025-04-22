@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
@@ -61,7 +61,7 @@ describe('AddParticipantPopup component', () => {
   });
 
   test('should submit the Full Account form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: {
           ...testValues,
@@ -110,7 +110,7 @@ describe('AddParticipantPopup component', () => {
   });
 
   test('should submit the Limited Account form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: testValues,
       },

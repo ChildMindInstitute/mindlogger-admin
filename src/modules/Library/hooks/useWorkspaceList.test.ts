@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
@@ -54,18 +54,18 @@ const mockGetWorkspaceRoles2 = {
 
 const fetchWorkspacesData = async () => {
   await waitFor(() => {
-    expect(mockAxios.get).toHaveBeenNthCalledWith(1, '/workspaces', {
+    expect(axios.get).toHaveBeenNthCalledWith(1, '/workspaces', {
       signal: undefined,
     });
   });
 
   await waitFor(() => {
-    expect(mockAxios.get).toHaveBeenNthCalledWith(2, `/workspaces/${ownerId1}/roles`, {
+    expect(axios.get).toHaveBeenNthCalledWith(2, `/workspaces/${ownerId1}/roles`, {
       params: {},
       signal: undefined,
     });
 
-    expect(mockAxios.get).toHaveBeenNthCalledWith(3, `/workspaces/${ownerId2}/roles`, {
+    expect(axios.get).toHaveBeenNthCalledWith(3, `/workspaces/${ownerId2}/roles`, {
       params: {},
       signal: undefined,
     });
@@ -87,9 +87,9 @@ describe('useWorkspaceList', () => {
   });
 
   test('should remove item from storage if authorized (failed)', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockGetWorkspaces);
-    mockAxios.get.mockResolvedValueOnce(mockGetWorkspaceRoles1);
-    mockAxios.get.mockResolvedValueOnce(mockGetWorkspaceRoles2);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockGetWorkspaces);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockGetWorkspaceRoles1);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockGetWorkspaceRoles2);
 
     const { result } = renderHookWithProviders(() => useWorkspaceList(true));
 
@@ -105,9 +105,9 @@ describe('useWorkspaceList', () => {
   });
 
   test('should remove item from storage if authorized', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockGetWorkspaces);
-    mockAxios.get.mockResolvedValueOnce(mockGetWorkspaceRoles1);
-    mockAxios.get.mockRejectedValue(new Error('Error'));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockGetWorkspaces);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockGetWorkspaceRoles1);
+    vi.mocked(axios.get).mockRejectedValue(new Error('Error'));
 
     const { result } = renderHookWithProviders(() => useWorkspaceList(true));
 

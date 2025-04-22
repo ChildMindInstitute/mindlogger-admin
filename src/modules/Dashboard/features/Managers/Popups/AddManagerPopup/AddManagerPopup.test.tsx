@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
@@ -63,7 +63,7 @@ describe('AddManagerPopup component', () => {
   });
 
   test('should submit the form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: mockSubmitValues,
       },

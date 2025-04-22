@@ -1,5 +1,5 @@
 import { act, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import download from 'downloadjs';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
@@ -64,7 +64,7 @@ export const getPreloadedState = (applet) => ({
 });
 
 const testDownloadReport = async (result: { current: unknown }, isFlow: boolean) => {
-  mockAxios.post.mockResolvedValueOnce({
+  vi.mocked(axios.post).mockResolvedValueOnce({
     data: 'reportData',
     headers: { 'content-disposition': 'attachment; filename=report.pdf' },
   });
@@ -79,7 +79,7 @@ const testDownloadReport = async (result: { current: unknown }, isFlow: boolean)
   });
 
   await waitFor(() => {
-    expect(mockAxios.post).toBeCalledWith(
+    expect(axios.post).toBeCalledWith(
       `/answers/applet/${mockedAppletId}/${
         isFlow ? `flows/${flowId}` : `activities/${activityId}`
       }/subjects/${mockedFullSubjectId1}/latest_report`,

@@ -1,8 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
-import mockAxios from '__mocks__/axios';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import { page } from 'resources';
@@ -23,6 +21,7 @@ import {
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
+  HttpResponse,
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
@@ -156,7 +155,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect(axios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });

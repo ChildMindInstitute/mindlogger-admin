@@ -3,7 +3,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -163,7 +163,7 @@ describe('ReportFilters', () => {
   });
 
   test('fetch answers on filters change', async () => {
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: [
           {
@@ -195,7 +195,7 @@ describe('ReportFilters', () => {
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
         {
@@ -232,7 +232,7 @@ describe('ReportFilters', () => {
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/flows/${mockedFlow.id}/submissions`,
         {

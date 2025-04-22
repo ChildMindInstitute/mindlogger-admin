@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -56,7 +56,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('ScheduleSetupPopup', () => {
   test('should render create individual schedule popup', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(
       <ScheduleSetupPopup
         popupVisible={true}
@@ -75,7 +75,7 @@ describe('ScheduleSetupPopup', () => {
 
     fireEvent.click(screen.getByText('Yes'));
 
-    expect(mockAxios.post).toHaveBeenNthCalledWith(
+    expect(axios.post).toHaveBeenNthCalledWith(
       1,
       `/applets/${mockedAppletId}/events/individual/${mockedFullParticipantId1}`,
       {},

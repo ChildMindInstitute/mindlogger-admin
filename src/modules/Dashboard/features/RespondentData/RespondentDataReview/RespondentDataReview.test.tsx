@@ -1,53 +1,78 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
+import { PreloadedState } from '@reduxjs/toolkit';
 
-import * as dashboardHooks from 'modules/Dashboard/hooks';
-import { page } from 'resources';
-import { DateFormats, JEST_TEST_TIMEOUT, MAX_LIMIT } from 'shared/consts';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
-  mockedActivityFlowId,
-  mockedActivityId2,
+  mockedApplet,
   mockedAppletId,
+  mockedCurrentWorkspace,
   mockedFullSubjectId1,
 } from 'shared/mock';
-import {
-  mockAssessment,
-  mockDecryptedActivityData,
-  mockedGetWithActivities2,
-  mockedGetWithActivities3,
-  mockedGetWithDates,
-  mockedGetWithFlows1,
-  mockedGetWithFlows2,
-  mockedGetWithResponses,
-  preloadedState,
-} from 'shared/mock/RespondetDataReview.mock';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from 'shared/consts';
+import { initialStateData } from 'shared/state';
+import { page } from 'resources';
+import * as dashboardHooks from 'modules/Dashboard/hooks';
+import { RootState } from 'redux/store';
 
 import { RespondentDataReview } from './RespondentDataReview';
 
-const date = new Date('2023-12-15');
+const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
-const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/responses`;
-
-const activityRoute = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/responses?selectedDate=${format(
-  date,
-  DateFormats.YearMonthDay,
-)}`;
-const activityRoutePath = page.appletParticipantActivityDetailsDataReview;
-
-const flowRoute1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activityFlows/${mockedActivityFlowId}/responses?selectedDate=${format(
-  date,
-  DateFormats.YearMonthDay,
-)}`;
-const flowRoutePath = page.appletParticipantActivityDetailsFlowDataReview;
+const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-27`;
+const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`;
+const routePath = page.appletParticipantDataReview;
+const preloadedState: PreloadedState<RootState> = {
+  workspaces: {
+    workspaces: initialStateData,
+    currentWorkspace: {
+      ...initialStateData,
+      ...mockedCurrentWorkspace,
+    },
+    roles: {
+      ...initialStateData,
+      data: {
+        [mockedAppletId]: [Roles.Manager],
+      },
+    },
+    workspacesRoles: initialStateData,
+  },
+  applet: {
+    applet: {
+      ...initialStateData,
+      data: { result: mockedApplet },
+    },
+  },
+  users: {
+    subjectDetails: {
+      ...initialStateData,
+      data: {
+        result: {
+          id: '1',
+          nickname: 'Mocked Respondent',
+          secretUserId: mockedFullSubjectId1,
+          lastSeen: '2023-12-15T23:29:36.150182',
+          tag: 'Child' as ParticipantTag,
+          userId: mockedFullSubjectId1,
+          firstName: 'John',
+          lastName: 'Doe',
+          roles: [Roles.Respondent],
+          teamMemberCanViewData: true,
+        },
+      },
+    },
+    respondentDetails: initialStateData,
+  },
+};
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
+  useDecryptedActivityData: vi.fn(),
 }));
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
@@ -57,6 +82,225 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   // @ts-ignore
   CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
 }));
+
+const items = [
+  {
+    question: {
+      en: 'Single Selected - Mocked Item',
+    },
+    responseType: 'singleSelect',
+    responseValues: {
+      paletteName: null,
+      options: [
+        {
+          id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+          text: '1',
+          isHidden: false,
+          value: 0,
+        },
+        {
+          id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+          text: '2',
+          isHidden: false,
+          value: 1,
+        },
+      ],
+    },
+    config: {
+      removeBackButton: false,
+      skippableItem: true,
+      randomizeOptions: false,
+      timer: 0,
+      addScores: false,
+      setAlerts: false,
+      addTooltip: false,
+      setPalette: false,
+      additionalResponseOption: {
+        textInputOption: false,
+        textInputRequired: false,
+      },
+    },
+    name: 'ss-1',
+    isHidden: false,
+    allowEdit: true,
+    id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+    order: 1,
+  },
+];
+
+const mockedGetWithActivities1 = {
+  data: {
+    result: [
+      {
+        id: '951145fa-3053-4428-a970-70531e383d89',
+        name: 'Activity 1',
+        answerDates: [],
+      },
+    ],
+  },
+};
+
+const mockedGetWithFlows1 = {
+  data: {
+    result: [
+      {
+        id: 'flow-id-1',
+        name: 'flow 1',
+        answerDates: [],
+      },
+    ],
+  },
+};
+
+const activity1 = {
+  id: '951145fa-3053-4428-a970-70531e383d89',
+  name: 'Activity 1',
+  lastAnswerDate: '2023-12-15T11:22:34.150182',
+  answerDates: [
+    {
+      createdAt: '2023-12-15T11:21:40.509095',
+      answerId: 'answer-id-1-1',
+    },
+    {
+      createdAt: '2023-12-15T11:22:34.150182',
+      answerId: 'answer-id-1-2',
+    },
+  ],
+};
+
+const mockedGetWithActivities2 = {
+  data: {
+    result: [activity1],
+  },
+};
+
+const mockedGetWithActivities3 = {
+  data: {
+    result: [
+      activity1,
+      {
+        id: '2',
+        name: 'Activity 2',
+        lastAnswerDate: '2023-12-15T23:29:36.150182',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T21:20:30.150182',
+            answerId: 'answer-id-2-1',
+          },
+          {
+            createdAt: '2023-12-15T23:29:36.150182',
+            answerId: 'answer-id-2-2',
+          },
+          {
+            createdAt: '2023-12-15T22:20:30.150182',
+            answerId: 'answer-id-2-3',
+          },
+        ],
+      },
+      {
+        id: '3',
+        name: 'Activity 3',
+        lastAnswerDate: '2023-12-15T05:10:10.111222',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T05:10:10.111222',
+            answerId: 'answer-id-3-1',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+const mockedGetWithDates = {
+  data: {
+    result: {
+      dates: ['2023-12-11', '2023-12-15'],
+    },
+  },
+};
+
+const mockedGetWithResponses = {
+  data: {
+    result: {
+      activity: {
+        items,
+      },
+      answer: { id: 'answer-id' },
+      summary: {
+        createdAt: '2024-03-14T14:33:48.750000',
+        identifier: 'test-identifier',
+        version: '10.10.12',
+      },
+    },
+  },
+};
+
+const mockDecryptedActivityData = {
+  decryptedAnswers: [
+    {
+      activityItem: {
+        question: {
+          en: 'Single Selected - Mocked Item',
+        },
+        responseType: 'singleSelect',
+        responseValues: {
+          options: [
+            {
+              id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+              text: '1',
+              isHidden: false,
+              value: 0,
+            },
+            {
+              id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+              text: '2',
+              isHidden: false,
+              value: 1,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: true,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: false,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+        },
+        name: 'ss-1',
+        isHidden: false,
+        allowEdit: true,
+        id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+        order: 1,
+      },
+      answer: {
+        value: '0',
+        edited: null,
+      },
+      items,
+    },
+  ],
+};
+
+const mockAssessment = {
+  data: {
+    result: {
+      answer: null,
+      itemIds: [],
+      items: [],
+      itemsLast: null,
+      reviewerPublicKey: null,
+      versions: [],
+    },
+  },
+};
 
 const RespondentDataReviewWithForm = () => {
   const methods = useForm({
@@ -73,37 +317,36 @@ const RespondentDataReviewWithForm = () => {
 };
 
 describe('RespondentDataReview', () => {
-  describe('General component tests', () => {
-    test('renders initial component with child components correctly', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities2);
+  test(
+    'renders component correctly with all child components when isFeedbackVisible param is false',
+    async () => {
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithDates);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities2);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockAssessment);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockAssessment);
+
+      const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
         preloadedState,
-        route: activityRoute,
-        routePath: activityRoutePath,
+        route: route1,
+        routePath,
       });
 
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
@@ -115,8 +358,8 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
+        expect(axios.get).toHaveBeenNthCalledWith(
+          2,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
@@ -127,43 +370,50 @@ describe('RespondentDataReview', () => {
             signal: undefined,
           },
         );
+
+        expect(axios.get).toHaveBeenNthCalledWith(3, `/answers/applet/${mockedAppletId}/dates`, {
+          params: {
+            targetSubjectId: mockedFullSubjectId1,
+            fromDate: startOfMonth(date).getTime().toString(),
+            toDate: endOfMonth(date).getTime().toString(),
+          },
+          signal: undefined,
+        });
       });
 
-      // Check render child components
+      // check render child components
       expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
+
       expect(
         screen.getByText(
           'Select the date, Activity Flow or Activity, and response time to review the response data.',
         ),
       ).toBeInTheDocument();
-    });
 
-    test('handles date picker interactions correctly', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities2);
+      // the activity list in the review menu child component is rendered correctly
+      const activityLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-\d+-select$/,
+      );
+      expect(activityLength).toHaveLength(1);
 
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: activityRoute,
-        routePath: activityRoutePath,
-      });
+      const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
+      await userEvent.click(activity);
 
-      window.HTMLElement.prototype.scrollTo = () => {};
+      // check that there are no timestamps in the selected activity
+      const timestampLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-0-completion-time-\d+$/,
+      );
+      expect(timestampLength).toHaveLength(0);
 
-      await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenCalledTimes(3);
-      });
-
+      // check that the selected date is displayed correctly in the datepicker
       const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
       expect(inputContainer).toBeInTheDocument();
 
       const input = inputContainer.querySelector('input') as HTMLInputElement;
       expect(input).toBeInTheDocument();
-      expect(input.value).toEqual('15 Dec 2023');
+      expect(input.value).toEqual('27 Dec 2023');
 
       await act(async () => {
         await userEvent.click(inputContainer);
@@ -172,8 +422,11 @@ describe('RespondentDataReview', () => {
       const datepicker = (await screen.findByTestId(
         `${dataTestid}-menu-review-date-popover`,
       )) as HTMLElement;
+
       expect(datepicker).toBeInTheDocument();
 
+      // open the datepicker and select a new date (Dec 15, 2023)
+      const selectedDate = new Date('2023-12-15');
       const datepickerDaySelected = datepicker.getElementsByClassName(
         'react-datepicker__day react-datepicker__day--015',
       );
@@ -182,214 +435,138 @@ describe('RespondentDataReview', () => {
       await userEvent.click(datepickerDaySelected[0]);
       const okButton = screen.getByText('Ok');
       expect(okButton).toBeInTheDocument();
+
       await userEvent.click(okButton);
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
-        expect(mockAxios.get).toHaveBeenCalledWith(
+
+        expect(axios.get).toHaveBeenNthCalledWith(
+          4,
           `/answers/applet/${mockedAppletId}/review/flows`,
-          expect.any(Object),
+          {
+            params: {
+              createdDate: format(selectedDate, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
+          },
         );
-        expect(mockAxios.get).toHaveBeenCalledWith(
+
+        expect(axios.get).toHaveBeenNthCalledWith(
+          5,
           `/answers/applet/${mockedAppletId}/review/activities`,
-          expect.any(Object),
+          {
+            params: {
+              createdDate: format(selectedDate, DateFormats.YearMonthDay),
+              limit: MAX_LIMIT,
+              targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
+          },
         );
-      });
-    });
-
-    test('handles activity selection and timestamps correctly', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities2)
-        .mockResolvedValueOnce(mockedGetWithResponses)
-        .mockResolvedValueOnce(mockAssessment);
-
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
-
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: activityRoute,
-        routePath: activityRoutePath,
-      });
-
-      window.HTMLElement.prototype.scrollTo = () => {};
-
-      // Check activity selection
-      const activityLength = await screen.findAllByTestId(
-        /respondents-review-menu-activity-\d+-select$/,
-      );
-      expect(activityLength).toHaveLength(1);
-
-      const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
-      await userEvent.click(activity);
-
-      // Check timestamps after activity selection
-      const timestampLength = screen.queryAllByTestId(
-        /respondents-review-menu-activity-0-completion-time-\d+$/,
-      );
-      expect(timestampLength).toHaveLength(3);
-
-      // Check inactive timestamp state
-      const timestamp1 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
-      expect(timestamp1).toHaveClass('MuiChip-colorSecondary');
-      expect(timestamp1).toHaveTextContent('21:20:30');
-
-      // Check active timestamp state
-      const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-2`);
-      expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
-      expect(timestamp3).toHaveTextContent('23:29:36');
-
-      // Check timestamp interaction
-      const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
-      expect(timestamp0).toBeInTheDocument();
-      await userEvent.click(timestamp0);
-
-      await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenCalledWith(
-          `/answers/applet/${mockedAppletId}/activities/${mockedActivityId2}/answers/answer-id-2-1`,
-          expect.any(Object),
+        // get the answer with the latest completion date
+        expect(axios.get).toHaveBeenNthCalledWith(
+          6,
+          `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-2`,
+          {
+            params: {
+              limit: MAX_LIMIT,
+            },
+            signal: undefined,
+          },
         );
-        expect(mockAxios.get).toHaveBeenCalledWith(
-          `/answers/applet/${mockedAppletId}/answers/answer-id-2-1/assessment`,
-          expect.any(Object),
+
+        expect(axios.get).toHaveBeenNthCalledWith(
+          7,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
+          {
+            signal: undefined,
+          },
         );
       });
 
-      // Check answer content
-      expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
-      expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();
-    });
-
-    test('handles feedback panel interactions correctly', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities2);
-
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: activityRoute,
-        routePath: activityRoutePath,
-      });
-
-      window.HTMLElement.prototype.scrollTo = () => {};
-
-      await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenCalledTimes(3);
-      });
-
-      const feedbackButton = await screen.findByTestId(`${dataTestid}-feedback-button`);
-      expect(feedbackButton).toBeInTheDocument();
-
-      const feedbackMenu = await screen.findByTestId(`${dataTestid}-feedback-menu`);
-      expect(feedbackMenu).toBeInTheDocument();
-      expect(feedbackMenu).toHaveStyle({ width: '0px' });
-
-      // Test opening feedback panel
-      await userEvent.click(feedbackButton);
-      expect(feedbackMenu).toHaveStyle({ width: '44rem' });
-
-      // Test closing feedback panel
-      const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
-      expect(feedbackMenuClose).toBeInTheDocument();
-      await userEvent.click(feedbackMenuClose);
-      expect(feedbackMenu).toHaveStyle({ width: '0px' });
-
-      // Verify feedback tab is not visible
+      // check that the Feedback Reviews tab is not open
       expect(
         screen.queryByTestId('respondents-data-summary-feedback-reviewed'),
       ).not.toBeInTheDocument();
-    });
 
-    test('renders component with chosen last answer date', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities2);
+      const timestampLength2 = screen.queryAllByTestId(
+        /respondents-review-menu-activity-0-completion-time-\d+$/,
+      );
+      expect(timestampLength2).toHaveLength(2);
 
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: routeWithoutSelectedDate,
-        routePath: activityRoutePath,
-      });
+      const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
+      expect(timestamp0).toBeInTheDocument();
 
-      window.HTMLElement.prototype.scrollTo = () => {};
+      await userEvent.click(timestamp0);
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
-          `/answers/applet/${mockedAppletId}/review/flows`,
+        expect(axios.get).toHaveBeenNthCalledWith(
+          8,
+          `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-1`,
           {
             params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
             },
             signal: undefined,
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/review/activities`,
+        expect(axios.get).toHaveBeenNthCalledWith(
+          9,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
           {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
             signal: undefined,
           },
         );
-
-        const activityLength = screen.queryAllByTestId(
-          /respondents-review-menu-activity-\d+-select$/,
-        );
-        expect(activityLength).toHaveLength(1);
-
-        const timestampLength = screen.queryAllByTestId(
-          /respondents-review-menu-activity-0-completion-time-\d+$/,
-        );
-        expect(timestampLength).toHaveLength(3);
       });
 
-      //check inactive timestamp
-      const timestamp1 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
-      expect(timestamp1).toHaveClass('MuiChip-colorSecondary');
-      expect(timestamp1).toHaveTextContent('21:20:30');
+      // check answer summary render
+      expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
 
-      //check active timestamp
-      const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-2`);
-      expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
-      expect(timestamp3).toHaveTextContent('23:29:36');
-    });
-  });
+      // check question render
+      expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();
 
-  describe('Activity view', () => {
-    test('properly displays correct dates for selected activity', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows1)
-        .mockResolvedValueOnce(mockedGetWithActivities3);
+      // test open/close feedback panel
+      const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
+      expect(feedbackButton).toBeInTheDocument();
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
+      const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
+      expect(feedbackMenu).toBeInTheDocument();
+      expect(feedbackMenu).toHaveStyle({ width: 0 });
+
+      await userEvent.click(feedbackButton);
+
+      expect(feedbackMenu).toHaveStyle({
+        width: '44rem',
+      });
+
+      const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
+      expect(feedbackMenuClose).toBeInTheDocument();
+
+      await userEvent.click(feedbackMenuClose);
+
+      expect(feedbackMenu).toHaveStyle({ width: 0 });
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'renders component correctly with all child components when isFeedbackVisible param is true',
+    async () => {
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities3);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithDates);
+      vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithResponses);
+      vi.mocked(axios.get).mockResolvedValueOnce({
+        data: {
+          result: {},
+        },
+      });
+
+      const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -397,32 +574,19 @@ describe('RespondentDataReview', () => {
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
         preloadedState,
-        route: activityRoute,
-        routePath: activityRoutePath,
+        route: route2,
+        routePath,
       });
 
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
+        expect(axios.get).toHaveBeenNthCalledWith(
           1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityId2,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
           `/answers/applet/${mockedAppletId}/review/flows`,
           {
             params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
+              createdDate: '2023-12-15',
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
             },
@@ -430,143 +594,127 @@ describe('RespondentDataReview', () => {
           },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
+        expect(axios.get).toHaveBeenNthCalledWith(
+          2,
           `/answers/applet/${mockedAppletId}/review/activities`,
           {
             params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
+              createdDate: '2023-12-15',
               limit: MAX_LIMIT,
               targetSubjectId: mockedFullSubjectId1,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(axios.get).toHaveBeenNthCalledWith(3, `/answers/applet/${mockedAppletId}/dates`, {
+          params: {
+            targetSubjectId: mockedFullSubjectId1,
+            fromDate: startOfMonth(date).getTime().toString(),
+            toDate: endOfMonth(date).getTime().toString(),
+          },
+          signal: undefined,
+        });
+
+        expect(axios.get).toHaveBeenNthCalledWith(
+          4,
+          `/answers/applet/${mockedAppletId}/activities/2/answers/answer-id-2-2`,
+          {
+            params: {
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
         );
       });
 
-      expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
-      expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
-      expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
+      expect(axios.get).toHaveBeenNthCalledWith(
+        5,
+        `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
+        {
+          signal: undefined,
+        },
+      );
+
+      // check that the Feedback Reviews tab is open
+      expect(screen.getByTestId('respondents-data-summary-feedback-reviewed')).toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test('renders component with chosen last answer date', async () => {
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithFlows1);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithActivities3);
+
+    renderWithProviders(<RespondentDataReviewWithForm />, {
+      preloadedState,
+      route: routeWithoutSelectedDate,
+      routePath,
+    });
+
+    window.HTMLElement.prototype.scrollTo = () => {};
+
+    await waitFor(() => {
+      expect(axios.get).toHaveBeenNthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/review/flows`,
+        {
+          params: {
+            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+            limit: MAX_LIMIT,
+            targetSubjectId: mockedFullSubjectId1,
+          },
+          signal: undefined,
+        },
+      );
+
+      expect(axios.get).toHaveBeenNthCalledWith(
+        2,
+        `/answers/applet/${mockedAppletId}/review/activities`,
+        {
+          params: {
+            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+            limit: MAX_LIMIT,
+            targetSubjectId: mockedFullSubjectId1,
+          },
+          signal: undefined,
+        },
+      );
 
       const activityLength = screen.queryAllByTestId(
         /respondents-review-menu-activity-\d+-select$/,
       );
-      expect(activityLength).toHaveLength(1);
+      expect(activityLength).toHaveLength(3);
 
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`),
-          ).toBeInTheDocument();
-        },
-        { timeout: JEST_TEST_TIMEOUT },
-      );
-
-      // check that the correct amount of timestamps are in the selected activity
       const timestampLength = screen.queryAllByTestId(
-        /respondents-review-menu-activity-0-completion-time-\d+$/,
+        /respondents-review-menu-activity-1-completion-time-\d+$/,
       );
       expect(timestampLength).toHaveLength(3);
 
-      const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
-      expect(inputContainer).toBeInTheDocument();
+      //check inactive timestamp
+      const timestamp1 = screen.getByTestId(`${dataTestid}-menu-activity-1-completion-time-0`);
+      expect(timestamp1).toHaveClass('MuiChip-colorSecondary');
+      expect(timestamp1).toHaveTextContent('21:20:30');
 
-      const input = inputContainer.querySelector('input') as HTMLInputElement;
-      expect(input).toBeInTheDocument();
-      expect(input.value).toEqual('15 Dec 2023');
+      //check active timestamp
+      const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-1-completion-time-2`);
+      expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
+      expect(timestamp3).toHaveTextContent('23:29:36');
     });
   });
 
-  describe('Activity flow view', () => {
-    test('properly displays correct dates for selected activity flow', async () => {
-      mockAxios.get
-        .mockResolvedValueOnce(mockedGetWithDates)
-        .mockResolvedValueOnce(mockedGetWithFlows2)
-        .mockResolvedValueOnce(mockedGetWithActivities3);
-
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
-
-      renderWithProviders(<RespondentDataReviewWithForm />, {
-        preloadedState,
-        route: flowRoute1,
-        routePath: flowRoutePath,
-      });
-
-      window.HTMLElement.prototype.scrollTo = () => {};
-
-      await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/answers/applet/${mockedAppletId}/dates`,
-          expect.objectContaining({
-            params: {
-              targetSubjectId: mockedFullSubjectId1,
-              fromDate: startOfMonth(date).getTime().toString(),
-              toDate: endOfMonth(date).getTime().toString(),
-              activityOrFlowId: mockedActivityFlowId,
-            },
-          }),
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          2,
-          `/answers/applet/${mockedAppletId}/review/flows`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
-
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          3,
-          `/answers/applet/${mockedAppletId}/review/activities`,
-          {
-            params: {
-              createdDate: format(date, DateFormats.YearMonthDay),
-              limit: MAX_LIMIT,
-              targetSubjectId: mockedFullSubjectId1,
-            },
-            signal: undefined,
-          },
-        );
-      });
-
-      expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
-      expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
-      expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
-
-      const activityLength = screen.queryAllByTestId(/respondents-review-menu-flow-\d+-select$/);
-      expect(activityLength).toHaveLength(1);
-
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId(`${dataTestid}-menu-flow-0-completion-time-0`),
-          ).toBeInTheDocument();
-        },
-        { timeout: JEST_TEST_TIMEOUT },
-      );
-
-      // check that the correct amount of timestamps are in the selected activity
-      const timestampLength = screen.queryAllByTestId(
-        /respondents-review-menu-flow-0-completion-time-\d+$/,
-      );
-      expect(timestampLength).toHaveLength(2);
-
-      const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
-      expect(inputContainer).toBeInTheDocument();
-
-      const input = inputContainer.querySelector('input') as HTMLInputElement;
-      expect(input).toBeInTheDocument();
-      expect(input.value).toEqual('15 Dec 2023');
+  test('test if default review date is equal to last activity completed date', async () => {
+    renderWithProviders(<RespondentDataReviewWithForm />, {
+      preloadedState,
+      route: routeWithoutSelectedDate,
+      routePath,
     });
+
+    const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
+    expect(inputContainer).toBeInTheDocument();
+
+    const input = inputContainer.querySelector('input') as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input.value).toEqual('15 Dec 2023');
   });
 });
