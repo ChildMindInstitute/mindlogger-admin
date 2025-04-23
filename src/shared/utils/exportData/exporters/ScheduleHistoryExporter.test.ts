@@ -1795,8 +1795,28 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
+            // schedule 1 still applies on the schedule 2 creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              defaultScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'default-schedule-event-2',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
+
             // schedule 2 applies after
-            exporter.daysBetweenInterval('2025-03-15', '2035-03-15').forEach((day) => {
+            exporter.daysBetweenInterval('2025-03-16', '2035-03-16').forEach((day) => {
               const foundSchedules = exporter.findSchedulesForDay(
                 day,
                 defaultScheduleUser,
@@ -1849,7 +1869,8 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
-            // schedule 2 applies on the selected date
+            // schedule 2 applies on the selected date, but schedule 1 also applies
+            // because it is the creation date of schedule 2
             const foundSchedules = exporter.findSchedulesForDay(
               '2025-03-15',
               defaultScheduleUser,
@@ -1857,6 +1878,11 @@ describe('ScheduleHistoryExporter', () => {
             );
 
             expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
               expect.objectContaining({
                 eventId: 'default-schedule-event-2',
                 eventVersion: 'v1',
@@ -1912,24 +1938,42 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
-            // schedule 2 applies after
-            ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
-              (day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  defaultScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([
-                  expect.objectContaining({
-                    eventId: 'default-schedule-event-2',
-                    eventVersion: 'v1',
-                    periodicity: Periodicity.Daily,
-                  }),
-                ]);
-              },
+            // Both apply on schedule 2 creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              defaultScheduleUser,
+              scheduleHistoryData,
             );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+              expect.objectContaining({
+                eventId: 'default-schedule-event-2',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Daily,
+              }),
+            ]);
+
+            // schedule 2 applies after
+            ['2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([
+                expect.objectContaining({
+                  eventId: 'default-schedule-event-2',
+                  eventVersion: 'v1',
+                  periodicity: Periodicity.Daily,
+                }),
+              ]);
+            });
 
             // Nothing applies after the end date
             exporter.daysBetweenInterval('2025-03-20', '2035-03-20').forEach((day) => {
@@ -1979,18 +2023,31 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
-            // Nothing applies until the start date of schedule 2
-            ['2025-03-15', '2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach(
-              (day) => {
-                const foundSchedules = exporter.findSchedulesForDay(
-                  day,
-                  defaultScheduleUser,
-                  scheduleHistoryData,
-                );
-
-                expect(foundSchedules).toEqual([]);
-              },
+            // schedule 1 also applies on schedule 2 creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              defaultScheduleUser,
+              scheduleHistoryData,
             );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
+
+            // Nothing applies until the start date of schedule 2
+            ['2025-03-16', '2025-03-17', '2025-03-18', '2025-03-19'].forEach((day) => {
+              const foundSchedules = exporter.findSchedulesForDay(
+                day,
+                defaultScheduleUser,
+                scheduleHistoryData,
+              );
+
+              expect(foundSchedules).toEqual([]);
+            });
 
             // schedule 2 applies after its start date
             const applicableDays = ['2025-03-20', '2025-03-27'];
@@ -2062,9 +2119,24 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
+            // schedule 1 also applies on schedule 2 creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              defaultScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
+
             // schedule 2 applies after
             const applicableDays = ['2025-03-17', '2025-03-18', '2025-03-19', '2025-03-20'];
-            exporter.daysBetweenInterval('2025-03-15', '2025-03-20').forEach((day) => {
+            exporter.daysBetweenInterval('2025-03-16', '2025-03-20').forEach((day) => {
               const foundSchedules = exporter.findSchedulesForDay(
                 day,
                 defaultScheduleUser,
@@ -2132,8 +2204,23 @@ describe('ScheduleHistoryExporter', () => {
               ]);
             });
 
+            // schedule 1 also applies on schedule 2 creation date
+            const foundSchedules = exporter.findSchedulesForDay(
+              '2025-03-15',
+              defaultScheduleUser,
+              scheduleHistoryData,
+            );
+
+            expect(foundSchedules).toEqual([
+              expect.objectContaining({
+                eventId: 'default-schedule-event-1',
+                eventVersion: 'v1',
+                periodicity: Periodicity.Always,
+              }),
+            ]);
+
             // Nothing applies until the start date of schedule 2
-            exporter.daysBetweenInterval('2025-03-15', '2025-04-30').forEach((day) => {
+            exporter.daysBetweenInterval('2025-03-16', '2025-04-30').forEach((day) => {
               const foundSchedules = exporter.findSchedulesForDay(
                 day,
                 defaultScheduleUser,
