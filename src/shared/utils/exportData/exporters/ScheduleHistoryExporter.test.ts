@@ -2299,8 +2299,8 @@ describe('ScheduleHistoryExporter', () => {
               eventVersion: 'v1',
               userId: null,
               subjectId: null,
-              eventVersionCreatedAt: '2025-03-12T00:00:00',
-              eventVersionUpdatedAt: '2025-03-12T00:00:00',
+              eventVersionCreatedAt: '2025-03-13T00:00:00',
+              eventVersionUpdatedAt: '2025-03-13T00:00:00',
               eventVersionIsDeleted: false,
               periodicity: Periodicity.Always,
               startDate: null,
@@ -2313,7 +2313,7 @@ describe('ScheduleHistoryExporter', () => {
 
           // Default schedule event 2 should not be present for the individual schedule user
           const foundSchedules = exporter.findSchedulesForDay(
-            '2025-03-12',
+            '2025-03-13',
             individualScheduleUser,
             scheduleHistoryData,
           );
