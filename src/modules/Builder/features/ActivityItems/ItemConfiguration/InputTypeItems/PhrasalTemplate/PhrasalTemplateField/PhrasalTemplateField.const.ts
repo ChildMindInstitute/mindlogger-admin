@@ -36,6 +36,7 @@ export const DisplayModeOptions: Readonly<Record<ItemResponseType, DisplayMode[]
   [ItemResponseType.ParagraphText]: undefined,
   [ItemResponseType.Photo]: undefined,
   [ItemResponseType.PhrasalTemplate]: undefined,
+  [ItemResponseType.RequestHealthRecordData]: undefined,
   [ItemResponseType.SingleSelection]: undefined,
   [ItemResponseType.Slider]: undefined,
   [ItemResponseType.SliderRows]: undefined,

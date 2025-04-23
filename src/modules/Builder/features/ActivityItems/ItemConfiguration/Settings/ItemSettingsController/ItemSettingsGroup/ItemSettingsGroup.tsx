@@ -33,8 +33,8 @@ import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import {
   DEFAULT_ACTIVE_TIMER_VALUE,
   ITEM_SETTINGS_TO_HAVE_TOOLTIP,
-  ITEM_TYPES_TO_HAVE_ALERTS,
 } from './ItemSettingsGroup.const';
+import { isItemTypeWithAlerts } from './ItemSettingsGroup.types';
 import {
   DEFAULT_DISABLED_TIMER_VALUE,
   DEFAULT_SCORE_VALUE,
@@ -299,12 +299,7 @@ export const ItemSettingsGroup = ({
                   );
                 }
 
-                if (
-                  isAlerts &&
-                  ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType) &&
-                  inputType !== ItemResponseType.PhrasalTemplate &&
-                  inputType !== ItemResponseType.Unity
-                ) {
+                if (isAlerts && isItemTypeWithAlerts(inputType)) {
                   const hasAlerts = event.target.checked;
 
                   setValue(

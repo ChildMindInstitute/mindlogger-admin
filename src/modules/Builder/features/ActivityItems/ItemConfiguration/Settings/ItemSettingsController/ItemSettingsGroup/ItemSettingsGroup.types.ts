@@ -6,6 +6,7 @@ import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 
 import { ItemSettingsGroupNames } from '../ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { ITEM_TYPES_TO_HAVE_ALERTS } from './ItemSettingsGroup.const';
 
 export type ItemSettingsGroupProps = {
   name: string;
@@ -24,3 +25,10 @@ export type RemoveItemFromSubscales = {
   subscalesName: string;
   item: ItemFormValues;
 };
+
+export type ItemTypeWithAlerts = (typeof ITEM_TYPES_TO_HAVE_ALERTS)[number];
+
+export const isItemTypeWithAlerts = (
+  inputType?: ItemResponseType,
+): inputType is ItemTypeWithAlerts =>
+  !!inputType && ITEM_TYPES_TO_HAVE_ALERTS.includes(inputType as ItemTypeWithAlerts);

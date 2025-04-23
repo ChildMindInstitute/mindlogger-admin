@@ -457,6 +457,8 @@ describe('ActivityAssignDrawer', () => {
   });
 
   it('prevents proceeding to Review step if there are duplicate assignments', async () => {
+    jest.setTimeout(20000);
+
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}

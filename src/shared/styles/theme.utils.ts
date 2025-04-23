@@ -16,7 +16,7 @@ export const getChipStyleOverrides = ({
     case 'default':
     case 'secondary':
       return {
-        color: variables.palette.on_surface_variant,
+        color: variables.palette.on_secondary_container,
         [key]: variables.palette.on_surface_variant_alfa8,
 
         // MUI applies tabindex to make Chip's focusable when they receive
@@ -29,7 +29,7 @@ export const getChipStyleOverrides = ({
       };
     case 'primary':
       return {
-        color: variables.palette.on_surface_variant,
+        color: variables.palette.on_secondary_container,
         [key]: variables.palette.primary95,
 
         '&[tabindex="0"]:hover': {
@@ -39,7 +39,7 @@ export const getChipStyleOverrides = ({
       };
     case 'success':
       return {
-        color: variables.palette.on_surface_variant,
+        color: variables.palette.on_secondary_container,
         [key]: variables.palette.green_light,
 
         '&[tabindex="0"]:hover': {
@@ -49,7 +49,7 @@ export const getChipStyleOverrides = ({
       };
     case 'warning':
       return {
-        color: variables.palette.on_surface_variant,
+        color: variables.palette.on_secondary_container,
         [key]: variables.palette.yellow_light,
 
         '&[tabindex="0"]:hover': {
@@ -65,6 +65,16 @@ export const getChipStyleOverrides = ({
         '&[tabindex="0"]:hover': {
           borderColor: variables.palette.on_surface_variant_alfa8,
           backgroundColor: isFilled ? variables.palette.on_surface_variant_alfa8 : undefined,
+        },
+      };
+    case 'infoAlt':
+      return {
+        color: variables.palette.on_secondary_container,
+        [key]: variables.palette.purple_alfa30,
+
+        '&[tabindex="0"]:hover': {
+          borderColor: variables.palette.purple_alfa30,
+          backgroundColor: isFilled ? variables.palette.purple_alfa30 : undefined,
         },
       };
     default:

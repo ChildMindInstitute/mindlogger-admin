@@ -14,6 +14,7 @@ import {
   Geolocation,
   NumberSelection,
   PhotoResponse,
+  RequestHealthRecordData,
   SelectionRows,
   SliderRows,
   TextResponse,
@@ -42,6 +43,7 @@ import {
   defaultSliderRowsConfig,
   defaultTextConfig,
   defaultTimeConfig,
+  defaultRequestHealthRecordDataConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   checkIfItemHasRequiredOptions,
@@ -90,6 +92,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) =>
         return <AudioPlayer name={name} />;
       case ItemResponseType.PhrasalTemplate:
         return <PhrasalTemplate name={name} />;
+      case ItemResponseType.RequestHealthRecordData:
+        return <RequestHealthRecordData name={name} />;
       default:
         return null;
     }
@@ -197,6 +201,16 @@ export const useSettingsSetup = ({
           case ItemResponseType.PhrasalTemplate:
             setValue(`${name}.responseValues`, { phrases: [getNewDefaultPhrase()], cardTitle: '' });
             setConfig(defaultPhrasalTemplateConfig);
+            break;
+          case ItemResponseType.RequestHealthRecordData:
+            setValue(`${name}.responseValues`, {
+              optInOutOptions: [
+                { id: 'opt_in', label: '' },
+                { id: 'opt_out', label: '' },
+              ],
+            });
+            setConfig(defaultRequestHealthRecordDataConfig);
+            break;
         }
       }
     });

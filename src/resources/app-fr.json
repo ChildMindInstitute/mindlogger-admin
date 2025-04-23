@@ -10,6 +10,7 @@
   "actions": "Actions",
   "activateActivitiesScheduled": "Toutes les activités activées sont programmées.",
   "activateInBuilder": "Activer dans le créateur",
+  "active": "Actif",
   "activities": "Activités",
   "activity": "Activité",
   "activityAssign": {
@@ -359,6 +360,7 @@
   "clearFlow": "Effacer le flux",
   "clearIndividualScheduleSuccess": "<0>Veuillez noter que Le participant <1>{{name}}</1> utilise toujours un <3>programme individuel</3>.</0> <1>Vous pouvez refaire passer cette personne au <1>programme par défaut</1> en appuyant sur l'icône de corbeille en haut à gauche.</1>",
   "clearScheduledEvents": "Effacer tous les événements programmés du calendrier",
+  "close": "Fermer",
   "colorPalette": "Palette de couleurs",
   "combineReportsIntoSingleFile": "Combiner les rapports en un seul fichier",
   "compliance": "Conformité",
@@ -1293,6 +1295,31 @@
   "reportConfiguration": "Configuration du rapport",
   "reportEmailBody": "Veuillez consulter le rapport joint à cet e-mail.",
   "reports": "Rapports",
+  "requestHealthRecordData": "Demander des données de santé",
+  "requestHealthRecordDataHint": "Invite les répondants à partager leurs informations de soins de santé avec vous.",
+  "requestHealthRecordDataSettings": {
+    "introText": "Les participants pourront choisir de partager ou non leurs informations de soins de santé avec vous. Entrez les libellés que vous souhaitez utiliser pour ces options de bouton Label.",
+    "disabledTooltip": "Un type d'élément Demander des données de santé existe déjà dans cette activité.",
+    "placeholder": "Entrez une brève description des données de santé que vous souhaitez demander au participant.\nIl verra ce message avant de se connecter à son compte de soins de santé.",
+    "label": "Label",
+    "labels": {
+      "opt_in": "Label d'acceptation",
+      "opt_out": "Label de refus"
+    },
+    "placeholders": {
+      "opt_in": "Texte",
+      "opt_out": "Texte"
+    },
+    "chipLabels": {
+      "active": "Actif",
+      "available": "Premium"
+    },
+    "modal": {
+      "title": "Demander des données de santé",
+      "content": "<0>Il est maintenant possible d'importer les données de soins de santé des participants, et d'utiliser ces données avec celles que vous collectez dans vos activités MindLogger.</0> <1>Veuillez consulter le site Web pour plus d'informations.</1>",
+      "cta": "Aller sur le site Web"
+    }
+  },
   "requestTransferOwnershipSuccess": "<0>Votre demande a été envoyée avec succès à <1>{{email}}</1>. Veuillez attendre que le destinataire accepte votre demande.</0>",
   "requiredField": "Champ requis",
   "requireToCreateAccount": "Voulez-vous exiger que le participant crée un compte?",

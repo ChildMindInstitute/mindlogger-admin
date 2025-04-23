@@ -1,12 +1,12 @@
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { format } from 'date-fns';
 
+import { AnswerDate } from 'modules/Dashboard/api';
 import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
-import { AnswerDate } from 'modules/Dashboard/api';
 
 import { sortAnswerDates } from '../../utils/sortAnswerDates';
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
@@ -21,7 +21,7 @@ export const ReviewMenuItem = ({
   'data-testid': dataTestid,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
   const submitId = searchParams.get('submitId');
 
@@ -33,7 +33,6 @@ export const ReviewMenuItem = ({
     onSelectItem(item);
     onSelectAnswer({ answer: null });
     toggleBooleanState(setIsOpen)();
-    setSearchParams(undefined);
   };
 
   const handleAnswerClick = (answer: AnswerDate) => {

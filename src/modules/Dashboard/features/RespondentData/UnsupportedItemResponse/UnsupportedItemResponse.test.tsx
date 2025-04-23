@@ -31,6 +31,7 @@ describe('UnsupportedItemResponse', () => {
     ${ItemResponseType.TouchPractice}           | ${defaultDescription}
     ${ItemResponseType.TouchTest}               | ${defaultDescription}
     ${ItemResponseType.ABTrails}                | ${defaultDescription}
+    ${ItemResponseType.RequestHealthRecordData} | ${defaultDescription}
   `('Message for $itemType item type', ({ itemType, expected }) => {
     renderWithProviders(<UnsupportedItemResponse itemType={itemType} data-testid={dataTestid} />);
     expect(screen.getByText(expected)).toBeInTheDocument();
