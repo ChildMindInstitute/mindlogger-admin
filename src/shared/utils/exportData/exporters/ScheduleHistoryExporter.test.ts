@@ -2802,23 +2802,40 @@ describe('ScheduleHistoryExporter', () => {
             ]);
           });
 
-          // v2 shows up on the days after it was created
-          ['2025-12-30', '2025-12-31'].forEach((day) => {
-            // Schedule does not apply before creation date
-            const foundSchedules = exporter.findSchedulesForDay(
-              day,
-              defaultScheduleUser,
-              scheduleHistoryData,
-            );
+          // One day of overlap between v1 and v2
+          let foundSchedules = exporter.findSchedulesForDay(
+            '2025-12-30',
+            defaultScheduleUser,
+            scheduleHistoryData,
+          );
 
-            expect(foundSchedules).toEqual([
-              expect.objectContaining({
-                eventId: 'default-schedule-event-1',
-                eventVersion: 'v2',
-                periodicity: Periodicity.Daily,
-              }),
-            ]);
-          });
+          expect(foundSchedules).toEqual([
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              periodicity: Periodicity.Daily,
+            }),
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v2',
+              periodicity: Periodicity.Daily,
+            }),
+          ]);
+
+          // v2 shows up on the days after it was created
+          foundSchedules = exporter.findSchedulesForDay(
+            '2025-12-31',
+            defaultScheduleUser,
+            scheduleHistoryData,
+          );
+
+          expect(foundSchedules).toEqual([
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v2',
+              periodicity: Periodicity.Daily,
+            }),
+          ]);
         });
 
         it('applies daily between the start and end date', () => {
@@ -3096,16 +3113,29 @@ describe('ScheduleHistoryExporter', () => {
             }
           });
 
-          applicableDays = [
+          // One day of overlap between v1 and v2
+          const foundSchedules = exporter.findSchedulesForDay(
             '2025-01-10',
-            '2025-01-13',
-            '2025-01-14',
-            '2025-01-15',
-            '2025-01-16',
-            '2025-01-17',
-          ];
+            defaultScheduleUser,
+            scheduleHistoryData,
+          );
 
-          exporter.daysBetweenInterval('2025-01-10', '2025-01-17').forEach((day) => {
+          expect(foundSchedules).toEqual([
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              periodicity: Periodicity.Weekdays,
+            }),
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v2',
+              periodicity: Periodicity.Weekdays,
+            }),
+          ]);
+
+          applicableDays = ['2025-01-13', '2025-01-14', '2025-01-15', '2025-01-16', '2025-01-17'];
+
+          exporter.daysBetweenInterval('2025-01-11', '2025-01-17').forEach((day) => {
             // Schedule does not apply before creation date
             const foundSchedules = exporter.findSchedulesForDay(
               day,
@@ -3244,9 +3274,29 @@ describe('ScheduleHistoryExporter', () => {
             }
           });
 
-          applicableDays = ['2025-03-03', '2025-04-03'];
+          // One day of overlap between v1 and v2
+          const foundSchedules = exporter.findSchedulesForDay(
+            '2025-03-03',
+            defaultScheduleUser,
+            scheduleHistoryData,
+          );
 
-          exporter.daysBetweenInterval('2025-03-03', '2025-04-03').forEach((day) => {
+          expect(foundSchedules).toEqual([
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v1',
+              periodicity: Periodicity.Monthly,
+            }),
+            expect.objectContaining({
+              eventId: 'default-schedule-event-1',
+              eventVersion: 'v2',
+              periodicity: Periodicity.Monthly,
+            }),
+          ]);
+
+          // v2 applies thereafter
+          applicableDays = ['2025-04-03'];
+          exporter.daysBetweenInterval('2025-03-04', '2025-04-03').forEach((day) => {
             // Schedule does not apply before creation date
             const foundSchedules = exporter.findSchedulesForDay(
               day,
