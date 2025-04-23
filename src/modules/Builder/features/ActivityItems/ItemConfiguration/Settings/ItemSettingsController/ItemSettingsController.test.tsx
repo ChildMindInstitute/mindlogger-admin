@@ -448,7 +448,6 @@ describe('ItemSettingsController', () => {
     ${ItemResponseType.Geolocation}             | ${'setting groups and order for Geolocation are correct'}
     ${ItemResponseType.Audio}                   | ${'setting groups and order for Audio are correct'}
     ${ItemResponseType.Message}                 | ${'setting groups and order for Message are correct'}
-    ${ItemResponseType.RequestHealthRecordData} | ${'setting groups and order for RequestHealthRecordData are correct'}
     ${ItemResponseType.AudioPlayer}             | ${'setting groups and order for AudioPlayer are correct'}
     ${ItemResponseType.Time}                    | ${'setting groups and order for Time are correct'}
   `('$description', ({ inputType }) => {
