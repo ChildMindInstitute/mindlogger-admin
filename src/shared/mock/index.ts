@@ -2,12 +2,20 @@ import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  defaultMultiSelectionConfig,
+  defaultSingleSelectionConfig,
+  defaultSliderConfig,
+  defaultTextConfig,
+  defaultTimeConfig,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+import { LookupTableDataItem } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
+import {
   ActivityAssignmentStatus,
   Applet,
   ParticipantActivityOrFlow,
 } from 'modules/Dashboard/api/api.types';
-import { page } from 'resources';
-import { DeviceType, ItemFormValuesCommonType, OrderName } from 'modules/Builder/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 import {
   Manager,
   Participant,
@@ -17,7 +25,7 @@ import {
   ParticipantWithDataAccess,
   SubjectDetailsWithDataAccess,
 } from 'modules/Dashboard/types';
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
+import { page } from 'resources';
 
 import {
   CalculationType,
@@ -29,7 +37,7 @@ import {
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
-} from './consts';
+} from '../consts';
 import {
   Activity,
   ActivitySettingsSubscale,
@@ -41,22 +49,16 @@ import {
   SliderItem,
   SubscaleSetting,
   TextItem,
-} from './state';
-import { DecryptedAnswerData, ElementType, Invitations } from './types';
-import { LookupTableDataItem } from '../modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
-import { Encryption } from './utils';
-import {
-  defaultMultiSelectionConfig,
-  defaultSingleSelectionConfig,
-  defaultSliderConfig,
-  defaultTextConfig,
-  defaultTimeConfig,
-} from '../modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
+} from '../state';
+import { DecryptedAnswerData, ElementType, Invitations } from '../types';
+import { Encryption } from '../utils';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
 export const mockedAppletId = '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a';
 export const mockedActivityId = '56a4ebe4-3d7f-485c-8293-093cabf29fa3';
+export const mockedActivityId2 = '96d06b8f-4709-43de-8362-574f070a2269';
+export const mockedActivityFlowId = '646653e0-699b-481d-9261-5065c5693f52';
 
 export const mockedUserData = {
   email: mockedEmail,
@@ -217,6 +219,7 @@ export const mockedCurrentWorkspace = {
   data: {
     ownerId: mockedOwnerId,
     workspaceName: 'name',
+    areFeatureFlagsLoaded: true,
   },
 };
 export const mockedFullParticipantId1 = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
@@ -276,6 +279,30 @@ export const mockedFullParticipant1WithDataAccess: ParticipantWithDataAccess = {
 
 export const mockedFullParticipantId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedFullSubjectId2 = 'subject-id-123';
+
+export const mockedFullParticipant2Details: ParticipantDetail = {
+  appletId: mockedAppletId,
+  appletDisplayName: 'Mocked Applet',
+  appletImage: '',
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  respondentNickname: 'Test Respondent',
+  respondentSecretId: 'testSecretId',
+  hasIndividualSchedule: false,
+  encryption: mockedEncryption,
+  subjectId: mockedFullSubjectId2,
+  subjectTag: 'Child' as ParticipantTag,
+  subjectFirstName: 'John',
+  subjectLastName: 'Doe',
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  invitation: null,
+  roles: [Roles.Respondent],
+};
+
+export const mockedFullParticipant2DetailWithDataAccess: ParticipantDetailWithDataAccess = {
+  ...mockedFullParticipant2Details,
+  teamMemberCanViewData: true,
+};
+
 export const mockedFullParticipant2: Participant = {
   id: mockedFullParticipantId2,
   nicknames: ['Test Respondent'],
@@ -285,25 +312,12 @@ export const mockedFullParticipant2: Participant = {
   isPinned: false,
   status: ParticipantStatus.Invited,
   email: 'resp2@mail.com',
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: 'Mocked Applet',
-      appletImage: '',
-      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: 'Test Respondent',
-      respondentSecretId: 'testSecretId',
-      hasIndividualSchedule: false,
-      encryption: mockedEncryption,
-      subjectId: mockedFullSubjectId2,
-      subjectTag: 'Child' as ParticipantTag,
-      subjectFirstName: 'John',
-      subjectLastName: 'Doe',
-      subjectCreatedAt: '2023-09-26T12:11:46.162083',
-      invitation: null,
-      roles: [Roles.Respondent],
-    },
-  ],
+  details: [mockedFullParticipant2Details],
+};
+
+export const mockedFullParticipant2WithDataAccess: ParticipantWithDataAccess = {
+  ...mockedFullParticipant2,
+  details: [mockedFullParticipant2DetailWithDataAccess],
 };
 
 export const mockedLimitedSubjectId = 'limited-subject-id-123';

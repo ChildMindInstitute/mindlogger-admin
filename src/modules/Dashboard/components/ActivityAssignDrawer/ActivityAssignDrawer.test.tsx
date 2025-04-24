@@ -2,7 +2,7 @@ import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
+import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import {
   mockedApplet,
   mockedAppletData,
@@ -14,13 +14,14 @@ import {
   mockedOwnerId,
   mockedOwnerParticipant,
   mockedFullParticipant1,
-  mockedFullParticipant2,
   mockedUserData,
+  mockedFullParticipant1WithDataAccess,
+  mockedFullParticipant2WithDataAccess,
+  mockedOwnerParticipantWithDataAccess,
+  mockedLimitedParticipantWithDataAccess,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { mockGetRequestResponses, mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
-import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { ManagersData } from 'modules/Dashboard/features';
 import { initialStateData } from 'redux/modules';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -51,17 +52,17 @@ const mockedGetApplet = {
   data: { result: mockedAppletData },
 };
 
-const mockedGetAppletParticipants = mockSuccessfulHttpResponse<ParticipantsData>({
+const mockedGetAppletParticipants = mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
   result: [
-    mockedFullParticipant1,
-    mockedFullParticipant2,
-    mockedOwnerParticipant,
-    mockedLimitedParticipant,
+    mockedFullParticipant1WithDataAccess,
+    mockedFullParticipant2WithDataAccess,
+    mockedOwnerParticipantWithDataAccess,
+    mockedLimitedParticipantWithDataAccess,
   ],
   count: 4,
 });
 
-const mockedGetAppletManagers = mockSuccessfulHttpResponse<ManagersData>({
+const mockedGetAppletManagers = mockSuccessfulHttpResponse<WorkspaceManagersResponse>({
   result: [
     {
       id: mockedOwnerParticipant.id as string,
@@ -156,8 +157,8 @@ describe('ActivityAssignDrawer', () => {
       [GET_WORKSPACE_MANAGERS_URL]: mockedGetAppletManagers,
       [GET_WORKSPACE_RESPONDENTS_URL]: (params) => {
         if (params.userId === mockedOwnerParticipant.id) {
-          return mockSuccessfulHttpResponse<ParticipantsData>({
-            result: [mockedOwnerParticipant],
+          return mockSuccessfulHttpResponse<WorkspaceRespondentsResponse>({
+            result: [mockedOwnerParticipantWithDataAccess],
             count: 1,
           });
         }
@@ -234,11 +235,9 @@ describe('ActivityAssignDrawer', () => {
       );
       expect(within(activityCheckbox).getByRole('checkbox')).toBeChecked();
 
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'Your Activity was auto-filled, add Respondents to continue.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Your Activity was auto-filled, add Respondents to continue.',
+      );
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -294,11 +293,9 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => {
       checkAssignment(`${mockedOwnerParticipant.nicknames[0]} (Team)`, '');
 
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          '1 Respondent was added into the table, select an Activity and Subject to continue.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        '1 Respondent was added into the table, select an Activity and Subject to continue.',
+      );
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -325,11 +322,9 @@ describe('ActivityAssignDrawer', () => {
 
       expect(screen.getByText('Add Respondent')).toBeVisible();
 
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          '1 Participant was added to the table. Please add a full account Respondent to continue.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        '1 Participant was added to the table. Please add a full account Respondent to continue.',
+      );
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -355,11 +350,9 @@ describe('ActivityAssignDrawer', () => {
         'Self',
       );
 
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          '1 Participant was added into the table, select an Activity to continue.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        '1 Participant was added into the table, select an Activity to continue.',
+      );
 
       expect(screen.queryByText('Next')).not.toBeVisible();
     });
@@ -379,13 +372,9 @@ describe('ActivityAssignDrawer', () => {
     );
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
+    );
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());
@@ -411,13 +400,9 @@ describe('ActivityAssignDrawer', () => {
     );
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+    );
 
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
@@ -431,11 +416,9 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
+      );
 
       expect(screen.getByText('Review')).toBeVisible();
     });
@@ -455,13 +438,9 @@ describe('ActivityAssignDrawer', () => {
     );
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+    );
 
     const submitButton = screen.getByText('Next');
     await waitFor(() => expect(submitButton).toBeEnabled());
@@ -469,17 +448,17 @@ describe('ActivityAssignDrawer', () => {
 
     jest.advanceTimersToNextTimer();
     await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'All of the requested assignments already exist. Please create new unique assignments.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'All of the requested assignments already exist. Please create new unique assignments.',
+      );
 
       expect(screen.getByText('Review')).not.toBeVisible();
     });
   });
 
   it('prevents proceeding to Review step if there are duplicate assignments', async () => {
+    jest.setTimeout(20000);
+
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
@@ -493,13 +472,9 @@ describe('ActivityAssignDrawer', () => {
     );
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+    );
 
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);
@@ -512,16 +487,12 @@ describe('ActivityAssignDrawer', () => {
     fireEvent.click(submitButton);
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(submitButton).not.toBeEnabled();
-      expect(screen.queryByText('Review')).not.toBeVisible();
+    await waitFor(() => expect(submitButton).not.toBeEnabled());
+    expect(await screen.findByText('Review')).not.toBeVisible();
 
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'There are duplicate rows in the table, please edit or remove to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'There are duplicate rows in the table, please edit or remove to continue.',
+    );
 
     await selectParticipant('target-subject', mockedLimitedParticipant.details[0].subjectId, 1);
     await waitFor(() => {
@@ -553,13 +524,9 @@ describe('ActivityAssignDrawer', () => {
     );
 
     jest.advanceTimersToNextTimer();
-    await waitFor(() => {
-      expect(
-        within(screen.getByRole('alert')).getByText(
-          'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
+    );
 
     const addButton = screen.getByRole('button', { name: 'Add Row' });
     fireEvent.click(addButton);

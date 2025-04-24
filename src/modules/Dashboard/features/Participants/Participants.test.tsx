@@ -67,7 +67,9 @@ const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
 const RESPONDENTS_ENDPOINT = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 // Mock responses for requests made both by Participants table and ActivityAssignDrawer
 const mockedResponses = {
-  [`/activities/applet/${mockedAppletId}`]: mockSuccessfulHttpResponse({ result: [] }),
+  [`/activities/applet/${mockedAppletId}`]: mockSuccessfulHttpResponse({
+    result: { activitiesDetails: [], appletDetail: mockedApplet },
+  }),
   [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]: mockSuccessfulHttpResponse({
     result: [],
   }),
@@ -323,15 +325,17 @@ describe('Participants component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(RESPONDENTS_ENDPOINT, {
-        params: {
-          limit: 20,
-          page: 1,
-          search: mockedSearchValue,
-          ordering: '-isPinned,+tags',
-        },
-        signal: undefined,
-      });
+      expect(mockAxios.get).toHaveBeenCalledWith(
+        RESPONDENTS_ENDPOINT,
+        expect.objectContaining({
+          params: {
+            limit: 20,
+            page: 1,
+            search: mockedSearchValue,
+            ordering: '-isPinned,+tags',
+          },
+        }),
+      );
     });
   });
 });

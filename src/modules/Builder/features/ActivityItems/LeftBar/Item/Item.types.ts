@@ -22,5 +22,6 @@ export type ActionsType = {
   onChangeVisibility: () => void;
   isItemHidden?: boolean;
   hasHiddenOption: boolean;
+  hasDuplicateOption: boolean;
   'data-testid'?: string;
 };

@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { Box } from '@mui/material';
+import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import {
   createSearchParams,
   generatePath,
@@ -6,42 +9,39 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
-import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
-import { Box } from '@mui/material';
 
 import {
-  getAppletSubmitDateListApi,
-  AppletSubmitDateList,
-  SubmitDates,
   AnswerDate,
+  AppletSubmitDateList,
+  getAppletSubmitDateListApi,
+  SubmitDates,
 } from 'modules/Dashboard/api';
-import { ResponseWithObject } from 'shared/api';
-import { DateFormats } from 'shared/consts';
-import { Spinner } from 'shared/components';
-import { useAsync } from 'shared/hooks';
-import { StyledContainer, theme } from 'shared/styles';
 import { users } from 'redux/modules';
 import { page } from 'resources';
-import { parseDateToMidnightUTC } from 'shared/utils';
+import { ResponseWithObject } from 'shared/api';
+import { Spinner } from 'shared/components';
+import { DateFormats } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { StyledContainer, theme } from 'shared/styles';
+import { parseDateToMidnightLocal } from 'shared/utils';
 
-import { Feedback } from './Feedback';
+import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ActivityResponses } from './ActivityResponses';
-import { ReviewMenu } from './ReviewMenu';
-import { ResponsesHeader } from './ResponsesHeader';
+import { EmptyResponses } from './EmptyResponses';
+import { Feedback } from './Feedback';
+import { FlowResponses } from './FlowResponses';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
+import { StyledReviewContainer } from './RespondentDataReview.styles';
 import {
-  SelectAnswerProps,
   FeedbackTabs,
   OnSelectActivityOrFlow,
+  SelectAnswerProps,
 } from './RespondentDataReview.types';
-import { StyledReviewContainer } from './RespondentDataReview.styles';
-import { RespondentsDataFormValues } from '../RespondentData.types';
+import { ResponsesHeader } from './ResponsesHeader';
 import { ResponsesSummary } from './ResponsesSummary';
+import { ReviewMenu } from './ReviewMenu';
 import { useActivityAnswersAndAssessment } from './hooks/useActivityAnswersAndAssessment/useActivityAnswersAndAssessment';
 import { useReviewActivitiesAndFlows } from './hooks/useReviewActivitiesAndFlows/useReviewActivitiesAndFlows';
-import { EmptyResponses } from './EmptyResponses';
-import { FlowResponses } from './FlowResponses';
 
 export const RespondentDataReview = () => {
   const { appletId, subjectId, activityId, activityFlowId } = useParams();
@@ -144,62 +144,70 @@ export const RespondentDataReview = () => {
     const datesResult = data?.result;
     if (!datesResult) return;
 
-    const submitDates = datesResult.dates.map(parseDateToMidnightUTC);
+    const submitDates = datesResult.dates.map(parseDateToMidnightLocal);
     setResponseDates(submitDates);
   });
 
-  const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !subjectId) return;
+  const handleGetSubmitDates = useCallback(
+    (date: Date) => {
+      const activityOrFlowId = activityFlowId || activityId;
+      if (!appletId || !subjectId || !activityOrFlowId) return;
 
-    const fromDate = startOfMonth(date).getTime().toString();
-    const toDate = endOfMonth(date).getTime().toString();
+      const fromDate = startOfMonth(date).getTime().toString();
+      const toDate = endOfMonth(date).getTime().toString();
 
-    getAppletSubmitDateList({
-      appletId,
-      targetSubjectId: subjectId,
-      fromDate,
-      toDate,
-    });
-  };
+      getAppletSubmitDateList({
+        appletId,
+        targetSubjectId: subjectId,
+        fromDate,
+        toDate,
+        activityOrFlowId,
+      });
+    },
+    [appletId, subjectId, activityFlowId, activityId, getAppletSubmitDateList],
+  );
 
-  const handleSetInitialDate = (date: Date) => {
-    setValue('responseDate', date);
-    const createdDate = format(date, DateFormats.YearMonthDay);
-    handleGetActivitiesAndFlows(createdDate);
-    handleGetSubmitDates(date);
-  };
+  const handleSetInitialDate = useCallback(
+    (date: Date) => {
+      setValue('responseDate', date);
+      const createdDate = format(date, DateFormats.YearMonthDay);
+      handleGetActivitiesAndFlows(createdDate);
+      prevSelectedDateRef.current = createdDate;
+    },
+    [setValue, handleGetActivitiesAndFlows],
+  );
 
   const handleResponseDateChange = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
     // if the date hasn't changed, exit the function early
-    if (!createdDate || prevSelectedDateRef.current === createdDate) {
+    if (!createdDate || selectedDateParam === createdDate) {
       return;
     }
+
     // reset all state values to default
     setActivities([]);
     setFlows([]);
     setSelectedActivity(null);
     setSelectedFlow(null);
     setSelectedAnswer(null);
-    setSearchParams(undefined);
+    setSearchParams(() => ({
+      selectedDate: createdDate,
+    }));
     setActivityAnswers(null);
     setFlowAnswers(null);
 
-    handleGetActivitiesAndFlows(createdDate);
-
     prevSelectedDateRef.current = createdDate;
+    handleGetActivitiesAndFlows(createdDate);
   };
 
   const handleActivitySelect: OnSelectActivityOrFlow = (item) => {
     setSelectedActivity(item);
     setSelectedFlow(null);
-    setFlowAnswers(null);
   };
 
   const handleFlowSelect: OnSelectActivityOrFlow = (item) => {
     setSelectedFlow(item);
     setSelectedActivity(null);
-    setActivityAnswers(null);
   };
 
   const hasAnswers = !!activityAnswers || !!flowAnswers;
@@ -225,33 +233,51 @@ export const RespondentDataReview = () => {
       activityId: selectedActivity?.id,
       flowId: selectedFlow?.id,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appletId, answerId, submitId, selectedActivity, selectedFlow, selectedAnswer]);
+  }, [
+    appletId,
+    answerId,
+    submitId,
+    selectedActivity,
+    selectedFlow,
+    selectedAnswer,
+    getAnswersAndAssessment,
+  ]);
 
+  // Effect to get submit dates
   useEffect(() => {
-    // avoid unnecessary rerender when last activity completed date state value is undefined
     if (lastActivityCompleted === undefined) return;
 
-    const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
-
+    let initialDate: Date;
     if (selectedDateParam) {
-      const selectedDate = parseDateToMidnightUTC(selectedDateParam);
-      if (isValid(selectedDate)) {
-        handleSetInitialDate(selectedDate);
-
-        return;
-      }
+      const parsedDate = parseDateToMidnightLocal(selectedDateParam);
+      initialDate = isValid(parsedDate) ? parsedDate : new Date();
+    } else if (lastActivityCompleted) {
+      initialDate = new Date(lastActivityCompleted);
+    } else {
+      initialDate = new Date();
     }
 
-    if (lastActivityCompletedDate) {
-      handleSetInitialDate(lastActivityCompletedDate);
+    handleGetSubmitDates(initialDate);
+  }, [lastActivityCompleted, selectedDateParam, handleGetSubmitDates]);
+
+  // Effect to point current view to either selected date or last submit date after response dates are loaded
+  useEffect(() => {
+    if (!responseDates?.length) return;
+
+    if (!selectedDateParam) {
+      handleSetInitialDate(responseDates[responseDates.length - 1]);
 
       return;
     }
 
-    handleSetInitialDate(new Date());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActivityCompleted]);
+    const selectedDate = parseDateToMidnightLocal(selectedDateParam);
+    if (
+      prevSelectedDateRef.current !== selectedDateParam &&
+      responseDates.some((date) => date.getTime() === selectedDate.getTime())
+    ) {
+      handleSetInitialDate(selectedDate);
+    }
+  }, [responseDates, selectedDateParam, handleSetInitialDate]);
 
   /**
    * Determines the source subject based on the presence of activity responses.

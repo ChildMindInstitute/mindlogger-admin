@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { useAsync } from 'shared/hooks/useAsync';
 import { getReviewActivitiesApi, getReviewFlowsApi, ReviewEntity } from 'modules/Dashboard/api';
 import {
   getConcatenatedEntities,
   getEntityWithLatestAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
+import { useAsync } from 'shared/hooks/useAsync';
 
 import { sortAnswerDates } from '../../utils/sortAnswerDates';
 import { ReviewActivitiesAndFlowsProps } from './useReviewActivitiesAndFlows.types';
@@ -56,20 +56,23 @@ export const useReviewActivitiesAndFlows = ({
     },
   );
 
-  const handleGetActivitiesAndFlows = (createdDate: string) => {
-    if (!appletId || !subjectId) {
-      return;
-    }
+  const handleGetActivitiesAndFlows = useCallback(
+    (createdDate: string) => {
+      if (!appletId || !subjectId) {
+        return;
+      }
 
-    const requestBody = {
-      appletId,
-      targetSubjectId: subjectId,
-      createdDate,
-    };
+      const requestBody = {
+        appletId,
+        targetSubjectId: subjectId,
+        createdDate,
+      };
 
-    getReviewFlows(requestBody);
-    getReviewActivities(requestBody);
-  };
+      getReviewFlows(requestBody);
+      getReviewActivities(requestBody);
+    },
+    [appletId, subjectId, getReviewActivities, getReviewFlows],
+  );
 
   useEffect(() => {
     if (
@@ -93,8 +96,18 @@ export const useReviewActivitiesAndFlows = ({
       selectedEntityByDefault = flows.filter((e) => e.id === activityFlowId)[0];
       setSelectedFlow(selectedEntityByDefault);
     } else {
-      const reviewEntities = getConcatenatedEntities({ activities, flows });
-      selectedEntityByDefault = getEntityWithLatestAnswer(reviewEntities) || reviewEntities[0];
+      // This only supports the legacy access through the /dataviz endpoint
+
+      const reviewEntitiesWithAnswers = getConcatenatedEntities({ activities, flows }).filter(
+        (entity) => entity.answerDates?.length > 0,
+      );
+
+      if (reviewEntitiesWithAnswers.length === 0) {
+        return;
+      }
+
+      selectedEntityByDefault =
+        getEntityWithLatestAnswer(reviewEntitiesWithAnswers) || reviewEntitiesWithAnswers[0];
 
       selectedEntityByDefault.isFlow
         ? setSelectedFlow(selectedEntityByDefault)

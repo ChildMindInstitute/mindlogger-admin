@@ -19,5 +19,6 @@ export const ITEMS_RESPONSE_TYPES_TO_SHOW = [
   ItemResponseType.Geolocation,
   ItemResponseType.Audio,
   ItemResponseType.Message,
+  ItemResponseType.RequestHealthRecordData,
   ItemResponseType.AudioPlayer,
 ];

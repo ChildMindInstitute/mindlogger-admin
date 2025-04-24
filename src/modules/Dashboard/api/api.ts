@@ -1,13 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { ExportDataResult, Invitation } from 'shared/types';
+import { ExportDataResult } from 'shared/types';
 import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
 
 import {
   TransferOwnershipType,
-  AppletInvitationData,
   DuplicateApplet,
   FolderId,
   AppletEncryption,
@@ -48,16 +47,10 @@ import {
   GetRespondentDetailsParams,
   AssessmentResult,
   SubmitDates,
-  AppletShellAccountData,
-  SubjectInvitationData,
-  EditSubject,
-  DeleteSubject,
   TargetSubjectId,
   SubjectId,
-  GetActivitiesParams,
   DeleteReview,
   EncryptedActivityAnswer,
-  GetWorkspaceRespondentsParams,
   GetAppletSubmissionsParams,
   GetAppletSubmissionsResponse,
   ReviewEntity,
@@ -78,13 +71,11 @@ import {
   FeedbackNote,
   GetActivityResponse,
   GetActivityParams,
-  EditSubjectResponse,
   CreateTemporaryMultiInformantRelation,
   GetAssignmentsParams,
   PostAssignmentsParams,
   GetSubjectActivitiesParams,
   AppletSubjectActivitiesResponse,
-  AppletActivitiesResponse,
   AppletAssignmentsResponse,
   AppletParticipantActivitiesResponse,
   GetTargetSubjectsByRespondentParams,
@@ -97,9 +88,7 @@ import {
   FlowItemHistoryData,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
-import { ApiSuccessResponse } from './base.types';
 import { SubjectDetailsWithDataAccess } from '../types';
-import { ParticipantsDataWithDataAccess } from '../features/Participants';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -137,33 +126,6 @@ export const getFilteredWorkspaceAppletsApi = (
     params: restParams,
     signal,
   });
-};
-
-export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
-};
-
-export const getWorkspaceRespondentsApi = (
-  { params }: GetWorkspaceRespondentsParams,
-  signal?: AbortSignal,
-): Promise<AxiosResponse<ParticipantsDataWithDataAccess>> => {
-  const { ownerId, appletId, ...restParams } = params;
-
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
@@ -260,69 +222,10 @@ export const editManagerAccessApi = (
     { signal },
   );
 
-export const editSubjectApi = (
-  { subjectId, values }: EditSubject,
-  signal?: AbortSignal,
-): Promise<AxiosResponse<ApiSuccessResponse<EditSubjectResponse>>> =>
-  authApiClient.put(
-    `/subjects/${subjectId}`,
-    {
-      ...values,
-    },
-    { signal },
-  );
-
-export const deleteSubjectApi = (
-  { subjectId, deleteAnswers }: DeleteSubject,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete(`/subjects/${subjectId}`, {
-    signal,
-    data: {
-      deleteAnswers,
-    },
-  });
-
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, {
     signal,
   });
-
-export const postAppletInvitationApi = (
-  { url, appletId, options }: AppletInvitationData,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post<ResponseWithObject<Invitation>>(
-    `/invitations/${appletId}/${url}`,
-    { ...options },
-    {
-      signal,
-    },
-  );
-
-export const postAppletShellAccountApi = (
-  { appletId, options }: AppletShellAccountData,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/invitations/${appletId}/shell-account`,
-    { ...options },
-    {
-      signal,
-    },
-  );
-
-export const postSubjectInvitationApi = (
-  { appletId, subjectId, email, language }: SubjectInvitationData,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/invitations/${appletId}/subject`,
-    { subjectId, email, language },
-    {
-      signal,
-    },
-  );
 
 export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signal?: AbortSignal) =>
   authApiClient.post<ResponseWithObject<Applet>>(
@@ -925,15 +828,6 @@ export const getSubjectDetailsApi = (
   signal?: AbortSignal,
 ): Promise<AxiosResponse<SubjectDetailsWithDataAccess>> =>
   authApiClient.get(`/subjects/${subjectId}`, {
-    signal,
-  });
-
-export const getAppletActivitiesApi = (
-  { params: { appletId, ...params } }: GetActivitiesParams,
-  signal?: AbortSignal,
-): Promise<AxiosResponse<AppletActivitiesResponse>> =>
-  authApiClient.get(`/activities/applet/${appletId}`, {
-    params,
     signal,
   });
 

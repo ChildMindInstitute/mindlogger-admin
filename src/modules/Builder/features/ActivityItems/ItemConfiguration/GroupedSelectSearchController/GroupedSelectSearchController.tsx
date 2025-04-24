@@ -1,25 +1,35 @@
-import { ChangeEvent, MouseEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {
+  Box,
+  BoxProps,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import { BoxProps, FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { StyledClearedButton, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
-import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Chip } from 'shared/components';
+import { Chip, ChipShape, OptionalTooltipWrapper } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
+import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
+import { falseReturnFunc, getIsMobileOnly, getIsWebOnly } from 'shared/utils';
 
-import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
+import { getItemsTypeChip } from '../ItemConfiguration.utils';
+import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
 import {
   StyledListSubheader,
   StyledMenuItem,
   StyledSelect,
 } from './GroupedSelectSearchController.styles';
-import { ItemTypeTooltip } from './ItemTypeTooltip';
-import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import { handleSearchKeyDown } from './GroupedSelectSearchController.utils';
-import { useItemTypeSelectSetup } from './GroupedSelectSearchController.hooks';
+import { ItemTypeTooltip } from './ItemTypeTooltip';
 
 const dataTestid = 'builder-activity-items-item-configuration-response-type';
 
@@ -28,11 +38,13 @@ const SelectItemContent = ({
   label,
   sx,
   value,
+  chip,
   ...otherProps
 }: {
   icon?: React.ReactNode;
   label: React.ReactNode;
   value: ItemResponseType;
+  chip?: React.ReactNode;
 } & BoxProps) => {
   const { t } = useTranslation('app');
   const isMobileOnly = getIsMobileOnly(value);
@@ -42,15 +54,11 @@ const SelectItemContent = ({
     <StyledFlexTopCenter sx={{ ...sx, gap: 1, maxHeight: 24 }} {...otherProps}>
       {icon}
       {label}
+      {chip}
       {(isMobileOnly || isWebOnly) && (
         <Chip
           data-testid={isMobileOnly ? 'mobile-only-label' : 'web-only-label'}
-          sx={{
-            borderRadius: variables.borderRadius.xs,
-            color: 'currentcolor',
-            height: 36,
-            px: 1.2,
-          }}
+          shape={ChipShape.RectangularLarge}
           title={isMobileOnly ? t('mobileOnly') : t('webOnly')}
         />
       )}
@@ -64,9 +72,11 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   options,
   setValue,
   fieldName,
+  onBeforeChange,
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
   const {
     getItemLanguageKey,
     getIsNotHaveSearchValue,
@@ -118,18 +128,24 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleOnSelectChange = (...props: unknown[]) => {
+          const handleOnSelectChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
+            const newValue = event.target.value as ItemResponseType;
+
+            if (onBeforeChange && !onBeforeChange(newValue)) {
+              return;
+            }
+
             if (checkIfSelectChangePopupIsVisible) {
               checkIfSelectChangePopupIsVisible(() => {
-                onChange(...props);
-                processItemType(props[0] as ChangeEvent<HTMLInputElement>);
+                onChange(event, child);
+                processItemType(event as ChangeEvent<HTMLInputElement>);
               });
 
               return;
             }
 
-            onChange(...props);
-            processItemType(props[0] as ChangeEvent<HTMLInputElement>);
+            onChange(event, child);
+            processItemType(event as ChangeEvent<HTMLInputElement>);
           };
 
           return (
@@ -151,6 +167,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     icon={itemsTypeIcons[value]}
                     label={t(getItemLanguageKey(value))}
                     value={value}
+                    chip={getItemsTypeChip({ value, featureFlags })}
                   />
                 )}
                 open={selectOpen}
@@ -195,7 +212,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
-                  ...groupOptions.map(({ value, icon }) => {
+                  ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
                     const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
                     return (
@@ -206,14 +223,22 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
                         key={value}
-                        value={value}
+                        value={disabled ? undefined : value}
+                        disabled={disabled}
                         data-testid={`${dataTestid}-option-${value}`}
                       >
-                        <SelectItemContent
-                          icon={<StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>}
-                          label={getGroupValueText(searchTerm, value)}
-                          value={value}
-                        />
+                        <OptionalTooltipWrapper tooltipTitle={tooltip} placement="left">
+                          <Box sx={{ position: 'relative', ml: -1.2, pl: 1.2 }}>
+                            <SelectItemContent
+                              icon={
+                                <StyledFlexTopCenter sx={{ mr: 0.8 }}>{icon}</StyledFlexTopCenter>
+                              }
+                              label={getGroupValueText(searchTerm, value)}
+                              value={value}
+                              chip={getItemsTypeChip({ value, featureFlags })}
+                            />
+                          </Box>
+                        </OptionalTooltipWrapper>
                       </StyledMenuItem>
                     );
                   }),

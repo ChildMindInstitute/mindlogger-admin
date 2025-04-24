@@ -1,9 +1,9 @@
-import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
-import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import * as reduxHooks from 'redux/store/hooks';
 import { users } from 'modules/Dashboard/state';
+import * as reduxHooks from 'redux/store/hooks';
+import { mockedActivityId2, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { applet as appletState } from 'shared/state';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 
@@ -19,6 +19,7 @@ describe('Respondent Data hooks', () => {
       mockedUseParams.mockReturnValue({
         appletId: mockedAppletId,
         subjectId: mockedFullSubjectId1,
+        activityId: mockedActivityId2,
       });
     });
 
@@ -32,7 +33,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-summary',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/summary`,
             'data-testid': 'respondents-summary-tab-summary',
           },
           {
@@ -40,7 +41,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-responses',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/responses`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/responses`,
             'data-testid': 'respondents-summary-tab-review',
           },
         ],

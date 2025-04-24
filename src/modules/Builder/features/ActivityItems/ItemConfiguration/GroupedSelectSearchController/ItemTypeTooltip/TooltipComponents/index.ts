@@ -9,3 +9,4 @@ export * from './SliderRows';
 export * from './Dashed';
 export * from './SelectionPerRow';
 export * from './PhrasalTemplate';
+export * from './RequestHealthRecordData';

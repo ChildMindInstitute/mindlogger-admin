@@ -55,13 +55,19 @@ export const getItemElements = <I extends Pick<ItemFormValues, 'id' | 'name' | '
   subscaleId: string,
   items: I[] = [],
   subscales: SubscaleFormValue[] = [],
+  scoringType?: SubscaleTotalScore,
 ): ItemElement[] => {
   if (!items) return [];
 
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
   const subscaleElements = subscales.reduce((acc, subscale) => {
-    if (subscale.id === subscaleId || subscale.items.includes(subscaleId)) return acc;
+    if (
+      subscale.id === subscaleId ||
+      subscale.items.includes(subscaleId) ||
+      scoringType === SubscaleTotalScore.Percentage
+    )
+      return acc;
 
     return [
       ...acc,

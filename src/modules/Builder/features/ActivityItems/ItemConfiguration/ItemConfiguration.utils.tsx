@@ -1,26 +1,29 @@
-import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
+import { ReactNode } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
-import { ItemResponseType } from 'shared/consts';
-import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
-import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 import {
+  DEFAULT_NUMBER_SELECT_MAX_VALUE,
+  DEFAULT_NUMBER_SELECT_MIN_VALUE,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_NUMBER_SELECT_MIN_VALUE,
-  DEFAULT_NUMBER_SELECT_MAX_VALUE,
 } from 'modules/Builder/consts';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { Chip, ChipShape } from 'shared/components';
+import { ItemResponseType } from 'shared/consts';
+import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { FeatureFlags } from 'shared/types/featureFlags';
+import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 
+import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import {
+  DEFAULT_AUDIO_DURATION_SEC,
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
-  DEFAULT_AUDIO_DURATION_SEC,
   SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
-import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
-import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
+import { GetEmptyAlert, ItemConfigurationSettings } from './ItemConfiguration.types';
 
 const { t } = i18n;
 
@@ -42,10 +45,43 @@ export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, strin
   [ItemResponseType.Geolocation]: t('geolocationHint'),
   [ItemResponseType.Audio]: t('audioHint'),
   [ItemResponseType.Message]: t('messageHint'),
+  [ItemResponseType.RequestHealthRecordData]: t('requestHealthRecordDataHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.PhrasalTemplate]: t('phrasalTemplateHint'),
 });
+
+export const getItemsTypeChip = ({
+  value,
+  featureFlags,
+}: {
+  value: ItemResponseType;
+  featureFlags: FeatureFlags;
+}): ReactNode => {
+  if (value === ItemResponseType.RequestHealthRecordData) {
+    if (featureFlags.enableEhrHealthData === 'active') {
+      return (
+        <Chip
+          title={t('requestHealthRecordDataSettings.chipLabels.active')}
+          color="success"
+          shape={ChipShape.RectangularLarge}
+          canRemove={false}
+        />
+      );
+    }
+
+    if (featureFlags.enableEhrHealthData === 'available') {
+      return (
+        <Chip
+          title={t('requestHealthRecordDataSettings.chipLabels.available')}
+          color="infoAlt"
+          shape={ChipShape.RectangularLarge}
+          canRemove={false}
+        />
+      );
+    }
+  }
+};
 
 export const getEmptySliderOption = ({
   isMultiple,

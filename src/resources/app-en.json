@@ -10,6 +10,7 @@
   "actions": "Actions",
   "activateActivitiesScheduled": "All activated Activities are scheduled.",
   "activateInBuilder": "Activate in builder",
+  "active": "Active",
   "activities": "Activities",
   "activity": "Activity",
   "activityAssign": {
@@ -359,6 +360,7 @@
   "clearFlow": "Clear Flow",
   "clearIndividualScheduleSuccess": "<0>Please note that Respondent <1>{{name}}</1> is still using an <3>individual schedule</3>.</0> <1>You may revert this Respondent back to the <1>default schedule</1> by pressing the trash icon on the top-left.</1>",
   "clearScheduledEvents": "Clear All Scheduled Events from Calendar",
+  "close": "Close",
   "colorPalette": "Color Palette",
   "combineReportsIntoSingleFile": "Combine reports into a single file",
   "compliance": "Compliance",
@@ -556,6 +558,10 @@
   "editParticipant": "Edit Participant",
   "editRespondents": "Edit Respondents",
   "editUser": "Edit User",
+  "ehr": {
+    "bannerAvailable": "<0>Now you can collect participants' Health Care Data in studies!</0> <1>Learn more</1>",
+    "bannerActive": "<0>Your Electronic Health Data Integration is active. If you have any questions or issues,</0> <1>contact us</1><2>.</2>"
+  },
   "element": "Element",
   "elementsAssociatedWithSubscales": "Elements associated with one or more subscales",
   "elementsNotIncludedInSubscale": "Elements not included in any subscale",
@@ -1159,6 +1165,7 @@
     "touch": "This Activity contains Stability Tracker (Touch) Item.",
     "unity": "New Unity Task"
   },
+  "percentageOfScores": "Percentage of Item Scores",
   "periodRequired": "Period is required",
   "personalInvitation": "Personal Invitation",
   "photo": "Photo",
@@ -1289,6 +1296,31 @@
   "reportConfiguration": "Report Configuration",
   "reportEmailBody": "Please see the report attached to this email.",
   "reports": "Reports",
+  "requestHealthRecordData": "Request Health Record Data",
+  "requestHealthRecordDataHint": "Prompts respondents to share their health care information with you.",
+  "requestHealthRecordDataSettings": {
+    "introText": "Participants will be permitted to opt-in or -out of sharing their health care data with you or not. Type the labels you want to use on those radio button options.",
+    "disabledTooltip": "A Request Health Record Data item type already exists in this activity.",
+    "placeholder": "Type a brief description of what EHR data you want from the participant.\nThey will see this message before being asked to sign into their Health Care account(s).",
+    "label": "Label",
+    "labels": {
+      "opt_in": "Opt-in label",
+      "opt_out": "Opt-out label"
+    },
+    "placeholders": {
+      "opt_in": "Text",
+      "opt_out": "Text"
+    },
+    "chipLabels": {
+      "active": "Active",
+      "available": "Premium"
+    },
+    "modal": {
+      "title": "Request Health Record Data",
+      "content": "<0>Now it is possible to import participants' Electronic Health Care Data, and use that data with what you collect in your MindLogger Activities.</0> <1>Please check out the website for more information.</1>",
+      "cta": "Go to Website"
+    }
+  },
   "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",
   "requiredField": "Field is required",
   "requireToCreateAccount": "Do you want to require the respondent to create an account?",
@@ -1545,6 +1577,7 @@
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringAverage": "Average",
   "subscaleScoringSum": "Sum",
+  "subscaleScoringPercentage": "Percentage",
   "subscript": "Subscript",
   "successDuplication": "Your applet {{appletName}} was successfully created!",
   "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",

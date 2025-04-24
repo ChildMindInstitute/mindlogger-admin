@@ -1,12 +1,12 @@
-import { SelectClasses, createTheme, Theme } from '@mui/material';
+import { createTheme, SelectClasses, Theme } from '@mui/material';
 import { OverridesStyleRules } from '@mui/material/styles/overrides';
 import 'react-datepicker/dist/react-datepicker.min.css';
 
 import { Svg } from 'shared/components/Svg';
+import { getChipStyleOverrides } from 'shared/styles/theme.utils';
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
-import { getChipStyleOverrides } from 'shared/styles/theme.utils';
 
 declare module '@mui/system/createTheme/createBreakpoints' {
   interface BreakpointOverrides {
@@ -446,7 +446,8 @@ export const theme = createTheme({
           borderRadius: variables.borderRadius.md,
           fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
           fontWeight: variables.font.weight.regular,
-          letterSpacing: size === 'small' ? 0 : variables.font.letterSpacing.xxl,
+          letterSpacing:
+            size === 'small' ? variables.font.letterSpacing.lg : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
           lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
@@ -635,7 +636,8 @@ export const theme = createTheme({
           '.MuiMenuItem-root': {
             padding: '1.2rem 2rem',
             transition: variables.transitions.bgColor,
-            '&.Mui-disabled': {
+            // Enable hover events (for tooltips) without enabling click events
+            '&.Mui-disabled:not(:active)': {
               pointerEvents: 'auto',
             },
             '&:hover': {
@@ -745,7 +747,7 @@ export const theme = createTheme({
     },
     MuiAlert: {
       styleOverrides: {
-        root: ({ ownerState: { variant, severity } }) => ({
+        root: ({ ownerState: { variant, severity, color } }) => ({
           fontSize: variables.font.size.lg,
           lineHeight: variables.font.lineHeight.lg,
           letterSpacing: variables.font.letterSpacing.md,
@@ -765,6 +767,9 @@ export const theme = createTheme({
             }),
             ...(severity === 'error' && {
               backgroundColor: variables.palette.error_container,
+            }),
+            ...(color === 'infoAlt' && {
+              backgroundColor: variables.palette.purple_alfa30,
             }),
           }),
           '.MuiAlert-action': {
@@ -883,6 +888,12 @@ export const theme = createTheme({
     info: {
       main: variables.palette.blue,
     },
+    infoAlt: {
+      main: variables.palette.purple,
+      dark: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa8),
+      light: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa12),
+      contrastText: variables.palette.on_secondary_container,
+    },
     success: {
       main: variables.palette.green,
     },
@@ -914,6 +925,27 @@ declare module '@mui/material/IconButton' {
 declare module '@mui/material/Autocomplete' {
   interface AutocompletePropsSizeOverrides {
     large: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    infoAlt: Palette['primary'];
+  }
+  interface PaletteOptions {
+    infoAlt?: PaletteOptions['primary'];
+  }
+}
+
+declare module '@mui/material/Alert' {
+  interface AlertPropsColorOverrides {
+    infoAlt: true;
+  }
+}
+
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    infoAlt: true;
   }
 }
 

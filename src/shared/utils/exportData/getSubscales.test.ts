@@ -149,15 +149,17 @@ const itemsOnlyFilledSubscaleScores = {
 describe('getSubscales', () => {
   describe('getSubScaleScore', () => {
     test.each`
-      subscalesSum | type                          | length | expected
-      ${5}         | ${SubscaleTotalScore.Sum}     | ${2}   | ${5}
-      ${5}         | ${SubscaleTotalScore.Average} | ${2}   | ${2.5}
-      ${5}         | ${SubscaleTotalScore.Average} | ${3}   | ${1.67}
-      ${5}         | ${SubscaleTotalScore.Average} | ${0}   | ${0}
+      subscalesSum | type                             | length | maxScore | expected
+      ${5}         | ${SubscaleTotalScore.Sum}        | ${2}   | ${0}     | ${5}
+      ${5}         | ${SubscaleTotalScore.Average}    | ${2}   | ${0}     | ${2.5}
+      ${5}         | ${SubscaleTotalScore.Average}    | ${3}   | ${0}     | ${1.67}
+      ${5}         | ${SubscaleTotalScore.Average}    | ${0}   | ${0}     | ${0}
+      ${5}         | ${SubscaleTotalScore.Percentage} | ${0}   | ${5}     | ${100}
+      ${5}         | ${SubscaleTotalScore.Percentage} | ${0}   | ${6}     | ${83.33}
     `(
       'returns "$expected" when subscalesSum="$subscalesSum", type="$type"',
-      ({ subscalesSum, type, length, expected }) => {
-        expect(getSubscaleScore(subscalesSum, type, length)).toBe(expected);
+      ({ subscalesSum, type, length, maxScore, expected }) => {
+        expect(getSubscaleScore(subscalesSum, type, length, maxScore)).toBe(expected);
       },
     );
   });

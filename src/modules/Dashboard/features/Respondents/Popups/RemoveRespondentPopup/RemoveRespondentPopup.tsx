@@ -5,10 +5,10 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { deleteSubjectApi } from 'api';
-import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
 import { isManagerOrOwner, toggleBooleanState } from 'shared/utils';
+import { useDeleteSubjectMutation } from 'modules/Dashboard/api/apiSlice';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RemoveRespondentPopupProps, Steps } from './RemoveRespondentPopup.types';
@@ -49,11 +49,7 @@ export const RemoveRespondentPopup = ({
     return getStep('next');
   };
 
-  const {
-    execute: handleSubjectDelete,
-    error,
-    isLoading,
-  } = useAsync(deleteSubjectApi, deleteSubjectCallback, deleteSubjectCallback);
+  const [deleteSubject, { error, isLoading }] = useDeleteSubjectMutation();
 
   const isRemoved = !error;
   const isFirstStepWithAppletId = !!appletId && step === 1;
@@ -123,10 +119,12 @@ export const RemoveRespondentPopup = ({
     const { subjectId } = chosenAppletData || {};
     if (!subjectId) return;
 
-    await handleSubjectDelete({
+    await deleteSubject({
       subjectId,
       deleteAnswers: removeData,
     });
+
+    deleteSubjectCallback();
   };
 
   const screens = getScreens({

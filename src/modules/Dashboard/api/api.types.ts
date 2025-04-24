@@ -1,11 +1,16 @@
-import { ActivityId, AppletId } from 'shared/api';
-import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
-import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
-import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
-import { Encryption } from 'shared/utils';
 import { User } from 'modules/Auth/state';
+import { ActivityId, AppletId } from 'shared/api';
+import { ParticipantTag, PerfTaskType, Roles } from 'shared/consts';
+import { Activity, ActivityFlow, Item, SingleApplet, SubscaleSetting } from 'shared/state';
+import { EncryptedAnswerSharedProps, ExportActivity, RetentionPeriods } from 'shared/types';
+import { Encryption } from 'shared/utils';
 
-import { SubjectDetails, SubjectDetailsWithDataAccess } from '../types';
+import {
+  Manager,
+  ParticipantWithDataAccess,
+  SubjectDetails,
+  SubjectDetailsWithDataAccess,
+} from '../types';
 
 export type GetAppletsParams = {
   params: {
@@ -20,10 +25,24 @@ export type GetAppletsParams = {
   };
 };
 
+export type GetWorkspaceManagersParams = GetAppletsParams;
+
+export type WorkspaceManagersResponse = {
+  result: Manager[];
+  count: number;
+  orderingFields?: string[];
+};
+
 export type GetWorkspaceRespondentsParams = GetAppletsParams & {
   params: {
     userId?: string;
   };
+};
+
+export type WorkspaceRespondentsResponse = {
+  result: ParticipantWithDataAccess[];
+  count: number;
+  orderingFields?: string[];
 };
 
 export type GetActivitiesParams = {
@@ -285,6 +304,10 @@ export type EditSubjectResponse = {
   secretUserId: string;
   nickname: string | null;
   tag: ParticipantTag | null;
+  firstName: string | null;
+  lastName: string | null;
+  title?: string | null;
+  role?: Roles | null;
 };
 
 export type DeleteSubject = SubjectId & {
@@ -306,7 +329,7 @@ export type AppletInvitationOptions = {
 };
 
 export type AppletInvitationData = AppletId & {
-  url: string;
+  url: 'respondent' | 'reviewer' | 'managers';
   options: AppletInvitationOptions;
 };
 
@@ -531,6 +554,7 @@ export type AppletSubmitDateList = AppletId &
   TargetSubjectId & {
     fromDate: string;
     toDate: string;
+    activityOrFlowId: string;
   };
 
 export type EventId = { eventId: string };
