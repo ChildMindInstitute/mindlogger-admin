@@ -5,8 +5,8 @@ type FlowActivityHistoryRow = {
   applet_id: string;
   applet_version: string;
   flow_item_history_created_date: string;
-  flow_id: string;
-  flow_name: string;
+  activity_flow_id: string;
+  activity_flow_name: string;
   activity_id: string;
   activity_name: string;
 };
@@ -36,8 +36,8 @@ export class FlowActivityHistoryExporter extends DataExporter<FlowActivityHistor
         applet_id: item.appletId,
         applet_version: item.appletVersion,
         flow_item_history_created_date: item.createdAt,
-        flow_id: item.flowId,
-        flow_name: item.flowName,
+        activity_flow_id: item.flowId,
+        activity_flow_name: item.flowName,
         activity_id: item.activityId,
         activity_name: item.activityName,
       })),
@@ -49,8 +49,8 @@ export class FlowActivityHistoryExporter extends DataExporter<FlowActivityHistor
       'applet_id',
       'applet_version',
       'flow_item_history_created_date',
-      'flow_id',
-      'flow_name',
+      'activity_flow_id',
+      'activity_flow_name',
       'activity_id',
       'activity_name',
     ];
