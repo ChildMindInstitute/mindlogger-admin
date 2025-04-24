@@ -23,7 +23,7 @@ export type ScheduleHistoryExportRow = {
   schedule_updated_by: string;
   activity_or_flow_id: string;
   activity_or_flow_name: string;
-  item_hidden: string;
+  activity_or_flow_hidden: string;
   schedule_start_date: string | null;
   schedule_end_date: string | null;
   schedule_date: string;
@@ -212,7 +212,7 @@ export class ScheduleHistoryExporter extends DataExporter<
             schedule_updated_by: schedule.eventUpdatedBy,
             activity_or_flow_id: schedule.activityOrFlowId,
             activity_or_flow_name: schedule.activityOrFlowName,
-            item_hidden: schedule.activityOrFlowHidden ? 'yes' : 'no',
+            activity_or_flow_hidden: schedule.activityOrFlowHidden ? 'yes' : 'no',
             schedule_start_date: schedule.startDate,
             schedule_end_date: schedule.endDate,
             schedule_date: day,
