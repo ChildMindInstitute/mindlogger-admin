@@ -1,7 +1,7 @@
 import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 import { getFlowItemHistory } from 'modules/Dashboard/api';
 
-type FlowItemHistoryRow = {
+type FlowActivityHistoryRow = {
   applet_id: string;
   applet_version: string;
   flow_item_history_created_date: string;
@@ -15,9 +15,9 @@ type FlowItemHistoryRow = {
  * A helper class for exporting the history of each version of each activity within each version of each activity flow
  * inside a given applet, optionally constrained by a date range.
  */
-export class FlowItemHistoryExporter extends DataExporter<FlowItemHistoryRow> {
+export class FlowActivityHistoryExporter extends DataExporter<FlowActivityHistoryRow> {
   constructor(public appletId: string) {
-    super('flow_item_history');
+    super('flow_activity_history');
   }
 
   async exportData({ appletId, ...params }: DataExporterOptions): Promise<void> {

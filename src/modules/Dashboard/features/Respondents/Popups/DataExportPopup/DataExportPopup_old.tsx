@@ -28,7 +28,7 @@ import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import { workspaces } from 'shared/state';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
-import { FlowItemHistoryExporter } from 'shared/utils/exportData/exporters/FlowItemHistoryExporter';
+import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
 
 import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -153,7 +153,7 @@ export const DataExportPopup = ({
             );
           }
 
-          await new FlowItemHistoryExporter(appletId).exportData({
+          await new FlowActivityHistoryExporter(appletId).exportData({
             appletId,
             fromDate,
             toDate,
