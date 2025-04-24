@@ -1,15 +1,18 @@
 import { DateTime, IANAZone, Interval } from 'luxon';
+import { AxiosResponse } from 'axios';
 
 import {
   DeviceScheduleHistoryData,
   getDeviceScheduleHistory,
   getScheduleHistory,
-  getWorkspaceRespondentsApi,
   ScheduleHistoryData,
 } from 'modules/Dashboard/api';
+import { apiDashboardSlice } from 'modules/Dashboard/api/apiSlice';
 import { ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 import { groupBy } from 'shared/utils/array';
+import { Response } from 'shared/api';
+import { store } from 'redux/store';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -88,10 +91,17 @@ export class ScheduleHistoryExporter extends DataExporter<
   }
 
   async getRespondentData(appletId: string): Promise<ParticipantWithDataAccess[]> {
-    return this.requestAllPagesConcurrently(
-      (page) => getWorkspaceRespondentsApi({ params: { ownerId: this.ownerId, appletId, page } }),
-      5,
-    );
+    return this.requestAllPagesConcurrently(async (page) => {
+      const data = await store
+        .dispatch(
+          apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
+            params: { ownerId: this.ownerId, appletId, page },
+          }),
+        )
+        .unwrap();
+
+      return { data } as AxiosResponse<Response<ParticipantWithDataAccess>>;
+    }, 5);
   }
 
   async generateExportData({
