@@ -618,7 +618,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       'schedule_updated_by',
       'activity_or_flow_id',
       'activity_or_flow_name',
-      'item_hidden',
+      'activity_or_flow_hidden',
       'schedule_start_date',
       'schedule_end_date',
       'schedule_date',
