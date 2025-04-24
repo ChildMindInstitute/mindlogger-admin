@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
 
-import { Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
+import { DeviceScheduleHistoryData, Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
+import { groupBy } from 'shared/utils/array';
 
 describe('ScheduleHistoryExporter', () => {
   const exporter = new ScheduleHistoryExporter('owner-id');
@@ -3417,6 +3418,325 @@ describe('ScheduleHistoryExporter', () => {
             expect(foundSchedules).toEqual([]);
           });
         });
+      });
+    });
+  });
+
+  describe('findLatestMobileSchedule', () => {
+    const userId = '053bb3b6-57d4-4c4a-adb3-dedff951ec7b';
+    const deviceId =
+      'eW0gjZDRQ1yoRxgJyD4uHU:APA91bEqR9g5YXnUG0hXZEsl3ZftQBfcm6xS4zvWpZJx27mxZLweG_Qx0sp4Xc7IoaR1M0Ux79-FVXTPSNIcxvuVFeNHQbM8MXA35m-drkdZG8gLUDUr10lcQ6pTKcXQaJ9AaFIxOCc9';
+    const eventId = '42153ce6-332c-4e1b-b6f8-97b72e40596f';
+    const userTimeZone = 'Etc/UTC';
+
+    const scheduleHistoryEvent: ScheduleHistoryData = {
+      appletId: '4a8ccced-51db-44d2-8a76-21a12bfd27ed',
+      appletVersion: '1.1.0',
+      appletName: 'Applet',
+      eventType: 'activity',
+      activityOrFlowId: 'activity-or-flow-id',
+      activityOrFlowName: 'Activity or Flow',
+      activityOrFlowHidden: false,
+      eventUpdatedBy: 'some-admin-user-id',
+      userId: null,
+      subjectId: null,
+
+      linkedWithAppletAt: '2025-03-12T00:00:00',
+      accessBeforeSchedule: false,
+      oneTimeCompletion: false,
+      eventId,
+      eventVersion: '20250312-1',
+      eventVersionCreatedAt: '2025-03-12T00:00:00',
+      eventVersionUpdatedAt: '2025-03-12T00:00:00',
+      eventVersionIsDeleted: false,
+      periodicity: Periodicity.Always,
+      startDate: null,
+      startTime: '00:00:00',
+      endDate: null,
+      endTime: '23:59:00',
+      selectedDate: null,
+    };
+
+    describe('device has current schedule', () => {
+      it('from one record', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: scheduleHistoryEvent.eventVersion,
+            createdAt: '2025-03-12T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          scheduleHistoryEvent,
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toEqual(deviceHistoryData[0]);
+      });
+
+      it('from multiple records', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-1',
+            createdAt: '2025-03-11T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-2',
+            createdAt: '2025-03-11T00:05:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: scheduleHistoryEvent.eventVersion,
+            createdAt: '2025-03-12T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          scheduleHistoryEvent,
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toEqual(deviceHistoryData[2]);
+      });
+
+      it('from multiple devices', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-1',
+            createdAt: '2025-03-11T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId:
+              'eVdMYFiYTImqG3vynCBXWy:APA91bFbR3KEyvGlB0x0TDCQGhBd_stWm1ZVMqOZqhUrz2a6j6-chV3RabpnGQblogJ-FVOdGsgkQcMHiUzcZTh7Axo8cJ4ZLFaLXAJiQdFZtlvpEl58Z48dYopdzOBEu-f-bGb379H5',
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-2',
+            createdAt: '2025-03-11T00:05:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: scheduleHistoryEvent.eventVersion,
+            createdAt: '2025-03-12T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          scheduleHistoryEvent,
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toEqual(deviceHistoryData[2]);
+      });
+
+      it('downloaded after event end time', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-1',
+            createdAt: '2025-03-11T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250311-2',
+            createdAt: '2025-03-11T00:05:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: scheduleHistoryEvent.eventVersion,
+            createdAt: '2025-03-12T10:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          { ...scheduleHistoryEvent, endTime: '09:00:00' },
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toEqual(deviceHistoryData[1]);
+      });
+    });
+
+    it('device has no downloaded schedule', () => {
+      const latestMobileSchedule = exporter.findLatestMobileSchedule(
+        '2025-03-12',
+        userId,
+        scheduleHistoryEvent,
+        [],
+      );
+
+      expect(latestMobileSchedule).toBeNull();
+    });
+
+    it('does not use unrelated schedule', () => {
+      const deviceHistoryData: DeviceScheduleHistoryData[] = [
+        {
+          userId,
+          deviceId,
+          eventId: 'fce917c4-15ab-4654-9fa5-218ac3bfc606',
+          eventVersion: '20250312-1',
+          createdAt: '2025-03-12T00:00:00',
+          startDate: '2025-03-12',
+          startTime: '00:00:00',
+          endDate: '2025-12-31',
+          endTime: '23:59:00',
+          accessBeforeSchedule: false,
+          userTimeZone,
+        },
+      ];
+
+      const latestMobileSchedule = exporter.findLatestMobileSchedule(
+        '2025-03-12',
+        userId,
+        scheduleHistoryEvent,
+        deviceHistoryData,
+      );
+
+      expect(latestMobileSchedule).toBeNull();
+    });
+
+    describe('does not use newer schedule version', () => {
+      it('same day', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250312-2',
+            createdAt: '2025-03-12T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          scheduleHistoryEvent,
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toBeNull();
+      });
+
+      it('different day', () => {
+        const deviceHistoryData: DeviceScheduleHistoryData[] = [
+          {
+            userId,
+            deviceId,
+            eventId: scheduleHistoryEvent.eventId,
+            eventVersion: '20250313-1',
+            createdAt: '2025-03-13T00:00:00',
+            startDate: scheduleHistoryEvent.startDate,
+            startTime: scheduleHistoryEvent.startTime,
+            endDate: scheduleHistoryEvent.endDate,
+            endTime: scheduleHistoryEvent.endTime,
+            accessBeforeSchedule: scheduleHistoryEvent.accessBeforeSchedule,
+            userTimeZone,
+          },
+        ];
+
+        const latestMobileSchedule = exporter.findLatestMobileSchedule(
+          '2025-03-12',
+          userId,
+          scheduleHistoryEvent,
+          deviceHistoryData,
+        );
+
+        expect(latestMobileSchedule).toBeNull();
       });
     });
   });

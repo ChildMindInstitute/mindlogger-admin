@@ -549,7 +549,7 @@ export class ScheduleHistoryExporter extends DataExporter<
    * Find the latest schedule among a user's devices for the day in question. If the user has more than one applicable
    * device on this day, the latest one will be returned.
    */
-  private findLatestMobileSchedule(
+  findLatestMobileSchedule(
     day: string,
     userId: string,
     scheduleHistoryEvent: ScheduleHistoryData,
@@ -557,7 +557,7 @@ export class ScheduleHistoryExporter extends DataExporter<
   ): DeviceScheduleHistoryData | null {
     // We just need to find the versions of this schedule that the user has downloaded
     // that aren't newer than the event version we're looking at
-    // and was downloaded before its start time
+    // and was downloaded before its end time
 
     const schedulesFound = sortedDeviceScheduleHistoryData.filter((schedule) => {
       if (!schedule.userTimeZone) {
@@ -588,7 +588,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       const sameDay = deviceDatePart === eventDatePart;
 
       const deviceVersionOlderOrSameAsEventVersion =
-        DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <=
+        DateTime.fromFormat(deviceDatePart, 'yyyyMMdd') <
           DateTime.fromFormat(eventDatePart, 'yyyyMMdd') ||
         (sameDay && parseInt(deviceNumberPart) <= parseInt(eventNumberPart));
 
