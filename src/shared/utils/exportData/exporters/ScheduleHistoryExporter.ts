@@ -570,16 +570,9 @@ export class ScheduleHistoryExporter extends DataExporter<
         return false;
       }
 
-      let localEndTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.endTime}`, {
+      const localStartTimeOnDay = DateTime.fromISO(`${day}T${scheduleHistoryEvent.startTime}`, {
         zone: userTimeZone,
       });
-
-      const extendsPastDay =
-        DateTime.fromISO(schedule.endTime) < DateTime.fromISO(schedule.startTime);
-
-      if (extendsPastDay) {
-        localEndTimeOnDay = localEndTimeOnDay.plus({ days: 1 });
-      }
 
       const [deviceDatePart, deviceNumberPart] = schedule.eventVersion.split('-');
       const [eventDatePart, eventNumberPart] = scheduleHistoryEvent.eventVersion.split('-');
@@ -596,7 +589,7 @@ export class ScheduleHistoryExporter extends DataExporter<
         schedule.userId === userId &&
         schedule.eventId === scheduleHistoryEvent.eventId &&
         deviceVersionOlderOrSameAsEventVersion &&
-        downloadTimestamp < localEndTimeOnDay
+        downloadTimestamp < localStartTimeOnDay
       );
     });
 
