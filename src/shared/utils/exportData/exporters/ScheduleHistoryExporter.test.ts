@@ -2,7 +2,6 @@ import { DateTime } from 'luxon';
 
 import { DeviceScheduleHistoryData, Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
-import { groupBy } from 'shared/utils/array';
 
 describe('ScheduleHistoryExporter', () => {
   const exporter = new ScheduleHistoryExporter('owner-id');
