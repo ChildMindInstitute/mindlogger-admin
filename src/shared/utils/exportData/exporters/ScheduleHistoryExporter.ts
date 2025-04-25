@@ -171,6 +171,13 @@ export class ScheduleHistoryExporter extends DataExporter<
         }
 
         return subjectIds.includes(detail.subjectId);
+      })
+      .filter((it) => {
+        if (!params.respondentIds) {
+          return true;
+        }
+
+        return params.respondentIds.includes(it.id);
       });
 
     if (fullAccountParticipants.length === 0) {
@@ -212,7 +219,24 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     for (let i = days.length - 1; i >= 0; i--) {
       const day = days[i];
+      const utcEndOfDay = DateTime.fromISO(`${day}T00:00:00`, { zone: 'UTC' }).endOf('day');
       for (const participant of fullAccountParticipants) {
+        const participantDetail = participant.details.find(
+          (detail) => detail.appletId === appletId,
+        );
+
+        if (participantDetail) {
+          const invitation = participantDetail.invitation;
+          if (invitation && invitation.acceptedAt) {
+            const invitationAcceptedAt = DateTime.fromISO(invitation.acceptedAt, { zone: 'UTC' });
+            if (invitationAcceptedAt > utcEndOfDay) {
+              // This user hasn't been added to the applet yet at this point in history,
+              // so let's skip them for now
+              continue;
+            }
+          }
+        }
+
         const schedulesForDay = this.findSchedulesForDay(
           day,
           participant.id,
