@@ -19,6 +19,7 @@ export const FeatureFlagDefaults: FeatureFlags = {
   enableCahmiSubscaleScoring: false,
   enableDataExportRenaming: false,
   enableEhrHealthData: 'unavailable',
+  enableEmaExtraFiles: false,
 };
 
 export const PROHIBITED_PII_KEYS = ['firstName', 'lastName', 'email'];
