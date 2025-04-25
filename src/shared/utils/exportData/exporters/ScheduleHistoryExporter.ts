@@ -46,8 +46,22 @@ export type ScheduleHistoryExportRow = {
 type FullAccountParticipant = Omit<ParticipantWithDataAccess, 'id'> & { id: string };
 
 type ScheduleHistoryExportOptions = DataExporterOptions & {
-  subjectIds?: string;
-  respondentIds?: string;
+  /**
+   * Restrict the export file to those users with the given subject IDs. If provided together with `respondentIds`,
+   * the result will be the intersection of the two
+   */
+  subjectIds?: string[];
+
+  /**
+   * Restrict the export file to those users with these IDs. If provided together with `subjectIds`,
+   * the result will be the intersection of the two
+   */
+  respondentIds?: string[];
+
+  /**
+   * The list of activities and/or flows for which to export schedule history
+   */
+  activityOrFlowIds?: string[];
 };
 
 /**
@@ -69,20 +83,32 @@ export class ScheduleHistoryExporter extends DataExporter<
     await this.downloadAsCSV(rows);
   }
 
+  /**
+   * Fetch all the schedule history data from the API
+   * @param appletId The applet for which to fetch the schedule history data
+   * @param subjectIds Optionally filter the schedule history by user subject ID
+   * @param respondentIds Optionally filter the schedule history by user ID
+   * @param activityOrFlowIds Optionally filter the schedule history by activity and flow IDs
+   */
   async getScheduleHistoryData(
     appletId: string,
-    subjectIds?: string,
-    respondentIds?: string,
+    subjectIds?: string[],
+    respondentIds?: string[],
+    activityOrFlowIds?: string[],
   ): Promise<ScheduleHistoryData[]> {
     return this.requestAllPagesConcurrently(
-      (page) => getScheduleHistory({ appletId, subjectIds, respondentIds, page }),
+      (page) =>
+        getScheduleHistory({ appletId, subjectIds, respondentIds, activityOrFlowIds, page }),
       5,
     );
   }
 
+  /**
+   * Fetch all the device schedule history records for this applet, optionally filtered by a list of user IDs
+   */
   async getDeviceScheduleHistoryData(
     appletId: string,
-    respondentIds?: string,
+    respondentIds?: string[],
   ): Promise<DeviceScheduleHistoryData[]> {
     return this.requestAllPagesConcurrently(
       (page) => getDeviceScheduleHistory({ appletId, respondentIds, page }),
@@ -90,6 +116,10 @@ export class ScheduleHistoryExporter extends DataExporter<
     );
   }
 
+  /**
+   * Get a list of all the respondents in the applet. This list is used to enumerate all the rows in the CSV file
+   * @param appletId
+   */
   async getRespondentData(appletId: string): Promise<ParticipantWithDataAccess[]> {
     return this.requestAllPagesConcurrently(async (page) => {
       const data = await store
@@ -106,13 +136,14 @@ export class ScheduleHistoryExporter extends DataExporter<
 
   async generateExportData({
     appletId,
-    subjectIds: subjectIdsString,
+    subjectIds,
     ...params
   }: ScheduleHistoryExportOptions): Promise<ScheduleHistoryExportRow[]> {
     const unsortedScheduleHistoryData = await this.getScheduleHistoryData(
       appletId,
-      subjectIdsString,
+      subjectIds,
       params.respondentIds,
+      params.activityOrFlowIds,
     );
 
     if (unsortedScheduleHistoryData.length === 0) {
@@ -127,9 +158,6 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     const respondents = await this.getRespondentData(appletId);
 
-    const subjectIds = subjectIdsString
-      ? subjectIdsString.split(',').map((it) => it.trim())
-      : undefined;
     const fullAccountParticipants = respondents
       .filter((it): it is FullAccountParticipant => !!it.id)
       .filter((it) => {
@@ -144,6 +172,11 @@ export class ScheduleHistoryExporter extends DataExporter<
 
         return subjectIds.includes(detail.subjectId);
       });
+
+    if (fullAccountParticipants.length === 0) {
+      // Nothing to export
+      return [];
+    }
 
     const sortedScheduleHistoryData = unsortedScheduleHistoryData.sort((a, b) => {
       const aEventVersionCreatedAt = new Date(a.eventVersionCreatedAt);

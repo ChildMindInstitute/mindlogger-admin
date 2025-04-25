@@ -599,12 +599,11 @@ export type ExportData = AppletId & {
 };
 
 export type ScheduleHistoryParams = AppletId & {
-  respondentIds?: string;
-  subjectIds?: string;
+  respondentIds?: string[];
+  subjectIds?: string[];
+  activityOrFlowIds?: string[];
   page?: number;
   limit?: number;
-  fromDate?: string;
-  toDate?: string;
 };
 
 export type ScheduleHistoryData = {
@@ -653,6 +652,7 @@ export type FlowItemHistoryParams = AppletId & {
   limit?: number;
   fromDate?: string;
   toDate?: string;
+  flowIds?: string[];
 };
 
 export type FlowItemHistoryData = {

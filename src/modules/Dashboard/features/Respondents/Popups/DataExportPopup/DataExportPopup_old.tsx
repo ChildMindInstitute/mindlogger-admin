@@ -141,11 +141,26 @@ export const DataExportPopup = ({
 
         if (featureFlags.enableEmaExtraFiles) {
           if (ownerId) {
+            let activityOrFlowIds: string[] | undefined;
+            let subjectIds: string[] | undefined;
+
+            // Both of these may be populated when exporting for a flow, but we only want the flow
+            if (filters?.flowId) {
+              activityOrFlowIds = [filters.flowId];
+            } else if (filters?.activityId) {
+              activityOrFlowIds = [filters.activityId];
+            }
+
+            if (targetSubjectIds) {
+              subjectIds = [targetSubjectIds];
+            }
+
             await new ScheduleHistoryExporter(ownerId).exportData({
               appletId,
               fromDate,
               toDate,
-              subjectIds: targetSubjectIds,
+              subjectIds,
+              activityOrFlowIds,
             });
           } else {
             console.warn(
@@ -157,6 +172,7 @@ export const DataExportPopup = ({
             appletId,
             fromDate,
             toDate,
+            flowIds: filters?.flowId ? [filters.flowId] : undefined,
           });
         }
 

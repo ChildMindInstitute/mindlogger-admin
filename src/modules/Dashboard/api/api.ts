@@ -932,6 +932,9 @@ export const getScheduleHistory = (
       limit,
       ...rest,
     },
+    paramsSerializer: {
+      indexes: null,
+    },
     signal,
   });
 
@@ -952,6 +955,9 @@ export const getDeviceScheduleHistory = (
         limit,
         ...rest,
       },
+      paramsSerializer: {
+        indexes: null,
+      },
       signal,
     },
   );
@@ -965,6 +971,9 @@ export const getFlowItemHistory = (
       page,
       limit,
       ...rest,
+    },
+    paramsSerializer: {
+      indexes: null,
     },
     signal,
   });

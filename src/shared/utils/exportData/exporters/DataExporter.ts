@@ -6,8 +6,19 @@ import { Response } from 'shared/api';
 import { exportTemplate } from 'shared/utils/exportTemplate';
 
 export type DataExporterOptions = {
+  /**
+   * The ID of the applet to export data from
+   */
   appletId: string;
+
+  /**
+   * Export data starting from this date, in the format yyyy-MM-ddTHH:mm:ss. When omitted, all data is exported
+   */
   fromDate?: string;
+
+  /**
+   * Export data until this date, in the format yyyy-MM-ddTHH:mm:ss. When omitted, all data is exported
+   */
   toDate?: string;
 };
 
