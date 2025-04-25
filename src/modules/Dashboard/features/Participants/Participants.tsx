@@ -148,6 +148,7 @@ export const Participants = () => {
         ...respondentAccess,
         respondentId,
         ownerId,
+        createdAt: respondentAccess.subjectCreatedAt,
       }
     );
   };
@@ -554,9 +555,7 @@ export const Participants = () => {
         <DataExportPopup
           popupVisible={dataExportPopupVisible}
           setPopupVisible={setDataExportPopupVisible}
-          tableRows={viewableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
           data-testid={`${dataTestId}-export-data-popup`}
         />
       )}

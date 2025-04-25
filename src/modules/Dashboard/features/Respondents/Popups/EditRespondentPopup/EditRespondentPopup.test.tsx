@@ -21,6 +21,7 @@ const chosenAppletData = {
   ownerId: '1',
   subjectId: 'subj-1',
   subjectTag: 'Child',
+  createdAt: '2025-01-01T00:00:00',
 } as const;
 
 const commonProps = {

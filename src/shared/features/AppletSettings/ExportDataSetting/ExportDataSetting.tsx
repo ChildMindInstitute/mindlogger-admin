@@ -19,8 +19,11 @@ import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettings
 export const ExportDataSetting = ({
   isExportSettingsOpen,
   onExportSettingsClose,
+  chosenAppletData,
+  isAppletSetting,
 }: ExportDataSettingProps) => {
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { result } = applet.useAppletData() ?? {};
+  const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
   const minDate = new Date(appletData?.createdAt ?? '');
@@ -51,7 +54,7 @@ export const ExportDataSetting = ({
       )}
       {dataIsExporting && (
         <DataExportPopup
-          isAppletSetting
+          isAppletSetting={isAppletSetting ?? true}
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}

@@ -1,3 +1,6 @@
+import { ChosenAppletData } from 'modules/Dashboard/features';
+import { SingleApplet } from 'shared/state';
+
 export const enum ExportDateType {
   AllTime = 'allTime',
   Last24h = 'last24h',
@@ -15,4 +18,6 @@ export type ExportDataFormValues = {
 export type ExportDataSettingProps = {
   isExportSettingsOpen: boolean;
   onExportSettingsClose: () => void;
+  chosenAppletData?: ChosenAppletData | SingleApplet | null;
+  isAppletSetting?: boolean;
 };

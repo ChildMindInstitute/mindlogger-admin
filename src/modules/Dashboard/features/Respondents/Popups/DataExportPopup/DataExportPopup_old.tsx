@@ -28,7 +28,6 @@ import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
 import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
-import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
 import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
@@ -38,9 +37,8 @@ export const DataExportPopup = ({
   popupVisible,
   isAppletSetting,
   setPopupVisible,
-  tableRows,
   chosenAppletData,
-  setChosenAppletData,
+  handlePopupClose: providedCloseHandler,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
@@ -77,9 +75,9 @@ export const DataExportPopup = ({
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
   const handlePopupClose = useCallback(() => {
-    setChosenAppletData?.(null);
     setPopupVisible(false);
-  }, [setChosenAppletData, setPopupVisible]);
+    providedCloseHandler?.();
+  }, [providedCloseHandler, setPopupVisible]);
 
   const handleRetry = () => {
     setActiveModal(Modals.DataExport);
@@ -153,37 +151,6 @@ export const DataExportPopup = ({
     [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose],
   );
 
-  const renderDataExportContent = () => {
-    if (dataIsExporting) {
-      return (
-        <>
-          <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-            {t('waitForRespondentDataDownload')}
-            {limit > 1 && (
-              <>
-                <br />
-                <br />
-                {t('dataProcessing', {
-                  percentages: Math.floor((currentPage / limit) * 100),
-                })}
-              </>
-            )}
-          </StyledBodyLarge>
-          <StyledLinearProgress />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-          {t('selectAppletToExportRespondentsData')}
-        </StyledBodyLarge>
-        <AppletsSmallTable tableRows={tableRows} />
-      </>
-    );
-  };
-
   useEffect(() => {
     setActiveModal(showEnterPwdScreen ? Modals.PasswordCheck : Modals.DataExport);
   }, [showEnterPwdScreen]);
@@ -198,7 +165,21 @@ export const DataExportPopup = ({
           buttonText=""
           data-testid={dataTestid}
         >
-          <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
+          <StyledModalWrapper>
+            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+              {t('waitForRespondentDataDownload')}
+              {limit > 1 && (
+                <>
+                  <br />
+                  <br />
+                  {t('dataProcessing', {
+                    percentages: Math.floor((currentPage / limit) * 100),
+                  })}
+                </>
+              )}
+            </StyledBodyLarge>
+            <StyledLinearProgress />
+          </StyledModalWrapper>
         </Modal>
       );
     case Modals.PasswordCheck:
