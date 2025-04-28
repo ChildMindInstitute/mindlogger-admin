@@ -80,6 +80,11 @@ export class ScheduleHistoryExporter extends DataExporter<
   async exportData(params: ScheduleHistoryExportOptions): Promise<void> {
     const rows = await this.generateExportData(params);
 
+    if (rows.length === 0) {
+      // Nothing to export
+      return;
+    }
+
     await this.downloadAsCSV(rows);
   }
 
