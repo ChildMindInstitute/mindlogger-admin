@@ -4,13 +4,13 @@ import { useParams } from 'react-router-dom';
 
 import { Spinner } from 'shared/components';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { ActivityAssignDrawer } from 'modules/Dashboard/components';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import { ActivitiesSectionHeader } from './ActivitiesSectionHeader';
 import { ActivitiesToolbar } from './ActivitiesToolbar';
@@ -127,16 +127,16 @@ export const Activities = () => {
         </StyledFlexColumn>
       )}
 
-      {showExportPopup && (
-        <DataExportPopup
+      {appletData && (
+        <ExportDataSetting
+          isExportSettingsOpen={showExportPopup}
+          onExportSettingsClose={() => setShowExportPopup(false)}
+          onDataExportPopupClose={() => {
+            setActivityId(undefined);
+          }}
           chosenAppletData={appletData ?? null}
           filters={{ activityId }}
           isAppletSetting
-          popupVisible={showExportPopup}
-          setPopupVisible={() => {
-            setShowExportPopup(false);
-            setActivityId(undefined);
-          }}
         />
       )}
 

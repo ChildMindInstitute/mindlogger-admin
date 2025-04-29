@@ -30,6 +30,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
 import { useAppDispatch } from 'redux/store';
 import { apiSlice } from 'shared/api/apiSlice';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
@@ -50,7 +51,7 @@ import {
   ParticipantActions,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
-import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
+import { EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
 
 export const Participants = () => {
   const { appletId } = useParams();
@@ -551,11 +552,12 @@ export const Participants = () => {
           tableRows={editableAppletsSmallTableRows}
         />
       )}
-      {dataExportPopupVisible && (
-        <DataExportPopup
-          popupVisible={dataExportPopupVisible}
-          setPopupVisible={setDataExportPopupVisible}
+      {chosenAppletData && (
+        <ExportDataSetting
+          isExportSettingsOpen={dataExportPopupVisible}
+          onExportSettingsClose={() => setDataExportPopupVisible(false)}
           chosenAppletData={chosenAppletData}
+          isAppletSetting={false}
           data-testid={`${dataTestId}-export-data-popup`}
         />
       )}

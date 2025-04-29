@@ -26,12 +26,12 @@ import { EditablePerformanceTasksType } from 'modules/Builder/features/Activitie
 import { getPerformanceTaskPath } from 'modules/Builder/features/Activities/Activities.utils';
 import { page } from 'resources';
 import { UnlockAppletPopup } from 'modules/Dashboard/features/Respondents/Popups/UnlockAppletPopup';
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/components';
 import { EditablePerformanceTasks } from 'modules/Builder/features/Activities/Activities.const';
 import { SubjectDetails } from 'modules/Dashboard/types';
 import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import { GetActionsMenuParams, UseAssignmentsTabProps } from './AssignmentsTab.types';
 
@@ -386,8 +386,14 @@ export const useAssignmentsTab = ({
         onSubmitHandler={() => navigateToData(selectedActivityOrFlow, selectedTargetSubjectId)}
       />
 
-      {showExportData && (
-        <DataExportPopup
+      {appletData && (
+        <ExportDataSetting
+          isExportSettingsOpen={showExportData}
+          onExportSettingsClose={() => setShowExportData(false)}
+          onDataExportPopupClose={() => {
+            setSelectedActivityOrFlow(undefined);
+            setSelectedTargetSubjectId(undefined);
+          }}
           chosenAppletData={appletData}
           filters={{
             activityId: selectedActivityOrFlow?.isFlow ? undefined : selectedActivityOrFlow?.id,
@@ -396,15 +402,6 @@ export const useAssignmentsTab = ({
             targetSubjectId: selectedTargetSubjectId,
           }}
           isAppletSetting
-          popupVisible={showExportData}
-          setPopupVisible={(isVisible) => {
-            setShowExportData(isVisible);
-
-            if (!isVisible) {
-              setSelectedActivityOrFlow(undefined);
-              setSelectedTargetSubjectId(undefined);
-            }
-          }}
           data-testid={`${dataTestId}-export-modal`}
         />
       )}

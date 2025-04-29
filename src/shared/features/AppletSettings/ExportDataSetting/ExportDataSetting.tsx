@@ -19,6 +19,7 @@ import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettings
 export const ExportDataSetting = ({
   isExportSettingsOpen,
   onExportSettingsClose,
+  onDataExportPopupClose,
   chosenAppletData,
   isAppletSetting,
 }: ExportDataSettingProps) => {
@@ -59,6 +60,7 @@ export const ExportDataSetting = ({
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
           data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
+          handlePopupClose={onDataExportPopupClose}
         />
       )}
     </FormProvider>
