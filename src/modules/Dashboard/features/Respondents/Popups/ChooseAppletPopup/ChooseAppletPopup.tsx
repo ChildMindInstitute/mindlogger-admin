@@ -6,6 +6,7 @@ import {
   StyledBodyMedium,
   StyledFlexTopCenter,
   StyledLabelLarge,
+  StyledModalWrapper,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
   theme,
@@ -89,10 +90,12 @@ export const ChooseAppletPopup = ({
       buttonText=""
       data-testid={`${dataTestid}-choose-applet-popup`}
     >
-      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-        {t('selectAppletToExportRespondentsData')}
-      </StyledBodyLarge>
-      <AppletsSmallTable tableRows={tableRows} />
+      <StyledModalWrapper>
+        <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+          {t('selectAppletToExportRespondentsData')}
+        </StyledBodyLarge>
+        <AppletsSmallTable tableRows={tableRows} />
+      </StyledModalWrapper>
     </Modal>
   );
 };
