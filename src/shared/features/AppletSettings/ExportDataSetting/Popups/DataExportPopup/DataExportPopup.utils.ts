@@ -4,7 +4,7 @@ import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting
 import { getNormalizedTimezoneDate } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
 
-import { GetFormattedToDate } from './DataExportPopup.types';
+import { GetFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
 
 export const getExportDataSuffix = (page: number) => `_response_${page}`;
 

@@ -6,7 +6,7 @@ import {
 import { getObjectFromList } from 'shared/utils/getObjectFromList';
 import { getDecryptedAnswers } from 'shared/utils/exportData/getDecryptedAnswers';
 
-import { GetDecryptedParsedAnswers } from './DataExportWorker.types';
+import { GetDecryptedParsedAnswers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.types';
 
 export const getDecryptedParsedAnswers = async ({
   exportDataResult,

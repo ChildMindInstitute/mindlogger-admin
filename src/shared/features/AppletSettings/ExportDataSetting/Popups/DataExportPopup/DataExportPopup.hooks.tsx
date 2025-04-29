@@ -6,8 +6,8 @@ import { isProduction } from 'shared/utils/env';
 import { SessionStorageKeys } from 'shared/utils/storage';
 import { useFeatureFlags } from 'shared/hooks';
 
-import { MultipleDecryptWorkersProps } from './DataExportPopup.types';
-import { DataExportWorkersManager as DataExportWorkersManagerClass } from './DataExportWorkersManager';
+import { MultipleDecryptWorkersProps } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { DataExportWorkersManager as DataExportWorkersManagerClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorkersManager';
 
 export const useMultipleDecryptWorkers = ({
   handleExportPopupClose,

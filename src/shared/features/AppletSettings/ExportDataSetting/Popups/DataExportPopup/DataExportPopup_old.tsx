@@ -27,10 +27,10 @@ import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
-import { ChosenAppletData } from '../../Respondents.types';
-import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
+import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
+import { getExportDataSuffix, getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},

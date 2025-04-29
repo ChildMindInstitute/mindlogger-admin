@@ -4,7 +4,7 @@ import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { DateFormats } from 'shared/consts';
 
-import { getFormattedToDate } from './DataExportPopup.utils';
+import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 describe('getFormattedToDate', () => {
   const utcDate = getNormalizedTimezoneDate(new Date().toString());

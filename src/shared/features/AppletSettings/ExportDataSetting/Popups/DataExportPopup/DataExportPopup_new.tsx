@@ -19,13 +19,13 @@ import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
-import { ChosenAppletData } from '../../Respondents.types';
-import { useMultipleDecryptWorkers } from './DataExportPopup.hooks';
-import { BUFFER_PERCENTAGE } from './DataExportPopup.const';
-import { ExportDataFetchService as ExportDataFetchServiceClass } from './ExportDataFetchSevice';
-import { getFormattedToDate } from './DataExportPopup.utils';
+import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
+import { useMultipleDecryptWorkers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.hooks';
+import { BUFFER_PERCENTAGE } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.const';
+import { ExportDataFetchService as ExportDataFetchServiceClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/ExportDataFetchSevice';
+import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
