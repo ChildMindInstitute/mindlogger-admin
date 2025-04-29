@@ -18,8 +18,11 @@ import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataS
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
-
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import {
+  DataExportPopupProps,
+  ExecuteAllPagesOfExportData,
+  Modals,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
 import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 import { useMultipleDecryptWorkers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.hooks';

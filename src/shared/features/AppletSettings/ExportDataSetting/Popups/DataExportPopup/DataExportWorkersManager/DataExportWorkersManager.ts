@@ -7,7 +7,6 @@ import { ItemResponseType } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel/mixpanel';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel/mixpanel.types';
 import { FeatureFlags } from 'shared/types/featureFlags';
-
 import DecryptionWorker from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.worker';
 import { IdleWorker } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
 import { NUM_WORKERS } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.const';

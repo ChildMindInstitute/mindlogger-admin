@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { DateFormats } from 'shared/consts';
-
 import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 describe('getFormattedToDate', () => {

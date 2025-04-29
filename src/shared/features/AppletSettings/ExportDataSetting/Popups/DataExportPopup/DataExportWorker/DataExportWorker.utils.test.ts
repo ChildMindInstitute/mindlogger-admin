@@ -1,5 +1,4 @@
 import { ItemResponseType } from 'shared/consts';
-
 import { getDecryptedParsedAnswers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.utils';
 
 describe('getParsedAnswers', () => {

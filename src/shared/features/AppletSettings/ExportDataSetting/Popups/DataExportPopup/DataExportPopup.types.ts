@@ -3,7 +3,6 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { SingleApplet } from 'shared/state';
 import { Encryption, ExportDataFilters } from 'shared/utils';
 import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
-
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type DataExportPopupProps = {
