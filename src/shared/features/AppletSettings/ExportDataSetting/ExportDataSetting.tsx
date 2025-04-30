@@ -7,8 +7,10 @@ import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSettin
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { UniqueTuple } from 'shared/types';
+import { useFeatureFlags } from 'shared/hooks';
 
 import {
+  EMAExtraFiles,
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
@@ -26,6 +28,7 @@ export const ExportDataSetting = ({
   isAppletSetting,
   supportedSupplementaryFiles,
 }: ExportDataSettingProps) => {
+  const { featureFlags } = useFeatureFlags();
   const { result } = applet.useAppletData() ?? {};
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -51,6 +54,16 @@ export const ExportDataSetting = ({
     methods.reset(defaultValues);
   };
 
+  const filteredSupportedSupplementaryFiles = (
+    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>)
+  ).filter((fileType) => {
+    if (EMAExtraFiles.includes(fileType)) {
+      return featureFlags.enableEmaExtraFiles;
+    }
+
+    return true;
+  });
+
   return (
     <FormProvider {...methods}>
       {isExportSettingsOpen && (
@@ -66,9 +79,7 @@ export const ExportDataSetting = ({
           }}
           minDate={minDate}
           getMaxDate={getMaxDate}
-          supportedSupplementaryFiles={
-            supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>)
-          }
+          supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
         />
       )}
       {dataIsExporting && (

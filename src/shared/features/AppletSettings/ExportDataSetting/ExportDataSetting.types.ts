@@ -11,8 +11,12 @@ export const enum ExportDateType {
   ChooseDates = 'chooseDates',
 }
 
+export const EMAExtraFiles = ['flowHistory', 'scheduleHistory'] as const;
+
 // The list of supplementary files that can be exported. These show up as checkboxes in the modal
-export const SupplementaryFiles = ['flowHistory', 'scheduleHistory'] as const;
+// If the appearance of one or more of these checkboxes is controlled by a feature flag, update the
+// filteredSupportedSupplementaryFiles variable in the ExportDataSetting component
+export const SupplementaryFiles = [...EMAExtraFiles] as const;
 
 export type SupplementaryFiles = (typeof SupplementaryFiles)[number];
 
