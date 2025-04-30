@@ -81,6 +81,11 @@ import {
   GetTargetSubjectsByRespondentParams,
   GetTargetSubjectsByRespondentResponse,
   AppletParticipantActivitiesMetadataResponse,
+  ScheduleHistoryParams,
+  ScheduleHistoryData,
+  DeviceScheduleHistoryData,
+  FlowItemHistoryParams,
+  FlowItemHistoryData,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import { SubjectDetailsWithDataAccess } from '../types';
@@ -914,5 +919,61 @@ export const getTargetSubjectsByRespondentApi = (
   signal?: AbortSignal,
 ): Promise<AxiosResponse<GetTargetSubjectsByRespondentResponse>> =>
   authApiClient.get(`/subjects/respondent/${subjectId}/activity-or-flow/${activityOrFlowId}`, {
+    signal,
+  });
+
+export const getScheduleHistory = (
+  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ScheduleHistoryParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<ScheduleHistoryData>>(`/applets/${appletId}/events/history`, {
+    params: {
+      page,
+      limit,
+      ...rest,
+    },
+    paramsSerializer: {
+      indexes: null,
+    },
+    signal,
+  });
+
+export const getDeviceScheduleHistory = (
+  {
+    appletId,
+    page = 1,
+    limit = DEFAULT_ROWS_PER_PAGE,
+    ...rest
+  }: Omit<ScheduleHistoryParams, 'subjectIds'>,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<DeviceScheduleHistoryData>>(
+    `/applets/${appletId}/events/device_history`,
+    {
+      params: {
+        page,
+        limit,
+        ...rest,
+      },
+      paramsSerializer: {
+        indexes: null,
+      },
+      signal,
+    },
+  );
+
+export const getFlowItemHistory = (
+  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: FlowItemHistoryParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<FlowItemHistoryData>>(`/applets/${appletId}/flows/item_history`, {
+    params: {
+      page,
+      limit,
+      ...rest,
+    },
+    paramsSerializer: {
+      indexes: null,
+    },
     signal,
   });

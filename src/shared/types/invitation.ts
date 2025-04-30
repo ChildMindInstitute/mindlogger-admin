@@ -10,6 +10,7 @@ export type Invitation = {
   role: string;
   email: string;
   createdAt: string;
+  acceptedAt: string | null;
   key: string;
   status: InvitationStatus;
   meta: {

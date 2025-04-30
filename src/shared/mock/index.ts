@@ -965,6 +965,7 @@ export const mockedInvitation: Invitations = {
       firstName: 'Jane',
       lastName: 'Doe',
       createdAt: '2023-11-02T08:37:13.652256',
+      acceptedAt: null,
       secretUserId: null,
       nickname: null,
       meta: {},
