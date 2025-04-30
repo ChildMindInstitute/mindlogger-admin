@@ -598,6 +598,74 @@ export type ExportData = AppletId & {
   toDate?: string;
 };
 
+export type ScheduleHistoryParams = AppletId & {
+  respondentIds?: string[];
+  subjectIds?: string[];
+  activityOrFlowIds?: string[];
+  page?: number;
+  limit?: number;
+};
+
+export type ScheduleHistoryData = {
+  appletId: string;
+  appletVersion: string;
+  appletName: string;
+  userId: string | null;
+  subjectId: string | null;
+  eventId: string;
+  eventType: 'activity' | 'flow';
+  eventVersion: string;
+  eventVersionCreatedAt: string;
+  eventVersionUpdatedAt: string;
+  eventVersionIsDeleted: boolean;
+  linkedWithAppletAt: string;
+  eventUpdatedBy: string;
+  activityOrFlowId: string;
+  activityOrFlowName: string;
+  activityOrFlowHidden: boolean;
+  accessBeforeSchedule: boolean | null;
+  oneTimeCompletion: boolean | null;
+  periodicity: Periodicity;
+  startDate: string | null;
+  startTime: string;
+  endDate: string | null;
+  endTime: string;
+  selectedDate: string | null;
+};
+
+export type DeviceScheduleHistoryData = {
+  userId: string;
+  deviceId: string;
+  eventId: string;
+  eventVersion: string;
+  startDate: string | null;
+  startTime: string;
+  endDate: string | null;
+  endTime: string;
+  accessBeforeSchedule: boolean | null;
+  createdAt: string;
+  userTimeZone: string | null;
+};
+
+export type FlowItemHistoryParams = AppletId & {
+  page?: number;
+  limit?: number;
+  fromDate?: string;
+  toDate?: string;
+  flowIds?: string[];
+};
+
+export type FlowItemHistoryData = {
+  appletId: string;
+  appletVersion: string;
+  appletName: string;
+  flowId: string;
+  flowName: string;
+  activityId: string;
+  activityName: string;
+  createdAt: string;
+};
+
 export type Folder = {
   id: string;
   name?: string;
