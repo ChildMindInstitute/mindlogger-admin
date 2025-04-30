@@ -211,7 +211,7 @@ export const DataExportPopup = ({
         setDataIsExporting(false);
       }
     },
-    [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose],
+    [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose, ownerId],
   );
 
   useEffect(() => {

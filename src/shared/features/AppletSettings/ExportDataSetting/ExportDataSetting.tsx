@@ -8,13 +8,14 @@ import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { UniqueTuple } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks';
+import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
-  EMAExtraFiles,
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
   SupplementaryFiles,
+  SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
 import { DATA_TESTID_EXPORT_DATA_EXPORT_POPUP } from './ExportDataSetting.const';
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
@@ -54,15 +55,30 @@ export const ExportDataSetting = ({
     methods.reset(defaultValues);
   };
 
-  const filteredSupportedSupplementaryFiles = (
-    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>)
-  ).filter((fileType) => {
-    if (EMAExtraFiles.includes(fileType)) {
-      return featureFlags.enableEmaExtraFiles;
-    }
+  const defaultSupportedSupplementaryFiles =
+    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
 
-    return true;
-  });
+  const filteredSupportedSupplementaryFiles = (
+    Object.entries(SupplementaryFilesWithFeatureFlag) as unknown as [
+      keyof typeof FeatureFlagDefaults | 'none',
+      SupplementaryFiles[],
+    ][]
+  )
+    .filter(([flag]) => {
+      if (flag === 'none') {
+        return true;
+      }
+
+      if (flag in featureFlags) {
+        return featureFlags[flag];
+      }
+
+      console.warn(`No such feature flag: ${flag}`);
+
+      return false;
+    })
+    .flatMap(([_, files]) => files)
+    .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
 
   return (
     <FormProvider {...methods}>
