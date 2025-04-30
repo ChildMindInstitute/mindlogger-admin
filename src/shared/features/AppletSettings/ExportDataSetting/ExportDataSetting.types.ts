@@ -1,6 +1,7 @@
 import { ChosenAppletData } from 'modules/Dashboard/features';
 import { SingleApplet } from 'shared/state';
 import { ExportDataFilters } from 'shared/utils';
+import { UniqueTuple } from 'shared/types';
 
 export const enum ExportDateType {
   AllTime = 'allTime',
@@ -10,10 +11,20 @@ export const enum ExportDateType {
   ChooseDates = 'chooseDates',
 }
 
+// The list of supplementary files that can be exported. These show up as checkboxes in the modal
+export const SupplementaryFiles = ['flowHistory', 'scheduleHistory'] as const;
+
+export type SupplementaryFiles = (typeof SupplementaryFiles)[number];
+
+export type SupplementaryFilesFormValues = {
+  [key in SupplementaryFiles]: boolean;
+};
+
 export type ExportDataFormValues = {
   dateType: ExportDateType;
   fromDate: Date;
   toDate: Date;
+  supplementaryFiles: SupplementaryFilesFormValues;
 };
 
 export type ExportDataSettingProps = {
@@ -23,4 +34,5 @@ export type ExportDataSettingProps = {
   chosenAppletData?: ChosenAppletData | SingleApplet | null;
   isAppletSetting?: boolean;
   filters?: ExportDataFilters;
+  supportedSupplementaryFiles?: UniqueTuple<SupplementaryFiles> | [];
 };

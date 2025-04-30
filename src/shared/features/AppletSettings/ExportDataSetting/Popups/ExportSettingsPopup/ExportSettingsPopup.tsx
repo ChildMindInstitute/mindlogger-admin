@@ -2,22 +2,39 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
+import { useMemo } from 'react';
 
 import { Svg } from 'shared/components/Svg';
 import { applet } from 'shared/state';
-import { SelectController } from 'shared/components/FormComponents';
+import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components/DatePicker';
 import { Modal } from 'shared/components/Modal';
-import { StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper, theme } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledModalWrapper,
+  theme,
+} from 'shared/styles';
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
-import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
+import {
+  StyledAppletSettingsButton,
+  StyledAppletSettingsDescription,
+} from 'shared/features/AppletSettings/AppletSettings.styles';
 
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
 import { getDateTypeOptions } from './ExportSettingsPopup.utils';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
-import { ExportDataFormValues, ExportDateType } from '../../ExportDataSetting.types';
-import { StyledExportSettingsDescription } from './ExportSettingsPopup.styles';
+import {
+  ExportDataFormValues,
+  ExportDateType,
+  SupplementaryFilesFormValues,
+} from '../../ExportDataSetting.types';
+import {
+  StyledExportSettingsDescription,
+  StyledExportSettingsForm,
+} from './ExportSettingsPopup.styles';
 
 export const ExportSettingsPopup = ({
   isOpen,
@@ -25,6 +42,7 @@ export const ExportSettingsPopup = ({
   onExport,
   minDate,
   getMaxDate,
+  supportedSupplementaryFiles,
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -33,6 +51,7 @@ export const ExportSettingsPopup = ({
   const dateType = watch('dateType');
   const fromDate = watch('fromDate');
   const toDate = watch('toDate');
+  const supplementaryFiles = watch('supplementaryFiles');
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
 
   const commonProps = {
@@ -85,6 +104,14 @@ export const ExportSettingsPopup = ({
     }
   };
 
+  const filteredSupplementaryFiles = useMemo(
+    () =>
+      (Object.entries(supplementaryFiles) as Array<[keyof SupplementaryFilesFormValues, boolean]>)
+        .filter(([fileType]) => supportedSupplementaryFiles?.includes(fileType))
+        .map(([fileType]) => fileType),
+    [supplementaryFiles, supportedSupplementaryFiles],
+  );
+
   return (
     <Modal
       open={isOpen}
@@ -96,7 +123,7 @@ export const ExportSettingsPopup = ({
       data-testid={DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}
     >
       <StyledModalWrapper>
-        <form noValidate autoComplete="off">
+        <StyledExportSettingsForm noValidate autoComplete="off">
           <StyledExportSettingsDescription>
             {t('exportDescription')}
           </StyledExportSettingsDescription>
@@ -116,11 +143,7 @@ export const ExportSettingsPopup = ({
             style={{ width: '100%' }}
           />
           {hasCustomDate && (
-            <StyledFlexTopCenter
-              sx={{
-                mt: theme.spacing(2.4),
-              }}
-            >
+            <StyledFlexTopCenter>
               <DatePicker
                 {...commonProps}
                 name="fromDate"
@@ -145,7 +168,27 @@ export const ExportSettingsPopup = ({
               />
             </StyledFlexTopCenter>
           )}
-          <Box sx={{ textAlign: 'center' }}>
+          {filteredSupplementaryFiles.length > 0 && (
+            <StyledAppletSettingsDescription>
+              {t(`dataExport.supplementaryFiles.description`)}
+            </StyledAppletSettingsDescription>
+          )}
+          <StyledFlexColumn>
+            {filteredSupplementaryFiles.map((fileType) => (
+              <CheckboxController
+                control={control}
+                sxLabelProps={{ mt: 0, ml: '12px' }}
+                name={`supplementaryFiles.${fileType}`}
+                key={`data-export-supplementary-file-${fileType}`}
+                label={
+                  <StyledBodyLarge>
+                    {t(`dataExport.supplementaryFiles.includes.${fileType}`)}
+                  </StyledBodyLarge>
+                }
+              />
+            ))}
+          </StyledFlexColumn>
+          <Box sx={{ textAlign: 'center' }} className="no-gap">
             <StyledAppletSettingsButton
               onClick={() => {
                 if (dateType !== 'chooseDates') {
@@ -161,7 +204,7 @@ export const ExportSettingsPopup = ({
               {t('download')}
             </StyledAppletSettingsButton>
           </Box>
-        </form>
+        </StyledExportSettingsForm>
       </StyledModalWrapper>
     </Modal>
   );

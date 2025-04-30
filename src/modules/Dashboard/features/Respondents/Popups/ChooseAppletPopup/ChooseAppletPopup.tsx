@@ -86,7 +86,7 @@ export const ChooseAppletPopup = ({
         setPopupVisible(false);
         handleClose(null);
       }}
-      title={t('dataExport')}
+      title={t('dataExport.title')}
       buttonText=""
       data-testid={`${dataTestid}-choose-applet-popup`}
     >

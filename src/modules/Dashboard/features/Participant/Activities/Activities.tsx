@@ -361,6 +361,7 @@ export const Activities = () => {
           chosenAppletData={appletData ?? null}
           filters={{ activityId: selectedActivityOrFlowId?.activityId, targetSubjectId: subjectId }}
           isAppletSetting
+          supportedSupplementaryFiles={['scheduleHistory']}
         />
       )}
 

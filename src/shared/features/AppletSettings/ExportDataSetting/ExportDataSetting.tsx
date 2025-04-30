@@ -6,11 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { UniqueTuple } from 'shared/types';
 
 import {
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
+  SupplementaryFiles,
 } from './ExportDataSetting.types';
 import { DATA_TESTID_EXPORT_DATA_EXPORT_POPUP } from './ExportDataSetting.const';
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
@@ -22,6 +24,7 @@ export const ExportDataSetting = ({
   onDataExportPopupClose,
   chosenAppletData,
   isAppletSetting,
+  supportedSupplementaryFiles,
 }: ExportDataSettingProps) => {
   const { result } = applet.useAppletData() ?? {};
   const appletData = chosenAppletData ?? result;
@@ -29,28 +32,43 @@ export const ExportDataSetting = ({
 
   const minDate = new Date(appletData?.createdAt ?? '');
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
+  const defaultValues: ExportDataFormValues = {
+    dateType: ExportDateType.AllTime,
+    fromDate: minDate,
+    toDate: getMaxDate(),
+    supplementaryFiles: SupplementaryFiles.reduce(
+      (acc, fileType) => ({ ...acc, [fileType]: false }),
+      {} as Record<SupplementaryFiles, boolean>,
+    ),
+  };
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
-    defaultValues: {
-      dateType: ExportDateType.AllTime,
-      fromDate: minDate,
-      toDate: getMaxDate(),
-    },
+    defaultValues,
     mode: 'onSubmit',
   });
+
+  const resetDefaultValues = () => {
+    methods.reset(defaultValues);
+  };
 
   return (
     <FormProvider {...methods}>
       {isExportSettingsOpen && (
         <ExportSettingsPopup
           isOpen
-          onClose={onExportSettingsClose}
+          onClose={() => {
+            resetDefaultValues();
+            onExportSettingsClose();
+          }}
           onExport={() => {
             setDataIsExporting(true);
             onExportSettingsClose();
           }}
           minDate={minDate}
           getMaxDate={getMaxDate}
+          supportedSupplementaryFiles={
+            supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>)
+          }
         />
       )}
       {dataIsExporting && (
@@ -60,7 +78,10 @@ export const ExportDataSetting = ({
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
           data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
-          handlePopupClose={onDataExportPopupClose}
+          handlePopupClose={() => {
+            resetDefaultValues();
+            onDataExportPopupClose?.();
+          }}
         />
       )}
     </FormProvider>

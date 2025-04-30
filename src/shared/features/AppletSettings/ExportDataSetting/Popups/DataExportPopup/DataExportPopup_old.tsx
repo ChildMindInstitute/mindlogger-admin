@@ -100,10 +100,14 @@ export const DataExportPopup = ({
         dataExportingRef.current = true;
         setDataIsExporting(true);
 
-        const dateType = getValues?.().dateType;
-        const formFromDate = getValues?.().fromDate;
+        const {
+          dateType,
+          fromDate: formFromDate,
+          toDate: formToDate,
+          supplementaryFiles,
+        } = getValues?.() ?? {};
+
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const formToDate = getValues?.().toDate;
         const toDate = getFormattedToDate({ dateType, formToDate });
 
         const body = {
@@ -144,48 +148,52 @@ export const DataExportPopup = ({
         }
 
         if (featureFlags.enableEmaExtraFiles) {
-          if (ownerId) {
-            let activityOrFlowIds: string[] | undefined;
-            const subjectIds: Set<string> = new Set();
+          if (supplementaryFiles.scheduleHistory) {
+            if (ownerId) {
+              let activityOrFlowIds: string[] | undefined;
+              const subjectIds: Set<string> = new Set();
 
-            // Both of these may be populated when exporting for a flow, but we only want the flow
-            if (filters?.flowId) {
-              activityOrFlowIds = [filters.flowId];
-            } else if (filters?.activityId) {
-              activityOrFlowIds = [filters.activityId];
+              // Both of these may be populated when exporting for a flow, but we only want the flow
+              if (filters?.flowId) {
+                activityOrFlowIds = [filters.flowId];
+              } else if (filters?.activityId) {
+                activityOrFlowIds = [filters.activityId];
+              }
+
+              if (targetSubjectIds) {
+                subjectIds.add(targetSubjectIds);
+              }
+
+              if (filters?.targetSubjectId) {
+                subjectIds.add(filters.targetSubjectId);
+              }
+
+              if (filters?.sourceSubjectId) {
+                subjectIds.add(filters.sourceSubjectId);
+              }
+
+              await new ScheduleHistoryExporter(ownerId).exportData({
+                appletId,
+                fromDate,
+                toDate,
+                subjectIds: subjectIds.size > 0 ? Array.from(subjectIds) : undefined,
+                activityOrFlowIds,
+              });
+            } else {
+              console.warn(
+                `No owner ID found for current workspace. Schedule history export skipped.`,
+              );
             }
+          }
 
-            if (targetSubjectIds) {
-              subjectIds.add(targetSubjectIds);
-            }
-
-            if (filters?.targetSubjectId) {
-              subjectIds.add(filters.targetSubjectId);
-            }
-
-            if (filters?.sourceSubjectId) {
-              subjectIds.add(filters.sourceSubjectId);
-            }
-
-            await new ScheduleHistoryExporter(ownerId).exportData({
+          if (supplementaryFiles.flowHistory) {
+            await new FlowActivityHistoryExporter(appletId).exportData({
               appletId,
               fromDate,
               toDate,
-              subjectIds: subjectIds.size > 0 ? Array.from(subjectIds) : undefined,
-              activityOrFlowIds,
+              flowIds: filters?.flowId ? [filters.flowId] : undefined,
             });
-          } else {
-            console.warn(
-              `No owner ID found for current workspace. Schedule history export skipped.`,
-            );
           }
-
-          await new FlowActivityHistoryExporter(appletId).exportData({
-            appletId,
-            fromDate,
-            toDate,
-            flowIds: filters?.flowId ? [filters.flowId] : undefined,
-          });
         }
 
         handlePopupClose();
@@ -216,7 +224,7 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handlePopupClose}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText=""
           data-testid={dataTestid}
         >
@@ -264,7 +272,7 @@ export const DataExportPopup = ({
           open={popupVisible}
           onClose={handlePopupClose}
           onSubmit={handleRetry}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText={t('retry')}
           hasSecondBtn
           submitBtnColor="error"

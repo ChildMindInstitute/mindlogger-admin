@@ -157,7 +157,7 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handleExportPopupClose}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText=""
           data-testid={dataTestid}
         >
@@ -209,7 +209,7 @@ export const DataExportPopup = ({
           open={popupVisible}
           onClose={handleExportPopupClose}
           onSubmit={handleRetry}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText={t('retry')}
           hasSecondBtn
           submitBtnColor="error"
