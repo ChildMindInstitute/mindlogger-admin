@@ -80,6 +80,15 @@ export const ExportDataSetting = ({
     .flatMap(([_, files]) => files)
     .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
 
+  let appletName = '';
+  if (appletData) {
+    if ('appletDisplayName' in appletData) {
+      appletName = appletData.appletDisplayName ?? '';
+    } else if ('displayName' in appletData) {
+      appletName = appletData.displayName;
+    }
+  }
+
   return (
     <FormProvider {...methods}>
       {isExportSettingsOpen && (
@@ -95,6 +104,7 @@ export const ExportDataSetting = ({
           }}
           minDate={minDate}
           getMaxDate={getMaxDate}
+          appletName={appletName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
         />
       )}

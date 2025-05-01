@@ -5,7 +5,6 @@ import { useFormContext } from 'react-hook-form';
 import { useMemo } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { applet } from 'shared/state';
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components/DatePicker';
 import { Modal } from 'shared/components/Modal';
@@ -42,10 +41,10 @@ export const ExportSettingsPopup = ({
   onExport,
   minDate,
   getMaxDate,
+  appletName,
   supportedSupplementaryFiles,
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
-  const { result: appletData } = applet.useAppletData() ?? {};
 
   const { control, setValue, watch } = useFormContext<ExportDataFormValues>() ?? {};
   const dateType = watch('dateType');
@@ -116,7 +115,7 @@ export const ExportSettingsPopup = ({
     <Modal
       open={isOpen}
       title={t('exportDataForApplet', {
-        name: appletData?.displayName ?? '',
+        name: appletName,
       })}
       onClose={onClose}
       buttonText=""

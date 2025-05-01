@@ -6,5 +6,6 @@ export type ExportSettingsPopupProps = {
   onExport: () => void;
   minDate: Date;
   getMaxDate: () => Date;
+  appletName: string;
   supportedSupplementaryFiles?: SupplementaryFiles[];
 };
