@@ -403,6 +403,9 @@ export const useAssignmentsTab = ({
           }}
           isAppletSetting
           data-testid={`${dataTestId}-export-modal`}
+          supportedSupplementaryFiles={
+            selectedActivityOrFlow?.isFlow ? undefined : ['scheduleHistory']
+          }
         />
       )}
 
