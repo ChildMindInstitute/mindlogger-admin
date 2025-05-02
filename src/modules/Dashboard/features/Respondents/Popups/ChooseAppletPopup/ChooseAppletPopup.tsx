@@ -18,11 +18,6 @@ import { ChosenAppletData } from 'modules/Dashboard/features/index';
 /**
  * A modal component to allow the user to choose from one of several applets a respondent has
  * access to
- * @param tableRows
- * @param popupVisible
- * @param handleClose
- * @param dataTestid
- * @constructor
  */
 export const ChooseAppletPopup = ({
   respondentId,
