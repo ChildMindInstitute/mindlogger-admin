@@ -49,6 +49,7 @@ export const getReportCSVObject = <T>({
     reviewedFlowSubmitId,
     legacyProfileId,
     scheduledEventId,
+    scheduledEventHistoryId,
     tzOffset,
     submitId,
   } = item;
@@ -83,6 +84,7 @@ export const getReportCSVObject = <T>({
         activity_start_time: convertDateStampToMs(startDatetime),
         activity_end_time: convertDateStampToMs(endDatetime),
         activity_schedule_id: scheduledEventId ?? '',
+        activity_schedule_history_id: scheduledEventHistoryId ?? '',
         activity_schedule_start_time: scheduledDatetime
           ? convertDateStampToMs(scheduledDatetime)
           : ActivityStatus.NotScheduled,
@@ -152,6 +154,7 @@ export const getReportCSVObject = <T>({
         rawScore: getRawScores(responseValues) || '',
         reviewing_id: reviewedFlowSubmitId ?? reviewedAnswerId ?? '',
         event_id: scheduledEventId ?? '',
+        event_history_id: scheduledEventHistoryId ?? '',
         timezone_offset: tzOffset ?? '',
         legacy_user_id: legacyProfileId ?? '',
       };
