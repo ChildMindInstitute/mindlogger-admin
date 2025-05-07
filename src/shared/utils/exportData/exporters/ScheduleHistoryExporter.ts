@@ -402,10 +402,22 @@ export class ScheduleHistoryExporter extends DataExporter<
                   // again
                   const deletedAfterToday = deletionDate.isValid && deletionDate > endOfTheDay;
 
+                  const supersededBeforeToday = appletVersionGroupedSchedules.some(
+                    (nextScheduleVersion) =>
+                      competition.eventId === nextScheduleVersion.eventId &&
+                      competition.eventVersion !== nextScheduleVersion.eventVersion &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt, {
+                        zone: 'UTC',
+                      }) <= startOfTheDay &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt) >
+                        DateTime.fromISO(competition.eventVersionCreatedAt),
+                  );
+
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedAfterToday)
+                    (notDeleted || deletedAfterToday) &&
+                    !supersededBeforeToday
                   );
                 }).length === 0
               );
