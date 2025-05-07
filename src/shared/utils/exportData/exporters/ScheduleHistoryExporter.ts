@@ -13,6 +13,7 @@ import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/expor
 import { groupBy } from 'shared/utils/array';
 import { Response } from 'shared/api';
 import { store } from 'redux/store';
+import { MAX_LIMIT } from 'shared/consts';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -130,7 +131,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       const data = await store
         .dispatch(
           apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-            params: { ownerId: this.ownerId, appletId, page },
+            params: { ownerId: this.ownerId, appletId, page, limit: MAX_LIMIT },
           }),
         )
         .unwrap();
