@@ -1,15 +1,19 @@
+import { DateTime } from 'luxon';
+
 import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/exporters/DataExporter';
 import { getFlowItemHistory } from 'modules/Dashboard/api';
 
-type FlowActivityHistoryRow = {
-  applet_id: string;
-  applet_version: string;
-  flow_item_history_created_date: string;
-  activity_flow_id: string;
-  activity_flow_name: string;
-  activity_id: string;
-  activity_name: string;
-};
+const FlowHistoryCSVHeaders = [
+  'applet_id',
+  'applet_version',
+  'flow_activity_history_created_date',
+  'activity_flow_id',
+  'activity_flow_name',
+  'activity_id',
+  'activity_name',
+] as const;
+
+type FlowActivityHistoryRow = { [header in (typeof FlowHistoryCSVHeaders)[number]]: string };
 
 type FlowActivityHistoryExporterOptions = DataExporterOptions & {
   /**
@@ -39,27 +43,25 @@ export class FlowActivityHistoryExporter extends DataExporter<FlowActivityHistor
     }
 
     await this.downloadAsCSV(
-      flowItemHistory.map((item) => ({
-        applet_id: item.appletId,
-        applet_version: item.appletVersion,
-        flow_item_history_created_date: item.createdAt,
-        activity_flow_id: item.flowId,
-        activity_flow_name: item.flowName,
-        activity_id: item.activityId,
-        activity_name: item.activityName,
-      })),
+      flowItemHistory
+        .map((item) => ({
+          applet_id: item.appletId,
+          applet_version: item.appletVersion,
+          flow_activity_history_created_date: item.createdAt,
+          activity_flow_id: item.flowId,
+          activity_flow_name: item.flowName,
+          activity_id: item.activityId,
+          activity_name: item.activityName,
+        }))
+        .sort(
+          (a, b) =>
+            DateTime.fromISO(b.flow_activity_history_created_date).valueOf() -
+            DateTime.fromISO(a.flow_activity_history_created_date).valueOf(),
+        ),
     );
   }
 
   getCSVHeaders(): string[] {
-    return [
-      'applet_id',
-      'applet_version',
-      'flow_item_history_created_date',
-      'activity_flow_id',
-      'activity_flow_name',
-      'activity_id',
-      'activity_name',
-    ];
+    return [...FlowHistoryCSVHeaders];
   }
 }
