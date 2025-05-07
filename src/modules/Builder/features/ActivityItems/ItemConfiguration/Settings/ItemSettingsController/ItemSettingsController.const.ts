@@ -353,7 +353,10 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.RequestHealthRecordData]: [
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
-      groupOptions: [ItemConfigurationSettings.IsGoBackRemoved],
+      groupOptions: [
+        ItemConfigurationSettings.IsSkippable,
+        ItemConfigurationSettings.IsGoBackRemoved,
+      ],
     },
   ],
   [ItemResponseType.AudioPlayer]: [

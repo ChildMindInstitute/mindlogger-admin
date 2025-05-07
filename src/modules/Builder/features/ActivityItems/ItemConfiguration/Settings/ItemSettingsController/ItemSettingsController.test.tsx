@@ -1,12 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { createRef } from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import get from 'lodash.get';
+import { createRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import * as useCurrentActivityHook from 'modules/Builder/hooks/useCurrentActivity';
+import * as useCustomFormContextHook from 'modules/Builder/hooks/useCustomFormContext';
 import { ItemResponseType } from 'shared/consts';
 import {
   mockedAppletFormData,
@@ -18,12 +19,11 @@ import {
   mockedSliderRowsFormValues,
   mockedTextFormValues,
 } from 'shared/mock';
-import * as useCustomFormContextHook from 'modules/Builder/hooks/useCustomFormContext';
-import * as useCurrentActivityHook from 'modules/Builder/hooks/useCurrentActivity';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsController } from './ItemSettingsController';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 const getMockedAppletFormData = (item) => ({
   ...mockedAppletFormData,
@@ -264,6 +264,10 @@ const mockedSettingsByType = {
     ItemConfigurationSettings.HasTimer,
     ItemConfigurationSettings.IsGoBackRemoved,
   ],
+  [ItemResponseType.RequestHealthRecordData]: [
+    ItemConfigurationSettings.IsSkippable,
+    ItemConfigurationSettings.IsGoBackRemoved,
+  ],
   [ItemResponseType.AudioPlayer]: [
     ItemConfigurationSettings.IsPlayAudioOnce,
     ItemConfigurationSettings.HasTextInput,
@@ -349,6 +353,7 @@ const mockedSettingGroupsByType = {
     ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
   ],
   [ItemResponseType.Message]: [ItemSettingsGroupNames.ScreenConfigurationsAndTimer],
+  [ItemResponseType.RequestHealthRecordData]: [ItemSettingsGroupNames.ScreenConfigurationsAndTimer],
   [ItemResponseType.AudioPlayer]: [
     ItemSettingsGroupNames.AudioPlayerOptions,
     ItemSettingsGroupNames.AdditionalResponseOptions,
@@ -399,6 +404,7 @@ describe('ItemSettingsController', () => {
     ${ItemResponseType.Geolocation}             | ${'settings and order for Geolocation are correct'}
     ${ItemResponseType.Audio}                   | ${'settings and order for Audio are correct'}
     ${ItemResponseType.Message}                 | ${'settings and order for Message are correct'}
+    ${ItemResponseType.RequestHealthRecordData} | ${'settings and order for RequestHealthRecordData are correct'}
     ${ItemResponseType.AudioPlayer}             | ${'settings and order for AudioPlayer are correct'}
     ${ItemResponseType.Time}                    | ${'settings and order for Time are correct'}
   `('$description', ({ inputType }) => {
@@ -442,6 +448,7 @@ describe('ItemSettingsController', () => {
     ${ItemResponseType.Geolocation}             | ${'setting groups and order for Geolocation are correct'}
     ${ItemResponseType.Audio}                   | ${'setting groups and order for Audio are correct'}
     ${ItemResponseType.Message}                 | ${'setting groups and order for Message are correct'}
+    ${ItemResponseType.RequestHealthRecordData} | ${'setting groups and order for RequestHealthRecordData are correct'}
     ${ItemResponseType.AudioPlayer}             | ${'setting groups and order for AudioPlayer are correct'}
     ${ItemResponseType.Time}                    | ${'setting groups and order for Time are correct'}
   `('$description', ({ inputType }) => {

@@ -22,4 +22,5 @@ export type FeatureFlags = Partial<{
   enableDataExportRenaming: boolean;
   enableSubscaleNullWhenSkipped: boolean;
   enableEhrHealthData: 'unavailable' | 'available' | 'active';
+  enableEmaExtraFiles: boolean;
 }>;
