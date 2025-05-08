@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { TimerType } from 'modules/Dashboard/api';
@@ -11,8 +12,8 @@ const dataTestid = 'timers-tab';
 const mockWatch = vi.fn();
 const mockSetValue = vi.fn();
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     watch: () => mockWatch(),
     setValue: mockSetValue,

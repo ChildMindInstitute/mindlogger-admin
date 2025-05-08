@@ -1,6 +1,7 @@
 import { generatePath } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { page } from 'resources';
 import {
@@ -53,13 +54,13 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => mockedUseNavigate,
-    useParams: () => mockedUseParams,
+    useNavigate: vi.fn(() => mockedUseNavigate),
+    useParams: vi.fn(() => mockedUseParams()),
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: () => mockedGetValues(),
     watch: () => mockedGetValues(),
