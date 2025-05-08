@@ -157,6 +157,7 @@ const legacyResult = {
   input_user_nickname: 'Mock input user',
   version: '2.0.0',
   event_id: '',
+  event_history_id: '',
   timezone_offset: '',
   legacy_user_id: '',
 };
@@ -187,6 +188,7 @@ const result = {
   activity_start_time: '1689755822000',
   activity_end_time: '1689756087000',
   activity_schedule_id: '',
+  activity_schedule_history_id: '',
   activity_schedule_start_time: 'not scheduled',
   utc_timezone_offset: '',
   activity_submission_review_id: '',
