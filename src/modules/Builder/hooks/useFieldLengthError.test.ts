@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { getMaxLengthValidationError } from 'shared/utils';
 
@@ -18,7 +19,7 @@ const mockedSetValue = jest.fn();
 const mockedSetError = jest.fn();
 const mockedClearErrors = jest.fn();
 
-jest.mock('react-hook-form', () => ({
+vi.mock('react-hook-form', () => ({
   useFormContext: () => ({
     setValue: mockedSetValue,
     setError: mockedSetError,

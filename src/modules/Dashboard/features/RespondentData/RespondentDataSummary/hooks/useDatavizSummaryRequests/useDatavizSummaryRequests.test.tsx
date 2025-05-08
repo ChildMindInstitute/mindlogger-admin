@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
@@ -11,8 +12,8 @@ const mockedGetValues = vi.fn();
 const mockedSetValue = vi.fn();
 const mockedSetIdentifiers = vi.fn();
 const mockedSetVersions = vi.fn();
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: mockedGetValues,
     setValue: mockedSetValue,

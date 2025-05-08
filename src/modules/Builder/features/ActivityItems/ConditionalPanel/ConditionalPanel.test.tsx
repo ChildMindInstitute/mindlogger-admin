@@ -1,16 +1,16 @@
 import { render, fireEvent, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { mockedAppletData } from 'shared/mock';
 import { ConditionalLogic } from 'redux/modules';
 
 import { ConditionalPanel } from '.';
 
-const mockedWatch = jest.fn();
-const mockedUseParams = jest.fn();
+const mockedWatch = vi.fn();
+const mockedUseParams = vi.fn();
 
 const mockCondition = mockedAppletData.activities[0].items[0].conditionalLogic as ConditionalLogic;
 
-// mock the module
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
@@ -21,13 +21,24 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockedWatch(),
-    setValue: () => jest.fn(),
-  }),
-}));
+vi.mock('react-hook-form', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({
+      watch: (path: string | undefined) => {
+        if (path && path.endsWith('.items')) {
+          return mockedWatch();
+        }
+
+        return undefined;
+      },
+      setValue: () => vi.fn(),
+    }),
+  };
+});
 
 const renderComponent = () => render(<ConditionalPanel condition={mockCondition} />);
 

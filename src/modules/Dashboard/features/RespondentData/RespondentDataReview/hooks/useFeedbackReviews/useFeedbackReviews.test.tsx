@@ -15,23 +15,23 @@ import { RespondentDataReviewContext } from '../../RespondentDataReview.context'
 import { useFeedbackReviewsData } from '../useFeedbackReviewsData/useFeedbackReviewsData';
 import { useFeedbackReviews } from './useFeedbackReviews';
 
-jest.mock('react-hook-form', () => ({
-  useFormContext: jest.fn(),
+vi.mock('react-hook-form', () => ({
+  useFormContext: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useAsync', () => ({
-  useAsync: jest.fn(),
+vi.mock('shared/hooks/useAsync', () => ({
+  useAsync: vi.fn(),
 }));
 
-jest.mock('modules/Dashboard/api', () => ({
-  getReviewsApi: jest.fn(),
-  getFlowReviewsApi: jest.fn(),
-  deleteReviewApi: jest.fn(),
-  deleteFlowReviewApi: jest.fn(),
+vi.mock('modules/Dashboard/api', () => ({
+  getReviewsApi: vi.fn(),
+  getFlowReviewsApi: vi.fn(),
+  deleteReviewApi: vi.fn(),
+  deleteFlowReviewApi: vi.fn(),
 }));
 
-jest.mock('../useFeedbackReviewsData/useFeedbackReviewsData', () => ({
-  useFeedbackReviewsData: jest.fn(),
+vi.mock('../useFeedbackReviewsData/useFeedbackReviewsData', () => ({
+  useFeedbackReviewsData: vi.fn(),
 }));
 
 const mockContextValue = {
@@ -72,10 +72,10 @@ const mockContextValue = {
     },
   ],
   lastAssessment: [],
-  setAssessment: jest.fn(),
-  setIsLastVersion: jest.fn(),
+  setAssessment: vi.fn(),
+  setIsLastVersion: vi.fn(),
   isBannerVisible: false,
-  setIsBannerVisible: jest.fn(),
+  setIsBannerVisible: vi.fn(),
 };
 
 const renderUseFeedbackReviewsHook = (useFeedbackReviewsProps) =>
@@ -89,10 +89,10 @@ const renderUseFeedbackReviewsHook = (useFeedbackReviewsProps) =>
 
 describe('useFeedbackReviews', () => {
   const mockUseFormContext = {
-    reset: jest.fn(),
+    reset: vi.fn(),
   };
 
-  const mockFetchReviewsData = jest.fn();
+  const mockFetchReviewsData = vi.fn();
   const mockAssessment = [
     {
       activityItem: {
@@ -156,7 +156,7 @@ describe('useFeedbackReviews', () => {
       answerId: 'testAnswerId',
       submitId: null,
       user: { id: 'testUserId', firstName: 'Jane', lastName: 'Doe' },
-      setAssessmentStep: jest.fn(),
+      setAssessmentStep: vi.fn(),
     });
 
     await act(async () => {
@@ -186,7 +186,7 @@ describe('useFeedbackReviews', () => {
       answerId: 'testAnswerId',
       submitId: null,
       user: { id: 'testUserId', firstName: 'Jane', lastName: 'Doe' },
-      setAssessmentStep: jest.fn(),
+      setAssessmentStep: vi.fn(),
     });
 
     await act(async () => {
@@ -216,7 +216,7 @@ describe('useFeedbackReviews', () => {
       answerId: null,
       submitId: 'submitId',
       user: { id: 'testUserId', firstName: 'Jane', lastName: 'Doe' },
-      setAssessmentStep: jest.fn(),
+      setAssessmentStep: vi.fn(),
     });
 
     await act(async () => {

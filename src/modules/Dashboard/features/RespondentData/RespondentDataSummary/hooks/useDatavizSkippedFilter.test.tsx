@@ -1,12 +1,13 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { SessionStorageKeys } from 'shared/utils';
 import { mockedAppletId } from 'shared/mock';
 
 import { useDatavizSkippedFilter } from './useDatavizSkippedFilter';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
@@ -14,16 +15,19 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: vi.fn(() => mockedUseParams()),
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    useWatch: () => jest.fn(),
-  }),
-}));
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useFormContext: () => ({
+      useWatch: () => vi.fn(),
+    }),
+  };
+});
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm();
@@ -35,7 +39,7 @@ describe('useDatavizSkippedFilter', () => {
   const sessionStorageKey = SessionStorageKeys.DatavizHideSkipped;
   beforeEach(() => {
     sessionStorage.clear();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
   });
 

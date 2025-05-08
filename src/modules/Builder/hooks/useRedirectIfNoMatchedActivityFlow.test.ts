@@ -1,8 +1,10 @@
 import { generatePath } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { mockedAppletData, mockedAppletId } from 'shared/mock';
+import { useCheckIfNewApplet } from 'shared/hooks';
 import { page } from 'resources';
 import { Path } from 'shared/utils';
 
@@ -45,17 +47,21 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => mockedUseNavigate,
-    useParams: () => mockedUseParams,
+    useNavigate: vi.fn(() => mockedUseNavigate),
+    useParams: vi.fn(() => mockedUseParams()),
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: () => mockedGetValues(),
     watch: () => mockedGetValues(),
   }),
+}));
+
+vi.mock('shared/hooks', () => ({
+  useCheckIfNewApplet: vi.fn(),
 }));
 
 describe('useRedirectIfNoMatchedActivityFlow', () => {
@@ -72,6 +78,9 @@ describe('useRedirectIfNoMatchedActivityFlow', () => {
   `('$description', ({ params, activityFlows, toBeCalledWith }) => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activityFlows);
+
+    // Mock useCheckIfNewApplet to return true for new applet test cases
+    vi.mocked(useCheckIfNewApplet).mockReturnValue(params.appletId === Path.NewApplet);
 
     renderHook(useRedirectIfNoMatchedActivityFlow);
 

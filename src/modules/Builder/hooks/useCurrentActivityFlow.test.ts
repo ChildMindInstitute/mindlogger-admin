@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { mockedAppletData } from 'shared/mock';
 
@@ -9,6 +10,7 @@ const mockedExistingActivityFlow = {
   activityFlow: mockedAppletData.activityFlows[0],
   fieldName: 'activityFlows.0',
 };
+
 const mockedExistingKeydActivityFlow = {
   activityFlow: mockedAppletData.activityFlows[1],
   fieldName: 'activityFlows.1',
@@ -24,18 +26,27 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockedWatch(),
-  }),
-}));
+vi.mock('react-hook-form', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({
+      watch: mockedWatch,
+    }),
+  };
+});
 
 describe('useCurrentActivityFlow', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test.each`
     activityFlowId                           | activityFlows                     | expected                          | description
     ${undefined}                             | ${[]}                             | ${{}}                             | ${'returns empty object if there is no activityId in url'}
@@ -47,8 +58,7 @@ describe('useCurrentActivityFlow', () => {
     mockedUseParams.mockReturnValue({ activityFlowId });
     mockedWatch.mockReturnValue(activityFlows);
 
-    const { result } = renderHook(useCurrentActivityFlow);
-
+    const { result } = renderHook(() => useCurrentActivityFlow());
     expect(result.current).toStrictEqual(expected);
   });
 });
