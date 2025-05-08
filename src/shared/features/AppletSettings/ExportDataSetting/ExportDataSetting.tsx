@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,26 +34,29 @@ export const ExportDataSetting = ({
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
-  const minDate = new Date(appletData?.createdAt ?? '');
+  const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
-  const defaultValues: ExportDataFormValues = {
-    dateType: ExportDateType.AllTime,
-    fromDate: minDate,
-    toDate: getMaxDate(),
-    supplementaryFiles: SupplementaryFiles.reduce(
-      (acc, fileType) => ({ ...acc, [fileType]: false }),
-      {} as Record<SupplementaryFiles, boolean>,
-    ),
-  };
+  const defaultValues: ExportDataFormValues = useMemo(
+    () => ({
+      dateType: ExportDateType.AllTime,
+      fromDate: minDate,
+      toDate: getMaxDate(),
+      supplementaryFiles: SupplementaryFiles.reduce(
+        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        {} as Record<SupplementaryFiles, boolean>,
+      ),
+    }),
+    [minDate],
+  );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
     defaultValues,
     mode: 'onSubmit',
   });
 
-  const resetDefaultValues = () => {
+  const resetDefaultValues = useCallback(() => {
     methods.reset(defaultValues);
-  };
+  }, [defaultValues, methods]);
 
   const defaultSupportedSupplementaryFiles =
     supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
@@ -88,6 +91,10 @@ export const ExportDataSetting = ({
       appletName = appletData.displayName;
     }
   }
+
+  useEffect(() => {
+    resetDefaultValues();
+  }, [resetDefaultValues]);
 
   return (
     <FormProvider {...methods}>
