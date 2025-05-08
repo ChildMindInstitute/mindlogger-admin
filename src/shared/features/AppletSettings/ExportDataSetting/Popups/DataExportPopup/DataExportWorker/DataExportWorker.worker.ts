@@ -1,5 +1,5 @@
-import { getDecryptedParsedAnswers } from './DataExportWorker.utils';
-import { WorkerPostMessageEvent } from './DataExportWorker.types';
+import { getDecryptedParsedAnswers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.utils';
+import { WorkerPostMessageEvent } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.types';
 
 declare const self: DedicatedWorkerGlobalScope;
 export default {} as typeof Worker & { new (): Worker };

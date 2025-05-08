@@ -28,6 +28,7 @@ export type ChosenAppletData = {
   appletId: string;
   appletDisplayName?: string;
   appletImg?: string;
+  createdAt: string;
   respondentSecretId?: string;
   hasIndividualSchedule?: boolean;
   respondentId: string | null;

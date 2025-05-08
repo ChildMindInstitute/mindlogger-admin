@@ -93,7 +93,12 @@ export const getAppletsSmallTableRows = (
 ) =>
   respondentAccesses?.map((respondentAccess) => {
     const choseAppletHandler = () =>
-      setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
+      setChosenAppletData({
+        ...respondentAccess,
+        ownerId,
+        respondentId,
+        createdAt: respondentAccess.subjectCreatedAt,
+      });
     const { appletDisplayName, appletImage, respondentSecretId, respondentNickname } =
       respondentAccess;
 

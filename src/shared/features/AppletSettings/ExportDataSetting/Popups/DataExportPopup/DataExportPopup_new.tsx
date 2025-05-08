@@ -18,24 +18,25 @@ import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataS
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
-
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
-import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
-import { ChosenAppletData } from '../../Respondents.types';
-import { useMultipleDecryptWorkers } from './DataExportPopup.hooks';
-import { BUFFER_PERCENTAGE } from './DataExportPopup.const';
-import { ExportDataFetchService as ExportDataFetchServiceClass } from './ExportDataFetchSevice';
-import { getFormattedToDate } from './DataExportPopup.utils';
+import {
+  DataExportPopupProps,
+  ExecuteAllPagesOfExportData,
+  Modals,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
+import { useMultipleDecryptWorkers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.hooks';
+import { BUFFER_PERCENTAGE } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.const';
+import { ExportDataFetchService as ExportDataFetchServiceClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/ExportDataFetchSevice';
+import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
   popupVisible,
   isAppletSetting,
   setPopupVisible,
-  tableRows,
   chosenAppletData,
-  setChosenAppletData,
+  handlePopupClose: providedCloseHandler,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const { t } = useTranslation('app');
@@ -48,10 +49,10 @@ export const DataExportPopup = ({
   const { getAppletPrivateKey } = useEncryptionStorage();
   const privateKeyRef = useRef<null | number[]>(null);
 
-  const handleExportPopupClose = useCallback(() => {
-    setChosenAppletData?.(null);
-    setPopupVisible(false);
-  }, [setChosenAppletData, setPopupVisible]);
+  const handleExportPopupClose = useCallback(
+    () => providedCloseHandler?.(),
+    [providedCloseHandler],
+  );
 
   const { dataIsExporting, setDataIsExporting, setExportDataQueue, limitRef, finishedPagesRef } =
     useMultipleDecryptWorkers({
@@ -137,41 +138,6 @@ export const DataExportPopup = ({
   const percentagesBuffer = Math.min(100, percentages + BUFFER_PERCENTAGE);
   const showExportPercentages = limitRef.current > 1;
 
-  const renderDataExportContent = () => {
-    if (dataIsExporting) {
-      return (
-        <>
-          <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-            {t('waitForRespondentDataDownload')}
-            {showExportPercentages && (
-              <>
-                <br />
-                <br />
-                {t('dataProcessing', {
-                  percentages,
-                })}
-              </>
-            )}
-          </StyledBodyLarge>
-          <StyledLinearProgress
-            variant={showExportPercentages ? 'buffer' : 'indeterminate'}
-            value={percentages}
-            valueBuffer={percentagesBuffer}
-          />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-          {t('selectAppletToExportRespondentsData')}
-        </StyledBodyLarge>
-        <AppletsSmallTable tableRows={tableRows} />
-      </>
-    );
-  };
-
   useEffect(() => {
     setActiveModal(showEnterPwdScreen ? Modals.PasswordCheck : Modals.DataExport);
   }, [showEnterPwdScreen]);
@@ -191,11 +157,29 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handleExportPopupClose}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText=""
           data-testid={dataTestid}
         >
-          <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
+          <StyledModalWrapper>
+            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+              {t('waitForRespondentDataDownload')}
+              {showExportPercentages && (
+                <>
+                  <br />
+                  <br />
+                  {t('dataProcessing', {
+                    percentages,
+                  })}
+                </>
+              )}
+            </StyledBodyLarge>
+            <StyledLinearProgress
+              variant={showExportPercentages ? 'buffer' : 'indeterminate'}
+              value={percentages}
+              valueBuffer={percentagesBuffer}
+            />
+          </StyledModalWrapper>
         </Modal>
       );
     case Modals.PasswordCheck:
@@ -225,7 +209,7 @@ export const DataExportPopup = ({
           open={popupVisible}
           onClose={handleExportPopupClose}
           onSubmit={handleRetry}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText={t('retry')}
           hasSecondBtn
           submitBtnColor="error"

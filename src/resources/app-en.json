@@ -461,7 +461,16 @@
   "current": "current ({{version}})",
   "daily": "Daily",
   "dashboard": "Dashboard",
-  "dataExport": "Data Export",
+  "dataExport": {
+    "title": "Data Export",
+    "supplementaryFiles": {
+      "description": "Supplementary files:",
+      "includes": {
+        "scheduleHistory": "Include schedule history",
+        "flowHistory": "Include activity flow history"
+      }
+    }
+  },
   "dataRetention": "Data retention",
   "dataRetentionUpdate": "Data Retention Setting Update",
   "datavizNotSupportedForPerformanceTasks": "Data visualization for Performance Tasks not supported",

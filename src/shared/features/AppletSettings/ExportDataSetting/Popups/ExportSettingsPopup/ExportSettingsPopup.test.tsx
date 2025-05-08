@@ -54,6 +54,7 @@ const commonProps = {
   onExport: mockOnExport,
   minDate: date,
   getMaxDate: () => getNormalizedTimezoneDate(new Date().toString()),
+  appletName: mockedApplet.displayName,
 };
 
 describe('ExportSettingsPopup', () => {
