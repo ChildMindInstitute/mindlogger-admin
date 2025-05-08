@@ -28,6 +28,7 @@ export const ExportDataSetting = ({
   chosenAppletData,
   isAppletSetting,
   supportedSupplementaryFiles,
+  filters,
 }: ExportDataSettingProps) => {
   const { featureFlags } = useFeatureFlags();
   const { result } = applet.useAppletData() ?? {};
@@ -122,6 +123,7 @@ export const ExportDataSetting = ({
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
           data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
+          filters={filters}
           handlePopupClose={() => {
             resetDefaultValues();
             onDataExportPopupClose?.();
