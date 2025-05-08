@@ -1,5 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -7,14 +8,18 @@ import * as useDatavizFiltersHook from '../../hooks/useDatavizFilters';
 import { CompletedChart } from './CompletedChart';
 import { CompletedChartProps } from './CompletedChart.types';
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => vi.fn(),
-  }),
-}));
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
 
-jest.mock('chartjs-adapter-date-fns', () => ({}));
+  return {
+    ...actual,
+    useFormContext: () => ({
+      watch: () => vi.fn(),
+    }),
+  };
+});
+
+vi.mock('chartjs-adapter-date-fns', () => ({}));
 
 const dataTestId = 'completed-chart';
 

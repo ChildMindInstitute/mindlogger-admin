@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { addDays, format } from 'date-fns';
 import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -136,12 +137,12 @@ describe('ExportSettingsPopup', () => {
   });
 
   describe('should update the toDate for every date range export', () => {
-    let spy: jest.SpyInstance<Date>;
+    let spy: { mockImplementation: (implementation: () => Date) => void; mockRestore: () => void };
     let mockDate: (dateString: string) => void;
 
     beforeEach(() => {
       const origDateConstructor = global.Date;
-      spy = vi.spyOn(global, 'Date');
+      spy = vi.spyOn(global, 'Date') as unknown as typeof spy;
       mockDate = (dateString) => spy.mockImplementation(() => new origDateConstructor(dateString));
     });
 

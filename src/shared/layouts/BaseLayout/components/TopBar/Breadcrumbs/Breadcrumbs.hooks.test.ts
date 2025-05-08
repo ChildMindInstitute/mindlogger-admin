@@ -148,15 +148,25 @@ const commonDataVizTest = ({ home, applet, user, viewData }) => {
   });
 };
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: vi.fn(),
-}));
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  ...jest.requireActual('shared/hooks/useFeatureFlags'),
-  useFeatureFlags: vi.fn(),
-}));
+  return {
+    ...actual,
+    useFormContext: vi.fn(),
+  };
+});
+
+vi.mock('shared/hooks/useFeatureFlags', async () => {
+  const actual = await vi.importActual('shared/hooks/useFeatureFlags');
+
+  return {
+    ...actual,
+    useFeatureFlags: () => ({
+      isFeatureEnabled: () => true,
+    }),
+  };
+});
 
 const testCommonBuilderCrumbs = ({ dashboard, applet, activities, expectedAppletProp }) => {
   expect(dashboard).toEqual(expectedDashboard);

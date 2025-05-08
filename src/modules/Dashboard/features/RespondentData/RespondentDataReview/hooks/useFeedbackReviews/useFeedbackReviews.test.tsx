@@ -15,22 +15,22 @@ import { RespondentDataReviewContext } from '../../RespondentDataReview.context'
 import { useFeedbackReviewsData } from '../useFeedbackReviewsData/useFeedbackReviewsData';
 import { useFeedbackReviews } from './useFeedbackReviews';
 
-jest.mock('react-hook-form', () => ({
+vi.mock('react-hook-form', () => ({
   useFormContext: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useAsync', () => ({
+vi.mock('shared/hooks/useAsync', () => ({
   useAsync: vi.fn(),
 }));
 
-jest.mock('modules/Dashboard/api', () => ({
+vi.mock('modules/Dashboard/api', () => ({
   getReviewsApi: vi.fn(),
   getFlowReviewsApi: vi.fn(),
   deleteReviewApi: vi.fn(),
   deleteFlowReviewApi: vi.fn(),
 }));
 
-jest.mock('../useFeedbackReviewsData/useFeedbackReviewsData', () => ({
+vi.mock('../useFeedbackReviewsData/useFeedbackReviewsData', () => ({
   useFeedbackReviewsData: vi.fn(),
 }));
 

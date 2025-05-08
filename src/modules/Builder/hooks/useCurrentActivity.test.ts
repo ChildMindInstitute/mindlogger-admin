@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { mockedAppletData } from 'shared/mock';
 
@@ -26,14 +27,13 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockedWatch(),
+vi.mock('./useCustomFormContext', () => ({
+  useCustomFormContext: () => ({
+    watch: mockedWatch,
   }),
 }));
 
