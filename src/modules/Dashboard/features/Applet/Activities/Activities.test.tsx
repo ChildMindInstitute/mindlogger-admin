@@ -115,7 +115,7 @@ describe('Dashboard > Applet > Activities screen', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render empty component', async () => {

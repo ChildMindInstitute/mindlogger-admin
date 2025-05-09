@@ -30,7 +30,7 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('Short text Item is rendered correctly', () => {

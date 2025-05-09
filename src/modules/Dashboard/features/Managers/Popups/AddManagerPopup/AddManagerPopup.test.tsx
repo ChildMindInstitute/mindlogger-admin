@@ -59,7 +59,7 @@ const mockSubmitValues = {
 
 describe('AddManagerPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should submit the form and show success banner', async () => {

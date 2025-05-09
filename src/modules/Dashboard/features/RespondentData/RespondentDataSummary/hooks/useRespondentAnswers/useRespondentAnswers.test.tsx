@@ -275,7 +275,7 @@ describe('useRespondentAnswers', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should fetch answers and update form values on successful API call (no identifier is chosen)', async () => {

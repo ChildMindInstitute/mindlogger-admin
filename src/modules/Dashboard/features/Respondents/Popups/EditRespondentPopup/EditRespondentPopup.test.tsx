@@ -31,7 +31,7 @@ const commonProps = {
 
 describe('EditRespondentPopup component tests', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('EditRespondentPopup should appear with respondentSecretId, respondentNickname, subjectTag', async () => {

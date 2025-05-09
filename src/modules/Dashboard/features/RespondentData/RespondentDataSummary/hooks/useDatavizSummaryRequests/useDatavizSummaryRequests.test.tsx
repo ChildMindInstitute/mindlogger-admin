@@ -98,7 +98,7 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   const testApiCallsAndSetValues = () => {

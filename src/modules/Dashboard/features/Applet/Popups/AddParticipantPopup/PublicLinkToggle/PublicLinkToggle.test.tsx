@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -43,7 +44,7 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It renders in the correct state', async () => {
-      jest.runAllTicks();
+      vi.runAllTicks();
 
       await waitFor(() => {
         expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
@@ -61,7 +62,7 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It calls `onConfirmPublicLink` with the appropriate parameter', async () => {
-      jest.runAllTicks();
+      vi.runAllTicks();
 
       await waitFor(async () => {
         const createBtn = screen.getByTestId(`${testId}-confirm-btn`);
@@ -81,7 +82,7 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It renders in the correct state', async () => {
-      jest.runAllTicks();
+      vi.runAllTicks();
 
       await waitFor(() => {
         expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
@@ -100,7 +101,7 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It calls `onConfirmPublicLink` with the appropriate parameter', async () => {
-      jest.runAllTicks();
+      vi.runAllTicks();
 
       await waitFor(async () => {
         const createBtn = screen.getByTestId(`${testId}-confirm-btn`);
@@ -112,7 +113,7 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It allows copying the returned value to the clipboard', async () => {
-      jest.runAllTicks();
+      vi.runAllTicks();
       const user = userEvent.setup();
 
       await waitFor(async () => {

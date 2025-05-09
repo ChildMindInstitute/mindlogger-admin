@@ -65,7 +65,7 @@ const mockedRespondents = {
 
 describe('EditAccessPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('renders modal with correct content', () => {
