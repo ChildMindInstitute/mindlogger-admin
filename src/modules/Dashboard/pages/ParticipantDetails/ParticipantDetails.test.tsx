@@ -58,7 +58,7 @@ describe('Participant Details page', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should display a loading indicator while both applet and participant data is loading', async () => {

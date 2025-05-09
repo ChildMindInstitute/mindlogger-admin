@@ -181,7 +181,7 @@ describe('Report component', () => {
     vi.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: vi.fn() });
   });
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('renders Report correctly with data', async () => {

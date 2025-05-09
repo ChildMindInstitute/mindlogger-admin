@@ -21,7 +21,7 @@ const mockFlags = {
 describe('exportDataSucceed', () => {
   beforeAll(() => {
     vi.useFakeTimers();
-    jest.setSystemTime(new Date('2000-01-01'));
+    vi.setSystemTime(new Date('2000-01-01'));
   });
   beforeEach(() => {
     vi.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
@@ -38,7 +38,7 @@ describe('exportDataSucceed', () => {
     vi.clearAllMocks();
   });
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   const mockedGetDecryptedAnswers = vi.fn();

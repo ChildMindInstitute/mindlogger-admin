@@ -143,7 +143,7 @@ describe('Activity Items Flow', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test.each`

@@ -82,7 +82,7 @@ describe('Calendar Component', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('renders calendar component with toolbar, month view visible, and provided event', () => {

@@ -112,7 +112,7 @@ describe('useSaveAndPublishSetup hook', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     mockAxios.reset();
   });
 

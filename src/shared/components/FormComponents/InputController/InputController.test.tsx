@@ -41,7 +41,7 @@ const InputControllerTest = ({ mode, ...props }: InputControllerTestProps) => {
 
 describe('InputController component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render component', () => {

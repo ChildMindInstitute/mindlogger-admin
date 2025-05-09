@@ -25,10 +25,10 @@ describe('getReportName', () => {
   describe('getReportZipName', () => {
     beforeAll(() => {
       vi.useFakeTimers();
-      jest.setSystemTime(new Date('2000-01-01'));
+      vi.setSystemTime(new Date('2000-01-01'));
     });
     afterAll(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
     test.each`
       name                | suffix          | expected                                            | description

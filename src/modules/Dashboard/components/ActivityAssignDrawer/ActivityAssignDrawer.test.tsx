@@ -1,6 +1,7 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import {
@@ -177,7 +178,7 @@ describe('ActivityAssignDrawer', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('renders correctly', () => {
@@ -207,7 +208,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityItems = screen.getAllByTestId(`${dataTestId}-activities-list-activity-item`);
       expect(activityItems).toHaveLength(mockedAppletData.activities.length);
@@ -228,7 +229,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityCheckbox = screen.getByTestId(
         `${dataTestId}-activities-list-activity-checkbox-${mockedAppletData.activities[0].id}`,
@@ -249,7 +250,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const selectAll = screen.getByText('Select All');
 
@@ -289,7 +290,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       checkAssignment(`${mockedOwnerParticipant.nicknames[0]} (Team)`, '');
 
@@ -312,7 +313,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedLimitedParticipant.details[0].subjectTag}`);
       checkAssignment(
@@ -342,7 +343,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`);
       checkAssignment(
@@ -371,7 +372,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -380,7 +381,7 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
@@ -399,7 +400,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -414,7 +415,7 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
@@ -437,7 +438,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -446,7 +447,7 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'All of the requested assignments already exist. Please create new unique assignments.',
@@ -471,7 +472,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -486,7 +487,7 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => expect(submitButton).not.toBeEnabled());
     expect(await screen.findByText('Review')).not.toBeVisible();
 
@@ -523,7 +524,7 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -538,19 +539,19 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
 
     fireEvent.click(screen.getByText('Send Emails'));
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Assigning to participants')).toBeVisible();
     });
 
-    jest.advanceTimersToNextTimer();
+    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Emails have been sent')).toBeVisible();
 

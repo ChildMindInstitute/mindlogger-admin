@@ -52,7 +52,7 @@ describe('ItemTypeTooltip', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test.each(Object.entries(tooltipTexts))('renders %s component', (uiType, expectedText) => {

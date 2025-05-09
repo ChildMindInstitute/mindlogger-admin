@@ -111,7 +111,7 @@ describe('ActivityUnassignDrawer', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('when there are multiple assignments', () => {

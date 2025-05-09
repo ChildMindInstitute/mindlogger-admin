@@ -195,7 +195,7 @@ describe('AvailabilityTab component', () => {
     const user = userEvent.setup({ delay: null });
 
     vi.useFakeTimers();
-    jest.setSystemTime(new Date('03-14-2024'));
+    vi.setSystemTime(new Date('03-14-2024'));
 
     await act(async () => {
       renderWithProviders(<FormWrapper {...props} />);
@@ -223,6 +223,6 @@ describe('AvailabilityTab component', () => {
     expect(startDateContainer.querySelector('input')).toHaveValue('21 Mar 2024');
     expect(endDateContainer.querySelector('input')).toHaveValue('22 Mar 2024');
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });
