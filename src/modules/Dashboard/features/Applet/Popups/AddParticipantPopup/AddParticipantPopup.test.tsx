@@ -37,7 +37,7 @@ const testValues = {
 
 describe('AddParticipantPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('popup has buttons according to the account type', async () => {

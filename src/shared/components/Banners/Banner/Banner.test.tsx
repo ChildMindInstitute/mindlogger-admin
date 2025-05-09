@@ -17,7 +17,7 @@ jest.mock('shared/hooks/useWindowFocus', () => ({
 
 describe('Banner', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render component', () => {

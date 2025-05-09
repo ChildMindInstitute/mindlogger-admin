@@ -52,7 +52,7 @@ describe('Extensions.hooks', () => {
   };
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should return default result', () => {

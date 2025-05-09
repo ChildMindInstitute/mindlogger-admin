@@ -108,7 +108,7 @@ describe('Participants component tests', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render empty table', async () => {

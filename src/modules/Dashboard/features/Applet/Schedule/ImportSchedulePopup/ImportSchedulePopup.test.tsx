@@ -42,7 +42,7 @@ describe('ImportSchedulePopup', () => {
   }));
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     vi.restoreAllMocks();
   });
 

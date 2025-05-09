@@ -38,7 +38,7 @@ describe('useItemContent', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render options for SingleSelection response type', () => {

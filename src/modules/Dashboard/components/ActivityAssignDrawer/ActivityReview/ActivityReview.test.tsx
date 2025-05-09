@@ -172,7 +172,7 @@ describe('ActivityReview component', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('renders activity and assignments', async () => {

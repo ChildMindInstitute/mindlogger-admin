@@ -41,7 +41,7 @@ const mockProps: AssignmentsTableProps = {
 
 describe('AssignmentsTable', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should render the assignments table', () => {

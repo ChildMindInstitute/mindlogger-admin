@@ -77,7 +77,7 @@ describe('verifyReportServer', () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should call fetch with correct parameters', async () => {
@@ -112,7 +112,7 @@ describe('setPasswordReportServer', () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should call fetch with correct parameters', async () => {

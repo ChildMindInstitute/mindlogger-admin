@@ -538,7 +538,7 @@ describe('usePreparedEvents hook', () => {
   }));
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should return default result if no appletData is given', () => {

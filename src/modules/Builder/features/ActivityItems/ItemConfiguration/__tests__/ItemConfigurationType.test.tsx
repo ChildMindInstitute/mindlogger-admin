@@ -61,7 +61,7 @@ describe('ItemConfiguration: Item Type', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('is rendered with correct item types, groups and "mobile only"', () => {
