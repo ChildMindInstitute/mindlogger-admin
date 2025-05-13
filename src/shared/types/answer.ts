@@ -111,6 +111,7 @@ export type ExportAnswer = {
     height: number;
   };
   scheduledEventId?: null | string;
+  scheduledEventHistoryId: null | string;
   tzOffset?: null | number;
   submitId: string;
 };

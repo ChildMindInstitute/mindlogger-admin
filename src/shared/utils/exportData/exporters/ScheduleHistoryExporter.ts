@@ -24,6 +24,7 @@ export type ScheduleHistoryExportRow = {
   schedule_type: ScheduleHistoryData['eventType'];
   schedule_version: string;
   schedule_version_created_timestamp: string;
+  schedule_applet_link_timestamp: string;
   schedule_updated_by: string;
   activity_or_flow_id: string;
   activity_or_flow_name: string;
@@ -282,6 +283,7 @@ export class ScheduleHistoryExporter extends DataExporter<
             schedule_type: schedule.eventType,
             schedule_version: schedule.eventVersion,
             schedule_version_created_timestamp: schedule.eventVersionCreatedAt,
+            schedule_applet_link_timestamp: schedule.linkedWithAppletAt,
             schedule_updated_by: schedule.eventUpdatedBy,
             activity_or_flow_id: schedule.activityOrFlowId,
             activity_or_flow_name: schedule.activityOrFlowName,
@@ -700,6 +702,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       'schedule_type',
       'schedule_version',
       'schedule_version_created_timestamp',
+      'schedule_applet_link_timestamp',
       'schedule_updated_by',
       'activity_or_flow_id',
       'activity_or_flow_name',
