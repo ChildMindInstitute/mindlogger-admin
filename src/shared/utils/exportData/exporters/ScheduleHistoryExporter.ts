@@ -13,6 +13,7 @@ import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/expor
 import { groupBy } from 'shared/utils/array';
 import { Response } from 'shared/api';
 import { store } from 'redux/store';
+import { DEFAULT_API_RESULTS_PER_PAGE } from 'modules/Dashboard/api/api.const';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -131,7 +132,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       const data = await store
         .dispatch(
           apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-            params: { ownerId: this.ownerId, appletId, page },
+            params: { ownerId: this.ownerId, appletId, page, limit: DEFAULT_API_RESULTS_PER_PAGE },
           }),
         )
         .unwrap();
@@ -404,10 +405,22 @@ export class ScheduleHistoryExporter extends DataExporter<
                   // again
                   const deletedAfterToday = deletionDate.isValid && deletionDate > endOfTheDay;
 
+                  const supersededBeforeToday = appletVersionGroupedSchedules.some(
+                    (nextScheduleVersion) =>
+                      competition.eventId === nextScheduleVersion.eventId &&
+                      competition.eventVersion !== nextScheduleVersion.eventVersion &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt, {
+                        zone: 'UTC',
+                      }) <= startOfTheDay &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt) >
+                        DateTime.fromISO(competition.eventVersionCreatedAt),
+                  );
+
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedAfterToday)
+                    (notDeleted || deletedAfterToday) &&
+                    !supersededBeforeToday
                   );
                 }).length === 0
               );
