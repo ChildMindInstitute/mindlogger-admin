@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { DateTime, Interval } from 'luxon';
 
-import { DEFAULT_ROWS_PER_PAGE } from 'modules/Dashboard/api/api.const';
+import { DEFAULT_API_RESULTS_PER_PAGE } from 'modules/Dashboard/api/api.const';
 import { Response } from 'shared/api';
 import { exportTemplate } from 'shared/utils/exportTemplate';
 
@@ -29,7 +29,10 @@ export type DataExporterOptions = {
 export abstract class DataExporter<D, O extends DataExporterOptions = DataExporterOptions> {
   protected constructor(public fileNamePrefix: string) {}
 
-  protected getExportPageAmount(total: number, limitPerPage = DEFAULT_ROWS_PER_PAGE): number {
+  protected getExportPageAmount(
+    total: number,
+    limitPerPage = DEFAULT_API_RESULTS_PER_PAGE,
+  ): number {
     return Math.ceil(total / limitPerPage);
   }
 
@@ -43,7 +46,7 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
   async requestAllPagesConcurrently<T>(
     asyncRequest: (page: number) => Promise<AxiosResponse<Response<T>>>,
     concurrentLimit: number,
-    limitPerPage: number = DEFAULT_ROWS_PER_PAGE,
+    limitPerPage: number = DEFAULT_API_RESULTS_PER_PAGE,
   ): Promise<T[]> {
     const results: T[] = [];
 
@@ -81,7 +84,7 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
 
   protected async *requestAllPages<T>(
     asyncRequest: (page: number) => Promise<AxiosResponse<Response<T>>>,
-    limitPerPage: number = DEFAULT_ROWS_PER_PAGE,
+    limitPerPage: number = DEFAULT_API_RESULTS_PER_PAGE,
   ): AsyncGenerator<T[]> {
     const axiosResponse = await asyncRequest(1);
 
