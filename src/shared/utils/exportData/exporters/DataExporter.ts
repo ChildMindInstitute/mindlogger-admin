@@ -29,13 +29,21 @@ export type DataExporterOptions = {
 export abstract class DataExporter<D, O extends DataExporterOptions = DataExporterOptions> {
   protected constructor(public fileNamePrefix: string) {}
 
-  protected getExportPageAmount(total: number) {
-    return Math.ceil(total / DEFAULT_ROWS_PER_PAGE);
+  protected getExportPageAmount(total: number, limitPerPage = DEFAULT_ROWS_PER_PAGE): number {
+    return Math.ceil(total / limitPerPage);
   }
 
+  /**
+   * A helper function for fetching all pages of a paginated response from the API
+   * @param asyncRequest The API request that fetches a single page of data
+   * @param concurrentLimit How many API requests to make concurrently
+   * @param limitPerPage How many results to fetch per page. If you pass a different `limit` query parameter
+   *                    to the API than `DEFAULT_ROWS_PER_PAGE`, you should pass it here
+   */
   async requestAllPagesConcurrently<T>(
     asyncRequest: (page: number) => Promise<AxiosResponse<Response<T>>>,
     concurrentLimit: number,
+    limitPerPage: number = DEFAULT_ROWS_PER_PAGE,
   ): Promise<T[]> {
     const results: T[] = [];
 
@@ -44,7 +52,7 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
     const data = firstResponse.data.result;
     results.push(...data);
 
-    const totalPages = this.getExportPageAmount(firstResponse.data.count);
+    const totalPages = this.getExportPageAmount(firstResponse.data.count, limitPerPage);
 
     const promises: Array<Promise<AxiosResponse<Response<T>>>> = [];
     let page = 2;
@@ -73,10 +81,11 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
 
   protected async *requestAllPages<T>(
     asyncRequest: (page: number) => Promise<AxiosResponse<Response<T>>>,
+    limitPerPage: number = DEFAULT_ROWS_PER_PAGE,
   ): AsyncGenerator<T[]> {
     const axiosResponse = await asyncRequest(1);
 
-    const totalPages = this.getExportPageAmount(axiosResponse.data.count);
+    const totalPages = this.getExportPageAmount(axiosResponse.data.count, limitPerPage);
     yield axiosResponse.data.result;
 
     if (totalPages > 1) {
