@@ -15,7 +15,7 @@ Running the app:
 
 ### 1. Prerequisites
 
-- NodeJS `18` or higher, recommend using `asdf` or `nvm` to manage local node version
+- NodeJS `22` or higher, recommend using `asdf` or `nvm` to manage local node version
 - [Backend](https://github.com/ChildMindInstitute/mindlogger-backend-refactor) project running locally or accessible in a test environment
   - If running locally, ensure that `http://localhost:3000` has been added to the BE's `CORS__ALLOW_ORIGINS` environment variable
 - Configured [environment variables](#environment-variables):\
