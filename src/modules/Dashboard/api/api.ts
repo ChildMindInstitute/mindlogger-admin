@@ -87,7 +87,7 @@ import {
   FlowItemHistoryParams,
   FlowItemHistoryData,
 } from './api.types';
-import { DEFAULT_ROWS_PER_PAGE } from './api.const';
+import { DEFAULT_API_RESULTS_PER_PAGE } from './api.const';
 import { SubjectDetailsWithDataAccess } from '../types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -801,7 +801,7 @@ export const getAppletVersionChangesApi = (
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
 export const getExportDataApi = (
-  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ExportData,
+  { appletId, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE, ...rest }: ExportData,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<ExportDataResult>>(`/answers/applet/${appletId}/data`, {
@@ -923,7 +923,7 @@ export const getTargetSubjectsByRespondentApi = (
   });
 
 export const getScheduleHistory = (
-  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ScheduleHistoryParams,
+  { appletId, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE, ...rest }: ScheduleHistoryParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<ScheduleHistoryData>>(`/applets/${appletId}/events/history`, {
@@ -942,7 +942,7 @@ export const getDeviceScheduleHistory = (
   {
     appletId,
     page = 1,
-    limit = DEFAULT_ROWS_PER_PAGE,
+    limit = DEFAULT_API_RESULTS_PER_PAGE,
     ...rest
   }: Omit<ScheduleHistoryParams, 'subjectIds'>,
   signal?: AbortSignal,
@@ -963,7 +963,7 @@ export const getDeviceScheduleHistory = (
   );
 
 export const getFlowItemHistory = (
-  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: FlowItemHistoryParams,
+  { appletId, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE, ...rest }: FlowItemHistoryParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<FlowItemHistoryData>>(`/applets/${appletId}/flows/item_history`, {

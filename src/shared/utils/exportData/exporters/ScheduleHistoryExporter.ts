@@ -13,6 +13,7 @@ import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/expor
 import { groupBy } from 'shared/utils/array';
 import { Response } from 'shared/api';
 import { store } from 'redux/store';
+import { DEFAULT_API_RESULTS_PER_PAGE } from 'modules/Dashboard/api/api.const';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -23,6 +24,7 @@ export type ScheduleHistoryExportRow = {
   schedule_type: ScheduleHistoryData['eventType'];
   schedule_version: string;
   schedule_version_created_timestamp: string;
+  schedule_applet_link_timestamp: string;
   schedule_updated_by: string;
   activity_or_flow_id: string;
   activity_or_flow_name: string;
@@ -130,7 +132,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       const data = await store
         .dispatch(
           apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-            params: { ownerId: this.ownerId, appletId, page },
+            params: { ownerId: this.ownerId, appletId, page, limit: DEFAULT_API_RESULTS_PER_PAGE },
           }),
         )
         .unwrap();
@@ -281,6 +283,7 @@ export class ScheduleHistoryExporter extends DataExporter<
             schedule_type: schedule.eventType,
             schedule_version: schedule.eventVersion,
             schedule_version_created_timestamp: schedule.eventVersionCreatedAt,
+            schedule_applet_link_timestamp: schedule.linkedWithAppletAt,
             schedule_updated_by: schedule.eventUpdatedBy,
             activity_or_flow_id: schedule.activityOrFlowId,
             activity_or_flow_name: schedule.activityOrFlowName,
@@ -402,10 +405,22 @@ export class ScheduleHistoryExporter extends DataExporter<
                   // again
                   const deletedAfterToday = deletionDate.isValid && deletionDate > endOfTheDay;
 
+                  const supersededBeforeToday = appletVersionGroupedSchedules.some(
+                    (nextScheduleVersion) =>
+                      competition.eventId === nextScheduleVersion.eventId &&
+                      competition.eventVersion !== nextScheduleVersion.eventVersion &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt, {
+                        zone: 'UTC',
+                      }) <= startOfTheDay &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt) >
+                        DateTime.fromISO(competition.eventVersionCreatedAt),
+                  );
+
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedAfterToday)
+                    (notDeleted || deletedAfterToday) &&
+                    !supersededBeforeToday
                   );
                 }).length === 0
               );
@@ -687,6 +702,7 @@ export class ScheduleHistoryExporter extends DataExporter<
       'schedule_type',
       'schedule_version',
       'schedule_version_created_timestamp',
+      'schedule_applet_link_timestamp',
       'schedule_updated_by',
       'activity_or_flow_id',
       'activity_or_flow_name',

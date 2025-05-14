@@ -2080,6 +2080,7 @@ export const mockedParsedAnswers = [
         items: mockedItemsOfParsedAnswers,
         activityName: 'New Activity#Single_Multi_Slider - Assessment',
         subscaleSetting: null,
+        scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
       },
       {
         activityItem: {
@@ -2182,6 +2183,7 @@ export const mockedParsedAnswers = [
         items: mockedItemsOfParsedAnswers,
         activityName: 'New Activity#Single_Multi_Slider - Assessment',
         subscaleSetting: null,
+        scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
       },
       {
         activityItem: {
@@ -2255,6 +2257,7 @@ export const mockedParsedAnswers = [
         items: mockedItemsOfParsedAnswers,
         activityName: 'New Activity#Single_Multi_Slider - Assessment',
         subscaleSetting: null,
+        scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
       },
     ],
     decryptedEvents: [],
@@ -2716,6 +2719,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
     reviewedFlowSubmitId: null,
+    scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
   },
   {
     activityItem: {
@@ -2804,6 +2808,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
     reviewedFlowSubmitId: null,
+    scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
   },
   {
     activityItem: {
@@ -2872,6 +2877,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
     reviewedFlowSubmitId: null,
+    scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
   },
   {
     activityItem: {
@@ -2953,6 +2959,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
     reviewedFlowSubmitId: null,
+    scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
   },
   {
     activityItem: {
@@ -3008,6 +3015,7 @@ export const mockedDecryptedAnswersWithSubscales: DecryptedAnswerData[] = [
     activityName: 'New Activity#SimpleItems-3 (No skippable)',
     subscaleSetting: mockedSubscaleSetting,
     reviewedFlowSubmitId: null,
+    scheduledEventHistoryId: 'a76b16b3-35e8-4917-85dc-0a1afd76cd31_20250501-1',
   },
 ];
 
