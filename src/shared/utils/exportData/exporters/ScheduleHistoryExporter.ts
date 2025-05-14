@@ -132,7 +132,13 @@ export class ScheduleHistoryExporter extends DataExporter<
       const data = await store
         .dispatch(
           apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-            params: { ownerId: this.ownerId, appletId, page, limit: DEFAULT_API_RESULTS_PER_PAGE },
+            params: {
+              ownerId: this.ownerId,
+              includeSoftDeletedSubjects: true,
+              appletId,
+              page,
+              limit: DEFAULT_API_RESULTS_PER_PAGE,
+            },
           }),
         )
         .unwrap();
@@ -226,7 +232,8 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     for (let i = days.length - 1; i >= 0; i--) {
       const day = days[i];
-      const utcEndOfDay = DateTime.fromISO(`${day}T00:00:00`, { zone: 'UTC' }).endOf('day');
+      const utcStartOfDay = DateTime.fromISO(`${day}T00:00:00`, { zone: 'UTC' });
+      const utcEndOfDay = utcStartOfDay.endOf('day');
       for (const participant of fullAccountParticipants) {
         const participantDetail = participant.details.find(
           (detail) => detail.appletId === appletId,
@@ -239,6 +246,16 @@ export class ScheduleHistoryExporter extends DataExporter<
             if (invitationAcceptedAt > utcEndOfDay) {
               // This user hasn't been added to the applet yet at this point in history,
               // so let's skip them for now
+              continue;
+            }
+          }
+
+          if (participantDetail.subjectIsDeleted) {
+            const deletionDate = DateTime.fromISO(participantDetail.subjectUpdatedAt, {
+              zone: 'UTC',
+            });
+            if (deletionDate < utcStartOfDay) {
+              // This participant has been removed from the applet at this point, so let's skip them
               continue;
             }
           }

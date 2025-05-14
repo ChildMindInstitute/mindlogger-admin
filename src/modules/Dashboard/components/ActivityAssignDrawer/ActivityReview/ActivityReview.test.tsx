@@ -61,6 +61,7 @@ const mockedOwnerRespondent: Participant = {
       subjectFirstName: 'John',
       subjectLastName: 'Doe',
       subjectCreatedAt: '2023-09-26T12:11:46.162083',
+      subjectIsDeleted: false,
       invitation: null,
       roles: [Roles.Owner, Roles.Respondent],
     },
