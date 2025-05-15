@@ -36,6 +36,7 @@ export type WorkspaceManagersResponse = {
 export type GetWorkspaceRespondentsParams = GetAppletsParams & {
   params: {
     userId?: string;
+    includeSoftDeletedSubjects?: boolean;
   };
 };
 

@@ -100,7 +100,7 @@ export const mockedOwnerSubjectWithDataAccess: SubjectDetailsWithDataAccess = {
   teamMemberCanViewData: true,
 };
 
-export const mockedOwnerParticipantDetail = {
+export const mockedOwnerParticipantDetail: ParticipantDetail = {
   appletId: mockedApplet.id,
   appletDisplayName: mockedApplet.displayName,
   appletImage: '',
@@ -114,6 +114,8 @@ export const mockedOwnerParticipantDetail = {
   subjectFirstName: mockedOwnerSubject.firstName,
   subjectLastName: mockedOwnerSubject.lastName,
   subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  subjectUpdatedAt: '2023-09-26T12:11:46.162083',
+  subjectIsDeleted: false,
   invitation: null,
   roles: [Roles.Owner, Roles.Respondent],
 };
@@ -251,6 +253,8 @@ export const mockedFullParticipant1Details: ParticipantDetail = {
   subjectFirstName: mockedFullSubject1.firstName,
   subjectLastName: mockedFullSubject1.lastName,
   subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  subjectUpdatedAt: '2023-09-26T12:11:46.162083',
+  subjectIsDeleted: false,
   invitation: null,
   roles: [Roles.Respondent],
 };
@@ -294,6 +298,8 @@ export const mockedFullParticipant2Details: ParticipantDetail = {
   subjectFirstName: 'John',
   subjectLastName: 'Doe',
   subjectCreatedAt: '2023-09-26T12:11:46.162083',
+  subjectUpdatedAt: '2023-09-26T12:11:46.162083',
+  subjectIsDeleted: false,
   invitation: null,
   roles: [Roles.Respondent],
 };
@@ -348,6 +354,8 @@ export const mockedLimitedParticipantDetails: ParticipantDetail = {
   subjectFirstName: mockedLimitedSubject.firstName,
   subjectLastName: mockedLimitedSubject.lastName,
   subjectCreatedAt: '2024-07-12T13:07:25.455726',
+  subjectUpdatedAt: '2024-07-12T13:07:25.455726',
+  subjectIsDeleted: false,
   invitation: null,
   roles: [],
 };

@@ -44,6 +44,8 @@ export type ParticipantDetail = {
   subjectFirstName: string;
   subjectLastName: string;
   subjectCreatedAt: string;
+  subjectUpdatedAt: string;
+  subjectIsDeleted: boolean;
   roles: Roles[];
 
   /**
