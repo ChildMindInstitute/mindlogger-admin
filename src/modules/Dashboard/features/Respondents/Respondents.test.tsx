@@ -1,5 +1,6 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -165,11 +166,10 @@ describe('Respondents component tests', () => {
 
   describe('should appear popup when click on respondent action for ', () => {
     test.each`
-      actionDataTestId                         | popupDataTestId                                       | description
-      ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}        | ${'view calendar'}
-      ${'dashboard-respondents-export-data'}   | ${'dashboard-respondents-export-data-popup-password'} | ${'export data'}
-      ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
-      ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'}        | ${'remove access'}
+      actionDataTestId                         | popupDataTestId                                | description
+      ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'} | ${'view calendar'}
+      ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}          | ${'edit respondents'}
+      ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'} | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
       mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
@@ -181,6 +181,24 @@ describe('Respondents component tests', () => {
       await waitFor(() => {
         expect(screen.getByTestId(popupDataTestId)).toBeInTheDocument();
       });
+    });
+  });
+
+  test('data export popup should appear when the respondent action and applet are selected', async () => {
+    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    renderWithProviders(<Respondents />, { preloadedState, route, routePath });
+
+    await clickActionDots();
+    const exportDataAction = await waitFor(() =>
+      screen.getByTestId('dashboard-respondents-export-data'),
+    );
+    await userEvent.click(exportDataAction);
+
+    const appletRow = await waitFor(() => screen.getByTestId('table-row-0'));
+    await userEvent.click(appletRow.children[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard-respondents-export-data-settings')).toBeInTheDocument();
     });
   });
 

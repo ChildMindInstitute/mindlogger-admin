@@ -455,12 +455,16 @@ describe('useAssignmentsTab hook', () => {
       await userEvent.click(screen.getByTestId(`${testId}-activity-actions-dots`));
       expect(screen.getByTestId(`${testId}-export`)).toBeVisible();
 
-      const exportDataButton = screen.getByTestId(`${testId}-export`);
+      const exportDataMenuItem = screen.getByTestId(`${testId}-export`);
 
       // Attempt to export data without encryption key
-      await userEvent.click(exportDataButton);
-      expect(screen.queryByTestId(`${testId}-export-modal`)).toBeNull();
-      expect(screen.queryByTestId(`${testId}-export-modal-password`)).toBeVisible();
+      await userEvent.click(exportDataMenuItem);
+      const exportDataDownloadButton = screen.getByTestId(
+        `${testId}-export-data-settings-download-button`,
+      );
+      await userEvent.click(exportDataDownloadButton);
+      expect(screen.queryByTestId(`${testId}-export-data-modal`)).toBeNull();
+      expect(screen.queryByTestId(`${testId}-export-data-modal-password`)).toBeVisible();
 
       // Attempt to view data with encryption key
       mockGetAppletPrivateKey.mockReturnValue('mockedPrivateKey');
@@ -472,8 +476,8 @@ describe('useAssignmentsTab hook', () => {
         />,
       );
 
-      expect(screen.queryByTestId(`${testId}-export-modal-password`)).toBeNull();
-      expect(screen.queryByTestId(`${testId}-export-modal`)).toBeVisible();
+      expect(screen.queryByTestId(`${testId}-export-data-modal-password`)).toBeNull();
+      expect(screen.queryByTestId(`${testId}-export-data-modal`)).toBeVisible();
     });
   });
 

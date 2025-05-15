@@ -1,7 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 
 import { Roles } from 'shared/consts';
-import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.const';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -35,12 +34,12 @@ describe('NavigationMenu/Actions', () => {
   });
 
   it('should render export settings modal if trigger is clicked', async () => {
-    renderWithProviders(<Actions isCompact={false} />, {
+    renderWithProviders(<Actions isCompact={false} data-testid={'actions'} />, {
       preloadedState: getPreloadedState(Roles.Manager),
     });
 
     fireEvent.click(screen.getByTestId(DATA_TESTID_ACTIONS_EXPORT_DATA));
 
-    expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument();
+    expect(screen.queryByTestId('actions-export-data-settings')).toBeInTheDocument();
   });
 });

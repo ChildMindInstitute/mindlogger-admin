@@ -289,10 +289,10 @@ describe('Participants component tests', () => {
 
   describe('popup should appear when click on participant action for ', () => {
     test.each`
-      actionDataTestId                        | popupDataTestId                                        | description
-      ${'dashboard-participants-edit'}        | ${'dashboard-respondents-edit-popup'}                  | ${'edit participants'}
-      ${'dashboard-participants-export-data'} | ${'dashboard-participants-export-data-popup-password'} | ${'export data'}
-      ${'dashboard-participants-remove'}      | ${'dashboard-respondents-remove-access-popup'}         | ${'remove participant'}
+      actionDataTestId                        | popupDataTestId                                  | description
+      ${'dashboard-participants-edit'}        | ${'dashboard-respondents-edit-popup'}            | ${'edit participants'}
+      ${'dashboard-participants-export-data'} | ${'dashboard-participants-export-data-settings'} | ${'export data'}
+      ${'dashboard-participants-remove'}      | ${'dashboard-respondents-remove-access-popup'}   | ${'remove participant'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
       mockGetRequestResponses({
         ...mockedResponses,

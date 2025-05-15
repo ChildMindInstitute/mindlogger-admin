@@ -12,6 +12,7 @@ const route = `/dashboard/${mockedAppletId}/respondents`;
 const routePath = page.appletRespondents;
 const chosenAppletData = {
   appletId: mockedAppletId,
+  createdAt: '2025-01-01T00:00:00',
   respondentSecretId: '1231222',
   respondentId: '1231256',
   respondentNickname: 'respondentNickname',

@@ -19,6 +19,7 @@ const chosenAppletDataMock = {
   respondentId: mockedFullParticipantId1,
   ownerId: mockedOwnerId,
   subjectId: mockedFullSubjectId1,
+  createdAt: mockedFullParticipant1.details[0].subjectCreatedAt,
 };
 
 const tableRowsMock = [

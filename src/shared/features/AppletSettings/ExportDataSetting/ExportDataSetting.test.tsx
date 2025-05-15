@@ -8,10 +8,6 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
 import { ExportDataSetting } from './ExportDataSetting';
-import {
-  DATA_TESTID_EXPORT_DATA_EXPORT_POPUP,
-  DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
-} from './ExportDataSetting.const';
 import { ExportDateType } from './ExportDataSetting.types';
 
 const createdDate = '2023-11-14T14:43:33.369902';
@@ -33,20 +29,26 @@ jest.mock('modules/Dashboard/api', () => ({
   getExportDataApi: (body: ExportData) => mockedExportDataApi(body),
 }));
 
+const dataTestId = 'export-data';
+
 describe('ExportDataSetting', () => {
-  it('should not render export settings model if isExportSettingsOpen is false', async () => {
+  it('should render nothing if isExportSettingsOpen is false', async () => {
     const mockOnClose = jest.fn();
 
     renderWithProviders(
-      <ExportDataSetting isExportSettingsOpen={false} onExportSettingsClose={mockOnClose} />,
+      <ExportDataSetting
+        isExportSettingsOpen={false}
+        onExportSettingsClose={mockOnClose}
+        data-testid={dataTestId}
+      />,
       {
         preloadedState,
       },
     );
 
     await waitFor(() => {
-      expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).not.toBeInTheDocument();
-      expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_EXPORT_POPUP)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${dataTestId}-settings`)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${dataTestId}-modal`)).not.toBeInTheDocument();
     });
   });
 
@@ -54,21 +56,21 @@ describe('ExportDataSetting', () => {
     const mockOnClose = jest.fn();
 
     renderWithProviders(
-      <ExportDataSetting isExportSettingsOpen onExportSettingsClose={mockOnClose} />,
+      <ExportDataSetting
+        isExportSettingsOpen
+        onExportSettingsClose={mockOnClose}
+        data-testid={dataTestId}
+      />,
       {
         preloadedState,
       },
     );
 
-    await waitFor(() =>
-      expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument());
 
     fireEvent.click(screen.getByText('Download'));
 
-    await waitFor(() =>
-      expect(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).toBeVisible(),
-    );
+    await waitFor(() => expect(screen.getByTestId(`${dataTestId}-modal-password`)).toBeVisible());
 
     expect(mockOnClose).toHaveBeenCalled();
   });
@@ -90,33 +92,35 @@ describe('ExportDataSetting', () => {
       );
 
       renderWithProviders(
-        <ExportDataSetting isExportSettingsOpen onExportSettingsClose={mockOnClose} />,
+        <ExportDataSetting
+          isExportSettingsOpen
+          onExportSettingsClose={mockOnClose}
+          data-testid={dataTestId}
+        />,
         {
           preloadedState,
         },
       );
 
       await waitFor(() =>
-        expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument(),
+        expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
       );
 
-      const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`);
+      const dateType = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
       expect(dateType).toBeVisible();
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportType } });
 
       fireEvent.click(screen.getByText('Download'));
 
-      expect(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).toBeVisible();
+      expect(screen.getByTestId(`${dataTestId}-modal-password`)).toBeVisible();
 
       fireEvent.change(await screen.findByLabelText('Password'), {
         target: { value: mockedPassword },
       });
 
       fireEvent.click(
-        within(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).getByText(
-          'Submit',
-        ),
+        within(screen.getByTestId(`${dataTestId}-modal-password`)).getByText('Submit'),
       );
 
       await waitFor(() => {

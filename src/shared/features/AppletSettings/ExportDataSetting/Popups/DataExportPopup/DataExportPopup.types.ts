@@ -1,20 +1,17 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
-import { Row } from 'shared/components';
 import { SingleApplet } from 'shared/state';
 import { Encryption, ExportDataFilters } from 'shared/utils';
 import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
-
-import { ChosenAppletData } from '../../Respondents.types';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type DataExportPopupProps = {
   filters?: ExportDataFilters;
   popupVisible: boolean;
-  isAppletSetting?: boolean;
   setPopupVisible: Dispatch<SetStateAction<boolean>>;
-  tableRows?: Row[];
+  isAppletSetting?: boolean;
   chosenAppletData: ChosenAppletData | SingleApplet | null;
-  setChosenAppletData?: Dispatch<SetStateAction<ChosenAppletData | null>>;
+  handlePopupClose?: () => void;
   'data-testid'?: string;
 };
 

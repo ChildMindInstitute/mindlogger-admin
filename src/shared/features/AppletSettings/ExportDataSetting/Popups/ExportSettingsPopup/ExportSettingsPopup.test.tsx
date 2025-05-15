@@ -12,7 +12,11 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ExportSettingsPopup } from './ExportSettingsPopup';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
-import { ExportDataFormValues, ExportDateType } from '../../ExportDataSetting.types';
+import {
+  ExportDataFormValues,
+  ExportDateType,
+  SupplementaryFiles,
+} from '../../ExportDataSetting.types';
 
 const dateString = '2023-11-14T14:43:33.369902';
 const date = new Date(dateString);
@@ -40,6 +44,10 @@ const FormComponent = ({ children, getForm }: FormComponentProps) => {
       dateType: ExportDateType.AllTime,
       fromDate: new Date(),
       toDate: new Date(),
+      supplementaryFiles: SupplementaryFiles.reduce(
+        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        {} as Record<SupplementaryFiles, boolean>,
+      ),
     },
     mode: 'onSubmit',
   });
@@ -54,6 +62,8 @@ const commonProps = {
   onExport: mockOnExport,
   minDate: date,
   getMaxDate: () => getNormalizedTimezoneDate(new Date().toString()),
+  appletName: mockedApplet.displayName,
+  'data-testid': DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 };
 
 describe('ExportSettingsPopup', () => {

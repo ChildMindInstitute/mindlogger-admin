@@ -13,7 +13,7 @@ import { StyledSettingsGroup, StyledSettings, StyledSetting, StyledTitle } from 
 import { ActionsProps } from './Actions.types';
 import { DATA_TESTID_ACTIONS_EXPORT_DATA } from './Actions.const';
 
-export const Actions = ({ isCompact }: ActionsProps) => {
+export const Actions = ({ isCompact, 'data-testid': dataTestId }: ActionsProps) => {
   const { appletId } = useParams();
   const { t } = useTranslation('app');
   const isNewApplet = useCheckIfNewApplet();
@@ -53,6 +53,7 @@ export const Actions = ({ isCompact }: ActionsProps) => {
         onExportSettingsClose={() => {
           setIsExportOpen(false);
         }}
+        data-testid={`${dataTestId}-export-data`}
       />
     </StyledSettingsGroup>
   ) : null;
