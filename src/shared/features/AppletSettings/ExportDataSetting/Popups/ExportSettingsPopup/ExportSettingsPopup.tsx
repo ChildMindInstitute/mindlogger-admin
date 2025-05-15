@@ -24,7 +24,6 @@ import {
 
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
 import { getDateTypeOptions } from './ExportSettingsPopup.utils';
-import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import {
   ExportDataFormValues,
   ExportDateType,
@@ -43,6 +42,7 @@ export const ExportSettingsPopup = ({
   getMaxDate,
   appletName,
   supportedSupplementaryFiles,
+  'data-testid': dataTestId,
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -119,7 +119,7 @@ export const ExportSettingsPopup = ({
       })}
       onClose={onClose}
       buttonText=""
-      data-testid={DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}
+      data-testid={dataTestId}
     >
       <StyledModalWrapper>
         <StyledExportSettingsForm noValidate autoComplete="off">
@@ -131,7 +131,7 @@ export const ExportSettingsPopup = ({
             control={control}
             options={getDateTypeOptions()}
             label={t('dateRange')}
-            data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`}
+            data-testid={`${dataTestId}-dateType`}
             dropdownStyles={{
               width: '30rem',
             }}
@@ -150,7 +150,7 @@ export const ExportSettingsPopup = ({
                 onSubmitCallback={onFromDateSubmit}
                 label={t('startDate')}
                 minDate={minDate}
-                data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`}
+                data-testid={`${dataTestId}-from-date`}
                 inputWrapperSx={{ width: '100%' }}
               />
               <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
@@ -162,7 +162,7 @@ export const ExportSettingsPopup = ({
                 onSubmitCallback={onToDateSubmit}
                 minDate={fromDate}
                 label={t('endDate')}
-                data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`}
+                data-testid={`${dataTestId}-to-date`}
                 inputWrapperSx={{ width: '100%' }}
               />
             </StyledFlexTopCenter>
@@ -198,7 +198,7 @@ export const ExportSettingsPopup = ({
               }}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="export" />}
-              data-testid={`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-button`}
+              data-testid={`${dataTestId}-download-button`}
             >
               {t('download')}
             </StyledAppletSettingsButton>

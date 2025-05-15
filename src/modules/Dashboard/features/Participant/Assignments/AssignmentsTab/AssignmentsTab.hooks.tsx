@@ -402,7 +402,7 @@ export const useAssignmentsTab = ({
             targetSubjectId: selectedTargetSubjectId,
           }}
           isAppletSetting
-          data-testid={`${dataTestId}-export-modal`}
+          data-testid={`${dataTestId}-export-data`}
           supportedSupplementaryFiles={
             selectedActivityOrFlow?.isFlow ? undefined : ['scheduleHistory']
           }

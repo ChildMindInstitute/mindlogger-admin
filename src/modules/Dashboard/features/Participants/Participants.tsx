@@ -558,7 +558,7 @@ export const Participants = () => {
           onExportSettingsClose={() => setDataExportPopupVisible(false)}
           chosenAppletData={chosenAppletData}
           isAppletSetting={false}
-          data-testid={`${dataTestId}-export-data-popup`}
+          data-testid={`${dataTestId}-export-data`}
         />
       )}
       {editRespondentPopupVisible && (

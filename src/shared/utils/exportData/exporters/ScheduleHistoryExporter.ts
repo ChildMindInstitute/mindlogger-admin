@@ -250,6 +250,8 @@ export class ScheduleHistoryExporter extends DataExporter<
           sortedScheduleHistoryData,
         );
 
+        console.log(schedulesForDay);
+
         schedulesForDay.forEach((schedule) => {
           const deviceSchedule = this.findLatestMobileSchedule(
             day,

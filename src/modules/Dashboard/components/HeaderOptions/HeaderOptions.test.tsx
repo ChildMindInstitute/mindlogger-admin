@@ -1,6 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.const';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
@@ -25,7 +24,7 @@ describe('HeaderOptions', () => {
   test('should open Export dialog when option is pressed', () => {
     fireEvent.click(screen.getByTestId('header-option-export-button'));
 
-    expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument();
+    expect(screen.queryByTestId('export-data-settings')).toBeInTheDocument();
   });
 
   test('should contain link to settings page', () => {

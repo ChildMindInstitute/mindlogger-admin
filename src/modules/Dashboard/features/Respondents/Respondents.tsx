@@ -521,7 +521,7 @@ export const Respondents = () => {
                 setDataExportPopupVisible(true);
               }
             }}
-            data-testid={`${dataTestid}-export`}
+            data-testid={`${dataTestid}-choose-export-applet`}
           />
         )}
       {chosenAppletData && (
@@ -530,6 +530,7 @@ export const Respondents = () => {
           onExportSettingsClose={() => setDataExportPopupVisible(false)}
           chosenAppletData={chosenAppletData}
           isAppletSetting={false}
+          data-testid={`${dataTestid}-export-data`}
         />
       )}
 

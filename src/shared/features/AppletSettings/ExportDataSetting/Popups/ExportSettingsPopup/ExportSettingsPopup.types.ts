@@ -8,4 +8,5 @@ export type ExportSettingsPopupProps = {
   getMaxDate: () => Date;
   appletName: string;
   supportedSupplementaryFiles?: SupplementaryFiles[];
+  'data-testid'?: string;
 };

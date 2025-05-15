@@ -45,4 +45,5 @@ export type ExportDataSettingProps = {
   isAppletSetting?: boolean;
   filters?: ExportDataFilters;
   supportedSupplementaryFiles?: UniqueTuple<SupplementaryFiles> | [];
+  'data-testid'?: string;
 };

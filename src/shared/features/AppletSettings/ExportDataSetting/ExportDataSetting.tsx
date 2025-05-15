@@ -17,7 +17,6 @@ import {
   SupplementaryFiles,
   SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
-import { DATA_TESTID_EXPORT_DATA_EXPORT_POPUP } from './ExportDataSetting.const';
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
@@ -29,6 +28,7 @@ export const ExportDataSetting = ({
   isAppletSetting,
   supportedSupplementaryFiles,
   filters,
+  'data-testid': dataTestId,
 }: ExportDataSettingProps) => {
   const { featureFlags } = useFeatureFlags();
   const { result } = applet.useAppletData() ?? {};
@@ -114,6 +114,7 @@ export const ExportDataSetting = ({
           getMaxDate={getMaxDate}
           appletName={appletName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
+          data-testid={`${dataTestId}-settings`}
         />
       )}
       {dataIsExporting && (
@@ -122,7 +123,7 @@ export const ExportDataSetting = ({
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
-          data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
+          data-testid={`${dataTestId}-modal`}
           filters={filters}
           handlePopupClose={() => {
             resetDefaultValues();

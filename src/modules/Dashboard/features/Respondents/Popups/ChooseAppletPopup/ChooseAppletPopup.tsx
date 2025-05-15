@@ -83,13 +83,13 @@ export const ChooseAppletPopup = ({
       }}
       title={t('dataExport.title')}
       buttonText=""
-      data-testid={`${dataTestid}-choose-applet-popup`}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
           {t('selectAppletToExportRespondentsData')}
         </StyledBodyLarge>
-        <AppletsSmallTable tableRows={tableRows} />
+        <AppletsSmallTable tableRows={tableRows} data-testid={`${dataTestid}-table}`} />
       </StyledModalWrapper>
     </Modal>
   );
