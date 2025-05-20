@@ -11,6 +11,11 @@ export const enum ExportDateType {
   ChooseDates = 'chooseDates',
 }
 
+export const enum ExportDataExported {
+  ResponsesOnly = 'responsesOnly',
+  ResponsesAndEhrData = 'responsesAndEhrData',
+}
+
 // The list of supplementary files that can be exported. These show up as checkboxes in the modal
 // If the appearance of one or more of these checkboxes is controlled by a feature flag, add it
 // to that flag's corresponding array, otherwise add it to the `none` array
@@ -31,6 +36,7 @@ export type SupplementaryFilesFormValues = {
 };
 
 export type ExportDataFormValues = {
+  dataExported: ExportDataExported;
   dateType: ExportDateType;
   fromDate: Date;
   toDate: Date;

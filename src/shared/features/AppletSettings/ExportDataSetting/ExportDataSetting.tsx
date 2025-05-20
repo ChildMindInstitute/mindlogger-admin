@@ -7,10 +7,11 @@ import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSettin
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { UniqueTuple } from 'shared/types';
-import { useFeatureFlags } from 'shared/hooks';
+import { useFeatureFlags, useHasEhrHealthData } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
+  ExportDataExported,
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
@@ -35,10 +36,20 @@ export const ExportDataSetting = ({
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
+  const appletId = appletData && ('appletId' in appletData ? appletData.appletId : appletData.id);
+  const hasEhrHealthData = useHasEhrHealthData({
+    appletId,
+    activityId: filters?.activityId,
+    flowId: filters?.flowId,
+  });
+
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
+      dataExported: hasEhrHealthData
+        ? ExportDataExported.ResponsesAndEhrData
+        : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
       fromDate: minDate,
       toDate: getMaxDate(),
@@ -47,7 +58,7 @@ export const ExportDataSetting = ({
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate],
+    [minDate, hasEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -114,6 +125,7 @@ export const ExportDataSetting = ({
           getMaxDate={getMaxDate}
           appletName={appletName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
+          hasEhrHealthData={hasEhrHealthData}
           data-testid={`${dataTestId}-settings`}
         />
       )}

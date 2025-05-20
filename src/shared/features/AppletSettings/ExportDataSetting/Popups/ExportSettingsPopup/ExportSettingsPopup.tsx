@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 import { useMemo } from 'react';
+import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
@@ -10,6 +10,7 @@ import { DatePicker } from 'shared/components/DatePicker';
 import { Modal } from 'shared/components/Modal';
 import {
   StyledBodyLarge,
+  StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledModalWrapper,
@@ -17,22 +18,14 @@ import {
 } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
-import {
-  StyledAppletSettingsButton,
-  StyledAppletSettingsDescription,
-} from 'shared/features/AppletSettings/AppletSettings.styles';
 
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
-import { getDateTypeOptions } from './ExportSettingsPopup.utils';
+import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
 import {
   ExportDataFormValues,
   ExportDateType,
   SupplementaryFilesFormValues,
 } from '../../ExportDataSetting.types';
-import {
-  StyledExportSettingsDescription,
-  StyledExportSettingsForm,
-} from './ExportSettingsPopup.styles';
 
 export const ExportSettingsPopup = ({
   isOpen,
@@ -42,6 +35,7 @@ export const ExportSettingsPopup = ({
   getMaxDate,
   appletName,
   supportedSupplementaryFiles,
+  hasEhrHealthData,
   'data-testid': dataTestId,
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
@@ -118,92 +112,97 @@ export const ExportSettingsPopup = ({
         name: appletName,
       })}
       onClose={onClose}
-      buttonText=""
+      width="57.5"
       data-testid={dataTestId}
     >
-      <StyledModalWrapper>
-        <StyledExportSettingsForm noValidate autoComplete="off">
-          <StyledExportSettingsDescription>
-            {t('exportDescription')}
-          </StyledExportSettingsDescription>
-          <SelectController
-            name={'dateType'}
-            control={control}
-            options={getDateTypeOptions()}
-            label={t('dateRange')}
-            data-testid={`${dataTestId}-dateType`}
-            dropdownStyles={{
-              width: '30rem',
-            }}
-            SelectProps={{
-              autoWidth: true,
-            }}
-            customChange={onDateTypeChange}
-            style={{ width: '100%' }}
-          />
-          {hasCustomDate && (
-            <StyledFlexTopCenter>
-              <DatePicker
-                {...commonProps}
-                name="fromDate"
-                onCloseCallback={onDatePickerClose}
-                onSubmitCallback={onFromDateSubmit}
-                label={t('startDate')}
-                minDate={minDate}
-                data-testid={`${dataTestId}-from-date`}
-                inputWrapperSx={{ width: '100%' }}
-              />
-              <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                {t('smallTo')}
-              </StyledBodyLarge>
-              <DatePicker
-                {...commonProps}
-                name="toDate"
-                onSubmitCallback={onToDateSubmit}
-                minDate={fromDate}
-                label={t('endDate')}
-                data-testid={`${dataTestId}-to-date`}
-                inputWrapperSx={{ width: '100%' }}
-              />
-            </StyledFlexTopCenter>
-          )}
-          {filteredSupplementaryFiles.length > 0 && (
-            <StyledAppletSettingsDescription>
-              {t(`dataExport.supplementaryFiles.description`)}
-            </StyledAppletSettingsDescription>
-          )}
-          <StyledFlexColumn>
-            {filteredSupplementaryFiles.map((fileType) => (
-              <CheckboxController
+      <StyledModalWrapper sx={{ pb: 0 }}>
+        <form noValidate autoComplete="off">
+          <StyledFlexColumn sx={{ gap: 3.2 }}>
+            <StyledFlexColumn sx={{ gap: 1.6 }}>
+              {hasEhrHealthData && (
+                <SelectController
+                  name="dataExported"
+                  control={control}
+                  options={getDataExportedOptions()}
+                  label={t('dataExport.data')}
+                  data-testid={`${dataTestId}-data-exported`}
+                  fullWidth
+                />
+              )}
+              <SelectController
+                name="dateType"
                 control={control}
-                sxLabelProps={{ mt: 0, ml: '12px' }}
-                name={`supplementaryFiles.${fileType}`}
-                key={`data-export-supplementary-file-${fileType}`}
-                label={
-                  <StyledBodyLarge>
-                    {t(`dataExport.supplementaryFiles.includes.${fileType}`)}
-                  </StyledBodyLarge>
-                }
+                options={getDateTypeOptions()}
+                label={t('dateRange')}
+                data-testid={`${dataTestId}-dateType`}
+                customChange={onDateTypeChange}
+                fullWidth
               />
-            ))}
-          </StyledFlexColumn>
-          <Box sx={{ textAlign: 'center' }} className="no-gap">
-            <StyledAppletSettingsButton
-              onClick={() => {
-                if (dateType !== 'chooseDates') {
-                  setValue('toDate', getMaxDate());
-                }
+            </StyledFlexColumn>
+            {hasCustomDate && (
+              <StyledFlexTopCenter>
+                <DatePicker
+                  {...commonProps}
+                  name="fromDate"
+                  onCloseCallback={onDatePickerClose}
+                  onSubmitCallback={onFromDateSubmit}
+                  label={t('startDate')}
+                  minDate={minDate}
+                  data-testid={`${dataTestId}-from-date`}
+                  inputWrapperSx={{ width: '100%' }}
+                />
+                <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                  {t('smallTo')}
+                </StyledBodyLarge>
+                <DatePicker
+                  {...commonProps}
+                  name="toDate"
+                  onSubmitCallback={onToDateSubmit}
+                  minDate={fromDate}
+                  label={t('endDate')}
+                  data-testid={`${dataTestId}-to-date`}
+                  inputWrapperSx={{ width: '100%' }}
+                />
+              </StyledFlexTopCenter>
+            )}
+            <StyledFlexColumn sx={{ gap: 1.6 }}>
+              <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>
+              <StyledFlexColumn gap={0.8}>
+                {filteredSupplementaryFiles.map((fileType) => (
+                  <CheckboxController
+                    control={control}
+                    sxLabelProps={{ m: 0 }}
+                    name={`supplementaryFiles.${fileType}`}
+                    key={`data-export-supplementary-file-${fileType}`}
+                    label={
+                      <StyledBodyLarge>
+                        {t(`dataExport.supplementaryFiles.includes.${fileType}`)}
+                      </StyledBodyLarge>
+                    }
+                  />
+                ))}
+              </StyledFlexColumn>
+            </StyledFlexColumn>
+            <StyledFlexAllCenter>
+              <Button
+                onClick={() => {
+                  if (dateType !== 'chooseDates') {
+                    setValue('toDate', getMaxDate());
+                  }
 
-                onExport();
-              }}
-              variant="contained"
-              startIcon={<Svg width="18" height="18" id="export" />}
-              data-testid={`${dataTestId}-download-button`}
-            >
-              {t('download')}
-            </StyledAppletSettingsButton>
-          </Box>
-        </StyledExportSettingsForm>
+                  onExport();
+                }}
+                color="primary"
+                variant="contained"
+                sx={{ px: 2.4 }}
+                startIcon={<Svg width="18" height="18" id="export" />}
+                data-testid={`${dataTestId}-download-button`}
+              >
+                {t('download')}
+              </Button>
+            </StyledFlexAllCenter>
+          </StyledFlexColumn>
+        </form>
       </StyledModalWrapper>
     </Modal>
   );
