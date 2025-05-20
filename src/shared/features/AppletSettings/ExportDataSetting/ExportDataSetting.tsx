@@ -7,10 +7,11 @@ import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSettin
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { UniqueTuple } from 'shared/types';
-import { useFeatureFlags } from 'shared/hooks';
+import { useFeatureFlags, useHasEhrHealthData } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
+  ExportDataExported,
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
@@ -35,10 +36,39 @@ export const ExportDataSetting = ({
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
+  const appletId = appletData && ('appletId' in appletData ? appletData.appletId : appletData.id);
+  const hasEhrHealthData = useHasEhrHealthData({
+    appletId,
+    activityId: filters?.activityId,
+    flowId: filters?.flowId,
+  });
+
+  // Determine the activity or flow name based on filters.
+  //
+  // We can assume the applet returned by `useAppletData` is the correct one to retrieve activity
+  // and flow names from because activity/flow-specific filters are only available in the context
+  // of the active applet.
+  const activityName = useMemo(() => {
+    if (filters?.flowId) {
+      const flow = result?.activityFlows?.find(({ id }) => id === filters.flowId);
+
+      return flow?.name;
+    } else if (filters?.activityId) {
+      const activity = result?.activities?.find(({ id }) => id === filters.activityId);
+
+      return activity?.name;
+    }
+
+    return undefined;
+  }, [result, filters?.activityId, filters?.flowId]);
+
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
+      dataExported: hasEhrHealthData
+        ? ExportDataExported.ResponsesAndEhrData
+        : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
       fromDate: minDate,
       toDate: getMaxDate(),
@@ -47,7 +77,7 @@ export const ExportDataSetting = ({
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate],
+    [minDate, hasEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -113,7 +143,9 @@ export const ExportDataSetting = ({
           minDate={minDate}
           getMaxDate={getMaxDate}
           appletName={appletName}
+          activityName={activityName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
+          hasEhrHealthData={hasEhrHealthData}
           data-testid={`${dataTestId}-settings`}
         />
       )}

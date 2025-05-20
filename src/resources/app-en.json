@@ -463,6 +463,11 @@
   "dashboard": "Dashboard",
   "dataExport": {
     "title": "Data Export",
+    "data": "Data",
+    "dataExported": {
+      "responsesOnly": "Responses Only",
+      "responsesAndEhrData": "Responses and EHR Data"
+    },
     "supplementaryFiles": {
       "description": "Supplementary files:",
       "includes": {
@@ -600,7 +605,7 @@
   "exportData": "Export Data",
   "exportDataForApplet": "Export Data for {{name}}",
   "exportDefaultSchedule": "Export Default Schedule",
-  "exportDescription": "Choose what to include:",
+  "exportDescription": "Export: <0>{{activityName}} data</0>",
   "exportDateRange": {
     "allTime": "All time",
     "last24h": "Last 24 hours",
