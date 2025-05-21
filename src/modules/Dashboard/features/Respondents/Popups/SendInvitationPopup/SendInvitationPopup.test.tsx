@@ -18,6 +18,7 @@ const mockedRespondentId = '456';
 const mockedEmail = 'test@test.com';
 const mockedChosenAppletData = {
   appletId: mockedAppletId,
+  createdAt: '2025-01-01T00:00:00',
   respondentSecretId: mockedSecretUserId,
   respondentId: mockedRespondentId,
   respondentNickname: 'respondentNickname',

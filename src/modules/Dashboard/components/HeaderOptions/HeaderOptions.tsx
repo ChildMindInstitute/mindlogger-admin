@@ -57,6 +57,7 @@ export const HeaderOptions = () => {
       <ExportDataSetting
         isExportSettingsOpen={isExportOpen}
         onExportSettingsClose={handleCloseExport}
+        data-testid={'export-data'}
       />
     </StyledFlexTopCenter>
   ) : null;

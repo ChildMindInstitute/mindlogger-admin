@@ -13,7 +13,6 @@ import { MenuActionProps, Spinner } from 'shared/components';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
 import { ActivitiesSectionHeader } from 'modules/Dashboard/features/Applet/Activities/ActivitiesSectionHeader';
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { users } from 'modules/Dashboard/state';
 import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
@@ -24,6 +23,7 @@ import { ActivityAssignDrawer, ActivityUnassignDrawer } from 'modules/Dashboard/
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { TEAM_MEMBER_ROLES } from 'shared/consts';
 import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import { ActivityOrFlowId } from './Activities.types';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
@@ -353,16 +353,15 @@ export const Activities = () => {
         />
       )}
 
-      {showExportPopup && (
-        <DataExportPopup
+      {appletData && (
+        <ExportDataSetting
+          isExportSettingsOpen={showExportPopup}
+          onExportSettingsClose={() => setShowExportPopup(false)}
+          onDataExportPopupClose={() => setSelectedActivityOrFlowId(undefined)}
           chosenAppletData={appletData ?? null}
           filters={{ activityId: selectedActivityOrFlowId?.activityId, targetSubjectId: subjectId }}
           isAppletSetting
-          popupVisible={showExportPopup}
-          setPopupVisible={() => {
-            setShowExportPopup(false);
-            setSelectedActivityOrFlowId(undefined);
-          }}
+          supportedSupplementaryFiles={['scheduleHistory']}
         />
       )}
 

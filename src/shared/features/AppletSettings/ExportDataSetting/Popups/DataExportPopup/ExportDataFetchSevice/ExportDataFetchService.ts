@@ -1,7 +1,6 @@
 import { getExportDataApi } from 'modules/Dashboard/api';
 import { sendLogFile } from 'shared/utils/logger';
-
-import { ExportDataProps } from '../DataExportPopup.types';
+import { ExportDataProps } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
 
 export class ExportDataFetchService {
   private abortController: AbortController | null = null;

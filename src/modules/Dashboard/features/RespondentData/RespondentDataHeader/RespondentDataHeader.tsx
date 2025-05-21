@@ -184,6 +184,12 @@ export const RespondentDataHeader = ({
             <ExportDataSetting
               isExportSettingsOpen={isExportOpen}
               onExportSettingsClose={handleCloseExport}
+              supportedSupplementaryFiles={activityFlowId ? undefined : ['scheduleHistory']}
+              filters={{
+                activityId,
+                flowId: activityFlowId,
+                targetSubjectId: subject.id,
+              }}
             />
             {featureFlags.enableActivityAssign && (
               <Tooltip

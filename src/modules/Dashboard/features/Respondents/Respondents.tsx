@@ -32,6 +32,7 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Participant, ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
 import { useLazyGetWorkspaceRespondentsQuery } from 'modules/Dashboard/api/apiSlice';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import {
   RespondentsTableHeader,
@@ -52,13 +53,13 @@ import {
   SetDataForAppletPage,
 } from './Respondents.types';
 import {
-  DataExportPopup,
   EditRespondentPopup,
   RemoveRespondentPopup,
   ScheduleSetupPopup,
   SendInvitationPopup,
   ViewParticipantPopup,
 } from './Popups';
+import { ChooseAppletPopup } from './Popups/ChooseAppletPopup/ChooseAppletPopup';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -109,6 +110,7 @@ export const Respondents = () => {
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
+  const [chooseExportAppletPopupVisible, setChooseExportAppletPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
@@ -130,6 +132,7 @@ export const Respondents = () => {
         ...respondentAccess,
         respondentId,
         ownerId,
+        createdAt: respondentAccess.subjectCreatedAt,
       }
     );
   };
@@ -174,7 +177,7 @@ export const Respondents = () => {
 
       setRespondentKey(respondentOrSubjectId);
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
-      setDataExportPopupVisible(true);
+      setChooseExportAppletPopupVisible(true);
       Mixpanel.track({
         action: MixpanelEventType.ExportDataClick,
         [MixpanelProps.AppletId]: appletId,
@@ -502,16 +505,35 @@ export const Respondents = () => {
           tableRows={editableAppletsSmallTableRows}
         />
       )}
-      {dataExportPopupVisible && (
-        <DataExportPopup
-          popupVisible={dataExportPopupVisible}
-          setPopupVisible={setDataExportPopupVisible}
-          tableRows={viewableAppletsSmallTableRows}
+      {chooseExportAppletPopupVisible &&
+        chosenRespondentsItems?.[FilteredAppletsKey.Viewable] &&
+        ownerId &&
+        respondentKey && (
+          <ChooseAppletPopup
+            respondentId={respondentKey}
+            appletOwnerId={ownerId}
+            appletAccesses={chosenRespondentsItems[FilteredAppletsKey.Viewable]}
+            popupVisible={chooseExportAppletPopupVisible}
+            setPopupVisible={setChooseExportAppletPopupVisible}
+            handleClose={(chosenApplet) => {
+              setChosenAppletData(chosenApplet);
+              if (chosenApplet) {
+                setDataExportPopupVisible(true);
+              }
+            }}
+            data-testid={`${dataTestid}-choose-export-applet`}
+          />
+        )}
+      {chosenAppletData && (
+        <ExportDataSetting
+          isExportSettingsOpen={dataExportPopupVisible}
+          onExportSettingsClose={() => setDataExportPopupVisible(false)}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          data-testid={`${dataTestid}-export-data-popup`}
+          isAppletSetting={false}
+          data-testid={`${dataTestid}-export-data`}
         />
       )}
+
       {editRespondentPopupVisible && (
         <EditRespondentPopup
           popupVisible={editRespondentPopupVisible}

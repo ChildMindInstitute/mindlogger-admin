@@ -13,6 +13,7 @@ import { DataExporter, DataExporterOptions } from 'shared/utils/exportData/expor
 import { groupBy } from 'shared/utils/array';
 import { Response } from 'shared/api';
 import { store } from 'redux/store';
+import { DEFAULT_API_RESULTS_PER_PAGE } from 'modules/Dashboard/api/api.const';
 
 export type ScheduleHistoryExportRow = {
   applet_id: string;
@@ -131,7 +132,13 @@ export class ScheduleHistoryExporter extends DataExporter<
       const data = await store
         .dispatch(
           apiDashboardSlice.endpoints.getWorkspaceRespondents.initiate({
-            params: { ownerId: this.ownerId, appletId, page },
+            params: {
+              ownerId: this.ownerId,
+              includeSoftDeletedSubjects: true,
+              appletId,
+              page,
+              limit: DEFAULT_API_RESULTS_PER_PAGE,
+            },
           }),
         )
         .unwrap();
@@ -225,7 +232,8 @@ export class ScheduleHistoryExporter extends DataExporter<
 
     for (let i = days.length - 1; i >= 0; i--) {
       const day = days[i];
-      const utcEndOfDay = DateTime.fromISO(`${day}T00:00:00`, { zone: 'UTC' }).endOf('day');
+      const utcStartOfDay = DateTime.fromISO(`${day}T00:00:00`, { zone: 'UTC' });
+      const utcEndOfDay = utcStartOfDay.endOf('day');
       for (const participant of fullAccountParticipants) {
         const participantDetail = participant.details.find(
           (detail) => detail.appletId === appletId,
@@ -241,6 +249,16 @@ export class ScheduleHistoryExporter extends DataExporter<
               continue;
             }
           }
+
+          if (participantDetail.subjectIsDeleted) {
+            const deletionDate = DateTime.fromISO(participantDetail.subjectUpdatedAt, {
+              zone: 'UTC',
+            });
+            if (deletionDate < utcStartOfDay) {
+              // This participant has been removed from the applet at this point, so let's skip them
+              continue;
+            }
+          }
         }
 
         const schedulesForDay = this.findSchedulesForDay(
@@ -248,6 +266,8 @@ export class ScheduleHistoryExporter extends DataExporter<
           participant.id,
           sortedScheduleHistoryData,
         );
+
+        console.log(schedulesForDay);
 
         schedulesForDay.forEach((schedule) => {
           const deviceSchedule = this.findLatestMobileSchedule(
@@ -404,10 +424,22 @@ export class ScheduleHistoryExporter extends DataExporter<
                   // again
                   const deletedAfterToday = deletionDate.isValid && deletionDate > endOfTheDay;
 
+                  const supersededBeforeToday = appletVersionGroupedSchedules.some(
+                    (nextScheduleVersion) =>
+                      competition.eventId === nextScheduleVersion.eventId &&
+                      competition.eventVersion !== nextScheduleVersion.eventVersion &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt, {
+                        zone: 'UTC',
+                      }) <= startOfTheDay &&
+                      DateTime.fromISO(nextScheduleVersion.eventVersionCreatedAt) >
+                        DateTime.fromISO(competition.eventVersionCreatedAt),
+                  );
+
                   return (
                     isIndividualSchedule &&
                     createdTodayOrBefore &&
-                    (notDeleted || deletedAfterToday)
+                    (notDeleted || deletedAfterToday) &&
+                    !supersededBeforeToday
                   );
                 }).length === 0
               );
@@ -501,7 +533,96 @@ export class ScheduleHistoryExporter extends DataExporter<
         );
       });
 
-    return applicableSchedules.sort((a, b) => {
+    const withResolvedScheduleAndAppletVersionLinking: ScheduleHistoryData[] = [];
+
+    /**
+     * When multiple schedules (default and individual) are linked to multiple applet versions on the same day,
+     * the default schedule should not show up for applet versions after the individual schedule is linked
+     */
+    Object.entries(groupBy(applicableSchedules, 'activityOrFlowId')).forEach(
+      ([_, entityGroupedSchedules]) => {
+        const typesOfSchedulesLinkedToday: Set<'default' | 'individual'> = new Set();
+        const appletVersionsLinkedToday: Set<string> = new Set();
+        const schedulesLinkedToday = entityGroupedSchedules.filter((schedule) => {
+          const scheduleLinkDate = DateTime.fromISO(schedule.linkedWithAppletAt, {
+            zone: 'UTC',
+          });
+
+          const linkedToday = scheduleLinkDate >= startOfTheDay && scheduleLinkDate <= endOfTheDay;
+
+          if (linkedToday) {
+            const type = !schedule.userId ? 'default' : 'individual';
+            typesOfSchedulesLinkedToday.add(type);
+            appletVersionsLinkedToday.add(schedule.appletVersion);
+          }
+
+          return linkedToday;
+        });
+
+        let resolvedSchedules = entityGroupedSchedules;
+        if (typesOfSchedulesLinkedToday.size > 1 && appletVersionsLinkedToday.size > 1) {
+          const sortedByLinkDate = [...schedulesLinkedToday].sort((a, b) => {
+            const aLinkDate = DateTime.fromISO(a.linkedWithAppletAt, { zone: 'UTC' });
+            const bLinkDate = DateTime.fromISO(b.linkedWithAppletAt, { zone: 'UTC' });
+
+            return aLinkDate.valueOf() - bLinkDate.valueOf();
+          });
+
+          const indexOfFirstIndividualScheduleLinkedToday = sortedByLinkDate.findIndex(
+            (schedule) => !!schedule.userId,
+          );
+          let indexOfLastIndividualScheduleLinkedToday = -1;
+          let indexOfLastDefaultScheduleLinkedTodayBeforeIndividual = -1;
+
+          for (let i = sortedByLinkDate.length - 1; i >= 0; i--) {
+            const schedule = sortedByLinkDate[i];
+            if (schedule.userId && indexOfLastIndividualScheduleLinkedToday === -1) {
+              indexOfLastIndividualScheduleLinkedToday = i;
+            } else if (!schedule.userId && indexOfLastIndividualScheduleLinkedToday !== -1) {
+              indexOfLastDefaultScheduleLinkedTodayBeforeIndividual = i;
+              break;
+            }
+          }
+
+          const lastIndividualScheduleLinkedToday =
+            sortedByLinkDate[indexOfLastIndividualScheduleLinkedToday];
+
+          const lastIndividualScheduleLinkedTodayIsDeletedToday =
+            lastIndividualScheduleLinkedToday.eventVersionIsDeleted &&
+            DateTime.fromISO(lastIndividualScheduleLinkedToday.eventVersionUpdatedAt, {
+              zone: 'UTC',
+            }) <= endOfTheDay;
+
+          resolvedSchedules = entityGroupedSchedules.filter((schedule) => {
+            // Check for schedules linked to their applet versions today. If there are both default and individual,
+            // and multiple applet versions, we need to make sure the default ones linked after the individual
+            // don't show up, unless the individual is deleted
+            if (!schedulesLinkedToday.includes(schedule)) {
+              return true;
+            }
+
+            if (schedule.userId) {
+              return true;
+            }
+
+            const linkedTodayIndex = sortedByLinkDate.indexOf(schedule);
+
+            return (
+              (lastIndividualScheduleLinkedTodayIsDeletedToday &&
+                linkedTodayIndex === indexOfLastDefaultScheduleLinkedTodayBeforeIndividual) ||
+              linkedTodayIndex > indexOfLastIndividualScheduleLinkedToday ||
+              linkedTodayIndex < indexOfFirstIndividualScheduleLinkedToday
+            );
+          });
+        }
+
+        if (resolvedSchedules.length > 0) {
+          withResolvedScheduleAndAppletVersionLinking.push(...resolvedSchedules);
+        }
+      },
+    );
+
+    return withResolvedScheduleAndAppletVersionLinking.sort((a, b) => {
       const startTimeDiff =
         DateTime.fromISO(`${day}T${a.startTime}`).valueOf() -
         DateTime.fromISO(`${day}T${b.startTime}`).valueOf();

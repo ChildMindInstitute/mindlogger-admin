@@ -1,1 +1,1 @@
-export const DEFAULT_ROWS_PER_PAGE = 250;
+export const DEFAULT_API_RESULTS_PER_PAGE = 250;

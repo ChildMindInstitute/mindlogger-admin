@@ -44,6 +44,8 @@ export type ParticipantDetail = {
   subjectFirstName: string;
   subjectLastName: string;
   subjectCreatedAt: string;
+  subjectUpdatedAt: string;
+  subjectIsDeleted: boolean;
   roles: Roles[];
 
   /**
@@ -66,12 +68,13 @@ export type Participant = {
   id: string | null;
   nicknames: string[];
   secretIds: string[];
-  lastSeen: string;
+  lastSeen: string | null;
   isPinned?: boolean;
   details: ParticipantDetail[];
   isAnonymousRespondent: boolean;
   email: string | null;
   status: ParticipantStatus;
+  subjects?: string[];
 };
 
 export type ParticipantWithDataAccess = Omit<Participant, 'details'> & {

@@ -2,9 +2,18 @@ import { DateTime } from 'luxon';
 
 import { DeviceScheduleHistoryData, Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
+import {
+  mockedAppletId,
+  mockedFullParticipant1DetailWithDataAccess,
+  mockedFullParticipant1WithDataAccess,
+  mockedOwnerId,
+  mockedOwnerParticipantWithDataAccess,
+} from 'shared/mock';
+import { ParticipantStatus, ParticipantWithDataAccess } from 'modules/Dashboard/types';
+import { Roles } from 'shared/consts';
 
 describe('ScheduleHistoryExporter', () => {
-  const exporter = new ScheduleHistoryExporter('owner-id');
+  const exporter = new ScheduleHistoryExporter(mockedOwnerId);
 
   describe('findSchedulesForDays', () => {
     const scheduleData = (
@@ -3811,6 +3820,803 @@ describe('ScheduleHistoryExporter', () => {
     it('does not work with invalid dates', () => {
       const days = exporter.daysBetweenInterval('2025-01-01', '2025-02-31');
       expect(days).toEqual([]);
+    });
+  });
+
+  describe('generateExportData', () => {
+    let respondentDataSpy: jest.SpyInstance;
+    let deviceScheduleHistoryDataSpy: jest.SpyInstance;
+    let scheduleHistorySpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      respondentDataSpy = jest
+        .spyOn(exporter, 'getRespondentData')
+        .mockResolvedValue([
+          mockedOwnerParticipantWithDataAccess,
+          mockedFullParticipant1WithDataAccess,
+        ]);
+
+      scheduleHistorySpy = jest.spyOn(exporter, 'getScheduleHistoryData').mockResolvedValue([]);
+
+      deviceScheduleHistoryDataSpy = jest
+        .spyOn(exporter, 'getDeviceScheduleHistoryData')
+        .mockResolvedValue([]);
+    });
+
+    describe('individual schedule participant is linked to appropriate default schedules in new applet versions', () => {
+      it('when individual schedule is not deleted', async () => {
+        const activityId = '5b226e57-cc94-4ea9-bcd0-456a7be322d7';
+        const defaultEventId = '529318e7-e6ba-4b86-b163-3950753cf669';
+        const individualEventId = 'f3dfc692-06f7-42a0-b762-24eefa6886dd';
+
+        const scheduleHistoryData: ScheduleHistoryData[] = [
+          {
+            appletId: mockedAppletId,
+            appletVersion: '1.1.0',
+            appletName: 'Sample applet',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:00:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '1.1.0',
+            appletName: 'Sample applet',
+            userId: mockedFullParticipant1WithDataAccess.id,
+            subjectId: mockedFullParticipant1DetailWithDataAccess.subjectId,
+            eventId: individualEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:01:00',
+            eventVersionUpdatedAt: '2025-04-29T00:01:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:01:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.0',
+            appletName: 'Applet name changed',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:03:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.0',
+            appletName: 'Applet name changed',
+            userId: mockedFullParticipant1WithDataAccess.id,
+            subjectId: mockedFullParticipant1DetailWithDataAccess.subjectId,
+            eventId: individualEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:01:00',
+            eventVersionUpdatedAt: '2025-04-29T00:01:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:03:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+        ];
+
+        scheduleHistorySpy.mockResolvedValue(scheduleHistoryData);
+
+        const data = await exporter.generateExportData({
+          appletId: mockedAppletId,
+          respondentIds: [mockedFullParticipant1WithDataAccess.id!],
+          fromDate: '2025-04-29T00:00:00',
+          toDate: '2025-04-29T23:59:00',
+        });
+
+        expect(data).toEqual([
+          expect.objectContaining({
+            applet_version: '2.0.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: individualEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '1.1.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: defaultEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '1.1.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: individualEventId,
+          }),
+        ]);
+      });
+
+      it('when individual schedule is deleted', async () => {
+        const activityId = '5b226e57-cc94-4ea9-bcd0-456a7be322d7';
+        const defaultEventId = '529318e7-e6ba-4b86-b163-3950753cf669';
+        const individualEventId = 'f3dfc692-06f7-42a0-b762-24eefa6886dd';
+
+        const scheduleHistoryData: ScheduleHistoryData[] = [
+          {
+            appletId: mockedAppletId,
+            appletVersion: '1.1.0',
+            appletName: 'Sample applet',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:00:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '1.1.0',
+            appletName: 'Sample applet',
+            userId: mockedFullParticipant1WithDataAccess.id,
+            subjectId: mockedFullParticipant1DetailWithDataAccess.subjectId,
+            eventId: individualEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:01:00',
+            eventVersionUpdatedAt: '2025-04-29T00:01:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:01:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.0',
+            appletName: 'Applet name changed',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:03:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.0',
+            appletName: 'Applet name changed',
+            userId: mockedFullParticipant1WithDataAccess.id,
+            subjectId: mockedFullParticipant1DetailWithDataAccess.subjectId,
+            eventId: individualEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:01:00',
+            eventVersionUpdatedAt: '2025-04-29T00:01:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:03:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.1',
+            appletName: 'Applet name changed again',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:04:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.1',
+            appletName: 'Applet name changed again',
+            userId: mockedFullParticipant1WithDataAccess.id,
+            subjectId: mockedFullParticipant1DetailWithDataAccess.subjectId,
+            eventId: individualEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:01:00',
+            eventVersionUpdatedAt: '2025-04-29T00:05:00',
+            eventVersionIsDeleted: true,
+            linkedWithAppletAt: '2025-04-29T00:04:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+          {
+            appletId: mockedAppletId,
+            appletVersion: '2.0.3',
+            appletName: 'Applet name changed one more time',
+            userId: null,
+            subjectId: null,
+            eventId: defaultEventId,
+            eventType: 'activity',
+            eventVersion: '20250429-1',
+            eventVersionCreatedAt: '2025-04-29T00:00:00',
+            eventVersionUpdatedAt: '2025-04-29T00:00:00',
+            eventVersionIsDeleted: false,
+            linkedWithAppletAt: '2025-04-29T00:06:00',
+            eventUpdatedBy: mockedOwnerId,
+            activityOrFlowId: activityId,
+            activityOrFlowName: 'New Activity',
+            activityOrFlowHidden: false,
+            accessBeforeSchedule: false,
+            oneTimeCompletion: false,
+            periodicity: Periodicity.Always,
+            startDate: null,
+            startTime: '00:00:00',
+            endDate: null,
+            endTime: '23:59:00',
+            selectedDate: null,
+          },
+        ];
+
+        scheduleHistorySpy.mockResolvedValue(scheduleHistoryData);
+
+        const data = await exporter.generateExportData({
+          appletId: mockedAppletId,
+          respondentIds: [mockedFullParticipant1WithDataAccess.id!],
+          fromDate: '2025-04-29T00:00:00',
+          toDate: '2025-04-29T23:59:00',
+        });
+
+        expect(data).toEqual([
+          expect.objectContaining({
+            applet_version: '2.0.3',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: defaultEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '2.0.1',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: defaultEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '2.0.1',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: individualEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '2.0.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: individualEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '1.1.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: defaultEventId,
+          }),
+          expect.objectContaining({
+            applet_version: '1.1.0',
+            user_id: mockedFullParticipant1WithDataAccess.id,
+            schedule_id: individualEventId,
+          }),
+        ]);
+      });
+    });
+
+    it('default schedule take precedence after individual schedule deletion', async () => {
+      const appletId = 'e5d59476-818d-43db-b9d4-33301dfb36a1';
+      const flowId = '0855cfa7-8289-4ef4-bf87-ccea24be209a';
+      const defaultEventId = 'e277f63a-e31c-42f3-9590-a9b1f9d25e2b';
+      const individualEventId = 'a1ef64bc-62a2-448b-8d11-98968262100d';
+      const respondentId = 'b32d2bbb-1bb3-4dc2-a3e7-65a9c1919046';
+
+      const scheduleHistoryData: ScheduleHistoryData[] = [
+        {
+          appletId,
+          appletVersion: '1.1.0',
+          appletName: '1980',
+          userId: null,
+          subjectId: null,
+          eventId: defaultEventId,
+          eventType: 'flow',
+          eventVersion: '20250505-1',
+          eventVersionCreatedAt: '2025-05-05T10:49:12.118610',
+          eventVersionUpdatedAt: '2025-05-05T10:49:12.118618',
+          eventVersionIsDeleted: false,
+          linkedWithAppletAt: '2025-05-05T10:49:12.122894',
+          eventUpdatedBy: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+          activityOrFlowId: flowId,
+          activityOrFlowName: 'AF1',
+          activityOrFlowHidden: false,
+          accessBeforeSchedule: false,
+          oneTimeCompletion: false,
+          periodicity: Periodicity.Always,
+          startDate: null,
+          startTime: '00:00:00',
+          endDate: null,
+          endTime: '23:59:00',
+          selectedDate: null,
+        },
+        {
+          appletId,
+          appletVersion: '1.1.0',
+          appletName: '1980',
+          userId: respondentId,
+          subjectId: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2',
+          eventId: individualEventId,
+          eventType: 'flow',
+          eventVersion: '20250505-1',
+          eventVersionCreatedAt: '2025-05-05T10:57:58.128417',
+          eventVersionUpdatedAt: '2025-05-05T10:57:58.128423',
+          eventVersionIsDeleted: false,
+          linkedWithAppletAt: '2025-05-05T10:57:58.134459',
+          eventUpdatedBy: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+          activityOrFlowId: flowId,
+          activityOrFlowName: 'AF1',
+          activityOrFlowHidden: false,
+          accessBeforeSchedule: false,
+          oneTimeCompletion: false,
+          periodicity: Periodicity.Always,
+          startDate: null,
+          startTime: '00:00:00',
+          endDate: null,
+          endTime: '23:59:00',
+          selectedDate: null,
+        },
+        {
+          appletId,
+          appletVersion: '1.1.0',
+          appletName: '1980',
+          userId: respondentId,
+          subjectId: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2',
+          eventId: individualEventId,
+          eventType: 'flow',
+          eventVersion: '20250505-2',
+          eventVersionCreatedAt: '2025-05-05T11:00:08.441623',
+          eventVersionUpdatedAt: '2025-05-06T10:31:19.303004',
+          eventVersionIsDeleted: true,
+          linkedWithAppletAt: '2025-05-05T11:00:08.448098',
+          eventUpdatedBy: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+          activityOrFlowId: flowId,
+          activityOrFlowName: 'AF1',
+          activityOrFlowHidden: false,
+          accessBeforeSchedule: false,
+          oneTimeCompletion: null,
+          periodicity: Periodicity.Daily,
+          startDate: '2025-05-05',
+          startTime: '07:00:00',
+          endDate: '2025-05-19',
+          endTime: '11:00:00',
+          selectedDate: null,
+        },
+      ];
+      scheduleHistorySpy.mockResolvedValue(scheduleHistoryData);
+
+      const respondentData: ParticipantWithDataAccess[] = [
+        {
+          id: respondentId,
+          nicknames: ['NN-PRNT'],
+          secretIds: ['ID-PRNT'],
+          isAnonymousRespondent: false,
+          lastSeen: null,
+          isPinned: false,
+          details: [
+            {
+              appletId,
+              appletDisplayName: '1980',
+              appletImage: '',
+              accessId: '961e6507-30d0-4b36-b8da-6023b92d7532',
+              respondentNickname: 'NN-PRNT',
+              respondentSecretId: 'ID-PRNT',
+              hasIndividualSchedule: false,
+              encryption: {
+                publicKey:
+                  '[1,76,211,152,171,81,215,33,212,194,212,245,49,115,35,8,67,179,133,181,175,30,204,169,67,183,69,200,29,166,232,116,226,227,195,60,105,93,212,165,47,145,236,83,38,14,26,2,136,108,206,247,232,13,235,70,128,4,198,13,118,194,115,68,104,119,168,15,204,218,249,100,56,128,221,72,119,145,186,251,170,241,92,246,28,79,234,169,78,248,178,218,120,205,214,72,229,66,31,37,163,107,250,121,131,10,196,21,104,248,3,137,84,175,52,74,60,36,239,150,71,225,69,94,180,149,131,109]',
+                prime:
+                  '[142,53,84,26,33,215,174,82,178,158,65,41,36,152,127,139,197,84,90,109,103,78,94,198,149,47,225,230,115,130,194,200,81,168,101,114,98,61,177,75,5,177,145,221,227,162,65,164,108,175,141,135,195,231,15,60,128,194,133,208,69,128,254,215,114,154,198,158,109,213,187,214,158,249,206,122,105,179,103,3,182,125,47,178,49,40,174,108,200,234,147,92,166,82,149,188,194,204,56,232,83,74,155,128,101,255,174,173,116,143,235,160,156,12,125,136,25,12,107,22,160,16,138,212,164,236,224,235]',
+                base: '[2]',
+                accountId: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+              },
+              subjectId: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2',
+              subjectTag: 'Parent',
+              subjectFirstName: 'FN-PRNT',
+              subjectLastName: 'LN-PRNT',
+              subjectCreatedAt: '2025-05-05T10:55:25.701196',
+              subjectUpdatedAt: '2025-05-05T10:55:25.701196',
+              subjectIsDeleted: false,
+              invitation: {
+                email: 'someone1@example.com',
+                appletId,
+                appletName: '1980',
+                role: 'respondent',
+                key: '9a455418-b9b8-3ba6-aadd-d363f3bbf511',
+                status: 'approved',
+                firstName: 'FN-PRNT',
+                lastName: 'LN-PRNT',
+                createdAt: '2025-05-05T10:55:25.760007',
+                acceptedAt: '2025-05-05T10:55:50.148171',
+                meta: { subject_id: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2', secret_user_id: null },
+                nickname: 'NN-PRNT',
+                secretUserId: 'ID-PRNT',
+                tag: 'Parent',
+                title: null,
+              },
+              roles: [Roles.Respondent],
+              teamMemberCanViewData: true,
+            },
+          ],
+          status: ParticipantStatus.Invited,
+          email: 'someone1@example.com',
+          subjects: ['6db858b0-0cbd-4b8c-a132-ed8aaef870e2'],
+        },
+        {
+          id: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+          nicknames: ['Aki Q'],
+          secretIds: ['11ab8179-7b6c-4467-bb27-5330cfaab4bf'],
+          isAnonymousRespondent: false,
+          lastSeen: null,
+          isPinned: false,
+          details: [
+            {
+              appletId,
+              appletDisplayName: '1980',
+              appletImage: '',
+              accessId: 'b83071ad-9c51-4d62-be27-fbccbce36807',
+              respondentNickname: 'Aki Q',
+              respondentSecretId: '11ab8179-7b6c-4467-bb27-5330cfaab4bf',
+              hasIndividualSchedule: false,
+              encryption: {
+                publicKey:
+                  '[1,76,211,152,171,81,215,33,212,194,212,245,49,115,35,8,67,179,133,181,175,30,204,169,67,183,69,200,29,166,232,116,226,227,195,60,105,93,212,165,47,145,236,83,38,14,26,2,136,108,206,247,232,13,235,70,128,4,198,13,118,194,115,68,104,119,168,15,204,218,249,100,56,128,221,72,119,145,186,251,170,241,92,246,28,79,234,169,78,248,178,218,120,205,214,72,229,66,31,37,163,107,250,121,131,10,196,21,104,248,3,137,84,175,52,74,60,36,239,150,71,225,69,94,180,149,131,109]',
+                prime:
+                  '[142,53,84,26,33,215,174,82,178,158,65,41,36,152,127,139,197,84,90,109,103,78,94,198,149,47,225,230,115,130,194,200,81,168,101,114,98,61,177,75,5,177,145,221,227,162,65,164,108,175,141,135,195,231,15,60,128,194,133,208,69,128,254,215,114,154,198,158,109,213,187,214,158,249,206,122,105,179,103,3,182,125,47,178,49,40,174,108,200,234,147,92,166,82,149,188,194,204,56,232,83,74,155,128,101,255,174,173,116,143,235,160,156,12,125,136,25,12,107,22,160,16,138,212,164,236,224,235]',
+                base: '[2]',
+                accountId: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+              },
+              subjectId: '85bb50d2-ed90-413d-9736-9b3d0e706627',
+              subjectTag: 'Team',
+              subjectFirstName: 'Aki',
+              subjectLastName: 'Q',
+              subjectCreatedAt: '2025-05-05T10:49:11.696467',
+              subjectUpdatedAt: '2025-05-05T10:49:11.696467',
+              subjectIsDeleted: false,
+              invitation: null,
+              roles: [Roles.Owner, Roles.Respondent],
+              teamMemberCanViewData: true,
+            },
+          ],
+          status: ParticipantStatus.Invited,
+          email: 'someone2@example.com',
+          subjects: ['85bb50d2-ed90-413d-9736-9b3d0e706627'],
+        },
+      ];
+      respondentDataSpy.mockResolvedValue(respondentData);
+
+      // Both schedules appear on deletion day
+      let data = await exporter.generateExportData({
+        appletId,
+        respondentIds: [respondentId],
+        activityOrFlowIds: [flowId],
+        fromDate: '2025-05-06T00:00:00',
+        toDate: '2025-05-06T23:59:00',
+      });
+
+      expect(data).toEqual([
+        expect.objectContaining({
+          applet_version: '1.1.0',
+          schedule_id: defaultEventId,
+          schedule_version: '20250505-1',
+          schedule_date: '2025-05-06',
+        }),
+        expect.objectContaining({
+          applet_version: '1.1.0',
+          schedule_id: individualEventId,
+          schedule_version: '20250505-2',
+          schedule_date: '2025-05-06',
+        }),
+      ]);
+
+      // Only default schedule appears after deletion day
+      data = await exporter.generateExportData({
+        appletId,
+        respondentIds: [respondentId],
+        activityOrFlowIds: [flowId],
+        fromDate: '2025-05-07T00:00:00',
+        toDate: '2025-05-07T23:59:00',
+      });
+
+      expect(data).toEqual([
+        expect.objectContaining({
+          applet_version: '1.1.0',
+          schedule_id: defaultEventId,
+          schedule_version: '20250505-1',
+          schedule_date: '2025-05-07',
+        }),
+      ]);
+    });
+
+    it('exports data for soft deleted subjects', async () => {
+      const appletId = 'e5d59476-818d-43db-b9d4-33301dfb36a1';
+      const flowId = '0855cfa7-8289-4ef4-bf87-ccea24be209a';
+      const defaultEventId = 'e277f63a-e31c-42f3-9590-a9b1f9d25e2b';
+      const respondentId = 'b32d2bbb-1bb3-4dc2-a3e7-65a9c1919046';
+      const ownerId = '36abb556-e2d3-4ce8-9390-f3fc93ee38ef';
+
+      const scheduleHistoryData: ScheduleHistoryData[] = [
+        {
+          appletId,
+          appletVersion: '1.1.0',
+          appletName: '1980',
+          userId: null,
+          subjectId: null,
+          eventId: defaultEventId,
+          eventType: 'flow',
+          eventVersion: '20250505-1',
+          eventVersionCreatedAt: '2025-05-05T10:49:12.118610',
+          eventVersionUpdatedAt: '2025-05-05T10:49:12.118618',
+          eventVersionIsDeleted: false,
+          linkedWithAppletAt: '2025-05-05T10:49:12.122894',
+          eventUpdatedBy: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+          activityOrFlowId: flowId,
+          activityOrFlowName: 'AF1',
+          activityOrFlowHidden: false,
+          accessBeforeSchedule: false,
+          oneTimeCompletion: false,
+          periodicity: Periodicity.Always,
+          startDate: null,
+          startTime: '00:00:00',
+          endDate: null,
+          endTime: '23:59:00',
+          selectedDate: null,
+        },
+      ];
+      scheduleHistorySpy.mockResolvedValue(scheduleHistoryData);
+
+      const respondentData: ParticipantWithDataAccess[] = [
+        {
+          id: respondentId,
+          nicknames: ['participant'],
+          secretIds: ['participant'],
+          isAnonymousRespondent: false,
+          lastSeen: null,
+          isPinned: false,
+          details: [
+            {
+              appletId,
+              appletDisplayName: '1980',
+              appletImage: '',
+              accessId: '961e6507-30d0-4b36-b8da-6023b92d7532',
+              respondentNickname: 'participant',
+              respondentSecretId: 'participant',
+              hasIndividualSchedule: false,
+              encryption: {
+                publicKey:
+                  '[1,76,211,152,171,81,215,33,212,194,212,245,49,115,35,8,67,179,133,181,175,30,204,169,67,183,69,200,29,166,232,116,226,227,195,60,105,93,212,165,47,145,236,83,38,14,26,2,136,108,206,247,232,13,235,70,128,4,198,13,118,194,115,68,104,119,168,15,204,218,249,100,56,128,221,72,119,145,186,251,170,241,92,246,28,79,234,169,78,248,178,218,120,205,214,72,229,66,31,37,163,107,250,121,131,10,196,21,104,248,3,137,84,175,52,74,60,36,239,150,71,225,69,94,180,149,131,109]',
+                prime:
+                  '[142,53,84,26,33,215,174,82,178,158,65,41,36,152,127,139,197,84,90,109,103,78,94,198,149,47,225,230,115,130,194,200,81,168,101,114,98,61,177,75,5,177,145,221,227,162,65,164,108,175,141,135,195,231,15,60,128,194,133,208,69,128,254,215,114,154,198,158,109,213,187,214,158,249,206,122,105,179,103,3,182,125,47,178,49,40,174,108,200,234,147,92,166,82,149,188,194,204,56,232,83,74,155,128,101,255,174,173,116,143,235,160,156,12,125,136,25,12,107,22,160,16,138,212,164,236,224,235]',
+                base: '[2]',
+                accountId: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+              },
+              subjectId: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2',
+              subjectTag: 'Parent',
+              subjectFirstName: 'FN-PRNT',
+              subjectLastName: 'LN-PRNT',
+              subjectCreatedAt: '2025-05-05T10:55:25.701196',
+              subjectUpdatedAt: '2025-05-10T10:55:25.701196',
+              subjectIsDeleted: true,
+              invitation: {
+                email: 'someone1@example.com',
+                appletId,
+                appletName: '1980',
+                role: 'respondent',
+                key: '9a455418-b9b8-3ba6-aadd-d363f3bbf511',
+                status: 'approved',
+                firstName: 'FN-PRNT',
+                lastName: 'LN-PRNT',
+                createdAt: '2025-05-05T10:55:25.760007',
+                acceptedAt: '2025-05-05T10:55:50.148171',
+                meta: { subject_id: '6db858b0-0cbd-4b8c-a132-ed8aaef870e2', secret_user_id: null },
+                nickname: 'participant',
+                secretUserId: 'participant',
+                tag: 'Parent',
+                title: null,
+              },
+              roles: [Roles.Respondent],
+              teamMemberCanViewData: true,
+            },
+          ],
+          status: ParticipantStatus.Invited,
+          email: 'someone1@example.com',
+          subjects: ['6db858b0-0cbd-4b8c-a132-ed8aaef870e2'],
+        },
+        {
+          id: ownerId,
+          nicknames: ['owner'],
+          secretIds: ['11ab8179-7b6c-4467-bb27-5330cfaab4bf'],
+          isAnonymousRespondent: false,
+          lastSeen: null,
+          isPinned: false,
+          details: [
+            {
+              appletId,
+              appletDisplayName: '1980',
+              appletImage: '',
+              accessId: 'b83071ad-9c51-4d62-be27-fbccbce36807',
+              respondentNickname: 'owner',
+              respondentSecretId: '11ab8179-7b6c-4467-bb27-5330cfaab4bf',
+              hasIndividualSchedule: false,
+              encryption: {
+                publicKey:
+                  '[1,76,211,152,171,81,215,33,212,194,212,245,49,115,35,8,67,179,133,181,175,30,204,169,67,183,69,200,29,166,232,116,226,227,195,60,105,93,212,165,47,145,236,83,38,14,26,2,136,108,206,247,232,13,235,70,128,4,198,13,118,194,115,68,104,119,168,15,204,218,249,100,56,128,221,72,119,145,186,251,170,241,92,246,28,79,234,169,78,248,178,218,120,205,214,72,229,66,31,37,163,107,250,121,131,10,196,21,104,248,3,137,84,175,52,74,60,36,239,150,71,225,69,94,180,149,131,109]',
+                prime:
+                  '[142,53,84,26,33,215,174,82,178,158,65,41,36,152,127,139,197,84,90,109,103,78,94,198,149,47,225,230,115,130,194,200,81,168,101,114,98,61,177,75,5,177,145,221,227,162,65,164,108,175,141,135,195,231,15,60,128,194,133,208,69,128,254,215,114,154,198,158,109,213,187,214,158,249,206,122,105,179,103,3,182,125,47,178,49,40,174,108,200,234,147,92,166,82,149,188,194,204,56,232,83,74,155,128,101,255,174,173,116,143,235,160,156,12,125,136,25,12,107,22,160,16,138,212,164,236,224,235]',
+                base: '[2]',
+                accountId: '36abb556-e2d3-4ce8-9390-f3fc93ee38ef',
+              },
+              subjectId: '85bb50d2-ed90-413d-9736-9b3d0e706627',
+              subjectTag: 'Team',
+              subjectFirstName: 'Aki',
+              subjectLastName: 'Q',
+              subjectCreatedAt: '2025-05-05T10:49:11.696467',
+              subjectUpdatedAt: '2025-05-05T10:49:11.696467',
+              subjectIsDeleted: false,
+              invitation: null,
+              roles: [Roles.Owner, Roles.Respondent],
+              teamMemberCanViewData: true,
+            },
+          ],
+          status: ParticipantStatus.Invited,
+          email: 'someone2@example.com',
+          subjects: ['85bb50d2-ed90-413d-9736-9b3d0e706627'],
+        },
+      ];
+      respondentDataSpy.mockResolvedValue(respondentData);
+
+      // Data is preserved for dates before deletion
+      let data = await exporter.generateExportData({
+        appletId,
+        respondentIds: [respondentId],
+        activityOrFlowIds: [flowId],
+        fromDate: '2025-05-07T00:00:00',
+        toDate: '2025-05-07T23:59:00',
+      });
+
+      expect(data).toEqual([
+        expect.objectContaining({
+          applet_version: '1.1.0',
+          schedule_id: defaultEventId,
+          schedule_version: '20250505-1',
+          schedule_date: '2025-05-07',
+          user_id: respondentId,
+        }),
+      ]);
+
+      // No data is present for days after deletion
+      // Data is preserved for dates before deletion
+      data = await exporter.generateExportData({
+        appletId,
+        respondentIds: [respondentId],
+        activityOrFlowIds: [flowId],
+        fromDate: '2025-05-11T00:00:00',
+        toDate: '2025-05-11T23:59:00',
+      });
+
+      expect(data).toEqual([]);
     });
   });
 });

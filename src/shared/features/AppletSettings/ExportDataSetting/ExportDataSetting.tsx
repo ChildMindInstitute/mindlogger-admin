@@ -1,61 +1,134 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups/DataExportPopup';
+import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { UniqueTuple } from 'shared/types';
+import { useFeatureFlags } from 'shared/hooks';
+import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
+  SupplementaryFiles,
+  SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
-import { DATA_TESTID_EXPORT_DATA_EXPORT_POPUP } from './ExportDataSetting.const';
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
 export const ExportDataSetting = ({
   isExportSettingsOpen,
   onExportSettingsClose,
+  onDataExportPopupClose,
+  chosenAppletData,
+  isAppletSetting,
+  supportedSupplementaryFiles,
+  filters,
+  'data-testid': dataTestId,
 }: ExportDataSettingProps) => {
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { featureFlags } = useFeatureFlags();
+  const { result } = applet.useAppletData() ?? {};
+  const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
-  const minDate = new Date(appletData?.createdAt ?? '');
+  const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
-  const methods = useForm<ExportDataFormValues>({
-    resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
-    defaultValues: {
+  const defaultValues: ExportDataFormValues = useMemo(
+    () => ({
       dateType: ExportDateType.AllTime,
       fromDate: minDate,
       toDate: getMaxDate(),
-    },
+      supplementaryFiles: SupplementaryFiles.reduce(
+        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        {} as Record<SupplementaryFiles, boolean>,
+      ),
+    }),
+    [minDate],
+  );
+  const methods = useForm<ExportDataFormValues>({
+    resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
+    defaultValues,
     mode: 'onSubmit',
   });
+
+  const resetDefaultValues = useCallback(() => {
+    methods.reset(defaultValues);
+  }, [defaultValues, methods]);
+
+  const defaultSupportedSupplementaryFiles =
+    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
+
+  const filteredSupportedSupplementaryFiles = (
+    Object.entries(SupplementaryFilesWithFeatureFlag) as unknown as [
+      keyof typeof FeatureFlagDefaults | 'none',
+      SupplementaryFiles[],
+    ][]
+  )
+    .filter(([flag]) => {
+      if (flag === 'none') {
+        return true;
+      }
+
+      if (flag in featureFlags) {
+        return featureFlags[flag];
+      }
+
+      console.warn(`No such feature flag: ${flag}`);
+
+      return false;
+    })
+    .flatMap(([_, files]) => files)
+    .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
+
+  let appletName = '';
+  if (appletData) {
+    if ('appletDisplayName' in appletData) {
+      appletName = appletData.appletDisplayName ?? '';
+    } else if ('displayName' in appletData) {
+      appletName = appletData.displayName;
+    }
+  }
+
+  useEffect(() => {
+    resetDefaultValues();
+  }, [resetDefaultValues]);
 
   return (
     <FormProvider {...methods}>
       {isExportSettingsOpen && (
         <ExportSettingsPopup
           isOpen
-          onClose={onExportSettingsClose}
+          onClose={() => {
+            resetDefaultValues();
+            onExportSettingsClose();
+          }}
           onExport={() => {
             setDataIsExporting(true);
             onExportSettingsClose();
           }}
           minDate={minDate}
           getMaxDate={getMaxDate}
+          appletName={appletName}
+          supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
+          data-testid={`${dataTestId}-settings`}
         />
       )}
       {dataIsExporting && (
         <DataExportPopup
-          isAppletSetting
+          isAppletSetting={isAppletSetting ?? true}
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
-          data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
+          data-testid={`${dataTestId}-modal`}
+          filters={filters}
+          handlePopupClose={() => {
+            resetDefaultValues();
+            onDataExportPopupClose?.();
+          }}
         />
       )}
     </FormProvider>

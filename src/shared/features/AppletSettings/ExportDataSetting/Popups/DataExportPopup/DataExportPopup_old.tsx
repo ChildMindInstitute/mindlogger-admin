@@ -29,21 +29,25 @@ import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataS
 import { workspaces } from 'shared/state';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
-
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
-import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
-import { ChosenAppletData } from '../../Respondents.types';
-import { getExportDataSuffix, getFormattedToDate } from './DataExportPopup.utils';
+import {
+  DataExportPopupProps,
+  ExecuteAllPagesOfExportData,
+  Modals,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
+import {
+  getExportDataSuffix,
+  getFormattedToDate,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
   popupVisible,
   isAppletSetting,
   setPopupVisible,
-  tableRows,
   chosenAppletData,
-  setChosenAppletData,
+  handlePopupClose: providedCloseHandler,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
@@ -81,9 +85,9 @@ export const DataExportPopup = ({
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
   const handlePopupClose = useCallback(() => {
-    setChosenAppletData?.(null);
     setPopupVisible(false);
-  }, [setChosenAppletData, setPopupVisible]);
+    providedCloseHandler?.();
+  }, [providedCloseHandler, setPopupVisible]);
 
   const handleRetry = () => {
     setActiveModal(Modals.DataExport);
@@ -96,10 +100,14 @@ export const DataExportPopup = ({
         dataExportingRef.current = true;
         setDataIsExporting(true);
 
-        const dateType = getValues?.().dateType;
-        const formFromDate = getValues?.().fromDate;
+        const {
+          dateType,
+          fromDate: formFromDate,
+          toDate: formToDate,
+          supplementaryFiles,
+        } = getValues?.() ?? {};
+
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const formToDate = getValues?.().toDate;
         const toDate = getFormattedToDate({ dateType, formToDate });
 
         const body = {
@@ -140,48 +148,52 @@ export const DataExportPopup = ({
         }
 
         if (featureFlags.enableEmaExtraFiles) {
-          if (ownerId) {
-            let activityOrFlowIds: string[] | undefined;
-            const subjectIds: Set<string> = new Set();
+          if (supplementaryFiles.scheduleHistory) {
+            if (ownerId) {
+              let activityOrFlowIds: string[] | undefined;
+              const subjectIds: Set<string> = new Set();
 
-            // Both of these may be populated when exporting for a flow, but we only want the flow
-            if (filters?.flowId) {
-              activityOrFlowIds = [filters.flowId];
-            } else if (filters?.activityId) {
-              activityOrFlowIds = [filters.activityId];
+              // Both of these may be populated when exporting for a flow, but we only want the flow
+              if (filters?.flowId) {
+                activityOrFlowIds = [filters.flowId];
+              } else if (filters?.activityId) {
+                activityOrFlowIds = [filters.activityId];
+              }
+
+              if (targetSubjectIds) {
+                subjectIds.add(targetSubjectIds);
+              }
+
+              if (filters?.targetSubjectId) {
+                subjectIds.add(filters.targetSubjectId);
+              }
+
+              if (filters?.sourceSubjectId) {
+                subjectIds.add(filters.sourceSubjectId);
+              }
+
+              await new ScheduleHistoryExporter(ownerId).exportData({
+                appletId,
+                fromDate,
+                toDate,
+                subjectIds: subjectIds.size > 0 ? Array.from(subjectIds) : undefined,
+                activityOrFlowIds,
+              });
+            } else {
+              console.warn(
+                `No owner ID found for current workspace. Schedule history export skipped.`,
+              );
             }
+          }
 
-            if (targetSubjectIds) {
-              subjectIds.add(targetSubjectIds);
-            }
-
-            if (filters?.targetSubjectId) {
-              subjectIds.add(filters.targetSubjectId);
-            }
-
-            if (filters?.sourceSubjectId) {
-              subjectIds.add(filters.sourceSubjectId);
-            }
-
-            await new ScheduleHistoryExporter(ownerId).exportData({
+          if (supplementaryFiles.flowHistory) {
+            await new FlowActivityHistoryExporter(appletId).exportData({
               appletId,
               fromDate,
               toDate,
-              subjectIds: subjectIds.size > 0 ? Array.from(subjectIds) : undefined,
-              activityOrFlowIds,
+              flowIds: filters?.flowId ? [filters.flowId] : undefined,
             });
-          } else {
-            console.warn(
-              `No owner ID found for current workspace. Schedule history export skipped.`,
-            );
           }
-
-          await new FlowActivityHistoryExporter(appletId).exportData({
-            appletId,
-            fromDate,
-            toDate,
-            flowIds: filters?.flowId ? [filters.flowId] : undefined,
-          });
         }
 
         handlePopupClose();
@@ -199,39 +211,8 @@ export const DataExportPopup = ({
         setDataIsExporting(false);
       }
     },
-    [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose],
+    [featureFlags, filters, getDecryptedAnswers, getValues, handlePopupClose, ownerId],
   );
-
-  const renderDataExportContent = () => {
-    if (dataIsExporting) {
-      return (
-        <>
-          <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-            {t('waitForRespondentDataDownload')}
-            {limit > 1 && (
-              <>
-                <br />
-                <br />
-                {t('dataProcessing', {
-                  percentages: Math.floor((currentPage / limit) * 100),
-                })}
-              </>
-            )}
-          </StyledBodyLarge>
-          <StyledLinearProgress />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-          {t('selectAppletToExportRespondentsData')}
-        </StyledBodyLarge>
-        <AppletsSmallTable tableRows={tableRows} />
-      </>
-    );
-  };
 
   useEffect(() => {
     setActiveModal(showEnterPwdScreen ? Modals.PasswordCheck : Modals.DataExport);
@@ -243,11 +224,25 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handlePopupClose}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText=""
           data-testid={dataTestid}
         >
-          <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
+          <StyledModalWrapper>
+            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+              {t('waitForRespondentDataDownload')}
+              {limit > 1 && (
+                <>
+                  <br />
+                  <br />
+                  {t('dataProcessing', {
+                    percentages: Math.floor((currentPage / limit) * 100),
+                  })}
+                </>
+              )}
+            </StyledBodyLarge>
+            <StyledLinearProgress />
+          </StyledModalWrapper>
         </Modal>
       );
     case Modals.PasswordCheck:
@@ -277,7 +272,7 @@ export const DataExportPopup = ({
           open={popupVisible}
           onClose={handlePopupClose}
           onSubmit={handleRetry}
-          title={t('dataExport')}
+          title={t('dataExport.title')}
           buttonText={t('retry')}
           hasSecondBtn
           submitBtnColor="error"

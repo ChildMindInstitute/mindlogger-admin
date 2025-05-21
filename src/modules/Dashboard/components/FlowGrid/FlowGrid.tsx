@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { FlowSummaryCard } from 'modules/Dashboard/components/FlowSummaryCard';
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { StyledFlexColumn } from 'shared/styles';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
 
 import { FlowGridProps } from './FlowGrid.types';
 import { useFlowGridMenu } from './FlowGrid.hooks';
@@ -57,16 +57,18 @@ export const FlowGrid = ({
 
       <TakeNowModal />
 
-      {showExportPopup && (
-        <DataExportPopup
+      {applet && (
+        <ExportDataSetting
+          isExportSettingsOpen={showExportPopup}
+          onExportSettingsClose={() => {
+            setShowExportPopup(false);
+          }}
+          onDataExportPopupClose={() => {
+            setFlowId(undefined);
+          }}
           chosenAppletData={applet ?? null}
           filters={{ flowId, targetSubjectId: subject?.id }}
           isAppletSetting
-          popupVisible={showExportPopup}
-          setPopupVisible={() => {
-            setShowExportPopup(false);
-            setFlowId(undefined);
-          }}
         />
       )}
     </>
