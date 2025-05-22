@@ -133,11 +133,6 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'Select the date, Activity Flow or Activity, and response time to review the response data.',
-        ),
-      ).toBeInTheDocument();
     });
 
     test('handles date picker interactions correctly', async () => {

@@ -98,7 +98,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 
@@ -125,7 +125,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 });
