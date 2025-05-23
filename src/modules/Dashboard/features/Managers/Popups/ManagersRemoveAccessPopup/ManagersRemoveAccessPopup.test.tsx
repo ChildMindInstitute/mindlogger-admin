@@ -38,7 +38,7 @@ const commonProps = {
 
 describe('ManagersRemoveAccessPopup component tests', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('ManagersRemoveAccessPopup should open with applets list', async () => {

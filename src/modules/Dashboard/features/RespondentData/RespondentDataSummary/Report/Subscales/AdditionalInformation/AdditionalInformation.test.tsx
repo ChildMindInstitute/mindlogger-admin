@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -40,7 +41,7 @@ describe('AdditionalInformation component', () => {
   });
 
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('renders AdditionalInformation component with regular text', () => {

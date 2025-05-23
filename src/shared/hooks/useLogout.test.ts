@@ -41,7 +41,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('useLogout', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('deleting access token navigates to login', async () => {

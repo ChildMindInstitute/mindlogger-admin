@@ -1,6 +1,7 @@
 import { waitFor } from '@testing-library/react';
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -38,8 +39,7 @@ const abortSignal = { signal: undefined };
 
 describe('DuplicatePopups', () => {
   afterEach(() => {
-    mockAxios.reset();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should show an error if the name already exists in database', async () => {

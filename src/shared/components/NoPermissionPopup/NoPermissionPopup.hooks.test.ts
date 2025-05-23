@@ -135,7 +135,6 @@ const successfulGetAlertsMock = {
 describe('useNoPermissionPopup', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    mockAxios.reset();
   });
 
   test('should return correct values and call dispatch on handleSubmit', async () => {

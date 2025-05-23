@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { initialStateData } from 'shared/state';
 import { mockedApplet } from 'shared/mock';
@@ -34,7 +35,7 @@ const getPreloadedState = (isPublished: boolean) => ({
 
 describe('PublishConcealAppletPopup', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('should show publish success banner', async () => {
