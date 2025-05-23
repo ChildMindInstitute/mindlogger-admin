@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
+import { alerts, auth, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { workspaces, auth, alerts } from 'redux/modules';
 import { Footer } from 'shared/components';
-import { useAlertsWebsocket } from 'shared/hooks';
+import { RebrandBanner } from 'shared/components/Banners/RebrandBanner';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { useAlertsWebsocket } from 'shared/hooks';
 
-import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
+import { LeftBar, TopBar } from './components';
 
 export const BaseLayout = () => {
   const { appletId } = useParams();
@@ -23,7 +24,7 @@ export const BaseLayout = () => {
     if (!isAuthorized) return;
 
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
-  }, [isAuthorized]);
+  }, [isAuthorized, dispatch]);
 
   useEffect(() => {
     if (!ownerId) return;
@@ -39,6 +40,7 @@ export const BaseLayout = () => {
     <StyledBaseLayout>
       {isAuthorized && <LeftBar />}
       <StyledCol isAuthorized={isAuthorized}>
+        <RebrandBanner />
         <TopBar />
         <Outlet />
         <Footer />
