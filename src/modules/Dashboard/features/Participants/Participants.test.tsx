@@ -51,7 +51,7 @@ const preloadedState = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
@@ -63,11 +63,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const RESPONDENTS_ENDPOINT = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 // Mock responses for requests made both by Participants table and ActivityAssignDrawer
@@ -102,7 +102,7 @@ describe('Participants component tests', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
@@ -244,7 +244,7 @@ describe('Participants component tests', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({

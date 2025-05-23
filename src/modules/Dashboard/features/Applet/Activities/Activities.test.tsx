@@ -81,7 +81,7 @@ const testId = 'dashboard-applet-activities';
 const route = `/dashboard/${mockedAppletId}/activities`;
 const routePath = page.appletActivities;
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {
@@ -94,11 +94,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
@@ -109,7 +109,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         enableParticipantMultiInformant: false,
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
@@ -232,7 +232,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -278,7 +278,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -324,7 +324,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -569,7 +569,7 @@ describe('Dashboard > Applet > Activities screen', () => {
           featureFlags: {
             enableParticipantMultiInformant: true,
           },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
       });
 

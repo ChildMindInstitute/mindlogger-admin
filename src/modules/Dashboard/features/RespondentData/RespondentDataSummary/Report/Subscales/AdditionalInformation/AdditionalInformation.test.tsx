@@ -22,11 +22,11 @@ jest.mock('./AdditionalInformation.styles', () => ({
   }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const dataTestId = 'additional-info';
 
@@ -36,7 +36,7 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -63,7 +63,7 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -84,7 +84,7 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(

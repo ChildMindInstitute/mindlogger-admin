@@ -9,9 +9,9 @@ import { ParticipantDropdown } from './ParticipantDropdown';
 import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 import { participantToOption } from './ParticipantDropdown.utils';
 
-jest.mock('shared/hooks/useFeatureFlags');
+vi.mock('shared/hooks/useFeatureFlags');
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ParticipantDropdown', () => {
   const dataTestId = 'test';

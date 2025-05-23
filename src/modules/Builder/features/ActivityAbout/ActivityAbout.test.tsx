@@ -2,9 +2,8 @@
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   mockedActivityId,
   mockedApplet,
@@ -15,8 +14,9 @@ import {
   mockedSingleSelectFormValues,
   mockedSliderFormValues,
 } from 'shared/mock';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { initialStateData } from 'shared/state';
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { Roles } from 'shared/consts';
 
 import { ActivityAbout } from './ActivityAbout';
 
@@ -54,7 +54,7 @@ const preloadedState = {
             name: 'Default',
             logo: null,
             backgroundImage: null,
-            primaryColor: '#00639a',
+            primaryColor: '#0067a0',
             secondaryColor: '#fff',
             tertiaryColor: '#404040',
             id: '9b023afd-e5f9-403c-b154-fc8f35fcf3ab',
@@ -80,11 +80,11 @@ const appletFormData = {
   ],
 };
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ActivityAbout', () => {
   beforeEach(() => {
@@ -92,7 +92,7 @@ describe('ActivityAbout', () => {
       featureFlags: {
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -150,7 +150,7 @@ describe('ActivityAbout', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithAppletFormData({

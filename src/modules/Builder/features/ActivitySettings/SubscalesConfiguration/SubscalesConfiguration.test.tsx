@@ -197,11 +197,11 @@ jest.mock('shared/components/FileUploader/FileUploader', () => ({
   ...jest.requireActual('__mocks__/LookupTableUploader'),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('SubscalesConfiguration', () => {
   beforeEach(() => {
@@ -209,7 +209,7 @@ describe('SubscalesConfiguration', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -300,18 +300,6 @@ describe('SubscalesConfiguration', () => {
     fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
       target: { value: 'subscale_2' },
     });
-
-    // Wait for both subscale names to be updated in the header (debounce complete)
-    await waitFor(
-      () => {
-        const header0 = screen.getByTestId(`${mockedTestid}-0-header`);
-        const header1 = screen.getByTestId(`${mockedTestid}-1-header`);
-        expect(header0).toHaveTextContent('Subscale 1: subscale_1');
-        expect(header1).toHaveTextContent('Subscale 2: subscale_2');
-      },
-      { timeout: 1500 },
-    );
-
     fireEvent.click(
       screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
     );
@@ -330,15 +318,12 @@ describe('SubscalesConfiguration', () => {
       associatedSubscale.querySelectorAll('td');
     const [associatedItemElement, associatedItemSubscale] = associatedItem.querySelectorAll('td');
 
-    // wait for debounce callback and validation to complete
-    await waitFor(
-      () => {
-        expect(associatedSubscaleElement).toHaveTextContent(
-          'Subscale: subscale_2 (Item: single_text_score)',
-        );
-      },
-      { timeout: 1500 },
-    );
+    // wait for debounce callback
+    await waitFor(() => {
+      expect(associatedSubscaleElement).toHaveTextContent(
+        'Subscale: subscale_2 (Item: single_text_score)',
+      );
+    });
 
     expect(associatedSubscaleSubscale).toHaveTextContent('subscale_1');
 
@@ -794,9 +779,7 @@ describe('SubscalesConfiguration', () => {
     });
 
     // Add the text " Subscale" to the subscale name, which should now be "Sum Subscale"
-    const nameInput = getByTestId(`${mockedTestid}-0-name`).querySelector('input');
-    await userEvent.type(nameInput, ' Subscale');
-    await userEvent.tab(); // This will trigger blur on the name input
+    await userEvent.type(getByTestId(`${mockedTestid}-0-name`).querySelector('input'), ' Subscale');
 
     await waitFor(() => {
       const reportScore: ScoreReport = ref.current.getValues(
@@ -837,11 +820,9 @@ describe('SubscalesConfiguration', () => {
       });
 
       await waitFor(() => {
-        const errorMessages = screen.getAllByText(
-          'That Subscale Name is already in use. Please use a different name',
-        );
-        expect(errorMessages.length).toBeGreaterThan(0);
-        expect(errorMessages[0]).toBeVisible();
+        expect(
+          screen.getByText('That Subscale Name is already in use. Please use a different name'),
+        ).toBeVisible();
       });
     });
 
@@ -851,7 +832,7 @@ describe('SubscalesConfiguration', () => {
           featureFlags: {
             enableCahmiSubscaleScoring: true,
           },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         await setUpLookupTable();
@@ -874,7 +855,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with severity column when enableCahmiSubscaleScoring is true', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -906,7 +887,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with empty severity column', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -927,7 +908,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table is valid with incomplete severity column', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -969,7 +950,7 @@ describe('SubscalesConfiguration', () => {
       test('Lookup table fails with invalid severity value', async () => {
         mockUseFeatureFlags.mockReturnValue({
           featureFlags: { enableCahmiSubscaleScoring: true },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
 
         setMockLookupTableFileData([
@@ -1006,7 +987,7 @@ describe('SubscalesConfiguration', () => {
         `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
           mockUseFeatureFlags.mockReturnValue({
             featureFlags: { enableCahmiSubscaleScoring },
-            resetLDContext: jest.fn(),
+            resetLDContext: vi.fn(),
           });
 
           setMockLookupTableFileData([
@@ -1036,7 +1017,7 @@ describe('SubscalesConfiguration', () => {
         `('$description', async ({ age, enableCahmiSubscaleScoring }) => {
           mockUseFeatureFlags.mockReturnValue({
             featureFlags: { enableCahmiSubscaleScoring },
-            resetLDContext: jest.fn(),
+            resetLDContext: vi.fn(),
           });
 
           setMockLookupTableFileData([

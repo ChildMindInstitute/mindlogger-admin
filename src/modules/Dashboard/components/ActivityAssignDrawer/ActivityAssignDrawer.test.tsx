@@ -36,7 +36,7 @@ import { checkAssignment, selectParticipant } from './ActivityAssignDrawer.test-
 =================================================== */
 
 const dataTestId = 'applet-activity-assign';
-const mockedOnClose = jest.fn();
+const mockedOnClose = vi.fn();
 
 const mockedGetAppletActivities = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -129,13 +129,13 @@ const preloadedState = {
   },
 };
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-Element.prototype.scrollTo = jest.fn();
+Element.prototype.scrollTo = vi.fn();
 
 vi.useFakeTimers();
 jest.setTimeout(10000);
@@ -149,7 +149,7 @@ describe('ActivityAssignDrawer', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({

@@ -10,10 +10,10 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useItemContent } from './Item.hooks';
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const singleSelectionItem: Item = {
   responseType: ItemResponseType.SingleSelection,
@@ -33,7 +33,7 @@ describe('useItemContent', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 

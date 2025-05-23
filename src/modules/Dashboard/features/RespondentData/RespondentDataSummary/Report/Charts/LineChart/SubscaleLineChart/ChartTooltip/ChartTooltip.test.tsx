@@ -30,11 +30,11 @@ const props: ChartTooltipProps = {
   'data-testid': dataTestid,
 };
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 jest.mock('./ChartTooltip.styles', () => ({
   ...jest.requireActual('./ChartTooltip.styles'),
@@ -53,7 +53,7 @@ describe('ChartTooltip', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -99,7 +99,7 @@ describe('ChartTooltip', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     const modifiedDataPoints: TooltipData[] =
@@ -147,7 +147,7 @@ describe('ChartTooltip', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     render(<ChartTooltip {...props} />);

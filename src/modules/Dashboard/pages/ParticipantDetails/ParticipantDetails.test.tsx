@@ -39,7 +39,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   ...jest.requireActual('shared/hooks/useFeatureFlags'),
   useFeatureFlags: vi.fn(),
 }));
@@ -49,7 +49,7 @@ describe('Participant Details page', () => {
 
   beforeEach(() => {
     jest.mocked(useNavigate).mockImplementation(() => navigate);
-    jest.mocked(useFeatureFlags).mockReturnValue({
+    vi.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: true,
       },
@@ -129,7 +129,7 @@ describe('Participant Details page', () => {
   test('should not render participant connections if the feature flag is disabled', async () => {
     vi.mocked(axios.get).mockResolvedValue(mockedAppletResult);
     vi.mocked(axios.get).mockResolvedValue(mockedParticipantResult);
-    jest.mocked(useFeatureFlags).mockReturnValue({
+    vi.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: false,
       },

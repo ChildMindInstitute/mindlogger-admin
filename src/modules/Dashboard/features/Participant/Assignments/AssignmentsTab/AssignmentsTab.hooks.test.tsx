@@ -99,7 +99,7 @@ const renderOptions = {
   routePath,
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
@@ -111,15 +111,15 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const mockHandleRefetch = jest.fn();
+const mockHandleRefetch = vi.fn();
 
-const mockGetAppletPrivateKey = jest.fn();
+const mockGetAppletPrivateKey = vi.fn();
 
 jest.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
@@ -128,7 +128,7 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 }));
 
 // Required for ActivityAssignDrawer
-Element.prototype.scrollTo = jest.fn();
+Element.prototype.scrollTo = vi.fn();
 
 const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
@@ -184,7 +184,7 @@ describe('useAssignmentsTab hook', () => {
         enableParticipantMultiInformant: true,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
