@@ -51,7 +51,7 @@ describe('Reminder component', () => {
     expect(screen.getByText('Reminder')).toBeInTheDocument();
     const header = screen.getByTestId(`${dataTestid}-header`);
     expect(header).toBeInTheDocument();
-    expect(header).toHaveTextContent('Curious');
+    expect(header).toHaveTextContent('MindLogger');
     const svg = header.querySelector('svg');
     expect(svg).toBeInTheDocument();
 
