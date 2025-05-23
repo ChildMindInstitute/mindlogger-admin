@@ -7,11 +7,11 @@ import { ReportContext } from '../../Report.context';
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { ChartData } from '../../Charts/BarChart/BarChart.types';
 
-jest.mock('modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts', () => ({
   BarChart: () => <div data-testid="mocked-bar-chart" />,
 }));
 
-jest.mock('../AdditionalInformation', () => ({
+vi.mock('../AdditionalInformation', () => ({
   AdditionalInformation: ({ optionText }: { optionText: string }) => (
     <div data-testid="mocked-additional-information">{optionText}</div>
   ),

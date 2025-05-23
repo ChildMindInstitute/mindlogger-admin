@@ -12,7 +12,7 @@ import { ConfigurationPopup } from './ConfigurationPopup';
 import { ConfigurationPopupProps } from './ConfigurationPopup.types';
 import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.utils';
 
-jest.mock('../LorisIntegration.utils', () => ({
+vi.mock('../LorisIntegration.utils', () => ({
   fetchLorisProjects: vi.fn(),
   saveLorisProject: vi.fn(),
 }));

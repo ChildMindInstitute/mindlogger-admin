@@ -11,7 +11,7 @@ const props = {
   duration: 5000,
 };
 
-jest.mock('shared/hooks/useWindowFocus', () => ({
+vi.mock('shared/hooks/useWindowFocus', () => ({
   useWindowFocus: () => mockUseWindowFocus(),
 }));
 

@@ -24,10 +24,14 @@ const resetAuthorizationPayload = {
 const mockedUseAppDispatch = vi.fn();
 const mockedUseNavigate = vi.fn();
 
-jest.mock('redux/store', () => ({
-  ...jest.requireActual('redux/store'),
-  useAppDispatch: () => mockedUseAppDispatch,
-}));
+vi.mock('redux/store', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: () => mockedUseAppDispatch,
+  };
+});
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation

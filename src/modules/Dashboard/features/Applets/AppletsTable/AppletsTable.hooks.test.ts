@@ -12,16 +12,20 @@ const mockAppletContextValue = {
   fetchData: vi.fn(),
 };
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useContext: vi.fn(),
-}));
+vi.mock('react', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('shared/hooks/useAsync', () => ({
+  return {
+    ...actual,
+    useContext: vi.fn(),
+  };
+});
+
+vi.mock('shared/hooks/useAsync', () => ({
   useAsync: vi.fn(),
 }));
 
-jest.mock('api', () => ({
+vi.mock('api', () => ({
   setFolderApi: vi.fn(),
 }));
 

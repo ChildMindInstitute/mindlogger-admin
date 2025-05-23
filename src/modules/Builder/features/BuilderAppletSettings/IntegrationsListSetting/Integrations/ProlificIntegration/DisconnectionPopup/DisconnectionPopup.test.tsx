@@ -8,7 +8,7 @@ import { DisconnectionPopup } from './DisconnectionPopup';
 import { PopupProps } from '../ProlificIntegration.types';
 import { deleteProlificIntegration } from '../ProlificIntegration.utils';
 
-jest.mock('../ProlificIntegration.utils', () => ({
+vi.mock('../ProlificIntegration.utils', () => ({
   deleteProlificIntegration: vi.fn(),
 }));
 

@@ -9,7 +9,7 @@ const mockActivityFlow = {
   items: [{ activityKey: 'activity1' }],
 };
 
-jest.mock('modules/Builder/features/ReportConfigSetting', () => ({
+vi.mock('modules/Builder/features/ReportConfigSetting', () => ({
   __esModule: true,
   default: () => <div data-testid="mock-report-config-setting" />,
 }));

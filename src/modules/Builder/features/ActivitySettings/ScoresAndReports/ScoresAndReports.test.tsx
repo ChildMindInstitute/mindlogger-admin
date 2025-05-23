@@ -33,7 +33,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('react-beautiful-dnd', () => ({
+vi.mock('react-beautiful-dnd', () => ({
   Droppable: ({ children }) =>
     children(
       {

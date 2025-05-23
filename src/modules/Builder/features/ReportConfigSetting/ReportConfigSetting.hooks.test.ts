@@ -24,13 +24,13 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/utils/authStorage', () => ({
+vi.mock('shared/utils/authStorage', () => ({
   authStorage: {
     getAccessToken: vi.fn(),
   },
 }));
 
-jest.mock('./ReportConfigSetting.utils', () => ({
+vi.mock('./ReportConfigSetting.utils', () => ({
   verifyReportServer: vi.fn(),
   setPasswordReportServer: vi.fn(),
 }));

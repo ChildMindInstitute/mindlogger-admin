@@ -13,7 +13,7 @@ import { EHRBanners, getDismissedKey } from './EHRBanners';
 const activeTestId = 'ehr-banner-active';
 const availableTestId = 'ehr-banner-available';
 
-jest.mock('shared/hooks', () => ({
+vi.mock('shared/hooks', () => ({
   useFeatureFlags: vi.fn(),
 }));
 

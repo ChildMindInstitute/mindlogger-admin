@@ -69,11 +69,11 @@ const getMockedContext = (
   isFeedbackOpen: true,
 });
 
-jest.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
+vi.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
   useEncryptedAnswers: vi.fn(),
 }));
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>

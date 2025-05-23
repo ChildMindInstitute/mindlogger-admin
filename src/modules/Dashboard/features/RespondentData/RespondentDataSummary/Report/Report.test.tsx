@@ -131,23 +131,23 @@ const mockedResponseOptions = {
   ],
 };
 
-jest.mock('./ReportFilters', () => ({
+vi.mock('./ReportFilters', () => ({
   ReportFilters: () => <div data-testid="report-filters"></div>,
 }));
 
-jest.mock('./CompletedChart', () => ({
+vi.mock('./CompletedChart', () => ({
   CompletedChart: () => <div data-testid="report-activity-completed"></div>,
 }));
 
-jest.mock('./Subscales', () => ({
+vi.mock('./Subscales', () => ({
   Subscales: () => <div data-testid="report-subscales"></div>,
 }));
 
-jest.mock('./ResponseOptions', () => ({
+vi.mock('./ResponseOptions', () => ({
   ResponseOptions: () => <div data-testid="report-response-options"></div>,
 }));
 
-jest.mock('downloadjs', () => vi.fn());
+vi.mock('downloadjs', () => vi.fn());
 
 const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(

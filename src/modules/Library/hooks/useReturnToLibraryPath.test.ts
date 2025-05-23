@@ -11,14 +11,18 @@ const getPreloadedState = ({ isAuthorized }) => ({
   },
 });
 
-jest.mock('shared/utils', () => ({
-  ...jest.requireActual('shared/utils'),
-  storage: {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-  },
-}));
+vi.mock('shared/utils', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    storage: {
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    },
+  };
+});
 
 describe('useReturnToLibraryPath', () => {
   beforeEach(() => {

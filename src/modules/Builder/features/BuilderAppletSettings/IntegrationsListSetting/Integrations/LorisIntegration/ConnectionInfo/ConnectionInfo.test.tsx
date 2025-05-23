@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { ConnectionInfo } from './ConnectionInfo';
 
 // Mock the useLorisConnectionInfo hook
-jest.mock('../LorisIntegration.hooks', () => ({
+vi.mock('../LorisIntegration.hooks', () => ({
   useLorisConnectionInfo: () => ({
     hostname: '192.168.001',
     username: 'yxiao37',

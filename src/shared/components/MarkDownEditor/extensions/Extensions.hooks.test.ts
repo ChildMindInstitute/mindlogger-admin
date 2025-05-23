@@ -7,13 +7,17 @@ import * as utils from './Extensions.utils';
 import { UploadMethodsProps } from './Extensions.types';
 
 const mockedExecuteMediaUpload = vi.fn();
-jest.mock('shared/hooks/useMediaUpload', () => ({
-  ...jest.requireActual('shared/hooks/useMediaUpload'),
-  useMediaUpload: () => ({
-    executeMediaUpload: mockedExecuteMediaUpload,
-    isLoading: false,
-  }),
-}));
+vi.mock('shared/hooks/useMediaUpload', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useMediaUpload: () => ({
+      executeMediaUpload: mockedExecuteMediaUpload,
+      isLoading: false,
+    }),
+  };
+});
 
 const setPopupVisibleAndSetError = async (props: UploadMethodsProps) => {
   vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));

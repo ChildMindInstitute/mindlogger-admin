@@ -16,12 +16,16 @@ import { AppletUiType, LibraryForm } from '../Applet.types';
 const dataTestid = 'activity-item';
 const mockDispatch = vi.fn();
 
-jest.mock('./Item.styles', () => ({
-  ...jest.requireActual('./Item.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
-}));
+vi.mock('./Item.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{modelValue}</div>
+    ),
+  };
+});
 
 const FormComponent = ({ children }) => {
   const methods = useForm<LibraryForm>({

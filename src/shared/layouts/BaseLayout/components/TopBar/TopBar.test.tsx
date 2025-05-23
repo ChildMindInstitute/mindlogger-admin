@@ -43,10 +43,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('./Notifications', () => ({
-  ...jest.requireActual('./Notifications'),
-  Notifications: () => <div>Notifications</div>,
-}));
+vi.mock('./Notifications', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    Notifications: () => <div>Notifications</div>,
+  };
+});
 
 describe('TopBar component', () => {
   test('when isAuthorized = false', async () => {

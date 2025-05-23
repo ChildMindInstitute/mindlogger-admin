@@ -9,11 +9,11 @@ import { auth } from 'redux/modules';
 import { ProlificIntegration } from './ProlificIntegration';
 import { prolificIntegrationExists } from './ProlificIntegration.utils';
 
-jest.mock('./ProlificIntegration.utils', () => ({
+vi.mock('./ProlificIntegration.utils', () => ({
   prolificIntegrationExists: vi.fn(),
 }));
 
-jest.mock('redux/modules');
+vi.mock('redux/modules');
 
 const preloadedStateWithoutIntegration = {
   applet: {

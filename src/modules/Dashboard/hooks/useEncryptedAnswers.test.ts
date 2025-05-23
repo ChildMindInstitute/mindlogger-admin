@@ -18,7 +18,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useEncryptionStorage', () => ({
+vi.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
     getAppletPrivateKey: () => mockedPrivateKey,
   }),

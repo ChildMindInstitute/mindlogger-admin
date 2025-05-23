@@ -96,16 +96,24 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: vi.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: vi.fn(),
-  useReturnToLibraryPath: vi.fn(),
-}));
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletsFromCart: vi.fn(),
+    useReturnToLibraryPath: vi.fn(),
+  };
+});
 
 describe('AppletsCatalog', () => {
   afterAll(() => {

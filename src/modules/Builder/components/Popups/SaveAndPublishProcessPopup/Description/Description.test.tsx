@@ -15,12 +15,16 @@ const getPreloadedState = (typePrefix = AppletThunkTypePrefix.Create) => ({
   },
 });
 
-jest.mock('modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks', () => ({
-  ...jest.requireActual('modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks'),
-  useAppletDataFromForm: () => () => ({
-    displayName: mockDisplayName,
-  }),
-}));
+vi.mock('modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletDataFromForm: () => () => ({
+      displayName: mockDisplayName,
+    }),
+  };
+});
 
 describe('Description Component', () => {
   afterAll(() => {

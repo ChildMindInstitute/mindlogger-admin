@@ -7,7 +7,7 @@ import { mockedOwnerId } from 'shared/mock';
 
 import { usePermissions } from './usePermissions';
 
-jest.mock('react-i18next', () => mockI18Next);
+vi.mock('react-i18next', () => mockI18Next);
 
 describe('usePermissions hook tests', () => {
   const mockAsyncFunc = vi.fn();

@@ -22,13 +22,18 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: () => mockedUseAppDispatch,
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Dashboard/state/CalendarEvents', () => {
-  const originalModule = jest.requireActual('modules/Dashboard/state/CalendarEvents');
+  return {
+    ...actual,
+    useAppDispatch: () => mockedUseAppDispatch,
+  };
+});
+
+vi.mock('modules/Dashboard/state/CalendarEvents', async (importOriginal) => {
+  const actual = await importOriginal();
+
   const useScheduledVisibilityData = vi.fn().mockReturnValue(true);
   const useAvailableVisibilityData = vi.fn().mockReturnValue(true);
   const setAvailableVisibility = vi.fn();
@@ -36,7 +41,7 @@ jest.mock('modules/Dashboard/state/CalendarEvents', () => {
   const createCalendarEvents = vi.fn();
 
   return {
-    ...originalModule,
+    ...actual,
     calendarEvents: {
       ...originalModule.calendarEvents,
       useScheduledVisibilityData,

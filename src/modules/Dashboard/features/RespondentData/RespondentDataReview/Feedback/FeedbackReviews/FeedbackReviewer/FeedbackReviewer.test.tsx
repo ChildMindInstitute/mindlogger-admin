@@ -7,7 +7,7 @@ import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentDat
 import { FeedbackReviewer } from './FeedbackReviewer';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>

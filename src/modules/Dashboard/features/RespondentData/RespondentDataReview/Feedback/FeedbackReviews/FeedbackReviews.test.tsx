@@ -153,10 +153,14 @@ const items = [
   },
 ];
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: vi.fn(),
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
 
 const mockedGetWithEmptyReviews = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -249,7 +253,7 @@ const mockedGetWithReviewsNoAnswers = {
   },
 };
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>

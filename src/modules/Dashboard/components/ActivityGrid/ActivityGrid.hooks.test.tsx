@@ -33,7 +33,7 @@ vi.mock('react-router-dom', async () => {
 const mockedUseParams = useParams as jest.MockedFunction<typeof useParams>;
 const mockedUseNavigate = useNavigate as jest.MockedFunction<typeof useNavigate>;
 
-jest.mock('redux/store/hooks', () => ({
+vi.mock('redux/store/hooks', () => ({
   useAppDispatch: vi.fn(),
   useAppSelector: vi.fn(),
 }));

@@ -14,12 +14,16 @@ import { useAppletPrivateKeySetter } from './useAppletPrivateKeySetter';
 const mockedSetAppletPrivateKey = vi.fn();
 
 vi.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-jest.mock('shared/hooks', () => ({
-  ...jest.requireActual('shared/hooks'),
-  useEncryptionStorage: () => ({
-    setAppletPrivateKey: mockedSetAppletPrivateKey,
-  }),
-}));
+vi.mock('shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useEncryptionStorage: () => ({
+      setAppletPrivateKey: mockedSetAppletPrivateKey,
+    }),
+  };
+});
 
 describe('useAppletPrivateKeySetter', () => {
   test.each`

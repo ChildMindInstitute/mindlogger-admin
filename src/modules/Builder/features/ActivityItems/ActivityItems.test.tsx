@@ -28,7 +28,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('modules/Builder/hooks/useDataPreloader', () => ({
+vi.mock('modules/Builder/hooks/useDataPreloader', () => ({
   useDataPreloader: ({ data }) => ({ data, isPending: false }),
 }));
 

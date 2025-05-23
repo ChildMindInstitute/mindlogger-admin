@@ -7,11 +7,11 @@ import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
 
 import { Uploader, UploaderProps } from '.';
 
-jest.mock('api');
+vi.mock('api');
 
 const mockImageUrl = 'https://example.com/test-image.png';
 
-jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
+vi.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
   useMediaUpload: ({ callback }: { callback: (url: string) => void }) => ({
     executeMediaUpload: vi.fn().mockImplementation(() => {
       callback(mockImageUrl);

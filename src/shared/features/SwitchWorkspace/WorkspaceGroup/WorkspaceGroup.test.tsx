@@ -33,7 +33,7 @@ const commonProps = {
   'data-testid': dataTestid,
 };
 
-jest.mock('redux/modules', () => ({
+vi.mock('redux/modules', () => ({
   workspaces: {
     useData: () => ({ ownerId: '1' }),
   },

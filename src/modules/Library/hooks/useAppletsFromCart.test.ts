@@ -16,12 +16,16 @@ const getPreloadedState = ({ isAuthorized }) => ({
 const mockDispatch = vi.fn();
 const mockPostAppletsToCart = vi.fn();
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: vi.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Library/utils', () => ({
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/utils', () => ({
   getAppletsFromStorage: vi.fn(),
 }));
 

@@ -13,6 +13,7 @@ import * as libraryHooks from 'modules/Library/hooks';
 import * as cartUtils from 'modules/Library/features/Cart/Cart.utils';
 
 import { AddToBuilderPopup } from './AddToBuilderPopup';
+import { __esModule } from 'linkifyjs';
 
 const mockDispatch = () => Promise.resolve('');
 const mockUseNavigate = vi.fn();
@@ -116,20 +117,32 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: vi.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('shared/hooks', () => ({
-  __esModule: true,
-  ...jest.requireActual('shared/hooks'),
-}));
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
 
-jest.mock('modules/Library/hooks', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Library/hooks'),
-}));
+vi.mock('shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+  };
+});
 
 (cartUtils as never).navigateToBuilder = mockNavigateToBuilder;
 (cartUtils as never).getAddToBuilderData = () => ({

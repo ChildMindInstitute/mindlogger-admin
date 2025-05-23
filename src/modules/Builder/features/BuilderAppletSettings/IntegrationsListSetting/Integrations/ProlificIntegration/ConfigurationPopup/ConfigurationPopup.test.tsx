@@ -8,7 +8,7 @@ import { ConfigurationPopup } from './ConfigurationPopup';
 import { PopupProps } from '../ProlificIntegration.types';
 import { createProlificIntegration } from '../ProlificIntegration.utils';
 
-jest.mock('../ProlificIntegration.utils', () => ({
+vi.mock('../ProlificIntegration.utils', () => ({
   createProlificIntegration: vi.fn(),
 }));
 

@@ -9,7 +9,7 @@ import { UseMediaUploadReturn } from './useMediaUpload.types';
 
 const mockedAxios = axios.create();
 const mockGetMediaUploadUrl = vi.fn();
-jest.mock('shared/hooks/useAsync', () => ({
+vi.mock('shared/hooks/useAsync', () => ({
   useAsync: () => ({ execute: mockGetMediaUploadUrl }),
 }));
 const mockCallback = vi.fn();

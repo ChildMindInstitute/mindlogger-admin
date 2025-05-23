@@ -45,10 +45,14 @@ const props = {
   'data-testid': dataTestid,
 };
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: vi.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCustomFormContext: vi.fn(),
+  };
+});
 
 describe('RemoveOptionPopup', () => {
   beforeEach(() => {

@@ -4,7 +4,7 @@ import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { useRemoveAppletData } from './useRemoveAppletData';
 
-jest.mock('redux/store', () => ({
+vi.mock('redux/store', () => ({
   useAppDispatch: vi.fn,
 }));
 

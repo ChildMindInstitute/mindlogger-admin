@@ -121,10 +121,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCurrentActivity: vi.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCurrentActivity: vi.fn(),
+  };
+});
 
 const mockUseCurrentActivity = jest.mocked(useCurrentActivity);
 

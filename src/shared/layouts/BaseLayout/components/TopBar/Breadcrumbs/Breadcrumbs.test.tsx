@@ -8,10 +8,14 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as useBreadcrumbsHooks from './Breadcrumbs.hooks';
 import { Breadcrumbs } from './Breadcrumbs';
 
-jest.mock('./Breadcrumbs.hooks', () => ({
-  ...jest.requireActual('./Breadcrumbs.hooks'),
-  useBreadcrumbs: vi.fn(),
-}));
+vi.mock('./Breadcrumbs.hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useBreadcrumbs: vi.fn(),
+  };
+});
 
 describe('Breadcrumbs Component', () => {
   test('should render breadcrumbs without links when no data is provided', () => {

@@ -434,11 +434,15 @@ const flowAnswers = [
   },
 ];
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
+  };
+});
 
 describe('FlowResponses', () => {
   test('renders component with flow answers', () => {

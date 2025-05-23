@@ -113,10 +113,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: vi.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
 
 const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
   renderWithProviders(

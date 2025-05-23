@@ -102,11 +102,15 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: vi.fn(),
-  useReturnToLibraryPath: vi.fn(),
-}));
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletsFromCart: vi.fn(),
+    useReturnToLibraryPath: vi.fn(),
+  };
+});
 
 describe('AppletDetails', () => {
   afterAll(() => {

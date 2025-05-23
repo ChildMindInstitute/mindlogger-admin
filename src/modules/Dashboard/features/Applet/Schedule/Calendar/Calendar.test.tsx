@@ -63,7 +63,7 @@ describe('Calendar Component', () => {
   const clickEditEventMock = vi.fn();
   const clickCreateEventMock = vi.fn();
 
-  jest.mock('redux/store/hooks', () => ({
+  vi.mock('redux/store/hooks', () => ({
     useAppDispatch: vi.fn(),
   }));
 

@@ -8,7 +8,7 @@ import { useFeedbackReviewsData } from './useFeedbackReviewsData';
 import { GetFeedbackReviewsProps } from '../FeedbackReviews.types';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
-jest.mock('modules/Dashboard/hooks', () => ({
+vi.mock('modules/Dashboard/hooks', () => ({
   useDecryptedActivityData: vi.fn(),
 }));
 

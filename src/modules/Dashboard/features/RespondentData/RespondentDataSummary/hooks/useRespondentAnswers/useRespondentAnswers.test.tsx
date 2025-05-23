@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
+import { vi } from 'vitest';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
@@ -24,18 +25,28 @@ vi.mock('react-router-dom', async () => {
 
 const mockedGetValues = vi.fn();
 const mockedSetValue = vi.fn();
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    getValues: mockedGetValues,
-    setValue: mockedSetValue,
-  }),
-}));
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: vi.fn(),
-}));
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useWatch: vi.fn(),
+    useFormContext: () => ({
+      getValues: mockedGetValues,
+      setValue: mockedSetValue,
+    }),
+  };
+});
+
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
 
 const mockedSetFlowSubmissions = vi.fn();
 const mockedSetFlowResponses = vi.fn();

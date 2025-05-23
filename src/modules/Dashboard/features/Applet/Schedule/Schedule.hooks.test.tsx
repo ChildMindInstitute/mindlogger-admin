@@ -517,10 +517,14 @@ const expectedResult = {
   ],
 };
 
-jest.mock('date-fns', () => ({
-  ...jest.requireActual('date-fns'),
-  getYear: vi.fn(),
-}));
+vi.mock('date-fns', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    getYear: vi.fn(),
+  };
+});
 
 const getWrapper =
   (events?: Event[]) =>
@@ -533,7 +537,7 @@ const getWrapper =
 const mockDispatch = vi.fn();
 
 describe('usePreparedEvents hook', () => {
-  jest.mock('redux/store/hooks', () => ({
+  vi.mock('redux/store/hooks', () => ({
     useAppDispatch: vi.fn(),
   }));
 

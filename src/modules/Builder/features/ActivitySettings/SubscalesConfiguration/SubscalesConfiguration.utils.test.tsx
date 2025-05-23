@@ -12,11 +12,15 @@ import {
   getUsedWithinSubscalesElements,
 } from './SubscalesConfiguration.utils';
 
-jest.mock('uuid', () => ({
-  __esModule: true,
-  ...jest.requireActual('uuid'),
-  v4: () => 'mocked-id',
-}));
+vi.mock('uuid', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    v4: () => 'mocked-id',
+  };
+});
 
 describe('SubscalesConfiguration.utils', () => {
   describe('getSubscalesDefaults', () => {

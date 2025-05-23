@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 
 import { useTable } from './useTable';
 
-jest.mock('redux/modules', () => ({
+vi.mock('redux/modules', () => ({
   workspaces: {
     useData: () => ({ ownerId: 'mockOwnerId' }),
   },

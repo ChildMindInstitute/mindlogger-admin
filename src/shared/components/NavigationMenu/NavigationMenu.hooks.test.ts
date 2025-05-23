@@ -34,7 +34,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useCheckIfNewApplet', () => ({
+vi.mock('shared/hooks/useCheckIfNewApplet', () => ({
   useCheckIfNewApplet: vi.fn(),
 }));
 

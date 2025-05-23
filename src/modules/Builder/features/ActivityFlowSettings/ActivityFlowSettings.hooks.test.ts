@@ -8,10 +8,14 @@ import { useActivityFlow } from './ActivityFlowSettings.hooks';
 
 const routePath = page.builderAppletActivityFlowItemSettings;
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: vi.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCustomFormContext: vi.fn(),
+  };
+});
 
 describe('useActivityFlow', () => {
   const mockWatch = vi.fn();

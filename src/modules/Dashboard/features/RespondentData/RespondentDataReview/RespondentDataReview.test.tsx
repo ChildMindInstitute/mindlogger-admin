@@ -70,18 +70,26 @@ const preloadedState: PreloadedState<RootState> = {
   },
 };
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: vi.fn(),
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
-}));
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
+
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
+  };
+});
 
 const items = [
   {

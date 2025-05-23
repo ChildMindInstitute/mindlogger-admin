@@ -7,7 +7,7 @@ import { SaveAndPublishProcessPopup } from './SaveAndPublishProcessPopup';
 import { SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
 import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
-jest.mock('redux/store/hooks', () => ({
+vi.mock('redux/store/hooks', () => ({
   useAppDispatch: vi.fn(),
   useAppSelector: vi.fn(),
 }));
