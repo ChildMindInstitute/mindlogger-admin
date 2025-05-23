@@ -29,53 +29,85 @@ const dateDataTestid = 'date-response-item';
 const selectionPerRowDataTestid = 'selection-per-row-response-item';
 const sliderRowsDataTestid = 'slider-rows-response-item';
 
-jest.mock('../ResponseItems/SingleSelectResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/SingleSelectResponseItem'),
-  SingleSelectResponseItem: () => <div data-testid={singleSelectDataTestid} />,
-}));
+vi.mock('../ResponseItems/SingleSelectResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('../ResponseItems/MultiSelectResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/MultiSelectResponseItem'),
-  MultiSelectResponseItem: () => <div data-testid={multiSelectDataTestid} />,
-}));
+  return {
+    ...actual,
+    __esModule: true,
+    SingleSelectResponseItem: () => <div data-testid={singleSelectDataTestid} />,
+  };
+});
 
-jest.mock('../ResponseItems/SliderResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/SliderResponseItem'),
-  SliderResponseItem: () => <div data-testid={sliderDataTestid} />,
-}));
+vi.mock('../ResponseItems/MultiSelectResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('../ResponseItems/TextResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/TextResponseItem'),
-  TextResponseItem: () => <div data-testid={textDataTestid} />,
-}));
+  return {
+    ...actual,
+    __esModule: true,
+    MultiSelectResponseItem: () => <div data-testid={multiSelectDataTestid} />,
+  };
+});
 
-jest.mock('../ResponseItems/NumberSelectionResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/NumberSelectionResponseItem'),
-  NumberSelectionResponseItem: () => <div data-testid={numberSelectionDataTestid} />,
-}));
+vi.mock('../ResponseItems/SliderResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('../ResponseItems/DateResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/DateResponseItem'),
-  DateResponseItem: () => <div data-testid={dateDataTestid} />,
-}));
+  return {
+    ...actual,
+    __esModule: true,
+    SliderResponseItem: () => <div data-testid={sliderDataTestid} />,
+  };
+});
 
-jest.mock('../ResponseItems/SingleMultiSelectPerRowResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/SingleMultiSelectPerRowResponseItem'),
-  SingleMultiSelectPerRowResponseItem: () => <div data-testid={selectionPerRowDataTestid} />,
-}));
+vi.mock('../ResponseItems/TextResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('../ResponseItems/SliderRowsResponseItem', () => ({
-  __esModule: true,
-  ...jest.requireActual('../ResponseItems/SliderRowsResponseItem'),
-  SliderRowsResponseItem: () => <div data-testid={sliderRowsDataTestid} />,
-}));
+  return {
+    ...actual,
+    __esModule: true,
+    TextResponseItem: () => <div data-testid={textDataTestid} />,
+  };
+});
+
+vi.mock('../ResponseItems/NumberSelectionResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    NumberSelectionResponseItem: () => <div data-testid={numberSelectionDataTestid} />,
+  };
+});
+
+vi.mock('../ResponseItems/DateResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    DateResponseItem: () => <div data-testid={dateDataTestid} />,
+  };
+});
+
+vi.mock('../ResponseItems/SingleMultiSelectPerRowResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    SingleMultiSelectPerRowResponseItem: () => <div data-testid={selectionPerRowDataTestid} />,
+  };
+});
+
+vi.mock('../ResponseItems/SliderRowsResponseItem', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    SliderRowsResponseItem: () => <div data-testid={sliderRowsDataTestid} />,
+  };
+});
 
 describe('getTimeResponseItem', () => {
   test.each`

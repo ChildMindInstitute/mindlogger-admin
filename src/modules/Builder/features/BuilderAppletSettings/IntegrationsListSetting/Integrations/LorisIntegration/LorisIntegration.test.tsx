@@ -63,11 +63,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('shared/hooks/useIsServerConfigured', () => ({
+vi.mock('shared/hooks/useIsServerConfigured', () => ({
   useIsServerConfigured: vi.fn(),
 }));
 
-jest.mock('redux/modules', () => ({
+vi.mock('redux/modules', () => ({
   applet: {
     useAppletData: vi.fn(),
   },

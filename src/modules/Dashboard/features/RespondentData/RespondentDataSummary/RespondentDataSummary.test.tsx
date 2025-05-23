@@ -54,19 +54,23 @@ const mockedSummaryFlows = [
 ];
 const mockedSetSelectedEntity = vi.fn();
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedIdentifiers: () => () => [
-    {
-      encryptedValue: 'jane doe',
-      decryptedValue: 'decryptedValue1',
-    },
-    {
-      encryptedValue: 'sam carter',
-      decryptedValue: 'decryptedValue2',
-    },
-  ],
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedIdentifiers: () => () => [
+      {
+        encryptedValue: 'jane doe',
+        decryptedValue: 'decryptedValue1',
+      },
+      {
+        encryptedValue: 'sam carter',
+        decryptedValue: 'decryptedValue2',
+      },
+    ],
+  };
+});
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
@@ -78,11 +82,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('./ReportMenu', () => ({
+vi.mock('./ReportMenu', () => ({
   ReportMenu: () => <div data-testid="report-menu"></div>,
 }));
 
-jest.mock('./Report', () => ({
+vi.mock('./Report', () => ({
   Report: () => <div data-testid="respondents-summary-report"></div>,
 }));
 

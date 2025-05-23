@@ -1,14 +1,14 @@
-import { act, renderHook } from '@testing-library/react';
-import * as dateFns from 'date-fns';
 import { ReactNode } from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import * as dateFns from 'date-fns';
 
-import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
-import { calendarEvents, Event } from 'modules/Dashboard/state';
-import { setupStore } from 'redux/store';
-import * as reduxHooks from 'redux/store/hooks';
-import { mockedAppletData as mockedApplet } from 'shared/mock';
 import { initialStateData, SingleApplet } from 'shared/state';
+import { setupStore } from 'redux/store';
+import { Event, calendarEvents } from 'modules/Dashboard/state';
+import { mockedAppletData as mockedApplet } from 'shared/mock';
+import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import * as reduxHooks from 'redux/store/hooks';
 
 import { usePreparedEvents } from './Schedule.hooks';
 
@@ -311,13 +311,13 @@ const expectedResult = {
       id: 'activity-id-1',
       name: 'Activity 1',
       isFlow: false,
-      colors: ['#0152FD', '#0152FD'],
+      colors: ['#0b6e99', '#0b6e99'],
     },
     {
       id: 'flow-id-1',
       name: 'Activity Flow 1',
       isFlow: true,
-      colors: ['#DAB417', '#DAB417'],
+      colors: ['#dfac03', '#dfac03'],
     },
   ],
   scheduledEvents: [
@@ -326,7 +326,7 @@ const expectedResult = {
       name: 'Activity 2',
       isFlow: false,
       count: 3,
-      colors: ['#386348', 'rgba(56, 99, 72, 0.3)'],
+      colors: ['#0f7b6c', 'rgba(15, 123, 108, 0.3)'],
     },
   ],
   deactivatedEvents: [
@@ -517,10 +517,14 @@ const expectedResult = {
   ],
 };
 
-jest.mock('date-fns', () => ({
-  ...jest.requireActual('date-fns'),
-  getYear: jest.fn(),
-}));
+vi.mock('date-fns', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    getYear: vi.fn(),
+  };
+});
 
 const getWrapper =
   (events?: Event[]) =>
@@ -530,11 +534,11 @@ const getWrapper =
     return <Provider store={store}>{children}</Provider>;
   };
 
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
 describe('usePreparedEvents hook', () => {
-  jest.mock('redux/store/hooks', () => ({
-    useAppDispatch: jest.fn(),
+  vi.mock('redux/store/hooks', () => ({
+    useAppDispatch: vi.fn(),
   }));
 
   afterEach(() => {

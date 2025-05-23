@@ -12,14 +12,14 @@ import { ConfigurationPopup } from './ConfigurationPopup';
 import { ConfigurationPopupProps } from './ConfigurationPopup.types';
 import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.utils';
 
-jest.mock('../LorisIntegration.utils', () => ({
-  fetchLorisProjects: jest.fn(),
-  saveLorisProject: jest.fn(),
+vi.mock('../LorisIntegration.utils', () => ({
+  fetchLorisProjects: vi.fn(),
+  saveLorisProject: vi.fn(),
 }));
 
 const defaultProps: ConfigurationPopupProps = {
   open: true,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
 };
 const hostname = 'hostname';
 const username = 'username';

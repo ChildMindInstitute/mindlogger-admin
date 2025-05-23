@@ -39,10 +39,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('shared/hooks/useFeatureFlags', () => ({
-  ...jest.requireActual('shared/hooks/useFeatureFlags'),
-  useFeatureFlags: vi.fn(),
-}));
+vi.mock('shared/hooks/useFeatureFlags', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useFeatureFlags: vi.fn(),
+  };
+});
 
 describe('Participant Details page', () => {
   const navigate: jest.Mock = vi.fn();

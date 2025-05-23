@@ -11,16 +11,20 @@ const mockedOptionText = 'This is additional information';
 const mockedLinkOptionText = 'https://example.com';
 const mockedLinkResponse = 'This is the response from the link API';
 
-jest.mock('./AdditionalInformation.styles', () => ({
-  ...jest.requireActual('./AdditionalInformation.styles'),
-  StyledMdPreview: ({
-    modelValue,
-    'data-testid': dataTestid,
-  }: {
-    modelValue: string;
-    'data-testid': string;
-  }) => <div data-testid={dataTestid}>{modelValue}</div>,
-}));
+vi.mock('./AdditionalInformation.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({
+      modelValue,
+      'data-testid': dataTestid,
+    }: {
+      modelValue: string;
+      'data-testid': string;
+    }) => <div data-testid={dataTestid}>{modelValue}</div>,
+  };
+});
 
 vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),

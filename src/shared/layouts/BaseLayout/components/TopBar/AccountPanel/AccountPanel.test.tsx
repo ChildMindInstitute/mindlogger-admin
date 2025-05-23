@@ -11,23 +11,31 @@ import * as hooksModule from 'shared/hooks';
 
 import { AccountPanel } from './AccountPanel';
 
-const mockDispatch = jest.fn();
-const mockSetVisibleDrawer = jest.fn();
-const mockHandleLogout = jest.fn();
+const mockDispatch = vi.fn();
+const mockSetVisibleDrawer = vi.fn();
+const mockHandleLogout = vi.fn();
 const notWatched = 34;
 
-jest.mock('shared/hooks', () => ({
-  ...jest.requireActual('shared/hooks'),
-  useLogout: jest.fn(),
-}));
+vi.mock('shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('../Notifications', () => ({
-  ...jest.requireActual('../Notifications'),
-  Notifications: () => <div>Notifications</div>,
-}));
+  return {
+    ...actual,
+    useLogout: vi.fn(),
+  };
+});
 
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
+vi.mock('../Notifications', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    Notifications: () => <div>Notifications</div>,
+  };
+});
+
+vi.mock('redux/store/hooks', () => ({
+  useAppDispatch: vi.fn(),
 }));
 
 describe('AccountPanel', () => {

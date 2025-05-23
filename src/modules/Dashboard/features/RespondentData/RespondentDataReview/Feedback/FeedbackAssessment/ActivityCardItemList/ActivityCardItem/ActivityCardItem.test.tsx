@@ -51,13 +51,17 @@ const mockActivityItem = {
 
 const dataTestid = 'activity-card-item';
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ 'data-testid': dataTestid, text }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    CollapsedMdText: ({ 'data-testid': dataTestid, text }) => (
+      <div data-testid={dataTestid}>{text}</div>
+    ),
+  };
+});
 
 const FormComponent = ({
   children,

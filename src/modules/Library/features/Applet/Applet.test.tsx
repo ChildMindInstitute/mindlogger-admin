@@ -99,9 +99,9 @@ const getPreloadedState = ({ isAuthorized }) => ({
 });
 
 const dataTestid = 'library-applet';
-const mockedUseNavigate = jest.fn();
-const mockDispatch = jest.fn();
-const mockSetSearch = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockDispatch = vi.fn();
+const mockSetSearch = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
@@ -113,10 +113,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
 
 const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
   renderWithProviders(

@@ -8,26 +8,30 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Subscale } from './Subscale';
 
-jest.mock(
+vi.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils',
   () => ({
     getResponseItem: () => <div data-testid="mocked-chart" />,
   }),
 );
 
-jest.mock('../AdditionalInformation', () => ({
+vi.mock('../AdditionalInformation', () => ({
   AdditionalInformation: ({ optionText, 'data-testid': dataTestid }) => (
     <div data-testid={dataTestid}>{optionText}</div>
   ),
 }));
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{text}</div>
+    ),
+  };
+});
 
 const isNested = false;
 const name = 'Average Nested';

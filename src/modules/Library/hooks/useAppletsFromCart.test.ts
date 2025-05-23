@@ -13,16 +13,20 @@ const getPreloadedState = ({ isAuthorized }) => ({
   },
 });
 
-const mockDispatch = jest.fn();
-const mockPostAppletsToCart = jest.fn();
+const mockDispatch = vi.fn();
+const mockPostAppletsToCart = vi.fn();
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Library/utils', () => ({
-  getAppletsFromStorage: jest.fn(),
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/utils', () => ({
+  getAppletsFromStorage: vi.fn(),
 }));
 
 describe('useAppletsFromCart', () => {

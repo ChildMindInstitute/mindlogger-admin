@@ -153,10 +153,14 @@ const items = [
   },
 ];
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
 
 const mockedGetWithEmptyReviews = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -249,16 +253,16 @@ const mockedGetWithReviewsNoAnswers = {
   },
 };
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
   )),
 }));
 
-const setIsLastVersion = jest.fn();
-const setIsBannerVisible = jest.fn();
-const setAssessment = jest.fn();
+const setIsLastVersion = vi.fn();
+const setIsBannerVisible = vi.fn();
+const setAssessment = vi.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
@@ -274,7 +278,7 @@ const getMockedContext = (
   isBannerVisible,
   setIsBannerVisible,
   itemIds,
-  setItemIds: jest.fn(),
+  setItemIds: vi.fn(),
   isFeedbackOpen: true,
 });
 
@@ -314,7 +318,7 @@ const renderComponent = (
   );
 
 const getDecryptedActivityData = () => {
-  const getDecryptedActivityDataMock = jest.fn().mockReturnValue(
+  const getDecryptedActivityDataMock = vi.fn().mockReturnValue(
     Promise.resolve({
       decryptedAnswers: [
         {
@@ -592,7 +596,7 @@ describe('FeedbackReviewed', () => {
   test('should render empty state', async () => {
     vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithEmptyReviews);
 
-    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
+    const getDecryptedActivityDataMock = vi.fn().mockReturnValue({
       decryptedAnswers: [],
     });
 

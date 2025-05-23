@@ -12,10 +12,14 @@ import {
 } from './Cart.utils';
 
 const mockUuid = '6b14a126-4031-4a5d-9aee-0062cea4cb00';
-jest.mock('uuid', () => ({
-  ...jest.requireActual('uuid'),
-  v4: () => mockUuid,
-}));
+vi.mock('uuid', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    v4: () => mockUuid,
+  };
+});
 
 describe('getSearchIncludes', () => {
   test.each`

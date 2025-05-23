@@ -15,14 +15,18 @@ const mockOnUpload = jest.fn();
 const mockOnChange = jest.fn();
 const mockOnClose = jest.fn();
 
-jest.mock('modules/Builder/components/MLPlayer', () => ({
-  ...jest.requireActual('modules/Builder/components/MLPlayer'),
-  MLPlayer: ({ onRemove, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>
-      <button data-testid={`${dataTestid}-remove`} onClick={onRemove}></button>
-    </div>
-  ),
-}));
+vi.mock('modules/Builder/components/MLPlayer', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    MLPlayer: ({ onRemove, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>
+        <button data-testid={`${dataTestid}-remove`} onClick={onRemove}></button>
+      </div>
+    ),
+  };
+});
 
 describe('RecordAudio', () => {
   let originalCreateObjectURL;

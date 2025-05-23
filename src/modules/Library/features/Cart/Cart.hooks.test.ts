@@ -11,8 +11,8 @@ import { useClearCart } from './Cart.hooks';
 const mockSessionStorageSelectedKey = 'mockSessionStorageSelectedKey';
 const mockDispatch = () => Promise.resolve('');
 
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
+vi.mock('redux/store/hooks', () => ({
+  useAppDispatch: vi.fn(),
 }));
 
 describe('useClearCart', () => {

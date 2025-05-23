@@ -36,7 +36,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActivityItemsFlow } from './ActivityItemsFlow';
 
-jest.mock('modules/Builder/hooks/useDataPreloader', () => ({
+vi.mock('modules/Builder/hooks/useDataPreloader', () => ({
   useDataPreloader: ({ data }) => ({ data, isPending: false }),
 }));
 

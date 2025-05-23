@@ -9,10 +9,14 @@ import {
   getTableScoreItems,
 } from './ScoresAndReports.utils';
 
-jest.mock('uuid', () => ({
-  ...jest.requireActual('uuid'),
-  v4: () => 'mockedUudv4',
-}));
+vi.mock('uuid', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    v4: () => 'mockedUudv4',
+  };
+});
 
 const firstScore: ScoreReport = {
   type: ScoreReportType.Score,

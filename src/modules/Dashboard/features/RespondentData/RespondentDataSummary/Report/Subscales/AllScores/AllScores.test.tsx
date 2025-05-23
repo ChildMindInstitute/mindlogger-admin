@@ -22,7 +22,7 @@ const frequency = 2;
 
 const dataTestId = 'all-scores';
 
-jest.mock('../../Charts/LineChart', () => ({
+vi.mock('../../Charts/LineChart', () => ({
   SubscaleLineChart: () => <div data-testid={`${dataTestId}-subscale-line-chart`} />,
 }));
 

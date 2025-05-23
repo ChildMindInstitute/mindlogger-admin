@@ -25,7 +25,7 @@ const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.
 
 const mockedExportDataApi = vi.fn();
 
-jest.mock('modules/Dashboard/api', () => ({
+vi.mock('modules/Dashboard/api', () => ({
   getExportDataApi: (body: ExportData) => mockedExportDataApi(body),
 }));
 

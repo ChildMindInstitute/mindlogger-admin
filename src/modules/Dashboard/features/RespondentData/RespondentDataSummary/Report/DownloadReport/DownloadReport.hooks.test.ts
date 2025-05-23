@@ -18,7 +18,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('downloadjs');
+vi.mock('downloadjs');
 
 const activityId = 'activity-id';
 const flowId = 'flow-id';

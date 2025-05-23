@@ -9,7 +9,7 @@ import { page } from 'resources';
 
 import { AppletDetails } from './AppletDetails';
 
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const route = `/library/${mockedAppletId}`;
 const routePath = page.libraryAppletDetails;
@@ -102,11 +102,15 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: jest.fn(),
-  useReturnToLibraryPath: jest.fn(),
-}));
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletsFromCart: vi.fn(),
+    useReturnToLibraryPath: vi.fn(),
+  };
+});
 
 describe('AppletDetails', () => {
   afterAll(() => {

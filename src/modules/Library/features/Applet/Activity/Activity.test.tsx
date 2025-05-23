@@ -82,12 +82,16 @@ const renderComponent = ({ activity, search, uiType, route, routePath }) =>
     },
   );
 
-jest.mock('../Item/Item.styles', () => ({
-  ...jest.requireActual('../Item/Item.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
-}));
+vi.mock('../Item/Item.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{modelValue}</div>
+    ),
+  };
+});
 
 describe('Activity Component', () => {
   beforeEach(() => {

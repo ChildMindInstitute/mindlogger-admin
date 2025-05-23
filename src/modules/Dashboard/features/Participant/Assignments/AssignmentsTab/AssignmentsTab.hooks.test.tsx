@@ -121,7 +121,7 @@ const mockHandleRefetch = vi.fn();
 
 const mockGetAppletPrivateKey = vi.fn();
 
-jest.mock('shared/hooks/useEncryptionStorage', () => ({
+vi.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
     getAppletPrivateKey: mockGetAppletPrivateKey,
   }),

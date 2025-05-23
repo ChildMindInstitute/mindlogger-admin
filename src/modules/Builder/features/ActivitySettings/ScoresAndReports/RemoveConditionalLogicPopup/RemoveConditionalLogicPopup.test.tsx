@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RemoveConditionalLogicPopup } from './RemoveConditionalLogicPopup';
 
-jest.mock('modules/Builder/hooks', () => ({
+vi.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     watch: () => 'The score name',
   }),

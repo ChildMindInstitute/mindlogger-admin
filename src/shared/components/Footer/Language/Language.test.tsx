@@ -5,7 +5,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Language } from './Language';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: (): { t: TFunction; i18n: { changeLanguage: () => Promise<unknown> } } => ({
     t: (str: string) => str,
     i18n: {

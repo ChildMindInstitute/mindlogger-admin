@@ -70,7 +70,7 @@ const mockedAppletData = {
   ],
 } as SingleApplet;
 
-jest.mock('modules/Builder/hooks', () => ({
+vi.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
     formState: {

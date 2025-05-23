@@ -36,16 +36,20 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-jest.mock('./ChartTooltip.styles', () => ({
-  ...jest.requireActual('./ChartTooltip.styles'),
-  StyledMdPreview: ({
-    modelValue,
-    'data-testid': dataTestid,
-  }: {
-    modelValue: string;
-    'data-testid': string;
-  }) => <div data-testid={dataTestid}>{modelValue}</div>,
-}));
+vi.mock('./ChartTooltip.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({
+      modelValue,
+      'data-testid': dataTestid,
+    }: {
+      modelValue: string;
+      'data-testid': string;
+    }) => <div data-testid={dataTestid}>{modelValue}</div>,
+  };
+});
 
 describe('ChartTooltip', () => {
   beforeEach(() => {

@@ -6,7 +6,7 @@ import { useMediaUploader } from './MediaUploader.hooks';
 const mockOnUpload = jest.fn();
 const mockedExecuteMediaUpload = jest.fn();
 const uploadError = 'Upload failed';
-jest.mock('shared/hooks/useMediaUpload', () => ({
+vi.mock('shared/hooks/useMediaUpload', () => ({
   useMediaUpload: () => ({
     executeMediaUpload: mockedExecuteMediaUpload,
     error: uploadError,

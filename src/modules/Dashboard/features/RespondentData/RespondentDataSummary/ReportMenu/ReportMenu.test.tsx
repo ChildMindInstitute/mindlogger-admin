@@ -8,7 +8,7 @@ import { RespondentDataContextType } from '../../RespondentDataContext/Responden
 import { ReportMenu } from './ReportMenu';
 import { ReportMenuProps } from './ReportMenu.types';
 
-jest.mock('shared/hooks/useRespondentLabel', () => ({
+vi.mock('shared/hooks/useRespondentLabel', () => ({
   useRespondentLabel: () => 'user: Jane Doe',
 }));
 

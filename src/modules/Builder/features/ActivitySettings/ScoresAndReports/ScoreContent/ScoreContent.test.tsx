@@ -106,8 +106,8 @@ const formValues: AppletFormValues = {
   streamPort: null,
 };
 
-const mockUseNavigate = jest.fn();
-const mockUseParams = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockUseParams = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {
@@ -121,10 +121,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCurrentActivity: jest.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCurrentActivity: vi.fn(),
+  };
+});
 
 const mockUseCurrentActivity = jest.mocked(useCurrentActivity);
 

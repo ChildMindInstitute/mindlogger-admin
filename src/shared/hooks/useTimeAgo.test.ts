@@ -5,7 +5,7 @@ import { mockI18Next } from 'shared/tests';
 
 import { useTimeAgo } from './useTimeAgo';
 
-jest.mock('react-i18next', () => mockI18Next);
+vi.mock('react-i18next', () => mockI18Next);
 
 describe('useTimeAgo hook tests', () => {
   test('should format date', () => {
