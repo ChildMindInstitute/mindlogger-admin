@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import curiousLogo from 'assets/images/curious_logo--white.png';
+import curiousIcon from 'assets/images/curious_icon--white.png';
 import { auth, workspaces } from 'redux/modules';
 import { theme, variables } from 'shared/styles';
 
@@ -106,7 +106,7 @@ export const RebrandBanner = (props: BannerProps) => {
                 handleDismiss();
               }
             }}
-            icon={<StyledImg src={curiousLogo} />}
+            icon={<StyledImg src={curiousIcon} />}
             sx={{
               backgroundColor: '#000',
               color: variables.palette.surface,
