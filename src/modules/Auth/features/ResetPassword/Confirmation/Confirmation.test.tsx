@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedEmail } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Confirmation } from '.';
 
@@ -22,7 +22,7 @@ describe('Confirmation component tests', () => {
     expect(description).toBeInTheDocument();
 
     const descriptionText = screen.getByText(
-      `A password reset link is sent to ${mockedEmail} if that email is associated with a MindLogger account.`,
+      `A password reset link is sent to ${mockedEmail} if that email is associated with a Curious account.`,
     );
     expect(descriptionText).toBeInTheDocument();
   });

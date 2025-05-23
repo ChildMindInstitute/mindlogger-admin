@@ -1,25 +1,25 @@
 import { lazy } from 'react';
 
+import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import {
   DataRetention,
-  TransferOwnershipSetting,
-  ShareAppletSetting,
   DeleteAppletSetting,
-  PublishConcealAppletSetting,
-  VersionHistorySetting,
   LiveResponseStreamingSetting,
+  PublishConcealAppletSetting,
+  ShareAppletSetting,
+  TransferOwnershipSetting,
+  VersionHistorySetting,
 } from 'shared/features/AppletSettings';
 import {
-  Mixpanel,
-  SettingParam,
-  isManagerOrOwner,
   checkIfCanEdit,
+  isManagerOrOwner,
+  Mixpanel,
   MixpanelEventType,
   MixpanelProps,
+  SettingParam,
 } from 'shared/utils';
-import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 import { IntegrationsListSetting } from './IntegrationsListSetting';
@@ -147,7 +147,7 @@ export const getSettings = ({
       isVisible: isSharingVisible,
       items: [
         /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
-        with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
+        with workspaces ID limitations until the Moderation process within Curious is introduced. (Story:
         AUS-4.1.4.10).*/
         {
           icon: <Svg id="share" />,

@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
+import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
@@ -20,7 +20,7 @@ export const Confirmation = ({ email }: { email: string }) => {
       >
         <Trans i18nKey="passwordResetLink">
           A password reset link is sent to {{ email }} <br /> if that email is associated with a
-          MindLogger account.
+          Curious account.
         </Trans>
       </StyledBodyMedium>
       <StyledBodyMedium sx={{ mb: theme.spacing(2.4), color: variables.palette.outline }}>

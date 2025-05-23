@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
@@ -12,7 +12,7 @@ describe('VersionWarningBanner', () => {
     renderWithProviders(<VersionWarningBanner />);
 
     expect(screen.getByTestId('warning-banner')).toBeInTheDocument();
-    expect(screen.getByText('You are using the new version of MindLogger!')).toBeInTheDocument();
+    expect(screen.getByText('You are using the new version of Curious!')).toBeInTheDocument();
   });
 
   test('clicking the close button hides the banner', () => {

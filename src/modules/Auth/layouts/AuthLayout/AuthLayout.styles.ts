@@ -1,8 +1,8 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
+import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 
 export const StyledAuthLayout = styled(StyledFlexColumn)`
   height: 100vh;
@@ -20,6 +20,13 @@ export const StyledLogoWrapper = styled(StyledFlexAllCenter)`
   width: 100%;
   background-color: ${variables.palette.primary};
   padding: ${theme.spacing(1, 2.4)};
+`;
+
+export const StyledLogo = styled('img')`
+  width: 148px;
+  height: 32px;
+  display: block;
+  margin: ${theme.spacing(0.6, 0)};
 `;
 
 export const StyledOutlet = styled(Box)`

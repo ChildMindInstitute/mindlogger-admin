@@ -4,8 +4,8 @@ import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Periodicity } from 'modules/Dashboard/api';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Reminder } from './Reminder';
 

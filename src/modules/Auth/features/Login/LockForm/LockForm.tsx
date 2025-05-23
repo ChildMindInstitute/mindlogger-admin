@@ -1,32 +1,32 @@
-import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { SignIn } from 'api';
+import { auth, User } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
+import { Avatar } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
+import { useLogout } from 'shared/hooks/useLogout';
 import {
-  variables,
   StyledBodyMedium,
+  StyledErrorText,
   StyledHeadline,
   StyledTitleMedium,
-  StyledErrorText,
+  variables,
 } from 'shared/styles';
-import { auth, User } from 'redux/modules';
-import { useLogout } from 'shared/hooks/useLogout';
-import { Avatar } from 'shared/components';
 
 import { loginFormSchema } from '../Login.schema';
 import {
-  StyledWelcome,
-  StyledLoginSubheader,
-  StyledForm,
-  StyledController,
-  StyledUserInfoController,
   StyledButton,
+  StyledController,
+  StyledForm,
   StyledImageContainer,
+  StyledLoginSubheader,
   StyledUserInfo,
+  StyledUserInfoController,
+  StyledWelcome,
 } from '../Login.styles';
 
 export const LockForm = () => {
@@ -57,7 +57,7 @@ export const LockForm = () => {
 
   return (
     <>
-      <StyledWelcome>{t('mindLoggerAdminPanel')}</StyledWelcome>
+      <StyledWelcome>{t('curiousAdminPanel')}</StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
         <StyledHeadline>{t('login')}</StyledHeadline>
         <StyledLoginSubheader>

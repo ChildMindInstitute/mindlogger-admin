@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SignIn } from 'api';
-import { page } from 'resources';
-import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
-import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { Mixpanel, MixpanelEventType } from 'shared/utils';
-import { variables } from 'shared/styles';
-import { AUTH_BOX_WIDTH } from 'shared/consts';
-import { LocationStateKeys } from 'shared/types';
 import { banners } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { page } from 'resources';
+import { InputController } from 'shared/components/FormComponents';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
+import { variables } from 'shared/styles';
+import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
+import { LocationStateKeys } from 'shared/types';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
-import {
-  StyledWelcome,
-  StyledLoginSubheader,
-  StyledForm,
-  StyledController,
-  StyledButton,
-  StyledForgotPasswordLink,
-} from '../Login.styles';
 import { loginFormSchema } from '../Login.schema';
+import {
+  StyledButton,
+  StyledController,
+  StyledForgotPasswordLink,
+  StyledForm,
+  StyledLoginSubheader,
+  StyledWelcome,
+} from '../Login.styles';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -140,7 +140,7 @@ export const LoginForm = () => {
     <Box sx={{ width: AUTH_BOX_WIDTH }}>
       <StyledWelcome>
         <Trans i18nKey="welcome">
-          Welcome to the MindLogger <br /> Admin Panel
+          Welcome to the Curious <br /> Admin Panel
         </Trans>
       </StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>

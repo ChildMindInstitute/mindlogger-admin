@@ -30,7 +30,7 @@ export const EHRAvailableModal = ({ open, onClose }: EHRAvailableModalProps) => 
         <Trans i18nKey="requestHealthRecordDataSettings.modal.content">
           <p style={{ marginTop: 20 }}>
             Now it is possible to import participants' Electronic Health Care Data, and use that
-            data with what you collect in your Mindlogger Activities.
+            data with what you collect in your Curious Activities.
           </p>
           <p style={{ marginTop: 24, marginBottom: 18 }}>
             Please check out the website for more information.
