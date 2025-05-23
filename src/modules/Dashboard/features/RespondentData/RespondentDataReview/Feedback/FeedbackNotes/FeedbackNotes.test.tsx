@@ -1,8 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
@@ -133,7 +134,7 @@ const renderFeedbackNotes = (entity: SelectedEntity, route: string) =>
   );
 
 const mockGetWithNotes = () => {
-  mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
+  vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithNotes);
 };
 
 const testNotesRender = async () =>
@@ -154,10 +155,10 @@ const testNoteCreation = async (apiCallRoute: string) => {
 
   await userEvent.type(screen.getByLabelText(/Add a New Note/i), newNoteValue);
   await userEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
-  mockAxios.post.mockResolvedValueOnce(null);
+  vi.mocked(axios.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(mockAxios.post).nthCalledWith(
+    expect(axios.post).nthCalledWith(
       1,
       apiCallRoute,
       {
@@ -186,7 +187,7 @@ const testNoteEditing = async (apiCallRoute: string) => {
   await userEvent.type(textarea, newNoteValue);
 
   // Setup mock before clicking save
-  mockAxios.put.mockResolvedValueOnce(null);
+  vi.mocked(axios.put).mockResolvedValueOnce(null);
 
   // Click save
   const saveButton = await screen.findByTestId(`${noteTestId}-0-save`);
@@ -194,7 +195,7 @@ const testNoteEditing = async (apiCallRoute: string) => {
 
   // Verify API call
   await waitFor(() => {
-    expect(mockAxios.put).toHaveBeenCalledWith(
+    expect(axios.put).toHaveBeenCalledWith(
       apiCallRoute,
       { note: newNoteValue },
       { signal: undefined },
@@ -216,10 +217,10 @@ const testNoteRemoving = async (apiCallRoute: string) => {
     await userEvent.click(visibleRemoveAction);
   });
 
-  mockAxios.post.mockResolvedValueOnce(null);
+  vi.mocked(axios.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(mockAxios.delete).nthCalledWith(
+    expect(axios.delete).nthCalledWith(
       1,
       apiCallRoute,
 

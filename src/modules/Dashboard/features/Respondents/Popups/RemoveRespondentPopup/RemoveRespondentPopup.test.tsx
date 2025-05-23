@@ -1,4 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -50,7 +51,7 @@ const commonProps = {
 
 describe('RemoveRespondentPopup component tests', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('RemoveRespondentPopup should open with applets list', async () => {

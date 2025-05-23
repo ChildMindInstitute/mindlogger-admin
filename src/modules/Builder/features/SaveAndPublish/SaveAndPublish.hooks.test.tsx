@@ -113,7 +113,6 @@ describe('useSaveAndPublishSetup hook', () => {
 
   afterEach(() => {
     vi.resetAllMocks();
-    mockAxios.reset();
   });
 
   describe('handleSaveAndPublishFirstClick', () => {

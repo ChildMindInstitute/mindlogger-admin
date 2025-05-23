@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { mockedApplet, mockedEmail } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
@@ -23,7 +24,7 @@ const preloadedState = {
 
 describe('TransferOwnershipPopup component tests', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('TransferOwnershipPopup should appear success text', async () => {
