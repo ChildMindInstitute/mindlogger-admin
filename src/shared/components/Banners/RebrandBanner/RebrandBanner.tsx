@@ -11,13 +11,24 @@ import { Banner, BannerProps } from '../Banner';
 import { StyledImg } from './RebrandBanner.styles';
 
 /**
- * Returns a unique key for the rebrand banner dismiss state for a given user and workspace, in this
- * format: `rebrand-banner-dismissed-{userId}:{workspaceId}`
+ * Returns a unique key for the rebrand banner dismiss state
+ * If workspaceId is provided, it creates a user+workspace specific key
+ * Otherwise, it creates a user-only key for use on the auth screen
  */
-export const getDismissedKey = (userId: string, workspaceId: string) =>
-  `rebrand-banner-dismissed-${userId}:${workspaceId}`;
+export const getDismissedKey = (userId: string, workspaceId?: string) =>
+  workspaceId
+    ? `rebrand-banner-dismissed-${userId}:${workspaceId}`
+    : `rebrand-banner-dismissed-${userId}`;
 
-const MAIN_ROUTES = ['/dashboard/applets', '/dashboard/managers', '/dashboard/respondents'];
+// Global key for anonymous users (e.g., on the login screen)
+const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
+
+const DISPLAY_ROUTES = [
+  '/auth',
+  '/dashboard/applets',
+  '/dashboard/managers',
+  '/dashboard/respondents',
+];
 
 export const RebrandBanner = (props: BannerProps) => {
   const { ownerId } = workspaces.useData() ?? {};
@@ -36,20 +47,51 @@ export const RebrandBanner = (props: BannerProps) => {
   };
 
   useEffect(() => {
-    if (!userId || !ownerId) return;
+    // For auth screen or when user is not logged in yet
+    if (!userId) {
+      const globalDismissed = localStorage.getItem(GLOBAL_DISMISSED_KEY);
+      setIsRebrandBannerActive(!globalDismissed);
 
-    const dismissed = localStorage.getItem(getDismissedKey(userId, ownerId));
+      return;
+    }
 
-    if (!dismissed) {
-      setIsRebrandBannerActive(true);
+    // For logged-in users
+    const userDismissed = localStorage.getItem(getDismissedKey(userId));
+
+    // If there's a workspace, also check workspace-specific dismissal
+    if (ownerId) {
+      const workspaceDismissed = localStorage.getItem(getDismissedKey(userId, ownerId));
+      setIsRebrandBannerActive(!userDismissed && !workspaceDismissed);
     } else {
-      setIsRebrandBannerActive(false);
+      setIsRebrandBannerActive(!userDismissed);
     }
   }, [userId, ownerId]);
 
-  const isMainRoute = MAIN_ROUTES.includes(location.pathname);
+  const isDisplayRoute = DISPLAY_ROUTES.some(
+    (route) => location.pathname === route || location.pathname.startsWith(route),
+  );
 
-  return userId && ownerId && isMainRoute ? (
+  const handleDismiss = () => {
+    // For auth screen or when user is not logged in yet
+    if (!userId) {
+      localStorage.setItem(GLOBAL_DISMISSED_KEY, 'true');
+    } else {
+      // Set user-level dismissal
+      localStorage.setItem(getDismissedKey(userId), 'true');
+
+      // Also set workspace-specific dismissal if available
+      if (ownerId) {
+        localStorage.setItem(getDismissedKey(userId, ownerId), 'true');
+      }
+    }
+
+    setIsCollapsing(true);
+  };
+
+  // Don't render if not on a display route or if no user info is available on non-auth routes
+  const shouldRender = isDisplayRoute && (location.pathname.startsWith('/auth') || userId);
+
+  return shouldRender ? (
     <Box>
       <Collapse in={isRebrandBannerActive && !isCollapsing} enter={false} onExited={handleOnExited}>
         {isRebrandBannerActive && (
@@ -59,8 +101,7 @@ export const RebrandBanner = (props: BannerProps) => {
             data-testid="rebrand-banner"
             onClose={(reason) => {
               if (reason === 'manual') {
-                localStorage.setItem(getDismissedKey(userId, ownerId), 'true');
-                setIsCollapsing(true);
+                handleDismiss();
               }
             }}
             icon={<StyledImg src={curiousLogo} />}
