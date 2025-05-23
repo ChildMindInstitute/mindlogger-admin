@@ -14,10 +14,10 @@ const renderWithExistenceCheck = (uiType) => {
   renderWithProviders(<ItemTypeTooltip uiType={uiType} anchorEl={anchorEl} />);
   expect(screen.getByTestId(tooltipPresentationDataTestid)).toBeInTheDocument();
 };
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const tooltipTexts = {
   Date: 'Date selection in the format Month DD, YYYY.',

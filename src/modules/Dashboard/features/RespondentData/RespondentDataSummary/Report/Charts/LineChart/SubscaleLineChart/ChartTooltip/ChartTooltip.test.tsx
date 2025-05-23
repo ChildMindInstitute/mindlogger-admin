@@ -30,11 +30,11 @@ const props: ChartTooltipProps = {
   'data-testid': dataTestid,
 };
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 jest.mock('./ChartTooltip.styles', () => ({
   ...jest.requireActual('./ChartTooltip.styles'),

@@ -22,11 +22,11 @@ jest.mock('./AdditionalInformation.styles', () => ({
   }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const dataTestId = 'additional-info';
 

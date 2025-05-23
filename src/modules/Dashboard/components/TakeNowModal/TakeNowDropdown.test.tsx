@@ -8,9 +8,9 @@ import { Roles } from 'shared/consts';
 
 import { TakeNowDropdown } from './TakeNowDropdown';
 
-jest.mock('shared/hooks/useFeatureFlags');
+vi.mock('shared/hooks/useFeatureFlags');
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('TakeNowDropdown', () => {
   const dataTestId = 'test';

@@ -61,11 +61,11 @@ const renderNewActivityFlowAbout = () => renderActivityFlowAbout(mockedAppletFor
 const renderActivityFlowAboutWithTwoFlows = () =>
   renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ActivityFlowAbout', () => {
   beforeEach(() => {

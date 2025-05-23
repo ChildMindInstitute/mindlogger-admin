@@ -14,7 +14,7 @@ jest.mock('react-hook-form', () => ({
   useWatch: jest.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: jest.fn(),
 }));
 

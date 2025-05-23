@@ -197,11 +197,11 @@ jest.mock('shared/components/FileUploader/FileUploader', () => ({
   ...jest.requireActual('__mocks__/LookupTableUploader'),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('SubscalesConfiguration', () => {
   beforeEach(() => {

@@ -26,11 +26,11 @@ jest.mock('../../Charts/LineChart', () => ({
   SubscaleLineChart: () => <div data-testid={`${dataTestId}-subscale-line-chart`} />,
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('AllScores component', () => {
   beforeEach(() => {
