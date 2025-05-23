@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedEncryption, mockedPassword } from 'shared/mock';
+import * as encryptionFunctions from 'shared/utils/encryption';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ArbitraryWarningPopup } from './ArbitraryWarningPopup';
 import { SUPPORT_LINK } from './ArbitraryWarningPopup.const';
@@ -35,7 +35,7 @@ describe('ArbitraryWarningPopup', () => {
     // first screen content
     expect(screen.getByText('Warning: Arbitrary Server is Connected')).toBeInTheDocument();
     expect(screen.getByText(mockedAppletName).closest('p')).toHaveTextContent(
-      'Your applet Applet Name is currently connected to an arbitrary server for data storage. If you proceed with the ownership transfer without contacting us, your applet will lose its arbitrary server configurations, and all data it subsequently collects will be stored on MindLogger servers from this point forward. In order to transfer the ownership of the applet while retaining the arbitrary server configuration, please reach out to the MindLogger support team by clicking the button below.',
+      'Your applet Applet Name is currently connected to an arbitrary server for data storage. If you proceed with the ownership transfer without contacting us, your applet will lose its arbitrary server configurations, and all data it subsequently collects will be stored on Curious servers from this point forward. In order to transfer the ownership of the applet while retaining the arbitrary server configuration, please reach out to the Curious support team by clicking the button below.',
     );
 
     // first screen buttons
@@ -57,7 +57,7 @@ describe('ArbitraryWarningPopup', () => {
     // second screen content
     expect(screen.getByTestId(`${dataTestId}-title`)).toHaveTextContent('Transfer Ownership');
     expect(screen.getByText(mockedAppletName).closest('p')).toHaveTextContent(
-      'Again, proceeding with the ownership transfer will cause this applet to lose its arbitrary server configurations, and all data it subsequently collects will be stored on MindLogger servers from this point forward. To proceed with the ownership transfer for your applet Applet Name and break its arbitrary server connections, please re-enter the password of your applet below.',
+      'Again, proceeding with the ownership transfer will cause this applet to lose its arbitrary server configurations, and all data it subsequently collects will be stored on Curious servers from this point forward. To proceed with the ownership transfer for your applet Applet Name and break its arbitrary server connections, please re-enter the password of your applet below.',
     );
     const appletPasswordInput = screen.getByTestId(`${dataTestId}-enter-password-input`);
     expect(appletPasswordInput).toBeInTheDocument();
