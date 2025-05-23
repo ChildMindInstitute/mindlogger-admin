@@ -21,7 +21,7 @@ export const getDismissedKey = (userId: string, workspaceId?: string) =>
     : `rebrand-banner-dismissed-${userId}`;
 
 // Global key for anonymous users (e.g., on the login screen)
-const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
+export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
 
 const DISPLAY_ROUTES = [
   '/auth',
@@ -68,7 +68,9 @@ export const RebrandBanner = (props: BannerProps) => {
   }, [userId, ownerId]);
 
   const isDisplayRoute = DISPLAY_ROUTES.some(
-    (route) => location.pathname === route || location.pathname.startsWith(route),
+    (route) =>
+      location.pathname === route ||
+      (location.pathname.startsWith(route) && route.includes('/auth')),
   );
 
   const handleDismiss = () => {
