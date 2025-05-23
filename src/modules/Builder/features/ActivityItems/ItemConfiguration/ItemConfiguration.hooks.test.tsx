@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useWatch } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { ItemResponseType } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks';
@@ -8,23 +9,26 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { useGetAvailableItemTypeOptions } from './ItemConfiguration.hooks';
 
-// Mock dependencies
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useWatch: jest.fn(),
-}));
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useWatch: vi.fn(),
+  };
+});
 
 vi.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+  useFeatureFlags: vi.fn(),
 }));
 
-jest.mock('modules/Builder/hooks/useCurrentActivity', () => ({
-  useCurrentActivity: jest.fn(),
+vi.mock('modules/Builder/hooks/useCurrentActivity', () => ({
+  useCurrentActivity: vi.fn(),
 }));
 
-const mockUseWatch = useWatch as jest.Mock;
-const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
-const mockUseCurrentActivity = useCurrentActivity as jest.Mock;
+const mockUseWatch = useWatch as vi.Mock;
+const mockUseFeatureFlags = useFeatureFlags as vi.Mock;
+const mockUseCurrentActivity = useCurrentActivity as vi.Mock;
 
 const mockSingleSelectionItem = {
   id: 'existing-item-id',
@@ -54,7 +58,7 @@ describe('ItemConfiguration hooks', () => {
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     const Wrapper = ({ children }: { children: React.ReactNode }) => {

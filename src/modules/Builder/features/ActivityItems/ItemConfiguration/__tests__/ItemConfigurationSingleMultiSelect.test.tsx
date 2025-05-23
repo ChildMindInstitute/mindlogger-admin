@@ -25,7 +25,7 @@ import {
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
 const mockedChangeColorEvent = { hex: '#fff' };
-jest.mock('react-color', () => ({
+vi.mock('react-color', () => ({
   ChromePicker: ({ onChangeComplete }) => (
     <div
       data-testid={'color-picker'}
@@ -298,13 +298,18 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
     renderWithAppletFormData({
       children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
+      appletFormData: getAppletFormDataWithItem({
+        ...mockedSingleSelectFormValues,
+        responseValues: {
+          options: [{ text: '' }],
+        },
+      }),
       formRef: ref,
     });
 
     setItemResponseType(ItemResponseType.SingleSelection);
 
-    await ref.current.trigger(`${mockedItemName}.responseValues.options.0`);
+    await ref.current.trigger(`${mockedItemName}.responseValues.options.0.text`);
 
     await waitFor(() => {
       expect(screen.getByText('Option Text is required')).toBeVisible();

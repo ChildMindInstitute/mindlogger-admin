@@ -7,7 +7,7 @@ import { useFeatureFlags } from 'shared/hooks';
 
 import { IntegrationsListSetting } from './IntegrationsListSetting';
 
-jest.mock('shared/hooks', () => ({
+vi.mock('shared/hooks', () => ({
   useFeatureFlags: vi.fn(),
 }));
 
@@ -17,7 +17,7 @@ describe('IntegrationsListSetting', () => {
   });
 
   test('should render LORIS when enableLorisIntegration is true', () => {
-    (useFeatureFlags as jest.Mock).mockImplementation(() => ({
+    (useFeatureFlags as vi.Mock).mockImplementation(() => ({
       featureFlags: {
         enableLorisIntegration: true,
         enableProlificIntegration: false,
@@ -31,7 +31,7 @@ describe('IntegrationsListSetting', () => {
   });
 
   test('should render Prolific integration when enableProlificIntegration is true', () => {
-    (useFeatureFlags as jest.Mock).mockImplementation(() => ({
+    (useFeatureFlags as vi.Mock).mockImplementation(() => ({
       featureFlags: {
         enableLorisIntegration: false,
         enableProlificIntegration: true,
@@ -45,7 +45,7 @@ describe('IntegrationsListSetting', () => {
   });
 
   test('should render LORIS and Prolific integrations', () => {
-    (useFeatureFlags as jest.Mock).mockImplementation(() => ({
+    (useFeatureFlags as vi.Mock).mockImplementation(() => ({
       featureFlags: {
         enableLorisIntegration: true,
         enableProlificIntegration: true,
