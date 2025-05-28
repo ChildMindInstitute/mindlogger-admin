@@ -110,7 +110,7 @@ describe('RebrandBanner', () => {
     test('does not show banner on non-display routes', () => {
       // Set location to a non-display route
       mockedUseLocation.mockImplementation(() => ({
-        pathname: '/dashboard/applets/some-applet-id',
+        pathname: '/dashboard/some-applet-id',
       }));
 
       renderWithProviders(<RebrandBanner />, {
