@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import curiousIcon from 'assets/images/curious_icon--white.png';
 import { auth, workspaces } from 'redux/modules';
-import { theme, variables } from 'shared/styles';
+import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg } from './RebrandBanner.styles';
@@ -108,10 +108,10 @@ export const RebrandBanner = (props: BannerProps) => {
             }}
             icon={<StyledImg src={curiousIcon} />}
             sx={{
-              backgroundColor: '#000',
+              backgroundColor: '#0B0907',
               color: variables.palette.surface,
               '& .MuiAlert-message': {
-                maxWidth: theme.spacing(90),
+                maxWidth: 'none',
               },
               '& .MuiAlert-icon': {
                 opacity: 1,
@@ -122,7 +122,7 @@ export const RebrandBanner = (props: BannerProps) => {
             }}
             {...props}
           >
-            <Trans i18nKey="rebrandBannerNoLink">
+            <Trans i18nKey="rebrandBanner">
               <strong>We are rebranding! </strong>
               <>Design updates are on the way — same great app, fresh new look. Curious? </>
               {/* 
