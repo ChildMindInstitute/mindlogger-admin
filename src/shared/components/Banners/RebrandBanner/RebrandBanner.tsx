@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import curiousIcon from 'assets/images/curious_icon--white.png';
-import { auth, workspaces } from 'redux/modules';
+import { auth } from 'redux/modules';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
@@ -12,13 +12,9 @@ import { StyledImg } from './RebrandBanner.styles';
 
 /**
  * Returns a unique key for the rebrand banner dismiss state
- * If workspaceId is provided, it creates a user+workspace specific key
- * Otherwise, it creates a user-only key for use on the auth screen
+ * It creates a user-only key for use on the auth screen
  */
-export const getDismissedKey = (userId: string, workspaceId?: string) =>
-  workspaceId
-    ? `rebrand-banner-dismissed-${userId}:${workspaceId}`
-    : `rebrand-banner-dismissed-${userId}`;
+export const getDismissedKey = (userId: string) => `rebrand-banner-dismissed-${userId}`;
 
 // Global key for anonymous users (e.g., on the login screen)
 export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
@@ -31,7 +27,6 @@ const DISPLAY_ROUTES = [
 ];
 
 export const RebrandBanner = (props: BannerProps) => {
-  const { ownerId } = workspaces.useData() ?? {};
   const userData = auth.useData();
   const userId = userData?.user.id;
   const location = useLocation();
@@ -58,14 +53,8 @@ export const RebrandBanner = (props: BannerProps) => {
     // For logged-in users
     const userDismissed = localStorage.getItem(getDismissedKey(userId));
 
-    // If there's a workspace, also check workspace-specific dismissal
-    if (ownerId) {
-      const workspaceDismissed = localStorage.getItem(getDismissedKey(userId, ownerId));
-      setIsRebrandBannerActive(!userDismissed && !workspaceDismissed);
-    } else {
-      setIsRebrandBannerActive(!userDismissed);
-    }
-  }, [userId, ownerId]);
+    setIsRebrandBannerActive(!userDismissed);
+  }, [userId]);
 
   const isDisplayRoute = DISPLAY_ROUTES.some(
     (route) =>
@@ -80,11 +69,6 @@ export const RebrandBanner = (props: BannerProps) => {
     } else {
       // Set user-level dismissal
       localStorage.setItem(getDismissedKey(userId), 'true');
-
-      // Also set workspace-specific dismissal if available
-      if (ownerId) {
-        localStorage.setItem(getDismissedKey(userId, ownerId), 'true');
-      }
     }
 
     setIsCollapsing(true);
