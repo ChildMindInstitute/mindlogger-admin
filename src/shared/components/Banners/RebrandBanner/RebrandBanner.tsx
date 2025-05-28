@@ -96,7 +96,7 @@ export const RebrandBanner = (props: BannerProps) => {
           >
             <Trans i18nKey="rebrandBanner">
               <strong>We are rebranding! </strong>
-              <>Design updates are on the way — same great app, fresh new look. Curious? </>
+              <>Design updates are on the way — same great app, fresh new look. </>
               {/* 
 								Uncomment once the URL is available
 								https://mindlogger.atlassian.net/browse/M2-9258
