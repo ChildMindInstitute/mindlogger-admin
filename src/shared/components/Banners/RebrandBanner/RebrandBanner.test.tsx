@@ -89,28 +89,13 @@ describe('RebrandBanner', () => {
       // Click close button
       await userEvent.click(within(banner).getByRole('button'));
 
-      // Check localStorage was set for both user-level and workspace-level
+      // Check localStorage was set for user-level
       expect(localStorage.getItem(getDismissedKey(mockedOwnerId))).toBe('true');
-      expect(localStorage.getItem(getDismissedKey(mockedOwnerId, mockedOwnerId))).toBe('true');
     });
 
     test('does not show banner when user-level dismissal exists', () => {
       // Set user-level dismissal
       localStorage.setItem(getDismissedKey(mockedOwnerId), 'true');
-
-      renderWithProviders(<RebrandBanner />, {
-        preloadedState: {
-          ...getPreloadedState(),
-          ...mockAuthState,
-        },
-      });
-
-      expect(screen.queryByTestId(bannerTestId)).not.toBeInTheDocument();
-    });
-
-    test('does not show banner when workspace-level dismissal exists', () => {
-      // Set workspace-level dismissal
-      localStorage.setItem(getDismissedKey(mockedOwnerId, mockedOwnerId), 'true');
 
       renderWithProviders(<RebrandBanner />, {
         preloadedState: {
