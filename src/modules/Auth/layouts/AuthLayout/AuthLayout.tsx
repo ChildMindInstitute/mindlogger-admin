@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import curiousLogo from 'assets/images/curious_logo--white.png';
@@ -16,6 +17,7 @@ import {
 } from './AuthLayout.styles';
 
 export const AuthLayout = () => {
+  const { t } = useTranslation();
   const status = auth.useStatus();
 
   return (
@@ -23,7 +25,7 @@ export const AuthLayout = () => {
       {status === 'loading' && <Spinner />}
       <StyledHeader>
         <StyledLogoWrapper>
-          <StyledLogo src={curiousLogo} alt="Curious Logo" />
+          <StyledLogo src={curiousLogo} alt={t('logoAltText')} />
         </StyledLogoWrapper>
         <Banners />
       </StyledHeader>
