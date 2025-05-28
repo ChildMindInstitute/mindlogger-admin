@@ -51,9 +51,9 @@ describe('Reminder component', () => {
     expect(screen.getByText('Reminder')).toBeInTheDocument();
     const header = screen.getByTestId(`${dataTestid}-header`);
     expect(header).toBeInTheDocument();
-    expect(header).toHaveTextContent('MindLogger');
-    const svg = header.querySelector('svg');
-    expect(svg).toBeInTheDocument();
+    expect(header).toHaveTextContent('Curious');
+    const img = header.querySelector('img');
+    expect(img).toBeInTheDocument();
 
     const removeButton = screen.getByTestId(`${dataTestid}-remove`);
     expect(removeButton).toBeInTheDocument();
