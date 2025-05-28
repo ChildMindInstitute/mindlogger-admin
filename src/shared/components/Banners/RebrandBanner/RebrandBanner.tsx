@@ -19,7 +19,7 @@ export const getDismissedKey = (userId: string) => `rebrand-banner-dismissed-${u
 // Global key for anonymous users (e.g., on the login screen)
 export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
 
-const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)(?:\/|$)/];
+const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
 export const RebrandBanner = (props: BannerProps) => {
   const userData = auth.useData();
