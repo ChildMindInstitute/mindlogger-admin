@@ -88,9 +88,6 @@ export const RebrandBanner = (props: BannerProps) => {
               '& .MuiAlert-message': {
                 maxWidth: 'none',
               },
-              '& .MuiAlert-icon': {
-                opacity: 1,
-              },
               '& .MuiButton-root': {
                 color: variables.palette.surface,
               },
