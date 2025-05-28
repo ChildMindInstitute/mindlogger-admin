@@ -1,5 +1,5 @@
 export const palette = {
-  primary: '#00639a',
+  primary: '#0067A0',
   primary50: '#207cbb',
   primary80: '#96ccff',
   primary95: '#e8f2ff',
