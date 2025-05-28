@@ -19,12 +19,7 @@ export const getDismissedKey = (userId: string) => `rebrand-banner-dismissed-${u
 // Global key for anonymous users (e.g., on the login screen)
 export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
 
-const DISPLAY_ROUTES = [
-  '/auth',
-  '/dashboard/applets',
-  '/dashboard/managers',
-  '/dashboard/respondents',
-];
+const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)(?:\/|$)/];
 
 export const RebrandBanner = (props: BannerProps) => {
   const userData = auth.useData();
@@ -56,11 +51,7 @@ export const RebrandBanner = (props: BannerProps) => {
     setIsRebrandBannerActive(!userDismissed);
   }, [userId]);
 
-  const isDisplayRoute = DISPLAY_ROUTES.some(
-    (route) =>
-      location.pathname === route ||
-      (location.pathname.startsWith(route) && route.includes('/auth')),
-  );
+  const isDisplayRoute = DISPLAY_ROUTES.some((route) => route.test(location.pathname));
 
   const handleDismiss = () => {
     // For auth screen or when user is not logged in yet
