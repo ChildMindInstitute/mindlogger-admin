@@ -5,6 +5,7 @@ import curiousLogo from 'assets/images/curious_logo--white.png';
 import { auth } from 'modules/Auth/state';
 import { Footer, Spinner } from 'shared/components';
 import { Banners } from 'shared/components/Banners';
+import { RebrandBanner } from 'shared/components/Banners/RebrandBanner';
 
 import {
   StyledAuthLayout,
@@ -29,6 +30,7 @@ export const AuthLayout = () => {
         </StyledLogoWrapper>
         <Banners />
       </StyledHeader>
+      <RebrandBanner />
       <StyledOutlet>
         <StyledAuthWrapper>
           <StyledAuthWrapperInner>
