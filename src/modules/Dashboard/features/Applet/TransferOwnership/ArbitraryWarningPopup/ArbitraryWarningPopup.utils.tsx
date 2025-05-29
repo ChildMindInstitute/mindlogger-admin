@@ -1,5 +1,5 @@
-import { Trans } from 'react-i18next';
 import { ButtonProps } from '@mui/material';
+import { Trans } from 'react-i18next';
 
 import { SubmitBtnColor } from 'shared/components/Modal';
 
@@ -29,10 +29,10 @@ export const getScreens = ({
         is currently connected to an arbitrary server for data storage. If you proceed with the
         ownership transfer without contacting us, your applet will
         <strong>lose its arbitrary server configurations</strong>, and all data it subsequently
-        collects will be stored on MindLogger servers from this point forward. In order to transfer
-        the ownership of the applet while
+        collects will be stored on Curious servers from this point forward. In order to transfer the
+        ownership of the applet while
         <strong>retaining the arbitrary server configuration</strong>, please reach out to the
-        MindLogger support team by clicking the button below.
+        Curious support team by clicking the button below.
       </Trans>
     ),
     onSubmit: onFirstSubmit,
@@ -50,7 +50,7 @@ export const getScreens = ({
       <Trans i18nKey="arbitraryWarning.contentSecond">
         <strong>
           Again, proceeding with the ownership transfer will cause this applet to lose its arbitrary
-          server configurations, and all data it subsequently collects will be stored on MindLogger
+          server configurations, and all data it subsequently collects will be stored on Curious
           servers from this point forward.
         </strong>
         To proceed with the ownership transfer for your applet

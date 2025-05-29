@@ -2,8 +2,8 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
-import { checkIfCanEdit, isManagerOrOwner } from 'shared/utils';
 import { variables } from 'shared/styles';
+import { checkIfCanEdit, isManagerOrOwner } from 'shared/utils';
 
 import { AppletActions } from './AppletItem.types';
 
@@ -74,7 +74,7 @@ export const getAppletActions = ({
       'data-testid': 'dashboard-applets-applet-transfer',
     },
     /*The "Share to Library" functionality is hidden in the UI under the feature flag "enableShareToLibrary"
-    with workspaces ID limitations until the Moderation process within MindLogger is introduced. (Story:
+    with workspaces ID limitations until the Moderation process within Curious is introduced. (Story:
     AUS-4.1.4.10).*/
     {
       icon: <Svg id="share" />,
