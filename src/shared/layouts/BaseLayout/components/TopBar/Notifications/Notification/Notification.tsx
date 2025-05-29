@@ -42,6 +42,8 @@ export const Notification = ({
   isWatched,
   subjectId,
   type,
+  activityId,
+  answerId,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -73,9 +75,11 @@ export const Notification = ({
 
   const navigateToResponseData = () => {
     navigate(
-      generatePath(page.appletParticipantDetails, {
+      generatePath(page.appletParticipantActivityDetailsDataReview, {
         appletId,
         subjectId,
+        activityId,
+        answerId,
       }),
     );
   };
