@@ -4,8 +4,8 @@ import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Periodicity } from 'modules/Dashboard/api';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Reminder } from './Reminder';
 
@@ -51,9 +51,9 @@ describe('Reminder component', () => {
     expect(screen.getByText('Reminder')).toBeInTheDocument();
     const header = screen.getByTestId(`${dataTestid}-header`);
     expect(header).toBeInTheDocument();
-    expect(header).toHaveTextContent('MindLogger');
-    const svg = header.querySelector('svg');
-    expect(svg).toBeInTheDocument();
+    expect(header).toHaveTextContent('Curious');
+    const img = header.querySelector('img');
+    expect(img).toBeInTheDocument();
 
     const removeButton = screen.getByTestId(`${dataTestid}-remove`);
     expect(removeButton).toBeInTheDocument();

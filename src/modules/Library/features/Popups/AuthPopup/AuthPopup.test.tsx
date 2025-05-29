@@ -1,7 +1,7 @@
-import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { AuthPopup } from './AuthPopup';
 
@@ -19,7 +19,7 @@ describe('AuthPopup library component tests', () => {
     const confirmBtn = await waitFor(() => screen.getByText('Yes, authorize'));
     fireEvent.click(confirmBtn);
     await waitFor(() => {
-      expect(screen.getByText('Log into your MindLogger account')).toBeInTheDocument();
+      expect(screen.getByText('Log into your Curious account')).toBeInTheDocument();
     });
   });
 });

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
+import curiousLogo from 'assets/images/curious_logo--white.png';
 import { auth } from 'modules/Auth/state';
-import { Spinner, Svg, Footer } from 'shared/components';
+import { Footer, Spinner } from 'shared/components';
 import { Banners } from 'shared/components/Banners';
 
 import {
@@ -9,11 +11,13 @@ import {
   StyledAuthWrapper,
   StyledAuthWrapperInner,
   StyledHeader,
+  StyledLogo,
   StyledLogoWrapper,
   StyledOutlet,
 } from './AuthLayout.styles';
 
 export const AuthLayout = () => {
+  const { t } = useTranslation();
   const status = auth.useStatus();
 
   return (
@@ -21,7 +25,7 @@ export const AuthLayout = () => {
       {status === 'loading' && <Spinner />}
       <StyledHeader>
         <StyledLogoWrapper>
-          <Svg id="header-logo" width={250} height={44} />
+          <StyledLogo src={curiousLogo} alt={t('logoAltText')} />
         </StyledLogoWrapper>
         <Banners />
       </StyledHeader>

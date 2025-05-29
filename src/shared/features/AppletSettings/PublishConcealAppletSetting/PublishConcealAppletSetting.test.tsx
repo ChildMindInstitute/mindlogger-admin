@@ -2,7 +2,9 @@
 // @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
+import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
+import { Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletFormData,
@@ -12,8 +14,6 @@ import {
 import { SettingParam } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { initialStateData } from 'redux/modules';
-import { Roles } from 'shared/consts';
 
 import { PublishConcealAppletSetting } from './PublishConcealAppletSetting';
 
@@ -65,7 +65,7 @@ describe('PublishConcealAppletSetting', () => {
     expect(screen.getByTestId('applet-settings-publish-conceal-publish')).toBeVisible();
     expect(
       screen.getByText(
-        'Once the Applet is published, it will be added to all MindLogger respondents.',
+        'Once the Applet is published, it will be added to all Curious respondents.',
       ),
     ).toBeVisible();
 
@@ -85,9 +85,7 @@ describe('PublishConcealAppletSetting', () => {
 
     expect(screen.getByTestId('applet-settings-publish-conceal-publish')).toBeVisible();
     expect(
-      screen.getByText(
-        'Once the Applet is concealed, it disappears for all MindLogger respondents.',
-      ),
+      screen.getByText('Once the Applet is concealed, it disappears for all Curious respondents.'),
     ).toBeVisible();
 
     fireEvent.click(screen.getByText('Conceal Applet'));
