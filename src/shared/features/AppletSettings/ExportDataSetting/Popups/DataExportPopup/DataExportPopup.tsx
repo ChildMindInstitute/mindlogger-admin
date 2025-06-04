@@ -15,6 +15,9 @@ export const DataExportPopup = (props: DataExportPopupProps) => {
   } = useFeatureFlags();
 
   return enableDataExportSpeedUp ? (
+    // TODO: Fix new export popup, as it's currently broken
+    // ** When fixing it, add any new features to align with new additions to DataExportPopupOld **
+    // https://mindlogger.atlassian.net/browse/M2-7782
     <DataExportPopupNew {...props} />
   ) : (
     <DataExportPopupOld {...props} />
