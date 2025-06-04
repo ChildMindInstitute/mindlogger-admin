@@ -2,6 +2,7 @@ export enum ApiLanguages {
   EN = 'en',
   FR = 'fr',
   EL = 'el',
+  ES = 'es',
 }
 
 export const DEFAULT_CONFIG = {

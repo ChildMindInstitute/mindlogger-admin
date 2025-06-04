@@ -2,11 +2,11 @@ import { Alert } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { StyledClearedButton } from 'shared/styles';
 import { useWindowFocus } from 'shared/hooks/useWindowFocus';
+import { StyledClearedButton } from 'shared/styles';
 
-import { BannerProps } from './Banner.types';
 import { BANNER_ICONS } from './Banner.const';
+import { BannerProps } from './Banner.types';
 
 export const Banner = ({
   children,
@@ -14,6 +14,7 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
+  icon,
   ...rest
 }: BannerProps) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -34,6 +35,7 @@ export const Banner = ({
   return (
     <Alert
       iconMapping={BANNER_ICONS}
+      icon={icon}
       slots={{
         closeButton: StyledClearedButton,
       }}

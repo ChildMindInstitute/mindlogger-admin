@@ -2,8 +2,8 @@
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
+import { Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletFormData,
@@ -11,7 +11,7 @@ import {
   mockedCurrentWorkspace,
 } from 'shared/mock';
 import { initialStateData } from 'shared/state';
-import { Roles } from 'shared/consts';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { AboutApplet } from './AboutApplet';
 
@@ -47,7 +47,7 @@ const preloadedState = {
             name: 'Default',
             logo: null,
             backgroundImage: null,
-            primaryColor: '#0067a0',
+            primaryColor: '#00639a',
             secondaryColor: '#fff',
             tertiaryColor: '#404040',
             id: '9b023afd-e5f9-403c-b154-fc8f35fcf3ab',
