@@ -165,24 +165,26 @@ export const ExportSettingsPopup = ({
                 />
               </StyledFlexTopCenter>
             )}
-            <StyledFlexColumn sx={{ gap: 1.6 }}>
-              <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>
-              <StyledFlexColumn gap={0.8}>
-                {filteredSupplementaryFiles.map((fileType) => (
-                  <CheckboxController
-                    control={control}
-                    sxLabelProps={{ m: 0 }}
-                    name={`supplementaryFiles.${fileType}`}
-                    key={`data-export-supplementary-file-${fileType}`}
-                    label={
-                      <StyledBodyLarge>
-                        {t(`dataExport.supplementaryFiles.includes.${fileType}`)}
-                      </StyledBodyLarge>
-                    }
-                  />
-                ))}
+            {filteredSupplementaryFiles.length > 0 && (
+              <StyledFlexColumn sx={{ gap: 1.6 }}>
+                <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>
+                <StyledFlexColumn gap={0.8}>
+                  {filteredSupplementaryFiles.map((fileType) => (
+                    <CheckboxController
+                      control={control}
+                      sxLabelProps={{ m: 0 }}
+                      name={`supplementaryFiles.${fileType}`}
+                      key={`data-export-supplementary-file-${fileType}`}
+                      label={
+                        <StyledBodyLarge>
+                          {t(`dataExport.supplementaryFiles.includes.${fileType}`)}
+                        </StyledBodyLarge>
+                      }
+                    />
+                  ))}
+                </StyledFlexColumn>
               </StyledFlexColumn>
-            </StyledFlexColumn>
+            )}
             <StyledFlexAllCenter>
               <Button
                 onClick={() => {
