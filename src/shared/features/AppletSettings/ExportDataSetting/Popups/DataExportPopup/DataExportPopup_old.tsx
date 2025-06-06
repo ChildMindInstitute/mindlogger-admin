@@ -115,11 +115,16 @@ export const DataExportPopup = ({
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
         const toDate = getFormattedToDate({ dateType, formToDate });
 
+        const includeEhr =
+          featureFlags.enableEhrHealthData !== 'unavailable' &&
+          dataExported === ExportDataExported.ResponsesAndEhrData;
+
         const body = {
           appletId,
           targetSubjectIds,
           fromDate,
           toDate,
+          includeEhr,
         };
         const firstPageResponse = await getExportDataApi(body);
         const { result: firstPageData, count: exportDataTotalCount = 0 } = firstPageResponse.data;
@@ -201,10 +206,7 @@ export const DataExportPopup = ({
           }
         }
 
-        if (
-          featureFlags.enableEhrHealthData !== 'unavailable' &&
-          dataExported === ExportDataExported.ResponsesAndEhrData
-        ) {
+        if (includeEhr) {
           const activityId = filters?.activityId;
           const flowId = filters?.flowId;
           const respondentId = filters?.sourceSubjectId;
