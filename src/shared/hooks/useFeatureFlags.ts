@@ -24,6 +24,7 @@ export const useFeatureFlags = () => {
     const keys = Object.keys(FeatureFlagDefaults) as (keyof typeof FeatureFlagDefaults)[];
     const features: FeatureFlags = {};
     keys.forEach((key) => (features[key] = flags[key] ?? FeatureFlagDefaults[key]));
+    features.enableEmaExtraFiles = true;
 
     return features;
   };

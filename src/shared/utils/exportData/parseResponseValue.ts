@@ -15,6 +15,7 @@ import {
   DecryptedTimeAnswer,
   ExtendedEvent,
   isMediaAnswerData,
+  isRequestHealthRecordDataAnswerData,
   ResponseValueType,
   UserActionType,
 } from 'shared/types';
@@ -78,6 +79,10 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
 ) => {
   if (isTextAnswer(answer)) return answer;
   if (isNullAnswer(answer)) return NULL_ANSWER;
+
+  if (isRequestHealthRecordDataAnswerData(item)) {
+    return item.ehrDataFile ?? '';
+  }
 
   const { activityItem } = item;
   const inputType = activityItem.responseType;
