@@ -10,16 +10,23 @@ import {
   mockedOwnerId,
   mockedFullParticipantId1,
   mockedFullParticipant1,
+  mockedAppletData,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
+import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
 
 import { Respondents } from './Respondents';
 
 const route = `/dashboard/${mockedAppletId}/respondents`;
 const routePath = page.appletRespondents;
+
+export const GET_APPLET_ACTIVITIES_URL = `/activities/applet/${mockedAppletId}`;
+export const GET_WORKSPACE_RESPONDENTS_URL = `/workspaces/${mockedOwnerId}/respondents`;
+export const GET_WORKSPACE_APPLET_RESPONDENTS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
+
 const preloadedState = {
   workspaces: {
     workspaces: initialStateData,
@@ -54,6 +61,16 @@ const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
   },
 });
 
+const mockedGetAppletActivities = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: {
+      activitiesDetails: mockedAppletData.activities,
+      appletDetail: mockedAppletData,
+    },
+  },
+};
+
 const clickActionDots = async () => {
   const actionsDots = await waitFor(() =>
     screen.getByTestId('dashboard-respondents-table-actions-dots'),
@@ -62,12 +79,26 @@ const clickActionDots = async () => {
 };
 
 describe('Respondents component tests', () => {
+  beforeEach(() => {
+    mockGetRequestResponses({
+      [GET_WORKSPACE_RESPONDENTS_URL]: getMockedGetWithRespondents(),
+      [GET_WORKSPACE_APPLET_RESPONDENTS_URL]: getMockedGetWithRespondents(),
+      [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
+    });
+  });
+
   test('should render empty table', async () => {
-    const successfulGetMock = {
+    const emptyGetMock = {
       status: ApiResponseCodes.SuccessfulResponse,
       data: null,
     };
-    mockAxios.get.mockResolvedValueOnce(successfulGetMock);
+
+    mockGetRequestResponses({
+      [GET_WORKSPACE_RESPONDENTS_URL]: emptyGetMock,
+      [GET_WORKSPACE_APPLET_RESPONDENTS_URL]: emptyGetMock,
+      [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
+    });
+
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -95,7 +126,6 @@ describe('Respondents component tests', () => {
   });
 
   test('should render table with respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const tableColumnNames = ['ID', 'Nickname', 'Last active', 'Schedule', 'Actions'];
     const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule'];
@@ -108,7 +138,6 @@ describe('Respondents component tests', () => {
   });
 
   test('should pin respondent', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     const respondentPin = await waitFor(() => screen.getByTestId('dashboard-respondents-pin'));
@@ -125,7 +154,6 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear respondents actions on respondent actions button click', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -145,7 +173,11 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear actions for anonymous respondent', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
+    mockGetRequestResponses({
+      [GET_WORKSPACE_RESPONDENTS_URL]: getMockedGetWithRespondents(true),
+      [GET_WORKSPACE_APPLET_RESPONDENTS_URL]: getMockedGetWithRespondents(true),
+      [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
+    });
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -171,7 +203,6 @@ describe('Respondents component tests', () => {
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}          | ${'edit respondents'}
       ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'} | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
       await clickActionDots();
@@ -185,7 +216,6 @@ describe('Respondents component tests', () => {
   });
 
   test('data export popup should appear when the respondent action and applet are selected', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
@@ -203,7 +233,6 @@ describe('Respondents component tests', () => {
   });
 
   test('shows view participant popup on the dashboard respondents page', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, {
       preloadedState,
       route: page.dashboardRespondents,
@@ -222,7 +251,6 @@ describe('Respondents component tests', () => {
   });
 
   test('should search respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 

@@ -7,6 +7,7 @@ import {
   DrawingItemAnswer,
   ExtendedExportAnswerWithoutEncryption,
   PhotoItemAnswer,
+  RequestHealthRecordDataAnswer,
   VideoItemAnswer,
 } from 'shared/types/answer';
 
@@ -19,15 +20,24 @@ export const isDrawingAnswerData = (
   item: DecryptedAnswerData,
 ): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer> =>
   item.activityItem?.responseType === ItemResponseType.Drawing && Boolean(item.answer);
+
 export const isNotMediaAnswerData = (
   item: DecryptedAnswerData,
 ): item is DecryptedAnswerData<
   ExtendedExportAnswerWithoutEncryption,
   Exclude<ActivityItemAnswer, AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer>
 > => !ItemsWithFileResponses.includes(item.activityItem?.responseType) || !item.answer;
+
 export const isMediaAnswerData = (
   item: DecryptedAnswerData,
 ): item is DecryptedAnswerData<
   ExtendedExportAnswerWithoutEncryption,
   AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer
 > => ItemsWithFileResponses.includes(item.activityItem?.responseType);
+
+export const isRequestHealthRecordDataAnswerData = (
+  item: DecryptedAnswerData,
+): item is DecryptedAnswerData<
+  ExtendedExportAnswerWithoutEncryption,
+  RequestHealthRecordDataAnswer
+> => item.activityItem?.responseType === ItemResponseType.RequestHealthRecordData;

@@ -8,5 +8,6 @@ export type ExportSettingsPopupProps = {
   getMaxDate: () => Date;
   appletName: string;
   supportedSupplementaryFiles?: SupplementaryFiles[];
+  hasEhrHealthData?: boolean;
   'data-testid'?: string;
 };

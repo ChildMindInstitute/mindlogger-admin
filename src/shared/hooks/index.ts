@@ -24,3 +24,4 @@ export * from './useMediaUpload';
 export * from './useTransferOwnership';
 export * from './useFeatureFlags';
 export * from './useModalBanners';
+export * from './useHasEhrHealthData';
