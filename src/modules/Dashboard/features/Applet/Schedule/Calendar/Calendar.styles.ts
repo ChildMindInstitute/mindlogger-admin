@@ -350,8 +350,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
         right: 0;
         transform: translateY(-50%);
         color: ${variables.palette.outline};
-        font-size: ${variables.font.size.md};
-        line-height: ${variables.font.lineHeight.md};
+        font-size: ${variables.font.size.label3};
+        line-height: ${variables.font.lineHeight.label3};
         letter-spacing: ${variables.font.letterSpacing.sm};
       }
     }
@@ -451,8 +451,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
         min-width: 2.5rem;
         height: 2.5rem;
         font-family: 'Atkinson', helvetica, arial, sans-serif;
-        font-size: ${variables.font.size.md};
-        line-height: ${variables.font.lineHeight.md};
+        font-size: ${variables.font.size.label3};
+        line-height: ${variables.font.lineHeight.label3};
         letter-spacing: ${variables.font.letterSpacing.lg};
         color: ${variables.palette.on_surface_variant};
         transition: ${variables.transitions.opacity};

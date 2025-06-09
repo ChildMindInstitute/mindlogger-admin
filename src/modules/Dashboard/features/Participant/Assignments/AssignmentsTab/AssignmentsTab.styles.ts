@@ -10,8 +10,8 @@ export const StyledToggleButton = styled(ToggleButton)`
   align-items: center;
   gap: ${theme.spacing(0.8)};
   transition: ${variables.transitions.bgColor};
-  font-size: ${variables.font.size.md};
-  line-height: ${variables.font.lineHeight.md};
+  font-size: ${variables.font.size.label3};
+  line-height: ${variables.font.lineHeight.label3};
   letter-spacing: ${variables.font.letterSpacing.sm};
 
   && {

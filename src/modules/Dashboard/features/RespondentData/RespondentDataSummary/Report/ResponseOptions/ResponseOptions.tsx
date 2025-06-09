@@ -1,18 +1,18 @@
+import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
-import { Tooltip } from 'shared/components/Tooltip';
-import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
-import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import { getDictionaryText } from 'shared/utils';
 import {
-  UNSUPPORTED_ITEMS,
   SHOW_MORE_HEIGHT,
+  UNSUPPORTED_ITEMS,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 import { FormattedResponses } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
+import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
+import { Tooltip } from 'shared/components/Tooltip';
+import { StyledHeadlineSmall, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
+import { getDictionaryText } from 'shared/utils';
 
 import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from '../../RespondentDataSummary.const';
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
@@ -53,14 +53,14 @@ export const ResponseOptions = ({
 
   return (
     <>
-      <StyledHeadline sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}>
+      <StyledHeadlineSmall sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}>
         {t('responseOptions')}
         <Tooltip tooltipTitle={t('responseOptionsTooltip')}>
           <span>
             <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
           </span>
         </Tooltip>
-      </StyledHeadline>
+      </StyledHeadlineSmall>
       {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
         responseOption.map((item, index) => {
           const dataTestid = `response-option-${

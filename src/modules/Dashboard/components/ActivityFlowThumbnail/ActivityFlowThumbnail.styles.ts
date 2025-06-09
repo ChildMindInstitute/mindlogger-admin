@@ -31,7 +31,7 @@ export const StyledItemCount = styled(StyledFlexAllCenter)({
   background: variables.palette.primary80,
   borderRadius: '100%',
   color: variables.palette.primary,
-  fontSize: variables.font.size.md,
+  fontSize: variables.font.size.label3,
   fontWeight: variables.font.weight.bold,
   height: '3.2rem',
   inset: 0,

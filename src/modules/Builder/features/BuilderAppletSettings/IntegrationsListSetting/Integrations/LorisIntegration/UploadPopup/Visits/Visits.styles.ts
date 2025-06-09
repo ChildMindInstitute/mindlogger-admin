@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { Table } from 'shared/components/Table';
 import { SelectController } from 'shared/components/FormComponents';
+import { Table } from 'shared/components/Table';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTable = styled(Table)`
@@ -17,7 +17,7 @@ export const StyledTable = styled(Table)`
 
   .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
     padding: ${theme.spacing(0.65, 1.2)};
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
 
     > :first-of-type {
       display: block;
@@ -31,7 +31,7 @@ export const StyledTable = styled(Table)`
     top: 0;
     left: 0;
     padding: ${theme.spacing(0.65, 1.2)};
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
   }
 `;
 
@@ -50,7 +50,7 @@ export const StyledSelectController = styled(SelectController)`
 
   .MuiSelect-select {
     padding: ${theme.spacing(0.65, 1.2)};
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
   }
 
   .MuiFormHelperText-root {

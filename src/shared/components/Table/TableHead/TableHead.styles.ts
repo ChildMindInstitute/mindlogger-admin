@@ -64,12 +64,13 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
         case UiType.Tertiary:
           return {
             color: variables.palette.outline,
-            fontSize: variables.font.size.md,
+            fontSize: variables.font.size.label3,
             letterSpacing: variables.font.letterSpacing.lg,
-            lineHeight: variables.font.lineHeight.md,
+            lineHeight: variables.font.lineHeight.label3,
           };
         default:
           return {};
       }
     }}
+  }
 `;

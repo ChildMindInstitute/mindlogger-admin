@@ -1,7 +1,7 @@
 import { Collapse, Slider, styled } from '@mui/material';
 
-import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 import { Table } from 'shared/components';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};
@@ -19,7 +19,7 @@ export const StyledInputContainer = styled(StyledFlexTopCenter)`
   .MuiFormHelperText-root {
     position: absolute;
     bottom: -2.4rem;
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
   }
 `;
 
@@ -62,8 +62,8 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
 
     .MuiTableCell-head,
     .MuiTableCell-body {
-      font-size: ${variables.font.size.md};
-      line-height: ${variables.font.lineHeight.md};
+      font-size: ${variables.font.size.label3};
+      line-height: ${variables.font.lineHeight.label3};
       font-weight: ${variables.font.weight.regular};
       letter-spacing: ${variables.font.letterSpacing.lg};
     }
@@ -89,7 +89,7 @@ export const StyledSlider = styled(Slider)`
   }
 
   .MuiSlider-mark {
-    color: ${variables.palette.on_surface_alfa38};
+    color: ${variables.palette.on_surface_alpha38};
   }
 
   .MuiSlider-markLabel {

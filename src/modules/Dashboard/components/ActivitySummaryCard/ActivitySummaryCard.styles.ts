@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 import { MouseEventHandler } from 'react';
 
-import { StyledFlexSpaceBetween, StyledHeadline, theme, variables } from 'shared/styles';
+import { StyledFlexSpaceBetween, StyledHeadlineSmall, theme, variables } from 'shared/styles';
 
 export const StyledContainer = styled(StyledFlexSpaceBetween)(
   ({
@@ -27,7 +27,7 @@ export const StyledContainer = styled(StyledFlexSpaceBetween)(
   }),
 );
 
-export const StyledActivityName = styled(StyledHeadline)`
+export const StyledActivityName = styled(StyledHeadlineSmall)`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

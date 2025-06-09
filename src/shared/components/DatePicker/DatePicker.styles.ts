@@ -10,8 +10,8 @@ export const StyledPopover = styled(Popover)`
   }
 
   .react-datepicker {
-    font-size: ${variables.font.size.md};
-    line-height: ${variables.font.lineHeight.md};
+    font-size: ${variables.font.size.label3};
+    line-height: ${variables.font.lineHeight.label3};
     letter-spacing: ${variables.font.letterSpacing.lg};
     font-family: 'Atkinson', helvetica, arial, sans-serif;
     background-color: transparent;

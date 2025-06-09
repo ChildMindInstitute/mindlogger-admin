@@ -26,7 +26,7 @@ export const StyledName = styled(StyledEllipsisText)`
 `;
 
 export const StyledNameWrapper = styled(StyledFlexTopCenter)`
-  font-size: ${variables.font.size.md};
+  font-size: ${variables.font.size.label3};
   color: ${variables.palette.on_surface_variant};
   display: flex;
   position: absolute;
@@ -51,5 +51,5 @@ export const StyledSlider = styled(Slider)`
   .MuiSlider-track {
     height: 0.2rem;
     color: ${variables.palette.primary};
-  },
+  }
 `;

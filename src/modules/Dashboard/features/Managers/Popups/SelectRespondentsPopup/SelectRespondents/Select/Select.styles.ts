@@ -12,9 +12,9 @@ export const StyledTextField = styled(TextField)`
   .MuiInputBase-root.MuiOutlinedInput-root {
     width: 12rem;
     color: ${variables.palette.primary};
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
     font-weight: ${variables.font.weight.regular};
-    line-height: ${variables.font.lineHeight.md};
+    line-height: ${variables.font.lineHeight.label3};
     background-color: transparent;
     border-radius: ${variables.borderRadius.xxxl};
     padding: ${theme.spacing(0, 1.6)};

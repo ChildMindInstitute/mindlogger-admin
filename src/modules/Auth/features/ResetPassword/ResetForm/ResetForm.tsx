@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ResetPassword } from 'api';
-import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledHeadline, StyledLinkBtn } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles';
-
 import {
+  StyledErrorText,
+  StyledHeadlineSmall,
+  StyledLinkBtn,
+} from 'shared/styles/styledComponents';
+
+import { resetSchema } from './ResetForm.schema';
+import {
+  StyledBackWrapper,
+  StyledButton,
+  StyledController,
   StyledForm,
   StyledResetPasswordSubheader,
-  StyledController,
-  StyledButton,
-  StyledBackWrapper,
 } from './ResetForm.styles';
-import { resetSchema } from './ResetForm.schema';
 import { ResetFormProps } from './ResetForm.types';
 
 export const ResetForm = ({ setEmail }: ResetFormProps) => {
@@ -46,7 +50,9 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledHeadline color={variables.palette.on_surface}>{t('resetPassword')}</StyledHeadline>
+      <StyledHeadlineSmall color={variables.palette.on_surface}>
+        {t('resetPassword')}
+      </StyledHeadlineSmall>
       <StyledResetPasswordSubheader color={variables.palette.on_surface_variant}>
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>

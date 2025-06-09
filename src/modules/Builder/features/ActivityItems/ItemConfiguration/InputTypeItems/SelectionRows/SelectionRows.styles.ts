@@ -1,6 +1,6 @@
 import { Button, Collapse, styled } from '@mui/material';
 
-import { StyledFlexTopCenter, StyledFlexColumn, theme, variables } from 'shared/styles';
+import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSelectionRowsContainer = styled(Collapse)`
@@ -41,7 +41,7 @@ export const StyledSelectionBox = styled(StyledFlexColumn, shouldForwardProp)`
     position: absolute;
     top: 5.3rem;
     bottom: unset;
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label3};
 
     ${({ isErrorShortened }: { isErrorShortened?: boolean }) =>
       isErrorShortened &&

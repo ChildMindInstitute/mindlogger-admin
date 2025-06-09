@@ -6,7 +6,7 @@ import { variables } from 'shared/styles';
 export const StyledSelectController = styled(SelectController)`
   && {
     .MuiInputBase-root {
-      font-size: ${variables.font.size.md};
+      font-size: ${variables.font.size.label3};
       color: ${variables.palette.primary};
 
       &::before,

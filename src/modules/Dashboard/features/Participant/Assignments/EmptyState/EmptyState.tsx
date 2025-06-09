@@ -2,7 +2,12 @@ import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { StyledFlexAllCenter, StyledFlexColumn, StyledHeadline, variables } from 'shared/styles';
+import {
+  StyledFlexAllCenter,
+  StyledFlexColumn,
+  StyledHeadlineSmall,
+  variables,
+} from 'shared/styles';
 
 import { EmptyStateProps } from './EmptyState.types';
 
@@ -22,9 +27,9 @@ export const EmptyState = ({
     >
       <StyledFlexColumn sx={{ alignItems: 'center', gap: 1.6, maxWidth }}>
         <Svg id={icon} width="80" height="80" fill={variables.palette.outline} />
-        <StyledHeadline as="h2" sx={{ color: variables.palette.outline, m: 0 }}>
+        <StyledHeadlineSmall as="h2" color={variables.palette.outline} sx={{ m: 0 }}>
           {title}
-        </StyledHeadline>
+        </StyledHeadlineSmall>
       </StyledFlexColumn>
       {!!onClickAssign && (
         <Button

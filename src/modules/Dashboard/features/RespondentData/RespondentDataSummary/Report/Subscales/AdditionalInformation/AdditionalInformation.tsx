@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getOptionTextApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
-import { StyledHeadline, StyledTitleBoldMedium, theme } from 'shared/styles';
 import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 import { useFeatureFlags } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
+import { StyledHeadlineSmall, StyledTitleBoldMedium, theme } from 'shared/styles';
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
-import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
+import { StyledContent, StyledHeader, StyledMdPreview } from './AdditionalInformation.styles';
 
 export const AdditionalInformation = ({
   optionText,
@@ -36,9 +36,9 @@ export const AdditionalInformation = ({
   return (
     <Box data-testid={dataTestid}>
       <StyledHeader>
-        <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
+        <StyledHeadlineSmall sx={{ mr: theme.spacing(1.6) }}>
           {t('additionalInformation')}
-        </StyledHeadline>
+        </StyledHeadlineSmall>
       </StyledHeader>
       <StyledContent>
         {featureFlags.enableCahmiSubscaleScoring && severity && (
