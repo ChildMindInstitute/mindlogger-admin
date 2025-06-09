@@ -243,7 +243,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            backgroundColor: variables.palette.primary_alfa12,
+            backgroundColor: variables.palette.primary_alpha12,
           },
         },
       },
@@ -292,7 +292,7 @@ export const theme = createTheme({
             cursor: 'pointer',
             transition: variables.transitions.bgColor,
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
           },
           '&.MuiTableRow-dragged-over': {
@@ -393,7 +393,7 @@ export const theme = createTheme({
             fontWeight: variables.font.weight.bold,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
@@ -420,18 +420,18 @@ export const theme = createTheme({
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
-              borderColor: variables.palette.outline_alfa12,
+              borderColor: variables.palette.outline_alpha12,
             },
 
             '&:not(.Mui-disabled)': {
               borderColor: variables.palette.outline_variant,
 
               '&:hover': {
-                backgroundColor: variables.palette.primary_alfa8,
+                backgroundColor: variables.palette.primary_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primary_alfa12,
+                backgroundColor: variables.palette.primary_alpha12,
               },
             },
           },
@@ -450,11 +450,11 @@ export const theme = createTheme({
               color: variables.palette.primary,
 
               '&:hover': {
-                backgroundColor: variables.palette.primary_alfa8,
+                backgroundColor: variables.palette.primary_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primary_alfa12,
+                backgroundColor: variables.palette.primary_alpha12,
               },
             },
 
@@ -478,7 +478,7 @@ export const theme = createTheme({
             boxShadow: variables.boxShadow.buttonElevation1,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
@@ -491,7 +491,7 @@ export const theme = createTheme({
               '&:focus, &:active': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.surface1,
-                  variables.palette.light_alfa12,
+                  variables.palette.white_alpha12,
                 ),
                 boxShadow: variables.boxShadow.buttonElevation1,
               },
@@ -506,7 +506,7 @@ export const theme = createTheme({
             fontWeight: variables.font.weight.regular,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
@@ -514,7 +514,7 @@ export const theme = createTheme({
               '&:hover': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa8,
+                  variables.palette.on_secondary_container_alpha8,
                 ),
                 boxShadow: variables.boxShadow.buttonElevation1,
               },
@@ -526,7 +526,7 @@ export const theme = createTheme({
               '&:focus, &:active': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa12,
+                  variables.palette.on_secondary_container_alpha12,
                 ),
               },
             },
@@ -545,11 +545,11 @@ export const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.on_surface_variant_alfa12,
+                backgroundColor: variables.palette.on_surface_variant_alpha12,
               },
             },
           },
@@ -586,7 +586,6 @@ export const theme = createTheme({
           fontWeight: variables.font.weight.regular,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
-          lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
           padding: size === 'small' ? '0.2rem 0.8rem' : '0.4rem 0.8rem',
           ...getChipStyleOverrides({ color, variant }),
 
@@ -611,7 +610,7 @@ export const theme = createTheme({
             height: 40,
             padding: '1rem',
             '&:hover': {
-              backgroundColor: variables.palette.on_secondary_container_alfa8,
+              backgroundColor: variables.palette.on_secondary_container_alpha8,
             },
             '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
               borderLeftColor: variables.palette.outline,
@@ -622,7 +621,7 @@ export const theme = createTheme({
               '&:hover': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa8,
+                  variables.palette.on_secondary_container_alpha8,
                 ),
               },
             },
@@ -648,7 +647,7 @@ export const theme = createTheme({
             color: variables.palette.primary,
           },
           '&.Mui-error': {
-            color: variables.palette.semantic.error,
+            color: variables.palette.error,
           },
         },
       },
@@ -688,14 +687,14 @@ export const theme = createTheme({
             },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.semantic.error,
+                borderColor: variables.palette.error,
               },
             },
           },
           '&.Mui-disabled': {
             '&&': {
               '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.on_surface_alfa12,
+                borderColor: variables.palette.on_surface_alpha12,
               },
             },
           },
@@ -782,18 +781,18 @@ export const theme = createTheme({
               pointerEvents: 'auto',
             },
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
           },
           '.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: variables.palette.on_surface_variant_alfa8,
+            backgroundColor: variables.palette.on_surface_variant_alpha8,
             '&:focus': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
             '&:hover': {
               backgroundColor: blendColorsNormal(
-                variables.palette.on_surface_variant_alfa8,
-                variables.palette.on_surface_alfa8,
+                variables.palette.on_surface_variant_alpha8,
+                variables.palette.on_surface_alpha8,
               ),
             },
           },
@@ -815,14 +814,14 @@ export const theme = createTheme({
               padding: '0.5rem 1.6rem',
               minHeight: '4.8rem',
               '&:hover': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
               },
               '&[aria-selected="true"]': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
                 '&:hover': {
                   backgroundColor: blendColorsNormal(
-                    variables.palette.on_surface_variant_alfa8,
-                    variables.palette.on_surface_alfa8,
+                    variables.palette.on_surface_variant_alpha8,
+                    variables.palette.on_surface_alpha8,
                   ),
                 },
               },
@@ -898,19 +897,19 @@ export const theme = createTheme({
           alignItems: 'center',
           ...(variant === 'standard' && {
             ...(severity === 'info' && {
-              backgroundColor: variables.palette.blue_alfa30,
+              backgroundColor: variables.palette.blue_alpha30,
             }),
             ...(severity === 'success' && {
-              backgroundColor: variables.palette.green_alfa30,
+              backgroundColor: variables.palette.green_alpha30,
             }),
             ...(severity === 'warning' && {
-              backgroundColor: variables.palette.yellow_alfa30,
+              backgroundColor: variables.palette.yellow_alpha30,
             }),
             ...(severity === 'error' && {
               backgroundColor: variables.palette.error_container,
             }),
             ...(color === 'infoAlt' && {
-              backgroundColor: variables.palette.purple_alfa30,
+              backgroundColor: variables.palette.purple_alpha30,
             }),
           }),
           '.MuiAlert-action': {
@@ -936,7 +935,7 @@ export const theme = createTheme({
             margin: theme.spacing(0.4),
           },
           '.MuiButton-text:hover': {
-            backgroundColor: variables.palette.on_surface_alfa8,
+            backgroundColor: variables.palette.on_surface_alpha8,
           },
         }),
       },
@@ -1024,16 +1023,16 @@ export const theme = createTheme({
     },
     primary: {
       main: variables.palette.primary,
-      dark: blendColorsNormal(variables.palette.primary, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.primary, variables.palette.light_alfa12),
+      dark: blendColorsNormal(variables.palette.primary, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.primary, variables.palette.white_alpha12),
     },
     info: {
       main: variables.palette.blue,
     },
     infoAlt: {
       main: variables.palette.purple,
-      dark: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa12),
+      dark: blendColorsNormal(variables.palette.purple, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.purple, variables.palette.white_alpha12),
       contrastText: variables.palette.on_secondary_container,
     },
     success: {
@@ -1044,8 +1043,8 @@ export const theme = createTheme({
     },
     error: {
       main: variables.palette.red,
-      dark: blendColorsNormal(variables.palette.red, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.red, variables.palette.light_alfa12),
+      dark: blendColorsNormal(variables.palette.red, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.red, variables.palette.white_alpha12),
     },
   },
 });
