@@ -27,11 +27,144 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Atkinson',
+    fontFamily: variables.font.family.body,
     htmlFontSize: 10,
     button: {
-      fontSize: variables.font.size.md,
+      fontSize: variables.font.size.body3,
     },
+    displayLarge: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display1,
+      lineHeight: variables.font.lineHeight.display1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    displayMedium: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display2,
+      lineHeight: variables.font.lineHeight.display2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    displaySmall: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display3,
+      lineHeight: variables.font.lineHeight.display3,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineLarge: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline1,
+      lineHeight: variables.font.lineHeight.headline1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineMedium: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline2,
+      lineHeight: variables.font.lineHeight.headline2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineSmall: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline3,
+      lineHeight: variables.font.lineHeight.headline3,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLarge: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title1,
+      lineHeight: variables.font.lineHeight.title1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLargish: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title2,
+      lineHeight: variables.font.lineHeight.title2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleMedium: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title3,
+      lineHeight: variables.font.lineHeight.title2,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    titleSmall: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title4,
+      lineHeight: variables.font.lineHeight.title3,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    labelLarge: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label1,
+      lineHeight: variables.font.lineHeight.label1,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    labelMedium: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label2,
+      lineHeight: variables.font.lineHeight.label2,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    labelSmall: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label3,
+      lineHeight: variables.font.lineHeight.label2,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    bodyLarger: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body1,
+      lineHeight: variables.font.lineHeight.body1,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    bodyLarge: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body2,
+      lineHeight: variables.font.lineHeight.body2,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    bodyMedium: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body3,
+      lineHeight: variables.font.lineHeight.body3,
+      letterSpacing: variables.font.letterSpacing.lg,
+    },
+    bodySmall: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body4,
+      lineHeight: variables.font.lineHeight.body4,
+      letterSpacing: variables.font.letterSpacing.xl,
+    },
+
+    // Standard MUI variants mapped to custom variants
+    h1: { fontSize: variables.font.size.headline1 },
+    h2: { fontSize: variables.font.size.headline2 },
+    h3: { fontSize: variables.font.size.headline3 },
+    h4: { fontSize: variables.font.size.title1 },
+    h5: { fontSize: variables.font.size.title3 },
+    h6: { fontSize: variables.font.size.title4 },
+    subtitle1: { fontSize: variables.font.size.body2 },
+    subtitle2: { fontSize: variables.font.size.body3 },
+    body1: { fontSize: variables.font.size.body2 },
+    body2: { fontSize: variables.font.size.body3 },
+    caption: { fontSize: variables.font.size.body4 },
+    overline: { fontSize: variables.font.size.label3 },
   },
   components: {
     MuiCssBaseline: {
@@ -91,7 +224,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.MuiTypography-root': {
-            fontSize: variables.font.size.xxl,
+            fontSize: variables.font.size.headline2,
+            lineHeight: variables.font.lineHeight.headline2,
             fontWeight: variables.font.weight.regular,
             padding: '6.4rem 3.2rem 2.8rem',
           },
@@ -135,9 +269,9 @@ export const theme = createTheme({
             borderLeft: 'none',
             color: variables.palette.outline,
             fontWeight: variables.font.weight.regular,
-            fontSize: variables.font.size.md,
-            lineHeight: variables.font.lineHeight.md,
-            letterSpacing: variables.font.letterSpacing.lg,
+            fontSize: variables.font.size.title4,
+            lineHeight: variables.font.lineHeight.title4,
+            letterSpacing: variables.font.letterSpacing.sm,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: 0,
@@ -200,8 +334,9 @@ export const theme = createTheme({
         root: {
           minHeight: '4.8rem',
           padding: '0 1.2rem',
-          fontSize: variables.font.size.sm,
-          lineHeight: variables.font.lineHeight.sm,
+          fontSize: variables.font.size.body4,
+          lineHeight: variables.font.lineHeight.body4,
+          letterSpacing: variables.font.letterSpacing.xl,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
           backgroundColor: 'transparent',
@@ -233,8 +368,9 @@ export const theme = createTheme({
             color: variables.palette.on_surface_variant,
             '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
               fontWeight: variables.font.weight.regular,
-              fontSize: variables.font.size.md,
-              lineHeight: variables.font.lineHeight.md,
+              fontSize: variables.font.size.body3,
+              lineHeight: variables.font.lineHeight.body3,
+              letterSpacing: variables.font.letterSpacing.lg,
             },
             '.MuiInputBase-root': {
               display: 'none',
@@ -424,10 +560,10 @@ export const theme = createTheme({
           border: 'none',
           borderRadius: variables.borderRadius.xxxl,
           boxShadow: 'none',
-          fontSize: variables.font.size.md,
+          fontSize: variables.font.size.body3,
+          lineHeight: variables.font.lineHeight.body3,
+          letterSpacing: variables.font.letterSpacing.lg,
           height: '4.8rem',
-          letterSpacing: variables.font.letterSpacing.sm,
-          lineHeight: variables.font.lineHeight.md,
           minWidth: '10rem',
           padding: '1rem 2rem',
           textTransform: 'none',
@@ -444,10 +580,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ ownerState: { color, variant, size } }) => ({
           borderRadius: variables.borderRadius.md,
-          fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
+          fontSize: variables.font.size[size === 'small' ? 'body3' : 'body2'],
+          lineHeight: variables.font.lineHeight[size === 'small' ? 'body3' : 'body2'],
+          letterSpacing: variables.font.letterSpacing[size === 'small' ? 'lg' : 'md'],
           fontWeight: variables.font.weight.regular,
-          letterSpacing:
-            size === 'small' ? variables.font.letterSpacing.lg : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
           lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
@@ -465,9 +601,10 @@ export const theme = createTheme({
         root: {
           '.MuiToggleButton-root': {
             color: variables.palette.on_secondary_container,
-            fontSize: variables.font.size.md,
+            fontSize: variables.font.size.body3,
+            lineHeight: variables.font.lineHeight.body3,
+            letterSpacing: variables.font.letterSpacing.lg,
             fontWeight: variables.font.weight.regular,
-            lineHeight: variables.font.lineHeight.md,
             borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
             textTransform: 'none',
@@ -504,7 +641,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.on_surface_variant,
-          fontSize: variables.font.size.lg,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
+          letterSpacing: variables.font.letterSpacing.md,
           '&.Mui-focused': {
             color: variables.palette.primary,
           },
@@ -519,8 +658,9 @@ export const theme = createTheme({
         input: {
           '&&': {
             height: 'auto',
-            fontSize: variables.font.size.lg,
-            lineHeight: variables.font.lineHeight.lg,
+            fontSize: variables.font.size.title3,
+            lineHeight: variables.font.lineHeight.title3,
+            letterSpacing: variables.font.letterSpacing.md,
             padding: '1.6rem',
           },
         },
@@ -529,8 +669,9 @@ export const theme = createTheme({
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          fontSize: variables.font.size.md,
-          lineHeight: variables.font.lineHeight.sm,
+          fontSize: variables.font.size.title4,
+          lineHeight: variables.font.lineHeight.title4,
+          letterSpacing: variables.font.letterSpacing.md,
         },
       },
     },
@@ -748,8 +889,8 @@ export const theme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: ({ ownerState: { variant, severity, color } }) => ({
-          fontSize: variables.font.size.lg,
-          lineHeight: variables.font.lineHeight.lg,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
           letterSpacing: variables.font.letterSpacing.md,
           color: variables.palette.on_surface,
           padding: theme.spacing(1.2, 1.6),
@@ -947,6 +1088,120 @@ declare module '@mui/material/Alert' {
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
     infoAlt: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    // Display variants - Affix Light
+    displayLarge: React.CSSProperties;
+    displayMedium: React.CSSProperties;
+    displaySmall: React.CSSProperties;
+
+    // Headline variants - Moderat Regular
+    headlineLarge: React.CSSProperties;
+    headlineMedium: React.CSSProperties;
+    headlineSmall: React.CSSProperties;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge: React.CSSProperties;
+    titleLargeBold: React.CSSProperties;
+    titleLargish: React.CSSProperties;
+    titleLargishBold: React.CSSProperties;
+    titleMedium: React.CSSProperties;
+    titleMediumBold: React.CSSProperties;
+    titleSmall: React.CSSProperties;
+    titleSmallBold: React.CSSProperties;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge: React.CSSProperties;
+    labelLargeBold: React.CSSProperties;
+    labelMedium: React.CSSProperties;
+    labelMediumBold: React.CSSProperties;
+    labelSmall: React.CSSProperties;
+    labelSmallBold: React.CSSProperties;
+
+    // Body variants - Moderat Regular
+    bodyLarger: React.CSSProperties;
+    bodyLarge: React.CSSProperties;
+    bodyMedium: React.CSSProperties;
+    bodySmall: React.CSSProperties;
+  }
+
+  // Allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    // Display variants - Affix Light
+    displayLarge?: React.CSSProperties;
+    displayMedium?: React.CSSProperties;
+    displaySmall?: React.CSSProperties;
+
+    // Headline variants - Moderat Regular
+    headlineLarge?: React.CSSProperties;
+    headlineMedium?: React.CSSProperties;
+    headlineSmall?: React.CSSProperties;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge?: React.CSSProperties;
+    titleLargeBold?: React.CSSProperties;
+    titleLargish?: React.CSSProperties;
+    titleLargishBold?: React.CSSProperties;
+    titleMedium?: React.CSSProperties;
+    titleMediumBold?: React.CSSProperties;
+    titleSmall?: React.CSSProperties;
+    titleSmallBold?: React.CSSProperties;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge?: React.CSSProperties;
+    labelLargeBold?: React.CSSProperties;
+    labelMedium?: React.CSSProperties;
+    labelMediumBold?: React.CSSProperties;
+    labelSmall?: React.CSSProperties;
+    labelSmallBold?: React.CSSProperties;
+
+    // Body variants - Moderat Regular
+    bodyLarger?: React.CSSProperties;
+    bodyLarge?: React.CSSProperties;
+    bodyMedium?: React.CSSProperties;
+    bodySmall?: React.CSSProperties;
+  }
+}
+
+// Update the Typography component props
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    // Display variants - Affix Light
+    displayLarge: true;
+    displayMedium: true;
+    displaySmall: true;
+
+    // Headline variants - Moderat Regular
+    headlineLarge: true;
+    headlineMedium: true;
+    headlineSmall: true;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge: true;
+    titleLargeBold: true;
+    titleLargish: true;
+    titleLargishBold: true;
+    titleMedium: true;
+    titleMediumBold: true;
+    titleSmall: true;
+    titleSmallBold: true;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge: true;
+    labelLargeBold: true;
+    labelMedium: true;
+    labelMediumBold: true;
+    labelSmall: true;
+    labelSmallBold: true;
+
+    // Body variants - Moderat Regular
+    bodyLarger: true;
+    bodyLarge: true;
+    bodyMedium: true;
+    bodySmall: true;
   }
 }
 
