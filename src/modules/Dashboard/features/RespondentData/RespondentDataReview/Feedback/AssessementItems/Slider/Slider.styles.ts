@@ -10,7 +10,7 @@ export const StyledSlider = styled(Slider)`
     opacity: ${variables.opacity.disabled};
 
     .MuiSlider-rail {
-      background-color: ${variables.palette.on_surface_alfa12};
+      background-color: ${variables.palette.on_surface_alpha12};
     }
 
     .MuiSlider-mark {

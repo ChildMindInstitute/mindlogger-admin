@@ -1,23 +1,23 @@
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Svg } from 'shared/components/Svg';
+import { ALLOWED_AUDIO_FILE_TYPES, MAX_FILE_SIZE_150MB } from 'shared/consts';
 import {
   StyledBodyMedium,
+  StyledErrorText,
   StyledFlexColumn,
-  StyledLinearProgress,
   StyledLabelBoldLarge,
+  StyledLinearProgress,
+  StyledTitleSmall,
   theme,
   variables,
-  StyledTitleSmall,
-  StyledErrorText,
 } from 'shared/styles';
-import { Svg } from 'shared/components/Svg';
 import { byteFormatter, getErrorMessage } from 'shared/utils';
-import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
-import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
-import { useMediaUploader } from './MediaUploader.hooks';
-import { MediaUploaderProps } from './MediaUploader.types';
 import { MLPlayer } from '../MLPlayer';
+import { useMediaUploader } from './MediaUploader.hooks';
+import { StyledContainer, StyledPreview, StyledSourceContainer } from './MediaUploader.styles';
+import { MediaUploaderProps } from './MediaUploader.types';
 
 export const MediaUploader = ({
   width,
@@ -58,7 +58,7 @@ export const MediaUploader = ({
             {error && (
               <StyledBodyMedium
                 sx={{ marginBottom: theme.spacing(1) }}
-                color={variables.palette.semantic.error}
+                color={variables.palette.error}
               >
                 {t(error, { size: byteFormatter(MAX_FILE_SIZE_150MB) })}
               </StyledBodyMedium>

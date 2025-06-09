@@ -1,7 +1,7 @@
-import { styled, Box, TextField } from '@mui/material';
+import { Box, styled, TextField } from '@mui/material';
 
-import { StyledBodyMedium } from 'shared/styles/styledComponents/Typography';
 import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
+import { StyledBodyMedium } from 'shared/styles/styledComponents/Typography';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -18,7 +18,7 @@ export const StyledTextField = styled(TextField)`
   && {
     &:hover {
       .Mui-disabled .MuiOutlinedInput-notchedOutline {
-        border-color: ${variables.palette.on_surface_alfa12};
+        border-color: ${variables.palette.on_surface_alpha12};
       }
     }
   }
@@ -47,7 +47,7 @@ export const StyledTextFieldContainer = styled(Box, shouldForwardProp)`
 export const StyledCounter = styled(StyledBodyMedium, shouldForwardProp)`
   ${commonHintProps};
   color: ${({ hasError }: { hasError?: boolean }) =>
-    hasError ? variables.palette.semantic.error : variables.palette.on_surface_variant};
+    hasError ? variables.palette.error : variables.palette.on_surface_variant};
 `;
 
 export const StyledUpDown = styled(StyledFlexColumn)`

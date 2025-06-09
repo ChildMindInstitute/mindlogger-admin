@@ -43,7 +43,7 @@ export const StyledSelectController = styled(SelectController)`
 
     &.Mui-error {
       .MuiOutlinedInput-notchedOutline {
-        background-color: ${variables.palette.red_alfa8};
+        background-color: ${variables.palette.red_alpha8};
       }
     }
   }

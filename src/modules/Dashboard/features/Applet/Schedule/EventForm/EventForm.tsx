@@ -1,36 +1,35 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { ObjectSchema } from 'yup';
 
-import { Option, SelectController } from 'shared/components/FormComponents';
+import { createEventApi, Periodicity, updateEventApi } from 'api';
+import { applets, calendarEvents } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
+import { apiSlice } from 'shared/api/apiSlice';
 import { DefaultTabs as Tabs } from 'shared/components';
+import { Option, SelectController } from 'shared/components/FormComponents';
+import { UiType } from 'shared/components/Tabs/Tabs.types';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { useAsync } from 'shared/hooks/useAsync';
+import { applet, workspaces } from 'shared/state';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage, Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils';
-import { UiType } from 'shared/components/Tabs/Tabs.types';
-import { applets } from 'modules/Dashboard/state';
-import { applet, workspaces } from 'shared/state';
-import { Periodicity, createEventApi, updateEventApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
-import { useAppDispatch } from 'redux/store';
-import { calendarEvents } from 'modules/Dashboard/state';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { apiSlice } from 'shared/api/apiSlice';
 
+import { EventFormSchema } from './EventForm.schema';
 import {
   EventFormProps,
   EventFormRef,
   EventFormValues,
   EventFormWarnings,
 } from './EventForm.types';
-import { EventFormSchema } from './EventForm.schema';
 import {
   getActivitiesFlows,
   getDefaultValues,
+  getEventFormTabs,
   getEventPayload,
   getIdWithoutRegex,
-  getEventFormTabs,
 } from './EventForm.utils';
 
 export const EventForm = forwardRef<EventFormRef, EventFormProps>(
@@ -274,10 +273,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
           </StyledModalWrapper>
           <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
           {errorMessage && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 2.6) }}
-            >
+            <StyledBodyLarge color={variables.palette.error} sx={{ m: theme.spacing(1, 2.6) }}>
               {errorMessage}
             </StyledBodyLarge>
           )}

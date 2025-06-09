@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -8,10 +9,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { TitleComponentProps } from './TitleComponent.types';
 import { StyledMark } from './TitleComponent.styles';
+import { TitleComponentProps } from './TitleComponent.types';
 import { getErrorMessages } from './TitleComponent.utils';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
@@ -36,7 +36,7 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
       </StyledFlexTopCenter>
       {isShowErrors &&
         errorMessages.map(({ key, message }) => (
-          <StyledLabelBoldLarge sx={{ color: variables.palette.semantic.error }} key={key}>
+          <StyledLabelBoldLarge sx={{ color: variables.palette.error }} key={key}>
             {message}
           </StyledLabelBoldLarge>
         ))}

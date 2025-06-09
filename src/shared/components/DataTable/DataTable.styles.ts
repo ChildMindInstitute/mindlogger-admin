@@ -8,8 +8,8 @@ const height = '29.2rem';
 export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   border: ${({ hasError }: { hasError?: boolean }) =>
     hasError
-      ? `${variables.borderWidth.lg} solid ${variables.palette.semantic.error};`
-      : `${variables.borderWidth.md} solid ${variables.palette.outline_variant};`}
+      ? `${variables.borderWidth.lg} solid ${variables.palette.error};`
+      : `${variables.borderWidth.md} solid ${variables.palette.outline_variant};`};
   border-radius: ${variables.borderRadius.lg2};
   min-height: ${height};
   max-height: ${height};

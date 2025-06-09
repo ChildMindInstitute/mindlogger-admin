@@ -3,7 +3,11 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { createIndividualEventsApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
+import { workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { apiSlice } from 'shared/api/apiSlice';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { useAsync } from 'shared/hooks';
 import {
   StyledBody,
   StyledBodyLarge,
@@ -12,11 +16,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
 import { getErrorMessage } from 'shared/utils';
-import { useAppDispatch } from 'redux/store';
-import { workspaces } from 'redux/modules';
-import { apiSlice } from 'shared/api/apiSlice';
 
 import { ConfirmEditDefaultSchedulePopupProps } from './ConfirmEditDefaultSchedulePopup.types';
 
@@ -111,7 +111,7 @@ export const ConfirmEditDefaultSchedulePopup = ({
         </StyledBody>
 
         {error && (
-          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+          <StyledBodyLarge color={variables.palette.error} sx={{ m: theme.spacing(1, 0) }}>
             {getErrorMessage(error)}
           </StyledBodyLarge>
         )}

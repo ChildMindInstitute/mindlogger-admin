@@ -20,7 +20,7 @@ export const StyledTextField = styled(TextField)`
     padding: ${theme.spacing(0, 1.6)};
 
     &.Mui-focused {
-      background-color: ${variables.palette.primary_alfa12};
+      background-color: ${variables.palette.primary_alpha12};
     }
   }
 

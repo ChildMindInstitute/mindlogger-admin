@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { ChangeScoreConditionIdPopupProps } from './ChangeScoreConditionIdPopup.types';
 
@@ -30,7 +30,7 @@ export const ChangeScoreConditionIdPopup = ({
 
   const getSecondScreen = () =>
     isError ? (
-      <StyledBodyLarge color={variables.palette.semantic.error}>
+      <StyledBodyLarge color={variables.palette.error}>
         {t('changeScoreConditionIdError')}
       </StyledBodyLarge>
     ) : (

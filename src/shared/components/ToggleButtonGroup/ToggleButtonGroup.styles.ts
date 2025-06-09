@@ -1,7 +1,7 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { ToggleButtonVariants } from './ToggleButtonGroup.types';
@@ -52,7 +52,7 @@ export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
 
           &.Mui-selected {
             border-color: ${variables.palette.primary50};
-            background-color: ${variables.palette.primary_alfa8};
+            background-color: ${variables.palette.primary_alpha8};
           }
         }
       `;

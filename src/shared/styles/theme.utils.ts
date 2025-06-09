@@ -30,7 +30,7 @@ export const getChipStyleOverrides = ({
     case 'primary':
       return {
         color: variables.palette.on_secondary_container,
-        [key]: variables.palette.primary[95],
+        [key]: variables.palette.primary95,
 
         '&[tabindex="0"]:hover': {
           borderColor: variables.palette.primary_container,

@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Spinner, Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
-import { getDateInUserTimezone } from 'shared/utils/dateTimezone';
-import {
-  variables,
-  StyledLabelBoldLarge,
-  StyledTitleSmall,
-  StyledFlexTopCenter,
-  StyledObserverTarget,
-} from 'shared/styles';
-import { alerts } from 'shared/state';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { alerts } from 'shared/state';
+import {
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  StyledObserverTarget,
+  StyledTitleSmall,
+  variables,
+} from 'shared/styles';
+import { getDateInUserTimezone } from 'shared/utils/dateTimezone';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { Notification, NotificationProps } from './Notification';
+import { ALERT_END_ITEM_CLASS, ALERT_LIST_CLASS } from './Notifications.const';
 import {
+  StyledBox,
+  StyledCentered,
+  StyledCollapseBtn,
   StyledHeader,
   StyledHeaderLeft,
   StyledIconWrapper,
-  StyledCollapseBtn,
   StyledList,
-  StyledCentered,
-  StyledBox,
 } from './Notifications.styles';
-import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
 
 export const Notifications = () => {
   const { t } = useTranslation('app');
@@ -72,7 +72,7 @@ export const Notifications = () => {
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
           {notWatched > 0 && (
-            <StyledLabelBoldLarge color={variables.palette.semantic.error}>
+            <StyledLabelBoldLarge color={variables.palette.error}>
               {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}

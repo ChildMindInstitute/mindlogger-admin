@@ -18,7 +18,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   }
 
   &.has-error {
-    border: ${variables.borderWidth.md} solid ${variables.palette.semantic.error};
+    border: ${variables.borderWidth.md} solid ${variables.palette.error};
     margin-bottom: 0;
   }
 
@@ -53,7 +53,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
         align-items: center;
 
         &:hover {
-          background-color: ${variables.palette.primary_alfa8};
+          background-color: ${variables.palette.primary_alpha8};
           border-radius: ${variables.borderRadius.xxxl};
         }
 

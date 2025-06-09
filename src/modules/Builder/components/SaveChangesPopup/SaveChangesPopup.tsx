@@ -28,7 +28,7 @@ export const SaveChangesPopup = ({
       hasSecondBtn
       hasThirdBtn
       secondBtnStyles={{
-        color: variables.palette.semantic.error,
+        color: variables.palette.error,
         fontWeight: variables.font.weight.bold,
       }}
       data-testid={dataTestid}

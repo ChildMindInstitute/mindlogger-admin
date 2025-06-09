@@ -1,16 +1,16 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Condition } from 'shared/state';
-import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { ConditionRowOld } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { Condition } from 'shared/state';
+import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { createArray } from 'shared/utils';
 
-import { StaticConditionRow } from './StaticConditionRow';
-import { ItemFlowContentProps } from './ItemFlowContent.types';
-import { StyledItemFlowContent } from './ItemFlowContent.styles';
 import { SummaryRow } from '../SummaryRow';
+import { StyledItemFlowContent } from './ItemFlowContent.styles';
+import { ItemFlowContentProps } from './ItemFlowContent.types';
+import { StaticConditionRow } from './StaticConditionRow';
 
 export const ItemFlowContent = ({
   name,
@@ -65,7 +65,7 @@ export const ItemFlowContent = ({
       />
       {error && (
         <StyledBodyLarge
-          sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}
+          sx={{ color: variables.palette.error, pl: theme.spacing(0.8) }}
           data-testid={`${dataTestid}-error`}
         >
           {errorMessage}

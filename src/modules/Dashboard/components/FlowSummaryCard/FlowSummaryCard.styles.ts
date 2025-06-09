@@ -17,7 +17,7 @@ export const StyledRoot = styled(StyledFlexSpaceBetween)(
     transition: variables.transitions.bgColor,
 
     '&:hover': {
-      background: onClick ? variables.palette.on_surface_variant_alfa8 : 'inherit',
+      background: onClick ? variables.palette.on_surface_variant_alpha8 : 'inherit',
     },
   }),
 );

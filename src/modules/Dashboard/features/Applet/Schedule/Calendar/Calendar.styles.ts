@@ -1,6 +1,6 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { theme, variables, StyledClearedButton } from 'shared/styles';
+import { StyledClearedButton, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
@@ -144,7 +144,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       border-radius: ${variables.borderRadius.xs};
-      background-color: ${variables.palette.gray_alfa50};
+      background-color: ${variables.palette.gray_alpha50};
     }
   }
 

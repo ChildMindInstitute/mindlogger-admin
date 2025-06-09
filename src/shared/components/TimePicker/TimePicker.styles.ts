@@ -1,4 +1,4 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
@@ -72,7 +72,7 @@ export const StyledTimePickerWrapper = styled(Box)`
             border-radius: ${variables.borderRadius.xs};
 
             &:hover {
-              background-color: ${variables.palette.on_secondary_container_alfa8};
+              background-color: ${variables.palette.on_secondary_container_alpha8};
             }
 
             &.react-datepicker__time-list-item--disabled {

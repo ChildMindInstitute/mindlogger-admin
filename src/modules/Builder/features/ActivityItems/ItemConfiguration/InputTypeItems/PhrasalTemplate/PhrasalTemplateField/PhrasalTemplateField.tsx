@@ -124,7 +124,7 @@ export const PhrasalTemplateField = ({
             action: onRemove,
             icon: <Svg id="trash" />,
             title: 'remove',
-            customItemColor: variables.palette.semantic.error,
+            customItemColor: variables.palette.error,
           },
         ]}
       />

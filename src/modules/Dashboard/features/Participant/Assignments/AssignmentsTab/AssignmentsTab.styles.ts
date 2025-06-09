@@ -23,7 +23,7 @@ export const StyledToggleButton = styled(ToggleButton)`
 
     &:hover,
     &:not(.Mui-selected):focus {
-      background-color: ${variables.palette.primary_alfa8};
+      background-color: ${variables.palette.primary_alpha8};
     }
 
     &.Mui-selected {

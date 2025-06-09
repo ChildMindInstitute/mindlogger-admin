@@ -11,7 +11,7 @@ export const StyledContainer = styled(Box)`
   position: relative;
   background-color: ${blendColorsNormal(
     variables.palette.surface,
-    variables.palette.yellow_alfa30,
+    variables.palette.yellow_alpha30,
   )};
   color: ${variables.palette.on_surface};
   padding: ${theme.spacing(1.2, 1.6)};

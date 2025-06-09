@@ -33,7 +33,7 @@ export const StyledItemHeader = styled(Box)`
 
   &:hover {
     ${StyledSvgArrowContainer} {
-      background-color: ${variables.palette.on_surface_alfa8};
+      background-color: ${variables.palette.on_surface_alpha8};
     }
   }
 `;

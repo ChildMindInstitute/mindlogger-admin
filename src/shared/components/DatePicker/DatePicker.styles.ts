@@ -1,6 +1,6 @@
-import { styled, Box, Button, Popover, TextField } from '@mui/material';
+import { Box, Button, Popover, styled, TextField } from '@mui/material';
 
-import { variables, StyledClearedButton, theme } from 'shared/styles';
+import { StyledClearedButton, theme, variables } from 'shared/styles';
 
 export const StyledPopover = styled(Popover)`
   .MuiPaper-root {
@@ -35,7 +35,7 @@ export const StyledPopover = styled(Popover)`
       margin: ${theme.spacing(0.4, 0)};
 
       &:hover {
-        background-color: ${variables.palette.on_surface_alfa8};
+        background-color: ${variables.palette.on_surface_alpha8};
       }
     }
 
@@ -81,7 +81,7 @@ export const StyledPopover = styled(Popover)`
     }
 
     &__day--today.react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
-      border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_alfa12};
+      border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_alpha12};
       font-weight: ${variables.font.weight.regular};
     }
 
@@ -153,10 +153,10 @@ export const StyledTextField = styled(TextField)`
   }
 
   .Mui-disabled {
-    -webkit-text-fill-color: ${variables.palette.on_surface_alfa38};
+    -webkit-text-fill-color: ${variables.palette.on_surface_alpha38};
 
     .MuiOutlinedInput-notchedOutline {
-      border-color: ${variables.palette.on_surface_alfa12};
+      border-color: ${variables.palette.on_surface_alpha12};
     }
   }
 
