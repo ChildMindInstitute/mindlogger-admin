@@ -25,7 +25,7 @@ export const StyledLabel = styled(StyledBodyMedium)`
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-  color: ${variables.palette.primary};
+  color: ${variables.palette.secondary};
 
   &:hover {
     text-decoration: underline;

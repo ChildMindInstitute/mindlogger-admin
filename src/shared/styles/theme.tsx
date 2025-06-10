@@ -633,6 +633,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           transition: variables.transitions.all,
+          color: variables.palette.secondary,
+          textDecorationColor: variables.palette.secondary,
         },
       },
     },
