@@ -1,6 +1,7 @@
 import { Badge, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { variables } from 'shared/styles';
+import theme from 'shared/styles/theme';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledBadge = styled(Badge, shouldForwardProp)`
@@ -12,7 +13,7 @@ export const StyledBadge = styled(Badge, shouldForwardProp)`
     background-color: ${variables.palette.error};
     color: ${variables.palette.white};
     font-weight: ${variables.font.weight.bold};
-    font-size: ${variables.font.size.xs};
+    font-size: ${variables.font.size.label3};
     padding: ${theme.spacing(0, 0.6)};
     border-radius: ${theme.spacing(1)};
 

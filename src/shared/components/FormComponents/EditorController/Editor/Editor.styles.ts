@@ -8,7 +8,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   background-color: ${variables.palette.surface};
   color: ${variables.palette.on_surface_variant};
-  font-size: ${variables.font.size.lg};
+  font-size: ${variables.font.size.body2};
   box-shadow: unset;
   height: 32rem;
 

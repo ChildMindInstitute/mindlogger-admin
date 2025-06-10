@@ -39,8 +39,8 @@ export const StyledTextFieldContainer = styled(Box, shouldForwardProp)`
     margin-top: 0;
     position: relative;
     top: ${theme.spacing(0.3)};
-    min-height: ${variables.font.lineHeight.sm};
-    margin-bottom: -${variables.font.lineHeight.sm};
+    min-height: ${variables.font.lineHeight.body4};
+    margin-bottom: -${variables.font.lineHeight.body4};
   }
 `;
 

@@ -93,7 +93,8 @@ export const StyledSlider = styled(Slider)`
   }
 
   .MuiSlider-markLabel {
-    font-size: ${variables.font.size.sm};
+    font-size: ${variables.font.size.body4};
+    line-height: ${variables.font.lineHeight.body4};
     color: ${variables.palette.black};
   }
 

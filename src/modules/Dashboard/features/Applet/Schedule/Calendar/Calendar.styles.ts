@@ -138,9 +138,9 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       min-width: 100%;
       height: 1.6rem;
       padding: ${theme.spacing(0.2, 0.4)};
-      font-size: ${variables.font.size.sm};
+      font-size: ${variables.font.size.body3};
+      line-height: ${variables.font.lineHeight.body3};
       font-weight: ${variables.font.weight.bold};
-      line-height: ${variables.font.lineHeight.sm};
       letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       border-radius: ${variables.borderRadius.xs};
@@ -414,8 +414,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     .rbc-header {
       padding-top: ${theme.spacing(0.3)};
       text-transform: uppercase;
-      font-size: ${variables.font.size.sm};
-      line-height: ${variables.font.lineHeight.sm};
+      font-size: ${variables.font.size.body3};
+      line-height: ${variables.font.lineHeight.body3};
       letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       border-color: ${variables.palette.surface_variant};
@@ -474,8 +474,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
 
     .rbc-show-more {
       margin: ${theme.spacing(0.2, 0, 0, 0.9)};
-      font-size: ${variables.font.size.sm};
-      line-height: ${variables.font.lineHeight.sm};
+      font-size: ${variables.font.size.body3};
+      line-height: ${variables.font.lineHeight.body3};
       letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       transition: ${variables.transitions.opacity};

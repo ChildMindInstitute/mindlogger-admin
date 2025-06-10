@@ -42,8 +42,8 @@ export const StyledSlider = styled(Slider)`
   }
 
   .MuiSlider-valueLabel {
-    font-size: ${variables.font.size.sm};
-    line-height: ${variables.font.lineHeight.sm};
+    font-size: ${variables.font.size.body4};
+    line-height: ${variables.font.lineHeight.body4};
     width: 3.2rem;
     height: 3.2rem;
     border-radius: ${variables.borderRadius.half} ${variables.borderRadius.half}
