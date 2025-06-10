@@ -137,11 +137,12 @@ export function flattenPaletteObject<T extends Record<string | number, string>>(
   const result: Record<string, string> = {};
 
   // Add the default color with just the prefix as the key
-  result[prefix] = paletteObject.default || paletteObject[40] || '';
+  result[prefix] = paletteObject.default || paletteObject[40];
 
   // Add all other colors with the prefix + key as the key
   Object.entries(paletteObject).forEach(([key, value]) => {
-    if (key !== 'main' && key !== 'default') {
+    if (key !== 'default') {
+      // If the key is a number, use it as is, otherwise append _
       const formattedKey = /^\d+$/.test(key) ? `${prefix}${key}` : `${prefix}_${key}`;
       result[formattedKey] = value;
     }
