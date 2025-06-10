@@ -64,9 +64,9 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
         case UiType.Tertiary:
           return {
             color: variables.palette.outline,
-            fontSize: variables.font.size.label3,
+            fontSize: variables.font.size.label1,
             letterSpacing: variables.font.letterSpacing.lg,
-            lineHeight: variables.font.lineHeight.label3,
+            lineHeight: variables.font.lineHeight.label1,
           };
         default:
           return {};

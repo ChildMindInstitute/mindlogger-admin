@@ -19,7 +19,7 @@ export const StyledInputController = styled(InputController)`
   .MuiFormHelperText-root {
     position: absolute;
     bottom: -2.4rem;
-    font-size: ${variables.font.size.label3};
+    font-size: ${variables.font.size.label1};
     white-space: nowrap;
   }
 `;

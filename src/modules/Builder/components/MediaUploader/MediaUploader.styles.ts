@@ -34,8 +34,8 @@ export const StyledSourceContainer = styled(StyledFlexColumn, shouldForwardProp)
 `;
 
 export const StyledNameWrapper = styled(Box)`
-  font-size: ${variables.font.size.label3};
-  line-height: ${variables.font.lineHeight.label3};
+  font-size: ${variables.font.size.label1};
+  line-height: ${variables.font.lineHeight.label1};
   color: ${variables.palette.on_surface_variant};
   margin-top: ${theme.spacing(1.6)};
 `;

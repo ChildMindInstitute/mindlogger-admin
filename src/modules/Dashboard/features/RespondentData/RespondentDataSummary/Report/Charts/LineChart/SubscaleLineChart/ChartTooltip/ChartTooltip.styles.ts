@@ -28,7 +28,7 @@ export const StyledBackground = styled(Box)`
 
 export const StyledMdPreview = styled(MarkDownPreview)`
   background-color: transparent;
-  font-size: ${variables.font.size.label3};
+  font-size: ${variables.font.size.label1};
   font-weight: normal;
   text-align: initial;
 
@@ -40,7 +40,7 @@ export const StyledMdPreview = styled(MarkDownPreview)`
     p {
       padding: 0;
       word-break: break-word;
-      font-size: ${variables.font.size.label3};
+      font-size: ${variables.font.size.label1};
       color: ${variables.palette.on_surface};
     }
 

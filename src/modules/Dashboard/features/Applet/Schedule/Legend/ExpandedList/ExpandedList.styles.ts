@@ -25,7 +25,7 @@ export const StyledChildren = styled(Box)`
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter)`
-  font-size: ${variables.font.size.label3};
+  font-size: ${variables.font.size.label1};
   line-height: 2rem;
   font-weight: ${variables.font.weight.regular};
   margin-top: ${theme.spacing(2.4)};

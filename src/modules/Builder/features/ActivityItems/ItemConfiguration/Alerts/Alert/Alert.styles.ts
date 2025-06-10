@@ -51,8 +51,8 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
 
   .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input,
   .MuiFormControl-root.MuiTextField-root input {
-    font-size: ${variables.font.size.label3};
-    line-height: ${variables.font.lineHeight.label3};
+    font-size: ${variables.font.size.label1};
+    line-height: ${variables.font.lineHeight.label1};
   }
 
   .MuiBox-root {

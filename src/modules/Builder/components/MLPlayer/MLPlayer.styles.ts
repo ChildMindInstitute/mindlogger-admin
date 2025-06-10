@@ -26,7 +26,7 @@ export const StyledName = styled(StyledEllipsisText)`
 `;
 
 export const StyledNameWrapper = styled(StyledFlexTopCenter)`
-  font-size: ${variables.font.size.label3};
+  font-size: ${variables.font.size.label1};
   color: ${variables.palette.on_surface_variant};
   display: flex;
   position: absolute;

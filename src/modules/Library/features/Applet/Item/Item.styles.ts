@@ -41,7 +41,7 @@ export const StyledItemHeader = styled(Box)`
 export const StyledMdPreview = styled(MarkDownPreview)`
   background-color: transparent;
   color: ${variables.palette.on_surface_variant};
-  font-size: ${variables.font.size.label3};
+  font-size: ${variables.font.size.label1};
   font-weight: normal;
   text-align: initial;
   padding: ${theme.spacing(0.7, 0)};

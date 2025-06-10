@@ -19,7 +19,7 @@ export const StyledInputContainer = styled(StyledFlexTopCenter)`
   .MuiFormHelperText-root {
     position: absolute;
     bottom: -2.4rem;
-    font-size: ${variables.font.size.label3};
+    font-size: ${variables.font.size.label1};
   }
 `;
 
@@ -62,8 +62,8 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
 
     .MuiTableCell-head,
     .MuiTableCell-body {
-      font-size: ${variables.font.size.label3};
-      line-height: ${variables.font.lineHeight.label3};
+      font-size: ${variables.font.size.label1};
+      line-height: ${variables.font.lineHeight.label1};
       font-weight: ${variables.font.weight.regular};
       letter-spacing: ${variables.font.letterSpacing.lg};
     }

@@ -119,7 +119,7 @@ export const theme = createTheme({
     labelSmall: {
       fontFamily: variables.font.family.label,
       fontWeight: variables.font.weight.regular,
-      fontSize: variables.font.size.label3,
+      fontSize: variables.font.size.label1,
       lineHeight: variables.font.lineHeight.label2,
       letterSpacing: variables.font.letterSpacing.xxl,
     },
@@ -164,7 +164,7 @@ export const theme = createTheme({
     body1: { fontSize: variables.font.size.body2 },
     body2: { fontSize: variables.font.size.body3 },
     caption: { fontSize: variables.font.size.body4 },
-    overline: { fontSize: variables.font.size.label3 },
+    overline: { fontSize: variables.font.size.label1 },
   },
   components: {
     MuiCssBaseline: {
@@ -420,7 +420,7 @@ export const theme = createTheme({
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
-              borderColor: variables.palette.outline_alpha12,
+              borderColor: variables.palette.on_surface_alpha12,
             },
 
             '&:not(.Mui-disabled)': {

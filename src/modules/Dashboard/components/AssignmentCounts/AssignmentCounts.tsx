@@ -25,7 +25,7 @@ export const AssignmentCounts = ({ selfReports, multiInformant }: AssignmentCoun
 
       <Tooltip
         tooltipTitle={
-          <StyledFlexColumn sx={{ gap: variables.font.lineHeight.label3 }}>
+          <StyledFlexColumn sx={{ gap: variables.font.lineHeight.label1 }}>
             <Trans i18nKey="activityAssign.assignmentCountsTooltip">
               <div>Self-Report</div>
               <div>Multi-Informant</div>

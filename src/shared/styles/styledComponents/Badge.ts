@@ -13,7 +13,7 @@ export const StyledBadge = styled(Badge, shouldForwardProp)`
     background-color: ${variables.palette.error};
     color: ${variables.palette.white};
     font-weight: ${variables.font.weight.bold};
-    font-size: ${variables.font.size.label3};
+    font-size: ${variables.font.size.label1};
     padding: ${theme.spacing(0, 0.6)};
     border-radius: ${theme.spacing(1)};
 

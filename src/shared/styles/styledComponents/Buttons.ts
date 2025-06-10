@@ -41,9 +41,9 @@ export const StyledSvgPrimaryColorBtn = styled(Button)`
 
 export const StyledLinkBtn = styled(StyledClearedButton)`
   color: ${variables.palette.primary};
-  font-size: ${variables.font.size.label3};
+  font-size: ${variables.font.size.label1};
+  line-height: ${variables.font.lineHeight.label1};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.label3};
   text-decoration: underline;
 
   &.MuiButton-text:hover {
