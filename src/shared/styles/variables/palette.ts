@@ -13,7 +13,7 @@ export interface Palette {
 const basePalette: BasePalette = {
   primary: {
     // Main primary color falls under primary[3]
-    // Definining it here for ease of use
+    // For the rest of the colors, the default value is [40]
     default: '#0B0907',
     0: '#000',
     10: '#1D1B19',
@@ -149,7 +149,11 @@ const basePalette: BasePalette = {
   },
 };
 
-export const palette: Palette = {
+/**
+ * This contains all flattened palette colors with its tonal variants,
+ * as well as all semantic colors (on_container, container, etc).
+ */
+export const semanticPalette: Palette = {
   ...flattenPaletteObject({ ...basePalette.primary }, 'primary'),
   on_primary: basePalette.primary[100],
   primary_container: basePalette.primary[90],
@@ -158,10 +162,6 @@ export const palette: Palette = {
   on_primary_fixed: basePalette.primary[10],
   primary_fixed_dim: basePalette.primary[80],
   on_primary_fixed_variant: basePalette.primary[30],
-  primary_alpha8: hexToRgba(basePalette.primary[40], 0.08),
-  primary_alpha12: hexToRgba(basePalette.primary[40], 0.12),
-  primary_alpha16: hexToRgba(basePalette.primary[40], 0.16),
-  on_primary_container_alpha8: hexToRgba(basePalette.primary[10], 0.08),
 
   ...flattenPaletteObject({ ...basePalette.secondary }, 'secondary'),
   on_secondary: basePalette.secondary[100],
@@ -171,8 +171,6 @@ export const palette: Palette = {
   on_secondary_fixed: basePalette.secondary[10],
   secondary_fixed_dim: basePalette.secondary[80],
   on_secondary_fixed_variant: basePalette.secondary[30],
-  on_secondary_container_alpha8: hexToRgba(basePalette.secondary[10], 0.08),
-  on_secondary_container_alpha12: hexToRgba(basePalette.secondary[10], 0.12),
 
   ...flattenPaletteObject({ ...basePalette.tertiary }, 'tertiary'),
   on_tertiary: basePalette.tertiary[100],
@@ -197,27 +195,15 @@ export const palette: Palette = {
   surface_variant: basePalette.neutral_variant[90],
   on_surface_variant: basePalette.neutral_variant[30],
 
-  on_surface_alpha8: hexToRgba(basePalette.neutral[10], 0.08),
-  on_surface_alpha12: hexToRgba(basePalette.neutral[10], 0.12),
-  on_surface_alpha16: hexToRgba(basePalette.neutral[10], 0.16),
-  on_surface_alpha38: hexToRgba(basePalette.neutral[10], 0.38),
-  surface_variant_alpha8: hexToRgba(basePalette.neutral_variant[90], 0.08),
-  on_surface_variant_alpha8: hexToRgba(basePalette.neutral_variant[30], 0.08),
-  on_surface_variant_alpha12: hexToRgba(basePalette.neutral_variant[30], 0.12),
-  on_surface_variant_alpha16: hexToRgba(basePalette.neutral_variant[30], 0.16),
-
   inverse_surface: basePalette.neutral[20],
   inverse_on_surface: basePalette.neutral[95],
   inverse_primary: basePalette.primary[80],
 
   outline: basePalette.neutral_variant[50],
   outline_variant: basePalette.neutral_variant[80],
-  outline_alpha8: hexToRgba(basePalette.neutral_variant[50], 0.08),
-  outline_alpha12: hexToRgba(basePalette.neutral_variant[50], 0.12),
 
   outline_variant2: '#c2c7cF',
 
-  disabled: basePalette.neutral_variant[30],
   dark_error_container: '#93000a',
 
   black: '#000',
@@ -226,24 +212,63 @@ export const palette: Palette = {
   white_alpha12: 'rgba(255, 255, 255, 0.12)',
   white_alpha50: 'rgba(255, 255, 255, 0.5)',
   ...flattenPaletteObject({ ...basePalette.blue }, 'blue'),
-  blue_alpha30: hexToRgba(basePalette.blue.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.brown }, 'brown'),
-  brown_alpha30: hexToRgba(basePalette.brown.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.gray }, 'gray'),
-  gray_alpha30: hexToRgba(basePalette.gray.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.green }, 'green'),
-  green_alpha30: hexToRgba(basePalette.green.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.orange }, 'orange'),
-  orange_alpha30: hexToRgba(basePalette.orange.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.pink }, 'pink'),
-  pink_alpha30: hexToRgba(basePalette.pink.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.yellow }, 'yellow'),
-  yellow_alpha30: hexToRgba(basePalette.yellow.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.purple }, 'purple'),
-  purple_alpha30: hexToRgba(basePalette.purple.default, 0.3),
   ...flattenPaletteObject({ ...basePalette.red }, 'red'),
-  red_alpha8: hexToRgba(basePalette.red.default, 0.08),
-  red_alpha30: hexToRgba(basePalette.red.default, 0.3),
+};
+
+/**
+ * These are alpha variants of the semantic colors.
+ * They exist separately from the semantic palette for
+ * better maintainability.
+ */
+const alphaVariantsPalette: Palette = {
+  primary_alpha8: hexToRgba(semanticPalette.primary40, 0.08),
+  primary_alpha12: hexToRgba(semanticPalette.primary40, 0.12),
+  primary_alpha16: hexToRgba(semanticPalette.primary40, 0.16),
+  on_primary_container_alpha8: hexToRgba(semanticPalette.on_primary_container, 0.08),
+
+  on_secondary_container_alpha8: hexToRgba(semanticPalette.on_secondary_container, 0.08),
+  on_secondary_container_alpha12: hexToRgba(semanticPalette.on_secondary_container, 0.12),
+
+  on_surface_alpha8: hexToRgba(semanticPalette.on_surface, 0.08),
+  on_surface_alpha12: hexToRgba(semanticPalette.on_surface, 0.12),
+  on_surface_alpha16: hexToRgba(semanticPalette.on_surface, 0.16),
+  on_surface_alpha38: hexToRgba(semanticPalette.on_surface, 0.38),
+  surface_variant_alpha8: hexToRgba(semanticPalette.surface_variant, 0.08),
+  on_surface_variant_alpha8: hexToRgba(semanticPalette.on_surface_variant, 0.08),
+  on_surface_variant_alpha12: hexToRgba(semanticPalette.on_surface_variant, 0.12),
+  on_surface_variant_alpha16: hexToRgba(semanticPalette.on_surface_variant, 0.16),
+
+  outline_alpha8: hexToRgba(semanticPalette.outline, 0.08),
+  outline_alpha12: hexToRgba(semanticPalette.outline, 0.12),
+
+  disabled: hexToRgba(semanticPalette.on_surface, 0.38),
+
+  blue_alpha30: hexToRgba(semanticPalette.blue, 0.3),
+  brown_alpha30: hexToRgba(semanticPalette.brown, 0.3),
+  gray_alpha30: hexToRgba(semanticPalette.gray, 0.3),
+  green_alpha30: hexToRgba(semanticPalette.green, 0.3),
+  orange_alpha30: hexToRgba(semanticPalette.orange, 0.3),
+  pink_alpha30: hexToRgba(semanticPalette.pink, 0.3),
+  yellow_alpha30: hexToRgba(semanticPalette.yellow, 0.3),
+  purple_alpha30: hexToRgba(semanticPalette.purple, 0.3),
+  red_alpha8: hexToRgba(semanticPalette.red, 0.08),
+  red_alpha30: hexToRgba(semanticPalette.red, 0.3),
+};
+
+/**
+ * This contains all colors, their tonal variants,
+ * semantic colors (on_container, container, etc), and alpha variants.
+ */
+export const palette: Palette = {
+  ...semanticPalette,
+  ...alphaVariantsPalette,
 };
 
 export const modalBackground = palette.surface;
