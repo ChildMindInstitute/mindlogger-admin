@@ -10,7 +10,7 @@ export const StyledBadge = styled(Badge, shouldForwardProp)`
     min-width: ${theme.spacing(1.8)};
     top: ${theme.spacing(0.2)};
     right: ${theme.spacing(0.2)};
-    background-color: ${variables.palette.tertiary};
+    background-color: ${variables.palette.error};
     color: ${variables.palette.white};
     font-weight: ${variables.font.weight.bold};
     font-size: ${variables.font.size.label1};
