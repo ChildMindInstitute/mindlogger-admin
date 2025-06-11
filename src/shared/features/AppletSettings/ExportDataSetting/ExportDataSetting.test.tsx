@@ -7,7 +7,6 @@ import { mockedApplet, mockedPassword } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { useHasEhrHealthData } from 'shared/hooks/useHasEhrHealthData';
 import * as apiFunctions from 'modules/Dashboard/api';
 import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ResponseWithObject } from 'api';
@@ -42,10 +41,6 @@ jest.mock('modules/Dashboard/api', () => ({
 jest.mock('shared/hooks/useFeatureFlags', () => ({
   ...jest.requireActual('shared/hooks/useFeatureFlags'),
   useFeatureFlags: jest.fn(),
-}));
-
-jest.mock('shared/hooks/useHasEhrHealthData', () => ({
-  useHasEhrHealthData: jest.fn(),
 }));
 
 jest.mock('shared/utils/exportData/exporters/ScheduleHistoryExporter', () => ({
@@ -237,7 +232,6 @@ describe('ExportDataSetting', () => {
       });
 
       const mockOnClose = jest.fn();
-      jest.mocked(useHasEhrHealthData).mockReturnValue(false);
 
       renderWithProviders(
         <ExportDataSetting
@@ -293,7 +287,6 @@ describe('ExportDataSetting', () => {
       });
 
       const mockOnClose = jest.fn();
-      jest.mocked(useHasEhrHealthData).mockReturnValue(false);
 
       renderWithProviders(
         <ExportDataSetting
@@ -349,7 +342,6 @@ describe('ExportDataSetting', () => {
       });
 
       const mockOnClose = jest.fn();
-      jest.mocked(useHasEhrHealthData).mockReturnValue(true);
 
       renderWithProviders(
         <ExportDataSetting

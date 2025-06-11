@@ -35,7 +35,7 @@ export const ExportSettingsPopup = ({
   getMaxDate,
   appletName,
   supportedSupplementaryFiles,
-  hasEhrHealthData,
+  canExportEhrHealthData,
   'data-testid': dataTestId,
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
@@ -119,7 +119,7 @@ export const ExportSettingsPopup = ({
         <form noValidate autoComplete="off">
           <StyledFlexColumn sx={{ gap: 3.2 }}>
             <StyledFlexColumn sx={{ gap: 1.6 }}>
-              {hasEhrHealthData && (
+              {canExportEhrHealthData && (
                 <SelectController
                   name="dataExported"
                   control={control}

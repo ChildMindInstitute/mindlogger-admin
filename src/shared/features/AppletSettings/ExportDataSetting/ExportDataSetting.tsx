@@ -7,7 +7,7 @@ import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSettin
 import { applet } from 'shared/state/Applet';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { UniqueTuple } from 'shared/types';
-import { useFeatureFlags, useHasEhrHealthData } from 'shared/hooks';
+import { useFeatureFlags } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
@@ -36,18 +36,13 @@ export const ExportDataSetting = ({
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
-  const appletId = appletData && ('appletId' in appletData ? appletData.appletId : appletData.id);
-  const hasEhrHealthData = useHasEhrHealthData({
-    appletId,
-    activityId: filters?.activityId,
-    flowId: filters?.flowId,
-  });
+  const canExportEhrHealthData = featureFlags.enableEhrHealthData !== 'unavailable';
 
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
-      dataExported: hasEhrHealthData
+      dataExported: canExportEhrHealthData
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
@@ -58,7 +53,7 @@ export const ExportDataSetting = ({
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate, hasEhrHealthData],
+    [minDate, canExportEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -125,7 +120,7 @@ export const ExportDataSetting = ({
           getMaxDate={getMaxDate}
           appletName={appletName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
-          hasEhrHealthData={hasEhrHealthData}
+          canExportEhrHealthData={canExportEhrHealthData}
           data-testid={`${dataTestId}-settings`}
         />
       )}
