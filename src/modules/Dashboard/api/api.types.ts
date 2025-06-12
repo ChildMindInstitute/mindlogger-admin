@@ -597,6 +597,7 @@ export type ExportData = AppletId & {
   limit?: number;
   fromDate?: string;
   toDate?: string;
+  includeEhr?: boolean;
 };
 
 export type ScheduleHistoryParams = AppletId & {

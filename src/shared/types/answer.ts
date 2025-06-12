@@ -15,6 +15,8 @@ import {
   NumberSelectionItem,
   ParagraphTextItem,
   PhotoItem,
+  RequestHealthRecordDataItem,
+  RequestHealthRecordDataResponseValues,
   ScoresAndReports,
   SingleSelectionPerRowItem,
   SingleSelectItem,
@@ -114,6 +116,7 @@ export type ExportAnswer = {
   scheduledEventHistoryId: null | string;
   tzOffset?: null | number;
   submitId: string;
+  ehrDataFile?: null | string;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
@@ -330,6 +333,10 @@ export type DecryptedFlankerAnswer =
   | AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>
   | DecryptedFlankerAnswerItemValue[];
 
+export type DecryptedRequestHealthRecordDataAnswer = AnswerWithWrapper<
+  RequestHealthRecordDataResponseValues['optInOutOptions'][number]['id']
+>;
+
 export type AnswerWithWrapper<T> = {
   value: T;
 };
@@ -352,7 +359,8 @@ export type AnswerDTO =
   | DecryptedSliderRowsAnswer
   | DecryptedABTrailsAnswer
   | DecryptedStabilityTrackerAnswer
-  | DecryptedFlankerAnswer;
+  | DecryptedFlankerAnswer
+  | DecryptedRequestHealthRecordDataAnswer;
 
 export type AnswerValue =
   | null
@@ -426,7 +434,8 @@ export type ActivityItemAnswer =
   | FlankerItemAnswer
   | MessageItemAnswer
   | TouchPracticeItemAnswer
-  | TouchTestItemAnswer;
+  | TouchTestItemAnswer
+  | RequestHealthRecordDataAnswer;
 
 type ActivityItemAnswerCommonType = {
   id?: string;
@@ -528,6 +537,10 @@ export type TouchPracticeItemAnswer = ActivityItemAnswerCommonType & {
 export type TouchTestItemAnswer = ActivityItemAnswerCommonType & {
   activityItem: TouchTestItem;
   answer: null;
+};
+export type RequestHealthRecordDataAnswer = ActivityItemAnswerCommonType & {
+  activityItem: RequestHealthRecordDataItem;
+  answer: DecryptedRequestHealthRecordDataAnswer;
 };
 
 export const enum ElementType {

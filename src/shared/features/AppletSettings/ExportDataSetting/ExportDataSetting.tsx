@@ -11,6 +11,7 @@ import { useFeatureFlags } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 
 import {
+  ExportDataExported,
   ExportDataFormValues,
   ExportDataSettingProps,
   ExportDateType,
@@ -35,10 +36,15 @@ export const ExportDataSetting = ({
   const appletData = chosenAppletData ?? result;
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
+  const canExportEhrHealthData = featureFlags.enableEhrHealthData !== 'unavailable';
+
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
   const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
+      dataExported: canExportEhrHealthData
+        ? ExportDataExported.ResponsesAndEhrData
+        : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
       fromDate: minDate,
       toDate: getMaxDate(),
@@ -47,7 +53,7 @@ export const ExportDataSetting = ({
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate],
+    [minDate, canExportEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -114,6 +120,7 @@ export const ExportDataSetting = ({
           getMaxDate={getMaxDate}
           appletName={appletName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
+          canExportEhrHealthData={canExportEhrHealthData}
           data-testid={`${dataTestId}-settings`}
         />
       )}

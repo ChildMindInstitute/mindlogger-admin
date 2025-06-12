@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 
-import { ExportDateType } from '../../ExportDataSetting.types';
+import { ExportDateType, ExportDataExported } from '../../ExportDataSetting.types';
 
 const { t } = i18n;
 
@@ -24,5 +24,16 @@ export const getDateTypeOptions = () => [
   {
     value: ExportDateType.ChooseDates,
     labelKey: t('exportDateRange.chooseDates'),
+  },
+];
+
+export const getDataExportedOptions = () => [
+  {
+    value: ExportDataExported.ResponsesOnly,
+    labelKey: t('dataExport.dataExported.responsesOnly'),
+  },
+  {
+    value: ExportDataExported.ResponsesAndEhrData,
+    labelKey: t('dataExport.dataExported.responsesAndEhrData'),
   },
 ];

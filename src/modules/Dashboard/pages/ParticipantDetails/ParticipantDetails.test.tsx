@@ -3,15 +3,27 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedApplet, mockedFullSubjectId1 } from 'shared/mock';
+import {
+  mockedAppletId,
+  mockedApplet,
+  mockedFullSubjectId1,
+  mockedAppletData,
+  mockedFullParticipant1,
+} from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { page } from 'resources';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { ApiResponseCodes } from 'api';
+import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
 
 import ParticipantDetails from './ParticipantDetails';
 
 const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}`;
 const routePath = page.appletParticipantDetails;
+
+export const GET_APPLET_URL = `/applets/${mockedAppletId}`;
+export const GET_SUBJECT_DETAILS_URL = `/subjects/${mockedFullSubjectId1}`;
+export const GET_APPLET_ACTIVITIES_URL = `/activities/applet/${mockedAppletId}`;
 
 const mockedAppletResult = {
   data: {
@@ -19,12 +31,18 @@ const mockedAppletResult = {
   },
 };
 
-const mockedParticipantResult = {
+const mockedSubjectResult = {
+  data: {
+    result: mockedFullParticipant1,
+  },
+};
+
+const mockedGetAppletActivities = {
+  status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: {
-      id: 'test',
-      secretId: 'test-secret-id',
-      displayName: 'testUser',
+      activitiesDetails: mockedAppletData.activities,
+      appletDetail: mockedAppletData,
     },
   },
 };
@@ -43,6 +61,12 @@ describe('Participant Details page', () => {
   const navigate: jest.Mock = jest.fn();
 
   beforeEach(() => {
+    mockGetRequestResponses({
+      [GET_APPLET_URL]: mockedAppletResult,
+      [GET_SUBJECT_DETAILS_URL]: mockedSubjectResult,
+      [GET_APPLET_ACTIVITIES_URL]: mockedGetAppletActivities,
+    });
+
     jest.mocked(useNavigate).mockImplementation(() => navigate);
     jest.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
@@ -86,9 +110,6 @@ describe('Participant Details page', () => {
   });
 
   test('should render participant activities', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
-
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
       route,
@@ -98,9 +119,6 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-activities'));
   });
   test('should render participant connections', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
-
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
       route: `${route}/connections`,
@@ -110,9 +128,6 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-connections'));
   });
   test('should render participant schedules', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
-
     const { getByTestId } = renderWithProviders(<ParticipantDetails />, {
       preloadedState: getPreloadedState(),
       route: `${route}/schedule`,
@@ -122,8 +137,6 @@ describe('Participant Details page', () => {
     await waitFor(() => getByTestId('participant-schedule'));
   });
   test('should not render participant connections if the feature flag is disabled', async () => {
-    mockAxios.get.mockResolvedValue(mockedAppletResult);
-    mockAxios.get.mockResolvedValue(mockedParticipantResult);
     jest.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: false,
