@@ -1,4 +1,4 @@
-import { Button, styled, Box } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import { MarkDownPreview } from 'shared/components';
 import { theme, variables } from 'shared/styles';
@@ -21,8 +21,8 @@ export const StyledMdPreview = styled(MarkDownPreview)`
 
     background-color: transparent;
     color: ${variables.palette.on_surface};
-    font-size: ${variables.font.size.lrg};
-    line-height: ${variables.font.lineHeight.xl};
+    font-size: ${variables.font.size.title2};
+    line-height: ${variables.font.lineHeight.title2};
     color: ${variables.palette.on_surface};
     font-weight: normal;
     text-align: initial;

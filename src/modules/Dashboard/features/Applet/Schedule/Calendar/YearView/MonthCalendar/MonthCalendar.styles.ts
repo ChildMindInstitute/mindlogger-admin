@@ -1,6 +1,6 @@
-import { styled, Box, Skeleton } from '@mui/material';
+import { Box, Skeleton, styled } from '@mui/material';
 
-import { theme, variables, StyledBodySmall } from 'shared/styles';
+import { StyledBodySmall, theme, variables } from 'shared/styles';
 
 export const StyledMonth = styled(Box)`
   padding: ${theme.spacing(0, 2, 2.2)};
@@ -27,6 +27,6 @@ export const StyledDay = styled(StyledBodySmall)`
 
 export const StyledSkeleton = styled(Skeleton)`
   border-radius: ${variables.borderRadius.xs};
-  background-color: ${variables.palette.on_secondary_container_alfa8};
+  background-color: ${variables.palette.on_secondary_container_alpha8};
   margin-bottom: ${theme.spacing(1)};
 `;

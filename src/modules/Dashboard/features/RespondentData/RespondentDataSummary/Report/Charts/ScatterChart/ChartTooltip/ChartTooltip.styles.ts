@@ -12,7 +12,7 @@ export const StyledTooltip = styled(Box)`
 
 export const StyledListItemButton = styled(ListItemButton)`
   color: ${variables.palette.on_surface};
-  font-size: ${variables.font.size.lg};
+  font-size: ${variables.font.size.body2};
   padding: ${theme.spacing(1.2, 2)};
 
   &:last-of-type {

@@ -1,32 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 import { type AxiosResponse } from 'axios';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@mui/material';
 
-import {
-  Encryption,
-  getEncryptionToServer,
-  getPrivateKey,
-  MixpanelEventType,
-  publicEncrypt,
-  trackAppletSave,
-} from 'shared/utils';
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import {
-  StyledBodyLarge,
-  StyledErrorText,
-  StyledFlexColumn,
-  StyledModalWrapper,
-  variables,
-} from 'shared/styles';
-import { useAsync } from 'shared/hooks/useAsync';
-import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
-import { applet, auth, banners, popups, SingleApplet, workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import {
   ApiResponseCodes,
   Applet,
@@ -35,6 +14,27 @@ import {
   ResponseWithObject,
 } from 'api';
 import { useCheckReportServer } from 'modules/Builder/features/ReportConfigSetting/ReportConfigSetting.hooks';
+import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
+import { applet, auth, banners, popups, SingleApplet, workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { CheckboxController, InputController } from 'shared/components/FormComponents';
+import { useAsync } from 'shared/hooks/useAsync';
+import {
+  StyledBodyLarge,
+  StyledErrorText,
+  StyledFlexColumn,
+  StyledModalWrapper,
+  variables,
+} from 'shared/styles';
+import {
+  Encryption,
+  getEncryptionToServer,
+  getPrivateKey,
+  MixpanelEventType,
+  publicEncrypt,
+  trackAppletSave,
+} from 'shared/utils';
 
 import {
   AppletPasswordPopup,
@@ -384,7 +384,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           hasSecondBtn
           data-testid={`${dataTestid}-error-popup`}
         >
-          <StyledModalWrapper sx={{ color: variables.palette.semantic.error }}>
+          <StyledModalWrapper sx={{ color: variables.palette.error }}>
             {t('errorDuplication')}
           </StyledModalWrapper>
         </Modal>

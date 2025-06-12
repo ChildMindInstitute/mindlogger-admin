@@ -1,10 +1,10 @@
-import { styled, ListItem, Box } from '@mui/material';
+import { Box, ListItem, styled } from '@mui/material';
 
+import { LEFT_BAR_WIDTH } from 'shared/consts';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
-import { LEFT_BAR_WIDTH } from 'shared/consts';
 
 const ItemBefore = `
   content: '';
@@ -33,13 +33,13 @@ export const StyledDrawerItem = styled(ListItem)`
     .active-link:before {
       background: ${blendColorsNormal(
         variables.palette.primary_container,
-        variables.palette.on_primary_container_alfa8,
+        variables.palette.on_primary_container_alpha8,
       )};
     }
 
     :before {
       ${ItemBefore}
-      background: ${variables.palette.on_surface_alfa8};
+      background: ${variables.palette.on_surface_alpha8};
     }
   }
 

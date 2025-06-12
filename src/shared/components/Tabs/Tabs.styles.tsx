@@ -1,12 +1,12 @@
-import { Tabs, styled, TabsOwnProps } from '@mui/material';
+import { styled, Tabs, TabsOwnProps } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
 import { TABS_HEIGHT } from 'shared/consts';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-import { UiType } from './Tabs.types';
 import { TABS_HORIZONTAL_PADDING } from './Tabs.const';
+import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
   height: ${({
@@ -71,7 +71,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     `};
 
     &:hover {
-      background-color: ${variables.palette.on_surface_variant_alfa8};
+      background-color: ${variables.palette.on_surface_variant_alpha8};
     }
 
     .MuiBadge-root {
@@ -111,7 +111,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     color: ${variables.palette.primary};
 
     &:hover {
-      background-color: ${variables.palette.primary_alfa8};
+      background-color: ${variables.palette.primary_alpha8};
     }
 
     svg {

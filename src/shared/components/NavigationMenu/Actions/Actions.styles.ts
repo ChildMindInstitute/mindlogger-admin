@@ -1,9 +1,9 @@
 import { Box, styled } from '@mui/material';
 
+import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
+import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
-import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledSettingsGroup = styled(Box, shouldForwardProp)`
@@ -39,7 +39,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg};
   position: relative;
   :hover {
-    background-color: ${variables.palette.on_surface_alfa12};
+    background-color: ${variables.palette.on_surface_alpha12};
   }
   svg {
     fill: ${variables.palette.on_surface_variant};
@@ -64,7 +64,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
       margin-top: 0;
     }
     :hover {
-      background-color: ${variables.palette.on_surface_alfa12};
+      background-color: ${variables.palette.on_surface_alpha12};
     }
   `};
   ${({ disabled }) =>

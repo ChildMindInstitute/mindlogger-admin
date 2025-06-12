@@ -1,4 +1,4 @@
-import { styled, Box, Button } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 
@@ -14,6 +14,6 @@ export const StyledButton = styled(Button)`
   height: 5rem;
   svg {
     fill: ${({ disabled }) =>
-      disabled ? variables.palette.on_surface_alfa38 : variables.palette.primary};
+      disabled ? variables.palette.on_surface_alpha38 : variables.palette.primary};
   }
 `;

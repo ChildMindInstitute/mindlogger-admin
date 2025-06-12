@@ -5,9 +5,9 @@ import { ActionsMenu, Chip, ChipShape, FlowChip, Svg } from 'shared/components';
 import { StyledEllipsisText, StyledFlexColumn, variables } from 'shared/styles';
 import { getDictionaryText } from 'shared/utils';
 
-import { FlowSummaryCardProps } from './FlowSummaryCard.types';
-import { StyledRoot } from './FlowSummaryCard.styles';
 import { ActivityFlowThumbnail } from '../ActivityFlowThumbnail';
+import { StyledRoot } from './FlowSummaryCard.styles';
+import { FlowSummaryCardProps } from './FlowSummaryCard.types';
 
 export const FlowSummaryCard = <T,>({
   flow: { id, activities, description, name },
@@ -26,10 +26,12 @@ export const FlowSummaryCard = <T,>({
       <ActivityFlowThumbnail activities={activities} />
 
       <StyledFlexColumn sx={{ gap: 0.8, flexGrow: 1, overflow: 'hidden' }}>
-        <StyledEllipsisText sx={{ fontSize: variables.font.size.xxl }}>{name}</StyledEllipsisText>
+        <StyledEllipsisText sx={{ fontSize: variables.font.size.headline3 }}>
+          {name}
+        </StyledEllipsisText>
 
         <StyledEllipsisText
-          sx={{ color: variables.palette.on_surface_variant, fontSize: variables.font.size.lg }}
+          sx={{ color: variables.palette.on_surface_variant, fontSize: variables.font.size.body2 }}
         >
           {getDictionaryText(description)}
         </StyledEllipsisText>

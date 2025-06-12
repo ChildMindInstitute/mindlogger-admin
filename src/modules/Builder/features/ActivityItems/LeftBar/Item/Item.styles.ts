@@ -1,13 +1,13 @@
 import { styled } from '@mui/material';
 
 import {
-  theme,
-  variables,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTitleBoldMedium,
   StyledTitleMedium,
   commonEllipsisStyles,
+  theme,
+  variables,
 } from 'shared/styles';
 import { blendColorsNormal, shouldForwardProp } from 'shared/utils';
 
@@ -43,7 +43,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
         isDragging &&
         `background-color: ${blendColorsNormal(
           variables.palette.surface,
-          variables.palette.on_surface_alfa16,
+          variables.palette.on_surface_alpha16,
         )}`
       };
       ${
@@ -51,7 +51,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
         `
         background-color: ${blendColorsNormal(
           variables.palette.surface,
-          variables.palette.on_surface_variant_alfa8,
+          variables.palette.on_surface_variant_alpha8,
         )};
         cursor: default;
       `
@@ -65,7 +65,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
           `
             background-color: ${blendColorsNormal(
               variables.palette.surface,
-              variables.palette.on_surface_alfa8,
+              variables.palette.on_surface_alpha8,
             )};
         `
         };
@@ -74,7 +74,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       &:active {
         background-color: ${blendColorsNormal(
           variables.palette.surface,
-          variables.palette.on_surface_alfa12,
+          variables.palette.on_surface_alpha12,
         )};
       }
   `}

@@ -1,25 +1,25 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
-import {
-  StyledFlexTopCenter,
-  StyledTitleMedium,
-  StyledSmallNumberInput,
-  theme,
-  StyledSvgPrimaryColorBtn,
-  StyledFlexColumn,
-  variables,
-  StyledBodySmall,
-  StyledBodyLarge,
-} from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { FlankerItemPositions } from 'modules/Builder/types';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
+import {
+  StyledBodyLarge,
+  StyledBodySmall,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledSmallNumberInput,
+  StyledSvgPrimaryColorBtn,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 import { getIsRequiredValidateMessage } from 'shared/utils';
-import { FlankerItemPositions } from 'modules/Builder/types';
-import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { StyledRemoveButton } from './FixationContent.styles';
 
@@ -86,10 +86,7 @@ export const FixationContent = () => {
             )}
           </StyledFlexTopCenter>
           {hasImgError && (
-            <StyledBodySmall
-              sx={{ pt: theme.spacing(0.5) }}
-              color={variables.palette.semantic.error}
-            >
+            <StyledBodySmall sx={{ pt: theme.spacing(0.5) }} color={variables.palette.error}>
               {getIsRequiredValidateMessage('flankerFixation.fixationScreenImg')}
             </StyledBodySmall>
           )}

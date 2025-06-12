@@ -3,26 +3,26 @@ import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { removeManagerAccessApi } from 'api';
+import { Modal, Table, UiType } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
+import { useAsync } from 'shared/hooks/useAsync';
 import {
-  StyledModalWrapper,
   StyledBodyLarge,
-  StyledLabelLarge,
-  StyledTitleBoldMedium,
+  StyledErrorText,
   StyledFlexTopCenter,
+  StyledLabelLarge,
+  StyledModalWrapper,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
+  StyledTitleBoldMedium,
   theme,
-  StyledErrorText,
   variables,
 } from 'shared/styles';
-import { Table, UiType, Modal } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
-import { removeManagerAccessApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
-import { RemoveAccessPopupProps, FormValues } from './ManagersRemoveAccessPopupProps.types';
+import { FormValues, RemoveAccessPopupProps } from './ManagersRemoveAccessPopupProps.types';
 
 export const ManagersRemoveAccessPopup = ({
   popupVisible,
@@ -188,9 +188,7 @@ export const ManagersRemoveAccessPopup = ({
 
   const getThirdMultipleScreen = () => (
     <>
-      <StyledBodyLarge
-        sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}
-      >
+      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.error }}>
         <Trans i18nKey="multipleRemoveAccessError">
           Access for
           <strong>
@@ -209,7 +207,7 @@ export const ManagersRemoveAccessPopup = ({
     const { displayName } = selectedApplets[0];
 
     return (
-      <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+      <StyledBodyLarge sx={{ color: variables.palette.error }}>
         <Trans i18nKey="removeAccessError">
           Access for the
           <strong>

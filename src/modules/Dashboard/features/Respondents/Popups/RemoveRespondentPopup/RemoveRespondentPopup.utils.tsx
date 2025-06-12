@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 
-import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { SubmitBtnColor } from 'shared/components';
+import { StyledBodyLarge, theme, variables } from 'shared/styles';
 
 import { GetScreen, Screen, ScreensParams } from './RemoveRespondentPopup.types';
 
@@ -53,7 +53,7 @@ const getFourthScreen = (respondentName: string, appletName: string) => (
 );
 
 const getFourthErrorScreen = (respondentName: string, appletName: string) => (
-  <StyledBodyLarge color={variables.palette.semantic.error}>
+  <StyledBodyLarge color={variables.palette.error}>
     <Trans i18nKey="respondentAccessRemoveError">
       <b>
         <> {{ respondentName }}</>
@@ -83,7 +83,7 @@ const getFifthExtScreen = (respondentName: string, appletName: string) => (
 );
 
 const getFifthExtScreenError = (respondentName: string) => (
-  <StyledBodyLarge color={variables.palette.semantic.error}>
+  <StyledBodyLarge color={variables.palette.error}>
     <Trans i18nKey="respondentAccessAndDataRemoveError">
       <b>
         <>{{ respondentName }}</>

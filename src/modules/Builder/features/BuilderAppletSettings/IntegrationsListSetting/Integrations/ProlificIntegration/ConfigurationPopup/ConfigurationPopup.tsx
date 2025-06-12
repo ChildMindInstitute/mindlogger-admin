@@ -15,10 +15,10 @@ import {
 } from 'shared/styles';
 
 import { StyledLink } from '../../../IntegrationsListSetting.styles';
-import { createProlificIntegration } from '../ProlificIntegration.utils';
 import type { PopupProps as ConfigurationPopupProps } from '../ProlificIntegration.types';
-import { ConfigurationPopupState, ProlificApiToken } from './ConfigurationPopup.types';
+import { createProlificIntegration } from '../ProlificIntegration.utils';
 import { StyledApiInputWithButton, StyledApiTokenButton } from './ConfigurationPopup.style';
+import { ConfigurationPopupState, ProlificApiToken } from './ConfigurationPopup.types';
 
 export const ConfigurationPopup = ({
   open,
@@ -130,7 +130,7 @@ export const ConfigurationPopup = ({
           </StyledApiInputWithButton>
           {kind === 'error' && (
             <StyledBodyMedium
-              sx={{ color: variables.palette.semantic.error, mt: theme.spacing(1.8) }}
+              sx={{ color: variables.palette.error, mt: theme.spacing(1.8) }}
               data-testid="prolific-upload-data-popup-error"
             >
               {state.message}

@@ -1,10 +1,17 @@
-import { ChangeEvent, useEffect } from 'react';
 import { Box } from '@mui/material';
+import { addDays } from 'date-fns';
+import { ChangeEvent, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { addDays } from 'date-fns';
 
+import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
 import { DatePicker, TimePicker, Tooltip } from 'shared/components';
+import {
+  CheckboxController,
+  Switch,
+  TagsAutocompleteController,
+} from 'shared/components/FormComponents';
+import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 import {
   StyledBodyLarge,
   StyledFlexTopCenter,
@@ -12,30 +19,23 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import {
-  CheckboxController,
-  Switch,
-  TagsAutocompleteController,
-} from 'shared/components/FormComponents';
-import { useRespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext';
-import { DEFAULT_END_TIME, DEFAULT_START_TIME } from 'shared/consts';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
+import { useDatavizSkippedFilter } from '../../hooks/useDatavizSkippedFilter';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
-import { getUniqueIdentifierOptions } from './ReportFilters.utils';
+import { MIN_DATE } from './ReportFilters.const';
 import {
+  StyledCheckboxTitle,
   StyledFiltersContainer,
   StyledMoreFilters,
   StyledTimeText,
-  StyledCheckboxTitle,
 } from './ReportFilters.styles';
 import {
   FiltersChangeType,
   OnFiltersChangeParams,
   ReportFiltersProps,
 } from './ReportFilters.types';
-import { MIN_DATE } from './ReportFilters.const';
-import { useDatavizSkippedFilter } from '../../hooks/useDatavizSkippedFilter';
+import { getUniqueIdentifierOptions } from './ReportFilters.utils';
 
 export const ReportFilters = ({
   identifiers = [],
@@ -173,7 +173,7 @@ export const ReportFilters = ({
           <StyledMoreFilters
             onClick={moreFiltersHandler}
             sx={{
-              backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
+              backgroundColor: moreFiltersVisible ? variables.palette.primary_alpha12 : '',
             }}
             data-testid={`${dataTestid}-more-button`}
           >

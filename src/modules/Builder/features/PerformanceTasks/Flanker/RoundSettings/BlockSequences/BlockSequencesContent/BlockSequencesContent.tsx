@@ -1,8 +1,11 @@
+import { Box } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { FlankerItemPositions } from 'modules/Builder/types';
 import { Svg, Table, UiType } from 'shared/components';
+import { FlankerStimulusSettings } from 'shared/state';
 import {
   StyledBodyMedium,
   StyledSvgPrimaryColorBtn,
@@ -10,12 +13,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate } from 'shared/utils';
-import { FlankerItemPositions } from 'modules/Builder/types';
 
-import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
+import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesContent.types';
 import {
   getExportData,
   getRoundBlocks,
@@ -25,7 +25,7 @@ import {
   getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
-import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesContent.types';
+import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 
 export const BlockSequencesContent = ({
   isPracticeRound,
@@ -120,10 +120,7 @@ export const BlockSequencesContent = ({
           {btnText}
         </StyledSvgPrimaryColorBtn>
         {!uploadedTable && hasBlockSequencesErrors && (
-          <StyledBodyMedium
-            sx={{ pt: theme.spacing(2.4) }}
-            color={variables.palette.semantic.error}
-          >
+          <StyledBodyMedium sx={{ pt: theme.spacing(2.4) }} color={variables.palette.error}>
             {t('fillInAllRequired')}
           </StyledBodyMedium>
         )}
@@ -152,10 +149,7 @@ export const BlockSequencesContent = ({
       )}
     </>
   ) : (
-    <StyledBodyMedium
-      sx={{ m: theme.spacing(-1.5, 0, 1) }}
-      color={variables.palette.semantic.error}
-    >
+    <StyledBodyMedium sx={{ m: theme.spacing(-1.5, 0, 1) }} color={variables.palette.error}>
       {t('flankerRound.addStimulus')}
     </StyledBodyMedium>
   );

@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 import { MouseEventHandler } from 'react';
 
-import { StyledFlexSpaceBetween, StyledHeadline, theme, variables } from 'shared/styles';
+import { StyledFlexSpaceBetween, StyledHeadlineSmall, theme, variables } from 'shared/styles';
 
 export const StyledContainer = styled(StyledFlexSpaceBetween)(
   ({
@@ -22,12 +22,12 @@ export const StyledContainer = styled(StyledFlexSpaceBetween)(
     transition: variables.transitions.bgColor,
 
     '&:hover': {
-      background: onClick ? variables.palette.on_surface_variant_alfa8 : 'inherit',
+      background: onClick ? variables.palette.on_surface_variant_alpha8 : 'inherit',
     },
   }),
 );
 
-export const StyledActivityName = styled(StyledHeadline)`
+export const StyledActivityName = styled(StyledHeadlineSmall)`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as reactHookForm from 'react-hook-form';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
+import * as reactHookForm from 'react-hook-form';
 
-import { ReportMenu } from './ReportMenu';
-import { ReportMenuProps } from './ReportMenu.types';
 import { RespondentDataContext } from '../../RespondentDataContext/RespondentDataContext.context';
 import { RespondentDataContextType } from '../../RespondentDataContext/RespondentDataContext.types';
+import { ReportMenu } from './ReportMenu';
+import { ReportMenuProps } from './ReportMenu.types';
 
 jest.mock('shared/hooks/useRespondentLabel', () => ({
   useRespondentLabel: () => 'user: Jane Doe',
@@ -128,7 +128,7 @@ describe('ReportMenu Component', () => {
 
     testActivities();
     const preselectedActivity = screen.getByTestId('respondents-summary-activity-1');
-    expect(preselectedActivity).toHaveStyle({ backgroundColor: '#e8f0f7' });
+    expect(preselectedActivity).toHaveStyle({ backgroundColor: '#F0EFEF' });
 
     expect(screen.queryByText('Activity Flows')).not.toBeInTheDocument();
   });

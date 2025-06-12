@@ -20,7 +20,7 @@ export const StyledActivityListItem = styled(Box)(
 
     &:hover,
     &:focus {
-      background-color: ${variables.palette.on_surface_variant_alfa8};
+      background-color: ${variables.palette.on_surface_variant_alpha8};
     }`
   }
 `,
@@ -62,7 +62,7 @@ export const StyledActivityListItemInner = styled(StyledFlexTopCenter)`
 
     &:hover::after,
     &:focus::after {
-      background-color: ${variables.palette.on_surface_variant_alfa8};
+      background-color: ${variables.palette.on_surface_variant_alpha8};
     }
   }
 

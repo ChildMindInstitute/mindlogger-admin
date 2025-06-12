@@ -2,12 +2,12 @@ import { useCallback, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
-import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
-import { page } from 'resources';
-import { Mixpanel, getErrorMessage, MixpanelEventType, MixpanelProps } from 'shared/utils';
-import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
+import { page } from 'resources';
+import { Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { getErrorMessage, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';
@@ -102,7 +102,7 @@ export const ScheduleSetupPopup = ({
           </>
         )}
         {error && (
-          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+          <StyledBodyLarge color={variables.palette.error} sx={{ m: theme.spacing(1, 0) }}>
             {getErrorMessage(error)}
           </StyledBodyLarge>
         )}

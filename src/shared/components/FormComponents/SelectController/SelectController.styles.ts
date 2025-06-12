@@ -1,6 +1,8 @@
 import { MenuItem, styled, TextField } from '@mui/material';
 
-import { StyledBodyLarge, variables, theme } from 'shared/styles';
+import { StyledBodyLarge } from 'shared/styles/styledComponents/Typography';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { SelectUiType, StyledMenuItemProps } from './SelectController.types';

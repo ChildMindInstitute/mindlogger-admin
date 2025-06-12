@@ -2,28 +2,28 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
-import { useAppDispatch } from 'redux/store';
-import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
-import { alerts } from 'shared/state';
 import { WorkspaceImage } from 'shared/features/SwitchWorkspace';
+import { alerts } from 'shared/state';
+import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
 
 import {
-  StyledNotification,
-  StyledLeftSection,
-  StyledImageWrapper,
-  StyledInfo,
-  StyledRightSection,
-  StyledInfoCircle,
-  StyledTimeAgo,
-  StyledLogo,
-  StyledMessage,
-  StyledTitle,
-  StyledTopSection,
   StyledBottomSection,
   StyledBtn,
+  StyledImageWrapper,
+  StyledInfo,
+  StyledInfoCircle,
+  StyledLeftSection,
+  StyledLogo,
   StyledLogoPlug,
+  StyledMessage,
+  StyledNotification,
+  StyledRightSection,
+  StyledTimeAgo,
+  StyledTitle,
+  StyledTopSection,
 } from './Notification.styles';
 import { NotificationProps } from './Notification.types';
 import { getMessageColor } from './Notification.utils';
@@ -147,9 +147,7 @@ export const Notification = ({
           )}
           <StyledTimeAgo
             fontWeight={isWatched ? 'regular' : 'bold'}
-            color={
-              isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error
-            }
+            color={isWatched ? variables.palette.on_surface_variant : variables.palette.error}
           >
             {timeAgo}
           </StyledTimeAgo>

@@ -1,5 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Svg, Tooltip } from 'shared/components';
 import {
   StyledFlexAllCenter,
   StyledFlexColumn,
@@ -7,7 +8,6 @@ import {
   StyledLabelLarge,
   variables,
 } from 'shared/styles';
-import { Svg, Tooltip } from 'shared/components';
 
 import { AssignmentCountsProps } from './AssignmentCounts.types';
 
@@ -25,7 +25,7 @@ export const AssignmentCounts = ({ selfReports, multiInformant }: AssignmentCoun
 
       <Tooltip
         tooltipTitle={
-          <StyledFlexColumn sx={{ gap: variables.font.lineHeight.md }}>
+          <StyledFlexColumn sx={{ gap: variables.font.lineHeight.label1 }}>
             <Trans i18nKey="activityAssign.assignmentCountsTooltip">
               <div>Self-Report</div>
               <div>Multi-Informant</div>

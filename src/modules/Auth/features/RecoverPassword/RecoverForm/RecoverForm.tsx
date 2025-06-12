@@ -4,22 +4,22 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { approveRecoveryPasswordApi } from 'api';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledHeadline, variables } from 'shared/styles';
-import { approveRecoveryPasswordApi } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { StyledErrorText, StyledHeadlineSmall, variables } from 'shared/styles';
 import { LocationStateKeys } from 'shared/types';
+import { getErrorMessage } from 'shared/utils';
 
+import { recoverPasswordFormDataTestid } from './RecoverForm.const';
+import { newPasswordSchema } from './RecoverForm.schema';
 import {
   StyledButton,
   StyledController,
   StyledForm,
   StyledResetPasswordSubheader,
 } from './RecoverForm.styles';
-import { newPasswordSchema } from './RecoverForm.schema';
 import { RecoverFormFields, RecoverFormProps } from './RecoverForm.types';
-import { recoverPasswordFormDataTestid } from './RecoverForm.const';
 
 export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const { t } = useTranslation('app');
@@ -47,7 +47,9 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       noValidate
       data-testid={recoverPasswordFormDataTestid}
     >
-      <StyledHeadline color={variables.palette.on_surface}>{t('createNewPassword')}</StyledHeadline>
+      <StyledHeadlineSmall color={variables.palette.on_surface}>
+        {t('createNewPassword')}
+      </StyledHeadlineSmall>
       <StyledResetPasswordSubheader color={variables.palette.on_surface_variant}>
         {t('createNewPasswordForEmail', { email })}
       </StyledResetPasswordSubheader>

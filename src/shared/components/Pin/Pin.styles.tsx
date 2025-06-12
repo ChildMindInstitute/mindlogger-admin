@@ -1,4 +1,4 @@
-import { styled, Button } from '@mui/material';
+import { Button, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -11,12 +11,12 @@ export const StyledPinButton = styled(Button, shouldForwardProp)`
   border-radius: ${variables.borderRadius.half};
 
   && .MuiTouchRipple-child {
-    background-color: ${variables.palette.on_surface_variant_alfa12};
+    background-color: ${variables.palette.on_surface_variant_alpha12};
   }
 
   :hover,
   :focus {
-    background: ${variables.palette.on_surface_variant_alfa8};
+    background: ${variables.palette.on_surface_variant_alpha8};
 
     && svg {
       fill: ${({ isPinned = false }: { isPinned?: boolean }) =>

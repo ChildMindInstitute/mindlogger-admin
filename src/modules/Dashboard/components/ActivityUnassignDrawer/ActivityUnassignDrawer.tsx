@@ -1,10 +1,16 @@
-import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Drawer, IconButton } from '@mui/material';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { deleteAppletAssignmentsApi, PostAssignmentsParams } from 'api';
+import { ActivityFlowThumbnail, AssignmentCounts } from 'modules/Dashboard/components';
+import { banners } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { FlowChip, Svg } from 'shared/components';
+import { useAsync, useModalBanners } from 'shared/hooks';
 import {
   StyledActivityThumbnailContainer,
   StyledActivityThumbnailImg,
@@ -12,27 +18,21 @@ import {
   StyledFlexColumn,
   StyledFlexTopBaseline,
   StyledFlexTopCenter,
-  StyledHeadline,
   StyledHeadlineMedium,
+  StyledHeadlineSmall,
   StyledTitleLarge,
 } from 'shared/styles';
-import { FlowChip, Svg } from 'shared/components';
-import { useAsync, useModalBanners } from 'shared/hooks';
-import { deleteAppletAssignmentsApi, PostAssignmentsParams } from 'api';
-import { ActivityFlowThumbnail, AssignmentCounts } from 'modules/Dashboard/components';
-import { useAppDispatch } from 'redux/store';
-import { banners } from 'redux/modules';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
+import { ActivityUnassignBannerComponents } from './ActivityUnassignDrawer.const';
+import { StyledFooter, StyledFooterWrapper, StyledHeader } from './ActivityUnassignDrawer.styles';
 import {
   ActivityUnassignDrawerProps,
   ActivityUnassignFormValues,
 } from './ActivityUnassignDrawer.types';
-import { StyledFooter, StyledFooterWrapper, StyledHeader } from './ActivityUnassignDrawer.styles';
-import { ConfirmationPopup } from './ConfirmationPopup';
-import { ActivityUnassignBannerComponents } from './ActivityUnassignDrawer.const';
-import { AssignmentsTable } from './AssignmentsTable';
 import { getConfirmationBody } from './ActivityUnassignDrawer.utils';
+import { AssignmentsTable } from './AssignmentsTable';
+import { ConfirmationPopup } from './ConfirmationPopup';
 
 const dataTestId = 'applet-activity-unassign';
 
@@ -234,7 +234,7 @@ export const ActivityUnassignDrawer = ({
               </StyledActivityThumbnailContainer>
 
               <StyledFlexTopCenter sx={{ gap: 0.8 }}>
-                <StyledHeadline>{activityOrFlow?.name}</StyledHeadline>
+                <StyledHeadlineSmall>{activityOrFlow?.name}</StyledHeadlineSmall>
                 {isFlow && <FlowChip />}
               </StyledFlexTopCenter>
             </StyledFlexTopCenter>

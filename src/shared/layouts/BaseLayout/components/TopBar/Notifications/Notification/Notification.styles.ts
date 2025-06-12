@@ -1,16 +1,16 @@
-import { styled, Box, Button } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import {
+  StyledBodyMedium,
+  StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopCenter,
-  StyledLabelMedium,
-  StyledBodyMedium,
-  StyledTitleMedium,
   StyledFlexWrap,
-  StyledFlexAllCenter,
+  StyledLabelMedium,
+  StyledTitleMedium,
 } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 const commonImgStyles = `
@@ -38,7 +38,7 @@ export const StyledNotification = styled(StyledFlexWrap, shouldForwardProp)`
     active ? variables.palette.secondary_container : 'transparent'};
 
   &:hover {
-    background-color: ${variables.palette.on_surface_alfa8};
+    background-color: ${variables.palette.on_surface_alpha8};
   }
 `;
 
@@ -92,7 +92,7 @@ export const StyledInfoCircle = styled(Box)`
   width: 1rem;
   height: 1rem;
   border-radius: 100%;
-  background-color: ${variables.palette.semantic.error};
+  background-color: ${variables.palette.error};
   align-self: flex-end;
 `;
 

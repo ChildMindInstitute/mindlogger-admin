@@ -14,7 +14,7 @@ import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { variables } from 'shared/styles';
-import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
+import { StyledErrorText, StyledHeadlineSmall } from 'shared/styles/styledComponents';
 import { LocationStateKeys } from 'shared/types';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
@@ -144,7 +144,7 @@ export const LoginForm = () => {
         </Trans>
       </StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledHeadline color={variables.palette.on_surface}>{t('login')}</StyledHeadline>
+        <StyledHeadlineSmall color={variables.palette.on_surface}>{t('login')}</StyledHeadlineSmall>
         <StyledLoginSubheader color={variables.palette.on_surface_variant}>
           {t('logIntoAccount')}
         </StyledLoginSubheader>

@@ -1,7 +1,7 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { SelectController } from 'shared/components/FormComponents';
-import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledAlert = styled(Box)`
   width: 100%;
@@ -51,8 +51,8 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
 
   .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input,
   .MuiFormControl-root.MuiTextField-root input {
-    font-size: ${variables.font.size.md};
-    line-height: ${variables.font.lineHeight.md};
+    font-size: ${variables.font.size.label1};
+    line-height: ${variables.font.lineHeight.label1};
   }
 
   .MuiBox-root {

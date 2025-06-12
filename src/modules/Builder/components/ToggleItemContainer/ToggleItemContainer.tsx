@@ -1,7 +1,8 @@
-import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
+import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Svg, Tooltip } from 'shared/components';
 import {
   StyledBodyMedium,
   StyledClearedButton,
@@ -12,14 +13,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Svg, Tooltip } from 'shared/components';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import {
-  StyledItemOption,
-  StylesTitleWrapper,
   StyledBadge,
+  StyledItemOption,
   StyledTitleContainer,
+  StylesTitleWrapper,
 } from './ToggleItemContainer.styles';
 import { ToggleItemProps } from './ToggleItemContainer.types';
 
@@ -83,7 +83,7 @@ export const ToggleItemContainer = ({
                 {hasErrorMessage && (
                   <StyledBodyMedium
                     sx={{ p: theme.spacing(0.5, 0, 0, 1.5) }}
-                    color={variables.palette.semantic.error}
+                    color={variables.palette.error}
                   >
                     {t(errorMessage)}
                   </StyledBodyMedium>

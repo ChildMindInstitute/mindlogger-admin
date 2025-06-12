@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 
 import i18n from 'i18n';
-import { StyledBodyLarge, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { LorisUserAnswerVisit, LorisUsersVisit, LorisUsersVisits } from 'modules/Builder/api';
+import { StyledBodyLarge, StyledTitleMedium, theme, variables } from 'shared/styles';
 
-import { UploadSteps, GetScreensProps, UploadDataForm } from './UploadPopup.types';
 import { ConnectionInfo } from '../ConnectionInfo';
+import { GetScreensProps, UploadDataForm, UploadSteps } from './UploadPopup.types';
 import { Visits } from './Visits';
 
 const { t } = i18n;
@@ -69,7 +69,7 @@ export const getScreens = ({
   {
     rightButtonText: t('retry'),
     content: (
-      <StyledBodyLarge sx={{ mb: theme.spacing(2.4), color: variables.palette.semantic.error }}>
+      <StyledBodyLarge sx={{ mb: theme.spacing(2.4), color: variables.palette.error }}>
         {t('errorFallback.somethingWentWrong')}
       </StyledBodyLarge>
     ),

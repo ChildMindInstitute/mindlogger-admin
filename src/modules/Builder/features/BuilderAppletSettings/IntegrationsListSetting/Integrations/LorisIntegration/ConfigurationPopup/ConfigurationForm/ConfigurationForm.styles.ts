@@ -7,6 +7,6 @@ export const StyledController = styled(Box)`
   margin-top: ${theme.spacing(2.4)};
 
   .MuiFormHelperText-root.Mui-error {
-    color: ${variables.palette.semantic.error};
+    color: ${variables.palette.error};
   }
 `;

@@ -1,6 +1,6 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn, StyledBodyMedium } from 'shared/styles/styledComponents';
+import { StyledBodyMedium, StyledFlexColumn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -15,9 +15,7 @@ export const absolutePosition = `
 const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean) => `
   border-radius: ${variables.borderRadius.xs};
   background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
-  border: ${
-    hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
-  };
+  border: ${hasError ? `${variables.borderWidth.md} solid ${variables.palette.error}` : 'unset'};
 
   .image-container {
     transition: ${variables.transitions.bgColor};
@@ -27,7 +25,7 @@ const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean)
 
   &:hover {
     .image-container {
-      background-color: ${variables.palette.on_surface_variant_alfa8};
+      background-color: ${variables.palette.on_surface_variant_alpha8};
     }
   }
 `;
@@ -102,7 +100,7 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
     if (!isPrimaryUiType && hasError) {
       return `
          svg {
-          fill: ${variables.palette.semantic.error};
+          fill: ${variables.palette.error};
          }
       `;
     }
@@ -158,8 +156,8 @@ export const StyledName = styled(Box)`
 `;
 
 export const StyledNameWrapper = styled(Box)`
-  font-size: ${variables.font.size.md};
-  line-height: ${variables.font.lineHeight.md};
+  font-size: ${variables.font.size.label1};
+  line-height: ${variables.font.lineHeight.label1};
   color: ${variables.palette.on_surface_variant};
   margin-top: ${theme.spacing(1.6)};
   display: flex;
@@ -173,5 +171,5 @@ export const StyledError = styled(StyledBodyMedium)`
   margin-bottom: ${theme.spacing(1)};
   padding: ${theme.spacing(0, 3)};
   text-align: center;
-  color: ${variables.palette.semantic.error};
+  color: ${variables.palette.error};
 `;

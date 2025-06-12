@@ -1,24 +1,24 @@
+import get from 'lodash.get';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import get from 'lodash.get';
 
+import {
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_MAX_VALUE,
+  DEFAULT_SLIDER_MIN_NUMBER,
+} from 'modules/Builder/consts';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { concatIf } from 'shared/utils/concatIf';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
-import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
-import {
-  DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_MAX_VALUE,
-  DEFAULT_SLIDER_MAX_NUMBER,
-} from 'modules/Builder/consts';
 
 import { Header } from './Header';
-import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
+import { SLIDER_LABEL_MAX_LENGTH, SLIDER_VALUE_LABEL_MAX_LENGTH } from './SliderPanel.const';
 import {
   StyledInputContainer,
   StyledScoresContainer,
@@ -26,6 +26,7 @@ import {
   StyledSliderPanelContainer,
   StyledTable,
 } from './SliderPanel.styles';
+import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
 import {
   getHeadCells,
   getMarks,
@@ -34,7 +35,6 @@ import {
   getTableRows,
   setScoresAndAlertsChange,
 } from './SliderPanel.utils';
-import { SLIDER_LABEL_MAX_LENGTH, SLIDER_VALUE_LABEL_MAX_LENGTH } from './SliderPanel.const';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -366,7 +366,7 @@ export const SliderPanel = ({
               {scoresError && (
                 <StyledBodySmall
                   sx={{ p: theme.spacing(0.5, 0, 0, 0) }}
-                  color={variables.palette.semantic.error}
+                  color={variables.palette.error}
                 >
                   {t('numberValueIsRequired')}
                 </StyledBodySmall>

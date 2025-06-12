@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
 import { Table } from 'shared/components';
+import { theme, variables } from 'shared/styles';
 import { tableRowHoverColor } from 'shared/utils/colors';
 
 export const StyledTableFormControlLabel = styled(FormControlLabel)`
@@ -17,7 +17,7 @@ export const StyledListFormControlLabel = styled(FormControlLabel)`
 export const StyledContainer = styled(Box)`
   .MuiTableContainer-root {
     &.error {
-      border: ${variables.borderWidth.lg} solid ${variables.palette.semantic.error};
+      border: ${variables.borderWidth.lg} solid ${variables.palette.error};
     }
   }
 

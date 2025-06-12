@@ -1,6 +1,6 @@
 import { styled, TextField } from '@mui/material';
 
-import { variables, theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTextField = styled(TextField, shouldForwardProp)`
@@ -9,7 +9,7 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
   && {
     &:hover {
       .Mui-disabled .MuiOutlinedInput-notchedOutline {
-        border-color: ${variables.palette.on_surface_alfa12};
+        border-color: ${variables.palette.on_surface_alpha12};
       }
     }
   }

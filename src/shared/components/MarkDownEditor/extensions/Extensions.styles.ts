@@ -1,8 +1,8 @@
-import { styled, MenuItem, MenuList } from '@mui/material';
+import { MenuItem, MenuList, styled } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledMenuList = styled(MenuList)`
   margin: 0;
@@ -12,9 +12,9 @@ export const StyledMenuList = styled(MenuList)`
 `;
 
 export const StyledMenuItem = styled(MenuItem)`
-  font-size: ${variables.font.size.sm};
+  font-size: ${variables.font.size.body4};
+  line-height: ${variables.font.lineHeight.body4};
   padding: ${theme.spacing(0.4, 1)};
-  line-height: ${variables.font.lineHeight.sm};
 `;
 
 export const StyledIconCenter = styled(StyledFlexAllCenter)`

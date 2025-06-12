@@ -1,18 +1,18 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
+import { reportConfig } from 'modules/Builder/state';
+import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
 import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { concatIf } from 'shared/utils';
-import { useAppDispatch } from 'redux/store';
-import { reportConfig } from 'modules/Builder/state';
 
+import { Description } from './Description';
+import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 import {
   SaveAndPublishProcessPopupProps,
   SaveAndPublishSteps,
 } from './SaveAndPublishProcessPopup.types';
-import { Description } from './Description';
-import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
 export const SaveAndPublishProcessPopup = ({
   isPopupVisible,
@@ -59,7 +59,7 @@ export const SaveAndPublishProcessPopup = ({
       hasSecondBtn: true,
       secondBtnText: t('dontSave'),
       secondBtnStyles: {
-        color: variables.palette.semantic.error,
+        color: variables.palette.error,
         fontWeight: variables.font.weight.bold,
       },
       onSecondBtnSubmit: handleReportConfigDoNotSave,

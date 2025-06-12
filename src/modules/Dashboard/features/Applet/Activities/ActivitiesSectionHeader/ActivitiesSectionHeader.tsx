@@ -11,7 +11,7 @@ export const ActivitiesSectionHeader = ({
 }: ActivitiesSectionHeaderProps) => (
   <Box
     component="header"
-    sx={{ display: 'flex', gap: 0.8, fontSize: variables.font.size.xl }}
+    sx={{ display: 'flex', gap: 0.8, fontSize: variables.font.size.title1 }}
     {...otherProps}
   >
     {title}

@@ -12,15 +12,15 @@ export const StyledTextField = styled(TextField)`
   .MuiInputBase-root.MuiOutlinedInput-root {
     width: 12rem;
     color: ${variables.palette.primary};
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label1};
     font-weight: ${variables.font.weight.regular};
-    line-height: ${variables.font.lineHeight.md};
+    line-height: ${variables.font.lineHeight.label1};
     background-color: transparent;
     border-radius: ${variables.borderRadius.xxxl};
     padding: ${theme.spacing(0, 1.6)};
 
     &.Mui-focused {
-      background-color: ${variables.palette.primary_alfa12};
+      background-color: ${variables.palette.primary_alpha12};
     }
   }
 

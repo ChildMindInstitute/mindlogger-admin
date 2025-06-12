@@ -13,8 +13,8 @@ import {
   variables,
 } from 'shared/styles';
 
-import { deleteProlificIntegration } from '../ProlificIntegration.utils';
 import { PopupProps as DisconnectionPopupProps } from '../ProlificIntegration.types';
+import { deleteProlificIntegration } from '../ProlificIntegration.utils';
 import { DisconnectionPopupState } from './DisconnectionPopup.types';
 
 export const DisconnectionPopup = ({
@@ -82,9 +82,7 @@ export const DisconnectionPopup = ({
           </StyledBodyLarger>
         </StyledFlexAllCenter>
         {kind === 'error' && (
-          <StyledBodyMedium
-            sx={{ color: variables.palette.semantic.error, mt: theme.spacing(1.8) }}
-          >
+          <StyledBodyMedium sx={{ color: variables.palette.error, mt: theme.spacing(1.8) }}>
             {state.message}
           </StyledBodyMedium>
         )}

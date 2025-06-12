@@ -1,5 +1,5 @@
-import { MdEditor, MdPreview } from 'md-editor-rt';
 import { styled } from '@mui/material';
+import { MdEditor, MdPreview } from 'md-editor-rt';
 
 import { theme, variables } from 'shared/styles';
 
@@ -10,10 +10,10 @@ const commonStyles = `
 
   .md-editor-preview-wrapper {
     h1 {
-      font-size: ${variables.font.size.xxl};
+      font-size: ${variables.font.size.headline3};
     }
     h2 {
-      font-size: ${variables.font.size.lrg};
+      font-size: ${variables.font.size.title2};
     }
   }
   

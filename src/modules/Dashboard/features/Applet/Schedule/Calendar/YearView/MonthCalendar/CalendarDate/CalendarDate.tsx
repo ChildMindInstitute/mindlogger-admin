@@ -1,24 +1,24 @@
-import { MouseEvent, useState, useRef } from 'react';
 import uniqueId from 'lodash.uniqueid';
+import { MouseEvent, useRef, useState } from 'react';
 
-import { theme, StyledBodySmall, StyledHeadline } from 'shared/styles';
 import { Event } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Event';
-import { formatToYearMonthDate, getDayName } from 'shared/utils/dateFormat';
+import { StyledBodySmall, StyledHeadlineSmall, theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
+import { formatToYearMonthDate, getDayName } from 'shared/utils/dateFormat';
 
-import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
+import { MAX_EVENTS_IN_TOOLTIP, MAX_ROWS_IN_TOOLTIP, TOOLTIP_HEIGHT } from './CalendarDate.const';
 import {
   StyledDayBtn,
   StyledDotsWrapper,
   StyledEventDot,
-  StyledTooltipDate,
-  StyledTooltip,
-  StyledTooltipEventWrapper,
   StyledMonthName,
   StyledMore,
+  StyledTooltip,
+  StyledTooltipDate,
+  StyledTooltipEventWrapper,
 } from './CalendarDate.styles';
+import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
 import { getMoreEventsText } from './CalendarDate.utils';
-import { MAX_EVENTS_IN_TOOLTIP, MAX_ROWS_IN_TOOLTIP, TOOLTIP_HEIGHT } from './CalendarDate.const';
 
 export const CalendarDate = ({
   dateToRender,
@@ -111,7 +111,7 @@ export const CalendarDate = ({
         >
           <StyledMonthName>{getDayName(dateToRender)}</StyledMonthName>
           <StyledTooltipDate>
-            <StyledHeadline>{dateToRender.getDate()}</StyledHeadline>
+            <StyledHeadlineSmall>{dateToRender.getDate()}</StyledHeadlineSmall>
           </StyledTooltipDate>
           {eventsRows}
           {showMoreText && <StyledMore>{getMoreEventsText(events)}</StyledMore>}

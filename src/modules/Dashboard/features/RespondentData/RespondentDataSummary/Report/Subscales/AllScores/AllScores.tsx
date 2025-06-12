@@ -1,22 +1,22 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
+import { useTranslation } from 'react-i18next';
 
+import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { useFeatureFlags } from 'shared/hooks';
 import {
   StyledBodyMedium,
   StyledFlexAllCenter,
   StyledFlexTopCenter,
   StyledFlexTopStart,
-  StyledHeadline,
+  StyledHeadlineSmall,
   theme,
   variables,
 } from 'shared/styles';
-import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
-import { useFeatureFlags } from 'shared/hooks';
 
 import { SubscaleLineChart } from '../../Charts/LineChart';
-import { AllScoresProps } from './AllScores.types';
 import { getSeveritySvg } from '../../Charts/LineChart/SubscaleLineChart/SubscaleLineChart.utils';
+import { AllScoresProps } from './AllScores.types';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
@@ -46,9 +46,9 @@ export const AllScores = ({
 
   return (
     <Box sx={{ mb: theme.spacing(2.4) }} data-testid={`${dataTestId}-container`}>
-      <StyledHeadline sx={{ mb: theme.spacing(0.8), color: variables.palette.on_surface }}>
+      <StyledHeadlineSmall sx={{ mb: theme.spacing(0.8), color: variables.palette.on_surface }}>
         {t('subscaleScores')}
-      </StyledHeadline>
+      </StyledHeadlineSmall>
       <StyledFlexTopStart>
         {!!latestFinalScore && (
           <>

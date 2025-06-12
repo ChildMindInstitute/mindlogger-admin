@@ -1,4 +1,4 @@
-import { styled, Box, OutlinedInput } from '@mui/material';
+import { Box, OutlinedInput, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
@@ -9,7 +9,7 @@ export const StyledTextField = styled(OutlinedInput)`
   height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) =>
     height || '4.8rem'};
   width: ${({ width }) => width || '49.8rem'};
-  background-color: ${({ background }) => background || variables.palette.outline_alfa8};
+  background-color: ${({ background }) => background || variables.palette.outline_alpha8};
   border-radius: 2.2rem;
 
   .MuiOutlinedInput-input {
@@ -28,7 +28,7 @@ export const StyledTextField = styled(OutlinedInput)`
   &.Mui-focused {
     border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_variant};
     padding-left: ${theme.spacing(1.3)};
-    background-color: ${({ background }) => background || variables.palette.outline_alfa12};
+    background-color: ${({ background }) => background || variables.palette.outline_alpha12};
 
     svg {
       fill: ${variables.palette.on_surface_variant};

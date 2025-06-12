@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
-import { StyledBodyLarge, StyledHeadline } from 'shared/styles';
+import { StyledBodyLarge, StyledHeadlineSmall } from 'shared/styles';
 
 import { StyledIcon, StyledToggleBtn, StyledToggleButtonGroup } from './ToggleButtonGroup.styles';
 import { ToggleButtonGroupProps, ToggleButtonVariants } from './ToggleButtonGroup.types';
@@ -57,7 +57,7 @@ export const ToggleButtonGroup = ({
             {isDefaultVariant ? (
               <span> {t(label)}</span>
             ) : (
-              <StyledHeadline>{t(label)}</StyledHeadline>
+              <StyledHeadlineSmall>{t(label)}</StyledHeadlineSmall>
             )}
           </Tooltip>
           {!isDefaultVariant && <StyledBodyLarge>{description}</StyledBodyLarge>}

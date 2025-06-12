@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { Tooltip } from 'shared/components/Tooltip';
-import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
+import { Tooltip } from 'shared/components/Tooltip';
+import { StyledHeadlineSmall, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { CompletedChartProps } from './CompletedChart.types';
@@ -19,7 +19,7 @@ export const CompletedChart = ({
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
-      <StyledHeadline
+      <StyledHeadlineSmall
         sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}
         data-testid={`${dataTestId}-headline`}
       >
@@ -31,7 +31,7 @@ export const CompletedChart = ({
             <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
           </span>
         </Tooltip>
-      </StyledHeadline>
+      </StyledHeadlineSmall>
       <ScatterChart
         minDate={minDate}
         maxDate={maxDate}

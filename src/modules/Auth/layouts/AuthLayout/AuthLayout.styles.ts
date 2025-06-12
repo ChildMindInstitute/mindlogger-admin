@@ -1,6 +1,10 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
+import {
+  StyledFlexAllCenter,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+} from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
@@ -16,7 +20,7 @@ export const StyledHeader = styled(Box)`
   z-index: ${theme.zIndex.fab};
 `;
 
-export const StyledLogoWrapper = styled(StyledFlexAllCenter)`
+export const StyledLogoWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
   background-color: ${variables.palette.primary};
   padding: ${theme.spacing(1, 2.4)};

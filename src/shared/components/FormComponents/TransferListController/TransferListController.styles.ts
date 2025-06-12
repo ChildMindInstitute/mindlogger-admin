@@ -19,7 +19,7 @@ export const StyledErrorContainer = styled(StyledBodySmall)`
   position: absolute;
   bottom: 0;
   left: 1.6rem;
-  color: ${variables.palette.semantic.error};
+  color: ${variables.palette.error};
 `;
 
 export const StyledTextField = styled(TextField)`
@@ -27,7 +27,7 @@ export const StyledTextField = styled(TextField)`
 
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.xxxl2};
-    background: ${variables.palette.outline_alfa8};
+    background: ${variables.palette.outline_alpha8};
 
     fieldset {
       border: none;

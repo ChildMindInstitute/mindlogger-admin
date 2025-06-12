@@ -1,12 +1,12 @@
 import { format, isValid, parseISO } from 'date-fns';
 
-import { variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats, Roles } from 'shared/consts';
+import { variables } from 'shared/styles';
 import { getNormalizedTimezoneDate, without } from 'shared/utils';
 
-import { ActivitiesFlowsWithColors } from './Schedule.types';
 import { iso8601DateOnlyRegex, iso8601DateTimeRegex } from './Schedule.const';
+import { ActivitiesFlowsWithColors } from './Schedule.types';
 
 export const getCount = (ids: ActivitiesFlowsWithColors, id: string) =>
   ids.filter((item) => item.id === id).length;
@@ -36,35 +36,35 @@ export const getEventStartDMYString = (isAlwaysAvailable: boolean, dateString?: 
 
 const {
   blue,
-  blue_alfa30,
+  blue_alpha30,
   brown,
-  brown_alfa30,
+  brown_alpha30,
   gray,
-  gray_alfa30,
+  gray_alpha30,
   green,
-  green_alfa30,
+  green_alpha30,
   orange,
-  orange_alfa30,
+  orange_alpha30,
   pink,
-  pink_alfa30,
+  pink_alpha30,
   yellow,
-  yellow_alfa30,
+  yellow_alpha30,
   purple,
-  purple_alfa30,
+  purple_alpha30,
   red,
-  red_alfa30,
+  red_alpha30,
 } = variables.palette;
 
 export const colorsArray = [
-  [blue, blue_alfa30],
-  [green, green_alfa30],
-  [orange, orange_alfa30],
-  [brown, brown_alfa30],
-  [yellow, yellow_alfa30],
-  [pink, pink_alfa30],
-  [gray, gray_alfa30],
-  [red, red_alfa30],
-  [purple, purple_alfa30],
+  [blue, blue_alpha30],
+  [green, green_alpha30],
+  [orange, orange_alpha30],
+  [brown, brown_alpha30],
+  [yellow, yellow_alpha30],
+  [pink, pink_alpha30],
+  [gray, gray_alpha30],
+  [red, red_alpha30],
+  [purple, purple_alpha30],
 ];
 
 export const getNextColor = (index: number) => {

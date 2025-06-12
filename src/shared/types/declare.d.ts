@@ -1,4 +1,6 @@
-declare module '*.ttf';
+declare module '*.woff';
+declare module '*.woff2';
+declare module '*.otf';
 declare module 'crypto-browserify';
 declare module 'react-big-calendar/lib/Month';
 declare module 'react-big-calendar/lib/utils/dates';

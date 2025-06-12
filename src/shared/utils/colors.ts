@@ -37,4 +37,4 @@ export const blendColorsNormal = (mainColor: string, overlayColor: string) => {
   }
 };
 
-export const tableRowHoverColor = variables.palette.on_surface_variant_alfa8;
+export const tableRowHoverColor = variables.palette.on_surface_variant_alpha8;

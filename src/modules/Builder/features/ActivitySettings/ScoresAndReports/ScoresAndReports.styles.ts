@@ -13,5 +13,6 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledConfigureBtn = styled(Button)`
-  font-size: ${variables.font.size.lg};
+  font-size: ${variables.font.size.body2};
+  line-height: ${variables.font.lineHeight.body2};
 `;

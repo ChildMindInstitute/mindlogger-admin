@@ -1,6 +1,6 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { theme, variables, StyledClearedButton } from 'shared/styles';
+import { StyledClearedButton, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledHeader = styled(Box, shouldForwardProp)`
@@ -38,8 +38,8 @@ export const StyledSelect = styled(Box)`
   align-items: center;
 
   .MuiTypography-root {
-    font-size: ${variables.font.size.lg};
-    line-height: ${variables.font.lineHeight.lg};
+    font-size: ${variables.font.size.body2};
+    line-height: ${variables.font.lineHeight.body2};
     font-weight: ${variables.font.weight.regular};
   }
 

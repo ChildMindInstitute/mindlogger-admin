@@ -1,16 +1,16 @@
-import { useState, MouseEvent, SyntheticEvent } from 'react';
+import { Autocomplete, Checkbox, Divider, FormControlLabel, ListItem, Paper } from '@mui/material';
+import { MouseEvent, SyntheticEvent, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import { Checkbox, FormControlLabel, Divider, Paper, ListItem, Autocomplete } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
 import { Chip, ChipShape } from 'shared/components/Chip';
 import { Svg } from 'shared/components/Svg';
+import { theme, variables } from 'shared/styles';
 
+import { StyledTagsContainer, StyledTextField } from './TagsAutocompleteController.styles';
 import {
   AutocompleteOption,
   TagsAutocompleteControllerProps,
 } from './TagsAutocompleteController.types';
-import { StyledTagsContainer, StyledTextField } from './TagsAutocompleteController.styles';
 
 export const TagsAutocompleteController = <
   FormType extends FieldValues,
@@ -82,7 +82,7 @@ export const TagsAutocompleteController = <
                 id="navigate-down"
                 width={24}
                 height={24}
-                fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+                fill={variables.palette[disabled ? 'on_surface_alpha38' : 'on_surface_variant']}
               />
             }
             renderInput={({ InputLabelProps: _InputLabelProps, ...params }) => (

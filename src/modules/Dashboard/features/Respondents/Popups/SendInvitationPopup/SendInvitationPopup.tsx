@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { useCreateSubjectInvitationMutation } from 'modules/Dashboard/api/apiSlice';
+import { useFormError } from 'modules/Dashboard/hooks';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage, Mixpanel, MixpanelEventType } from 'shared/utils';
-import { InputController } from 'shared/components/FormComponents';
-import { useFormError } from 'modules/Dashboard/hooks';
-import { useCreateSubjectInvitationMutation } from 'modules/Dashboard/api/apiSlice';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
-import { dataTestId, RESPONDENT_ALREADY_INVITED } from './SendInvitationPopup.const';
 import { SendInvitationSchema } from './SendInvitation.schema';
+import { dataTestId, RESPONDENT_ALREADY_INVITED } from './SendInvitationPopup.const';
+import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
 
 export const SendInvitationPopup = ({
   popupVisible,
@@ -97,10 +97,7 @@ export const SendInvitationPopup = ({
                 />
               </form>
               {hasCommonError && (
-                <StyledBodyLarge
-                  color={variables.palette.semantic.error}
-                  sx={{ m: theme.spacing(1, 0) }}
-                >
+                <StyledBodyLarge color={variables.palette.error} sx={{ m: theme.spacing(1, 0) }}>
                   {getErrorMessage(error)}
                 </StyledBodyLarge>
               )}

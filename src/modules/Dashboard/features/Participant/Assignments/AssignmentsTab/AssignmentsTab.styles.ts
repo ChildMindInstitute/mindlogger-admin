@@ -10,8 +10,8 @@ export const StyledToggleButton = styled(ToggleButton)`
   align-items: center;
   gap: ${theme.spacing(0.8)};
   transition: ${variables.transitions.bgColor};
-  font-size: ${variables.font.size.md};
-  line-height: ${variables.font.lineHeight.md};
+  font-size: ${variables.font.size.label1};
+  line-height: ${variables.font.lineHeight.label1};
   letter-spacing: ${variables.font.letterSpacing.sm};
 
   && {
@@ -23,7 +23,7 @@ export const StyledToggleButton = styled(ToggleButton)`
 
     &:hover,
     &:not(.Mui-selected):focus {
-      background-color: ${variables.palette.primary_alfa8};
+      background-color: ${variables.palette.primary_alpha8};
     }
 
     &.Mui-selected {

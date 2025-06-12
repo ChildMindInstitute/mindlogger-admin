@@ -12,10 +12,10 @@ export const StyledErrorText = styled(StyledLabelLarge)`
     marginBottom?.toString() ? theme.spacing(marginBottom) : theme.spacing(1.2)};
 
   && {
-    color: ${variables.palette.semantic.error};
+    color: ${variables.palette.error};
   }
 `;
 
 export const StyledBodyErrorText = styled(StyledBodyMedium)`
-  color: ${variables.palette.semantic.error};
+  color: ${variables.palette.error};
 `;

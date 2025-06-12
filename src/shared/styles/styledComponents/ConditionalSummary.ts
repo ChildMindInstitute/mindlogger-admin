@@ -1,8 +1,8 @@
 import { styled } from '@mui/material';
 
+import { SelectController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { SelectController } from 'shared/components/FormComponents';
 
 import { StyledFlexTopCenter } from './Flex';
 
@@ -46,6 +46,6 @@ export const StyledSummarySelectController = styled(SelectController)`
   }
 
   .MuiOutlinedInput-notchedOutline {
-    border-color: ${variables.palette.outline};
+    border-color: ${variables.palette.outline_variant};
   }
 `;

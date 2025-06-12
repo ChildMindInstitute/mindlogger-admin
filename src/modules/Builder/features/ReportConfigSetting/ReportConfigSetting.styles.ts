@@ -1,11 +1,11 @@
 import styled from '@emotion/styled/macro';
 
 import {
-  StyledFlexAllCenter,
   StyledClearedButton,
+  StyledFlexAllCenter,
   StyledFlexTopCenter,
-  variables,
   theme,
+  variables,
 } from 'shared/styles';
 
 export const StyledSvg = styled(StyledFlexAllCenter)`
@@ -27,7 +27,7 @@ export const StyledButton = styled(StyledClearedButton)`
 
   &:hover {
     ${StyledSvg} {
-      background-color: ${variables.palette.on_surface_alfa8};
+      background-color: ${variables.palette.on_surface_alpha8};
     }
   }
 `;
