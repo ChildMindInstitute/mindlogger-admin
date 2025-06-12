@@ -208,9 +208,6 @@ export const semanticPalette: Palette = {
 
   black: '#000',
   white: '#FFF',
-  white_alpha8: 'rgba(255, 255, 255, 0.08)',
-  white_alpha12: 'rgba(255, 255, 255, 0.12)',
-  white_alpha50: 'rgba(255, 255, 255, 0.5)',
   ...flattenPaletteObject({ ...basePalette.blue }, 'blue'),
   ...flattenPaletteObject({ ...basePalette.brown }, 'brown'),
   ...flattenPaletteObject({ ...basePalette.gray }, 'gray'),
@@ -250,6 +247,9 @@ const alphaVariantsPalette: Palette = {
 
   disabled: hexToRgba(semanticPalette.on_surface, 0.38),
 
+  white_alpha8: hexToRgba(semanticPalette.white, 0.08),
+  white_alpha12: hexToRgba(semanticPalette.white, 0.12),
+  white_alpha50: hexToRgba(semanticPalette.white, 0.5),
   blue_alpha30: hexToRgba(semanticPalette.blue, 0.3),
   brown_alpha30: hexToRgba(semanticPalette.brown, 0.3),
   gray_alpha30: hexToRgba(semanticPalette.gray, 0.3),
