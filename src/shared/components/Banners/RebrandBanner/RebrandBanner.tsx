@@ -8,7 +8,9 @@ import { auth } from 'redux/modules';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
-import { StyledImg } from './RebrandBanner.styles';
+import { StyledImg, StyledLink } from './RebrandBanner.styles';
+
+const CURIOUS_REBRAND_URL = 'https://www.gettingcurious.com/rebrand';
 
 /**
  * Returns a unique key for the rebrand banner dismiss state
@@ -96,14 +98,10 @@ export const RebrandBanner = (props: BannerProps) => {
           >
             <Trans i18nKey="rebrandBanner">
               <strong>We are rebranding! </strong>
-              <>Design updates are on the way — same great app, fresh new look. </>
-              {/* 
-								Uncomment once the URL is available
-								https://mindlogger.atlassian.net/browse/M2-9258
-							*/}
-              {/* <StyledLink href={CURIOUS_REBRAND_URL} target="_blank">
+              <>Design updates are on the way — same great app, fresh new look. Curious? </>
+              <StyledLink href={CURIOUS_REBRAND_URL} target="_blank">
                 Click to learn more.
-              </StyledLink> */}
+              </StyledLink>
             </Trans>
           </Banner>
         )}
