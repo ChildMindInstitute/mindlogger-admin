@@ -1,5 +1,7 @@
-import AffixLight from 'assets/fonts/Affix/Affix-Light.otf';
-import AffixMedium from 'assets/fonts/Affix/Affix-Medium.otf';
+import AffixLightOtf from 'assets/fonts/Affix/Affix-Light.otf';
+import AffixLight from 'assets/fonts/Affix/Affix-Light.woff2';
+import AffixMediumOtf from 'assets/fonts/Affix/Affix-Medium.otf';
+import AffixMedium from 'assets/fonts/Affix/Affix-Medium.woff2';
 import ModeratBold from 'assets/fonts/Moderat/Moderat-Bold.woff';
 import ModeratBold2 from 'assets/fonts/Moderat/Moderat-Bold.woff2';
 import ModeratRegular from 'assets/fonts/Moderat/Moderat-Regular.woff';
@@ -21,11 +23,11 @@ export const typography = `
   font-family: 'Affix';
   font-style: normal;
   font-weight: 500;
-  src: url(${AffixMedium}) format('opentype')
+  src: url(${AffixMedium}) format('woff2'), url(${AffixMediumOtf}) format('opentype')
 }
 @font-face {
   font-family: 'Affix';
   font-weight: 300;
-  src: url(${AffixLight}) format('opentype')
+  src: url(${AffixLight}) format('woff2'), url(${AffixLightOtf}) format('opentype')
 }
 `;
