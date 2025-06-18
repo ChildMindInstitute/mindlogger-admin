@@ -119,8 +119,8 @@ export const theme = createTheme({
     labelSmall: {
       fontFamily: variables.font.family.label,
       fontWeight: variables.font.weight.regular,
-      fontSize: variables.font.size.label1,
-      lineHeight: variables.font.lineHeight.label2,
+      fontSize: variables.font.size.label3,
+      lineHeight: variables.font.lineHeight.label3,
       letterSpacing: variables.font.letterSpacing.xxl,
     },
     bodyLarger: {
