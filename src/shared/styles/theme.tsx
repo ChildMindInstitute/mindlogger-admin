@@ -92,7 +92,7 @@ export const theme = createTheme({
       fontFamily: variables.font.family.title,
       fontWeight: variables.font.weight.regular,
       fontSize: variables.font.size.title3,
-      lineHeight: variables.font.lineHeight.title2,
+      lineHeight: variables.font.lineHeight.title3,
       letterSpacing: variables.font.letterSpacing.md,
     },
     titleSmall: {
