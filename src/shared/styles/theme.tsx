@@ -606,17 +606,17 @@ export const theme = createTheme({
       },
     },
     MuiChip: {
-      defaultProps: { size: 'small' },
+      defaultProps: { size: 'medium' },
       styleOverrides: {
         root: ({ ownerState: { color, variant, size } }) => ({
           borderRadius: variables.borderRadius.md,
-          fontSize: variables.font.size[size === 'small' ? 'body3' : 'body2'],
-          lineHeight: variables.font.lineHeight[size === 'small' ? 'body3' : 'body2'],
-          letterSpacing: variables.font.letterSpacing[size === 'small' ? 'lg' : 'md'],
+          fontSize: variables.font.size[size === 'small' ? 'label2' : 'label1'],
+          lineHeight: variables.font.lineHeight[size === 'small' ? 'label2' : 'label1'],
+          letterSpacing: variables.font.letterSpacing[size === 'small' ? 'xxl' : 'sm'],
           fontWeight: variables.font.weight.regular,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
-          padding: size === 'small' ? '0.2rem 0.8rem' : '0.4rem 0.8rem',
+          padding: size === 'small' ? '0.2rem 0.8rem' : '0.6rem 1.2rem',
           ...getChipStyleOverrides({ color, variant }),
 
           '.MuiChip-deleteIcon': { margin: 0 },
