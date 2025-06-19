@@ -14,7 +14,7 @@ export const StyledIcon = styled(Box)`
   svg {
     fill: ${({ variant }) =>
       variables.palette[
-        variant === ToggleButtonVariants.Large ? 'primary50' : 'on_secondary_container'
+        variant === ToggleButtonVariants.Large ? 'secondary50' : 'on_secondary_container'
       ]};
   }
 `;
