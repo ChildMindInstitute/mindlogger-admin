@@ -497,7 +497,6 @@ export const theme = createTheme({
           style: {
             backgroundColor: 'transparent',
             fontWeight: variables.font.weight.regular,
-            color: variables.palette.primary,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -545,8 +544,8 @@ export const theme = createTheme({
           props: { variant: 'tonal' },
           style: {
             fontWeight: variables.font.weight.regular,
-            background: variables.palette.secondaryContainer,
-            color: variables.palette.onSecondaryContainer,
+            background: variables.palette.secondary_container,
+            color: variables.palette.on_secondary_container,
 
             '&.Mui-disabled': {
               backgroundColor: variables.palette.on_surface_alpha12,
@@ -555,7 +554,7 @@ export const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover, &:focus, &:active': {
-                background: `linear-gradient(${variables.palette.on_surface_variant_alpha8}, ${variables.palette.on_surface_variant_alpha8}), ${variables.palette.secondaryContainer}`,
+                background: `linear-gradient(${variables.palette.on_surface_variant_alpha8}, ${variables.palette.on_surface_variant_alpha8}), ${variables.palette.secondary_container}`,
               },
 
               '&:hover': {
