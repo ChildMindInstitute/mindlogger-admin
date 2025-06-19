@@ -228,6 +228,8 @@ const alphaVariantsPalette: Palette = {
   primary_alpha8: hexToRgba(semanticPalette.primary40, 0.08),
   primary_alpha12: hexToRgba(semanticPalette.primary40, 0.12),
   primary_alpha16: hexToRgba(semanticPalette.primary40, 0.16),
+  on_primary_alpha8: hexToRgba(semanticPalette.on_primary, 0.08),
+  on_primary_alpha12: hexToRgba(semanticPalette.on_primary, 0.12),
   on_primary_container_alpha8: hexToRgba(semanticPalette.on_primary_container, 0.08),
 
   on_secondary_container_alpha8: hexToRgba(semanticPalette.on_secondary_container, 0.08),

@@ -389,8 +389,9 @@ export const theme = createTheme({
         {
           props: { variant: 'contained' },
           style: {
-            color: variables.palette.white,
             fontWeight: variables.font.weight.bold,
+            color: variables.palette.on_primary,
+            backgroundColor: variables.palette.primary,
 
             '&.Mui-disabled': {
               backgroundColor: variables.palette.on_surface_alpha12,
@@ -399,39 +400,39 @@ export const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                boxShadow: variables.boxShadow.buttonElevation1,
+                background: `linear-gradient(${variables.palette.on_primary_alpha8}, ${variables.palette.on_primary_alpha8}), ${variables.palette.primary}`,
               },
 
-              '&:active': {
-                boxShadow: 'none',
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.on_primary_alpha12}, ${variables.palette.on_primary_alpha12}), ${variables.palette.primary}`,
               },
-
-              '&:focus, &:active': {},
             },
           },
         },
         {
           props: { variant: 'outlined' },
           style: {
-            background: variables.palette.white,
-            border: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
-            color: variables.palette.primary,
             fontWeight: variables.font.weight.regular,
+            backgroundColor: 'transparent',
+            color: variables.palette.primary,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
 
             '&.Mui-disabled': {
-              color: variables.palette.disabled,
               borderColor: variables.palette.on_surface_alpha12,
+              color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
-              borderColor: variables.palette.outline_variant,
-
               '&:hover': {
                 backgroundColor: variables.palette.primary_alpha8,
               },
 
               '&:focus, &:active': {
                 backgroundColor: variables.palette.primary_alpha12,
+              },
+
+              '&:focus': {
+                borderColor: variables.palette.primary,
               },
             },
           },
@@ -439,16 +440,15 @@ export const theme = createTheme({
         {
           props: { variant: 'text' },
           style: {
-            background: 'transparent',
+            backgroundColor: 'transparent',
             fontWeight: variables.font.weight.regular,
+            color: variables.palette.primary,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
             },
 
             '&:not(.MuiButton-textError):not(.Mui-disabled)': {
-              color: variables.palette.primary,
-
               '&:hover': {
                 backgroundColor: variables.palette.primary_alpha8,
               },
@@ -457,25 +457,15 @@ export const theme = createTheme({
                 backgroundColor: variables.palette.primary_alpha12,
               },
             },
-
-            '&:not(.Mui-disabled)': {
-              '&:hover': {
-                borderColor: variables.palette.outline,
-              },
-
-              '&:focus': {
-                borderColor: 'currentColor',
-              },
-            },
           },
         },
         {
           props: { variant: 'elevated' },
           style: {
-            background: variables.palette.surface1,
-            color: variables.palette.primary,
             fontWeight: variables.font.weight.bold,
-            boxShadow: variables.boxShadow.buttonElevation1,
+            backgroundColor: variables.palette.surface1,
+            color: variables.palette.primary,
+            boxShadow: variables.boxShadow.light1,
 
             '&.Mui-disabled': {
               backgroundColor: variables.palette.on_surface_alpha12,
@@ -484,16 +474,12 @@ export const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.surface2,
-                boxShadow: variables.boxShadow.buttonElevation2,
+                background: `linear-gradient(${variables.palette.primary_alpha8}, ${variables.palette.primary_alpha8}), ${variables.palette.surface1}`,
+                boxShadow: variables.boxShadow.light2,
               },
 
               '&:focus, &:active': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.surface1,
-                  variables.palette.white_alpha12,
-                ),
-                boxShadow: variables.boxShadow.buttonElevation1,
+                background: `linear-gradient(${variables.palette.surface1_alpha12}, ${variables.palette.surface1_alpha12}), ${variables.palette.surface1}`,
               },
             },
           },
@@ -501,9 +487,9 @@ export const theme = createTheme({
         {
           props: { variant: 'tonal' },
           style: {
-            background: variables.palette.secondary_container,
-            color: variables.palette.on_secondary_container,
             fontWeight: variables.font.weight.regular,
+            background: variables.palette.secondaryContainer,
+            color: variables.palette.onSecondaryContainer,
 
             '&.Mui-disabled': {
               backgroundColor: variables.palette.on_surface_alpha12,
@@ -511,23 +497,12 @@ export const theme = createTheme({
             },
 
             '&:not(.Mui-disabled)': {
+              '&:hover, &:focus, &:active': {
+                background: `linear-gradient(${variables.palette.on_surface_variant_alpha8}, ${variables.palette.on_surface_variant_alpha8}), ${variables.palette.secondaryContainer}`,
+              },
+
               '&:hover': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alpha8,
-                ),
-                boxShadow: variables.boxShadow.buttonElevation1,
-              },
-
-              '&:active': {
-                boxShadow: 'none',
-              },
-
-              '&:focus, &:active': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alpha12,
-                ),
+                boxShadow: variables.boxShadow.light1,
               },
             },
           },
@@ -535,9 +510,9 @@ export const theme = createTheme({
         {
           props: { variant: 'textNeutral' },
           style: {
+            fontWeight: variables.font.weight.regular,
             background: 'transparent',
             color: variables.palette.on_surface_variant,
-            fontWeight: variables.font.weight.regular,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -560,12 +535,12 @@ export const theme = createTheme({
           border: 'none',
           borderRadius: variables.borderRadius.xxxl,
           boxShadow: 'none',
-          fontSize: variables.font.size.body3,
-          lineHeight: variables.font.lineHeight.body3,
-          letterSpacing: variables.font.letterSpacing.lg,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
+          letterSpacing: variables.font.letterSpacing.md,
           height: '4.8rem',
           minWidth: '10rem',
-          padding: '1rem 2rem',
+          padding: '1.2rem 2.4rem',
           textTransform: 'none',
           gap: '0.8rem',
 
