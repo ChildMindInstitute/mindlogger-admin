@@ -13,7 +13,7 @@ export const StyledPopover = styled(Popover)`
     font-size: ${variables.font.size.label1};
     line-height: ${variables.font.lineHeight.label1};
     letter-spacing: ${variables.font.letterSpacing.lg};
-    font-family: 'Atkinson', helvetica, arial, sans-serif;
+    font-family: 'Moderat', helvetica, arial, sans-serif;
     background-color: transparent;
     border: none;
     border-radius: unset;

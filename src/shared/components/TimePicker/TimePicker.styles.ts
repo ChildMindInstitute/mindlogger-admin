@@ -64,7 +64,7 @@ export const StyledTimePickerWrapper = styled(Box)`
             justify-content: start;
             height: auto;
             padding: ${theme.spacing(1, 1.6)};
-            font-family: 'Atkinson', helvetica, arial, sans-serif;
+            font-family: 'Moderat', helvetica, arial, sans-serif;
             font-weight: ${variables.font.weight.regular};
             font-size: ${variables.font.size.body2};
             line-height: ${variables.font.lineHeight.body2};

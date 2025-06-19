@@ -450,7 +450,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       .rbc-button-link:not(.rbc-show-more) {
         min-width: 2.5rem;
         height: 2.5rem;
-        font-family: 'Atkinson', helvetica, arial, sans-serif;
+        font-family: 'Moderat', helvetica, arial, sans-serif;
         font-size: ${variables.font.size.label1};
         line-height: ${variables.font.lineHeight.label1};
         letter-spacing: ${variables.font.letterSpacing.lg};
