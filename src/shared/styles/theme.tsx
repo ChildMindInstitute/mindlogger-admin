@@ -504,6 +504,8 @@ export const theme = createTheme({
             },
 
             '&:not(.MuiButton-textError):not(.Mui-disabled)': {
+              color: variables.palette.primary,
+
               '&:hover': {
                 backgroundColor: variables.palette.primary_alpha8,
               },
@@ -595,7 +597,7 @@ export const theme = createTheme({
           letterSpacing: variables.font.letterSpacing.md,
           height: '4.8rem',
           minWidth: '10rem',
-          padding: '1.2rem 2.4rem',
+          padding: '1rem 2.4rem',
           textTransform: 'none',
           gap: '0.8rem',
 
