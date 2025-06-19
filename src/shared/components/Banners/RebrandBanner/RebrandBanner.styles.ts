@@ -6,6 +6,6 @@ export const StyledImg = styled('img')`
 `;
 
 export const StyledLink = styled(Link)`
-  color: '#B6DEFF';
-  text-decoration-color: '#B6DEFF';
+  color: #b6deff;
+  text-decoration-color: #b6deff;
 `;
