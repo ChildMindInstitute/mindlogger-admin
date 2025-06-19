@@ -1049,6 +1049,13 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          color: variables.palette.primary,
+        },
+      },
+    },
   },
   palette: {
     background: {
