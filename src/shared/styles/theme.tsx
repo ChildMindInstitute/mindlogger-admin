@@ -262,6 +262,9 @@ export const theme = createTheme({
         a: {
           color: variables.palette.secondary,
         },
+        input: {
+          fontFamily: variables.font.family.body,
+        },
       }),
     },
     MuiDialog: {
