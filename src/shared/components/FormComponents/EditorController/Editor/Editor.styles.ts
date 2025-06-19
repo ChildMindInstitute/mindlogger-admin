@@ -38,6 +38,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
     height: auto;
+    min-height: 38px;
 
     & .md-editor-toolbar {
       min-width: auto;
@@ -61,11 +62,20 @@ export const StyledMdEditor = styled(MarkDownEditor)`
           fill: ${variables.palette.on_surface_variant};
         }
       }
+
+      & .md-editor-divider {
+        background-color: ${variables.palette.gray};
+        height: 24px;
+      }
     }
   }
 
   & .md-editor-dropdown-overlay {
     margin-top: 0;
+  }
+
+  & .md-editor-preview-wrapper {
+    font-family: ${variables.font.family.body};
   }
 `;
 
