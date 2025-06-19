@@ -1075,9 +1075,9 @@ export const theme = createTheme({
       main: variables.palette.yellow,
     },
     error: {
-      main: variables.palette.red,
-      dark: blendColorsNormal(variables.palette.red, variables.palette.white_alpha8),
-      light: blendColorsNormal(variables.palette.red, variables.palette.white_alpha12),
+      main: variables.palette.error,
+      dark: blendColorsNormal(variables.palette.error, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.error, variables.palette.white_alpha12),
     },
   },
 });
