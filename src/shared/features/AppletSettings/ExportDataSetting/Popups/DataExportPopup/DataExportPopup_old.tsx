@@ -12,7 +12,10 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
 import { DateFormats } from 'shared/consts';
-import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import {
+  ExportDataExported,
+  ExportDataFormValues,
+} from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
   ExecuteAllPagesOfExportData,
@@ -38,6 +41,7 @@ import {
   MixpanelProps,
   sendLogFile,
 } from 'shared/utils';
+import { EHRDataExporter } from 'shared/utils/exportData/exporters/EHRDataExporter';
 import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
@@ -101,6 +105,7 @@ export const DataExportPopup = ({
         setDataIsExporting(true);
 
         const {
+          dataExported,
           dateType,
           fromDate: formFromDate,
           toDate: formToDate,
@@ -110,11 +115,16 @@ export const DataExportPopup = ({
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
         const toDate = getFormattedToDate({ dateType, formToDate });
 
+        const includeEhr =
+          featureFlags.enableEhrHealthData !== 'unavailable' &&
+          dataExported === ExportDataExported.ResponsesAndEhrData;
+
         const body = {
           appletId,
           targetSubjectIds,
           fromDate,
           toDate,
+          includeEhr,
         };
         const firstPageResponse = await getExportDataApi(body);
         const { result: firstPageData, count: exportDataTotalCount = 0 } = firstPageResponse.data;
@@ -194,6 +204,23 @@ export const DataExportPopup = ({
               flowIds: filters?.flowId ? [filters.flowId] : undefined,
             });
           }
+        }
+
+        if (includeEhr) {
+          const activityId = filters?.activityId;
+          const flowId = filters?.flowId;
+          const respondentId = filters?.sourceSubjectId;
+          const subjectId = targetSubjectIds ?? filters?.targetSubjectId;
+
+          await new EHRDataExporter().exportData({
+            appletId,
+            fromDate,
+            toDate,
+            activityIds: activityId ? [activityId] : undefined,
+            flowIds: flowId ? [flowId] : undefined,
+            respondentIds: respondentId ? [respondentId] : undefined,
+            subjectIds: subjectId ? [subjectId] : undefined,
+          });
         }
 
         handlePopupClose();

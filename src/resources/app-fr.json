@@ -463,6 +463,11 @@
   "dashboard": "Tableau de bord",
   "dataExport": {
     "title": "Export de données",
+    "data": "Données",
+    "dataExported": {
+      "responsesOnly": "Réponses uniquement",
+      "responsesAndEhrData": "Réponses & données DSE"
+    },
     "supplementaryFiles": {
       "description": "Fichiers supplémentaires :",
       "includes": {
@@ -600,7 +605,6 @@
   "exportData": "Exporter les données",
   "exportDataForApplet": "Exporter les données pour {{name}}",
   "exportDefaultSchedule": "Exporter le programme par défaut",
-  "exportDescription": "Choisissez ce que vous souhaitez inclure :",
   "exportDateRange": {
     "allTime": "Tout le temps",
     "last24h": "Dernières 24 heures",
@@ -1262,7 +1266,7 @@
   "quote": "Citation",
   "random": "Aléatoire",
   "rangeOfScores": "Plage possible de scores",
-  "rebrandBanner": "<0>Nous changeons de marque!</0> <1>Des mises à jour de design sont en cours — même application géniale, nouveau look frais.</1>",
+  "rebrandBanner": "<0>Nous changeons de marque! </0> <1>Des mises à jour de design sont en cours — même application géniale, nouveau look frais. Curieux? </1><2>Cliquez pour en savoir plus.</2>",
   "record": "Enregistrer",
   "recordAudio": "Enregistrer <br /> Audio",
   "redo": "Refaire",
