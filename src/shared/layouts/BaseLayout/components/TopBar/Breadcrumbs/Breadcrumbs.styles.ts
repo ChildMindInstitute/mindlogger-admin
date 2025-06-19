@@ -12,8 +12,8 @@ const commonCenterStyles = `
 `;
 
 const commonImgStyles = `
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: ${variables.borderRadius.xs};
 `;
 
@@ -38,7 +38,12 @@ export const StyledLink = styled(Link)`
   height: 4rem;
 
   &:hover {
-    background-color: ${variables.palette.on_surface_variant_alpha8};
+    background-color: ${variables.palette.on_surface_alpha8};
+  }
+
+  &:focus,
+  &:active {
+    background-color: ${variables.palette.on_surface_alpha12};
   }
 `;
 
