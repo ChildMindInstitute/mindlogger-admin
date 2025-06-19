@@ -797,35 +797,35 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiPaper-root': {
-            backgroundColor: variables.palette.surface,
-            borderRadius: variables.borderRadius.md,
-            border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
-            boxShadow: variables.boxShadow.soft,
+            backgroundColor: variables.palette.surface1,
+            borderRadius: variables.borderRadius.lg,
+            boxShadow: variables.boxShadow.light2,
             marginTop: '0.4rem',
-            padding: '0.8rem 0',
+            padding: '0.8rem 0.4rem',
           },
           '.MuiList-root': {
             padding: '0',
           },
           '.MuiMenuItem-root': {
-            padding: '1.2rem 2rem',
+            padding: '1.6rem 2.4rem 1.6rem 1.6rem ',
             transition: variables.transitions.bgColor,
+            borderRadius: variables.borderRadius.xxs,
             // Enable hover events (for tooltips) without enabling click events
             '&.Mui-disabled:not(:active)': {
               pointerEvents: 'auto',
             },
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alpha8,
+              backgroundColor: variables.palette.surface_variant,
             },
           },
           '.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: variables.palette.on_surface_variant_alpha8,
+            backgroundColor: variables.palette.surface_variant,
             '&:focus': {
-              backgroundColor: variables.palette.on_surface_variant_alpha8,
+              backgroundColor: variables.palette.surface_variant,
             },
             '&:hover': {
               backgroundColor: blendColorsNormal(
-                variables.palette.on_surface_variant_alpha8,
+                variables.palette.surface_variant,
                 variables.palette.on_surface_alpha8,
               ),
             },
