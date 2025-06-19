@@ -495,8 +495,8 @@ export const theme = createTheme({
         {
           props: { variant: 'text' },
           style: {
-            backgroundColor: 'transparent',
             fontWeight: variables.font.weight.regular,
+            backgroundColor: 'transparent',
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,

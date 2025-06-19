@@ -1,16 +1,16 @@
 import { styled } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
-import { variables } from 'shared/styles/variables';
 import { theme } from 'shared/styles';
 import { StyledClearedButton as ClearedButton } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 import { ChipShape } from './Chip.types';
 
 export const StyledChip = styled(Chip)`
   border-radius: ${({ shape }: { shape: ChipShape }) =>
     ({
-      [ChipShape.Rounded]: variables.borderRadius.xxl,
+      [ChipShape.Rounded]: variables.borderRadius.xxxl2,
       [ChipShape.Rectangular]: variables.borderRadius.md,
       [ChipShape.RectangularLarge]: variables.borderRadius.xs,
     })[shape]};
