@@ -279,8 +279,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.MuiTypography-root': {
-            fontSize: variables.font.size.headline2,
-            lineHeight: variables.font.lineHeight.headline2,
+            fontSize: variables.font.size.headline3,
+            lineHeight: variables.font.lineHeight.headline3,
             fontWeight: variables.font.weight.regular,
             padding: '6.4rem 3.2rem 2.8rem',
           },
