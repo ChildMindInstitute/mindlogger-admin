@@ -259,6 +259,9 @@ export const theme = createTheme({
         '.md-editor-dropdown-hidden': {
           zIndex: -(theme.zIndex.modal - 1),
         },
+        a: {
+          color: variables.palette.secondary,
+        },
       }),
     },
     MuiDialog: {
