@@ -1,59 +1,59 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FlowChip, Modal, Spinner } from 'shared/components';
-import { Activity, workspaces } from 'redux/modules';
-import {
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledHeadline,
-  theme,
-  StyledActivityThumbnailContainer,
-  StyledActivityThumbnailImg,
-  StyledErrorText,
-} from 'shared/styles';
 import { createTemporaryMultiInformantRelationApi, ParticipantActivityOrFlow } from 'api';
-import {
-  MixpanelProps,
-  Mixpanel,
-  checkIfDashboardAppletActivitiesUrlPassed,
-  checkIfDashboardAppletParticipantDetailsUrlPassed,
-  checkIfFullAccess,
-  getErrorMessage,
-  MixpanelEventType,
-  TakeNowDialogClosedEvent,
-  MultiInformantStartActivityClickEvent,
-  ProvidingResponsesDropdownOpenedEvent,
-  ProvidingResponsesSelectionChangedEvent,
-  OwnResponsesCheckboxToggledEvent,
-  InputtingResponsesDropdownOpenedEvent,
-  InputtingResponsesSelectionChangedEvent,
-  ResponsesAboutDropdownOpenedEvent,
-  ResponsesAboutSelectionChangedEvent,
-  TakeNowClickEvent,
-  addFeatureToEvent,
-  MixpanelFeature,
-} from 'shared/utils';
-import { useAsync, useLogout } from 'shared/hooks';
-import { HydratedActivityFlow } from 'modules/Dashboard/types';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   ActivityFlowThumbnail,
   ParticipantDropdownOption,
   SearchResultUserTypes,
   useParticipantDropdown,
 } from 'modules/Dashboard/components';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
+import { Activity, workspaces } from 'redux/modules';
+import { FlowChip, Modal, Spinner } from 'shared/components';
+import { useAsync, useLogout } from 'shared/hooks';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import {
+  StyledActivityThumbnailContainer,
+  StyledActivityThumbnailImg,
+  StyledErrorText,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledHeadlineSmall,
+  theme,
+} from 'shared/styles';
+import {
+  addFeatureToEvent,
+  checkIfDashboardAppletActivitiesUrlPassed,
+  checkIfDashboardAppletParticipantDetailsUrlPassed,
+  checkIfFullAccess,
+  getErrorMessage,
+  InputtingResponsesDropdownOpenedEvent,
+  InputtingResponsesSelectionChangedEvent,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelFeature,
+  MixpanelProps,
+  MultiInformantStartActivityClickEvent,
+  OwnResponsesCheckboxToggledEvent,
+  ProvidingResponsesDropdownOpenedEvent,
+  ProvidingResponsesSelectionChangedEvent,
+  ResponsesAboutDropdownOpenedEvent,
+  ResponsesAboutSelectionChangedEvent,
+  TakeNowClickEvent,
+  TakeNowDialogClosedEvent,
+} from 'shared/utils';
 
+import { TakeNowDropdown } from './TakeNowDropdown';
 import {
   OpenTakeNowModal,
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { TakeNowDropdown } from './TakeNowDropdown';
 
 type TakeNowData = {
   url: URL;
@@ -371,7 +371,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           <StyledFlexTopCenter gap={2.4}>
             <StyledActivityThumbnailContainer>{thumbnail}</StyledActivityThumbnailContainer>
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: 0.8 }}>
-              <StyledHeadline>{activityOrFlow.name}</StyledHeadline>
+              <StyledHeadlineSmall>{activityOrFlow.name}</StyledHeadlineSmall>
               {isFlow && <FlowChip />}
             </StyledFlexTopCenter>
           </StyledFlexTopCenter>

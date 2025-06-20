@@ -5,8 +5,8 @@ import { FileUploader, FileUploaderUiType, Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { invalidFileFormatError, uploadLabel } from './ImportSequencesPopup.const';
-import { ImportSequencesPopupProps, ImportSequencesType } from './ImportSequencesPopup.types';
 import { useImportSequence } from './ImportSequencesPopup.hooks';
+import { ImportSequencesPopupProps, ImportSequencesType } from './ImportSequencesPopup.types';
 import { getScreens } from './ImportSequencesPopup.utils';
 
 export const ImportSequencesPopup = ({
@@ -39,7 +39,7 @@ export const ImportSequencesPopup = ({
       uiType={FileUploaderUiType.Secondary}
     />,
     <StyledBodyLarge>{t('flankerRound.successfullyUploaded')}</StyledBodyLarge>,
-    <StyledBodyLarge color={variables.palette.semantic.error}>
+    <StyledBodyLarge color={variables.palette.error}>
       {t(`flankerRound.${isUpload ? 'uploadError' : 'updateError'}`)}
     </StyledBodyLarge>,
   ];

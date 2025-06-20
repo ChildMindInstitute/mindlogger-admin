@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { ChangeEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { StyledErrorText, variables } from 'shared/styles';
@@ -39,7 +39,7 @@ export const CheckboxController = <T extends FieldValues>({
             control={
               <Checkbox
                 {...checkboxProps}
-                sx={{ color: error && variables.palette.semantic.error, ...checkboxProps.sx }}
+                sx={{ color: error && variables.palette.error, ...checkboxProps.sx }}
                 disabled={disabled}
                 checked={(isInversed ? !value : value) ?? false}
                 onChange={(event) => {

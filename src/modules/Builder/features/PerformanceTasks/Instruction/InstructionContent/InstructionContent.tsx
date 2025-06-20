@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
-import { EditorController, EditorUiType } from 'shared/components/FormComponents';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { EditorController, EditorUiType } from 'shared/components/FormComponents';
+import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { InstructionContentProps } from './InstructionContent.types';
 
@@ -27,7 +27,7 @@ export const InstructionContent = ({
         data-testid={`${dataTestid}-instruction`}
       />
       {hasError && (
-        <StyledBodyMedium sx={{ pt: theme.spacing(0.5) }} color={variables.palette.semantic.error}>
+        <StyledBodyMedium sx={{ pt: theme.spacing(0.5) }} color={variables.palette.error}>
           {t('fillInAllRequired')}
         </StyledBodyMedium>
       )}

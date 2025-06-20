@@ -1,6 +1,6 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { theme, variables, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import { StyledClearedButton, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledCollapseBtn = styled(StyledFlexTopCenter)`
   width: 100%;
@@ -25,7 +25,7 @@ export const StyledChildren = styled(Box)`
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter)`
-  font-size: ${variables.font.size.md};
+  font-size: ${variables.font.size.label1};
   line-height: 2rem;
   font-weight: ${variables.font.weight.regular};
   margin-top: ${theme.spacing(2.4)};

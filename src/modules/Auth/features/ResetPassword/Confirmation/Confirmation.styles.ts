@@ -1,8 +1,8 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
+import { StyledHeadlineSmall } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledHeadline } from 'shared/styles/styledComponents';
 
 export const StyledConfirmation = styled(Box)`
   width: 47.3rem;
@@ -13,6 +13,6 @@ export const StyledConfirmation = styled(Box)`
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;
 
-export const StyledHeader = styled(StyledHeadline)`
+export const StyledHeader = styled(StyledHeadlineSmall)`
   margin: ${theme.spacing(0, 0, 0.8)};
 `;

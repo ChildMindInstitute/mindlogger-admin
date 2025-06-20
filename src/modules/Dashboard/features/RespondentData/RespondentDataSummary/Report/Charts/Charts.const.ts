@@ -32,7 +32,7 @@ export const commonLabelsProps = {
   padding: 25,
   color: variables.palette.on_surface,
   font: {
-    family: 'Atkinson',
+    family: 'Moderat',
     size: 14,
   },
   useBorderRadius: true,

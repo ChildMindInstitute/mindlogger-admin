@@ -1,21 +1,21 @@
-import { useState } from 'react';
 import { Box, Button } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { exportTemplate, Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
+import { exportTemplate, Mixpanel, MixpanelCalendarEvent, MixpanelProps } from 'shared/utils';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
+import { useSchedule } from '../ScheduleProvider/ScheduleProvider.hooks';
 import { ExpandedList } from './ExpandedList';
 import { defaultExportHeader } from './Legend.const';
+import { useExpandedLists } from './Legend.hooks';
 import { StyledLegend } from './Legend.styles';
 import { LegendProps } from './Legend.types';
-import { useExpandedLists } from './Legend.hooks';
 import { ScheduleToggle } from './ScheduleToggle';
-import { useSchedule } from '../ScheduleProvider/ScheduleProvider.hooks';
 
 export const Legend = ({
   legendEvents,
@@ -78,7 +78,7 @@ export const Legend = ({
           <Box
             component="p"
             data-testid={`${dataTestid}-schedule`}
-            sx={{ fontSize: variables.font.size.xl, m: 0, py: 0.7 }}
+            sx={{ fontSize: variables.font.size.title1, m: 0, py: 0.7 }}
           >
             {hasIndividualSchedule ? t('individualSchedule') : t('defaultSchedule')}
           </Box>

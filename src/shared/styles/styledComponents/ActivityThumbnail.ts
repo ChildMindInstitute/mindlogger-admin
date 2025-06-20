@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import { variables } from 'shared/styles';
+import { variables } from 'shared/styles/variables';
 
 export const StyledActivityThumbnailContainer = styled('div')`
   display: flex;

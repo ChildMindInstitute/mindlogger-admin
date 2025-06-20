@@ -1,10 +1,10 @@
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 
-import { Svg } from 'shared/components/Svg';
-import { theme, variables, StyledBodyLarge } from 'shared/styles';
 import { page } from 'resources';
+import { Svg } from 'shared/components/Svg';
+import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { SettingParam } from 'shared/utils/urlGenerator';
 
 import { StyledSvg } from '../ReportConfigSetting.styles';
@@ -21,7 +21,7 @@ export const ServerNotConfigured = ({
     <>
       <StyledBodyLarge
         sx={{ margin: theme.spacing(2.4, 0, 4.8, 0) }}
-        color={variables.palette.semantic.error}
+        color={variables.palette.error}
       >
         {t('configureServerForReport')}
       </StyledBodyLarge>

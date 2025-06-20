@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useId, useState } from 'react';
 import { State } from '@popperjs/core';
 import maxSize from 'popper-max-size-modifier';
+import { useCallback, useEffect, useId, useState } from 'react';
 
-import { TooltipProps } from './Tooltip.types';
 import { StyledTooltip } from './Tooltip.styles';
+import { TooltipProps } from './Tooltip.types';
 
 const applyMaxSize = {
   name: 'applyMaxSize' as const,
@@ -101,7 +101,7 @@ export const Tooltip = ({
       title={tooltipTitle}
       sx={{
         '.MuiTooltip-tooltip': {
-          maxWidth: maxWidth ?? '24rem',
+          maxWidth: maxWidth ?? '25rem',
         },
       }}
     >

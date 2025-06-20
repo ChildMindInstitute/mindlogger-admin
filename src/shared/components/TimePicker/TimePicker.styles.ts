@@ -1,4 +1,4 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
@@ -64,15 +64,15 @@ export const StyledTimePickerWrapper = styled(Box)`
             justify-content: start;
             height: auto;
             padding: ${theme.spacing(1, 1.6)};
-            font-family: 'Atkinson', helvetica, arial, sans-serif;
+            font-family: 'Moderat', helvetica, arial, sans-serif;
             font-weight: ${variables.font.weight.regular};
-            font-size: ${variables.font.size.lg};
-            line-height: ${variables.font.lineHeight.lg};
+            font-size: ${variables.font.size.body2};
+            line-height: ${variables.font.lineHeight.body2};
             color: ${variables.palette.on_surface};
             border-radius: ${variables.borderRadius.xs};
 
             &:hover {
-              background-color: ${variables.palette.on_secondary_container_alfa8};
+              background-color: ${variables.palette.on_secondary_container_alpha8};
             }
 
             &.react-datepicker__time-list-item--disabled {

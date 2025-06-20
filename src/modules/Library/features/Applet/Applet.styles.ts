@@ -2,11 +2,11 @@ import styled from '@emotion/styled/macro';
 import { Box, Button } from '@mui/material';
 
 import {
-  theme,
-  variables,
-  StyledFlexWrap,
   StyledClearedButton,
   StyledFlexAllCenter,
+  StyledFlexWrap,
+  theme,
+  variables,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -47,7 +47,7 @@ export const StyledAppletKeywordsContainer = styled(StyledFlexWrap)`
 `;
 
 export const StyledAppletKeyword = styled(Button, shouldForwardProp)`
-  background-color: ${variables.palette.on_surface_alfa8};
+  background-color: ${variables.palette.on_surface_alpha8};
   color: ${variables.palette.on_surface_variant};
   padding: ${theme.spacing(0.2, 1)};
   height: auto;
@@ -60,7 +60,7 @@ export const StyledAppletKeyword = styled(Button, shouldForwardProp)`
     &:hover,
     &:active,
     &:focus {
-      background-color: ${variables.palette.on_surface_alfa8};
+      background-color: ${variables.palette.on_surface_alpha8};
       opacity: ${({ hasSearch }) => (hasSearch ? '0.85' : '1')};
     }
   }
@@ -98,7 +98,7 @@ export const StyledExpandedButton = styled(StyledClearedButton)`
 
   &:hover {
     ${StyledSvgContainer} {
-      background-color: ${variables.palette.on_surface_alfa8};
+      background-color: ${variables.palette.on_surface_alpha8};
     }
 
     &.MuiButton-text {

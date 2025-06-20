@@ -1,14 +1,14 @@
-import { Context } from 'chartjs-plugin-datalabels';
 import { ChartDataset, LinearScale, ScriptableTooltipContext } from 'chart.js';
+import { Context } from 'chartjs-plugin-datalabels';
 import { format, isEqual } from 'date-fns';
 
-import { DateFormats } from 'shared/consts';
-import { variables } from 'shared/styles';
 import { DEFAULT_DATE_MIN } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.const';
 import { DEFAULT_DATE_MAX } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.const';
+import { DateFormats } from 'shared/consts';
+import { variables } from 'shared/styles';
 
-import { locales, POINT_RADIUS_DEFAULT, LABEL_WIDTH_Y } from '../../Charts.const';
-import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
+import { LABEL_WIDTH_Y, locales, POINT_RADIUS_DEFAULT } from '../../Charts.const';
+import { getTimeConfig, getTimelineStepSize } from '../../Charts.utils';
 import { DataProps } from './TimePickerLineChart.types';
 
 export const getOptions = (
@@ -73,7 +73,7 @@ export const getOptions = (
           stepSize: 1,
           color: variables.palette.on_surface,
           font: {
-            family: 'Atkinson',
+            family: 'Moderat',
             size: 14,
           },
         },

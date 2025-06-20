@@ -1,7 +1,8 @@
-import { ChangeEvent, DragEvent, useEffect, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -12,13 +13,12 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Svg } from 'shared/components/Svg';
 
 import { DownloadTemplate } from './DownloadTemlate';
-import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
-import { FileUploaderProps, ImportedFile, FileUploaderUiType } from './FileUploader.types';
-import { importTable, getDropText, getAcceptedFormats } from './FileUploader.utils';
 import { MimeType } from './FileUploader.const';
+import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
+import { FileUploaderProps, FileUploaderUiType, ImportedFile } from './FileUploader.types';
+import { getAcceptedFormats, getDropText, importTable } from './FileUploader.utils';
 
 export const FileUploader = ({
   uploadLabel,
@@ -157,7 +157,7 @@ export const FileUploader = ({
         )}
       </Box>
       {error && (
-        <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
+        <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.error}>
           {error}
         </StyledTitleSmall>
       )}

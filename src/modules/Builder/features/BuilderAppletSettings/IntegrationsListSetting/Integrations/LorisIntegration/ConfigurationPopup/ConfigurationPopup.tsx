@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Control, FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
+import { Control, FieldValues, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { applet, banners } from 'shared/state';
-import { Modal } from 'shared/components/Modal';
+import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
+import { IntegrationTypes } from 'shared/consts';
+import { applet, banners } from 'shared/state';
 import {
   StyledBodyMedium,
   StyledModalWrapper,
@@ -15,17 +17,15 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useAppDispatch } from 'redux/store';
-import { IntegrationTypes } from 'shared/consts';
 
+import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.utils';
+import { configurationFormSchema } from './ConfigurationPopup.schema';
 import {
   ConfigurationForm,
   ConfigurationPopupProps,
   ConfigurationsSteps,
 } from './ConfigurationPopup.types';
-import { configurationFormSchema } from './ConfigurationPopup.schema';
 import { getScreens } from './ConfigurationPopup.utils';
-import { fetchLorisProjects, saveLorisProject } from '../LorisIntegration.utils';
 
 export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) => {
   const { t } = useTranslation();
@@ -170,7 +170,7 @@ export const ConfigurationPopup = ({ open, onClose }: ConfigurationPopupProps) =
         </FormProvider>
         {error && (
           <StyledBodyMedium
-            sx={{ color: variables.palette.semantic.error, mt: theme.spacing(1.8) }}
+            sx={{ color: variables.palette.error, mt: theme.spacing(1.8) }}
             data-testid="upload-data-popup-error"
           >
             {error}

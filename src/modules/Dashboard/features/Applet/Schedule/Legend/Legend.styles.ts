@@ -1,6 +1,6 @@
-import { styled, Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledLegend = styled(Box)`
   padding: ${theme.spacing(1.2, 1.6, 0)};
@@ -39,5 +39,5 @@ export const StyledCreateBtn = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledDeactivated = styled(StyledFlexTopCenter)`
-  color: ${variables.palette.on_surface_alfa38};
+  color: ${variables.palette.on_surface_alpha38};
 `;

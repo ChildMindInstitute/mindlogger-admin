@@ -1,15 +1,15 @@
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { StyledBodyMedium, StyledTitleMedium, theme, variables } from 'shared/styles';
-import { UiType } from 'shared/components/Table';
 import { LorisUserAnswerVisit } from 'modules/Builder/api';
+import { UiType } from 'shared/components/Table';
+import { StyledBodyMedium, StyledTitleMedium, theme, variables } from 'shared/styles';
 
-import { findVisitErrorMessage, getHeadCells, getActivitiesRows } from './Visits.utils';
 import { StyledTable } from './Visits.styles';
 import { HandleChangeVisitProps, VisitsProps } from './Visits.types';
+import { findVisitErrorMessage, getActivitiesRows, getHeadCells } from './Visits.utils';
 
 export const Visits = ({ visitsList }: VisitsProps) => {
   const { t } = useTranslation();
@@ -93,7 +93,7 @@ export const Visits = ({ visitsList }: VisitsProps) => {
             />
             {error && (
               <StyledBodyMedium
-                sx={{ color: variables.palette.semantic.error, mt: theme.spacing(0.8) }}
+                sx={{ color: variables.palette.error, mt: theme.spacing(0.8) }}
                 data-testid="upload-data-popup-error"
               >
                 {error}

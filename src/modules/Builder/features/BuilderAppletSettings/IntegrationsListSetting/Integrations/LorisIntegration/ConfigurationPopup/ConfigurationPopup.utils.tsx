@@ -49,7 +49,7 @@ export const getScreens = ({
             isLabelNeedTranslation={false}
           />
         ) : (
-          <StyledTitleMedium sx={{ color: variables.palette.semantic.error }}>
+          <StyledTitleMedium sx={{ color: variables.palette.error }}>
             <Trans i18nKey="loris.projectsEmptyState">
               We were unable to access the Projects list for the selected account, likely because it
               is empty.

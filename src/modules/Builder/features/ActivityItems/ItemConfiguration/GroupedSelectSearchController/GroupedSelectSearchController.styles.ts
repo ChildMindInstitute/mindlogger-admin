@@ -1,4 +1,4 @@
-import { styled, MenuItem, ListItem, Select } from '@mui/material';
+import { ListItem, MenuItem, Select, styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
@@ -14,8 +14,8 @@ export const StyledGroupName = styled(ListItem, shouldForwardProp)`
   padding: ${theme.spacing(2, 2, 1.2)};
   border-top: ${borderWidth.md} solid ${palette.surface_variant};
   background-color: transparent;
-  font-size: ${size.md};
-  line-height: ${lineHeight.md};
+  font-size: ${size.body3};
+  line-height: ${lineHeight.body3};
   font-weight: ${weight.bold};
   text-transform: uppercase;
   color: ${palette.outline};

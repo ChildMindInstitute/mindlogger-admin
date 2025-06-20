@@ -1,18 +1,18 @@
 import { LinearScale } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
 
-import { variables } from 'shared/styles';
-import { ItemResponseType, locales } from 'shared/consts';
 import { ItemOption } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { ItemResponseType, locales } from 'shared/consts';
+import { variables } from 'shared/styles';
 
+import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
+import { getTimeConfig, getTimelineStepSize, truncateString } from '../Charts.utils';
 import {
   DataProps,
   ExtendedChartDataset,
   OptionsProps,
   ScalesType,
 } from './MultiScatterChart.types';
-import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
-import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
 
 export const getOptions = ({
   lang,
@@ -85,7 +85,7 @@ export const getOptions = ({
           },
           color: variables.palette.on_surface,
           font: {
-            family: 'Atkinson',
+            family: 'Moderat',
             size: 14,
           },
         },

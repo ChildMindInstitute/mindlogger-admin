@@ -85,7 +85,7 @@ export const RebrandBanner = (props: BannerProps) => {
             }}
             icon={<StyledImg src={curiousIcon} />}
             sx={{
-              backgroundColor: '#0B0907',
+              backgroundColor: variables.palette.primary,
               color: variables.palette.surface,
               '& .MuiAlert-message': {
                 maxWidth: 'none',

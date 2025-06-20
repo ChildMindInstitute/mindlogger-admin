@@ -2,23 +2,19 @@ import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
-import {
-  StyledLabelSmall,
-  StyledLabelMedium,
-  StyledBodySmall,
-} from 'shared/styles/styledComponents';
+import { StyledLabelLarge, StyledLabelSmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
-import {
-  StyledLink,
-  StyledBox,
-  StyledIconWrapper,
-  StyledPlaceholder,
-  StyledIconImg,
-  StyledChip,
-} from './Breadcrumbs.styles';
 import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
+import {
+  StyledBox,
+  StyledChip,
+  StyledIconImg,
+  StyledIconWrapper,
+  StyledLink,
+  StyledPlaceholder,
+} from './Breadcrumbs.styles';
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const Breadcrumbs = () => {
@@ -61,7 +57,7 @@ export const Breadcrumbs = () => {
 
   return (
     <MuiBreadcrumbs
-      separator={<Svg id="separator" width="8" height="12" />}
+      separator={<Svg id="separator" width="6.25" height="10.5" />}
       data-testid="breadcrumbs"
     >
       {breadcrumbsData?.map(
@@ -70,24 +66,24 @@ export const Breadcrumbs = () => {
             <StyledBox key={key} data-testid="breadcrumbs-item">
               {getBreadcrumbIcon({ icon, useCustomIcon, label, image })}
               {disabledLink ? (
-                <StyledBodySmall color={variables.palette.on_surface_variant}>
+                <StyledLabelLarge color={variables.palette.on_surface_variant}>
                   {label}
-                </StyledBodySmall>
+                </StyledLabelLarge>
               ) : (
-                <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
+                <StyledLabelLarge color={variables.palette.on_surface}>{label}</StyledLabelLarge>
               )}
             </StyledBox>
           ) : (
             <StyledLink key={key} to={navPath || ''} data-testid="breadcrumbs-link">
               {getBreadcrumbIcon({ icon, useCustomIcon, label, image })}
-              <StyledBodySmall color={variables.palette.on_surface_variant}>
+              <StyledLabelLarge color={variables.palette.on_surface_variant}>
                 {label}
-              </StyledBodySmall>
+              </StyledLabelLarge>
               {chip && (
                 <StyledChip>
-                  <StyledBodySmall color={variables.palette.on_surface_variant}>
+                  <StyledLabelLarge color={variables.palette.on_surface_variant}>
                     {chip}
-                  </StyledBodySmall>
+                  </StyledLabelLarge>
                 </StyledChip>
               )}
             </StyledLink>

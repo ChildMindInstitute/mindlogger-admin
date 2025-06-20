@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { publishAppletApi, concealAppletApi } from 'api';
+import { concealAppletApi, publishAppletApi } from 'api';
 import { applet, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
 import {
-  StyledModalWrapper,
-  StyledLinearProgress,
   StyledBodyLarge,
+  StyledLinearProgress,
+  StyledModalWrapper,
   variables,
 } from 'shared/styles';
-import { useAsync } from 'shared/hooks/useAsync';
 
 export const PublishConcealAppletPopup = () => {
   const { t } = useTranslation('app');
@@ -137,7 +137,7 @@ export const PublishConcealAppletPopup = () => {
           data-testid="dashboard-applets-publish-conceal-popup-error-popup"
         >
           <StyledModalWrapper>
-            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+            <StyledBodyLarge sx={{ color: variables.palette.error }}>
               <Trans i18nKey="publishAppletPopupErrorDescription">
                 The Applet
                 <strong>

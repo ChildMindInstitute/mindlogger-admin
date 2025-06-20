@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { Autocomplete, AutocompleteRenderInputParams, Box } from '@mui/material';
 import unionBy from 'lodash/unionBy';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 import { Chip, Svg } from 'shared/components';
 import { theme, variables } from 'shared/styles';
-import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
-import {
-  ParticipantDropdownProps,
-  ParticipantDropdownOption,
-  ParticipantDropdownVariant,
-} from './ParticipantDropdown.types';
 import {
   StyledEmptyError,
   StyledGroupLabel,
   StyledTextField,
   StyledTextFieldWrapper,
 } from './ParticipantDropdown.styles';
+import {
+  ParticipantDropdownOption,
+  ParticipantDropdownProps,
+  ParticipantDropdownVariant,
+} from './ParticipantDropdown.types';
 import { getParticipantLabel } from './ParticipantDropdown.utils';
 
 export const ParticipantDropdown = ({
@@ -187,7 +187,7 @@ export const ParticipantDropdown = ({
           id="navigate-down"
           width={24}
           height={24}
-          fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+          fill={variables.palette[disabled ? 'on_surface_alpha38' : 'on_surface_variant']}
         />
       }
       fullWidth={true}
