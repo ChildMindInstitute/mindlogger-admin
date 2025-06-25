@@ -39,7 +39,7 @@ export class EHRDataExporter {
     flowIds,
     respondentIds,
     subjectIds,
-  }: EHRDataExporterOptions) {
+  }: EHRDataExporterOptions): Promise<{ size?: number }> {
     // Build the URL with query parameters
     const queryParams = new URLSearchParams();
     if (fromDate) queryParams.append('fromDate', fromDate);
@@ -72,7 +72,7 @@ export class EHRDataExporter {
     if (!response.ok) throw new Error(`EHR data download failed for ${url}`);
 
     // No EHR data matching the query parameters found
-    if (response.status === 204) return;
+    if (response.status === 204) return {};
 
     // Get the filename from the Content-Disposition header or use default
     const contentDisposition = response.headers.get('Content-Disposition');
@@ -90,5 +90,7 @@ export class EHRDataExporter {
     a.click();
     window.URL.revokeObjectURL(downloadUrl);
     document.body.removeChild(a);
+
+    return { size: blob.size };
   }
 }
