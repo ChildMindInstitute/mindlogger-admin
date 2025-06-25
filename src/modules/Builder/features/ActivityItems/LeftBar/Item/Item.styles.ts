@@ -37,8 +37,8 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
         stroke: ${variables.palette.on_surface_variant};
       }
 
-      ${isActive && `background-color: ${variables.palette.secondary_container};`}
-      ${hasError && `background-color: ${variables.palette.error_container};`}
+      ${isActive && `background-color: ${variables.palette.secondary_container}`};
+      ${hasError && `background-color: ${variables.palette.error_container}`};
       ${
         isDragging &&
         `background-color: ${blendColorsNormal(
