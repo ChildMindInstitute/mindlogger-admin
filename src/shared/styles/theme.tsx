@@ -27,11 +27,193 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Atkinson',
+    fontFamily: variables.font.family.body,
     htmlFontSize: 10,
     button: {
-      fontSize: variables.font.size.md,
+      fontSize: variables.font.size.body3,
     },
+    displayLarge: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display1,
+      lineHeight: variables.font.lineHeight.display1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    displayMedium: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display2,
+      lineHeight: variables.font.lineHeight.display2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    displaySmall: {
+      fontFamily: variables.font.family.display,
+      fontWeight: variables.font.weight.light,
+      fontSize: variables.font.size.display3,
+      lineHeight: variables.font.lineHeight.display3,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineLarge: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline1,
+      lineHeight: variables.font.lineHeight.headline1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineMedium: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline2,
+      lineHeight: variables.font.lineHeight.headline2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    headlineSmall: {
+      fontFamily: variables.font.family.headline,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.headline3,
+      lineHeight: variables.font.lineHeight.headline3,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLarge: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title1,
+      lineHeight: variables.font.lineHeight.title1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLargeBold: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.title1,
+      lineHeight: variables.font.lineHeight.title1,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLargish: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title2,
+      lineHeight: variables.font.lineHeight.title2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleLargishBold: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.title2,
+      lineHeight: variables.font.lineHeight.title2,
+      letterSpacing: variables.font.letterSpacing.none,
+    },
+    titleMedium: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title3,
+      lineHeight: variables.font.lineHeight.title3,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    titleMediumBold: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.title3,
+      lineHeight: variables.font.lineHeight.title3,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    titleSmall: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.title4,
+      lineHeight: variables.font.lineHeight.title4,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    titleSmallBold: {
+      fontFamily: variables.font.family.title,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.title4,
+      lineHeight: variables.font.lineHeight.title4,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    labelLarge: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label1,
+      lineHeight: variables.font.lineHeight.label1,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    labelLargeBold: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.label1,
+      lineHeight: variables.font.lineHeight.label1,
+      letterSpacing: variables.font.letterSpacing.sm,
+    },
+    labelMedium: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label2,
+      lineHeight: variables.font.lineHeight.label2,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    labelMediumBold: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.label2,
+      lineHeight: variables.font.lineHeight.label2,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    labelSmall: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.label3,
+      lineHeight: variables.font.lineHeight.label3,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    labelSmallBold: {
+      fontFamily: variables.font.family.label,
+      fontWeight: variables.font.weight.bold,
+      fontSize: variables.font.size.label3,
+      lineHeight: variables.font.lineHeight.label3,
+      letterSpacing: variables.font.letterSpacing.xxl,
+    },
+    bodyLarger: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body1,
+      lineHeight: variables.font.lineHeight.body1,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    bodyLarge: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body2,
+      lineHeight: variables.font.lineHeight.body2,
+      letterSpacing: variables.font.letterSpacing.md,
+    },
+    bodyMedium: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body3,
+      lineHeight: variables.font.lineHeight.body3,
+      letterSpacing: variables.font.letterSpacing.lg,
+    },
+    bodySmall: {
+      fontFamily: variables.font.family.body,
+      fontWeight: variables.font.weight.regular,
+      fontSize: variables.font.size.body4,
+      lineHeight: variables.font.lineHeight.body4,
+      letterSpacing: variables.font.letterSpacing.xl,
+    },
+
+    // Standard MUI variants mapped to custom variants
+    h1: { fontSize: variables.font.size.headline1 },
+    h2: { fontSize: variables.font.size.headline2 },
+    h3: { fontSize: variables.font.size.headline3 },
+    h4: { fontSize: variables.font.size.title1 },
+    h5: { fontSize: variables.font.size.title3 },
+    h6: { fontSize: variables.font.size.title4 },
+    subtitle1: { fontSize: variables.font.size.body2 },
+    subtitle2: { fontSize: variables.font.size.body3 },
+    body1: { fontSize: variables.font.size.body2 },
+    body2: { fontSize: variables.font.size.body3 },
+    caption: { fontSize: variables.font.size.body4 },
+    overline: { fontSize: variables.font.size.label1 },
   },
   components: {
     MuiCssBaseline: {
@@ -77,6 +259,12 @@ export const theme = createTheme({
         '.md-editor-dropdown-hidden': {
           zIndex: -(theme.zIndex.modal - 1),
         },
+        a: {
+          color: variables.palette.secondary,
+        },
+        input: {
+          fontFamily: variables.font.family.body,
+        },
       }),
     },
     MuiDialog: {
@@ -91,7 +279,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.MuiTypography-root': {
-            fontSize: variables.font.size.xxl,
+            fontSize: variables.font.size.headline3,
+            lineHeight: variables.font.lineHeight.headline3,
             fontWeight: variables.font.weight.regular,
             padding: '6.4rem 3.2rem 2.8rem',
           },
@@ -109,7 +298,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            backgroundColor: variables.palette.primary_alfa12,
+            backgroundColor: variables.palette.primary_alpha12,
           },
         },
       },
@@ -135,9 +324,9 @@ export const theme = createTheme({
             borderLeft: 'none',
             color: variables.palette.outline,
             fontWeight: variables.font.weight.regular,
-            fontSize: variables.font.size.md,
-            lineHeight: variables.font.lineHeight.md,
-            letterSpacing: variables.font.letterSpacing.lg,
+            fontSize: variables.font.size.title4,
+            lineHeight: variables.font.lineHeight.title4,
+            letterSpacing: variables.font.letterSpacing.sm,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: 0,
@@ -158,7 +347,7 @@ export const theme = createTheme({
             cursor: 'pointer',
             transition: variables.transitions.bgColor,
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
           },
           '&.MuiTableRow-dragged-over': {
@@ -200,8 +389,9 @@ export const theme = createTheme({
         root: {
           minHeight: '4.8rem',
           padding: '0 1.2rem',
-          fontSize: variables.font.size.sm,
-          lineHeight: variables.font.lineHeight.sm,
+          fontSize: variables.font.size.body4,
+          lineHeight: variables.font.lineHeight.body4,
+          letterSpacing: variables.font.letterSpacing.xl,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
           backgroundColor: 'transparent',
@@ -233,8 +423,9 @@ export const theme = createTheme({
             color: variables.palette.on_surface_variant,
             '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
               fontWeight: variables.font.weight.regular,
-              fontSize: variables.font.size.md,
-              lineHeight: variables.font.lineHeight.md,
+              fontSize: variables.font.size.body3,
+              lineHeight: variables.font.lineHeight.body3,
+              letterSpacing: variables.font.letterSpacing.lg,
             },
             '.MuiInputBase-root': {
               display: 'none',
@@ -253,49 +444,50 @@ export const theme = createTheme({
         {
           props: { variant: 'contained' },
           style: {
-            color: variables.palette.white,
             fontWeight: variables.font.weight.bold,
+            color: variables.palette.on_primary,
+            backgroundColor: variables.palette.primary,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                boxShadow: variables.boxShadow.buttonElevation1,
+                background: `linear-gradient(${variables.palette.on_primary_alpha8}, ${variables.palette.on_primary_alpha8}), ${variables.palette.primary}`,
               },
 
-              '&:active': {
-                boxShadow: 'none',
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.on_primary_alpha12}, ${variables.palette.on_primary_alpha12}), ${variables.palette.primary}`,
               },
-
-              '&:focus, &:active': {},
             },
           },
         },
         {
           props: { variant: 'outlined' },
           style: {
-            background: variables.palette.white,
-            border: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
-            color: variables.palette.primary,
             fontWeight: variables.font.weight.regular,
+            backgroundColor: 'transparent',
+            color: variables.palette.primary,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
 
             '&.Mui-disabled': {
+              borderColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
-              borderColor: variables.palette.outline_alfa12,
             },
 
             '&:not(.Mui-disabled)': {
-              borderColor: variables.palette.outline_variant,
-
               '&:hover': {
-                backgroundColor: variables.palette.primary_alfa8,
+                backgroundColor: variables.palette.primary_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primary_alfa12,
+                backgroundColor: variables.palette.primary_alpha12,
+              },
+
+              '&:focus': {
+                borderColor: variables.palette.primary,
               },
             },
           },
@@ -303,8 +495,8 @@ export const theme = createTheme({
         {
           props: { variant: 'text' },
           style: {
-            background: 'transparent',
             fontWeight: variables.font.weight.regular,
+            backgroundColor: 'transparent',
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -314,21 +506,11 @@ export const theme = createTheme({
               color: variables.palette.primary,
 
               '&:hover': {
-                backgroundColor: variables.palette.primary_alfa8,
+                backgroundColor: variables.palette.primary_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primary_alfa12,
-              },
-            },
-
-            '&:not(.Mui-disabled)': {
-              '&:hover': {
-                borderColor: variables.palette.outline,
-              },
-
-              '&:focus': {
-                borderColor: 'currentColor',
+                backgroundColor: variables.palette.primary_alpha12,
               },
             },
           },
@@ -336,28 +518,24 @@ export const theme = createTheme({
         {
           props: { variant: 'elevated' },
           style: {
-            background: variables.palette.surface1,
-            color: variables.palette.primary,
             fontWeight: variables.font.weight.bold,
-            boxShadow: variables.boxShadow.buttonElevation1,
+            backgroundColor: variables.palette.surface1,
+            color: variables.palette.primary,
+            boxShadow: variables.boxShadow.light1,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.surface2,
-                boxShadow: variables.boxShadow.buttonElevation2,
+                background: `linear-gradient(${variables.palette.primary_alpha8}, ${variables.palette.primary_alpha8}), ${variables.palette.surface1}`,
+                boxShadow: variables.boxShadow.light2,
               },
 
               '&:focus, &:active': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.surface1,
-                  variables.palette.light_alfa12,
-                ),
-                boxShadow: variables.boxShadow.buttonElevation1,
+                background: `linear-gradient(${variables.palette.surface1_alpha12}, ${variables.palette.surface1_alpha12}), ${variables.palette.surface1}`,
               },
             },
           },
@@ -365,33 +543,22 @@ export const theme = createTheme({
         {
           props: { variant: 'tonal' },
           style: {
+            fontWeight: variables.font.weight.regular,
             background: variables.palette.secondary_container,
             color: variables.palette.on_secondary_container,
-            fontWeight: variables.font.weight.regular,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.on_surface_alfa12,
+              backgroundColor: variables.palette.on_surface_alpha12,
               color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
+              '&:hover, &:focus, &:active': {
+                background: `linear-gradient(${variables.palette.on_surface_variant_alpha8}, ${variables.palette.on_surface_variant_alpha8}), ${variables.palette.secondary_container}`,
+              },
+
               '&:hover': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa8,
-                ),
-                boxShadow: variables.boxShadow.buttonElevation1,
-              },
-
-              '&:active': {
-                boxShadow: 'none',
-              },
-
-              '&:focus, &:active': {
-                backgroundColor: blendColorsNormal(
-                  variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa12,
-                ),
+                boxShadow: variables.boxShadow.light1,
               },
             },
           },
@@ -399,9 +566,9 @@ export const theme = createTheme({
         {
           props: { variant: 'textNeutral' },
           style: {
+            fontWeight: variables.font.weight.regular,
             background: 'transparent',
             color: variables.palette.on_surface_variant,
-            fontWeight: variables.font.weight.regular,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -409,11 +576,11 @@ export const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.on_surface_variant_alfa12,
+                backgroundColor: variables.palette.on_surface_variant_alpha12,
               },
             },
           },
@@ -424,12 +591,12 @@ export const theme = createTheme({
           border: 'none',
           borderRadius: variables.borderRadius.xxxl,
           boxShadow: 'none',
-          fontSize: variables.font.size.md,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
+          letterSpacing: variables.font.letterSpacing.md,
           height: '4.8rem',
-          letterSpacing: variables.font.letterSpacing.sm,
-          lineHeight: variables.font.lineHeight.md,
           minWidth: '10rem',
-          padding: '1rem 2rem',
+          padding: '1rem 2.4rem',
           textTransform: 'none',
           gap: '0.8rem',
 
@@ -440,18 +607,17 @@ export const theme = createTheme({
       },
     },
     MuiChip: {
-      defaultProps: { size: 'small' },
+      defaultProps: { size: 'medium' },
       styleOverrides: {
         root: ({ ownerState: { color, variant, size } }) => ({
           borderRadius: variables.borderRadius.md,
-          fontSize: variables.font.size[size === 'small' ? 'md' : 'lg'],
+          fontSize: variables.font.size[size === 'small' ? 'label2' : 'label1'],
+          lineHeight: variables.font.lineHeight[size === 'small' ? 'label2' : 'label1'],
+          letterSpacing: variables.font.letterSpacing[size === 'small' ? 'xxl' : 'sm'],
           fontWeight: variables.font.weight.regular,
-          letterSpacing:
-            size === 'small' ? variables.font.letterSpacing.lg : variables.font.letterSpacing.xxl,
           gap: '0.4rem',
           height: size === 'small' ? '2.4rem' : '3.2rem',
-          lineHeight: variables.font.lineHeight[size === 'small' ? 'md' : 'lg'],
-          padding: size === 'small' ? '0.2rem 0.8rem' : '0.4rem 0.8rem',
+          padding: size === 'small' ? '0.2rem 0.8rem' : '0.6rem 1.2rem',
           ...getChipStyleOverrides({ color, variant }),
 
           '.MuiChip-deleteIcon': { margin: 0 },
@@ -465,16 +631,17 @@ export const theme = createTheme({
         root: {
           '.MuiToggleButton-root': {
             color: variables.palette.on_secondary_container,
-            fontSize: variables.font.size.md,
+            fontSize: variables.font.size.body3,
+            lineHeight: variables.font.lineHeight.body3,
+            letterSpacing: variables.font.letterSpacing.lg,
             fontWeight: variables.font.weight.regular,
-            lineHeight: variables.font.lineHeight.md,
             borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
             textTransform: 'none',
             height: 40,
             padding: '1rem',
             '&:hover': {
-              backgroundColor: variables.palette.on_secondary_container_alfa8,
+              backgroundColor: variables.palette.on_secondary_container_alpha8,
             },
             '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
               borderLeftColor: variables.palette.outline,
@@ -485,7 +652,7 @@ export const theme = createTheme({
               '&:hover': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.secondary_container,
-                  variables.palette.on_secondary_container_alfa8,
+                  variables.palette.on_secondary_container_alpha8,
                 ),
               },
             },
@@ -497,6 +664,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           transition: variables.transitions.all,
+          color: variables.palette.secondary,
+          textDecorationColor: variables.palette.secondary,
         },
       },
     },
@@ -504,12 +673,14 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.on_surface_variant,
-          fontSize: variables.font.size.lg,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
+          letterSpacing: variables.font.letterSpacing.md,
           '&.Mui-focused': {
             color: variables.palette.primary,
           },
           '&.Mui-error': {
-            color: variables.palette.semantic.error,
+            color: variables.palette.error,
           },
         },
       },
@@ -519,8 +690,9 @@ export const theme = createTheme({
         input: {
           '&&': {
             height: 'auto',
-            fontSize: variables.font.size.lg,
-            lineHeight: variables.font.lineHeight.lg,
+            fontSize: variables.font.size.title3,
+            lineHeight: variables.font.lineHeight.title3,
+            letterSpacing: variables.font.letterSpacing.md,
             padding: '1.6rem',
           },
         },
@@ -529,8 +701,9 @@ export const theme = createTheme({
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          fontSize: variables.font.size.md,
-          lineHeight: variables.font.lineHeight.sm,
+          fontSize: variables.font.size.title4,
+          lineHeight: variables.font.lineHeight.title4,
+          letterSpacing: variables.font.letterSpacing.md,
         },
       },
     },
@@ -547,14 +720,14 @@ export const theme = createTheme({
             },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.semantic.error,
+                borderColor: variables.palette.error,
               },
             },
           },
           '&.Mui-disabled': {
             '&&': {
               '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.on_surface_alfa12,
+                borderColor: variables.palette.on_surface_alpha12,
               },
             },
           },
@@ -623,36 +796,36 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiPaper-root': {
-            backgroundColor: variables.palette.surface,
-            borderRadius: variables.borderRadius.md,
-            border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
-            boxShadow: variables.boxShadow.soft,
+            backgroundColor: variables.palette.surface1,
+            borderRadius: variables.borderRadius.lg,
+            boxShadow: variables.boxShadow.light2,
             marginTop: '0.4rem',
-            padding: '0.8rem 0',
+            padding: '0.8rem 0.4rem',
           },
           '.MuiList-root': {
             padding: '0',
           },
           '.MuiMenuItem-root': {
-            padding: '1.2rem 2rem',
+            padding: '1.6rem 2.4rem 1.6rem 1.6rem ',
             transition: variables.transitions.bgColor,
+            borderRadius: variables.borderRadius.xxs,
             // Enable hover events (for tooltips) without enabling click events
             '&.Mui-disabled:not(:active)': {
               pointerEvents: 'auto',
             },
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.surface_variant,
             },
           },
           '.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: variables.palette.on_surface_variant_alfa8,
+            backgroundColor: variables.palette.surface_variant,
             '&:focus': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
+              backgroundColor: variables.palette.surface_variant,
             },
             '&:hover': {
               backgroundColor: blendColorsNormal(
-                variables.palette.on_surface_variant_alfa8,
-                variables.palette.on_surface_alfa8,
+                variables.palette.surface_variant,
+                variables.palette.on_surface_alpha8,
               ),
             },
           },
@@ -674,14 +847,14 @@ export const theme = createTheme({
               padding: '0.5rem 1.6rem',
               minHeight: '4.8rem',
               '&:hover': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
               },
               '&[aria-selected="true"]': {
-                backgroundColor: variables.palette.on_surface_variant_alfa8,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
                 '&:hover': {
                   backgroundColor: blendColorsNormal(
-                    variables.palette.on_surface_variant_alfa8,
-                    variables.palette.on_surface_alfa8,
+                    variables.palette.on_surface_variant_alpha8,
+                    variables.palette.on_surface_alpha8,
                   ),
                 },
               },
@@ -748,8 +921,8 @@ export const theme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: ({ ownerState: { variant, severity, color } }) => ({
-          fontSize: variables.font.size.lg,
-          lineHeight: variables.font.lineHeight.lg,
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
           letterSpacing: variables.font.letterSpacing.md,
           color: variables.palette.on_surface,
           padding: theme.spacing(1.2, 1.6),
@@ -757,19 +930,19 @@ export const theme = createTheme({
           alignItems: 'center',
           ...(variant === 'standard' && {
             ...(severity === 'info' && {
-              backgroundColor: variables.palette.blue_alfa30,
+              backgroundColor: variables.palette.blue_alpha30,
             }),
             ...(severity === 'success' && {
-              backgroundColor: variables.palette.green_alfa30,
+              backgroundColor: variables.palette.green_alpha30,
             }),
             ...(severity === 'warning' && {
-              backgroundColor: variables.palette.yellow_alfa30,
+              backgroundColor: variables.palette.yellow_alpha30,
             }),
             ...(severity === 'error' && {
               backgroundColor: variables.palette.error_container,
             }),
             ...(color === 'infoAlt' && {
-              backgroundColor: variables.palette.purple_alfa30,
+              backgroundColor: variables.palette.purple_alpha30,
             }),
           }),
           '.MuiAlert-action': {
@@ -795,7 +968,7 @@ export const theme = createTheme({
             margin: theme.spacing(0.4),
           },
           '.MuiButton-text:hover': {
-            backgroundColor: variables.palette.on_surface_alfa8,
+            backgroundColor: variables.palette.on_surface_alpha8,
           },
         }),
       },
@@ -876,6 +1049,13 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          color: variables.palette.primary,
+        },
+      },
+    },
   },
   palette: {
     background: {
@@ -883,16 +1063,16 @@ export const theme = createTheme({
     },
     primary: {
       main: variables.palette.primary,
-      dark: blendColorsNormal(variables.palette.primary, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.primary, variables.palette.light_alfa12),
+      dark: blendColorsNormal(variables.palette.primary, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.primary, variables.palette.white_alpha12),
     },
     info: {
       main: variables.palette.blue,
     },
     infoAlt: {
       main: variables.palette.purple,
-      dark: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.purple, variables.palette.light_alfa12),
+      dark: blendColorsNormal(variables.palette.purple, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.purple, variables.palette.white_alpha12),
       contrastText: variables.palette.on_secondary_container,
     },
     success: {
@@ -902,9 +1082,9 @@ export const theme = createTheme({
       main: variables.palette.yellow,
     },
     error: {
-      main: variables.palette.red,
-      dark: blendColorsNormal(variables.palette.red, variables.palette.light_alfa8),
-      light: blendColorsNormal(variables.palette.red, variables.palette.light_alfa12),
+      main: variables.palette.error,
+      dark: blendColorsNormal(variables.palette.error, variables.palette.white_alpha8),
+      light: blendColorsNormal(variables.palette.error, variables.palette.white_alpha12),
     },
   },
 });
@@ -947,6 +1127,120 @@ declare module '@mui/material/Alert' {
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
     infoAlt: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    // Display variants - Affix Light
+    displayLarge: React.CSSProperties;
+    displayMedium: React.CSSProperties;
+    displaySmall: React.CSSProperties;
+
+    // Headline variants - Moderat Regular
+    headlineLarge: React.CSSProperties;
+    headlineMedium: React.CSSProperties;
+    headlineSmall: React.CSSProperties;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge: React.CSSProperties;
+    titleLargeBold: React.CSSProperties;
+    titleLargish: React.CSSProperties;
+    titleLargishBold: React.CSSProperties;
+    titleMedium: React.CSSProperties;
+    titleMediumBold: React.CSSProperties;
+    titleSmall: React.CSSProperties;
+    titleSmallBold: React.CSSProperties;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge: React.CSSProperties;
+    labelLargeBold: React.CSSProperties;
+    labelMedium: React.CSSProperties;
+    labelMediumBold: React.CSSProperties;
+    labelSmall: React.CSSProperties;
+    labelSmallBold: React.CSSProperties;
+
+    // Body variants - Moderat Regular
+    bodyLarger: React.CSSProperties;
+    bodyLarge: React.CSSProperties;
+    bodyMedium: React.CSSProperties;
+    bodySmall: React.CSSProperties;
+  }
+
+  // Allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    // Display variants - Affix Light
+    displayLarge?: React.CSSProperties;
+    displayMedium?: React.CSSProperties;
+    displaySmall?: React.CSSProperties;
+
+    // Headline variants - Moderat Regular
+    headlineLarge?: React.CSSProperties;
+    headlineMedium?: React.CSSProperties;
+    headlineSmall?: React.CSSProperties;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge?: React.CSSProperties;
+    titleLargeBold?: React.CSSProperties;
+    titleLargish?: React.CSSProperties;
+    titleLargishBold?: React.CSSProperties;
+    titleMedium?: React.CSSProperties;
+    titleMediumBold?: React.CSSProperties;
+    titleSmall?: React.CSSProperties;
+    titleSmallBold?: React.CSSProperties;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge?: React.CSSProperties;
+    labelLargeBold?: React.CSSProperties;
+    labelMedium?: React.CSSProperties;
+    labelMediumBold?: React.CSSProperties;
+    labelSmall?: React.CSSProperties;
+    labelSmallBold?: React.CSSProperties;
+
+    // Body variants - Moderat Regular
+    bodyLarger?: React.CSSProperties;
+    bodyLarge?: React.CSSProperties;
+    bodyMedium?: React.CSSProperties;
+    bodySmall?: React.CSSProperties;
+  }
+}
+
+// Update the Typography component props
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    // Display variants - Affix Light
+    displayLarge: true;
+    displayMedium: true;
+    displaySmall: true;
+
+    // Headline variants - Moderat Regular
+    headlineLarge: true;
+    headlineMedium: true;
+    headlineSmall: true;
+
+    // Title variants - Moderat Regular & Bold
+    titleLarge: true;
+    titleLargeBold: true;
+    titleLargish: true;
+    titleLargishBold: true;
+    titleMedium: true;
+    titleMediumBold: true;
+    titleSmall: true;
+    titleSmallBold: true;
+
+    // Label variants - Moderat Regular & Bold
+    labelLarge: true;
+    labelLargeBold: true;
+    labelMedium: true;
+    labelMediumBold: true;
+    labelSmall: true;
+    labelSmallBold: true;
+
+    // Body variants - Moderat Regular
+    bodyLarger: true;
+    bodyLarge: true;
+    bodyMedium: true;
+    bodySmall: true;
   }
 }
 

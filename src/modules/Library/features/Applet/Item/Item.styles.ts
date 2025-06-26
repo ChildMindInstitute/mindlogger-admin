@@ -3,11 +3,11 @@ import { Box } from '@mui/material';
 
 import { MarkDownPreview } from 'shared/components';
 import {
-  theme,
-  variables,
   StyledFlexColumn,
   StyledFlexTopStart,
   StyledSvgArrowContainer,
+  theme,
+  variables,
 } from 'shared/styles';
 
 import { ActivityItemGrid } from '../Activity/Activity.styles';
@@ -33,7 +33,7 @@ export const StyledItemHeader = styled(Box)`
 
   &:hover {
     ${StyledSvgArrowContainer} {
-      background-color: ${variables.palette.on_surface_alfa8};
+      background-color: ${variables.palette.on_surface_alpha8};
     }
   }
 `;
@@ -41,7 +41,7 @@ export const StyledItemHeader = styled(Box)`
 export const StyledMdPreview = styled(MarkDownPreview)`
   background-color: transparent;
   color: ${variables.palette.on_surface_variant};
-  font-size: ${variables.font.size.md};
+  font-size: ${variables.font.size.label1};
   font-weight: normal;
   text-align: initial;
   padding: ${theme.spacing(0.7, 0)};

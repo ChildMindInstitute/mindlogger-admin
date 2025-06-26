@@ -12,7 +12,7 @@ import { useLogout } from 'shared/hooks/useLogout';
 import {
   StyledBodyMedium,
   StyledErrorText,
-  StyledHeadline,
+  StyledHeadlineSmall,
   StyledTitleMedium,
   variables,
 } from 'shared/styles';
@@ -59,7 +59,7 @@ export const LockForm = () => {
     <>
       <StyledWelcome>{t('curiousAdminPanel')}</StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledHeadline>{t('login')}</StyledHeadline>
+        <StyledHeadlineSmall>{t('login')}</StyledHeadlineSmall>
         <StyledLoginSubheader>
           <Trans i18nKey="lockDescription" />
         </StyledLoginSubheader>

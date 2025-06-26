@@ -16,7 +16,7 @@ export const StyledTextFieldWrapper = styled(Box)(
     ${
       isShaded &&
       `&:hover {
-        background-color: ${variables.palette.on_surface_variant_alfa8};
+        background-color: ${variables.palette.on_surface_variant_alpha8};
       }`
     }
   `,

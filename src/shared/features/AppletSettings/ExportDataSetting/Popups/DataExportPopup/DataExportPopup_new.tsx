@@ -1,11 +1,27 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import get from 'lodash.get';
-import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
+import get from 'lodash.get';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
+import { DateFormats } from 'shared/consts';
+import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { BUFFER_PERCENTAGE } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.const';
+import { useMultipleDecryptWorkers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.hooks';
+import {
+  DataExportPopupProps,
+  ExecuteAllPagesOfExportData,
+  Modals,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import { ExportDataFetchService as ExportDataFetchServiceClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/ExportDataFetchSevice';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import {
   StyledBodyLarge,
   StyledLinearProgress,
@@ -13,22 +29,6 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
-import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
-import { DateFormats } from 'shared/consts';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
-import {
-  DataExportPopupProps,
-  ExecuteAllPagesOfExportData,
-  Modals,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
-import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
-import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
-import { useMultipleDecryptWorkers } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.hooks';
-import { BUFFER_PERCENTAGE } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.const';
-import { ExportDataFetchService as ExportDataFetchServiceClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/ExportDataFetchSevice';
-import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 
 export const DataExportPopup = ({
   filters = {},
@@ -218,7 +218,7 @@ export const DataExportPopup = ({
           data-testid={`${dataTestid}-error`}
         >
           <StyledModalWrapper>
-            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+            <StyledBodyLarge sx={{ color: variables.palette.error }}>
               {t('exportFailed')}
             </StyledBodyLarge>
           </StyledModalWrapper>

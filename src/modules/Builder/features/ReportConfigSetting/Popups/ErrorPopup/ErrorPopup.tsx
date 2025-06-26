@@ -28,9 +28,7 @@ export const ErrorPopup = ({ popupVisible, setPopupVisible, retryCallback }: Err
       data-testid="builder-activity-flows-settings-report-config-form-error-popup"
     >
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-          {t('saveError')}
-        </StyledBodyLarge>
+        <StyledBodyLarge sx={{ color: variables.palette.error }}>{t('saveError')}</StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

@@ -10,6 +10,6 @@ export const StyledApplets = styled(StyledModalWrapper)`
 `;
 
 export const StyledError = styled(StyledTitleSmall)`
-  color: ${variables.palette.semantic.error};
+  color: ${variables.palette.error};
   margin: ${theme.spacing(2.4, 3.2, 0)};
 `;

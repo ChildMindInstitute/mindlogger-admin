@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexTopCenter, variables, theme } from 'shared/styles';
-import { SelectController, InputController } from 'shared/components/FormComponents';
+import { InputController, SelectController } from 'shared/components/FormComponents';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledCondition = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
@@ -22,7 +22,7 @@ export const StyledCondition = styled(StyledFlexTopCenter)`
   }
 
   :hover {
-    background: ${variables.palette.on_surface_alfa8};
+    background: ${variables.palette.on_surface_alpha8};
 
     & > .MuiButtonBase-root {
       display: flex;

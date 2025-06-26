@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { ChangeScoreIdPopupProps } from './ChangeScoreIdPopup.types';
 
@@ -30,9 +30,7 @@ export const ChangeScoreIdPopup = ({
 
   const getSecondScreen = () =>
     isError ? (
-      <StyledBodyLarge color={variables.palette.semantic.error}>
-        {t('changeScoreIdError')}
-      </StyledBodyLarge>
+      <StyledBodyLarge color={variables.palette.error}>{t('changeScoreIdError')}</StyledBodyLarge>
     ) : (
       <StyledBodyLarge>{t('changeScoreIdSuccess')}</StyledBodyLarge>
     );

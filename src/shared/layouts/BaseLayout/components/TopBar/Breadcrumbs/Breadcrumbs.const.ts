@@ -1,1 +1,1 @@
-export const BREADCRUMB_ICON_SIZE = 18;
+export const BREADCRUMB_ICON_SIZE = 15;

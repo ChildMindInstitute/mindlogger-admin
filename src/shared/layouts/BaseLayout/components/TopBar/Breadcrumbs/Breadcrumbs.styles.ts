@@ -1,9 +1,9 @@
+import { Box, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { styled, Box } from '@mui/material';
 
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 
 const commonCenterStyles = `
   display: flex;
@@ -12,8 +12,8 @@ const commonCenterStyles = `
 `;
 
 const commonImgStyles = `
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: ${variables.borderRadius.xs};
 `;
 
@@ -38,7 +38,12 @@ export const StyledLink = styled(Link)`
   height: 4rem;
 
   &:hover {
-    background-color: ${variables.palette.on_surface_variant_alfa8};
+    background-color: ${variables.palette.on_surface_alpha8};
+  }
+
+  &:focus,
+  &:active {
+    background-color: ${variables.palette.on_surface_alpha12};
   }
 `;
 
@@ -50,6 +55,6 @@ export const StyledBox = styled(Box)`
 export const StyledChip = styled(Box)`
   padding: ${theme.spacing(0.6, 1)};
   margin-left: ${theme.spacing(0.8)};
-  background-color: ${variables.palette.on_surface_variant_alfa8};
+  background-color: ${variables.palette.on_surface_variant_alpha8};
   border-radius: ${variables.borderRadius.xs};
 `;

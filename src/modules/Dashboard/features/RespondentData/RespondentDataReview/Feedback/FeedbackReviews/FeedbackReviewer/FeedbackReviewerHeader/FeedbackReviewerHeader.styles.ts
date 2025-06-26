@@ -27,6 +27,6 @@ export const StyledLock = styled(StyledFlexTopStart)`
   transition: ${variables.transitions.bgColor};
 
   &:hover {
-    background-color: ${variables.palette.primary_alfa8};
+    background-color: ${variables.palette.primary_alpha8};
   }
 `;

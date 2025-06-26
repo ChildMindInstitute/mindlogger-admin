@@ -10,7 +10,7 @@ export const StyledItem = styled(Box, shouldForwardProp)`
   cursor: pointer;
 
   &:hover {
-    background-color: ${variables.palette.on_surface_alfa8};
+    background-color: ${variables.palette.on_surface_alpha8};
   }
 
   ${({ isSelected }: { isSelected: boolean }) =>

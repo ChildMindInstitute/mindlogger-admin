@@ -1,11 +1,32 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import get from 'lodash.get';
-import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
+import get from 'lodash.get';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { getExportDataApi } from 'api';
+import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
+import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
+import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
+import { DateFormats } from 'shared/consts';
+import {
+  ExportDataExported,
+  ExportDataFormValues,
+} from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import {
+  DataExportPopupProps,
+  ExecuteAllPagesOfExportData,
+  Modals,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import {
+  getExportDataSuffix,
+  getFormattedToDate,
+} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
+import { workspaces } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledLinearProgress,
@@ -16,34 +37,13 @@ import {
 import {
   exportEncryptedDataSucceed,
   Mixpanel,
-  sendLogFile,
   MixpanelEventType,
   MixpanelProps,
+  sendLogFile,
 } from 'shared/utils';
-import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
-import { getExportDataApi } from 'api';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
-import { DateFormats } from 'shared/consts';
-import {
-  ExportDataExported,
-  ExportDataFormValues,
-} from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
-import { workspaces } from 'shared/state';
-import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
-import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
-import {
-  DataExportPopupProps,
-  ExecuteAllPagesOfExportData,
-  Modals,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
-import { useCheckIfHasEncryption } from 'modules/Dashboard/features/Respondents/Popups/Popups.hooks';
-import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
-import {
-  getExportDataSuffix,
-  getFormattedToDate,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 import { EHRDataExporter } from 'shared/utils/exportData/exporters/EHRDataExporter';
+import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
+import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
 export const DataExportPopup = ({
   filters = {},
@@ -308,7 +308,7 @@ export const DataExportPopup = ({
           data-testid={`${dataTestid}-error`}
         >
           <StyledModalWrapper>
-            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+            <StyledBodyLarge sx={{ color: variables.palette.error }}>
               {t('exportFailed')}
             </StyledBodyLarge>
           </StyledModalWrapper>

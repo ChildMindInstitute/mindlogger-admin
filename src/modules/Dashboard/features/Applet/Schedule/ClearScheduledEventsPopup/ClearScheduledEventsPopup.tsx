@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
-import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { useAsync } from 'shared/hooks/useAsync';
-import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
-import { useAppDispatch } from 'redux/store';
+import { deleteIndividualEventsApi, deleteScheduledEventsApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
+import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 
 import { ClearScheduledEventsPopupProps, Steps } from './ClearScheduledEventsPopup.types';
@@ -78,10 +78,7 @@ export const ClearScheduledEventsPopup = ({
         <StyledModalWrapper data-testid={`${dataTestid}-text`}>
           {screens[step].component}
           {(deleteScheduledError || deleteIndividualScheduledError) && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 0) }}
-            >
+            <StyledBodyLarge color={variables.palette.error} sx={{ m: theme.spacing(1, 0) }}>
               {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
             </StyledBodyLarge>
           )}

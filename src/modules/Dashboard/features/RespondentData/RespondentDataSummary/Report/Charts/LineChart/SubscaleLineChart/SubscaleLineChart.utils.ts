@@ -1,4 +1,3 @@
-import { Context } from 'chartjs-plugin-datalabels';
 import {
   ChartData,
   ChartDataset,
@@ -6,21 +5,21 @@ import {
   LinearScale,
   ScriptableTooltipContext,
 } from 'chart.js';
+import { Context } from 'chartjs-plugin-datalabels';
 
-import { variables } from 'shared/styles';
 import { Version } from 'api';
 import { TScoreSeverity } from 'modules/Builder/features/ActivitySettings/SubscalesConfiguration/LookupTable';
+import { variables } from 'shared/styles';
 
 import {
-  SUBSCALES_CHART_LABEL_WIDTH_Y,
+  COLORS,
+  commonLabelsProps,
   locales,
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
-  COLORS,
-  commonLabelsProps,
+  SUBSCALES_CHART_LABEL_WIDTH_Y,
 } from '../../Charts.const';
-import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
-import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
+import { getTimeConfig, getTimelineStepSize } from '../../Charts.utils';
 import {
   COLOR_PLACEHOLDER,
   defaultSeveritySvg,
@@ -29,6 +28,7 @@ import {
   moderateSeveritySvg,
   severeSeveritySvg,
 } from './SubscaleLineChart.const';
+import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -101,7 +101,7 @@ export const getOptions = (
             return variables.palette.on_surface;
           },
           font: {
-            family: 'Atkinson',
+            family: 'Moderat',
             size: 14,
           },
         },

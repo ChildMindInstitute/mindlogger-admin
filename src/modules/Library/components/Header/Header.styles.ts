@@ -1,4 +1,4 @@
-import { styled, Box, Button } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
@@ -13,7 +13,7 @@ export const StyledHeaderContainer = styled(Box)`
 
 export const StyledBackButton = styled(Button)`
   &:hover {
-    background-color: ${variables.palette.on_surface_variant_alfa8};
+    background-color: ${variables.palette.on_surface_variant_alpha8};
   }
 
   svg {

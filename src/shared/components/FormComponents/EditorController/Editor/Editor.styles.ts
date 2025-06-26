@@ -8,7 +8,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   background-color: ${variables.palette.surface};
   color: ${variables.palette.on_surface_variant};
-  font-size: ${variables.font.size.lg};
+  font-size: ${variables.font.size.body2};
   box-shadow: unset;
   height: 32rem;
 
@@ -18,7 +18,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   }
 
   &.has-error {
-    border: ${variables.borderWidth.md} solid ${variables.palette.semantic.error};
+    border: ${variables.borderWidth.md} solid ${variables.palette.error};
     margin-bottom: 0;
   }
 
@@ -38,6 +38,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
     height: auto;
+    min-height: 38px;
 
     & .md-editor-toolbar {
       min-width: auto;
@@ -53,7 +54,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
         align-items: center;
 
         &:hover {
-          background-color: ${variables.palette.primary_alfa8};
+          background-color: ${variables.palette.primary_alpha8};
           border-radius: ${variables.borderRadius.xxxl};
         }
 
@@ -61,11 +62,20 @@ export const StyledMdEditor = styled(MarkDownEditor)`
           fill: ${variables.palette.on_surface_variant};
         }
       }
+
+      & .md-editor-divider {
+        background-color: ${variables.palette.gray};
+        height: 24px;
+      }
     }
   }
 
   & .md-editor-dropdown-overlay {
     margin-top: 0;
+  }
+
+  & .md-editor-preview-wrapper {
+    font-family: ${variables.font.family.body};
   }
 `;
 

@@ -34,6 +34,6 @@ export const StyledSvg = styled(Svg)`
   border-radius: ${variables.borderRadius.half};
 
   :hover {
-    background-color: ${variables.palette.on_surface_alfa8};
+    background-color: ${variables.palette.on_surface_alpha8};
   }
 `;

@@ -1,19 +1,28 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { ObjectSchema } from 'yup';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useForm, useFormContext } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { ObjectSchema } from 'yup';
 
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useCurrentActivityFlow } from 'modules/Builder/hooks/useCurrentActivityFlow';
+import { reportConfig } from 'modules/Builder/state';
+import { AppletFormValues } from 'modules/Builder/types';
 import {
-  postReportConfigApi,
-  postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
+  postActivityReportConfigApi,
+  postReportConfigApi,
 } from 'modules/Dashboard/api';
-import { ApiResponseCodes } from 'shared/api';
+import {
+  AppletPasswordPopup,
+  AppletPasswordPopupProps,
+  AppletPasswordPopupType,
+} from 'modules/Dashboard/features/Applet/Popups';
 import { applet, banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
+import { ApiResponseCodes } from 'shared/api';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
@@ -23,20 +32,18 @@ import {
   TagsController,
   UiType,
 } from 'shared/components/FormComponents';
-import {
-  theme,
-  variables,
-  StyledBodyLarge,
-  StyledTitleMedium,
-  StyledFlexColumn,
-} from 'shared/styles';
-import {
-  AppletPasswordPopup,
-  AppletPasswordPopupType,
-  AppletPasswordPopupProps,
-} from 'modules/Dashboard/features/Applet/Popups';
+import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
+import { usePrompt } from 'shared/features/AppletSettings/AppletSettings.hooks';
+import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
+import {
+  StyledBodyLarge,
+  StyledFlexColumn,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 import {
   getParsedEncryptionFromServer,
   getPrivateKey,
@@ -45,30 +52,23 @@ import {
 import { getSanitizedContent } from 'shared/utils/forms';
 import { getEntityKey } from 'shared/utils/getEntityKey';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
-import { reportConfig } from 'modules/Builder/state';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { useCurrentActivityFlow } from 'modules/Builder/hooks/useCurrentActivityFlow';
-import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
-import { AppletFormValues } from 'modules/Builder/types';
-import { usePrompt } from 'shared/features/AppletSettings/AppletSettings.hooks';
-import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
 
+import { ErrorPopup, ServerVerifyErrorPopup, WarningPopup } from './Popups';
+import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
+import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.hooks';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import {
-  StyledButton,
-  StyledSvg,
-  StyledLink,
   StyledActivities,
+  StyledButton,
+  StyledLink,
+  StyledSvg,
 } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
-import { ErrorPopup, ServerVerifyErrorPopup, WarningPopup } from './Popups';
 import {
   getActivitiesOptions,
   getActivityItemsOptions,
   setSubjectData,
 } from './ReportConfigSetting.utils';
-import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.hooks';
-import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 import { ServerNotConfigured } from './ServerNotConfigured';
 
 export const ReportConfigSetting = ({ 'data-testid': dataTestid }: ReportConfigSettingProps) => {
@@ -462,11 +462,7 @@ export const ReportConfigSetting = ({ 'data-testid': dataTestid }: ReportConfigS
           </Box>
           <StyledBodyLarge
             sx={{ margin: theme.spacing(2.4, 0, isSettingsOpen ? 2.4 : 4.8) }}
-            color={
-              isServerConfigured
-                ? variables.palette.semantic.green
-                : variables.palette.semantic.error
-            }
+            color={isServerConfigured ? variables.palette.green : variables.palette.error}
           >
             {t(isServerConfigured ? 'serverStatusConfigured' : 'serverStatusNotConfigured')}
           </StyledBodyLarge>

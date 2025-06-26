@@ -1,17 +1,17 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { forwardRef, useImperativeHandle, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyLarge, StyledClearedButton, variables, theme } from 'shared/styles';
+import { StyledBodyLarge, StyledClearedButton, theme, variables } from 'shared/styles';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
-import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';
-import { createPasswordFormSchema } from './CreateAppletPassword.schema';
 import { StyledController } from '../Password.styles';
 import { AppletPasswordRef } from '../Password.types';
+import { createPasswordFormSchema } from './CreateAppletPassword.schema';
+import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';
 
 export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPasswordProps>(
   ({ submitCallback, 'data-testid': dataTestid }, ref) => {
@@ -33,10 +33,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
 
     return (
       <form onSubmit={handleSubmit(submitCallback)} noValidate>
-        <StyledBodyLarge
-          color={variables.palette.semantic.error}
-          sx={{ marginBottom: theme.spacing(3.2) }}
-        >
+        <StyledBodyLarge color={variables.palette.error} sx={{ marginBottom: theme.spacing(3.2) }}>
           {t('createAppletPasswordWarning')}
         </StyledBodyLarge>
         <StyledBodyLarge

@@ -58,8 +58,8 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
     `
     & .MuiTableCell-root {
       cursor: default;
-      font-size: ${variables.font.size.md};
-      line-height: ${variables.font.lineHeight.md};
+      font-size: ${variables.font.size.label1};
+      line-height: ${variables.font.lineHeight.label1};
       letter-spacing: ${variables.font.letterSpacing.lg};
     }
   `}

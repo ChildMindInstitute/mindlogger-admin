@@ -3,8 +3,8 @@ import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { variables } from 'shared/styles';
 
 import { COLORS, commonLabelsProps, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
-import { ChartData } from './BarChart.types';
 import { BORDER_RADIUS } from './BarChart.const';
+import { ChartData } from './BarChart.types';
 
 export const getDatasets = (chartData: ChartData[]) =>
   chartData.map((item, index) => ({
@@ -53,7 +53,7 @@ export const getOptions = (
         stepSize,
         color: variables.palette.on_surface,
         font: {
-          family: 'Atkinson',
+          family: 'Moderat',
           size: 14,
         },
       },

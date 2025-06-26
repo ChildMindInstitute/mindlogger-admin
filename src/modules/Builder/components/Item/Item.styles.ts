@@ -28,7 +28,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     if (isDragging) {
       bgColor = blendColorsNormal(
         variables.palette.surface,
-        variables.palette.on_surface_alfa16,
+        variables.palette.on_surface_alpha16,
       ) as string;
     }
     if (hasError) {
@@ -53,7 +53,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       &:hover {
         background-color:  ${blendColorsNormal(
           variables.palette.surface,
-          variables.palette.on_surface_alfa8,
+          variables.palette.on_surface_alpha8,
         )};
         
         .item-name {
@@ -64,7 +64,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       &:active {
         background-color: ${blendColorsNormal(
           variables.palette.surface,
-          variables.palette.on_surface_alfa12,
+          variables.palette.on_surface_alpha12,
         )};
       }
   `;

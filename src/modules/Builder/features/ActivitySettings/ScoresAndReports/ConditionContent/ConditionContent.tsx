@@ -1,28 +1,27 @@
-import { useTranslation } from 'react-i18next';
 import { useFieldArray } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { Condition, RangeValueCondition } from 'shared/state';
-import { getEntityKey } from 'shared/utils';
-import { ConditionType } from 'shared/consts';
 import { ConditionRow, ConditionRowOld } from 'modules/Builder/components';
-import { ConditionRowType } from 'modules/Builder/types';
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { OnChangeConditionType } from 'modules/Builder/components/ConditionRow/ConditionRow.types';
-import { getPayload } from 'modules/Builder/components/ConditionRow/ConditionRow.utils';
 import {
   DEFAULT_PAYLOAD_MAX_VALUE,
   DEFAULT_PAYLOAD_MIN_VALUE,
 } from 'modules/Builder/components/ConditionRow/ConditionRow.const';
+import { OnChangeConditionType } from 'modules/Builder/components/ConditionRow/ConditionRow.types';
+import { getPayload } from 'modules/Builder/components/ConditionRow/ConditionRow.utils';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { ConditionRowType } from 'modules/Builder/types';
+import { Svg } from 'shared/components/Svg';
+import { ConditionType } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { Condition, RangeValueCondition } from 'shared/state';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { getEntityKey } from 'shared/utils';
 
-import { ConditionContentProps } from './ConditionContent.types';
-import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
+import { ConditionContentProps } from './ConditionContent.types';
 import { getDefaultScoreCondition } from './ConditionContent.utils';
 import { defaultSectionCondition } from './CondtitionContent.const';
+import { ScoreSummaryRow } from './ScoreSummaryRow';
 
 export const ConditionContent = ({
   name,
@@ -107,9 +106,7 @@ export const ConditionContent = ({
         ),
       )}
       {!!error && (
-        <StyledBodyMedium color={variables.palette.semantic.error}>
-          {error.message}
-        </StyledBodyMedium>
+        <StyledBodyMedium color={variables.palette.error}>{error.message}</StyledBodyMedium>
       )}
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}

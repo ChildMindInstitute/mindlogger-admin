@@ -6,9 +6,9 @@ import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTableCell = styled(TableCell, shouldForwardProp)`
-  font-size: ${variables.font.size.lg};
+  font-size: ${variables.font.size.body2};
+  line-height: ${variables.font.lineHeight.body2};
   letter-spacing: ${variables.font.letterSpacing.sm};
-  line-height: ${variables.font.lineHeight.lg};
   height: ${theme.spacing(6.4)};
 
   &&:first-of-type {

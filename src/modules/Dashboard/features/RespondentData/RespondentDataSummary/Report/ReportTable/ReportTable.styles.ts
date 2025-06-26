@@ -6,7 +6,7 @@ export const StyledTableWrapper = styled(Box)`
   margin-top: ${theme.spacing(2.4)};
 
   .MuiTableCell-root {
-    font-size: ${variables.font.size.md};
+    font-size: ${variables.font.size.label1};
   }
 
   thead {

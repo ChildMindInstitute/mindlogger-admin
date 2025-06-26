@@ -2,20 +2,20 @@ import { Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
-import { StyledTitleSmall, variables } from 'shared/styles';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { SubscaleTotalScore } from 'shared/consts';
-import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
-import { DataTableColumn } from 'shared/components';
 import { removeMarkdown } from 'modules/Builder/utils';
+import { DataTableColumn } from 'shared/components';
+import { SubscaleTotalScore } from 'shared/consts';
+import { StyledTitleSmall, variables } from 'shared/styles';
+import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 
+import { LabelsObject, ModalType } from './LookupTable';
 import {
   ItemElement,
   SharedElementColumns,
   SubscaleColumns,
   SubscaleContentProps,
 } from './SubscalesConfiguration.types';
-import { LabelsObject, ModalType } from './LookupTable';
 
 const { t } = i18n;
 
@@ -293,17 +293,17 @@ export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
   },
   errors: {
     haveToUploadFile: (
-      <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
+      <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.error}>
         {t('subscaleLookupTable.errors.haveToUploadFile')}
       </StyledTitleSmall>
     ),
     fileCantBeParsed: (
-      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+      <StyledTitleSmall sx={{ color: variables.palette.error }}>
         {t('subscaleLookupTable.errors.fileCantBeParsed')}
       </StyledTitleSmall>
     ),
     incorrectFileFormat: (
-      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+      <StyledTitleSmall sx={{ color: variables.palette.error }}>
         <Trans i18nKey="subscaleLookupTable.errors.incorrectFileFormat">
           Incorrect file format. Please upload file in
           <strong> .csv. </strong>
@@ -312,7 +312,7 @@ export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
       </StyledTitleSmall>
     ),
     onDelete: (
-      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+      <StyledTitleSmall sx={{ color: variables.palette.error }}>
         <Trans i18nKey="subscaleLookupTable.errors.onDelete">
           The current Lookup Table for
           <strong>
@@ -349,7 +349,7 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
     errors: {
       ...labels.errors,
       onDelete: (
-        <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+        <StyledTitleSmall sx={{ color: variables.palette.error }}>
           {t('addTotalScoreLookupTable.errors.onDelete')}
         </StyledTitleSmall>
       ),

@@ -33,9 +33,7 @@ export const ErrorPopup = ({
       data-testid={dataTestid}
     >
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-          {t('saveError')}
-        </StyledBodyLarge>
+        <StyledBodyLarge sx={{ color: variables.palette.error }}>{t('saveError')}</StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

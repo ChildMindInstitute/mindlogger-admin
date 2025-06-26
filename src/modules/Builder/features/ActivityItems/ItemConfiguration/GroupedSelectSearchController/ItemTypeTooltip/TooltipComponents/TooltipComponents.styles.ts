@@ -1,19 +1,19 @@
 import { Box, styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import {
   StyledBodySmall,
   StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopCenter,
 } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 const {
   palette: {
     surface_variant: surfaceVariant,
     on_surface_variant: onSurfaceVariant,
-    on_surface_alfa38: onSurfaceAlfa38,
+    on_surface_alpha38: onSurfaceAlfa38,
     surface,
   },
   borderRadius: { xxs, xs, md },

@@ -1,15 +1,15 @@
-import { styled, Button, Box } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import {
-  theme,
-  variables,
-  StyledHeadline,
-  StyledLinkBtn,
   StyledBodyMedium,
   StyledFlexAllCenter,
+  StyledHeadlineSmall,
+  StyledLinkBtn,
+  theme,
+  variables,
 } from 'shared/styles';
 
-export const StyledWelcome = styled(StyledHeadline)`
+export const StyledWelcome = styled(StyledHeadlineSmall)`
   color: ${variables.palette.primary};
   padding: ${theme.spacing(0, 3.2)};
   text-align: center;
