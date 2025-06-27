@@ -149,7 +149,7 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
   async downloadAsCSV(data: D[]): Promise<void> {
     // Sanitize data before CSV export to prevent CSV injection attacks
     const sanitizedData = sanitizeCSVData(data as Record<string, unknown>[]);
-    
+
     await exportTemplate({
       data: sanitizedData,
       fileName: this.fileNamePrefix,

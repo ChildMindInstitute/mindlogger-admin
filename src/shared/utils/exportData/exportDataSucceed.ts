@@ -39,8 +39,12 @@ const exportProcessedData = async ({
     : { general: legacyReportHeader, activity: legacyActivityJourneyHeader };
 
   // Sanitize user-controlled data before CSV export to prevent CSV injection attacks
-  const sanitizedReportData = sanitizeCSVData(reportData.filter(Boolean) as Record<string, unknown>[]);
-  const sanitizedActivityJourneyData = sanitizeCSVData(activityJourneyData.filter(Boolean) as Record<string, unknown>[]);
+  const sanitizedReportData = sanitizeCSVData(
+    reportData.filter(Boolean) as Record<string, unknown>[],
+  );
+  const sanitizedActivityJourneyData = sanitizeCSVData(
+    activityJourneyData.filter(Boolean) as Record<string, unknown>[],
+  );
 
   await exportTemplate({
     data: sanitizedReportData,

@@ -1,9 +1,4 @@
-import { 
-  sanitizeCSVValue, 
-  sanitizeCSVObject, 
-  sanitizeCSVData, 
-  isCSVSafe 
-} from './csvSanitization';
+import { sanitizeCSVValue, sanitizeCSVObject, sanitizeCSVData, isCSVSafe } from './csvSanitization';
 
 describe('CSV Sanitization', () => {
   describe('sanitizeCSVValue', () => {
@@ -43,11 +38,13 @@ describe('CSV Sanitization', () => {
     });
 
     test('should handle complex formula injection attempts', () => {
-      expect(sanitizeCSVValue('=cmd|"/c calc"!A0')).toBe("'=cmd|\"/c calc\"!A0");
-      expect(sanitizeCSVValue('=HYPERLINK("http://evil.com","Click me")')).toBe("'=HYPERLINK(\"http://evil.com\",\"Click me\")");
-      expect(sanitizeCSVValue('+cmd|"/c calc"!A0')).toBe("'+cmd|\"/c calc\"!A0");
-      expect(sanitizeCSVValue('-cmd|"/c calc"!A0')).toBe("'-cmd|\"/c calc\"!A0");
-      expect(sanitizeCSVValue('@SUM(1+1)*cmd|"/c calc"!A0')).toBe("'@SUM(1+1)*cmd|\"/c calc\"!A0");
+      expect(sanitizeCSVValue('=cmd|"/c calc"!A0')).toBe('\'=cmd|"/c calc"!A0');
+      expect(sanitizeCSVValue('=HYPERLINK("http://evil.com","Click me")')).toBe(
+        '\'=HYPERLINK("http://evil.com","Click me")',
+      );
+      expect(sanitizeCSVValue('+cmd|"/c calc"!A0')).toBe('\'+cmd|"/c calc"!A0');
+      expect(sanitizeCSVValue('-cmd|"/c calc"!A0')).toBe('\'-cmd|"/c calc"!A0');
+      expect(sanitizeCSVValue('@SUM(1+1)*cmd|"/c calc"!A0')).toBe('\'@SUM(1+1)*cmd|"/c calc"!A0');
     });
   });
 
@@ -58,7 +55,7 @@ describe('CSV Sanitization', () => {
         formula: '=SUM(A1:A10)',
         email: 'user@example.com',
         dangerous: '+malicious',
-        safe: 'normal text'
+        safe: 'normal text',
       };
 
       const result = sanitizeCSVObject(input);
@@ -78,8 +75,8 @@ describe('CSV Sanitization', () => {
         },
         metadata: {
           count: 5,
-          formula: '+dangerous'
-        }
+          formula: '+dangerous',
+        },
       };
 
       const result = sanitizeCSVObject(input);
@@ -96,12 +93,12 @@ describe('CSV Sanitization', () => {
         number: 42,
         boolean: true,
         nullValue: null,
-        undefinedValue: undefined
+        undefinedValue: undefined,
       };
 
       const result = sanitizeCSVObject(input);
 
-      expect(result.list).toBe("=formula,safe"); // Arrays get stringified
+      expect(result.list).toBe('=formula,safe'); // Arrays get stringified
       expect(result.number).toBe('42');
       expect(result.boolean).toBe('true');
       expect(result.nullValue).toBe('');
@@ -115,13 +112,13 @@ describe('CSV Sanitization', () => {
         {
           name: 'User 1',
           response: '=SUM(A1:A10)',
-          email: 'user1@example.com'
+          email: 'user1@example.com',
         },
         {
-          name: 'User 2', 
+          name: 'User 2',
           response: '+malicious_formula',
-          email: 'user2@example.com'
-        }
+          email: 'user2@example.com',
+        },
       ];
 
       const result = sanitizeCSVData(input);
@@ -170,25 +167,25 @@ describe('CSV Sanitization', () => {
   describe('Real-world attack scenarios', () => {
     test('should prevent DDE (Dynamic Data Exchange) attacks', () => {
       const ddeAttack = '=cmd|"/c calc"!A1';
-      expect(sanitizeCSVValue(ddeAttack)).toBe("'=cmd|\"/c calc\"!A1");
+      expect(sanitizeCSVValue(ddeAttack)).toBe('\'=cmd|"/c calc"!A1');
       expect(isCSVSafe(sanitizeCSVValue(ddeAttack))).toBe(true);
     });
 
     test('should prevent hyperlink-based attacks', () => {
       const hyperlinkAttack = '=HYPERLINK("http://evil.com","Click me")';
-      expect(sanitizeCSVValue(hyperlinkAttack)).toBe("'=HYPERLINK(\"http://evil.com\",\"Click me\")");
+      expect(sanitizeCSVValue(hyperlinkAttack)).toBe('\'=HYPERLINK("http://evil.com","Click me")');
       expect(isCSVSafe(sanitizeCSVValue(hyperlinkAttack))).toBe(true);
     });
 
     test('should prevent command execution via various prefixes', () => {
       const attacks = [
         '=cmd|"/c calc"!A0',
-        '+cmd|"/c calc"!A0', 
+        '+cmd|"/c calc"!A0',
         '-cmd|"/c calc"!A0',
-        '@SUM(1+1)*cmd|"/c calc"!A0'
+        '@SUM(1+1)*cmd|"/c calc"!A0',
       ];
 
-      attacks.forEach(attack => {
+      attacks.forEach((attack) => {
         const sanitized = sanitizeCSVValue(attack);
         expect(sanitized).toMatch(/^'/);
         expect(isCSVSafe(sanitized)).toBe(true);
@@ -200,7 +197,7 @@ describe('CSV Sanitization', () => {
         { name: 'John Doe', nickname: '=EVIL()' },
         { name: 'Jane Smith', tag: '+Administrator' },
         { name: 'Bob Wilson', response: '@dangerous_command' },
-        { name: 'Alice Brown', comment: '-rm -rf /' }
+        { name: 'Alice Brown', comment: '-rm -rf /' },
       ];
 
       const sanitized = sanitizeCSVData(userInputs);

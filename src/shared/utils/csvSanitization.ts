@@ -1,6 +1,6 @@
 /**
  * CSV Sanitization utilities to prevent CSV Injection attacks
- * 
+ *
  * This module provides functions to sanitize user-controlled data before
  * exporting to CSV files, preventing formula injection attacks where
  * malicious formulas could be executed when CSV files are opened in
@@ -12,7 +12,7 @@
  * These characters can trigger formula execution in spreadsheet applications:
  * = (equals) - starts formulas
  * + (plus) - can start formulas in some contexts
- * - (minus) - can start formulas in some contexts  
+ * - (minus) - can start formulas in some contexts
  * @ (at) - can start formulas in some contexts
  * \t (tab) - can cause parsing issues
  * \r (carriage return) - can cause parsing issues
@@ -22,10 +22,10 @@ const DANGEROUS_CSV_CHARS = /^[=+\-@\t\r]/;
 /**
  * Sanitizes a single value for safe CSV export by escaping dangerous characters
  * that could be interpreted as formulas when opened in spreadsheet software.
- * 
+ *
  * @param value - The value to sanitize (can be any type)
  * @returns The sanitized string value safe for CSV export
- * 
+ *
  * @example
  * sanitizeCSVValue("=SUM(1+1)") // Returns "'=SUM(1+1)"
  * sanitizeCSVValue("+1234") // Returns "'+1234"
@@ -41,7 +41,7 @@ export function sanitizeCSVValue(value: unknown): string {
 
   // Convert arrays to comma-separated strings WITHOUT sanitizing individual elements
   if (Array.isArray(value)) {
-    return value.map(item => String(item == null ? '' : item)).join(',');
+    return value.map((item) => String(item == null ? '' : item)).join(',');
   }
 
   // Convert all values to strings
@@ -52,7 +52,7 @@ export function sanitizeCSVValue(value: unknown): string {
     return stringValue;
   }
 
-  // Special case: negative numbers should not be sanitized 
+  // Special case: negative numbers should not be sanitized
   // (this seems like a security issue but the test expects this behavior)
   if (typeof value === 'number' && value < 0) {
     return stringValue;
@@ -71,10 +71,10 @@ export function sanitizeCSVValue(value: unknown): string {
  * Recursively sanitizes all string values in an object for safe CSV export.
  * This function traverses the object and sanitizes any string values that
  * could be dangerous when exported to CSV.
- * 
+ *
  * @param obj - The object to sanitize
  * @returns A new object with all string values sanitized
- * 
+ *
  * @example
  * const data = {
  *   name: "=DANGEROUS()",
@@ -84,7 +84,7 @@ export function sanitizeCSVValue(value: unknown): string {
  * sanitizeCSVObject(data);
  * // Returns: {
  * //   name: "'=DANGEROUS()",
- * //   email: "user@example.com", 
+ * //   email: "user@example.com",
  * //   nested: { formula: "'+SUM(A1:A10)" }
  * // }
  */
@@ -111,10 +111,10 @@ export function sanitizeCSVObject<T extends Record<string, unknown>>(obj: T): an
 /**
  * Sanitizes an array of objects for CSV export. This is the main function
  * to use when preparing data for CSV export.
- * 
+ *
  * @param data - Array of objects to sanitize
  * @returns Array of sanitized objects safe for CSV export
- * 
+ *
  * @example
  * const exportData = [
  *   { name: "=EVIL()", email: "test@example.com" },
@@ -133,16 +133,16 @@ export function sanitizeCSVData<T extends Record<string, unknown>>(data: T[]): T
 
   return data
     .filter((item): item is T => item != null && typeof item === 'object')
-    .map(item => sanitizeCSVObject(item));
+    .map((item) => sanitizeCSVObject(item));
 }
 
 /**
  * Validates if a value is safe for CSV export (i.e., doesn't start with dangerous characters).
  * This function can be used for validation/testing purposes.
- * 
+ *
  * @param value - The value to check
  * @returns true if the value is safe for CSV export, false otherwise
- * 
+ *
  * @example
  * isCSVSafe("=DANGEROUS()") // Returns false
  * isCSVSafe("Safe text") // Returns true
