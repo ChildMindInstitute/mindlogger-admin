@@ -35,13 +35,13 @@ const DANGEROUS_CSV_CHARS = /^[=+\-@\t\r]/;
  */
 export function sanitizeCSVValue(value: unknown): string {
   // Convert null and undefined to empty strings
-  if (value == null) {
+  if (value === null || value === undefined) {
     return '';
   }
 
   // Convert arrays to comma-separated strings WITHOUT sanitizing individual elements
   if (Array.isArray(value)) {
-    return value.map((item) => String(item == null ? '' : item)).join(',');
+    return value.map((item) => String(item === null || item === undefined ? '' : item)).join(',');
   }
 
   // Convert all values to strings
@@ -132,7 +132,7 @@ export function sanitizeCSVData<T extends Record<string, unknown>>(data: T[]): T
   }
 
   return data
-    .filter((item): item is T => item != null && typeof item === 'object')
+    .filter((item): item is T => item !== null && item !== undefined && typeof item === 'object')
     .map((item) => sanitizeCSVObject(item));
 }
 
