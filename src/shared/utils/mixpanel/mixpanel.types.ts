@@ -32,11 +32,13 @@ export enum MixpanelProps {
   AutoAssignedFlowCount = 'Auto-assigned flow count',
   ManuallyAssignedActivityCount = 'Manually-assigned activity count',
   ManuallyAssignedFlowCount = 'Manually-assigned flow count',
+  EHRFileSize = 'EHR File Size',
 }
 
 export enum MixpanelFeature {
   MultiInformant = 'Multi-informant',
   SSI = 'SSI',
+  EHR = 'EHR',
 }
 
 export enum MixpanelEventType {
@@ -373,6 +375,8 @@ export type EditLimitedAccountClickedEvent = WithAppletId<{
 
 export type ExportDataSuccessfulEvent = WithAppletId<{
   action: MixpanelEventType.ExportDataSuccessful;
+  [MixpanelProps.Feature]?: MixpanelFeature[];
+  [MixpanelProps.EHRFileSize]?: number;
 }>;
 
 export type FullAccountEditedSuccessfullyEvent = WithAppletId<{
