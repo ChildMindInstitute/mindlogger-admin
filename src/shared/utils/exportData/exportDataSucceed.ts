@@ -21,6 +21,7 @@ import { exportCsvZip } from './exportCsvZip';
 import { exportMediaZip } from './exportMediaZip';
 import { getReportZipName, ZipFile } from './getReportName';
 import { ExportDataFilters, prepareEncryptedData, prepareDecryptedData } from './prepareData';
+import { sanitizeCSVData } from '../csvSanitization';
 
 const exportProcessedData = async ({
   reportData,
@@ -37,16 +38,20 @@ const exportProcessedData = async ({
     ? { general: reportHeader, activity: activityJourneyHeader }
     : { general: legacyReportHeader, activity: legacyActivityJourneyHeader };
 
+  // Sanitize user-controlled data before CSV export to prevent CSV injection attacks
+  const sanitizedReportData = sanitizeCSVData(reportData.filter(Boolean) as Record<string, unknown>[]);
+  const sanitizedActivityJourneyData = sanitizeCSVData(activityJourneyData.filter(Boolean) as Record<string, unknown>[]);
+
   await exportTemplate({
-    data: reportData,
+    data: sanitizedReportData,
     fileName:
       (flags.enableDataExportRenaming ? GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
-    defaultData: reportData.length > 0 ? null : reportHeaders.general,
+    defaultData: sanitizedReportData.length > 0 ? null : reportHeaders.general,
   });
   await exportTemplate({
-    data: activityJourneyData,
+    data: sanitizedActivityJourneyData,
     fileName: JOURNEY_REPORT_NAME + suffix,
-    defaultData: activityJourneyData.length > 0 ? null : reportHeaders.activity,
+    defaultData: sanitizedActivityJourneyData.length > 0 ? null : reportHeaders.activity,
   });
 
   await Promise.allSettled([
