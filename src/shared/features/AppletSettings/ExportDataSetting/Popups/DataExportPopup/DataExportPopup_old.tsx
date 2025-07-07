@@ -35,9 +35,11 @@ import {
   variables,
 } from 'shared/styles';
 import {
+  ExportDataSuccessfulEvent,
   exportEncryptedDataSucceed,
   Mixpanel,
   MixpanelEventType,
+  MixpanelFeature,
   MixpanelProps,
   sendLogFile,
 } from 'shared/utils';
@@ -101,6 +103,11 @@ export const DataExportPopup = ({
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
+        const analyticsEvent: ExportDataSuccessfulEvent = {
+          action: MixpanelEventType.ExportDataSuccessful,
+          [MixpanelProps.AppletId]: appletId,
+        };
+
         dataExportingRef.current = true;
         setDataIsExporting(true);
 
@@ -212,7 +219,7 @@ export const DataExportPopup = ({
           const respondentId = filters?.sourceSubjectId;
           const subjectId = targetSubjectIds ?? filters?.targetSubjectId;
 
-          await new EHRDataExporter().exportData({
+          const { size } = await new EHRDataExporter().exportData({
             appletId,
             fromDate,
             toDate,
@@ -221,13 +228,15 @@ export const DataExportPopup = ({
             respondentIds: respondentId ? [respondentId] : undefined,
             subjectIds: subjectId ? [subjectId] : undefined,
           });
+
+          if (size) {
+            analyticsEvent[MixpanelProps.Feature] = [MixpanelFeature.EHR];
+            analyticsEvent[MixpanelProps.EHRFileSize] = size;
+          }
         }
 
+        Mixpanel.track(analyticsEvent);
         handlePopupClose();
-        Mixpanel.track({
-          action: MixpanelEventType.ExportDataSuccessful,
-          [MixpanelProps.AppletId]: appletId,
-        });
       } catch (e) {
         const error = e as TypeError;
         console.warn('Error while export data', error);
