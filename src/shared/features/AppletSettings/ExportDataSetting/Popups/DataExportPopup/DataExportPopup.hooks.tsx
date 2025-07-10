@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { getParsedEncryptionFromServer } from 'shared/utils/encryption';
-import { ExportDataResult } from 'shared/types/answer';
-import { isProduction } from 'shared/utils/env';
-import { SessionStorageKeys } from 'shared/utils/storage';
-import { useFeatureFlags } from 'shared/hooks';
 import { MultipleDecryptWorkersProps } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
 import { DataExportWorkersManager as DataExportWorkersManagerClass } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorkersManager';
+import { useFeatureFlags } from 'shared/hooks';
+import { ExportDataResult } from 'shared/types/answer';
+import { checkIfShouldLogging } from 'shared/utils';
+import { getParsedEncryptionFromServer } from 'shared/utils/encryption';
 
 export const useMultipleDecryptWorkers = ({
   handleExportPopupClose,
@@ -23,8 +22,7 @@ export const useMultipleDecryptWorkers = ({
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
   const { featureFlags } = useFeatureFlags();
 
-  const shouldLogDataInDebugMode =
-    !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
+  const shouldLogDataInDebugMode = checkIfShouldLogging();
 
   const DataExportWorkerManager = useRef(
     new DataExportWorkersManagerClass(
