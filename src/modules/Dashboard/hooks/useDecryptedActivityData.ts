@@ -21,7 +21,6 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption);
   const { getAppletPrivateKey } = useEncryptionStorage();
-  // TODO: Consider if re-adding
   const shouldLogDataInDebugMode = checkIfShouldLogging();
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
