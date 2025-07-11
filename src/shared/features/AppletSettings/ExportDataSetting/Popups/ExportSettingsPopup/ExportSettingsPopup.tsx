@@ -1,13 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { useFormContext } from 'react-hook-form';
-import { useMemo } from 'react';
 import { Button } from '@mui/material';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
+import { useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components/DatePicker';
+import { DateType } from 'shared/components/DatePicker/DatePicker.types';
+import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { Modal } from 'shared/components/Modal';
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
@@ -17,15 +18,14 @@ import {
   theme,
 } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
-import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 
-import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
-import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
 import {
   ExportDataFormValues,
   ExportDateType,
   SupplementaryFilesFormValues,
 } from '../../ExportDataSetting.types';
+import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
+import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
 
 export const ExportSettingsPopup = ({
   isOpen,
@@ -57,19 +57,22 @@ export const ExportSettingsPopup = ({
     },
   };
 
-  const onFromDateSubmit = (date: DateType) => {
+  const processFromDate = (date: DateType | undefined) => {
     if (!date) return;
     setValue('fromDate', startOfDay(date));
   };
-  const onToDateSubmit = (date: DateType) => {
+
+  const processToDate = (date: DateType | undefined) => {
     if (!date) return;
     setValue('toDate', endOfDay(date));
   };
+
   const onDatePickerClose = () => {
     if (toDate < fromDate) {
       setValue('toDate', addDays(fromDate, 1));
     }
   };
+
   const onDateTypeChange = (e: SelectEvent) => {
     const dateType = e.target.value as ExportDateType;
     const maxDate = getMaxDate();
@@ -144,8 +147,11 @@ export const ExportSettingsPopup = ({
                 <DatePicker
                   {...commonProps}
                   name="fromDate"
-                  onCloseCallback={onDatePickerClose}
-                  onSubmitCallback={onFromDateSubmit}
+                  onCloseCallback={(date) => {
+                    processFromDate(date);
+                    onDatePickerClose();
+                  }}
+                  onSubmitCallback={processFromDate}
                   label={t('startDate')}
                   minDate={minDate}
                   data-testid={`${dataTestId}-from-date`}
@@ -157,7 +163,8 @@ export const ExportSettingsPopup = ({
                 <DatePicker
                   {...commonProps}
                   name="toDate"
-                  onSubmitCallback={onToDateSubmit}
+                  onCloseCallback={processToDate}
+                  onSubmitCallback={processToDate}
                   minDate={fromDate}
                   label={t('endDate')}
                   data-testid={`${dataTestId}-to-date`}
