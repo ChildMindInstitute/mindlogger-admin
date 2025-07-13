@@ -67,10 +67,15 @@ export const ExportSettingsPopup = ({
     setValue('toDate', endOfDay(date));
   };
 
-  const onDatePickerClose = () => {
+  const onFromDatePickerClose = () => {
+    let newToDate = toDate;
     if (toDate < fromDate) {
-      setValue('toDate', addDays(fromDate, 1));
+      const increasedFromDate = addDays(fromDate, 1);
+      const maxDate = getMaxDate();
+
+      newToDate = increasedFromDate <= maxDate ? increasedFromDate : maxDate;
     }
+    processToDate(newToDate);
   };
 
   const onDateTypeChange = (e: SelectEvent) => {
@@ -149,9 +154,8 @@ export const ExportSettingsPopup = ({
                   name="fromDate"
                   onCloseCallback={(date) => {
                     processFromDate(date);
-                    onDatePickerClose();
+                    onFromDatePickerClose();
                   }}
-                  onSubmitCallback={processFromDate}
                   label={t('startDate')}
                   minDate={minDate}
                   data-testid={`${dataTestId}-from-date`}
@@ -164,7 +168,6 @@ export const ExportSettingsPopup = ({
                   {...commonProps}
                   name="toDate"
                   onCloseCallback={processToDate}
-                  onSubmitCallback={processToDate}
                   minDate={fromDate}
                   label={t('endDate')}
                   data-testid={`${dataTestId}-to-date`}
