@@ -1,12 +1,11 @@
 import { useParams } from 'react-router-dom';
 
-import { applet } from 'shared/state/Applet';
-import { Encryption, getParsedEncryptionFromServer, SessionStorageKeys } from 'shared/utils';
-import { useEncryptionStorage } from 'shared/hooks';
-import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
 import { ItemResponseType } from 'shared/consts';
+import { useEncryptionStorage } from 'shared/hooks';
+import { applet } from 'shared/state/Applet';
+import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
+import { checkIfShouldLogging, Encryption, getParsedEncryptionFromServer } from 'shared/utils';
 import { getDecryptedAnswers } from 'shared/utils/exportData/getDecryptedAnswers';
-import { isProduction } from 'shared/utils/env';
 
 export const getEmptyDecryptedActivityData = () => ({
   decryptedAnswers: [],
@@ -22,8 +21,7 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption);
   const { getAppletPrivateKey } = useEncryptionStorage();
-  const shouldLogDataInDebugMode =
-    !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
+  const shouldLogDataInDebugMode = checkIfShouldLogging();
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
 
