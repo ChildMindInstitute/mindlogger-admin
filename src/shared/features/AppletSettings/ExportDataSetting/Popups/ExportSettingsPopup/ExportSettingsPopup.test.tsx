@@ -61,7 +61,7 @@ const commonProps = {
   onClose: mockOnClose,
   onExport: mockOnExport,
   minDate: date,
-  getMaxDate: () => getNormalizedTimezoneDate(new Date().toString()),
+  maxDate: getNormalizedTimezoneDate(new Date().toString()),
   appletName: mockedApplet.displayName,
   'data-testid': DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 };

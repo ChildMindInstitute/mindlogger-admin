@@ -32,7 +32,7 @@ export const ExportSettingsPopup = ({
   onClose,
   onExport,
   minDate,
-  getMaxDate,
+  maxDate,
   appletName,
   supportedSupplementaryFiles,
   canExportEhrHealthData,
@@ -48,7 +48,7 @@ export const ExportSettingsPopup = ({
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
 
   const commonProps = {
-    maxDate: getMaxDate(),
+    maxDate,
     control,
     inputSx: {
       '& .MuiInputLabel-outlined': {
