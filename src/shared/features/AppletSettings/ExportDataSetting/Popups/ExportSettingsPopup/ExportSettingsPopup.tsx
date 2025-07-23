@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,6 @@ import {
   StyledModalWrapper,
   theme,
 } from 'shared/styles';
-import { SelectEvent } from 'shared/types';
 
 import {
   ExportDataFormValues,
@@ -57,53 +56,56 @@ export const ExportSettingsPopup = ({
     },
   };
 
-  const processFromDate = (date: DateType | undefined) => {
-    if (!date) return;
-    setValue('fromDate', startOfDay(date));
-  };
+  const processFromDate = useCallback(
+    (date: DateType | undefined) => {
+      if (!date) return;
+      setValue('fromDate', startOfDay(date));
+    },
+    [setValue],
+  );
 
-  const processToDate = (date: DateType | undefined) => {
-    if (!date) return;
-    setValue('toDate', endOfDay(date));
-  };
+  const processToDate = useCallback(
+    (date: DateType | undefined) => {
+      if (!date) return;
+      setValue('toDate', endOfDay(date));
+    },
+    [setValue],
+  );
 
   const onFromDatePickerClose = () => {
     let newToDate = toDate;
     if (toDate < fromDate) {
       const increasedFromDate = addDays(fromDate, 1);
-      const maxDate = getMaxDate();
 
       newToDate = increasedFromDate <= maxDate ? increasedFromDate : maxDate;
     }
     processToDate(newToDate);
   };
 
-  const onDateTypeChange = (e: SelectEvent) => {
-    const dateType = e.target.value as ExportDateType;
-    const maxDate = getMaxDate();
+  useEffect(() => {
     switch (dateType) {
       case ExportDateType.AllTime:
-        setValue('fromDate', minDate);
-        setValue('toDate', maxDate);
+        processFromDate(minDate);
+        processToDate(maxDate);
         break;
       case ExportDateType.Last24h:
         setValue('fromDate', addDays(maxDate, -1));
         setValue('toDate', maxDate);
         break;
       case ExportDateType.LastWeek:
-        setValue('fromDate', addDays(maxDate, -7));
-        setValue('toDate', maxDate);
+        processFromDate(addDays(maxDate, -7));
+        processToDate(maxDate);
         break;
       case ExportDateType.LastMonth:
-        setValue('fromDate', addDays(maxDate, -30));
-        setValue('toDate', maxDate);
+        processFromDate(addDays(maxDate, -30));
+        processToDate(maxDate);
         break;
       case ExportDateType.ChooseDates:
-        setValue('fromDate', minDate);
-        setValue('toDate', maxDate);
+        processFromDate(minDate);
+        processToDate(maxDate);
         break;
     }
-  };
+  }, [dateType, minDate, maxDate, processFromDate, processToDate, setValue]);
 
   const filteredSupplementaryFiles = useMemo(
     () =>
@@ -143,7 +145,6 @@ export const ExportSettingsPopup = ({
                 options={getDateTypeOptions()}
                 label={t('dateRange')}
                 data-testid={`${dataTestId}-dateType`}
-                customChange={onDateTypeChange}
                 fullWidth
               />
             </StyledFlexColumn>
@@ -197,13 +198,7 @@ export const ExportSettingsPopup = ({
             )}
             <StyledFlexAllCenter>
               <Button
-                onClick={() => {
-                  if (dateType !== 'chooseDates') {
-                    setValue('toDate', getMaxDate());
-                  }
-
-                  onExport();
-                }}
+                onClick={onExport}
                 color="primary"
                 variant="contained"
                 sx={{ px: 2.4 }}
