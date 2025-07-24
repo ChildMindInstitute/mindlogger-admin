@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { endOfDay, startOfDay } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
@@ -46,8 +47,8 @@ export const ExportDataSetting = ({
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
-      fromDate: minDate,
-      toDate: maxDate,
+      fromDate: startOfDay(minDate),
+      toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(
         (acc, fileType) => ({ ...acc, [fileType]: false }),
         {} as Record<SupplementaryFiles, boolean>,
