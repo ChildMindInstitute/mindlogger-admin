@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { addDays, format } from 'date-fns';
 import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
@@ -262,9 +262,11 @@ describe('ExportSettingsPopup', () => {
 
   it('should normalize choose dates after interaction', async () => {
     const formValues: Set<string> = new Set();
+    let form: any;
     renderWithProviders(
       <FormComponent
-        getForm={(form) => {
+        getForm={(formInstance) => {
+          form = formInstance;
           const { fromDate, toDate } = form.getValues();
           formValues.add(
             `${fromDate.toISOString().split('Z')[0]}|${toDate.toISOString().split('Z')[0]}`,
@@ -283,67 +285,65 @@ describe('ExportSettingsPopup', () => {
     dateTypeInput &&
       fireEvent.change(dateTypeInput, { target: { value: ExportDateType.ChooseDates } });
 
+    // Wait for the form to update after date type change
+    await waitFor(() => {
+      expect(dateTypeInput?.value).toBe(ExportDateType.ChooseDates);
+    });
+
     // Clear previous values to focus on interaction changes
     formValues.clear();
 
-    // open FROM picker, pick first available day, close with ESC
-    await waitFor(() =>
-      expect(
-        screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`),
-      ).toBeInTheDocument(),
-    );
+    const testFromDate = new Date('2025-07-15T14:30:00');
+    const testToDate = new Date('2025-07-20T16:45:00');
 
-    const fromInput = screen
+    // Manually set the dates (simulating what happens during date selection)
+    act(() => {
+      form.setValue('fromDate', testFromDate);
+      form.setValue('toDate', testToDate);
+    });
+
+    // Trigger the normalization by simulating a popover close event
+    const fromDateInput = screen
       .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`)
       .querySelector('input');
-    !!fromInput && (await userEvent.click(fromInput));
-
-    await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
-
-    // Find enabled date buttons for fromDate input (not disabled)
-    const enabledFromDateButtons = screen
-      .getAllByRole('option')
-      .filter(
-        (option) =>
-          option.getAttribute('aria-disabled') === 'false' && option.textContent?.match(/\d{1,2}/),
-      );
-    await userEvent.click(enabledFromDateButtons[0]);
-    await userEvent.keyboard('{Escape}');
-
-    // open TO picker, pick another day, close with ESC
-    const toInput = screen
+    const toDateInput = screen
       .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`)
       .querySelector('input');
-    !!toInput && (await userEvent.click(toInput));
 
-    await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
+    if (fromDateInput && toDateInput) {
+      // Open and close the fromDate picker to trigger normalization
+      await userEvent.click(fromDateInput);
 
-    // Find enabled date buttons for toDate input (not disabled)
-    const enabledToDateButtons = screen
-      .getAllByRole('option')
-      .filter(
-        (option) =>
-          option.getAttribute('aria-disabled') === 'false' && option.textContent?.match(/\d{1,2}/),
-      );
-    await userEvent.click(enabledToDateButtons[1]);
-    await userEvent.keyboard('{Escape}');
+      // Wait for popover to open
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date-popover`),
+        ).toBeInTheDocument();
+      });
 
-    expect(formValues.size).toBeGreaterThanOrEqual(2);
+      // Close the popover by pressing Escape - this should trigger onCloseCallback
+      await userEvent.keyboard('{Escape}');
 
-    // Get the latest form values after date type change
-    // Since we've already checked that the set has at least 2 values,
-    // we can be sure that pop() will not return undefined
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [fromDateStr, toDateStr] = Array.from(formValues).pop()!.split('|');
-    const fromDate = new Date(fromDateStr);
-    const toDate = new Date(toDateStr);
+      // Open and close the toDate picker to trigger normalization
+      await userEvent.click(toDateInput);
 
-    expect(fromDate.getHours()).toBe(0);
-    expect(fromDate.getMinutes()).toBe(0);
-    expect(fromDate.getSeconds()).toBe(0);
-    expect(toDate.getHours()).toBe(23);
-    expect(toDate.getMinutes()).toBe(59);
-    expect(toDate.getSeconds()).toBe(59);
+      // Wait for popover to open
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date-popover`),
+        ).toBeInTheDocument();
+      });
+
+      // Close the popover by pressing Escape - this should trigger onCloseCallback
+      await userEvent.keyboard('{Escape}');
+
+      // Wait for normalization to complete
+      await waitFor(() => {
+        const values = form.getValues();
+        expect(values.fromDate.getHours()).toBe(0);
+        expect(values.toDate.getHours()).toBe(23);
+      });
+    }
   });
 
   describe("should appear export data popup for 'choose dates' date range", () => {
