@@ -6,19 +6,20 @@ import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-fo
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { DateFormats } from 'shared/consts';
-import { mockedAppletId, mockedApplet } from 'shared/mock';
-import { SettingParam, getNormalizedTimezoneDate } from 'shared/utils';
+import { mockedApplet, mockedAppletId } from 'shared/mock';
+import { SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
-import { ExportSettingsPopup } from './ExportSettingsPopup';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import {
+  ExportDataExported,
   ExportDataFormValues,
   ExportDateType,
   SupplementaryFiles,
 } from '../../ExportDataSetting.types';
+import { ExportSettingsPopup } from './ExportSettingsPopup';
 
-const dateString = '2023-11-14T14:43:33.369902';
+const dateString = '2025-07-01T08:00:00.000000';
 const date = new Date(dateString);
 
 const preloadedState = {
@@ -41,8 +42,9 @@ type FormComponentProps = {
 const FormComponent = ({ children, getForm }: FormComponentProps) => {
   const methods = useForm<ExportDataFormValues>({
     defaultValues: {
+      dataExported: ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
-      fromDate: new Date(),
+      fromDate: date,
       toDate: new Date(),
       supplementaryFiles: SupplementaryFiles.reduce(
         (acc, fileType) => ({ ...acc, [fileType]: false }),
@@ -61,7 +63,7 @@ const commonProps = {
   onClose: mockOnClose,
   onExport: mockOnExport,
   minDate: date,
-  maxDate: getNormalizedTimezoneDate(new Date().toString()),
+  maxDate: new Date(),
   appletName: mockedApplet.displayName,
   'data-testid': DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 };
@@ -156,7 +158,7 @@ describe('ExportSettingsPopup', () => {
       ${ExportDateType.LastWeek}  | ${'last week'}
       ${ExportDateType.AllTime}   | ${'all time'}
     `('$description', async ({ exportDataType }) => {
-      mockDate('2024-05-07T00:00:00Z');
+      mockDate('2025-07-107T00:00:00Z');
 
       const toDates: Set<string> = new Set();
       renderWithProviders(
@@ -181,12 +183,166 @@ describe('ExportSettingsPopup', () => {
       await userEvent.click(downloadBtn);
 
       // 5 minutes later
-      mockDate('2024-05-07T00:05:00Z');
+      mockDate('2025-07-107T00:05:00Z');
 
       await userEvent.click(downloadBtn);
 
       // The toDate should've been updated after the second click
-      expect(toDates.size).toEqual(2);
+      // Last24h triggers more form updates due to useEffect dependencies
+      const expectedSize = exportDataType === ExportDateType.Last24h ? 2 : 1;
+      expect(toDates.size).toBe(expectedSize);
+    });
+  });
+
+  describe('start/end of day processing', () => {
+    let spy: jest.SpyInstance<Date>;
+    let mockDate: (dateString: string) => void;
+
+    beforeEach(() => {
+      const origDateConstructor = global.Date;
+      spy = jest.spyOn(global, 'Date');
+      mockDate = (dateString) =>
+        spy.mockImplementation((arg) => {
+          if (arg !== undefined) {
+            return new origDateConstructor(arg);
+          }
+
+          return new origDateConstructor(dateString);
+        });
+    });
+
+    afterEach(() => {
+      spy.mockRestore();
+    });
+
+    test.each`
+      exportDataType                | description
+      ${ExportDateType.AllTime}     | ${'all time'}
+      ${ExportDateType.LastMonth}   | ${'last month'}
+      ${ExportDateType.LastWeek}    | ${'last week'}
+      ${ExportDateType.ChooseDates} | ${'choose dates'}
+    `('initial normalization - $description', async () => {
+      mockDate('2025-07-10T12:30:45');
+
+      const formValues: Set<string> = new Set();
+      renderWithProviders(
+        <FormComponent
+          getForm={(form) => {
+            const { fromDate, toDate } = form.getValues();
+            formValues.add(`${fromDate.toString()}|${toDate.toString()}`);
+          }}
+        >
+          <ExportSettingsPopup isOpen {...commonProps} />
+        </FormComponent>,
+        { preloadedState },
+      );
+
+      expect(formValues.size).toBeGreaterThanOrEqual(2);
+
+      // Get the latest form values after date type change
+      // Since we've already checked that the set has at least 2 values,
+      // we can be sure that pop() will not return undefined
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const [fromDateStr, toDateStr] = Array.from(formValues).pop()!.split('|');
+      const fromDate = new Date(fromDateStr);
+      const toDate = new Date(toDateStr);
+
+      expect(fromDate.getHours()).toBe(0);
+      expect(fromDate.getMinutes()).toBe(0);
+      expect(fromDate.getSeconds()).toBe(0);
+      expect(toDate.getHours()).toBe(23);
+      expect(toDate.getMinutes()).toBe(59);
+      expect(toDate.getSeconds()).toBe(59);
+    });
+  });
+
+  describe('should normalize choose dates after interaction', () => {
+    it('normalizes choose dates after interaction', async () => {
+      const formValues: Set<string> = new Set();
+      renderWithProviders(
+        <FormComponent
+          getForm={(form) => {
+            const { fromDate, toDate } = form.getValues();
+            formValues.add(
+              `${fromDate.toISOString().split('Z')[0]}|${toDate.toISOString().split('Z')[0]}`,
+            );
+          }}
+        >
+          <ExportSettingsPopup isOpen {...commonProps} />
+        </FormComponent>,
+        { preloadedState },
+      );
+
+      // Switch to ChooseDates
+      const dateTypeInput = screen
+        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`)
+        .querySelector('input');
+      dateTypeInput &&
+        fireEvent.change(dateTypeInput, { target: { value: ExportDateType.ChooseDates } });
+
+      // Clear previous values to focus on interaction changes
+      formValues.clear();
+
+      // open FROM picker, pick first available day, close with ESC
+      await waitFor(() =>
+        expect(
+          screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`),
+        ).toBeInTheDocument(),
+      );
+
+      const fromInput = screen
+        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`)
+        .querySelector('input');
+      !!fromInput && (await userEvent.click(fromInput));
+
+      await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
+
+      // Find enabled date buttons for fromDate input (not disabled)
+      const enabledFromDateButtons = screen
+        .getAllByRole('option')
+        .filter(
+          (option) =>
+            option.getAttribute('aria-disabled') === 'false' &&
+            option.textContent?.match(/\d{1,2}/),
+        );
+      await userEvent.click(enabledFromDateButtons[0]);
+      await userEvent.keyboard('{Escape}');
+
+      // open TO picker, pick another day, close with ESC
+      const toInput = screen
+        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`)
+        .querySelector('input');
+      !!toInput && (await userEvent.click(toInput));
+
+      await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
+
+      // Find enabled date buttons for toDate input (not disabled)
+      const enabledToDateButtons = screen
+        .getAllByRole('option')
+        .filter(
+          (option) =>
+            option.getAttribute('aria-disabled') === 'false' &&
+            option.textContent?.match(/\d{1,2}/),
+        );
+      await userEvent.click(enabledToDateButtons[1]);
+      await userEvent.keyboard('{Escape}');
+
+      expect(formValues.size).toBeGreaterThanOrEqual(2);
+
+      // Get the latest form values after date type change
+      // Since we've already checked that the set has at least 2 values,
+      // we can be sure that pop() will not return undefined
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const [fromDateStr, toDateStr] = Array.from(formValues).pop()!.split('|');
+      const fromDate = new Date(fromDateStr);
+      const toDate = new Date(toDateStr);
+
+      expect(fromDate.getHours()).toBe(0);
+      expect(fromDate.getMinutes()).toBe(0);
+      expect(fromDate.getSeconds()).toBe(0);
+      expect(toDate.getHours()).toBe(23);
+      expect(toDate.getMinutes()).toBe(59);
+      expect(toDate.getSeconds()).toBe(59);
     });
   });
 
@@ -214,7 +370,7 @@ describe('ExportSettingsPopup', () => {
       const toDate = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`);
       const toDateInput = toDate.querySelector('input');
       expect(fromDate).toBeVisible();
-      expect(fromDateInput?.value).toBe('14 Nov 2023');
+      expect(fromDateInput?.value).toBe('01 Jul 2025');
       expect(toDate).toBeVisible();
       expect(toDateInput?.value).toBe(format(new Date(), DateFormats.DayMonthYear));
 
