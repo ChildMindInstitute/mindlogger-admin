@@ -1,23 +1,23 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { addDays, roundToNearestMinutes } from 'date-fns';
 import { AxiosResponse } from 'axios';
+import { addDays, roundToNearestMinutes, startOfDay } from 'date-fns';
 
-import { initialStateData } from 'redux/modules';
-import { mockedApplet, mockedPassword } from 'shared/mock';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import * as encryptionFunctions from 'shared/utils/encryption';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import * as apiFunctions from 'modules/Dashboard/api';
-import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 import { ResponseWithObject } from 'api';
-import { ExportDataResult } from 'shared/types';
-import * as ScheduleHistoryExporterClasses from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
-import * as FlowActivityHistoryExporterClasses from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
-import * as EHRDataExporterClasses from 'shared/utils/exportData/exporters/EHRDataExporter';
+import * as apiFunctions from 'modules/Dashboard/api';
+import { initialStateData } from 'redux/modules';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { mockedApplet, mockedPassword } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { ExportDataResult } from 'shared/types';
+import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
+import * as encryptionFunctions from 'shared/utils/encryption';
+import * as EHRDataExporterClasses from 'shared/utils/exportData/exporters/EHRDataExporter';
+import * as FlowActivityHistoryExporterClasses from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
+import * as ScheduleHistoryExporterClasses from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
-import { ExportDataExported, ExportDateType } from './ExportDataSetting.types';
 import { ExportDataSetting } from './ExportDataSetting';
+import { ExportDataExported, ExportDateType } from './ExportDataSetting.types';
 
 const createdDate = '2023-11-14T14:43:33.369902';
 
@@ -160,11 +160,11 @@ describe('ExportDataSetting', () => {
 
   describe('should pass settings specified in settings popup to the export popup', () => {
     test.each`
-      exportType                  | expectedFromTime            | description
-      ${ExportDateType.AllTime}   | ${new Date(createdDate)}    | ${'use applet create time and now for all time'}
-      ${ExportDateType.Last24h}   | ${addDays(new Date(), -1)}  | ${'use correct dates for last 24h'}
-      ${ExportDateType.LastWeek}  | ${addDays(new Date(), -7)}  | ${'use correct dates for last week'}
-      ${ExportDateType.LastMonth} | ${addDays(new Date(), -30)} | ${'use correct dates for last month'}
+      exportType                  | expectedFromTime                        | description
+      ${ExportDateType.AllTime}   | ${startOfDay(new Date(createdDate))}    | ${'use normalized applet create time for all time'}
+      ${ExportDateType.Last24h}   | ${addDays(new Date(), -1)}              | ${'use correct dates for last 24h'}
+      ${ExportDateType.LastWeek}  | ${startOfDay(addDays(new Date(), -7))}  | ${'use normalized dates for last week'}
+      ${ExportDateType.LastMonth} | ${startOfDay(addDays(new Date(), -30))} | ${'use normalized dates for last month'}
     `('$description', async ({ exportType, expectedFromTime }) => {
       const mockOnClose = jest.fn();
 
