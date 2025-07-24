@@ -56,7 +56,7 @@ export const ExportSettingsPopup = ({
     },
   };
 
-  const processFromDate = useCallback(
+  const normalizeFromDate = useCallback(
     (date: DateType | undefined) => {
       if (!date) return;
       setValue('fromDate', startOfDay(date));
@@ -64,7 +64,7 @@ export const ExportSettingsPopup = ({
     [setValue],
   );
 
-  const processToDate = useCallback(
+  const normalizeToDate = useCallback(
     (date: DateType | undefined) => {
       if (!date) return;
       setValue('toDate', endOfDay(date));
@@ -79,33 +79,33 @@ export const ExportSettingsPopup = ({
 
       newToDate = increasedFromDate <= maxDate ? increasedFromDate : maxDate;
     }
-    processToDate(newToDate);
+    normalizeToDate(newToDate);
   };
 
   useEffect(() => {
     switch (dateType) {
       case ExportDateType.AllTime:
-        processFromDate(minDate);
-        processToDate(maxDate);
+        normalizeFromDate(minDate);
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.Last24h:
         setValue('fromDate', addDays(maxDate, -1));
         setValue('toDate', maxDate);
         break;
       case ExportDateType.LastWeek:
-        processFromDate(addDays(maxDate, -7));
-        processToDate(maxDate);
+        normalizeFromDate(addDays(maxDate, -7));
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.LastMonth:
-        processFromDate(addDays(maxDate, -30));
-        processToDate(maxDate);
+        normalizeFromDate(addDays(maxDate, -30));
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.ChooseDates:
-        processFromDate(minDate);
-        processToDate(maxDate);
+        normalizeFromDate(minDate);
+        normalizeToDate(maxDate);
         break;
     }
-  }, [dateType, minDate, maxDate, processFromDate, processToDate, setValue]);
+  }, [dateType, minDate, maxDate, normalizeFromDate, normalizeToDate, setValue]);
 
   const filteredSupplementaryFiles = useMemo(
     () =>
@@ -154,7 +154,7 @@ export const ExportSettingsPopup = ({
                   {...commonProps}
                   name="fromDate"
                   onCloseCallback={(date) => {
-                    processFromDate(date);
+                    normalizeFromDate(date);
                     onFromDatePickerClose();
                   }}
                   label={t('startDate')}
@@ -168,7 +168,7 @@ export const ExportSettingsPopup = ({
                 <DatePicker
                   {...commonProps}
                   name="toDate"
-                  onCloseCallback={processToDate}
+                  onCloseCallback={normalizeToDate}
                   minDate={fromDate}
                   label={t('endDate')}
                   data-testid={`${dataTestId}-to-date`}
