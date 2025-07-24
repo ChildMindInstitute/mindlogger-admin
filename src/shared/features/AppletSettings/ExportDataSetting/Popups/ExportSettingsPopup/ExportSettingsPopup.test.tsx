@@ -256,94 +256,90 @@ describe('ExportSettingsPopup', () => {
     });
   });
 
-  describe('should normalize choose dates after interaction', () => {
-    it('normalizes choose dates after interaction', async () => {
-      const formValues: Set<string> = new Set();
-      renderWithProviders(
-        <FormComponent
-          getForm={(form) => {
-            const { fromDate, toDate } = form.getValues();
-            formValues.add(
-              `${fromDate.toISOString().split('Z')[0]}|${toDate.toISOString().split('Z')[0]}`,
-            );
-          }}
-        >
-          <ExportSettingsPopup isOpen {...commonProps} />
-        </FormComponent>,
-        { preloadedState },
+  it('should normalize choose dates after interaction', async () => {
+    const formValues: Set<string> = new Set();
+    renderWithProviders(
+      <FormComponent
+        getForm={(form) => {
+          const { fromDate, toDate } = form.getValues();
+          formValues.add(
+            `${fromDate.toISOString().split('Z')[0]}|${toDate.toISOString().split('Z')[0]}`,
+          );
+        }}
+      >
+        <ExportSettingsPopup isOpen {...commonProps} />
+      </FormComponent>,
+      { preloadedState },
+    );
+
+    // Switch to ChooseDates
+    const dateTypeInput = screen
+      .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`)
+      .querySelector('input');
+    dateTypeInput &&
+      fireEvent.change(dateTypeInput, { target: { value: ExportDateType.ChooseDates } });
+
+    // Clear previous values to focus on interaction changes
+    formValues.clear();
+
+    // open FROM picker, pick first available day, close with ESC
+    await waitFor(() =>
+      expect(
+        screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`),
+      ).toBeInTheDocument(),
+    );
+
+    const fromInput = screen
+      .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`)
+      .querySelector('input');
+    !!fromInput && (await userEvent.click(fromInput));
+
+    await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
+
+    // Find enabled date buttons for fromDate input (not disabled)
+    const enabledFromDateButtons = screen
+      .getAllByRole('option')
+      .filter(
+        (option) =>
+          option.getAttribute('aria-disabled') === 'false' && option.textContent?.match(/\d{1,2}/),
       );
+    await userEvent.click(enabledFromDateButtons[0]);
+    await userEvent.keyboard('{Escape}');
 
-      // Switch to ChooseDates
-      const dateTypeInput = screen
-        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`)
-        .querySelector('input');
-      dateTypeInput &&
-        fireEvent.change(dateTypeInput, { target: { value: ExportDateType.ChooseDates } });
+    // open TO picker, pick another day, close with ESC
+    const toInput = screen
+      .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`)
+      .querySelector('input');
+    !!toInput && (await userEvent.click(toInput));
 
-      // Clear previous values to focus on interaction changes
-      formValues.clear();
+    await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
 
-      // open FROM picker, pick first available day, close with ESC
-      await waitFor(() =>
-        expect(
-          screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`),
-        ).toBeInTheDocument(),
+    // Find enabled date buttons for toDate input (not disabled)
+    const enabledToDateButtons = screen
+      .getAllByRole('option')
+      .filter(
+        (option) =>
+          option.getAttribute('aria-disabled') === 'false' && option.textContent?.match(/\d{1,2}/),
       );
+    await userEvent.click(enabledToDateButtons[1]);
+    await userEvent.keyboard('{Escape}');
 
-      const fromInput = screen
-        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-from-date`)
-        .querySelector('input');
-      !!fromInput && (await userEvent.click(fromInput));
+    expect(formValues.size).toBeGreaterThanOrEqual(2);
 
-      await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
+    // Get the latest form values after date type change
+    // Since we've already checked that the set has at least 2 values,
+    // we can be sure that pop() will not return undefined
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [fromDateStr, toDateStr] = Array.from(formValues).pop()!.split('|');
+    const fromDate = new Date(fromDateStr);
+    const toDate = new Date(toDateStr);
 
-      // Find enabled date buttons for fromDate input (not disabled)
-      const enabledFromDateButtons = screen
-        .getAllByRole('option')
-        .filter(
-          (option) =>
-            option.getAttribute('aria-disabled') === 'false' &&
-            option.textContent?.match(/\d{1,2}/),
-        );
-      await userEvent.click(enabledFromDateButtons[0]);
-      await userEvent.keyboard('{Escape}');
-
-      // open TO picker, pick another day, close with ESC
-      const toInput = screen
-        .getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-to-date`)
-        .querySelector('input');
-      !!toInput && (await userEvent.click(toInput));
-
-      await waitFor(() => expect(screen.getAllByRole('option').length).toBeGreaterThan(0));
-
-      // Find enabled date buttons for toDate input (not disabled)
-      const enabledToDateButtons = screen
-        .getAllByRole('option')
-        .filter(
-          (option) =>
-            option.getAttribute('aria-disabled') === 'false' &&
-            option.textContent?.match(/\d{1,2}/),
-        );
-      await userEvent.click(enabledToDateButtons[1]);
-      await userEvent.keyboard('{Escape}');
-
-      expect(formValues.size).toBeGreaterThanOrEqual(2);
-
-      // Get the latest form values after date type change
-      // Since we've already checked that the set has at least 2 values,
-      // we can be sure that pop() will not return undefined
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const [fromDateStr, toDateStr] = Array.from(formValues).pop()!.split('|');
-      const fromDate = new Date(fromDateStr);
-      const toDate = new Date(toDateStr);
-
-      expect(fromDate.getHours()).toBe(0);
-      expect(fromDate.getMinutes()).toBe(0);
-      expect(fromDate.getSeconds()).toBe(0);
-      expect(toDate.getHours()).toBe(23);
-      expect(toDate.getMinutes()).toBe(59);
-      expect(toDate.getSeconds()).toBe(59);
-    });
+    expect(fromDate.getHours()).toBe(0);
+    expect(fromDate.getMinutes()).toBe(0);
+    expect(fromDate.getSeconds()).toBe(0);
+    expect(toDate.getHours()).toBe(23);
+    expect(toDate.getMinutes()).toBe(59);
+    expect(toDate.getSeconds()).toBe(59);
   });
 
   describe("should appear export data popup for 'choose dates' date range", () => {
