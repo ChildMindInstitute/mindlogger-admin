@@ -19,17 +19,20 @@ import {
 } from '../../ExportDataSetting.types';
 import { ExportSettingsPopup } from './ExportSettingsPopup';
 
-const dateString = '2025-07-01T08:00:00.000000';
-const date = new Date(dateString);
+const minDate = '2025-07-01T08:00:00.000000';
+const date = new Date(minDate);
 
 const preloadedState = {
   applet: {
     applet: {
       ...initialStateData,
-      data: { result: { ...mockedApplet, createdAt: dateString } },
+      data: { result: { ...mockedApplet, createdAt: minDate } },
     },
   },
 };
+
+const mockDateString = '2025-07-107T12:30:45';
+const mockDatePlus5Minutes = '2025-07-107T12:35:45';
 
 const mockOnClose = jest.fn();
 const mockOnExport = jest.fn();
@@ -158,7 +161,7 @@ describe('ExportSettingsPopup', () => {
       ${ExportDateType.LastWeek}  | ${'last week'}
       ${ExportDateType.AllTime}   | ${'all time'}
     `('$description', async ({ exportDataType }) => {
-      mockDate('2025-07-107T00:00:00Z');
+      mockDate(mockDateString);
 
       const toDates: Set<string> = new Set();
       renderWithProviders(
@@ -183,12 +186,13 @@ describe('ExportSettingsPopup', () => {
       await userEvent.click(downloadBtn);
 
       // 5 minutes later
-      mockDate('2025-07-107T00:05:00Z');
+      mockDate(mockDatePlus5Minutes);
 
       await userEvent.click(downloadBtn);
 
       // The toDate should've been updated after the second click
-      // Last24h triggers more form updates due to useEffect dependencies
+      // Last24h's set should also contain the 5 mins afterwards,
+      // the rest of the options should only contain endOfDay (23:59:59)
       const expectedSize = exportDataType === ExportDateType.Last24h ? 2 : 1;
       expect(toDates.size).toBe(expectedSize);
     });
@@ -222,7 +226,7 @@ describe('ExportSettingsPopup', () => {
       ${ExportDateType.LastWeek}    | ${'last week'}
       ${ExportDateType.ChooseDates} | ${'choose dates'}
     `('initial normalization - $description', async () => {
-      mockDate('2025-07-10T12:30:45');
+      mockDate(mockDateString);
 
       const formValues: Set<string> = new Set();
       renderWithProviders(
