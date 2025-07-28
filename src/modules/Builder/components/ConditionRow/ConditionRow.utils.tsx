@@ -343,7 +343,7 @@ export const getPayload = ({
         const payload = conditionPayload as SliderRowsCondition<RangeValueCondition>['payload'];
         const rowIndex = formRowIndex ?? payload?.rowIndex ?? '';
         const { maxValue = '', minValue = '' } = rowIndex
-          ? selectedItem?.responseValues.rows[+rowIndex] ?? {}
+          ? (selectedItem?.responseValues.rows[+rowIndex] ?? {})
           : {};
 
         return {
