@@ -1,3 +1,5 @@
+// eslint-disable no-console
+import { ItemsWithFileResponses } from 'shared/consts';
 import {
   AppletExportData,
   DecryptedAnswerData,
@@ -7,19 +9,19 @@ import {
   SuccessedEventDTO,
   UserActionType,
 } from 'shared/types';
+import { FeatureFlags } from 'shared/types/featureFlags';
+import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
+import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
+import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
+import { getSubscales } from 'shared/utils/exportData/getSubscales';
+import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 import {
   checkIfHasMigratedAnswers,
   getIdBeforeMigration,
 } from 'shared/utils/exportData/migratedData';
-import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
-import { getSubscales } from 'shared/utils/exportData/getSubscales';
-import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
-import { ItemsWithFileResponses } from 'shared/consts';
-import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
-import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
-import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { getObjectFromList } from '../getObjectFromList';
+import { checkIfShouldLogging } from '../logger';
 
 export const getDecryptedAnswersObject = ({
   decryptedAnswers,
@@ -125,35 +127,115 @@ export const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
   { enableDataExportRenaming }: FeatureFlags,
 ) => {
+  const shouldLogDataInDebugMode = checkIfShouldLogging();
+
+  if (shouldLogDataInDebugMode) {
+    console.log(
+      `[getActivityJourneyData] Starting with ${decryptedEvents.length} events and ${decryptedAnswers.length} answers`,
+    );
+  }
+
   const decryptedFilteredEvents = decryptedEvents.filter(isSuccessEvent);
+
+  if (shouldLogDataInDebugMode) {
+    console.log(
+      `[getActivityJourneyData] Filtered events from ${decryptedEvents.length} to ${decryptedFilteredEvents.length} successful events`,
+    );
+  }
+
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
   const hasUrlEventScreen = checkIfHasGithubImportedEventScreen(decryptedFilteredEvents);
+
+  if (shouldLogDataInDebugMode) {
+    console.log(
+      `[getActivityJourneyData] hasMigratedAnswers: ${hasMigratedAnswers}, hasUrlEventScreen: ${hasUrlEventScreen}`,
+    );
+  }
+
   const getEventScreen = getEventScreenWrapper({ hasUrlEventScreen });
   const decryptedAnswersObject = getDecryptedAnswersObject({
     decryptedAnswers,
     hasMigratedAnswers,
     hasUrlEventScreen,
   });
-  let indexForABTrailsFiles = 0;
-  const events = decryptedFilteredEvents.map((event, index, events) => {
-    // if Activity has splash screen image (in Builder), the first event will be added as the Splash screen item
-    if (index === 0 && !decryptedAnswersObject[getEventScreen(event.screen)] && events[index + 1])
-      return getSplashScreen(event, {
-        ...events[index + 1],
-        ...decryptedAnswersObject[getEventScreen(events[index + 1].screen)],
-      });
 
-    return getJourneyCSVObject({
-      event: {
-        ...event,
-        ...decryptedAnswersObject[getEventScreen(event.screen)],
-      },
-      rawAnswersObject,
-      index:
-        event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
-      enableDataExportRenaming: !!enableDataExportRenaming,
-    });
+  if (shouldLogDataInDebugMode) {
+    console.log(
+      `[getActivityJourneyData] Created decryptedAnswersObject with ${
+        Object.keys(decryptedAnswersObject).length
+      } keys`,
+    );
+  }
+
+  let indexForABTrailsFiles = 0;
+
+  if (shouldLogDataInDebugMode) {
+    console.log(`[getActivityJourneyData] Processing events and mapping to journey objects`);
+  }
+
+  const events = decryptedFilteredEvents.map((event, index, events) => {
+    try {
+      // if Activity has splash screen image (in Builder), the first event will be added as the Splash screen item
+      if (
+        index === 0 &&
+        !decryptedAnswersObject[getEventScreen(event.screen)] &&
+        events[index + 1]
+      ) {
+        if (shouldLogDataInDebugMode) {
+          console.log(`[getActivityJourneyData] Creating splash screen for first event`);
+        }
+
+        return getSplashScreen(event, {
+          ...events[index + 1],
+          ...decryptedAnswersObject[getEventScreen(events[index + 1].screen)],
+        });
+      }
+
+      const screenKey = getEventScreen(event.screen);
+
+      if (shouldLogDataInDebugMode && index % 100 === 0) {
+        console.log(
+          `[getActivityJourneyData] Processing event ${index}/${decryptedFilteredEvents.length}, screen: ${screenKey}`,
+        );
+      }
+
+      return getJourneyCSVObject({
+        event: {
+          ...event,
+          ...decryptedAnswersObject[screenKey],
+        },
+        rawAnswersObject,
+        index:
+          event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
+        enableDataExportRenaming: !!enableDataExportRenaming,
+      });
+    } catch (error) {
+      console.error(`[getActivityJourneyData] Error processing event at index ${index}:`, error);
+      if (error instanceof Error && shouldLogDataInDebugMode) {
+        console.error(
+          `[getActivityJourneyData] Error details: ${error.name}: ${error.message}, Stack: ${error.stack}`,
+        );
+
+        console.error(
+          `[getActivityJourneyData] Event data: screen=${event.screen}, type=${event.type}`,
+        );
+      }
+
+      return undefined;
+    }
   });
 
-  return activityJourneyData.concat(...events).filter(Boolean);
+  if (shouldLogDataInDebugMode) {
+    console.log(
+      `[getActivityJourneyData] Processed ${events.length} events, concatenating with existing data (${activityJourneyData.length} items)`,
+    );
+  }
+
+  const result = activityJourneyData.concat(...events).filter(Boolean);
+
+  if (shouldLogDataInDebugMode) {
+    console.log(`[getActivityJourneyData] Final result contains ${result.length} items`);
+  }
+
+  return result;
 };
