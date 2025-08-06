@@ -1,8 +1,7 @@
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
-import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { postLogFile } from '../api/api';
-import { isProduction } from './env';
+import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { SessionStorageKeys } from './storage';
 
 const DEVICE_ID = 'browser';
@@ -78,7 +77,8 @@ export const sendLogFile = async ({
   }
 };
 
+// TODO: Evaluate if re-adding prod env check for logging is required
 export const checkIfShouldLogging = () =>
-  !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
+  sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
 
 export const logDataInDebugMode = (data: unknown) => checkIfShouldLogging() && console.log(data);
