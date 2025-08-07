@@ -698,6 +698,17 @@ export const theme = createTheme({
         },
       },
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&:not(.Mui-disabled)': {
+            '&, &.Mui-focused': {
+              color: variables.palette.on_surface,
+            },
+          },
+        },
+      },
+    },
     MuiFormHelperText: {
       styleOverrides: {
         root: {
