@@ -5,7 +5,7 @@ export type ExportSettingsPopupProps = {
   onClose: () => void;
   onExport: () => void;
   minDate: Date;
-  getMaxDate: () => Date;
+  maxDate: Date;
   appletName: string;
   supportedSupplementaryFiles?: SupplementaryFiles[];
   canExportEhrHealthData?: boolean;
