@@ -71,7 +71,11 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           open={deletePopupVisible}
           onClose={deletePopupClose}
           onSubmit={submitForm}
-          title={t('deleteApplet')}
+          title={
+            currentApplet?.displayName
+              ? `${t('deleteApplet')} - ${currentApplet.displayName}`
+              : t('deleteApplet')
+          }
           buttonText={t('delete')}
           hasSecondBtn
           submitBtnColor="error"
@@ -84,7 +88,13 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
             {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
             <StyledModalWrapper>
               <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
-                {t('deleteAppletDescriptionWithPassword')}
+                <Trans
+                  i18nKey="deleteAppletDescriptionWithPassword"
+                  values={{ appletName: currentApplet?.displayName }}
+                >
+                  To delete <strong>{'{{appletName}}'}</strong> type Applet password here. After
+                  deleting you won't be able to restore the Applet.
+                </Trans>
               </StyledBodyLarge>
               <EnterAppletPassword
                 ref={appletPasswordRef}
@@ -103,7 +113,11 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           open={deletePopupVisible}
           onClose={deletePopupClose}
           onSubmit={handleRetryDelete}
-          title={t('deleteApplet')}
+          title={
+            currentApplet?.displayName
+              ? `${t('deleteApplet')} - ${currentApplet.displayName}`
+              : t('deleteApplet')
+          }
           buttonText={t('retry')}
           hasSecondBtn
           submitBtnColor="error"
