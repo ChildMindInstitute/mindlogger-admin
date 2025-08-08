@@ -17,7 +17,7 @@ concurrency:
   group: build-deploy-${{ inputs.env }}
 
 env:
-  NODE_VERSION: 22.15.0
+#  NODE_VERSION: 22.15.0
   VITE_BUILD_VERSION: ${{ inputs.version }}
   VITE_DD_VERSION: ${{ inputs.version }}
 
@@ -37,6 +37,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout
+
+      - name: Setup node version
+        run: |
+          echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
       - name: Configure aws credentials for secrets
         uses: aws-actions/configure-aws-credentials@v4
