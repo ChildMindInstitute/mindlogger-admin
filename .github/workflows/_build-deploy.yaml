@@ -17,7 +17,7 @@ concurrency:
   group: build-deploy-${{ inputs.env }}
 
 env:
-  NODE_VERSION: 20.11.0
+  NODE_VERSION: 22.15.0
   VITE_BUILD_VERSION: ${{ inputs.version }}
   VITE_DD_VERSION: ${{ inputs.version }}
 
@@ -57,12 +57,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
-        run: npm install --only=production
+        run: npm ci
 
-      - name: Running tests
+      - uses: wearerequired/lint-action@v2
+        name: Lint
+        with:
+          eslint: true
+          eslint_extensions: js,jsx,ts,tsx
+          prettier: true
+          prettier_extensions: js,jsx,ts,tsx
+          continue_on_error: false
+
+      - name: Tests
         run: npm run test
-
-        # TODO run linter?
 
       - name: Build admin app
         run: npm run build
