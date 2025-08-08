@@ -1,0 +1,92 @@
+name: Build and Deploy
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        description: Environment name
+        type: string
+      version:
+        required: false
+        description: Version
+        type: string
+        default: latest
+
+concurrency:
+  cancel-in-progress: false
+  group: build-deploy-${{ inputs.env }}
+
+env:
+  NODE_VERSION: 22.15.0
+  VITE_BUILD_VERSION: ${{ inputs.version }}
+  VITE_DD_VERSION: ${{ inputs.version }}
+
+jobs:
+  setup-vars:
+    uses: ./.github/workflows/_setup.yaml
+    with:
+      env-name: ${{ inputs.env-name }}
+
+  build:
+    runs-on: ubuntu-latest
+    name: Node Build and Deploy
+    needs: setup-vars
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - name: Configure aws credentials for secrets
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-session-name: OIDC-GHA-Build-Secrets
+          aws-region: us-east-1
+
+      - name: Load build config
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: /CodeBuild/admin-panel/${{ inputs.env }}
+          parse-json-secrets: true
+
+      - uses: actions/setup-node@v4
+        name: Setup Node
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: wearerequired/lint-action@v2
+        name: Lint
+        with:
+          eslint: true
+          eslint_extensions: js,jsx,ts,tsx
+          prettier: true
+          prettier_extensions: js,jsx,ts,tsx
+          continue_on_error: false
+
+      - name: Tests
+        run: npm run test
+
+      - name: Build admin app
+        run: npm run build
+
+      - name: Configure AWS credentials for deploy
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ needs.setup-vars.outputs.role }}
+          role-session-name: OIDC-GHA-session-deploy
+          aws-region: ${{ needs.setup-vars.outputs.region }}
+
+      - name: Deploy
+        run: |
+          aws s3 sync ./build s3://cmiml-${{ inputs.env }}-admin-panel
+
+      - name: Invalidate Cloudfront caches
+        run:
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("admin"; "i")) | .Id'); do
+            aws cloudfront create-invalidation --distribution-id ${id} --paths "/*"
+          done

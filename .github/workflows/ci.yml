@@ -14,14 +14,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - uses: actions/cache@v4
+        id: cache
         with:
           path: |
             ~/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm ci
+        if: steps.cache.outputs.cache-hit != 'true'
 
       - uses: wearerequired/lint-action@v2
         with:
@@ -30,7 +33,10 @@ jobs:
           prettier: true
           prettier_extensions: js,jsx,ts,tsx
           continue_on_error: false
+
   tests:
+    needs: lint
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,15 +44,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - name: Install deps
         run: npm ci
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Running tests
         env:
@@ -54,6 +55,8 @@ jobs:
           REACT_APP_WEB_URI: http://localhost:5173
         run: npm run test:nowatch
   build:
+    needs: tests
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -61,15 +64,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - name: Install deps
         run: npm ci
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Build admin app
         env:
