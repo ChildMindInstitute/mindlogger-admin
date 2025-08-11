@@ -80,6 +80,8 @@ jobs:
 
       - name: Build admin app
         run: npm run build
+        env:
+          CI: false
 
       - name: Configure AWS credentials for deploy
         uses: aws-actions/configure-aws-credentials@v4
