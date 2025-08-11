@@ -169,6 +169,7 @@ export const ItemsWithFileResponses = [
   ItemResponseType.Photo,
   ItemResponseType.Video,
   ItemResponseType.Audio,
+  ItemResponseType.Unity,
 ];
 
 export enum CalculationType {

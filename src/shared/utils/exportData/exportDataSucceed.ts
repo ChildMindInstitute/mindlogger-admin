@@ -30,6 +30,7 @@ const exportProcessedData = async ({
   stabilityTrackerItemsData,
   abTrailsItemsData,
   flankerItemsData,
+  unityData,
   suffix,
   flags,
 }: AppletExportData & { suffix: string; flags: FeatureFlags }) => {
@@ -55,6 +56,7 @@ const exportProcessedData = async ({
     exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails, suffix)),
     exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker, suffix)),
     exportMediaZip(mediaData, getReportZipName(ZipFile.Media, suffix)),
+    exportMediaZip(unityData, getReportZipName(ZipFile.Unity, suffix)),
   ]);
 };
 

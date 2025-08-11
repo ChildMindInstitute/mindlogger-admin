@@ -14,9 +14,9 @@ import {
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { getSubscales } from 'shared/utils/exportData/getSubscales';
 import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
-import { ItemsWithFileResponses } from 'shared/consts';
+import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
-import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
+import { getDrawingUrl, getMediaUrl, getUnityMediaUrls } from 'shared/utils/exportData/getUrls';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { getObjectFromList } from '../getObjectFromList';
@@ -96,6 +96,28 @@ export const getMediaData = (
   }, [] as ExportMediaData[]);
 
   return mediaData.concat(...mediaAnswers);
+};
+
+export const getUnityData = (
+  unityData: AppletExportData['unityData'],
+  decryptedAnswers: DecryptedAnswerData[],
+): ExportMediaData[] => {
+  const unityAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
+    const responseType = item.activityItem?.responseType;
+
+    if (responseType !== ItemResponseType.Unity) {
+      return filteredAcc;
+    }
+
+    const mediaData = getUnityMediaUrls(item).map((url) => ({
+      fileName: getMediaFileName(item, getFileExtension(url)),
+      url,
+    }));
+
+    return filteredAcc.concat(mediaData);
+  }, [] as ExportMediaData[]);
+
+  return unityData.concat(...unityAnswers);
 };
 
 export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').pop() ?? '';

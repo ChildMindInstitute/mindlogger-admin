@@ -7,12 +7,14 @@ import {
   ExtendedExportAnswerWithoutEncryption,
   FailedDecryption,
   isDrawingAnswerData,
+  isMediaAnswerData,
   isNotMediaAnswerData,
+  isUnityAnswerData,
 } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { postFilePresignApi } from 'shared/api';
 
-import { getDrawingUrl, getMediaUrl } from './exportData/getUrls';
+import { getDrawingUrl, getMediaUrl, getUnityMediaUrls } from './exportData/getUrls';
 import { getObjectFromList } from './getObjectFromList';
 import { isSuccessEvent } from './exportData/getReportAndMediaData';
 
@@ -87,13 +89,18 @@ export const getAnswersWithPublicUrls = async (
   if (!parsedAnswers.length) return [];
 
   const privateUrls = parsedAnswers.reduce((acc, data) => {
-    const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
+    const decryptedAnswers = data.decryptedAnswers.reduce<string[]>((urlsAcc, item) => {
       if (shouldConvertPrivateDrawingUrl(item)) {
         return urlsAcc.concat(getDrawingUrl(item));
       }
-      if (isNotMediaAnswerData(item)) return urlsAcc;
 
-      return urlsAcc.concat(getMediaUrl(item));
+      if (isMediaAnswerData(item)) {
+        return urlsAcc.concat(getMediaUrl(item));
+      } else if (isUnityAnswerData(item)) {
+        return urlsAcc.concat(...getUnityMediaUrls(item));
+      } else {
+        return urlsAcc;
+      }
     }, [] as string[]);
 
     return acc.concat(decryptedAnswers);
