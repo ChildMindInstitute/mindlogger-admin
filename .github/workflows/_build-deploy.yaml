@@ -52,7 +52,8 @@ jobs:
       - name: Load build config
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
-          secret-ids: /CodeBuild/admin-panel/${{ inputs.env-name }}
+          secret-ids: |
+            ,/CodeBuild/admin-panel/${{ inputs.env-name }}
           parse-json-secrets: true
 
       - uses: actions/setup-node@v4
