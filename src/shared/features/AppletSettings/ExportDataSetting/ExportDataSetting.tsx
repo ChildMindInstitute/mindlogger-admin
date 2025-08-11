@@ -1,7 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
 import { useFeatureFlags } from 'shared/hooks';
@@ -96,11 +96,30 @@ export const ExportDataSetting = ({
     .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
 
   let appletName = '';
+  let contextItemName = '';
+
   if (appletData) {
     if ('appletDisplayName' in appletData) {
       appletName = appletData.appletDisplayName ?? '';
     } else if ('displayName' in appletData) {
       appletName = appletData.displayName;
+    }
+
+    contextItemName = appletName;
+
+    // Check if we have activity or flow filters and update the context item name accordingly
+    if (filters?.activityId && 'activities' in appletData) {
+      const activity = appletData.activities?.find(
+        (activity) => activity.id === filters.activityId,
+      );
+      if (activity?.name) {
+        contextItemName = activity.name;
+      }
+    } else if (filters?.flowId && 'activityFlows' in appletData) {
+      const flow = appletData.activityFlows?.find((flow) => flow.id === filters.flowId);
+      if (flow?.name) {
+        contextItemName = flow.name;
+      }
     }
   }
 
@@ -123,7 +142,7 @@ export const ExportDataSetting = ({
           }}
           minDate={minDate}
           getMaxDate={getMaxDate}
-          appletName={appletName}
+          contextItemName={contextItemName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
           canExportEhrHealthData={canExportEhrHealthData}
           data-testid={`${dataTestId}-settings`}
