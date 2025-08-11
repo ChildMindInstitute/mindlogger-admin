@@ -90,7 +90,7 @@ jobs:
           aws s3 sync ./build s3://cmiml-${{ inputs.env-name }}-admin-panel
 
       - name: Invalidate Cloudfront caches
-        run:
-          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("admin"; "i")) | .Id'); do
-            aws cloudfront create-invalidation --distribution-id ${id} --paths "/*"
+        run: |
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
+            AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
