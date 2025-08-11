@@ -4,12 +4,13 @@ import { ObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
-import { applet } from 'shared/state/Applet';
-import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
-import { UniqueTuple } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
+import { applet } from 'shared/state/Applet';
+import { UniqueTuple } from 'shared/types';
+import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
+import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import {
   ExportDataExported,
   ExportDataFormValues,
@@ -18,7 +19,6 @@ import {
   SupplementaryFiles,
   SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
-import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
 export const ExportDataSetting = ({
@@ -49,7 +49,10 @@ export const ExportDataSetting = ({
       fromDate: minDate,
       toDate: getMaxDate(),
       supplementaryFiles: SupplementaryFiles.reduce(
-        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        (acc, fileType) => ({
+          ...acc,
+          [fileType]: fileType === 'userJourney',
+        }),
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
@@ -65,8 +68,10 @@ export const ExportDataSetting = ({
     methods.reset(defaultValues);
   }, [defaultValues, methods]);
 
-  const defaultSupportedSupplementaryFiles =
-    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
+  // User journey is always supported
+  const defaultSupportedSupplementaryFiles = supportedSupplementaryFiles
+    ? [...new Set([...supportedSupplementaryFiles, 'userJourney'])]
+    : (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
 
   const filteredSupportedSupplementaryFiles = (
     Object.entries(SupplementaryFilesWithFeatureFlag) as unknown as [
