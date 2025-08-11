@@ -162,7 +162,11 @@ describe('prepareData', () => {
   test('prepareEncryptedData should return an object with the correct keys', async () => {
     const data = { activities: [], answers: [] };
     const getDecryptedAnswers = jest.fn();
-    const result = await prepareEncryptedData(data, getDecryptedAnswers);
+    const result = await prepareEncryptedData({
+      data,
+      getDecryptedAnswers,
+      shouldGenerateUserJourney: true,
+    });
 
     testCorrectKeys(result);
   });
@@ -408,12 +412,21 @@ describe('prepareData', () => {
       .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
       .mockImplementationOnce(() => mockedParsedAnswers);
 
-    const result = await prepareEncryptedData(data, getDecryptedAnswers, mockFlags);
+    const result = await prepareEncryptedData({
+      data,
+      getDecryptedAnswers,
+      shouldGenerateUserJourney: true,
+      flags: mockFlags,
+    });
     expect(result).toEqual(mockedExportDataResult);
   });
 
   test('prepareDecryptedData should return filled in reportData', async () => {
-    const result = await prepareDecryptedData(mockedParsedAnswers, mockFlags);
+    const result = await prepareDecryptedData({
+      parsedAnswers: mockedParsedAnswers,
+      flags: mockFlags,
+      shouldGenerateUserJourney: true,
+    });
     expect(result).toEqual(mockedExportDataResult);
   });
 });
