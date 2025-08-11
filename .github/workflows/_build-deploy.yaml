@@ -2,7 +2,7 @@ name: Build and Deploy
 on:
   workflow_call:
     inputs:
-      env:
+      env-name:
         required: true
         description: Environment name
         type: string
@@ -14,7 +14,7 @@ on:
 
 concurrency:
   cancel-in-progress: false
-  group: build-deploy-${{ inputs.env }}
+  group: build-deploy-${{ inputs.env-name }}
 
 env:
 #  NODE_VERSION: 22.15.0
@@ -52,7 +52,7 @@ jobs:
       - name: Load build config
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
-          secret-ids: /CodeBuild/admin-panel/${{ inputs.env }}
+          secret-ids: /CodeBuild/admin-panel/${{ inputs.env-name }}
           parse-json-secrets: true
 
       - uses: actions/setup-node@v4
@@ -87,7 +87,7 @@ jobs:
 
       - name: Deploy
         run: |
-          aws s3 sync ./build s3://cmiml-${{ inputs.env }}-admin-panel
+          aws s3 sync ./build s3://cmiml-${{ inputs.env-name }}-admin-panel
 
       - name: Invalidate Cloudfront caches
         run:

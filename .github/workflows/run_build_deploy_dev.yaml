@@ -10,4 +10,4 @@ jobs:
     name: Build and Deploy
     uses: ./.github/workflows/_build-deploy.yaml
     with:
-      env: dev
+      env-name: dev
