@@ -172,7 +172,11 @@ describe('prepareData', () => {
   });
 
   test('prepareDecryptedData should return an object with the correct keys', async () => {
-    const result = await prepareDecryptedData([]);
+    const result = await prepareDecryptedData({
+      parsedAnswers: [],
+      flags: mockFlags,
+      shouldGenerateUserJourney: true,
+    });
 
     testCorrectKeys(result);
   });
