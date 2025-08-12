@@ -11,3 +11,5 @@ jobs:
     uses: ./.github/workflows/_build-deploy.yaml
     with:
       env-name: dev
+    secrets:
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_DEV }}
