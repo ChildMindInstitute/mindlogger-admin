@@ -21,10 +21,7 @@ import {
   ExecuteAllPagesOfExportData,
   Modals,
 } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
-import {
-  getExportDataSuffix,
-  getFormattedToDate,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import { getExportDataSuffix } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
 import { workspaces } from 'shared/state';
 import {
@@ -119,8 +116,8 @@ export const DataExportPopup = ({
           supplementaryFiles,
         } = getValues?.() ?? {};
 
-        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = getFormattedToDate({ dateType, formToDate });
+        let fromDate = format(formFromDate, DateFormats.shortISO);
+        let toDate = format(formToDate, DateFormats.shortISO);
 
         const includeEhr =
           featureFlags.enableEhrHealthData !== 'unavailable' &&
