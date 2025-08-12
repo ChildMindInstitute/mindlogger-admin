@@ -119,6 +119,15 @@ export const DataExportPopup = ({
         let fromDate = format(formFromDate, DateFormats.shortISO);
         let toDate = format(formToDate, DateFormats.shortISO);
 
+        // Update the time for last 24 hours submissions
+        if (dateType === ExportDateType.Last24h) {
+          const currentTime = new Date();
+          const oneDayAgo = new Date(currentTime);
+          oneDayAgo.setHours(currentTime.getHours() - 24);
+          fromDate = format(oneDayAgo, DateFormats.shortISO);
+          toDate = format(currentTime, DateFormats.shortISO);
+        }
+
         const includeEhr =
           featureFlags.enableEhrHealthData !== 'unavailable' &&
           dataExported === ExportDataExported.ResponsesAndEhrData;
