@@ -15,6 +15,7 @@ import { DateFormats } from 'shared/consts';
 import {
   ExportDataExported,
   ExportDataFormValues,
+  ExportDateType,
 } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
