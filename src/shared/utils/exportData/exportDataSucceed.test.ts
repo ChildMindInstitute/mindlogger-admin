@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import {
+  activityJourneyHeader,
   legacyActivityJourneyHeader,
   legacyReportHeader,
-  activityJourneyHeader,
   reportHeader,
 } from 'shared/consts';
 
-import { exportEncryptedDataSucceed, exportDecryptedDataSucceed } from './exportDataSucceed';
-import * as prepareDataUtils from './prepareData';
 import * as exportTemplateUtils from '../exportTemplate';
 import * as exportCsvZipUtils from './exportCsvZip';
+import { exportDecryptedDataSucceed, exportEncryptedDataSucceed } from './exportDataSucceed';
 import * as exportMediaZipUtils from './exportMediaZip';
+import * as prepareDataUtils from './prepareData';
 
 const mockFlags = {
   enableDataExportRenaming: false,
@@ -125,6 +125,7 @@ describe('exportDataSucceed', () => {
     await exportDecryptedDataSucceed({
       suffix: '',
       flags: mockFlags,
+      shouldGenerateUserJourney: true,
     })(undefined);
 
     expect(prepareDataUtils.prepareDecryptedData).not.toHaveBeenCalled();
@@ -135,14 +136,16 @@ describe('exportDataSucceed', () => {
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: mockFlags,
+      shouldGenerateUserJourney: true,
     })(mockedExportData);
 
-    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
-      mockedExportData,
-      mockedGetDecryptedAnswers,
-      mockFlags,
-      undefined,
-    );
+    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
+      data: mockedExportData,
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      flags: mockFlags,
+      filters: undefined,
+      shouldGenerateUserJourney: true,
+    });
 
     checkCommonActions();
   });
@@ -151,13 +154,15 @@ describe('exportDataSucceed', () => {
     await exportDecryptedDataSucceed({
       suffix: '-test',
       flags: mockFlags,
+      shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
 
-    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
-      mockedDecryptedExportData,
-      mockFlags,
-      undefined,
-    );
+    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
+      parsedAnswers: mockedDecryptedExportData,
+      flags: mockFlags,
+      shouldGenerateUserJourney: true,
+      filters: undefined,
+    });
 
     checkCommonActions();
   });
@@ -167,14 +172,16 @@ describe('exportDataSucceed', () => {
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
+      shouldGenerateUserJourney: true,
     })(mockedExportData);
 
-    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith(
-      mockedExportData,
-      mockedGetDecryptedAnswers,
-      { ...mockFlags, enableDataExportRenaming: true },
-      undefined,
-    );
+    expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
+      data: mockedExportData,
+      getDecryptedAnswers: mockedGetDecryptedAnswers,
+      flags: { ...mockFlags, enableDataExportRenaming: true },
+      filters: undefined,
+      shouldGenerateUserJourney: true,
+    });
 
     checkCommonActions(true);
   });
@@ -183,13 +190,15 @@ describe('exportDataSucceed', () => {
     await exportDecryptedDataSucceed({
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
+      shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
 
-    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith(
-      mockedDecryptedExportData,
-      { ...mockFlags, enableDataExportRenaming: true },
-      undefined,
-    );
+    expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
+      parsedAnswers: mockedDecryptedExportData,
+      flags: { ...mockFlags, enableDataExportRenaming: true },
+      filters: undefined,
+      shouldGenerateUserJourney: true,
+    });
 
     checkCommonActions(true);
   });
@@ -206,6 +215,7 @@ describe('exportDataSucceed', () => {
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '',
       flags: mockFlags,
+      shouldGenerateUserJourney: true,
     })(mockedExportData);
 
     checkExportTemplateDefaultData();
@@ -224,6 +234,7 @@ describe('exportDataSucceed', () => {
     await exportDecryptedDataSucceed({
       suffix: '',
       flags: mockFlags,
+      shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
 
     checkExportTemplateDefaultData();

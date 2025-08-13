@@ -1,10 +1,10 @@
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import {
   AppletExportData,
   DecryptedActivityData,
   ExportDataResult,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types/answer';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { getObjectFromList } from '../getObjectFromList';
@@ -13,6 +13,7 @@ import {
   getParsedAnswers,
   remapFailedAnswers,
 } from '../getParsedAnswers';
+import { logDataInDebugMode } from '../logger';
 import {
   getABTrailsItemsData,
   getDrawingItemsData,
@@ -20,7 +21,6 @@ import {
   getStabilityTrackerItemsData,
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
-import { logDataInDebugMode } from '../logger';
 
 export interface ExportDataFilters {
   activityId?: string;
@@ -56,11 +56,17 @@ export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
     );
 };
 
-export const prepareDecryptedData = async (
-  parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
-  flags: FeatureFlags,
-  filters?: ExportDataFilters,
-) => {
+export const prepareDecryptedData = async ({
+  parsedAnswers,
+  flags,
+  shouldGenerateUserJourney,
+  filters,
+}: {
+  parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[];
+  flags: FeatureFlags;
+  shouldGenerateUserJourney: boolean;
+  filters?: ExportDataFilters;
+}) => {
   logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const filteredParsedAnswers = parsedAnswers.filter(getParsedAnswersFilterFn(filters));
   const remappedParsedAnswers = remapFailedAnswers(filteredParsedAnswers);
@@ -80,13 +86,15 @@ export const prepareDecryptedData = async (
       flags,
     );
     const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
-    const activityJourneyData = getActivityJourneyData(
-      acc.activityJourneyData,
-      rawAnswersObject,
-      data.decryptedAnswers,
-      data.decryptedEvents,
-      flags,
-    );
+    const activityJourneyData = shouldGenerateUserJourney
+      ? getActivityJourneyData(
+          acc.activityJourneyData,
+          rawAnswersObject,
+          data.decryptedAnswers,
+          data.decryptedEvents,
+          flags,
+        )
+      : [];
     const drawingItemsData = await getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
     const stabilityTrackerItemsData = await getStabilityTrackerItemsData(
       acc.stabilityTrackerItemsData,
@@ -112,13 +120,25 @@ export const prepareDecryptedData = async (
   return acc;
 };
 
-export const prepareEncryptedData = async (
-  data: ExportDataResult,
-  getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
-  flags: FeatureFlags,
-  filters?: ExportDataFilters,
-) => {
+export const prepareEncryptedData = async ({
+  data,
+  getDecryptedAnswers,
+  flags,
+  shouldGenerateUserJourney,
+  filters,
+}: {
+  data: ExportDataResult;
+  getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
+  flags: FeatureFlags;
+  shouldGenerateUserJourney: boolean;
+  filters?: ExportDataFilters;
+}) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
 
-  return prepareDecryptedData(parsedAnswers, flags, filters);
+  return prepareDecryptedData({
+    parsedAnswers,
+    flags,
+    shouldGenerateUserJourney,
+    filters,
+  });
 };

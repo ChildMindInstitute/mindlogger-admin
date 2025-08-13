@@ -1,31 +1,32 @@
-import { useTranslation } from 'react-i18next';
-import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { useFormContext } from 'react-hook-form';
-import { useMemo } from 'react';
 import { Button } from '@mui/material';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
+import { useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components/DatePicker';
+import { DateType } from 'shared/components/DatePicker/DatePicker.types';
+import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { Modal } from 'shared/components/Modal';
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledModalWrapper,
+  StyledTitleBoldMedium,
   theme,
 } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
-import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 
-import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
-import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
 import {
   ExportDataFormValues,
   ExportDateType,
   SupplementaryFilesFormValues,
 } from '../../ExportDataSetting.types';
+import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
+import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
 
 export const ExportSettingsPopup = ({
   isOpen,
@@ -33,7 +34,7 @@ export const ExportSettingsPopup = ({
   onExport,
   minDate,
   getMaxDate,
-  appletName,
+  contextItemName,
   supportedSupplementaryFiles,
   canExportEhrHealthData,
   'data-testid': dataTestId,
@@ -108,9 +109,7 @@ export const ExportSettingsPopup = ({
   return (
     <Modal
       open={isOpen}
-      title={t('exportDataForApplet', {
-        name: appletName,
-      })}
+      title={t('exportData')}
       onClose={onClose}
       width="57.5"
       data-testid={dataTestId}
@@ -118,6 +117,12 @@ export const ExportSettingsPopup = ({
       <StyledModalWrapper sx={{ pb: 0 }}>
         <form noValidate autoComplete="off">
           <StyledFlexColumn sx={{ gap: 3.2 }}>
+            <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+              <StyledBodyLarge>{t('export')}:</StyledBodyLarge>
+              <StyledTitleBoldMedium>
+                {contextItemName} {t('dataExport.responses')}
+              </StyledTitleBoldMedium>
+            </StyledFlexTopCenter>
             <StyledFlexColumn sx={{ gap: 1.6 }}>
               {canExportEhrHealthData && (
                 <SelectController

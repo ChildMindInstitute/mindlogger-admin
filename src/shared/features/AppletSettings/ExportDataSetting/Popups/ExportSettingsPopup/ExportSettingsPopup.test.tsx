@@ -6,17 +6,17 @@ import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-fo
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { DateFormats } from 'shared/consts';
-import { mockedAppletId, mockedApplet } from 'shared/mock';
-import { SettingParam, getNormalizedTimezoneDate } from 'shared/utils';
+import { mockedApplet, mockedAppletId } from 'shared/mock';
+import { getNormalizedTimezoneDate, SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
-import { ExportSettingsPopup } from './ExportSettingsPopup';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import {
   ExportDataFormValues,
   ExportDateType,
   SupplementaryFiles,
 } from '../../ExportDataSetting.types';
+import { ExportSettingsPopup } from './ExportSettingsPopup';
 
 const dateString = '2023-11-14T14:43:33.369902';
 const date = new Date(dateString);
@@ -62,7 +62,7 @@ const commonProps = {
   onExport: mockOnExport,
   minDate: date,
   getMaxDate: () => getNormalizedTimezoneDate(new Date().toString()),
-  appletName: mockedApplet.displayName,
+  contextItemName: mockedApplet.displayName,
   'data-testid': DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 };
 
