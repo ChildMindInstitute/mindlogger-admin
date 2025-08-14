@@ -56,7 +56,7 @@ export const DataExportPopup = ({
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
   const { featureFlags } = useFeatureFlags();
-  const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
+  const { getValues, watch } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const { ownerId } = workspaces.useData() ?? {};
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -68,6 +68,7 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
+  const shouldGenerateUserJourney = watch('supplementaryFiles.userJourney');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
 
@@ -149,6 +150,7 @@ export const DataExportPopup = ({
           suffix: exportDataPages > 1 ? getExportDataSuffix(1) : '',
           filters,
           flags: featureFlags,
+          shouldGenerateUserJourney,
         })(firstPageData);
 
         if (exportDataPages > 1) {
@@ -167,6 +169,7 @@ export const DataExportPopup = ({
               suffix: getExportDataSuffix(page),
               filters,
               flags: featureFlags,
+              shouldGenerateUserJourney,
             })(nextPageData);
           }
         }

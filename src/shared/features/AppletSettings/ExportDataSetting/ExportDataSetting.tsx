@@ -50,7 +50,10 @@ export const ExportDataSetting = ({
       fromDate: startOfDay(minDate),
       toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(
-        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        (acc, fileType) => ({
+          ...acc,
+          [fileType]: fileType === 'userJourney',
+        }),
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
@@ -66,8 +69,10 @@ export const ExportDataSetting = ({
     methods.reset(defaultValues);
   }, [defaultValues, methods]);
 
-  const defaultSupportedSupplementaryFiles =
-    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
+  // User journey is always supported
+  const defaultSupportedSupplementaryFiles = supportedSupplementaryFiles
+    ? [...new Set([...supportedSupplementaryFiles, 'userJourney'])]
+    : (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
 
   const filteredSupportedSupplementaryFiles = (
     Object.entries(SupplementaryFilesWithFeatureFlag) as unknown as [
@@ -92,11 +97,30 @@ export const ExportDataSetting = ({
     .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
 
   let appletName = '';
+  let contextItemName = '';
+
   if (appletData) {
     if ('appletDisplayName' in appletData) {
       appletName = appletData.appletDisplayName ?? '';
     } else if ('displayName' in appletData) {
       appletName = appletData.displayName;
+    }
+
+    contextItemName = appletName;
+
+    // Check if we have activity or flow filters and update the context item name accordingly
+    if (filters?.activityId && 'activities' in appletData) {
+      const activity = appletData.activities?.find(
+        (activity) => activity.id === filters.activityId,
+      );
+      if (activity?.name) {
+        contextItemName = activity.name;
+      }
+    } else if (filters?.flowId && 'activityFlows' in appletData) {
+      const flow = appletData.activityFlows?.find((flow) => flow.id === filters.flowId);
+      if (flow?.name) {
+        contextItemName = flow.name;
+      }
     }
   }
 
@@ -119,7 +143,7 @@ export const ExportDataSetting = ({
           }}
           minDate={minDate}
           maxDate={maxDate}
-          appletName={appletName}
+          contextItemName={contextItemName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
           canExportEhrHealthData={canExportEhrHealthData}
           data-testid={`${dataTestId}-settings`}

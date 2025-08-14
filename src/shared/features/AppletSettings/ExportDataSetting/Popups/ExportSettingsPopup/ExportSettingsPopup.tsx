@@ -15,6 +15,7 @@ import {
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledModalWrapper,
+  StyledTitleBoldMedium,
   theme,
 } from 'shared/styles';
 
@@ -32,7 +33,7 @@ export const ExportSettingsPopup = ({
   onExport,
   minDate,
   maxDate,
-  appletName,
+  contextItemName,
   supportedSupplementaryFiles,
   canExportEhrHealthData,
   'data-testid': dataTestId,
@@ -118,9 +119,7 @@ export const ExportSettingsPopup = ({
   return (
     <Modal
       open={isOpen}
-      title={t('exportDataForApplet', {
-        name: appletName,
-      })}
+      title={t('exportData')}
       onClose={onClose}
       width="57.5"
       data-testid={dataTestId}
@@ -128,6 +127,12 @@ export const ExportSettingsPopup = ({
       <StyledModalWrapper sx={{ pb: 0 }}>
         <form noValidate autoComplete="off">
           <StyledFlexColumn sx={{ gap: 3.2 }}>
+            <StyledFlexTopCenter sx={{ gap: 0.8 }}>
+              <StyledBodyLarge>{t('export')}:</StyledBodyLarge>
+              <StyledTitleBoldMedium>
+                {contextItemName} {t('dataExport.responses')}
+              </StyledTitleBoldMedium>
+            </StyledFlexTopCenter>
             <StyledFlexColumn sx={{ gap: 1.6 }}>
               {canExportEhrHealthData && (
                 <SelectController

@@ -67,7 +67,7 @@ const commonProps = {
   onExport: mockOnExport,
   minDate: date,
   maxDate: new Date(),
-  appletName: mockedApplet.displayName,
+  contextItemName: mockedApplet.displayName,
   'data-testid': DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 };
 
