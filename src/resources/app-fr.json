@@ -468,9 +468,11 @@
       "responsesOnly": "Réponses uniquement",
       "responsesAndEhrData": "Réponses & données DSE"
     },
+    "responses": "réponses",
     "supplementaryFiles": {
-      "description": "Fichiers supplémentaires :",
+      "description": "Fichiers supplémentaires:",
       "includes": {
+        "userJourney": "Données du parcours utilisateur",
         "scheduleHistory": "Inclure l'historique du programme",
         "flowHistory": "Inclure l'historique du flux d'activité"
       }

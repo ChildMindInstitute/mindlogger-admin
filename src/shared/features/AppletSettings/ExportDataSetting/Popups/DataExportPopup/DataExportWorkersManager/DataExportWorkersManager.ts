@@ -1,17 +1,17 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
-import { ExportDataResult } from 'shared/types/answer';
-import { EncryptionParsed } from 'shared/utils/encryption';
-import { ExportDataFilters, exportDecryptedDataSucceed } from 'shared/utils/exportData';
 import { ItemResponseType } from 'shared/consts';
-import { Mixpanel } from 'shared/utils/mixpanel/mixpanel';
-import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel/mixpanel.types';
-import { FeatureFlags } from 'shared/types/featureFlags';
-import DecryptionWorker from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.worker';
 import { IdleWorker } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
+import { getExportDataSuffix } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 import { NUM_WORKERS } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.const';
 import { WorkerOnMessageEvent } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.types';
-import { getExportDataSuffix } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import DecryptionWorker from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportWorker/DataExportWorker.worker';
+import { ExportDataResult } from 'shared/types/answer';
+import { FeatureFlags } from 'shared/types/featureFlags';
+import { EncryptionParsed } from 'shared/utils/encryption';
+import { ExportDataFilters, exportDecryptedDataSucceed } from 'shared/utils/exportData';
+import { Mixpanel } from 'shared/utils/mixpanel/mixpanel';
+import { MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel/mixpanel.types';
 
 export class DataExportWorkersManager {
   private workers: IdleWorker[] = [];
@@ -70,6 +70,8 @@ export class DataExportWorkersManager {
         suffix: hasSuffix ? getExportDataSuffix(page) : '',
         filters,
         flags: this.flags,
+        // TODO: This should be properly passed from the form once this exporter is enabled
+        shouldGenerateUserJourney: true,
       })(decryptedData).then(() => {
         this.finishedPagesRef.current.add(page);
         this.handleAllTasksCompleted();

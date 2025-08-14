@@ -1,7 +1,7 @@
 import { ChosenAppletData } from 'modules/Dashboard/features';
 import { SingleApplet } from 'shared/state';
-import { ExportDataFilters } from 'shared/utils';
 import { UniqueTuple } from 'shared/types';
+import { ExportDataFilters } from 'shared/utils';
 
 export const enum ExportDateType {
   AllTime = 'allTime',
@@ -21,12 +21,12 @@ export const enum ExportDataExported {
 // to that flag's corresponding array, otherwise add it to the `none` array
 export const SupplementaryFilesWithFeatureFlag = {
   enableEmaExtraFiles: ['flowHistory', 'scheduleHistory'],
-  // none: [],
+  none: ['userJourney'],
 } as const;
 
 export const SupplementaryFiles = [
   ...SupplementaryFilesWithFeatureFlag.enableEmaExtraFiles,
-  //...SupplementaryFilesWithFeatureFlag.none,
+  ...SupplementaryFilesWithFeatureFlag.none,
 ] as const;
 
 export type SupplementaryFiles = (typeof SupplementaryFiles)[number];
