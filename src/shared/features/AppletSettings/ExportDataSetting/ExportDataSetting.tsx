@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { endOfDay, startOfDay } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
@@ -39,15 +40,15 @@ export const ExportDataSetting = ({
   const canExportEhrHealthData = featureFlags.enableEhrHealthData !== 'unavailable';
 
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
-  const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
+  const maxDate = useMemo(() => getNormalizedTimezoneDate(new Date().toString()), []);
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
       dataExported: canExportEhrHealthData
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
-      fromDate: minDate,
-      toDate: getMaxDate(),
+      fromDate: startOfDay(minDate),
+      toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(
         (acc, fileType) => ({
           ...acc,
@@ -56,7 +57,7 @@ export const ExportDataSetting = ({
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate, canExportEhrHealthData],
+    [minDate, maxDate, canExportEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -141,7 +142,7 @@ export const ExportDataSetting = ({
             onExportSettingsClose();
           }}
           minDate={minDate}
-          getMaxDate={getMaxDate}
+          maxDate={maxDate}
           contextItemName={contextItemName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
           canExportEhrHealthData={canExportEhrHealthData}

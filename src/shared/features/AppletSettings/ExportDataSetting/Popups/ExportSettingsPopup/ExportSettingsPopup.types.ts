@@ -5,7 +5,7 @@ export type ExportSettingsPopupProps = {
   onClose: () => void;
   onExport: () => void;
   minDate: Date;
-  getMaxDate: () => Date;
+  maxDate: Date;
   contextItemName: string; // Activity name or Activity Flow name or Applet name
   supportedSupplementaryFiles?: SupplementaryFiles[];
   canExportEhrHealthData?: boolean;

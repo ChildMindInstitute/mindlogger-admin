@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +18,6 @@ import {
   StyledTitleBoldMedium,
   theme,
 } from 'shared/styles';
-import { SelectEvent } from 'shared/types';
 
 import {
   ExportDataFormValues,
@@ -33,7 +32,7 @@ export const ExportSettingsPopup = ({
   onClose,
   onExport,
   minDate,
-  getMaxDate,
+  maxDate,
   contextItemName,
   supportedSupplementaryFiles,
   canExportEhrHealthData,
@@ -49,7 +48,7 @@ export const ExportSettingsPopup = ({
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
 
   const commonProps = {
-    maxDate: getMaxDate(),
+    maxDate,
     control,
     inputSx: {
       '& .MuiInputLabel-outlined': {
@@ -58,45 +57,56 @@ export const ExportSettingsPopup = ({
     },
   };
 
-  const onFromDateSubmit = (date: DateType) => {
-    if (!date) return;
-    setValue('fromDate', startOfDay(date));
-  };
-  const onToDateSubmit = (date: DateType) => {
-    if (!date) return;
-    setValue('toDate', endOfDay(date));
-  };
-  const onDatePickerClose = () => {
+  const normalizeFromDate = useCallback(
+    (date: DateType | undefined) => {
+      if (!date) return;
+      setValue('fromDate', startOfDay(date));
+    },
+    [setValue],
+  );
+
+  const normalizeToDate = useCallback(
+    (date: DateType | undefined) => {
+      if (!date) return;
+      setValue('toDate', endOfDay(date));
+    },
+    [setValue],
+  );
+
+  const onFromDatePickerClose = () => {
+    let newToDate = toDate;
     if (toDate < fromDate) {
-      setValue('toDate', addDays(fromDate, 1));
+      const increasedFromDate = addDays(fromDate, 1);
+
+      newToDate = increasedFromDate <= maxDate ? increasedFromDate : maxDate;
     }
+    normalizeToDate(newToDate);
   };
-  const onDateTypeChange = (e: SelectEvent) => {
-    const dateType = e.target.value as ExportDateType;
-    const maxDate = getMaxDate();
+
+  useEffect(() => {
     switch (dateType) {
       case ExportDateType.AllTime:
-        setValue('fromDate', minDate);
-        setValue('toDate', maxDate);
+        normalizeFromDate(minDate);
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.Last24h:
         setValue('fromDate', addDays(maxDate, -1));
         setValue('toDate', maxDate);
         break;
       case ExportDateType.LastWeek:
-        setValue('fromDate', addDays(maxDate, -7));
-        setValue('toDate', maxDate);
+        normalizeFromDate(addDays(maxDate, -7));
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.LastMonth:
-        setValue('fromDate', addDays(maxDate, -30));
-        setValue('toDate', maxDate);
+        normalizeFromDate(addDays(maxDate, -30));
+        normalizeToDate(maxDate);
         break;
       case ExportDateType.ChooseDates:
-        setValue('fromDate', minDate);
-        setValue('toDate', maxDate);
+        normalizeFromDate(minDate);
+        normalizeToDate(maxDate);
         break;
     }
-  };
+  }, [dateType, minDate, maxDate, normalizeFromDate, normalizeToDate, setValue]);
 
   const filteredSupplementaryFiles = useMemo(
     () =>
@@ -140,7 +150,6 @@ export const ExportSettingsPopup = ({
                 options={getDateTypeOptions()}
                 label={t('dateRange')}
                 data-testid={`${dataTestId}-dateType`}
-                customChange={onDateTypeChange}
                 fullWidth
               />
             </StyledFlexColumn>
@@ -149,8 +158,10 @@ export const ExportSettingsPopup = ({
                 <DatePicker
                   {...commonProps}
                   name="fromDate"
-                  onCloseCallback={onDatePickerClose}
-                  onSubmitCallback={onFromDateSubmit}
+                  onCloseCallback={(date) => {
+                    normalizeFromDate(date);
+                    onFromDatePickerClose();
+                  }}
                   label={t('startDate')}
                   minDate={minDate}
                   data-testid={`${dataTestId}-from-date`}
@@ -162,7 +173,7 @@ export const ExportSettingsPopup = ({
                 <DatePicker
                   {...commonProps}
                   name="toDate"
-                  onSubmitCallback={onToDateSubmit}
+                  onCloseCallback={normalizeToDate}
                   minDate={fromDate}
                   label={t('endDate')}
                   data-testid={`${dataTestId}-to-date`}
@@ -192,13 +203,7 @@ export const ExportSettingsPopup = ({
             )}
             <StyledFlexAllCenter>
               <Button
-                onClick={() => {
-                  if (dateType !== 'chooseDates') {
-                    setValue('toDate', getMaxDate());
-                  }
-
-                  onExport();
-                }}
+                onClick={onExport}
                 color="primary"
                 variant="contained"
                 sx={{ px: 2.4 }}
