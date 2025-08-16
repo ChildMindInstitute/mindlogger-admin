@@ -11,6 +11,11 @@ on:
         description: Version
         type: string
         default: latest
+      git-ref:
+        required: false
+        description: Github ref that matches the build version
+        type: string
+        default: develop
     secrets:
       slack-webhook:
         required: true
@@ -20,7 +25,6 @@ concurrency:
   group: build-deploy-${{ inputs.env-name }}
 
 env:
-#  NODE_VERSION: 22.15.0
   VITE_BUILD_VERSION: ${{ inputs.version }}
   VITE_DD_VERSION: ${{ inputs.version }}
 
@@ -40,6 +44,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout
+        with:
+          ref: ${{ inputs.git-ref }}
 
       - name: Setup node version
         run: |
