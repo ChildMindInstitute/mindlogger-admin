@@ -46,5 +46,6 @@ jobs:
     with:
       env-name: uat
       version: ${{ needs.ref.outputs.target-ref }}
+      git-ref: ${{ needs.ref.outputs.target-ref }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
