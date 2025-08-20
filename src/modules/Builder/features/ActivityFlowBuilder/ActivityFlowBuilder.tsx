@@ -1,24 +1,25 @@
-import { useState, MouseEvent, useMemo } from 'react';
 import { Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { MouseEvent, useMemo, useState } from 'react';
+import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { useFieldArray, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
-import { Menu } from 'shared/components';
-import { BuilderContainer } from 'shared/features';
-import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
+import { DndDroppable, Item, ItemUiType } from 'modules/Builder/components';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { useCustomFormContext, useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 import {
   ActivityFlowFormValues,
   ActivityFlowItem,
   ActivityFormValues,
 } from 'modules/Builder/types';
-import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { Menu } from 'shared/components';
+import { BuilderContainer } from 'shared/features';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 
-import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
+import { builderItemClassName } from './ActivityFlowBuilder.const';
+import { GetMenuItemsType } from './ActivityFlowBuilder.types';
 import {
   getActivityFlowIndex,
   getFlowBuilderActions,
@@ -26,8 +27,7 @@ import {
   getNonReviewableActivities,
 } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
-import { GetMenuItemsType } from './ActivityFlowBuilder.types';
-import { builderItemClassName } from './ActivityFlowBuilder.const';
+import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 
 export const ActivityFlowBuilder = () => {
   const [flowActivityToDeleteData, setFlowActivityToDeleteData] = useState<{
@@ -40,8 +40,10 @@ export const ActivityFlowBuilder = () => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const { activityFlowId } = useParams();
-  const [formActivities, activityFlows]: [ActivityFormValues[], ActivityFlowFormValues[]] =
-    useWatch({ name: ['activities', 'activityFlows'] });
+
+  const formActivities: ActivityFormValues[] = useWatch({ control, name: 'activities' });
+  const activityFlows: ActivityFlowFormValues[] = useWatch({ control, name: 'activityFlows' });
+
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
   const currentActivityFlow = activityFlows[activityFlowIndex];
   const activityFlowName = `activityFlows.${activityFlowIndex}`;
