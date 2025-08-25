@@ -1,14 +1,33 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Box, Button } from '@mui/material';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
+import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
+import {
+  REACT_HOOK_FORM_KEY_NAME,
+  SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
+} from 'modules/Builder/consts';
 import {
   useCheckAndTriggerOnNameUniqueness,
   useCurrentActivity,
   useCustomFormContext,
 } from 'modules/Builder/hooks';
+import { SubscaleFormValue } from 'modules/Builder/types';
+import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
+import { page } from 'resources';
+import { DataTable } from 'shared/components';
+import {
+  InputController,
+  RadioGroupController,
+  SelectController,
+  TransferListController,
+} from 'shared/components/FormComponents';
+import { Svg } from 'shared/components/Svg';
+import { CalculationType, observerStyles } from 'shared/consts';
+import { useStaticContent } from 'shared/hooks/useStaticContent';
+import { ScoreConditionalLogic, ScoreReport, ScoreReportScoringType } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -21,52 +40,33 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import {
-  InputController,
-  RadioGroupController,
-  SelectController,
-  TransferListController,
-} from 'shared/components/FormComponents';
-import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic, ScoreReport, ScoreReportScoringType } from 'shared/state';
-import { CalculationType, observerStyles } from 'shared/consts';
-import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { getEntityKey, SettingParam } from 'shared/utils';
-import {
-  REACT_HOOK_FORM_KEY_NAME,
-  SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
-} from 'modules/Builder/consts';
 import { SelectEvent, isScoreReport } from 'shared/types';
-import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
-import { useStaticContent } from 'shared/hooks/useStaticContent';
-import { SubscaleFormValue } from 'modules/Builder/types';
-import { page } from 'resources';
-import { DataTable } from 'shared/components';
+import { SettingParam, getEntityKey } from 'shared/utils';
 
-import { StyledButton } from '../ScoresAndReports.styles';
-import { SectionScoreHeader } from '../SectionScoreHeader';
-import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
-import { CopyId } from './CopyId';
 import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { getTableScoreItems } from '../ScoresAndReports.utils';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { SectionScoreHeader } from '../SectionScoreHeader';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
+import { CopyId } from './CopyId';
 import { ScoreCondition } from './ScoreCondition';
 import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const';
+import { ScoreContentProps } from './ScoreContent.types';
 import {
-  getScoreItemsColumns,
-  getSelectedItemsColumns,
-  getScoreConditionalDefaults,
   getIsScoreIdVariable,
+  getScoreConditionalDefaults,
   getScoreId,
+  getScoreItemsColumns,
   getScoreRange,
   getScoreRangeLabel,
+  getSelectedItemsColumns,
   updateMessagesWithVariable,
   updateScoreConditionIds,
   updateScoreConditionsPayload,
 } from './ScoreContent.utils';
-import { ScoreContentProps } from './ScoreContent.types';
 import { StaticScoreContent } from './StaticScoreContent';
-import { getTableScoreItems } from '../ScoresAndReports.utils';
 
 export const ScoreContent = ({
   name,
@@ -99,9 +99,9 @@ export const ScoreContent = ({
   const subscaleNameField = `${name}.subscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
-
-  const score: ScoreReport = useWatch({ name });
+  const subscalesResult: SubscaleFormValue[] = useWatch({ name: subscalesField, control });
+  const subscales = useMemo(() => subscalesResult ?? [], [subscalesResult]);
+  const score: ScoreReport = useWatch({ name, control });
   const {
     name: scoreName,
     id: scoreId,
@@ -113,31 +113,48 @@ export const ScoreContent = ({
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
 
-  const selectedItemsPredicate = (item: { id?: string; key?: string }) =>
-    itemsScore?.includes(getEntityKey(item, true));
-  const selectedItems = scoreItems?.filter(selectedItemsPredicate);
+  const selectedItemsPredicate = useCallback(
+    (item: { id?: string; key?: string }) => itemsScore?.includes(getEntityKey(item, true)),
+    [itemsScore],
+  );
+  const selectedItems = useMemo(
+    () => scoreItems?.filter(selectedItemsPredicate),
+    [scoreItems, selectedItemsPredicate],
+  );
 
-  const eligibleSubscales = subscales.filter(({ subscaleTableData, items }) => {
-    const hasLookupTable = !!subscaleTableData && subscaleTableData.length > 0;
+  const eligibleSubscales = useMemo(
+    () =>
+      subscales.filter(({ subscaleTableData, items }) => {
+        const hasLookupTable = !!subscaleTableData && subscaleTableData.length > 0;
 
-    // Subscales can contain only nested subscales, but they need at least one activity item
-    // because that's what the report score is calculated from
-    const hasNonSubscaleItems =
-      scoreItems?.filter((item) => items.includes(getEntityKey(item, true)))?.length > 0;
+        // Subscales can contain only nested subscales, but they need at least one activity item
+        // because that's what the report score is calculated from
+        const hasNonSubscaleItems =
+          scoreItems?.filter((item) => items.includes(getEntityKey(item, true)))?.length > 0;
 
-    return hasLookupTable && hasNonSubscaleItems;
-  });
-  const linkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
+        return hasLookupTable && hasNonSubscaleItems;
+      }),
+    [subscales, scoreItems],
+  );
+  const linkedSubscale = useMemo(
+    () => eligibleSubscales.find(({ name }) => name === subscaleName),
+    [eligibleSubscales, subscaleName],
+  );
 
-  const scoreRange = getScoreRange({
-    items: selectedItems,
-    calculationType,
-    activity,
-    lookupTable: scoringType === 'score' ? linkedSubscale?.subscaleTableData : null,
-  });
-  const scoreRangeLabel = selectedItems?.length
-    ? getScoreRangeLabel(scoreRange)
-    : EMPTY_SCORE_RANGE_LABEL;
+  const scoreRange = useMemo(
+    () =>
+      getScoreRange({
+        items: selectedItems,
+        calculationType,
+        activity,
+        lookupTable: scoringType === 'score' ? linkedSubscale?.subscaleTableData : null,
+      }),
+    [selectedItems, calculationType, activity, scoringType, linkedSubscale],
+  );
+  const scoreRangeLabel = useMemo(
+    () => (selectedItems?.length ? getScoreRangeLabel(scoreRange) : EMPTY_SCORE_RANGE_LABEL),
+    [selectedItems, scoreRange],
+  );
 
   const {
     fields: scoreConditionals,
