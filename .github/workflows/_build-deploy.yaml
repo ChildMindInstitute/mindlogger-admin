@@ -25,6 +25,8 @@ concurrency:
   group: build-deploy-${{ inputs.env-name }}
 
 env:
+  REACT_APP_DEVELOP_BUILD_VERSION: ${{ inputs.version }}
+  REACT_APP_DD_VERSION: ${{ inputs.version }}
   VITE_BUILD_VERSION: ${{ inputs.version }}
   VITE_DD_VERSION: ${{ inputs.version }}
 
