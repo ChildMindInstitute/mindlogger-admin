@@ -216,11 +216,11 @@ export const ScoreContent = ({
 
   const handleCalculationChange = useCallback(
     (event: { target: { value: string } }) => {
-      const calculationType = event.target.value as CalculationType;
+      const newCalculationType = event.target.value as CalculationType;
       setPrevCalculationType(score.calculationType);
 
       const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
-      const newScoreId = getScoreId(scoreName, calculationType);
+      const newScoreId = getScoreId(scoreName, newCalculationType);
 
       if (oldScoreId !== newScoreId) {
         const isVariable = getIsScoreIdVariable({
@@ -237,7 +237,7 @@ export const ScoreContent = ({
       }
 
       setValue(scoreIdField, newScoreId);
-      setPrevCalculationType(calculationType);
+      setPrevCalculationType(newCalculationType);
       updateScoreConditionIds({
         setValue,
         conditionsName: scoreConditionalsName,
@@ -249,14 +249,13 @@ export const ScoreContent = ({
         getValues,
         scoreConditionalsName,
         selectedItems,
-        calculationType,
+        calculationType: newCalculationType,
         activity,
       });
     },
     [
       activity,
       getValues,
-      name,
       prevCalculationType,
       prevScoreName,
       reportsName,
@@ -266,17 +265,19 @@ export const ScoreContent = ({
       scoreName,
       selectedItems,
       setValue,
+      scoreIdField,
     ],
   );
 
   const handleLinkedSubscaleChange = useCallback(
     (e: SelectEvent) => {
-      const subscaleName = e.target.value;
-      const newLinkedSubscale = eligibleSubscales.find(({ name }) => name === subscaleName);
+      const newSubscaleName = e.target.value;
+
+      const newLinkedSubscale = eligibleSubscales.find(({ name }) => name === newSubscaleName);
 
       if (!newLinkedSubscale) return;
 
-      setValue(subscaleNameField, subscaleName);
+      setValue(subscaleNameField, newSubscaleName);
 
       if (scoringType === 'score') {
         setValue(calculationTypeField, newLinkedSubscale.scoring);
@@ -293,10 +294,12 @@ export const ScoreContent = ({
       }
     },
     [
+      calculationTypeField,
+      subscaleNameField,
+      itemsScoreField,
+      activity?.items,
       calculationType,
       handleCalculationChange,
-      subscaleNameField,
-      name,
       scoringType,
       setValue,
       eligibleSubscales,
@@ -317,7 +320,15 @@ export const ScoreContent = ({
         setValue(itemsScoreField, linkedSubscale.items);
       }
     },
-    [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
+    [
+      calculationTypeField,
+      itemsScoreField,
+      scoringTypeField,
+      calculationType,
+      handleCalculationChange,
+      linkedSubscale,
+      setValue,
+    ],
   );
 
   const handleNameBlur = () => {
