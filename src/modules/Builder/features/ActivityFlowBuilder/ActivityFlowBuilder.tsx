@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
-import { MouseEvent, useMemo, useState } from 'react';
+import { CSSProperties, MouseEvent, useMemo, useState } from 'react';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { FixedSizeList as List } from 'react-window';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DndDroppable, Item, ItemUiType } from 'modules/Builder/components';
@@ -151,54 +152,150 @@ export const ActivityFlowBuilder = () => {
             <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activityFlowItems.map((item, index) => {
-                    const key = item.id || item.key;
-                    const currentActivity = activitiesIdsObjects[item.activityKey];
-                    const activityName = currentActivity?.name;
-                    const activityDescription = currentActivity?.description;
-                    const itemDataTestid = `${dataTestid}-flow-${index}`;
+                  {activityFlowItems.length > 20 ? (
+                    <List
+                      height={600}
+                      width="100%"
+                      itemCount={activityFlowItems.length}
+                      itemSize={80}
+                      itemData={{
+                        activityFlowItems,
+                        activitiesIdsObjects,
+                        dataTestid,
+                        anchorEl,
+                        flowActivityToUpdateIndex,
+                        handleFlowActivityToUpdateSet,
+                        handleFlowActivityDuplicate,
+                        handleFlowActivityToDeleteSet,
+                      }}
+                    >
+                      {({
+                        index,
+                        style,
+                        data,
+                      }: {
+                        index: number;
+                        style: CSSProperties;
+                        data: {
+                          activityFlowItems: ActivityFlowItem[];
+                          activitiesIdsObjects: Record<string, ActivityFormValues>;
+                          dataTestid: string;
+                          anchorEl: HTMLElement | null;
+                          flowActivityToUpdateIndex: number | null;
+                          handleFlowActivityToUpdateSet: (
+                            event: MouseEvent<HTMLElement>,
+                            index: number,
+                          ) => void;
+                          handleFlowActivityDuplicate: (index: number) => void;
+                          handleFlowActivityToDeleteSet: (
+                            index: number,
+                            name: string,
+                            activityKey: string,
+                          ) => () => void;
+                        };
+                      }) => {
+                        const item = data.activityFlowItems[index];
+                        const key = item.id || item.key;
+                        const currentActivity = data.activitiesIdsObjects[item.activityKey];
+                        const activityName = currentActivity?.name;
+                        const activityDescription = currentActivity?.description;
+                        const itemDataTestid = `${data.dataTestid}-flow-${index}`;
 
-                    return (
-                      <Draggable key={key} draggableId={key || ''} index={index}>
-                        {(itemProvided, snapshot) => (
-                          <Box
-                            className={builderItemClassName}
-                            ref={itemProvided.innerRef}
-                            {...itemProvided.draggableProps}
-                            data-testid={itemDataTestid}
-                          >
-                            <Item
-                              dragHandleProps={itemProvided.dragHandleProps}
-                              isDragging={snapshot.isDragging}
-                              index={index + 1}
-                              total={activityFlowItems.length}
-                              getActions={() =>
-                                getFlowBuilderActions({
-                                  index,
-                                  replaceItem: handleFlowActivityToUpdateSet,
-                                  duplicateItem: handleFlowActivityDuplicate,
-                                  removeItem: handleFlowActivityToDeleteSet(
-                                    index,
-                                    activityName || '',
-                                    item.activityKey,
-                                  ),
-                                  replaceItemActionActive:
-                                    !!anchorEl && flowActivityToUpdateIndex === index,
-                                  'data-testid': itemDataTestid,
-                                })
-                              }
-                              uiType={ItemUiType.FlowBuilder}
-                              name={activityName || ''}
-                              description={activityDescription || ''}
-                              visibleByDefault={!!anchorEl && flowActivityToUpdateIndex === index}
-                              {...item}
+                        return (
+                          <Draggable key={key} draggableId={key || ''} index={index}>
+                            {(itemProvided, snapshot) => (
+                              <Box
+                                className={builderItemClassName}
+                                ref={itemProvided.innerRef}
+                                {...itemProvided.draggableProps}
+                                data-testid={itemDataTestid}
+                                style={{ ...style, ...itemProvided.draggableProps.style }}
+                              >
+                                <Item
+                                  dragHandleProps={itemProvided.dragHandleProps}
+                                  isDragging={snapshot.isDragging}
+                                  index={index + 1}
+                                  total={data.activityFlowItems.length}
+                                  getActions={() =>
+                                    getFlowBuilderActions({
+                                      index,
+                                      replaceItem: data.handleFlowActivityToUpdateSet,
+                                      duplicateItem: data.handleFlowActivityDuplicate,
+                                      removeItem: data.handleFlowActivityToDeleteSet(
+                                        index,
+                                        activityName || '',
+                                        item.activityKey,
+                                      ),
+                                      replaceItemActionActive:
+                                        !!data.anchorEl && data.flowActivityToUpdateIndex === index,
+                                      'data-testid': itemDataTestid,
+                                    })
+                                  }
+                                  uiType={ItemUiType.FlowBuilder}
+                                  name={activityName || ''}
+                                  description={activityDescription || ''}
+                                  visibleByDefault={
+                                    !!data.anchorEl && data.flowActivityToUpdateIndex === index
+                                  }
+                                  {...item}
+                                  data-testid={itemDataTestid}
+                                />
+                              </Box>
+                            )}
+                          </Draggable>
+                        );
+                      }}
+                    </List>
+                  ) : (
+                    activityFlowItems.map((item, index) => {
+                      const key = item.id || item.key;
+                      const currentActivity = activitiesIdsObjects[item.activityKey];
+                      const activityName = currentActivity?.name;
+                      const activityDescription = currentActivity?.description;
+                      const itemDataTestid = `${dataTestid}-flow-${index}`;
+
+                      return (
+                        <Draggable key={key} draggableId={key || ''} index={index}>
+                          {(itemProvided, snapshot) => (
+                            <Box
+                              className={builderItemClassName}
+                              ref={itemProvided.innerRef}
+                              {...itemProvided.draggableProps}
                               data-testid={itemDataTestid}
-                            />
-                          </Box>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                            >
+                              <Item
+                                dragHandleProps={itemProvided.dragHandleProps}
+                                isDragging={snapshot.isDragging}
+                                index={index + 1}
+                                total={activityFlowItems.length}
+                                getActions={() =>
+                                  getFlowBuilderActions({
+                                    index,
+                                    replaceItem: handleFlowActivityToUpdateSet,
+                                    duplicateItem: handleFlowActivityDuplicate,
+                                    removeItem: handleFlowActivityToDeleteSet(
+                                      index,
+                                      activityName || '',
+                                      item.activityKey,
+                                    ),
+                                    replaceItemActionActive:
+                                      !!anchorEl && flowActivityToUpdateIndex === index,
+                                    'data-testid': itemDataTestid,
+                                  })
+                                }
+                                uiType={ItemUiType.FlowBuilder}
+                                name={activityName || ''}
+                                description={activityDescription || ''}
+                                visibleByDefault={!!anchorEl && flowActivityToUpdateIndex === index}
+                                {...item}
+                                data-testid={itemDataTestid}
+                              />
+                            </Box>
+                          )}
+                        </Draggable>
+                      );
+                    })
+                  )}
                   {listProvided.placeholder}
                 </Box>
               )}
