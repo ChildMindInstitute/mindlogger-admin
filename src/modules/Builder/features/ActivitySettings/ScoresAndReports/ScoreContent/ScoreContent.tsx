@@ -362,20 +362,6 @@ export const ScoreContent = ({
     });
   };
 
-  const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter(
-      (item) => chosenItems?.includes(getEntityKey(item, true)),
-    );
-    updateScoreConditionsPayload({
-      setValue,
-      getValues,
-      scoreConditionalsName,
-      selectedItems: newSelectedItems,
-      calculationType,
-      activity,
-    });
-  };
-
   useEffect(() => {
     // Account for changes made to the linked subscale on the subscale configuration screen
     if (scoringType === 'score') {
@@ -411,13 +397,54 @@ export const ScoreContent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const ItemsList = () => {
+  // Pre-compute columns outside of the component to avoid recreation on each render
+  const scoreItemColumns = useMemo(() => getScoreItemsColumns(), []);
+  const selectedItemColumns = useMemo(() => getSelectedItemsColumns(), []);
+
+  // Pre-compute filtered data for the DataTable
+  const filteredTableData = useMemo(
+    () => getTableScoreItems(scoreItems)?.filter(selectedItemsPredicate),
+    [scoreItems, selectedItemsPredicate],
+  );
+
+  // Get the current score conditionals for the callback
+  const watchedScoreConditionals = useWatch({ control, name: scoreConditionalsName });
+
+  // Update score conditions payload when selected score items change
+  const onItemsToCalculateScoreChange = useCallback(
+    (selectedItems: string[]) => {
+      if (watchedScoreConditionals?.length) {
+        // Using the correct function signature for updateScoreConditionsPayload
+        updateScoreConditionsPayload({
+          setValue,
+          getValues,
+          scoreConditionalsName,
+          selectedItems: scoreItems?.filter((item) =>
+            selectedItems.includes(getEntityKey(item, true)),
+          ),
+          calculationType,
+          activity,
+        });
+      }
+    },
+    [
+      watchedScoreConditionals,
+      scoreItems,
+      setValue,
+      getValues,
+      scoreConditionalsName,
+      calculationType,
+      activity,
+    ],
+  );
+
+  const ItemsList = useCallback(() => {
     if (scoringType === 'score' && linkedSubscale) {
       return (
         <Box sx={{ mb: theme.spacing(2.5) }}>
           <DataTable
-            columns={getSelectedItemsColumns()}
-            data={getTableScoreItems(scoreItems)?.filter(selectedItemsPredicate)}
+            columns={selectedItemColumns}
+            data={filteredTableData}
             noDataPlaceholder={t('noSelectedItemsYet')}
             data-testid={`${dataTestid}-selected`}
           />
@@ -429,8 +456,8 @@ export const ScoreContent = ({
       <TransferListController
         name={itemsScoreField}
         items={tableItems}
-        columns={getScoreItemsColumns()}
-        selectedItemsColumns={getSelectedItemsColumns()}
+        columns={scoreItemColumns}
+        selectedItemsColumns={selectedItemColumns}
         hasSelectedSection
         searchKey="label"
         hasSearch
@@ -440,7 +467,18 @@ export const ScoreContent = ({
         data-testid={`${dataTestid}-items-score`}
       />
     );
-  };
+  }, [
+    scoringType,
+    linkedSubscale,
+    selectedItemColumns,
+    filteredTableData,
+    t,
+    dataTestid,
+    itemsScoreField,
+    tableItems,
+    scoreItemColumns,
+    onItemsToCalculateScoreChange,
+  ]);
 
   return (
     <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
