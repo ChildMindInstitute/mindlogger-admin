@@ -15,16 +15,14 @@ import { DateFormats } from 'shared/consts';
 import {
   ExportDataExported,
   ExportDataFormValues,
+  ExportDateType,
 } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
   ExecuteAllPagesOfExportData,
   Modals,
 } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
-import {
-  getExportDataSuffix,
-  getFormattedToDate,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import { getExportDataSuffix } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
 import { workspaces } from 'shared/state';
 import {
@@ -120,8 +118,17 @@ export const DataExportPopup = ({
           supplementaryFiles,
         } = getValues?.() ?? {};
 
-        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = getFormattedToDate({ dateType, formToDate });
+        let fromDate = format(formFromDate, DateFormats.shortISO);
+        let toDate = format(formToDate, DateFormats.shortISO);
+
+        // Update the time for last 24 hours submissions
+        if (dateType === ExportDateType.Last24h) {
+          const currentTime = new Date();
+          const oneDayAgo = new Date(currentTime);
+          oneDayAgo.setHours(currentTime.getHours() - 24);
+          fromDate = format(oneDayAgo, DateFormats.shortISO);
+          toDate = format(currentTime, DateFormats.shortISO);
+        }
 
         const includeEhr =
           featureFlags.enableEhrHealthData !== 'unavailable' &&
