@@ -1,0 +1,149 @@
+name: Build and Deploy
+on:
+  workflow_call:
+    inputs:
+      env-name:
+        required: true
+        description: Environment name
+        type: string
+      version:
+        required: false
+        description: Version
+        type: string
+        default: latest
+      git-ref:
+        required: false
+        description: Github ref that matches the build version
+        type: string
+        default: develop
+    secrets:
+      slack-webhook:
+        required: true
+
+concurrency:
+  cancel-in-progress: false
+  group: build-deploy-${{ inputs.env-name }}
+
+env:
+  REACT_APP_DEVELOP_BUILD_VERSION: ${{ inputs.version }}
+  REACT_APP_DD_VERSION: ${{ inputs.version }}
+  VITE_BUILD_VERSION: ${{ inputs.version }}
+  VITE_DD_VERSION: ${{ inputs.version }}
+
+jobs:
+  setup-vars:
+    uses: ./.github/workflows/_setup.yaml
+    with:
+      env-name: ${{ inputs.env-name }}
+
+  build-deploy:
+    runs-on: ubuntu-latest
+    name: Node Build and Deploy
+    needs: setup-vars
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+        with:
+          ref: ${{ inputs.git-ref }}
+
+      - name: Setup node version
+        run: |
+          echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+      - name: Configure aws credentials for secrets
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-session-name: OIDC-GHA-Build-Secrets
+          aws-region: us-east-1
+
+      - name: Load build config
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            ,/CodeBuild/admin-panel/${{ inputs.env-name }}
+          parse-json-secrets: true
+
+      - uses: actions/setup-node@v4
+        name: Setup Node
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: wearerequired/lint-action@v2
+        name: Lint
+        with:
+          eslint: true
+          eslint_extensions: js,jsx,ts,tsx
+          prettier: true
+          prettier_extensions: js,jsx,ts,tsx
+          continue_on_error: true
+
+      - name: Tests
+        run: npm run test:nowatch
+        env:
+          REACT_APP_API_DOMAIN: http://localhost:8000
+          REACT_APP_ENV: 'dev'
+          REACT_APP_WEB_URI: http://localhost:5173
+
+      - name: Build admin app
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Configure AWS credentials for deploy
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ needs.setup-vars.outputs.role }}
+          role-session-name: OIDC-GHA-session-deploy
+          aws-region: ${{ needs.setup-vars.outputs.region }}
+
+      - name: Deploy
+        run: |
+          aws s3 sync ./build s3://cmiml-${{ inputs.env-name }}-admin-panel
+
+      - name: Invalidate Cloudfront caches
+        run: |
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
+            AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
+          done
+
+
+  on-deploy-failure:
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && (needs.build-deploy.result == 'failure' || needs.build-deploy.result == 'timed_out') }}
+    needs:
+      - build-deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Send Slack message on failure"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: failure
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Admin Deploy Failed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚨 Error when executing deployment!'
+
+  on-deploy-success:
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && (needs.build-deploy.result == 'success') }}
+    needs:
+      - build-deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Send Slack message on success"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: success
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Admin Deployed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'

@@ -1,15 +1,17 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { endOfDay, startOfDay } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
-import { applet } from 'shared/state/Applet';
-import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
-import { UniqueTuple } from 'shared/types';
 import { useFeatureFlags } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
+import { applet } from 'shared/state/Applet';
+import { UniqueTuple } from 'shared/types';
+import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
+import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import {
   ExportDataExported,
   ExportDataFormValues,
@@ -18,7 +20,6 @@ import {
   SupplementaryFiles,
   SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
-import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
 export const ExportDataSetting = ({
@@ -39,21 +40,24 @@ export const ExportDataSetting = ({
   const canExportEhrHealthData = featureFlags.enableEhrHealthData !== 'unavailable';
 
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
-  const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
+  const maxDate = useMemo(() => getNormalizedTimezoneDate(new Date().toString()), []);
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
       dataExported: canExportEhrHealthData
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
       dateType: ExportDateType.AllTime,
-      fromDate: minDate,
-      toDate: getMaxDate(),
+      fromDate: startOfDay(minDate),
+      toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(
-        (acc, fileType) => ({ ...acc, [fileType]: false }),
+        (acc, fileType) => ({
+          ...acc,
+          [fileType]: fileType === 'userJourney',
+        }),
         {} as Record<SupplementaryFiles, boolean>,
       ),
     }),
-    [minDate, canExportEhrHealthData],
+    [minDate, maxDate, canExportEhrHealthData],
   );
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
@@ -65,8 +69,10 @@ export const ExportDataSetting = ({
     methods.reset(defaultValues);
   }, [defaultValues, methods]);
 
-  const defaultSupportedSupplementaryFiles =
-    supportedSupplementaryFiles ?? (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
+  // User journey is always supported
+  const defaultSupportedSupplementaryFiles = supportedSupplementaryFiles
+    ? [...new Set([...supportedSupplementaryFiles, 'userJourney'])]
+    : (SupplementaryFiles as UniqueTuple<SupplementaryFiles>);
 
   const filteredSupportedSupplementaryFiles = (
     Object.entries(SupplementaryFilesWithFeatureFlag) as unknown as [
@@ -91,11 +97,30 @@ export const ExportDataSetting = ({
     .filter((file) => (defaultSupportedSupplementaryFiles as string[]).includes(file));
 
   let appletName = '';
+  let contextItemName = '';
+
   if (appletData) {
     if ('appletDisplayName' in appletData) {
       appletName = appletData.appletDisplayName ?? '';
     } else if ('displayName' in appletData) {
       appletName = appletData.displayName;
+    }
+
+    contextItemName = appletName;
+
+    // Check if we have activity or flow filters and update the context item name accordingly
+    if (filters?.activityId && 'activities' in appletData) {
+      const activity = appletData.activities?.find(
+        (activity) => activity.id === filters.activityId,
+      );
+      if (activity?.name) {
+        contextItemName = activity.name;
+      }
+    } else if (filters?.flowId && 'activityFlows' in appletData) {
+      const flow = appletData.activityFlows?.find((flow) => flow.id === filters.flowId);
+      if (flow?.name) {
+        contextItemName = flow.name;
+      }
     }
   }
 
@@ -117,8 +142,8 @@ export const ExportDataSetting = ({
             onExportSettingsClose();
           }}
           minDate={minDate}
-          getMaxDate={getMaxDate}
-          appletName={appletName}
+          maxDate={maxDate}
+          contextItemName={contextItemName}
           supportedSupplementaryFiles={filteredSupportedSupplementaryFiles}
           canExportEhrHealthData={canExportEhrHealthData}
           data-testid={`${dataTestId}-settings`}

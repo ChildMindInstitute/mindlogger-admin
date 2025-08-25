@@ -468,9 +468,11 @@
       "responsesOnly": "Réponses uniquement",
       "responsesAndEhrData": "Réponses & données DSE"
     },
+    "responses": "réponses",
     "supplementaryFiles": {
-      "description": "Fichiers supplémentaires :",
+      "description": "Fichiers supplémentaires:",
       "includes": {
+        "userJourney": "Données du parcours utilisateur",
         "scheduleHistory": "Inclure l'historique du programme",
         "flowHistory": "Inclure l'historique du flux d'activité"
       }
@@ -502,7 +504,7 @@
   "deleteActivityFlow": "Supprimer le flux d'activité",
   "deleteActivityFlowDescription": "Êtes-vous sûr de vouloir supprimer le flux d'activité <1>{{activityFlowName}}</1>?",
   "deleteApplet": "Supprimer l'Applet",
-  "deleteAppletDescriptionWithPassword": "Pour supprimer, saisissez le mot de passe de l'Applet ici.\nAprès la suppression vous ne pourrez pas restaurer l'Applet.",
+  "deleteAppletDescriptionWithPassword": "Pour supprimer <1>{{appletName}}</1>, saisissez le mot de passe de l'Applet ici.\nAprès la suppression vous ne pourrez pas restaurer l'Applet.",
   "deleteAudio": "Supprimer l'audio",
   "deleteDescription": "Une fois l'Applet supprimée vous ne pourrez pas la restaurer.",
   "deleteFolderWarning": "Impossible de supprimer un dossier contenant des Applets. Retirez les Applets du dossier avant de le supprimer.",

@@ -1,18 +1,18 @@
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import {
+  activityJourneyHeader,
+  GENERAL_REPORT_NAME,
   JOURNEY_REPORT_NAME,
   LEGACY_GENERAL_REPORT_NAME,
   legacyActivityJourneyHeader,
   legacyReportHeader,
-  GENERAL_REPORT_NAME,
-  activityJourneyHeader,
   reportHeader,
 } from 'shared/consts';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import {
   AppletExportData,
+  DecryptedActivityData,
   ExportDataResult,
   ExtendedExportAnswerWithoutEncryption,
-  DecryptedActivityData,
 } from 'shared/types';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
@@ -33,7 +33,12 @@ const exportProcessedData = async ({
   flankerItemsData,
   suffix,
   flags,
-}: AppletExportData & { suffix: string; flags: FeatureFlags }) => {
+  shouldGenerateUserJourney,
+}: AppletExportData & {
+  suffix: string;
+  flags: FeatureFlags;
+  shouldGenerateUserJourney: boolean;
+}) => {
   const reportHeaders = flags.enableDataExportRenaming
     ? { general: reportHeader, activity: activityJourneyHeader }
     : { general: legacyReportHeader, activity: legacyActivityJourneyHeader };
@@ -52,11 +57,13 @@ const exportProcessedData = async ({
       (flags.enableDataExportRenaming ? GENERAL_REPORT_NAME : LEGACY_GENERAL_REPORT_NAME) + suffix,
     defaultData: sanitizedReportData.length > 0 ? null : reportHeaders.general,
   });
-  await exportTemplate({
-    data: sanitizedActivityJourneyData,
-    fileName: JOURNEY_REPORT_NAME + suffix,
-    defaultData: sanitizedActivityJourneyData.length > 0 ? null : reportHeaders.activity,
-  });
+
+  if (shouldGenerateUserJourney)
+    await exportTemplate({
+      data: sanitizedActivityJourneyData,
+      fileName: JOURNEY_REPORT_NAME + suffix,
+      defaultData: sanitizedActivityJourneyData.length > 0 ? null : reportHeaders.activity,
+    });
 
   await Promise.allSettled([
     exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing, suffix)),
@@ -73,17 +80,25 @@ export const exportEncryptedDataSucceed =
     suffix,
     filters,
     flags,
+    shouldGenerateUserJourney,
   }: {
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
     suffix: string;
     filters?: ExportDataFilters;
     flags: FeatureFlags;
+    shouldGenerateUserJourney: boolean;
   }) =>
   async (result: ExportDataResult) => {
     if (!result) return;
 
-    const exportData = await prepareEncryptedData(result, getDecryptedAnswers, flags, filters);
-    await exportProcessedData({ ...exportData, suffix, flags });
+    const exportData = await prepareEncryptedData({
+      data: result,
+      getDecryptedAnswers,
+      flags,
+      shouldGenerateUserJourney,
+      filters,
+    });
+    await exportProcessedData({ ...exportData, suffix, flags, shouldGenerateUserJourney });
   };
 
 export const exportDecryptedDataSucceed =
@@ -91,14 +106,21 @@ export const exportDecryptedDataSucceed =
     suffix,
     filters,
     flags,
+    shouldGenerateUserJourney,
   }: {
     suffix: string;
     filters?: ExportDataFilters;
     flags: FeatureFlags;
+    shouldGenerateUserJourney: boolean;
   }) =>
   async (parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[]) => {
     if (!parsedAnswers) return;
 
-    const exportData = await prepareDecryptedData(parsedAnswers, flags, filters);
-    await exportProcessedData({ ...exportData, suffix, flags });
+    const exportData = await prepareDecryptedData({
+      parsedAnswers,
+      flags,
+      shouldGenerateUserJourney,
+      filters,
+    });
+    await exportProcessedData({ ...exportData, suffix, flags, shouldGenerateUserJourney });
   };

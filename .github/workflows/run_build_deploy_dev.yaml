@@ -1,0 +1,15 @@
+name: Build and Deploy Dev
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-deploy:
+    name: Build and Deploy
+    uses: ./.github/workflows/_build-deploy.yaml
+    with:
+      env-name: dev
+    secrets:
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_DEV }}

@@ -468,9 +468,11 @@
       "responsesOnly": "Responses Only",
       "responsesAndEhrData": "Responses & EHR Data"
     },
+    "responses": "responses",
     "supplementaryFiles": {
       "description": "Supplementary files:",
       "includes": {
+        "userJourney": "User Journey Data",
         "scheduleHistory": "Include schedule history",
         "flowHistory": "Include activity flow history"
       }
@@ -502,7 +504,7 @@
   "deleteActivityFlow": "Delete Activity Flow",
   "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{activityFlowName}}</1>?",
   "deleteApplet": "Delete Applet",
-  "deleteAppletDescriptionWithPassword": "To delete type Applet password here.\nAfter deleting you won't be able to restore the Applet.",
+  "deleteAppletDescriptionWithPassword": "To delete <1>{{appletName}}</1> type Applet password here.\nAfter deleting you won't be able to restore the Applet.",
   "deleteAudio": "Delete Audio",
   "deleteDescription": "Once the Applet is deleted, you won't be able to restore it.",
   "deleteFolderWarning": "Cannot delete a folder that contains Applets. Remove Applets from folder before deleting.",

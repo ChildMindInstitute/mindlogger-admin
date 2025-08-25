@@ -15,16 +15,14 @@ import { DateFormats } from 'shared/consts';
 import {
   ExportDataExported,
   ExportDataFormValues,
+  ExportDateType,
 } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
   ExecuteAllPagesOfExportData,
   Modals,
 } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
-import {
-  getExportDataSuffix,
-  getFormattedToDate,
-} from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
+import { getExportDataSuffix } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
 import { useFeatureFlags, useSetupEnterAppletPassword } from 'shared/hooks';
 import { workspaces } from 'shared/state';
 import {
@@ -35,9 +33,11 @@ import {
   variables,
 } from 'shared/styles';
 import {
+  ExportDataSuccessfulEvent,
   exportEncryptedDataSucceed,
   Mixpanel,
   MixpanelEventType,
+  MixpanelFeature,
   MixpanelProps,
   sendLogFile,
 } from 'shared/utils';
@@ -56,7 +56,7 @@ export const DataExportPopup = ({
 }: DataExportPopupProps) => {
   const dataExportingRef = useRef(false);
   const { featureFlags } = useFeatureFlags();
-  const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
+  const { getValues, watch } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const { ownerId } = workspaces.useData() ?? {};
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -68,6 +68,7 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
+  const shouldGenerateUserJourney = watch('supplementaryFiles.userJourney');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
 
@@ -101,6 +102,11 @@ export const DataExportPopup = ({
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
+        const analyticsEvent: ExportDataSuccessfulEvent = {
+          action: MixpanelEventType.ExportDataSuccessful,
+          [MixpanelProps.AppletId]: appletId,
+        };
+
         dataExportingRef.current = true;
         setDataIsExporting(true);
 
@@ -112,8 +118,17 @@ export const DataExportPopup = ({
           supplementaryFiles,
         } = getValues?.() ?? {};
 
-        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
-        const toDate = getFormattedToDate({ dateType, formToDate });
+        let fromDate = format(formFromDate, DateFormats.shortISO);
+        let toDate = format(formToDate, DateFormats.shortISO);
+
+        // Update the time for last 24 hours submissions
+        if (dateType === ExportDateType.Last24h) {
+          const currentTime = new Date();
+          const oneDayAgo = new Date(currentTime);
+          oneDayAgo.setHours(currentTime.getHours() - 24);
+          fromDate = format(oneDayAgo, DateFormats.shortISO);
+          toDate = format(currentTime, DateFormats.shortISO);
+        }
 
         const includeEhr =
           featureFlags.enableEhrHealthData !== 'unavailable' &&
@@ -135,6 +150,7 @@ export const DataExportPopup = ({
           suffix: exportDataPages > 1 ? getExportDataSuffix(1) : '',
           filters,
           flags: featureFlags,
+          shouldGenerateUserJourney,
         })(firstPageData);
 
         if (exportDataPages > 1) {
@@ -153,6 +169,7 @@ export const DataExportPopup = ({
               suffix: getExportDataSuffix(page),
               filters,
               flags: featureFlags,
+              shouldGenerateUserJourney,
             })(nextPageData);
           }
         }
@@ -212,7 +229,7 @@ export const DataExportPopup = ({
           const respondentId = filters?.sourceSubjectId;
           const subjectId = targetSubjectIds ?? filters?.targetSubjectId;
 
-          await new EHRDataExporter().exportData({
+          const { size } = await new EHRDataExporter().exportData({
             appletId,
             fromDate,
             toDate,
@@ -221,13 +238,15 @@ export const DataExportPopup = ({
             respondentIds: respondentId ? [respondentId] : undefined,
             subjectIds: subjectId ? [subjectId] : undefined,
           });
+
+          if (size) {
+            analyticsEvent[MixpanelProps.Feature] = [MixpanelFeature.EHR];
+            analyticsEvent[MixpanelProps.EHRFileSize] = size;
+          }
         }
 
+        Mixpanel.track(analyticsEvent);
         handlePopupClose();
-        Mixpanel.track({
-          action: MixpanelEventType.ExportDataSuccessful,
-          [MixpanelProps.AppletId]: appletId,
-        });
       } catch (e) {
         const error = e as TypeError;
         console.warn('Error while export data', error);
