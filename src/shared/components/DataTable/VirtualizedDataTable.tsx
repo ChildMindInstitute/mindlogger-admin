@@ -143,7 +143,7 @@ export const VirtualizedDataTable = ({
       </Table>
       <Box sx={{ height: Math.min(400, data.length * ROW_HEIGHT + 2), width: '100%' }}>
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }: { height: number; width: number }) => (
             <List
               height={height}
               width={width}
