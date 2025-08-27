@@ -17,7 +17,7 @@ import {
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
 import { page } from 'resources';
-import { DataTable } from 'shared/components';
+import { VirtualizedDataTable } from 'shared/components';
 import {
   InputController,
   RadioGroupController,
@@ -67,6 +67,8 @@ import {
   updateScoreConditionsPayload,
 } from './ScoreContent.utils';
 import { StaticScoreContent } from './StaticScoreContent';
+
+const VIRTUALIZATION_THRESHOLD = 50; // Number of items above which virtualization is enabled
 
 export const ScoreContent = ({
   name,
@@ -397,24 +399,24 @@ export const ScoreContent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Pre-compute columns outside of the component to avoid recreation on each render
   const scoreItemColumns = useMemo(() => getScoreItemsColumns(), []);
   const selectedItemColumns = useMemo(() => getSelectedItemsColumns(), []);
 
-  // Pre-compute filtered data for the DataTable
   const filteredTableData = useMemo(
     () => getTableScoreItems(scoreItems)?.filter(selectedItemsPredicate),
     [scoreItems, selectedItemsPredicate],
   );
 
-  // Get the current score conditionals for the callback
-  const watchedScoreConditionals = useWatch({ control, name: scoreConditionalsName });
+  const hasScoreConditionals =
+    useWatch({
+      control,
+      name: scoreConditionalsName,
+      defaultValue: [],
+    })?.length > 0;
 
-  // Update score conditions payload when selected score items change
   const onItemsToCalculateScoreChange = useCallback(
     (selectedItems: string[]) => {
-      if (watchedScoreConditionals?.length) {
-        // Using the correct function signature for updateScoreConditionsPayload
+      if (hasScoreConditionals) {
         updateScoreConditionsPayload({
           setValue,
           getValues,
@@ -428,7 +430,7 @@ export const ScoreContent = ({
       }
     },
     [
-      watchedScoreConditionals,
+      hasScoreConditionals,
       scoreItems,
       setValue,
       getValues,
@@ -442,15 +444,18 @@ export const ScoreContent = ({
     if (scoringType === 'score' && linkedSubscale) {
       return (
         <Box sx={{ mb: theme.spacing(2.5) }}>
-          <DataTable
+          <VirtualizedDataTable
             columns={selectedItemColumns}
             data={filteredTableData}
             noDataPlaceholder={t('noSelectedItemsYet')}
             data-testid={`${dataTestid}-selected`}
+            itemsLength={filteredTableData?.length}
           />
         </Box>
       );
     }
+
+    const shouldUseVirtualization = tableItems && tableItems.length > VIRTUALIZATION_THRESHOLD;
 
     return (
       <TransferListController
@@ -464,6 +469,7 @@ export const ScoreContent = ({
         sxProps={{ mb: theme.spacing(2.5) }}
         tooltipByDefault
         onChangeSelectedCallback={onItemsToCalculateScoreChange}
+        useVirtualizedList={shouldUseVirtualization}
         data-testid={`${dataTestid}-items-score`}
       />
     );

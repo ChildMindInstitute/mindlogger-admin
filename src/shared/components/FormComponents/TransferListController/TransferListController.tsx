@@ -2,12 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import {
-  DataTable,
-  DataTableItem,
-  DataTableProps,
-  VirtualizedDataTable,
-} from 'shared/components/DataTable';
+import { DataTableItem, DataTableProps, SmartDataTable } from 'shared/components/DataTable';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
@@ -96,7 +91,7 @@ export const TransferListController = <T extends FieldValues>({
               />
             )}
             <StyledTransferListController hasError={!!error}>
-              <DataTable
+              <SmartDataTable
                 columns={columns}
                 data={filteredData}
                 selectable={!readOnly}
@@ -108,13 +103,17 @@ export const TransferListController = <T extends FieldValues>({
                 tableHeadBackground={tableHeadBackground}
                 tooltipByDefault={tooltipByDefault}
                 itemsLength={items?.length}
+                forceVirtualization={useVirtualizedList}
                 data-testid={`${dataTestid}-unselected`}
               />
               {hasSelectedSection && (
-                <DataTable
+                <SmartDataTable
                   columns={selectedItemsColumns || columns}
                   data={selectionSectionItems}
                   noDataPlaceholder={t('noSelectedItemsYet')}
+                  itemsLength={selectionSectionItems?.length}
+                  tooltipByDefault={tooltipByDefault}
+                  forceVirtualization={useVirtualizedList}
                   data-testid={`${dataTestid}-selected`}
                 />
               )}
