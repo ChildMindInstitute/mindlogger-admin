@@ -1,14 +1,19 @@
 import { ChangeEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import {
+  DataTable,
+  DataTableItem,
+  DataTableProps,
+  VirtualizedDataTable,
+} from 'shared/components/DataTable';
 import { Svg } from 'shared/components/Svg';
-import { DataTable, DataTableProps, DataTableItem } from 'shared/components/DataTable';
 import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import {
-  StyledTextField,
   StyledErrorContainer,
+  StyledTextField,
   StyledTransferListController,
 } from './TransferListController.styles';
 import { TransferListControllerProps } from './TransferListController.types';
@@ -29,6 +34,7 @@ export const TransferListController = <T extends FieldValues>({
   tableHeadBackground,
   tooltipByDefault,
   onChangeSelectedCallback,
+  useVirtualizedList = false,
   'data-testid': dataTestid,
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
