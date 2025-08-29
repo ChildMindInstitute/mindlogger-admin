@@ -3,7 +3,7 @@ export enum ApiLanguages {
   FR = 'fr',
   EL = 'el',
   ES = 'es',
-  PT_BR = 'pt-BR',
+  PT = 'pt',
 }
 
 export const DEFAULT_CONFIG = {
