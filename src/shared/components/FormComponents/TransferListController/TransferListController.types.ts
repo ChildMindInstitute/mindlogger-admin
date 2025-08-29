@@ -1,8 +1,8 @@
+import { SxProps } from '@mui/material';
 import { ReactNode } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
-import { SxProps } from '@mui/material';
 
-import { DataTableItem, DataTableColumn } from 'shared/components/DataTable';
+import { DataTableColumn, DataTableItem } from 'shared/components/DataTable';
 
 export type TransferListControllerProps<T extends FieldValues> = {
   caption?: ReactNode;
@@ -16,7 +16,8 @@ export type TransferListControllerProps<T extends FieldValues> = {
   hasSearch?: boolean;
   hasSelectedSection?: boolean;
   tableHeadBackground?: string;
-  'data-testid'?: string;
   tooltipByDefault?: boolean;
   onChangeSelectedCallback?: (values: string[]) => void;
+  useVirtualizedList?: boolean;
+  'data-testid'?: string;
 } & UseControllerProps<T>;
