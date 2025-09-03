@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { CSSProperties, MouseEvent, useMemo, useState } from 'react';
+import { CSSProperties, MouseEvent, useMemo, useRef, useState } from 'react';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +37,7 @@ export const ActivityFlowBuilder = () => {
     activityKey: string;
   } | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const stableAnchorRef = useRef<HTMLDivElement | null>(null);
   const [flowActivityToUpdateIndex, setFlowActivityToUpdateIndex] = useState<number | null>(null);
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
@@ -103,11 +104,16 @@ export const ActivityFlowBuilder = () => {
 
   const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
     setFlowActivityToUpdateIndex(index);
-    let parentElement = event.currentTarget.parentNode as HTMLElement;
-    while (parentElement && !parentElement.classList.contains(builderItemClassName)) {
-      parentElement = parentElement.parentNode as HTMLElement;
+
+    if (stableAnchorRef.current) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      stableAnchorRef.current.style.position = 'absolute';
+      stableAnchorRef.current.style.top = `${rect.top}px`;
+      stableAnchorRef.current.style.left = `${rect.left}px`;
+      stableAnchorRef.current.style.width = `${rect.width}px`;
+      stableAnchorRef.current.style.height = `${rect.height}px`;
+      setAnchorEl(stableAnchorRef.current);
     }
-    setAnchorEl(parentElement || null);
   };
 
   const handleFlowActivityUpdate = (index: number, obj: ActivityFlowItem) => {
@@ -146,6 +152,8 @@ export const ActivityFlowBuilder = () => {
       }}
       hasMaxWidth
     >
+      <div ref={stableAnchorRef} style={{ position: 'absolute', pointerEvents: 'none' }} />
+
       {activityFlowItems?.length ? (
         <>
           <DragDropContext onDragEnd={handleDragEnd}>
