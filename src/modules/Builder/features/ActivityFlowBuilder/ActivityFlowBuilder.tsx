@@ -165,7 +165,8 @@ export const ActivityFlowBuilder = () => {
                       height={600}
                       width="100%"
                       itemCount={activityFlowItems.length}
-                      itemSize={80}
+                      itemSize={98}
+                      overscanCount={5}
                       itemData={{
                         activityFlowItems,
                         activitiesIdsObjects,
@@ -219,9 +220,13 @@ export const ActivityFlowBuilder = () => {
                                 data-testid={itemDataTestid}
                                 style={{
                                   ...style,
-                                  ...itemProvided.draggableProps.style,
-                                  position: snapshot.isDragging ? 'fixed' : 'relative',
-                                  zIndex: snapshot.isDragging ? 9999 : 'auto',
+                                  ...(snapshot.isDragging
+                                    ? {
+                                        ...itemProvided.draggableProps.style,
+                                        position: 'fixed',
+                                        zIndex: 9999,
+                                      }
+                                    : {}),
                                 }}
                               >
                                 <Item
@@ -276,9 +281,14 @@ export const ActivityFlowBuilder = () => {
                               {...itemProvided.draggableProps}
                               data-testid={itemDataTestid}
                               style={{
-                                ...itemProvided.draggableProps.style,
-                                position: snapshot.isDragging ? 'fixed' : 'relative',
-                                zIndex: snapshot.isDragging ? 9999 : 'auto',
+                                marginBottom: '16px',
+                                ...(snapshot.isDragging
+                                  ? {
+                                      ...itemProvided.draggableProps.style,
+                                      position: 'fixed',
+                                      zIndex: 9999,
+                                    }
+                                  : {}),
                               }}
                             >
                               <Item
