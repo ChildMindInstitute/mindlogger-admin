@@ -209,7 +209,12 @@ export const ActivityFlowBuilder = () => {
                                 ref={itemProvided.innerRef}
                                 {...itemProvided.draggableProps}
                                 data-testid={itemDataTestid}
-                                style={{ ...style, ...itemProvided.draggableProps.style }}
+                                style={{
+                                  ...style,
+                                  ...itemProvided.draggableProps.style,
+                                  position: snapshot.isDragging ? 'fixed' : 'relative',
+                                  zIndex: snapshot.isDragging ? 9999 : 'auto',
+                                }}
                               >
                                 <Item
                                   dragHandleProps={itemProvided.dragHandleProps}
@@ -262,6 +267,11 @@ export const ActivityFlowBuilder = () => {
                               ref={itemProvided.innerRef}
                               {...itemProvided.draggableProps}
                               data-testid={itemDataTestid}
+                              style={{
+                                ...itemProvided.draggableProps.style,
+                                position: snapshot.isDragging ? 'fixed' : 'relative',
+                                zIndex: snapshot.isDragging ? 9999 : 'auto',
+                              }}
                             >
                               <Item
                                 dragHandleProps={itemProvided.dragHandleProps}
