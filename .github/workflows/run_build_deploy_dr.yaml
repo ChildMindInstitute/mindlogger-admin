@@ -13,7 +13,7 @@ on:
 
 concurrency:
   cancel-in-progress: true
-  group: admin-build-deploy-prod
+  group: admin-build-deploy-dr
 
 permissions:
   id-token: write
@@ -48,4 +48,4 @@ jobs:
       version: ${{ needs.ref.outputs.target-ref }}
       git-ref: ${{ needs.ref.outputs.target-ref }}
     secrets:
-      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_PROD }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_DR }}
