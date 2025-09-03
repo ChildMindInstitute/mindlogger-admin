@@ -136,8 +136,10 @@ jobs:
     if: ${{ !cancelled() && (needs.build-deploy.result == 'success') }}
     needs:
       - build-deploy
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
       - name: "Send Slack message on success"
         uses: rtCamp/action-slack-notify@v2
         env:
