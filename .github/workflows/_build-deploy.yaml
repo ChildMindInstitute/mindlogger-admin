@@ -109,7 +109,7 @@ jobs:
 
       - name: Invalidate Cloudfront caches
         run: |
-          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("admin"; "i")) | .Id'); do
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
 
