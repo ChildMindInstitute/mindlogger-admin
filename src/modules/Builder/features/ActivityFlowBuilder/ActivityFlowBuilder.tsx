@@ -167,6 +167,7 @@ export const ActivityFlowBuilder = () => {
                       itemCount={activityFlowItems.length}
                       itemSize={98}
                       overscanCount={5}
+                      style={{ overflowY: 'visible' }}
                       itemData={{
                         activityFlowItems,
                         activitiesIdsObjects,
