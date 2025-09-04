@@ -11,6 +11,11 @@ on:
         description: Version
         type: string
         default: latest
+      git-ref:
+        required: false
+        description: Github ref that matches the build version
+        type: string
+        default: develop
     secrets:
       slack-webhook:
         required: true
@@ -20,7 +25,8 @@ concurrency:
   group: build-deploy-${{ inputs.env-name }}
 
 env:
-#  NODE_VERSION: 22.15.0
+  REACT_APP_DEVELOP_BUILD_VERSION: ${{ inputs.version }}
+  REACT_APP_DD_VERSION: ${{ inputs.version }}
   VITE_BUILD_VERSION: ${{ inputs.version }}
   VITE_DD_VERSION: ${{ inputs.version }}
 
@@ -40,6 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout
+        with:
+          ref: ${{ inputs.git-ref }}
 
       - name: Setup node version
         run: |
@@ -130,6 +138,19 @@ jobs:
       - build-deploy
     steps:
       - uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::917902836630:role/ssm-versions-oidc-github-role
+          role-session-name: OIDC-GHA-session-version
+          aws-region: us-east-1
+      - name: Store version in SSM
+        run: |
+          aws ssm put-parameter \
+                  --name "/curious/app/admin/${{ inputs.env-name }}/version" \
+                  --value "${{ inputs.image-tag }}" \
+                  --type "String" \
+                  --overwrite
       - name: "Send Slack message on success"
         uses: rtCamp/action-slack-notify@v2
         env:
