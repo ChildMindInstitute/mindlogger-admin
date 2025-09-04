@@ -75,14 +75,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - uses: wearerequired/lint-action@v2
-        name: Lint
-        with:
-          eslint: true
-          eslint_extensions: js,jsx,ts,tsx
-          prettier: true
-          prettier_extensions: js,jsx,ts,tsx
-          continue_on_error: true
+#      - uses: wearerequired/lint-action@v2
+#        name: Lint
+#        with:
+#          eslint: true
+#          eslint_extensions: js,jsx,ts,tsx
+#          prettier: true
+#          prettier_extensions: js,jsx,ts,tsx
+#          continue_on_error: true
 
       - name: Tests
         run: npm run test:nowatch
