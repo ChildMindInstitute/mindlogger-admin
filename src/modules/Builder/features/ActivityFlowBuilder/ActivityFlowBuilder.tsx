@@ -213,54 +213,66 @@ export const ActivityFlowBuilder = () => {
 
                         return (
                           <Draggable key={key} draggableId={key || ''} index={index}>
-                            {(itemProvided, snapshot) => (
-                              <Box
-                                className={builderItemClassName}
-                                ref={itemProvided.innerRef}
-                                {...itemProvided.draggableProps}
-                                data-testid={itemDataTestid}
-                                style={{
-                                  ...style,
-                                  ...(snapshot.isDragging
-                                    ? {
-                                        ...itemProvided.draggableProps.style,
-                                        position: 'fixed',
-                                        zIndex: 9999,
-                                      }
-                                    : {}),
-                                }}
-                              >
-                                <Item
-                                  dragHandleProps={itemProvided.dragHandleProps}
-                                  isDragging={snapshot.isDragging}
-                                  index={index + 1}
-                                  total={data.activityFlowItems.length}
-                                  getActions={() =>
-                                    getFlowBuilderActions({
-                                      index,
-                                      replaceItem: data.handleFlowActivityToUpdateSet,
-                                      duplicateItem: data.handleFlowActivityDuplicate,
-                                      removeItem: data.handleFlowActivityToDeleteSet(
-                                        index,
-                                        activityName || '',
-                                        item.activityKey,
-                                      ),
-                                      replaceItemActionActive:
-                                        !!data.anchorEl && data.flowActivityToUpdateIndex === index,
-                                      'data-testid': itemDataTestid,
-                                    })
-                                  }
-                                  uiType={ItemUiType.FlowBuilder}
-                                  name={activityName || ''}
-                                  description={activityDescription || ''}
-                                  visibleByDefault={
-                                    !!data.anchorEl && data.flowActivityToUpdateIndex === index
-                                  }
-                                  {...item}
+                            {(itemProvided, snapshot) => {
+                              const dragStyle = {
+                                ...style,
+                                ...itemProvided.draggableProps.style,
+                              };
+
+                              return (
+                                <Box
+                                  className={builderItemClassName}
+                                  ref={itemProvided.innerRef}
+                                  {...itemProvided.draggableProps}
                                   data-testid={itemDataTestid}
-                                />
-                              </Box>
-                            )}
+                                  style={
+                                    snapshot.isDragging
+                                      ? {
+                                          ...dragStyle,
+                                          position: 'fixed',
+                                          zIndex: 9999,
+                                          width: style.width,
+                                          height: style.height,
+                                        }
+                                      : {
+                                          ...dragStyle,
+                                          marginBottom: '16px',
+                                        }
+                                  }
+                                >
+                                  <Item
+                                    dragHandleProps={itemProvided.dragHandleProps}
+                                    isDragging={snapshot.isDragging}
+                                    index={index + 1}
+                                    total={data.activityFlowItems.length}
+                                    getActions={() =>
+                                      getFlowBuilderActions({
+                                        index,
+                                        replaceItem: data.handleFlowActivityToUpdateSet,
+                                        duplicateItem: data.handleFlowActivityDuplicate,
+                                        removeItem: data.handleFlowActivityToDeleteSet(
+                                          index,
+                                          activityName || '',
+                                          item.activityKey,
+                                        ),
+                                        replaceItemActionActive:
+                                          !!data.anchorEl &&
+                                          data.flowActivityToUpdateIndex === index,
+                                        'data-testid': itemDataTestid,
+                                      })
+                                    }
+                                    uiType={ItemUiType.FlowBuilder}
+                                    name={activityName || ''}
+                                    description={activityDescription || ''}
+                                    visibleByDefault={
+                                      !!data.anchorEl && data.flowActivityToUpdateIndex === index
+                                    }
+                                    {...item}
+                                    data-testid={itemDataTestid}
+                                  />
+                                </Box>
+                              );
+                            }}
                           </Draggable>
                         );
                       }}
