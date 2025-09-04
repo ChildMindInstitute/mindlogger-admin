@@ -162,7 +162,7 @@ export const ActivityFlowBuilder = () => {
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                   {activityFlowItems.length > 20 ? (
                     <List
-                      height={600}
+                      height={activityFlowItems.length * 98}
                       width="100%"
                       itemCount={activityFlowItems.length}
                       itemSize={98}
