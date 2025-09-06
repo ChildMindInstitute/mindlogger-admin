@@ -1,10 +1,25 @@
-import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
 
+import {
+  AppletAssignmentsResponse,
+  Assignment,
+  getAppletAssignmentsApi,
+  GetAssignmentsParams,
+  postAppletAssignmentsApi,
+  PostAssignmentsParams,
+} from 'api';
 import successImage from 'assets/images/email-success.webp';
+import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
+import { AssignmentCounts, useParticipantDropdown } from 'modules/Dashboard/components';
+import { HydratedActivityFlow } from 'modules/Dashboard/types';
+import { hydrateActivityFlows } from 'modules/Dashboard/utils';
+import { Activity } from 'redux/modules';
+import { Spinner, Svg, Tooltip } from 'shared/components';
+import { useAsync, useModalBanners } from 'shared/hooks';
 import {
   StyledBodyLarger,
   StyledFlexAllCenter,
@@ -19,31 +34,10 @@ import {
   StyledTitleLargish,
   variables,
 } from 'shared/styles';
-import { Spinner, Svg, Tooltip } from 'shared/components';
-import { HydratedActivityFlow } from 'modules/Dashboard/types';
-import { useAsync, useModalBanners } from 'shared/hooks';
-import {
-  AppletAssignmentsResponse,
-  Assignment,
-  getAppletAssignmentsApi,
-  GetAssignmentsParams,
-  postAppletAssignmentsApi,
-  PostAssignmentsParams,
-} from 'api';
-import { hydrateActivityFlows } from 'modules/Dashboard/utils';
-import { Activity } from 'redux/modules';
-import { AssignmentCounts, useParticipantDropdown } from 'modules/Dashboard/components';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
-import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
-import { ActivityReview } from './ActivityReview';
-import { AssignmentsTable } from './AssignmentsTable';
-import { ActivityCheckbox } from './ActivityCheckbox';
-import {
-  ActivityAssignDrawerProps,
-  ActivityAssignFormValues,
-  ValidActivityAssignment,
-} from './ActivityAssignDrawer.types';
+import { ActivitiesList } from './ActivitiesList';
+import { ActivityAssignBannerComponents } from './ActivityAssignDrawer.const';
 import { useActivityAssignFormSchema } from './ActivityAssignDrawer.schema';
 import {
   StyledFooter,
@@ -54,10 +48,16 @@ import {
   StyledPane,
   StyledSuccessImage,
 } from './ActivityAssignDrawer.styles';
-import { HelpPopup } from './HelpPopup';
-import { ActivitiesList } from './ActivitiesList';
+import {
+  ActivityAssignDrawerProps,
+  ActivityAssignFormValues,
+  ValidActivityAssignment,
+} from './ActivityAssignDrawer.types';
+import { ActivityCheckbox } from './ActivityCheckbox';
+import { ActivityReview } from './ActivityReview';
+import { AssignmentsTable } from './AssignmentsTable';
 import { DeletePopup } from './DeletePopup';
-import { ActivityAssignBannerComponents } from './ActivityAssignDrawer.const';
+import { HelpPopup } from './HelpPopup';
 
 const dataTestId = 'applet-activity-assign';
 
@@ -123,11 +123,17 @@ export const ActivityAssignDrawer = ({
 
   const isLoading = isLoadingParticipants || isLoadingActivities || isLoadingGetAssignments;
 
-  const activities: Activity[] = activitiesData?.activitiesDetails ?? [];
-  const flows: HydratedActivityFlow[] = hydrateActivityFlows(
-    activitiesData?.appletDetail?.activityFlows ?? [],
-    activities,
+  const activities: Activity[] = useMemo(
+    () => activitiesData?.activitiesDetails ?? [],
+    [activitiesData],
   );
+
+  // Memoize hydrateActivityFlows to avoid recalculation on every render
+  const flows: HydratedActivityFlow[] = useMemo(() => {
+    if (!activitiesData?.appletDetail?.activityFlows || !activities.length) return [];
+
+    return hydrateActivityFlows(activitiesData.appletDetail.activityFlows, activities);
+  }, [activitiesData?.appletDetail?.activityFlows, activities]);
 
   const defaultValues = {
     activityIds: activityId ? [activityId] : [],
@@ -179,13 +185,24 @@ export const ActivityAssignDrawer = ({
     drawerRef.current?.scrollTo({ top, behavior: 'smooth' });
   };
 
-  const assignableActivities = activities
-    .map(({ autoAssign, id = '' }) => !autoAssign && id)
-    .filter((activity) => !!activity) as [] | string[];
+  // Memoize assignable activities and flows to avoid recalculation
+  const assignableActivities = useMemo(
+    () =>
+      activities
+        .filter(({ autoAssign }) => !autoAssign)
+        .map(({ id = '' }) => id)
+        .filter(Boolean) as string[],
+    [activities],
+  );
 
-  const assignableFlows = flows
-    .map(({ autoAssign, id = '' }) => !autoAssign && id)
-    .filter((flow) => !!flow) as [] | string[];
+  const assignableFlows = useMemo(
+    () =>
+      flows
+        .filter(({ autoAssign }) => !autoAssign)
+        .map(({ id = '' }) => id)
+        .filter(Boolean) as string[],
+    [flows],
+  );
 
   const activitiesCount = assignableActivities.length + assignableFlows.length;
   const selectAllIsChecked = activitiesCount !== 0 && selectionCount === activitiesCount;
@@ -249,26 +266,28 @@ export const ActivityAssignDrawer = ({
       // Convert respondent-subject assignments to a flat list of fully hydrated assignments
       // (one for each activity/flow)
       const hydratedAssignments: Assignment[] = [];
-      for (const activityFlowId of flowIds) {
-        hydratedAssignments.push(
-          ...validAssignments.map((assignment) => ({
+
+      // Optimize assignment creation by using a more efficient approach
+      for (const assignment of validAssignments) {
+        for (const activityFlowId of flowIds) {
+          hydratedAssignments.push({
             ...assignment,
             activityId: null,
             activityFlowId,
-          })),
-        );
-      }
-      for (const activityId of activityIds) {
-        hydratedAssignments.push(
-          ...validAssignments.map((assignment) => ({
+          });
+        }
+
+        for (const activityId of activityIds) {
+          hydratedAssignments.push({
             ...assignment,
             activityId,
             activityFlowId: null,
-          })),
-        );
+          });
+        }
       }
 
       // Calculate # of pre-existing assignments and emails being sent
+      // Only fetch assignments for selected activities/flows to reduce payload
       const getAssignmentsData = await getAssignments({
         appletId,
         flows: flowIds.join(',') || undefined,
@@ -276,19 +295,21 @@ export const ActivityAssignDrawer = ({
       });
       const existingAssignments = getAssignmentsData.data.result.assignments;
 
+      // Optimize duplicate checking with a Set-based approach
+      const existingAssignmentKeys = new Set(
+        existingAssignments.map(
+          (a) =>
+            `${a.respondentSubjectId}_${a.targetSubjectId}_${a.activityId}_${a.activityFlowId}`,
+        ),
+      );
+
       let duplicates = 0;
       const emailRecipients = new Set<string>();
 
       for (const assignment of hydratedAssignments) {
-        const exists = existingAssignments.some(
-          (existing) =>
-            existing.respondentSubjectId === assignment.respondentSubjectId &&
-            existing.targetSubjectId === assignment.targetSubjectId &&
-            existing.activityId === assignment.activityId &&
-            existing.activityFlowId === assignment.activityFlowId,
-        );
+        const assignmentKey = `${assignment.respondentSubjectId}_${assignment.targetSubjectId}_${assignment.activityId}_${assignment.activityFlowId}`;
 
-        if (exists) {
+        if (existingAssignmentKeys.has(assignmentKey)) {
           duplicates++;
         } else {
           emailRecipients.add(assignment.respondentSubjectId);
@@ -510,7 +531,7 @@ export const ActivityAssignDrawer = ({
       {bannersComponent}
 
       <StyledFlexColumn sx={{ position: 'relative', flex: 1 }}>
-        {/* Step 1 – Select activities and add respondents */}
+        {/* Step 1 - Select activities and add respondents */}
         <Fade in={step === 1} onEntered={() => scrollPane()}>
           <StyledPane sx={{ gap: 4.8 }}>
             {/* Select activities */}
@@ -606,7 +627,7 @@ export const ActivityAssignDrawer = ({
           </StyledPane>
         </Fade>
 
-        {/* Step 2 – Review and send emails */}
+        {/* Step 2 - Review and send emails */}
         <Fade in={step === 2} onEntered={() => scrollPane()} unmountOnExit>
           <StyledPane sx={{ gap: 1.6 }}>
             <StyledFlexTopCenter sx={{ gap: 0.8 }}>
@@ -667,7 +688,7 @@ export const ActivityAssignDrawer = ({
           </StyledPane>
         </Fade>
 
-        {/* Step 3 – Assigning */}
+        {/* Step 3 - Assigning */}
         <Fade in={step === 3} onEntered={() => scrollPane()} unmountOnExit>
           <StyledPane
             sx={{ placeContent: 'center', alignItems: 'center', textAlign: 'center', mt: -9.5 }}
@@ -681,7 +702,7 @@ export const ActivityAssignDrawer = ({
           </StyledPane>
         </Fade>
 
-        {/* Step 4 – Success */}
+        {/* Step 4 - Success */}
         <Fade in={step === 4} onEntered={() => scrollPane()} unmountOnExit>
           <StyledPane sx={{ placeContent: 'center', textAlign: 'center', gap: 2.1, mt: -9.5 }}>
             <Box>
