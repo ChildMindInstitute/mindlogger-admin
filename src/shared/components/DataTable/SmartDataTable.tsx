@@ -4,16 +4,18 @@ import { DataTable } from './DataTable';
 import { DataTableProps } from './DataTable.types';
 import { VirtualizedDataTable } from './VirtualizedDataTable';
 
-export const VIRTUALIZATION_THRESHOLD = 30; // Only use virtualization for datasets larger than this
+export const VIRTUALIZATION_THRESHOLD = 30;
 
 export interface SmartDataTableProps extends DataTableProps {
   /**
    * Force virtualization regardless of data size
+   * @default false
    */
   forceVirtualization?: boolean;
 
   /**
    * Custom threshold to determine when to use virtualization
+   * @default VIRTUALIZATION_THRESHOLD (30)
    */
   virtualizationThreshold?: number;
 }

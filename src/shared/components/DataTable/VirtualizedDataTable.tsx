@@ -16,6 +16,7 @@ import {
 import { DataTableItem, DataTableProps } from './DataTable.types';
 
 const ROW_HEIGHT = 56;
+const MAX_HEIGHT = 400;
 
 export const VirtualizedDataTable = ({
   data,
@@ -141,7 +142,7 @@ export const VirtualizedDataTable = ({
           </TableRow>
         </TableHead>
       </Table>
-      <Box sx={{ height: Math.min(400, data.length * ROW_HEIGHT + 2), width: '100%' }}>
+      <Box sx={{ height: Math.min(MAX_HEIGHT, data.length * ROW_HEIGHT + 2), width: '100%' }}>
         <AutoSizer>
           {({ height, width }: { height: number; width: number }) => (
             <List
