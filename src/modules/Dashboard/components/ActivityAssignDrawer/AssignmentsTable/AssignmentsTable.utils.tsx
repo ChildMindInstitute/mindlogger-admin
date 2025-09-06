@@ -7,7 +7,7 @@ export const getHeadCells = (isReadOnly?: boolean) => {
 
   return [
     {
-      id: 'respondentSubjectId',
+      key: 'respondentSubjectId',
       label: (
         <StyledFlexTopCenter sx={{ gap: 0.6 }}>
           {t('activityAssign.assignTo')}
@@ -29,7 +29,7 @@ export const getHeadCells = (isReadOnly?: boolean) => {
       enableSort: false,
     },
     {
-      id: 'targetSubjectId',
+      key: 'targetSubjectId',
       label: (
         <StyledFlexTopCenter sx={{ gap: 0.6 }}>
           {t('activityAssign.whoIsActivityAbout')}
