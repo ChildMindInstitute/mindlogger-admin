@@ -1,21 +1,19 @@
-import { useTranslation } from 'react-i18next';
-import { useCallback, useMemo } from 'react';
 import { Box, Button } from '@mui/material';
+import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import {
-  DashboardTableProps,
-  ParticipantDropdownOption,
-  SearchResultUserTypes,
-} from 'modules/Dashboard/components';
+import { ParticipantDropdownOption, SearchResultUserTypes } from 'modules/Dashboard/components';
+import { SmartDataTable, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { Svg } from 'shared/components';
 import { variables } from 'shared/styles';
 
-import { AssignmentsTableProps } from './AssignmentsTable.types';
-import { StyledTable, StyledTableContainer } from './AssignmentsTable.styles';
-import { AssignmentDropdown } from './AssignmentDropdown';
 import { ActivityAssignment } from '../ActivityAssignDrawer.types';
+import { AssignmentDropdown } from './AssignmentDropdown';
+import { StyledTableContainer } from './AssignmentsTable.styles';
+import { AssignmentsTableProps } from './AssignmentsTable.types';
 import { getHeadCells } from './AssignmentsTable.utils';
+
+const VIRTUALIZATION_THRESHOLD = 30;
 
 export const AssignmentsTable = ({
   allParticipants,
@@ -102,7 +100,7 @@ export const AssignmentsTable = ({
     [handleSearch],
   );
 
-  const rows: DashboardTableProps['rows'] = useMemo(
+  const tableData = useMemo(
     () =>
       assignments.map(({ respondentSubjectId, targetSubjectId }, index) => {
         const respondent =
@@ -130,59 +128,53 @@ export const AssignmentsTable = ({
         );
 
         return {
-          rowState: { value: hasRowError && 'error' },
-          respondentSubjectId: {
-            value: respondentSubjectId ?? '',
-            content: () => (
-              <AssignmentDropdown
-                placeholder={t('respondentPlaceholder')}
-                isReadOnly={isReadOnly}
-                value={respondent}
-                options={
-                  enableParticipantMultiInformant
-                    ? fullAccountParticipantsAndTeamMembers
-                    : teamMembersOnly
-                }
-                onChange={(value) =>
-                  handleChange({ respondentSubjectId: value && value.id }, index)
-                }
-                handleSearch={handleRespondentSearch}
-                showGroups
-                emptyValueError={subjectValue && !subject?.userId ? t('addRespondent') : undefined}
-                data-testid={`${dataTestId}-${index}-respondent-dropdown`}
-              />
-            ),
-          },
-          targetSubjectId: {
-            value: targetSubjectId ?? '',
-            content: () => (
-              <AssignmentDropdown
-                placeholder={t(
-                  respondent?.isTeamMember ? 'subjectPlaceholderTeamMember' : 'subjectPlaceholder',
-                )}
-                isReadOnly={isReadOnly}
-                value={subjectValue}
-                options={subjectOptions}
-                onChange={(value) => handleChange({ targetSubjectId: value && value.id }, index)}
-                handleSearch={(query) => handleSubjectSearch(query, selfOption)}
-                groupBy={(option) => (option.id === selfOption?.id ? 'self' : 'other')}
-                renderGroup={(params) => (
-                  <Box
-                    component="li"
-                    key={params.key}
-                    sx={{
-                      '&:not(:last-child)': {
-                        borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
-                      },
-                    }}
-                  >
-                    <Box component="ul" sx={{ p: 0 }} {...params} />
-                  </Box>
-                )}
-                data-testid={`${dataTestId}-${index}-target-subject-dropdown`}
-              />
-            ),
-          },
+          id: `assignment-${index}`,
+          respondentSubjectId: (
+            <AssignmentDropdown
+              placeholder={t('respondentPlaceholder')}
+              isReadOnly={isReadOnly}
+              value={respondent}
+              options={
+                enableParticipantMultiInformant
+                  ? fullAccountParticipantsAndTeamMembers
+                  : teamMembersOnly
+              }
+              onChange={(value) => handleChange({ respondentSubjectId: value && value.id }, index)}
+              handleSearch={handleRespondentSearch}
+              showGroups
+              emptyValueError={subjectValue && !subject?.userId ? t('addRespondent') : undefined}
+              data-testid={`${dataTestId}-${index}-respondent-dropdown`}
+            />
+          ),
+          targetSubjectId: (
+            <AssignmentDropdown
+              placeholder={t(
+                respondent?.isTeamMember ? 'subjectPlaceholderTeamMember' : 'subjectPlaceholder',
+              )}
+              isReadOnly={isReadOnly}
+              value={subjectValue}
+              options={subjectOptions}
+              onChange={(value) => handleChange({ targetSubjectId: value && value.id }, index)}
+              handleSearch={(query) => handleSubjectSearch(query, selfOption)}
+              groupBy={(option) => (option.id === selfOption?.id ? 'self' : 'other')}
+              renderGroup={(params) => (
+                <Box
+                  component="li"
+                  key={params.key}
+                  sx={{
+                    '&:not(:last-child)': {
+                      borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+                    },
+                  }}
+                >
+                  <Box component="ul" sx={{ p: 0 }} {...params} />
+                </Box>
+              )}
+              data-testid={`${dataTestId}-${index}-target-subject-dropdown`}
+            />
+          ),
+          // Add aria-invalid attribute for error styling
+          'aria-invalid': hasRowError || undefined,
         };
       }),
     [
@@ -204,10 +196,11 @@ export const AssignmentsTable = ({
 
   return (
     <StyledTableContainer>
-      <StyledTable
+      <SmartDataTable
         columns={getHeadCells(isReadOnly)}
-        rows={rows}
-        enablePagination={false}
+        data={tableData}
+        virtualizationThreshold={VIRTUALIZATION_THRESHOLD}
+        forceVirtualization={assignments.length > 100}
         data-testid={dataTestId}
       />
       {showAddButton && (
