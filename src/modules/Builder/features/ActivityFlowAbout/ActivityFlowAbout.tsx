@@ -31,6 +31,7 @@ export const ActivityFlowAbout = React.memo(() => {
 
   const activityFlowIndex = useMemo(() => {
     const activityFlows: AppletFormValues['activityFlows'] = getValues('activityFlows');
+
     return getActivityFlowIndex(activityFlows, activityFlowId || '');
   }, [activityFlowId, getValues]);
 
