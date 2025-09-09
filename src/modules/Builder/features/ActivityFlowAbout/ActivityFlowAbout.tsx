@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -21,15 +22,17 @@ import { useFeatureFlags } from 'shared/hooks';
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
-export const ActivityFlowAbout = () => {
+export const ActivityFlowAbout = React.memo(() => {
   const { t } = useTranslation();
   const { featureFlags } = useFeatureFlags();
 
-  const { control, watch } = useCustomFormContext();
+  const { control, getValues } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
+  const activityFlowIndex = useMemo(() => {
+    const activityFlows: AppletFormValues['activityFlows'] = getValues('activityFlows');
+    return getActivityFlowIndex(activityFlows, activityFlowId || '');
+  }, [activityFlowId, getValues]);
 
   const dataTestid = 'builder-activity-flows-about';
   const commonProps = {
@@ -50,6 +53,7 @@ export const ActivityFlowAbout = () => {
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
             restrictExceededValueLength
+            withDebounce
             data-testid={`${dataTestid}-name`}
           />
         </Box>
@@ -63,6 +67,7 @@ export const ActivityFlowAbout = () => {
             restrictExceededValueLength
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}
+            withDebounce
             data-testid={`${dataTestid}-description`}
           />
         </Box>
@@ -118,4 +123,4 @@ export const ActivityFlowAbout = () => {
       </StyledWrapper>
     </BuilderContainer>
   );
-};
+});

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -61,7 +61,7 @@ import { ActivityAssignBannerComponents } from './ActivityAssignDrawer.const';
 
 const dataTestId = 'applet-activity-assign';
 
-export const ActivityAssignDrawer = ({
+export const ActivityAssignDrawer = React.memo(({
   appletId,
   activityId,
   activityFlowId,
@@ -147,9 +147,17 @@ export const ActivityAssignDrawer = ({
     mode: 'onSubmit',
   });
 
-  const [activityIds, flowIds, assignments] = useWatch({
+  const activityIds = useWatch({
     control,
-    name: ['activityIds', 'flowIds', 'assignments'],
+    name: 'activityIds',
+  });
+  const flowIds = useWatch({
+    control,
+    name: 'flowIds',
+  });
+  const assignments = useWatch({
+    control,
+    name: 'assignments',
   });
   const selectionCount = activityIds.length + flowIds.length;
   const assignmentCounts = useMemo(() => {
@@ -726,4 +734,4 @@ export const ActivityAssignDrawer = ({
       />
     </Drawer>
   );
-};
+});
