@@ -92,10 +92,12 @@ export const getConditionMinMaxRangeValues = ({
       return {
         leftRange: {
           minNumber: +responseValues.minValue,
-          maxNumber: maxValue,
+          // Ensure minValue is less than maxValue for BETWEEN conditions
+          maxNumber: maxValue ? maxValue - 1 : +responseValues.maxValue - 1,
         },
         rightRange: {
-          minNumber: minValue,
+          // Ensure maxValue is greater than minValue for BETWEEN conditions
+          minNumber: minValue ? minValue + 1 : +responseValues.minValue + 1,
           maxNumber: +responseValues.maxValue,
         },
       };
@@ -106,10 +108,12 @@ export const getConditionMinMaxRangeValues = ({
       return {
         leftRange: {
           minNumber: responseValues.minValue,
-          maxNumber: maxValue,
+          // Ensure minValue is less than maxValue for BETWEEN conditions
+          maxNumber: maxValue ? maxValue - 1 : responseValues.maxValue - 1,
         },
         rightRange: {
-          minNumber: minValue,
+          // Ensure maxValue is greater than minValue for BETWEEN conditions
+          minNumber: minValue ? minValue + 1 : responseValues.minValue + 1,
           maxNumber: responseValues.maxValue,
         },
       };
@@ -126,10 +130,12 @@ export const getConditionMinMaxRangeValues = ({
       return {
         leftRange: {
           minNumber,
-          maxNumber: maxValue,
+          // Ensure minValue is less than maxValue for BETWEEN conditions
+          maxNumber: maxValue ? maxValue - 1 : maxNumber - 1,
         },
         rightRange: {
-          minNumber: minValue,
+          // Ensure maxValue is greater than minValue for BETWEEN conditions
+          minNumber: minValue ? minValue + 1 : minNumber + 1,
           maxNumber,
         },
       };

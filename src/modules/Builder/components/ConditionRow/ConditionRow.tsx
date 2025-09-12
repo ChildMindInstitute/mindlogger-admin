@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 import get from 'lodash.get';
@@ -25,7 +25,7 @@ import {
 import { Condition, ConditionItem } from './Condition';
 import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
-export const ConditionRow = ({
+const ConditionRowComponent = ({
   name,
   activityName,
   index,
@@ -133,7 +133,15 @@ export const ConditionRow = ({
 
       setValue(conditionPayloadName, payload);
     },
-    [name, conditionPayload, selectedItem, onChangeConditionType],
+    [
+      onChangeConditionType,
+      conditionPayload,
+      selectedItem,
+      setValue,
+      conditionPayloadName,
+      clearErrors,
+      conditionPayloadSelectionName,
+    ],
   );
 
   const handleRemove = useCallback(onRemove, [index]);
@@ -174,3 +182,6 @@ export const ConditionRow = ({
     </>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const ConditionRow = memo(ConditionRowComponent);

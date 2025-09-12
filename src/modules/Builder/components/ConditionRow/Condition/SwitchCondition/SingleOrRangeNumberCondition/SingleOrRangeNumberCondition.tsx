@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -9,7 +10,7 @@ import {
   getConditionMinMaxRangeValues,
 } from './SingleOrRangeNumberCondition.utils';
 
-export const SingleOrRangeNumberCondition = ({
+const SingleOrRangeNumberConditionComponent = ({
   children,
   state,
   selectedItem,
@@ -26,17 +27,26 @@ export const SingleOrRangeNumberCondition = ({
   const { control } = useCustomFormContext();
   const rowIndex = useWatch({ name: rowIndexName });
 
-  const { minNumber, maxNumber } = getConditionMinMaxValues({
-    item: selectedItem,
-    state,
-    rowIndex,
-  });
-  const { leftRange, rightRange } = getConditionMinMaxRangeValues({
-    item: selectedItem,
-    minValue,
-    maxValue,
-    rowIndex,
-  });
+  const { minNumber, maxNumber } = useMemo(
+    () =>
+      getConditionMinMaxValues({
+        item: selectedItem,
+        state,
+        rowIndex,
+      }),
+    [selectedItem, state, rowIndex],
+  );
+
+  const { leftRange, rightRange } = useMemo(
+    () =>
+      getConditionMinMaxRangeValues({
+        item: selectedItem,
+        minValue,
+        maxValue,
+        rowIndex,
+      }),
+    [selectedItem, minValue, maxValue, rowIndex],
+  );
 
   return (
     <>
@@ -48,6 +58,7 @@ export const SingleOrRangeNumberCondition = ({
           name={numberValueName}
           minNumberValue={minNumber}
           maxNumberValue={maxNumber}
+          withDebounce
           data-testid={`${dataTestid}-slider-value`}
         />
       )}
@@ -60,6 +71,7 @@ export const SingleOrRangeNumberCondition = ({
             name={minValueName}
             minNumberValue={leftRange.minNumber}
             maxNumberValue={leftRange.maxNumber}
+            withDebounce
             data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
@@ -69,6 +81,7 @@ export const SingleOrRangeNumberCondition = ({
             name={maxValueName}
             minNumberValue={rightRange.minNumber}
             maxNumberValue={rightRange.maxNumber}
+            withDebounce
             data-testid={`${dataTestid}-max-value`}
           />
         </>
@@ -76,3 +89,6 @@ export const SingleOrRangeNumberCondition = ({
     </>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const SingleOrRangeNumberCondition = memo(SingleOrRangeNumberConditionComponent);

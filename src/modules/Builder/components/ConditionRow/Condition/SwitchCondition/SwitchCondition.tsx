@@ -1,7 +1,7 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, memo } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { DatePicker } from 'shared/components/DatePicker';
@@ -22,7 +22,7 @@ import { SingleMultiScoreCondition } from './SingleMultiScoreCondition';
 import { SingleOrRangeNumberCondition } from './SingleOrRangeNumberCondition';
 import { getPayload } from '../../ConditionRow.utils';
 
-export const SwitchCondition = ({
+const SwitchConditionComponent = ({
   itemName,
   selectedItem,
   payloadName,
@@ -290,3 +290,6 @@ export const SwitchCondition = ({
       return null;
   }
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const SwitchCondition = memo(SwitchConditionComponent);

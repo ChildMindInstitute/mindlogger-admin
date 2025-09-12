@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
@@ -12,7 +13,7 @@ import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
 import { SwitchCondition } from './SwitchCondition';
 import { ConditionItemType } from './Condition.const';
 
-export const Condition = ({
+const ConditionComponent = ({
   itemName,
   stateName,
   payloadName,
@@ -30,7 +31,11 @@ export const Condition = ({
   const { t } = useTranslation('app');
   const { control } = useCustomFormContext();
 
-  const selectedItem = itemOptions?.find(({ value }) => value === item);
+  const selectedItem = useMemo(
+    () => itemOptions?.find(({ value }) => value === item),
+    [itemOptions, item],
+  );
+
   const isRowTypeItem = type === ConditionRowType.Item;
   const isRowTypeScore = type === ConditionRowType.Score;
   const isStateSelectDisabled = !selectedItem?.type;
@@ -39,14 +44,17 @@ export const Condition = ({
   const numberValueName = `${payloadName}.value`;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
 
-  const switchConditionProps = {
-    itemName,
-    selectedItem,
-    payloadName,
-    state,
-    dataTestid,
-    valueOptions,
-  };
+  const switchConditionProps = useMemo(
+    () => ({
+      itemName,
+      selectedItem,
+      payloadName,
+      state,
+      dataTestid,
+      valueOptions,
+    }),
+    [itemName, selectedItem, payloadName, state, dataTestid, valueOptions],
+  );
 
   return (
     <StyledCondition data-testid={dataTestid}>
@@ -120,3 +128,6 @@ export const Condition = ({
     </StyledCondition>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const Condition = memo(ConditionComponent);
