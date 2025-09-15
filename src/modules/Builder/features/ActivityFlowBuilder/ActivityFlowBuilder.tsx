@@ -67,8 +67,9 @@ const VirtualizedListItem = React.memo<VirtualizedListItemProps>(({ index, style
               ? {
                   ...itemProvided.draggableProps.style,
                   position: 'fixed',
-                  zIndex: 9999,
-                  width: style.width || 'auto',
+                  zIndex: 1300, // Below header z-index
+                  width: 'calc(100% - 128px)', // Constrain width to prevent overflow
+                  maxWidth: '800px', // Maximum width limit
                   height: style.height || 'auto',
                 }
               : {
@@ -252,7 +253,12 @@ export const ActivityFlowBuilder = () => {
       {activityFlowItems?.length ? (
         <>
           <DragDropContext onDragEnd={handleDragEnd}>
-            <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
+            <DndDroppable
+              droppableId="activity-flow-builder-dnd"
+              direction="vertical"
+              ignoreContainerClipping={true}
+              isCombineEnabled={false}
+            >
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                   {activityFlowItems.length > 20 ? (
@@ -297,7 +303,9 @@ export const ActivityFlowBuilder = () => {
                                 ...(snapshot.isDragging
                                   ? {
                                       position: 'fixed',
-                                      zIndex: 9999,
+                                      zIndex: 1300, // Below header z-index
+                                      width: 'calc(100% - 128px)', // Constrain width to prevent overflow
+                                      maxWidth: '800px', // Maximum width limit
                                     }
                                   : {}),
                               }}
