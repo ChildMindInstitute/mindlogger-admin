@@ -27,13 +27,6 @@ export const StyledCheckbox = styled(Checkbox)`
 `;
 
 export const StyledTableCell = styled(TableCell)`
-  position: relative;
-
-  &:before {
-    content: ' ';
-    visibility: hidden;
-  }
-
   padding-bottom: ${theme.spacing(2)};
 `;
 
