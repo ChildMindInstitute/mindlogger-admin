@@ -1,4 +1,4 @@
-import { Box, Table, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, styled, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
@@ -6,14 +6,30 @@ import { FixedSizeList as List } from 'react-window';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-import {
-  StyledCheckbox,
-  StyledHeadCell,
-  StyledTableCell,
-  StyledTableContainer,
-} from './DataTable.styles';
+import { StyledCheckbox, StyledHeadCell, StyledTableCell } from './DataTable.styles';
 import { DataTableItem, DataTableProps } from './DataTable.types';
+
+// Styled container for virtualized tables without fixed height constraints
+const StyledVirtualizedContainer = styled(Box, shouldForwardProp)`
+  border: ${({ hasError }: { hasError?: boolean }) =>
+    hasError
+      ? `${variables.borderWidth.lg} solid ${variables.palette.error};`
+      : `${variables.borderWidth.md} solid ${variables.palette.outline_variant};`};
+  border-radius: ${variables.borderRadius.lg2};
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 29.2rem;
+  max-height: 29.2rem;
+
+  .MuiTableCell-root {
+    background-color: transparent;
+    height: 4.8rem;
+  }
+`;
 
 const ROW_HEIGHT = 56;
 
@@ -113,8 +129,8 @@ export const VirtualizedDataTable = ({
   }
 
   return (
-    <StyledTableContainer hasError={hasError} data-testid={dataTestid}>
-      <Table stickyHeader>
+    <StyledVirtualizedContainer hasError={hasError} data-testid={dataTestid}>
+      <Table stickyHeader sx={{ flexShrink: 0 }}>
         <TableHead>
           <TableRow>
             {selectable && selectAll && data?.length ? (
@@ -141,7 +157,7 @@ export const VirtualizedDataTable = ({
           </TableRow>
         </TableHead>
       </Table>
-      <Box sx={{ height: Math.min(400, data.length * ROW_HEIGHT + 2), width: '100%' }}>
+      <Box sx={{ flexGrow: 1, width: '100%', overflow: 'hidden' }}>
         <AutoSizer>
           {({ height, width }: { height: number; width: number }) => (
             <List
@@ -156,6 +172,6 @@ export const VirtualizedDataTable = ({
           )}
         </AutoSizer>
       </Box>
-    </StyledTableContainer>
+    </StyledVirtualizedContainer>
   );
 };
