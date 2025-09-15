@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { CSSProperties, MouseEvent, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, MouseEvent, useCallback, useMemo, useRef, useState } from 'react';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +29,89 @@ import {
 } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
+
+// Memoized list item component for better performance
+interface VirtualizedListItemProps {
+  index: number;
+  style: CSSProperties;
+  data: {
+    activityFlowItems: ActivityFlowItem[];
+    activitiesIdsObjects: Record<string, ActivityFormValues>;
+    dataTestid: string;
+    anchorEl: HTMLElement | null;
+    flowActivityToUpdateIndex: number | null;
+    handleFlowActivityToUpdateSet: (event: MouseEvent<HTMLElement>, index: number) => void;
+    handleFlowActivityDuplicate: (index: number) => void;
+    handleFlowActivityToDeleteSet: (index: number, name: string, activityKey: string) => () => void;
+  };
+}
+
+const VirtualizedListItem = React.memo<VirtualizedListItemProps>(({ index, style, data }) => {
+  const item = data.activityFlowItems[index];
+  const key = item.id || item.key;
+  const currentActivity = data.activitiesIdsObjects[item.activityKey];
+  const activityName = currentActivity?.name;
+  const activityDescription = currentActivity?.description;
+  const itemDataTestid = `${data.dataTestid}-flow-${index}`;
+
+  return (
+    <Draggable key={key} draggableId={key || ''} index={index}>
+      {(itemProvided, snapshot) => (
+        <Box
+          className={builderItemClassName}
+          ref={itemProvided.innerRef}
+          {...itemProvided.draggableProps}
+          data-testid={itemDataTestid}
+          style={
+            snapshot.isDragging
+              ? {
+                  ...itemProvided.draggableProps.style,
+                  position: 'fixed',
+                  zIndex: 9999,
+                  width: style.width || 'auto',
+                  height: style.height || 'auto',
+                }
+              : {
+                  ...style,
+                  ...itemProvided.draggableProps.style,
+                  marginBottom: '16px',
+                }
+          }
+        >
+          <Item
+            dragHandleProps={itemProvided.dragHandleProps}
+            isDragging={snapshot.isDragging}
+            index={index + 1}
+            total={data.activityFlowItems.length}
+            getActions={() =>
+              getFlowBuilderActions({
+                index,
+                replaceItem: data.handleFlowActivityToUpdateSet,
+                duplicateItem: data.handleFlowActivityDuplicate,
+                removeItem: data.handleFlowActivityToDeleteSet(
+                  index,
+                  activityName || '',
+                  item.activityKey,
+                ),
+                replaceItemActionActive:
+                  !!data.anchorEl && data.flowActivityToUpdateIndex === index,
+                'data-testid': itemDataTestid,
+              })
+            }
+            uiType={ItemUiType.FlowBuilder}
+            name={activityName || ''}
+            description={activityDescription || ''}
+            visibleByDefault={!!data.anchorEl && data.flowActivityToUpdateIndex === index}
+            {...item}
+            data-testid={itemDataTestid}
+          />
+        </Box>
+      )}
+    </Draggable>
+  );
+});
+
+VirtualizedListItem.displayName = 'VirtualizedListItem';
 
 export const ActivityFlowBuilder = () => {
   const [flowActivityToDeleteData, setFlowActivityToDeleteData] = useState<{
@@ -67,13 +150,19 @@ export const ActivityFlowBuilder = () => {
   );
   const dataTestid = 'builder-activity-flows-builder';
 
-  const handleFlowActivityDuplicate = (index: number) => {
-    if (!activityFlowItems) return;
-    insert(index + 1, { activityKey: activityFlowItems[index].activityKey, key: uuidv4() });
-  };
+  const handleFlowActivityDuplicate = useCallback(
+    (index: number) => {
+      if (!activityFlowItems) return;
+      insert(index + 1, { activityKey: activityFlowItems[index].activityKey, key: uuidv4() });
+    },
+    [activityFlowItems, insert],
+  );
 
-  const handleFlowActivityToDeleteSet = (index: number, name: string, activityKey: string) => () =>
-    setFlowActivityToDeleteData({ index, name, activityKey });
+  const handleFlowActivityToDeleteSet = useCallback(
+    (index: number, name: string, activityKey: string) => () =>
+      setFlowActivityToDeleteData({ index, name, activityKey }),
+    [],
+  );
 
   const removeReportConfigItemValue = () => {
     setValue(`${activityFlowName}.reportIncludedActivityName`, '');
@@ -102,19 +191,22 @@ export const ActivityFlowBuilder = () => {
 
   const handleFlowActivityAdd = (activityKey: string) => append({ key: uuidv4(), activityKey });
 
-  const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
-    setFlowActivityToUpdateIndex(index);
+  const handleFlowActivityToUpdateSet = useCallback(
+    (event: MouseEvent<HTMLElement>, index: number) => {
+      setFlowActivityToUpdateIndex(index);
 
-    if (stableAnchorRef.current) {
-      const rect = event.currentTarget.getBoundingClientRect();
-      stableAnchorRef.current.style.position = 'absolute';
-      stableAnchorRef.current.style.top = `${rect.top}px`;
-      stableAnchorRef.current.style.left = `${rect.left}px`;
-      stableAnchorRef.current.style.width = `${rect.width}px`;
-      stableAnchorRef.current.style.height = `${rect.height}px`;
-      setAnchorEl(stableAnchorRef.current);
-    }
-  };
+      if (stableAnchorRef.current) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        stableAnchorRef.current.style.position = 'absolute';
+        stableAnchorRef.current.style.top = `${rect.top}px`;
+        stableAnchorRef.current.style.left = `${rect.left}px`;
+        stableAnchorRef.current.style.width = `${rect.width}px`;
+        stableAnchorRef.current.style.height = `${rect.height}px`;
+        setAnchorEl(stableAnchorRef.current);
+      }
+    },
+    [],
+  );
 
   const handleFlowActivityUpdate = (index: number, obj: ActivityFlowItem) => {
     if (!activityFlowItems) return;
@@ -131,12 +223,15 @@ export const ActivityFlowBuilder = () => {
     setFlowActivityToUpdateIndex(null);
   };
 
-  const handleMenuClose = () => setAnchorEl(null);
+  const handleMenuClose = useCallback(() => setAnchorEl(null), []);
 
-  const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
-    if (!destination) return;
-    move(source.index, destination.index);
-  };
+  const handleDragEnd: DragDropContextProps['onDragEnd'] = useCallback(
+    ({ source, destination }) => {
+      if (!destination) return;
+      move(source.index, destination.index);
+    },
+    [move],
+  );
 
   useRedirectIfNoMatchedActivityFlow();
 
@@ -162,12 +257,11 @@ export const ActivityFlowBuilder = () => {
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                   {activityFlowItems.length > 20 ? (
                     <List
-                      height={activityFlowItems.length * 98}
+                      height={Math.min(600, window.innerHeight - 200)}
                       width="100%"
                       itemCount={activityFlowItems.length}
                       itemSize={98}
-                      overscanCount={5}
-                      style={{ overflowY: 'visible' }}
+                      overscanCount={2}
                       itemData={{
                         activityFlowItems,
                         activitiesIdsObjects,
@@ -179,103 +273,7 @@ export const ActivityFlowBuilder = () => {
                         handleFlowActivityToDeleteSet,
                       }}
                     >
-                      {({
-                        index,
-                        style,
-                        data,
-                      }: {
-                        index: number;
-                        style: CSSProperties;
-                        data: {
-                          activityFlowItems: ActivityFlowItem[];
-                          activitiesIdsObjects: Record<string, ActivityFormValues>;
-                          dataTestid: string;
-                          anchorEl: HTMLElement | null;
-                          flowActivityToUpdateIndex: number | null;
-                          handleFlowActivityToUpdateSet: (
-                            event: MouseEvent<HTMLElement>,
-                            index: number,
-                          ) => void;
-                          handleFlowActivityDuplicate: (index: number) => void;
-                          handleFlowActivityToDeleteSet: (
-                            index: number,
-                            name: string,
-                            activityKey: string,
-                          ) => () => void;
-                        };
-                      }) => {
-                        const item = data.activityFlowItems[index];
-                        const key = item.id || item.key;
-                        const currentActivity = data.activitiesIdsObjects[item.activityKey];
-                        const activityName = currentActivity?.name;
-                        const activityDescription = currentActivity?.description;
-                        const itemDataTestid = `${data.dataTestid}-flow-${index}`;
-
-                        return (
-                          <Draggable key={key} draggableId={key || ''} index={index}>
-                            {(itemProvided, snapshot) => {
-                              const dragStyle = {
-                                ...style,
-                                ...itemProvided.draggableProps.style,
-                              };
-
-                              return (
-                                <Box
-                                  className={builderItemClassName}
-                                  ref={itemProvided.innerRef}
-                                  {...itemProvided.draggableProps}
-                                  data-testid={itemDataTestid}
-                                  style={
-                                    snapshot.isDragging
-                                      ? {
-                                          ...dragStyle,
-                                          position: 'fixed',
-                                          zIndex: 9999,
-                                          width: style.width,
-                                          height: style.height,
-                                        }
-                                      : {
-                                          ...dragStyle,
-                                          marginBottom: '16px',
-                                        }
-                                  }
-                                >
-                                  <Item
-                                    dragHandleProps={itemProvided.dragHandleProps}
-                                    isDragging={snapshot.isDragging}
-                                    index={index + 1}
-                                    total={data.activityFlowItems.length}
-                                    getActions={() =>
-                                      getFlowBuilderActions({
-                                        index,
-                                        replaceItem: data.handleFlowActivityToUpdateSet,
-                                        duplicateItem: data.handleFlowActivityDuplicate,
-                                        removeItem: data.handleFlowActivityToDeleteSet(
-                                          index,
-                                          activityName || '',
-                                          item.activityKey,
-                                        ),
-                                        replaceItemActionActive:
-                                          !!data.anchorEl &&
-                                          data.flowActivityToUpdateIndex === index,
-                                        'data-testid': itemDataTestid,
-                                      })
-                                    }
-                                    uiType={ItemUiType.FlowBuilder}
-                                    name={activityName || ''}
-                                    description={activityDescription || ''}
-                                    visibleByDefault={
-                                      !!data.anchorEl && data.flowActivityToUpdateIndex === index
-                                    }
-                                    {...item}
-                                    data-testid={itemDataTestid}
-                                  />
-                                </Box>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      }}
+                      {VirtualizedListItem}
                     </List>
                   ) : (
                     activityFlowItems.map((item, index) => {
@@ -294,10 +292,10 @@ export const ActivityFlowBuilder = () => {
                               {...itemProvided.draggableProps}
                               data-testid={itemDataTestid}
                               style={{
+                                ...itemProvided.draggableProps.style,
                                 marginBottom: '16px',
                                 ...(snapshot.isDragging
                                   ? {
-                                      ...itemProvided.draggableProps.style,
                                       position: 'fixed',
                                       zIndex: 9999,
                                     }
