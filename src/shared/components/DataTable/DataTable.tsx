@@ -61,14 +61,16 @@ export const DataTable = ({
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {selectable && selectAll && data?.length ? (
+            {selectable ? (
               <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={{ width: '2.8rem' }}>
-                <StyledCheckbox
-                  checked={isAllSelected}
-                  onChange={handleSelectAll}
-                  disabled={!data?.length}
-                  data-testid={`${dataTestid}-select-all`}
-                />
+                {selectAll && data?.length ? (
+                  <StyledCheckbox
+                    checked={isAllSelected}
+                    onChange={handleSelectAll}
+                    disabled={!data?.length}
+                    data-testid={`${dataTestid}-select-all`}
+                  />
+                ) : null}
               </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
@@ -99,9 +101,9 @@ export const DataTable = ({
                     />
                   </TableCell>
                 )}
-                {dataTableColumns?.map(({ key }) => (
+                {dataTableColumns?.map(({ key, styles = {} }) => (
                   <StyledTableCell
-                    sx={{ backgroundColor: 'inherit' }}
+                    sx={{ backgroundColor: 'inherit', ...styles }}
                     key={`data-table-cell-${key}`}
                   >
                     <ContentWithTooltip

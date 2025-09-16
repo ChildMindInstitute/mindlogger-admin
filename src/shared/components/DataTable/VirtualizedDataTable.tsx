@@ -103,8 +103,11 @@ export const VirtualizedDataTable = ({
               />
             </TableCell>
           )}
-          {dataTableColumns?.map(({ key }) => (
-            <StyledTableCell sx={{ backgroundColor: 'inherit' }} key={`data-table-cell-${key}`}>
+          {dataTableColumns?.map(({ key, styles = {} }) => (
+            <StyledTableCell
+              sx={{ backgroundColor: 'inherit', ...styles }}
+              key={`data-table-cell-${key}`}
+            >
               <ContentWithTooltip
                 value={item.tooltip ?? item[key]}
                 item={item}
@@ -133,14 +136,16 @@ export const VirtualizedDataTable = ({
       <Table stickyHeader sx={{ flexShrink: 0 }}>
         <TableHead>
           <TableRow>
-            {selectable && selectAll && data?.length ? (
+            {selectable ? (
               <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={{ width: '2.8rem' }}>
-                <StyledCheckbox
-                  checked={isAllSelected}
-                  onChange={handleSelectAll}
-                  disabled={!data?.length}
-                  data-testid={`${dataTestid}-select-all`}
-                />
+                {selectAll && data?.length ? (
+                  <StyledCheckbox
+                    checked={isAllSelected}
+                    onChange={handleSelectAll}
+                    disabled={!data?.length}
+                    data-testid={`${dataTestid}-select-all`}
+                  />
+                ) : null}
               </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
