@@ -62,124 +62,68 @@ export const Input = <T extends FieldValues>({
     return String(value);
   };
 
-  // Preserve the original string value to maintain leading zeros
-  const stringValue = String(value ?? '');
   const numberValue = isNaN(+value) ? 0 : +value;
-  const hasLeadingZeros = /^0\d+/.test(stringValue);
 
-  // Helper function to preserve leading zeros when incrementing/decrementing
-  const preserveLeadingZeros = useCallback(
-    (newValue: number, originalValue: string): string | number => {
-      // Check if original value has leading zeros (like "01", "001", etc.)
-      const hasLeadingZeros = /^0\d+/.test(originalValue);
-
-      if (!hasLeadingZeros || newValue <= 0) {
-        return newValue;
-      }
-
-      const newStringValue = String(newValue);
-      const originalLength = originalValue.length;
-
-      // If new number is longer than original format, return as number
-      // e.g., "09" -> 10 should return 10, not "010"
-      if (newStringValue.length > originalLength) {
-        return newValue;
-      }
-
-      // Pad to exactly match original length
-      // e.g., "01" -> 2 becomes "02", not "002"
-      return newStringValue.padStart(originalLength, '0');
-    },
-    [],
-  );
-
-  // Debounced change handler for button clicks
-  const handleDebouncedButtonChange = useMemo(
-    () =>
-      debounce((value: string | number) => {
-        onChange?.(value);
-      }, 100), // Shorter debounce for button clicks for better UX
-    [onChange],
-  );
-
+  // Plus/minus buttons always work with numbers, no leading zeros
   const handleAddNumber = useCallback(() => {
     const newNumber = numberValue + 1;
     if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Add);
     if (maxNumberValue === undefined || newNumber <= maxNumberValue) {
-      // Only preserve leading zeros if they exist in the original value
-      const newValue = hasLeadingZeros ? preserveLeadingZeros(newNumber, stringValue) : newNumber;
-      if (withDebounce) {
-        handleDebouncedButtonChange(newValue);
-      } else {
-        onChange?.(newValue);
-      }
+      onChange?.(newNumber);
     }
-  }, [
-    numberValue,
-    onArrowPress,
-    maxNumberValue,
-    preserveLeadingZeros,
-    stringValue,
-    hasLeadingZeros,
-    withDebounce,
-    handleDebouncedButtonChange,
-    onChange,
-  ]);
+  }, [numberValue, onArrowPress, maxNumberValue, onChange]);
 
   const handleSubtractNumber = useCallback(() => {
     const newNumber = numberValue - 1;
     if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Subtract);
     if (minNumberValue === undefined || newNumber >= minNumberValue) {
-      // Only preserve leading zeros if they exist in the original value
-      const newValue = hasLeadingZeros ? preserveLeadingZeros(newNumber, stringValue) : newNumber;
-      if (withDebounce) {
-        handleDebouncedButtonChange(newValue);
-      } else {
-        onChange?.(newValue);
-      }
+      onChange?.(newNumber);
     }
-  }, [
-    numberValue,
-    onArrowPress,
-    minNumberValue,
-    preserveLeadingZeros,
-    stringValue,
-    hasLeadingZeros,
-    withDebounce,
-    handleDebouncedButtonChange,
-    onChange,
-  ]);
+  }, [numberValue, onArrowPress, minNumberValue, onChange]);
   const handleChange = useCallback(
     (event: SelectEvent) => {
+      const newValue = event.target.value;
+
       const handleChangeLogic = () => {
-        const newValue = event.target.value;
         if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength)
           return;
-        const getNumberValue = () => {
-          if (!isNumberType) return undefined;
 
-          // Preserve leading zeros by keeping the string value when needed
-          // Only convert to number for validation
-          if (isControlledNumberValue) {
-            const numValue = +newValue;
-            // Check bounds and return numbers for min/max
-            if (minNumberValue !== undefined && numValue < minNumberValue) return minNumberValue;
-            if (maxNumberValue !== undefined && numValue > maxNumberValue) return maxNumberValue;
+        // For non-number inputs, pass through unchanged
+        if (!isNumberType) {
+          onChange?.(newValue);
 
-            // Only preserve string format if it has leading zeros (like 01, 001, etc.)
-            const hasLeadingZero = /^0\d+/.test(newValue);
+          return;
+        }
 
-            return hasLeadingZero ? newValue : +newValue;
+        // For number inputs
+        if (newValue === '') {
+          onChange?.('');
+
+          return;
+        }
+
+        // Check if value has leading zeros (user typed them)
+        const hasLeadingZero = /^0\d+/.test(newValue);
+
+        if (isControlledNumberValue) {
+          const numValue = +newValue;
+          // Check bounds
+          if (minNumberValue !== undefined && numValue < minNumberValue) {
+            onChange?.(minNumberValue);
+
+            return;
           }
+          if (maxNumberValue !== undefined && numValue > maxNumberValue) {
+            onChange?.(maxNumberValue);
 
+            return;
+          }
+          // Preserve leading zeros if user typed them, otherwise return number
+          onChange?.(hasLeadingZero ? newValue : numValue);
+        } else {
           // For uncontrolled number values
-          if (newValue === '') return '';
-          const hasLeadingZero = /^0\d+/.test(newValue);
-
-          return hasLeadingZero ? newValue : +newValue;
-        };
-
-        onChange?.(getNumberValue() ?? newValue);
+          onChange?.(hasLeadingZero ? newValue : +newValue);
+        }
       };
 
       if (onCustomChange) return onCustomChange(event, handleChangeLogic);
@@ -207,10 +151,9 @@ export const Input = <T extends FieldValues>({
 
       if (withDebounce) {
         handleDebouncedChange.flush();
-        handleDebouncedButtonChange.flush();
       }
     },
-    [onBlur, withDebounce, handleDebouncedChange, handleDebouncedButtonChange],
+    [onBlur, withDebounce, handleDebouncedChange],
   );
 
   useEffect(() => {
@@ -218,14 +161,10 @@ export const Input = <T extends FieldValues>({
     inputRef.current.value = String(value ?? '');
   }, [withDebounce, value]);
 
-  // Cleanup debounced functions on unmount
-  useEffect(
-    () => () => {
-      handleDebouncedChange.cancel();
-      handleDebouncedButtonChange.cancel();
-    },
-    [handleDebouncedChange, handleDebouncedButtonChange],
-  );
+  // Cleanup debounced function on unmount
+  useEffect(() => {
+    handleDebouncedChange.cancel();
+  }, [handleDebouncedChange]);
 
   return (
     <Tooltip tooltipTitle={tooltip}>
