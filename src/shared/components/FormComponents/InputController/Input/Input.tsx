@@ -64,22 +64,20 @@ export const Input = <T extends FieldValues>({
 
   const numberValue = isNaN(+value) ? 0 : +value;
 
-  // Plus/minus buttons always work with numbers, no leading zeros
-  const handleAddNumber = useCallback(() => {
-    const newNumber = numberValue + 1;
-    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Add);
-    if (maxNumberValue === undefined || newNumber <= maxNumberValue) {
-      onChange?.(newNumber);
+  // Simple handlers for plus/minus buttons - always return numbers, no leading zeros
+  const handleAddNumber = () => {
+    if (onArrowPress) return onArrowPress(numberValue + 1, ArrowPressType.Add);
+    if (maxNumberValue === undefined || numberValue < maxNumberValue) {
+      onChange?.(numberValue + 1);
     }
-  }, [numberValue, onArrowPress, maxNumberValue, onChange]);
+  };
 
-  const handleSubtractNumber = useCallback(() => {
-    const newNumber = numberValue - 1;
-    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Subtract);
-    if (minNumberValue === undefined || newNumber >= minNumberValue) {
-      onChange?.(newNumber);
+  const handleSubtractNumber = () => {
+    if (onArrowPress) return onArrowPress(numberValue - 1, ArrowPressType.Subtract);
+    if (minNumberValue === undefined || numberValue > minNumberValue) {
+      onChange?.(numberValue - 1);
     }
-  }, [numberValue, onArrowPress, minNumberValue, onChange]);
+  };
   const handleChange = useCallback(
     (event: SelectEvent) => {
       const newValue = event.target.value;
@@ -162,9 +160,12 @@ export const Input = <T extends FieldValues>({
   }, [withDebounce, value]);
 
   // Cleanup debounced function on unmount
-  useEffect(() => {
-    handleDebouncedChange.cancel();
-  }, [handleDebouncedChange]);
+  useEffect(
+    () => () => {
+      handleDebouncedChange.cancel();
+    },
+    [handleDebouncedChange],
+  );
 
   return (
     <Tooltip tooltipTitle={tooltip}>
