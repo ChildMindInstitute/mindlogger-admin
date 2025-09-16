@@ -64,20 +64,53 @@ export const Input = <T extends FieldValues>({
 
   const numberValue = isNaN(+value) ? 0 : +value;
 
-  // Simple handlers for plus/minus buttons - always return numbers, no leading zeros
-  const handleAddNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue + 1, ArrowPressType.Add);
-    if (maxNumberValue === undefined || numberValue < maxNumberValue) {
-      onChange?.(numberValue + 1);
-    }
-  };
+  // Debounced handler specifically for button clicks - better UX
+  const handleDebouncedButtonChange = useMemo(
+    () =>
+      debounce((value: number) => {
+        onChange?.(value);
+      }, 100), // Short debounce for responsive button clicks
+    [onChange],
+  );
 
-  const handleSubtractNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue - 1, ArrowPressType.Subtract);
-    if (minNumberValue === undefined || numberValue > minNumberValue) {
-      onChange?.(numberValue - 1);
+  // Optimized handlers for plus/minus buttons - always return numbers, no leading zeros
+  const handleAddNumber = useCallback(() => {
+    const newNumber = numberValue + 1;
+    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Add);
+    if (maxNumberValue === undefined || newNumber <= maxNumberValue) {
+      if (withDebounce) {
+        handleDebouncedButtonChange(newNumber);
+      } else {
+        onChange?.(newNumber);
+      }
     }
-  };
+  }, [
+    numberValue,
+    onArrowPress,
+    maxNumberValue,
+    withDebounce,
+    handleDebouncedButtonChange,
+    onChange,
+  ]);
+
+  const handleSubtractNumber = useCallback(() => {
+    const newNumber = numberValue - 1;
+    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Subtract);
+    if (minNumberValue === undefined || newNumber >= minNumberValue) {
+      if (withDebounce) {
+        handleDebouncedButtonChange(newNumber);
+      } else {
+        onChange?.(newNumber);
+      }
+    }
+  }, [
+    numberValue,
+    onArrowPress,
+    minNumberValue,
+    withDebounce,
+    handleDebouncedButtonChange,
+    onChange,
+  ]);
   const handleChange = useCallback(
     (event: SelectEvent) => {
       const newValue = event.target.value;
@@ -149,9 +182,10 @@ export const Input = <T extends FieldValues>({
 
       if (withDebounce) {
         handleDebouncedChange.flush();
+        handleDebouncedButtonChange.flush();
       }
     },
-    [onBlur, withDebounce, handleDebouncedChange],
+    [onBlur, withDebounce, handleDebouncedChange, handleDebouncedButtonChange],
   );
 
   useEffect(() => {
@@ -159,12 +193,13 @@ export const Input = <T extends FieldValues>({
     inputRef.current.value = String(value ?? '');
   }, [withDebounce, value]);
 
-  // Cleanup debounced function on unmount
+  // Cleanup debounced functions on unmount
   useEffect(
     () => () => {
       handleDebouncedChange.cancel();
+      handleDebouncedButtonChange.cancel();
     },
-    [handleDebouncedChange],
+    [handleDebouncedChange, handleDebouncedButtonChange],
   );
 
   return (

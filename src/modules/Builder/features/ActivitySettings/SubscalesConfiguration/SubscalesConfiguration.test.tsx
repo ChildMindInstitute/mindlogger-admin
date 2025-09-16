@@ -300,6 +300,15 @@ describe('SubscalesConfiguration', () => {
     fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
       target: { value: 'subscale_2' },
     });
+
+    // Wait for both subscale names to be updated in the header (debounce complete)
+    await waitFor(() => {
+      const header0 = screen.getByTestId(`${mockedTestid}-0-header`);
+      const header1 = screen.getByTestId(`${mockedTestid}-1-header`);
+      expect(header0).toHaveTextContent('Subscale 1: subscale_1');
+      expect(header1).toHaveTextContent('Subscale 2: subscale_2');
+    }, { timeout: 1000 });
+
     fireEvent.click(
       screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
     );
@@ -318,13 +327,9 @@ describe('SubscalesConfiguration', () => {
       associatedSubscale.querySelectorAll('td');
     const [associatedItemElement, associatedItemSubscale] = associatedItem.querySelectorAll('td');
 
-    // wait for debounce callback
-    await waitFor(() => {
-      expect(associatedSubscaleElement).toHaveTextContent(
-        'Subscale: subscale_2 (Item: single_text_score)',
-      );
-    });
-
+    expect(associatedSubscaleElement).toHaveTextContent(
+      'Subscale: subscale_2 (Item: single_text_score)',
+    );
     expect(associatedSubscaleSubscale).toHaveTextContent('subscale_1');
 
     expect(associatedItemElement).toHaveTextContent('Item: single_text_score');
