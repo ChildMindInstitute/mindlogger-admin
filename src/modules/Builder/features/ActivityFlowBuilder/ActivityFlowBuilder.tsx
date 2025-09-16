@@ -54,6 +54,22 @@ const VirtualizedListItem = React.memo<VirtualizedListItemProps>(({ index, style
   const activityDescription = currentActivity?.description;
   const itemDataTestid = `${data.dataTestid}-flow-${index}`;
 
+  // Optimized style calculation
+  const getItemStyle = useCallback(
+    (isDragging: boolean, draggableStyle: any) => ({
+      ...style,
+      ...draggableStyle,
+      marginBottom: '16px',
+      userSelect: 'none',
+      ...(isDragging && {
+        zIndex: 5000,
+        boxShadow: '0 5px 20px rgba(0,0,0,0.2)',
+        opacity: 0.9,
+      }),
+    }),
+    [style],
+  );
+
   return (
     <Draggable key={key} draggableId={key || ''} index={index}>
       {(itemProvided, snapshot) => (
@@ -62,22 +78,7 @@ const VirtualizedListItem = React.memo<VirtualizedListItemProps>(({ index, style
           ref={itemProvided.innerRef}
           {...itemProvided.draggableProps}
           data-testid={itemDataTestid}
-          style={
-            snapshot.isDragging
-              ? {
-                  ...itemProvided.draggableProps.style,
-                  position: 'fixed',
-                  zIndex: 1300, // Below header z-index
-                  width: 'calc(100% - 128px)', // Constrain width to prevent overflow
-                  maxWidth: '800px', // Maximum width limit
-                  height: style.height || 'auto',
-                }
-              : {
-                  ...style,
-                  ...itemProvided.draggableProps.style,
-                  marginBottom: '16px',
-                }
-          }
+          style={getItemStyle(snapshot.isDragging, itemProvided.draggableProps.style)}
         >
           <Item
             dragHandleProps={itemProvided.dragHandleProps}
@@ -256,18 +257,48 @@ export const ActivityFlowBuilder = () => {
             <DndDroppable
               droppableId="activity-flow-builder-dnd"
               direction="vertical"
+              mode="virtual"
               ignoreContainerClipping={true}
               isCombineEnabled={false}
+              renderClone={(provided, snapshot, rubric) => (
+                <Box
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  ref={provided.innerRef}
+                  style={{
+                    ...provided.draggableProps.style,
+                    zIndex: 9999,
+                  }}
+                >
+                  <Item
+                    uiType={ItemUiType.FlowBuilder}
+                    name={
+                      activitiesIdsObjects[activityFlowItems[rubric.source.index]?.activityKey]
+                        ?.name || ''
+                    }
+                    description={
+                      activitiesIdsObjects[activityFlowItems[rubric.source.index]?.activityKey]
+                        ?.description || ''
+                    }
+                    isDragging={snapshot.isDragging}
+                    getActions={() => []}
+                  />
+                </Box>
+              )}
             >
               {(listProvided) => (
-                <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activityFlowItems.length > 20 ? (
+                <Box
+                  {...listProvided.droppableProps}
+                  ref={listProvided.innerRef}
+                  sx={{ position: 'relative', minHeight: '200px' }}
+                >
+                  {activityFlowItems.length > 10 ? (
                     <List
                       height={Math.min(600, window.innerHeight - 200)}
                       width="100%"
                       itemCount={activityFlowItems.length}
                       itemSize={98}
-                      overscanCount={2}
+                      overscanCount={3}
                       itemData={{
                         activityFlowItems,
                         activitiesIdsObjects,
@@ -300,14 +331,12 @@ export const ActivityFlowBuilder = () => {
                               style={{
                                 ...itemProvided.draggableProps.style,
                                 marginBottom: '16px',
-                                ...(snapshot.isDragging
-                                  ? {
-                                      position: 'fixed',
-                                      zIndex: 1300, // Below header z-index
-                                      width: 'calc(100% - 128px)', // Constrain width to prevent overflow
-                                      maxWidth: '800px', // Maximum width limit
-                                    }
-                                  : {}),
+                                userSelect: 'none',
+                                ...(snapshot.isDragging && {
+                                  zIndex: 5000,
+                                  boxShadow: '0 5px 20px rgba(0,0,0,0.2)',
+                                  opacity: 0.9,
+                                }),
                               }}
                             >
                               <Item
