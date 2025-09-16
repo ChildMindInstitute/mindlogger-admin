@@ -26,7 +26,7 @@ export const ActivityFlowAbout = React.memo(() => {
   const { t } = useTranslation();
   const { featureFlags } = useFeatureFlags();
 
-  const { control, getValues } = useCustomFormContext();
+  const { control, getValues, clearErrors, trigger } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
   const activityFlowIndex = useMemo(() => {
@@ -56,6 +56,16 @@ export const ActivityFlowAbout = React.memo(() => {
             restrictExceededValueLength
             withDebounce
             data-testid={`${dataTestid}-name`}
+            onChange={(e, onChange) => {
+              // Clear errors immediately when user starts typing
+              clearErrors(`activityFlows.${activityFlowIndex}.name`);
+              // Call the original onChange
+              onChange();
+              // Trigger revalidation after a delay to allow debounce to complete
+              setTimeout(() => {
+                trigger(`activityFlows.${activityFlowIndex}.name`);
+              }, 600);
+            }}
           />
         </Box>
         <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -70,6 +80,16 @@ export const ActivityFlowAbout = React.memo(() => {
             rows={TEXTAREA_ROWS_COUNT_SM}
             withDebounce
             data-testid={`${dataTestid}-description`}
+            onChange={(e, onChange) => {
+              // Clear errors immediately when user starts typing
+              clearErrors(`activityFlows.${activityFlowIndex}.description`);
+              // Call the original onChange
+              onChange();
+              // Trigger revalidation after a delay to allow debounce to complete
+              setTimeout(() => {
+                trigger(`activityFlows.${activityFlowIndex}.description`);
+              }, 600);
+            }}
           />
         </Box>
         <StyledTitleMedium
