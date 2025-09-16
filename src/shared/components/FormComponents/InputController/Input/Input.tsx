@@ -65,21 +65,30 @@ export const Input = <T extends FieldValues>({
   // Preserve the original string value to maintain leading zeros
   const stringValue = String(value ?? '');
   const numberValue = isNaN(+value) ? 0 : +value;
+  const hasLeadingZeros = /^0\d+/.test(stringValue);
 
   // Helper function to preserve leading zeros when incrementing/decrementing
   const preserveLeadingZeros = useCallback(
     (newValue: number, originalValue: string): string | number => {
-      const newStringValue = String(newValue);
-      const leadingZeros = originalValue.match(/^0+/);
+      // Check if original value has leading zeros (like "01", "001", etc.)
+      const hasLeadingZeros = /^0\d+/.test(originalValue);
 
-      // If original had leading zeros and new value is positive, preserve them
-      if (leadingZeros && newValue > 0) {
-        const totalLength = Math.max(originalValue.length, newStringValue.length);
-
-        return newStringValue.padStart(totalLength, '0');
+      if (!hasLeadingZeros || newValue <= 0) {
+        return newValue;
       }
 
-      return newValue;
+      const newStringValue = String(newValue);
+      const originalLength = originalValue.length;
+
+      // If new number is longer than original format, return as number
+      // e.g., "09" -> 10 should return 10, not "010"
+      if (newStringValue.length > originalLength) {
+        return newValue;
+      }
+
+      // Pad to exactly match original length
+      // e.g., "01" -> 2 becomes "02", not "002"
+      return newStringValue.padStart(originalLength, '0');
     },
     [],
   );
@@ -97,7 +106,8 @@ export const Input = <T extends FieldValues>({
     const newNumber = numberValue + 1;
     if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Add);
     if (maxNumberValue === undefined || newNumber <= maxNumberValue) {
-      const newValue = preserveLeadingZeros(newNumber, stringValue);
+      // Only preserve leading zeros if they exist in the original value
+      const newValue = hasLeadingZeros ? preserveLeadingZeros(newNumber, stringValue) : newNumber;
       if (withDebounce) {
         handleDebouncedButtonChange(newValue);
       } else {
@@ -110,6 +120,7 @@ export const Input = <T extends FieldValues>({
     maxNumberValue,
     preserveLeadingZeros,
     stringValue,
+    hasLeadingZeros,
     withDebounce,
     handleDebouncedButtonChange,
     onChange,
@@ -119,7 +130,8 @@ export const Input = <T extends FieldValues>({
     const newNumber = numberValue - 1;
     if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Subtract);
     if (minNumberValue === undefined || newNumber >= minNumberValue) {
-      const newValue = preserveLeadingZeros(newNumber, stringValue);
+      // Only preserve leading zeros if they exist in the original value
+      const newValue = hasLeadingZeros ? preserveLeadingZeros(newNumber, stringValue) : newNumber;
       if (withDebounce) {
         handleDebouncedButtonChange(newValue);
       } else {
@@ -132,6 +144,7 @@ export const Input = <T extends FieldValues>({
     minNumberValue,
     preserveLeadingZeros,
     stringValue,
+    hasLeadingZeros,
     withDebounce,
     handleDebouncedButtonChange,
     onChange,
@@ -145,19 +158,25 @@ export const Input = <T extends FieldValues>({
         const getNumberValue = () => {
           if (!isNumberType) return undefined;
 
-          // Preserve leading zeros by keeping the string value
+          // Preserve leading zeros by keeping the string value when needed
           // Only convert to number for validation
           if (isControlledNumberValue) {
             const numValue = +newValue;
-            // Check bounds but preserve string format
+            // Check bounds and return numbers for min/max
             if (minNumberValue !== undefined && numValue < minNumberValue) return minNumberValue;
             if (maxNumberValue !== undefined && numValue > maxNumberValue) return maxNumberValue;
 
-            // Return the original string to preserve leading zeros
-            return newValue;
+            // Only preserve string format if it has leading zeros (like 01, 001, etc.)
+            const hasLeadingZero = /^0\d+/.test(newValue);
+
+            return hasLeadingZero ? newValue : +newValue;
           }
 
-          return newValue === '' ? '' : newValue;
+          // For uncontrolled number values
+          if (newValue === '') return '';
+          const hasLeadingZero = /^0\d+/.test(newValue);
+
+          return hasLeadingZero ? newValue : +newValue;
         };
 
         onChange?.(getNumberValue() ?? newValue);
