@@ -25,6 +25,11 @@ const StyledVirtualizedContainer = styled(Box, shouldForwardProp)`
   min-height: 29.2rem;
   max-height: 29.2rem;
 
+  .MuiTable-root {
+    table-layout: fixed;
+    width: 100%;
+  }
+
   .MuiTableCell-root {
     background-color: transparent;
     height: 4.8rem;
@@ -95,8 +100,18 @@ export const VirtualizedDataTable = ({
           data-testid={rowTestId}
         >
           {selectable && (
-            <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
+            <TableCell
+              sx={{
+                width: '48px',
+                minWidth: '48px',
+                maxWidth: '48px',
+                backgroundColor: 'inherit',
+                p: 0,
+                textAlign: 'center',
+              }}
+            >
               <StyledCheckbox
+                sx={{ m: 0 }}
                 checked={isItemSelected}
                 onChange={() => handleSelect(item, isItemSelected)}
                 data-testid={`${dataTestid}-checkbox-${index}`}
@@ -133,13 +148,29 @@ export const VirtualizedDataTable = ({
 
   return (
     <StyledVirtualizedContainer hasError={hasError} data-testid={dataTestid}>
-      <Table stickyHeader sx={{ flexShrink: 0 }}>
+      <Table stickyHeader sx={{ flexShrink: 0, tableLayout: 'fixed', width: '100%' }}>
+        <colgroup>
+          {selectable ? <col style={{ width: '48px' }} /> : null}
+          {dataTableColumns?.map(({ key, styles = {} }) => (
+            <col key={`col-${key}`} style={{ width: (styles as any)?.width }} />
+          ))}
+        </colgroup>
         <TableHead>
           <TableRow>
             {selectable ? (
-              <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={{ width: '2.8rem' }}>
+              <StyledHeadCell
+                tableHeadBackground={tableHeadBackground}
+                sx={{
+                  width: '48px',
+                  minWidth: '48px',
+                  maxWidth: '48px',
+                  p: 0,
+                  textAlign: 'center',
+                }}
+              >
                 {selectAll && data?.length ? (
                   <StyledCheckbox
+                    sx={{ m: 0 }}
                     checked={isAllSelected}
                     onChange={handleSelectAll}
                     disabled={!data?.length}

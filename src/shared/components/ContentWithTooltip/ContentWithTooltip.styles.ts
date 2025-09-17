@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import { StyledBodyMedium, theme } from 'shared/styles';
+import { StyledBodyMedium } from 'shared/styles';
 
 export const StyledCellText = styled(StyledBodyMedium)`
   display: block;
@@ -8,5 +8,4 @@ export const StyledCellText = styled(StyledBodyMedium)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 ${theme.spacing(1.2)};
 `;
