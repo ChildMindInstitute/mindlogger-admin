@@ -1,6 +1,14 @@
 import { Box } from '@mui/material';
-import React, { CSSProperties, MouseEvent, useCallback, useMemo, useRef, useState } from 'react';
-import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
+import React, {
+  CSSProperties,
+  MouseEvent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
+import { DragDropContext, DragDropContextProps, DragUpdate, Draggable } from 'react-beautiful-dnd';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -124,6 +132,12 @@ export const ActivityFlowBuilder = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const stableAnchorRef = useRef<HTMLDivElement | null>(null);
   const [flowActivityToUpdateIndex, setFlowActivityToUpdateIndex] = useState<number | null>(null);
+  const listRef = useRef<List>(null);
+  // Keep a ref to react-window's outer element instead of using private internals
+  const listOuterRef = useRef<HTMLDivElement | null>(null);
+  const scrollAnimationRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerHeight, setContainerHeight] = useState(600);
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const { activityFlowId } = useParams();
@@ -227,13 +241,100 @@ export const ActivityFlowBuilder = () => {
 
   const handleMenuClose = useCallback(() => setAnchorEl(null), []);
 
+  const handleDragUpdate = useCallback(
+    (update: DragUpdate) => {
+      if (!listRef.current || (activityFlowItems && activityFlowItems.length <= 10)) return;
+
+      // Cancel any existing animation
+      if (scrollAnimationRef.current) {
+        cancelAnimationFrame(scrollAnimationRef.current);
+        scrollAnimationRef.current = null;
+      }
+
+      // Get the dragging element position
+      const draggedElement = document.querySelector(
+        `[data-rbd-draggable-id="${update.draggableId}"]`,
+      );
+      if (!draggedElement) return;
+
+      const dragRect = draggedElement.getBoundingClientRect();
+      // Use the provided outerRef instead of private _outerRef
+      const listElement = listOuterRef.current as HTMLElement | null;
+      if (!listElement) return;
+
+      const listRect = listElement.getBoundingClientRect();
+      const scrollThreshold = 100; // Distance from edge to trigger scroll
+      const maxScrollSpeed = 15; // Maximum scroll speed
+
+      let scrollSpeed = 0;
+      const dragCenterY = dragRect.top + dragRect.height / 2;
+
+      // Check if near top edge
+      if (dragCenterY < listRect.top + scrollThreshold) {
+        const distance = listRect.top + scrollThreshold - dragCenterY;
+        scrollSpeed = -Math.min(maxScrollSpeed, (distance / scrollThreshold) * maxScrollSpeed);
+      }
+      // Check if near bottom edge
+      else if (dragCenterY > listRect.bottom - scrollThreshold) {
+        const distance = dragCenterY - (listRect.bottom - scrollThreshold);
+        scrollSpeed = Math.min(maxScrollSpeed, (distance / scrollThreshold) * maxScrollSpeed);
+      }
+
+      if (scrollSpeed !== 0) {
+        const performScroll = () => {
+          if (!listRef.current) return;
+
+          // Read the current scroll offset from the DOM element
+          const currentScrollOffset = listOuterRef.current?.scrollTop ?? 0;
+          const maxScrollOffset = activityFlowItems!.length * 98 - containerHeight;
+          const newScrollOffset = Math.max(
+            0,
+            Math.min(maxScrollOffset, currentScrollOffset + scrollSpeed),
+          );
+
+          listRef.current.scrollTo(newScrollOffset);
+
+          // Continue scrolling if still dragging near edge
+          if (scrollSpeed !== 0) {
+            scrollAnimationRef.current = requestAnimationFrame(performScroll);
+          }
+        };
+
+        scrollAnimationRef.current = requestAnimationFrame(performScroll);
+      }
+    },
+    [activityFlowItems, containerHeight],
+  );
+
   const handleDragEnd: DragDropContextProps['onDragEnd'] = useCallback(
     ({ source, destination }) => {
+      // Cancel any ongoing scroll animation
+      if (scrollAnimationRef.current) {
+        cancelAnimationFrame(scrollAnimationRef.current);
+        scrollAnimationRef.current = null;
+      }
+
       if (!destination) return;
       move(source.index, destination.index);
     },
     [move],
   );
+
+  // Calculate container height dynamically
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const availableHeight = window.innerHeight - rect.top - 100; // Leave some margin
+        setContainerHeight(Math.min(600, Math.max(400, availableHeight)));
+      }
+    };
+
+    calculateHeight();
+    window.addEventListener('resize', calculateHeight);
+
+    return () => window.removeEventListener('resize', calculateHeight);
+  }, []);
 
   useRedirectIfNoMatchedActivityFlow();
 
@@ -247,13 +348,17 @@ export const ActivityFlowBuilder = () => {
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,
       }}
+      // Hide outer page scrollbar when virtual list is active
+      sxProps={{
+        overflowY: activityFlowItems && activityFlowItems.length > 10 ? 'hidden' : 'auto',
+      }}
       hasMaxWidth
     >
       <div ref={stableAnchorRef} style={{ position: 'absolute', pointerEvents: 'none' }} />
 
       {activityFlowItems?.length ? (
         <>
-          <DragDropContext onDragEnd={handleDragEnd}>
+          <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={handleDragUpdate}>
             <DndDroppable
               droppableId="activity-flow-builder-dnd"
               direction="vertical"
@@ -289,12 +394,27 @@ export const ActivityFlowBuilder = () => {
               {(listProvided) => (
                 <Box
                   {...listProvided.droppableProps}
-                  ref={listProvided.innerRef}
-                  sx={{ position: 'relative', minHeight: '200px' }}
+                  ref={(el) => {
+                    // Track the container element for height calculations only
+                    containerRef.current = el as HTMLDivElement | null;
+                  }}
+                  sx={{
+                    position: 'relative',
+                    minHeight: '200px',
+                    overflow: 'hidden',
+                    maxHeight: containerHeight,
+                  }}
                 >
                   {activityFlowItems.length > 10 ? (
                     <List
-                      height={Math.min(600, window.innerHeight - 200)}
+                      ref={listRef}
+                      // Attach our outer ref and wire droppable's innerRef to the scroll container
+                      outerRef={(el) => {
+                        listOuterRef.current = el as HTMLDivElement | null;
+                        // Ensure Droppable measures the correct scroll container
+                        listProvided.innerRef(el as unknown as HTMLElement | null);
+                      }}
+                      height={containerHeight}
                       width="100%"
                       itemCount={activityFlowItems.length}
                       itemSize={98}
@@ -372,7 +492,7 @@ export const ActivityFlowBuilder = () => {
                       );
                     })
                   )}
-                  {listProvided.placeholder}
+                  {activityFlowItems.length <= 10 && listProvided.placeholder}
                 </Box>
               )}
             </DndDroppable>
