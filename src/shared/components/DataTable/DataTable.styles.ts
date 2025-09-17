@@ -13,6 +13,10 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
   min-height: ${height};
   max-height: ${height};
+  /* Ensure rounded corners clip sticky header/background and avoid visual gaps */
+  overflow: hidden; /* clip all sides */
+  overflow-y: auto; /* but keep vertical scrolling */
+  background-color: ${variables.palette.surface1};
 
   .MuiTable-root {
     table-layout: fixed;
@@ -35,6 +39,8 @@ export const StyledTableCell = styled(TableCell)`
   max-width: 0;
   width: 100%;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const StyledHeadCell = styled(TableCell, shouldForwardProp)`

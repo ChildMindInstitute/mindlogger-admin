@@ -24,6 +24,8 @@ const StyledVirtualizedContainer = styled(Box, shouldForwardProp)`
   height: 100%;
   min-height: 29.2rem;
   max-height: 29.2rem;
+  overflow: hidden; /* clip sticky header to rounded corners, prevent gaps */
+  background-color: ${variables.palette.surface1};
 
   .MuiTable-root {
     table-layout: fixed;
