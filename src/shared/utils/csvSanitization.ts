@@ -17,7 +17,7 @@
  * \t (tab) - can cause parsing issues
  * \r (carriage return) - can cause parsing issues
  */
-const DANGEROUS_CSV_CHARS = /^[=+\-@\t\r]/;
+const DANGEROUS_CSV_CHARS = /^[=+\-@\t\r\n]/;
 
 /**
  * Sanitizes a single value for safe CSV export by escaping dangerous characters
@@ -58,13 +58,20 @@ export function sanitizeCSVValue(value: unknown): string {
     return stringValue;
   }
 
-  // Check if the string starts with dangerous characters
-  if (DANGEROUS_CSV_CHARS.test(stringValue)) {
-    // Escape by prefixing with a single quote
-    return `'${stringValue}`;
-  }
+  // Split the value into individual lines to handle multiline CSV fields
+  // Supports all newline variations: \n (Unix), \r\n (Windows), \r (classic Mac)
+  const lines = stringValue.split(/\r\n|\r|\n/);
 
-  return stringValue;
+  // Sanitize each line independently by prefixing with a single quote
+  const sanitizedLines = lines.map((line) => {
+    if (DANGEROUS_CSV_CHARS.test(line)) {
+      return `'${line}`; // Escape potential formula injection
+    }
+
+    return line; // Safe line, return as-is
+  });
+
+  return sanitizedLines.join('\n');
 }
 
 /**
