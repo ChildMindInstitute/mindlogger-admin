@@ -138,16 +138,6 @@ export const VirtualizedDataTable = ({
     [dataTableColumns, data, dataTestid, handleSelect, selectable, selected, tooltipByDefault],
   );
 
-  if (!data?.length) {
-    return (
-      <TableRow className="empty-state">
-        <TableCell sx={{ textAlign: 'left', backgroundColor: 'inherit' }}>
-          <StyledLabelLarge>{noDataPlaceholder}</StyledLabelLarge>
-        </TableCell>
-      </TableRow>
-    );
-  }
-
   return (
     <StyledVirtualizedContainer hasError={hasError} data-testid={dataTestid}>
       <Table stickyHeader sx={{ flexShrink: 0, tableLayout: 'fixed', width: '100%' }}>
@@ -196,19 +186,25 @@ export const VirtualizedDataTable = ({
         </TableHead>
       </Table>
       <Box sx={{ flexGrow: 1, width: '100%', overflow: 'hidden' }}>
-        <AutoSizer>
-          {({ height, width }: { height: number; width: number }) => (
-            <List
-              height={height}
-              width={width}
-              itemCount={data.length}
-              itemSize={ROW_HEIGHT}
-              overscanCount={5}
-            >
-              {renderRow}
-            </List>
-          )}
-        </AutoSizer>
+        {!data?.length ? (
+          <Box sx={{ p: 2, display: 'flex', alignItems: 'center', height: '100%' }}>
+            <StyledLabelLarge>{noDataPlaceholder}</StyledLabelLarge>
+          </Box>
+        ) : (
+          <AutoSizer>
+            {({ height, width }: { height: number; width: number }) => (
+              <List
+                height={height}
+                width={width}
+                itemCount={data.length}
+                itemSize={ROW_HEIGHT}
+                overscanCount={5}
+              >
+                {renderRow}
+              </List>
+            )}
+          </AutoSizer>
+        )}
       </Box>
     </StyledVirtualizedContainer>
   );

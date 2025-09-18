@@ -36,6 +36,7 @@ export const StyledCheckbox = styled(Checkbox)`
 `;
 
 export const StyledTableCell = styled(TableCell)`
+  max-width: 450px;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
