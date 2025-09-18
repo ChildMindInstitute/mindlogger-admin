@@ -331,11 +331,14 @@ describe('SubscalesConfiguration', () => {
     const [associatedItemElement, associatedItemSubscale] = associatedItem.querySelectorAll('td');
 
     // wait for debounce callback and validation to complete
-    await waitFor(() => {
-      expect(associatedSubscaleElement).toHaveTextContent(
-        'Subscale: subscale_2 (Item: single_text_score)',
-      );
-    }, { timeout: 1500 });
+    await waitFor(
+      () => {
+        expect(associatedSubscaleElement).toHaveTextContent(
+          'Subscale: subscale_2 (Item: single_text_score)',
+        );
+      },
+      { timeout: 1500 },
+    );
 
     expect(associatedSubscaleSubscale).toHaveTextContent('subscale_1');
 
