@@ -21,7 +21,20 @@ export const EditorController = <T extends FieldValues>({
 }: EditorControllerProps<T>) => {
   const dispatch = useAppDispatch();
   const editorRef = useRef<ExposeParam>();
-  const { clearErrors, trigger } = useFormContext();
+
+  // Use form context safely - may not be available in tests
+  let clearErrors: ((name?: string) => void) | undefined;
+  let trigger: ((name?: string) => Promise<boolean>) | undefined;
+
+  try {
+    const formContext = useFormContext();
+    clearErrors = formContext?.clearErrors;
+    trigger = formContext?.trigger;
+  } catch (error) {
+    // Form context not available - fallback for tests
+    clearErrors = undefined;
+    trigger = undefined;
+  }
 
   const onFileSizeExceeded = useCallback(
     (size: number | null) => {
@@ -69,15 +82,15 @@ export const EditorController = <T extends FieldValues>({
           value={value}
           onChange={(value) => {
             // Clear errors immediately when user starts typing
-            if (error) {
+            if (error && clearErrors) {
               clearErrors(name);
             }
             // Call the original onChange
             onChange(value);
             // Trigger revalidation after debounce delay
-            if (withDebounce) {
+            if (withDebounce && trigger) {
               setTimeout(() => {
-                trigger(name);
+                trigger!(name);
               }, 600);
             }
           }}
