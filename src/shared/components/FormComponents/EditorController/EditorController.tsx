@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { FieldValues, Controller } from 'react-hook-form';
+import { FieldValues, Controller, useFormContext } from 'react-hook-form';
 import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 
 import { MediaType, UploadFileError } from 'shared/consts';
@@ -21,6 +21,7 @@ export const EditorController = <T extends FieldValues>({
 }: EditorControllerProps<T>) => {
   const dispatch = useAppDispatch();
   const editorRef = useRef<ExposeParam>();
+  const { clearErrors, trigger } = useFormContext();
 
   const onFileSizeExceeded = useCallback(
     (size: number | null) => {
@@ -66,7 +67,20 @@ export const EditorController = <T extends FieldValues>({
           editorId={editorId}
           editorRef={editorRef}
           value={value}
-          onChange={onChange}
+          onChange={(value) => {
+            // Clear errors immediately when user starts typing
+            if (error) {
+              clearErrors(name);
+            }
+            // Call the original onChange
+            onChange(value);
+            // Trigger revalidation after debounce delay
+            if (withDebounce) {
+              setTimeout(() => {
+                trigger(name);
+              }, 600);
+            }
+          }}
           onInsert={onInsert}
           onFileExceeded={onFileSizeExceeded}
           onIncorrectFileFormat={onIncorrectFileFormat}
