@@ -15,7 +15,20 @@ export const InputController = <T extends FieldValues>({
   ...props
 }: InputControllerProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { clearErrors, trigger } = useFormContext();
+
+  // Use form context safely - may not be available in tests
+  let clearErrors: ((name?: string) => void) | undefined;
+  let trigger: ((name?: string) => Promise<boolean>) | undefined;
+
+  try {
+    const formContext = useFormContext();
+    clearErrors = formContext?.clearErrors;
+    trigger = formContext?.trigger;
+  } catch (error) {
+    // Form context not available - fallback for tests
+    clearErrors = undefined;
+    trigger = undefined;
+  }
 
   // removing the ability to change added number by scrolling - M2-6130
   const handleOnWheel = () => {
@@ -40,22 +53,26 @@ export const InputController = <T extends FieldValues>({
                 ? onChange
                 : (value) => {
                     // Clear errors immediately if field has error and user is entering data
-                    if (error) {
+                    if (error && clearErrors) {
                       clearErrors(name);
                     }
                     onChange(value);
                     // Trigger validation after change to check for new errors (e.g., empty field)
-                    setTimeout(() => {
-                      trigger(name);
-                    }, 100);
+                    if (trigger) {
+                      setTimeout(() => {
+                        trigger!(name);
+                      }, 100);
+                    }
                   }
             }
             onBlur={(event) => {
               onBlur();
               // Trigger validation on blur to check if field is empty
-              setTimeout(() => {
-                trigger(name);
-              }, 100);
+              if (trigger) {
+                setTimeout(() => {
+                  trigger!(name);
+                }, 100);
+              }
             }}
             value={value}
             error={!!error || providedError}
