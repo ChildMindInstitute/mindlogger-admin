@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import { StyledBodyMedium } from 'shared/styles';
+import { StyledBodyMedium, variables } from 'shared/styles';
 
 export const StyledCellText = styled(StyledBodyMedium)`
   display: block;
@@ -8,4 +8,5 @@ export const StyledCellText = styled(StyledBodyMedium)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${variables.palette.on_surface};
 `;
