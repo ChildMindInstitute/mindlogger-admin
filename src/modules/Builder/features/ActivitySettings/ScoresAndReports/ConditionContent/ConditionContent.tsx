@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +23,7 @@ import { getDefaultScoreCondition } from './ConditionContent.utils';
 import { defaultSectionCondition } from './CondtitionContent.const';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 
-const ConditionContentComponent = ({
+export const ConditionContent = ({
   name,
   type,
   score,
@@ -46,34 +45,36 @@ const ConditionContentComponent = ({
   });
   const error = getFieldState(`${name}.conditions`).error;
 
-  const handleAddCondition = useCallback(() => {
+  const handleAddCondition = () => {
     appendCondition(
       type === ConditionRowType.Score && score
         ? getDefaultScoreCondition(score)
         : (defaultSectionCondition as Condition),
     );
-  }, [appendCondition, type, score]);
+  };
 
-  const handleChangeConditionType: OnChangeConditionType = useCallback(
-    ({ conditionType, conditionPayload, conditionPayloadName, selectedItem }) => {
-      if (
-        type === ConditionRowType.Score &&
-        (conditionType === ConditionType.Between || conditionType === ConditionType.OutsideOf)
-      ) {
-        const { minValue, maxValue } = (conditionPayload as RangeValueCondition['payload']) ?? {};
+  const handleChangeConditionType: OnChangeConditionType = ({
+    conditionType,
+    conditionPayload,
+    conditionPayloadName,
+    selectedItem,
+  }) => {
+    if (
+      type === ConditionRowType.Score &&
+      (conditionType === ConditionType.Between || conditionType === ConditionType.OutsideOf)
+    ) {
+      const { minValue, maxValue } = (conditionPayload as RangeValueCondition['payload']) ?? {};
 
-        const payload = {
-          minValue: +(minValue ?? scoreRange?.minScore ?? DEFAULT_PAYLOAD_MIN_VALUE).toFixed(2),
-          maxValue: +(maxValue ?? scoreRange?.maxScore ?? DEFAULT_PAYLOAD_MAX_VALUE).toFixed(2),
-        };
+      const payload = {
+        minValue: +(minValue ?? scoreRange?.minScore ?? DEFAULT_PAYLOAD_MIN_VALUE).toFixed(2),
+        maxValue: +(maxValue ?? scoreRange?.maxScore ?? DEFAULT_PAYLOAD_MAX_VALUE).toFixed(2),
+      };
 
-        return setValue(conditionPayloadName, payload);
-      }
+      return setValue(conditionPayloadName, payload);
+    }
 
-      setValue(conditionPayloadName, getPayload({ conditionType, conditionPayload, selectedItem }));
-    },
-    [type, scoreRange, setValue],
-  );
+    setValue(conditionPayloadName, getPayload({ conditionType, conditionPayload, selectedItem }));
+  };
 
   return (
     <>
@@ -119,6 +120,3 @@ const ConditionContentComponent = ({
     </>
   );
 };
-
-// Memoize component to prevent unnecessary re-renders
-export const ConditionContent = memo(ConditionContentComponent);

@@ -1,4 +1,3 @@
-import { memo, useMemo, useCallback } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -10,7 +9,7 @@ import {
   getConditionMinMaxRangeValues,
 } from './SingleOrRangeNumberCondition.utils';
 
-const SingleOrRangeNumberConditionComponent = ({
+export const SingleOrRangeNumberCondition = ({
   children,
   state,
   selectedItem,
@@ -24,63 +23,20 @@ const SingleOrRangeNumberConditionComponent = ({
   isRangeValueShown,
   dataTestid,
 }: SingleOrRangeNumberConditionProps) => {
-  const { control, clearErrors, trigger } = useCustomFormContext();
+  const { control } = useCustomFormContext();
   const rowIndex = useWatch({ name: rowIndexName });
 
-  const { minNumber, maxNumber } = useMemo(
-    () =>
-      getConditionMinMaxValues({
-        item: selectedItem,
-        state,
-        rowIndex,
-      }),
-    [selectedItem, state, rowIndex],
-  );
-
-  const { leftRange, rightRange } = useMemo(
-    () =>
-      getConditionMinMaxRangeValues({
-        item: selectedItem,
-        minValue,
-        maxValue,
-        rowIndex,
-      }),
-    [selectedItem, minValue, maxValue, rowIndex],
-  );
-
-  const handleNumberChange = useCallback(
-    (fieldName: string) => (event: any, onChange: () => void) => {
-      // Clear errors immediately if field has error and user is entering data
-      clearErrors(fieldName);
-      onChange();
-      // Trigger validation after change
-      setTimeout(() => {
-        trigger(fieldName);
-      }, 100);
-    },
-    [clearErrors, trigger],
-  );
-
-  const handleMinValueChange = useCallback(
-    (event: any, onChange: () => void) => {
-      handleNumberChange(minValueName)(event, onChange);
-    },
-    [handleNumberChange, minValueName],
-  );
-
-  const handleMaxValueChange = useCallback(
-    (event: any, onChange: () => void) => {
-      handleNumberChange(maxValueName)(event, onChange);
-    },
-    [handleNumberChange, maxValueName],
-  );
-
-  const handleSingleValueChange = useCallback(
-    (event: any, onChange: () => void) => {
-      handleNumberChange(numberValueName)(event, onChange);
-    },
-    [handleNumberChange, numberValueName],
-  );
+  const { minNumber, maxNumber } = getConditionMinMaxValues({
+    item: selectedItem,
+    state,
+    rowIndex,
+  });
+  const { leftRange, rightRange } = getConditionMinMaxRangeValues({
+    item: selectedItem,
+    minValue,
+    maxValue,
+    rowIndex,
+  });
 
   return (
     <>
@@ -92,8 +48,6 @@ const SingleOrRangeNumberConditionComponent = ({
           name={numberValueName}
           minNumberValue={minNumber}
           maxNumberValue={maxNumber}
-          withDebounce
-          onChange={handleSingleValueChange}
           data-testid={`${dataTestid}-slider-value`}
         />
       )}
@@ -106,8 +60,6 @@ const SingleOrRangeNumberConditionComponent = ({
             name={minValueName}
             minNumberValue={leftRange.minNumber}
             maxNumberValue={leftRange.maxNumber}
-            withDebounce
-            onChange={handleMinValueChange}
             data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
@@ -117,8 +69,6 @@ const SingleOrRangeNumberConditionComponent = ({
             name={maxValueName}
             minNumberValue={rightRange.minNumber}
             maxNumberValue={rightRange.maxNumber}
-            withDebounce
-            onChange={handleMaxValueChange}
             data-testid={`${dataTestid}-max-value`}
           />
         </>
@@ -126,6 +76,3 @@ const SingleOrRangeNumberConditionComponent = ({
     </>
   );
 };
-
-// Memoize component to prevent unnecessary re-renders
-export const SingleOrRangeNumberCondition = memo(SingleOrRangeNumberConditionComponent);

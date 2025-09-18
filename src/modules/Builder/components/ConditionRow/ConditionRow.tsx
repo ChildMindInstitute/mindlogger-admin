@@ -1,4 +1,4 @@
-import { useCallback, useMemo, memo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
 import get from 'lodash.get';
@@ -25,7 +25,7 @@ import {
 import { Condition, ConditionItem } from './Condition';
 import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
-const ConditionRowComponent = ({
+export const ConditionRow = ({
   name,
   activityName,
   index,
@@ -97,9 +97,6 @@ const ConditionRowComponent = ({
       );
       const selectedItemIndex = items?.indexOf(selectedItem);
 
-      // Clear errors immediately when user selects an item
-      clearErrors(conditionName);
-
       if (conditionItemResponseType !== selectedItem?.responseType) {
         setValue(conditionTypeName, '');
         setValue(conditionPayloadName, {});
@@ -112,78 +109,36 @@ const ConditionRowComponent = ({
       if (autoTrigger) {
         trigger(`${name}.itemKey`);
       }
-
-      // Trigger validation after a short delay
-      setTimeout(() => {
-        trigger(conditionName);
-      }, 100);
     },
-    [
-      items,
-      clearErrors,
-      conditionName,
-      conditionItemResponseType,
-      autoTrigger,
-      setValue,
-      conditionTypeName,
-      conditionPayloadName,
-      activityName,
-      trigger,
-      name,
-    ],
+    [items, conditionItemResponseType, name, autoTrigger],
   );
 
   const handleChangeConditionType = useCallback(
     (e: SelectEvent) => {
       const conditionType = e.target.value as ConditionType;
-
-      // Clear errors immediately when user selects a condition type
-      clearErrors(conditionName);
-
       if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(conditionType)) {
         clearErrors(conditionPayloadSelectionName);
       }
 
       if (onChangeConditionType) {
-        const result = onChangeConditionType({
+        return onChangeConditionType({
           conditionType,
           conditionPayload,
           conditionPayloadName,
           selectedItem,
         });
-
-        // Trigger validation after condition type change
-        setTimeout(() => {
-          trigger(conditionName);
-        }, 100);
-
-        return result;
       }
 
       const payload = getPayload({ conditionType, conditionPayload, selectedItem });
-      setValue(conditionPayloadName, payload);
 
-      // Trigger validation after a short delay
-      setTimeout(() => {
-        trigger(conditionName);
-      }, 100);
+      setValue(conditionPayloadName, payload);
     },
-    [
-      onChangeConditionType,
-      conditionPayload,
-      selectedItem,
-      setValue,
-      conditionPayloadName,
-      clearErrors,
-      conditionPayloadSelectionName,
-      trigger,
-      conditionName,
-    ],
+    [name, conditionPayload, selectedItem, onChangeConditionType],
   );
 
-  const handleRemove = useCallback(onRemove, [onRemove]);
+  const handleRemove = useCallback(onRemove, [index]);
 
-  const itemOptions = useMemo(() => options[type], [options, type]);
+  const itemOptions = useMemo(() => options[type], [type, scores, items, selectedScore]);
   const valueOptions = useMemo(() => getValueOptionsList(selectedItem), [selectedItem]);
 
   const error = get(errors, `${conditionsName}[${index}]`);
@@ -219,6 +174,3 @@ const ConditionRowComponent = ({
     </>
   );
 };
-
-// Memoize component to prevent unnecessary re-renders
-export const ConditionRow = memo(ConditionRowComponent);
