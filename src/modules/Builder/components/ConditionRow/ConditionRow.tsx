@@ -97,6 +97,9 @@ const ConditionRowComponent = ({
       );
       const selectedItemIndex = items?.indexOf(selectedItem);
 
+      // Clear errors immediately when user selects an item
+      clearErrors(conditionName);
+
       if (conditionItemResponseType !== selectedItem?.responseType) {
         setValue(conditionTypeName, '');
         setValue(conditionPayloadName, {});
@@ -109,29 +112,61 @@ const ConditionRowComponent = ({
       if (autoTrigger) {
         trigger(`${name}.itemKey`);
       }
+
+      // Trigger validation after a short delay
+      setTimeout(() => {
+        trigger(conditionName);
+      }, 100);
     },
-    [items, conditionItemResponseType, name, autoTrigger],
+    [
+      items,
+      clearErrors,
+      conditionName,
+      conditionItemResponseType,
+      autoTrigger,
+      setValue,
+      conditionTypeName,
+      conditionPayloadName,
+      activityName,
+      trigger,
+      name,
+    ],
   );
 
   const handleChangeConditionType = useCallback(
     (e: SelectEvent) => {
       const conditionType = e.target.value as ConditionType;
+
+      // Clear errors immediately when user selects a condition type
+      clearErrors(conditionName);
+
       if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(conditionType)) {
         clearErrors(conditionPayloadSelectionName);
       }
 
       if (onChangeConditionType) {
-        return onChangeConditionType({
+        const result = onChangeConditionType({
           conditionType,
           conditionPayload,
           conditionPayloadName,
           selectedItem,
         });
+
+        // Trigger validation after condition type change
+        setTimeout(() => {
+          trigger(conditionName);
+        }, 100);
+
+        return result;
       }
 
       const payload = getPayload({ conditionType, conditionPayload, selectedItem });
-
       setValue(conditionPayloadName, payload);
+
+      // Trigger validation after a short delay
+      setTimeout(() => {
+        trigger(conditionName);
+      }, 100);
     },
     [
       onChangeConditionType,
@@ -141,12 +176,14 @@ const ConditionRowComponent = ({
       conditionPayloadName,
       clearErrors,
       conditionPayloadSelectionName,
+      trigger,
+      conditionName,
     ],
   );
 
-  const handleRemove = useCallback(onRemove, [index]);
+  const handleRemove = useCallback(onRemove, [onRemove]);
 
-  const itemOptions = useMemo(() => options[type], [type, scores, items, selectedScore]);
+  const itemOptions = useMemo(() => options[type], [options, type]);
   const valueOptions = useMemo(() => getValueOptionsList(selectedItem), [selectedItem]);
 
   const error = get(errors, `${conditionsName}[${index}]`);

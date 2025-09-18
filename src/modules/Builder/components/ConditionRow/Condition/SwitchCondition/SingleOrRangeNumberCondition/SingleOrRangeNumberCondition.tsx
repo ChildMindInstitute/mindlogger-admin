@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useCallback } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -24,7 +24,7 @@ const SingleOrRangeNumberConditionComponent = ({
   isRangeValueShown,
   dataTestid,
 }: SingleOrRangeNumberConditionProps) => {
-  const { control } = useCustomFormContext();
+  const { control, clearErrors, trigger } = useCustomFormContext();
   const rowIndex = useWatch({ name: rowIndexName });
 
   const { minNumber, maxNumber } = useMemo(
@@ -48,6 +48,40 @@ const SingleOrRangeNumberConditionComponent = ({
     [selectedItem, minValue, maxValue, rowIndex],
   );
 
+  const handleNumberChange = useCallback(
+    (fieldName: string) => (event: any, onChange: () => void) => {
+      // Clear errors immediately if field has error and user is entering data
+      clearErrors(fieldName);
+      onChange();
+      // Trigger validation after change
+      setTimeout(() => {
+        trigger(fieldName);
+      }, 100);
+    },
+    [clearErrors, trigger],
+  );
+
+  const handleMinValueChange = useCallback(
+    (event: any, onChange: () => void) => {
+      handleNumberChange(minValueName)(event, onChange);
+    },
+    [handleNumberChange, minValueName],
+  );
+
+  const handleMaxValueChange = useCallback(
+    (event: any, onChange: () => void) => {
+      handleNumberChange(maxValueName)(event, onChange);
+    },
+    [handleNumberChange, maxValueName],
+  );
+
+  const handleSingleValueChange = useCallback(
+    (event: any, onChange: () => void) => {
+      handleNumberChange(numberValueName)(event, onChange);
+    },
+    [handleNumberChange, numberValueName],
+  );
+
   return (
     <>
       {children}
@@ -59,6 +93,7 @@ const SingleOrRangeNumberConditionComponent = ({
           minNumberValue={minNumber}
           maxNumberValue={maxNumber}
           withDebounce
+          onChange={handleSingleValueChange}
           data-testid={`${dataTestid}-slider-value`}
         />
       )}
@@ -72,6 +107,7 @@ const SingleOrRangeNumberConditionComponent = ({
             minNumberValue={leftRange.minNumber}
             maxNumberValue={leftRange.maxNumber}
             withDebounce
+            onChange={handleMinValueChange}
             data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
@@ -82,6 +118,7 @@ const SingleOrRangeNumberConditionComponent = ({
             minNumberValue={rightRange.minNumber}
             maxNumberValue={rightRange.maxNumber}
             withDebounce
+            onChange={handleMaxValueChange}
             data-testid={`${dataTestid}-max-value`}
           />
         </>
