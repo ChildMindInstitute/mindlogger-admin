@@ -19,7 +19,7 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, setValue, getValues, trigger } = useFormContext();
+  const { control, getFieldState, setValue, getValues, trigger, clearErrors } = useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;
@@ -88,6 +88,14 @@ export const SectionScoreCommonFields = ({
           hasSelectedSection={false}
           tableHeadBackground={tableHeadBackground}
           data-testid={`${dataTestid}-print-items-list`}
+          onChangeSelectedCallback={(newSelectedItems) => {
+            // Clear errors immediately when user selects/deselects items
+            clearErrors(itemsPrintName);
+            // Trigger validation after selection change
+            setTimeout(() => {
+              trigger(itemsPrintName);
+            }, 100);
+          }}
         />
       )}
     </>

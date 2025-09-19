@@ -1,4 +1,4 @@
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
@@ -36,6 +36,7 @@ export const SubscaleContent = ({
 }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
+  const { clearErrors, trigger } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
@@ -114,6 +115,14 @@ export const SubscaleContent = ({
           hasSearch={false}
           hasSelectedSection={false}
           data-testid={`${dataTestid}-items`}
+          onChangeSelectedCallback={() => {
+            // Clear errors immediately when user selects/deselects items
+            clearErrors(`${name}.items`);
+            // Trigger validation after selection change
+            setTimeout(() => {
+              trigger(`${name}.items`);
+            }, 100);
+          }}
         />
         <DataTable
           columns={getNotUsedElementsTableColumns()}
