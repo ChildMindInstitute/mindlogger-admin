@@ -36,8 +36,10 @@ export const StyledCheckbox = styled(Checkbox)`
 `;
 
 export const StyledTableCell = styled(TableCell)`
-  max-width: 450px;
-  width: 100%;
+  /* Allow column widths to be driven by colgroup or inline styles */
+  max-width: unset;
+  width: auto;
+  min-width: 0; /* enable text truncation inside percent-based columns */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

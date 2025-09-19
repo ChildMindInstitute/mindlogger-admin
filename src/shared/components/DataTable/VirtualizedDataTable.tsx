@@ -1,5 +1,5 @@
 import { Box, styled, Table, TableCell, TableHead, TableRow } from '@mui/material';
-import { CSSProperties, useCallback, useEffect, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 
@@ -40,6 +40,14 @@ const StyledVirtualizedContainer = styled(Box, shouldForwardProp)`
 
 const ROW_HEIGHT = 56;
 
+// Stable outer scroller to suppress horizontal scrollbar inside the virtualized list
+const OuterNoXScroll = styled('div')`
+  overflow-x: hidden !important;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+`;
+
 export const VirtualizedDataTable = ({
   data,
   columns: dataTableColumns,
@@ -56,6 +64,9 @@ export const VirtualizedDataTable = ({
   'data-testid': dataTestid,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const headerCellRefs = useRef<(HTMLTableCellElement | null)[]>([]);
+  const [colWidths, setColWidths] = useState<number[]>([]);
 
   const getItemKey = (item: DataTableItem) => item.id;
 
@@ -85,6 +96,31 @@ export const VirtualizedDataTable = ({
 
     setSelected(data?.map((item) => getItemKey(item)) ?? []);
   }, [data, isAllSelected, onSelectAll]);
+
+  // Measure header cell widths and propagate to row cells so virtualization matches header
+  const measureHeader = useCallback(() => {
+    const raw = headerCellRefs.current.map((el) => el?.getBoundingClientRect().width || 0);
+    // Subtract a small fudge to avoid fractional rounding creating overflow
+    const FUDGE_TOTAL = 8; // px
+    const widths = raw.map((w, i) => {
+      const subtract = i === raw.length - 1 ? FUDGE_TOTAL : 1;
+
+      return Math.max(0, w - subtract);
+    });
+    setColWidths(widths);
+  }, []);
+
+  useEffect(() => {
+    measureHeader();
+  }, [measureHeader, dataTableColumns, selectable]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver(() => measureHeader());
+    ro.observe(containerRef.current);
+
+    return () => ro.disconnect();
+  }, [measureHeader]);
 
   const renderRow = useCallback(
     ({ index, style }: { index: number; style: CSSProperties }) => {
@@ -120,9 +156,14 @@ export const VirtualizedDataTable = ({
               />
             </TableCell>
           )}
-          {dataTableColumns?.map(({ key, styles = {} }) => (
+          {dataTableColumns?.map(({ key, styles = {} }, ci) => (
             <StyledTableCell
-              sx={{ backgroundColor: 'inherit', ...styles }}
+              sx={{
+                backgroundColor: 'inherit',
+                ...styles,
+                width: colWidths[ci] ? `${colWidths[ci]}px` : (styles as any)?.width,
+                maxWidth: colWidths[ci] ? `${colWidths[ci]}px` : undefined,
+              }}
               key={`data-table-cell-${key}`}
             >
               <ContentWithTooltip
@@ -135,16 +176,28 @@ export const VirtualizedDataTable = ({
         </TableRow>
       );
     },
-    [dataTableColumns, data, dataTestid, handleSelect, selectable, selected, tooltipByDefault],
+    [
+      colWidths,
+      dataTableColumns,
+      data,
+      dataTestid,
+      handleSelect,
+      selectable,
+      selected,
+      tooltipByDefault,
+    ],
   );
 
   return (
-    <StyledVirtualizedContainer hasError={hasError} data-testid={dataTestid}>
+    <StyledVirtualizedContainer hasError={hasError} data-testid={dataTestid} ref={containerRef}>
       <Table stickyHeader sx={{ flexShrink: 0, tableLayout: 'fixed', width: '100%' }}>
         <colgroup>
           {selectable ? <col style={{ width: '48px' }} /> : null}
-          {dataTableColumns?.map(({ key, styles = {} }) => (
-            <col key={`col-${key}`} style={{ width: (styles as any)?.width }} />
+          {dataTableColumns?.map(({ key, styles = {} }, i) => (
+            <col
+              key={`col-${key}`}
+              style={{ width: colWidths[i] ? `${colWidths[i]}px` : (styles as any)?.width }}
+            />
           ))}
         </colgroup>
         <TableHead>
@@ -171,11 +224,12 @@ export const VirtualizedDataTable = ({
                 ) : null}
               </StyledHeadCell>
             ) : null}
-            {dataTableColumns?.map(({ key, label, styles = {} }) => (
+            {dataTableColumns?.map(({ key, label, styles = {} }, i) => (
               <StyledHeadCell
                 tableHeadBackground={tableHeadBackground}
                 sx={styles}
                 key={`data-table-head-${key}`}
+                ref={(el: HTMLTableCellElement | null) => (headerCellRefs.current[i] = el)}
               >
                 <StyledBodyMedium sx={{ color: variables.palette.outline }}>
                   {label}
@@ -199,6 +253,7 @@ export const VirtualizedDataTable = ({
                 itemCount={data.length}
                 itemSize={ROW_HEIGHT}
                 overscanCount={5}
+                outerElementType={OuterNoXScroll}
               >
                 {renderRow}
               </List>
