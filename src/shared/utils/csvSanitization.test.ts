@@ -23,7 +23,8 @@ describe('CSV Sanitization', () => {
       expect(sanitizeCSVValue('-5')).toBe("'-5");
       expect(sanitizeCSVValue('@malicious')).toBe("'@malicious");
       expect(sanitizeCSVValue('\ttest')).toBe("'\ttest");
-      expect(sanitizeCSVValue('\rtest')).toBe("'\rtest");
+      // \r splits into ['', 'test'] → only 'test' is kept, and it's safe
+      expect(sanitizeCSVValue('\rtest')).toBe('\ntest');
     });
 
     test('should handle numbers', () => {
@@ -45,6 +46,32 @@ describe('CSV Sanitization', () => {
       expect(sanitizeCSVValue('+cmd|"/c calc"!A0')).toBe('\'+cmd|"/c calc"!A0');
       expect(sanitizeCSVValue('-cmd|"/c calc"!A0')).toBe('\'-cmd|"/c calc"!A0');
       expect(sanitizeCSVValue('@SUM(1+1)*cmd|"/c calc"!A0')).toBe('\'@SUM(1+1)*cmd|"/c calc"!A0');
+    });
+
+    test('sanitizes formulas that appear on subsequent lines (newline injection)', () => {
+      const input = 'This is a safe first line\n=SUM(A1:A2)';
+      const expected = "This is a safe first line\n'=SUM(A1:A2)";
+
+      const result = sanitizeCSVValue(input);
+      expect(result).toBe(expected);
+    });
+
+    test('sanitizes "=" on second line after newline', () => {
+      const input = 'Safe line\n=SUM(A1:A2)';
+      const expected = "Safe line\n'=SUM(A1:A2)";
+      expect(sanitizeCSVValue(input)).toBe(expected);
+    });
+
+    test('sanitizes "+", "-", "@" on multiple lines', () => {
+      const input = 'Line1\n+HACK\n-Line2\n@exploit';
+      const expected = "Line1\n'+HACK\n'-Line2\n'@exploit";
+      expect(sanitizeCSVValue(input)).toBe(expected);
+    });
+
+    test('sanitizes lines starting with tab, CR, and LF line breaks', () => {
+      const input = '\tmalicious\r=SUM(A1:A1)\n+payload';
+      const expected = "'\tmalicious\n'=SUM(A1:A1)\n'+payload"; // note: \r and \n are both split to \n
+      expect(sanitizeCSVValue(input)).toBe(expected);
     });
   });
 
