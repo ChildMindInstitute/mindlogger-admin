@@ -348,10 +348,6 @@ export const ActivityFlowBuilder = () => {
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,
       }}
-      // Hide outer page scrollbar when virtual list is active
-      sxProps={{
-        overflowY: activityFlowItems && activityFlowItems.length > 10 ? 'hidden' : 'auto',
-      }}
       hasMaxWidth
     >
       <div ref={stableAnchorRef} style={{ position: 'absolute', pointerEvents: 'none' }} />
@@ -401,8 +397,6 @@ export const ActivityFlowBuilder = () => {
                   sx={{
                     position: 'relative',
                     minHeight: '200px',
-                    overflow: 'hidden',
-                    maxHeight: containerHeight,
                   }}
                 >
                   {activityFlowItems.length > 10 ? (
@@ -414,7 +408,7 @@ export const ActivityFlowBuilder = () => {
                         // Ensure Droppable measures the correct scroll container
                         listProvided.innerRef(el as unknown as HTMLElement | null);
                       }}
-                      height={containerHeight}
+                      height={activityFlowItems.length * 98}
                       width="100%"
                       itemCount={activityFlowItems.length}
                       itemSize={98}
