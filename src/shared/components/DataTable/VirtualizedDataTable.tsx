@@ -107,6 +107,7 @@ export const VirtualizedDataTable = ({
 
       return Math.max(0, w - subtract);
     });
+
     setColWidths(widths);
   }, []);
 
@@ -161,8 +162,10 @@ export const VirtualizedDataTable = ({
               sx={{
                 backgroundColor: 'inherit',
                 ...styles,
-                width: colWidths[ci] ? `${colWidths[ci]}px` : (styles as any)?.width,
-                maxWidth: colWidths[ci] ? `${colWidths[ci]}px` : undefined,
+                ...(colWidths[ci] && {
+                  width: `${colWidths[ci]}px`,
+                  maxWidth: `${colWidths[ci]}px`,
+                }),
               }}
               key={`data-table-cell-${key}`}
             >
@@ -193,11 +196,8 @@ export const VirtualizedDataTable = ({
       <Table stickyHeader sx={{ flexShrink: 0, tableLayout: 'fixed', width: '100%' }}>
         <colgroup>
           {selectable ? <col style={{ width: '48px' }} /> : null}
-          {dataTableColumns?.map(({ key, styles = {} }, i) => (
-            <col
-              key={`col-${key}`}
-              style={{ width: colWidths[i] ? `${colWidths[i]}px` : (styles as any)?.width }}
-            />
+          {dataTableColumns?.map(({ key, styles = {} }) => (
+            <col key={`col-${key}`} style={{ width: (styles as CSSProperties)?.width }} />
           ))}
         </colgroup>
         <TableHead>
