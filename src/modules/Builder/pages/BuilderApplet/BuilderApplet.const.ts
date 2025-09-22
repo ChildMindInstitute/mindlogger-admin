@@ -64,7 +64,7 @@ export const ALLOWED_TYPES_IN_VARIABLES = [
 
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
 
-export const alphanumericAndHyphenRegexp = /^[a-zA-Z0-9_-]+$/g;
+export const alphanumericAndHyphenRegexp = /^[\p{L}0-9_-]+$/gu;
 
 export const enum ItemTestFunctions {
   UniqueItemName = 'unique-item-name',
