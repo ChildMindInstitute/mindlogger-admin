@@ -40,7 +40,7 @@ describe('forms', () => {
         false,
         true,
         `<a target="_blank" href="https://www.test.org">Opens in new tab</a>`,
-        '<a href="testorg" target="_blank">Opens in new tab</a>',
+        '<a target="_blank" href="testorg">Opens in new tab</a>',
       ],
       [
         true,
