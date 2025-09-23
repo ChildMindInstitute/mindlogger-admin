@@ -80,10 +80,10 @@ export const Uploader = ({
         img.onload = () => {
           const { width, height } = img;
           resolve(
-            width > MIN_IMAGE_WIDTH &&
-              width < MAX_IMAGE_WIDTH &&
-              height > MIN_IMAGE_HEIGHT &&
-              height < MAX_IMAGE_HEIGHT,
+            width >= MIN_IMAGE_WIDTH &&
+              width <= MAX_IMAGE_WIDTH &&
+              height >= MIN_IMAGE_HEIGHT &&
+              height <= MAX_IMAGE_HEIGHT,
           );
         };
         img.onerror = reject;

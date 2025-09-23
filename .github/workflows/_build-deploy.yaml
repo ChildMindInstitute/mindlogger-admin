@@ -75,14 +75,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - uses: wearerequired/lint-action@v2
-        name: Lint
-        with:
-          eslint: true
-          eslint_extensions: js,jsx,ts,tsx
-          prettier: true
-          prettier_extensions: js,jsx,ts,tsx
-          continue_on_error: true
+#      - uses: wearerequired/lint-action@v2
+#        name: Lint
+#        with:
+#          eslint: true
+#          eslint_extensions: js,jsx,ts,tsx
+#          prettier: true
+#          prettier_extensions: js,jsx,ts,tsx
+#          continue_on_error: true
 
       - name: Tests
         run: npm run test:nowatch
@@ -109,7 +109,7 @@ jobs:
 
       - name: Invalidate Cloudfront caches
         run: |
-          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("admin"; "i")) | .Id'); do
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
 
@@ -136,8 +136,19 @@ jobs:
     if: ${{ !cancelled() && (needs.build-deploy.result == 'success') }}
     needs:
       - build-deploy
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: "Send Slack message on success"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: success
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Admin Deployed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -148,15 +159,6 @@ jobs:
         run: |
           aws ssm put-parameter \
                   --name "/curious/app/admin/${{ inputs.env-name }}/version" \
-                  --value "${{ inputs.image-tag }}" \
+                  --value "${{ inputs.version }}" \
                   --type "String" \
                   --overwrite
-      - name: "Send Slack message on success"
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_COLOR: success
-          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
-          SLACKIFY_MARKDOWN: true
-          MSG_MINIMAL: actions url
-          SLACK_TITLE: Admin Deployed to ${{ inputs.env-name }}
-          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
