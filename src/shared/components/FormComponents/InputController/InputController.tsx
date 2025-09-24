@@ -16,19 +16,15 @@ export const InputController = <T extends FieldValues>({
 }: InputControllerProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Use form context safely - may not be available in tests
-  let clearErrors: ((name?: string) => void) | undefined;
-  let trigger: ((name?: string) => Promise<boolean>) | undefined;
+  const globalFormContext = useFormContext();
 
-  try {
-    const formContext = useFormContext();
-    clearErrors = formContext?.clearErrors;
-    trigger = formContext?.trigger;
-  } catch (error) {
-    // Form context not available - fallback for tests
-    clearErrors = undefined;
-    trigger = undefined;
-  }
+  // Clean conditional usage without explicit assignments
+  const formMethods = control
+    ? {} // No methods when control is passed
+    : { clearErrors: globalFormContext?.clearErrors, trigger: globalFormContext?.trigger };
+
+  // Use the methods from the conditional object
+  const { clearErrors, trigger } = formMethods;
 
   // removing the ability to change added number by scrolling - M2-6130
   const handleOnWheel = () => {
@@ -59,18 +55,20 @@ export const InputController = <T extends FieldValues>({
                     onChange(value);
                     // Trigger validation after change to check for new errors (e.g., empty field)
                     if (trigger) {
+                      const triggerFn = trigger;
                       setTimeout(() => {
-                        trigger!(name);
+                        triggerFn(name);
                       }, 100);
                     }
                   }
             }
-            onBlur={(event) => {
+            onBlur={(_event) => {
               onBlur();
               // Trigger validation on blur to check if field is empty
               if (trigger) {
+                const triggerFn = trigger;
                 setTimeout(() => {
-                  trigger!(name);
+                  triggerFn(name);
                 }, 100);
               }
             }}
