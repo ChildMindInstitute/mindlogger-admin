@@ -10,7 +10,7 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
-import { isDev, isProduction } from './shared/utils/env';
+import { isUat, isProduction } from './shared/utils/env';
 
 if (process.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
@@ -27,7 +27,7 @@ if (process.env.REACT_APP_DD_CLIENT_TOKEN) {
 if (
   process.env.REACT_APP_DD_APP_ID &&
   process.env.REACT_APP_DD_CLIENT_TOKEN &&
-  (isDev || isProduction)
+  (isUat || isProduction)
 ) {
   datadogRum.init({
     applicationId: process.env.REACT_APP_DD_APP_ID,
