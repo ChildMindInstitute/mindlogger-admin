@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray } from 'react-hook-form';
@@ -24,6 +24,83 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { DeleteFlowModal } from './DeleteFlowModal';
 import { getDuplicatedActivityFlow, getFlowsItemActions } from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
+
+// Memoized Flow Item component for better performance
+const FlowDraggableItem = React.memo<{
+  flow: ActivityFlowFormValues;
+  index: number;
+  activityFlowKey: string;
+  isDragging: boolean;
+  isLastItem: boolean;
+  hasError: boolean;
+  dataTestid: string;
+  handleEditActivityFlow: (activityFlowId: string) => void;
+  handleSetFlowToDeleteData: (index: number, name: string) => () => void;
+  handleDuplicateActivityFlow: (index: number) => void;
+  handleToggleActivityFlowVisibility: (index: number) => void;
+  handleAddActivityFlow: (positionToAdd?: number) => void;
+}>(
+  ({
+    flow,
+    index,
+    activityFlowKey,
+    isDragging,
+    isLastItem,
+    hasError,
+    dataTestid,
+    handleEditActivityFlow,
+    handleSetFlowToDeleteData,
+    handleDuplicateActivityFlow,
+    handleToggleActivityFlowVisibility,
+    handleAddActivityFlow,
+  }) => {
+    const getActivityFlowVisible = (isHidden: boolean | undefined) =>
+      isHidden === undefined ? false : isHidden;
+
+    return (
+      <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
+        {(itemProvided, snapshot) => (
+          <Box
+            {...itemProvided.draggableProps}
+            ref={itemProvided.innerRef}
+            data-testid={dataTestid}
+          >
+            <Item
+              dragHandleProps={itemProvided.dragHandleProps}
+              isDragging={snapshot.isDragging}
+              onItemClick={() => handleEditActivityFlow(activityFlowKey)}
+              getActions={() =>
+                getFlowsItemActions({
+                  activityFlowIndex: index,
+                  activityFlowId: activityFlowKey,
+                  activityFlowHidden: getActivityFlowVisible(flow.isHidden),
+                  removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
+                  editActivityFlow: handleEditActivityFlow,
+                  duplicateActivityFlow: handleDuplicateActivityFlow,
+                  toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
+                  'data-testid': dataTestid,
+                })
+              }
+              isInactive={flow.isHidden}
+              hasStaticActions={flow.isHidden}
+              uiType={ItemUiType.Flow}
+              hasError={hasError}
+              {...flow}
+              data-testid={dataTestid}
+            />
+            <InsertItem
+              isVisible={!isLastItem && !isDragging}
+              onInsert={() => handleAddActivityFlow(index + 1)}
+              data-testid={`${dataTestid}-insert`}
+            />
+          </Box>
+        )}
+      </Draggable>
+    );
+  },
+);
+
+FlowDraggableItem.displayName = 'FlowDraggableItem';
 
 export const ActivityFlow = () => {
   const [flowToDeleteData, setFlowToDeleteData] = useState<{
@@ -55,72 +132,89 @@ export const ActivityFlow = () => {
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const errors = activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error);
+  const errors = useMemo(
+    () => activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error),
+    [activityFlows, getFieldState],
+  );
 
-  const handleFlowDelete = () => {
+  const handleFlowDelete = useCallback(() => {
     if (!flowToDeleteData) return;
 
     removeActivityFlow(flowToDeleteData.index);
     setFlowToDeleteData(null);
-  };
+  }, [flowToDeleteData, removeActivityFlow]);
 
-  const handleEditActivityFlow = (activityFlowId: string) =>
-    navigate(
-      generatePath(page.builderAppletActivityFlowItem, {
-        appletId,
-        activityFlowId,
-      }),
-    );
+  const handleEditActivityFlow = useCallback(
+    (activityFlowId: string) =>
+      navigate(
+        generatePath(page.builderAppletActivityFlowItem, {
+          appletId,
+          activityFlowId,
+        }),
+      ),
+    [navigate, appletId],
+  );
 
-  const handleAddActivityFlow = (positionToAdd?: number) => {
-    // remove Reviewer Assessment Activity from Flow Items list
-    const flowItems = activities.reduce((acc: ActivityFlowItem[], activity) => {
-      if (!activity.isReviewable) {
-        acc.push({
-          key: uuidv4(),
-          activityKey: getEntityKey(activity),
-        });
+  const handleAddActivityFlow = useCallback(
+    (positionToAdd?: number) => {
+      // remove Reviewer Assessment Activity from Flow Items list
+      const flowItems = activities.reduce((acc: ActivityFlowItem[], activity) => {
+        if (!activity.isReviewable) {
+          acc.push({
+            key: uuidv4(),
+            activityKey: getEntityKey(activity),
+          });
+        }
+
+        return acc;
+      }, []);
+
+      const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
+
+      if (positionToAdd) {
+        insertActivityFlow(positionToAdd, newActivityFlow);
+      } else {
+        appendActivityFlow(newActivityFlow);
       }
+      handleEditActivityFlow(newActivityFlow.key);
+    },
+    [activities, insertActivityFlow, appendActivityFlow, handleEditActivityFlow],
+  );
 
-      return acc;
-    }, []);
+  const handleDuplicateActivityFlow = useCallback(
+    (index: number) => {
+      const name = getUniqueName({
+        name: activityFlows[index].name,
+        existingNames: pluck(activityFlows, 'name'),
+      });
 
-    const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
+      insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
+    },
+    [activityFlows, insertActivityFlow],
+  );
 
-    if (positionToAdd) {
-      insertActivityFlow(positionToAdd, newActivityFlow);
-    } else {
-      appendActivityFlow(newActivityFlow);
-    }
-    handleEditActivityFlow(newActivityFlow.key);
-  };
+  const handleToggleActivityFlowVisibility = useCallback(
+    (index: number) =>
+      updateActivityFlow(index, {
+        ...activityFlows[index],
+        isHidden: !activityFlows[index].isHidden,
+      }),
+    [activityFlows, updateActivityFlow],
+  );
 
-  const handleDuplicateActivityFlow = (index: number) => {
-    const name = getUniqueName({
-      name: activityFlows[index].name,
-      existingNames: pluck(activityFlows, 'name'),
-    });
+  const handleSetFlowToDeleteData = useCallback(
+    (index: number, name: string) => () => setFlowToDeleteData({ index, name }),
+    [],
+  );
 
-    insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
-  };
-
-  const handleToggleActivityFlowVisibility = (index: number) =>
-    updateActivityFlow(index, {
-      ...activityFlows[index],
-      isHidden: !activityFlows[index].isHidden,
-    });
-
-  const getActivityFlowVisible = (isHidden: boolean | undefined) =>
-    isHidden === undefined ? false : isHidden;
-
-  const handleSetFlowToDeleteData = (index: number, name: string) => () =>
-    setFlowToDeleteData({ index, name });
-
-  const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
-    setIsDragging(false);
-    if (!destination) return;
-    moveActivityFlow(source.index, destination.index);
-  };
+  const handleDragEnd = useCallback<DragDropContextProps['onDragEnd']>(
+    ({ source, destination }) => {
+      setIsDragging(false);
+      if (!destination) return;
+      moveActivityFlow(source.index, destination.index);
+    },
+    [moveActivityFlow],
+  );
 
   return (
     <BuilderContainer
@@ -131,57 +225,36 @@ export const ActivityFlow = () => {
     >
       {activityFlows?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
-          <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
+          <DndDroppable
+            droppableId="activity-flows-dnd"
+            direction="vertical"
+            ignoreContainerClipping={true}
+            isCombineEnabled={false}
+          >
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((flow, index) => {
                   const activityFlowKey = getEntityKey(flow);
+                  const dataTestid = `builder-activity-flows-flow-${index}`;
+                  const hasError = errors[index];
+                  const isLastItem = index === activityFlows.length - 1;
 
                   return (
-                    <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
-                      {(itemProvided, snapshot) => {
-                        const dataTestid = `builder-activity-flows-flow-${index}`;
-
-                        return (
-                          <Box
-                            {...itemProvided.draggableProps}
-                            ref={itemProvided.innerRef}
-                            data-testid={dataTestid}
-                          >
-                            <Item
-                              dragHandleProps={itemProvided.dragHandleProps}
-                              isDragging={snapshot.isDragging}
-                              onItemClick={() => handleEditActivityFlow(activityFlowKey)}
-                              getActions={() =>
-                                getFlowsItemActions({
-                                  activityFlowIndex: index,
-                                  activityFlowId: activityFlowKey,
-                                  activityFlowHidden: getActivityFlowVisible(flow.isHidden),
-                                  removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
-                                  editActivityFlow: handleEditActivityFlow,
-                                  duplicateActivityFlow: handleDuplicateActivityFlow,
-                                  toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
-                                  'data-testid': dataTestid,
-                                })
-                              }
-                              isInactive={flow.isHidden}
-                              hasStaticActions={flow.isHidden}
-                              uiType={ItemUiType.Flow}
-                              hasError={errors[index]}
-                              {...flow}
-                              data-testid={dataTestid}
-                            />
-                            <InsertItem
-                              isVisible={
-                                index >= 0 && index < activityFlows.length - 1 && !isDragging
-                              }
-                              onInsert={() => handleAddActivityFlow(index + 1)}
-                              data-testid={`${dataTestid}-insert`}
-                            />
-                          </Box>
-                        );
-                      }}
-                    </Draggable>
+                    <FlowDraggableItem
+                      key={activityFlowKey}
+                      flow={flow}
+                      index={index}
+                      activityFlowKey={activityFlowKey}
+                      isDragging={isDragging}
+                      isLastItem={isLastItem}
+                      hasError={hasError}
+                      dataTestid={dataTestid}
+                      handleEditActivityFlow={handleEditActivityFlow}
+                      handleSetFlowToDeleteData={handleSetFlowToDeleteData}
+                      handleDuplicateActivityFlow={handleDuplicateActivityFlow}
+                      handleToggleActivityFlowVisibility={handleToggleActivityFlowVisibility}
+                      handleAddActivityFlow={handleAddActivityFlow}
+                    />
                   );
                 })}
                 {listProvided.placeholder}

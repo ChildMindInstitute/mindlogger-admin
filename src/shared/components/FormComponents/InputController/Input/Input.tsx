@@ -1,4 +1,4 @@
-import { useEffect, useRef, FocusEventHandler } from 'react';
+import { useEffect, useRef, FocusEventHandler, useCallback, useMemo } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -64,53 +64,143 @@ export const Input = <T extends FieldValues>({
 
   const numberValue = isNaN(+value) ? 0 : +value;
 
-  const handleAddNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue + 1, ArrowPressType.Add);
-    if (maxNumberValue === undefined || numberValue < maxNumberValue) {
-      onChange?.(numberValue + 1);
-    }
-  };
-  const handleSubtractNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue - 1, ArrowPressType.Subtract);
-    if (minNumberValue === undefined || numberValue > minNumberValue) {
-      onChange?.(numberValue - 1);
-    }
-  };
-  const handleChange = (event: SelectEvent) => {
-    const handleChangeLogic = () => {
-      const newValue = event.target.value;
-      if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength)
-        return;
-      const getNumberValue = () => {
-        if (!isNumberType) return undefined;
-        if (isControlledNumberValue) return +newValue;
+  // Debounced handler specifically for button clicks - better UX
+  const handleDebouncedButtonChange = useMemo(
+    () =>
+      debounce((value: number) => {
+        onChange?.(value);
+      }, 100), // Short debounce for responsive button clicks
+    [onChange],
+  );
 
-        return newValue === '' ? '' : +newValue;
+  // Optimized handlers for plus/minus buttons - always return numbers, no leading zeros
+  const handleAddNumber = useCallback(() => {
+    const newNumber = numberValue + 1;
+    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Add);
+    if (maxNumberValue === undefined || newNumber <= maxNumberValue) {
+      if (withDebounce) {
+        handleDebouncedButtonChange(newNumber);
+      } else {
+        onChange?.(newNumber);
+      }
+    }
+  }, [
+    numberValue,
+    onArrowPress,
+    maxNumberValue,
+    withDebounce,
+    handleDebouncedButtonChange,
+    onChange,
+  ]);
+
+  const handleSubtractNumber = useCallback(() => {
+    const newNumber = numberValue - 1;
+    if (onArrowPress) return onArrowPress(newNumber, ArrowPressType.Subtract);
+    if (minNumberValue === undefined || newNumber >= minNumberValue) {
+      if (withDebounce) {
+        handleDebouncedButtonChange(newNumber);
+      } else {
+        onChange?.(newNumber);
+      }
+    }
+  }, [
+    numberValue,
+    onArrowPress,
+    minNumberValue,
+    withDebounce,
+    handleDebouncedButtonChange,
+    onChange,
+  ]);
+  const handleChange = useCallback(
+    (event: SelectEvent) => {
+      const newValue = event.target.value;
+
+      const handleChangeLogic = () => {
+        if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength)
+          return;
+
+        // For non-number inputs, pass through unchanged
+        if (!isNumberType) {
+          onChange?.(newValue);
+
+          return;
+        }
+
+        // For number inputs
+        if (newValue === '') {
+          onChange?.('');
+
+          return;
+        }
+
+        // Check if value has leading zeros (user typed them)
+        const hasLeadingZero = /^0\d+/.test(newValue);
+
+        if (isControlledNumberValue) {
+          const numValue = +newValue;
+          // Check bounds
+          if (minNumberValue !== undefined && numValue < minNumberValue) {
+            onChange?.(minNumberValue);
+
+            return;
+          }
+          if (maxNumberValue !== undefined && numValue > maxNumberValue) {
+            onChange?.(maxNumberValue);
+
+            return;
+          }
+          // Preserve leading zeros if user typed them, otherwise return number
+          onChange?.(hasLeadingZero ? newValue : numValue);
+        } else {
+          // For uncontrolled number values
+          onChange?.(hasLeadingZero ? newValue : +newValue);
+        }
       };
 
-      onChange?.(getNumberValue() ?? newValue);
-    };
+      if (onCustomChange) return onCustomChange(event, handleChangeLogic);
 
-    if (onCustomChange) return onCustomChange(event, handleChangeLogic);
-
-    handleChangeLogic();
-  };
-  const handleDebouncedChange = debounce(
-    (event: SelectEvent) => handleChange(event),
-    CHANGE_DEBOUNCE_VALUE,
+      handleChangeLogic();
+    },
+    [
+      isNumberType,
+      isControlledNumberValue,
+      minNumberValue,
+      maxNumberValue,
+      maxLength,
+      restrictExceededValueLength,
+      onChange,
+      onCustomChange,
+    ],
   );
-  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
-    onBlur?.(event);
+  const handleDebouncedChange = useMemo(
+    () => debounce((event: SelectEvent) => handleChange(event), CHANGE_DEBOUNCE_VALUE),
+    [handleChange],
+  );
+  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = useCallback(
+    (event) => {
+      onBlur?.(event);
 
-    if (withDebounce) {
-      handleDebouncedChange.flush();
-    }
-  };
+      if (withDebounce) {
+        handleDebouncedChange.flush();
+        handleDebouncedButtonChange.flush();
+      }
+    },
+    [onBlur, withDebounce, handleDebouncedChange, handleDebouncedButtonChange],
+  );
 
   useEffect(() => {
     if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value ?? '';
-  }, [withDebounce, inputRef.current, value]);
+    inputRef.current.value = String(value ?? '');
+  }, [withDebounce, value]);
+
+  // Cleanup debounced functions on unmount
+  useEffect(
+    () => () => {
+      handleDebouncedChange.cancel();
+      handleDebouncedButtonChange.cancel();
+    },
+    [handleDebouncedChange, handleDebouncedButtonChange],
+  );
 
   return (
     <Tooltip tooltipTitle={tooltip}>

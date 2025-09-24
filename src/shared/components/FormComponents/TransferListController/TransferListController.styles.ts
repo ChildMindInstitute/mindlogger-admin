@@ -8,6 +8,11 @@ export const StyledTransferListController = styled(StyledFlexTopCenter, shouldFo
   width: 100%;
   gap: 2.4rem;
 
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+
   ${({ hasError }: { hasError?: boolean }) =>
     hasError &&
     `

@@ -97,6 +97,8 @@ export const ConditionRow = ({
       );
       const selectedItemIndex = items?.indexOf(selectedItem);
 
+      clearErrors(conditionItemName);
+
       if (conditionItemResponseType !== selectedItem?.responseType) {
         setValue(conditionTypeName, '');
         setValue(conditionPayloadName, {});
@@ -110,12 +112,15 @@ export const ConditionRow = ({
         trigger(`${name}.itemKey`);
       }
     },
-    [items, conditionItemResponseType, name, autoTrigger],
+    [items, conditionItemResponseType, name, autoTrigger, clearErrors, conditionItemName],
   );
 
   const handleChangeConditionType = useCallback(
     (e: SelectEvent) => {
       const conditionType = e.target.value as ConditionType;
+
+      clearErrors(conditionTypeName);
+
       if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(conditionType)) {
         clearErrors(conditionPayloadSelectionName);
       }
@@ -133,8 +138,20 @@ export const ConditionRow = ({
 
       setValue(conditionPayloadName, payload);
     },
-    [name, conditionPayload, selectedItem, onChangeConditionType],
+    [
+      name,
+      conditionPayload,
+      selectedItem,
+      onChangeConditionType,
+      clearErrors,
+      conditionTypeName,
+      conditionPayloadSelectionName,
+    ],
   );
+
+  const handleChangeConditionValue = useCallback(() => {
+    clearErrors(conditionPayloadSelectionName);
+  }, [clearErrors, conditionPayloadSelectionName]);
 
   const handleRemove = useCallback(onRemove, [index]);
 

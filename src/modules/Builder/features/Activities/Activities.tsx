@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -26,6 +26,82 @@ import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities
 import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
 
+// Memoized Activity Item component for better performance
+const ActivityDraggableItem = React.memo<{
+  activity: ActivityFormValues;
+  index: number;
+  activityKey: string;
+  isPerformanceTask: boolean;
+  activityName: string;
+  isEditVisible: boolean;
+  hasError: boolean;
+  dataTestid: string;
+  isDragging: boolean;
+  isLastItem: boolean;
+  handleEditActivity: (index: number) => void;
+  handleDuplicateActivity: (index: number, isPerformanceTask: boolean) => void;
+  handleActivityVisibilityChange: (index: number) => void;
+  handleActivityAdd: (props: ActivityAddProps) => void;
+  setActivityToDelete: (key: string) => void;
+}>(
+  ({
+    activity,
+    index,
+    activityKey,
+    isPerformanceTask,
+    activityName,
+    isEditVisible,
+    hasError,
+    dataTestid,
+    isDragging,
+    isLastItem,
+    handleEditActivity,
+    handleDuplicateActivity,
+    handleActivityVisibilityChange,
+    handleActivityAdd,
+    setActivityToDelete,
+  }) => (
+    <Draggable draggableId={activityKey} index={index}>
+      {(itemProvided, snapshot) => (
+        <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef} data-testid={dataTestid}>
+          <Item
+            {...activity}
+            onItemClick={isEditVisible ? () => handleEditActivity(index) : undefined}
+            dragHandleProps={itemProvided.dragHandleProps}
+            isDragging={snapshot.isDragging}
+            img={activity.image}
+            isInactive={activity.isHidden}
+            hasStaticActions={activity.isHidden}
+            uiType={ItemUiType.Activity}
+            getActions={() =>
+              getActions({
+                key: activityKey,
+                isActivityHidden: activity.isHidden,
+                onEdit: () => handleEditActivity(index),
+                onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
+                onRemove: () => setActivityToDelete(activityKey),
+                onVisibilityChange: () => handleActivityVisibilityChange(index),
+                isEditVisible,
+                'data-testid': dataTestid,
+              })
+            }
+            hasError={hasError}
+            count={activity.items?.length}
+            data-testid={dataTestid}
+          />
+          <InsertItem
+            isVisible={!isLastItem && !isDragging}
+            onInsert={() => handleActivityAdd({ index: index + 1 })}
+            data-testid={`${dataTestid}-insert`}
+          />
+        </Box>
+      )}
+    </Draggable>
+  ),
+);
+
+ActivityDraggableItem.displayName = 'ActivityDraggableItem';
+
 export const Activities = () => {
   const { t } = useTranslation('app');
   const { control, getFieldState, setValue, clearErrors } = useCustomFormContext();
@@ -50,125 +126,162 @@ export const Activities = () => {
   });
   const activities = fields as unknown as ActivityFormValues[];
 
-  const activityNames = pluck(activities, 'name');
+  const activityNames = useMemo(() => pluck(activities, 'name'), [activities]);
   const activityFlows: AppletFormValues['activityFlows'] = useWatch({ name: 'activityFlows' });
-  const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
+  const errors = useMemo(
+    () => activities?.map((_, index) => !!getFieldState(`activities.${index}`).error),
+    [activities, getFieldState],
+  );
 
-  const navigateToActivity = (activityId?: string) =>
-    activityId &&
-    navigate(
-      generatePath(page.builderAppletActivityAbout, {
-        appletId,
-        activityId,
-      }),
-    );
-  const navigateToPerformanceTask = (activityId?: string, performanceTasksType?: PerfTaskType) =>
-    activityId &&
-    appletId &&
-    performanceTasksType &&
-    navigate(
-      generatePath(
-        getPerformanceTaskPath(performanceTasksType as unknown as EditablePerformanceTasksType),
-        {
+  const navigateToActivity = useCallback(
+    (activityId?: string) =>
+      activityId &&
+      navigate(
+        generatePath(page.builderAppletActivityAbout, {
           appletId,
           activityId,
-        },
+        }),
       ),
-    );
-  const handleModalClose = () => setActivityToDelete('');
-  const handleActivityAdd = (props: ActivityAddProps) => {
-    Mixpanel.track({
-      action: MixpanelEventType.AddActivityClick,
-      [MixpanelProps.AppletId]: appletId,
-    });
-    const {
-      index,
-      performanceTaskName,
-      performanceTaskDesc,
-      isNavigationBlocked,
-      performanceTaskType,
-    } = props || {};
+    [navigate, appletId],
+  );
+  const navigateToPerformanceTask = useCallback(
+    (activityId?: string, performanceTasksType?: PerfTaskType) =>
+      activityId &&
+      appletId &&
+      performanceTasksType &&
+      navigate(
+        generatePath(
+          getPerformanceTaskPath(performanceTasksType as unknown as EditablePerformanceTasksType),
+          {
+            appletId,
+            activityId,
+          },
+        ),
+      ),
+    [navigate, appletId],
+  );
+  const handleModalClose = useCallback(() => setActivityToDelete(''), []);
+  const handleActivityAdd = useCallback(
+    (props: ActivityAddProps) => {
+      Mixpanel.track({
+        action: MixpanelEventType.AddActivityClick,
+        [MixpanelProps.AppletId]: appletId,
+      });
+      const {
+        index,
+        performanceTaskName,
+        performanceTaskDesc,
+        isNavigationBlocked,
+        performanceTaskType,
+      } = props || {};
 
-    const newActivityName =
-      performanceTaskName && performanceTaskDesc && performanceTaskType
-        ? performanceTaskName
-        : t('newActivity');
+      const newActivityName =
+        performanceTaskName && performanceTaskDesc && performanceTaskType
+          ? performanceTaskName
+          : t('newActivity');
 
-    const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
+      const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
 
-    const newActivity =
-      performanceTaskName && performanceTaskDesc && performanceTaskType
-        ? (getNewPerformanceTask({
+      const newActivity =
+        performanceTaskName && performanceTaskDesc && performanceTaskType
+          ? (getNewPerformanceTask({
+              name,
+              description: performanceTaskDesc,
+              performanceTaskType,
+            }) as ActivityFormValues)
+          : getNewActivity({ name });
+
+      typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
+
+      if (isNavigationBlocked) return;
+      if (activities?.length === 0) {
+        clearErrors('activities');
+      }
+      if (newActivity.isPerformanceTask && performanceTaskType) {
+        return navigateToPerformanceTask(newActivity.key, performanceTaskType);
+      }
+
+      return navigateToActivity(newActivity.key);
+    },
+    [
+      activities?.length,
+      activityNames,
+      appendActivity,
+      insertActivity,
+      clearErrors,
+      navigateToActivity,
+      navigateToPerformanceTask,
+      appletId,
+      t,
+    ],
+  );
+
+  const handleActivityRemove = useCallback(
+    (index: number, activityKey: string) => {
+      const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
+      removeActivity(index);
+      setValue('activityFlows', newActivityFlows);
+    },
+    [activityFlows, removeActivity, setValue],
+  );
+
+  const handleDuplicateActivity = useCallback(
+    (index: number, isPerformanceTask: boolean) => {
+      const activityToDuplicate = activities[index];
+      const name = getUniqueName({ name: activityToDuplicate.name, existingNames: activityNames });
+
+      const newActivity = isPerformanceTask
+        ? getNewPerformanceTask({
             name,
-            description: performanceTaskDesc,
-            performanceTaskType,
-          }) as ActivityFormValues)
-        : getNewActivity({ name });
+            description: activityToDuplicate.description,
+            performanceTask: activityToDuplicate as GetNewPerformanceTask['performanceTask'],
+          })
+        : getNewActivity({ activity: activityToDuplicate });
 
-    typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
+      insertActivity(index + 1, {
+        ...(newActivity as ActivityFormValues),
+        name,
+      });
+    },
+    [activities, activityNames, insertActivity],
+  );
 
-    if (isNavigationBlocked) return;
-    if (activities?.length === 0) {
-      clearErrors('activities');
-    }
-    if (newActivity.isPerformanceTask && performanceTaskType) {
-      return navigateToPerformanceTask(newActivity.key, performanceTaskType);
-    }
+  const handleEditActivity = useCallback(
+    (index: number) => {
+      Mixpanel.track({
+        action: MixpanelEventType.ActivityEditClick,
+        [MixpanelProps.AppletId]: appletId,
+      });
+      const activityToEdit = activities[index];
+      const activityKey = getActivityKey(activityToEdit);
+      if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {
+        return navigateToPerformanceTask(activityKey, activityToEdit.performanceTaskType);
+      }
 
-    return navigateToActivity(newActivity.key);
-  };
+      return navigateToActivity(activityKey);
+    },
+    [activities, appletId, navigateToActivity, navigateToPerformanceTask],
+  );
 
-  const handleActivityRemove = (index: number, activityKey: string) => {
-    const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
-    removeActivity(index);
-    setValue('activityFlows', newActivityFlows);
-  };
+  const handleActivityVisibilityChange = useCallback(
+    (index: number) => {
+      const activityToChangeVisibility = activities[index];
+      updateActivity(index, {
+        ...activityToChangeVisibility,
+        isHidden: !activityToChangeVisibility.isHidden,
+      });
+    },
+    [activities, updateActivity],
+  );
 
-  const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
-    const activityToDuplicate = activities[index];
-    const name = getUniqueName({ name: activityToDuplicate.name, existingNames: activityNames });
-
-    const newActivity = isPerformanceTask
-      ? getNewPerformanceTask({
-          name,
-          description: activityToDuplicate.description,
-          performanceTask: activityToDuplicate as GetNewPerformanceTask['performanceTask'],
-        })
-      : getNewActivity({ activity: activityToDuplicate });
-
-    insertActivity(index + 1, {
-      ...(newActivity as ActivityFormValues),
-      name,
-    });
-  };
-
-  const handleEditActivity = (index: number) => {
-    Mixpanel.track({
-      action: MixpanelEventType.ActivityEditClick,
-      [MixpanelProps.AppletId]: appletId,
-    });
-    const activityToEdit = activities[index];
-    const activityKey = getActivityKey(activityToEdit);
-    if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {
-      return navigateToPerformanceTask(activityKey, activityToEdit.performanceTaskType);
-    }
-
-    return navigateToActivity(activityKey);
-  };
-
-  const handleActivityVisibilityChange = (index: number) => {
-    const activityToChangeVisibility = activities[index];
-    updateActivity(index, {
-      ...activityToChangeVisibility,
-      isHidden: !activityToChangeVisibility.isHidden,
-    });
-  };
-
-  const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
-    setIsDragging(false);
-    if (!destination) return;
-    moveActivity(source.index, destination.index);
-  };
+  const handleDragEnd = useCallback<DragDropContextProps['onDragEnd']>(
+    ({ source, destination }) => {
+      setIsDragging(false);
+      if (!destination) return;
+      moveActivity(source.index, destination.index);
+    },
+    [moveActivity],
+  );
 
   return (
     <BuilderContainer
@@ -179,7 +292,12 @@ export const Activities = () => {
     >
       {activities?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
-          <DndDroppable droppableId="activities-dnd" direction="vertical">
+          <DndDroppable
+            droppableId="activities-dnd"
+            direction="vertical"
+            ignoreContainerClipping={true}
+            isCombineEnabled={false}
+          >
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activities.map((activity: ActivityFormValues, index: number) => {
@@ -191,52 +309,27 @@ export const Activities = () => {
                     EditablePerformanceTasks.includes(activity.performanceTaskType || '');
                   const hasError = errors[index];
                   const dataTestid = `builder-activities-activity-${index}`;
+                  const isLastItem = index === activities.length - 1;
 
                   return (
                     <Fragment key={`activity-${activityKey}`}>
-                      <Draggable draggableId={activityKey} index={index}>
-                        {(itemProvided, snapshot) => (
-                          <Box
-                            {...itemProvided.draggableProps}
-                            ref={itemProvided.innerRef}
-                            data-testid={dataTestid}
-                          >
-                            <Item
-                              {...activity}
-                              onItemClick={
-                                isEditVisible ? () => handleEditActivity(index) : undefined
-                              }
-                              dragHandleProps={itemProvided.dragHandleProps}
-                              isDragging={snapshot.isDragging}
-                              img={activity.image}
-                              isInactive={activity.isHidden}
-                              hasStaticActions={activity.isHidden}
-                              uiType={ItemUiType.Activity}
-                              getActions={() =>
-                                getActions({
-                                  key: activityKey,
-                                  isActivityHidden: activity.isHidden,
-                                  onEdit: () => handleEditActivity(index),
-                                  onDuplicate: () =>
-                                    handleDuplicateActivity(index, isPerformanceTask),
-                                  onRemove: () => setActivityToDelete(activityKey),
-                                  onVisibilityChange: () => handleActivityVisibilityChange(index),
-                                  isEditVisible,
-                                  'data-testid': dataTestid,
-                                })
-                              }
-                              hasError={hasError}
-                              count={activity.items?.length}
-                              data-testid={dataTestid}
-                            />
-                            <InsertItem
-                              isVisible={index >= 0 && index < activities.length - 1 && !isDragging}
-                              onInsert={() => handleActivityAdd({ index: index + 1 })}
-                              data-testid={`${dataTestid}-insert`}
-                            />
-                          </Box>
-                        )}
-                      </Draggable>
+                      <ActivityDraggableItem
+                        activity={activity}
+                        index={index}
+                        activityKey={activityKey}
+                        isPerformanceTask={isPerformanceTask}
+                        activityName={activityName}
+                        isEditVisible={isEditVisible}
+                        hasError={hasError}
+                        dataTestid={dataTestid}
+                        isDragging={isDragging}
+                        isLastItem={isLastItem}
+                        handleEditActivity={handleEditActivity}
+                        handleDuplicateActivity={handleDuplicateActivity}
+                        handleActivityVisibilityChange={handleActivityVisibilityChange}
+                        handleActivityAdd={handleActivityAdd}
+                        setActivityToDelete={setActivityToDelete}
+                      />
                       <DeleteActivityModal
                         activityName={activityName}
                         isOpen={activityToDelete === activityKey}

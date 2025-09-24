@@ -7,10 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { mockedAppletFormData } from 'shared/mock';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, asyncTimeout } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { useFeatureFlags } from 'shared/hooks';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ActivityFlowAbout } from './ActivityFlowAbout';
 
@@ -124,14 +125,17 @@ describe('ActivityFlowAbout', () => {
     ${`${mockedFlowsTestid}-single-report`} | ${'isSingleReport'} | ${''}         | ${true}                        | ${'Change Activity Flow: Combine Reports'}
     ${`${mockedFlowsTestid}-hide-badge`}    | ${'hideBadge'}      | ${''}         | ${true}                        | ${'Change Activity Flow: Hide Badge'}
     ${`${mockedFlowsTestid}-auto-assign`}   | ${'autoAssign'}     | ${''}         | ${false}                       | ${'Change Activity Flow: Auto-assign'}
-  `('$description', ({ testId, attribute, inputType, value }) => {
+  `('$description', async ({ testId, attribute, inputType, value }) => {
     const ref = renderActivityFlowAbout();
 
     const field = screen.getByTestId(testId);
 
-    inputType
-      ? fireEvent.change(field.querySelector(inputType), { target: { value } })
-      : fireEvent.click(field);
+    if (inputType) {
+      fireEvent.change(field.querySelector(inputType), { target: { value } });
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+    } else {
+      fireEvent.click(field);
+    }
 
     expect(ref.current.getValues(`activityFlows.0.${attribute}`)).toEqual(value);
   });
@@ -146,6 +150,7 @@ describe('ActivityFlowAbout', () => {
     const field = screen.getByTestId(testId);
     fireEvent.change(field.querySelector(inputType), { target: { value } });
 
+    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
     await ref.current.trigger('activityFlows');
 
     await waitFor(() => {
@@ -175,6 +180,7 @@ describe('ActivityFlowAbout', () => {
       target: { value: 'second flow' },
     });
 
+    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
     await ref.current.trigger('activityFlows');
 
     await waitFor(() => {

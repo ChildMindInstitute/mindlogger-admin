@@ -1,29 +1,29 @@
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useMemo, useState } from 'react';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { useLocation, useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
-import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
-import { LinkedTabs, Spinner } from 'shared/components';
-import { useCheckIfNewApplet, useRemoveAppletData, usePermissions } from 'shared/hooks';
-import { StyledBody } from 'shared/styles/styledComponents';
-import { applet, forbiddenState } from 'shared/state';
-import { workspaces } from 'redux/modules';
-import { AppletFormValues } from 'modules/Builder/types';
 import { themes } from 'modules/Builder/state';
+import { AppletFormValues } from 'modules/Builder/types';
+import { workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { LinkedTabs, Spinner } from 'shared/components';
+import { useCheckIfNewApplet, usePermissions, useRemoveAppletData } from 'shared/hooks';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { applet, forbiddenState } from 'shared/state';
+import { StyledBody } from 'shared/styles/styledComponents';
 
+import { themeParams } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
 import {
-  getDefaultValues,
   getAppletTabs,
+  getDefaultThemeId,
+  getDefaultValues,
   prepareActivitiesFromLibrary,
   prepareActivityFlowsFromLibrary,
-  getDefaultThemeId,
 } from './BuilderApplet.utils';
-import { themeParams } from './BuilderApplet.const';
 
 export const BuilderApplet = () => {
   const params = useParams();
@@ -71,7 +71,8 @@ export const BuilderApplet = () => {
   const methods = useForm<AppletFormValues>({
     defaultValues,
     resolver: yupResolver(AppletSchema(featureFlags) as ObjectSchema<AppletFormValues>),
-    mode: 'onChange',
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   });
   const { reset, control, setValue, getValues } = methods;
 

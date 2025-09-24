@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { FieldValues, Controller } from 'react-hook-form';
+import { FieldValues, Controller, useFormContext } from 'react-hook-form';
 import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 
 import { MediaType, UploadFileError } from 'shared/consts';
@@ -21,6 +21,20 @@ export const EditorController = <T extends FieldValues>({
 }: EditorControllerProps<T>) => {
   const dispatch = useAppDispatch();
   const editorRef = useRef<ExposeParam>();
+
+  // Use form context safely - may not be available in tests
+  let clearErrors: ((name?: string) => void) | undefined;
+  let trigger: ((name?: string) => Promise<boolean>) | undefined;
+
+  try {
+    const formContext = useFormContext();
+    clearErrors = formContext?.clearErrors;
+    trigger = formContext?.trigger;
+  } catch (error) {
+    // Form context not available - fallback for tests
+    clearErrors = undefined;
+    trigger = undefined;
+  }
 
   const onFileSizeExceeded = useCallback(
     (size: number | null) => {
@@ -66,7 +80,20 @@ export const EditorController = <T extends FieldValues>({
           editorId={editorId}
           editorRef={editorRef}
           value={value}
-          onChange={onChange}
+          onChange={(value) => {
+            // Clear errors immediately when user starts typing
+            if (error && clearErrors) {
+              clearErrors(name);
+            }
+            // Call the original onChange
+            onChange(value);
+            // Trigger revalidation after debounce delay
+            if (withDebounce && trigger) {
+              setTimeout(() => {
+                trigger!(name);
+              }, 600);
+            }
+          }}
           onInsert={onInsert}
           onFileExceeded={onFileSizeExceeded}
           onIncorrectFileFormat={onIncorrectFileFormat}

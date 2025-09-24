@@ -13,6 +13,8 @@ import {
   StyledHeadCell,
 } from './DataTable.styles';
 
+const CHECKBOX_COL_WIDTH = 48; // px; keep roomy to avoid overlap
+
 export const DataTable = ({
   data,
   columns: dataTableColumns,
@@ -58,17 +60,35 @@ export const DataTable = ({
 
   return (
     <StyledTableContainer hasError={hasError} data-testid={dataTestid}>
-      <Table stickyHeader>
+      <Table stickyHeader sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <colgroup>
+          {selectable ? <col style={{ width: `${CHECKBOX_COL_WIDTH}px` }} /> : null}
+          {dataTableColumns?.map(({ key, styles = {} }) => (
+            <col key={`col-${key}`} style={{ width: (styles as any)?.width }} />
+          ))}
+        </colgroup>
         <TableHead>
           <TableRow>
-            {selectable && selectAll && data?.length ? (
-              <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={{ width: '2.8rem' }}>
-                <StyledCheckbox
-                  checked={isAllSelected}
-                  onChange={handleSelectAll}
-                  disabled={!data?.length}
-                  data-testid={`${dataTestid}-select-all`}
-                />
+            {selectable ? (
+              <StyledHeadCell
+                tableHeadBackground={tableHeadBackground}
+                sx={{
+                  width: `${CHECKBOX_COL_WIDTH}px`,
+                  minWidth: `${CHECKBOX_COL_WIDTH}px`,
+                  maxWidth: `${CHECKBOX_COL_WIDTH}px`,
+                  p: 0,
+                  textAlign: 'center',
+                }}
+              >
+                {selectAll && data?.length ? (
+                  <StyledCheckbox
+                    sx={{ m: 0 }}
+                    checked={isAllSelected}
+                    onChange={handleSelectAll}
+                    disabled={!data?.length}
+                    data-testid={`${dataTestid}-select-all`}
+                  />
+                ) : null}
               </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
@@ -91,17 +111,27 @@ export const DataTable = ({
             return (
               <TableRow key={`data-table-row-${getEntityKey(item) || index}`}>
                 {selectable && (
-                  <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
+                  <TableCell
+                    sx={{
+                      width: `${CHECKBOX_COL_WIDTH}px`,
+                      minWidth: `${CHECKBOX_COL_WIDTH}px`,
+                      maxWidth: `${CHECKBOX_COL_WIDTH}px`,
+                      backgroundColor: 'inherit',
+                      p: 0,
+                      textAlign: 'center',
+                    }}
+                  >
                     <StyledCheckbox
+                      sx={{ m: 0 }}
                       checked={isSelected}
                       onChange={() => handleSelect(item, isSelected)}
                       data-testid={`${dataTestid}-checkbox-${index}`}
                     />
                   </TableCell>
                 )}
-                {dataTableColumns?.map(({ key }) => (
+                {dataTableColumns?.map(({ key, styles = {} }) => (
                   <StyledTableCell
-                    sx={{ backgroundColor: 'inherit' }}
+                    sx={{ backgroundColor: 'inherit', ...styles }}
                     key={`data-table-cell-${key}`}
                   >
                     <ContentWithTooltip

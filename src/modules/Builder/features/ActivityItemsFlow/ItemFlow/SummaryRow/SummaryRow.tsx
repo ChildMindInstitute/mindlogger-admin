@@ -18,7 +18,7 @@ import { useItemsInUsage } from './SummaryRow.hooks';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue, getValues } = useCustomFormContext();
+  const { control, setValue, getValues, clearErrors } = useCustomFormContext();
   const matchFieldName = `${name}.match`;
   const itemKeyFieldName = `${name}.itemKey`;
   const [items, conditions, match]: [ItemFormValues[], Condition[], ConditionalLogicMatch] =
@@ -31,11 +31,17 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
     (event: SelectEvent) => {
       const itemIndex = items?.findIndex((item) => getEntityKey(item) === event.target.value);
 
+      clearErrors(itemKeyFieldName);
+
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
     },
-    [items, activityName, setValue],
+    [items, activityName, setValue, clearErrors, itemKeyFieldName],
   );
+
+  const handleChangeMatch = useCallback(() => {
+    clearErrors(matchFieldName);
+  }, [clearErrors, matchFieldName]);
 
   const matchOptions = useMemo(() => getMatchOptions({ conditions, items }), [conditions, items]);
   const itemsOptions = useMemo(
@@ -64,6 +70,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
           isLabelNeedTranslation={false}
+          customChange={handleChangeMatch}
         />
 
         <StyledTitleMedium>{t('summaryRowDescription')}</StyledTitleMedium>
