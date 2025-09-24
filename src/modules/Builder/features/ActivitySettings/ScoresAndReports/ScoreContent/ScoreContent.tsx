@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useFieldArray, useWatch } from 'react-hook-form';
+import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -82,6 +82,7 @@ export const ScoreContent = ({
   const navigate = useNavigate();
   const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
+  const { clearErrors, trigger } = useFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
@@ -408,7 +409,16 @@ export const ScoreContent = ({
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
         tooltipByDefault
-        onChangeSelectedCallback={onItemsToCalculateScoreChange}
+        onChangeSelectedCallback={(chosenItems) => {
+          // Clear errors immediately when user selects/deselects items
+          clearErrors(itemsScoreField);
+          // Call original callback
+          onItemsToCalculateScoreChange(chosenItems);
+          // Trigger validation after selection change
+          setTimeout(() => {
+            trigger(itemsScoreField);
+          }, 100);
+        }}
         data-testid={`${dataTestid}-items-score`}
       />
     );

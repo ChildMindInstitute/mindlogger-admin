@@ -19,5 +19,13 @@ export const DndDroppable = ({ children, ...props }: DroppableProps) => {
     return null;
   }
 
-  return <Droppable {...props}>{children}</Droppable>;
+  return (
+    <Droppable
+      {...props}
+      ignoreContainerClipping={props.ignoreContainerClipping}
+      isCombineEnabled={props.isCombineEnabled}
+    >
+      {children}
+    </Droppable>
+  );
 };
