@@ -113,6 +113,15 @@ jobs:
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
 
+      - name: Upload Datadog sourcemaps
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+        run: |
+          npx datadog-ci sourcemaps upload bulid/static/dist --service mindlogger-admin \
+            --release-version '${{ inputs.version }}' \
+            --minified-path-prefix 'https://${{ needs.setup-vars.outputs.host }}/static/js'
+          
+
 
   on-deploy-failure:
     runs-on: ubuntu-latest
