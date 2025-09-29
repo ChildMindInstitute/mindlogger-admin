@@ -119,7 +119,7 @@ jobs:
         env:
           DATADOG_API_KEY: ${{ secrets.datadog-api-key }}
         run: |
-          npx @datadog/datadog-ci sourcemaps upload bulid/static/dist --service mindlogger-admin \
+          npx @datadog/datadog-ci sourcemaps upload build/static/dist --service mindlogger-admin \
             --release-version '${{ inputs.version }}' \
             --minified-path-prefix 'https://${{ needs.setup-vars.outputs.host }}/static/js'
           
