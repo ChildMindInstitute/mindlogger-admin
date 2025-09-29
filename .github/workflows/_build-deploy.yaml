@@ -19,6 +19,8 @@ on:
     secrets:
       slack-webhook:
         required: true
+      datadog-api-key:
+        required: true
 
 concurrency:
   cancel-in-progress: false
@@ -115,7 +117,7 @@ jobs:
 
       - name: Upload Datadog sourcemaps
         env:
-          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_API_KEY: ${{ secrets.datadog-api-key }}
         run: |
           npx @datadog/datadog-ci sourcemaps upload bulid/static/dist --service mindlogger-admin \
             --release-version '${{ inputs.version }}' \

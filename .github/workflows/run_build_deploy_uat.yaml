@@ -52,3 +52,4 @@ jobs:
       git-ref: ${{ needs.ref.outputs.target-ref }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
+      datadog-api-key: ${{ secrets.DATADOG_API_KEY }}
