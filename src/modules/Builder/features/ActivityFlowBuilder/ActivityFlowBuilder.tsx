@@ -348,6 +348,10 @@ export const ActivityFlowBuilder = () => {
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,
       }}
+      sxProps={{
+        overflowY: 'auto', // Use browser scrollbar
+        maxHeight: '100vh',
+      }}
       hasMaxWidth
     >
       <div ref={stableAnchorRef} style={{ position: 'absolute', pointerEvents: 'none' }} />
@@ -393,6 +397,8 @@ export const ActivityFlowBuilder = () => {
                   ref={(el) => {
                     // Track the container element for height calculations only
                     containerRef.current = el as HTMLDivElement | null;
+                    // Connect to droppable for drag functionality
+                    listProvided.innerRef(el as HTMLElement | null);
                   }}
                   sx={{
                     position: 'relative',
@@ -402,12 +408,11 @@ export const ActivityFlowBuilder = () => {
                   {activityFlowItems.length > 10 ? (
                     <List
                       ref={listRef}
-                      // Attach our outer ref and wire droppable's innerRef to the scroll container
+                      // Attach our outer ref for scroll tracking
                       outerRef={(el) => {
                         listOuterRef.current = el as HTMLDivElement | null;
-                        // Ensure Droppable measures the correct scroll container
-                        listProvided.innerRef(el as unknown as HTMLElement | null);
                       }}
+                      // Set height to exact content height to prevent internal scrollbar
                       height={activityFlowItems.length * 98}
                       width="100%"
                       itemCount={activityFlowItems.length}
