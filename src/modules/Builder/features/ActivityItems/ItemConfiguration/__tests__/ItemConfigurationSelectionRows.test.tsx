@@ -276,14 +276,14 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
 
       const rowTooltip = rowTooltips[0];
       fireEvent.change(rowTooltip.querySelector('input'), { target: { value: 'tooltip' } });
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE + 200); // Extra time for validation
       expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.0.tooltip`)).toEqual(
         'tooltip',
       );
 
       const optionTooltip = optionTooltips[1];
       fireEvent.change(optionTooltip.querySelector('input'), { target: { value: 'tooltip' } });
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE + 200); // Extra time for validation
       expect(ref.current.getValues(`${mockedItemName}.responseValues.options.1.tooltip`)).toEqual(
         'tooltip',
       );
@@ -351,7 +351,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
           .querySelector('input');
         fireEvent.change(alertInput, { target: { value: 'text' } });
 
-        await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+        await asyncTimeout(CHANGE_DEBOUNCE_VALUE + 200); // Extra time for validation
 
         setAlertOption(1, 0);
         setAlertRow(1, 0);

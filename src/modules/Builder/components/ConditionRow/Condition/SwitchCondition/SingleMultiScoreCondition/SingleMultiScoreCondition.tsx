@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useCallback } from 'react';
 
 import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 
@@ -15,12 +16,16 @@ export const SingleMultiScoreCondition = ({
   dataTestid,
 }: SingleMultiScoreConditionProps) => {
   const { t } = useTranslation('app');
-  const { control } = useCustomFormContext();
+  const { control, clearErrors } = useCustomFormContext();
 
   const optionValueName = `${payloadName}.optionValue`;
   const numberValueName = `${payloadName}.value`;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
   const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
+
+  const handleValueChange = useCallback(() => {
+    clearErrors(optionValueName);
+  }, [clearErrors, optionValueName]);
 
   return (
     <>
@@ -33,6 +38,7 @@ export const SingleMultiScoreCondition = ({
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-selection-value`}
         disabled={isValueSelectDisabled}
+        customChange={handleValueChange}
       />
     </>
   );

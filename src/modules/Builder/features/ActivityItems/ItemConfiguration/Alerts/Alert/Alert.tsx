@@ -13,6 +13,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { SelectEvent } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { StyledAlert, StyledDescription, StyledRow, StyledSelectController } from './Alert.styles';
@@ -26,6 +27,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
     getValues,
     watch,
     formState: { errors },
+    clearErrors,
   } = useCustomFormContext();
 
   const alertName = `${name}.alerts.${index}`;
@@ -68,6 +70,13 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   };
   const sliderErrorText = getSliderErrorText();
 
+  // Generic handler to clear validation errors on selection
+  const handleClearFieldError = (fieldName: string) => (_event: SelectEvent) => {
+    if (clearErrors) {
+      clearErrors(fieldName);
+    }
+  };
+
   const renderAlertContent = () => {
     switch (responseType) {
       case ItemResponseType.SingleSelection:
@@ -82,6 +91,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
                 isErrorVisible={false}
+                customChange={handleClearFieldError(alertValueName)}
                 data-testid={`${dataTestid}-selection-option`}
               />,
             ]}
@@ -99,6 +109,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
                 isErrorVisible={false}
+                customChange={handleClearFieldError(optionName)}
                 data-testid={`${dataTestid}-selection-per-row-option`}
               />,
               <StyledSelectController
@@ -107,6 +118,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('row')}
                 options={getItemsList(getValues(name) as ItemFormValues, alert)}
                 isErrorVisible={false}
+                customChange={handleClearFieldError(rowName)}
                 data-testid={`${dataTestid}-selection-per-row-row`}
               />,
             ]}
@@ -123,6 +135,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('slider')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
                 isErrorVisible={false}
+                customChange={handleClearFieldError(alertSliderIdName)}
                 data-testid={`${dataTestid}-slider-rows-row`}
               />,
               <StyledSelectController
@@ -131,6 +144,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('option')}
                 options={getSliderRowsItemList(getValues(name), alert)}
                 isErrorVisible={false}
+                customChange={handleClearFieldError(alertValueName)}
                 data-testid={`${dataTestid}-slider-rows-value`}
               />,
             ]}

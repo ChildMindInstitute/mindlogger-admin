@@ -6,6 +6,9 @@ export const getColumns = () => [
   {
     key: 'name',
     label: t('itemName'),
+    styles: {
+      width: '35%',
+    },
   },
   {
     key: 'question',

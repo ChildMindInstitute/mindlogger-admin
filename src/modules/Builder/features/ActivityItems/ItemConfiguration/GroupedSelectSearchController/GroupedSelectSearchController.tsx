@@ -11,6 +11,7 @@ import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Chip, ChipShape, OptionalTooltipWrapper } from 'shared/components';
 import { Svg } from 'shared/components/Svg';
@@ -72,11 +73,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   options,
   setValue,
   fieldName,
-  onBeforeChange,
+  onBeforeChange: _onBeforeChange,
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
   const { featureFlags } = useFeatureFlags();
+  const { clearErrors } = useCustomFormContext();
+
   const {
     getItemLanguageKey,
     getIsNotHaveSearchValue,
@@ -129,10 +132,11 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           const handleOnSelectChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
-            const newValue = event.target.value as ItemResponseType;
-
-            if (onBeforeChange && !onBeforeChange(newValue)) {
-              return;
+            // Clear errors immediately if field has error and user is making a selection
+            if (error && clearErrors) {
+              setTimeout(() => {
+                clearErrors(name);
+              }, 200);
             }
 
             if (checkIfSelectChangePopupIsVisible) {

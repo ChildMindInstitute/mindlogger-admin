@@ -6,10 +6,25 @@ on:
       - develop
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get git short sha
+        id: sha
+        run: |
+          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    outputs:
+      short-sha: ${{ steps.sha.outputs.sha }}
   build-deploy:
     name: Build and Deploy
+    needs: version
     uses: ./.github/workflows/_build-deploy.yaml
     with:
       env-name: dev
+      version: ${{ needs.version.outputs.short-sha }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_DEV }}
+

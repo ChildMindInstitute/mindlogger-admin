@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -21,15 +22,18 @@ import { useFeatureFlags } from 'shared/hooks';
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
-export const ActivityFlowAbout = () => {
+export const ActivityFlowAbout = React.memo(() => {
   const { t } = useTranslation();
   const { featureFlags } = useFeatureFlags();
 
-  const { control, watch } = useCustomFormContext();
+  const { control, getValues, clearErrors, trigger } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
+  const activityFlowIndex = useMemo(() => {
+    const activityFlows: AppletFormValues['activityFlows'] = getValues('activityFlows');
+
+    return getActivityFlowIndex(activityFlows, activityFlowId || '');
+  }, [activityFlowId, getValues]);
 
   const dataTestid = 'builder-activity-flows-about';
   const commonProps = {
@@ -50,7 +54,18 @@ export const ActivityFlowAbout = () => {
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
             restrictExceededValueLength
+            withDebounce
             data-testid={`${dataTestid}-name`}
+            onChange={(e, onChange) => {
+              // Clear errors immediately when user starts typing
+              clearErrors(`activityFlows.${activityFlowIndex}.name`);
+              // Call the original onChange
+              onChange();
+              // Trigger revalidation after a delay to allow debounce to complete
+              setTimeout(() => {
+                trigger(`activityFlows.${activityFlowIndex}.name`);
+              }, 600);
+            }}
           />
         </Box>
         <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -63,7 +78,18 @@ export const ActivityFlowAbout = () => {
             restrictExceededValueLength
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}
+            withDebounce
             data-testid={`${dataTestid}-description`}
+            onChange={(e, onChange) => {
+              // Clear errors immediately when user starts typing
+              clearErrors(`activityFlows.${activityFlowIndex}.description`);
+              // Call the original onChange
+              onChange();
+              // Trigger revalidation after a delay to allow debounce to complete
+              setTimeout(() => {
+                trigger(`activityFlows.${activityFlowIndex}.description`);
+              }, 600);
+            }}
           />
         </Box>
         <StyledTitleMedium
@@ -118,4 +144,4 @@ export const ActivityFlowAbout = () => {
       </StyledWrapper>
     </BuilderContainer>
   );
-};
+});
