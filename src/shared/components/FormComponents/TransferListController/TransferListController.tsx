@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -35,6 +35,8 @@ export const TransferListController = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   const [search, setSearch] = useState('');
+  // Track the latest selected keys across rapid interactions to avoid lost updates
+  const selectedRef = useRef<string[]>([]);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => setSearch(event.target.value);
 
@@ -45,21 +47,37 @@ export const TransferListController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
+        // Sync the ref to the current value each render so event handlers see the latest state
+        selectedRef.current = (value || []) as string[];
+
         const selectionSectionItems =
           selectedItems ?? items?.filter((item) => value?.includes(getItemKey(item)));
 
         const handleSelect: DataTableProps['onSelect'] = (selectedKey, isSelected) => {
-          const newValues = isSelected
-            ? value?.filter((key: string | number) => key !== selectedKey)
-            : [...(value || []), selectedKey];
-          onChange(newValues);
-          onChangeSelectedCallback?.(newValues);
+          const key = selectedKey as string;
+          const prev = selectedRef.current || [];
+          let next: string[];
+
+          if (isSelected) {
+            next = prev.filter((k: string) => k !== key);
+          } else if (prev.includes(key)) {
+            next = prev;
+          } else {
+            next = [...prev, key];
+          }
+
+          // Update the ref immediately so subsequent fast clicks see the latest state
+          selectedRef.current = next;
+          onChange(next);
+          onChangeSelectedCallback?.(next);
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
-          const newValues = isAllSelected ? [] : items?.map((item) => getItemKey(item)) || [];
-          onChange(newValues);
-          onChangeSelectedCallback?.(newValues);
+          const mapped = (items?.map((item) => getItemKey(item)) as string[]) || [];
+          const next = isAllSelected ? [] : mapped;
+          selectedRef.current = next;
+          onChange(next);
+          onChangeSelectedCallback?.(next);
         };
 
         const isSearchable = hasSearch && search && searchKey;
