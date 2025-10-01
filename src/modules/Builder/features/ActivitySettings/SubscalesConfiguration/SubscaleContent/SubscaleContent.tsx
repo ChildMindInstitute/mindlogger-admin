@@ -36,7 +36,7 @@ export const SubscaleContent = ({
 }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-  const { clearErrors, trigger } = useFormContext();
+  const { clearErrors, trigger, getFieldState } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
@@ -89,10 +89,22 @@ export const SubscaleContent = ({
           label={t('subscaleName')}
           data-testid={`${dataTestid}-name`}
           withDebounce
+          onInput={() => {
+            // Avoid unnecessary rerenders: clear only if an error is currently shown
+            if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+          }}
           onChange={(e, onChange) => {
             onChange();
             // Also update the name of this subscale in any score reports that are linked to it
             updateSubscaleNameInReports(subscaleName, e.target.value);
+          }}
+          onBlur={(e) => {
+            // Only validate on blur if the field is actually empty.
+            // Use the event target's current value to avoid stale form state with debounce.
+            const currentValue = (e.target as HTMLInputElement).value;
+            if (!currentValue || currentValue.trim() === '') {
+              trigger(`${name}.name`);
+            }
           }}
         />
         <SelectController
