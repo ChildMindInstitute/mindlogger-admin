@@ -1,6 +1,22 @@
 import 'mock-local-storage';
 import '@testing-library/jest-dom';
 
+// Mock ResizeObserver
+const mockResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+global.ResizeObserver = mockResizeObserver;
+
+// Also set prototype methods
+Object.setPrototypeOf(mockResizeObserver.prototype, {
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+});
+
 jest.mock('react-secure-storage', () => ({
   setItem: jest.fn(() => Promise.resolve()),
   getItem: jest.fn(() => Promise.resolve('')),
