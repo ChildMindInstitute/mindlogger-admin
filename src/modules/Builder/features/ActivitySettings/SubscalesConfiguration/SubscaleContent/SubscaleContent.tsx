@@ -126,6 +126,7 @@ export const SubscaleContent = ({
           columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}
+          useVirtualizedList
           data-testid={`${dataTestid}-items`}
           onChangeSelectedCallback={() => {
             // Clear errors immediately when user selects/deselects items
