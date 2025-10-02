@@ -1,4 +1,4 @@
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ConditionRow, ConditionRowOld } from 'modules/Builder/components';
@@ -34,6 +34,7 @@ export const ConditionContent = ({
   const conditionsName = `${name}.conditions`;
   const { featureFlags } = useFeatureFlags();
   const { control, getFieldState, setValue } = useCustomFormContext();
+  const { trigger } = useFormContext();
   const { fieldName } = useCurrentActivity();
   const {
     fields: conditions,
@@ -70,10 +71,16 @@ export const ConditionContent = ({
         maxValue: +(maxValue ?? scoreRange?.maxScore ?? DEFAULT_PAYLOAD_MAX_VALUE).toFixed(2),
       };
 
-      return setValue(conditionPayloadName, payload);
+      setValue(conditionPayloadName, payload);
+      // Trigger validation on conditions array to clear "at least one condition" error
+      setTimeout(() => trigger(conditionsName), 100);
+
+      return;
     }
 
     setValue(conditionPayloadName, getPayload({ conditionType, conditionPayload, selectedItem }));
+    // Trigger validation on conditions array to clear "at least one condition" error
+    setTimeout(() => trigger(conditionsName), 100);
   };
 
   return (
