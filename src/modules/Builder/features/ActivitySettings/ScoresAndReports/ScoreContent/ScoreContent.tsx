@@ -82,7 +82,7 @@ export const ScoreContent = ({
   const navigate = useNavigate();
   const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
-  const { clearErrors, trigger } = useFormContext();
+  const { clearErrors, trigger, getFieldState } = useFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
@@ -438,7 +438,21 @@ export const ScoreContent = ({
                 key={scoreNameField}
                 name={scoreNameField}
                 label={t('scoreName')}
-                onBlur={handleNameBlur}
+                onInput={() => {
+                  // Clear errors immediately when user starts typing
+                  if (getFieldState(scoreNameField).error) clearErrors(scoreNameField);
+                }}
+                onBlur={(e) => {
+                  // With debounce, manually set current DOM value before custom blur handler
+                  const currentValue = (e.target as HTMLInputElement).value;
+                  setValue(scoreNameField, currentValue, { shouldValidate: false });
+                  setTimeout(() => {
+                    // Trigger validation first to show errors immediately
+                    trigger(scoreNameField);
+                    // Then run custom blur logic
+                    handleNameBlur();
+                  }, 0);
+                }}
                 sx={{ mb: theme.spacing(4.8) }}
                 data-testid={`${dataTestid}-name`}
                 withDebounce
