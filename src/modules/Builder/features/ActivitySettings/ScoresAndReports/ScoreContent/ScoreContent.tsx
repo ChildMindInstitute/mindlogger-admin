@@ -260,6 +260,8 @@ export const ScoreContent = ({
 
       if (!newLinkedSubscale) return;
 
+      // Clear validation error when subscale is selected
+      clearErrors(subscaleNameField);
       setValue(subscaleNameField, subscaleName);
 
       if (scoringType === 'score') {
@@ -284,6 +286,7 @@ export const ScoreContent = ({
       scoringType,
       setValue,
       eligibleSubscales,
+      clearErrors,
     ],
   );
 
