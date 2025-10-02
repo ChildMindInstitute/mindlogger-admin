@@ -95,16 +95,18 @@ export const SubscaleContent = ({
           }}
           onChange={(e, onChange) => {
             onChange();
-            // Also update the name of this subscale in any score reports that are linked to it
+            // Update the name of this subscale in any score reports that are linked to it
             updateSubscaleNameInReports(subscaleName, e.target.value);
           }}
           onBlur={(e) => {
-            // Only validate on blur if the field is actually empty.
-            // Use the event target's current value to avoid stale form state with debounce.
+            // With debounce, we need to manually set the current DOM value and then validate
+            // to avoid validation running with stale form state
             const currentValue = (e.target as HTMLInputElement).value;
-            if (!currentValue || currentValue.trim() === '') {
+            setValue(`${name}.name`, currentValue, { shouldValidate: false });
+            // Use setTimeout to ensure setValue completes before validation
+            setTimeout(() => {
               trigger(`${name}.name`);
-            }
+            }, 0);
           }}
         />
         <SelectController
