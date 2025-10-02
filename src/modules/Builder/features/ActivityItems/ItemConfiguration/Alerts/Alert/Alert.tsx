@@ -20,6 +20,22 @@ import { StyledAlert, StyledDescription, StyledRow, StyledSelectController } fro
 import { AlertProps } from './Alert.types';
 import { getItemsList, getOptionsList, getSliderRowsItemList } from './Alert.utils';
 
+// Utility to handle alert text validation and error clearing
+const handleAlertTextValidation = (
+  value: string,
+  applyChange: () => void,
+  trigger: (fieldName: string) => void,
+  clearErrors: (fieldName: string) => void,
+  fieldName: string,
+) => {
+  applyChange();
+  if (!value || value.trim() === '') {
+    setTimeout(() => trigger(fieldName), 0);
+  } else {
+    clearErrors(fieldName);
+  }
+};
+
 export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const { t } = useTranslation('app');
   const {
@@ -28,6 +44,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
     watch,
     formState: { errors },
     clearErrors,
+    trigger,
   } = useCustomFormContext();
 
   const alertName = `${name}.alerts.${index}`;
@@ -214,6 +231,15 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
           fieldset: { borderColor: variables.palette.outline_variant },
         }}
         data-testid={`${dataTestid}-text`}
+        onChange={(e, applyChange) =>
+          handleAlertTextValidation(
+            e.target.value,
+            applyChange,
+            trigger,
+            clearErrors,
+            alertTextName,
+          )
+        }
       />
       {sliderErrorText && (
         <StyledBodyMedium
