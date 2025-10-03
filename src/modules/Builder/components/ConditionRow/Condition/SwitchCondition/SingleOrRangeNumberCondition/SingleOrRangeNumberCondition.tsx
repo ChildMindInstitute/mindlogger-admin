@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useWatch, useFormContext } from 'react-hook-form';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -23,9 +24,31 @@ export const SingleOrRangeNumberCondition = ({
   isRangeValueShown,
   dataTestid,
 }: SingleOrRangeNumberConditionProps) => {
-  const { control } = useCustomFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
   const { clearErrors, trigger } = useFormContext();
   const rowIndex = useWatch({ name: rowIndexName });
+
+  // Local state for instant typing feedback
+  const [localValues, setLocalValues] = useState(() => ({
+    number: String(getValues(numberValueName) ?? ''),
+    min: String(getValues(minValueName) ?? ''),
+    max: String(getValues(maxValueName) ?? ''),
+  }));
+
+  // Sync local state when form values change externally
+  const formValues = {
+    number: useWatch({ name: numberValueName, control }),
+    min: useWatch({ name: minValueName, control }),
+    max: useWatch({ name: maxValueName, control }),
+  };
+
+  useEffect(() => {
+    setLocalValues({
+      number: String(formValues.number ?? ''),
+      min: String(formValues.min ?? ''),
+      max: String(formValues.max ?? ''),
+    });
+  }, [formValues.number, formValues.min, formValues.max]);
 
   const { minNumber, maxNumber } = getConditionMinMaxValues({
     item: selectedItem,
@@ -49,12 +72,14 @@ export const SingleOrRangeNumberCondition = ({
           name={numberValueName}
           minNumberValue={minNumber}
           maxNumberValue={maxNumber}
-          onInput={() => {
-            // Clear errors immediately when user starts typing
+          value={localValues.number}
+          onChange={(e) => {
+            setLocalValues((prev) => ({ ...prev, number: e.target.value }));
             clearErrors(numberValueName);
           }}
-          onBlur={() => {
-            // Trigger validation on blur for performance
+          onBlur={(e) => {
+            const value = e.target.value;
+            setValue(numberValueName, value === '' ? '' : Number(value));
             setTimeout(() => trigger(numberValueName), 100);
           }}
           data-testid={`${dataTestid}-slider-value`}
@@ -69,12 +94,14 @@ export const SingleOrRangeNumberCondition = ({
             name={minValueName}
             minNumberValue={leftRange.minNumber}
             maxNumberValue={leftRange.maxNumber}
-            onInput={() => {
-              // Clear errors immediately when user starts typing
+            value={localValues.min}
+            onChange={(e) => {
+              setLocalValues((prev) => ({ ...prev, min: e.target.value }));
               clearErrors(minValueName);
             }}
-            onBlur={() => {
-              // Trigger validation on blur for performance
+            onBlur={(e) => {
+              const value = e.target.value;
+              setValue(minValueName, value === '' ? '' : Number(value));
               setTimeout(() => trigger(minValueName), 100);
             }}
             data-testid={`${dataTestid}-min-value`}
@@ -86,12 +113,14 @@ export const SingleOrRangeNumberCondition = ({
             name={maxValueName}
             minNumberValue={rightRange.minNumber}
             maxNumberValue={rightRange.maxNumber}
-            onInput={() => {
-              // Clear errors immediately when user starts typing
+            value={localValues.max}
+            onChange={(e) => {
+              setLocalValues((prev) => ({ ...prev, max: e.target.value }));
               clearErrors(maxValueName);
             }}
-            onBlur={() => {
-              // Trigger validation on blur for performance
+            onBlur={(e) => {
+              const value = e.target.value;
+              setValue(maxValueName, value === '' ? '' : Number(value));
               setTimeout(() => trigger(maxValueName), 100);
             }}
             data-testid={`${dataTestid}-max-value`}
