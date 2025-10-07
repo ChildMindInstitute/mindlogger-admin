@@ -74,8 +74,15 @@ export const SingleOrRangeNumberCondition = ({
           maxNumberValue={maxNumber}
           value={localValues.number}
           onChange={(e) => {
-            setLocalValues((prev) => ({ ...prev, number: e.target.value }));
-            clearErrors(numberValueName);
+            const value = e.target.value;
+            setLocalValues((prev) => ({ ...prev, number: value }));
+            if (value === '') {
+              // Trigger validation immediately when content is cleared
+              setValue(numberValueName, '');
+              setTimeout(() => trigger(numberValueName), 0);
+            } else {
+              clearErrors(numberValueName);
+            }
           }}
           onBlur={(e) => {
             const value = e.target.value;
@@ -96,8 +103,15 @@ export const SingleOrRangeNumberCondition = ({
             maxNumberValue={leftRange.maxNumber}
             value={localValues.min}
             onChange={(e) => {
-              setLocalValues((prev) => ({ ...prev, min: e.target.value }));
-              clearErrors(minValueName);
+              const value = e.target.value;
+              setLocalValues((prev) => ({ ...prev, min: value }));
+              if (value === '') {
+                // Trigger validation immediately when content is cleared
+                setValue(minValueName, '');
+                setTimeout(() => trigger(minValueName), 0);
+              } else {
+                clearErrors(minValueName);
+              }
             }}
             onBlur={(e) => {
               const value = e.target.value;
@@ -115,8 +129,15 @@ export const SingleOrRangeNumberCondition = ({
             maxNumberValue={rightRange.maxNumber}
             value={localValues.max}
             onChange={(e) => {
-              setLocalValues((prev) => ({ ...prev, max: e.target.value }));
-              clearErrors(maxValueName);
+              const value = e.target.value;
+              setLocalValues((prev) => ({ ...prev, max: value }));
+              if (value === '') {
+                // Trigger validation immediately when content is cleared
+                setValue(maxValueName, '');
+                setTimeout(() => trigger(maxValueName), 0);
+              } else {
+                clearErrors(maxValueName);
+              }
             }}
             onBlur={(e) => {
               const value = e.target.value;
