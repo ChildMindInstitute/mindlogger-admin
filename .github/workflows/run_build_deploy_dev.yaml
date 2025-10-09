@@ -27,4 +27,5 @@ jobs:
       version: ${{ needs.version.outputs.short-sha }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_DEV }}
+      datadog-api-key: ${{ secrets.DATADOG_API_KEY }}
 

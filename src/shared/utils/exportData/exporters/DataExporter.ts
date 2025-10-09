@@ -4,6 +4,7 @@ import { DateTime, Interval } from 'luxon';
 import { DEFAULT_API_RESULTS_PER_PAGE } from 'modules/Dashboard/api/api.const';
 import { Response } from 'shared/api';
 import { exportTemplate } from 'shared/utils/exportTemplate';
+import { sanitizeCSVData } from 'shared/utils/csvSanitization';
 
 export type DataExporterOptions = {
   /**
@@ -146,10 +147,13 @@ export abstract class DataExporter<D, O extends DataExporterOptions = DataExport
   abstract exportData(params: O): Promise<void>;
 
   async downloadAsCSV(data: D[]): Promise<void> {
+    // Sanitize data before CSV export to prevent CSV injection attacks
+    const sanitizedData = sanitizeCSVData(data as Record<string, unknown>[]);
+
     await exportTemplate({
-      data,
+      data: sanitizedData,
       fileName: this.fileNamePrefix,
-      defaultData: data.length > 0 ? null : this.getCSVHeaders(),
+      defaultData: sanitizedData.length > 0 ? null : this.getCSVHeaders(),
     });
   }
 }

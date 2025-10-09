@@ -19,6 +19,8 @@ on:
     secrets:
       slack-webhook:
         required: true
+      datadog-api-key:
+        required: true
 
 concurrency:
   cancel-in-progress: false
@@ -112,6 +114,15 @@ jobs:
           for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("admin"; "i")) | .Id'); do
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
+
+      - name: Upload Datadog sourcemaps
+        env:
+          DATADOG_API_KEY: ${{ secrets.datadog-api-key }}
+        run: |
+          npx @datadog/datadog-ci sourcemaps upload build/static/js --service mindlogger-admin \
+            --release-version '${{ inputs.version }}' \
+            --minified-path-prefix 'https://${{ needs.setup-vars.outputs.host }}/static/js'
+          
 
 
   on-deploy-failure:

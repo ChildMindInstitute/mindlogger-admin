@@ -11,6 +11,9 @@ on:
       cluster:
         description: ECS Cluster name
         value: ${{ jobs.setup-vars.outputs.cluster }}
+      host:
+        description: Deployment hostname
+        value: ${{ jobs.setup-vars.outputs.host }}
     inputs:
       env-name:
         required: true
@@ -51,6 +54,19 @@ jobs:
               exit 1;
           esac
 
+      - name: Map env to hostname
+        id: host
+        run: |
+          ENV_NAME="${{ inputs.env-name }}"
+          case "$ENV_NAME" in
+            "prod")
+              echo "host=admin.gettingcurious.com" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "host=admin-${{ inputs.env-name }}.cmiml.net" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
       - name: Map env to AWS Region
         id: region
         run: |
@@ -80,3 +96,4 @@ jobs:
       role: ${{ steps.role.outputs.role }}
       region: ${{ steps.region.outputs.region }}
       cluster: ${{ steps.cluster.outputs.cluster }}
+      host: ${{ steps.host.outputs.host }}
