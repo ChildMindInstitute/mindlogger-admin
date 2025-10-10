@@ -322,13 +322,28 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletEncryption = appletData?.encryption;
   const encryptionRef = useRef<Encryption | undefined>(appletEncryption);
-  // Track the version before save attempt to detect if save succeeded despite network error
   const versionBeforeSaveRef = useRef<string | undefined>(appletData?.version);
+  const isRetryAfterNetworkErrorRef = useRef(false);
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
   const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
   const isDisplayNameDirty = dirtyFields?.displayName;
+
+  // Sync refs with server state, but skip during retry to preserve pre-save version
+  useEffect(() => {
+    if (isRetryAfterNetworkErrorRef.current) {
+      return;
+    }
+
+    if (appletData?.version) {
+      versionBeforeSaveRef.current = appletData.version;
+    }
+
+    if (appletData?.encryption) {
+      encryptionRef.current = appletData.encryption;
+    }
+  }, [appletData?.version, appletData?.encryption]);
 
   useEffect(() => {
     const isUpdateOrCreate =
@@ -344,6 +359,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       if (hasAccessDeniedError) return;
 
       setPublishProcessStep(SaveAndPublishSteps.Failed);
+      isRetryAfterNetworkErrorRef.current = true;
     }
   }, [responseStatus, responseTypePrefix, isResponseStatusError, hasAccessDeniedError]);
 
@@ -441,8 +457,8 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    // On retry, check if the save already succeeded by refetching applet data
-    if (appletId && ownerId && versionBeforeSaveRef.current) {
+    // On retry, check if save already succeeded by comparing server version
+    if (appletId && ownerId && isRetryAfterNetworkErrorRef.current) {
       try {
         const { getApplet } = applet.thunk;
         const refreshedApplet = await dispatch(getApplet({ appletId }));
@@ -450,19 +466,20 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
         if (getApplet.fulfilled.match(refreshedApplet)) {
           const currentVersion = refreshedApplet.payload.data.result?.version;
 
-          // If version changed, the save already succeeded despite network error
           if (currentVersion !== versionBeforeSaveRef.current) {
+            versionBeforeSaveRef.current = currentVersion;
             showSuccessBanner(true);
 
             if (appletId && ownerId) {
               await navigateToApplet(appletId);
             }
 
+            isRetryAfterNetworkErrorRef.current = false;
+
             return;
           }
         }
       } catch (error) {
-        // If refetch fails, proceed with retry
         console.warn('Failed to check applet version before retry:', error);
       }
     }
@@ -519,8 +536,10 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   };
 
   const sendRequest = async (password?: string) => {
-    // Capture current applet version before attempting save
-    versionBeforeSaveRef.current = appletData?.version;
+    // Capture version before save (skip if already captured during retry)
+    if (!isRetryAfterNetworkErrorRef.current) {
+      versionBeforeSaveRef.current = appletData?.version;
+    }
 
     const encryptionData: Encryption | undefined =
       password && ownerId
@@ -568,6 +587,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
         applet: result.payload.data.result,
       });
 
+      versionBeforeSaveRef.current = result.payload.data.result?.version;
+      isRetryAfterNetworkErrorRef.current = false;
+
       showSuccessBanner(true);
 
       if (shouldNavigateRef.current) {
@@ -588,6 +610,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
         action: MixpanelEventType.AppletCreatedSuccessfully,
         applet: result.payload.data.result,
       });
+
+      versionBeforeSaveRef.current = result.payload.data.result?.version;
+      isRetryAfterNetworkErrorRef.current = false;
 
       showSuccessBanner();
 
