@@ -321,7 +321,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletEncryption = appletData?.encryption;
-  const encryptionRef = useRef<Encryption | undefined>(appletEncryption);
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
@@ -492,11 +491,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
   const sendRequest = async (password?: string) => {
     const encryptionData: Encryption | undefined =
-      password && ownerId
-        ? await getEncryptionToServer(password, ownerId)
-        : appletEncryption || encryptionRef.current;
-
-    encryptionRef.current = encryptionData;
+      password && ownerId ? await getEncryptionToServer(password, ownerId) : appletEncryption;
 
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
