@@ -322,8 +322,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletEncryption = appletData?.encryption;
   const encryptionRef = useRef<Encryption | undefined>(appletEncryption);
-  // Track the version before save attempt to detect if save succeeded despite network error
-  const versionBeforeSaveRef = useRef<string | undefined>(appletData?.version);
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
@@ -441,32 +439,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    // On retry, check if the save already succeeded by refetching applet data
-    if (appletId && ownerId && versionBeforeSaveRef.current) {
-      try {
-        const { getApplet } = applet.thunk;
-        const refreshedApplet = await dispatch(getApplet({ appletId }));
-
-        if (getApplet.fulfilled.match(refreshedApplet)) {
-          const currentVersion = refreshedApplet.payload.data.result?.version;
-
-          // If version changed, the save already succeeded despite network error
-          if (currentVersion !== versionBeforeSaveRef.current) {
-            showSuccessBanner(true);
-
-            if (appletId && ownerId) {
-              await navigateToApplet(appletId);
-            }
-
-            return;
-          }
-        }
-      } catch (error) {
-        // If refetch fails, proceed with retry
-        console.warn('Failed to check applet version before retry:', error);
-      }
-    }
-
     if (!isDirty) {
       dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
@@ -519,9 +491,6 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   };
 
   const sendRequest = async (password?: string) => {
-    // Capture current applet version before attempting save
-    versionBeforeSaveRef.current = appletData?.version;
-
     const encryptionData: Encryption | undefined =
       password && ownerId
         ? await getEncryptionToServer(password, ownerId)
@@ -530,22 +499,22 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     encryptionRef.current = encryptionData;
 
     setPublishProcessPopupOpened(true);
-    const appletFormData = getAppletData(encryptionData);
+    const appletData = getAppletData(encryptionData);
 
-    if (!appletFormData) return;
+    if (!appletData) return;
 
     let result;
     try {
       const uniqueNameResult =
-        isDisplayNameDirty && (await getAppletUniqueNameApi({ name: appletFormData.displayName }));
+        isDisplayNameDirty && (await getAppletUniqueNameApi({ name: appletData.displayName }));
       appletUniqueNameRef.current = uniqueNameResult?.data?.result?.name || null;
     } catch (error) {
       appletUniqueNameRef.current = null;
       console.warn(error);
     } finally {
       const body = {
-        ...appletFormData,
-        displayName: appletUniqueNameRef.current || appletFormData.displayName,
+        ...appletData,
+        displayName: appletUniqueNameRef.current || appletData.displayName,
       };
       checkIfAppletBeingCreatedOrUpdatedRef.current = true;
       if ((isNewApplet || !appletId) && ownerId) {
