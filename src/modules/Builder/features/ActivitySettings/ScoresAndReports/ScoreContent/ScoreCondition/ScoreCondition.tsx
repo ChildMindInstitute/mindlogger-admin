@@ -113,18 +113,26 @@ export const ScoreCondition = ({
               key={`${name}.name`}
               name={`${name}.name`}
               label={t('scoreConditionName')}
-              onInput={() => {
-                // Clear errors immediately when user starts typing
-                if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+              onInput={(e) => {
+                const currentValue = (e.target as HTMLInputElement).value;
+                if (currentValue !== '' && getFieldState(`${name}.name`).error) {
+                  clearErrors(`${name}.name`);
+                }
+              }}
+              onChange={(e, applyChange) => {
+                const currentValue = (e.target as HTMLInputElement).value;
+                if (currentValue === '') {
+                  setValue(`${name}.name`, currentValue, { shouldValidate: true });
+
+                  return;
+                }
+                applyChange();
               }}
               onBlur={(e) => {
-                // With debounce, manually set current DOM value before custom blur handler
                 const currentValue = (e.target as HTMLInputElement).value;
                 setValue(`${name}.name`, currentValue, { shouldValidate: false });
                 setTimeout(() => {
-                  // Trigger validation first to show errors immediately
                   trigger(`${name}.name`);
-                  // Then run custom blur logic
                   handleConditionNameBlur();
                 }, 0);
               }}

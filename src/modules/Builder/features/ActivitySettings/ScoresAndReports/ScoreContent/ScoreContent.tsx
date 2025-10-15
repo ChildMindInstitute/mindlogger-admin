@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
@@ -339,8 +339,8 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter(
-      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    const newSelectedItems = scoreItems?.filter((item) =>
+      chosenItems?.includes(getEntityKey(item, true)),
     );
     updateScoreConditionsPayload({
       setValue,
@@ -441,18 +441,31 @@ export const ScoreContent = ({
                 key={scoreNameField}
                 name={scoreNameField}
                 label={t('scoreName')}
-                onInput={() => {
-                  // Clear errors immediately when user starts typing
-                  if (getFieldState(scoreNameField).error) clearErrors(scoreNameField);
+                onInput={(e) => {
+                  const currentValue = (e.target as HTMLInputElement).value;
+                  if (currentValue !== '' && getFieldState(scoreNameField).error) {
+                    clearErrors(scoreNameField);
+                  }
+                }}
+                onChange={(e, applyChange) => {
+                  const currentValue = (e.target as HTMLInputElement).value;
+                  if (currentValue === '') {
+                    setValue(scoreNameField, currentValue, { shouldValidate: true });
+
+                    return;
+                  }
+                  applyChange();
                 }}
                 onBlur={(e) => {
-                  // With debounce, manually set current DOM value before custom blur handler
                   const currentValue = (e.target as HTMLInputElement).value;
+                  if (currentValue === '') {
+                    handleNameBlur();
+
+                    return;
+                  }
                   setValue(scoreNameField, currentValue, { shouldValidate: false });
                   setTimeout(() => {
-                    // Trigger validation first to show errors immediately
                     trigger(scoreNameField);
-                    // Then run custom blur logic
                     handleNameBlur();
                   }, 0);
                 }}
