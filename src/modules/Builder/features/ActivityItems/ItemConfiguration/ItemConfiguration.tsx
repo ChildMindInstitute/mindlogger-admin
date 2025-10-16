@@ -42,7 +42,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
-  const { control, getFieldState, setValue, getValues, setError, clearErrors } =
+  const { control, getFieldState, setValue, getValues, setError, clearErrors, trigger } =
     useCustomFormContext();
 
   const { fieldName, activity } = useCurrentActivity();
@@ -183,6 +183,18 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               data-testid="builder-activity-items-item-configuration-name"
               FormHelperTextProps={{
                 ...(hasSameNameInSystemItemsError && { sx: itemNameHelperTextSxProps }),
+              }}
+              onInput={() => {
+                // Avoid unnecessary rerenders: clear only if an error is currently shown
+                if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+              }}
+              onChange={(e, applyChange) => {
+                applyChange();
+                // Trigger validation for both empty and non-empty values
+                // This ensures uniqueness validation runs as user types
+                setTimeout(() => {
+                  trigger(`${name}.name`);
+                }, 100);
               }}
             />
           </Grid>

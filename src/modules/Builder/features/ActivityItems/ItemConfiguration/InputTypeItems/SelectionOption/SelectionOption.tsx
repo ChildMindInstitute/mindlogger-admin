@@ -267,14 +267,27 @@ export const SelectionOption = ({
                     name={optionTextName}
                     label={t('optionText')}
                     placeholder={placeholder}
-                    onChange={(event) =>
+                    onChange={(event) => {
                       handleOptionTextChange({
                         event,
                         fieldName: optionTextName,
                         maxLength: optionTextMaxLength,
-                      })
-                    }
+                      });
+                      // Trigger validation to check if field is required
+                      setTimeout(() => {
+                        trigger(optionTextName);
+                      }, 100);
+                    }}
                     maxLength={optionTextMaxLength}
+                    sx={{
+                      // Ensure red border persists whenever error exists
+                      '&.MuiTextField-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                        borderColor: variables.palette.error,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                        borderColor: variables.palette.error,
+                      },
+                    }}
                     data-testid={`${dataTestid}-text`}
                     InputLabelProps={{ shrink: true }}
                   />
