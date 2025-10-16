@@ -42,7 +42,7 @@ export const ScoreCondition = ({
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
   const { control, setValue, watch, getValues } = useCustomFormContext();
-  const { trigger, clearErrors, getFieldState } = useFormContext();
+  const { trigger } = useFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);
   const targetSelector = `report-${scoreKey}`;
@@ -113,12 +113,6 @@ export const ScoreCondition = ({
               key={`${name}.name`}
               name={`${name}.name`}
               label={t('scoreConditionName')}
-              onInput={(e) => {
-                const currentValue = (e.target as HTMLInputElement).value;
-                if (currentValue !== '' && getFieldState(`${name}.name`).error) {
-                  clearErrors(`${name}.name`);
-                }
-              }}
               onChange={(e, applyChange) => {
                 const currentValue = (e.target as HTMLInputElement).value;
                 if (currentValue === '') {
@@ -127,17 +121,29 @@ export const ScoreCondition = ({
                   return;
                 }
                 applyChange();
+                // Debounced uniqueness/required validation
+                setTimeout(() => {
+                  trigger(`${name}.name`);
+                }, 100);
               }}
               onBlur={(e) => {
                 const currentValue = (e.target as HTMLInputElement).value;
-                setValue(`${name}.name`, currentValue, { shouldValidate: false });
-                setTimeout(() => {
-                  trigger(`${name}.name`);
+                setValue(`${name}.name`, currentValue, { shouldValidate: true });
+                if (currentValue !== '') {
                   handleConditionNameBlur();
-                }, 0);
+                }
               }}
               data-testid={`${dataTestid}-name`}
               withDebounce
+              sx={{
+                // Persist red border on error (local override only for this field)
+                '&.MuiTextField-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                  borderColor: variables.palette.error,
+                },
+                '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                  borderColor: variables.palette.error,
+                },
+              }}
             />
             <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
               <CopyId

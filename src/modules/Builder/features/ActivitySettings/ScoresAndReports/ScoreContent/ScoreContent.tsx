@@ -82,7 +82,7 @@ export const ScoreContent = ({
   const navigate = useNavigate();
   const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
-  const { clearErrors, trigger, getFieldState } = useFormContext();
+  const { clearErrors, trigger } = useFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
@@ -441,37 +441,40 @@ export const ScoreContent = ({
                 key={scoreNameField}
                 name={scoreNameField}
                 label={t('scoreName')}
-                onInput={(e) => {
-                  const currentValue = (e.target as HTMLInputElement).value;
-                  if (currentValue !== '' && getFieldState(scoreNameField).error) {
-                    clearErrors(scoreNameField);
-                  }
-                }}
+                withDebounce
                 onChange={(e, applyChange) => {
                   const currentValue = (e.target as HTMLInputElement).value;
+                  // For empty value, validate immediately
                   if (currentValue === '') {
                     setValue(scoreNameField, currentValue, { shouldValidate: true });
 
                     return;
                   }
+                  // Apply the original change to keep input/DOM in sync
                   applyChange();
+                  // Then trigger validation to show uniqueness errors promptly
+                  setTimeout(() => {
+                    trigger(scoreNameField);
+                  }, 100);
                 }}
                 onBlur={(e) => {
                   const currentValue = (e.target as HTMLInputElement).value;
-                  if (currentValue === '') {
+                  setValue(scoreNameField, currentValue, { shouldValidate: true });
+                  if (currentValue !== '') {
                     handleNameBlur();
-
-                    return;
                   }
-                  setValue(scoreNameField, currentValue, { shouldValidate: false });
-                  setTimeout(() => {
-                    trigger(scoreNameField);
-                    handleNameBlur();
-                  }, 0);
                 }}
-                sx={{ mb: theme.spacing(4.8) }}
+                sx={{
+                  mb: theme.spacing(4.8),
+                  // Ensure red border persists whenever error exists
+                  '&.MuiTextField-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                    borderColor: variables.palette.error,
+                  },
+                  '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                    borderColor: variables.palette.error,
+                  },
+                }}
                 data-testid={`${dataTestid}-name`}
-                withDebounce
               />
               <SelectController
                 name={calculationTypeField}
