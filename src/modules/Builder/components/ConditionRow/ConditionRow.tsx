@@ -105,11 +105,15 @@ export const ConditionRow = ({
           shouldValidate: false,
           shouldDirty: false,
         });
-        setValue(conditionPayloadName, {}, {
-          shouldTouch: false,
-          shouldValidate: false,
-          shouldDirty: false,
-        });
+        setValue(
+          conditionPayloadName,
+          {},
+          {
+            shouldTouch: false,
+            shouldValidate: false,
+            shouldDirty: false,
+          },
+        );
       }
 
       if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {

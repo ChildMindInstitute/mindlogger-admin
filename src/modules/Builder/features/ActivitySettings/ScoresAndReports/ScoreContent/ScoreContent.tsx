@@ -240,16 +240,16 @@ export const ScoreContent = ({
     [
       activity,
       getValues,
-      name,
+      reportsName,
       prevCalculationType,
       prevScoreName,
-      reportsName,
       score?.calculationType,
       score?.id,
       scoreConditionalsName,
       scoreName,
       selectedItems,
       setValue,
+      scoreIdField,
     ],
   );
 
@@ -265,12 +265,18 @@ export const ScoreContent = ({
       setValue(subscaleNameField, subscaleName);
 
       if (scoringType === 'score') {
+        // Update calculation type from linked subscale and clear its errors
         setValue(calculationTypeField, newLinkedSubscale.scoring);
+        clearErrors(calculationTypeField);
+        setTimeout(() => trigger(calculationTypeField), 0);
 
         const eligibleItems = newLinkedSubscale.items.filter(
           (item) => !!activity?.items.some((activityItem) => activityItem.id === item),
         );
+        // Update items and clear their errors since value changed programmatically
         setValue(itemsScoreField, eligibleItems);
+        clearErrors(itemsScoreField);
+        setTimeout(() => trigger(itemsScoreField), 100);
 
         if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
           setValue(calculationTypeField, newLinkedSubscale.scoring);
@@ -282,11 +288,14 @@ export const ScoreContent = ({
       calculationType,
       handleCalculationChange,
       subscaleNameField,
-      name,
       scoringType,
       setValue,
       eligibleSubscales,
       clearErrors,
+      activity,
+      trigger,
+      calculationTypeField,
+      itemsScoreField,
     ],
   );
 
@@ -298,13 +307,27 @@ export const ScoreContent = ({
       if (scoringType === 'score' && linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
           setValue(calculationTypeField, linkedSubscale.scoring);
+          clearErrors(calculationTypeField);
+          setTimeout(() => trigger(calculationTypeField), 0);
           handleCalculationChange({ target: { value: linkedSubscale.scoring } });
         }
 
         setValue(itemsScoreField, linkedSubscale.items);
+        clearErrors(itemsScoreField);
+        setTimeout(() => trigger(itemsScoreField), 100);
       }
     },
-    [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
+    [
+      calculationType,
+      handleCalculationChange,
+      linkedSubscale,
+      setValue,
+      clearErrors,
+      trigger,
+      calculationTypeField,
+      itemsScoreField,
+      scoringTypeField,
+    ],
   );
 
   const handleNameBlur = () => {
@@ -339,8 +362,8 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter((item) =>
-      chosenItems?.includes(getEntityKey(item, true)),
+    const newSelectedItems = scoreItems?.filter(
+      (item) => chosenItems?.includes(getEntityKey(item, true)),
     );
     updateScoreConditionsPayload({
       setValue,
