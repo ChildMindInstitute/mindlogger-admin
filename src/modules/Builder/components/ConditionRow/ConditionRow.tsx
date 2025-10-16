@@ -100,8 +100,16 @@ export const ConditionRow = ({
       clearErrors(conditionItemName);
 
       if (conditionItemResponseType !== selectedItem?.responseType) {
-        setValue(conditionTypeName, '');
-        setValue(conditionPayloadName, {});
+        setValue(conditionTypeName, '', {
+          shouldTouch: false,
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+        setValue(conditionPayloadName, {}, {
+          shouldTouch: false,
+          shouldValidate: false,
+          shouldDirty: false,
+        });
       }
 
       if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
@@ -135,8 +143,11 @@ export const ConditionRow = ({
       }
 
       const payload = getPayload({ conditionType, conditionPayload, selectedItem });
-
-      setValue(conditionPayloadName, payload);
+      setValue(conditionPayloadName, payload, {
+        shouldTouch: false,
+        shouldValidate: false,
+        shouldDirty: false,
+      });
     },
     [
       name,
@@ -146,6 +157,8 @@ export const ConditionRow = ({
       clearErrors,
       conditionTypeName,
       conditionPayloadSelectionName,
+      conditionPayloadName,
+      setValue,
     ],
   );
 
