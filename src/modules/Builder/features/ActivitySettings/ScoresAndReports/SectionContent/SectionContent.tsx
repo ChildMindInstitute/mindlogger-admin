@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -7,6 +7,7 @@ import {
   useCurrentActivity,
   useCustomFormContext,
   useCheckAndTriggerOnNameUniqueness,
+  useImmediateValidation,
 } from 'modules/Builder/hooks';
 import { StyledFlexColumn, StyledObserverTarget, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
@@ -39,7 +40,6 @@ export const SectionContent = ({
 }: SectionContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-  const { clearErrors, getFieldState } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionalLogic = useWatch({ name: conditionalLogicName });
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -54,6 +54,8 @@ export const SectionContent = ({
     entitiesFieldPath: reportsName,
     checkIfShouldIncludeEntity: isSectionReport,
   });
+
+  const handleSectionNameChange = useImmediateValidation(`${name}.name`);
 
   const handleAddConditionalLogic = () => {
     setValue(conditionalLogicName, defaultConditionalValue);
@@ -84,18 +86,7 @@ export const SectionContent = ({
             label={t('sectionName')}
             data-testid={`${dataTestid}-name`}
             withDebounce
-            onInput={(e) => {
-              const currentValue = (e.target as HTMLInputElement).value;
-              if (currentValue !== '' && getFieldState(`${name}.name`).error) {
-                clearErrors(`${name}.name`);
-              }
-            }}
-            onChange={(e) => {
-              const currentValue = (e.target as HTMLInputElement).value;
-              // Update form state with immediate validation
-              setValue(`${name}.name`, currentValue, { shouldValidate: true });
-              if (currentValue === '') return;
-            }}
+            onChange={handleSectionNameChange}
             onBlur={(e) => {
               const currentValue = (e.target as HTMLInputElement).value;
               setValue(`${name}.name`, currentValue, { shouldValidate: true });

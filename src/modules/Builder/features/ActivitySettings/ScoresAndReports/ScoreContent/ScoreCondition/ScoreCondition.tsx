@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
-import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCheckAndTriggerOnNameUniqueness,
+  useCustomFormContext,
+  useImmediateValidation,
+} from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -42,7 +45,6 @@ export const ScoreCondition = ({
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
   const { control, setValue, watch, getValues } = useCustomFormContext();
-  const { trigger } = useFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);
   const targetSelector = `report-${scoreKey}`;
@@ -55,6 +57,8 @@ export const ScoreCondition = ({
     currentPath: name,
     entitiesFieldPath: scoreConditionalsName,
   });
+
+  const handleConditionNameChange = useImmediateValidation(`${name}.name`);
 
   const handleConditionNameBlur = () => {
     if (conditionName === prevScoreConditionName) return;
@@ -113,19 +117,7 @@ export const ScoreCondition = ({
               key={`${name}.name`}
               name={`${name}.name`}
               label={t('scoreConditionName')}
-              onChange={(e, applyChange) => {
-                const currentValue = (e.target as HTMLInputElement).value;
-                if (currentValue === '') {
-                  setValue(`${name}.name`, currentValue, { shouldValidate: true });
-
-                  return;
-                }
-                applyChange();
-                // Debounced uniqueness/required validation
-                setTimeout(() => {
-                  trigger(`${name}.name`);
-                }, 100);
-              }}
+              onChange={handleConditionNameChange}
               onBlur={(e) => {
                 const currentValue = (e.target as HTMLInputElement).value;
                 setValue(`${name}.name`, currentValue, { shouldValidate: true });

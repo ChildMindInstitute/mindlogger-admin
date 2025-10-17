@@ -8,6 +8,7 @@ import {
   useCheckAndTriggerOnNameUniqueness,
   useCurrentActivity,
   useCustomFormContext,
+  useImmediateValidation,
 } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
@@ -160,6 +161,8 @@ export const ScoreContent = ({
     entitiesFieldPath: reportsName,
     checkIfShouldIncludeEntity: isScoreReport,
   });
+
+  const handleNameChange = useImmediateValidation(scoreNameField);
 
   const removeScoreConditional = (index: number) => {
     setIsRemoveConditionalPopupVisible(true);
@@ -465,21 +468,7 @@ export const ScoreContent = ({
                 name={scoreNameField}
                 label={t('scoreName')}
                 withDebounce
-                onChange={(e, applyChange) => {
-                  const currentValue = (e.target as HTMLInputElement).value;
-                  // For empty value, validate immediately
-                  if (currentValue === '') {
-                    setValue(scoreNameField, currentValue, { shouldValidate: true });
-
-                    return;
-                  }
-                  // Apply the original change to keep input/DOM in sync
-                  applyChange();
-                  // Then trigger validation to show uniqueness errors promptly
-                  setTimeout(() => {
-                    trigger(scoreNameField);
-                  }, 100);
-                }}
+                onChange={handleNameChange}
                 onBlur={(e) => {
                   const currentValue = (e.target as HTMLInputElement).value;
                   setValue(scoreNameField, currentValue, { shouldValidate: true });
