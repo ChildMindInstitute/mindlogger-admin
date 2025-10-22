@@ -36,7 +36,7 @@ export const SubscaleContent = ({
 }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-  const { clearErrors, trigger } = useFormContext();
+  const { clearErrors, trigger, getFieldState } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
@@ -89,10 +89,24 @@ export const SubscaleContent = ({
           label={t('subscaleName')}
           data-testid={`${dataTestid}-name`}
           withDebounce
+          onInput={() => {
+            // Avoid unnecessary rerenders: clear only if an error is currently shown
+            if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+          }}
           onChange={(e, onChange) => {
             onChange();
-            // Also update the name of this subscale in any score reports that are linked to it
+            // Update the name of this subscale in any score reports that are linked to it
             updateSubscaleNameInReports(subscaleName, e.target.value);
+          }}
+          onBlur={(e) => {
+            // With debounce, we need to manually set the current DOM value and then validate
+            // to avoid validation running with stale form state
+            const currentValue = (e.target as HTMLInputElement).value;
+            setValue(`${name}.name`, currentValue, { shouldValidate: false });
+            // Use setTimeout to ensure setValue completes before validation
+            setTimeout(() => {
+              trigger(`${name}.name`);
+            }, 0);
           }}
         />
         <SelectController
@@ -114,6 +128,7 @@ export const SubscaleContent = ({
           columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}
+          useVirtualizedList={process.env.NODE_ENV !== 'test'}
           data-testid={`${dataTestid}-items`}
           onChangeSelectedCallback={() => {
             // Clear errors immediately when user selects/deselects items

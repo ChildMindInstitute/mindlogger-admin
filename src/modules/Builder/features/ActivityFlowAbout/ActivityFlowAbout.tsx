@@ -26,13 +26,15 @@ export const ActivityFlowAbout = React.memo(() => {
   const { t } = useTranslation();
   const { featureFlags } = useFeatureFlags();
 
-  const { control, getValues, clearErrors, trigger } = useCustomFormContext();
+  const { control, getValues } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
   const activityFlowIndex = useMemo(() => {
     const activityFlows: AppletFormValues['activityFlows'] = getValues('activityFlows');
 
-    return getActivityFlowIndex(activityFlows, activityFlowId || '');
+    const index = getActivityFlowIndex(activityFlows, activityFlowId || '');
+
+    return index;
   }, [activityFlowId, getValues]);
 
   const dataTestid = 'builder-activity-flows-about';
@@ -54,18 +56,7 @@ export const ActivityFlowAbout = React.memo(() => {
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
             restrictExceededValueLength
-            withDebounce
             data-testid={`${dataTestid}-name`}
-            onChange={(e, onChange) => {
-              // Clear errors immediately when user starts typing
-              clearErrors(`activityFlows.${activityFlowIndex}.name`);
-              // Call the original onChange
-              onChange();
-              // Trigger revalidation after a delay to allow debounce to complete
-              setTimeout(() => {
-                trigger(`activityFlows.${activityFlowIndex}.name`);
-              }, 600);
-            }}
           />
         </Box>
         <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -78,18 +69,7 @@ export const ActivityFlowAbout = React.memo(() => {
             restrictExceededValueLength
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}
-            withDebounce
             data-testid={`${dataTestid}-description`}
-            onChange={(e, onChange) => {
-              // Clear errors immediately when user starts typing
-              clearErrors(`activityFlows.${activityFlowIndex}.description`);
-              // Call the original onChange
-              onChange();
-              // Trigger revalidation after a delay to allow debounce to complete
-              setTimeout(() => {
-                trigger(`activityFlows.${activityFlowIndex}.description`);
-              }, 600);
-            }}
           />
         </Box>
         <StyledTitleMedium

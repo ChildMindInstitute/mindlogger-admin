@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -39,6 +39,7 @@ export const SectionContent = ({
 }: SectionContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
+  const { trigger, clearErrors, getFieldState } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionalLogic = useWatch({ name: conditionalLogicName });
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -83,6 +84,20 @@ export const SectionContent = ({
             label={t('sectionName')}
             data-testid={`${dataTestid}-name`}
             withDebounce
+            onInput={() => {
+              // Clear errors immediately when user starts typing
+              if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+            }}
+            onBlur={(e) => {
+              // With debounce, manually set current DOM value and trigger validation
+              // This ensures validation sees the actual typed value
+              const currentValue = (e.target as HTMLInputElement).value;
+              setValue(`${name}.name`, currentValue, { shouldValidate: false });
+              // Wait for setValue to complete, then trigger validation
+              setTimeout(() => {
+                trigger(`${name}.name`);
+              }, 0);
+            }}
           />
           <Box sx={{ mt: theme.spacing(2.4) }}>
             {conditionalLogic ? (
