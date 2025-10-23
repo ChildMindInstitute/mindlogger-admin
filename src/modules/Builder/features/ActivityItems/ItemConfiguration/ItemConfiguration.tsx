@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -42,16 +42,25 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
-  const { control, getFieldState, setValue } = useCustomFormContext();
+  const { control, getFieldState, setValue, getValues, setError, clearErrors } =
+    useCustomFormContext();
+
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
-  const [responseType, currentItem]: [ItemResponseTypeNoPerfTasks, ItemFormValues] = useWatch({
-    name: [`${name}.responseType`, name],
+  const responseType: ItemResponseTypeNoPerfTasks = useWatch({
+    name: `${name}.responseType`,
+    control,
   });
+
+  const currentItem: ItemFormValues = useMemo(
+    () => getValues(name) as ItemFormValues,
+    [getValues, name],
+  );
+
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
-  const conditionalLogicForItem = getItemConditionDependencies(
-    currentItem,
-    activity?.conditionalLogic,
+  const conditionalLogicForItem = useMemo(
+    () => getItemConditionDependencies(currentItem, activity?.conditionalLogic),
+    [currentItem, activity?.conditionalLogic],
   );
 
   const availableItemsTypeOptions = useGetAvailableItemTypeOptions(name);
@@ -104,6 +113,33 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const hasSameNameInSystemItemsError =
     getFieldState(`${name}.name`)?.error?.type === ItemTestFunctions.ExistingNameInSystemItem;
 
+  // Inline validation for question without modifying shared controller.
+  const questionValue: string = useWatch({ name: `${name}.question`, control }) || '';
+  const initialValueRef = useRef(questionValue);
+  const hasUserTypedRef = useRef(false);
+
+  useEffect(() => {
+    if (questionValue !== initialValueRef.current) {
+      hasUserTypedRef.current = true;
+    }
+
+    // Only validate if user has interacted with this field
+    if (!hasUserTypedRef.current) {
+      return;
+    }
+
+    const trimmed = questionValue.trim();
+
+    if (!trimmed) {
+      setError(`${name}.question`, {
+        type: 'required',
+        message: t('displayedContentRequired'),
+      });
+    } else {
+      clearErrors(`${name}.question`);
+    }
+  }, [questionValue, name, setError, clearErrors, t]);
+
   return (
     <>
       <BuilderContainer
@@ -153,7 +189,6 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         </Grid>
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('displayedContent')}</StyledTitleLarge>
         <EditorController
-          withDebounce
           name={`${name}.question`}
           control={control}
           placeholder={itemsTypePlaceholders[responseType]}
