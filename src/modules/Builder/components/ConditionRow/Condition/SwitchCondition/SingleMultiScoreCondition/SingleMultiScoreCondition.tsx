@@ -16,7 +16,7 @@ export const SingleMultiScoreCondition = ({
   dataTestid,
 }: SingleMultiScoreConditionProps) => {
   const { t } = useTranslation('app');
-  const { control, clearErrors } = useCustomFormContext();
+  const { control, clearErrors, trigger } = useCustomFormContext();
 
   const optionValueName = `${payloadName}.optionValue`;
   const numberValueName = `${payloadName}.value`;
@@ -25,7 +25,17 @@ export const SingleMultiScoreCondition = ({
 
   const handleValueChange = useCallback(() => {
     clearErrors(optionValueName);
-  }, [clearErrors, optionValueName]);
+
+    const segments = payloadName.split('.');
+    segments.pop();
+    const rowName = segments.join('.');
+    const conditionsName = segments.slice(0, -1).join('.');
+    // Defer to next tick to avoid validating before RHF sets the value
+    setTimeout(() => {
+      trigger(rowName, { shouldFocus: false });
+      trigger(conditionsName, { shouldFocus: false });
+    }, 0);
+  }, [clearErrors, optionValueName, payloadName, trigger]);
 
   return (
     <>

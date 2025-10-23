@@ -89,24 +89,29 @@ export const SubscaleContent = ({
           label={t('subscaleName')}
           data-testid={`${dataTestid}-name`}
           withDebounce
-          onInput={() => {
-            // Avoid unnecessary rerenders: clear only if an error is currently shown
-            if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
+          onInput={(e) => {
+            const currentValue = (e.target as HTMLInputElement).value;
+            // Clear errors immediately when typing (lightweight)
+            if (currentValue !== '' && getFieldState(`${name}.name`).error) {
+              clearErrors(`${name}.name`);
+            }
           }}
-          onChange={(e, onChange) => {
-            onChange();
-            // Update the name of this subscale in any score reports that are linked to it
-            updateSubscaleNameInReports(subscaleName, e.target.value);
+          onChange={(e, applyChange) => {
+            const currentValue = (e.target as HTMLInputElement).value;
+            if (currentValue === '') {
+              setValue(`${name}.name`, currentValue, { shouldValidate: true });
+              updateSubscaleNameInReports(subscaleName, '');
+
+              return;
+            }
+            applyChange();
+            // Trigger validation immediately after debounced change
+            setTimeout(() => trigger(`${name}.name`), 100);
           }}
           onBlur={(e) => {
-            // With debounce, we need to manually set the current DOM value and then validate
-            // to avoid validation running with stale form state
             const currentValue = (e.target as HTMLInputElement).value;
-            setValue(`${name}.name`, currentValue, { shouldValidate: false });
-            // Use setTimeout to ensure setValue completes before validation
-            setTimeout(() => {
-              trigger(`${name}.name`);
-            }, 0);
+            setValue(`${name}.name`, currentValue, { shouldValidate: true });
+            updateSubscaleNameInReports(subscaleName, currentValue);
           }}
         />
         <SelectController
