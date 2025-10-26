@@ -42,7 +42,13 @@ export default defineConfig({
     dedupe: ['react', 'react-dom', 'redux', '@reduxjs/toolkit'],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@reduxjs/toolkit'],
+    include: [
+      'react', 
+      'react-dom', 
+      '@reduxjs/toolkit', 
+      'react-window',
+      'react-virtualized-auto-sizer'
+    ],
     exclude: [],
     esbuildOptions: {
       // Node.js global to browser globalThis
@@ -50,5 +56,8 @@ export default defineConfig({
         global: 'globalThis',
       },
     },
+  },
+  ssr: {
+    noExternal: ['react-window'],
   },
 });
