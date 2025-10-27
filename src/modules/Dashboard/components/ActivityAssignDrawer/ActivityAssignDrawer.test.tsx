@@ -138,7 +138,7 @@ const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 Element.prototype.scrollTo = vi.fn();
 
 vi.useFakeTimers();
-jest.setTimeout(10000);
+vi.setTimeout(10000);
 
 const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
@@ -458,7 +458,7 @@ describe('ActivityAssignDrawer', () => {
   });
 
   it('prevents proceeding to Review step if there are duplicate assignments', async () => {
-    jest.setTimeout(20000);
+    vi.setTimeout(20000);
 
     renderWithProviders(
       <ActivityAssignDrawer

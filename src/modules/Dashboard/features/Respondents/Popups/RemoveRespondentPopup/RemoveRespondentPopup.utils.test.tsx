@@ -10,9 +10,9 @@ const mockScreensParams = {
   appletName: 'Sample Applet',
   removeData: true,
   isRemoved: false,
-  submitPassword: jest.fn(),
-  removeAccess: jest.fn(),
-  onClose: jest.fn(),
+  submitPassword: vi.fn(),
+  removeAccess: vi.fn(),
+  onClose: vi.fn(),
 };
 
 const expectedResult1 = [

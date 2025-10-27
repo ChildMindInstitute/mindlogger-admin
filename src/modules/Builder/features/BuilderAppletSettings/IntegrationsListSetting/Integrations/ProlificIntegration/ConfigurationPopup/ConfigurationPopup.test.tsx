@@ -55,7 +55,7 @@ describe('ProlificIntegration', () => {
   });
 
   test('should close popup and update applet when clicking submit', async () => {
-    (createProlificIntegration as jest.Mock).mockImplementation();
+    (createProlificIntegration as vi.Mock).mockImplementation();
 
     const onClose = vi.fn();
     const updateAppletData = vi.fn();
@@ -86,7 +86,7 @@ describe('ProlificIntegration', () => {
   });
 
   test('should show error when api token is wrong', async () => {
-    (createProlificIntegration as jest.Mock).mockImplementation(() => {
+    (createProlificIntegration as vi.Mock).mockImplementation(() => {
       throw new Error('Invalid API token');
     });
 

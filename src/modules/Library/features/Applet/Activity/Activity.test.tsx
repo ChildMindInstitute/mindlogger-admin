@@ -14,7 +14,7 @@ import { Activity } from './Activity';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 const dataTestid = 'library-applet-activity';
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
 const mockedNormalActivity = {
   name: 'New Activity 1',

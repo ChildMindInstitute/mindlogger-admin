@@ -16,8 +16,8 @@ const mockedExistingKeydActivityFlow = {
   fieldName: 'activityFlows.1',
 };
 
-const mockedUseParams = jest.fn();
-const mockedWatch = jest.fn();
+const mockedUseParams = vi.fn();
+const mockedWatch = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

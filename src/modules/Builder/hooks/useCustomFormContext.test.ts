@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { useCustomFormContext } from './useCustomFormContext';
 
-const mockedSetValue = jest.fn();
+const mockedSetValue = vi.fn();
 
 vi.mock('react-hook-form', () => ({
   useFormContext: () => ({

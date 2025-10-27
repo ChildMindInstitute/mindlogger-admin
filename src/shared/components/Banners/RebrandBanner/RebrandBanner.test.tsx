@@ -12,16 +12,16 @@ import { GLOBAL_DISMISSED_KEY, RebrandBanner, getDismissedKey } from './RebrandB
 const bannerTestId = 'rebrand-banner';
 
 // Mock useLocation hook
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: jest.fn().mockImplementation(() => ({
+vi.mock('react-router-dom', () => ({
+  ...vi.requireActual('react-router-dom'),
+  useLocation: vi.fn().mockImplementation(() => ({
     pathname: '/dashboard/applets',
   })),
 }));
 
 describe('RebrandBanner', () => {
   // Get the mocked useLocation function
-  const mockedUseLocation = useLocation as jest.Mock;
+  const mockedUseLocation = useLocation as vi.Mock;
 
   beforeEach(() => {
     // Clear localStorage before each test

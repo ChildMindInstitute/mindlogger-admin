@@ -178,7 +178,7 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
         enableParticipantMultiInformant: true,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses(getRequestResponses);

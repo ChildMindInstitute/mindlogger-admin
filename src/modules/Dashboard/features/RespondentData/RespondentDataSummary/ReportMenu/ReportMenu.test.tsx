@@ -76,11 +76,11 @@ const mockFlows = [
   },
 ];
 
-const mockedSetValue = jest.fn();
-const mockSetIsLoading = jest.fn();
-const mockGetIdentifiersVersions = jest.fn();
-const mockFetchAnswers = jest.fn();
-const mockedSetSelectedEntity = jest.fn();
+const mockedSetValue = vi.fn();
+const mockSetIsLoading = vi.fn();
+const mockGetIdentifiersVersions = vi.fn();
+const mockFetchAnswers = vi.fn();
+const mockedSetSelectedEntity = vi.fn();
 
 const renderReportMenu = (
   props?: Partial<ReportMenuProps>,

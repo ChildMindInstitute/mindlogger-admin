@@ -2,7 +2,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 
 import { InsertItem } from '.';
 
-const mockOnInsert = jest.fn();
+const mockOnInsert = vi.fn();
 
 const dataTestid = 'builder-insert-item';
 const commonProps = {

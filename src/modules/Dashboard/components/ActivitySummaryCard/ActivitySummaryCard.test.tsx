@@ -41,7 +41,7 @@ describe('ActivitySummaryCard', () => {
 
   test('should render actions menu and run action handler when clicked', () => {
     const testId = 'testMenu';
-    const mockAction = jest.fn();
+    const mockAction = vi.fn();
     const mockMenuItem = { title: 'test item', action: mockAction };
     const actionsMenu = <ActionsMenu menuItems={[mockMenuItem]} data-testid={testId} />;
 

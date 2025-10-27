@@ -8,21 +8,21 @@ const defaultProps = {
   items: [
     {
       icon: <Svg id="remove-from-folder" />,
-      action: jest.fn(),
+      action: vi.fn(),
       tooltipTitle: 'Action 1',
       isDisplayed: true,
       'data-testid': 'data-testid-action-1',
     },
     {
       icon: <Svg id="duplicate" />,
-      action: jest.fn(),
+      action: vi.fn(),
       tooltipTitle: 'Action 2',
       isDisplayed: false,
       'data-testid': 'data-testid-action-2',
     },
     {
       icon: <Svg id="trash" />,
-      action: jest.fn(),
+      action: vi.fn(),
       tooltipTitle: 'Action 3',
       isDisplayed: true,
       disabled: true,

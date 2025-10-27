@@ -28,7 +28,7 @@ const mockedDataWithReviewableActivity = {
   activityFlows: [],
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

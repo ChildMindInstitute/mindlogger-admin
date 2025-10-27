@@ -49,10 +49,10 @@ vi.mock('shared/hooks/useFeatureFlags', async (importOriginal) => {
 });
 
 describe('Participant Details page', () => {
-  const navigate: jest.Mock = vi.fn();
+  const navigate: vi.Mock = vi.fn();
 
   beforeEach(() => {
-    jest.mocked(useNavigate).mockImplementation(() => navigate);
+    vi.mocked(useNavigate).mockImplementation(() => navigate);
     vi.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: true,

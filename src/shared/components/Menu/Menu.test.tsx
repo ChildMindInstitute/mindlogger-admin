@@ -10,7 +10,7 @@ const menuItems = [
     isDisplayed: true,
     tooltip: 'tooltip text',
     context: 'context-1',
-    action: jest.fn(),
+    action: vi.fn(),
     'data-testid': 'test-menu-item-1',
   },
   {
@@ -18,7 +18,7 @@ const menuItems = [
     isDisplayed: true,
     disabled: false,
     context: 'context-2',
-    action: jest.fn(),
+    action: vi.fn(),
     'data-testid': 'test-menu-item-2',
   },
   {
@@ -30,14 +30,14 @@ const menuItems = [
     isDisplayed: false,
     disabled: false,
     context: 'context-3',
-    action: jest.fn(),
+    action: vi.fn(),
     'data-testid': 'test-menu-item-3',
   },
   {
     title: 'Option 4',
     disabled: true,
     context: 'context-4',
-    action: jest.fn(),
+    action: vi.fn(),
     'data-testid': 'test-menu-item-4',
   },
 ];
@@ -46,7 +46,7 @@ const renderMenu = () =>
   render(
     <Menu
       anchorEl={document.body}
-      onClose={jest.fn()}
+      onClose={vi.fn()}
       menuItems={menuItems}
       data-testid="test-menu"
     />,

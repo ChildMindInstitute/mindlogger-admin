@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { SoftLockWarningBanner } from './SoftLockWarningBanner';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 
 describe('SoftLockWarningBanner', () => {
   test('should render', () => {

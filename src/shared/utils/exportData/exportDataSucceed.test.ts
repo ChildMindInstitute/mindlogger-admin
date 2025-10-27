@@ -41,7 +41,7 @@ describe('exportDataSucceed', () => {
     vi.useRealTimers();
   });
 
-  const mockedGetDecryptedAnswers = jest.fn();
+  const mockedGetDecryptedAnswers = vi.fn();
   const mockedExportData = {
     activities: [],
     answers: [],

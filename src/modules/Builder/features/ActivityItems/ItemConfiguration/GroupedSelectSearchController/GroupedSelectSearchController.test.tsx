@@ -48,7 +48,7 @@ const FormComponent = () => {
     options,
     setValue,
     fieldName: 'activity.0.item.0',
-    checkIfSelectChangePopupIsVisible: jest.fn(),
+    checkIfSelectChangePopupIsVisible: vi.fn(),
   };
 
   return <GroupedSelectSearchController {...props} />;

@@ -35,7 +35,7 @@ const preloadedState = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation

@@ -58,7 +58,7 @@ describe('ProlificIntegration', () => {
   });
 
   test('should close popup and update applet when clicking delete', async () => {
-    (deleteProlificIntegration as jest.Mock).mockResolvedValue({});
+    (deleteProlificIntegration as vi.Mock).mockResolvedValue({});
 
     const onClose = vi.fn();
     const updateAppletData = vi.fn();

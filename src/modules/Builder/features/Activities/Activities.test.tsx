@@ -64,7 +64,7 @@ const mockedGyroscopeTestid = 'builder-activities-add-perf-task-gyroscope';
 const mockedTouchTestid = 'builder-activities-add-perf-task-touch';
 const mockedUnityTestid = 'builder-activities-add-perf-task-unity';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

@@ -7,7 +7,7 @@ import * as useEncryptionStorageHook from 'shared/hooks/useEncryptionStorage';
 
 import { useCheckIfHasEncryption } from './Popups.hooks';
 
-const callbackMock = jest.fn();
+const callbackMock = vi.fn();
 
 describe('useCheckIfHasEncryption', () => {
   afterEach(() => {

@@ -67,7 +67,7 @@ describe('Calendar Component', () => {
     useAppDispatch: vi.fn(),
   }));
 
-  jest.mock(
+  vi.mock(
     'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
     () => ({
       useSchedule: vi.fn(),

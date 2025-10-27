@@ -6,7 +6,7 @@ import { ApiLanguages } from 'api';
 import { UpgradeAccountForm } from './UpgradeAccountForm';
 import { UpgradeAccountFormValues } from '../UpgradeAccountPopup.types';
 
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 const dataTestid = 'test-id';
 
 const UpgradeAccountFormTest = () => {

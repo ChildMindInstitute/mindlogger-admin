@@ -6,7 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Confirmation } from '.';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

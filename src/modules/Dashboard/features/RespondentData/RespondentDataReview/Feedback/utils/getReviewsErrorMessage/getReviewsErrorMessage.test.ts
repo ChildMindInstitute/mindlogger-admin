@@ -22,7 +22,7 @@ describe('getReviewsErrorMessage', () => {
   });
 
   test('should return the error message for reviewsError', () => {
-    (getErrorMessage as jest.Mock).mockReturnValue(mockErrorMessage);
+    (getErrorMessage as vi.Mock).mockReturnValue(mockErrorMessage);
 
     const result = getReviewsErrorMessage(mockAxiosError, null);
 
@@ -31,7 +31,7 @@ describe('getReviewsErrorMessage', () => {
   });
 
   test('should return the error message for reviewsFlowError', () => {
-    (getErrorMessage as jest.Mock).mockReturnValue(mockErrorMessage);
+    (getErrorMessage as vi.Mock).mockReturnValue(mockErrorMessage);
 
     const result = getReviewsErrorMessage(null, mockAxiosError);
 

@@ -14,7 +14,7 @@ import { Item } from './Item';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 const dataTestid = 'activity-item';
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
 vi.mock('./Item.styles', async (importOriginal) => {
   const actual = await importOriginal();

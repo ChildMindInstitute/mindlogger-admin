@@ -108,7 +108,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('navigates to the next step when onNext is called', async () => {
-    (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
+    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />);
 
@@ -131,7 +131,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('displays an error message when fetching projects fails', async () => {
-    (fetchLorisProjects as jest.Mock).mockRejectedValueOnce(new Error('Fetch failed'));
+    (fetchLorisProjects as vi.Mock).mockRejectedValueOnce(new Error('Fetch failed'));
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
       preloadedState,
@@ -146,8 +146,8 @@ describe('ConfigurationPopup', () => {
   });
 
   test('saves the project and closes the modal', async () => {
-    (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as jest.Mock).mockResolvedValue({ result: [{ message: 'Success' }] });
+    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
+    (saveLorisProject as vi.Mock).mockResolvedValue({ result: [{ message: 'Success' }] });
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
@@ -166,8 +166,8 @@ describe('ConfigurationPopup', () => {
 
   test('displays an error message when saving the project fails', async () => {
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as jest.Mock).mockRejectedValueOnce(new Error('Save failed'));
+    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
+    (saveLorisProject as vi.Mock).mockRejectedValueOnce(new Error('Save failed'));
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
       preloadedState,
@@ -186,8 +186,8 @@ describe('ConfigurationPopup', () => {
 
   test('displays an error message when the applet is already tied to a project', async () => {
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    (fetchLorisProjects as jest.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as jest.Mock).mockResolvedValueOnce({
+    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
+    (saveLorisProject as vi.Mock).mockResolvedValueOnce({
       result: [{ message: 'This project has previously been tied to applet' }],
     });
 

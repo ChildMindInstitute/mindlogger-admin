@@ -115,7 +115,7 @@ const mockedGetAppletManagers = mockSuccessfulHttpResponse<WorkspaceManagersResp
   count: 1,
 });
 
-const mockOnDelete = jest.fn();
+const mockOnDelete = vi.fn();
 const dataTestId = 'test-id';
 
 const GET_WORKSPACE_RESPONDENTS_URL = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;

@@ -3,10 +3,10 @@ import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectContro
 
 import { getItemsOptions, getItemsInUsage } from './SummaryRow.utils';
 
-jest.mock(
+vi.mock(
   'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
   () => ({
-    ...jest.requireActual(
+    ...vi.requireActual(
       'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
     ),
     StyledMdPreview: ({ modelValue }: { modelValue: string }) => <div>{modelValue}</div>,

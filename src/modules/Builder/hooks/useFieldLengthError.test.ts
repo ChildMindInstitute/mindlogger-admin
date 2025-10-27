@@ -15,9 +15,9 @@ const mockedSetErrorObj = {
   message: getMaxLengthValidationError({ max: mockedMaxLength }),
 };
 
-const mockedSetValue = jest.fn();
-const mockedSetError = jest.fn();
-const mockedClearErrors = jest.fn();
+const mockedSetValue = vi.fn();
+const mockedSetError = vi.fn();
+const mockedClearErrors = vi.fn();
 
 vi.mock('react-hook-form', () => ({
   useFormContext: () => ({

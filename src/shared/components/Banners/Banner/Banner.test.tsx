@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Banner } from './Banner';
 
-const mockOnClose = jest.fn();
-const mockUseWindowFocus = jest.fn();
+const mockOnClose = vi.fn();
+const mockUseWindowFocus = vi.fn();
 
 const props = {
   children: 'Test banner',
@@ -43,7 +43,7 @@ describe('Banner', () => {
 
     render(<Banner {...props} />);
 
-    jest.advanceTimersByTime(props.duration + 1000);
+    vi.advanceTimersByTime(props.duration + 1000);
     expect(mockOnClose).toHaveBeenCalled();
   });
 
@@ -53,7 +53,7 @@ describe('Banner', () => {
 
     render(<Banner {...props} />);
 
-    jest.advanceTimersByTime(props.duration + 1000);
+    vi.advanceTimersByTime(props.duration + 1000);
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 

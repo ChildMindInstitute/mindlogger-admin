@@ -225,7 +225,7 @@ describe('DuplicatePopups', () => {
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
     vi.spyOn(global, 'fetch').mockImplementation(
-      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) })) as jest.Mock,
+      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) })) as vi.Mock,
     );
 
     vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(

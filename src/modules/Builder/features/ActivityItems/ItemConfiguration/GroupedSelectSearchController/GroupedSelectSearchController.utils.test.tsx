@@ -6,8 +6,8 @@ describe('handleSearchKeyDown', () => {
   beforeEach(() => {
     mockEvent = {
       ...new KeyboardEvent('keypress'),
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
     } as unknown as React.KeyboardEvent;
   });
 

@@ -44,23 +44,23 @@ const getMockFolderItem = (isEmpty = true, isNew = false) => ({
   foldersAppletCount: isEmpty ? 0 : 3,
 });
 
-const mockReloadData = jest.fn();
-const mockHandleFolderClick = jest.fn();
+const mockReloadData = vi.fn();
+const mockHandleFolderClick = vi.fn();
 
 const mockContext = {
   rows: [mockedApplet],
-  setRows: jest.fn(),
+  setRows: vi.fn(),
   expandedFolders: [],
   reloadData: mockReloadData,
   handleFolderClick: mockHandleFolderClick,
-  fetchData: jest.fn(),
+  fetchData: vi.fn(),
 };
 
 const commonUseDndProps = {
-  onDragLeave: jest.fn(),
-  onDragOver: jest.fn(),
-  onDrop: jest.fn(),
-  onDragEnd: jest.fn(),
+  onDragLeave: vi.fn(),
+  onDragOver: vi.fn(),
+  onDrop: vi.fn(),
+  onDragEnd: vi.fn(),
 };
 
 const getFolderItemComponent = (isEmpty = true, isNew = false) => (

@@ -16,7 +16,7 @@ describe('useFeedbackReviewsData', () => {
   const mockGetDecryptedActivityData = vi.fn();
 
   beforeEach(() => {
-    (useDecryptedActivityData as jest.Mock).mockReturnValue(mockGetDecryptedActivityData);
+    (useDecryptedActivityData as vi.Mock).mockReturnValue(mockGetDecryptedActivityData);
   });
 
   test('should fetch and decrypt review data correctly', async () => {

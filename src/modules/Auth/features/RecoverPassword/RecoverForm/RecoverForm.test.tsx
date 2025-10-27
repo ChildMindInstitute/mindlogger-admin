@@ -11,7 +11,7 @@ import { recoverPasswordFormDataTestid } from './RecoverForm.const';
 
 const mockKey = 'key';
 const mockEmail = 'jdoe@test.com';
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

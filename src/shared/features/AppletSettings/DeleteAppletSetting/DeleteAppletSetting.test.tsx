@@ -52,7 +52,7 @@ const preloadedState = {
 };
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation

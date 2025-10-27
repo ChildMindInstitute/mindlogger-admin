@@ -7,7 +7,7 @@ import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
 const dataTestid = 'clear-scheduled-events-popup';
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const basicProps = {
   open: true,
   onClose: onCloseMock,

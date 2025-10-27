@@ -62,7 +62,7 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation

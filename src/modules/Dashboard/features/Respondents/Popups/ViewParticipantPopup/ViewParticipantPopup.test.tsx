@@ -24,8 +24,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const mockedUseNavigate = jest.mocked(useNavigate);
-const mockedGeneratePath = jest.mocked(generatePath);
+const mockedUseNavigate = vi.mocked(useNavigate);
+const mockedGeneratePath = vi.mocked(generatePath);
 
 const setChosenAppletDataMock = vi.fn();
 const setPopupVisibleMock = vi.fn();

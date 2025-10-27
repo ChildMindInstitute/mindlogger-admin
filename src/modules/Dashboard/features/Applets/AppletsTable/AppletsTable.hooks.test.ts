@@ -31,7 +31,7 @@ vi.mock('api', () => ({
 
 describe('useAppletsDnd', () => {
   beforeEach(() => {
-    (useAsync as jest.Mock).mockReturnValue({ execute: vi.fn() });
+    (useAsync as vi.Mock).mockReturnValue({ execute: vi.fn() });
   });
 
   afterAll(() => {
@@ -39,7 +39,7 @@ describe('useAppletsDnd', () => {
   });
 
   test('returns initial state', () => {
-    (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
+    (useContext as vi.Mock).mockReturnValue(mockAppletContextValue);
 
     const { result } = renderHook(useAppletsDnd);
     expect(result.current.isDragOver).toBe(false);
@@ -51,7 +51,7 @@ describe('useAppletsDnd', () => {
 
   test('onDragLeave updates isDragOver to false', () => {
     const onDragLeaveParams = { preventDefault: vi.fn(), persist: vi.fn() };
-    (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
+    (useContext as vi.Mock).mockReturnValue(mockAppletContextValue);
 
     const { result } = renderHook(useAppletsDnd);
     act(() => {
@@ -62,7 +62,7 @@ describe('useAppletsDnd', () => {
 
   test('onDragOver updates isDragOver to true', () => {
     const onDragOverParams = { preventDefault: vi.fn() };
-    (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
+    (useContext as vi.Mock).mockReturnValue(mockAppletContextValue);
 
     const { result } = renderHook(useAppletsDnd);
     act(() => {
@@ -80,11 +80,11 @@ describe('useAppletsDnd', () => {
     const mockFetchData = vi.fn();
     const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
 
-    (useContext as jest.Mock).mockReturnValue({
+    (useContext as vi.Mock).mockReturnValue({
       ...mockAppletContextValue,
       fetchData: mockFetchData,
     });
-    (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
+    (useAsync as vi.Mock).mockReturnValue({ execute: mockSetFolder });
 
     const { result } = renderHook(useAppletsDnd);
     await act(() => {
@@ -108,11 +108,11 @@ describe('useAppletsDnd', () => {
     const previousFolder = { id: 'folderId' };
 
     const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
-    (useContext as jest.Mock).mockReturnValue({
+    (useContext as vi.Mock).mockReturnValue({
       ...mockAppletContextValue,
       rows: [draggedItem, folder, previousFolder],
     });
-    (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
+    (useAsync as vi.Mock).mockReturnValue({ execute: mockSetFolder });
 
     const { result } = renderHook(useAppletsDnd);
     await act(async () => {
@@ -136,11 +136,11 @@ describe('useAppletsDnd', () => {
     const previousFolder = { id: 'previousFolderId' };
 
     const mockSetFolder = vi.fn().mockResolvedValueOnce(undefined);
-    (useContext as jest.Mock).mockReturnValue({
+    (useContext as vi.Mock).mockReturnValue({
       ...mockAppletContextValue,
       rows: [draggedItem, folder, previousFolder],
     });
-    (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
+    (useAsync as vi.Mock).mockReturnValue({ execute: mockSetFolder });
 
     const { result } = renderHook(useAppletsDnd);
     await act(async () => {

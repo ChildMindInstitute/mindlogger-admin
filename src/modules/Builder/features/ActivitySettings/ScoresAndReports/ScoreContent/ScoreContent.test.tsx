@@ -130,7 +130,7 @@ vi.mock('modules/Builder/hooks', async (importOriginal) => {
   };
 });
 
-const mockUseCurrentActivity = jest.mocked(useCurrentActivity);
+const mockUseCurrentActivity = vi.mocked(useCurrentActivity);
 
 describe('ScoreContent', () => {
   beforeEach(() => {

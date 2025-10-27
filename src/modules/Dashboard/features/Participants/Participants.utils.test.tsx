@@ -63,13 +63,13 @@ describe('Participants utils tests', () => {
 
     const commonGetActionsProps: GetParticipantActionsProps = {
       actions: {
-        editParticipant: jest.fn(),
-        upgradeAccount: jest.fn(),
-        exportData: jest.fn(),
-        removeParticipant: jest.fn(),
-        assignActivity: jest.fn(),
-        copyEmailAddress: jest.fn(),
-        copyInvitationLink: jest.fn(),
+        editParticipant: vi.fn(),
+        upgradeAccount: vi.fn(),
+        exportData: vi.fn(),
+        removeParticipant: vi.fn(),
+        assignActivity: vi.fn(),
+        copyEmailAddress: vi.fn(),
+        copyInvitationLink: vi.fn(),
       },
       filteredApplets,
       respondentId: mockedFullParticipantId1,

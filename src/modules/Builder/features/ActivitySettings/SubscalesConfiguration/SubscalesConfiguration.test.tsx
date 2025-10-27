@@ -193,8 +193,8 @@ const setUpLookupTable = async (
   return ref;
 };
 
-jest.mock('shared/components/FileUploader/FileUploader', () => ({
-  ...jest.requireActual('__mocks__/LookupTableUploader'),
+vi.mock('shared/components/FileUploader/FileUploader', () => ({
+  ...vi.requireActual('__mocks__/LookupTableUploader'),
 }));
 
 vi.mock('shared/hooks/useFeatureFlags', () => ({

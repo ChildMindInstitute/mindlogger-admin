@@ -41,8 +41,8 @@ const mockToken = 'mockToken';
 const mockPassword = 'mockPassword';
 
 const renderReportServerHook = (message: string) => {
-  (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-  (verifyReportServer as jest.Mock).mockResolvedValue({
+  (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+  (verifyReportServer as vi.Mock).mockResolvedValue({
     json: async () => ({ message }),
   });
 
@@ -57,7 +57,7 @@ const renderReportServerHook = (message: string) => {
 };
 
 const renderDefaultValuesHook = (appletData = {}, params) => {
-  (useParams as jest.Mock).mockReturnValue(params);
+  (useParams as vi.Mock).mockReturnValue(params);
 
   return renderHook(() =>
     useDefaultValues({
@@ -113,8 +113,8 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns true when server responds with SUCCESS_MESSAGE', async () => {
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (setPasswordReportServer as jest.Mock).mockResolvedValue({
+    (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+    (setPasswordReportServer as vi.Mock).mockResolvedValue({
       json: async () => ({ message: SUCCESS_MESSAGE }),
     });
 
@@ -144,8 +144,8 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns false when server does not respond with SUCCESS_MESSAGE', async () => {
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (setPasswordReportServer as jest.Mock).mockResolvedValue({
+    (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+    (setPasswordReportServer as vi.Mock).mockResolvedValue({
       json: async () => ({ message: 'OTHER_MESSAGE' }),
     });
 
@@ -181,7 +181,7 @@ describe('useDefaultValues', () => {
   });
 
   test('returns initialValues when no appletData provided', () => {
-    (useParams as jest.Mock).mockReturnValue({});
+    (useParams as vi.Mock).mockReturnValue({});
 
     const { result } = renderHook(() => useDefaultValues());
 

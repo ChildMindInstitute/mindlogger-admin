@@ -35,8 +35,8 @@ const preloadedState = {
 const mockDateString = '2025-07-107T12:30:45';
 const mockDatePlus5Minutes = '2025-07-107T12:35:45';
 
-const mockOnClose = jest.fn();
-const mockOnExport = jest.fn();
+const mockOnClose = vi.fn();
+const mockOnExport = vi.fn();
 
 type FormComponentProps = {
   children: React.ReactNode;
@@ -200,12 +200,12 @@ describe('ExportSettingsPopup', () => {
   });
 
   describe('start/end of day processing', () => {
-    let spy: jest.SpyInstance<Date>;
+    let spy: vi.SpyInstance<Date>;
     let mockDate: (dateString: string) => void;
 
     beforeEach(() => {
       const origDateConstructor = global.Date;
-      spy = jest.spyOn(global, 'Date');
+      spy = vi.spyOn(global, 'Date');
       mockDate = (dateString) =>
         spy.mockImplementation((arg) => {
           if (arg !== undefined) {

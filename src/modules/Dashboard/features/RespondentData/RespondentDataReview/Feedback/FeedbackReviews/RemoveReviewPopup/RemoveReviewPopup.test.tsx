@@ -7,8 +7,8 @@ import { RemoveReviewPopup } from './RemoveReviewPopup';
 import { RemoveReviewPopupProps } from './RemoveReviewPopup.types';
 
 const dataTestid = 'respondents-feedback-review-remove-popup';
-const mockedOnClose = jest.fn();
-const mockedOnSubmit = jest.fn();
+const mockedOnClose = vi.fn();
+const mockedOnSubmit = vi.fn();
 
 const renderComponent = (props?: Partial<RemoveReviewPopupProps>) => {
   renderWithProviders(

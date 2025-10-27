@@ -45,11 +45,11 @@ const text = {
   },
 };
 
-jest.mock(
+vi.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
   () => ({
     __esModule: true,
-    ...jest.requireActual(
+    ...vi.requireActual(
       'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
     ),
     SingleSelectionController: () => <div data-testid="mock-single-selection-controller"></div>,

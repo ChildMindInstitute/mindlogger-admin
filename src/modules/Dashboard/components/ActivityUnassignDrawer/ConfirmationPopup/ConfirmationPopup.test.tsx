@@ -6,8 +6,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { ConfirmationPopup } from './ConfirmationPopup';
 
 const mockedTestId = 'test-id';
-const mockedOnClose = jest.fn();
-const mockedOnConfirm = jest.fn();
+const mockedOnClose = vi.fn();
+const mockedOnConfirm = vi.fn();
 const mockedTitle = 'title';
 const mockedBody = 'body';
 

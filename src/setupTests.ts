@@ -2,22 +2,6 @@ import 'mock-local-storage';
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock ResizeObserver
-const mockResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-global.ResizeObserver = mockResizeObserver;
-
-// Also set prototype methods
-Object.setPrototypeOf(mockResizeObserver.prototype, {
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-});
-
 vi.mock('react-secure-storage', () => ({
   setItem: vi.fn(() => Promise.resolve()),
   getItem: vi.fn(() => Promise.resolve('')),

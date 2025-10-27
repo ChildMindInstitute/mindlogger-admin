@@ -43,9 +43,9 @@ const pathToActivityItemsNewApplet = generatePath(page.builderAppletActivityItem
   appletId: Path.NewApplet,
 });
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedGetValues = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedGetValues = vi.fn();
 
 // mock the module
 vi.mock('react-router-dom', async () => {

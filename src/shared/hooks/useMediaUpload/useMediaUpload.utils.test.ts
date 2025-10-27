@@ -61,9 +61,9 @@ describe('useMediaUpload.utils', () => {
 
   describe('checkFileExists', () => {
     const url = 'https://example.com/file.mp3';
-    const mockedOnSuccess = jest.fn();
-    const mockedOnError = jest.fn();
-    const mockedOnStopRecursion = jest.fn();
+    const mockedOnSuccess = vi.fn();
+    const mockedOnError = vi.fn();
+    const mockedOnStopRecursion = vi.fn();
 
     beforeEach(() => {
       vi.useFakeTimers();

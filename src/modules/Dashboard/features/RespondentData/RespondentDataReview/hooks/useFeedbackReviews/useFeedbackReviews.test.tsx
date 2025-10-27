@@ -131,12 +131,12 @@ describe('useFeedbackReviews', () => {
   ];
 
   beforeEach(() => {
-    (useFormContext as jest.Mock).mockReturnValue(mockUseFormContext);
-    (useFeedbackReviewsData as jest.Mock).mockReturnValue({
+    (useFormContext as vi.Mock).mockReturnValue(mockUseFormContext);
+    (useFeedbackReviewsData as vi.Mock).mockReturnValue({
       fetchReviewsData: mockFetchReviewsData,
     });
 
-    (useAsync as jest.Mock).mockImplementation((apiFunction, onSuccess) => ({
+    (useAsync as vi.Mock).mockImplementation((apiFunction, onSuccess) => ({
       execute: vi.fn(async (params) => {
         const result = await apiFunction(params);
         await onSuccess(result);
@@ -148,7 +148,7 @@ describe('useFeedbackReviews', () => {
 
   test('should fetch reviews correctly', async () => {
     const mockReviewsResult = { data: { result: [{ id: 1, answer: 'encrypted answer' }] } };
-    (getReviewsApi as jest.Mock).mockResolvedValue(mockReviewsResult);
+    (getReviewsApi as vi.Mock).mockResolvedValue(mockReviewsResult);
     mockFetchReviewsData.mockResolvedValue([{ reviewId: 1, reviewer: 'test' }]);
 
     const { result } = renderUseFeedbackReviewsHook({
@@ -177,8 +177,8 @@ describe('useFeedbackReviews', () => {
   });
 
   test('should handle review removal correctly (activity)', async () => {
-    (deleteReviewApi as jest.Mock).mockResolvedValue({});
-    (getReviewsApi as jest.Mock).mockResolvedValue({ data: { result: [] } });
+    (deleteReviewApi as vi.Mock).mockResolvedValue({});
+    (getReviewsApi as vi.Mock).mockResolvedValue({ data: { result: [] } });
     mockFetchReviewsData.mockResolvedValue([]);
 
     const { result } = renderUseFeedbackReviewsHook({
@@ -207,8 +207,8 @@ describe('useFeedbackReviews', () => {
   });
 
   test('should handle review removal correctly (activity flow)', async () => {
-    (deleteFlowReviewApi as jest.Mock).mockResolvedValue({});
-    (getFlowReviewsApi as jest.Mock).mockResolvedValue({ data: { result: [] } });
+    (deleteFlowReviewApi as vi.Mock).mockResolvedValue({});
+    (getFlowReviewsApi as vi.Mock).mockResolvedValue({ data: { result: [] } });
     mockFetchReviewsData.mockResolvedValue([]);
 
     const { result } = renderUseFeedbackReviewsHook({
