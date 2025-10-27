@@ -56,3 +56,16 @@ vi.mock('axios', () => {
     },
   };
 });
+
+// Global mock for useFeatureFlags - Vitest requires this due to different hoisting behavior than Jest
+// In Jest (develop branch), individual test mocks work without a global mock due to automatic hoisting
+// In Vitest, we need a default implementation to prevent "Cannot destructure" errors
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(() => ({
+    featureFlags: {
+      enableActivityAssign: true,
+      enableParticipantMultiInformant: true,
+    },
+    resetLDContext: vi.fn(),
+  })),
+}));
