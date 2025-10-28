@@ -137,8 +137,11 @@ const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 Element.prototype.scrollTo = vi.fn();
 
-vi.useFakeTimers();
-vi.setTimeout(10000);
+// Set default mock implementation before all tests
+mockUseFeatureFlags.mockReturnValue({
+  featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
+  resetLDContext: vi.fn(),
+});
 
 const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
@@ -178,7 +181,7 @@ describe('ActivityAssignDrawer', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders correctly', () => {
@@ -208,7 +211,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityItems = screen.getAllByTestId(`${dataTestId}-activities-list-activity-item`);
       expect(activityItems).toHaveLength(mockedAppletData.activities.length);
@@ -229,7 +231,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityCheckbox = screen.getByTestId(
         `${dataTestId}-activities-list-activity-checkbox-${mockedAppletData.activities[0].id}`,
@@ -250,7 +251,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const selectAll = screen.getByText('Select All');
 
@@ -290,7 +290,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       checkAssignment(`${mockedOwnerParticipant.nicknames[0]} (Team)`, '');
 
@@ -313,7 +312,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedLimitedParticipant.details[0].subjectTag}`);
       checkAssignment(
@@ -343,7 +341,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`);
       checkAssignment(
@@ -372,7 +369,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -381,7 +377,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
@@ -400,7 +395,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -415,7 +409,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
@@ -438,7 +431,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -447,7 +439,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'All of the requested assignments already exist. Please create new unique assignments.',
@@ -458,8 +449,6 @@ describe('ActivityAssignDrawer', () => {
   });
 
   it('prevents proceeding to Review step if there are duplicate assignments', async () => {
-    vi.setTimeout(20000);
-
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
@@ -472,7 +461,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -487,7 +475,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => expect(submitButton).not.toBeEnabled());
     expect(await screen.findByText('Review')).not.toBeVisible();
 
@@ -524,7 +511,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    vi.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -539,19 +525,16 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
 
     fireEvent.click(screen.getByText('Send Emails'));
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Assigning to participants')).toBeVisible();
     });
 
-    vi.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Emails have been sent')).toBeVisible();
 
