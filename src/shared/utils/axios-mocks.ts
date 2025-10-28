@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } 
 
 import { BaseSchema, MetaSchema } from '../state';
 import { ApiResponseCodes } from '../api';
+import { authApiClient } from '../api/apiConfig';
 
 // Define HttpResponse type based on AxiosResponse
 export type HttpResponse = AxiosResponse;
@@ -15,27 +16,28 @@ export type HttpResponse = AxiosResponse;
 export const mockGetRequestResponses = (
   responses: Record<string, HttpResponse | ((params: Record<string, string>) => HttpResponse)>,
 ): void => {
-  // Mock axios.get with vitest
-  vi.spyOn(axios, 'get').mockImplementation(
-    <T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
-      if (url && responses[url]) {
-        const response = responses[url];
+  const mockImplementation = <T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+    if (url && responses[url]) {
+      const response = responses[url];
 
-        if (typeof response === 'function' && config?.params) {
-          return Promise.resolve(response(config.params) as AxiosResponse<T>);
-        }
-
-        return Promise.resolve(responses[url] as AxiosResponse<T>);
-      } else {
-        // Must explain that the request was unmocked via a console log statement, else you only
-        // receive a contextless UnhandledPromiseRejection error.
-        // eslint-disable-next-line no-console
-        console.log(`No response provided for ${url}`);
-
-        throw new Error(`No response provided for ${url}`);
+      if (typeof response === 'function' && config?.params) {
+        return Promise.resolve(response(config.params) as AxiosResponse<T>);
       }
-    },
-  );
+
+      return Promise.resolve(responses[url] as AxiosResponse<T>);
+    } else {
+      // Must explain that the request was unmocked via a console log statement, else you only
+      // receive a contextless UnhandledPromiseRejection error.
+      // eslint-disable-next-line no-console
+      console.log(`No response provided for ${url}`);
+
+      throw new Error(`No response provided for ${url}`);
+    }
+  };
+
+  // Mock both axios.get and authApiClient.get
+  vi.spyOn(axios, 'get').mockImplementation(mockImplementation);
+  vi.spyOn(authApiClient, 'get').mockImplementation(mockImplementation);
 };
 
 export type HttpResponseWithData<D> = Omit<HttpResponse, 'data'> & { data: D };

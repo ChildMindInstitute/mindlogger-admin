@@ -38,31 +38,26 @@ import {
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { authApiClient } from 'shared/api/apiConfig';
 
 import { Activities } from './Activities';
 
-const successfulEmptyGetAppletActivitiesMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: {
-      activitiesDetails: [],
-      appletDetail: {
-        ...mockedAppletData,
-        activities: [],
-      },
+const successfulEmptyGetAppletActivitiesMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: {
+    activitiesDetails: [],
+    appletDetail: {
+      ...mockedAppletData,
+      activities: [],
     },
   },
-};
+});
 
-const successfulGetAppletActivitiesMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: {
-      activitiesDetails: mockedAppletData.activities,
-      appletDetail: mockedAppletData,
-    },
+const successfulGetAppletActivitiesMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: {
+    activitiesDetails: mockedAppletData.activities,
+    appletDetail: mockedAppletData,
   },
-};
+});
 
 const getAppletUrl = `/applets/${mockedAppletId}`;
 const successfulGetAppletMock = {
@@ -70,12 +65,9 @@ const successfulGetAppletMock = {
   data: { result: mockedAppletData },
 };
 
-const successfulEmptyHttpResponseMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: [],
-  },
-};
+const successfulEmptyHttpResponseMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: [],
+});
 
 const testId = 'dashboard-applet-activities';
 const route = `/dashboard/${mockedAppletId}/activities`;
@@ -102,6 +94,15 @@ const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
+// Set default mock implementation before all tests
+mockUseFeatureFlags.mockReturnValue({
+  featureFlags: {
+    enableParticipantMultiInformant: false,
+    enableActivityAssign: false,
+  },
+  resetLDContext: vi.fn(),
+});
+
 describe('Dashboard > Applet > Activities screen', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -115,7 +116,7 @@ describe('Dashboard > Applet > Activities screen', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render empty component', async () => {
@@ -155,7 +156,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(axios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect(authApiClient.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
