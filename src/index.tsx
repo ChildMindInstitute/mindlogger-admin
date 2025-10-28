@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import * as Sentry from '@sentry/react';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
@@ -27,7 +26,7 @@ if (process.env.REACT_APP_DD_CLIENT_TOKEN) {
 if (
   process.env.REACT_APP_DD_APP_ID &&
   process.env.REACT_APP_DD_CLIENT_TOKEN &&
-  (isUat || isProduction)
+  (isUat || isProduction || true)
 ) {
   datadogRum.init({
     applicationId: process.env.REACT_APP_DD_APP_ID,
@@ -41,33 +40,17 @@ if (
     version: process.env.REACT_APP_DD_VERSION,
     sessionSampleRate: 100,
     sessionReplaySampleRate: 0,
-    defaultPrivacyLevel: 'mask',
+    defaultPrivacyLevel: 'mask-user-input',
     trackResources: true,
     trackLongTasks: true,
     trackUserInteractions: false,
-    allowedTracingUrls: (process.env.REACT_APP_DD_TRACING_URLS ?? '')
-      .split(',')
-      .map((it: string) => it.trim()),
+    allowedTracingUrls: [
+      (url) => url.indexOf('cmiml.net') > -1,
+      (url) => url.indexOf('gettingcurious.com') > -1,
+    ],
   });
 }
 
-Sentry.init({
-  dsn: process.env.REACT_APP_DSN || '',
-  integrations: [
-    Sentry.browserTracingIntegration({
-      tracePropagationTargets: process.env.REACT_APP_TRACE_PROPAGATION_TARGETS
-        ? JSON.parse(process.env.REACT_APP_TRACE_PROPAGATION_TARGETS)
-        : [],
-    }),
-    Sentry.replayIntegration({
-      maskAllText: false,
-      blockAllMedia: false,
-    }),
-  ],
-  tracesSampleRate: 1.0,
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-});
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
