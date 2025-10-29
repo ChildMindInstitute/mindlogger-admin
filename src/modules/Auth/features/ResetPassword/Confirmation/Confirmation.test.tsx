@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { mockedEmail } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -15,7 +16,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => mockUseNavigate,
+    useNavigate: () => mockedUseNavigate,
   };
 });
 

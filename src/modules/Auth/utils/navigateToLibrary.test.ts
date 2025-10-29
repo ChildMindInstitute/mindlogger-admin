@@ -1,8 +1,13 @@
+import { vi } from 'vitest';
+
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 
 import { navigateToLibrary } from './navigateToLibrary';
 
 describe('navigateToLibrary', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   test('should navigate to the library URL when it is present in storage', () => {
     const fakeNavigate = vi.fn();
     const libraryUrl = 'https://example.com/library';
