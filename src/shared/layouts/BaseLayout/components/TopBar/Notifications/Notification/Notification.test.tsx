@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { mockedAlert, mockedFullSubjectId1 } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -104,7 +105,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
+      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 
@@ -131,7 +132,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}`,
+      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 });
