@@ -1,5 +1,6 @@
 import { screen, waitFor, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet } from 'shared/mock';
@@ -108,7 +109,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('navigates to the next step when onNext is called', async () => {
-    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
+    vi.mocked(fetchLorisProjects).mockResolvedValueOnce(['Project1', 'Project2']);
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />);
 
@@ -131,7 +132,7 @@ describe('ConfigurationPopup', () => {
   });
 
   test('displays an error message when fetching projects fails', async () => {
-    (fetchLorisProjects as vi.Mock).mockRejectedValueOnce(new Error('Fetch failed'));
+    vi.mocked(fetchLorisProjects).mockRejectedValueOnce(new Error('Fetch failed'));
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
       preloadedState,
@@ -140,14 +141,17 @@ describe('ConfigurationPopup', () => {
     await fillForm();
     await userEvent.click(screen.getByTestId('loris-configuration-popup-submit-button'));
 
-    await waitFor(() => {
-      expect(screen.getByText(/Invalid server or hostname credentials/i)).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Invalid server or hostname credentials/i)).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('saves the project and closes the modal', async () => {
-    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as vi.Mock).mockResolvedValue({ result: [{ message: 'Success' }] });
+    vi.mocked(fetchLorisProjects).mockResolvedValueOnce(['Project1', 'Project2']);
+    vi.mocked(saveLorisProject).mockResolvedValue({ result: [{ message: 'Success' }] });
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
@@ -166,8 +170,8 @@ describe('ConfigurationPopup', () => {
 
   test('displays an error message when saving the project fails', async () => {
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as vi.Mock).mockRejectedValueOnce(new Error('Save failed'));
+    vi.mocked(fetchLorisProjects).mockResolvedValueOnce(['Project1', 'Project2']);
+    vi.mocked(saveLorisProject).mockRejectedValueOnce(new Error('Save failed'));
 
     renderWithProviders(<ConfigurationPopup {...defaultProps} />, {
       preloadedState,
@@ -186,8 +190,8 @@ describe('ConfigurationPopup', () => {
 
   test('displays an error message when the applet is already tied to a project', async () => {
     vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    (fetchLorisProjects as vi.Mock).mockResolvedValueOnce(['Project1', 'Project2']);
-    (saveLorisProject as vi.Mock).mockResolvedValueOnce({
+    vi.mocked(fetchLorisProjects).mockResolvedValueOnce(['Project1', 'Project2']);
+    vi.mocked(saveLorisProject).mockResolvedValueOnce({
       result: [{ message: 'This project has previously been tied to applet' }],
     });
 

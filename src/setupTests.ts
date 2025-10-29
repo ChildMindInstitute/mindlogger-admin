@@ -24,8 +24,9 @@ vi.spyOn(global.console, 'warn').mockImplementation((message) => {
 
 vi.spyOn(global.console, 'error').mockImplementation((message) => {
   if (
-    message?.includes('A component is changing an uncontrolled input to be controlled') ||
-    message?.includes('`children` must be passed')
+    typeof message === 'string' &&
+    (message.includes('A component is changing an uncontrolled input to be controlled') ||
+      message.includes('`children` must be passed'))
   )
     return;
 
