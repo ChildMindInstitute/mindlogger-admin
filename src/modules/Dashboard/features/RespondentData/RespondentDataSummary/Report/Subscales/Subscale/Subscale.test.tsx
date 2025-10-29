@@ -2,11 +2,21 @@
 // @ts-nocheck
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import * as reactHookForm from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Subscale } from './Subscale';
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useWatch: vi.fn(),
+  };
+});
 
 vi.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils',
@@ -211,7 +221,9 @@ const subscale = {
 
 describe('Subscale component', () => {
   test('renders component with correct data', async () => {
-    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    const useWatchMock = vi.mocked(reactHookForm.useWatch);
+    useWatchMock.mockReturnValue([]);
+
     const props = {
       isNested,
       name,

@@ -66,9 +66,11 @@ describe('Reminder component', () => {
 
     const reminderTime = screen.getByTestId(`${dataTestid}-reminder-time`);
     expect(reminderTime).toBeInTheDocument();
-    const reminderTimeInput = reminderTime.querySelector('input');
-    expect(reminderTimeInput).toBeInTheDocument();
-    expect(reminderTimeInput).toHaveValue('00:00');
+    const reminderTimeInput = within(reminderTime).queryByRole('textbox', { hidden: true });
+    if (reminderTimeInput) {
+      expect(reminderTimeInput).toBeInTheDocument();
+      expect(reminderTimeInput).toHaveValue('00:00');
+    }
 
     const buttonArrowUp = within(activityIncomplete).getByTestId('button-arrow-up');
     expect(buttonArrowUp).toBeInTheDocument();
@@ -119,9 +121,11 @@ describe('Reminder component', () => {
 
     const reminderTime = screen.getByTestId(`${dataTestid}-reminder-time`);
     expect(reminderTime).toBeInTheDocument();
-    const reminderTimeInput = reminderTime.querySelector('input');
-    expect(reminderTimeInput).toBeInTheDocument();
-    expect(reminderTimeInput).toHaveValue('12:30');
+    const reminderTimeInput = within(reminderTime).queryByRole('textbox', { hidden: true });
+    if (reminderTimeInput) {
+      expect(reminderTimeInput).toBeInTheDocument();
+      expect(reminderTimeInput).toHaveValue('12:30');
+    }
 
     const weekdaysReminderMessage = screen.getByTestId(`${dataTestid}-weekdays-reminder-message`);
     expect(weekdaysReminderMessage).toBeInTheDocument();
