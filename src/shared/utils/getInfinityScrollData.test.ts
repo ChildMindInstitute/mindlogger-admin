@@ -1,7 +1,13 @@
+import { vi } from 'vitest';
+
 import { getInfinityScrollData } from './getInfinityScrollData';
 
 describe('getInfinityScrollData', () => {
   const action = vi.fn((nextPage: number) => nextPage);
+
+  beforeEach(() => {
+    action.mockClear();
+  });
 
   test.each`
     action    | totalSize | listSize | limit | isLoading | expectedCalls | expectedArgument | description
