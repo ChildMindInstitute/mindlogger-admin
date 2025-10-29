@@ -40,7 +40,7 @@ export const BaseLayout = () => {
     <StyledBaseLayout>
       {isAuthorized && <LeftBar />}
       <StyledCol isAuthorized={isAuthorized}>
-        {// <AnnouncementBanner />}
+        {/* <AnnouncementBanner /> */}
         <TopBar />
         <Outlet />
         <Footer />

@@ -72,7 +72,11 @@ export const AnnouncementBanner = (props: BannerProps) => {
 
   return shouldRender ? (
     <Box>
-      <Collapse in={isAnnouncementBannerActive && !isCollapsing} enter={false} onExited={handleOnExited}>
+      <Collapse
+        in={isAnnouncementBannerActive && !isCollapsing}
+        enter={false}
+        onExited={handleOnExited}
+      >
         {isAnnouncementBannerActive && (
           <Banner
             duration={null}

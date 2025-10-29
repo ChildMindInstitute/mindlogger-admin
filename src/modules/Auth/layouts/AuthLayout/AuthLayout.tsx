@@ -30,7 +30,7 @@ export const AuthLayout = () => {
         </StyledLogoWrapper>
         <Banners />
       </StyledHeader>
-      {// <AnnouncementBanner />}
+      {/* <AnnouncementBanner /> */}
       <StyledOutlet>
         <StyledAuthWrapper>
           <StyledAuthWrapperInner>
