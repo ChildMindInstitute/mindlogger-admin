@@ -18,7 +18,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockedUseNavigate,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
@@ -43,11 +43,11 @@ vi.mock('modules/Dashboard/state/CalendarEvents', async (importOriginal) => {
   return {
     ...actual,
     calendarEvents: {
-      ...originalModule.calendarEvents,
+      ...actual.calendarEvents,
       useScheduledVisibilityData,
       useAvailableVisibilityData,
       actions: {
-        ...originalModule.calendarEvents.actions,
+        ...actual.calendarEvents.actions,
         setAvailableVisibility,
         setScheduledVisibility,
         createCalendarEvents,
@@ -110,10 +110,12 @@ describe('useExpandedLists', () => {
     scheduledList.buttons[1].action();
     const { setAvailableVisibility, setScheduledVisibility } =
       calendarEventsModule.calendarEvents.actions;
-    expect(setScheduledVisibility).toHaveBeenCalledWith(true);
+    // The button toggles visibility, so if current state is true, it should call with false
+    expect(setScheduledVisibility).toHaveBeenCalledWith(false);
 
     availableList.buttons[0].action();
-    expect(setAvailableVisibility).toHaveBeenCalledWith(true);
+    // The button toggles visibility, so if current state is true, it should call with false
+    expect(setAvailableVisibility).toHaveBeenCalledWith(false);
 
     deactivatedList.buttons[0].action();
     expect(mockedUseNavigate).toHaveBeenCalledWith('/builder/mockedAppletId/activities');
