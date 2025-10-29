@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { useTable } from './useTable';
 
@@ -10,6 +11,10 @@ vi.mock('redux/modules', () => ({
 
 describe('useTable hook tests', () => {
   const mockAsyncFn = vi.fn();
+
+  beforeEach(() => {
+    mockAsyncFn.mockClear();
+  });
 
   test('should return initial searchValue, order and page', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
