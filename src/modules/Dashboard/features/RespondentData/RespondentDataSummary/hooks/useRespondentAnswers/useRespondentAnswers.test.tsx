@@ -19,7 +19,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
@@ -286,7 +286,7 @@ describe('useRespondentAnswers', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch answers and update form values on successful API call (no identifier is chosen)', async () => {
@@ -406,7 +406,16 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided with function params)', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
+
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParamsWithIdentifier);
 
@@ -414,10 +423,19 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided as form value)', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue({
       ...mockedGetValuesReturn,
       identifier: mockedIdentifier,
     });
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
+
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, identifier: undefined });
 
@@ -425,7 +443,15 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to activity last answer date, if filterByIdentifier was changed to false', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
 
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, filterByIdentifier: false });
@@ -468,6 +494,11 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should handle errors gracefully', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
     vi.mocked(axios.get).mockRejectedValue(new Error('API Error'));
 

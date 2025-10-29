@@ -17,7 +17,8 @@ vi.mock('shared/utils/encryption', () => ({
 }));
 
 vi.spyOn(global.console, 'warn').mockImplementation((message) => {
-  if (message?.includes('You have provided an out-of-range value')) return;
+  if (typeof message === 'string' && message.includes('You have provided an out-of-range value'))
+    return;
 
   return message;
 });
