@@ -30,12 +30,13 @@ describe('exportDataSucceed', () => {
     vi.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
       Promise.resolve(prepareDataUtils.getDefaultExportData()),
     );
-    vi.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
-    vi.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
-    vi.spyOn(exportMediaZipUtils, 'exportMediaZip').mockImplementation();
+    vi.spyOn(exportTemplateUtils, 'exportTemplate').mockResolvedValue(undefined);
+    vi.spyOn(exportCsvZipUtils, 'exportCsvZip').mockResolvedValue(undefined);
+    vi.spyOn(exportMediaZipUtils, 'exportMediaZip').mockResolvedValue(undefined);
   });
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
   afterAll(() => {
     vi.useRealTimers();
@@ -132,12 +133,15 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportEncryptedDataSucceed: check actions with default data with legacy naming', async () => {
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
       data: mockedExportData,
@@ -151,11 +155,14 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportDecryptedDataSucceed: check actions with default data with legacy naming', async () => {
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '-test',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
       parsedAnswers: mockedDecryptedExportData,
@@ -168,12 +175,15 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportEncryptedDataSucceed: check actions with default data with new naming', async () => {
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
       data: mockedExportData,
@@ -187,11 +197,14 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportDecryptedDataSucceed: check actions with default data with new naming', async () => {
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
       parsedAnswers: mockedDecryptedExportData,
@@ -211,12 +224,15 @@ describe('exportDataSucceed', () => {
         activityJourneyData,
       }),
     );
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     checkExportTemplateDefaultData();
   });
@@ -231,11 +247,14 @@ describe('exportDataSucceed', () => {
         activityJourneyData,
       }),
     );
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     checkExportTemplateDefaultData();
   });
