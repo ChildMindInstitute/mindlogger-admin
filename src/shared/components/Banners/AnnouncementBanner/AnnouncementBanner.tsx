@@ -8,33 +8,33 @@ import { auth } from 'redux/modules';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
-import { StyledImg, StyledLink } from './RebrandBanner.styles';
+import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
 
-const CURIOUS_REBRAND_URL = 'https://www.gettingcurious.com/rebrand';
+const ANNOUNCEMENT_URL = 'https://www.gettingcurious.com/rebrand';
 
 /**
- * Returns a unique key for the rebrand banner dismiss state
+ * Returns a unique key for the announcement banner dismiss state
  * It creates a user-only key for use on the auth screen
  */
-export const getDismissedKey = (userId: string) => `rebrand-banner-dismissed-${userId}`;
+export const getDismissedKey = (userId: string) => `announcement-banner-dismissed-${userId}`;
 
 // Global key for anonymous users (e.g., on the login screen)
-export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
+export const GLOBAL_DISMISSED_KEY = 'announcement-banner-dismissed-global';
 
 const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
-export const RebrandBanner = (props: BannerProps) => {
+export const AnnouncementBanner = (props: BannerProps) => {
   const userData = auth.useData();
   const userId = userData?.user.id;
   const location = useLocation();
 
-  const [isRebrandBannerActive, setIsRebrandBannerActive] = useState(false);
+  const [isAnnouncementBannerActive, setIsAnnouncementBannerActive] = useState(false);
   const [isCollapsing, setIsCollapsing] = useState(false);
 
   const handleOnExited = () => {
     if (isCollapsing) {
       setIsCollapsing(false);
-      setIsRebrandBannerActive(false);
+      setIsAnnouncementBannerActive(false);
     }
   };
 
@@ -42,7 +42,7 @@ export const RebrandBanner = (props: BannerProps) => {
     // For auth screen or when user is not logged in yet
     if (!userId) {
       const globalDismissed = localStorage.getItem(GLOBAL_DISMISSED_KEY);
-      setIsRebrandBannerActive(!globalDismissed);
+      setIsAnnouncementBannerActive(!globalDismissed);
 
       return;
     }
@@ -50,7 +50,7 @@ export const RebrandBanner = (props: BannerProps) => {
     // For logged-in users
     const userDismissed = localStorage.getItem(getDismissedKey(userId));
 
-    setIsRebrandBannerActive(!userDismissed);
+    setIsAnnouncementBannerActive(!userDismissed);
   }, [userId]);
 
   const isDisplayRoute = DISPLAY_ROUTES.some((route) => route.test(location.pathname));
@@ -72,12 +72,12 @@ export const RebrandBanner = (props: BannerProps) => {
 
   return shouldRender ? (
     <Box>
-      <Collapse in={isRebrandBannerActive && !isCollapsing} enter={false} onExited={handleOnExited}>
-        {isRebrandBannerActive && (
+      <Collapse in={isAnnouncementBannerActive && !isCollapsing} enter={false} onExited={handleOnExited}>
+        {isAnnouncementBannerActive && (
           <Banner
             duration={null}
             severity={undefined}
-            data-testid="rebrand-banner"
+            data-testid="announcement-banner"
             onClose={(reason) => {
               if (reason === 'manual') {
                 handleDismiss();
@@ -96,10 +96,10 @@ export const RebrandBanner = (props: BannerProps) => {
             }}
             {...props}
           >
-            <Trans i18nKey="rebrandBanner">
+            <Trans i18nKey="announcementBanner">
               <strong>We are rebranding! </strong>
               <>Design updates are on the way — same great app, fresh new look. Curious? </>
-              <StyledLink href={CURIOUS_REBRAND_URL} target="_blank">
+              <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
                 Click to learn more.
               </StyledLink>
             </Trans>
