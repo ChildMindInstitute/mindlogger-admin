@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { Action } from 'history';
+import { vi } from 'vitest';
 
 import history from 'routes/history';
 
@@ -9,6 +10,10 @@ const mockBlocker = vi.fn();
 const spyHistoryBlock = vi.spyOn(history, 'block');
 
 describe('useBlocker', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should call history.block when "when" is true', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     expect(spyHistoryBlock).toHaveBeenCalled();
