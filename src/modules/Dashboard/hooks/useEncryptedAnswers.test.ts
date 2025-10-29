@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 import * as routerDom from 'react-router-dom';
 
 import { auth } from 'redux/modules';
@@ -15,6 +16,26 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useParams: () => vi.fn(),
+  };
+});
+
+vi.mock('shared/utils', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('shared/utils')>();
+
+  return {
+    ...actual,
+    getParsedEncryptionFromServer: vi.fn((encryption) => {
+      if (!encryption) return null;
+
+      return {
+        publicKey: [1, 2, 3],
+        prime: [4, 5, 6],
+        base: [7, 8, 9],
+        accountId: 'mockAccountId',
+      };
+    }),
+    getAESKey: vi.fn(() => Promise.resolve('mocked-aes-key')),
+    encryptData: vi.fn(({ text }) => Promise.resolve(`encrypted:${text}`)),
   };
 });
 
