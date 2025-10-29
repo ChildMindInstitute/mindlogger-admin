@@ -3,10 +3,12 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 vi.mock('react-secure-storage', () => ({
+  default: {
   setItem: vi.fn(() => Promise.resolve()),
   getItem: vi.fn(() => Promise.resolve('')),
   removeItem: vi.fn(() => Promise.resolve()),
   clear: vi.fn(() => Promise.resolve()),
+  },
 }));
 
 vi.mock('shared/utils/encryption', () => ({
