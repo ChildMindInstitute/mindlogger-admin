@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { useState } from 'react';
 import { t } from 'i18next';
+import { vi } from 'vitest';
 
 import { useParticipantDropdown } from 'modules/Dashboard/components';
 import {
@@ -123,6 +124,12 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
+// Set default mock implementation before all tests
+mockUseFeatureFlags.mockReturnValue({
+  featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
+  resetLDContext: vi.fn(),
+});
+
 /**
  * Wrapper for each component test
  */
@@ -171,7 +178,7 @@ describe('AssignmentsTable', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render the assignments table', () => {

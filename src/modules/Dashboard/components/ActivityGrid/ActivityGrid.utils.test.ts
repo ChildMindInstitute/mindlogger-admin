@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { getActivityActions } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.utils';
 import {
   ActionsObject,
