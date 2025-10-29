@@ -794,7 +794,9 @@ describe('SubscalesConfiguration', () => {
     });
 
     // Add the text " Subscale" to the subscale name, which should now be "Sum Subscale"
-    await userEvent.type(getByTestId(`${mockedTestid}-0-name`).querySelector('input'), ' Subscale');
+    const nameInput = getByTestId(`${mockedTestid}-0-name`).querySelector('input');
+    await userEvent.type(nameInput, ' Subscale');
+    await userEvent.tab(); // This will trigger blur on the name input
 
     await waitFor(() => {
       const reportScore: ScoreReport = ref.current.getValues(
@@ -835,9 +837,11 @@ describe('SubscalesConfiguration', () => {
       });
 
       await waitFor(() => {
-        expect(
-          screen.getByText('That Subscale Name is already in use. Please use a different name'),
-        ).toBeVisible();
+        const errorMessages = screen.getAllByText(
+          'That Subscale Name is already in use. Please use a different name',
+        );
+        expect(errorMessages.length).toBeGreaterThan(0);
+        expect(errorMessages[0]).toBeVisible();
       });
     });
 

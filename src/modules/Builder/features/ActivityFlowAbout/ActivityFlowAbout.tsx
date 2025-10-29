@@ -3,7 +3,11 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCustomFormContext,
+  useRedirectIfNoMatchedActivityFlow,
+  useImmediateValidation,
+} from 'modules/Builder/hooks';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
@@ -16,7 +20,6 @@ import {
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
-import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 import { useFeatureFlags } from 'shared/hooks';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
@@ -37,6 +40,13 @@ export const ActivityFlowAbout = React.memo(() => {
     return index;
   }, [activityFlowId, getValues]);
 
+  const nameFieldPath = `activityFlows.${activityFlowIndex}.name`;
+  const descriptionFieldPath = `activityFlows.${activityFlowIndex}.description`;
+
+  // Use the validation hook for both fields
+  const handleNameChange = useImmediateValidation(nameFieldPath);
+  const handleDescriptionChange = useImmediateValidation(descriptionFieldPath);
+
   const dataTestid = 'builder-activity-flows-about';
   const commonProps = {
     fullWidth: true,
@@ -51,25 +61,27 @@ export const ActivityFlowAbout = React.memo(() => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            key={`activityFlows.${activityFlowIndex}.name`}
-            name={`activityFlows.${activityFlowIndex}.name`}
+            key={nameFieldPath}
+            name={nameFieldPath}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
             restrictExceededValueLength
             data-testid={`${dataTestid}-name`}
+            onChange={handleNameChange}
           />
         </Box>
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            key={`activityFlows.${activityFlowIndex}.description`}
-            name={`activityFlows.${activityFlowIndex}.description`}
+            key={descriptionFieldPath}
+            name={descriptionFieldPath}
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
             restrictExceededValueLength
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}
             data-testid={`${dataTestid}-description`}
+            onChange={handleDescriptionChange}
           />
         </Box>
         <StyledTitleMedium

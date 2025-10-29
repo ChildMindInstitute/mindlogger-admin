@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
@@ -8,6 +8,7 @@ import {
   useCheckAndTriggerOnNameUniqueness,
   useCurrentActivity,
   useCustomFormContext,
+  useImmediateValidation,
 } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
@@ -82,7 +83,7 @@ export const ScoreContent = ({
   const navigate = useNavigate();
   const { appletId, activityId } = useParams();
   const { control, setValue, getValues } = useCustomFormContext();
-  const { clearErrors, trigger, getFieldState } = useFormContext();
+  const { clearErrors, trigger } = useFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
@@ -160,6 +161,8 @@ export const ScoreContent = ({
     entitiesFieldPath: reportsName,
     checkIfShouldIncludeEntity: isScoreReport,
   });
+
+  const handleNameChange = useImmediateValidation(scoreNameField);
 
   const removeScoreConditional = (index: number) => {
     setIsRemoveConditionalPopupVisible(true);
@@ -240,16 +243,16 @@ export const ScoreContent = ({
     [
       activity,
       getValues,
-      name,
+      reportsName,
       prevCalculationType,
       prevScoreName,
-      reportsName,
       score?.calculationType,
       score?.id,
       scoreConditionalsName,
       scoreName,
       selectedItems,
       setValue,
+      scoreIdField,
     ],
   );
 
@@ -265,12 +268,18 @@ export const ScoreContent = ({
       setValue(subscaleNameField, subscaleName);
 
       if (scoringType === 'score') {
+        // Update calculation type from linked subscale and clear its errors
         setValue(calculationTypeField, newLinkedSubscale.scoring);
+        clearErrors(calculationTypeField);
+        setTimeout(() => trigger(calculationTypeField), 0);
 
         const eligibleItems = newLinkedSubscale.items.filter(
           (item) => !!activity?.items.some((activityItem) => activityItem.id === item),
         );
+        // Update items and clear their errors since value changed programmatically
         setValue(itemsScoreField, eligibleItems);
+        clearErrors(itemsScoreField);
+        setTimeout(() => trigger(itemsScoreField), 100);
 
         if (`${calculationType}` !== `${newLinkedSubscale.scoring}`) {
           setValue(calculationTypeField, newLinkedSubscale.scoring);
@@ -282,11 +291,14 @@ export const ScoreContent = ({
       calculationType,
       handleCalculationChange,
       subscaleNameField,
-      name,
       scoringType,
       setValue,
       eligibleSubscales,
       clearErrors,
+      activity,
+      trigger,
+      calculationTypeField,
+      itemsScoreField,
     ],
   );
 
@@ -298,13 +310,27 @@ export const ScoreContent = ({
       if (scoringType === 'score' && linkedSubscale) {
         if (`${calculationType}` !== `${linkedSubscale.scoring}`) {
           setValue(calculationTypeField, linkedSubscale.scoring);
+          clearErrors(calculationTypeField);
+          setTimeout(() => trigger(calculationTypeField), 0);
           handleCalculationChange({ target: { value: linkedSubscale.scoring } });
         }
 
         setValue(itemsScoreField, linkedSubscale.items);
+        clearErrors(itemsScoreField);
+        setTimeout(() => trigger(itemsScoreField), 100);
       }
     },
-    [calculationType, handleCalculationChange, linkedSubscale, name, setValue],
+    [
+      calculationType,
+      handleCalculationChange,
+      linkedSubscale,
+      setValue,
+      clearErrors,
+      trigger,
+      calculationTypeField,
+      itemsScoreField,
+      scoringTypeField,
+    ],
   );
 
   const handleNameBlur = () => {
@@ -441,24 +467,26 @@ export const ScoreContent = ({
                 key={scoreNameField}
                 name={scoreNameField}
                 label={t('scoreName')}
-                onInput={() => {
-                  // Clear errors immediately when user starts typing
-                  if (getFieldState(scoreNameField).error) clearErrors(scoreNameField);
-                }}
-                onBlur={(e) => {
-                  // With debounce, manually set current DOM value before custom blur handler
-                  const currentValue = (e.target as HTMLInputElement).value;
-                  setValue(scoreNameField, currentValue, { shouldValidate: false });
-                  setTimeout(() => {
-                    // Trigger validation first to show errors immediately
-                    trigger(scoreNameField);
-                    // Then run custom blur logic
-                    handleNameBlur();
-                  }, 0);
-                }}
-                sx={{ mb: theme.spacing(4.8) }}
-                data-testid={`${dataTestid}-name`}
                 withDebounce
+                onChange={handleNameChange}
+                onBlur={(e) => {
+                  const currentValue = (e.target as HTMLInputElement).value;
+                  setValue(scoreNameField, currentValue, { shouldValidate: true });
+                  if (currentValue !== '') {
+                    handleNameBlur();
+                  }
+                }}
+                sx={{
+                  mb: theme.spacing(4.8),
+                  // Ensure red border persists whenever error exists
+                  '&.MuiTextField-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                    borderColor: variables.palette.error,
+                  },
+                  '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                    borderColor: variables.palette.error,
+                  },
+                }}
+                data-testid={`${dataTestid}-name`}
               />
               <SelectController
                 name={calculationTypeField}

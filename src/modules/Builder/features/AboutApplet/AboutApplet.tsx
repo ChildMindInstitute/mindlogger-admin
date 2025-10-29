@@ -14,34 +14,21 @@ import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { themes } from 'modules/Builder/state';
 import { BuilderContainer } from 'shared/features';
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCustomFormContext, useImmediateValidation } from 'modules/Builder/hooks';
 
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
 import { commonUploaderProps } from './AboutApplet.const';
 import { ThemeSelectController } from './ThemeSelectController';
 
-// Utility to handle displayName validation and error clearing
-const handleDisplayNameValidation = (
-  value: string,
-  applyChange: () => void,
-  trigger: (fieldName: string) => void,
-  clearErrors: (fieldName: string) => void,
-  fieldName: string,
-) => {
-  applyChange();
-  if (!value || value.trim() === '') {
-    setTimeout(() => trigger(fieldName), 0);
-  } else {
-    clearErrors(fieldName);
-  }
-};
-
 export const AboutApplet = () => {
   const { t } = useTranslation();
   const { result: themesList = [] } = themes.useThemesData() || {};
   const themesOptions = getColorThemeOptions(themesList);
-  const { control, setValue, watch, trigger, clearErrors } = useCustomFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
+
+  // Use the validation hook for the displayName field
+  const handleDisplayNameChange = useImmediateValidation('displayName');
 
   const commonInputProps = {
     control,
@@ -89,15 +76,7 @@ export const AboutApplet = () => {
               label={t('appletName')}
               restrictExceededValueLength
               data-testid="about-applet-display-name"
-              onChange={(e, applyChange) =>
-                handleDisplayNameValidation(
-                  e.target.value,
-                  applyChange,
-                  trigger,
-                  clearErrors,
-                  'displayName',
-                )
-              }
+              onChange={handleDisplayNameChange}
             />
           </Box>
           <Box sx={{ mb: theme.spacing(4.4) }}>

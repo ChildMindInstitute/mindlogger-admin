@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
-import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCheckAndTriggerOnNameUniqueness,
+  useCustomFormContext,
+  useImmediateValidation,
+} from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -42,7 +45,6 @@ export const ScoreCondition = ({
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
   const { control, setValue, watch, getValues } = useCustomFormContext();
-  const { trigger, clearErrors, getFieldState } = useFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);
   const targetSelector = `report-${scoreKey}`;
@@ -55,6 +57,8 @@ export const ScoreCondition = ({
     currentPath: name,
     entitiesFieldPath: scoreConditionalsName,
   });
+
+  const handleConditionNameChange = useImmediateValidation(`${name}.name`);
 
   const handleConditionNameBlur = () => {
     if (conditionName === prevScoreConditionName) return;
@@ -113,23 +117,25 @@ export const ScoreCondition = ({
               key={`${name}.name`}
               name={`${name}.name`}
               label={t('scoreConditionName')}
-              onInput={() => {
-                // Clear errors immediately when user starts typing
-                if (getFieldState(`${name}.name`).error) clearErrors(`${name}.name`);
-              }}
+              onChange={handleConditionNameChange}
               onBlur={(e) => {
-                // With debounce, manually set current DOM value before custom blur handler
                 const currentValue = (e.target as HTMLInputElement).value;
-                setValue(`${name}.name`, currentValue, { shouldValidate: false });
-                setTimeout(() => {
-                  // Trigger validation first to show errors immediately
-                  trigger(`${name}.name`);
-                  // Then run custom blur logic
+                setValue(`${name}.name`, currentValue, { shouldValidate: true });
+                if (currentValue !== '') {
                   handleConditionNameBlur();
-                }, 0);
+                }
               }}
               data-testid={`${dataTestid}-name`}
               withDebounce
+              sx={{
+                // Persist red border on error (local override only for this field)
+                '&.MuiTextField-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                  borderColor: variables.palette.error,
+                },
+                '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                  borderColor: variables.palette.error,
+                },
+              }}
             />
             <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
               <CopyId

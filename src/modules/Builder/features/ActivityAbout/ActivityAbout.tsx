@@ -27,6 +27,7 @@ import {
   useRedirectIfNoMatchedActivity,
   useCurrentActivity,
   useCustomFormContext,
+  useImmediateValidation,
 } from 'modules/Builder/hooks';
 import { getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useFeatureFlags } from 'shared/hooks';
@@ -43,32 +44,19 @@ import {
   useCheckIfItemsHaveVariables,
 } from './ActivityAbout.hooks';
 
-// Utility to handle activity name validation and error clearing
-const handleDisplayNameValidation = (
-  value: string,
-  applyChange: () => void,
-  trigger: (fieldName: string) => void,
-  clearErrors: (fieldName: string) => void,
-  fieldName: string,
-) => {
-  applyChange();
-  if (!value || value.trim() === '') {
-    setTimeout(() => trigger(fieldName), 0);
-  } else {
-    clearErrors(fieldName);
-  }
-};
-
 export const ActivityAbout = () => {
   const { t } = useTranslation();
   const { featureFlags } = useFeatureFlags();
 
   useRedirectIfNoMatchedActivity();
 
-  const { control, setValue, trigger, clearErrors } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
   const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
+
+  // Use the validation hook for the activity name field
+  const handleNameChange = useImmediateValidation(`${fieldName}.name`);
 
   const [activityItems, activityFlows, activityImage, splashScreen]: [
     ItemFormValues[],
@@ -225,15 +213,7 @@ export const ActivityAbout = () => {
               restrictExceededValueLength
               label={t('activityName')}
               data-testid="builder-activity-about-name"
-              onChange={(e, applyChange) =>
-                handleDisplayNameValidation(
-                  e.target.value,
-                  applyChange,
-                  trigger,
-                  clearErrors,
-                  `${fieldName}.name`,
-                )
-              }
+              onChange={handleNameChange}
             />
           </Box>
           <InputController
