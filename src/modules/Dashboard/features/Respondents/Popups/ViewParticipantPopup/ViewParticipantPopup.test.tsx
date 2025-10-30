@@ -1,5 +1,6 @@
 import { fireEvent } from '@testing-library/react';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -13,14 +14,16 @@ import { page } from 'resources';
 
 import { ViewParticipantPopup } from './ViewParticipantPopup';
 
+const navigateMock = vi.fn();
+
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
-    generatePath: () => vi.fn(),
+    useNavigate: vi.fn(),
+    generatePath: vi.fn(),
   };
 });
 
@@ -57,8 +60,6 @@ const tableRowsMock = [
 ];
 
 describe('ViewParticipantPopup', () => {
-  const navigateMock = vi.fn();
-
   beforeEach(() => {
     mockedUseNavigate.mockReturnValue(navigateMock);
   });

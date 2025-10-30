@@ -1,17 +1,23 @@
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpanel';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
 import { EditSubjectResponse } from 'api';
+import { useEditSubjectMutation } from 'modules/Dashboard/api/apiSlice';
 
 import { EditRespondentPopup } from '.';
 
+vi.mock('modules/Dashboard/api/apiSlice');
+
 const onCloseMock = vi.fn();
 const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
+const mockEditSubject = vi.fn();
+
+const mockedUseEditSubjectMutation = vi.mocked(useEditSubjectMutation);
 
 const chosenAppletData = {
   appletId: mockedAppletId,
@@ -31,6 +37,21 @@ const commonProps = {
 };
 
 describe('EditRespondentPopup component tests', () => {
+  beforeEach(() => {
+    mockEditSubject.mockResolvedValue({
+      data: {
+        result: {
+          ...chosenAppletData,
+          tag: chosenAppletData.subjectTag,
+        },
+      },
+    });
+    mockedUseEditSubjectMutation.mockReturnValue([
+      mockEditSubject,
+      { isLoading: false, error: undefined },
+    ] as unknown as ReturnType<typeof useEditSubjectMutation>);
+  });
+
   afterEach(() => {
     vi.resetAllMocks();
   });
@@ -54,7 +75,7 @@ describe('EditRespondentPopup component tests', () => {
       ...commonProps,
       chosenAppletData: limitedAppletData,
     };
-    vi.mocked(axios.put).mockResolvedValueOnce({
+    mockEditSubject.mockResolvedValueOnce({
       data: {
         result: {
           ...limitedAppletData,
@@ -102,7 +123,7 @@ describe('EditRespondentPopup component tests', () => {
       lastName: null,
     };
 
-    vi.mocked(axios.put).mockResolvedValueOnce({
+    mockEditSubject.mockResolvedValueOnce({
       data: {
         result,
       },
@@ -168,7 +189,7 @@ describe('EditRespondentPopup component tests', () => {
     });
 
     test('It accepts changes to the subjectʼs tag value', async () => {
-      vi.mocked(axios.put).mockResolvedValueOnce({
+      mockEditSubject.mockResolvedValueOnce({
         data: {
           result: {
             ...chosenAppletData,
@@ -189,15 +210,14 @@ describe('EditRespondentPopup component tests', () => {
       await userEvent.click(dropdownOption as HTMLElement);
       await userEvent.click(submitBtn);
 
-      expect(axios.put).toBeCalledWith(
-        `/subjects/${chosenAppletData.subjectId}`,
-        {
+      expect(mockEditSubject).toBeCalledWith({
+        subjectId: chosenAppletData.subjectId,
+        values: {
           nickname: chosenAppletData.respondentNickname,
           secretUserId: chosenAppletData.respondentSecretId,
           tag: 'Parent',
         },
-        { signal: expect.anything() },
-      );
+      });
     });
   });
 });
