@@ -11,9 +11,9 @@ vi.mock('react-secure-storage', () => ({
   },
 }));
 
-vi.mock('shared/utils/encryption', () => ({
+vi.mock('shared/utils/encryption', async () => ({
   __esModule: true,
-  ...vi.importActual('shared/utils/encryption'),
+  ...(await vi.importActual('shared/utils/encryption')),
 }));
 
 vi.spyOn(global.console, 'warn').mockImplementation((message) => {

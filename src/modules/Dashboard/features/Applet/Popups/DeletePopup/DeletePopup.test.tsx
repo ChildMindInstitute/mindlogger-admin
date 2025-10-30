@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
@@ -28,7 +29,7 @@ const onCloseMock = vi.fn();
 
 describe('DeletePopup', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
