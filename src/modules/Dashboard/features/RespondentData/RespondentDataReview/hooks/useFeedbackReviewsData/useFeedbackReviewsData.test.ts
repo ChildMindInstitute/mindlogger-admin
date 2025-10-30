@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
@@ -17,6 +18,10 @@ describe('useFeedbackReviewsData', () => {
 
   beforeEach(() => {
     (useDecryptedActivityData as vi.Mock).mockReturnValue(mockGetDecryptedActivityData);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('should fetch and decrypt review data correctly', async () => {
