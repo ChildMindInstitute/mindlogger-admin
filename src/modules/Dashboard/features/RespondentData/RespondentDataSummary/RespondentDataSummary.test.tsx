@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
@@ -90,6 +91,15 @@ vi.mock('./Report', () => ({
   Report: () => <div data-testid="respondents-summary-report"></div>,
 }));
 
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useFormContext: vi.fn(),
+  };
+});
+
 const testEmptyState = (text: string) => {
   expect(screen.getByTestId('report-menu')).toBeInTheDocument();
   expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
@@ -134,7 +144,7 @@ describe('RespondentDataSummary component', () => {
     vi.clearAllMocks();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    vi.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
+    vi.mocked(reactHookForm.useFormContext).mockReturnValue({ setValue: mockedSetValue });
   });
 
   test('renders correctly with selected activity and summary activities', async () => {
