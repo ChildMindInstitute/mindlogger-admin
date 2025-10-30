@@ -1,17 +1,22 @@
 import { renderHook } from '@testing-library/react';
-import * as reactHookForm from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { Version } from 'api';
 
 import { useDatavizFilters } from './useDatavizFilters';
 
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useWatch: () => mockFormReturnValues,
+  };
+});
+
+const mockFormReturnValues = [new Date('2023-01-10'), new Date('2023-01-15'), '00:00', '23:59'];
+
 describe('useDatavizFilters', () => {
-  const mockFormReturnValues = [new Date('2023-01-10'), new Date('2023-01-15'), '00:00', '23:59'];
-
-  beforeEach(() => {
-    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(mockFormReturnValues);
-  });
-
   test('should calculate minDate, maxDate correctly and return empty versions', () => {
     const versions: Version[] = [];
 
