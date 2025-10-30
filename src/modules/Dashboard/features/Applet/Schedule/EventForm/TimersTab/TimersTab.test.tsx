@@ -12,13 +12,17 @@ const dataTestid = 'timers-tab';
 const mockWatch = vi.fn();
 const mockSetValue = vi.fn();
 
-vi.mock('react-hook-form', () => ({
-  ...vi.importActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockWatch(),
-    setValue: mockSetValue,
-  }),
-}));
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({
+      watch: () => mockWatch(),
+      setValue: mockSetValue,
+    }),
+  };
+});
 
 const FormWrapper = () => {
   const methods = useForm({
