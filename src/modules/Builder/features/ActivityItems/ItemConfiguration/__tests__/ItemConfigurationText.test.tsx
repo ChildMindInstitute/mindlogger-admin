@@ -139,8 +139,12 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
     const ref = renderTextResponse();
 
     await setItemConfigSetting(ItemConfigurationSettings.IsCorrectAnswerRequired);
-    await ref.current.trigger('activities.0.items.0');
+    
+    // Trigger validation on the specific field path
+    await ref.current.trigger('activities.0.items.0.config.correctAnswer');
 
-    expect(await screen.findByText('Correct Answer is required')).toBeVisible();
+    await waitFor(() => {
+      expect(screen.getByText('Correct Answer is required')).toBeVisible();
+    });
   });
 });
