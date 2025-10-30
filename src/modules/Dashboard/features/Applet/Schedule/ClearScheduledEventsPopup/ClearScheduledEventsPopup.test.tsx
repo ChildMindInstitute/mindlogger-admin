@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -18,6 +19,10 @@ const basicProps = {
 };
 
 describe('ClearScheduledEventsPopup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should delete events for default schedule', async () => {
     vi.mocked(axios.delete).mockResolvedValueOnce(null);
 

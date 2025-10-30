@@ -38,12 +38,13 @@ const dataTestid = 'dashboard-applets-duplicate-popup';
 const abortSignal = { signal: undefined };
 
 describe('DuplicatePopups', () => {
-  afterEach(() => {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test('should show an error if the name already exists in database', async () => {
-    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletData });
+    
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name (1)' } } });
 
@@ -60,6 +61,8 @@ describe('DuplicatePopups', () => {
   });
 
   test('should duplicate and open success modal', async () => {
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletData });
+    
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
     });
