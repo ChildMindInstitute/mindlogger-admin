@@ -3,6 +3,7 @@ import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import {
   ApiResponseCodes,
@@ -355,6 +356,9 @@ describe('useAssignmentsTab hook', () => {
     `(
       'should navigate to appropriate view data URL for $description',
       async ({ activityOrFlow, route, param }) => {
+        // Reset the private key mock to undefined for this test
+        mockGetAppletPrivateKey.mockReturnValue(undefined);
+
         const { rerender } = renderWithProviders(
           <UseAssignmentsHookTest
             activityOrFlow={activityOrFlow}
@@ -449,6 +453,9 @@ describe('useAssignmentsTab hook', () => {
     });
 
     test('should show Export modal', async () => {
+      // Reset the private key mock to undefined for this test
+      mockGetAppletPrivateKey.mockReturnValue(undefined);
+
       const { rerender } = renderWithProviders(
         <UseAssignmentsHookTest
           activityOrFlow={mockParticipantActivities.autoAssignActivity}

@@ -2,6 +2,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { RootState } from 'redux/store';
 import { page } from 'resources';
@@ -196,6 +197,11 @@ describe('ReviewMenu', () => {
       `${dataTestid}-review-date-popover`,
     )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
+
+    // Wait for the datepicker calendar to fully render
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
 
     const december11 = datepicker.getElementsByClassName(
       'react-datepicker__day react-datepicker__day--011',
