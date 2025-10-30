@@ -28,7 +28,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
@@ -98,7 +98,7 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   const testApiCallsAndSetValues = () => {
