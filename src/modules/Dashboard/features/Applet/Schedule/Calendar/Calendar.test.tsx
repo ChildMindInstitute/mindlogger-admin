@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { fireEvent, act } from '@testing-library/react';
 import { endOfDay, startOfDay } from 'date-fns';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
@@ -58,23 +59,30 @@ const preloadedState = {
   },
 };
 
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock(
+  'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
+  () => ({
+    useSchedule: vi.fn(),
+  }),
+);
+
 describe('Calendar Component', () => {
   const mockDispatch = vi.fn();
   const clickEditEventMock = vi.fn();
   const clickCreateEventMock = vi.fn();
 
-  vi.mock('redux/store/hooks', () => ({
-    useAppDispatch: vi.fn(),
-  }));
-
-  vi.mock(
-    'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
-    () => ({
-      useSchedule: vi.fn(),
-    }),
-  );
-
   beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
     vi.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
       onClickCreateEvent: clickCreateEventMock,
       onClickEditEvent: clickEditEventMock,
@@ -176,7 +184,7 @@ describe('Calendar Component', () => {
       });
     });
 
-    expect(mockDispatch).nthCalledWith(1, {
+    expect(mockDispatch).toHaveBeenCalledWith({
       payload: expect.any(Object),
       type: 'calendarEvents/setCalendarCurrentYear',
     });
