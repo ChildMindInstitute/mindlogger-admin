@@ -1,12 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { initReactI18next } from 'react-i18next';
+import { vi } from 'vitest';
 
 import i18n from 'i18n';
 
 import { FileUploader } from './FileUploader';
 import { FileUploaderProps } from './FileUploader.types';
 
+// Mock xlsx library to avoid dependency issues in tests
+const mockSheetToJson = vi.fn(() => [
+  { header1: 'value1', header2: 'value2' },
+  { header1: 'value3', header2: 'value4' },
+]);
+
+vi.mock('xlsx', () => ({
+  read: () => ({
+    Sheets: { Sheet1: {} },
+  }),
+  utils: {
+    sheet_to_json: () => mockSheetToJson(),
+  },
+}));
 const mockOnFileReady = vi.fn();
 const mockOnDownloadTemplate = vi.fn();
 export const mockInvalidFileFormatError = <span>Invalid file format.</span>;
@@ -27,6 +42,11 @@ const renderComponent = (props: FileUploaderProps) => render(<FileUploader {...p
 describe('FileUploader', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Reset mock to return valid data by default
+    mockSheetToJson.mockReturnValue([
+      { header1: 'value1', header2: 'value2' },
+      { header1: 'value3', header2: 'value4' },
+    ]);
   });
 
   test('renders with default values', () => {
@@ -49,6 +69,9 @@ describe('FileUploader', () => {
   });
 
   test('returns parsing error if file does not content data', async () => {
+    // Make mock return empty array to simulate invalid file
+    mockSheetToJson.mockReturnValueOnce([]);
+    
     const invalidFile = new File(['File contents'], 'test.csv', {
       type: 'text/csv',
     });

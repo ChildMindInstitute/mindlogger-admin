@@ -1,10 +1,26 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ImportSchedulePopup } from './ImportSchedulePopup';
 import * as importSchedulePopupFunc from './ImportSchedulePopup.utils';
+
+// Mock xlsx library to avoid dependency issues in tests
+vi.mock('xlsx', () => ({
+  read: () => ({
+    Sheets: {
+      Sheet1: {},
+    },
+  }),
+  utils: {
+    sheet_to_json: () => [
+      { header1: 'value1', header2: 'value2' },
+      { header1: 'value3', header2: 'value4' },
+    ],
+  },
+}));
 
 describe('ImportSchedulePopup', () => {
   const mockedOnClose = vi.fn();
