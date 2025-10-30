@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { authApiClient } from 'shared/api/apiConfig';
 import {
   mockedApplet,
   mockedAppletId,
@@ -141,8 +142,10 @@ const renderComponent = (props?: Partial<FeedbackAssessmentProps>) => {
 
 describe('FeedbackAssessment', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
-    vi.restoreAllMocks();
+    // Spy on authApiClient methods since that's what the code actually uses
+    vi.spyOn(authApiClient, 'post');
   });
 
   test('should render and the 3rd option (id: 7cdc4381-af6d-4bbb-baf7-bf4fe73448d0) is checked', () => {
@@ -173,19 +176,19 @@ describe('FeedbackAssessment', () => {
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();
-    expect(axios.post).toHaveBeenCalled();
+    expect(authApiClient.post).toHaveBeenCalled();
     expect(mockedSetAssessmentStep).toHaveBeenCalledWith(0);
     expect(mockedSubmitCallback).toHaveBeenCalled();
     expect(mockedSetError).not.toHaveBeenCalled();
   });
 
   test('set error if API call is failed on submit assessment', async () => {
-    vi.mocked(axios.post).mockRejectedValue(new Error('some error'));
+    vi.mocked(authApiClient.post).mockRejectedValue(new Error('some error'));
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));
 
-    expect(axios.post).toHaveBeenCalled();
+    expect(authApiClient.post).toHaveBeenCalled();
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();

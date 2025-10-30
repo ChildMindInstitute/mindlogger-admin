@@ -1,13 +1,12 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
 import { vi } from 'vitest';
 
+import { authApiClient } from 'shared/api/apiConfig';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { PublicLinkToggle } from './PublicLinkToggle';
 
-const mockedAxios = axios.create();
 const fakeRequest = vi.fn();
 
 const testId = 'public-link-toggle';
@@ -27,13 +26,11 @@ const testResponse = {
 
 describe('PublicLinkToggle', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
+    vi.spyOn(authApiClient, 'get').mockImplementation(fakeRequest);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.clearAllTimers();
   });
 
   describe('When no public link is returned', () => {
@@ -44,8 +41,6 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It renders in the correct state', async () => {
-      vi.runAllTicks();
-
       await waitFor(() => {
         expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
           signal: undefined,
@@ -62,8 +57,6 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It calls `onConfirmPublicLink` with the appropriate parameter', async () => {
-      vi.runAllTicks();
-
       await waitFor(async () => {
         const createBtn = screen.getByTestId(`${testId}-confirm-btn`);
 
@@ -82,8 +75,6 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It renders in the correct state', async () => {
-      vi.runAllTicks();
-
       await waitFor(() => {
         expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
           signal: undefined,
@@ -101,8 +92,6 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It calls `onConfirmPublicLink` with the appropriate parameter', async () => {
-      vi.runAllTicks();
-
       await waitFor(async () => {
         const createBtn = screen.getByTestId(`${testId}-confirm-btn`);
 
@@ -113,7 +102,6 @@ describe('PublicLinkToggle', () => {
     });
 
     test('It allows copying the returned value to the clipboard', async () => {
-      vi.runAllTicks();
       const user = userEvent.setup();
 
       await waitFor(async () => {
