@@ -51,9 +51,17 @@ vi.mock('axios', () => {
   const mockPut = vi.fn();
   const mockIsAxiosError = vi.fn();
 
+  // Create shared mock instance for axios.create()
+  const mockInstance = {
+    post: mockPost,
+    get: mockGet,
+    delete: mockDelete,
+    put: mockPut,
+  };
+
   return {
     default: {
-      create: () => ({ post: mockPost, get: mockGet, delete: mockDelete, put: mockPut }),
+      create: () => mockInstance,
       post: mockPost,
       get: mockGet,
       delete: mockDelete,

@@ -1,4 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import {
   mockedApplet,
@@ -30,7 +31,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockUseNavigate,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
@@ -66,16 +67,6 @@ const mockedActivityFlow = {
 };
 
 const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
-
-vi.mock('react-router-dom', async () => {
-  // pull in the real implementation
-  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-
-  return {
-    ...actual,
-    useParams: () => mockedUseParams,
-  };
-});
 
 describe('RespondentDataHeader component tests', () => {
   beforeEach(() => {
@@ -275,8 +266,16 @@ describe('RespondentDataHeader component tests', () => {
           preloadedState: getPreloadedState(role),
         },
       );
-      const actionButton = screen.queryByTestId(`${dataTestid}-take-now`);
-      canPerformAction ? expect(actionButton).toBeInTheDocument() : expect(actionButton).toBeNull();
+      
+      if (canPerformAction) {
+        // Wait for the button to appear for roles that should have access
+        const actionButton = await screen.findByTestId(`${dataTestid}-take-now`);
+        expect(actionButton).toBeInTheDocument();
+      } else {
+        // For roles that shouldn't have access, button should not exist
+        const actionButton = screen.queryByTestId(`${dataTestid}-take-now`);
+        expect(actionButton).toBeNull();
+      }
     });
   });
 });
