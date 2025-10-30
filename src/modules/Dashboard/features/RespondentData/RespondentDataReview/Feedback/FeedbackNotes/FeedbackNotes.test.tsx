@@ -1,6 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { vi } from 'vitest';
@@ -8,6 +7,7 @@ import { vi } from 'vitest';
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
+import { authApiClient } from 'shared/api/apiConfig';
 import {
   mockedApplet,
   mockedAppletId,
@@ -134,7 +134,7 @@ const renderFeedbackNotes = (entity: SelectedEntity, route: string) =>
   );
 
 const mockGetWithNotes = () => {
-  vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithNotes);
+  vi.mocked(authApiClient.get).mockResolvedValueOnce(mockedGetWithNotes);
 };
 
 const testNotesRender = async () =>
@@ -155,10 +155,10 @@ const testNoteCreation = async (apiCallRoute: string) => {
 
   await userEvent.type(screen.getByLabelText(/Add a New Note/i), newNoteValue);
   await userEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
-  vi.mocked(axios.post).mockResolvedValueOnce(null);
+  vi.mocked(authApiClient.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(axios.post).nthCalledWith(
+    expect(authApiClient.post).nthCalledWith(
       1,
       apiCallRoute,
       {
@@ -187,7 +187,7 @@ const testNoteEditing = async (apiCallRoute: string) => {
   await userEvent.type(textarea, newNoteValue);
 
   // Setup mock before clicking save
-  vi.mocked(axios.put).mockResolvedValueOnce(null);
+  vi.mocked(authApiClient.put).mockResolvedValueOnce(null);
 
   // Click save
   const saveButton = await screen.findByTestId(`${noteTestId}-0-save`);
@@ -195,7 +195,7 @@ const testNoteEditing = async (apiCallRoute: string) => {
 
   // Verify API call
   await waitFor(() => {
-    expect(axios.put).toHaveBeenCalledWith(
+    expect(authApiClient.put).toHaveBeenCalledWith(
       apiCallRoute,
       { note: newNoteValue },
       { signal: undefined },
@@ -217,10 +217,10 @@ const testNoteRemoving = async (apiCallRoute: string) => {
     await userEvent.click(visibleRemoveAction);
   });
 
-  vi.mocked(axios.post).mockResolvedValueOnce(null);
+  vi.mocked(authApiClient.post).mockResolvedValueOnce(null);
 
   await waitFor(() => {
-    expect(axios.delete).nthCalledWith(
+    expect(authApiClient.delete).nthCalledWith(
       1,
       apiCallRoute,
 
@@ -230,6 +230,19 @@ const testNoteRemoving = async (apiCallRoute: string) => {
 };
 
 describe('FeedbackNotes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Ensure authApiClient has put method (might not exist in jest-mock-axios instances)
+    if (!authApiClient.put) {
+      authApiClient.put = vi.fn();
+    }
+    // Spy on authApiClient methods since that's what the code actually uses
+    vi.spyOn(authApiClient, 'get');
+    vi.spyOn(authApiClient, 'post');
+    vi.spyOn(authApiClient, 'put');
+    vi.spyOn(authApiClient, 'delete');
+  });
+
   test('should render array of notes for Activity answer', async () => {
     mockGetWithNotes();
     renderFeedbackNotes(mockedActivity, routeWithAnswerId);
