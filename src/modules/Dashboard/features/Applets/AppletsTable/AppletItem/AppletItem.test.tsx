@@ -1,4 +1,5 @@
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -60,6 +61,10 @@ vi.mock('react-router-dom', async () => {
 });
 
 describe('AppletItem component tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render applet row', () => {
     renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
