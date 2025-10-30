@@ -48,14 +48,16 @@ vi.mock('axios', () => {
   const mockPost = vi.fn();
   const mockGet = vi.fn();
   const mockDelete = vi.fn();
+  const mockPut = vi.fn();
   const mockIsAxiosError = vi.fn();
 
   return {
     default: {
-      create: () => ({ post: mockPost, get: mockGet, delete: mockDelete }),
+      create: () => ({ post: mockPost, get: mockGet, delete: mockDelete, put: mockPut }),
       post: mockPost,
       get: mockGet,
       delete: mockDelete,
+      put: mockPut,
       isAxiosError: mockIsAxiosError,
     },
   };

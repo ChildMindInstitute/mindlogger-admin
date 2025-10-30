@@ -1,4 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -44,17 +45,10 @@ const getMockFolderItem = (isEmpty = true, isNew = false) => ({
   foldersAppletCount: isEmpty ? 0 : 3,
 });
 
-const mockReloadData = vi.fn();
-const mockHandleFolderClick = vi.fn();
-
-const mockContext = {
-  rows: [mockedApplet],
-  setRows: vi.fn(),
-  expandedFolders: [],
-  reloadData: mockReloadData,
-  handleFolderClick: mockHandleFolderClick,
-  fetchData: vi.fn(),
-};
+let mockReloadData: ReturnType<typeof vi.fn>;
+let mockHandleFolderClick: ReturnType<typeof vi.fn>;
+let mockSetRows: ReturnType<typeof vi.fn>;
+let mockFetchData: ReturnType<typeof vi.fn>;
 
 const commonUseDndProps = {
   onDragLeave: vi.fn(),
@@ -63,15 +57,26 @@ const commonUseDndProps = {
   onDragEnd: vi.fn(),
 };
 
-const getFolderItemComponent = (isEmpty = true, isNew = false) => (
-  <AppletsContext.Provider value={mockContext}>
-    <table>
-      <tbody>
-        <FolderItem item={getMockFolderItem(isEmpty, isNew)} />
-      </tbody>
-    </table>
-  </AppletsContext.Provider>
-);
+const getFolderItemComponent = (isEmpty = true, isNew = false) => {
+  const mockContext = {
+    rows: [mockedApplet],
+    setRows: mockSetRows,
+    expandedFolders: [],
+    reloadData: mockReloadData,
+    handleFolderClick: mockHandleFolderClick,
+    fetchData: mockFetchData,
+  };
+
+  return (
+    <AppletsContext.Provider value={mockContext}>
+      <table>
+        <tbody>
+          <FolderItem item={getMockFolderItem(isEmpty, isNew)} />
+        </tbody>
+      </table>
+    </AppletsContext.Provider>
+  );
+};
 
 const clickActionDots = async () => {
   const actionsDots = await waitFor(() =>
@@ -81,6 +86,14 @@ const clickActionDots = async () => {
 };
 
 describe('FolderItem component tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockReloadData = vi.fn();
+    mockHandleFolderClick = vi.fn();
+    mockSetRows = vi.fn();
+    mockFetchData = vi.fn();
+  });
+
   test('should render folder row', () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
@@ -206,7 +219,8 @@ describe('FolderItem component tests', () => {
     });
   });
 
-  test('should add applet to folder', () => {
+  test('should add applet to folder', async () => {
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(false), { preloadedState });
     fireEvent.drop(screen.getByRole('row'), {
       dataTransfer: {
@@ -214,12 +228,14 @@ describe('FolderItem component tests', () => {
       },
     });
 
-    expect(axios.post).nthCalledWith(
-      1,
-      '/applets/set_folder',
-      { appletId: mockedAppletId, folderId: 'testId' },
-      { signal: undefined },
-    );
+    await waitFor(() => {
+      expect(axios.post).nthCalledWith(
+        1,
+        '/applets/set_folder',
+        { appletId: mockedAppletId, folderId: 'testId' },
+        { signal: undefined },
+      );
+    });
   });
 
   test('should have correct classnames for hover and for isDragOver', async () => {
