@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
-import * as reactHookForm from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
@@ -15,6 +15,24 @@ import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/Resp
 import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
 
 import { ReportFilters } from './ReportFilters';
+
+let shouldMockUseWatch = false;
+let mockedUseWatchValue: any = null;
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useWatch: (params: any) => {
+      if (shouldMockUseWatch) {
+        return mockedUseWatchValue;
+      }
+
+      return actual.useWatch(params);
+    },
+  };
+});
 
 const identifiers = [
   {
@@ -77,7 +95,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
@@ -87,6 +105,14 @@ describe('ReportFilters', () => {
       appletId: mockedAppletId,
       subjectId: mockedFullSubjectId1,
     });
+    // Reset to use real useWatch by default
+    shouldMockUseWatch = false;
+    mockedUseWatchValue = null;
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('renders date pickers and time pickers', async () => {
@@ -175,12 +201,9 @@ describe('ReportFilters', () => {
         ],
       },
     });
-    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([
-      true,
-      false,
-      new Date('2024-01-04'),
-      new Date('2024-01-10'),
-    ]);
+
+    shouldMockUseWatch = true;
+    mockedUseWatchValue = [true, false, new Date('2024-01-04'), new Date('2024-01-10')];
 
     await act(async () => {
       renderWithProviders(
@@ -214,12 +237,21 @@ describe('ReportFilters', () => {
   });
 
   test('fetch answers on filters change when the entity is Flow', async () => {
-    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([
-      true,
-      false,
-      new Date('2024-01-04'),
-      new Date('2024-01-10'),
-    ]);
+    vi.mocked(axios.get).mockResolvedValueOnce({
+      data: {
+        result: [
+          {
+            userPublicKey: 'userPublicKey',
+            answer: 'answer',
+            items: [],
+            itemIds: 'itemIds',
+          },
+        ],
+      },
+    });
+
+    shouldMockUseWatch = true;
+    mockedUseWatchValue = [true, false, new Date('2024-01-04'), new Date('2024-01-10')];
 
     renderWithProviders(
       <RespondentDataContext.Provider value={{ selectedEntity: mockedFlow }}>

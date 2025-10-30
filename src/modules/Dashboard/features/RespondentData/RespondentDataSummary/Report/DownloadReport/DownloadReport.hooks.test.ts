@@ -1,6 +1,7 @@
 import { act, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import download from 'downloadjs';
+import { vi } from 'vitest';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -14,7 +15,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => mockedUseParams,
+    useParams: () => mockedUseParams(),
   };
 });
 
