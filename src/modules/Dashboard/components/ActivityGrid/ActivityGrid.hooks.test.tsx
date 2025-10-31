@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isValidElement } from 'react';
 
@@ -25,13 +26,13 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
-    useParams: () => vi.fn(),
+    useNavigate: vi.fn(),
+    useParams: vi.fn(),
   };
 });
 
-const mockedUseParams = useParams as vi.MockedFunction<typeof useParams>;
-const mockedUseNavigate = useNavigate as vi.MockedFunction<typeof useNavigate>;
+const mockedUseParams = vi.mocked(useParams);
+const mockedUseNavigate = vi.mocked(useNavigate);
 
 vi.mock('redux/store/hooks', () => ({
   useAppDispatch: vi.fn(),
