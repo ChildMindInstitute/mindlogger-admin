@@ -31,11 +31,8 @@ vi.mock('api', () => ({
 
 describe('useAppletsDnd', () => {
   beforeEach(() => {
-    (useAsync as vi.Mock).mockReturnValue({ execute: vi.fn() });
-  });
-
-  afterAll(() => {
     vi.clearAllMocks();
+    (useAsync as vi.Mock).mockReturnValue({ execute: vi.fn() });
   });
 
   test('returns initial state', () => {
