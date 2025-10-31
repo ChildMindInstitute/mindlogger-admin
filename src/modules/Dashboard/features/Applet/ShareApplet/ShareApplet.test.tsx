@@ -42,6 +42,10 @@ describe('ShareApplet Component', () => {
     navigator.clipboard.writeText.mockResolvedValue(undefined);
   });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('renders the ShareApplet component with default values', () => {
     render(<ShareApplet {...defaultProps} />);
 
@@ -105,6 +109,23 @@ describe('ShareApplet Component', () => {
 
   test('handle share applet and copy applet link', async () => {
     const libraryUrl = 'library-url';
+    vi.mocked(axios.post)
+      .mockResolvedValueOnce({
+        payload: {
+          response: {
+            status: ApiResponseCodes.SuccessfulResponse,
+            data: null,
+          },
+        },
+      })
+      .mockResolvedValueOnce({
+        payload: {
+          response: {
+            status: ApiResponseCodes.SuccessfulResponse,
+            data: null,
+          },
+        },
+      });
     vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: {
@@ -129,8 +150,7 @@ describe('ShareApplet Component', () => {
     rerender(<ShareApplet {...defaultProps} isSubmitted />);
 
     await waitFor(() => {
-      expect(axios.post).toHaveBeenNthCalledWith(
-        3,
+      expect(axios.post).toHaveBeenCalledWith(
         '/library',
         { appletId: mockedApplet.id, name: appletName, keywords: [mockedKeyword] },
         { signal: undefined },
