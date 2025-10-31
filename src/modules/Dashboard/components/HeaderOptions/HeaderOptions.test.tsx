@@ -1,14 +1,39 @@
 import { fireEvent, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId } from 'shared/mock';
-import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { mockedApplet, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
 
 import { HeaderOptions } from './HeaderOptions';
 
+const testAppletId = 'testAppletId';
+
+const getPreloadedState = (role: Roles = Roles.Manager) => ({
+  workspaces: {
+    workspaces: initialStateData,
+    currentWorkspace: {
+      ...initialStateData,
+      ...mockedCurrentWorkspace,
+    },
+    roles: {
+      ...initialStateData,
+      data: {
+        [testAppletId]: [role],
+      },
+    },
+    workspacesRoles: initialStateData,
+  },
+  applet: {
+    applet: {
+      ...initialStateData,
+      data: { result: mockedApplet },
+    },
+  },
+});
+
 const mockUseNavigate = vi.fn();
-const mockedUseParams = () => ({ appletId: mockedAppletId });
 
 // mock the module
 vi.mock('react-router-dom', async () => {
@@ -18,7 +43,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockUseNavigate,
-    useParams: () => mockedUseParams,
+    useParams: () => ({ appletId: 'testAppletId' }),
   };
 });
 
@@ -36,7 +61,7 @@ describe('HeaderOptions', () => {
   test('should contain link to settings page', () => {
     expect(screen.getByTestId('header-option-settings-link')).toHaveAttribute(
       'href',
-      `/dashboard/${mockedAppletId}/settings`,
+      `/dashboard/${testAppletId}/settings`,
     );
   });
 });
@@ -55,10 +80,14 @@ describe('should show or hide header buttons depending on role', () => {
       preloadedState: getPreloadedState(role),
     });
 
-    const settingsButton = screen.queryAllByTestId('header-option-settings-link')[0];
-    canEdit ? expect(settingsButton).toBeDefined() : expect(settingsButton).toBe(undefined);
+    const settingsButtons = screen.queryAllByTestId('header-option-settings-link');
+    canEdit
+      ? expect(settingsButtons.length).toBeGreaterThan(0)
+      : expect(settingsButtons.length).toBe(0);
 
-    const exportButton = screen.queryAllByTestId('header-option-export-button')[0];
-    canAccessData ? expect(exportButton).toBeDefined() : expect(exportButton).toBe(undefined);
+    const exportButtons = screen.queryAllByTestId('header-option-export-button');
+    canAccessData
+      ? expect(exportButtons.length).toBeGreaterThan(0)
+      : expect(exportButtons.length).toBe(0);
   });
 });
