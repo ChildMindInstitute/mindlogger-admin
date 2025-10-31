@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import * as dateFns from 'date-fns';
+import { vi } from 'vitest';
 
 import { initialStateData, SingleApplet } from 'shared/state';
 import { setupStore } from 'redux/store';
@@ -311,13 +312,13 @@ const expectedResult = {
       id: 'activity-id-1',
       name: 'Activity 1',
       isFlow: false,
-      colors: ['#0b6e99', '#0b6e99'],
+      colors: ['#0152FD', '#0152FD'],
     },
     {
       id: 'flow-id-1',
       name: 'Activity Flow 1',
       isFlow: true,
-      colors: ['#dfac03', '#dfac03'],
+      colors: ['#DAB417', '#DAB417'],
     },
   ],
   scheduledEvents: [
@@ -326,7 +327,7 @@ const expectedResult = {
       name: 'Activity 2',
       isFlow: false,
       count: 3,
-      colors: ['#0f7b6c', 'rgba(15, 123, 108, 0.3)'],
+      colors: ['#386348', 'rgba(56, 99, 72, 0.3)'],
     },
   ],
   deactivatedEvents: [
@@ -534,12 +535,14 @@ const getWrapper =
     return <Provider store={store}>{children}</Provider>;
   };
 
-const mockDispatch = vi.fn();
+const mockDispatch = vi.fn((action: unknown) => Promise.resolve(action)) as ReturnType<
+  typeof reduxHooks.useAppDispatch
+>;
 
 describe('usePreparedEvents hook', () => {
-  vi.mock('redux/store/hooks', () => ({
-    useAppDispatch: vi.fn(),
-  }));
+  beforeEach(() => {
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+  });
 
   afterEach(() => {
     vi.resetAllMocks();
@@ -562,8 +565,7 @@ describe('usePreparedEvents hook', () => {
   test('should dispatch create calendar events and set create events data for same year', async () => {
     const mockedYear = 2025;
     vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
-    (dateFns.getYear as vi.Mock).mockReturnValue(mockedYear);
-    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    (dateFns.getYear as ReturnType<typeof vi.fn>).mockReturnValue(mockedYear);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {
@@ -589,8 +591,7 @@ describe('usePreparedEvents hook', () => {
     const mockedYear = 2024;
     const mockedNextYear = 2025;
     vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
-    (dateFns.getYear as vi.Mock).mockReturnValue(mockedNextYear);
-    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    (dateFns.getYear as ReturnType<typeof vi.fn>).mockReturnValue(mockedNextYear);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {
