@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedApplet, mockedFullSubjectId1 } from 'shared/mock';
@@ -29,18 +30,22 @@ const mockedParticipantResult = {
   },
 };
 
+const mockNavigate = vi.fn();
+
 vi.mock('react-router-dom', async () => {
   // pull in the real implementation
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
+    useNavigate: () => mockNavigate,
   };
 });
 
-vi.mock('shared/hooks/useFeatureFlags', async (importOriginal) => {
-  const actual = await importOriginal();
+vi.mock('shared/hooks/useFeatureFlags', async () => {
+  const actual = await vi.importActual<typeof import('shared/hooks/useFeatureFlags')>(
+    'shared/hooks/useFeatureFlags',
+  );
 
   return {
     ...actual,
@@ -49,10 +54,7 @@ vi.mock('shared/hooks/useFeatureFlags', async (importOriginal) => {
 });
 
 describe('Participant Details page', () => {
-  const navigate: vi.Mock = vi.fn();
-
   beforeEach(() => {
-    vi.mocked(useNavigate).mockImplementation(() => navigate);
     vi.mocked(useFeatureFlags).mockReturnValue({
       featureFlags: {
         enableParticipantConnections: true,
@@ -87,7 +89,7 @@ describe('Participant Details page', () => {
 
     await waitFor(() => screen.getByTestId('spinner'));
 
-    expect(navigate).toHaveBeenCalledWith(
+    expect(mockNavigate).toHaveBeenCalledWith(
       generatePath(page.appletParticipants, {
         appletId: mockedAppletId,
       }),

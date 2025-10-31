@@ -1,6 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -185,7 +186,7 @@ describe('Respondents component tests', () => {
   });
 
   test('data export popup should appear when the respondent action and applet are selected', async () => {
-    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    vi.mocked(axios.get).mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await clickActionDots();
