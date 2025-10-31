@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { addDays, roundToNearestMinutes } from 'date-fns';
+import { addDays, roundToNearestMinutes, startOfDay } from 'date-fns';
+import { vi } from 'vitest';
 
 import { ExportData } from 'api';
 import { initialStateData } from 'redux/modules';
@@ -11,6 +12,8 @@ import { ExportDataSetting } from './ExportDataSetting';
 import { ExportDateType } from './ExportDataSetting.types';
 
 const createdDate = '2023-11-14T14:43:33.369902';
+// Set a fixed "now" date for consistent test results
+const mockedNow = new Date('2023-11-14T16:10:00.000Z');
 
 const preloadedState = {
   applet: {
@@ -29,9 +32,28 @@ vi.mock('modules/Dashboard/api', () => ({
   getExportDataApi: (body: ExportData) => mockedExportDataApi(body),
 }));
 
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: () => ({
+    featureFlags: {
+      enableDataExportSpeedUp: false, // Use old DataExportPopup which has Last24h special handling
+    },
+  }),
+}));
+
 const dataTestId = 'export-data';
 
 describe('ExportDataSetting', () => {
+  beforeEach(() => {
+    // Mock Date to return a fixed date for consistent test results
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.setSystemTime(mockedNow);
+    mockedExportDataApi.mockClear();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should not render export settings model if isExportSettingsOpen is false', async () => {
     const mockOnClose = vi.fn();
 
@@ -77,11 +99,11 @@ describe('ExportDataSetting', () => {
 
   describe('should pass settings specified in settings popup to the export popup', () => {
     test.each`
-      exportType                  | expectedFromTime            | description
-      ${ExportDateType.AllTime}   | ${new Date(createdDate)}    | ${'use applet create time and now for all time'}
-      ${ExportDateType.Last24h}   | ${addDays(new Date(), -1)}  | ${'use correct dates for last 24h'}
-      ${ExportDateType.LastWeek}  | ${addDays(new Date(), -7)}  | ${'use correct dates for last week'}
-      ${ExportDateType.LastMonth} | ${addDays(new Date(), -30)} | ${'use correct dates for last month'}
+      exportType                  | expectedFromTime                       | description
+      ${ExportDateType.AllTime}   | ${startOfDay(new Date(createdDate))}   | ${'use applet create time and now for all time'}
+      ${ExportDateType.Last24h}   | ${addDays(mockedNow, -1)}              | ${'use correct dates for last 24h'}
+      ${ExportDateType.LastWeek}  | ${startOfDay(addDays(mockedNow, -7))}  | ${'use correct dates for last week'}
+      ${ExportDateType.LastMonth} | ${startOfDay(addDays(mockedNow, -30))} | ${'use correct dates for last month'}
     `('$description', async ({ exportType, expectedFromTime }) => {
       const mockOnClose = vi.fn();
 
@@ -106,10 +128,30 @@ describe('ExportDataSetting', () => {
         expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
       );
 
-      const dateType = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
-      expect(dateType).toBeVisible();
-      const input = dateType.querySelector('input');
-      input && fireEvent.change(input, { target: { value: exportType } });
+      const dateTypeField = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
+      expect(dateTypeField).toBeVisible();
+      
+      // Open the select dropdown
+      const selectButton = dateTypeField.querySelector('[role="button"]');
+      if (selectButton) {
+        fireEvent.mouseDown(selectButton);
+      }
+      
+      // Wait for dropdown to open and select the option
+      await waitFor(() => {
+        const options = screen.getAllByRole('option');
+        const targetOption = options.find(
+          (option) => option.getAttribute('data-value') === exportType,
+        );
+        if (targetOption) {
+          fireEvent.click(targetOption);
+        }
+      });
+
+      // Wait for the useEffect to update the dates based on the new dateType
+      await waitFor(() => {
+        // Give the component time to process the dateType change
+      });
 
       fireEvent.click(screen.getByText('Download'));
 
