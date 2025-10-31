@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { mockedAppletId, mockedCurrentWorkspace, mockedEmail } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -24,6 +25,10 @@ const transferOwnershipComponent = (
 );
 
 describe('TransferOwnership', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('renders without errors', () => {
     renderWithProviders(transferOwnershipComponent);
   });

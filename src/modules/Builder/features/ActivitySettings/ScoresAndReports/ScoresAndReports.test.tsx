@@ -29,7 +29,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => mockUseNavigate,
+    useNavigate: () => mockedUseNavigate,
   };
 });
 
