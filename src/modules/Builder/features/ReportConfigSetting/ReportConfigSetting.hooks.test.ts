@@ -20,7 +20,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useParams: () => vi.fn(),
+    useParams: vi.fn(),
   };
 });
 
