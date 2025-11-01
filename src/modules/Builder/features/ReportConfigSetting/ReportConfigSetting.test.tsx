@@ -74,12 +74,14 @@ const renderReportConfigSettingWithForm = ({
   });
 };
 
-const spyVerifyReportServer = vi.spyOn(reportUtils, 'verifyReportServer');
-const spySetPasswordReportServer = vi.spyOn(reportUtils, 'setPasswordReportServer');
+let spyVerifyReportServer;
+let spySetPasswordReportServer;
 
 describe('ReportConfigSetting', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    spyVerifyReportServer = vi.spyOn(reportUtils, 'verifyReportServer');
+    spySetPasswordReportServer = vi.spyOn(reportUtils, 'setPasswordReportServer');
   });
 
   describe('Is rendered correctly', () => {

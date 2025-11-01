@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi, type Mock } from 'vitest';
 import { useLocation } from 'react-router-dom';
 
 import { AuthSchema, initialStateData } from 'redux/modules';
@@ -12,16 +13,20 @@ import { GLOBAL_DISMISSED_KEY, RebrandBanner, getDismissedKey } from './RebrandB
 const bannerTestId = 'rebrand-banner';
 
 // Mock useLocation hook
-vi.mock('react-router-dom', () => ({
-  ...vi.requireActual('react-router-dom'),
-  useLocation: vi.fn().mockImplementation(() => ({
-    pathname: '/dashboard/applets',
-  })),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+
+  return {
+    ...actual,
+    useLocation: vi.fn().mockImplementation(() => ({
+      pathname: '/dashboard/applets',
+    })),
+  };
+});
 
 describe('RebrandBanner', () => {
   // Get the mocked useLocation function
-  const mockedUseLocation = useLocation as vi.Mock;
+  const mockedUseLocation = useLocation as Mock;
 
   beforeEach(() => {
     // Clear localStorage before each test
