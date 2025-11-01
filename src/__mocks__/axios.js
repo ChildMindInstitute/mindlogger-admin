@@ -5,6 +5,11 @@ if (!mockAxios.put) {
   mockAxios.put = mockAxios.post;
 }
 
+// Extend mockAxios to include head method if it doesn't exist
+if (!mockAxios.head) {
+  mockAxios.head = mockAxios.get;
+}
+
 // Override create to return instances with all HTTP methods
 mockAxios.create = function () {
   const instance = {

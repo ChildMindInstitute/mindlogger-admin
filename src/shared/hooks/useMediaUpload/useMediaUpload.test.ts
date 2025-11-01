@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 
 import { waitForTheUpdate } from 'shared/utils/testUtils';
@@ -7,7 +8,9 @@ import { TargetExtension } from 'shared/api';
 import { useMediaUpload } from './useMediaUpload';
 import { UseMediaUploadReturn } from './useMediaUpload.types';
 
-const mockedAxios = axios.create();
+// Mock axios at the module level
+vi.mock('axios');
+const mockedAxios = vi.mocked(axios);
 const mockGetMediaUploadUrl = vi.fn();
 vi.mock('shared/hooks/useAsync', () => ({
   useAsync: () => ({ execute: mockGetMediaUploadUrl }),
