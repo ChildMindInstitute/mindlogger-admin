@@ -58,6 +58,6 @@ export default defineConfig({
     },
   },
   ssr: {
-    noExternal: ['react-window'],
+    noExternal: ['react-window', 'react-virtualized-auto-sizer'],
   },
 });
