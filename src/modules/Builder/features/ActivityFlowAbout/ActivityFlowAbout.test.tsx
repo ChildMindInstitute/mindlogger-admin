@@ -144,7 +144,13 @@ describe('ActivityFlowAbout', () => {
     const ref = renderNewActivityFlowAbout();
 
     const field = screen.getByTestId(testId);
-    fireEvent.change(field.querySelector(inputType), { target: { value } });
+    const input = field.querySelector(inputType);
+    // First, set a value to make the field "touched"
+    fireEvent.change(input, { target: { value: 'test' } });
+    fireEvent.blur(input);
+    // Then clear it to trigger the required validation
+    fireEvent.change(input, { target: { value } });
+    fireEvent.blur(input);
 
     await ref.current.trigger('activityFlows');
 
