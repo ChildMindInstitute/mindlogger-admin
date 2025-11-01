@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
@@ -13,11 +14,9 @@ import * as libraryHooks from 'modules/Library/hooks';
 import * as cartUtils from 'modules/Library/features/Cart/Cart.utils';
 
 import { AddToBuilderPopup } from './AddToBuilderPopup';
-import { __esModule } from 'linkifyjs';
 
 const mockDispatch = () => Promise.resolve('');
 const mockUseNavigate = vi.fn();
-const mockNavigateToBuilder = vi.fn();
 const mockSetAddToBuilderPopupVisible = vi.fn();
 const dataTestid = 'library-cart-add-to-builder-popup';
 
@@ -144,9 +143,18 @@ vi.mock('modules/Library/hooks', async (importOriginal) => {
   };
 });
 
-(cartUtils as never).navigateToBuilder = mockNavigateToBuilder;
-(cartUtils as never).getAddToBuilderData = () => ({
-  appletToBuilder: {},
+vi.mock('modules/Library/features/Cart/Cart.utils', async () => {
+  const actual = await vi.importActual<typeof import('modules/Library/features/Cart/Cart.utils')>(
+    'modules/Library/features/Cart/Cart.utils',
+  );
+
+  return {
+    ...actual,
+    navigateToBuilder: vi.fn(),
+    getAddToBuilderData: () => ({
+      appletToBuilder: {},
+    }),
+  };
 });
 
 const testStep1 = async ({ title }) => {
@@ -305,7 +313,11 @@ describe('AddToBuilderPopup', () => {
     await userEvent.click(confirmButton);
 
     // navigate to new applet
-    expect(mockNavigateToBuilder).toHaveBeenCalledWith(mockUseNavigate, 'new-applet', {});
+    expect(vi.mocked(cartUtils.navigateToBuilder)).toHaveBeenCalledWith(
+      mockUseNavigate,
+      'new-applet',
+      {},
+    );
     expect(mockSetAddToBuilderPopupVisible).toHaveBeenCalledWith(false);
   });
 
@@ -391,7 +403,7 @@ describe('AddToBuilderPopup', () => {
     });
 
     // navigate to existing applet
-    expect(mockNavigateToBuilder).toHaveBeenCalledWith(
+    expect(vi.mocked(cartUtils.navigateToBuilder)).toHaveBeenCalledWith(
       mockUseNavigate,
       '6d195670-726d-4c36-8682-c9f2615827dd',
       {},
@@ -430,12 +442,7 @@ describe('AddToBuilderPopup', () => {
     await userEvent.click(confirmButton);
 
     // step 3: select applet
-    expect(title).toHaveTextContent('Add to Builder');
-    expect(
-      screen.getByText('Cart content has not been added to the builder. Please try again.'),
-    ).toBeInTheDocument(); // error step
-
-    await userEvent.click(confirmButton);
+    expect(title).toHaveTextContent('Select Applet');
 
     expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
       params: {

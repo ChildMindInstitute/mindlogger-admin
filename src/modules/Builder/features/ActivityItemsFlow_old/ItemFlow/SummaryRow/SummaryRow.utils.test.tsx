@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { ItemResponseType } from 'shared/consts';
 import { StyledMdPreview } from 'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles';
 
@@ -5,12 +7,16 @@ import { getItemsOptions, getItemsInUsage } from './SummaryRow.utils';
 
 vi.mock(
   'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
-  () => ({
-    ...vi.requireActual(
-      'modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles',
-    ),
-    StyledMdPreview: ({ modelValue }: { modelValue: string }) => <div>{modelValue}</div>,
-  }),
+  async () => {
+    const actual = await vi.importActual<
+      typeof import('modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles')
+    >('modules/Builder/components/ItemFlowSelectController/StyledMdPreview/StyledMdPreview.styles');
+
+    return {
+      ...actual,
+      StyledMdPreview: ({ modelValue }: { modelValue: string }) => <div>{modelValue}</div>,
+    };
+  },
 );
 
 describe('SummaryRow.utils', () => {

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
@@ -147,7 +148,18 @@ vi.mock('./ResponseOptions', () => ({
   ResponseOptions: () => <div data-testid="report-response-options"></div>,
 }));
 
-vi.mock('downloadjs', () => vi.fn());
+vi.mock('downloadjs', () => ({
+  default: vi.fn(),
+}));
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({ setValue: vi.fn() }),
+  };
+});
 
 const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(
@@ -175,11 +187,6 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
   );
 
 describe('Report component', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    vi.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: vi.fn() });
-  });
   afterEach(() => {
     vi.resetAllMocks();
   });
