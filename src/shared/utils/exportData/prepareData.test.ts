@@ -162,13 +162,22 @@ describe('prepareData', () => {
   test('prepareEncryptedData should return an object with the correct keys', async () => {
     const data = { activities: [], answers: [] };
     const getDecryptedAnswers = vi.fn();
-    const result = await prepareEncryptedData(data, getDecryptedAnswers);
+    const result = await prepareEncryptedData({
+      data,
+      getDecryptedAnswers,
+      flags: mockFlags,
+      shouldGenerateUserJourney: false,
+    });
 
     testCorrectKeys(result);
   });
 
   test('prepareDecryptedData should return an object with the correct keys', async () => {
-    const result = await prepareDecryptedData([]);
+    const result = await prepareDecryptedData({
+      parsedAnswers: [],
+      flags: mockFlags,
+      shouldGenerateUserJourney: false,
+    });
 
     testCorrectKeys(result);
   });
@@ -408,12 +417,21 @@ describe('prepareData', () => {
       () => mockedParsedAnswers,
     );
 
-    const result = await prepareEncryptedData(data, getDecryptedAnswers, mockFlags);
+    const result = await prepareEncryptedData({
+      data,
+      getDecryptedAnswers,
+      flags: mockFlags,
+      shouldGenerateUserJourney: false,
+    });
     expect(result).toEqual(mockedExportDataResult);
   });
 
   test('prepareDecryptedData should return filled in reportData', async () => {
-    const result = await prepareDecryptedData(mockedParsedAnswers, mockFlags);
+    const result = await prepareDecryptedData({
+      parsedAnswers: mockedParsedAnswers,
+      flags: mockFlags,
+      shouldGenerateUserJourney: false,
+    });
     expect(result).toEqual(mockedExportDataResult);
   });
 });
