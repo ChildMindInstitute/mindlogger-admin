@@ -5,9 +5,9 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { createStore } from '@reduxjs/toolkit';
 
 import { mockedApplet } from 'shared/mock';
-import { createStore } from 'redux';
 import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
 
 import { LorisIntegration } from './LorisIntegration';
@@ -57,9 +57,9 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
-    useParams: () => vi.fn(),
-    generatePath: () => vi.fn(),
+    useNavigate: vi.fn(),
+    useParams: vi.fn(),
+    generatePath: vi.fn(),
   };
 });
 
