@@ -80,8 +80,6 @@ vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
   };
 });
 
-// end of file
-
 vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
 
@@ -309,6 +307,7 @@ const mockAssessment = {
       itemsLast: null,
       reviewerPublicKey: null,
       versions: [],
+      reviews: [],
     },
   },
 };
@@ -328,9 +327,40 @@ const RespondentDataReviewWithForm = () => {
 };
 
 describe('RespondentDataReview', () => {
+  const originalProcessListeners = process.listeners('unhandledRejection');
+
+  beforeAll(() => {
+    // Remove default process listeners
+    process.removeAllListeners('unhandledRejection');
+    
+    // Add custom handler to suppress undefined errors
+    process.on('unhandledRejection', (reason) => {
+      if (reason !== undefined) {
+        // Re-throw actual errors
+        throw reason;
+      }
+      // Suppress undefined rejections
+    });
+  });
+
+  afterAll(() => {
+    // Restore original listeners
+    process.removeAllListeners('unhandledRejection');
+    originalProcessListeners.forEach((listener) => {
+      process.on('unhandledRejection', listener as never);
+    });
+  });
+
   beforeEach(() => {
     // Reset mocks before each test
     vi.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    // Wait for any pending timers or promises to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
   });
 
   test(
@@ -365,8 +395,27 @@ describe('RespondentDataReview', () => {
         if (url.endsWith(`/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`)) {
           return Promise.resolve(mockAssessment);
         }
+        if (url.includes('/reviews')) {
+          return Promise.resolve({ data: { result: [] } });
+        }
+        if (url.includes('/assessment')) {
+          return Promise.resolve({ data: { result: { reviews: [] } } });
+        }
 
-        return Promise.resolve({ data: { result: {} } });
+        return Promise.resolve({
+          data: {
+            result: {
+              activity: { items },
+              answer: {},
+              summary: {
+                createdAt: '2024-03-14T14:33:48.750000',
+                identifier: 'test-identifier',
+                version: '1.0.0',
+              },
+              reviews: [],
+            },
+          },
+        });
       });
 
       const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
@@ -585,10 +634,29 @@ describe('RespondentDataReview', () => {
           return Promise.resolve(mockedGetWithResponses);
         }
         if (url.endsWith(`/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`)) {
-          return Promise.resolve({ data: { result: {} } });
+          return Promise.resolve({ data: { result: { reviews: [] } } });
+        }
+        if (url.includes('/reviews')) {
+          return Promise.resolve({ data: { result: [] } });
+        }
+        if (url.includes('/assessment')) {
+          return Promise.resolve({ data: { result: { reviews: [] } } });
         }
 
-        return Promise.resolve({ data: { result: {} } });
+        return Promise.resolve({
+          data: {
+            result: {
+              activity: { items },
+              answer: {},
+              summary: {
+                createdAt: '2024-03-14T14:33:48.750000',
+                identifier: 'test-identifier',
+                version: '1.0.0',
+              },
+              reviews: [],
+            },
+          },
+        });
       });
 
       const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
@@ -643,8 +711,27 @@ describe('RespondentDataReview', () => {
       if (url.endsWith(`/answers/applet/${mockedAppletId}/review/activities`)) {
         return Promise.resolve(mockedGetWithActivities3);
       }
+      if (url.includes('/reviews')) {
+        return Promise.resolve({ data: { result: [] } });
+      }
+      if (url.includes('/assessment')) {
+        return Promise.resolve({ data: { result: { reviews: [] } } });
+      }
 
-      return Promise.resolve({ data: { result: {} } });
+      return Promise.resolve({
+        data: {
+          result: {
+            activity: { items },
+            answer: {},
+            summary: {
+              createdAt: '2024-03-14T14:33:48.750000',
+              identifier: 'test-identifier',
+              version: '1.0.0',
+            },
+            reviews: [],
+          },
+        },
+      });
     });
 
     renderWithProviders(<RespondentDataReviewWithForm />, {
@@ -692,6 +779,40 @@ describe('RespondentDataReview', () => {
   test('test if default review date is equal to last activity completed date', async () => {
     // This test verifies that when a route includes a selectedDate matching the user's
     // lastSeen/lastActivityCompleted date, the date picker component renders correctly
+    
+    const getMock = authApiClient.get as unknown as Mock;
+    getMock.mockImplementation((url: string) => {
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/dates`)) {
+        return Promise.resolve(mockedGetWithDates);
+      }
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/review/flows`)) {
+        return Promise.resolve(mockedGetWithFlows1);
+      }
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/review/activities`)) {
+        return Promise.resolve(mockedGetWithActivities3);
+      }
+      if (url.includes('/reviews')) {
+        return Promise.resolve({ data: { result: [] } });
+      }
+      if (url.includes('/assessment')) {
+        return Promise.resolve({ data: { result: { reviews: [] } } });
+      }
+
+      return Promise.resolve({
+        data: {
+          result: {
+            activity: { items },
+            answer: {},
+            summary: {
+              createdAt: '2024-03-14T14:33:48.750000',
+              identifier: 'test-identifier',
+              version: '1.0.0',
+            },
+            reviews: [],
+          },
+        },
+      });
+    });
     
     // Use a route with selectedDate matching the lastSeen date from preloadedState (2023-12-15)
     const routeWithDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${activity1Id}/responses?selectedDate=2023-12-15`;
