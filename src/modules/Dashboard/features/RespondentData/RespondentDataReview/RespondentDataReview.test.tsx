@@ -332,7 +332,7 @@ describe('RespondentDataReview', () => {
   beforeAll(() => {
     // Remove default process listeners
     process.removeAllListeners('unhandledRejection');
-    
+
     // Add custom handler to suppress undefined errors
     process.on('unhandledRejection', (reason) => {
       if (reason !== undefined) {
@@ -504,7 +504,7 @@ describe('RespondentDataReview', () => {
       )) as HTMLElement;
 
       expect(datepicker).toBeInTheDocument();
-      
+
       // open the datepicker and select a new date (Dec 15, 2023)
       await waitFor(() => {
         const datepickerDays = datepicker.getElementsByClassName(
@@ -779,7 +779,7 @@ describe('RespondentDataReview', () => {
   test('test if default review date is equal to last activity completed date', async () => {
     // This test verifies that when a route includes a selectedDate matching the user's
     // lastSeen/lastActivityCompleted date, the date picker component renders correctly
-    
+
     const getMock = authApiClient.get as unknown as Mock;
     getMock.mockImplementation((url: string) => {
       if (url.endsWith(`/answers/applet/${mockedAppletId}/dates`)) {
@@ -813,7 +813,7 @@ describe('RespondentDataReview', () => {
         },
       });
     });
-    
+
     // Use a route with selectedDate matching the lastSeen date from preloadedState (2023-12-15)
     const routeWithDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${activity1Id}/responses?selectedDate=2023-12-15`;
 
@@ -826,7 +826,7 @@ describe('RespondentDataReview', () => {
     // Wait for the date picker to be rendered
     const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
     expect(inputContainer).toBeInTheDocument();
-    
+
     // Verify the input element exists (Note: the DatePicker's internal value handling
     // in the test environment may not reflect the actual date value in input.value)
     const input = inputContainer.querySelector('input');

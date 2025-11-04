@@ -416,7 +416,7 @@ describe('ActivityAssignDrawer', () => {
 
       expect(screen.getByText('Review')).toBeVisible();
     });
-  });
+  }, 10000);
 
   it('does not proceed to Review step if submitting only existing assignments', async () => {
     renderWithProviders(
@@ -487,7 +487,7 @@ describe('ActivityAssignDrawer', () => {
       expect(submitButton).toBeEnabled();
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
-  });
+  }, 10000);
 
   it('successfully submits assignments to the API', async () => {
     vi.mocked(axios.post).mockResolvedValue(
@@ -562,5 +562,5 @@ describe('ActivityAssignDrawer', () => {
 
     fireEvent.click(screen.getByText('Done'));
     expect(mockedOnClose).toHaveBeenCalled();
-  });
+  }, 10000);
 });

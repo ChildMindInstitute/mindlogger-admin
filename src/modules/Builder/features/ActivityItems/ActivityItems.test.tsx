@@ -293,7 +293,7 @@ describe('Activity Items', () => {
       await waitFor(() => {
         expect(mockedUseNavigate).toHaveBeenCalledTimes(3);
       });
-      
+
       const thirdCall = mockedUseNavigate.mock.calls[2][0];
       const items = ref.current.getValues('activities.0.items');
       expect(thirdCall).toContain('/items/');
@@ -319,7 +319,7 @@ describe('Activity Items', () => {
       await waitFor(() => {
         expect(mockedUseNavigate).toHaveBeenCalledTimes(2);
       });
-      
+
       const secondCall = mockedUseNavigate.mock.calls[1][0];
       const items = ref.current.getValues('activities.0.items');
       expect(secondCall).toContain('/items/');
@@ -378,7 +378,7 @@ describe('Activity Items', () => {
 
       // Get all items and find which one was clicked
       const items = ref.current.getValues('activities.0.items');
-      
+
       fireEvent.click(screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'));
 
       // Should navigate to an item (the one that was clicked)

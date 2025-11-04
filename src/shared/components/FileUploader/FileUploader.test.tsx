@@ -71,7 +71,7 @@ describe('FileUploader', () => {
   test('returns parsing error if file does not content data', async () => {
     // Make mock return empty array to simulate invalid file
     mockSheetToJson.mockReturnValueOnce([]);
-    
+
     const invalidFile = new File(['File contents'], 'test.csv', {
       type: 'text/csv',
     });

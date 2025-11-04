@@ -139,7 +139,7 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
     const ref = renderTextResponse();
 
     await setItemConfigSetting(ItemConfigurationSettings.IsCorrectAnswerRequired);
-    
+
     // Trigger validation on the specific field path
     await ref.current.trigger('activities.0.items.0.config.correctAnswer');
 

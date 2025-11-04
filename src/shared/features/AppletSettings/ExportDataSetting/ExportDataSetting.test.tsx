@@ -130,13 +130,13 @@ describe('ExportDataSetting', () => {
 
       const dateTypeField = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
       expect(dateTypeField).toBeVisible();
-      
+
       // Open the select dropdown
       const selectButton = dateTypeField.querySelector('[role="button"]');
       if (selectButton) {
         fireEvent.mouseDown(selectButton);
       }
-      
+
       // Wait for dropdown to open and select the option
       await waitFor(() => {
         const options = screen.getAllByRole('option');

@@ -247,7 +247,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         (isSelfReporting || loggedInUser) &&
         activityOrFlow?.id
       ) {
-        const url = new URL(`protected/applets/${appletId}`,
+        const url = new URL(
+          `protected/applets/${appletId}`,
           `${import.meta.env.REACT_APP_WEB_URI}/`,
         );
         url.searchParams.set('startActivityOrFlow', activityOrFlow.id);

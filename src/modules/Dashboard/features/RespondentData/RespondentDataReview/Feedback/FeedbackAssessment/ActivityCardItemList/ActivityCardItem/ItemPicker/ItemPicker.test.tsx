@@ -50,7 +50,9 @@ vi.mock(
   async () => {
     const actual = await vi.importActual<
       typeof import('modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers')
-    >('modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers');
+    >(
+      'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
+    );
 
     return {
       __esModule: true,

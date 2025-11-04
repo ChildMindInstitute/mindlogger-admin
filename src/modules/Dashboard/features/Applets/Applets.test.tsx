@@ -270,7 +270,7 @@ describe('Applets component tests', () => {
       [`/workspaces/${mockedOwnerId}/folders`]: successfulGetFoldersMock,
       [`/workspaces/${mockedOwnerId}/applets`]: successfulGetAppletsMock,
     });
-    
+
     vi.mocked(authApiClient.post).mockResolvedValueOnce({
       status: ApiResponseCodes.SuccessfulResponse,
       data: {
@@ -303,9 +303,10 @@ describe('Applets component tests', () => {
     mockGetRequestResponses({
       [`/workspaces/${mockedOwnerId}/folders`]: successfulGetFoldersMock,
       [`/workspaces/${mockedOwnerId}/applets`]: successfulGetAppletsMock,
-      [`/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`]: successfulGetExpandedAppletsMock,
+      [`/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`]:
+        successfulGetExpandedAppletsMock,
     });
-    
+
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     const folder = await waitFor(() => screen.getByText('Folder9'));

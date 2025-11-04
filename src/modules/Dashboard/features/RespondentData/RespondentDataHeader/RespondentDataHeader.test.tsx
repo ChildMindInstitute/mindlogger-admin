@@ -266,7 +266,7 @@ describe('RespondentDataHeader component tests', () => {
           preloadedState: getPreloadedState(role),
         },
       );
-      
+
       if (canPerformAction) {
         // Wait for the button to appear for roles that should have access
         const actionButton = await screen.findByTestId(`${dataTestid}-take-now`);

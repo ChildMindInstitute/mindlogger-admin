@@ -16,7 +16,10 @@ export type HttpResponse = AxiosResponse;
 export const mockGetRequestResponses = (
   responses: Record<string, HttpResponse | ((params: Record<string, string>) => HttpResponse)>,
 ): void => {
-  const mockImplementation = <T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+  const mockImplementation = <T>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>> => {
     if (url && responses[url]) {
       const response = responses[url];
 
