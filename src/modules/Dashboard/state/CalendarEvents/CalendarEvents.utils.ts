@@ -81,7 +81,10 @@ export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) 
   );
 
   const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
-    item.eventsIds.forEach((item) => item.isHiddenInTimeView && acc.push(item.id));
+    item.eventsIds.forEach(
+      (event: { id: string; isHiddenInTimeView: boolean }) =>
+        event.isHiddenInTimeView && acc.push(event.id),
+    );
 
     return acc;
   }, []);
