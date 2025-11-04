@@ -1,3 +1,3 @@
 module.exports = {
-    plugins: ['babel-plugin-macros']
-  };
+  plugins: ['babel-plugin-macros'],
+};

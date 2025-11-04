@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 

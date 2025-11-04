@@ -43,11 +43,11 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
-      'react', 
-      'react-dom', 
-      '@reduxjs/toolkit', 
+      'react',
+      'react-dom',
+      '@reduxjs/toolkit',
       'react-window',
-      'react-virtualized-auto-sizer'
+      'react-virtualized-auto-sizer',
     ],
     exclude: [],
     esbuildOptions: {

@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { vi } from 'vitest';
 
@@ -21,6 +21,7 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('react-hook-form', async (importOriginal) => {
   const actual = await importOriginal();
+
   return {
     ...actual,
     useFormContext: () => ({
