@@ -3,8 +3,8 @@ import { Outlet, useParams } from 'react-router-dom';
 
 import { alerts, auth, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
+// import { AnnouncementBanner } from 'shared/components/Banners/AnnouncementBanner';
 import { Footer } from 'shared/components';
-import { RebrandBanner } from 'shared/components/Banners/RebrandBanner';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useAlertsWebsocket } from 'shared/hooks';
 
@@ -40,7 +40,7 @@ export const BaseLayout = () => {
     <StyledBaseLayout>
       {isAuthorized && <LeftBar />}
       <StyledCol isAuthorized={isAuthorized}>
-        <RebrandBanner />
+        {/* <AnnouncementBanner /> */}
         <TopBar />
         <Outlet />
         <Footer />
