@@ -4,7 +4,7 @@ import { MediaUploader } from './MediaUploader';
 import { MediaUploaderProps } from './MediaUploader.types';
 
 const dataTestid = 'media-uploader';
-const onUploadMock = jest.fn();
+const onUploadMock = vi.fn();
 
 const fileUploaderProps = {
   width: 300,
@@ -25,7 +25,7 @@ const renderComponent = (props: MediaUploaderProps) => render(<MediaUploader {..
 
 describe('MediaUploader', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render component', () => {

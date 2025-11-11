@@ -256,28 +256,36 @@ const textTableRegExp = /response-option-\d+-\d+-table$/;
 const multiScatterChart = 'multi-scatter-chart';
 const timePickerLineChart = 'time-picker-line-chart';
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useWatch: () => [],
-}));
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
 
-jest.mock('../Charts/LineChart/TimePickerLineChart', () => ({
+  return {
+    ...actual,
+    useWatch: () => [],
+  };
+});
+
+vi.mock('../Charts/LineChart/TimePickerLineChart', () => ({
   __esModule: true,
   TimePickerLineChart: () => <div data-testid={timePickerLineChart} />,
 }));
 
-jest.mock('./MultipleSelectionChart', () => ({
+vi.mock('./MultipleSelectionChart', () => ({
   __esModule: true,
   MultipleSelectionChart: () => <div data-testid={multiScatterChart} />,
 }));
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async () => {
+  const actual = await vi.importActual('modules/Dashboard/features/RespondentData/CollapsedMdText');
+
+  return {
+    __esModule: true,
+    ...actual,
+    CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{text}</div>
+    ),
+  };
+});
 
 describe('ResponseOptions', () => {
   test('renders component and children correctly', async () => {

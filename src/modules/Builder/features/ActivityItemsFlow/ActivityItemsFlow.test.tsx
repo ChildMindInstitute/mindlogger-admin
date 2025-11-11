@@ -36,7 +36,7 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActivityItemsFlow } from './ActivityItemsFlow';
 
-jest.mock('modules/Builder/hooks/useDataPreloader', () => ({
+vi.mock('modules/Builder/hooks/useDataPreloader', () => ({
   useDataPreloader: ({ data }) => ({ data, isPending: false }),
 }));
 
@@ -106,11 +106,11 @@ const mockedOrderedSummaryItemItems = [
   mockedPhrasalTemplateActivityItem,
 ];
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const renderActivityItemsFlow = (formData) => {
   const ref = createRef();
@@ -138,12 +138,12 @@ describe('Activity Items Flow', () => {
       featureFlags: {
         enableItemFlowExtendedItems: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test.each`

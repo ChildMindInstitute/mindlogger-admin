@@ -3,6 +3,7 @@ import { generatePath } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { Button } from '@mui/material';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import {
   ApiResponseCodes,
@@ -99,33 +100,38 @@ const renderOptions = {
   routePath,
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
-}));
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockHandleRefetch = vi.fn();
 
-const mockHandleRefetch = jest.fn();
+const mockGetAppletPrivateKey = vi.fn();
 
-const mockGetAppletPrivateKey = jest.fn();
-
-jest.mock('shared/hooks/useEncryptionStorage', () => ({
+vi.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
     getAppletPrivateKey: mockGetAppletPrivateKey,
   }),
 }));
 
 // Required for ActivityAssignDrawer
-Element.prototype.scrollTo = jest.fn();
+Element.prototype.scrollTo = vi.fn();
 
-const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 /* Test Component
 =================================================== */
@@ -179,7 +185,7 @@ describe('useAssignmentsTab hook', () => {
         enableParticipantMultiInformant: true,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -208,7 +214,7 @@ describe('useAssignmentsTab hook', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Edit', () => {
@@ -350,6 +356,9 @@ describe('useAssignmentsTab hook', () => {
     `(
       'should navigate to appropriate view data URL for $description',
       async ({ activityOrFlow, route, param }) => {
+        // Reset the private key mock to undefined for this test
+        mockGetAppletPrivateKey.mockReturnValue(undefined);
+
         const { rerender } = renderWithProviders(
           <UseAssignmentsHookTest
             activityOrFlow={activityOrFlow}
@@ -444,6 +453,9 @@ describe('useAssignmentsTab hook', () => {
     });
 
     test('should show Export modal', async () => {
+      // Reset the private key mock to undefined for this test
+      mockGetAppletPrivateKey.mockReturnValue(undefined);
+
       const { rerender } = renderWithProviders(
         <UseAssignmentsHookTest
           activityOrFlow={mockParticipantActivities.autoAssignActivity}

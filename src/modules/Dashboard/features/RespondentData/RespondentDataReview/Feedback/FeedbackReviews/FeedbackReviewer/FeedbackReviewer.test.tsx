@@ -7,14 +7,14 @@ import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentDat
 import { FeedbackReviewer } from './FeedbackReviewer';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
+  CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
   )),
 }));
-const mockedOnReviewAnswerRemove = jest.fn();
-const mockedOnReviewEdit = jest.fn();
+const mockedOnReviewAnswerRemove = vi.fn();
+const mockedOnReviewEdit = vi.fn();
 const mockedReviewer = {
   id: 'c1dbef7d-a790-42d9-ad09-e680eb76af7c',
   firstName: 'John',

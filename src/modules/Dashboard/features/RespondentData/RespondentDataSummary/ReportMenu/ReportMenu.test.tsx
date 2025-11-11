@@ -1,16 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
-import * as reactHookForm from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { RespondentDataContext } from '../../RespondentDataContext/RespondentDataContext.context';
 import { RespondentDataContextType } from '../../RespondentDataContext/RespondentDataContext.types';
 import { ReportMenu } from './ReportMenu';
 import { ReportMenuProps } from './ReportMenu.types';
 
-jest.mock('shared/hooks/useRespondentLabel', () => ({
+vi.mock('shared/hooks/useRespondentLabel', () => ({
   useRespondentLabel: () => 'user: Jane Doe',
 }));
+
+const mockedSetValue = vi.fn();
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({ setValue: mockedSetValue }),
+  };
+});
 
 const mockedActivity = {
   id: 'activity-2',
@@ -76,11 +87,10 @@ const mockFlows = [
   },
 ];
 
-const mockedSetValue = jest.fn();
-const mockSetIsLoading = jest.fn();
-const mockGetIdentifiersVersions = jest.fn();
-const mockFetchAnswers = jest.fn();
-const mockedSetSelectedEntity = jest.fn();
+const mockSetIsLoading = vi.fn();
+const mockGetIdentifiersVersions = vi.fn();
+const mockFetchAnswers = vi.fn();
+const mockedSetSelectedEntity = vi.fn();
 
 const renderReportMenu = (
   props?: Partial<ReportMenuProps>,
@@ -117,10 +127,8 @@ const testActivities = () => {
 };
 
 describe('ReportMenu Component', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('renders the component with activities and empty flows', () => {

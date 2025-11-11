@@ -1,6 +1,7 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { expectBanner } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -37,15 +38,15 @@ const dataTestid = 'dashboard-applets-duplicate-popup';
 const abortSignal = { signal: undefined };
 
 describe('DuplicatePopups', () => {
-  afterEach(() => {
-    mockAxios.reset();
-    jest.restoreAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   test('should show an error if the name already exists in database', async () => {
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name (1)' } } });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletData });
+
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name (1)' } } });
 
     const { findByTestId, getByText } = renderWithProviders(<DuplicatePopups />, {
       preloadedState,
@@ -60,17 +61,19 @@ describe('DuplicatePopups', () => {
   });
 
   test('should duplicate and open success modal', async () => {
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletData });
+
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
     });
 
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
@@ -109,7 +112,7 @@ describe('DuplicatePopups', () => {
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     // Make sure the duplicate API call excluded the report server config
-    expect(mockAxios.post).toHaveBeenCalledWith(
+    expect(axios.post).toHaveBeenCalledWith(
       `/applets/${mockedAppletData.id}/duplicate`,
       expect.objectContaining({ includeReportServer: false }),
       abortSignal,
@@ -137,21 +140,19 @@ describe('DuplicatePopups', () => {
       reportRecipients: ['reportrecipient@example.com'],
     };
 
-    jest
-      .spyOn(applet, 'useAppletData')
-      .mockReturnValue({ result: mockedAppletDataWithReportServer });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletDataWithReportServer });
 
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletDataWithReportServer } },
     });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
 
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
@@ -190,7 +191,7 @@ describe('DuplicatePopups', () => {
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     // Make sure the duplicate API call excluded the report server config
-    expect(mockAxios.post).toHaveBeenCalledWith(
+    expect(axios.post).toHaveBeenCalledWith(
       `/applets/${mockedAppletData.id}/duplicate`,
       expect.objectContaining({ includeReportServer: false }),
       abortSignal,
@@ -218,35 +219,29 @@ describe('DuplicatePopups', () => {
       reportRecipients: ['reportrecipient@example.com'],
     };
 
-    jest
-      .spyOn(applet, 'useAppletData')
-      .mockReturnValue({ result: mockedAppletDataWithReportServer });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedAppletDataWithReportServer });
 
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletDataWithReportServer } },
     });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest
-      .spyOn(global, 'fetch')
-      .mockImplementation(
-        jest.fn(() =>
-          Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) }),
-        ) as jest.Mock,
-      );
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.spyOn(global, 'fetch').mockImplementation(
+      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ message: 'ok' }) })) as vi.Mock,
+    );
 
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],
       }),
     );
-    jest
-      .spyOn(encryptionFunctions, 'publicEncrypt')
-      .mockReturnValue(Promise.resolve(btoa('Encrypted password')));
+    vi.spyOn(encryptionFunctions, 'publicEncrypt').mockReturnValue(
+      Promise.resolve(btoa('Encrypted password')),
+    );
 
     const {
       getByTestId,
@@ -284,7 +279,7 @@ describe('DuplicatePopups', () => {
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     // Make sure the duplicate API call included the report server config
-    expect(mockAxios.post).toHaveBeenCalledWith(
+    expect(axios.post).toHaveBeenCalledWith(
       `/applets/${mockedAppletData.id}/duplicate`,
       expect.objectContaining({ includeReportServer: true }),
       abortSignal,

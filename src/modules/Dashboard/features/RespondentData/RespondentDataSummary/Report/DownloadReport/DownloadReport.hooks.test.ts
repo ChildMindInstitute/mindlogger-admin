@@ -1,19 +1,25 @@
 import { act, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import download from 'downloadjs';
+import { vi } from 'vitest';
 
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
 import { useDownloadReport } from './DownloadReport.hooks';
 
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mockedUseParams = vi.fn();
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('downloadjs');
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
+
+vi.mock('downloadjs');
 
 const activityId = 'activity-id';
 const flowId = 'flow-id';
@@ -59,7 +65,7 @@ export const getPreloadedState = (applet) => ({
 });
 
 const testDownloadReport = async (result: { current: unknown }, isFlow: boolean) => {
-  mockAxios.post.mockResolvedValueOnce({
+  vi.mocked(axios.post).mockResolvedValueOnce({
     data: 'reportData',
     headers: { 'content-disposition': 'attachment; filename=report.pdf' },
   });
@@ -74,7 +80,7 @@ const testDownloadReport = async (result: { current: unknown }, isFlow: boolean)
   });
 
   await waitFor(() => {
-    expect(mockAxios.post).toBeCalledWith(
+    expect(axios.post).toBeCalledWith(
       `/answers/applet/${mockedAppletId}/${
         isFlow ? `flows/${flowId}` : `activities/${activityId}`
       }/subjects/${mockedFullSubjectId1}/latest_report`,
@@ -97,7 +103,7 @@ describe('useDownloadReport', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

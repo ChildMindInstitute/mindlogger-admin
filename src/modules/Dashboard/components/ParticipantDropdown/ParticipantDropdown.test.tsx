@@ -9,9 +9,9 @@ import { ParticipantDropdown } from './ParticipantDropdown';
 import { ParticipantDropdownOption } from './ParticipantDropdown.types';
 import { participantToOption } from './ParticipantDropdown.utils';
 
-jest.mock('shared/hooks/useFeatureFlags');
+vi.mock('shared/hooks/useFeatureFlags');
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ParticipantDropdown', () => {
   const dataTestId = 'test';
@@ -21,7 +21,7 @@ describe('ParticipantDropdown', () => {
       featureFlags: {
         enableParticipantMultiInformant: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -32,7 +32,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={null}
         placeholder="Test Placeholder"
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -55,7 +55,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );
@@ -79,7 +79,7 @@ describe('ParticipantDropdown', () => {
         options={[]}
         value={testValue}
         placeholder=""
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         data-testid={dataTestId}
       />,
     );

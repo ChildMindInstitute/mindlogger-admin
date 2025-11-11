@@ -5,7 +5,7 @@ import { MixpanelEventType, MixpanelFeature, MixpanelProps, WithFeature } from '
 import { addFeatureToEvent, trackAppletSave } from './mixpanel.utils';
 import { Mixpanel } from './mixpanel';
 
-jest.mock('./mixpanel');
+vi.mock('./mixpanel');
 
 describe('addFeatureToEvent', () => {
   it('should add a feature to an empty event', () => {

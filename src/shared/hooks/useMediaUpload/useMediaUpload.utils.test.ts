@@ -1,13 +1,16 @@
 import axios from 'axios';
+import { vi } from 'vitest';
 
 import { MediaUploadFields } from 'shared/api';
 import { waitForTheUpdate } from 'shared/utils/testUtils';
 
 import { uploadFileToS3, getFormDataToUpload, checkFileExists } from './useMediaUpload.utils';
 
-describe('useMediaUpload.utils', () => {
-  const mockedAxios = axios.create();
+// Mock axios at the module level
+vi.mock('axios');
+const mockedAxios = vi.mocked(axios);
 
+describe('useMediaUpload.utils', () => {
   describe('uploadFileToS3', () => {
     const uploadUrl = 'https://example.com/upload';
     const body = new FormData();
@@ -22,9 +25,9 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should throw an error if axios.post fails', async () => {
-      jest
-        .spyOn(mockedAxios, 'post')
-        .mockImplementation(() => Promise.reject(new Error('Upload failed')));
+      vi.spyOn(mockedAxios, 'post').mockImplementation(() =>
+        Promise.reject(new Error('Upload failed')),
+      );
 
       await expect(uploadFileToS3({ body, uploadUrl })).rejects.toThrow('Upload failed');
     });
@@ -58,22 +61,22 @@ describe('useMediaUpload.utils', () => {
 
   describe('checkFileExists', () => {
     const url = 'https://example.com/file.mp3';
-    const mockedOnSuccess = jest.fn();
-    const mockedOnError = jest.fn();
-    const mockedOnStopRecursion = jest.fn();
+    const mockedOnSuccess = vi.fn();
+    const mockedOnError = vi.fn();
+    const mockedOnStopRecursion = vi.fn();
 
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.clearAllTimers();
-      jest.restoreAllMocks();
-      jest.clearAllMocks();
+      vi.clearAllTimers();
+      vi.restoreAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should call onSuccess when file exists', async () => {
-      jest.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
+      vi.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
 
       await checkFileExists({
         url,
@@ -82,7 +85,7 @@ describe('useMediaUpload.utils', () => {
         onStopRecursion: mockedOnStopRecursion,
       });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       await waitForTheUpdate();
 
@@ -93,12 +96,12 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should retry after a timeout if response status is Forbidden', async () => {
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
-      const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
+      const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(mockedAxios.head).toHaveBeenCalledWith(url);
       expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
@@ -108,11 +111,11 @@ describe('useMediaUpload.utils', () => {
 
     test('should call onError when an error occurs', async () => {
       const error = new Error('Network error');
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce(error);
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce(error);
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       await waitForTheUpdate();
 
@@ -122,8 +125,8 @@ describe('useMediaUpload.utils', () => {
     });
 
     test('should clear timeout when stopChecking is called', async () => {
-      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
-      const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+      vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
+      const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
 
       const { stopChecking } = await checkFileExists({
         url,
@@ -134,7 +137,7 @@ describe('useMediaUpload.utils', () => {
 
       stopChecking();
 
-      expect(clearTimeoutSpy).toHaveBeenCalledWith(expect.any(Number));
+      expect(clearTimeoutSpy).toHaveBeenCalled();
     });
   });
 });

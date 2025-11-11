@@ -40,8 +40,8 @@ const getToggleBtn = () =>
   screen.getByTestId('builder-activity-items-item-configuration-options-0-collapse');
 
 describe('SelectionOption', () => {
-  const onRemoveOption = jest.fn();
-  const onUpdateOption = jest.fn();
+  const onRemoveOption = vi.fn();
+  const onUpdateOption = vi.fn();
   const selectionOptionProps = {
     name,
     onRemoveOption,
@@ -51,7 +51,7 @@ describe('SelectionOption', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render first regular option expanded', () => {

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { mockedApplet } from 'shared/mock';
 import { ApiResponseCodes } from 'api';
@@ -11,20 +11,20 @@ import { ShareApplet } from './ShareApplet';
 const dataTestid = 'share-applet';
 const appletName = 'displayName';
 
-const onAppletSharedMock = jest.fn();
+const onAppletSharedMock = vi.fn();
 
 const defaultProps = {
   applet: mockedApplet,
   onAppletShared: onAppletSharedMock,
-  onDisableSubmit: jest.fn(),
+  onDisableSubmit: vi.fn(),
   isSubmitted: false,
-  setIsSubmitted: jest.fn(),
+  setIsSubmitted: vi.fn(),
   showSuccess: true,
   'data-testid': dataTestid,
 };
 
 const checkAppletNameInLibraryMock = () =>
-  expect(mockAxios.post).toHaveBeenNthCalledWith(
+  expect(axios.post).toHaveBeenNthCalledWith(
     1,
     '/library/check_name',
     { name: appletName },
@@ -33,13 +33,17 @@ const checkAppletNameInLibraryMock = () =>
 
 Object.assign(navigator, {
   clipboard: {
-    writeText: jest.fn(),
+    writeText: vi.fn(),
   },
 });
 
 describe('ShareApplet Component', () => {
   beforeAll(() => {
     navigator.clipboard.writeText.mockResolvedValue(undefined);
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   test('renders the ShareApplet component with default values', () => {
@@ -52,7 +56,7 @@ describe('ShareApplet Component', () => {
   });
 
   test('applet name is not taken', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       payload: {
         response: {
           status: ApiResponseCodes.SuccessfulResponse,
@@ -72,7 +76,7 @@ describe('ShareApplet Component', () => {
   });
 
   test('handles applet name already taken error', async () => {
-    mockAxios.post.mockRejectedValueOnce({
+    vi.mocked(axios.post).mockRejectedValueOnce({
       payload: {
         response: {
           status: ApiResponseCodes.Forbidden,
@@ -105,7 +109,24 @@ describe('ShareApplet Component', () => {
 
   test('handle share applet and copy applet link', async () => {
     const libraryUrl = 'library-url';
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.post)
+      .mockResolvedValueOnce({
+        payload: {
+          response: {
+            status: ApiResponseCodes.SuccessfulResponse,
+            data: null,
+          },
+        },
+      })
+      .mockResolvedValueOnce({
+        payload: {
+          response: {
+            status: ApiResponseCodes.SuccessfulResponse,
+            data: null,
+          },
+        },
+      });
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: {
           url: libraryUrl,
@@ -129,14 +150,13 @@ describe('ShareApplet Component', () => {
     rerender(<ShareApplet {...defaultProps} isSubmitted />);
 
     await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
-        3,
+      expect(axios.post).toHaveBeenCalledWith(
         '/library',
         { appletId: mockedApplet.id, name: appletName, keywords: [mockedKeyword] },
         { signal: undefined },
       );
 
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
+      expect(axios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
         signal: undefined,
       });
     });

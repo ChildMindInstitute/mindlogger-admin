@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { DateTime } from 'luxon';
 
 import { DeviceScheduleHistoryData, Periodicity, ScheduleHistoryData } from 'modules/Dashboard/api';
@@ -3824,21 +3825,21 @@ describe('ScheduleHistoryExporter', () => {
   });
 
   describe('generateExportData', () => {
-    let respondentDataSpy: jest.SpyInstance;
-    let deviceScheduleHistoryDataSpy: jest.SpyInstance;
-    let scheduleHistorySpy: jest.SpyInstance;
+    let respondentDataSpy: any;
+    let _deviceScheduleHistoryDataSpy: any;
+    let scheduleHistorySpy: any;
 
     beforeEach(() => {
-      respondentDataSpy = jest
+      respondentDataSpy = vi
         .spyOn(exporter, 'getRespondentData')
         .mockResolvedValue([
           mockedOwnerParticipantWithDataAccess,
           mockedFullParticipant1WithDataAccess,
         ]);
 
-      scheduleHistorySpy = jest.spyOn(exporter, 'getScheduleHistoryData').mockResolvedValue([]);
+      scheduleHistorySpy = vi.spyOn(exporter, 'getScheduleHistoryData').mockResolvedValue([]);
 
-      deviceScheduleHistoryDataSpy = jest
+      _deviceScheduleHistoryDataSpy = vi
         .spyOn(exporter, 'getDeviceScheduleHistoryData')
         .mockResolvedValue([]);
     });

@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ServerVerifyErrorPopup } from './ServerVerifyErrorPopup';
 
-const setPopupVisibleMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
 
 describe('ServerVerifyErrorPopup', () => {
   test('should render', () => {

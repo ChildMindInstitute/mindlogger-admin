@@ -1,7 +1,10 @@
 import { Box, styled, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList as List } from 'react-window';
+import * as ReactWindow from 'react-window';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const List = (ReactWindow as any).FixedSizeList;
 
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';

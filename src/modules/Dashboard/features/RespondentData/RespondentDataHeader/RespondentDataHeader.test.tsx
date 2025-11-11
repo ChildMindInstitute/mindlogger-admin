@@ -1,4 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import {
   mockedApplet,
@@ -20,22 +21,27 @@ import { SubjectDetailsWithDataAccess } from 'modules/Dashboard/types';
 
 import { RespondentDataHeader } from './RespondentDataHeader';
 
-const mockUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-  useParams: () => mockedUseParams(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+    useParams: () => mockedUseParams(),
+  };
+});
 
 const dataTestid = 'respondent-data-header';
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const mockedSubject: SubjectDetailsWithDataAccess = {
   nickname: mockedFullParticipant1.nicknames[0],
@@ -60,12 +66,7 @@ const mockedActivityFlow = {
   activities: [mockedActivity],
 };
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 describe('RespondentDataHeader component tests', () => {
   beforeEach(() => {
@@ -74,7 +75,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
@@ -83,7 +84,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({});
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -109,7 +110,7 @@ describe('RespondentDataHeader component tests', () => {
     mockedUseParams.mockReturnValue({ activityId: mockedActivity.id });
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {},
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -161,7 +162,7 @@ describe('RespondentDataHeader component tests', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -265,8 +266,16 @@ describe('RespondentDataHeader component tests', () => {
           preloadedState: getPreloadedState(role),
         },
       );
-      const actionButton = screen.queryByTestId(`${dataTestid}-take-now`);
-      canPerformAction ? expect(actionButton).toBeInTheDocument() : expect(actionButton).toBeNull();
+
+      if (canPerformAction) {
+        // Wait for the button to appear for roles that should have access
+        const actionButton = await screen.findByTestId(`${dataTestid}-take-now`);
+        expect(actionButton).toBeInTheDocument();
+      } else {
+        // For roles that shouldn't have access, button should not exist
+        const actionButton = screen.queryByTestId(`${dataTestid}-take-now`);
+        expect(actionButton).toBeNull();
+      }
     });
   });
 });

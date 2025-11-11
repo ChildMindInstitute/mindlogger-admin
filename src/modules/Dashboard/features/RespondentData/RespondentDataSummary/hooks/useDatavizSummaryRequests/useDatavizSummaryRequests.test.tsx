@@ -1,5 +1,6 @@
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 
@@ -7,23 +8,29 @@ import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
 import { RespondentDataContext } from '../../../RespondentDataContext/RespondentDataContext.context';
 
-const mockedGetValues = jest.fn();
-const mockedSetValue = jest.fn();
-const mockedSetIdentifiers = jest.fn();
-const mockedSetVersions = jest.fn();
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+const mockedGetValues = vi.fn();
+const mockedSetValue = vi.fn();
+const mockedSetIdentifiers = vi.fn();
+const mockedSetVersions = vi.fn();
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: mockedGetValues,
     setValue: mockedSetValue,
   }),
 }));
 
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mockedUseParams = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
 
 const renderHookWithContext = () => {
   const {
@@ -81,7 +88,7 @@ describe('useDatavizSummaryRequests', () => {
       appletId: mockedAppletId,
       subjectId: mockedFullSubjectId1,
     });
-    const mockedGetDecryptedIdentifiers = jest.spyOn(
+    const mockedGetDecryptedIdentifiers = vi.spyOn(
       useDecryptedIdentifiersHook,
       'useDecryptedIdentifiers',
     );
@@ -91,11 +98,11 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   const testApiCallsAndSetValues = () => {
-    expect(mockAxios.get).toHaveBeenCalledTimes(2);
+    expect(axios.get).toHaveBeenCalledTimes(2);
     expect(mockedSetIdentifiers).toHaveBeenCalledWith(mockedDecryptedIdentifiersResult);
     expect(mockedSetValue).toHaveBeenCalledWith('versions', [
       { id: 'v1', label: 'v1' },
@@ -105,10 +112,10 @@ describe('useDatavizSummaryRequests', () => {
   };
 
   test('should call APIs and set form values for Activity', async () => {
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: 'some data' },
     });
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
 
@@ -121,10 +128,10 @@ describe('useDatavizSummaryRequests', () => {
   });
 
   test('should call APIs and set form values for Flow', async () => {
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: 'some data' },
     });
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
 
@@ -147,17 +154,17 @@ describe('useDatavizSummaryRequests', () => {
     const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: { ...mockedActivity, ...activityProps } });
 
-    expect(mockAxios.get).not.toHaveBeenCalled();
+    expect(axios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
   });
 
   test('should handle errors gracefully', async () => {
-    mockAxios.get.mockRejectedValue(new Error('API Error'));
+    vi.mocked(axios.get).mockRejectedValue(new Error('API Error'));
 
     const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: mockedActivity });
 
-    expect(mockAxios.get).toHaveBeenCalled();
+    expect(axios.get).toHaveBeenCalled();
     expect(console.warn).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,7 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { t } from 'i18next';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import {
@@ -35,7 +36,7 @@ import { checkAssignment, selectParticipant } from './ActivityAssignDrawer.test-
 =================================================== */
 
 const dataTestId = 'applet-activity-assign';
-const mockedOnClose = jest.fn();
+const mockedOnClose = vi.fn();
 
 const mockedGetAppletActivities = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -128,18 +129,21 @@ const preloadedState = {
   },
 };
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-Element.prototype.scrollTo = jest.fn();
+Element.prototype.scrollTo = vi.fn();
 
-jest.useFakeTimers();
-jest.setTimeout(10000);
+// Set default mock implementation before all tests
+mockUseFeatureFlags.mockReturnValue({
+  featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
+  resetLDContext: vi.fn(),
+});
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 /* Tests
 =================================================== */
@@ -148,7 +152,7 @@ describe('ActivityAssignDrawer', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true, enableParticipantMultiInformant: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -177,7 +181,7 @@ describe('ActivityAssignDrawer', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders correctly', () => {
@@ -207,7 +211,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityItems = screen.getAllByTestId(`${dataTestId}-activities-list-activity-item`);
       expect(activityItems).toHaveLength(mockedAppletData.activities.length);
@@ -228,7 +231,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const activityCheckbox = screen.getByTestId(
         `${dataTestId}-activities-list-activity-checkbox-${mockedAppletData.activities[0].id}`,
@@ -249,7 +251,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const selectAll = screen.getByText('Select All');
 
@@ -289,7 +290,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       checkAssignment(`${mockedOwnerParticipant.nicknames[0]} (Team)`, '');
 
@@ -312,7 +312,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedLimitedParticipant.details[0].subjectTag}`);
       checkAssignment(
@@ -342,7 +341,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       const subjectTag = t(`participantTag.${mockedFullParticipant1.details[0].subjectTag}`);
       checkAssignment(
@@ -371,7 +369,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participants & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -380,7 +377,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
@@ -399,7 +395,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -414,7 +409,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'One or more of these Activities have already been assigned; no emails for those assignments will be sent.',
@@ -422,7 +416,7 @@ describe('ActivityAssignDrawer', () => {
 
       expect(screen.getByText('Review')).toBeVisible();
     });
-  });
+  }, 10000);
 
   it('does not proceed to Review step if submitting only existing assignments', async () => {
     renderWithProviders(
@@ -437,7 +431,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -446,7 +439,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'All of the requested assignments already exist. Please create new unique assignments.',
@@ -457,8 +449,6 @@ describe('ActivityAssignDrawer', () => {
   });
 
   it('prevents proceeding to Review step if there are duplicate assignments', async () => {
-    jest.setTimeout(20000);
-
     renderWithProviders(
       <ActivityAssignDrawer
         appletId={mockedAppletId}
@@ -471,7 +461,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -486,7 +475,6 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => expect(submitButton).not.toBeEnabled());
     expect(await screen.findByText('Review')).not.toBeVisible();
 
@@ -499,10 +487,10 @@ describe('ActivityAssignDrawer', () => {
       expect(submitButton).toBeEnabled();
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
-  });
+  }, 10000);
 
   it('successfully submits assignments to the API', async () => {
-    mockAxios.post.mockResolvedValue(
+    vi.mocked(axios.post).mockResolvedValue(
       mockSuccessfulHttpResponse({
         result: {
           appletId: mockedAppletId,
@@ -523,7 +511,6 @@ describe('ActivityAssignDrawer', () => {
       { preloadedState },
     );
 
-    jest.advanceTimersToNextTimer();
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'The Participant & Activity have been auto-filled, click ‘Next’ to continue.',
     );
@@ -538,19 +525,16 @@ describe('ActivityAssignDrawer', () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
     fireEvent.click(submitButton);
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Review')).toBeVisible();
     });
 
     fireEvent.click(screen.getByText('Send Emails'));
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Assigning to participants')).toBeVisible();
     });
 
-    jest.advanceTimersToNextTimer();
     await waitFor(() => {
       expect(screen.getByText('Emails have been sent')).toBeVisible();
 
@@ -566,7 +550,7 @@ describe('ActivityAssignDrawer', () => {
         }),
       );
 
-      expect(mockAxios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+      expect(axios.post).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
         assignments: [mockedAssignment, mockedLimitedAssignment].map((a) => ({
           activity_id: a.activityId,
           activity_flow_id: a.activityFlowId,
@@ -578,5 +562,5 @@ describe('ActivityAssignDrawer', () => {
 
     fireEvent.click(screen.getByText('Done'));
     expect(mockedOnClose).toHaveBeenCalled();
-  });
+  }, 10000);
 });

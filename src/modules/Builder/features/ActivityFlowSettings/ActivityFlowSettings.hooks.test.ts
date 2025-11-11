@@ -8,13 +8,17 @@ import { useActivityFlow } from './ActivityFlowSettings.hooks';
 
 const routePath = page.builderAppletActivityFlowItemSettings;
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCustomFormContext: vi.fn(),
+  };
+});
 
 describe('useActivityFlow', () => {
-  const mockWatch = jest.fn();
+  const mockWatch = vi.fn();
   const mockActivityFlows = [
     {
       id: '123',
@@ -35,7 +39,7 @@ describe('useActivityFlow', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return currentActivityFlow based on activityFlowId', () => {

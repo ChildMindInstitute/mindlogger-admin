@@ -22,15 +22,15 @@ const frequency = 2;
 
 const dataTestId = 'all-scores';
 
-jest.mock('../../Charts/LineChart', () => ({
+vi.mock('../../Charts/LineChart', () => ({
   SubscaleLineChart: () => <div data-testid={`${dataTestId}-subscale-line-chart`} />,
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('AllScores component', () => {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('AllScores component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -68,7 +68,7 @@ describe('AllScores component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -118,7 +118,7 @@ describe('AllScores component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(

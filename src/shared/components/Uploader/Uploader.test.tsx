@@ -7,13 +7,13 @@ import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
 
 import { Uploader, UploaderProps } from '.';
 
-jest.mock('api');
+vi.mock('api');
 
 const mockImageUrl = 'https://example.com/test-image.png';
 
-jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
+vi.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
   useMediaUpload: ({ callback }: { callback: (url: string) => void }) => ({
-    executeMediaUpload: jest.fn().mockImplementation(() => {
+    executeMediaUpload: vi.fn().mockImplementation(() => {
       callback(mockImageUrl);
     }),
     isLoading: false,
@@ -21,8 +21,8 @@ jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
 }));
 
 const renderComponent = (props: UploaderProps) => renderWithProviders(<Uploader {...props} />);
-const mockSetValue = jest.fn();
-const mockGetValue = jest.fn();
+const mockSetValue = vi.fn();
+const mockGetValue = vi.fn();
 const mockImageFile = new File(['(⌐□_□)'], 'test-image.png', { type: 'image/png' });
 const descriptionText = 'Upload an Image';
 const uploaderProps = {
@@ -36,15 +36,15 @@ const uploaderProps = {
 
 describe('Uploader component', () => {
   beforeAll(() => {
-    global.URL.createObjectURL = jest.fn(() => 'mocked-url://mocked-url');
+    global.URL.createObjectURL = vi.fn(() => 'mocked-url://mocked-url');
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders without errors', () => {
@@ -61,7 +61,7 @@ describe('Uploader component', () => {
     expect(await screen.findByText('test-image.png')).toBeInTheDocument();
     expect(screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
 
-    const mockCropImage = jest.spyOn(CropPopupUtils, 'cropImage');
+    const mockCropImage = vi.spyOn(CropPopupUtils, 'cropImage');
     mockCropImage.mockImplementation(({ onReady }) => {
       const mockedBlob = new Blob();
       onReady(mockedBlob);
@@ -73,7 +73,7 @@ describe('Uploader component', () => {
   });
 
   test('handles image delete', async () => {
-    const getImageValueMock = jest.fn().mockReturnValue(mockImageUrl);
+    const getImageValueMock = vi.fn().mockReturnValue(mockImageUrl);
     renderComponent({ ...uploaderProps, getValue: getImageValueMock });
 
     const uploaderContainer = screen.getByTestId('image-uploader');

@@ -7,11 +7,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { mockedAppletFormData } from 'shared/mock';
-import { getEntityKey, asyncTimeout } from 'shared/utils';
+import { getEntityKey } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { useFeatureFlags } from 'shared/hooks';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ActivityFlowAbout } from './ActivityFlowAbout';
 
@@ -62,20 +61,20 @@ const renderNewActivityFlowAbout = () => renderActivityFlowAbout(mockedAppletFor
 const renderActivityFlowAboutWithTwoFlows = () =>
   renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ActivityFlowAbout', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: {
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
@@ -125,17 +124,14 @@ describe('ActivityFlowAbout', () => {
     ${`${mockedFlowsTestid}-single-report`} | ${'isSingleReport'} | ${''}         | ${true}                        | ${'Change Activity Flow: Combine Reports'}
     ${`${mockedFlowsTestid}-hide-badge`}    | ${'hideBadge'}      | ${''}         | ${true}                        | ${'Change Activity Flow: Hide Badge'}
     ${`${mockedFlowsTestid}-auto-assign`}   | ${'autoAssign'}     | ${''}         | ${false}                       | ${'Change Activity Flow: Auto-assign'}
-  `('$description', async ({ testId, attribute, inputType, value }) => {
+  `('$description', ({ testId, attribute, inputType, value }) => {
     const ref = renderActivityFlowAbout();
 
     const field = screen.getByTestId(testId);
 
-    if (inputType) {
-      fireEvent.change(field.querySelector(inputType), { target: { value } });
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
-    } else {
-      fireEvent.click(field);
-    }
+    inputType
+      ? fireEvent.change(field.querySelector(inputType), { target: { value } })
+      : fireEvent.click(field);
 
     expect(ref.current.getValues(`activityFlows.0.${attribute}`)).toEqual(value);
   });
@@ -148,9 +144,14 @@ describe('ActivityFlowAbout', () => {
     const ref = renderNewActivityFlowAbout();
 
     const field = screen.getByTestId(testId);
-    fireEvent.change(field.querySelector(inputType), { target: { value } });
+    const input = field.querySelector(inputType);
+    // First, set a value to make the field "touched"
+    fireEvent.change(input, { target: { value: 'test' } });
+    fireEvent.blur(input);
+    // Then clear it to trigger the required validation
+    fireEvent.change(input, { target: { value } });
+    fireEvent.blur(input);
 
-    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
     await ref.current.trigger('activityFlows');
 
     await waitFor(() => {
@@ -163,7 +164,7 @@ describe('ActivityFlowAbout', () => {
       featureFlags: {
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderActivityFlowAbout();
@@ -180,7 +181,6 @@ describe('ActivityFlowAbout', () => {
       target: { value: 'second flow' },
     });
 
-    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
     await ref.current.trigger('activityFlows');
 
     await waitFor(() => {

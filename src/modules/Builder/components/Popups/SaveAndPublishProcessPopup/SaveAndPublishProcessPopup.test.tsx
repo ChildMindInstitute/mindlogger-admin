@@ -7,14 +7,14 @@ import { SaveAndPublishProcessPopup } from './SaveAndPublishProcessPopup';
 import { SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
 import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
-  useAppSelector: jest.fn(),
+vi.mock('redux/store/hooks', () => ({
+  useAppDispatch: vi.fn(),
+  useAppSelector: vi.fn(),
 }));
 
-const mockDispatch = jest.fn();
-const mockOnRetry = jest.fn();
-const mockOnClose = jest.fn();
+const mockDispatch = vi.fn();
+const mockOnRetry = vi.fn();
+const mockOnClose = vi.fn();
 
 const commonProps = {
   isPopupVisible: true,
@@ -24,7 +24,7 @@ const commonProps = {
 
 describe('SaveAndPublishProcessPopup', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('renders correctly for a beingCreated', () => {
@@ -61,7 +61,7 @@ describe('SaveAndPublishProcessPopup', () => {
   });
 
   test('dispatches correct action on report config save', () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
 
     renderWithProviders(
       <SaveAndPublishProcessPopup step={SaveAndPublishSteps.ReportConfigSave} {...commonProps} />,

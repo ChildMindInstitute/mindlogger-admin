@@ -1,8 +1,9 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { authApiClient } from 'shared/api/apiConfig';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
@@ -51,18 +52,23 @@ const preloadedState = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
-}));
-
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const RESPONDENTS_ENDPOINT = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 // Mock responses for requests made both by Participants table and ActivityAssignDrawer
@@ -91,19 +97,19 @@ const clickActionDots = async () => {
   fireEvent.click(actionsDots);
 };
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 describe('Participants component tests', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render empty table', async () => {
@@ -117,15 +123,13 @@ describe('Participants component tests', () => {
   });
 
   test('should render no permission table', async () => {
-    const mockedGet = {
-      payload: {
-        response: {
-          status: ApiResponseCodes.Forbidden,
-          data: null,
-        },
+    const mockedError = {
+      response: {
+        status: ApiResponseCodes.Forbidden,
+        data: null,
       },
     };
-    mockAxios.get.mockResolvedValue(mockedGet);
+    vi.spyOn(authApiClient, 'get').mockRejectedValue(mockedError);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
@@ -202,7 +206,7 @@ describe('Participants component tests', () => {
     fireEvent.click(participantPin);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(authApiClient.post).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/respondents/${mockedFullParticipantId1}/pin`,
         {},
@@ -239,7 +243,7 @@ describe('Participants component tests', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -317,6 +321,7 @@ describe('Participants component tests', () => {
       ...mockedResponses,
       [RESPONDENTS_ENDPOINT]: getMockedGetWithParticipants(),
     });
+    const authApiClientGetSpy = vi.mocked(authApiClient.get);
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
@@ -324,18 +329,21 @@ describe('Participants component tests', () => {
     const searchInput = search.querySelector('input');
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        RESPONDENTS_ENDPOINT,
-        expect.objectContaining({
-          params: {
-            limit: 20,
-            page: 1,
-            search: mockedSearchValue,
-            ordering: '-isPinned,+tags',
-          },
-        }),
-      );
-    });
+    await waitFor(
+      () => {
+        expect(authApiClientGetSpy).toHaveBeenCalledWith(
+          RESPONDENTS_ENDPOINT,
+          expect.objectContaining({
+            params: {
+              limit: 20,
+              page: 1,
+              search: mockedSearchValue,
+              ordering: '-isPinned,+tags',
+            },
+          }),
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 });

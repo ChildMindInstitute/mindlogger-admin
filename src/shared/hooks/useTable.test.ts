@@ -1,15 +1,20 @@
 import { renderHook, act } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { useTable } from './useTable';
 
-jest.mock('redux/modules', () => ({
+vi.mock('redux/modules', () => ({
   workspaces: {
     useData: () => ({ ownerId: 'mockOwnerId' }),
   },
 }));
 
 describe('useTable hook tests', () => {
-  const mockAsyncFn = jest.fn();
+  const mockAsyncFn = vi.fn();
+
+  beforeEach(() => {
+    mockAsyncFn.mockClear();
+  });
 
   test('should return initial searchValue, order and page', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));

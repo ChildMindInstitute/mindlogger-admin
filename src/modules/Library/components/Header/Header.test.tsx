@@ -8,13 +8,18 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Header } from './Header';
 import { RightButtonType } from './Header.types';
 
-const rightButtonCallback = jest.fn();
-const mockedUseNavigate = jest.fn();
+const rightButtonCallback = vi.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 const preloadedState = {
   library: {
@@ -43,7 +48,7 @@ describe('Header component tests', () => {
   });
 
   test('should render the search input when handleSearch is provided', () => {
-    const handleSearch = jest.fn();
+    const handleSearch = vi.fn();
     renderWithProviders(<Header handleSearch={handleSearch} />);
 
     const searchInput = screen.getByTestId('library-search');

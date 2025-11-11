@@ -1,5 +1,6 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { describe, test, expect, vi, afterEach } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -21,7 +22,7 @@ const chosenAppletData = {
   subjectId: mockedFullSubjectId1,
 };
 
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 const commonProps = {
   onClose: onCloseMock,
@@ -50,7 +51,7 @@ const commonProps = {
 
 describe('RemoveRespondentPopup component tests', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('RemoveRespondentPopup should open with applets list', async () => {
@@ -65,8 +66,8 @@ describe('RemoveRespondentPopup component tests', () => {
   });
 
   test('RemoveRespondentPopup should remove access with appletId', async () => {
-    mockAxios.post.mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
-    mockAxios.delete.mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.post).mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.delete).mockResolvedValueOnce(mockSuccessfulHttpResponse(null));
 
     renderWithProviders(<RemoveRespondentPopup {...commonProps} />, {
       route,

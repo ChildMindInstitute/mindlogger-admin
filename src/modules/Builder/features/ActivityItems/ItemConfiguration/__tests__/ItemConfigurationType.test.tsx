@@ -45,10 +45,10 @@ import {
   mockedEmptyParagraphText,
 } from '../__mocks__';
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ItemConfiguration: Item Type', () => {
   beforeEach(() => {
@@ -56,12 +56,12 @@ describe('ItemConfiguration: Item Type', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('is rendered with correct item types, groups and "mobile only"', () => {

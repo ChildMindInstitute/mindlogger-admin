@@ -10,19 +10,23 @@ import { RecordAudio } from './RecordAudio';
 import * as audioRecorderHooks from './RecordAudio.hooks';
 import { recordAudioDataTestid } from './RecordAudio.const';
 
-const mockClearBlob = jest.fn();
-const mockOnUpload = jest.fn();
-const mockOnChange = jest.fn();
-const mockOnClose = jest.fn();
+const mockClearBlob = vi.fn();
+const mockOnUpload = vi.fn();
+const mockOnChange = vi.fn();
+const mockOnClose = vi.fn();
 
-jest.mock('modules/Builder/components/MLPlayer', () => ({
-  ...jest.requireActual('modules/Builder/components/MLPlayer'),
-  MLPlayer: ({ onRemove, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>
-      <button data-testid={`${dataTestid}-remove`} onClick={onRemove}></button>
-    </div>
-  ),
-}));
+vi.mock('modules/Builder/components/MLPlayer', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    MLPlayer: ({ onRemove, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>
+        <button data-testid={`${dataTestid}-remove`} onClick={onRemove}></button>
+      </div>
+    ),
+  };
+});
 
 describe('RecordAudio', () => {
   let originalCreateObjectURL;
@@ -37,22 +41,22 @@ describe('RecordAudio', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render RecordAudio component, test remove record', async () => {
-    const useAudioRecorderSpy = jest.spyOn(audioRecorderHooks, 'useAudioRecorder');
-    const useMediaUploadSpy = jest.spyOn(useMediaUploadHooks, 'useMediaUpload');
+    const useAudioRecorderSpy = vi.spyOn(audioRecorderHooks, 'useAudioRecorder');
+    const useMediaUploadSpy = vi.spyOn(useMediaUploadHooks, 'useMediaUpload');
 
     useAudioRecorderSpy.mockImplementation(({ setFile }) => ({
-      startRecording: jest.fn(),
+      startRecording: vi.fn(),
       stopRecording: () => {
         // workaround for event listener
         setTimeout(() => {
           setFile({});
         });
       },
-      togglePauseResume: jest.fn(),
+      togglePauseResume: vi.fn(),
       clearBlob: mockClearBlob,
       isRecording: false,
       isPaused: false,
@@ -67,7 +71,7 @@ describe('RecordAudio', () => {
       error: {
         data: 'Mock Error',
       },
-      stopUpload: jest.fn,
+      stopUpload: vi.fn,
     }));
 
     renderWithProviders(
@@ -81,9 +85,9 @@ describe('RecordAudio', () => {
     await userEvent.click(stopButton);
 
     useAudioRecorderSpy.mockImplementation(() => ({
-      startRecording: jest.fn(),
-      stopRecording: jest.fn(),
-      togglePauseResume: jest.fn(),
+      startRecording: vi.fn(),
+      stopRecording: vi.fn(),
+      togglePauseResume: vi.fn(),
       clearBlob: mockClearBlob,
       isRecording: false,
       isPaused: false,
@@ -105,16 +109,16 @@ describe('RecordAudio', () => {
   });
 
   test('render RecordAudio component, test upload record', async () => {
-    const useAudioRecorderSpy = jest.spyOn(audioRecorderHooks, 'useAudioRecorder');
-    const useMediaUploadSpy = jest.spyOn(useMediaUploadHooks, 'useMediaUpload');
+    const useAudioRecorderSpy = vi.spyOn(audioRecorderHooks, 'useAudioRecorder');
+    const useMediaUploadSpy = vi.spyOn(useMediaUploadHooks, 'useMediaUpload');
     useAudioRecorderSpy.mockImplementation(({ setFile }) => ({
-      startRecording: jest.fn(),
+      startRecording: vi.fn(),
       stopRecording: () => {
         setTimeout(() => {
           setFile({});
         });
       },
-      togglePauseResume: jest.fn(),
+      togglePauseResume: vi.fn(),
       clearBlob: mockClearBlob,
       isRecording: false,
       isPaused: false,
@@ -127,7 +131,7 @@ describe('RecordAudio', () => {
       },
       isLoading: false,
       error: null,
-      stopUpload: jest.fn,
+      stopUpload: vi.fn,
     }));
 
     renderWithProviders(
@@ -141,9 +145,9 @@ describe('RecordAudio', () => {
     await userEvent.click(stopButton);
 
     useAudioRecorderSpy.mockImplementation(() => ({
-      startRecording: jest.fn(),
-      stopRecording: jest.fn(),
-      togglePauseResume: jest.fn(),
+      startRecording: vi.fn(),
+      stopRecording: vi.fn(),
+      togglePauseResume: vi.fn(),
       clearBlob: mockClearBlob,
       isRecording: false,
       isPaused: false,

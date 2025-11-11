@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
@@ -28,8 +28,8 @@ const preloadedState = {
 };
 
 const dataTestId = 'test-id';
-const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const onCloseMock = vi.fn();
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const mockWorkspaceInfo = {
   name: 'test-workspace',
@@ -59,11 +59,11 @@ const mockSubmitValues = {
 
 describe('AddManagerPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should submit the form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: mockSubmitValues,
       },

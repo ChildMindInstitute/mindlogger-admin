@@ -31,17 +31,26 @@ const getPreloadedState = ({ isAuthorized }) => ({
 });
 
 const dataTestid = 'top-bar';
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('./Notifications', () => ({
-  ...jest.requireActual('./Notifications'),
-  Notifications: () => <div>Notifications</div>,
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('./Notifications', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    Notifications: () => <div>Notifications</div>,
+  };
+});
 
 describe('TopBar component', () => {
   test('when isAuthorized = false', async () => {

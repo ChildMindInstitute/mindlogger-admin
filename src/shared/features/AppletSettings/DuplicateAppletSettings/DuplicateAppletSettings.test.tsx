@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -62,25 +62,30 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('DuplicateAppletSettings', () => {
   test('should render and navigate to builder', async () => {
     mockGetRequestResponses({
       [`/applets/${mockedAppletId}`]: { data: { result: mockedAppletData } },
     });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest
-      .spyOn(encryptionFunctions, 'getEncryptionToServer')
-      .mockReturnValue(Promise.resolve(mockedEncryption));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValueOnce(
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    vi.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(
+      Promise.resolve(mockedEncryption),
+    );
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValueOnce(
       Promise.resolve({
         getPrivateKey: () => [],
       }),

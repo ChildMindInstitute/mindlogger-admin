@@ -11,7 +11,7 @@ import { Cart } from './Cart';
 
 const dataTestid = 'library-cart';
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const mockWorkspaces = [
   {
@@ -130,30 +130,43 @@ const getPreloadedState = ({ isAuthorized, status, hasCartApplets }) => ({
   },
 });
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useWorkspaceList: () => ({
-    workspaces: mockWorkspaces,
-  }),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useWorkspaceList: () => ({
+      workspaces: mockWorkspaces,
+    }),
+  };
+});
 
 describe('Cart', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   test('renders loading spinner when applets are loading', () => {
@@ -246,8 +259,8 @@ describe('Cart', () => {
   });
 
   test('calls navigateToBuilder when authorized user adds to builder', async () => {
-    const mockNavigateToBuilder = jest.fn();
-    jest.spyOn(cartUtils, 'navigateToBuilder').mockImplementationOnce(mockNavigateToBuilder);
+    const mockNavigateToBuilder = vi.fn();
+    vi.spyOn(cartUtils, 'navigateToBuilder').mockImplementationOnce(mockNavigateToBuilder);
 
     renderWithProviders(<Cart />, {
       preloadedState: getPreloadedState({

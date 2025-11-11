@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 
 import { expectBanner, SettingParam } from 'shared/utils';
@@ -52,17 +52,22 @@ const preloadedState = {
 };
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('DeleteAppletSetting', () => {
   test('should render and submit', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
       getPublicKey: getPublicKeyMock,
     }));
     const { store } = renderWithProviders(<DeleteAppletSetting />, {

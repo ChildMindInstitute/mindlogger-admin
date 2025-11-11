@@ -130,7 +130,7 @@ export const Managers = () => {
 
       const url = new URL(
         `invitation/${context.invitationKey}`,
-        `${process.env.REACT_APP_WEB_URI}/`,
+        `${import.meta.env.REACT_APP_WEB_URI}/`,
       );
       navigator.clipboard.writeText(url.toString());
     },

@@ -11,16 +11,16 @@ import { useClearCart } from './Cart.hooks';
 const mockSessionStorageSelectedKey = 'mockSessionStorageSelectedKey';
 const mockDispatch = () => Promise.resolve('');
 
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
+vi.mock('redux/store/hooks', () => ({
+  useAppDispatch: vi.fn(),
 }));
 
 describe('useClearCart', () => {
   beforeEach(() => {
     sessionStorage.setItem(STORAGE_SELECTED_KEY, mockSessionStorageSelectedKey);
 
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.clearAllMocks();
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -28,7 +28,7 @@ describe('useClearCart', () => {
   });
 
   test('removes item from sessionStorage and dispatches thunk', () => {
-    const spyPostAppletsToCarts = jest.spyOn(library.thunk, 'postAppletsToCart');
+    const spyPostAppletsToCarts = vi.spyOn(library.thunk, 'postAppletsToCart');
     expect(sessionStorage.getItem(STORAGE_SELECTED_KEY)).toEqual(mockSessionStorageSelectedKey);
 
     const { result } = renderHook(useClearCart);

@@ -4,7 +4,7 @@ import { Pin } from './Pin';
 
 const testId = 'test-pin';
 
-const mockOnClick = jest.fn();
+const mockOnClick = vi.fn();
 
 describe('Pin', () => {
   test('calls onClick event handler when clicked', async () => {

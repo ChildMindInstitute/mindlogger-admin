@@ -6,8 +6,8 @@ import { Reviews } from './Reviews';
 import { ReviewsProps } from './Reviews.types';
 import { ReviewData } from '../FeedbackReviews.types';
 
-const mockedOnReviewAnswerRemove = jest.fn();
-const mockedOnReviewEdit = jest.fn();
+const mockedOnReviewAnswerRemove = vi.fn();
+const mockedOnReviewEdit = vi.fn();
 const mockedReviewersData = [
   {
     reviewId: 'a7af3c10-6cca-4e3b-a051-86c1757e7fd9',

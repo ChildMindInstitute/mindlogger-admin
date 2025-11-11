@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
@@ -24,12 +25,12 @@ const preloadedState = {
 };
 
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 
 describe('DeletePopup', () => {
   afterEach(() => {
-    mockAxios.reset();
-    jest.restoreAllMocks();
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('DeletePopup should open the password check modal initially', async () => {
@@ -41,8 +42,8 @@ describe('DeletePopup', () => {
   });
 
   test('DeletePopup should show success banner', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPublicKey: getPublicKeyMock,
       }),

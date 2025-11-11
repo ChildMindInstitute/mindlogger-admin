@@ -8,7 +8,7 @@ import { ResponsesHeader } from './ResponsesHeader';
 import { ResponsesHeaderProps } from './ResponsesHeader.types';
 
 const dataTestId = 'review-header';
-const mockOnButtonClick = jest.fn();
+const mockOnButtonClick = vi.fn();
 const defaultProps = {
   containerRef: { current: null },
   isAnswerSelected: false,

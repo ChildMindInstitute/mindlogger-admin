@@ -42,7 +42,7 @@ const activityItem = {
 };
 
 const dataTestid = 'slider';
-const onChange = jest.fn();
+const onChange = vi.fn();
 
 describe('Slider', () => {
   test('renders the slider component with images and labels', async () => {

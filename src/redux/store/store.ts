@@ -8,7 +8,7 @@ import { rootReducer } from './reducers';
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   configureStore({
     reducer: rootReducer,
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: import.meta.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

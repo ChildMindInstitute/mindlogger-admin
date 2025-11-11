@@ -1,17 +1,18 @@
+import { vi, describe, test, expect, afterEach, beforeAll } from 'vitest';
 import axios from 'axios';
 
 import { remapFailedAnswers, getAnswersWithPublicUrls } from './getParsedAnswers';
+import { mockSuccessfulHttpResponse } from './axios-mocks';
 
-jest.mock('api');
+// Mock the api module
+vi.mock('api');
 
 describe('getParsedAnswers', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
   beforeAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('remapFailedAnswers', () => {
@@ -91,15 +92,11 @@ describe('getParsedAnswers', () => {
 
   describe('getAnswersWithPublicUrls', () => {
     test('should return answers with public urls', async () => {
-      jest.spyOn(mockedAxios, 'post').mockImplementation(
-        () =>
-          new Promise((res) =>
-            res({
-              data: {
-                result: ['publicDrawingUrl', 'publicAudioUrl', 'publicVideoUrl', 'publicPhotoUrl'],
-              },
-            }),
-          ),
+      // Setup the mock response for axios.post using the mockSuccessfulHttpResponse utility
+      vi.mocked(axios.post).mockResolvedValue(
+        mockSuccessfulHttpResponse({
+          result: ['publicDrawingUrl', 'publicAudioUrl', 'publicVideoUrl', 'publicPhotoUrl'],
+        }),
       );
 
       const parsedAnswers = [

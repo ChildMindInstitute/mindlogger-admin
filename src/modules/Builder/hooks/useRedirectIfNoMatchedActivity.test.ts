@@ -1,12 +1,14 @@
 import { generatePath } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
 import { Path } from 'shared/utils';
 
 import { useRedirectIfNoMatchedActivity } from './useRedirectIfNoMatchedActivity';
+import { useCurrentActivity } from './useCurrentActivity';
 
 const mockedParamsWithActivity = {
   appletId: mockedAppletId,
@@ -31,26 +33,37 @@ const pathToActivitiesNewApplet = generatePath(page.builderAppletActivities, {
   appletId: mockedParamsNewAppletWithActivity.appletId,
 });
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedGetValues = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedGetValues = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-  useParams: () => mockedUseParams(),
-}));
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: vi.fn(() => mockedUseNavigate),
+    useParams: vi.fn(() => mockedUseParams()),
+  };
+});
+
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: () => mockedGetValues(),
     watch: () => mockedGetValues(),
   }),
 }));
 
+vi.mock('./useCurrentActivity', () => ({
+  useCurrentActivity: vi.fn(),
+}));
+
 describe('useRedirectIfNoMatchedActivity', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`
@@ -62,6 +75,14 @@ describe('useRedirectIfNoMatchedActivity', () => {
   `('$description', ({ params, activities, toBeCalledWith }) => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activities);
+
+    // Set activity to undefined for cases where we expect a redirect
+    // and to a mock value for cases where we don't expect a redirect
+    vi.mocked(useCurrentActivity).mockReturnValue({
+      activity: toBeCalledWith ? undefined : activities[0],
+      fieldName: 'activities.0',
+      activityObjField: 'activities[0]',
+    });
 
     renderHook(useRedirectIfNoMatchedActivity);
 

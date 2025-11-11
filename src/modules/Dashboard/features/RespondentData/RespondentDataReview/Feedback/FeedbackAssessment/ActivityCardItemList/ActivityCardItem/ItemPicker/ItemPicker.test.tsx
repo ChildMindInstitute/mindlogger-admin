@@ -45,17 +45,23 @@ const text = {
   },
 };
 
-jest.mock(
+vi.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
-  () => ({
-    __esModule: true,
-    ...jest.requireActual(
+  async () => {
+    const actual = await vi.importActual<
+      typeof import('modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers')
+    >(
       'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
-    ),
-    SingleSelectionController: () => <div data-testid="mock-single-selection-controller"></div>,
-    MultipleSelectionController: () => <div data-testid="mock-multi-selection-controller"></div>,
-    SliderController: () => <div data-testid="mock-slider-controller"></div>,
-  }),
+    );
+
+    return {
+      __esModule: true,
+      ...actual,
+      SingleSelectionController: () => <div data-testid="mock-single-selection-controller"></div>,
+      MultipleSelectionController: () => <div data-testid="mock-multi-selection-controller"></div>,
+      SliderController: () => <div data-testid="mock-slider-controller"></div>,
+    };
+  },
 );
 
 const FormComponent = ({ children }: { children: React.ReactNode }) => {

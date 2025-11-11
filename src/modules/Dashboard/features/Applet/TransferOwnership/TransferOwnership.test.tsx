@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import { mockedAppletId, mockedCurrentWorkspace, mockedEmail } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -9,8 +10,8 @@ import { Roles } from 'shared/consts';
 
 import { TransferOwnership } from './TransferOwnership';
 
-const mockedSetIsSubmitted = jest.fn();
-const mockedSetEmailTransferred = jest.fn();
+const mockedSetIsSubmitted = vi.fn();
+const mockedSetEmailTransferred = vi.fn();
 const dataTestid = 'transfer-ownership';
 
 const transferOwnershipComponent = (
@@ -24,6 +25,10 @@ const transferOwnershipComponent = (
 );
 
 describe('TransferOwnership', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('renders without errors', () => {
     renderWithProviders(transferOwnershipComponent);
   });
@@ -41,7 +46,7 @@ describe('TransferOwnership', () => {
     await userEvent.type(screen.getByLabelText(/Owner email/i), `${mockedEmail}{enter}`);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/applets/${mockedAppletId}/transferOwnership`,
         { email: mockedEmail },
@@ -74,6 +79,6 @@ describe('TransferOwnership', () => {
     await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
     expect(screen.getByTestId('arbitrary-warning-popup')).toBeInTheDocument();
-    expect(mockAxios.post).not.toHaveBeenCalled();
+    expect(axios.post).not.toHaveBeenCalled();
   });
 });

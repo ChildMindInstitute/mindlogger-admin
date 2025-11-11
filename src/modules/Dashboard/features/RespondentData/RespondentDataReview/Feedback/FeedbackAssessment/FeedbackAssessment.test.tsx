@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { authApiClient } from 'shared/api/apiConfig';
 import {
   mockedApplet,
   mockedAppletId,
@@ -50,32 +51,32 @@ const preloadedState = {
   },
 };
 
-const mockedSetItemIds = jest.fn();
+const mockedSetItemIds = vi.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
   isLastVersion: boolean,
 ) => ({
   assessment,
-  setAssessment: jest.fn(),
+  setAssessment: vi.fn(),
   lastAssessment,
   assessmentVersions,
   isLastVersion,
-  setIsLastVersion: jest.fn(),
+  setIsLastVersion: vi.fn(),
   isBannerVisible: false,
-  setIsBannerVisible: jest.fn(),
+  setIsBannerVisible: vi.fn(),
   itemIds,
   setItemIds: mockedSetItemIds,
   isFeedbackOpen: true,
 });
 
-jest.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
-  useEncryptedAnswers: jest.fn(),
+vi.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
+  useEncryptedAnswers: vi.fn(),
 }));
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
+  CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
   )),
 }));
@@ -95,10 +96,10 @@ const FormComponent = ({
 };
 
 const mockedUserName = 'User Name (Me)';
-const mockedSubmitCallback = jest.fn();
-const mockedSetAssessmentStep = jest.fn();
-const mockedSetIsLoading = jest.fn();
-const mockedSetError = jest.fn();
+const mockedSubmitCallback = vi.fn();
+const mockedSetAssessmentStep = vi.fn();
+const mockedSetIsLoading = vi.fn();
+const mockedSetError = vi.fn();
 const getFeedbackAssessmentComponent = ({
   assessment,
   lastAssessment,
@@ -141,8 +142,10 @@ const renderComponent = (props?: Partial<FeedbackAssessmentProps>) => {
 
 describe('FeedbackAssessment', () => {
   beforeEach(() => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(jest.fn());
-    jest.restoreAllMocks();
+    vi.clearAllMocks();
+    vi.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
+    // Spy on authApiClient methods since that's what the code actually uses
+    vi.spyOn(authApiClient, 'post');
   });
 
   test('should render and the 3rd option (id: 7cdc4381-af6d-4bbb-baf7-bf4fe73448d0) is checked', () => {
@@ -165,7 +168,7 @@ describe('FeedbackAssessment', () => {
   });
 
   test('should submit assessment', async () => {
-    jest.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(jest.fn());
+    vi.spyOn(useEncryptedAnswersHook, 'useEncryptedAnswers').mockReturnValue(vi.fn());
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));
@@ -173,19 +176,19 @@ describe('FeedbackAssessment', () => {
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();
-    expect(mockAxios.post).toHaveBeenCalled();
+    expect(authApiClient.post).toHaveBeenCalled();
     expect(mockedSetAssessmentStep).toHaveBeenCalledWith(0);
     expect(mockedSubmitCallback).toHaveBeenCalled();
     expect(mockedSetError).not.toHaveBeenCalled();
   });
 
   test('set error if API call is failed on submit assessment', async () => {
-    mockAxios.post.mockRejectedValue(new Error('some error'));
+    vi.mocked(authApiClient.post).mockRejectedValue(new Error('some error'));
     renderComponent();
 
     await userEvent.click(screen.getByText('Submit'));
 
-    expect(mockAxios.post).toHaveBeenCalled();
+    expect(authApiClient.post).toHaveBeenCalled();
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(1, true);
     expect(mockedSetIsLoading).toHaveBeenNthCalledWith(2, false);
     expect(mockedSetItemIds).toHaveBeenCalled();

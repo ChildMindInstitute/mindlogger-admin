@@ -9,8 +9,8 @@ import { ArbitraryWarningPopup } from './ArbitraryWarningPopup';
 import { SUPPORT_LINK } from './ArbitraryWarningPopup.const';
 
 const dataTestId = 'arbitrary-warning-popup';
-const mockedOnSubmit = jest.fn();
-const mockedOnClose = jest.fn();
+const mockedOnSubmit = vi.fn();
+const mockedOnClose = vi.fn();
 const mockedAppletName = 'Applet Name';
 const renderComponent = () =>
   renderWithProviders(
@@ -29,7 +29,7 @@ describe('ArbitraryWarningPopup', () => {
   test('renders first screen correctly', async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const windowOpenMock = jest.spyOn(window, 'open').mockImplementation(() => {});
+    const windowOpenMock = vi.spyOn(window, 'open').mockImplementation(() => {});
     renderComponent();
 
     // first screen content
@@ -81,7 +81,7 @@ describe('ArbitraryWarningPopup', () => {
   test('transfer ownership successfully if Applet password is correct', async () => {
     const getPublicKeyMock = () =>
       Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+    vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPublicKey: getPublicKeyMock,
       }),

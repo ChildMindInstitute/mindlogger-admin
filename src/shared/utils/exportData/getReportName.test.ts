@@ -24,11 +24,11 @@ const singleItem = {
 describe('getReportName', () => {
   describe('getReportZipName', () => {
     beforeAll(() => {
-      jest.useFakeTimers();
-      jest.setSystemTime(new Date('2000-01-01'));
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2000-01-01'));
     });
     afterAll(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
     test.each`
       name                | suffix          | expected                                            | description

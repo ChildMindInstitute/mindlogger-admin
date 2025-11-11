@@ -1,5 +1,6 @@
+import { vi } from 'vitest';
 import { screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
@@ -131,23 +132,34 @@ const mockedResponseOptions = {
   ],
 };
 
-jest.mock('./ReportFilters', () => ({
+vi.mock('./ReportFilters', () => ({
   ReportFilters: () => <div data-testid="report-filters"></div>,
 }));
 
-jest.mock('./CompletedChart', () => ({
+vi.mock('./CompletedChart', () => ({
   CompletedChart: () => <div data-testid="report-activity-completed"></div>,
 }));
 
-jest.mock('./Subscales', () => ({
+vi.mock('./Subscales', () => ({
   Subscales: () => <div data-testid="report-subscales"></div>,
 }));
 
-jest.mock('./ResponseOptions', () => ({
+vi.mock('./ResponseOptions', () => ({
   ResponseOptions: () => <div data-testid="report-response-options"></div>,
 }));
 
-jest.mock('downloadjs', () => jest.fn());
+vi.mock('downloadjs', () => ({
+  default: vi.fn(),
+}));
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({ setValue: vi.fn() }),
+  };
+});
 
 const renderComponent = (context: Partial<RespondentDataContextType>) =>
   renderWithProviders(
@@ -155,8 +167,8 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       value={{
-        setResponseOptions: jest.fn(),
-        setSubscalesFrequency: jest.fn(),
+        setResponseOptions: vi.fn(),
+        setSubscalesFrequency: vi.fn(),
         answers: [],
         flowSubmissions: [],
         responseOptions: {},
@@ -175,20 +187,15 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
   );
 
 describe('Report component', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: jest.fn() });
-  });
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('renders Report correctly with data', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: 'data',
     });
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
 
     renderComponent({
       answers: mockedAnswers as unknown as ActivityCompletion[],
@@ -210,7 +217,7 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
 
     renderComponent({
       selectedEntity: mockedActivity,
@@ -221,7 +228,7 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with empty version filter', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
 
     renderComponent({
       selectedEntity: mockedActivity,
@@ -236,7 +243,7 @@ describe('Report component', () => {
       ...mockedActivity,
       hasAnswer: false,
     };
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    vi.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
     renderComponent({
       selectedEntity: activityMocked,
     });

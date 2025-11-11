@@ -2,32 +2,46 @@
 // @ts-nocheck
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import * as reactHookForm from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Subscale } from './Subscale';
 
-jest.mock(
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+
+  return {
+    ...actual,
+    useWatch: vi.fn(),
+  };
+});
+
+vi.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils',
   () => ({
     getResponseItem: () => <div data-testid="mocked-chart" />,
   }),
 );
 
-jest.mock('../AdditionalInformation', () => ({
+vi.mock('../AdditionalInformation', () => ({
   AdditionalInformation: ({ optionText, 'data-testid': dataTestid }) => (
     <div data-testid={dataTestid}>{optionText}</div>
   ),
 }));
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{text}</div>
+    ),
+  };
+});
 
 const isNested = false;
 const name = 'Average Nested';
@@ -207,7 +221,9 @@ const subscale = {
 
 describe('Subscale component', () => {
   test('renders component with correct data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    const useWatchMock = vi.mocked(reactHookForm.useWatch);
+    useWatchMock.mockReturnValue([]);
+
     const props = {
       isNested,
       name,

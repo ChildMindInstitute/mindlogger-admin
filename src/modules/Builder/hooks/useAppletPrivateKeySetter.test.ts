@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import {
   mockedAppletId,
@@ -8,20 +9,45 @@ import {
   mockedUserData,
 } from 'shared/mock';
 import { auth } from 'modules/Auth/state';
+import * as sharedUtils from 'shared/utils';
 
 import { useAppletPrivateKeySetter } from './useAppletPrivateKeySetter';
 
-const mockedSetAppletPrivateKey = jest.fn();
+const mockedSetAppletPrivateKey = vi.fn();
 
-jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-jest.mock('shared/hooks', () => ({
-  ...jest.requireActual('shared/hooks'),
-  useEncryptionStorage: () => ({
-    setAppletPrivateKey: mockedSetAppletPrivateKey,
-  }),
-}));
+vi.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
+
+vi.mock('shared/utils', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    getParsedEncryptionFromServer: vi.fn(),
+    getAppletEncryptionInfo: vi.fn(),
+  };
+});
+
+vi.mock('shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useEncryptionStorage: () => ({
+      setAppletPrivateKey: mockedSetAppletPrivateKey,
+    }),
+  };
+});
 
 describe('useAppletPrivateKeySetter', () => {
+  const mockedGetParsedEncryptionFromServer = vi.mocked(sharedUtils.getParsedEncryptionFromServer);
+  const mockedGetAppletEncryptionInfo = vi.mocked(sharedUtils.getAppletEncryptionInfo);
+
+  beforeEach(() => {
+    mockedSetAppletPrivateKey.mockClear();
+    mockedGetParsedEncryptionFromServer.mockClear();
+    mockedGetAppletEncryptionInfo.mockClear();
+  });
+
   test.each`
     appletId          | appletPassword    | encryption          | expected                               | description
     ${undefined}      | ${undefined}      | ${undefined}        | ${undefined}                           | ${"doesn't set private key if every argument missed"}
@@ -30,6 +56,21 @@ describe('useAppletPrivateKeySetter', () => {
     ${mockedAppletId} | ${mockedPassword} | ${undefined}        | ${undefined}                           | ${"doesn't set private key if encryption is empty"}
     ${mockedAppletId} | ${mockedPassword} | ${mockedEncryption} | ${[mockedAppletId, mockedPrivateKey2]} | ${'sets private key if everything is provided'}
   `('$description', async ({ appletId, appletPassword, encryption, expected }) => {
+    // Setup mocks based on test case
+    if (encryption) {
+      mockedGetParsedEncryptionFromServer.mockReturnValue({
+        publicKey: [1, 2, 3],
+        prime: [4, 5, 6],
+        base: [7, 8, 9],
+        accountId: 'mockAccountId',
+      });
+      mockedGetAppletEncryptionInfo.mockResolvedValue({
+        getPrivateKey: () => mockedPrivateKey2,
+      } as any);
+    } else {
+      mockedGetParsedEncryptionFromServer.mockReturnValue(null);
+    }
+
     const { result } = renderHook(useAppletPrivateKeySetter);
 
     await result.current({ appletId, appletPassword, encryption });

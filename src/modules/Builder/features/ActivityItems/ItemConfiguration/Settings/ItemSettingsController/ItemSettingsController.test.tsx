@@ -367,7 +367,7 @@ const mockedSettingGroupsByType = {
 
 describe('ItemSettingsController', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("doesn't render if inputType is not provided", () => {
@@ -713,13 +713,14 @@ describe('ItemSettingsController', () => {
   `(
     'set activity skippable to false if $settingKey input field is checked',
     async ({ settingKey, item }) => {
-      const mockedSetValue = jest.fn();
-      jest
-        .spyOn(useCustomFormContextHook, 'useCustomFormContext')
-        .mockReturnValue({ setValue: mockedSetValue, getValues: jest.fn() });
-      jest
-        .spyOn(useCurrentActivityHook, 'useCurrentActivity')
-        .mockReturnValue({ fieldName: 'activities.0' });
+      const mockedSetValue = vi.fn();
+      vi.spyOn(useCustomFormContextHook, 'useCustomFormContext').mockReturnValue({
+        setValue: mockedSetValue,
+        getValues: vi.fn(),
+      });
+      vi.spyOn(useCurrentActivityHook, 'useCurrentActivity').mockReturnValue({
+        fieldName: 'activities.0',
+      });
 
       renderWithAppletFormData({
         children: (

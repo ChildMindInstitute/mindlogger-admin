@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { auth } from 'modules/Auth/state';
 import { mockedAppletId, mockedPrivateKey, mockedUserData } from 'shared/mock';
@@ -8,14 +9,24 @@ import { getEncryptionStorageKey, useEncryptionStorage } from './useEncryptionSt
 
 const EMPTY_PRIVATE_KEY = '';
 
-const mockedUseParams = jest.fn();
+const mockedUseParams = vi.fn();
+const mockedUseCheckIfNewApplet = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams,
+  };
+});
+
+vi.mock('shared/hooks/useCheckIfNewApplet', () => ({
+  useCheckIfNewApplet: () => mockedUseCheckIfNewApplet(),
 }));
 
-const spyUseData = jest.spyOn(auth, 'useData');
+const spyUseData = vi.spyOn(auth, 'useData');
 
 describe('useEncryptionStorage', () => {
   beforeEach(() => {
@@ -23,6 +34,7 @@ describe('useEncryptionStorage', () => {
 
     spyUseData.mockReturnValue({ user: mockedUserData });
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
+    mockedUseCheckIfNewApplet.mockReturnValue(false);
   });
 
   test('getAppletPrivateKey works correctly', () => {
@@ -43,14 +55,15 @@ describe('useEncryptionStorage', () => {
   });
 
   test.each`
-    appletId          | ownerId              | expected             | description
-    ${Path.NewApplet} | ${mockedUserData.id} | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if applet is new'}
-    ${mockedAppletId} | ${''}                | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if there is no ownerId'}
-    ${''}             | ${mockedUserData.id} | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if there is no appletId'}
-    ${mockedAppletId} | ${mockedUserData.id} | ${null}              | ${"getAppletPrivateKey returns null if applet hasn't opened yet"}
-  `('$description', ({ appletId, ownerId, expected }) => {
+    appletId          | ownerId              | isNewApplet | expected             | description
+    ${Path.NewApplet} | ${mockedUserData.id} | ${true}     | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if applet is new'}
+    ${mockedAppletId} | ${''}                | ${false}    | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if there is no ownerId'}
+    ${''}             | ${mockedUserData.id} | ${false}    | ${EMPTY_PRIVATE_KEY} | ${'getAppletPrivateKey returns empty string if there is no appletId'}
+    ${mockedAppletId} | ${mockedUserData.id} | ${false}    | ${null}              | ${"getAppletPrivateKey returns null if applet hasn't opened yet"}
+  `('$description', ({ appletId, ownerId, isNewApplet, expected }) => {
     mockedUseParams.mockReturnValue({ appletId });
     spyUseData.mockReturnValue({ user: { ...mockedUserData, id: ownerId } });
+    mockedUseCheckIfNewApplet.mockReturnValue(isNewApplet);
 
     const { result } = renderHook(useEncryptionStorage);
 
@@ -58,7 +71,7 @@ describe('useEncryptionStorage', () => {
   });
 
   test('getAppletPrivateKey clears previously set value if error appears while trying to JSON.parse', () => {
-    jest.spyOn(JSON, 'parse').mockImplementationOnce(() => {
+    vi.spyOn(JSON, 'parse').mockImplementationOnce(() => {
       throw new Error();
     });
 
@@ -72,7 +85,7 @@ describe('useEncryptionStorage', () => {
   });
 
   test('getAppletPrivateKey returns empty string if error appears while trying to JSON.parse', () => {
-    jest.spyOn(JSON, 'parse').mockImplementationOnce(() => {
+    vi.spyOn(JSON, 'parse').mockImplementationOnce(() => {
       throw new Error();
     });
 

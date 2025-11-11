@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -10,22 +11,26 @@ const mockedOptionText = 'This is additional information';
 const mockedLinkOptionText = 'https://example.com';
 const mockedLinkResponse = 'This is the response from the link API';
 
-jest.mock('./AdditionalInformation.styles', () => ({
-  ...jest.requireActual('./AdditionalInformation.styles'),
-  StyledMdPreview: ({
-    modelValue,
-    'data-testid': dataTestid,
-  }: {
-    modelValue: string;
-    'data-testid': string;
-  }) => <div data-testid={dataTestid}>{modelValue}</div>,
+vi.mock('./AdditionalInformation.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({
+      modelValue,
+      'data-testid': dataTestid,
+    }: {
+      modelValue: string;
+      'data-testid': string;
+    }) => <div data-testid={dataTestid}>{modelValue}</div>,
+  };
+});
+
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
-}));
-
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const dataTestId = 'additional-info';
 
@@ -35,12 +40,12 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('renders AdditionalInformation component with regular text', () => {
@@ -62,7 +67,7 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -83,7 +88,7 @@ describe('AdditionalInformation component', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     renderWithProviders(
@@ -97,7 +102,7 @@ describe('AdditionalInformation component', () => {
   });
 
   test('renders AdditionalInformation component with link and fetches additional information', async () => {
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: mockedLinkResponse,
     });
 
@@ -112,7 +117,7 @@ describe('AdditionalInformation component', () => {
     expect(screen.queryByText('Additional Information')).not.toBeNull();
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, mockedLinkOptionText);
+      expect(axios.get).toHaveBeenNthCalledWith(1, mockedLinkOptionText);
     });
 
     expect(screen.queryByText(mockedLinkResponse)).not.toBeNull();

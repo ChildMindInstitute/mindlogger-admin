@@ -4,8 +4,21 @@ import { renderHook } from '@testing-library/react';
 
 import { useFormError } from './useFormError';
 
-const setHasCommonError = jest.fn();
-const setError = jest.fn();
+vi.mock('axios', async () => {
+  const actual = await vi.importActual('axios');
+
+  return {
+    ...actual,
+    default: {
+      ...actual.default,
+      isAxiosError: vi.fn(() => true),
+    },
+    isAxiosError: vi.fn(() => true),
+  };
+});
+
+const setHasCommonError = vi.fn();
+const setError = vi.fn();
 const commonProps = { setError, setHasCommonError };
 const fieldName = 'email';
 const mockedApiErrorMessage = 'some message';
@@ -33,6 +46,10 @@ class CustomError extends Error {
 const mockedError = new CustomError(mockedApiErrorMessage);
 
 describe('useFormError', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should set hasCommonError to false when there is no error', () => {
     renderHook(() => useFormError({ ...commonProps, error: null, fields: {} }));
 

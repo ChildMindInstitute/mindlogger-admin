@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { library } from 'redux/modules';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -9,7 +9,7 @@ import { page } from 'resources';
 
 import { AppletDetails } from './AppletDetails';
 
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const route = `/library/${mockedAppletId}`;
 const routePath = page.libraryAppletDetails;
@@ -92,33 +92,42 @@ const mockAppletDetails = {
   version: '1.1.1',
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: jest.fn(),
-  useReturnToLibraryPath: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletsFromCart: vi.fn(),
+    useReturnToLibraryPath: vi.fn(),
+  };
+});
 
 describe('AppletDetails', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders loading spinner when cart applets are loading', () => {
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
+    vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
     renderWithProviders(<AppletDetails />, { route, routePath });
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   test('renders details and buttons when cart applets are loaded', async () => {
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
+    vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockAppletDetails,
       },
@@ -129,7 +138,7 @@ describe('AppletDetails', () => {
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/library/${mockedAppletId}`, {
+      expect(axios.get).toHaveBeenNthCalledWith(1, `/library/${mockedAppletId}`, {
         signal: undefined,
       });
     });

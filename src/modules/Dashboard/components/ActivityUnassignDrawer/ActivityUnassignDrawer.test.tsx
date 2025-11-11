@@ -1,5 +1,5 @@
 import { screen, fireEvent, within, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import {
   mockedActivityId,
@@ -26,7 +26,7 @@ import { ActivityUnassignDrawerProps } from './ActivityUnassignDrawer.types';
 =================================================== */
 
 const dataTestId = 'applet-activity-unassign';
-const mockedOnClose = jest.fn();
+const mockedOnClose = vi.fn();
 
 const mockedAssignment1: HydratedAssignment = {
   id: 'test-assignment-id-1',
@@ -88,13 +88,13 @@ const preloadedState = {
 
 const APPLET_ASSIGNMENTS_URL = `/assignments/applet/${mockedAppletId}`;
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
 /* Tests
 =================================================== */
@@ -103,15 +103,15 @@ describe('ActivityUnassignDrawer', () => {
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
       featureFlags: { enableActivityAssign: true },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
-    mockAxios.delete.mockResolvedValue(mockSuccessfulHttpResponse(null));
+    vi.mocked(axios.delete).mockResolvedValue(mockSuccessfulHttpResponse(null));
     mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('when there are multiple assignments', () => {
@@ -189,7 +189,7 @@ describe('ActivityUnassignDrawer', () => {
           }),
         );
 
-        expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+        expect(axios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {
             assignments: [
               {
@@ -251,7 +251,7 @@ describe('ActivityUnassignDrawer', () => {
           }),
         );
 
-        expect(mockAxios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
+        expect(axios.delete).toBeCalledWith(APPLET_ASSIGNMENTS_URL, {
           data: {
             assignments: [
               {

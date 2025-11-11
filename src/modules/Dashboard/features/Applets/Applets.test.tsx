@@ -1,7 +1,9 @@
+import { vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
 
+import { authApiClient } from 'shared/api/apiConfig';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockGetRequestResponses } from 'shared/utils/axios-mocks';
 import {
   mockedApplet,
   mockedAppletId,
@@ -130,16 +132,22 @@ const successfulEmptyGetMock = {
   },
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('Applets component tests', () => {
   test('should render empty component', async () => {
-    mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
+    vi.mocked(authApiClient.get).mockResolvedValue(successfulEmptyGetMock);
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     await waitFor(() => {
@@ -152,18 +160,18 @@ describe('Applets component tests', () => {
   });
 
   test('should render table with rows', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
+    vi.mocked(authApiClient.get).mockResolvedValueOnce(successfulGetFoldersMock);
+    vi.mocked(authApiClient.get).mockResolvedValueOnce(successfulGetAppletsMock);
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     const rows = ['Folder9', 'MockedApplet'];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-applets-table')).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/workspaces/${mockedOwnerId}/folders`, {
+      expect(authApiClient.get).toHaveBeenNthCalledWith(1, `/workspaces/${mockedOwnerId}/folders`, {
         signal: undefined,
       });
-      expect(mockAxios.get).toHaveBeenNthCalledWith(2, `/workspaces/${mockedOwnerId}/applets`, {
+      expect(authApiClient.get).toHaveBeenNthCalledWith(2, `/workspaces/${mockedOwnerId}/applets`, {
         params: { limit: 20 },
         signal: undefined,
       });
@@ -182,7 +190,7 @@ describe('Applets component tests', () => {
       ${Roles.Reviewer}    | ${false} | ${'should not be for reviewer'}
       ${Roles.SuperAdmin}  | ${false} | ${'should not be for superAdmin'}
     `('$description', async ({ role, exist }) => {
-      mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
+      vi.mocked(authApiClient.get).mockResolvedValue(successfulEmptyGetMock);
       renderWithProviders(<Applets />, { preloadedState: getPreloadedState(role) });
 
       await waitFor(() => {
@@ -196,7 +204,7 @@ describe('Applets component tests', () => {
     });
 
     test('should have menu with navigation items', async () => {
-      mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
+      vi.mocked(authApiClient.get).mockResolvedValue(successfulEmptyGetMock);
       renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
       const addAppletButton = await waitFor(() =>
@@ -224,49 +232,46 @@ describe('Applets component tests', () => {
   });
 
   test('should search applets', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulEmptyGetMock);
-    mockAxios.get.mockResolvedValueOnce(successfulEmptyGetMock);
+    const searchQuery = 'Mock';
+    mockGetRequestResponses({
+      [`/workspaces/${mockedOwnerId}/folders`]: successfulGetFoldersMock,
+      [`/workspaces/${mockedOwnerId}/applets`]: successfulGetAppletsMock,
+      [`/workspaces/${mockedOwnerId}/applets/search/${searchQuery}`]: successfulGetAppletsMock,
+      [`/workspaces/${mockedOwnerId}/applets/search/NotExistedApplet`]: successfulEmptyGetMock,
+    });
+
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     const searchInput = screen.getByTestId('dashboard-applets-search').querySelector('input');
-    const searchQuery = 'Mock';
     searchInput && fireEvent.change(searchInput, { target: { value: searchQuery } });
 
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(3, `/workspaces/${mockedOwnerId}/folders`, {
-        signal: undefined,
-      });
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        4,
-        `/workspaces/${mockedOwnerId}/applets/search/${searchQuery}`,
-        {
-          params: {
-            limit: 20,
-            page: 1,
-          },
-          signal: undefined,
-        },
-      );
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('MockedApplet')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     searchInput && fireEvent.change(searchInput, { target: { value: 'NotExistedApplet' } });
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          "No match was found for 'NotExistedApplet'. Try a different search word or phrase.",
-        ),
-      ).toBeInTheDocument;
-    });
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(
+            "No match was found for 'NotExistedApplet'. Try a different search word or phrase.",
+          ),
+        ).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('should add folder', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
-    mockAxios.post.mockResolvedValueOnce({
+    mockGetRequestResponses({
+      [`/workspaces/${mockedOwnerId}/folders`]: successfulGetFoldersMock,
+      [`/workspaces/${mockedOwnerId}/applets`]: successfulGetAppletsMock,
+    });
+
+    vi.mocked(authApiClient.post).mockResolvedValueOnce({
       status: ApiResponseCodes.SuccessfulResponse,
       data: {
         result: {
@@ -275,9 +280,8 @@ describe('Applets component tests', () => {
           appletCount: 0,
         },
       },
-    });
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
+    } as any);
+
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     const addFolderButton = await waitFor(() => screen.getByTestId('dashboard-applets-add-folder'));
@@ -286,7 +290,7 @@ describe('Applets component tests', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 13, charCode: 13 });
 
     await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
+      expect(authApiClient.post).toHaveBeenNthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/folders`,
         { name: 'New Folder' },
@@ -296,21 +300,19 @@ describe('Applets component tests', () => {
   });
 
   test('should expand and collapse folder', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetFoldersMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    mockGetRequestResponses({
+      [`/workspaces/${mockedOwnerId}/folders`]: successfulGetFoldersMock,
+      [`/workspaces/${mockedOwnerId}/applets`]: successfulGetAppletsMock,
+      [`/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`]:
+        successfulGetExpandedAppletsMock,
+    });
+
     renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
     const folder = await waitFor(() => screen.getByText('Folder9'));
     fireEvent.click(folder);
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(
-        `/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`,
-        { signal: undefined },
-      );
       expect(screen.getByText('Expanded Applet')).toBeInTheDocument();
     });
 

@@ -7,13 +7,19 @@ import { Identifier as IdentifierResponse } from 'api';
 import { Identifier } from '../../RespondentData.types';
 import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
 
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mockedUseParams = vi.fn();
 
-jest.mock('shared/hooks/useEncryptionStorage', () => ({
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams,
+  };
+});
+
+vi.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
     getAppletPrivateKey: () => mockedPrivateKey,
   }),
@@ -21,7 +27,7 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 
 describe('useDecryptedIdentifiers', () => {
   test('should return null when useAppletData is null', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
+    vi.spyOn(applet, 'useAppletData').mockReturnValue(null);
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);
@@ -30,7 +36,7 @@ describe('useDecryptedIdentifiers', () => {
   });
 
   test('should return an array of identifiers for decrypted data (userPublicKey: null)', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const identifiers = [
@@ -68,7 +74,7 @@ describe('useDecryptedIdentifiers', () => {
   });
 
   test('should return an array of identifiers for encrypted data', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);

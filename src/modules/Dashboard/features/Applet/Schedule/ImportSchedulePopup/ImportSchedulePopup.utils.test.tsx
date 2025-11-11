@@ -110,12 +110,12 @@ describe('getUploadedTime', () => {
 
 describe('getEndOfYearDate', () => {
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2000-01-01'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2000-01-01'));
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   const testCases = [

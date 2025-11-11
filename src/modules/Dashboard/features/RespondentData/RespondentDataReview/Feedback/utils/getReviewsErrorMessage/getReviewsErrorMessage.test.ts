@@ -4,8 +4,8 @@ import { getErrorMessage } from 'shared/utils';
 
 import { getReviewsErrorMessage } from './getReviewsErrorMessage';
 
-jest.mock('shared/utils', () => ({
-  getErrorMessage: jest.fn(),
+vi.mock('shared/utils', () => ({
+  getErrorMessage: vi.fn(),
 }));
 
 describe('getReviewsErrorMessage', () => {
@@ -18,11 +18,11 @@ describe('getReviewsErrorMessage', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return the error message for reviewsError', () => {
-    (getErrorMessage as jest.Mock).mockReturnValue(mockErrorMessage);
+    (getErrorMessage as vi.Mock).mockReturnValue(mockErrorMessage);
 
     const result = getReviewsErrorMessage(mockAxiosError, null);
 
@@ -31,7 +31,7 @@ describe('getReviewsErrorMessage', () => {
   });
 
   test('should return the error message for reviewsFlowError', () => {
-    (getErrorMessage as jest.Mock).mockReturnValue(mockErrorMessage);
+    (getErrorMessage as vi.Mock).mockReturnValue(mockErrorMessage);
 
     const result = getReviewsErrorMessage(null, mockAxiosError);
 

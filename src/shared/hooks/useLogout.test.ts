@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
@@ -21,27 +21,36 @@ const resetAuthorizationPayload = {
   type: 'auth/resetAuthorization',
 };
 
-const mockedUseAppDispatch = jest.fn();
-const mockedUseNavigate = jest.fn();
+const mockedUseAppDispatch = vi.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('redux/store', () => ({
-  ...jest.requireActual('redux/store'),
-  useAppDispatch: () => mockedUseAppDispatch,
-}));
+vi.mock('redux/store', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+  return {
+    ...actual,
+    useAppDispatch: () => mockedUseAppDispatch,
+  };
+});
+
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('useLogout', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('deleting access token navigates to login', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     await waitFor(() => {
       result.current();
@@ -52,7 +61,7 @@ describe('useLogout', () => {
 
   test('deleting access token resets all data', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
 
     await waitFor(() => {
       result.current();
@@ -65,14 +74,14 @@ describe('useLogout', () => {
 
   test('delete refresh token api is called if delete access token rejects with Unauthorized status code', async () => {
     const { result } = renderHookWithProviders(useLogout, { preloadedState: getPreloadedState() });
-    mockAxios.post.mockRejectedValueOnce({
+    vi.mocked(axios.post).mockRejectedValueOnce({
       response: {
         status: ApiResponseCodes.Unauthorized,
       },
     });
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    mockAxios.post.mockImplementation((url: string) => {
+    vi.mocked(axios.post).mockImplementation((url: string) => {
       expect(url).toBe('auth/logout2');
     });
 

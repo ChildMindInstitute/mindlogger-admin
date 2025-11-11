@@ -23,8 +23,8 @@ const populatedState: PreloadedState<RootState> = {
   },
 };
 
-const spyAccessToken = jest.spyOn(authStorage, 'getAccessToken');
-const spyUseStatus = jest.spyOn(auth, 'useStatus');
+const spyAccessToken = vi.spyOn(authStorage, 'getAccessToken');
+const spyUseStatus = vi.spyOn(auth, 'useStatus');
 
 describe('useSessionBanners', () => {
   test('should remove all banners when the session becomes invalid', () => {

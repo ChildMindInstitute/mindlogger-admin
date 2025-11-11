@@ -4,14 +4,14 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RemoveConditionalLogicPopup } from './RemoveConditionalLogicPopup';
 
-jest.mock('modules/Builder/hooks', () => ({
+vi.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     watch: () => 'The score name',
   }),
 }));
 
-const onCloseMock = jest.fn();
-const onRemoveMock = jest.fn();
+const onCloseMock = vi.fn();
+const onRemoveMock = vi.fn();
 
 describe('RemoveConditionalLogicPopup', () => {
   test('should remove conditional logic', () => {

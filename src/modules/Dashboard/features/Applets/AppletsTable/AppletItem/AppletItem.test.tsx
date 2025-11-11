@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedOwnerId, mockedPassword } from 'shared/mock';
@@ -10,8 +11,8 @@ import * as appletsTableHooks from '../AppletsTable.hooks';
 import { AppletsContext } from '../../Applets.context';
 import { AppletItem } from './AppletItem';
 
-const mockReloadData = jest.fn();
-const mockHandleFolderClick = jest.fn();
+const mockReloadData = vi.fn();
+const mockHandleFolderClick = vi.fn();
 
 const getMockedApplet = (isAppletInFolder = false, hasEncryption = true) => ({
   ...mockedApplet,
@@ -22,18 +23,18 @@ const getMockedApplet = (isAppletInFolder = false, hasEncryption = true) => ({
 
 const mockContext = {
   rows: [getMockedApplet()],
-  setRows: jest.fn(),
+  setRows: vi.fn(),
   expandedFolders: [],
   reloadData: mockReloadData,
   handleFolderClick: mockHandleFolderClick,
-  fetchData: jest.fn(),
+  fetchData: vi.fn(),
 };
 
 const getAppletItemComponent = (isAppletInFolder = false, hasEncryption = true) => (
   <AppletsContext.Provider value={mockContext}>
     <table>
       <tbody>
-        <AppletItem item={getMockedApplet(isAppletInFolder, hasEncryption)} onPublish={jest.fn} />
+        <AppletItem item={getMockedApplet(isAppletInFolder, hasEncryption)} onPublish={vi.fn} />
       </tbody>
     </table>
   </AppletsContext.Provider>
@@ -46,14 +47,24 @@ const clickActionDots = async () => {
   fireEvent.click(actionsDots);
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('AppletItem component tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render applet row', () => {
     renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
@@ -120,7 +131,7 @@ describe('AppletItem component tests', () => {
     act(() => fireEvent.click(screen.getByText('Submit')));
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/applets/${mockedAppletId}/encryption`,
         expect.anything(),
@@ -154,14 +165,14 @@ describe('AppletItem component tests', () => {
   });
 
   test('should pin applet in folder', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(getAppletItemComponent(true), { preloadedState: getPreloadedState() });
 
     const appletPin = await waitFor(() => screen.getByTestId('dashboard-applets-pin'));
     fireEvent.click(appletPin);
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/folders/mockedParentId/pin/${mockedAppletId}`,
         {},
@@ -177,7 +188,7 @@ describe('AppletItem component tests', () => {
     fireEvent.click(screen.getByTestId('dashboard-applets-applet-remove-from-folder'));
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
+      expect(axios.post).nthCalledWith(
         1,
         '/applets/set_folder',
         { appletId: mockedAppletId, folderId: undefined },
@@ -188,12 +199,12 @@ describe('AppletItem component tests', () => {
 
   test('should have correct classnames for hover and for isDragOver', async () => {
     const commonUseDndProps = {
-      onDragLeave: jest.fn(),
-      onDragOver: jest.fn(),
-      onDrop: jest.fn(),
-      onDragEnd: jest.fn(),
+      onDragLeave: vi.fn(),
+      onDragOver: vi.fn(),
+      onDrop: vi.fn(),
+      onDragEnd: vi.fn(),
     };
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });
@@ -206,7 +217,7 @@ describe('AppletItem component tests', () => {
     expect(tableRow).toHaveClass('MuiTableRow-has-hover');
     expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
       ...commonUseDndProps,
     });

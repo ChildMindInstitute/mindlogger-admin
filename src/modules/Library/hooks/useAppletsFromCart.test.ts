@@ -13,16 +13,20 @@ const getPreloadedState = ({ isAuthorized }) => ({
   },
 });
 
-const mockDispatch = jest.fn();
-const mockPostAppletsToCart = jest.fn();
+const mockDispatch = vi.fn();
+const mockPostAppletsToCart = vi.fn();
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Library/utils', () => ({
-  getAppletsFromStorage: jest.fn(),
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/utils', () => ({
+  getAppletsFromStorage: vi.fn(),
 }));
 
 describe('useAppletsFromCart', () => {
@@ -32,12 +36,12 @@ describe('useAppletsFromCart', () => {
   ];
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(library.thunk, 'postAppletsToCart').mockReturnValue(mockPostAppletsToCart);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(library.thunk, 'postAppletsToCart').mockReturnValue(mockPostAppletsToCart);
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should call postAppletsToCart if authorized with applets from storage', async () => {

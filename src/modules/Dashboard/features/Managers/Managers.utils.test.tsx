@@ -13,10 +13,10 @@ import { Manager } from '../../types';
 import { Roles } from '../../../../shared/consts';
 
 const headCellProperties = ['avatar', 'firstName', 'lastName', 'title', 'email', 'actions'];
-const removeTeamMemberAction = jest.fn();
-const editTeamMemberAction = jest.fn();
-const copyEmailAddressAction = jest.fn();
-const copyInvitationLinkAction = jest.fn();
+const removeTeamMemberAction = vi.fn();
+const editTeamMemberAction = vi.fn();
+const copyEmailAddressAction = vi.fn();
+const copyInvitationLinkAction = vi.fn();
 
 describe('Managers utils tests', () => {
   describe('getHeadCells function', () => {

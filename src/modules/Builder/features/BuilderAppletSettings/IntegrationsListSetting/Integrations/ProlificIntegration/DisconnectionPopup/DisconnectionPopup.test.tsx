@@ -8,8 +8,8 @@ import { DisconnectionPopup } from './DisconnectionPopup';
 import { PopupProps } from '../ProlificIntegration.types';
 import { deleteProlificIntegration } from '../ProlificIntegration.utils';
 
-jest.mock('../ProlificIntegration.utils', () => ({
-  deleteProlificIntegration: jest.fn(),
+vi.mock('../ProlificIntegration.utils', () => ({
+  deleteProlificIntegration: vi.fn(),
 }));
 
 type DisconnectionPopupProps = PopupProps;
@@ -36,15 +36,15 @@ const defaultApplet = preloadedStateWithIntegration.applet.applet.data.result;
 
 describe('ProlificIntegration', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the DisconnectionPopup', () => {
     const defaultProps: DisconnectionPopupProps = {
       open: true,
-      onClose: jest.fn(),
+      onClose: vi.fn(),
       applet: defaultApplet,
-      updateAppletData: jest.fn(),
+      updateAppletData: vi.fn(),
     };
 
     renderWithProviders(<DisconnectionPopup {...defaultProps} />);
@@ -58,10 +58,10 @@ describe('ProlificIntegration', () => {
   });
 
   test('should close popup and update applet when clicking delete', async () => {
-    (deleteProlificIntegration as jest.Mock).mockResolvedValue({});
+    (deleteProlificIntegration as vi.Mock).mockResolvedValue({});
 
-    const onClose = jest.fn();
-    const updateAppletData = jest.fn();
+    const onClose = vi.fn();
+    const updateAppletData = vi.fn();
 
     renderWithProviders(
       <DisconnectionPopup

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isValidElement } from 'react';
 
@@ -18,18 +19,24 @@ const props = {
   },
 } as UseActivityGridProps;
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-  useParams: jest.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-const mockedUseParams = useParams as jest.MockedFunction<typeof useParams>;
-const mockedUseNavigate = useNavigate as jest.MockedFunction<typeof useNavigate>;
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+    useParams: vi.fn(),
+  };
+});
 
-jest.mock('redux/store/hooks', () => ({
-  useAppDispatch: jest.fn(),
-  useAppSelector: jest.fn(),
+const mockedUseParams = vi.mocked(useParams);
+const mockedUseNavigate = vi.mocked(useNavigate);
+
+vi.mock('redux/store/hooks', () => ({
+  useAppDispatch: vi.fn(),
+  useAppSelector: vi.fn(),
 }));
 
 describe('useActivityGrid', () => {
@@ -113,7 +120,7 @@ describe('useActivityGrid', () => {
   });
 
   test('editActivity should navigate to correct the activity builder page', () => {
-    const mockedNavigate = jest.fn();
+    const mockedNavigate = vi.fn();
     mockedUseNavigate.mockReturnValue(mockedNavigate);
 
     const {

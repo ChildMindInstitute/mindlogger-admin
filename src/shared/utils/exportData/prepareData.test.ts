@@ -139,7 +139,7 @@ const mockedExportDataResult = {
 
 describe('prepareData', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   const testCorrectKeys = (result) => {
@@ -161,11 +161,12 @@ describe('prepareData', () => {
 
   test('prepareEncryptedData should return an object with the correct keys', async () => {
     const data = { activities: [], answers: [] };
-    const getDecryptedAnswers = jest.fn();
+    const getDecryptedAnswers = vi.fn();
     const result = await prepareEncryptedData({
       data,
       getDecryptedAnswers,
-      shouldGenerateUserJourney: true,
+      flags: mockFlags,
+      shouldGenerateUserJourney: false,
     });
 
     testCorrectKeys(result);
@@ -175,7 +176,7 @@ describe('prepareData', () => {
     const result = await prepareDecryptedData({
       parsedAnswers: [],
       flags: mockFlags,
-      shouldGenerateUserJourney: true,
+      shouldGenerateUserJourney: false,
     });
 
     testCorrectKeys(result);
@@ -411,16 +412,16 @@ describe('prepareData', () => {
         },
       ],
     };
-    const getDecryptedAnswers = jest.fn();
-    jest
-      .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
-      .mockImplementationOnce(() => mockedParsedAnswers);
+    const getDecryptedAnswers = vi.fn();
+    vi.spyOn(getParsedAnswersFunctions, 'getParsedAnswers').mockImplementationOnce(
+      () => mockedParsedAnswers,
+    );
 
     const result = await prepareEncryptedData({
       data,
       getDecryptedAnswers,
-      shouldGenerateUserJourney: true,
       flags: mockFlags,
+      shouldGenerateUserJourney: false,
     });
     expect(result).toEqual(mockedExportDataResult);
   });
@@ -429,7 +430,7 @@ describe('prepareData', () => {
     const result = await prepareDecryptedData({
       parsedAnswers: mockedParsedAnswers,
       flags: mockFlags,
-      shouldGenerateUserJourney: true,
+      shouldGenerateUserJourney: false,
     });
     expect(result).toEqual(mockedExportDataResult);
   });

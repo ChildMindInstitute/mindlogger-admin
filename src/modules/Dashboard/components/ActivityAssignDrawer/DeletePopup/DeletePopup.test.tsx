@@ -7,8 +7,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DeletePopup } from './DeletePopup';
 
 const mockedTestId = 'test-id';
-const mockedSetIsVisible = jest.fn();
-const mockedOnConfirm = jest.fn();
+const mockedSetIsVisible = vi.fn();
+const mockedOnConfirm = vi.fn();
 const mockedActivityName = 'activity';
 
 describe('DeletePopup', () => {

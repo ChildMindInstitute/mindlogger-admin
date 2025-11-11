@@ -3,21 +3,26 @@ import * as routerDom from 'react-router-dom';
 
 import { useCheckIfNewApplet } from './useCheckIfNewApplet';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
 
 describe('useCheckIfNewApplet hook tests', () => {
   test('should return false', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
     const { result } = renderHook(useCheckIfNewApplet);
 
     expect(result.current).toBeTruthy();
   });
 
   test('should return true', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'mockAppletId' });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'mockAppletId' });
     const { result } = renderHook(useCheckIfNewApplet);
 
     expect(result.current).toBeFalsy();

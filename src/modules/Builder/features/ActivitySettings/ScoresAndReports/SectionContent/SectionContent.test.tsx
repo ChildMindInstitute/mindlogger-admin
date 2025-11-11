@@ -53,7 +53,7 @@ const formDataWithoutSectionConditions = {
 
 describe('SectionContent', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render section', () => {
@@ -107,10 +107,10 @@ describe('SectionContent', () => {
   });
 
   test('should set correct default conditional logic value', async () => {
-    const mockedSetValue = jest.fn();
-    jest
-      .spyOn(useCustomFormContextHook, 'useCustomFormContext')
-      .mockReturnValue({ setValue: mockedSetValue });
+    const mockedSetValue = vi.fn();
+    vi.spyOn(useCustomFormContextHook, 'useCustomFormContext').mockReturnValue({
+      setValue: mockedSetValue,
+    });
 
     const { getByTestId } = renderWithAppletFormData({
       children: <SectionContent {...commonProps} />,

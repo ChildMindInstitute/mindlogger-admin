@@ -3,8 +3,8 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
-import * as reactHookForm from 'react-hook-form';
+import axios from 'axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
@@ -15,6 +15,24 @@ import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/Resp
 import { RespondentDataContext } from 'modules/Dashboard/features/RespondentData/RespondentDataContext/RespondentDataContext.context';
 
 import { ReportFilters } from './ReportFilters';
+
+let shouldMockUseWatch = false;
+let mockedUseWatchValue: any = null;
+
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useWatch: (params: any) => {
+      if (shouldMockUseWatch) {
+        return mockedUseWatchValue;
+      }
+
+      return actual.useWatch(params);
+    },
+  };
+});
 
 const identifiers = [
   {
@@ -65,16 +83,21 @@ const FormComponent = () => {
 
   return (
     <FormProvider {...methods}>
-      <ReportFilters identifiers={identifiers} versions={versions} setIsLoading={jest.fn()} />
+      <ReportFilters identifiers={identifiers} versions={versions} setIsLoading={vi.fn()} />
     </FormProvider>
   );
 };
 
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mockedUseParams = vi.fn();
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
 
 describe('ReportFilters', () => {
   beforeEach(() => {
@@ -82,6 +105,14 @@ describe('ReportFilters', () => {
       appletId: mockedAppletId,
       subjectId: mockedFullSubjectId1,
     });
+    // Reset to use real useWatch by default
+    shouldMockUseWatch = false;
+    mockedUseWatchValue = null;
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('renders date pickers and time pickers', async () => {
@@ -158,7 +189,7 @@ describe('ReportFilters', () => {
   });
 
   test('fetch answers on filters change', async () => {
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: [
           {
@@ -170,9 +201,9 @@ describe('ReportFilters', () => {
         ],
       },
     });
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
+
+    shouldMockUseWatch = true;
+    mockedUseWatchValue = [true, false, new Date('2024-01-04'), new Date('2024-01-10')];
 
     await act(async () => {
       renderWithProviders(
@@ -187,7 +218,7 @@ describe('ReportFilters', () => {
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
         {
@@ -206,9 +237,21 @@ describe('ReportFilters', () => {
   });
 
   test('fetch answers on filters change when the entity is Flow', async () => {
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
+    vi.mocked(axios.get).mockResolvedValueOnce({
+      data: {
+        result: [
+          {
+            userPublicKey: 'userPublicKey',
+            answer: 'answer',
+            items: [],
+            itemIds: 'itemIds',
+          },
+        ],
+      },
+    });
+
+    shouldMockUseWatch = true;
+    mockedUseWatchValue = [true, false, new Date('2024-01-04'), new Date('2024-01-10')];
 
     renderWithProviders(
       <RespondentDataContext.Provider value={{ selectedEntity: mockedFlow }}>
@@ -221,7 +264,7 @@ describe('ReportFilters', () => {
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/flows/${mockedFlow.id}/submissions`,
         {
