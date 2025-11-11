@@ -53,18 +53,20 @@ if (
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-const LDProvider = await asyncWithLDProvider({
-  clientSideID: import.meta.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
-});
-
 Mixpanel.init();
 
-root.render(
-  <React.StrictMode>
-    <LDProvider>
-      <App />
-    </LDProvider>
-  </React.StrictMode>,
-);
+(async () => {
+  const LDProvider = await asyncWithLDProvider({
+    clientSideID: import.meta.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
+  });
+
+  root.render(
+    <React.StrictMode>
+      <LDProvider>
+        <App />
+      </LDProvider>
+    </React.StrictMode>,
+  );
+})();
 
 reportWebVitals();
