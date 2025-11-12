@@ -473,10 +473,12 @@ describe('RespondentDataReview', () => {
       ).toBeInTheDocument();
 
       // the activity list in the review menu child component is rendered correctly
-      const activityLength = screen.queryAllByTestId(
-        /respondents-review-menu-activity-\d+-select$/,
-      );
-      expect(activityLength).toHaveLength(1);
+      await waitFor(() => {
+        const activityLength = screen.queryAllByTestId(
+          /respondents-review-menu-activity-\d+-select$/,
+        );
+        expect(activityLength).toHaveLength(1);
+      });
 
       const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
       await userEvent.click(activity);
@@ -694,7 +696,11 @@ describe('RespondentDataReview', () => {
       );
 
       // check that the Feedback Reviews tab is open
-      expect(screen.getByTestId('respondents-data-summary-feedback-reviewed')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('respondents-data-summary-feedback-reviewed'),
+        ).toBeInTheDocument();
+      });
     },
     JEST_TEST_TIMEOUT,
   );
