@@ -107,7 +107,7 @@ jobs:
 
       - name: Deploy
         run: |
-          aws s3 sync ./build s3://cmiml-${{ inputs.env-name }}-admin-panel
+          aws s3 sync ./dist s3://cmiml-${{ inputs.env-name }}-admin-panel
 
       - name: Invalidate Cloudfront caches
         run: |
@@ -119,9 +119,9 @@ jobs:
         env:
           DATADOG_API_KEY: ${{ secrets.datadog-api-key }}
         run: |
-          npx @datadog/datadog-ci sourcemaps upload build/static/js --service mindlogger-admin \
+          npx @datadog/datadog-ci sourcemaps upload dist/assets/js --service mindlogger-admin \
             --release-version '${{ inputs.version }}' \
-            --minified-path-prefix 'https://${{ needs.setup-vars.outputs.host }}/static/js'
+            --minified-path-prefix 'https://${{ needs.setup-vars.outputs.host }}/assets/js'
           
 
 
