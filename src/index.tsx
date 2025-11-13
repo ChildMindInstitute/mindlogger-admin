@@ -45,8 +45,8 @@ if (
     trackLongTasks: true,
     trackUserInteractions: false,
     allowedTracingUrls: [
-      (url) => url.indexOf('cmiml.net') > -1,
-      (url) => url.indexOf('gettingcurious.com') > -1,
+      (url) => url.indexOf('api-uat.cmiml.net') > -1,
+      (url) => url.indexOf('api-v2.gettingcurious.com') > -1,
     ],
   });
 }
