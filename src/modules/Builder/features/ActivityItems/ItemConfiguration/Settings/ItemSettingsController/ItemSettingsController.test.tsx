@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import get from 'lodash.get';
 import { createRef } from 'react';
@@ -741,12 +741,22 @@ describe('ItemSettingsController', () => {
         );
 
         await userEvent.click(hasTextInputSetting);
+        
+        // Wait for the UI to update after enabling hasTextInput
+        await waitFor(() => {
+          const textInputRequiredSetting = screen.getByTestId(
+            `builder-activity-items-item-settings-${settingKey}`,
+          );
+          expect(textInputRequiredSetting).toBeInTheDocument();
+        });
       }
       const setting = screen.getByTestId(`builder-activity-items-item-settings-${settingKey}`);
 
       await userEvent.click(setting);
 
-      expect(mockedSetValue).nthCalledWith(1, 'activities.0.isSkippable', false);
+      await waitFor(() => {
+        expect(mockedSetValue).nthCalledWith(1, 'activities.0.isSkippable', false);
+      });
     },
   );
 });

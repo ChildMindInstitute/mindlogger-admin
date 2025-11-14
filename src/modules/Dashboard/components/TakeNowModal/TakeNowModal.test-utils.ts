@@ -18,7 +18,7 @@ import {
   TakeNowClickEvent,
 } from 'shared/utils';
 
-const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
+export const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 export const takeNowModalTestId = (testId: string) => `${testId}-take-now-modal`;
 

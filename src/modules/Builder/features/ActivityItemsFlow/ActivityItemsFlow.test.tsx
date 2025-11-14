@@ -289,7 +289,7 @@ describe('Activity Items Flow', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     fireEvent.mouseDown(
-      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="combobox"]'),
     );
     const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
     expect(nameDropdown).toBeVisible();
@@ -316,7 +316,7 @@ describe('Activity Items Flow', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     fireEvent.mouseDown(
-      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="combobox"]'),
     );
     const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
     expect(nameDropdown).toBeVisible();
@@ -351,7 +351,7 @@ describe('Activity Items Flow', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     fireEvent.mouseDown(
-      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="combobox"]'),
     );
     const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
     expect(nameDropdown).toBeVisible();
@@ -387,7 +387,7 @@ describe('Activity Items Flow', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     fireEvent.mouseDown(
-      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="combobox"]'),
     );
     const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
     expect(nameDropdown).toBeVisible();
@@ -407,7 +407,7 @@ describe('Activity Items Flow', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     fireEvent.mouseDown(
-      screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
+      screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="combobox"]'),
     );
     const itemDropdown = screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`);
     expect(itemDropdown).toBeVisible();
@@ -447,7 +447,7 @@ describe('Activity Items Flow', () => {
 
       fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
       fireEvent.mouseDown(
-        screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+        screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="combobox"]'),
       );
       fireEvent.click(
         screen
@@ -455,7 +455,7 @@ describe('Activity Items Flow', () => {
           .querySelector('li:nth-child(2)'),
       );
       fireEvent.mouseDown(
-        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
+        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="combobox"]'),
       );
       expect(
         screen

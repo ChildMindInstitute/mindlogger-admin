@@ -348,7 +348,7 @@ describe('ReportConfigSetting', () => {
     );
     expect(itemName).toBeVisible();
 
-    fireEvent.mouseDown(itemName.querySelector("[role='button']"));
+    fireEvent.mouseDown(itemName.querySelector("[role='combobox']"));
 
     const itemNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,
@@ -378,7 +378,7 @@ describe('ReportConfigSetting', () => {
 
     expect(itemName.querySelector('label')).toHaveClass('Mui-disabled');
 
-    fireEvent.mouseDown(activityName.querySelector('[role="button"]'));
+    fireEvent.mouseDown(activityName.querySelector('[role="combobox"]'));
 
     const activityNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-activity-name-dropdown`,
@@ -393,7 +393,7 @@ describe('ReportConfigSetting', () => {
       expect(itemName.querySelector('label')).not.toHaveClass('Mui-disabled');
     });
 
-    fireEvent.mouseDown(itemName.querySelector('[role="button"]'));
+    fireEvent.mouseDown(itemName.querySelector('[role="combobox"]'));
 
     const itemNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,

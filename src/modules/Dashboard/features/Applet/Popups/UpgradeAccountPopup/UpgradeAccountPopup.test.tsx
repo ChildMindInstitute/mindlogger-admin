@@ -46,7 +46,15 @@ describe('UpgradeAccountPopup component', () => {
     );
 
     const emailInput = getByTestId(`${dataTestid}-email`).querySelector('input');
-    emailInput && (await userEvent.type(emailInput, testValues.email));
+    if (emailInput) {
+      await userEvent.clear(emailInput);
+      await userEvent.type(emailInput, testValues.email);
+      // Trigger blur to complete validation
+      emailInput.blur();
+    }
+
+    // Wait a tick for validation
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     await userEvent.click(getByText('Send Invitation'));
 
