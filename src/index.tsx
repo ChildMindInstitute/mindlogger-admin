@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
-import { datadogRum } from '@datadog/browser-rum';
+import {datadogRum, RumEvent} from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -10,6 +10,7 @@ import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { isUat, isProduction } from './shared/utils/env';
+import type {RumEventDomainContext} from "@datadog/browser-rum-core/src/domainContext.types";
 
 if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
@@ -41,13 +42,21 @@ if (
     sessionSampleRate: 100,
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask-user-input',
-    trackResources: false,
+    trackResources: true,
     trackLongTasks: true,
     trackUserInteractions: false,
     allowedTracingUrls: [
       (url) => url.indexOf('api-uat.cmiml.net') > -1,
       (url) => url.indexOf('api-v2.gettingcurious.com') > -1,
     ],
+    beforeSend: (event: RumEvent, context: RumEventDomainContext) => {
+      // Do not instrument S3 calls, especially for exports.
+      if (event.type === 'resource' && event.resource.url.indexOf('s3.amazonaws.com') > -1) {
+        return false;
+      }
+
+      return true;
+    },
   });
 }
 
