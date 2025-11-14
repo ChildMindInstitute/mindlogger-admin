@@ -443,7 +443,7 @@ export const mockedEmptyText = {
   config: {
     removeBackButton: false,
     skippableItem: false,
-    maxResponseLength: 72,
+    maxResponseLength: 300,
     correctAnswerRequired: false,
     correctAnswer: '',
     numericalResponseRequired: false,
