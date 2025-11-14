@@ -12,7 +12,6 @@ import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { isUat, isProduction } from './shared/utils/env';
 
-
 if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
     clientToken: import.meta.env.REACT_APP_DD_CLIENT_TOKEN as string,
