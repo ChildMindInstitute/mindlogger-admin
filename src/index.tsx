@@ -42,7 +42,7 @@ if (
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask-user-input',
     trackResources: true,
-    trackLongTasks: true,
+    trackLongTasks: false,
     trackUserInteractions: false,
     allowedTracingUrls: [
       (url) => url.indexOf('api-uat.cmiml.net') > -1,
