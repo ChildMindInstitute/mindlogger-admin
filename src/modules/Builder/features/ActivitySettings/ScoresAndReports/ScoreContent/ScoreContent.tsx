@@ -370,8 +370,8 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter(
-      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    const newSelectedItems = scoreItems?.filter((item) =>
+      chosenItems?.includes(getEntityKey(item, true)),
     );
     updateScoreConditionsPayload({
       setValue,

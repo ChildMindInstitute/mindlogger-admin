@@ -72,9 +72,8 @@ export const useSubscalesSystemItemsSetup = (
     );
 
     // Remove system items from report scores that include them
-    updateReports(
-      (itemsPrint: string[] | undefined) =>
-        itemsPrint?.filter((item) => !systemItemKeys.includes(item)),
+    updateReports((itemsPrint: string[] | undefined) =>
+      itemsPrint?.filter((item) => !systemItemKeys.includes(item)),
     );
   };
 
@@ -101,21 +100,20 @@ export const useSubscalesSystemItemsSetup = (
     );
 
     // Replace system items in report scores that include them
-    updateReports(
-      (itemsPrint: string[] | undefined) =>
-        itemsPrint
-          ?.map((item) => {
-            const oldSystemItem = oldSystemItems.find((old) => old.key === item);
+    updateReports((itemsPrint: string[] | undefined) =>
+      itemsPrint
+        ?.map((item) => {
+          const oldSystemItem = oldSystemItems.find((old) => old.key === item);
 
-            if (oldSystemItem) {
-              const newItem = newSystemItems.find((newItem) => newItem.name === oldSystemItem.name);
+          if (oldSystemItem) {
+            const newItem = newSystemItems.find((newItem) => newItem.name === oldSystemItem.name);
 
-              return newItem ? getEntityKey(newItem) : null;
-            }
+            return newItem ? getEntityKey(newItem) : null;
+          }
 
-            return item;
-          })
-          .filter((it): it is string => it !== null),
+          return item;
+        })
+        .filter((it): it is string => it !== null),
     );
   };
 

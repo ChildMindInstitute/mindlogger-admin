@@ -76,7 +76,7 @@ config({
         typographer: true,
         quotes: '“”‘’',
       })
-      
+
       .use(emojiPlugin.full)
       .use(taskLists)
       .use(sup)
