@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
-import { datadogRum } from '@datadog/browser-rum';
+import { datadogRum, RumEvent } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -48,6 +48,14 @@ if (
       (url) => url.indexOf('api-uat.cmiml.net') > -1,
       (url) => url.indexOf('api-v2.gettingcurious.com') > -1,
     ],
+    beforeSend: (event: RumEvent) => {
+      // Do not instrument S3 calls, especially for exports.
+      if (event.type === 'resource' && event.resource.url.indexOf('s3.amazonaws.com') > -1) {
+        return false;
+      }
+
+      return true;
+    },
   });
 }
 
