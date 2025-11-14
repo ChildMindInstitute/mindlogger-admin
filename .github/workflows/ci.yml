@@ -17,17 +17,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - uses: actions/cache@v4
         id: cache
         with:
           path: |
             ~/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - run: npm ci
+      - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
 
       - uses: wearerequired/lint-action@v2
         with:
@@ -50,16 +51,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install deps
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Running tests
         env:
           REACT_APP_API_DOMAIN: http://localhost:8080
           REACT_APP_WEB_URI: http://localhost:5173
-        run: npm run test:nowatch
+        run: yarn test:nowatch
   build:
     needs: tests
     name: Build
@@ -73,12 +74,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install deps
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build admin app
         env:
           CI: false
-        run: npm run build
+        run: yarn build
