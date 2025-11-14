@@ -41,7 +41,7 @@ if (
     sessionSampleRate: 100,
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask-user-input',
-    trackResources: true,
+    trackResources: false,
     trackLongTasks: true,
     trackUserInteractions: false,
     allowedTracingUrls: [
