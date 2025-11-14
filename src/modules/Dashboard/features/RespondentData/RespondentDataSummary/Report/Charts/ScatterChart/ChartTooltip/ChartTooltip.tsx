@@ -27,7 +27,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
   const { mine, other } = reviewCount ?? {};
 
   const navigateToReviewAnswer = (isFeedbackVisible = false) => {
-    if (!data) return;
+    if (!data || data.parsed.x === null) return;
 
     const selectedDate = format(new Date(data.parsed.x), DateFormats.YearMonthDay);
 
@@ -48,13 +48,13 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
   };
 
   const showSubscaleResultHandler = () => {
-    if (!id || isFlow) return;
-    setCurrentActivityCompletionData({ answerId: id, date: data?.parsed.x });
+    if (!id || isFlow || !data?.parsed.x) return;
+    setCurrentActivityCompletionData({ answerId: id, date: data.parsed.x });
   };
 
   return (
     <>
-      {data && (
+      {data && data.parsed.x !== null && (
         <>
           <StyledIndent />
           <StyledTooltip data-testid={`${dataTestId}-tooltip`}>
@@ -63,7 +63,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
               color={variables.palette.outline}
               data-testid={`${dataTestId}-tooltip-date`}
             >
-              {format(data?.parsed.x, DateFormats.MonthDayTime)}
+              {format(data.parsed.x, DateFormats.MonthDayTime)}
             </StyledBodySmall>
 
             <StyledFlexColumn>

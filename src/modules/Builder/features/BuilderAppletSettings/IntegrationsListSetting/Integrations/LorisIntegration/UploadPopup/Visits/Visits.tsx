@@ -21,7 +21,10 @@ export const Visits = ({ visitsList }: VisitsProps) => {
     formState: { errors },
   } = useFormContext();
 
-  const visitsForm: LorisUserAnswerVisit[] = useWatch({ name: 'visitsForm' });
+  const visitsForm: LorisUserAnswerVisit[] = useWatch({
+    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
+    name: 'visitsForm',
+  }) as LorisUserAnswerVisit[];
 
   const handleChangeVisit = useCallback(
     ({ activityAnswer, value }: HandleChangeVisitProps) => {

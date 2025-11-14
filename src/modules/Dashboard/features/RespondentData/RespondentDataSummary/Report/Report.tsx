@@ -43,9 +43,10 @@ export const Report = () => {
     apiVersions,
   } = useRespondentDataContext();
 
-  const versions: AutocompleteOption[] = useWatch({
+  const versions = useWatch({
+    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name: 'versions',
-  });
+  }) as AutocompleteOption[];
   const { hideSkipped } = useDatavizSkippedFilter();
 
   const [isLoading, setIsLoading] = useState(false);

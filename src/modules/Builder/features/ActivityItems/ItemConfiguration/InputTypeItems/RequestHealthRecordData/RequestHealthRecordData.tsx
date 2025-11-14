@@ -11,9 +11,10 @@ import { RequestHealthRecordDataProps } from './RequestHealthRecordData.types';
 export const RequestHealthRecordData = ({ name }: RequestHealthRecordDataProps) => {
   const { t } = useTranslation('app');
 
-  const optInOutOptions: RequestHealthRecordDataOption[] = useWatch({
+  const optInOutOptions = useWatch({
+    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name: `${name}.responseValues.optInOutOptions`,
-  });
+  }) as RequestHealthRecordDataOption[];
 
   return (
     <StyledContainer>

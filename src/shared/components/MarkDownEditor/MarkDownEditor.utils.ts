@@ -76,7 +76,7 @@ config({
         typographer: true,
         quotes: '“”‘’',
       })
-      // @ts-expect-error - Type mismatch between markdown-it versions
+      
       .use(emojiPlugin.full)
       .use(taskLists)
       .use(sup)

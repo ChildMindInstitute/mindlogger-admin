@@ -52,7 +52,8 @@ export const LeftBar = ({
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
   const { fieldName, activity } = useCurrentActivity();
-  const items: ItemFormValues[] = useWatch({ name: `${fieldName}.items` });
+  // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
+  const items = useWatch({ name: `${fieldName}.items` }) as ItemFormValues[];
   const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
