@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
-import {datadogRum, RumEvent} from '@datadog/browser-rum';
+import { datadogRum, RumEvent } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
+import type { RumEventDomainContext } from '@datadog/browser-rum-core/src/domainContext.types';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
@@ -10,7 +11,7 @@ import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { isUat, isProduction } from './shared/utils/env';
-import type {RumEventDomainContext} from "@datadog/browser-rum-core/src/domainContext.types";
+
 
 if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
