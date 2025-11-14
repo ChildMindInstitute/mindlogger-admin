@@ -85,8 +85,8 @@ describe('AddParticipantPopup component', () => {
     firstNameInput && (await userEvent.type(firstNameInput, testValues.firstName));
     const lastNameInput = getByTestId(`${dataTestId}-lname`).querySelector('input');
     lastNameInput && (await userEvent.type(lastNameInput, testValues.lastName));
-    const tagSelectButton = within(getByTestId(`${dataTestId}-tag`)).getByRole('button');
-    await userEvent.click(tagSelectButton);
+    const tagSelectCombobox = within(getByTestId(`${dataTestId}-tag`)).getByRole('combobox');
+    await userEvent.click(tagSelectCombobox);
     const roleOptions = await screen.findByRole('listbox', { name: 'Tag' });
     await userEvent.click(within(roleOptions).getByText('Child'));
 
@@ -129,8 +129,8 @@ describe('AddParticipantPopup component', () => {
     firstNameInput && (await userEvent.type(firstNameInput, testValues.firstName));
     const lastNameInput = getByTestId(`${dataTestId}-lname`).querySelector('input');
     lastNameInput && (await userEvent.type(lastNameInput, testValues.lastName));
-    const tagSelectButton = within(getByTestId(`${dataTestId}-tag`)).getByRole('button');
-    await userEvent.click(tagSelectButton);
+    const tagSelectCombobox = within(getByTestId(`${dataTestId}-tag`)).getByRole('combobox');
+    await userEvent.click(tagSelectCombobox);
     const roleOptions = await screen.findByRole('listbox', { name: 'Tag' });
     await userEvent.click(within(roleOptions).getByText('Child'));
 

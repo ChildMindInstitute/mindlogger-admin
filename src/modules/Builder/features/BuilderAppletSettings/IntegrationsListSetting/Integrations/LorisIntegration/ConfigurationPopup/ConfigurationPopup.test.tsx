@@ -63,8 +63,8 @@ const selectProject = async () => {
     expect(screen.getByTestId('loris-project-select')).toBeInTheDocument();
   });
   const selectCompoEl = screen.getByTestId('loris-project-select');
-  const button = within(selectCompoEl).getByRole('button');
-  fireEvent.mouseDown(button);
+  const combobox = within(selectCompoEl).getByRole('combobox');
+  fireEvent.mouseDown(combobox);
   const listbox = within(screen.getByRole('presentation')).getByRole('listbox');
   const options = within(listbox).getAllByRole('option');
   fireEvent.click(options[0]);

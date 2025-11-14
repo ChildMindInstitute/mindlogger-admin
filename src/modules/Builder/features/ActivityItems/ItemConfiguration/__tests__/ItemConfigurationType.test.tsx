@@ -71,8 +71,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     mockedItemTypes.forEach((itemType) => {
       const option = screen.getByTestId(`${mockedOptionTestid}-${itemType}`);
@@ -101,8 +101,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const options = screen.getAllByTestId((testId) => testId.startsWith(mockedOptionTestid));
 
@@ -140,8 +140,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const search = screen.getByTestId(mockedSearchTestid);
     const searchInput = search.querySelector('input');
@@ -196,8 +196,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const option = screen.getByTestId(`${mockedOptionTestid}-${itemType}`);
     fireEvent.click(option);
