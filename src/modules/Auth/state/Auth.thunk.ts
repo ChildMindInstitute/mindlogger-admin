@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { datadogRum } from '@datadog/browser-rum';
+
 
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -27,6 +29,7 @@ export const signIn = createAsyncThunk(
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
 
+        datadogRum.setUser({ id: data.result.user.id, email: data.result.user.email });
         Mixpanel.login(data.result.user.id);
         FeatureFlags.login(data.result.user.id);
       }
