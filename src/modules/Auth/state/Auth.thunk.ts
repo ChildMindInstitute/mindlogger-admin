@@ -28,7 +28,7 @@ export const signIn = createAsyncThunk(
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
 
-        datadogRum.setUser({ id: data.result.user.id, email: data.result.user.email });
+        datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);
         FeatureFlags.login(data.result.user.id);
       }
