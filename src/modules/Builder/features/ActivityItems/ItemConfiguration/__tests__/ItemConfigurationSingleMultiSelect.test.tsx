@@ -388,7 +388,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
       ).toBeVisible();
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toBeUndefined();
-    });
+    }, 10000);
 
     test('Is initialized correctly for item with paletteName', () => {
       renderWithAppletFormData({

@@ -1,21 +1,20 @@
-import { JSZipGeneratorOptions } from 'jszip';
 import FileSaver from 'file-saver';
-
-export const BLOB_ZIP_OPTIONS: JSZipGeneratorOptions<'blob'> = {
-  type: 'blob',
-  compression: 'DEFLATE',
-  compressionOptions: { level: 3 },
-};
+import { zipSync } from 'fflate';
 
 export const exportZip = async (data: { fileName: string; file: Blob }[], fileName: string) => {
   const dataArray = Array.isArray(data) ? data : [data];
 
-  const JSZip = await import('jszip');
-  const zip = new JSZip.default();
-  dataArray.forEach((data) => {
-    zip.file(data.fileName, data.file);
-  });
+  // Convert blobs to Uint8Array for fflate
+  const zipData: Record<string, Uint8Array> = {};
+  for (const item of dataArray) {
+    const arrayBuffer = await item.file.arrayBuffer();
+    zipData[item.fileName] = new Uint8Array(arrayBuffer);
+  }
 
-  const content = await zip.generateAsync(BLOB_ZIP_OPTIONS);
+  // Use fflate's zipSync for fast, synchronous zip generation
+  // level: 0 means no compression (STORE mode) for maximum speed
+  const zipped = zipSync(zipData, { level: 0 });
+  const content = new Blob([new Uint8Array(zipped)], { type: 'application/zip' });
+
   FileSaver.saveAs(content, fileName);
 };
