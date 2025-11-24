@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { TimerType } from 'modules/Dashboard/api';
@@ -8,16 +9,20 @@ import { TimerType } from 'modules/Dashboard/api';
 import { TimersTab } from './TimersTab';
 
 const dataTestid = 'timers-tab';
-const mockWatch = jest.fn();
-const mockSetValue = jest.fn();
+const mockWatch = vi.fn();
+const mockSetValue = vi.fn();
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    watch: () => mockWatch(),
-    setValue: mockSetValue,
-  }),
-}));
+vi.mock('react-hook-form', async () => {
+  const actual = await vi.importActual('react-hook-form');
+
+  return {
+    ...actual,
+    useFormContext: () => ({
+      watch: () => mockWatch(),
+      setValue: mockSetValue,
+    }),
+  };
+});
 
 const FormWrapper = () => {
   const methods = useForm({
@@ -33,7 +38,7 @@ const FormWrapper = () => {
 
 describe('TimersTab component', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('render TimersTab component, TimerType = NotSet', async () => {

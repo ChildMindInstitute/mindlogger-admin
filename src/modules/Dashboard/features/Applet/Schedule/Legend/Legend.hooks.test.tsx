@@ -6,37 +6,48 @@ import * as calendarEventsModule from 'modules/Dashboard/state/CalendarEvents';
 
 import { useExpandedLists } from './Legend.hooks';
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedUseAppDispatch = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedUseAppDispatch = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-  useParams: () => mockedUseParams(),
-}));
-
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: () => mockedUseAppDispatch,
-}));
-
-jest.mock('modules/Dashboard/state/CalendarEvents', () => {
-  const originalModule = jest.requireActual('modules/Dashboard/state/CalendarEvents');
-  const useScheduledVisibilityData = jest.fn().mockReturnValue(true);
-  const useAvailableVisibilityData = jest.fn().mockReturnValue(true);
-  const setAvailableVisibility = jest.fn();
-  const setScheduledVisibility = jest.fn();
-  const createCalendarEvents = jest.fn();
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
   return {
-    ...originalModule,
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+    useParams: () => mockedUseParams(),
+  };
+});
+
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: () => mockedUseAppDispatch,
+  };
+});
+
+vi.mock('modules/Dashboard/state/CalendarEvents', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  const useScheduledVisibilityData = vi.fn().mockReturnValue(true);
+  const useAvailableVisibilityData = vi.fn().mockReturnValue(true);
+  const setAvailableVisibility = vi.fn();
+  const setScheduledVisibility = vi.fn();
+  const createCalendarEvents = vi.fn();
+
+  return {
+    ...actual,
     calendarEvents: {
-      ...originalModule.calendarEvents,
+      ...actual.calendarEvents,
       useScheduledVisibilityData,
       useAvailableVisibilityData,
       actions: {
-        ...originalModule.calendarEvents.actions,
+        ...actual.calendarEvents.actions,
         setAvailableVisibility,
         setScheduledVisibility,
         createCalendarEvents,
@@ -47,10 +58,10 @@ jest.mock('modules/Dashboard/state/CalendarEvents', () => {
 
 describe('useExpandedLists', () => {
   test('returns correct data with legend events', () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockedUseAppDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockedUseAppDispatch);
     mockedUseParams.mockReturnValue({ appletId: 'mockedAppletId' });
-    const clearAllScheduledEventsAction = jest.fn();
-    const onCreateActivitySchedule = jest.fn();
+    const clearAllScheduledEventsAction = vi.fn();
+    const onCreateActivitySchedule = vi.fn();
 
     const { result } = renderHookWithProviders(() =>
       useExpandedLists(
@@ -99,10 +110,12 @@ describe('useExpandedLists', () => {
     scheduledList.buttons[1].action();
     const { setAvailableVisibility, setScheduledVisibility } =
       calendarEventsModule.calendarEvents.actions;
-    expect(setScheduledVisibility).toHaveBeenCalledWith(true);
+    // The button toggles visibility, so if current state is true, it should call with false
+    expect(setScheduledVisibility).toHaveBeenCalledWith(false);
 
     availableList.buttons[0].action();
-    expect(setAvailableVisibility).toHaveBeenCalledWith(true);
+    // The button toggles visibility, so if current state is true, it should call with false
+    expect(setAvailableVisibility).toHaveBeenCalledWith(false);
 
     deactivatedList.buttons[0].action();
     expect(mockedUseNavigate).toHaveBeenCalledWith('/builder/mockedAppletId/activities');
@@ -110,8 +123,8 @@ describe('useExpandedLists', () => {
 
   test('returns undefined when legend events are null', () => {
     mockedUseParams.mockReturnValue({ appletId: 'mockedAppletId' });
-    const clearAllScheduledEventsAction = jest.fn();
-    const onCreateActivitySchedule = jest.fn();
+    const clearAllScheduledEventsAction = vi.fn();
+    const onCreateActivitySchedule = vi.fn();
 
     const { result } = renderHookWithProviders(() =>
       useExpandedLists(null, clearAllScheduledEventsAction, onCreateActivitySchedule),

@@ -20,28 +20,29 @@ const mockFlags = {
 
 describe('exportDataSucceed', () => {
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2000-01-01'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2000-01-01'));
   });
   beforeEach(() => {
-    jest
-      .spyOn(prepareDataUtils, 'prepareEncryptedData')
-      .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
-    jest
-      .spyOn(prepareDataUtils, 'prepareDecryptedData')
-      .mockReturnValue(Promise.resolve(prepareDataUtils.getDefaultExportData()));
-    jest.spyOn(exportTemplateUtils, 'exportTemplate').mockImplementation();
-    jest.spyOn(exportCsvZipUtils, 'exportCsvZip').mockImplementation();
-    jest.spyOn(exportMediaZipUtils, 'exportMediaZip').mockImplementation();
+    vi.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
+      Promise.resolve(prepareDataUtils.getDefaultExportData()),
+    );
+    vi.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
+      Promise.resolve(prepareDataUtils.getDefaultExportData()),
+    );
+    vi.spyOn(exportTemplateUtils, 'exportTemplate').mockResolvedValue(undefined);
+    vi.spyOn(exportCsvZipUtils, 'exportCsvZip').mockResolvedValue(undefined);
+    vi.spyOn(exportMediaZipUtils, 'exportMediaZip').mockResolvedValue(undefined);
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
-  const mockedGetDecryptedAnswers = jest.fn();
+  const mockedGetDecryptedAnswers = vi.fn();
   const mockedExportData = {
     activities: [],
     answers: [],
@@ -132,12 +133,15 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportEncryptedDataSucceed: check actions with default data with legacy naming', async () => {
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
       data: mockedExportData,
@@ -151,11 +155,14 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportDecryptedDataSucceed: check actions with default data with legacy naming', async () => {
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '-test',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
       parsedAnswers: mockedDecryptedExportData,
@@ -168,12 +175,15 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportEncryptedDataSucceed: check actions with default data with new naming', async () => {
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareEncryptedData).toHaveBeenCalledWith({
       data: mockedExportData,
@@ -187,11 +197,14 @@ describe('exportDataSucceed', () => {
   });
 
   test('exportDecryptedDataSucceed: check actions with default data with new naming', async () => {
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '-test',
       flags: { ...mockFlags, enableDataExportRenaming: true },
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     expect(prepareDataUtils.prepareDecryptedData).toHaveBeenCalledWith({
       parsedAnswers: mockedDecryptedExportData,
@@ -204,19 +217,22 @@ describe('exportDataSucceed', () => {
   });
 
   test("exportEncryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
-    jest.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
+    vi.spyOn(prepareDataUtils, 'prepareEncryptedData').mockReturnValue(
       Promise.resolve({
         ...prepareDataUtils.getDefaultExportData(),
         reportData,
         activityJourneyData,
       }),
     );
-    await exportEncryptedDataSucceed({
+    const promise = exportEncryptedDataSucceed({
       getDecryptedAnswers: mockedGetDecryptedAnswers,
       suffix: '',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     checkExportTemplateDefaultData();
   });
@@ -224,18 +240,21 @@ describe('exportDataSucceed', () => {
   test("exportDecryptedDataSucceed: should set 'null' for defaultData in exportTemplate", async () => {
     const reportData = [{ id: 'test' }];
     const activityJourneyData = [{ id: 'test' }];
-    jest.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
+    vi.spyOn(prepareDataUtils, 'prepareDecryptedData').mockReturnValue(
       Promise.resolve({
         ...prepareDataUtils.getDefaultExportData(),
         reportData,
         activityJourneyData,
       }),
     );
-    await exportDecryptedDataSucceed({
+    const promise = exportDecryptedDataSucceed({
       suffix: '',
       flags: mockFlags,
       shouldGenerateUserJourney: true,
     })(mockedDecryptedExportData);
+
+    await vi.runAllTimersAsync();
+    await promise;
 
     checkExportTemplateDefaultData();
   });

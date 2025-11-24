@@ -6,17 +6,21 @@ import { useUploadMethods } from './Extensions.hooks';
 import * as utils from './Extensions.utils';
 import { UploadMethodsProps } from './Extensions.types';
 
-const mockedExecuteMediaUpload = jest.fn();
-jest.mock('shared/hooks/useMediaUpload', () => ({
-  ...jest.requireActual('shared/hooks/useMediaUpload'),
-  useMediaUpload: () => ({
-    executeMediaUpload: mockedExecuteMediaUpload,
-    isLoading: false,
-  }),
-}));
+const mockedExecuteMediaUpload = vi.fn();
+vi.mock('shared/hooks/useMediaUpload', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useMediaUpload: () => ({
+      executeMediaUpload: mockedExecuteMediaUpload,
+      isLoading: false,
+    }),
+  };
+});
 
 const setPopupVisibleAndSetError = async (props: UploadMethodsProps) => {
-  jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
+  vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
   const { result, rerender } = renderHook(() => useUploadMethods(props));
   expect(result.current.sourceError).toBe('');
   expect(result.current.isPopupVisible).toBeFalsy();
@@ -38,10 +42,10 @@ const setPopupVisibleAndSetError = async (props: UploadMethodsProps) => {
 };
 
 describe('Extensions.hooks', () => {
-  const mockedInsertHandler = jest.fn();
-  const mockedSetFileSizeExceeded = jest.fn();
-  const mockedSetIncorrectFormat = jest.fn();
-  const mockedSetIsLoading = jest.fn();
+  const mockedInsertHandler = vi.fn();
+  const mockedSetFileSizeExceeded = vi.fn();
+  const mockedSetIncorrectFormat = vi.fn();
+  const mockedSetIsLoading = vi.fn();
   const props = {
     fileSizeExceeded: MAX_FILE_SIZE_25MB,
     type: MediaType.Image,
@@ -52,7 +56,7 @@ describe('Extensions.hooks', () => {
   };
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should return default result', () => {
@@ -75,7 +79,7 @@ describe('Extensions.hooks', () => {
   });
 
   test('should set invalid link error on submit', async () => {
-    jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
+    vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(false));
     const { result, rerender } = renderHook(() => useUploadMethods(props));
     expect(result.current.sourceError).toBe('');
 
@@ -93,7 +97,7 @@ describe('Extensions.hooks', () => {
     const { result, rerender } = await setPopupVisibleAndSetError(props);
     expect(mockedInsertHandler).toBeCalledTimes(0);
 
-    jest.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(true));
+    vi.spyOn(utils, 'checkImgUrl').mockImplementationOnce(() => Promise.resolve(true));
     const succeedFormData = {
       label: 'label',
       address: 'succeed address',
@@ -130,7 +134,7 @@ describe('Extensions.hooks', () => {
   });
 
   test('should check triggers within onUploadClick', async () => {
-    const mockedClick = jest.fn();
+    const mockedClick = vi.fn();
     const { result, rerender } = renderHook(() => useUploadMethods(props));
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

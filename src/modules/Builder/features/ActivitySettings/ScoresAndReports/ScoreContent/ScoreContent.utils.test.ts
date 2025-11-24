@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { vi } from 'vitest';
+
 import { CalculationType } from 'shared/consts';
 import {
   mockedMultiActivityItem,
@@ -84,7 +86,10 @@ describe('getIsScoreIdVariable', () => {
 });
 
 describe('updateMessagesWithVariable', () => {
-  const mockedSetValue = jest.fn();
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+  const mockedSetValue = vi.fn();
 
   test.each`
     name            | newScoreId       | description

@@ -8,15 +8,20 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { NavigationMenu } from './NavigationMenu';
 import { Svg } from '../Svg';
 
-const mockOnClick = jest.fn();
-const mockClose = jest.fn();
-const mockOnSetActiveItem = jest.fn();
-const mockedUseNavigate = jest.fn();
+const mockOnClick = vi.fn();
+const mockClose = vi.fn();
+const mockOnSetActiveItem = vi.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 const dataTestid = 'dashboard-applet-settings';
 

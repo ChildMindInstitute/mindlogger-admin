@@ -1,4 +1,4 @@
-import { flattenPaletteObject, hexToRgba } from '../theme.utils';
+import { flattenPaletteObject, hexToRgba } from '../palette.utils';
 
 type BasePalette = Record<string, Record<string | number, string>>;
 export interface Palette {

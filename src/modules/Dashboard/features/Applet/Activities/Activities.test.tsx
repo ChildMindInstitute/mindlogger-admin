@@ -1,8 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
-import mockAxios from '__mocks__/axios';
 
 import { ApiResponseCodes, WorkspaceManagersResponse, WorkspaceRespondentsResponse } from 'api';
 import { page } from 'resources';
@@ -23,6 +21,7 @@ import {
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
+  HttpResponse,
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
@@ -39,31 +38,26 @@ import {
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { authApiClient } from 'shared/api/apiConfig';
 
 import { Activities } from './Activities';
 
-const successfulEmptyGetAppletActivitiesMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: {
-      activitiesDetails: [],
-      appletDetail: {
-        ...mockedAppletData,
-        activities: [],
-      },
+const successfulEmptyGetAppletActivitiesMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: {
+    activitiesDetails: [],
+    appletDetail: {
+      ...mockedAppletData,
+      activities: [],
     },
   },
-};
+});
 
-const successfulGetAppletActivitiesMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: {
-      activitiesDetails: mockedAppletData.activities,
-      appletDetail: mockedAppletData,
-    },
+const successfulGetAppletActivitiesMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: {
+    activitiesDetails: mockedAppletData.activities,
+    appletDetail: mockedAppletData,
   },
-};
+});
 
 const getAppletUrl = `/applets/${mockedAppletId}`;
 const successfulGetAppletMock = {
@@ -71,31 +65,43 @@ const successfulGetAppletMock = {
   data: { result: mockedAppletData },
 };
 
-const successfulEmptyHttpResponseMock: HttpResponse = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: [],
-  },
-};
+const successfulEmptyHttpResponseMock: HttpResponse = mockSuccessfulHttpResponse({
+  result: [],
+});
 
 const testId = 'dashboard-applet-activities';
 const route = `/dashboard/${mockedAppletId}/activities`;
 const routePath = page.appletActivities;
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
-}));
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
 
-const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+// Set default mock implementation before all tests
+mockUseFeatureFlags.mockReturnValue({
+  featureFlags: {
+    enableParticipantMultiInformant: false,
+    enableActivityAssign: false,
+  },
+  resetLDContext: vi.fn(),
+});
 
 describe('Dashboard > Applet > Activities screen', () => {
   beforeEach(() => {
@@ -104,13 +110,13 @@ describe('Dashboard > Applet > Activities screen', () => {
         enableParticipantMultiInformant: false,
         enableActivityAssign: false,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     mixpanelTrack.mockReset();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render empty component', async () => {
@@ -150,7 +156,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
+      expect(authApiClient.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
@@ -227,7 +233,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -273,7 +279,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -319,7 +325,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ...mockUseFeatureFlags().featureFlags,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses({
@@ -564,7 +570,7 @@ describe('Dashboard > Applet > Activities screen', () => {
           featureFlags: {
             enableParticipantMultiInformant: true,
           },
-          resetLDContext: jest.fn(),
+          resetLDContext: vi.fn(),
         });
       });
 

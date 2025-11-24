@@ -6,8 +6,8 @@ import { ChartTooltipContainer } from './ChartTooltipContainer';
 
 const dataTestid = 'example';
 
-const onMouseEnter = jest.fn();
-const onMouseLeave = jest.fn();
+const onMouseEnter = vi.fn();
+const onMouseLeave = vi.fn();
 const props = {
   'data-testid': dataTestid,
   onMouseEnter,

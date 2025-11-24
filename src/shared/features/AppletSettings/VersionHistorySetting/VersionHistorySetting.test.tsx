@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -9,6 +8,7 @@ import { Roles } from 'shared/consts';
 import { mockedAppletId, mockedCurrentWorkspace, mockedApplet } from 'shared/mock';
 import { SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { authApiClient } from 'shared/api/apiConfig';
 
 import { VersionHistorySetting } from './VersionHistorySetting';
 
@@ -99,35 +99,81 @@ const emptyChangesMock = {
 const dataTestid = 'applet-settings-version-history';
 
 describe('VersionHistorySetting', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authApiClient.get).mockImplementation((url) => {
+      if (url.endsWith('/versions')) {
+        return Promise.resolve(versionsMock);
+      }
+      if (url.endsWith('/2.0.0/changes')) {
+        return Promise.resolve(changesMock);
+      }
+
+      return Promise.resolve(emptyChangesMock);
+    });
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
+
   describe('should render and change version', () => {
-    test.each`
-      route                                                                     | routePath                         | description
-      ${`/dashboard/${mockedAppletId}/settings/${SettingParam.VersionHistory}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
-      ${`/builder/${mockedAppletId}/settings/${SettingParam.VersionHistory}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
-    `('$description', async ({ route, routePath }) => {
-      mockAxios.get.mockImplementation((url) => {
-        switch (true) {
-          case url?.endsWith('/versions'):
-            return Promise.resolve(versionsMock);
-          case url?.endsWith('/2.0.0/changes'):
-            return Promise.resolve(changesMock);
-          default:
-            return Promise.resolve(emptyChangesMock);
-        }
-      });
+    test('for dashboard', async () => {
+      const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.VersionHistory}`;
+      const routePath = page.appletSettingsItem;
       renderWithProviders(<VersionHistorySetting />, { preloadedState, route, routePath });
 
       expect(screen.getByTestId('spinner')).toBeVisible();
       await waitFor(() => expect(screen.getByTestId(`${dataTestid}-version`)).toBeVisible());
-      expect(screen.getByText('current (2.0.0)')).toBeVisible();
+      // Open the select to assert the first option label reliably (MUI doesn't always render the display value text in JSDOM)
+      const versionSelectRoot = screen.getByTestId(`${dataTestid}-version`);
+      const selectTrigger = versionSelectRoot.querySelector('[role="button"]');
+      selectTrigger && fireEvent.mouseDown(selectTrigger);
+      expect(await screen.findByTestId(`${dataTestid}-version-0`)).toHaveTextContent(
+        'current (2.0.0)',
+      );
       expect(screen.getByTestId(`${dataTestid}-applet-changes`)).toBeVisible();
       expect(screen.getByTestId(`${dataTestid}-activities-changes`)).toBeVisible();
 
       const input = screen.getByTestId(`${dataTestid}-version`).querySelector('input');
       input && fireEvent.change(input, { target: { value: '1.1.0' } });
 
-      expect(await screen.findByText('version (1.1.0)')).toBeVisible();
-      expect(screen.getByText('No changes.')).toBeVisible();
+      expect(screen.getByRole('option', { name: 'version (1.1.0)' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      expect(await screen.findByText('No changes.')).toBeVisible();
+    });
+
+    test('for builder', async () => {
+      const route = `/builder/${mockedAppletId}/settings/${SettingParam.VersionHistory}`;
+      const routePath = page.builderAppletSettingsItem;
+      renderWithProviders(<VersionHistorySetting key="builder-test" />, {
+        preloadedState,
+        route,
+        routePath,
+      });
+
+      expect(screen.getByTestId('spinner')).toBeVisible();
+      await waitFor(() => expect(screen.getByTestId(`${dataTestid}-version`)).toBeVisible());
+      // Open the select to assert the first option label reliably (MUI doesn't always render the display value text in JSDOM)
+      const versionSelectRoot = screen.getByTestId(`${dataTestid}-version`);
+      const selectTrigger = versionSelectRoot.querySelector('[role="button"]');
+      selectTrigger && fireEvent.mouseDown(selectTrigger);
+      expect(await screen.findByTestId(`${dataTestid}-version-0`)).toHaveTextContent(
+        'current (2.0.0)',
+      );
+      expect(screen.getByTestId(`${dataTestid}-applet-changes`)).toBeVisible();
+      expect(screen.getByTestId(`${dataTestid}-activities-changes`)).toBeVisible();
+
+      const input = screen.getByTestId(`${dataTestid}-version`).querySelector('input');
+      input && fireEvent.change(input, { target: { value: '1.1.0' } });
+
+      expect(screen.getByRole('option', { name: 'version (1.1.0)' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      expect(await screen.findByText('No changes.')).toBeVisible();
     });
   });
 });

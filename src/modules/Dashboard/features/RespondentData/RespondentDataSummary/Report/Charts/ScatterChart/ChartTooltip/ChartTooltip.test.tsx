@@ -35,18 +35,23 @@ const getProps = (props?: Partial<ScatterTooltipRowData>) => ({
       x: date,
     },
   },
-  onMouseEnter: jest.fn(),
-  onMouseLeave: jest.fn(),
+  onMouseEnter: vi.fn(),
+  onMouseLeave: vi.fn(),
   'data-testid': dataTestid,
 });
 
-const mockedNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedNavigate,
-}));
+const mockedNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-const setCurrentActivityCompletionData = jest.fn();
+  return {
+    ...actual,
+    useNavigate: () => mockedNavigate,
+  };
+});
+
+const setCurrentActivityCompletionData = vi.fn();
 
 const getPreloadedState = (hasAssessment = false) => ({
   applet: {

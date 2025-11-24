@@ -1,6 +1,6 @@
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
@@ -10,8 +10,8 @@ import { ParticipantTag } from 'shared/consts';
 import { UpgradeAccountPopup } from './UpgradeAccountPopup';
 
 const dataTestid = 'test-id';
-const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const onCloseMock = vi.fn();
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,
@@ -31,11 +31,11 @@ const testValues = {
 
 describe('UpgradeAccountPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should submit the form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: testValues,
       },

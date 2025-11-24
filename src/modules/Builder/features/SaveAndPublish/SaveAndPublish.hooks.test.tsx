@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { ApiResponseCodes } from 'api';
 import { mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
@@ -70,7 +70,7 @@ const mockedAppletData = {
   ],
 } as SingleApplet;
 
-jest.mock('modules/Builder/hooks', () => ({
+vi.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
     formState: {
@@ -79,16 +79,16 @@ jest.mock('modules/Builder/hooks', () => ({
     },
     getValues: () => mockedAppletData,
   }),
-  useAppletPrivateKeySetter: jest.fn(),
+  useAppletPrivateKeySetter: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const spyMixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 /* Utilities
 =================================================== */
@@ -106,20 +106,19 @@ describe('useSaveAndPublishSetup hook', () => {
       featureFlags: {
         enableCahmiSubscaleScoring: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
     spyMixpanelTrack.mockReset();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    mockAxios.reset();
+    vi.resetAllMocks();
   });
 
   describe('handleSaveAndPublishFirstClick', () => {
     describe('creating a new applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.post.mockResolvedValueOnce({
+        vi.mocked(axios.post).mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
             result: { ...mockedAppletData, id: mockedAppletId },
@@ -168,7 +167,7 @@ describe('useSaveAndPublishSetup hook', () => {
       });
 
       test('should not show a success banner if call to save fails', async () => {
-        mockAxios.post.mockRejectedValueOnce({});
+        vi.mocked(axios.post).mockRejectedValueOnce({});
 
         const { result, rerender, store } = renderHookWithProviders(useSaveAndPublishSetup, {
           preloadedState: getPreloadedState(),
@@ -191,7 +190,7 @@ describe('useSaveAndPublishSetup hook', () => {
 
     describe('updating an existing applet', () => {
       test('should show a success banner if call to save succeeds', async () => {
-        mockAxios.put.mockResolvedValueOnce({
+        vi.mocked(axios.put).mockResolvedValueOnce({
           status: ApiResponseCodes.SuccessfulResponse,
           data: {
             result: { ...mockedAppletData, id: mockedAppletId },

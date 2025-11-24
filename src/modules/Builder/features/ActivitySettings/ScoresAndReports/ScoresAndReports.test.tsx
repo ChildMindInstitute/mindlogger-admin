@@ -20,14 +20,20 @@ import { ScoresAndReports } from './ScoresAndReports';
 const route = `/builder/${mockedAppletId}/activities/${mockedActivityId}/settings/scores-and-reports`;
 const routePath = page.builderAppletActivitySettingsItem;
 const dataTestid = 'builder-activity-settings-scores-and-reports';
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('react-beautiful-dnd', () => ({
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('react-beautiful-dnd', () => ({
   Droppable: ({ children }) =>
     children(
       {
@@ -36,9 +42,9 @@ jest.mock('react-beautiful-dnd', () => ({
           draggableId: {},
           index: {},
           style: {},
-          onDragEnd: jest.fn(),
+          onDragEnd: vi.fn(),
         },
-        innerRef: jest.fn(),
+        innerRef: vi.fn(),
       },
       {},
     ),
@@ -48,7 +54,7 @@ jest.mock('react-beautiful-dnd', () => ({
         draggableProps: {
           style: {},
         },
-        innerRef: jest.fn(),
+        innerRef: vi.fn(),
       },
       {},
     ),
@@ -91,7 +97,7 @@ const preloadedState = {
 
 describe('ScoreAndReports', () => {
   beforeEach(() => {
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => cb());
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => cb());
   });
 
   afterEach(() => {

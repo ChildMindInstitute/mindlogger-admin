@@ -2,6 +2,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useForm } from 'react-hook-form';
+import { vi } from 'vitest';
 
 import { RootState } from 'redux/store';
 import { page } from 'resources';
@@ -59,11 +60,11 @@ const preloadedState: PreloadedState<RootState> = {
 const dataTestid = 'respondents-review-menu';
 
 const selectedDate = new Date('2023-12-15');
-const onMonthChange = jest.fn();
-const onSelectActivity = jest.fn();
-const onSelectFlow = jest.fn();
-const onSelectAnswer = jest.fn();
-const onDateChange = jest.fn();
+const onMonthChange = vi.fn();
+const onSelectActivity = vi.fn();
+const onSelectFlow = vi.fn();
+const onSelectAnswer = vi.fn();
+const onDateChange = vi.fn();
 
 const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
   const { control } = useForm<RespondentsDataFormValues>({
@@ -196,6 +197,11 @@ describe('ReviewMenu', () => {
       `${dataTestid}-review-date-popover`,
     )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
+
+    // Wait for the datepicker calendar to fully render
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
 
     const december11 = datepicker.getElementsByClassName(
       'react-datepicker__day react-datepicker__day--011',

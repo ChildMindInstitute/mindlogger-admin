@@ -1,12 +1,13 @@
 import { render, act, cleanup, waitFor } from '@testing-library/react';
 import { Droppable } from 'react-beautiful-dnd';
+import { vi } from 'vitest';
 
 import { DndDroppable } from '.';
 
 const renderComponent = () => <DndDroppable droppableId="droppableId">{() => <></>}</DndDroppable>;
 
-jest.mock('react-beautiful-dnd', () => ({
-  Droppable: jest.fn().mockImplementation(({ children }) => <>{children}</>),
+vi.mock('react-beautiful-dnd', () => ({
+  Droppable: vi.fn().mockImplementation(({ children }) => <>{children}</>),
 }));
 
 describe('DndDroppable', () => {

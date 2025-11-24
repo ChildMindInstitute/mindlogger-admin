@@ -7,7 +7,7 @@ import { page } from 'resources';
 
 import { LinkedTabs } from './LinkedTabs';
 
-const mockOnClick = jest.fn();
+const mockOnClick = vi.fn();
 const dashboardDataTestid = 'dashboard-tab';
 const mockTabs = [
   {

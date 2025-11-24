@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { PreloadedState } from '@reduxjs/toolkit';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { RootState } from 'redux/store';
 import { AlertType, Workspace } from 'shared/state';
@@ -15,12 +15,17 @@ import { state as popupState } from 'modules/Dashboard/state/Popups/Popups.state
 import { useNoPermissionPopup } from './NoPermissionPopup.hooks';
 import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 const userId = 'a9990d0a-7a95-45ed-86ad-1509a9d62614';
 const workspacesData = {
@@ -129,13 +134,12 @@ const successfulGetAlertsMock = {
 
 describe('useNoPermissionPopup', () => {
   afterEach(() => {
-    jest.clearAllMocks();
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('should return correct values and call dispatch on handleSubmit', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
     const { result, store } = renderHookWithProviders(useNoPermissionPopup, {
@@ -166,7 +170,7 @@ describe('useNoPermissionPopup', () => {
       count: 0,
       notWatched: 0,
     });
-    expect(mockAxios.get).nthCalledWith(1, `/alerts`, {
+    expect(axios.get).nthCalledWith(1, `/alerts`, {
       params: {
         limit: DEFAULT_ROWS_PER_PAGE,
       },
@@ -175,7 +179,7 @@ describe('useNoPermissionPopup', () => {
     expect(store.getState().popups.data).toStrictEqual({
       ...popupState.data,
     });
-    expect(mockAxios.get).nthCalledWith(2, `/workspaces`, {
+    expect(axios.get).nthCalledWith(2, `/workspaces`, {
       signal: expect.any(Object),
     });
     expect(store.getState().workspaces.currentWorkspace.data).toStrictEqual(
@@ -190,11 +194,11 @@ describe('useNoPermissionPopup', () => {
   });
 
   test('should reload window when on dashboard applets page if current user workspace is active', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
-    const reloadSpy = jest.fn();
+    const reloadSpy = vi.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: reloadSpy },
       writable: true,
@@ -249,8 +253,8 @@ describe('useNoPermissionPopup', () => {
     expect(store.getState().forbiddenState.data.redirectedFromBuilder).toBeTruthy();
 
     // set redirectedFromBuilder to false after setting the workspace and navigating to the dashboard
-    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetAlertsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: workspacesData,
     });
 

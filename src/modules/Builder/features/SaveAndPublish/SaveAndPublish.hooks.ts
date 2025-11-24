@@ -43,6 +43,7 @@ import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/type
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { AppletPasswordRefType } from 'modules/Dashboard/features/Applet/Popups';
 import { apiSlice } from 'shared/api/apiSlice';
+import { getDefaultValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import {
   getActivityItems,
@@ -275,8 +276,14 @@ export const useUpdatedAppletNavigate = () => {
         itemId,
       });
       const url = getUpdatedAppletUrl(appletId, newActivityOrFlowId, newItemId, location.pathname);
+
+      // Convert the new applet data to form values
+      const formValues = getDefaultValues(newApplet);
+
       await navigate(url);
-      reset(undefined, { keepDirty: false });
+
+      // Reset with the actual new data instead of undefined
+      reset(formValues, { keepDirty: false });
     }
   };
 };

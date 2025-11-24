@@ -14,14 +14,18 @@ import { Item } from './Item';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 const dataTestid = 'activity-item';
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
 
-jest.mock('./Item.styles', () => ({
-  ...jest.requireActual('./Item.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
-}));
+vi.mock('./Item.styles', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
+      <div data-testid={dataTestid}>{modelValue}</div>
+    ),
+  };
+});
 
 const FormComponent = ({ children }) => {
   const methods = useForm<LibraryForm>({
@@ -66,18 +70,15 @@ const ItemComponent = (
 
 describe('Item', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders checkbox and header', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(
-      library.actions,
-      'setAddToBuilderBtnDisabled',
-    );
+    const setAddToBuilderBtnDisabledMock = vi.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
 
     renderWithProviders(ItemComponent, {
       route: '/library/cart',

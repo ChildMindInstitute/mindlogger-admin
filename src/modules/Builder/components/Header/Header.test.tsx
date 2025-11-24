@@ -6,7 +6,7 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { Header } from './Header';
 
-const mockHandleClick = jest.fn();
+const mockHandleClick = vi.fn();
 const mockTitle = 'Test Title';
 const mockButtons = [
   { label: 'Button 1', icon: <span>Icon 1</span>, handleClick: mockHandleClick },

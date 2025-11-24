@@ -13,11 +13,11 @@ import { EHRBanners, getDismissedKey } from './EHRBanners';
 const activeTestId = 'ehr-banner-active';
 const availableTestId = 'ehr-banner-available';
 
-jest.mock('shared/hooks', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks', () => ({
+  useFeatureFlags: vi.fn(),
 }));
 
-const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
+const mockUseFeatureFlags = useFeatureFlags as vi.Mock;
 
 describe('EHRBanners', () => {
   beforeEach(() => {

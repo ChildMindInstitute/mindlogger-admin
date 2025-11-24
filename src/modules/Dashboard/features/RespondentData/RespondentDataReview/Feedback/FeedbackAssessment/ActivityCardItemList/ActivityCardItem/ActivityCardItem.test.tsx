@@ -51,13 +51,17 @@ const mockActivityItem = {
 
 const dataTestid = 'activity-card-item';
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ 'data-testid': dataTestid, text }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
-}));
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+    CollapsedMdText: ({ 'data-testid': dataTestid, text }) => (
+      <div data-testid={dataTestid}>{text}</div>
+    ),
+  };
+});
 
 const FormComponent = ({
   children,
@@ -105,7 +109,7 @@ describe('ActivityCardItem', () => {
   });
 
   test('calls toNextStep when "Next" button is clicked', async () => {
-    const toNextStepMock = jest.fn();
+    const toNextStepMock = vi.fn();
     render(
       <FormComponent assessment={[mockActivityItem]}>
         <ActivityCardItem
@@ -130,7 +134,7 @@ describe('ActivityCardItem', () => {
   });
 
   test('calls toPrevStep when "Back" button is clicked', async () => {
-    const toPrevStepMock = jest.fn();
+    const toPrevStepMock = vi.fn();
     render(
       <FormComponent assessment={[mockActivityItem]}>
         <ActivityCardItem

@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { mockedAlert, mockedFullSubjectId1 } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -9,17 +10,23 @@ import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
 import { Notification } from './Notification';
 
-const mockedUseNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+const mockedUseNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('Notification', () => {
-  const mockedSetCurrentId = jest.fn();
+  const mockedSetCurrentId = vi.fn();
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should render component', () => {
@@ -76,10 +83,10 @@ describe('Notification', () => {
     expect(mockedSetCurrentId).toBeCalledWith('');
   });
   test('should navigate when click on response data button without existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('');
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification
@@ -98,15 +105,15 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
+      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 
   test('should navigate when click on response data button with existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = jest.fn().mockReturnValue('123');
-    jest
-      .spyOn(useEncryptionStorageFunc, 'useEncryptionStorage')
-      .mockReturnValue({ getAppletPrivateKey: mockedgGetAppletPrivateKey });
+    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('123');
+    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
+      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    });
 
     renderWithProviders(
       <Notification
@@ -125,7 +132,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
+      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
     );
   });
 });

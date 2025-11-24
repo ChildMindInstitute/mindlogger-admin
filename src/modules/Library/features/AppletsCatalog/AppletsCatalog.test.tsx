@@ -11,7 +11,7 @@ import { JEST_TEST_TIMEOUT } from 'shared/consts';
 import { AppletsCatalog } from './AppletsCatalog';
 
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 const mockPublishedApplets = {
   count: 16,
@@ -86,39 +86,52 @@ const mockPublishedApplets = {
   ],
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
-jest.mock('modules/Library/hooks', () => ({
-  ...jest.requireActual('modules/Library/hooks'),
-  useAppletsFromCart: jest.fn(),
-  useReturnToLibraryPath: jest.fn(),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppletsFromCart: vi.fn(),
+    useReturnToLibraryPath: vi.fn(),
+  };
+});
 
 describe('AppletsCatalog', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-    jest.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
   });
 
   test(
     'renders loading spinner when applets are loading',
     () => {
-      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-      jest.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
-      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
-      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
+      const spyGetPublishedApplets = vi.spyOn(library.thunk, 'getPublishedApplets');
+      vi.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
+      vi.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
+      vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
 
       renderWithProviders(<AppletsCatalog />);
 
@@ -131,10 +144,10 @@ describe('AppletsCatalog', () => {
   test(
     'renders applets and pagination correctly when applets are loaded',
     async () => {
-      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-      jest.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
-      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
-      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
+      const spyGetPublishedApplets = vi.spyOn(library.thunk, 'getPublishedApplets');
+      vi.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
+      vi.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
+      vi.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
       renderWithProviders(<AppletsCatalog />);
 

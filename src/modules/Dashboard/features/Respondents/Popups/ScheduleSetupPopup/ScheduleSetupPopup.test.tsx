@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -12,8 +12,8 @@ import {
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 
-const setPopupVisibleMock = jest.fn();
-const setChosenAppletDataMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
+const setChosenAppletDataMock = vi.fn();
 const chosenAppletDataMock = {
   ...mockedFullParticipant1.details[0],
   respondentId: mockedFullParticipantId1,
@@ -42,16 +42,21 @@ const tableRowsMock = [
   },
 ];
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('ScheduleSetupPopup', () => {
   test('should render create individual schedule popup', async () => {
-    mockAxios.post.mockResolvedValueOnce(null);
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(
       <ScheduleSetupPopup
         popupVisible={true}
@@ -70,7 +75,7 @@ describe('ScheduleSetupPopup', () => {
 
     fireEvent.click(screen.getByText('Yes'));
 
-    expect(mockAxios.post).toHaveBeenNthCalledWith(
+    expect(axios.post).toHaveBeenNthCalledWith(
       1,
       `/applets/${mockedAppletId}/events/individual/${mockedFullParticipantId1}`,
       {},

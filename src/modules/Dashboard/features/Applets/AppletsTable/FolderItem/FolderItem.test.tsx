@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } from 'shared/mock';
@@ -44,34 +45,38 @@ const getMockFolderItem = (isEmpty = true, isNew = false) => ({
   foldersAppletCount: isEmpty ? 0 : 3,
 });
 
-const mockReloadData = jest.fn();
-const mockHandleFolderClick = jest.fn();
-
-const mockContext = {
-  rows: [mockedApplet],
-  setRows: jest.fn(),
-  expandedFolders: [],
-  reloadData: mockReloadData,
-  handleFolderClick: mockHandleFolderClick,
-  fetchData: jest.fn(),
-};
+let mockReloadData: ReturnType<typeof vi.fn>;
+let mockHandleFolderClick: ReturnType<typeof vi.fn>;
+let mockSetRows: ReturnType<typeof vi.fn>;
+let mockFetchData: ReturnType<typeof vi.fn>;
 
 const commonUseDndProps = {
-  onDragLeave: jest.fn(),
-  onDragOver: jest.fn(),
-  onDrop: jest.fn(),
-  onDragEnd: jest.fn(),
+  onDragLeave: vi.fn(),
+  onDragOver: vi.fn(),
+  onDrop: vi.fn(),
+  onDragEnd: vi.fn(),
 };
 
-const getFolderItemComponent = (isEmpty = true, isNew = false) => (
-  <AppletsContext.Provider value={mockContext}>
-    <table>
-      <tbody>
-        <FolderItem item={getMockFolderItem(isEmpty, isNew)} />
-      </tbody>
-    </table>
-  </AppletsContext.Provider>
-);
+const getFolderItemComponent = (isEmpty = true, isNew = false) => {
+  const mockContext = {
+    rows: [mockedApplet],
+    setRows: mockSetRows,
+    expandedFolders: [],
+    reloadData: mockReloadData,
+    handleFolderClick: mockHandleFolderClick,
+    fetchData: mockFetchData,
+  };
+
+  return (
+    <AppletsContext.Provider value={mockContext}>
+      <table>
+        <tbody>
+          <FolderItem item={getMockFolderItem(isEmpty, isNew)} />
+        </tbody>
+      </table>
+    </AppletsContext.Provider>
+  );
+};
 
 const clickActionDots = async () => {
   const actionsDots = await waitFor(() =>
@@ -81,6 +86,14 @@ const clickActionDots = async () => {
 };
 
 describe('FolderItem component tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockReloadData = vi.fn();
+    mockHandleFolderClick = vi.fn();
+    mockSetRows = vi.fn();
+    mockFetchData = vi.fn();
+  });
+
   test('should render folder row', () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
@@ -105,14 +118,14 @@ describe('FolderItem component tests', () => {
   });
 
   test('should delete empty folder', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
     await clickActionDots();
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
-      expect(mockAxios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
+      expect(axios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
         signal: undefined,
       });
       expect(mockReloadData).toBeCalled();
@@ -120,14 +133,14 @@ describe('FolderItem component tests', () => {
   });
 
   test('should delete new empty folder', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(true, true), { preloadedState });
 
     await clickActionDots();
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
-      expect(mockAxios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
+      expect(axios.delete).nthCalledWith(1, `/workspaces/${mockedOwnerId}/folders/testId`, {
         signal: undefined,
       });
       expect(mockReloadData).toBeCalled();
@@ -154,7 +167,7 @@ describe('FolderItem component tests', () => {
   });
 
   test('should rename folder', async () => {
-    mockAxios.put.mockResolvedValueOnce(null);
+    vi.mocked(axios.put).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
     await clickActionDots();
@@ -170,7 +183,7 @@ describe('FolderItem component tests', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 13, charCode: 13 });
 
     await waitFor(() => {
-      expect(mockAxios.put).nthCalledWith(
+      expect(axios.put).nthCalledWith(
         1,
         `/workspaces/${mockedOwnerId}/folders/testId`,
         { name: newFolderName },
@@ -201,12 +214,13 @@ describe('FolderItem component tests', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13, charCode: 13 });
 
     await waitFor(() => {
-      expect(mockAxios.post).toBeCalled();
+      expect(axios.post).toBeCalled();
       expect(mockReloadData).toBeCalled();
     });
   });
 
-  test('should add applet to folder', () => {
+  test('should add applet to folder', async () => {
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(false), { preloadedState });
     fireEvent.drop(screen.getByRole('row'), {
       dataTransfer: {
@@ -214,16 +228,18 @@ describe('FolderItem component tests', () => {
       },
     });
 
-    expect(mockAxios.post).nthCalledWith(
-      1,
-      '/applets/set_folder',
-      { appletId: mockedAppletId, folderId: 'testId' },
-      { signal: undefined },
-    );
+    await waitFor(() => {
+      expect(axios.post).nthCalledWith(
+        1,
+        '/applets/set_folder',
+        { appletId: mockedAppletId, folderId: 'testId' },
+        { signal: undefined },
+      );
+    });
   });
 
   test('should have correct classnames for hover and for isDragOver', async () => {
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });
@@ -236,7 +252,7 @@ describe('FolderItem component tests', () => {
     expect(tableRow).toHaveClass('MuiTableRow-has-hover');
     expect(tableRow).not.toHaveClass('MuiTableRow-dragged-over');
 
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: true,
       ...commonUseDndProps,
     });
@@ -247,7 +263,7 @@ describe('FolderItem component tests', () => {
   });
 
   test('should not have classname for hover if folder is empty', async () => {
-    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+    vi.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
     });

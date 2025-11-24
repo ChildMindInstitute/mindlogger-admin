@@ -47,14 +47,14 @@ export const getScreens = ({
     leftBtnText: 'back',
     leftBtnVariant: 'text' as ButtonProps['variant'],
     content: (
-      <Trans i18nKey="arbitraryWarning.contentSecond">
+      <Trans i18nKey="arbitraryWarning.contentSecond" values={{ appletName }}>
         <strong>
           Again, proceeding with the ownership transfer will cause this applet to lose its arbitrary
           server configurations, and all data it subsequently collects will be stored on Curious
           servers from this point forward.
         </strong>
         To proceed with the ownership transfer for your applet
-        <strong>{{ appletName }}</strong>
+        <strong>appletName</strong>
         and break its arbitrary server connections, please re-enter the password of your applet
         below.
       </Trans>

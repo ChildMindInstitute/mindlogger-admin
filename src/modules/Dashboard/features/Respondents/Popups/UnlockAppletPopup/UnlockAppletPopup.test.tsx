@@ -5,9 +5,9 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as hooks from '../Popups.hooks';
 import { UnlockAppletPopup } from './UnlockAppletPopup';
 
-const setPopupVisibleMock = jest.fn();
+const setPopupVisibleMock = vi.fn();
 
-const useCheckIfHasEncryptionMock = jest.spyOn(hooks, 'useCheckIfHasEncryption');
+const useCheckIfHasEncryptionMock = vi.spyOn(hooks, 'useCheckIfHasEncryption');
 
 describe('UnlockAppletPopup', () => {
   test('should render enter password popup', async () => {

@@ -20,20 +20,28 @@ const mockMedia = {
   name: 'media-name',
   uploaded: true,
 };
-const mockSetMedia = jest.fn();
-const mockSetValue = jest.fn();
-const mockWatch = jest.fn();
-const mockGetFieldState = jest.fn();
+const mockSetMedia = vi.fn();
+const mockSetValue = vi.fn();
+const mockWatch = vi.fn();
+const mockGetFieldState = vi.fn();
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
-}));
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Builder/components/MLPlayer', () => ({
-  ...jest.requireActual('modules/Builder/components/MLPlayer'),
-  MLPlayer: () => <div data-testid="ml-player"></div>,
-}));
+  return {
+    ...actual,
+    useCustomFormContext: vi.fn(),
+  };
+});
+
+vi.mock('modules/Builder/components/MLPlayers', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    MLPlayer: () => <div data-testid="ml-player"></div>,
+  };
+});
 
 describe('AudioPlayerContent component', () => {
   test('render AudioPlayerContent component when url is non-nullable', () => {
@@ -54,7 +62,7 @@ describe('AudioPlayerContent component', () => {
     const description = screen.getByTestId(`${audioPlayerDataTestid}-description`);
     expect(description).toBeInTheDocument();
     expect(description).toHaveTextContent('The respondent will listen to an audio stimulus.');
-    expect(screen.getByTestId('ml-player')).toBeInTheDocument();
+    expect(screen.getByTestId(`${audioPlayerDataTestid}-player`)).toBeInTheDocument();
   });
 
   test('render AudioPlayerContent component when url is nullable, test upload', async () => {

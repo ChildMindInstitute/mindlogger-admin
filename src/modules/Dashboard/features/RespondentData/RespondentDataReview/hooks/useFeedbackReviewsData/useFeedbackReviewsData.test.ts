@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
@@ -8,15 +9,19 @@ import { useFeedbackReviewsData } from './useFeedbackReviewsData';
 import { GetFeedbackReviewsProps } from '../FeedbackReviews.types';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  useDecryptedActivityData: jest.fn(),
+vi.mock('modules/Dashboard/hooks', () => ({
+  useDecryptedActivityData: vi.fn(),
 }));
 
 describe('useFeedbackReviewsData', () => {
-  const mockGetDecryptedActivityData = jest.fn();
+  const mockGetDecryptedActivityData = vi.fn();
 
   beforeEach(() => {
-    (useDecryptedActivityData as jest.Mock).mockReturnValue(mockGetDecryptedActivityData);
+    (useDecryptedActivityData as vi.Mock).mockReturnValue(mockGetDecryptedActivityData);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('should fetch and decrypt review data correctly', async () => {

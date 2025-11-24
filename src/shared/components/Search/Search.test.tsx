@@ -4,7 +4,7 @@ import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachT
 
 import { Search } from './Search';
 
-const onSearchMock = jest.fn();
+const onSearchMock = vi.fn();
 const placeholder = 'Search';
 
 describe('Search component tests', () => {

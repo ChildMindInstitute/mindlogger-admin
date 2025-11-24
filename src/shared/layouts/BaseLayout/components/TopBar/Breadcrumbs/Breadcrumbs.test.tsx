@@ -8,14 +8,18 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as useBreadcrumbsHooks from './Breadcrumbs.hooks';
 import { Breadcrumbs } from './Breadcrumbs';
 
-jest.mock('./Breadcrumbs.hooks', () => ({
-  ...jest.requireActual('./Breadcrumbs.hooks'),
-  useBreadcrumbs: jest.fn(),
-}));
+vi.mock('./Breadcrumbs.hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useBreadcrumbs: vi.fn(),
+  };
+});
 
 describe('Breadcrumbs Component', () => {
   test('should render breadcrumbs without links when no data is provided', () => {
-    jest.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => []);
+    vi.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => []);
 
     renderWithProviders(<Breadcrumbs />);
 
@@ -41,7 +45,7 @@ describe('Breadcrumbs Component', () => {
         navPath: '/dashboard/applets',
       },
     ];
-    jest.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => breadcrumbs);
+    vi.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => breadcrumbs);
 
     renderWithProviders(<Breadcrumbs />);
 
@@ -81,7 +85,7 @@ describe('Breadcrumbs Component', () => {
         navPath: '/dashboard/138304f4-79b5-4c99-81f5-abf21f9d8fa2/respondents',
       },
     ];
-    jest.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => breadcrumbs);
+    vi.spyOn(useBreadcrumbsHooks, 'useBreadcrumbs').mockImplementationOnce(() => breadcrumbs);
 
     renderWithProviders(<Breadcrumbs />);
 

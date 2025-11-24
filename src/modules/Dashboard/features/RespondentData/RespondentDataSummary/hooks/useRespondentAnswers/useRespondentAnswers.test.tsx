@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
+import { vi } from 'vitest';
 
 import { mockedActivityId, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
@@ -10,33 +11,49 @@ import { MAX_LIMIT } from 'shared/consts';
 
 import { useRespondentAnswers } from './useRespondentAnswers';
 
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+const mockedUseParams = vi.fn();
 
-const mockedGetValues = jest.fn();
-const mockedSetValue = jest.fn();
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    getValues: mockedGetValues,
-    setValue: mockedSetValue,
-  }),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
-}));
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
 
-const mockedSetFlowSubmissions = jest.fn();
-const mockedSetFlowResponses = jest.fn();
-const mockedSetFlowResponseOptionsCount = jest.fn();
-const mockedSetAnswers = jest.fn();
-const mockedSetResponseOptions = jest.fn();
-const mockedSetSubscalesFrequency = jest.fn();
+const mockedGetValues = vi.fn();
+const mockedSetValue = vi.fn();
+
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useWatch: vi.fn(),
+    useFormContext: () => ({
+      getValues: mockedGetValues,
+      setValue: mockedSetValue,
+    }),
+  };
+});
+
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
+
+const mockedSetFlowSubmissions = vi.fn();
+const mockedSetFlowResponses = vi.fn();
+const mockedSetFlowResponseOptionsCount = vi.fn();
+const mockedSetAnswers = vi.fn();
+const mockedSetResponseOptions = vi.fn();
+const mockedSetSubscalesFrequency = vi.fn();
 const identifiers = [
   {
     decryptedValue: 'ident_1',
@@ -94,7 +111,7 @@ const testIdentifierDatesChange = async () => {
   expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'endDate', endDate);
 
   await waitFor(() => {
-    expect(mockAxios.get).toHaveBeenNthCalledWith(
+    expect(axios.get).toHaveBeenNthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
       {
@@ -269,17 +286,17 @@ describe('useRespondentAnswers', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch answers and update form values on successful API call (no identifier is chosen)', async () => {
-    const mockedGetDecryptedActivityData = jest.fn();
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(mockedGetDecryptedActivityData);
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: [{ version: 'v1' }, { version: 'v2' }] },
     });
 
@@ -288,7 +305,7 @@ describe('useRespondentAnswers', () => {
 
     expect(mockedGetValues).toHaveBeenCalled();
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
         {
@@ -315,13 +332,13 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should fetch answers and update form values on successful API call for Activity Flow', async () => {
-    const mockedGetDecryptedActivityData = jest.fn();
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(mockedGetDecryptedActivityData);
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
     mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { result: encryptedFlowSubmissions },
     });
 
@@ -330,7 +347,7 @@ describe('useRespondentAnswers', () => {
 
     expect(mockedGetValues).toHaveBeenCalled();
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/flows/${mockedFlowId}/submissions`,
         {
@@ -389,7 +406,16 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided with function params)', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
+
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParamsWithIdentifier);
 
@@ -397,10 +423,19 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided as form value)', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue({
       ...mockedGetValuesReturn,
       identifier: mockedIdentifier,
     });
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
+
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, identifier: undefined });
 
@@ -408,7 +443,15 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to activity last answer date, if filterByIdentifier was changed to false', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
+    vi.mocked(axios.get).mockResolvedValue({
+      data: { result: [{ version: 'v1' }] },
+    });
 
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, filterByIdentifier: false });
@@ -420,7 +463,7 @@ describe('useRespondentAnswers', () => {
     expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'endDate', endDate);
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/activities/${mockedActivityId}/answers`,
         {
@@ -446,18 +489,23 @@ describe('useRespondentAnswers', () => {
     await fetchAnswers(mockedFetchParams);
 
     expect(mockedGetValues).not.toHaveBeenCalled();
-    expect(mockAxios.get).not.toHaveBeenCalled();
+    expect(axios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
   });
 
   test('should handle errors gracefully', async () => {
+    const mockedGetDecryptedActivityData = vi.fn();
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      mockedGetDecryptedActivityData,
+    );
+    mockedGetDecryptedActivityData.mockReturnValue({ decryptedAnswers: [] });
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
-    mockAxios.get.mockRejectedValue(new Error('API Error'));
+    vi.mocked(axios.get).mockRejectedValue(new Error('API Error'));
 
     const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParams);
 
-    expect(mockAxios.get).toHaveBeenCalled();
+    expect(axios.get).toHaveBeenCalled();
     expect(console.warn).toHaveBeenCalled();
   });
 });

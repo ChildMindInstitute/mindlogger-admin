@@ -6,7 +6,7 @@ import { ApiLanguages } from 'api';
 import { UpgradeAccountForm } from './UpgradeAccountForm';
 import { UpgradeAccountFormValues } from '../UpgradeAccountPopup.types';
 
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 const dataTestid = 'test-id';
 
 const UpgradeAccountFormTest = () => {
@@ -24,7 +24,7 @@ const labelNames = ['Email Address', 'Invitation Language'];
 
 describe('AddParticipantForm component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('The form has all fields', () => {

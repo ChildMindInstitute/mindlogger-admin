@@ -1,14 +1,19 @@
 import { renderHook, act } from '@testing-library/react';
 import { Action } from 'history';
+import { vi } from 'vitest';
 
 import history from 'routes/history';
 
 import { useBlocker } from './useBlocker';
 
-const mockBlocker = jest.fn();
-const spyHistoryBlock = jest.spyOn(history, 'block');
+const mockBlocker = vi.fn();
+const spyHistoryBlock = vi.spyOn(history, 'block');
 
 describe('useBlocker', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should call history.block when "when" is true', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     expect(spyHistoryBlock).toHaveBeenCalled();
@@ -23,7 +28,7 @@ describe('useBlocker', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     const blockingFunction = spyHistoryBlock.mock.calls[0][0];
     const mockTransition = {
-      retry: jest.fn(),
+      retry: vi.fn(),
       action: Action.Pop,
       location: {
         state: 'some-state',

@@ -1,14 +1,15 @@
-import { act, renderHook } from '@testing-library/react';
-import * as dateFns from 'date-fns';
 import { ReactNode } from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import * as dateFns from 'date-fns';
+import { vi } from 'vitest';
 
-import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
-import { calendarEvents, Event } from 'modules/Dashboard/state';
-import { setupStore } from 'redux/store';
-import * as reduxHooks from 'redux/store/hooks';
-import { mockedAppletData as mockedApplet } from 'shared/mock';
 import { initialStateData, SingleApplet } from 'shared/state';
+import { setupStore } from 'redux/store';
+import { Event, calendarEvents } from 'modules/Dashboard/state';
+import { mockedAppletData as mockedApplet } from 'shared/mock';
+import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import * as reduxHooks from 'redux/store/hooks';
 
 import { usePreparedEvents } from './Schedule.hooks';
 
@@ -517,10 +518,14 @@ const expectedResult = {
   ],
 };
 
-jest.mock('date-fns', () => ({
-  ...jest.requireActual('date-fns'),
-  getYear: jest.fn(),
-}));
+vi.mock('date-fns', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    getYear: vi.fn(),
+  };
+});
 
 const getWrapper =
   (events?: Event[]) =>
@@ -530,15 +535,17 @@ const getWrapper =
     return <Provider store={store}>{children}</Provider>;
   };
 
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn((action: unknown) => Promise.resolve(action)) as ReturnType<
+  typeof reduxHooks.useAppDispatch
+>;
 
 describe('usePreparedEvents hook', () => {
-  jest.mock('redux/store/hooks', () => ({
-    useAppDispatch: jest.fn(),
-  }));
+  beforeEach(() => {
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+  });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should return default result if no appletData is given', () => {
@@ -557,9 +564,8 @@ describe('usePreparedEvents hook', () => {
 
   test('should dispatch create calendar events and set create events data for same year', async () => {
     const mockedYear = 2025;
-    jest.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
-    (dateFns.getYear as jest.Mock).mockReturnValue(mockedYear);
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
+    (dateFns.getYear as ReturnType<typeof vi.fn>).mockReturnValue(mockedYear);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {
@@ -584,9 +590,8 @@ describe('usePreparedEvents hook', () => {
   test('should dispatch set create events data and create next year events for different year', async () => {
     const mockedYear = 2024;
     const mockedNextYear = 2025;
-    jest.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
-    (dateFns.getYear as jest.Mock).mockReturnValue(mockedNextYear);
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(calendarEvents, 'useCalendarCurrentYearData').mockReturnValue(mockedYear);
+    (dateFns.getYear as ReturnType<typeof vi.fn>).mockReturnValue(mockedNextYear);
 
     await act(async () => {
       renderHook(() => usePreparedEvents(mockedAppletData), {

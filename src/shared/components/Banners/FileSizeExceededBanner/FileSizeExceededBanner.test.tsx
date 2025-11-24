@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { FileSizeExceededBanner } from './FileSizeExceededBanner';
 
 const props = {
-  onClose: jest.fn(),
+  onClose: vi.fn(),
   size: 100,
 };
 

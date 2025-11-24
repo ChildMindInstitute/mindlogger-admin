@@ -99,19 +99,28 @@ const getPreloadedState = ({ isAuthorized }) => ({
 });
 
 const dataTestid = 'library-applet';
-const mockedUseNavigate = jest.fn();
-const mockDispatch = jest.fn();
-const mockSetSearch = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockDispatch = vi.fn();
+const mockSetSearch = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
+
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
 
 const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
   renderWithProviders(
@@ -130,10 +139,10 @@ const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
 
 describe('Applet', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   afterAll(() => {
     sessionStorage.clear();
@@ -191,7 +200,7 @@ describe('Applet', () => {
   });
 
   test('renders applet information for uiType = List, isAuthorized = true; test select activity and add to cart', async () => {
-    const addAppletToCartMock = jest.spyOn(library.thunk, 'postAppletsToCart');
+    const addAppletToCartMock = vi.spyOn(library.thunk, 'postAppletsToCart');
 
     renderComponent({
       uiType: AppletUiType.List,
@@ -232,7 +241,7 @@ describe('Applet', () => {
   });
 
   test('renders applet information for uiType = List, isAuthorized = false; test select activity and add to cart', async () => {
-    const addAppletToCartMock = jest.spyOn(library.actions, 'setAppletsFromStorage');
+    const addAppletToCartMock = vi.spyOn(library.actions, 'setAppletsFromStorage');
 
     renderComponent({
       uiType: AppletUiType.List,
@@ -273,7 +282,7 @@ describe('Applet', () => {
   });
 
   test('renders applet information for uiType = Details, isAuthorized = true; test select activity and add to cart', async () => {
-    const addAppletToCartMock = jest.spyOn(library.thunk, 'postAppletsToCart');
+    const addAppletToCartMock = vi.spyOn(library.thunk, 'postAppletsToCart');
 
     renderComponent({
       uiType: AppletUiType.Details,

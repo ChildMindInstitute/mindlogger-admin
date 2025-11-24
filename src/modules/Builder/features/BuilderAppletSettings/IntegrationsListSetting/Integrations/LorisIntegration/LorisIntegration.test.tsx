@@ -5,9 +5,9 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { createStore } from '@reduxjs/toolkit';
 
 import { mockedApplet } from 'shared/mock';
-import { createStore } from 'redux';
 import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
 
 import { LorisIntegration } from './LorisIntegration';
@@ -50,19 +50,26 @@ const preloadedStateWithIntegration = {
   },
 };
 
-jest.mock('react-router-dom', () => ({
-  useNavigate: jest.fn(),
-  useParams: jest.fn(),
-  generatePath: jest.fn(),
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+    useParams: vi.fn(),
+    generatePath: vi.fn(),
+  };
+});
+
+vi.mock('shared/hooks/useIsServerConfigured', () => ({
+  useIsServerConfigured: vi.fn(),
 }));
 
-jest.mock('shared/hooks/useIsServerConfigured', () => ({
-  useIsServerConfigured: jest.fn(),
-}));
-
-jest.mock('redux/modules', () => ({
+vi.mock('redux/modules', () => ({
   applet: {
-    useAppletData: jest.fn(),
+    useAppletData: vi.fn(),
   },
 }));
 
@@ -74,7 +81,7 @@ const renderWithStore = (preloadedState) =>
   );
 
 describe('LorisIntegration', () => {
-  const navigate = jest.fn();
+  const navigate = vi.fn();
 
   beforeEach(() => {
     useNavigate.mockReturnValue(navigate);

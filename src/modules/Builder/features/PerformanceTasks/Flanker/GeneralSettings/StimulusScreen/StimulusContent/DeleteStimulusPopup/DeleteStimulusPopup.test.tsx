@@ -1,13 +1,13 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
 
-const onModalCloseMock = jest.fn();
-const onModalSubmitMock = jest.fn();
+const onModalCloseMock = vi.fn();
+const onModalSubmitMock = vi.fn();
 const dataTestid = 'builder-activity-flanker-stimulus-screen-delete-popup';
 
 const commonProps = {
@@ -19,7 +19,7 @@ const commonProps = {
 
 describe('DeleteStimulusPopup component tests', () => {
   afterEach(() => {
-    mockAxios.reset();
+    vi.clearAllMocks();
   });
 
   test('DeleteStimulusPopup', async () => {

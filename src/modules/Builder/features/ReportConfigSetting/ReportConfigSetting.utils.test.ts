@@ -8,7 +8,7 @@ import {
   setSubjectData,
 } from './ReportConfigSetting.utils';
 
-const setValue = jest.fn();
+const setValue = vi.fn();
 const getParams = (newParams = {}) => ({
   setValue,
   appletName: 'Test Applet',
@@ -69,7 +69,7 @@ describe('verifyReportServer', () => {
   const originalFetch = global.fetch;
 
   beforeAll(() => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   afterAll(() => {
@@ -77,7 +77,7 @@ describe('verifyReportServer', () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should call fetch with correct parameters', async () => {
@@ -87,16 +87,19 @@ describe('verifyReportServer', () => {
 
     await verifyReportServer({ url, publicKey, token });
 
-    expect(fetch).toHaveBeenCalledWith('http://example.com/verify', {
-      method: 'PUT',
-      headers: {
-        map: {
-          'content-type': 'application/json',
-          token: 'testToken',
-        },
-      },
-      body: JSON.stringify({ publicKey }),
-    });
+    expect(fetch).toHaveBeenCalledWith(
+      'http://example.com/verify',
+      expect.objectContaining({
+        method: 'PUT',
+        body: JSON.stringify({ publicKey }),
+      }),
+    );
+
+    // Check headers separately since Headers object doesn't match plain object
+    const fetchCall = vi.mocked(fetch).mock.calls[0];
+    const headers = fetchCall[1]?.headers as Headers;
+    expect(headers.get('token')).toBe('testToken');
+    expect(headers.get('content-type')).toBe('application/json');
   });
 });
 
@@ -104,7 +107,7 @@ describe('setPasswordReportServer', () => {
   const originalFetch = global.fetch;
 
   beforeAll(() => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   afterAll(() => {
@@ -112,7 +115,7 @@ describe('setPasswordReportServer', () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should call fetch with correct parameters', async () => {
@@ -124,16 +127,19 @@ describe('setPasswordReportServer', () => {
 
     await setPasswordReportServer({ url, appletId, ownerId, password, token });
 
-    expect(fetch).toHaveBeenCalledWith('http://example.com/set-password', {
-      method: 'POST',
-      headers: {
-        map: {
-          'content-type': 'application/json',
-          token: 'testToken',
-        },
-      },
-      body: JSON.stringify({ appletId, workspaceId: ownerId, password }),
-    });
+    expect(fetch).toHaveBeenCalledWith(
+      'http://example.com/set-password',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ appletId, workspaceId: ownerId, password }),
+      }),
+    );
+
+    // Check headers separately since Headers object doesn't match plain object
+    const fetchCall = vi.mocked(fetch).mock.calls[0];
+    const headers = fetchCall[1]?.headers as Headers;
+    expect(headers.get('token')).toBe('testToken');
+    expect(headers.get('content-type')).toBe('application/json');
   });
 });
 

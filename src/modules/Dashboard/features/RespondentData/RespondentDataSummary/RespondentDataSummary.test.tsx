@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
+import axios from 'axios';
 import * as reactHookForm from 'react-hook-form';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 
@@ -16,7 +17,7 @@ import { RespondentDataContextType } from '../RespondentDataContext/RespondentDa
 
 const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/dataviz/summary`;
 const routePath = page.appletParticipantDataSummary;
-const mockedSetValue = jest.fn();
+const mockedSetValue = vi.fn();
 
 const mockedSelectedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
@@ -52,34 +53,52 @@ const mockedSummaryFlows = [
     lastAnswerDate: null,
   },
 ];
-const mockedSetSelectedEntity = jest.fn();
+const mockedSetSelectedEntity = vi.fn();
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedIdentifiers: () => () => [
-    {
-      encryptedValue: 'jane doe',
-      decryptedValue: 'decryptedValue1',
-    },
-    {
-      encryptedValue: 'sam carter',
-      decryptedValue: 'decryptedValue2',
-    },
-  ],
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ subjectId: mockedFullSubjectId1, appletId: mockedAppletId }),
-}));
+  return {
+    ...actual,
+    useDecryptedIdentifiers: () => () => [
+      {
+        encryptedValue: 'jane doe',
+        decryptedValue: 'decryptedValue1',
+      },
+      {
+        encryptedValue: 'sam carter',
+        decryptedValue: 'decryptedValue2',
+      },
+    ],
+  };
+});
 
-jest.mock('./ReportMenu', () => ({
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: () => ({ subjectId: mockedFullSubjectId1, appletId: mockedAppletId }),
+  };
+});
+
+vi.mock('./ReportMenu', () => ({
   ReportMenu: () => <div data-testid="report-menu"></div>,
 }));
 
-jest.mock('./Report', () => ({
+vi.mock('./Report', () => ({
   Report: () => <div data-testid="respondents-summary-report"></div>,
 }));
+
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useFormContext: vi.fn(),
+  };
+});
 
 const testEmptyState = (text: string) => {
   expect(screen.getByTestId('report-menu')).toBeInTheDocument();
@@ -122,10 +141,10 @@ const renderComponent = (context: Partial<RespondentDataContextType>) =>
 
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
+    vi.mocked(reactHookForm.useFormContext).mockReturnValue({ setValue: mockedSetValue });
   });
 
   test('renders correctly with selected activity and summary activities', async () => {
@@ -154,15 +173,15 @@ describe('RespondentDataSummary component', () => {
   );
 
   test('should fetch activities and flows', async () => {
-    const mockedSetSummaryActivities = jest.fn();
-    const mockedSetSummaryFlows = jest.fn();
+    const mockedSetSummaryActivities = vi.fn();
+    const mockedSetSummaryFlows = vi.fn();
 
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockedSummaryFlows,
       },
     });
-    mockAxios.get.mockResolvedValueOnce({
+    vi.mocked(axios.get).mockResolvedValueOnce({
       data: {
         result: mockedSummaryActivities,
       },
@@ -178,7 +197,7 @@ describe('RespondentDataSummary component', () => {
     });
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/summary/flows`,
         {
@@ -189,7 +208,7 @@ describe('RespondentDataSummary component', () => {
           signal: undefined,
         },
       );
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
+      expect(axios.get).toHaveBeenNthCalledWith(
         2,
         `/answers/applet/${mockedAppletId}/summary/activities`,
         {
@@ -208,14 +227,14 @@ describe('RespondentDataSummary component', () => {
   });
 
   test('should choose the activity or flow with latest answers and fetch answers for it', async () => {
-    const mockGetIdentifiersVersions = jest.fn();
-    const mockFetchAnswers = jest.fn();
-    jest
-      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
-      .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
-    jest
-      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
-      .mockReturnValue({ fetchAnswers: mockFetchAnswers });
+    const mockGetIdentifiersVersions = vi.fn();
+    const mockFetchAnswers = vi.fn();
+    vi.spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests').mockReturnValue({
+      getIdentifiersVersions: mockGetIdentifiersVersions,
+    });
+    vi.spyOn(useRespondentAnswersHook, 'useRespondentAnswers').mockReturnValue({
+      fetchAnswers: mockFetchAnswers,
+    });
 
     renderComponent({
       selectedEntity: null,

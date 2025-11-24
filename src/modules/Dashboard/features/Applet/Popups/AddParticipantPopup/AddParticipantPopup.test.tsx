@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
@@ -11,8 +11,8 @@ import { ParticipantTag } from 'shared/consts';
 import { AddParticipantPopup } from './AddParticipantPopup';
 
 const dataTestId = 'test-id';
-const onCloseMock = jest.fn();
-const mixpanelTrack = jest.spyOn(Mixpanel, 'track');
+const onCloseMock = vi.fn();
+const mixpanelTrack = vi.spyOn(Mixpanel, 'track');
 
 const props = {
   onClose: onCloseMock,
@@ -37,7 +37,7 @@ const testValues = {
 
 describe('AddParticipantPopup component', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('popup has buttons according to the account type', async () => {
@@ -61,7 +61,7 @@ describe('AddParticipantPopup component', () => {
   });
 
   test('should submit the Full Account form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: {
           ...testValues,
@@ -110,7 +110,7 @@ describe('AddParticipantPopup component', () => {
   });
 
   test('should submit the Limited Account form and show success banner', async () => {
-    mockAxios.post.mockResolvedValueOnce({
+    vi.mocked(axios.post).mockResolvedValueOnce({
       data: {
         result: testValues,
       },

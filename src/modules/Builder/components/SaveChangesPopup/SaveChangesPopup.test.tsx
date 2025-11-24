@@ -9,9 +9,9 @@ const dataTestid = 'save-changes-popup';
 
 describe('SaveChangesPopup', () => {
   test('renders the popup correctly', async () => {
-    const handleClose = jest.fn();
-    const handleDoNotSaveSubmit = jest.fn();
-    const handleSaveSubmit = jest.fn();
+    const handleClose = vi.fn();
+    const handleDoNotSaveSubmit = vi.fn();
+    const handleSaveSubmit = vi.fn();
 
     renderWithProviders(
       <SaveChangesPopup

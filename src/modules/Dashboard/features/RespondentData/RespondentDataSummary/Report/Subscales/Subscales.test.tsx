@@ -212,17 +212,17 @@ const answers: ActivityCompletion[] = [
 
 const subscalesFrequency = answers.length;
 
-jest.mock('./Subscale', () => ({
+vi.mock('./Subscale', () => ({
   Subscale: ({ 'data-testid': dataTestid }: { 'data-testid': string }) => (
     <div data-testid={dataTestid} />
   ),
 }));
 
-jest.mock('./AllScores', () => ({
+vi.mock('./AllScores', () => ({
   AllScores: () => <div data-testid="all-scores" />,
 }));
 
-jest.mock('./ActivityCompletionScores', () => ({
+vi.mock('./ActivityCompletionScores', () => ({
   ActivityCompletionScores: () => <div data-testid="activity-completion-scores" />,
 }));
 

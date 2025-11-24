@@ -9,11 +9,11 @@ import { auth } from 'redux/modules';
 import { ProlificIntegration } from './ProlificIntegration';
 import { prolificIntegrationExists } from './ProlificIntegration.utils';
 
-jest.mock('./ProlificIntegration.utils', () => ({
-  prolificIntegrationExists: jest.fn(),
+vi.mock('./ProlificIntegration.utils', () => ({
+  prolificIntegrationExists: vi.fn(),
 }));
 
-jest.mock('redux/modules');
+vi.mock('redux/modules');
 
 const preloadedStateWithoutIntegration = {
   applet: {
@@ -37,12 +37,12 @@ const renderWithStore = (preloadedState: AppletState) =>
 
 describe('ProlificIntegration', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the ProlificIntegration component when api token does not exist', () => {
-    (prolificIntegrationExists as jest.Mock).mockResolvedValue(false);
-    (auth.useData as jest.Mock).mockResolvedValue({ user: { id: '123' } });
+    (prolificIntegrationExists as vi.Mock).mockResolvedValue(false);
+    (auth.useData as vi.Mock).mockResolvedValue({ user: { id: '123' } });
 
     renderWithStore(preloadedStateWithoutIntegration);
 
@@ -56,8 +56,8 @@ describe('ProlificIntegration', () => {
   });
 
   test('should render the ProlificIntegration connected component when api token exists', async () => {
-    (prolificIntegrationExists as jest.Mock).mockResolvedValue(true);
-    (auth.useData as jest.Mock).mockResolvedValue({ user: { id: '123' } });
+    (prolificIntegrationExists as vi.Mock).mockResolvedValue(true);
+    (auth.useData as vi.Mock).mockResolvedValue({ user: { id: '123' } });
 
     renderWithStore(preloadedStateWithoutIntegration);
 

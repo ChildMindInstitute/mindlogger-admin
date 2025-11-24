@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 import * as routerDom from 'react-router-dom';
 
 import { auth } from 'redux/modules';
@@ -8,12 +9,37 @@ import { mockedApplet, mockedPrivateKey, mockedUserData } from 'shared/mock';
 
 import { useEncryptedAnswers } from './useEncryptedAnswers';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('shared/hooks/useEncryptionStorage', () => ({
+  return {
+    ...actual,
+    useParams: () => vi.fn(),
+  };
+});
+
+vi.mock('shared/utils', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('shared/utils')>();
+
+  return {
+    ...actual,
+    getParsedEncryptionFromServer: vi.fn((encryption) => {
+      if (!encryption) return null;
+
+      return {
+        publicKey: [1, 2, 3],
+        prime: [4, 5, 6],
+        base: [7, 8, 9],
+        accountId: 'mockAccountId',
+      };
+    }),
+    getAESKey: vi.fn(() => Promise.resolve('mocked-aes-key')),
+    encryptData: vi.fn(({ text }) => Promise.resolve(`encrypted:${text}`)),
+  };
+});
+
+vi.mock('shared/hooks/useEncryptionStorage', () => ({
   useEncryptionStorage: () => ({
     getAppletPrivateKey: () => mockedPrivateKey,
   }),
@@ -21,9 +47,9 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 
 describe('useEncryptedAnswers', () => {
   test('should return null when useAppletData is null', () => {
-    jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-    jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    vi.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue(null);
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
     const { result } = renderHook(useEncryptedAnswers);
 
@@ -31,9 +57,9 @@ describe('useEncryptedAnswers', () => {
   });
 
   test('should return encrypted string', async () => {
-    jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    vi.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
+    vi.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
     const { result } = renderHook(useEncryptedAnswers);
     const encryptAnswers = result.current as (answers: AnswerDTO[]) => Promise<string>;

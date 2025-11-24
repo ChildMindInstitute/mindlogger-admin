@@ -61,14 +61,14 @@ describe('useTransferOwnership', () => {
   });
 
   test('should show success banner when transferring ownership succeeds', async () => {
-    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+    const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
     const { result, rerender, store } = renderHookWithProviders(
       () => useTransferOwnership(appletId),
       {
         preloadedState: emptyState,
       },
     );
-    const mockedCallback = jest.fn();
+    const mockedCallback = vi.fn();
 
     expect(store.getState().banners).toEqual(emptyState.banners);
     expect(screen.queryByTestId('testId')).toBeNull();

@@ -14,10 +14,10 @@ const renderWithExistenceCheck = (uiType) => {
   renderWithProviders(<ItemTypeTooltip uiType={uiType} anchorEl={anchorEl} />);
   expect(screen.getByTestId(tooltipPresentationDataTestid)).toBeInTheDocument();
 };
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 const tooltipTexts = {
   Date: 'Date selection in the format Month DD, YYYY.',
@@ -47,12 +47,12 @@ describe('ItemTypeTooltip', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test.each(Object.entries(tooltipTexts))('renders %s component', (uiType, expectedText) => {

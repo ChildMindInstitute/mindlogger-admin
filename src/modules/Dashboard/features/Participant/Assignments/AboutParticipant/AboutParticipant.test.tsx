@@ -164,9 +164,9 @@ const getRequestResponses = {
   [GET_WORKSPACE_MANAGERS_URL]: successfulGetWorkspaceManagersMock,
 };
 
-jest.mock('shared/hooks/useFeatureFlags');
+vi.mock('shared/hooks/useFeatureFlags');
 
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 /* Tests
 =================================================== */
@@ -178,14 +178,14 @@ describe('Dashboard > Applet > Participant > Assignments > About Participant scr
         enableParticipantMultiInformant: true,
         enableActivityAssign: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
 
     mockGetRequestResponses(getRequestResponses);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render the loading state at first', async () => {

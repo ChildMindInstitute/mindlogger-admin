@@ -2,17 +2,19 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
 import { JEST_TEST_TIMEOUT } from 'shared/consts';
+import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
 
 import { CreateEventPopup } from './CreateEventPopup';
 
-const mockSetCreateEventPopupVisible = jest.fn();
+const mockSetCreateEventPopupVisible = vi.fn();
 const dataTestid = 'dashboard-calendar-create-event-popup';
 const mockDefaultStartDate = new Date('03-18-2024');
 const mockAppletId = 'a341e3d7-0170-4894-8823-798c58456130';
@@ -108,6 +110,11 @@ export const preloadedState = {
 };
 
 describe('CreateEventPopup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(axios.post).mockResolvedValue(mockSuccessfulHttpResponse({ result: true }));
+  });
+
   test(
     'create new event for WEEKLY event',
     async () => {
@@ -147,7 +154,9 @@ describe('CreateEventPopup', () => {
       const activityInput = activityContainer.querySelector('input');
       expect(activityInput).toHaveValue('');
       const select = activityContainer.querySelector('.MuiSelect-select');
+      expect(select).toBeInTheDocument();
       await userEvent.click(select);
+
       const listbox = await screen.findByRole('listbox');
       expect(listbox).toBeInTheDocument();
       expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
@@ -180,7 +189,7 @@ describe('CreateEventPopup', () => {
       expect(removeButton).toBeInTheDocument();
       await userEvent.click(removeButton);
 
-      expect(mockAxios.post).toBeCalledWith(
+      expect(vi.mocked(axios.post)).toBeCalledWith(
         `/applets/${mockAppletId}/events`,
         {
           activityId: '96d889e2-2264-4e76-8c60-744600e770fe',
@@ -254,7 +263,7 @@ describe('CreateEventPopup', () => {
       expect(confirmButton).toBeInTheDocument();
       await userEvent.click(confirmButton);
 
-      expect(mockAxios.post).toBeCalledWith(
+      expect(vi.mocked(axios.post)).toBeCalledWith(
         `/applets/${mockAppletId}/events`,
         {
           accessBeforeSchedule: false,

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import userEvent from '@testing-library/user-event';
 
@@ -153,10 +153,14 @@ const items = [
   },
 ];
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
-}));
+vi.mock('modules/Dashboard/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useDecryptedActivityData: vi.fn(),
+  };
+});
 
 const mockedGetWithEmptyReviews = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -249,16 +253,16 @@ const mockedGetWithReviewsNoAnswers = {
   },
 };
 
-jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
+vi.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
+  CollapsedMdText: vi.fn(() => (
     <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
   )),
 }));
 
-const setIsLastVersion = jest.fn();
-const setIsBannerVisible = jest.fn();
-const setAssessment = jest.fn();
+const setIsLastVersion = vi.fn();
+const setIsBannerVisible = vi.fn();
+const setAssessment = vi.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
@@ -274,7 +278,7 @@ const getMockedContext = (
   isBannerVisible,
   setIsBannerVisible,
   itemIds,
-  setItemIds: jest.fn(),
+  setItemIds: vi.fn(),
   isFeedbackOpen: true,
 });
 
@@ -314,7 +318,7 @@ const renderComponent = (
   );
 
 const getDecryptedActivityData = () => {
-  const getDecryptedActivityDataMock = jest.fn().mockReturnValue(
+  const getDecryptedActivityDataMock = vi.fn().mockReturnValue(
     Promise.resolve({
       decryptedAnswers: [
         {
@@ -417,9 +421,9 @@ const getDecryptedActivityData = () => {
     }),
   );
 
-  jest
-    .spyOn(dashboardHooks, 'useDecryptedActivityData')
-    .mockReturnValue(getDecryptedActivityDataMock);
+  vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+    getDecryptedActivityDataMock,
+  );
 };
 
 describe('FeedbackReviewed', () => {
@@ -439,12 +443,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render array of reviews with empty review, show feedback assessment on add button click', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(false));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(false));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -475,11 +479,11 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render reviews with no permission', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviewsNoAnswers);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviewsNoAnswers);
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -498,12 +502,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render array of reviews with review of current user, should delete review', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(true));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -544,7 +548,7 @@ describe('FeedbackReviewed', () => {
     expect(submitPopupButton).toBeInTheDocument();
     await userEvent.click(submitPopupButton);
 
-    expect(mockAxios.delete).nthCalledWith(
+    expect(axios.delete).nthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/assessment/review-id-2`,
       { signal: undefined },
@@ -558,7 +562,7 @@ describe('FeedbackReviewed', () => {
       { activityItem: lastAssessment[0], answer: undefined },
     ]);
 
-    expect(mockAxios.get).nthCalledWith(
+    expect(axios.get).nthCalledWith(
       1,
       `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
       { signal: undefined },
@@ -566,12 +570,12 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should edit review', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithReviews(true));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
+      expect(axios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
@@ -590,15 +594,15 @@ describe('FeedbackReviewed', () => {
   });
 
   test('should render empty state', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithEmptyReviews);
+    vi.mocked(axios.get).mockResolvedValueOnce(mockedGetWithEmptyReviews);
 
-    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
+    const getDecryptedActivityDataMock = vi.fn().mockReturnValue({
       decryptedAnswers: [],
     });
 
-    jest
-      .spyOn(dashboardHooks, 'useDecryptedActivityData')
-      .mockReturnValue(getDecryptedActivityDataMock);
+    vi.spyOn(dashboardHooks, 'useDecryptedActivityData').mockReturnValue(
+      getDecryptedActivityDataMock,
+    );
 
     renderComponent(assessment, lastAssessment, false, true);
 

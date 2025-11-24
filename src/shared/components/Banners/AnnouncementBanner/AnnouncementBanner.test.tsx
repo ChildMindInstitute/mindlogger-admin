@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi, type Mock } from 'vitest';
 import { useLocation } from 'react-router-dom';
 
 import { AuthSchema, initialStateData } from 'redux/modules';
@@ -7,21 +8,25 @@ import { mockedOwnerId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
-import { GLOBAL_DISMISSED_KEY, RebrandBanner, getDismissedKey } from './RebrandBanner';
+import { GLOBAL_DISMISSED_KEY, AnnouncementBanner, getDismissedKey } from './AnnouncementBanner';
 
-const bannerTestId = 'rebrand-banner';
+const bannerTestId = 'announcement-banner';
 
 // Mock useLocation hook
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: jest.fn().mockImplementation(() => ({
-    pathname: '/dashboard/applets',
-  })),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
 
-describe('RebrandBanner', () => {
+  return {
+    ...actual,
+    useLocation: vi.fn().mockImplementation(() => ({
+      pathname: '/dashboard/applets',
+    })),
+  };
+});
+
+describe('AnnouncementBanner', () => {
   // Get the mocked useLocation function
-  const mockedUseLocation = useLocation as jest.Mock;
+  const mockedUseLocation = useLocation as Mock;
 
   beforeEach(() => {
     // Clear localStorage before each test
@@ -63,9 +68,9 @@ describe('RebrandBanner', () => {
     },
   };
 
-  describe('Rebrand Banner behavior for logged-in users', () => {
+  describe('Announcement Banner behavior for logged-in users', () => {
     test('shows banner when not dismissed', () => {
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAuthState,
@@ -76,7 +81,7 @@ describe('RebrandBanner', () => {
     });
 
     test('hides banner when dismissed', async () => {
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAuthState,
@@ -97,7 +102,7 @@ describe('RebrandBanner', () => {
       // Set user-level dismissal
       localStorage.setItem(getDismissedKey(mockedOwnerId), 'true');
 
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAuthState,
@@ -113,7 +118,7 @@ describe('RebrandBanner', () => {
         pathname: '/dashboard/some-applet-id',
       }));
 
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAuthState,
@@ -124,7 +129,7 @@ describe('RebrandBanner', () => {
     });
   });
 
-  describe('Rebrand Banner behavior on auth screen', () => {
+  describe('Announcment Banner behavior on auth screen', () => {
     beforeEach(() => {
       // Set location to auth route
       mockedUseLocation.mockImplementation(() => ({
@@ -133,7 +138,7 @@ describe('RebrandBanner', () => {
     });
 
     test('shows banner on auth screen when not dismissed', () => {
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAnonymousState,
@@ -144,7 +149,7 @@ describe('RebrandBanner', () => {
     });
 
     test('hides banner on auth screen when dismissed', async () => {
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAnonymousState,
@@ -165,7 +170,7 @@ describe('RebrandBanner', () => {
       // Set global dismissal
       localStorage.setItem(GLOBAL_DISMISSED_KEY, 'true');
 
-      renderWithProviders(<RebrandBanner />, {
+      renderWithProviders(<AnnouncementBanner />, {
         preloadedState: {
           ...getPreloadedState(),
           ...mockAnonymousState,

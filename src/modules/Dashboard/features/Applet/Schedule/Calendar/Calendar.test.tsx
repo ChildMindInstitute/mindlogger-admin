@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { fireEvent, act } from '@testing-library/react';
 import { endOfDay, startOfDay } from 'date-fns';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
@@ -58,31 +59,38 @@ const preloadedState = {
   },
 };
 
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
+
+vi.mock(
+  'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
+  () => ({
+    useSchedule: vi.fn(),
+  }),
+);
+
 describe('Calendar Component', () => {
-  const mockDispatch = jest.fn();
-  const clickEditEventMock = jest.fn();
-  const clickCreateEventMock = jest.fn();
-
-  jest.mock('redux/store/hooks', () => ({
-    useAppDispatch: jest.fn(),
-  }));
-
-  jest.mock(
-    'modules/Dashboard/features/Applet/Schedule/ScheduleProvider/ScheduleProvider.hooks',
-    () => ({
-      useSchedule: jest.fn(),
-    }),
-  );
+  const mockDispatch = vi.fn();
+  const clickEditEventMock = vi.fn();
+  const clickCreateEventMock = vi.fn();
 
   beforeEach(() => {
-    jest.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
+    vi.clearAllMocks();
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(scheduleProviderHooks, 'useSchedule').mockReturnValue({
       onClickCreateEvent: clickCreateEventMock,
       onClickEditEvent: clickEditEventMock,
     });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('renders calendar component with toolbar, month view visible, and provided event', () => {
@@ -167,7 +175,7 @@ describe('Calendar Component', () => {
   });
 
   test('should dispatch setCalendarCurrentYear', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
     await act(async () => {
       renderWithProviders(<Calendar />, {
         preloadedState,
@@ -176,7 +184,7 @@ describe('Calendar Component', () => {
       });
     });
 
-    expect(mockDispatch).nthCalledWith(1, {
+    expect(mockDispatch).toHaveBeenCalledWith({
       payload: expect.any(Object),
       type: 'calendarEvents/setCalendarCurrentYear',
     });

@@ -14,10 +14,10 @@ const mockedParagraphTextTestid = `${mockedTestid}-paragraph-text-response`;
 const renderTextResponse = () => renderItemConfigurationByType(ItemResponseType.Text);
 const renderParagraphTextResponse = () =>
   renderItemConfigurationByType(ItemResponseType.ParagraphText);
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
 }));
-const mockUseFeatureFlags = jest.mocked(useFeatureFlags);
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
 describe('ItemConfiguration: Short Text, ParagraphText', () => {
   beforeEach(() => {
@@ -25,12 +25,12 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
       featureFlags: {
         enableParagraphTextItem: true,
       },
-      resetLDContext: jest.fn(),
+      resetLDContext: vi.fn(),
     });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('Short text Item is rendered correctly', () => {
@@ -139,8 +139,12 @@ describe('ItemConfiguration: Short Text, ParagraphText', () => {
     const ref = renderTextResponse();
 
     await setItemConfigSetting(ItemConfigurationSettings.IsCorrectAnswerRequired);
-    await ref.current.trigger('activities.0.items.0');
 
-    expect(await screen.findByText('Correct Answer is required')).toBeVisible();
+    // Trigger validation on the specific field path
+    await ref.current.trigger('activities.0.items.0.config.correctAnswer');
+
+    await waitFor(() => {
+      expect(screen.getByText('Correct Answer is required')).toBeVisible();
+    });
   });
 });

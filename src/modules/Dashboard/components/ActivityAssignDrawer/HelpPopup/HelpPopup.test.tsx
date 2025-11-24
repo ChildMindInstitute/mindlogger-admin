@@ -7,7 +7,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { HelpPopup } from './HelpPopup';
 
 const mockedTestId = 'test-id';
-const mockedSetIsVisible = jest.fn();
+const mockedSetIsVisible = vi.fn();
 
 describe('HelpPopup', () => {
   test('renders the popup correctly', async () => {

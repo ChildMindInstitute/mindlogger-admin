@@ -9,7 +9,7 @@ import { AddParticipantFormValues } from '../AddParticipantPopup.types';
 import { AddParticipantFormProps } from './AddParticipantForm.types';
 import { defaultValues } from '../AddParticipantPopup.const';
 
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 const dataTestid = 'test-id';
 
 const AddParticipantFormTest = ({ accountType }: Pick<AddParticipantFormProps, 'accountType'>) => {
@@ -36,7 +36,7 @@ const fullAccountLabelNames = [...limitedAccountLabelNames, ...onlyFullAccountLa
 
 describe('AddParticipantForm component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('The form has fields according to the account type', () => {

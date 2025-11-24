@@ -5,7 +5,7 @@ import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 import { AddParticipantSuccessBanner } from './AddParticipantSuccessBanner';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 const dataTestid = 'success-banner';
 const props = {
   accountType: AccountType.Full,
@@ -13,15 +13,21 @@ const props = {
   onClose: mockOnClose,
   'data-testid': dataTestid,
 };
-const mockedUseNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
+const mockedUseNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockedUseNavigate,
+  };
+});
 
 describe('AddParticipantSuccessBanner', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render', () => {

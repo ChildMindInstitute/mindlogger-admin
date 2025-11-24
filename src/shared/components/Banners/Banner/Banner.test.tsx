@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Banner } from './Banner';
 
-const mockOnClose = jest.fn();
-const mockUseWindowFocus = jest.fn();
+const mockOnClose = vi.fn();
+const mockUseWindowFocus = vi.fn();
 
 const props = {
   children: 'Test banner',
@@ -11,13 +11,13 @@ const props = {
   duration: 5000,
 };
 
-jest.mock('shared/hooks/useWindowFocus', () => ({
+vi.mock('shared/hooks/useWindowFocus', () => ({
   useWindowFocus: () => mockUseWindowFocus(),
 }));
 
 describe('Banner', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render component', () => {
@@ -38,22 +38,22 @@ describe('Banner', () => {
   });
 
   test('banner auto-closes after 5 seconds if window in focus', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockUseWindowFocus.mockReturnValue(true);
 
     render(<Banner {...props} />);
 
-    jest.advanceTimersByTime(props.duration + 1000);
+    vi.advanceTimersByTime(props.duration + 1000);
     expect(mockOnClose).toHaveBeenCalled();
   });
 
   test('banner does not auto-close if window unfocused', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockUseWindowFocus.mockReturnValue(false);
 
     render(<Banner {...props} />);
 
-    jest.advanceTimersByTime(props.duration + 1000);
+    vi.advanceTimersByTime(props.duration + 1000);
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 

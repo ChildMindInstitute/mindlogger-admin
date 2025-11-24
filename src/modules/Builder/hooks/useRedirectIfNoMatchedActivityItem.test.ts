@@ -1,6 +1,7 @@
 import { generatePath } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import { vi } from 'vitest';
 
 import { page } from 'resources';
 import {
@@ -42,17 +43,24 @@ const pathToActivityItemsNewApplet = generatePath(page.builderAppletActivityItem
   appletId: Path.NewApplet,
 });
 
-const mockedUseNavigate = jest.fn();
-const mockedUseParams = jest.fn();
-const mockedGetValues = jest.fn();
+const mockedUseNavigate = vi.fn();
+const mockedUseParams = vi.fn();
+const mockedGetValues = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-  useParams: () => mockedUseParams(),
-}));
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: vi.fn(() => mockedUseNavigate),
+    useParams: vi.fn(() => mockedUseParams()),
+  };
+});
+
+vi.mock('react-hook-form', () => ({
+  ...vi.importActual('react-hook-form'),
   useFormContext: () => ({
     getValues: () => mockedGetValues(),
     watch: () => mockedGetValues(),
@@ -61,7 +69,7 @@ jest.mock('react-hook-form', () => ({
 
 describe('useRedirectIfNoMatchedActivityItem', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
+import { vi } from 'vitest';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
@@ -7,7 +8,7 @@ import { mockedAppletId, mockedFullParticipantId1 } from 'shared/mock';
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
 const dataTestid = 'clear-scheduled-events-popup';
-const onCloseMock = jest.fn();
+const onCloseMock = vi.fn();
 const basicProps = {
   open: true,
   onClose: onCloseMock,
@@ -18,8 +19,12 @@ const basicProps = {
 };
 
 describe('ClearScheduledEventsPopup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should delete events for default schedule', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
 
     renderWithProviders(<ClearScheduledEventsPopup {...basicProps} />);
 
@@ -31,7 +36,7 @@ describe('ClearScheduledEventsPopup', () => {
     fireEvent.click(screen.getByText('Clear All'));
 
     expect(
-      expect(mockAxios.delete).nthCalledWith(1, `/applets/${mockedAppletId}/events`, {
+      expect(axios.delete).nthCalledWith(1, `/applets/${mockedAppletId}/events`, {
         signal: undefined,
       }),
     );
@@ -44,7 +49,7 @@ describe('ClearScheduledEventsPopup', () => {
   });
 
   test('should delete events for individual schedule', async () => {
-    mockAxios.delete.mockResolvedValueOnce(null);
+    vi.mocked(axios.delete).mockResolvedValueOnce(null);
     renderWithProviders(
       <ClearScheduledEventsPopup {...basicProps} userId={mockedFullParticipantId1} />,
     );
@@ -57,7 +62,7 @@ describe('ClearScheduledEventsPopup', () => {
     fireEvent.click(screen.getByText('Clear All'));
 
     expect(
-      expect(mockAxios.delete).nthCalledWith(
+      expect(axios.delete).nthCalledWith(
         1,
         `/applets/${mockedAppletId}/events/delete_individual/${mockedFullParticipantId1}`,
         {

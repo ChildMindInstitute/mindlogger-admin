@@ -4,7 +4,7 @@ import { FieldError } from 'react-hook-form';
 import { DatePickerInput } from './DatePickerInput';
 
 describe('DatePickerInput', () => {
-  const mockedHandlePickerShow = jest.fn();
+  const mockedHandlePickerShow = vi.fn();
   const sharedProps = {
     inputWrapperSx: {},
     id: 'icon_id',

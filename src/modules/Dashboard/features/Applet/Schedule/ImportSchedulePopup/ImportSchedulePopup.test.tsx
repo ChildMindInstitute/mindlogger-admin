@@ -1,14 +1,30 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ImportSchedulePopup } from './ImportSchedulePopup';
 import * as importSchedulePopupFunc from './ImportSchedulePopup.utils';
 
+// Mock xlsx library to avoid dependency issues in tests
+vi.mock('xlsx', () => ({
+  read: () => ({
+    Sheets: {
+      Sheet1: {},
+    },
+  }),
+  utils: {
+    sheet_to_json: () => [
+      { header1: 'value1', header2: 'value2' },
+      { header1: 'value3', header2: 'value4' },
+    ],
+  },
+}));
+
 describe('ImportSchedulePopup', () => {
-  const mockedOnClose = jest.fn();
-  const mockedOnDownloadTemplate = jest.fn();
+  const mockedOnClose = vi.fn();
+  const mockedOnDownloadTemplate = vi.fn();
   const props = {
     isIndividual: false,
     appletName: 'applet',
@@ -29,7 +45,7 @@ describe('ImportSchedulePopup', () => {
 
   // Here we test high-level logic of the stepper, not the internal conditions of the hook logic.
   // Need to mock the schedule export data to pass successfully when file is ready
-  jest.spyOn(importSchedulePopupFunc, 'getUploadedScheduleErrors').mockImplementation(() => ({
+  vi.spyOn(importSchedulePopupFunc, 'getUploadedScheduleErrors').mockImplementation(() => ({
     notExistentActivities: [],
     invalidStartTimeField: { data: null, id: 'invalid-start-time' },
     invalidEndTimeField: { data: null, id: 'invalid-end-time' },
@@ -42,8 +58,8 @@ describe('ImportSchedulePopup', () => {
   }));
 
   afterAll(() => {
-    jest.resetAllMocks();
-    jest.restoreAllMocks();
+    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('should render default schedule step=0', () => {

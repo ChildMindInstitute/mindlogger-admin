@@ -2,11 +2,11 @@ import { act, fireEvent, renderHook } from '@testing-library/react';
 
 import { useNetwork } from './useNetwork';
 
-const spyNavigatorOnline = jest.spyOn(window.navigator, 'onLine', 'get');
+const spyNavigatorOnline = vi.spyOn(window.navigator, 'onLine', 'get');
 
 describe('useNetwork', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`

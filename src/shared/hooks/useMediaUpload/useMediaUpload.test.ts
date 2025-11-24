@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+import { vi } from 'vitest';
 import axios from 'axios';
 
 import { waitForTheUpdate } from 'shared/utils/testUtils';
@@ -7,14 +8,16 @@ import { TargetExtension } from 'shared/api';
 import { useMediaUpload } from './useMediaUpload';
 import { UseMediaUploadReturn } from './useMediaUpload.types';
 
-const mockedAxios = axios.create();
-const mockGetMediaUploadUrl = jest.fn();
-jest.mock('shared/hooks/useAsync', () => ({
+// Mock axios at the module level
+vi.mock('axios');
+const mockedAxios = vi.mocked(axios);
+const mockGetMediaUploadUrl = vi.fn();
+vi.mock('shared/hooks/useAsync', () => ({
   useAsync: () => ({ execute: mockGetMediaUploadUrl }),
 }));
-const mockCallback = jest.fn();
-const mockErrorCallback = jest.fn();
-const mockFinallyCallback = jest.fn();
+const mockCallback = vi.fn();
+const mockErrorCallback = vi.fn();
+const mockFinallyCallback = vi.fn();
 const url = 'https://example.com/image.jpg';
 const uploadUrl = 'https://example.com/upload';
 const file = new File(['file contents'], 'test.jpg', { type: 'image/jpeg' });
@@ -56,7 +59,7 @@ const testUploadFlow = async (
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-  jest.runAllTimers();
+  vi.runAllTimers();
   await waitForTheUpdate();
 
   expect(result.current.isLoading).toBe(false);
@@ -74,8 +77,8 @@ const testSuccessUpload = async (targetExtension?: TargetExtension) => {
   const { result } = renderHook(() => useMediaUpload(useMediaUploadProps));
 
   mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
-  jest.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
-  jest.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
+  vi.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
+  vi.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
 
   await testUploadFlow(result, targetExtension);
 
@@ -87,12 +90,12 @@ const testSuccessUpload = async (targetExtension?: TargetExtension) => {
 
 describe('useMediaUpload', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useFakeTimers();
+    vi.clearAllMocks();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.clearAllTimers();
+    vi.clearAllTimers();
   });
 
   test('should upload file and set mediaUrl on successful upload', async () => testSuccessUpload());
@@ -105,7 +108,7 @@ describe('useMediaUpload', () => {
     const message = 'Upload failed';
     mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
 
-    jest.spyOn(mockedAxios, 'post').mockRejectedValueOnce(new Error(message));
+    vi.spyOn(mockedAxios, 'post').mockRejectedValueOnce(new Error(message));
 
     await testUploadFlow(result);
     testErrorFlow(result, message);
@@ -116,8 +119,8 @@ describe('useMediaUpload', () => {
     const message = 'Network error';
 
     mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
-    jest.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
-    jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce(new Error(message));
+    vi.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
+    vi.spyOn(mockedAxios, 'head').mockRejectedValueOnce(new Error(message));
 
     await testUploadFlow(result);
     testErrorFlow(result, message);

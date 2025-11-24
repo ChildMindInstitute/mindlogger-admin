@@ -74,12 +74,14 @@ const renderReportConfigSettingWithForm = ({
   });
 };
 
-const spyVerifyReportServer = jest.spyOn(reportUtils, 'verifyReportServer');
-const spySetPasswordReportServer = jest.spyOn(reportUtils, 'setPasswordReportServer');
+let spyVerifyReportServer;
+let spySetPasswordReportServer;
 
 describe('ReportConfigSetting', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
+    spyVerifyReportServer = vi.spyOn(reportUtils, 'verifyReportServer');
+    spySetPasswordReportServer = vi.spyOn(reportUtils, 'setPasswordReportServer');
   });
 
   describe('Is rendered correctly', () => {
@@ -94,7 +96,7 @@ describe('ReportConfigSetting', () => {
     });
 
     test('Server URL/Server Public Key: fields are set', () => {
-      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      vi.spyOn(applet, 'useAppletData').mockReturnValue({
         result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
       });
 
@@ -111,7 +113,7 @@ describe('ReportConfigSetting', () => {
       ${`${mockedReportConfigDataTestid}-subject`}                    | ${''}                      | ${'REPORT: dataviz / [Activity Name]'}             | ${'Subject Preview'}
       ${`${mockedReportConfigDataTestid}-report-email-body`}          | ${''}                      | ${'Please see the report attached to this email.'} | ${'Email Body'}
     `('$description', ({ testId, label, value }) => {
-      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      vi.spyOn(applet, 'useAppletData').mockReturnValue({
         result: mockedAppletData,
       });
 
@@ -181,10 +183,10 @@ describe('ReportConfigSetting', () => {
     });
 
     test('Configure server: rejected set password', async () => {
-      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      vi.spyOn(applet, 'useAppletData').mockReturnValue({
         result: mockedAppletData,
       });
-      jest.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
+      vi.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
         getPublicKey: () => ({ equals: () => true }),
       });
 
@@ -230,14 +232,14 @@ describe('ReportConfigSetting', () => {
     });
 
     test('Configure Server: all endpoints work', async () => {
-      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      vi.spyOn(applet, 'useAppletData').mockReturnValue({
         result: mockedAppletData,
       });
-      jest.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
+      vi.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
         getPublicKey: () => ({ equals: () => true }),
       });
-      jest.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
-      jest.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
+      vi.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
+      vi.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
 
       const { store } = renderReportConfigSettingWithForm();
 
@@ -307,7 +309,7 @@ describe('ReportConfigSetting', () => {
   });
 
   test('Activity: fields', () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({
       result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
     });
 
@@ -320,7 +322,7 @@ describe('ReportConfigSetting', () => {
   });
 
   test('Activity Flow: fields', () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({
       result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
     });
 
@@ -333,7 +335,7 @@ describe('ReportConfigSetting', () => {
   });
 
   test('Activity: Item Value', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({
       result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
     });
 
@@ -357,7 +359,7 @@ describe('ReportConfigSetting', () => {
   });
 
   test('Activity Flow: Item Value', async () => {
-    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+    vi.spyOn(applet, 'useAppletData').mockReturnValue({
       result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
     });
 

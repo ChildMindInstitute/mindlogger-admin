@@ -4,13 +4,13 @@ import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { useRemoveAppletData } from './useRemoveAppletData';
 
-jest.mock('redux/store', () => ({
-  useAppDispatch: jest.fn,
+vi.mock('redux/store', () => ({
+  useAppDispatch: vi.fn,
 }));
 
 describe('useRemoveAppletData hook tests', () => {
   test('should remove keys from storage', () => {
-    const spyStorage = jest.spyOn(storage, 'removeItem');
+    const spyStorage = vi.spyOn(storage, 'removeItem');
     const { result } = renderHook(() => useRemoveAppletData());
     act(() => {
       result.current();

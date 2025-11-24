@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { expectBanner, SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -42,7 +42,7 @@ describe('TransferOwnershipSetting', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.TransferOwnership}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.TransferOwnership}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      mockAxios.post.mockResolvedValue(null);
+      vi.mocked(axios.post).mockResolvedValue(null);
       const dataTestid = 'applet-settings-transfer-ownership';
       const { store } = renderWithProviders(<TransferOwnershipSetting />, {
         preloadedState,
@@ -56,7 +56,7 @@ describe('TransferOwnershipSetting', () => {
       await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
       await waitFor(() => {
-        expect(mockAxios.post).nthCalledWith(
+        expect(axios.post).nthCalledWith(
           1,
           `/applets/${mockedAppletId}/transferOwnership`,
           { email: mockedEmail },

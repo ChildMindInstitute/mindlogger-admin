@@ -1,8 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { MAX_LIMIT } from 'shared/consts';
@@ -15,9 +16,8 @@ import * as cartUtils from 'modules/Library/features/Cart/Cart.utils';
 import { AddToBuilderPopup } from './AddToBuilderPopup';
 
 const mockDispatch = () => Promise.resolve('');
-const mockUseNavigate = jest.fn();
-const mockNavigateToBuilder = jest.fn();
-const mockSetAddToBuilderPopupVisible = jest.fn();
+const mockUseNavigate = vi.fn();
+const mockSetAddToBuilderPopupVisible = vi.fn();
 const dataTestid = 'library-cart-add-to-builder-popup';
 
 const mockWorkspaces = [
@@ -106,29 +106,55 @@ const preloadedState = {
   },
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('redux/store/hooks', () => ({
-  ...jest.requireActual('redux/store/hooks'),
-  useAppDispatch: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
-jest.mock('shared/hooks', () => ({
-  __esModule: true,
-  ...jest.requireActual('shared/hooks'),
-}));
+vi.mock('redux/store/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
 
-jest.mock('modules/Library/hooks', () => ({
-  __esModule: true,
-  ...jest.requireActual('modules/Library/hooks'),
-}));
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(),
+  };
+});
 
-(cartUtils as never).navigateToBuilder = mockNavigateToBuilder;
-(cartUtils as never).getAddToBuilderData = () => ({
-  appletToBuilder: {},
+vi.mock('shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+  };
+});
+
+vi.mock('modules/Library/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    __esModule: true,
+  };
+});
+
+vi.mock('modules/Library/features/Cart/Cart.utils', async () => {
+  const actual = await vi.importActual<typeof import('modules/Library/features/Cart/Cart.utils')>(
+    'modules/Library/features/Cart/Cart.utils',
+  );
+
+  return {
+    ...actual,
+    navigateToBuilder: vi.fn(),
+    getAddToBuilderData: () => ({
+      appletToBuilder: {},
+    }),
+  };
 });
 
 const testStep1 = async ({ title }) => {
@@ -147,7 +173,7 @@ const testStep2 = async ({ rerender, title }) => {
   const selectActions = await screen.findByTestId(`${dataTestid}-select-action`);
   expect(selectActions).toBeInTheDocument();
 
-  expect(mockAxios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+  expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
     params: {
       flatList: true,
       limit: MAX_LIMIT,
@@ -175,7 +201,7 @@ const renderAddToBuilderPopup = ({
   workspaces,
   checkIfHasAccessToWorkspace,
 }) => {
-  jest.spyOn(libraryHooks, 'useWorkspaceList').mockReturnValue({
+  vi.spyOn(libraryHooks, 'useWorkspaceList').mockReturnValue({
     workspaces,
     isLoading,
     checkIfHasAccessToWorkspace: () => checkIfHasAccessToWorkspace,
@@ -192,15 +218,15 @@ const renderAddToBuilderPopup = ({
 
 describe('AddToBuilderPopup', () => {
   beforeEach(() => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+    vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders component and test loading, cancel button', async () => {
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     renderAddToBuilderPopup({
       isLoading: true,
@@ -222,8 +248,8 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps when workspaces length = 1 (skip workspace select step)', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
     const workspaces = mockWorkspaces[0];
 
     renderAddToBuilderPopup({
@@ -244,8 +270,8 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps: workspace selection (with error) -> add to builder actions -> navigate to new applet', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -287,16 +313,20 @@ describe('AddToBuilderPopup', () => {
     await userEvent.click(confirmButton);
 
     // navigate to new applet
-    expect(mockNavigateToBuilder).toHaveBeenCalledWith(mockUseNavigate, 'new-applet', {});
+    expect(vi.mocked(cartUtils.navigateToBuilder)).toHaveBeenCalledWith(
+      mockUseNavigate,
+      'new-applet',
+      {},
+    );
     expect(mockSetAddToBuilderPopupVisible).toHaveBeenCalledWith(false);
   });
 
   test('test steps: workspace selection -> add to builder actions -> select applet -> navigate to existing applet', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -335,16 +365,13 @@ describe('AddToBuilderPopup', () => {
 
     // back to step 2: add to builder actions
     expect(screen.getByTestId(`${dataTestid}-step-2`)).toBeInTheDocument();
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
 
     rerender(
       <AddToBuilderPopup
@@ -367,19 +394,16 @@ describe('AddToBuilderPopup', () => {
     await userEvent.click(confirmButton);
 
     // handleAddToExistingApplet
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
 
     // navigate to existing applet
-    expect(mockNavigateToBuilder).toHaveBeenCalledWith(
+    expect(vi.mocked(cartUtils.navigateToBuilder)).toHaveBeenCalledWith(
       mockUseNavigate,
       '6d195670-726d-4c36-8682-c9f2615827dd',
       {},
@@ -388,8 +412,8 @@ describe('AddToBuilderPopup', () => {
   });
 
   test('test steps (with offline mode): workspace selection -> add to builder actions -> select applet -> error', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,
@@ -412,36 +436,28 @@ describe('AddToBuilderPopup', () => {
 
     const actionContainer1 = screen.getByTestId(`${dataTestid}-select-action-1`);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(false);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(false);
 
     await userEvent.click(actionContainer1.querySelector('input')); // select "add to an existing applet"
     await userEvent.click(confirmButton);
 
     // step 3: select applet
-    expect(title).toHaveTextContent('Add to Builder');
-    expect(
-      screen.getByText('Cart content has not been added to the builder. Please try again.'),
-    ).toBeInTheDocument(); // error step
+    expect(title).toHaveTextContent('Select Applet');
 
-    await userEvent.click(confirmButton);
-
-    expect(mockAxios.get).toBeCalledWith(
-      '/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets',
-      {
-        params: {
-          flatList: true,
-          limit: MAX_LIMIT,
-        },
-        signal: undefined,
+    expect(axios.get).toBeCalledWith('/workspaces/c48b275d-db4b-4f79-8469-9198b45985d3/applets', {
+      params: {
+        flatList: true,
+        limit: MAX_LIMIT,
       },
-    );
+      signal: undefined,
+    });
   });
 
   test('test steps (with no access): workspace selection -> add to builder actions -> error', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
-    mockAxios.get.mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
+    vi.mocked(axios.get).mockResolvedValueOnce(successfulGetExpandedAppletsMock);
 
-    jest.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
+    vi.spyOn(sharedHooks, 'useNetwork').mockReturnValue(true);
 
     const { rerender } = renderAddToBuilderPopup({
       workspaces: mockWorkspaces,

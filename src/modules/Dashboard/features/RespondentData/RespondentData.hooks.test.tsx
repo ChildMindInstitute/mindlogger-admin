@@ -1,30 +1,38 @@
+/* eslint-disable import/first, import/order */
+import { vi } from 'vitest';
+
+import { mockedActivityId2, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
+
+// Mock must be defined before imports that use it
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useParams: vi.fn(() => ({
+      appletId: mockedAppletId,
+      subjectId: mockedFullSubjectId1,
+      activityId: mockedActivityId2,
+    })),
+  };
+});
+
 import { users } from 'modules/Dashboard/state';
 import * as reduxHooks from 'redux/store/hooks';
-import { mockedActivityId2, mockedAppletId, mockedFullSubjectId1 } from 'shared/mock';
 import { applet as appletState } from 'shared/state';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
-
-const mockedUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
+/* eslint-enable import/first, import/order */
 
 describe('Respondent Data hooks', () => {
   describe('useRespondentDataSetup', () => {
-    beforeEach(() => {
-      mockedUseParams.mockReturnValue({
-        appletId: mockedAppletId,
-        subjectId: mockedFullSubjectId1,
-        activityId: mockedActivityId2,
-      });
-    });
+    const route = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${mockedActivityId2}/summary`;
+    const routePath = '/dashboard/:appletId/participants/:subjectId/activities/:activityId/summary';
 
     test('returns an array of tab objects', () => {
-      const { result } = renderHookWithProviders(useRespondentDataSetup);
+      const { result } = renderHookWithProviders(useRespondentDataSetup, { route, routePath });
 
       expect(result.current).toEqual({
         respondentDataTabs: [
@@ -49,14 +57,16 @@ describe('Respondent Data hooks', () => {
     });
 
     test('launches getSubjectDetails', () => {
-      const mockDispatch = jest.fn();
-      const mockGetSubjectDetails = jest.fn();
-      const mockGetAppletData = jest.fn();
-      jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-      jest.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
-      jest.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
+      const mockDispatch = vi.fn();
+      const mockGetSubjectDetails = vi.fn();
+      const mockGetAppletData = vi.fn();
+      vi.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+      vi.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
+      vi.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
       renderHookWithProviders(useRespondentDataSetup, {
         preloadedState: getPreloadedState(),
+        route,
+        routePath,
       });
 
       expect(mockDispatch).toHaveBeenCalledTimes(2);

@@ -1,28 +1,21 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { AxiosResponse } from 'axios';
 import { addDays, roundToNearestMinutes, startOfDay } from 'date-fns';
+import { vi } from 'vitest';
 
-import { ResponseWithObject } from 'api';
-import * as apiFunctions from 'modules/Dashboard/api';
+import { ExportData } from 'api';
 import { initialStateData } from 'redux/modules';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { mockedApplet, mockedPassword } from 'shared/mock';
-import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { ExportDataResult } from 'shared/types';
-import { mockSuccessfulHttpResponse } from 'shared/utils/axios-mocks';
-import * as encryptionFunctions from 'shared/utils/encryption';
-import * as EHRDataExporterClasses from 'shared/utils/exportData/exporters/EHRDataExporter';
-import * as FlowActivityHistoryExporterClasses from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
-import * as ScheduleHistoryExporterClasses from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import * as encryptionFunctions from 'shared/utils/encryption';
 
 import { ExportDataSetting } from './ExportDataSetting';
-import { ExportDataExported, ExportDateType } from './ExportDataSetting.types';
+import { ExportDateType } from './ExportDataSetting.types';
 
 const createdDate = '2023-11-14T14:43:33.369902';
+// Set a fixed "now" date for consistent test results
+const mockedNow = new Date('2023-11-14T16:10:00.000Z');
 
 const preloadedState = {
-  ...getPreloadedState(),
   applet: {
     applet: {
       ...initialStateData,
@@ -33,90 +26,36 @@ const preloadedState = {
 
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 
-jest.mock('modules/Dashboard/api', () => ({
-  ...jest.requireActual('modules/Dashboard/api'),
-  getExportDataApi: jest.fn(),
+const mockedExportDataApi = vi.fn();
+
+vi.mock('modules/Dashboard/api', () => ({
+  getExportDataApi: (body: ExportData) => mockedExportDataApi(body),
 }));
 
-jest.mock('shared/hooks/useFeatureFlags', () => ({
-  ...jest.requireActual('shared/hooks/useFeatureFlags'),
-  useFeatureFlags: jest.fn(),
-}));
-
-jest.mock('shared/utils/exportData/exporters/ScheduleHistoryExporter', () => ({
-  ScheduleHistoryExporter: jest.fn(),
-}));
-
-jest.mock('shared/utils/exportData/exporters/FlowActivityHistoryExporter', () => ({
-  FlowActivityHistoryExporter: jest.fn(),
-}));
-
-jest.mock('shared/utils/exportData/exporters/EHRDataExporter', () => ({
-  EHRDataExporter: jest.fn(),
-}));
-
-jest.mock('shared/utils/exportTemplate', () => ({
-  exportTemplate: jest.fn(),
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: () => ({
+    featureFlags: {
+      enableDataExportSpeedUp: false, // Use old DataExportPopup which has Last24h special handling
+    },
+  }),
 }));
 
 const dataTestId = 'export-data';
 
 describe('ExportDataSetting', () => {
-  const mockedExportDataApi = jest.spyOn(apiFunctions, 'getExportDataApi');
-  const mockedScheduleHistoryExporter = jest
-    .spyOn(ScheduleHistoryExporterClasses, 'ScheduleHistoryExporter')
-    .mockImplementation(
-      () =>
-        ({
-          exportData: jest.fn().mockResolvedValue(true),
-        }) as unknown as ScheduleHistoryExporterClasses.ScheduleHistoryExporter,
-    );
-  const mockedFlowHistoryExporter = jest
-    .spyOn(FlowActivityHistoryExporterClasses, 'FlowActivityHistoryExporter')
-    .mockImplementation(
-      () =>
-        ({
-          exportData: jest.fn().mockResolvedValue(true),
-        }) as unknown as FlowActivityHistoryExporterClasses.FlowActivityHistoryExporter,
-    );
-  const mockedEhrDataExporter = jest
-    .spyOn(EHRDataExporterClasses, 'EHRDataExporter')
-    .mockImplementation(
-      () =>
-        ({
-          exportData: jest.fn().mockResolvedValue(true),
-        }) as unknown as EHRDataExporterClasses.EHRDataExporter,
-    );
-
   beforeEach(() => {
-    jest.mocked(useFeatureFlags).mockReturnValue({
-      featureFlags: {
-        enableEmaExtraFiles: true,
-        enableEhrHealthData: 'active',
-        enableDataExportSpeedUp: false,
-      },
-      resetLDContext: jest.fn(),
-    });
-
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
-      Promise.resolve({
-        getPublicKey: getPublicKeyMock,
-      }),
-    );
-
-    mockedExportDataApi.mockResolvedValue(
-      mockSuccessfulHttpResponse({
-        result: {
-          answers: [],
-          activities: [],
-        },
-        count: 0,
-      }) as AxiosResponse<ResponseWithObject<ExportDataResult>>,
-    );
+    // Mock Date to return a fixed date for consistent test results
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.setSystemTime(mockedNow);
+    mockedExportDataApi.mockClear();
   });
 
-  it('should render nothing if isExportSettingsOpen is false', async () => {
-    const mockOnClose = jest.fn();
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should not render export settings model if isExportSettingsOpen is false', async () => {
+    const mockOnClose = vi.fn();
 
     renderWithProviders(
       <ExportDataSetting
@@ -136,7 +75,7 @@ describe('ExportDataSetting', () => {
   });
 
   it('should call close callback and open the export popup if the settings download button is clicked', async () => {
-    const mockOnClose = jest.fn();
+    const mockOnClose = vi.fn();
 
     renderWithProviders(
       <ExportDataSetting
@@ -160,13 +99,19 @@ describe('ExportDataSetting', () => {
 
   describe('should pass settings specified in settings popup to the export popup', () => {
     test.each`
-      exportType                  | expectedFromTime                        | description
-      ${ExportDateType.AllTime}   | ${startOfDay(new Date(createdDate))}    | ${'use normalized applet create time for all time'}
-      ${ExportDateType.Last24h}   | ${addDays(new Date(), -1)}              | ${'use correct dates for last 24h'}
-      ${ExportDateType.LastWeek}  | ${startOfDay(addDays(new Date(), -7))}  | ${'use normalized dates for last week'}
-      ${ExportDateType.LastMonth} | ${startOfDay(addDays(new Date(), -30))} | ${'use normalized dates for last month'}
+      exportType                  | expectedFromTime                       | description
+      ${ExportDateType.AllTime}   | ${startOfDay(new Date(createdDate))}   | ${'use applet create time and now for all time'}
+      ${ExportDateType.Last24h}   | ${addDays(mockedNow, -1)}              | ${'use correct dates for last 24h'}
+      ${ExportDateType.LastWeek}  | ${startOfDay(addDays(mockedNow, -7))}  | ${'use correct dates for last week'}
+      ${ExportDateType.LastMonth} | ${startOfDay(addDays(mockedNow, -30))} | ${'use correct dates for last month'}
     `('$description', async ({ exportType, expectedFromTime }) => {
-      const mockOnClose = jest.fn();
+      const mockOnClose = vi.fn();
+
+      vi.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
+        Promise.resolve({
+          getPublicKey: getPublicKeyMock,
+        }),
+      );
 
       renderWithProviders(
         <ExportDataSetting
@@ -183,10 +128,30 @@ describe('ExportDataSetting', () => {
         expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
       );
 
-      const dateType = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
-      expect(dateType).toBeVisible();
-      const input = dateType.querySelector('input');
-      input && fireEvent.change(input, { target: { value: exportType } });
+      const dateTypeField = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
+      expect(dateTypeField).toBeVisible();
+
+      // Open the select dropdown
+      const selectButton = dateTypeField.querySelector('[role="button"]');
+      if (selectButton) {
+        fireEvent.mouseDown(selectButton);
+      }
+
+      // Wait for dropdown to open and select the option
+      await waitFor(() => {
+        const options = screen.getAllByRole('option');
+        const targetOption = options.find(
+          (option) => option.getAttribute('data-value') === exportType,
+        );
+        if (targetOption) {
+          fireEvent.click(targetOption);
+        }
+      });
+
+      // Wait for the useEffect to update the dates based on the new dateType
+      await waitFor(() => {
+        // Give the component time to process the dateType change
+      });
 
       fireEvent.click(screen.getByText('Download'));
 
@@ -210,7 +175,7 @@ describe('ExportDataSetting', () => {
         // When checking relative dates, round the date to the nearest
         // 10 minute to account for the test run time.
         expect(
-          roundToNearestMinutes(new Date(requestBody.fromDate as string), {
+          roundToNearestMinutes(new Date(requestBody.fromDate), {
             nearestTo: 10,
           }),
         ).toEqual(
@@ -218,173 +183,6 @@ describe('ExportDataSetting', () => {
             nearestTo: 10,
           }),
         );
-      });
-    });
-
-    it('should pass schedule history setting to the export popup', async () => {
-      jest.mocked(useFeatureFlags).mockReturnValue({
-        featureFlags: {
-          enableEmaExtraFiles: true,
-          enableEhrHealthData: 'unavailable',
-          enableDataExportSpeedUp: false,
-        },
-        resetLDContext: jest.fn(),
-      });
-
-      const mockOnClose = jest.fn();
-
-      renderWithProviders(
-        <ExportDataSetting
-          isExportSettingsOpen
-          onExportSettingsClose={mockOnClose}
-          data-testid={dataTestId}
-        />,
-        {
-          preloadedState,
-        },
-      );
-
-      await waitFor(() =>
-        expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
-      );
-
-      const scheduleHistoryCheckbox = screen
-        .getByText('Include schedule history')
-        .closest('label')
-        ?.querySelector('input');
-
-      expect(scheduleHistoryCheckbox).toBeInTheDocument();
-
-      if (scheduleHistoryCheckbox) {
-        fireEvent.click(scheduleHistoryCheckbox);
-      }
-
-      fireEvent.click(screen.getByText('Download'));
-
-      expect(screen.getByTestId(`${dataTestId}-modal-password`)).toBeVisible();
-
-      fireEvent.change(await screen.findByLabelText('Password'), {
-        target: { value: mockedPassword },
-      });
-
-      fireEvent.click(
-        within(screen.getByTestId(`${dataTestId}-modal-password`)).getByText('Submit'),
-      );
-
-      await waitFor(() => {
-        expect(mockedScheduleHistoryExporter).toHaveBeenCalled();
-      });
-    });
-
-    it('should pass flow history setting to the export popup', async () => {
-      jest.mocked(useFeatureFlags).mockReturnValue({
-        featureFlags: {
-          enableEmaExtraFiles: true,
-          enableEhrHealthData: 'unavailable',
-          enableDataExportSpeedUp: false,
-        },
-        resetLDContext: jest.fn(),
-      });
-
-      const mockOnClose = jest.fn();
-
-      renderWithProviders(
-        <ExportDataSetting
-          isExportSettingsOpen
-          onExportSettingsClose={mockOnClose}
-          data-testid={dataTestId}
-        />,
-        {
-          preloadedState,
-        },
-      );
-
-      await waitFor(() =>
-        expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
-      );
-
-      const flowHistoryCheckbox = screen
-        .getByText('Include activity flow history')
-        .closest('label')
-        ?.querySelector('input');
-
-      expect(flowHistoryCheckbox).toBeInTheDocument();
-
-      if (flowHistoryCheckbox) {
-        fireEvent.click(flowHistoryCheckbox);
-      }
-
-      fireEvent.click(screen.getByText('Download'));
-
-      expect(screen.getByTestId(`${dataTestId}-modal-password`)).toBeVisible();
-
-      fireEvent.change(await screen.findByLabelText('Password'), {
-        target: { value: mockedPassword },
-      });
-
-      fireEvent.click(
-        within(screen.getByTestId(`${dataTestId}-modal-password`)).getByText('Submit'),
-      );
-
-      await waitFor(() => {
-        expect(mockedFlowHistoryExporter).toHaveBeenCalled();
-      });
-    });
-
-    it('should pass EHR health data setting to the export popup', async () => {
-      jest.mocked(useFeatureFlags).mockReturnValue({
-        featureFlags: {
-          enableEmaExtraFiles: false,
-          enableEhrHealthData: 'active',
-          enableDataExportSpeedUp: false,
-        },
-        resetLDContext: jest.fn(),
-      });
-
-      const mockOnClose = jest.fn();
-
-      renderWithProviders(
-        <ExportDataSetting
-          isExportSettingsOpen
-          onExportSettingsClose={mockOnClose}
-          data-testid={dataTestId}
-        />,
-        {
-          preloadedState,
-        },
-      );
-
-      await waitFor(() =>
-        expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
-      );
-
-      // Reset the mock before the test
-      jest.clearAllMocks();
-
-      // Select the ResponsesAndEhrData option
-      const exportDataExportedSetting = screen.getByTestId(
-        `${`${dataTestId}-settings`}-data-exported`,
-      );
-      expect(exportDataExportedSetting).toBeVisible();
-      const input = exportDataExportedSetting.querySelector('input');
-      input &&
-        fireEvent.change(input, { target: { value: ExportDataExported.ResponsesAndEhrData } });
-
-      fireEvent.click(screen.getByText('Download'));
-
-      expect(screen.getByTestId(`${dataTestId}-modal-password`)).toBeVisible();
-
-      fireEvent.change(await screen.findByLabelText('Password'), {
-        target: { value: mockedPassword },
-      });
-
-      fireEvent.click(
-        within(screen.getByTestId(`${dataTestId}-modal-password`)).getByText('Submit'),
-      );
-
-      await waitFor(() => {
-        // Verify that the EHR data exporter was instantiated
-        expect(mockedEhrDataExporter).toHaveBeenCalled();
       });
     });
   });

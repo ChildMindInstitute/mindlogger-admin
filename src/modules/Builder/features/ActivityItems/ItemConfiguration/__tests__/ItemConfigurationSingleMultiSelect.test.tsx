@@ -25,7 +25,7 @@ import {
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
 const mockedChangeColorEvent = { hex: '#fff' };
-jest.mock('react-color', () => ({
+vi.mock('react-color', () => ({
   ChromePicker: ({ onChangeComplete }) => (
     <div
       data-testid={'color-picker'}
@@ -36,7 +36,7 @@ jest.mock('react-color', () => ({
 
 describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test.each`
@@ -298,13 +298,18 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
     renderWithAppletFormData({
       children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
+      appletFormData: getAppletFormDataWithItem({
+        ...mockedSingleSelectFormValues,
+        responseValues: {
+          options: [{ text: '' }],
+        },
+      }),
       formRef: ref,
     });
 
     setItemResponseType(ItemResponseType.SingleSelection);
 
-    await ref.current.trigger(`${mockedItemName}.responseValues.options.0`);
+    await ref.current.trigger(`${mockedItemName}.responseValues.options.0.text`);
 
     await waitFor(() => {
       expect(screen.getByText('Option Text is required')).toBeVisible();
@@ -383,7 +388,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
       ).toBeVisible();
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toBeUndefined();
-    });
+    }, 10000);
 
     test('Is initialized correctly for item with paletteName', () => {
       renderWithAppletFormData({

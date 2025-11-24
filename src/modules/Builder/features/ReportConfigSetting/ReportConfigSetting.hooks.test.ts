@@ -13,19 +13,26 @@ import {
   defaultValues as initialValues,
 } from './ReportConfigSetting.const';
 
-jest.mock('react-router-dom', () => ({
-  useParams: jest.fn(),
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('shared/utils/authStorage', () => ({
+  return {
+    ...actual,
+    useParams: vi.fn(),
+  };
+});
+
+vi.mock('shared/utils/authStorage', () => ({
   authStorage: {
-    getAccessToken: jest.fn(),
+    getAccessToken: vi.fn(),
   },
 }));
 
-jest.mock('./ReportConfigSetting.utils', () => ({
-  verifyReportServer: jest.fn(),
-  setPasswordReportServer: jest.fn(),
+vi.mock('./ReportConfigSetting.utils', () => ({
+  verifyReportServer: vi.fn(),
+  setPasswordReportServer: vi.fn(),
 }));
 
 const mockUrl = 'http://example.com';
@@ -34,8 +41,8 @@ const mockToken = 'mockToken';
 const mockPassword = 'mockPassword';
 
 const renderReportServerHook = (message: string) => {
-  (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-  (verifyReportServer as jest.Mock).mockResolvedValue({
+  (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+  (verifyReportServer as vi.Mock).mockResolvedValue({
     json: async () => ({ message }),
   });
 
@@ -50,7 +57,7 @@ const renderReportServerHook = (message: string) => {
 };
 
 const renderDefaultValuesHook = (appletData = {}, params) => {
-  (useParams as jest.Mock).mockReturnValue(params);
+  (useParams as vi.Mock).mockReturnValue(params);
 
   return renderHook(() =>
     useDefaultValues({
@@ -68,7 +75,7 @@ const renderDefaultValuesHook = (appletData = {}, params) => {
 
 describe('useCheckReportServer', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('onVerify returns true when server responds with OK_MESSAGE', async () => {
@@ -106,8 +113,8 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns true when server responds with SUCCESS_MESSAGE', async () => {
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (setPasswordReportServer as jest.Mock).mockResolvedValue({
+    (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+    (setPasswordReportServer as vi.Mock).mockResolvedValue({
       json: async () => ({ message: SUCCESS_MESSAGE }),
     });
 
@@ -137,8 +144,8 @@ describe('useCheckReportServer', () => {
   });
 
   test('onSetPassword returns false when server does not respond with SUCCESS_MESSAGE', async () => {
-    (authStorage.getAccessToken as jest.Mock).mockReturnValue(mockToken);
-    (setPasswordReportServer as jest.Mock).mockResolvedValue({
+    (authStorage.getAccessToken as vi.Mock).mockReturnValue(mockToken);
+    (setPasswordReportServer as vi.Mock).mockResolvedValue({
       json: async () => ({ message: 'OTHER_MESSAGE' }),
     });
 
@@ -170,11 +177,11 @@ describe('useCheckReportServer', () => {
 
 describe('useDefaultValues', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('returns initialValues when no appletData provided', () => {
-    (useParams as jest.Mock).mockReturnValue({});
+    (useParams as vi.Mock).mockReturnValue({});
 
     const { result } = renderHook(() => useDefaultValues());
 

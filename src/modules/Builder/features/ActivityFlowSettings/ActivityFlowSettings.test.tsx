@@ -9,8 +9,8 @@ import { page } from 'resources';
 
 import { ActivityFlowSettings } from './ActivityFlowSettings';
 
-const mockWatch = jest.fn();
-const mockUseNavigate = jest.fn();
+const mockWatch = vi.fn();
+const mockUseNavigate = vi.fn();
 
 const routePath = page.builderAppletActivityFlowItemSettings;
 const dataTestid = 'builder-activity-flows-settings-report-config';
@@ -23,16 +23,26 @@ const mockActivityFlows = [
   },
 ];
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUseNavigate,
-}));
+// mock the module
+vi.mock('react-router-dom', async () => {
+  // pull in the real implementation
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useCustomFormContext: jest.fn(),
-  useRedirectIfNoMatchedActivityFlow: jest.fn(),
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
+
+vi.mock('modules/Builder/hooks', async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    useCustomFormContext: vi.fn(),
+    useRedirectIfNoMatchedActivityFlow: vi.fn(),
+  };
+});
 
 const testActivityFlowSettings = async ({ disableButton }) => {
   expect(screen.getByText('Activity Flow Settings')).toBeInTheDocument();
@@ -59,7 +69,7 @@ describe('ActivityFlowSettings', () => {
   beforeEach(() => {
     useCustomFormContext.mockReturnValue({ watch: mockWatch });
     mockWatch.mockReturnValueOnce(mockActivityFlows);
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders ActivityFlowSettings component with mock data and enabled report config', () => {

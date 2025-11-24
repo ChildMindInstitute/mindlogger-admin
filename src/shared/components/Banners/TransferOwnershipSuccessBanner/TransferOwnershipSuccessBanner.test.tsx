@@ -4,7 +4,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { TransferOwnershipSuccessBanner } from './TransferOwnershipSuccessBanner';
 
-const mockOnClose = jest.fn();
+const mockOnClose = vi.fn();
 
 const props = {
   email: 'test@example.com',

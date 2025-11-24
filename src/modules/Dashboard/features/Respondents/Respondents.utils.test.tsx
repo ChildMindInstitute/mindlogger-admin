@@ -52,12 +52,12 @@ const headCellProperties = ['pin', 'secretIds', 'nicknames', 'lastSeen', 'status
 const mockedEmail = 'test@test.com';
 const commonGetActionsProps = {
   actions: {
-    scheduleSetupAction: jest.fn(),
-    viewDataAction: jest.fn(),
-    removeAccessAction: jest.fn(),
-    userDataExportAction: jest.fn(),
-    editRespondent: jest.fn(),
-    sendInvitation: jest.fn(),
+    scheduleSetupAction: vi.fn(),
+    viewDataAction: vi.fn(),
+    removeAccessAction: vi.fn(),
+    userDataExportAction: vi.fn(),
+    editRespondent: vi.fn(),
+    sendInvitation: vi.fn(),
   },
   filteredApplets,
   respondentId: mockedFullParticipantId1,

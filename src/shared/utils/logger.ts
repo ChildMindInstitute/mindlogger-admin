@@ -1,7 +1,8 @@
+import { zipSync, strToU8 } from 'fflate';
+
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
 import { postLogFile } from '../api/api';
-import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { SessionStorageKeys } from './storage';
 
 const DEVICE_ID = 'browser';
@@ -30,7 +31,7 @@ export const sendLogFile = async ({
   error: TypeError;
   formData?: Record<string, unknown>;
 }) => {
-  if (process.env.NODE_ENV !== 'production') return;
+  if (import.meta.env.NODE_ENV !== 'production') return;
 
   const { platform, appVersion, appName, userAgent, hardwareConcurrency, language } = navigator;
   const time = new Date().getTime();
@@ -54,15 +55,14 @@ export const sendLogFile = async ({
     errorStack: error?.stack ?? '',
   };
   const logString = JSON.stringify(logObject, undefined, 4);
-  const file = new File([logString], `log_${time}.txt`, {
-    type: 'text/plain',
-    lastModified: time,
-  });
   const fileId = `${pathname.replace(/\//g, '_')}_${time}`;
-  const JSZip = await import('jszip');
-  const zip = new JSZip.default();
-  zip.file(`${fileId}.txt`, file);
-  const content = await zip.generateAsync(BLOB_ZIP_OPTIONS);
+
+  // Use fflate for fast zip generation
+  const zipData = {
+    [`${fileId}.txt`]: strToU8(logString),
+  };
+  const zipped = zipSync(zipData, { level: 0 });
+  const content = new Blob([new Uint8Array(zipped)], { type: 'application/zip' });
   const fileFormData = getUploadFormData(content);
 
   try {

@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ActionsMenu } from './ActionsMenu';
 
 const menuItems = [
-  { title: 'Option 1', action: jest.fn() },
-  { title: 'Option 2', action: jest.fn() },
+  { title: 'Option 1', action: vi.fn() },
+  { title: 'Option 2', action: vi.fn() },
 ];
 
 const renderMenu = () => render(<ActionsMenu menuItems={menuItems} data-testid="test-actions" />);
