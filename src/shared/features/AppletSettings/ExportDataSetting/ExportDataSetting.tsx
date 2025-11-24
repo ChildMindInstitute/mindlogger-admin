@@ -9,7 +9,6 @@ import { useFeatureFlags } from 'shared/hooks';
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 import { applet } from 'shared/state/Applet';
 import { UniqueTuple } from 'shared/types';
-import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import {
@@ -40,7 +39,7 @@ export const ExportDataSetting = ({
   const canExportEhrHealthData = featureFlags.enableEhrHealthData !== 'unavailable';
 
   const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
-  const maxDate = useMemo(() => getNormalizedTimezoneDate(new Date().toString()), []);
+  const maxDate = useMemo(() => new Date(), []);
   const defaultValues: ExportDataFormValues = useMemo(
     () => ({
       dataExported: canExportEhrHealthData

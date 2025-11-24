@@ -73,6 +73,7 @@ export enum DateFormats {
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
   YearMonthDayHoursMinutes = 'yyyy-MM-dd HH:mm',
   shortISO = "yyyy-MM-dd'T'HH:mm:ss",
+  shortISOWithTimezone = "yyyy-MM-dd'T'HH:mm:ssXXX",
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
   MonthDayYearTime = 'MMM dd, yyyy, HH:mm',
