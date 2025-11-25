@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import get from 'lodash.get';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -11,7 +10,6 @@ import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respond
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
-import { DateFormats } from 'shared/consts';
 import {
   ExportDataExported,
   ExportDataFormValues,
