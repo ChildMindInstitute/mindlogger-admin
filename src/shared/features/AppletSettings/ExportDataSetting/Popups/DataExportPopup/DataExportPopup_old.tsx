@@ -118,16 +118,16 @@ export const DataExportPopup = ({
           supplementaryFiles,
         } = getValues?.() ?? {};
 
-        let fromDate = format(formFromDate, DateFormats.shortISOWithTimezone);
-        let toDate = format(formToDate, DateFormats.shortISOWithTimezone);
+        let fromDate = format(formFromDate, DateFormats.shortISO);
+        let toDate = format(formToDate, DateFormats.shortISO);
 
         // Update the time for last 24 hours submissions
         if (dateType === ExportDateType.Last24h) {
           const currentTime = new Date();
-          // Properly calculate 24 hours ago by subtracting milliseconds
-          const oneDayAgo = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000);
-          fromDate = format(oneDayAgo, DateFormats.shortISOWithTimezone);
-          toDate = format(currentTime, DateFormats.shortISOWithTimezone);
+          const oneDayAgo = new Date(currentTime);
+          oneDayAgo.setHours(currentTime.getHours() - 24);
+          fromDate = format(oneDayAgo, DateFormats.shortISO);
+          toDate = format(currentTime, DateFormats.shortISO);
         }
 
         const includeEhr =
