@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import get from 'lodash.get';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -10,6 +11,7 @@ import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respond
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
+import { DateFormats } from 'shared/consts';
 import {
   ExportDataExported,
   ExportDataFormValues,
@@ -116,16 +118,16 @@ export const DataExportPopup = ({
           supplementaryFiles,
         } = getValues?.() ?? {};
 
-        let fromDate = formFromDate.toISOString();
-        let toDate = formToDate.toISOString();
+        let fromDate = format(formFromDate, DateFormats.shortISO);
+        let toDate = format(formToDate, DateFormats.shortISO);
 
         // Update the time for last 24 hours submissions
         if (dateType === ExportDateType.Last24h) {
           const currentTime = new Date();
           const oneDayAgo = new Date(currentTime);
           oneDayAgo.setHours(currentTime.getHours() - 24);
-          fromDate = oneDayAgo.toISOString();
-          toDate = currentTime.toISOString();
+          fromDate = format(oneDayAgo, DateFormats.shortISO);
+          toDate = format(currentTime, DateFormats.shortISO);
         }
 
         const includeEhr =
