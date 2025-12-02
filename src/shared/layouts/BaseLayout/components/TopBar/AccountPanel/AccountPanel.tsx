@@ -7,7 +7,6 @@ import { alerts, auth } from 'redux/modules';
 import {
   StyledLabelSmall,
   StyledTitleSmall,
-  StyledFlexTopCenter,
   variables,
   StyledIconButton,
   StyledBadge,
@@ -21,10 +20,13 @@ import {
   StyledAccountDrawer,
   StyledHeader,
   StyledHeaderInfo,
+  StyledUserInfoWrapper,
   StyledAvatarWrapper,
   StyledFooter,
   StyledLogOutBtn,
   StyledCloseWrapper,
+  StyledSettingsSection,
+  StyledSettingsIcon,
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
@@ -59,7 +61,15 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
       >
         <Box>
           <StyledHeader>
-            <StyledFlexTopCenter>
+            <StyledCloseWrapper>
+              <StyledIconButton
+                data-testid="account-panel-close"
+                onClick={() => setVisibleDrawer(false)}
+              >
+                <Svg id="close" />
+              </StyledIconButton>
+            </StyledCloseWrapper>
+            <StyledUserInfoWrapper>
               <StyledBadge badgeContent={notWatched} outlineColor={variables.palette.surface1}>
                 <StyledAvatarWrapper>
                   <Avatar caption={userInitials} />
@@ -73,16 +83,15 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
                   </StyledLabelSmall>
                 )}
               </StyledHeaderInfo>
-            </StyledFlexTopCenter>
-            <StyledCloseWrapper>
-              <StyledIconButton
-                data-testid="account-panel-close"
-                onClick={() => setVisibleDrawer(false)}
-              >
-                <Svg id="close" />
-              </StyledIconButton>
-            </StyledCloseWrapper>
+            </StyledUserInfoWrapper>
+            <StyledSettingsSection data-testid="account-panel-settings">
+              <StyledSettingsIcon>
+                <Svg id="settings" width="18" height="18" />
+              </StyledSettingsIcon>
+              <StyledTitleSmall>{t('settings')}</StyledTitleSmall>
+            </StyledSettingsSection>
           </StyledHeader>
+          <Divider />
           <Notifications />
         </Box>
         <Divider />
