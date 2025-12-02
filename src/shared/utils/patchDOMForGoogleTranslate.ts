@@ -17,7 +17,10 @@ export function patchDOMForGoogleTranslate() {
     };
 
     const originalInsertBefore = Node.prototype.insertBefore;
-    Node.prototype.insertBefore = function insertBefore<T extends Node>(newNode: T, referenceNode: Node | null): T {
+    Node.prototype.insertBefore = function insertBefore<T extends Node>(
+      newNode: T,
+      referenceNode: Node | null,
+    ): T {
       if (referenceNode && referenceNode.parentNode !== this) {
         if (console) {
           console.error(
