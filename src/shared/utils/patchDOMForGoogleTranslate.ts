@@ -13,7 +13,7 @@ export function patchDOMForGoogleTranslate() {
         return child;
       }
 
-      return originalRemoveChild.apply(this, arguments);
+      return originalRemoveChild.call(this, child);
     };
 
     const originalInsertBefore = Node.prototype.insertBefore;
@@ -30,7 +30,7 @@ export function patchDOMForGoogleTranslate() {
         return newNode;
       }
 
-      return originalInsertBefore.apply(this, arguments);
+      return originalInsertBefore.call(this, newNode, referenceNode);
     };
   }
 }
