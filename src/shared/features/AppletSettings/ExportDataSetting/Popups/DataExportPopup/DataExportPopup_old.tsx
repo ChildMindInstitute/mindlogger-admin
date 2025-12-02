@@ -45,6 +45,22 @@ import { EHRDataExporter } from 'shared/utils/exportData/exporters/EHRDataExport
 import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
+// NOTE: This is not the correct approach - the backend should be timezone-aware.
+// We're converting to UTC as a hack because the backend expects UTC but doesn't handle timezones properly.
+const formatDateAsUTC = (date: Date): string => {
+  // Get the UTC components and create a new date in local timezone that represents UTC time
+  const utcDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+  );
+
+  return format(utcDate, DateFormats.shortISO);
+};
+
 export const DataExportPopup = ({
   filters = {},
   popupVisible,
@@ -122,12 +138,13 @@ export const DataExportPopup = ({
         let toDate = format(formToDate, DateFormats.shortISO);
 
         // Update the time for last 24 hours submissions
+        // Converting to UTC because backend expects UTC but is not timezone-aware
         if (dateType === ExportDateType.Last24h) {
           const currentTime = new Date();
           const oneDayAgo = new Date(currentTime);
           oneDayAgo.setHours(currentTime.getHours() - 24);
-          fromDate = format(oneDayAgo, DateFormats.shortISO);
-          toDate = format(currentTime, DateFormats.shortISO);
+          fromDate = formatDateAsUTC(oneDayAgo);
+          toDate = formatDateAsUTC(currentTime);
         }
 
         const includeEhr =
