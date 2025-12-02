@@ -4,7 +4,7 @@
 export function patchDOMForGoogleTranslate() {
   if (typeof Node === 'function' && Node.prototype) {
     const originalRemoveChild = Node.prototype.removeChild;
-    Node.prototype.removeChild = function (child) {
+    Node.prototype.removeChild = function removeChild<T extends Node>(child: T): T {
       if (child.parentNode !== this) {
         if (console) {
           console.error('Cannot remove a child from a different parent', child, this);
@@ -13,11 +13,11 @@ export function patchDOMForGoogleTranslate() {
         return child;
       }
 
-      return originalRemoveChild.call(this, child);
+      return originalRemoveChild.call(this, child) as T;
     };
 
     const originalInsertBefore = Node.prototype.insertBefore;
-    Node.prototype.insertBefore = function (newNode, referenceNode) {
+    Node.prototype.insertBefore = function insertBefore<T extends Node>(newNode: T, referenceNode: Node | null): T {
       if (referenceNode && referenceNode.parentNode !== this) {
         if (console) {
           console.error(
@@ -30,7 +30,7 @@ export function patchDOMForGoogleTranslate() {
         return newNode;
       }
 
-      return originalInsertBefore.call(this, newNode, referenceNode);
+      return originalInsertBefore.call(this, newNode, referenceNode) as T;
     };
   }
 }
