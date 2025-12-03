@@ -186,62 +186,68 @@ export const SelectController = <T extends FieldValues>({
     onChange: ((e: SelectEvent) => void) | undefined,
     selectedValue?: string,
     error?: FieldError,
-  ) => (
-    <Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
-      {placeholder && !selectedValue && (
-        <>
-          <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
-          <StyledPlaceholder className="controller-placeholder">{placeholder}</StyledPlaceholder>
-        </>
-      )}
+  ) => {
+      // HACK: Rerender when selectedValue changes to avoid interference from Google Translate (M2-10076)
+      const [forceRerenderKey, setForceRerenderKey] = useState(1);
+      useEffect(() => setForceRerenderKey(-forceRerenderKey), [selectedValue]);
 
-      <Tooltip
-        enterDelay={500}
-        {...TooltipProps}
-        onClose={handleCloseTooltip}
-        onOpen={handleOpenTooltip}
-        open={open}
-      >
-        <StyledTextField
-          {...props}
-          select
-          onChange={onChange}
-          value={selectedValue}
-          error={!!error || providedError}
-          helperText={isErrorVisible ? error?.message || helperText : ''}
-          disabled={disabled}
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                sx: { ...selectDropdownStyles, ...dropdownStyles },
-                'data-testid': `${dataTestid}-dropdown`,
-              },
-            },
-            IconComponent: shouldSkipIcon
-              ? undefined
-              : (props) => <Svg className={props.className} id="navigate-down" />,
-            ...SelectProps,
-            onClose: handleCloseSelect,
-            onOpen: handleOpenSelect,
-            ...(shouldSkipIcon && {
-              inputProps: {
-                sx: {
-                  pr: '1.2rem !important',
-                  minWidth: '94% !important',
+      return (<Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
+        {placeholder && !selectedValue && (
+          <>
+            <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
+            <StyledPlaceholder className="controller-placeholder">{placeholder}</StyledPlaceholder>
+          </>
+        )}
+
+        <Tooltip
+          enterDelay={500}
+          {...TooltipProps}
+          onClose={handleCloseTooltip}
+          onOpen={handleOpenTooltip}
+          open={open}
+        >
+          <StyledTextField
+            {...props}
+            key={forceRerenderKey}
+            select
+            onChange={onChange}
+            value={selectedValue}
+            error={!!error || providedError}
+            helperText={isErrorVisible ? error?.message || helperText : ''}
+            disabled={disabled}
+            SelectProps={{
+              MenuProps: {
+                PaperProps: {
+                  sx: { ...selectDropdownStyles, ...dropdownStyles },
+                  'data-testid': `${dataTestid}-dropdown`,
                 },
               },
-            }),
-          }}
-          data-testid={dataTestid}
-        >
-          {renderGroupedOptions(selectedValue)}
-          {targetSelector && (
-            <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
-          )}
-        </StyledTextField>
-      </Tooltip>
-    </Box>
-  );
+              IconComponent: shouldSkipIcon
+                ? undefined
+                : (props) => <Svg className={props.className} id="navigate-down" />,
+              ...SelectProps,
+              onClose: handleCloseSelect,
+              onOpen: handleOpenSelect,
+              ...(shouldSkipIcon && {
+                inputProps: {
+                  sx: {
+                    pr: '1.2rem !important',
+                    minWidth: '94% !important',
+                  },
+                },
+              }),
+            }}
+            data-testid={dataTestid}
+          >
+            {renderGroupedOptions(selectedValue)}
+            {targetSelector && (
+              <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
+            )}
+          </StyledTextField>
+        </Tooltip>
+      </Box>
+    );
+  }
 
   return (
     <>
