@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { Box, ClickAwayListener, Divider } from '@mui/material';
 
 import { Avatar, Svg } from 'shared/components';
@@ -14,6 +15,7 @@ import {
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { checkIfAppletUrlPassed } from 'shared/utils/urlGenerator';
+import { AccountSettings } from 'modules/Dashboard/features/AccountSettings';
 
 import { Notifications } from '../Notifications';
 import {
@@ -40,6 +42,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
   const handleLogout = useLogout();
   const dispatch = useAppDispatch();
   const { notWatched = 0 } = alerts.useAlertsData() ?? {};
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
 
   const onLogout = () => {
     if (checkIfAppletUrlPassed(pathname)) {
@@ -84,7 +87,10 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
                 )}
               </StyledHeaderInfo>
             </StyledUserInfoWrapper>
-            <StyledSettingsSection data-testid="account-panel-settings">
+            <StyledSettingsSection
+              data-testid="account-panel-settings"
+              onClick={() => setShowAccountSettings(true)}
+            >
               <StyledSettingsIcon>
                 <Svg id="settings" width="18" height="18" />
               </StyledSettingsIcon>
@@ -103,6 +109,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
             {t('logOut')}
           </StyledLogOutBtn>
         </StyledFooter>
+        <AccountSettings open={showAccountSettings} onClose={() => setShowAccountSettings(false)} />
       </StyledAccountDrawer>
     </ClickAwayListener>
   );
