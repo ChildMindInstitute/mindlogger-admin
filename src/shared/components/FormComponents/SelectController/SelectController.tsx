@@ -187,11 +187,12 @@ export const SelectController = <T extends FieldValues>({
     selectedValue?: string,
     error?: FieldError,
   ) => {
-      // HACK: Rerender when selectedValue changes to avoid interference from Google Translate (M2-10076)
-      const [forceRerenderKey, setForceRerenderKey] = useState(1);
-      useEffect(() => setForceRerenderKey(-forceRerenderKey), [selectedValue]);
+    // HACK: Rerender when selectedValue changes to avoid interference from Google Translate (M2-10076)
+    const [forceRerenderKey, setForceRerenderKey] = useState(1);
+    useEffect(() => setForceRerenderKey(-forceRerenderKey), [selectedValue]);
 
-      return (<Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
+    return (
+      <Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
         {placeholder && !selectedValue && (
           <>
             <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
@@ -247,7 +248,7 @@ export const SelectController = <T extends FieldValues>({
         </Tooltip>
       </Box>
     );
-  }
+  };
 
   return (
     <>
