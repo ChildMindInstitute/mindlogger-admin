@@ -5,6 +5,7 @@ import { datadogRum, RumEvent } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
+import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTranslate';
 
 import App from './App';
 import './i18n';
@@ -62,6 +63,8 @@ if (
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 Mixpanel.init();
+
+patchDOMForGoogleTranslate();
 
 (async () => {
   const LDProvider = await asyncWithLDProvider({
