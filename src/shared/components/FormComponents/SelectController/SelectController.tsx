@@ -187,9 +187,11 @@ export const SelectController = <T extends FieldValues>({
     selectedValue?: string,
     error?: FieldError,
   ) => {
+    /* eslint-disable react-hooks/rules-of-hooks */
     // HACK: Rerender when selectedValue changes to avoid interference from Google Translate (M2-10076)
     const [forceRerenderKey, setForceRerenderKey] = useState(1);
     useEffect(() => setForceRerenderKey(-forceRerenderKey), [selectedValue]);
+    /* eslint-enable react-hooks/rules-of-hooks */
 
     return (
       <Box sx={{ position: 'relative', width: '100%', ...sx }} className={className || ''}>
