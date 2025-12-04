@@ -99,8 +99,6 @@
     "preview": "vite preview",
     "lint:check": "eslint src",
     "lint:fix": "eslint src --fix",
-    "prettier:check": "prettier src --check",
-    "prettier:fix": "prettier src --write",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:junit": "vitest run --reporter=default --reporter=junit",
