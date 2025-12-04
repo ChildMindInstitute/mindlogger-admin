@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, MouseEvent, ReactNode, useRef, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -91,7 +91,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   const [selectOpen, setSelectOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLLIElement | null>(null);
   const [currentItemType, setCurrentItemType] = useState<ItemResponseTypeNoPerfTasks | null>(null);
-  const searchTermLowercase = searchTerm.toLowerCase();
+  const searchTermLowercase = searchTerm.toLocaleLowerCase();
 
   const handleTooltipOpen = (
     event: MouseEvent<HTMLLIElement>,
@@ -219,11 +219,24 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
                   ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
-                    const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
+                    // HACK: Read translated value from DOM if Google Translate is enabled (M2-10091)
+
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const menuItemRef = useRef<HTMLLIElement>(null);
+                    const maybeGoogleTranslatedValue = menuItemRef.current?.textContent;
+                    const hasGoogleTranslatedValue =
+                      maybeGoogleTranslatedValue && maybeGoogleTranslatedValue !== value;
+
+                    // hide if value does not have search term and if value from Google Translate does not have search term
+                    const isHidden =
+                      getIsNotHaveSearchValue(value, searchTermLowercase) &&
+                      (!hasGoogleTranslatedValue ||
+                        getIsNotHaveSearchValue(maybeGoogleTranslatedValue, searchTermLowercase));
 
                     // HACK: Use key to rerender when search term changes to avoid interference from Google Translate (M2-10091)
                     return (
                       <StyledMenuItem
+                        ref={menuItemRef}
                         onMouseEnter={
                           selectOpen ? (event) => handleTooltipOpen(event, value) : falseReturnFunc
                         }
