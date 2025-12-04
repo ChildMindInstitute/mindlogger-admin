@@ -221,6 +221,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
                     const isHidden = getIsNotHaveSearchValue(value, searchTermLowercase);
 
+                    // HACK: Use key to rerender when search term changes to avoid interference from Google Translate (M2-10091)
                     return (
                       <StyledMenuItem
                         onMouseEnter={
@@ -228,7 +229,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         }
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
-                        key={value}
+                        key={`${searchTerm} - ${value}`}
                         value={disabled ? undefined : value}
                         disabled={disabled}
                         data-testid={`${dataTestid}-option-${value}`}
