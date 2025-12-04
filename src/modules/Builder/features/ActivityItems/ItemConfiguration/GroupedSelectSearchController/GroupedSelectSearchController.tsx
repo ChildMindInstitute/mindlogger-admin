@@ -167,7 +167,9 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 labelId="input-type-label"
                 label={t('itemType')}
                 renderValue={() => (
+                  // HACK: Use key to rerender when value changes to avoid interference from Google Translate (M2-10076)
                   <SelectItemContent
+                    key={value}
                     icon={itemsTypeIcons[value]}
                     label={t(getItemLanguageKey(value))}
                     value={value}
