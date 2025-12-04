@@ -1,6 +1,8 @@
 # Child Mind Institute - Curious Admin
 
-This repository is used for the Admin Panel of the [Curious](https://mindlogger.org/) application stack.
+This repository is used for the A* `yarn eject`
+
+    **Note: this is a one-way operation. Once you `eject`, you can't go back!**n Panel of the [Curious](https://mindlogger.org/) application stack.
 
 ## Getting Started
 
@@ -23,8 +25,8 @@ Running the app:
 
 ### 2. Run the app
 
-* Install dependencies using `npm install`
-* Run the project using `npm run start`. See [scripts](#available-scripts)
+* Install dependencies using `yarn install`
+* Run the project using `yarn start`. See [scripts](#available-scripts)
 * Launch browser [http://localhost:3000](http://localhost:3000) to view the admin panel
 
 ## Features
@@ -49,7 +51,7 @@ In the project directory, you can run:
 
 ### Running the app
 
-* `npm start`
+* `yarn start`
 
     Runs the app in the development mode.\
     Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -57,11 +59,11 @@ In the project directory, you can run:
     The page will reload if you make edits.\
     You will also see any lint errors in the console.
 
-* `npm start:checkCycles`
+* `yarn start:checkCycles`
 
-    The same as `npm start`, but with cycle dependency analysis logging.
+    The same as `yarn start`, but with cycle dependency analysis logging.
 
-* `npm run build`
+* `yarn build`
 
     Builds the app for production to the `build` folder.\
     It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -85,11 +87,11 @@ In the project directory, you can run:
 
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-* `npm run test` - Launches the test runner in the interactive watch mode.
-* `npm run test:coverage` - Generate test coverage report
-* `npm run test:junit` - Generate a junit xml report
-* `npm run test:related` - Runs tests only for modified files
-* `npm run test:nowatch` - Runs test suite once with the `watchAll=false` flag
+* `yarn test` - Launches the test runner in the interactive watch mode.
+* `yarn test:coverage` - Generate test coverage report
+* `yarn test:junit` - Generate a junit xml report
+* `yarn test:related` - Runs tests only for modified files
+* `yarn test:nowatch` - Runs test suite once with the `watchAll=false` flag
 
 ## Environment Variables
 
