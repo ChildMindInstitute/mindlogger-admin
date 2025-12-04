@@ -15,7 +15,7 @@ run() {
     return 0
   fi
 
-  npm run test:nowatch $ARGS $(echo $tests_related)
+  yarn test:nowatch $ARGS $(echo $tests_related)
 }
 
 run
