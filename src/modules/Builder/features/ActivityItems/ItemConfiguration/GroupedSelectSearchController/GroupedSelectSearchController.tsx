@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { ChangeEvent, MouseEvent, ReactNode, useRef, useState } from 'react';
+import { ChangeEvent, MouseEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -219,19 +219,30 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
                   ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
-                    // HACK: Read translated value from DOM if Google Translate is enabled (M2-10095)
-
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     const menuItemRef = useRef<HTMLLIElement>(null);
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const [googleTranslatedValue, setGoogleTranslatedValue] = useState<string>('');
+
+                    // HACK: Read translated value from DOM if Google Translate is enabled (M2-10095)
                     const maybeGoogleTranslatedValue = menuItemRef.current?.textContent;
-                    const hasGoogleTranslatedValue =
-                      maybeGoogleTranslatedValue && maybeGoogleTranslatedValue !== value;
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    useEffect(() => {
+                      // cache value from DOM if it has been changed by Google Translate
+                      if (
+                        maybeGoogleTranslatedValue &&
+                        maybeGoogleTranslatedValue !== googleTranslatedValue &&
+                        !maybeGoogleTranslatedValue.startsWith(t(value))
+                      ) {
+                        setGoogleTranslatedValue(maybeGoogleTranslatedValue);
+                      }
+                    }, [maybeGoogleTranslatedValue]);
 
                     // hide if value does not have search term and if value from Google Translate does not have search term
                     const isHidden =
                       getIsNotHaveSearchValue(value, searchTermLowercase) &&
-                      (!hasGoogleTranslatedValue ||
-                        getIsNotHaveSearchValue(maybeGoogleTranslatedValue, searchTermLowercase));
+                      (!googleTranslatedValue ||
+                        getIsNotHaveSearchValue(googleTranslatedValue, searchTermLowercase));
 
                     // HACK: Use key to rerender when search term changes to avoid interference from Google Translate (M2-10091)
                     return (
