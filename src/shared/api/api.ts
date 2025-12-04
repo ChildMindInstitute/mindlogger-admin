@@ -14,6 +14,7 @@ import {
   AppletBody,
   AppletUniqueName,
 } from './api.types';
+import { MFAInitiateResponse, MFAVerifyRequest, MFAVerifyResponse } from './api.mfa.types';
 import { apiClient, authApiClient } from './apiConfig';
 
 export const signInRefreshTokenApi = (
@@ -123,3 +124,18 @@ export const postLogFile = (
     },
     signal,
   });
+
+// MFA API endpoints
+export const mfaApi = {
+  initiateSetup: (signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFAInitiateResponse>>(
+      '/users/me/mfa/totp/initiate',
+      {},
+      { signal },
+    ),
+
+  verifyCode: (body: MFAVerifyRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFAVerifyResponse>>('/users/me/mfa/totp/verify', body, {
+      signal,
+    }),
+};

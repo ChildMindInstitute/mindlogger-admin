@@ -79,10 +79,12 @@ export const StyledDescription = styled(Box)`
 
 export const StyledQRCodeContainer = styled(Box)`
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   align-self: stretch;
   padding: 0 127.5px;
+  min-height: 225px;
 `;
 
 export const StyledQRCodePlaceholder = styled(Box)`
@@ -177,8 +179,16 @@ export const StyledButton = styled('button')`
   &.secondary {
     background: transparent;
     border: none;
+    height: auto;
+    padding: 0;
     color: ${variables.palette.primary};
-    font-weight: ${variables.font.weight.regular};
+    font-family: ${variables.font.family};
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2.4rem;
+    letter-spacing: 0.15px;
+    text-align: center;
 
     &:hover {
       text-decoration: underline;
@@ -201,4 +211,34 @@ export const StyledLink = styled(Box)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const StyledErrorMessage = styled(Box)`
+  display: flex;
+  width: 340px;
+  padding: 12px 16px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  background: ${variables.palette.error_container};
+  color: ${variables.palette.on_error_container};
+  font-family: ${variables.font.family};
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2rem;
+  letter-spacing: 0.25px;
+`;
+
+export const StyledLoadingContainer = styled(Box)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
 `;

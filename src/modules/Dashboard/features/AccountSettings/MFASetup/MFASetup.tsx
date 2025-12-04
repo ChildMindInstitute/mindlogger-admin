@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import { QRCodeSVG } from 'qrcode.react';
 
 import {
   StyledDialog,
@@ -8,26 +9,47 @@ import {
   StyledContent,
   StyledDescription,
   StyledQRCodeContainer,
-  StyledQRCodePlaceholder,
   StyledInputContainer,
   StyledInput,
   StyledButtonContainer,
   StyledButton,
+  StyledErrorMessage,
+  StyledLoadingContainer,
 } from './MFASetup.styles';
 import { MFASetupProps } from './MFASetup.types';
+import { useMFASetup } from './useMFASetup';
 
 export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
-  const [verificationCode, setVerificationCode] = useState('');
+  const {
+    provisioningUri,
+    verificationCode,
+    isLoading,
+    error,
+    setVerificationCode,
+    handleVerify,
+    clearError,
+  } = useMFASetup(open);
 
-  const handleContinue = () => {
-    // TODO: Verify the code with backend
-    if (verificationCode) {
+  const handleContinue = async () => {
+    const success = await handleVerify();
+    if (success) {
       onComplete();
+      onClose();
     }
   };
 
   const handleCantScan = () => {
     // TODO: Show alternative setup method (manual entry)
+  };
+
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+    if (value.length <= 6) {
+      setVerificationCode(value);
+      if (error) {
+        clearError();
+      }
+    }
   };
 
   return (
@@ -56,24 +78,36 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           authenticator app to complete setup.
         </StyledDescription>
 
+        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+
         <StyledQRCodeContainer>
-          <StyledQRCodePlaceholder>
-            {/* TODO: Replace with actual QR code component */}
-          </StyledQRCodePlaceholder>
+          {provisioningUri && <QRCodeSVG value={provisioningUri} size={225} />}
+          {isLoading && (
+            <StyledLoadingContainer>
+              <CircularProgress />
+            </StyledLoadingContainer>
+          )}
         </StyledQRCodeContainer>
 
         <StyledInputContainer>
           <StyledInput
             type="text"
+            inputMode="numeric"
             placeholder="Enter verification code"
             value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
+            onChange={handleCodeChange}
             maxLength={6}
+            disabled={isLoading}
           />
         </StyledInputContainer>
 
         <StyledButtonContainer>
-          <StyledButton type="button" className="primary" onClick={handleContinue}>
+          <StyledButton
+            type="button"
+            className="primary"
+            onClick={handleContinue}
+            disabled={isLoading}
+          >
             Continue
           </StyledButton>
           <StyledButton type="button" className="secondary" onClick={handleCantScan}>

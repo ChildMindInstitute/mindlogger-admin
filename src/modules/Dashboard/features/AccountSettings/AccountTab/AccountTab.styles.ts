@@ -162,6 +162,33 @@ export const StyledAuthenticatorTitle = styled(Box)`
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
   line-height: 2.8rem; /* 140% */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const StyledEnabledBadge = styled(Box)`
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: ${variables.palette.surface_variant};
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  span {
+    color: ${variables.palette.on_surface};
+    font-family: ${variables.font.family};
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: ${variables.font.weight.bold};
+    line-height: 1.6rem;
+    letter-spacing: 0.05rem;
+  }
 `;
 
 export const StyledAuthenticatorDescription = styled(Box)`
