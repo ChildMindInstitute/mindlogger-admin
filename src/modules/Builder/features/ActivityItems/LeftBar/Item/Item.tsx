@@ -31,7 +31,8 @@ export const Item = ({
   const { getFieldState } = useCustomFormContext();
   const [visibleActions, setVisibleActions] = useState(false);
   const { activity } = useCurrentActivity();
-  const item: ItemFormValues = useWatch({ name: name! });
+  // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
+  const item = useWatch({ name: name! }) as ItemFormValues;
 
   const hasHiddenOption = !!getItemConditionDependencies(item, activity?.conditionalLogic)?.length;
   const hasDuplicateOption = item.responseType !== ItemResponseType.RequestHealthRecordData;

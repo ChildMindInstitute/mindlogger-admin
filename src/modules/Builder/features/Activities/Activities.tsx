@@ -127,7 +127,8 @@ export const Activities = () => {
   const activities = fields as unknown as ActivityFormValues[];
 
   const activityNames = useMemo(() => pluck(activities, 'name'), [activities]);
-  const activityFlows: AppletFormValues['activityFlows'] = useWatch({ name: 'activityFlows' });
+  // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
+  const activityFlows = useWatch({ name: 'activityFlows' }) as AppletFormValues['activityFlows'];
   const errors = useMemo(
     () => activities?.map((_, index) => !!getFieldState(`activities.${index}`).error),
     [activities, getFieldState],

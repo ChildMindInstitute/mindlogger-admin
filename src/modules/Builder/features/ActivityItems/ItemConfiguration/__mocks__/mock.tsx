@@ -116,8 +116,8 @@ export const removeUuidValues = (item) => {
 };
 export const setItemResponseType = (responseType) => {
   const itemType = screen.getByTestId(mockedTypeTestid);
-  const typeButton = itemType.querySelector('[role="button"]');
-  fireEvent.mouseDown(typeButton);
+  const typeCombobox = itemType.querySelector('[role="combobox"]');
+  fireEvent.mouseDown(typeCombobox);
 
   const option = screen.getByTestId(`${mockedOptionTestid}-${responseType}`);
   fireEvent.click(option);
@@ -443,7 +443,7 @@ export const mockedEmptyText = {
   config: {
     removeBackButton: false,
     skippableItem: false,
-    maxResponseLength: 72,
+    maxResponseLength: 300,
     correctAnswerRequired: false,
     correctAnswer: '',
     numericalResponseRequired: false,

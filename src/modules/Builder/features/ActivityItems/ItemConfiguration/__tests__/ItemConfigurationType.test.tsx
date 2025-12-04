@@ -9,7 +9,6 @@ import {
   mockedSingleSelectFormValues,
 } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import {
   mockedItemName,
@@ -45,25 +44,21 @@ import {
   mockedEmptyParagraphText,
 } from '../__mocks__';
 
-vi.mock('shared/hooks/useFeatureFlags', () => ({
-  useFeatureFlags: vi.fn(),
-}));
-const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
+vi.mock('shared/hooks', async () => {
+  const actual = await vi.importActual('shared/hooks');
 
-describe('ItemConfiguration: Item Type', () => {
-  beforeEach(() => {
-    mockUseFeatureFlags.mockReturnValue({
+  return {
+    ...actual,
+    useFeatureFlags: vi.fn(() => ({
       featureFlags: {
         enableParagraphTextItem: true,
       },
       resetLDContext: vi.fn(),
-    });
-  });
+    })),
+  };
+});
 
-  afterEach(() => {
-    vi.resetAllMocks();
-  });
-
+describe('ItemConfiguration: Item Type', () => {
   test('is rendered with correct item types, groups and "mobile only"', () => {
     renderWithAppletFormData({
       children: renderItemConfiguration(),
@@ -71,8 +66,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     mockedItemTypes.forEach((itemType) => {
       const option = screen.getByTestId(`${mockedOptionTestid}-${itemType}`);
@@ -101,8 +96,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const options = screen.getAllByTestId((testId) => testId.startsWith(mockedOptionTestid));
 
@@ -140,8 +135,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const search = screen.getByTestId(mockedSearchTestid);
     const searchInput = search.querySelector('input');
@@ -196,8 +191,8 @@ describe('ItemConfiguration: Item Type', () => {
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
-    const typeButton = type.querySelector('[role="button"]');
-    fireEvent.mouseDown(typeButton);
+    const typeCombobox = type.querySelector('[role="combobox"]');
+    fireEvent.mouseDown(typeCombobox);
 
     const option = screen.getByTestId(`${mockedOptionTestid}-${itemType}`);
     fireEvent.click(option);

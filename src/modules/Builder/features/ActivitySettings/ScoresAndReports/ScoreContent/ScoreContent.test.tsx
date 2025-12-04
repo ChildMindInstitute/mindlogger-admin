@@ -351,7 +351,7 @@ describe('ScoreContent', () => {
     await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
 
     const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
-    await userEvent.click(within(dropdown).getByRole('button'));
+    await userEvent.click(within(dropdown).getByRole('combobox'));
 
     const options = await findAllByRole('option');
     expect(options).toHaveLength(1);
@@ -515,7 +515,7 @@ describe('ScoreContent', () => {
       // Change the scoring type to 'Score'
       await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
       const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
-      await userEvent.click(within(dropdown).getByRole('button'));
+      await userEvent.click(within(dropdown).getByRole('combobox'));
 
       // Select the subscale from the dropdown
       const option = await findByRole('option');
@@ -524,7 +524,7 @@ describe('ScoreContent', () => {
       await findByTestId(`${dataTestid}-view-subscales-configuration`);
 
       const calculationType = await findByTestId(`${dataTestid}-calculation-type`);
-      expect(within(calculationType).getByRole('button').textContent).toEqual(
+      expect(within(calculationType).getByRole('combobox').textContent).toEqual(
         expectedCalculationType,
       );
 
@@ -586,7 +586,7 @@ describe('ScoreContent', () => {
     // Change the scoring type to 'Score'
     await userEvent.click(within(scoreTypeRadioGroup).getByLabelText('Score'));
     const dropdown = await findByTestId(`${dataTestid}-linked-subscale`);
-    await userEvent.click(within(dropdown).getByRole('button'));
+    await userEvent.click(within(dropdown).getByRole('combobox'));
 
     // Select the subscale from the dropdown
     const option = await findByRole('option');

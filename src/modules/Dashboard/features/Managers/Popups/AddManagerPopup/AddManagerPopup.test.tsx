@@ -125,8 +125,8 @@ describe('AddManagerPopup component', () => {
       preloadedState,
     });
 
-    const roleSelectButton = within(getByTestId(`${dataTestId}-role`)).getByRole('button');
-    await userEvent.click(roleSelectButton);
+    const roleSelectCombobox = within(getByTestId(`${dataTestId}-role`)).getByRole('combobox');
+    await userEvent.click(roleSelectCombobox);
     const roleOptions = await screen.findByRole('listbox', { name: 'Role' });
     await userEvent.click(within(roleOptions).getByText('Reviewer'));
 

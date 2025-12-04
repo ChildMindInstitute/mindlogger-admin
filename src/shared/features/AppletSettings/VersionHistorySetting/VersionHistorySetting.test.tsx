@@ -127,7 +127,7 @@ describe('VersionHistorySetting', () => {
       await waitFor(() => expect(screen.getByTestId(`${dataTestid}-version`)).toBeVisible());
       // Open the select to assert the first option label reliably (MUI doesn't always render the display value text in JSDOM)
       const versionSelectRoot = screen.getByTestId(`${dataTestid}-version`);
-      const selectTrigger = versionSelectRoot.querySelector('[role="button"]');
+      const selectTrigger = versionSelectRoot.querySelector('[role="combobox"]');
       selectTrigger && fireEvent.mouseDown(selectTrigger);
       expect(await screen.findByTestId(`${dataTestid}-version-0`)).toHaveTextContent(
         'current (2.0.0)',
@@ -158,7 +158,7 @@ describe('VersionHistorySetting', () => {
       await waitFor(() => expect(screen.getByTestId(`${dataTestid}-version`)).toBeVisible());
       // Open the select to assert the first option label reliably (MUI doesn't always render the display value text in JSDOM)
       const versionSelectRoot = screen.getByTestId(`${dataTestid}-version`);
-      const selectTrigger = versionSelectRoot.querySelector('[role="button"]');
+      const selectTrigger = versionSelectRoot.querySelector('[role="combobox"]');
       selectTrigger && fireEvent.mouseDown(selectTrigger);
       expect(await screen.findByTestId(`${dataTestid}-version-0`)).toHaveTextContent(
         'current (2.0.0)',

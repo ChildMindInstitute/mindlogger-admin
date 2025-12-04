@@ -148,6 +148,7 @@ export const Calendar = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
+          // @ts-expect-error - react-big-calendar component types are too strict
           components={components}
           views={views}
           selectable
