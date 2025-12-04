@@ -219,7 +219,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 {options?.map(({ groupName, groupOptions }) => [
                   getGroupName(groupName, groupOptions, searchTermLowercase),
                   ...groupOptions.map(({ value, icon, disabled, tooltip }) => {
-                    // HACK: Read translated value from DOM if Google Translate is enabled (M2-10091)
+                    // HACK: Read translated value from DOM if Google Translate is enabled (M2-10095)
 
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     const menuItemRef = useRef<HTMLLIElement>(null);
