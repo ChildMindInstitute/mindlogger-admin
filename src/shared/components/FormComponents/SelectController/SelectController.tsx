@@ -202,8 +202,10 @@ export const SelectController = <T extends FieldValues>({
         onOpen={handleOpenTooltip}
         open={open}
       >
+        {/* HACK: Use key to rerender when selectedValue changes to avoid interference from Google Translate (M2-10076) */}
         <StyledTextField
           {...props}
+          key={selectedValue}
           select
           onChange={onChange}
           value={selectedValue}

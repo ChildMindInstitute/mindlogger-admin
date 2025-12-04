@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import axios from 'axios';
@@ -161,7 +161,12 @@ describe('CreateEventPopup', () => {
       expect(listbox).toBeInTheDocument();
       expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
       await userEvent.click(listbox.querySelectorAll('li')[0]);
-      expect(activityInput).toHaveValue('96d889e2-2264-4e76-8c60-744600e770fe'); // selected the 1st activity
+      await waitFor(() => {
+        // wait for activity container to rerender
+        const selectedActivityContainer = screen.getByTestId(`${dataTestid}-form-activity`);
+        const selectedActivityInput = selectedActivityContainer.querySelector('input');
+        expect(selectedActivityInput).toHaveValue('96d889e2-2264-4e76-8c60-744600e770fe'); // selected the 1st activity
+      });
       await userEvent.click(saveButton);
 
       const removeEventsPopupDataTestid = `${dataTestid}-remove-all-scheduled-events-popup`;
@@ -243,7 +248,12 @@ describe('CreateEventPopup', () => {
       expect(listbox).toBeInTheDocument();
       expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
       await userEvent.click(listbox.querySelectorAll('li')[1]); // selected the 2nd activity
-      expect(activityInput).toHaveValue('60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0');
+      await waitFor(() => {
+        // wait for activity container to rerender
+        const selectedActivityContainer = screen.getByTestId(`${dataTestid}-form-activity`);
+        const selectedActivityInput = selectedActivityContainer.querySelector('input');
+        expect(selectedActivityInput).toHaveValue('60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0');
+      });
       const saveButton = screen.getByTestId(`${dataTestid}-submit-button`);
       await userEvent.click(saveButton);
 
