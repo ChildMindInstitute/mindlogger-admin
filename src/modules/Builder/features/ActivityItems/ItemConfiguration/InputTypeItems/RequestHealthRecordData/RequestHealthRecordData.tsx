@@ -12,7 +12,6 @@ export const RequestHealthRecordData = ({ name }: RequestHealthRecordDataProps) 
   const { t } = useTranslation('app');
 
   const optInOutOptions = useWatch({
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name: `${name}.responseValues.optInOutOptions`,
   }) as RequestHealthRecordDataOption[];
 

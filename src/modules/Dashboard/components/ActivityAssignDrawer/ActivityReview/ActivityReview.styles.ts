@@ -2,7 +2,6 @@ import { Accordion, AccordionDetails, AccordionSummary, styled } from '@mui/mate
 
 import { theme, variables } from 'shared/styles';
 
-// @ts-expect-error - MUI styled Accordion type doesn't include component prop
 export const StyledAccordion = styled(Accordion)<{ component?: string }>({
   background: 0,
   border: 0,
@@ -25,7 +24,6 @@ export const StyledAccordion = styled(Accordion)<{ component?: string }>({
 });
 
 StyledAccordion.defaultProps = {
-  // @ts-expect-error - MUI Accordion types don't include component prop
   component: 'li',
   square: true,
   variant: 'outlined',
