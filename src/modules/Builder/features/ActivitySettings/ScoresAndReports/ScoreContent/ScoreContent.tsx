@@ -102,11 +102,9 @@ export const ScoreContent = ({
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] =
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     (useWatch({ name: subscalesField }) as SubscaleFormValue[]) ?? [];
 
   const score: ScoreReport = useWatch({
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name,
   }) as ScoreReport;
   const {
