@@ -128,8 +128,6 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           authenticator app to complete setup.
         </StyledDescription>
 
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
-
         <StyledQRCodeContainer>
           {provisioningUri && <QRCodeSVG value={provisioningUri} size={260} />}
           {isLoading && (
