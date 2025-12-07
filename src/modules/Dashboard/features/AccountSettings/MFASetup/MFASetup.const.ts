@@ -8,10 +8,10 @@ export const MFA_CONSTANTS = {
 } as const;
 
 export const MFA_ERROR_MESSAGES = {
-  INVALID_CODE: 'Invalid TOTP code. Please check your authenticator app and try again.',
-  EXPIRED_SETUP: 'MFA setup has expired. Please initiate MFA setup again.',
-  SETUP_NOT_FOUND: 'No pending MFA setup found. Please initiate MFA setup first.',
-  NETWORK_ERROR: 'Unable to connect. Please check your connection and try again.',
+  INVALID_CODE: 'Invalid Code',
+  EXPIRED_SETUP: 'Setup expired. Please reinitiate MFA',
+  SETUP_NOT_FOUND: 'No setup found. Please reinitiate MFA',
+  NETWORK_ERROR: 'Network Error',
   UNKNOWN_ERROR: 'Something went wrong. Please try again.',
 } as const;
 

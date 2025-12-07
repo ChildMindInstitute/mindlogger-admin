@@ -96,17 +96,21 @@ export const StyledQRCodePlaceholder = styled(Box)`
   flex-shrink: 0;
 `;
 
-export const StyledInputContainer = styled(Box)`
+export const StyledInputContainer = styled(Box)<{ hasError?: boolean }>`
   display: flex;
   width: 340px;
   flex-direction: column;
   align-items: stretch;
   padding: 18px 20px;
   border-radius: 4px;
-  border: 1px solid ${variables.palette.outline};
+  border: ${({ hasError }) =>
+    hasError
+      ? `2px solid ${variables.palette.error}`
+      : `1px solid ${variables.palette.outline}`};
 
   &:focus-within {
-    border: 2px solid ${variables.palette.primary};
+    border: 2px solid
+      ${({ hasError }) => (hasError ? variables.palette.error : variables.palette.primary)};
     padding: 17px 19px;
   }
 `;
@@ -214,20 +218,27 @@ export const StyledLink = styled(Box)`
 `;
 
 export const StyledErrorMessage = styled(Box)`
-  display: flex;
-  width: 340px;
-  padding: 12px 16px;
-  align-items: center;
-  gap: 8px;
-  border-radius: 4px;
-  background: ${variables.palette.error_container};
-  color: ${variables.palette.on_error_container};
+  margin-top: 4px;
+  padding-left: 16px;
+  color: ${variables.palette.error};
   font-family: ${variables.font.family};
-  font-size: 1.4rem;
-  font-style: normal;
+  font-size: 1.2rem;
   font-weight: 400;
-  line-height: 2rem;
-  letter-spacing: 0.25px;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  text-align: left;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 export const StyledLoadingContainer = styled(Box)`

@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
 import {
@@ -78,8 +78,6 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           authenticator app to complete setup.
         </StyledDescription>
 
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
-
         <StyledQRCodeContainer>
           {provisioningUri && <QRCodeSVG value={provisioningUri} size={225} />}
           {isLoading && (
@@ -89,17 +87,20 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           )}
         </StyledQRCodeContainer>
 
-        <StyledInputContainer>
-          <StyledInput
-            type="text"
-            inputMode="numeric"
-            placeholder="Enter verification code"
-            value={verificationCode}
-            onChange={handleCodeChange}
-            maxLength={6}
-            disabled={isLoading}
-          />
-        </StyledInputContainer>
+        <Box sx={{ width: '340px', position: 'relative' }}>
+          <StyledInputContainer hasError={!!error}>
+            <StyledInput
+              type="text"
+              inputMode="numeric"
+              placeholder="Enter verification code"
+              value={verificationCode}
+              onChange={handleCodeChange}
+              maxLength={6}
+              disabled={isLoading}
+            />
+          </StyledInputContainer>
+          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        </Box>
 
         <StyledButtonContainer>
           <StyledButton
