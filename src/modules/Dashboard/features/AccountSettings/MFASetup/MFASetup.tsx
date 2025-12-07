@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CircularProgress, Box } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -18,8 +19,10 @@ import {
 } from './MFASetup.styles';
 import { MFASetupProps } from './MFASetup.types';
 import { useMFASetup } from './useMFASetup';
+import { MFAManualSetup } from '../MFAManualSetup/MFAManualSetup';
 
 export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
+  const [showManualSetup, setShowManualSetup] = useState(false);
   const {
     provisioningUri,
     verificationCode,
@@ -28,6 +31,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
     setVerificationCode,
     handleVerify,
     clearError,
+    secretKey,
   } = useMFASetup(open);
 
   const handleContinue = async () => {
@@ -39,7 +43,11 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   };
 
   const handleCantScan = () => {
-    // TODO: Show alternative setup method (manual entry)
+    setShowManualSetup(true);
+  };
+
+  const handleBackToQR = () => {
+    setShowManualSetup(false);
   };
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +59,13 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
       }
     }
   };
+
+  // Show manual setup view if requested
+  if (showManualSetup) {
+    return (
+      <MFAManualSetup open={open} onClose={onClose} onBack={handleBackToQR} secretKey={secretKey} />
+    );
+  }
 
   return (
     <StyledDialog open={open} onClose={onClose} maxWidth={false}>

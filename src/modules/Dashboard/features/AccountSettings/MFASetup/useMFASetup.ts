@@ -46,6 +46,7 @@ interface UseMFASetupResult {
   verificationCode: string;
   isLoading: boolean;
   error: string | null;
+  secretKey: string;
   setVerificationCode: (code: string) => void;
   handleVerify: () => Promise<boolean>;
   clearError: () => void;
@@ -53,6 +54,7 @@ interface UseMFASetupResult {
 
 export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
   const [provisioningUri, setProvisioningUri] = useState<string | null>(null);
+  const [secretKey, setSecretKey] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +64,7 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
     if (!isOpen) {
       // Reset state when modal closes
       setProvisioningUri(null);
+      setSecretKey('');
       setVerificationCode('');
       setError(null);
 
@@ -76,6 +79,13 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
         const response = await mfaApi.initiateSetup();
         const data = response.data.result as MFAInitiateResponse;
         setProvisioningUri(data.provisioningUri);
+
+        // Extract secret key from provisioning URI
+        // URI format: otpauth://totp/...?secret=SECRETKEY&...
+        const match = data.provisioningUri.match(/secret=([A-Z0-9]+)/i);
+        if (match && match[1]) {
+          setSecretKey(match[1]);
+        }
       } catch (err) {
         const axiosError = err as AxiosError;
         setError(getErrorMessage(axiosError));
@@ -127,6 +137,7 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
     verificationCode,
     isLoading,
     error,
+    secretKey,
     setVerificationCode,
     handleVerify,
     clearError,
