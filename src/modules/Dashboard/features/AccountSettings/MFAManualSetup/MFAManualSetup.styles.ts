@@ -6,7 +6,6 @@ export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
     display: flex;
     width: 480px;
-    height: 556px;
     padding: 32px;
     flex-direction: column;
     align-items: flex-start;
@@ -71,6 +70,7 @@ export const StyledContent = styled(Box)`
   gap: 32px;
   align-self: stretch;
   flex: 1;
+  transition: all 0.3s ease-in-out;
 `;
 
 export const StyledDescription = styled(Box)`
@@ -260,16 +260,19 @@ export const StyledErrorMessage = styled(Box)`
   line-height: 1.66;
   letter-spacing: 0.03333em;
   text-align: left;
-  animation: fadeIn 0.2s ease-in;
+  animation: fadeIn 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-4px);
+      transform: translateY(-8px);
+      max-height: 0;
     }
     to {
       opacity: 1;
       transform: translateY(0);
+      max-height: 100px;
     }
   }
 `;

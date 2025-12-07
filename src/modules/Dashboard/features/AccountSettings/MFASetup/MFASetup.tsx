@@ -63,7 +63,18 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   // Show manual setup view if requested
   if (showManualSetup) {
     return (
-      <MFAManualSetup open={open} onClose={onClose} onBack={handleBackToQR} secretKey={secretKey} />
+      <MFAManualSetup
+        open={open}
+        onClose={onClose}
+        onBack={handleBackToQR}
+        secretKey={secretKey}
+        verificationCode={verificationCode}
+        isLoading={isLoading}
+        error={error}
+        setVerificationCode={setVerificationCode}
+        handleVerify={handleVerify}
+        clearError={clearError}
+      />
     );
   }
 
