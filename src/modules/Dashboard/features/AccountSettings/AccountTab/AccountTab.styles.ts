@@ -117,8 +117,10 @@ export const StyledChangeButton = styled('button')<{ isRemove?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    border-color: ${(props) => (props.isRemove ? variables.palette.error40 : variables.palette.primary)};
-    background-color: ${(props) => (props.isRemove ? 'rgba(186, 26, 26, 0.08)' : variables.palette.primary_alpha12)};
+    border-color: ${(props) =>
+      props.isRemove ? variables.palette.error40 : variables.palette.primary};
+    background-color: ${(props) =>
+      props.isRemove ? 'rgba(186, 26, 26, 0.08)' : variables.palette.primary_alpha12};
   }
 
   &:disabled {

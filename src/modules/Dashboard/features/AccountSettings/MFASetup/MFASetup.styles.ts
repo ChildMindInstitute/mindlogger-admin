@@ -83,7 +83,7 @@ export const StyledQRCodeContainer = styled(Box)`
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  
+
   min-height: 260px;
 `;
 
@@ -104,9 +104,7 @@ export const StyledInputContainer = styled(Box)<{ hasError?: boolean }>`
   padding: 18px 20px;
   border-radius: 4px;
   border: ${({ hasError }) =>
-    hasError
-      ? `2px solid ${variables.palette.error}`
-      : `1px solid ${variables.palette.outline}`};
+    hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
 
   &:focus-within {
     border: 2px solid

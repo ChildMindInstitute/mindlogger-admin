@@ -25,7 +25,7 @@ export const AccountSettings = ({ open, onClose }: AccountSettingsProps) => (
       </StyledTab>
     </StyledTabsContainer>
     <StyledDialogContent>
-      <AccountTab />
+      <AccountTab isModalOpen={open} />
     </StyledDialogContent>
   </StyledDialog>
 );

@@ -31,7 +31,11 @@ import {
   StyledEnabledBadge,
 } from './AccountTab.styles';
 
-export const AccountTab = () => {
+interface AccountTabProps {
+  isModalOpen: boolean;
+}
+
+export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   // const { t } = useTranslation('app');
   const authData = auth.useData();
   const userInitials = auth.useUserInitials();
@@ -39,9 +43,12 @@ export const AccountTab = () => {
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
   const [_isLoadingMFAStatus, setIsLoadingMFAStatus] = useState(true);
 
-  // Fetch MFA status on mount
+  // Fetch MFA status whenever modal opens
   useEffect(() => {
+    if (!isModalOpen) return;
+
     const fetchMFAStatus = async () => {
+      setIsLoadingMFAStatus(true);
       try {
         const response = await getUserDetailsApi();
         const userData = response.data.result;
@@ -56,7 +63,7 @@ export const AccountTab = () => {
     };
 
     fetchMFAStatus();
-  }, []);
+  }, [isModalOpen]);
 
   const handleMFASetupComplete = () => {
     setShowMFASetup(false);
