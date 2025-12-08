@@ -5,11 +5,11 @@ import { variables } from 'shared/styles/variables';
 export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
     display: flex;
-    width: 480px;
+    width: 540px;
     padding: 32px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px;
+    gap: 24px;
     border-radius: 16px;
     background: ${variables.palette.surface};
   }
@@ -62,7 +62,7 @@ export const StyledContent = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   align-self: stretch;
 `;
 
@@ -83,8 +83,8 @@ export const StyledQRCodeContainer = styled(Box)`
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  padding: 0 127.5px;
-  min-height: 225px;
+  
+  min-height: 260px;
 `;
 
 export const StyledQRCodePlaceholder = styled(Box)`

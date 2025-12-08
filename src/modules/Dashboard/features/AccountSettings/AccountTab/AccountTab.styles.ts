@@ -93,7 +93,7 @@ export const StyledDivider = styled(Box)`
   background: ${variables.palette.surface_variant};
 `;
 
-export const StyledChangeButton = styled('button')`
+export const StyledChangeButton = styled('button')<{ isRemove?: boolean }>`
   display: flex;
   min-width: 147px;
   height: 48px;
@@ -105,7 +105,7 @@ export const StyledChangeButton = styled('button')`
   border: 1px solid ${variables.palette.outline};
   text-transform: none;
   flex-shrink: 0;
-  color: ${variables.palette.primary};
+  color: ${(props) => (props.isRemove ? variables.palette.error40 : variables.palette.primary)};
   text-align: center;
   font-family: ${variables.font.family};
   font-size: 1.6rem;
@@ -117,8 +117,8 @@ export const StyledChangeButton = styled('button')`
   cursor: pointer;
 
   &:hover {
-    border-color: ${variables.palette.primary};
-    background-color: ${variables.palette.primary_alpha12};
+    border-color: ${(props) => (props.isRemove ? variables.palette.error40 : variables.palette.primary)};
+    background-color: ${(props) => (props.isRemove ? 'rgba(186, 26, 26, 0.08)' : variables.palette.primary_alpha12)};
   }
 
   &:disabled {
@@ -169,25 +169,30 @@ export const StyledAuthenticatorTitle = styled(Box)`
 
 export const StyledEnabledBadge = styled(Box)`
   display: flex;
-  padding: 4px 8px;
+  width: 95px;
+  height: 32px;
+  padding: 4px 12px 4px 8px;
   align-items: center;
   gap: 4px;
-  border-radius: 4px;
-  background: ${variables.palette.surface_variant};
+  border-radius: 8px;
+  background: ${variables.palette.green_light};
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   span {
-    color: ${variables.palette.on_surface};
+    width: 53px;
+    height: 20px;
+    color: ${variables.palette.on_primary_container};
     font-family: ${variables.font.family};
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-style: normal;
-    font-weight: ${variables.font.weight.bold};
-    line-height: 1.6rem;
-    letter-spacing: 0.05rem;
+    font-weight: ${variables.font.weight.regular};
+    line-height: 2rem;
+    letter-spacing: 0.1px;
+    text-align: center;
   }
 `;
 

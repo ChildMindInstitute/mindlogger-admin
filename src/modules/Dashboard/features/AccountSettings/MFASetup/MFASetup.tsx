@@ -79,7 +79,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
         </StyledDescription>
 
         <StyledQRCodeContainer>
-          {provisioningUri && <QRCodeSVG value={provisioningUri} size={225} />}
+          {provisioningUri && <QRCodeSVG value={provisioningUri} size={260} />}
           {isLoading && (
             <StyledLoadingContainer>
               <CircularProgress />
