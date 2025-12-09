@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { datadogRum } from '@datadog/browser-rum';
 
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
@@ -39,6 +40,7 @@ export const useLogout = () => {
       dispatch(alerts.actions.resetAlerts());
       dispatch(auth.actions.resetAuthorization());
 
+      datadogRum.clearUser();
       Mixpanel.track({ action: MixpanelEventType.Logout });
       Mixpanel.logout();
       await FeatureFlags.logout();
