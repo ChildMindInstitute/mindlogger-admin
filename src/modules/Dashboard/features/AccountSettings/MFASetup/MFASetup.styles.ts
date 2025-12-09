@@ -103,7 +103,7 @@ export const StyledInputContainer = styled(Box, {
   width: 340px;
   flex-direction: column;
   align-items: stretch;
-  padding: 18px 20px;
+  padding: ${({ $hasError }) => ($hasError ? '17px 19px' : '18px 20px')};
   border-radius: 4px;
   border: ${({ $hasError }) =>
     $hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};

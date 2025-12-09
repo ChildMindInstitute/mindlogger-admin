@@ -26,9 +26,13 @@ export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
     }
   };
 
+  if (!secretKey) {
+    return null;
+  }
+
   return (
     <StyledSecretKeyContainer onClick={handleCopySecret} style={{ cursor: 'pointer' }}>
-      <StyledSecretKey>{secretKey || 'DM2QOZYGHNRDC44Z2'}</StyledSecretKey>
+      <StyledSecretKey>{secretKey}</StyledSecretKey>
       <Tooltip tooltipTitle={copied ? 'Copied' : 'Copy'} placement="top">
         <StyledCopyButton className="copy-button" copied={copied}>
           {copied ? <CheckIcon /> : <CopyIcon />}
