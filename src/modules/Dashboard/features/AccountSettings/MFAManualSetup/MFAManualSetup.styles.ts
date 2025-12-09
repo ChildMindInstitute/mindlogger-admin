@@ -124,7 +124,9 @@ export const StyledSecretKeyContainer = styled(Box)`
   }
 `;
 
-export const StyledCopyButton = styled(Box)<{ copied?: boolean }>`
+export const StyledCopyButton = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'copied',
+})<{ copied?: boolean }>`
   position: absolute;
   right: 16px;
   display: flex;

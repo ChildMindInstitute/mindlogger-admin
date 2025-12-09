@@ -20,7 +20,7 @@ export const StyledSection = styled(Box)`
 
   > .MuiTypography-root:first-of-type {
     color: ${variables.palette.on_surface};
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.title};
     font-size: 2rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
@@ -33,7 +33,7 @@ export const StyledSectionTitle = styled(Box)`
 
   .MuiTypography-root {
     color: ${variables.palette.on_surface};
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.title};
     font-size: 2.4rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
@@ -70,7 +70,7 @@ export const StyledEmailSection = styled(Box)`
 
 export const StyledEmailLabel = styled(Box)`
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -79,7 +79,7 @@ export const StyledEmailLabel = styled(Box)`
 
 export const StyledEmailText = styled(Box)`
   color: ${variables.palette.on_surface_variant};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -107,7 +107,7 @@ export const StyledChangeButton = styled('button')<{ isRemove?: boolean }>`
   flex-shrink: 0;
   color: ${(props) => (props.isRemove ? variables.palette.error40 : variables.palette.primary)};
   text-align: center;
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -159,7 +159,7 @@ export const StyledAuthenticatorInfo = styled(Box)`
 
 export const StyledAuthenticatorTitle = styled(Box)`
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -188,7 +188,7 @@ export const StyledEnabledBadge = styled(Box)`
     width: 53px;
     height: 20px;
     color: ${variables.palette.on_primary_container};
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 1.4rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
@@ -219,7 +219,7 @@ export const StyledAuthenticatorDescription = styled(Box)`
 export const StyledTwoFactorDescription = styled(Box)`
   max-width: 89.5rem;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -232,7 +232,7 @@ export const StyledRecoveryOptionsHeader = styled(Box)`
   align-items: center;
   gap: 12px;
   color: ${variables.palette.on_surface_variant};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2.4rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -243,7 +243,7 @@ export const StyledRecoveryOptionsHeader = styled(Box)`
 export const StyledRecoveryCodesTitle = styled(Box)`
   align-self: stretch;
   color: ${variables.palette.on_surface_variant};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
