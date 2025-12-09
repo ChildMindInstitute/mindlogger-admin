@@ -96,19 +96,21 @@ export const StyledQRCodePlaceholder = styled(Box)`
   flex-shrink: 0;
 `;
 
-export const StyledInputContainer = styled(Box)<{ hasError?: boolean }>`
+export const StyledInputContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$hasError',
+})<{ $hasError?: boolean }>`
   display: flex;
   width: 340px;
   flex-direction: column;
   align-items: stretch;
   padding: 18px 20px;
   border-radius: 4px;
-  border: ${({ hasError }) =>
-    hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
+  border: ${({ $hasError }) =>
+    $hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
 
   &:focus-within {
     border: 2px solid
-      ${({ hasError }) => (hasError ? variables.palette.error : variables.palette.primary)};
+      ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.primary)};
     padding: 17px 19px;
   }
 `;

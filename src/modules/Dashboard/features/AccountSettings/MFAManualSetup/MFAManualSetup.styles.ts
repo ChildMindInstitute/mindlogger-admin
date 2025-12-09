@@ -155,7 +155,9 @@ export const StyledSecretKey = styled(Box)`
   opacity: 1;
 `;
 
-export const StyledInputContainer = styled(Box)<{ hasError?: boolean }>`
+export const StyledInputContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$hasError',
+})<{ $hasError?: boolean }>`
   display: flex;
   width: 300px;
   height: 56px;
@@ -166,12 +168,12 @@ export const StyledInputContainer = styled(Box)<{ hasError?: boolean }>`
   border-radius: 4px;
   gap: 10px;
   opacity: 1;
-  border: ${({ hasError }) =>
-    hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
+  border: ${({ $hasError }) =>
+    $hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
 
   &:focus-within {
     border: 2px solid
-      ${({ hasError }) => (hasError ? variables.palette.error : variables.palette.primary)};
+      ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.primary)};
     padding: 7px 15px;
   }
 `;

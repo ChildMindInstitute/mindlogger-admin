@@ -17,40 +17,45 @@ export const MFAVerificationForm = ({
   StyledButtonContainer,
   StyledButton,
   StyledErrorMessage,
-}: MFAVerificationFormProps) => (
-  <>
-    <Box sx={{ width: inputWidth, position: 'relative' }}>
-      <StyledInputContainer hasError={!!error}>
-        <StyledInput
-          type="text"
-          inputMode="numeric"
-          placeholder="Enter verification code"
-          value={verificationCode}
-          onChange={onInputChange}
-          maxLength={6}
-          disabled={isLoading}
-        />
-      </StyledInputContainer>
-      {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
-    </Box>
+}: MFAVerificationFormProps) => {
+  // Cast to any to avoid TypeScript prop forwarding issues with transient props
+  const InputContainer = StyledInputContainer as any;
 
-    <StyledButtonContainer>
-      <StyledButton
-        type="button"
-        className="primary"
-        onClick={onPrimaryAction}
-        disabled={isLoading}
-      >
-        {isLoading ? 'Verifying...' : primaryButtonText}
-      </StyledButton>
-      <StyledButton
-        type="button"
-        className="secondary"
-        onClick={onSecondaryAction}
-        disabled={isLoading}
-      >
-        {secondaryButtonText}
-      </StyledButton>
-    </StyledButtonContainer>
-  </>
-);
+  return (
+    <>
+      <Box sx={{ width: inputWidth, position: 'relative' }}>
+        <InputContainer $hasError={!!error}>
+          <StyledInput
+            type="text"
+            inputMode="numeric"
+            placeholder="Enter verification code"
+            value={verificationCode}
+            onChange={onInputChange}
+            maxLength={6}
+            disabled={isLoading}
+          />
+        </InputContainer>
+        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+      </Box>
+
+      <StyledButtonContainer>
+        <StyledButton
+          type="button"
+          className="primary"
+          onClick={onPrimaryAction}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Verifying...' : primaryButtonText}
+        </StyledButton>
+        <StyledButton
+          type="button"
+          className="secondary"
+          onClick={onSecondaryAction}
+          disabled={isLoading}
+        >
+          {secondaryButtonText}
+        </StyledButton>
+      </StyledButtonContainer>
+    </>
+  );
+};

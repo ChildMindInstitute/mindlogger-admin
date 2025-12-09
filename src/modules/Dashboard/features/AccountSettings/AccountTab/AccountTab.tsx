@@ -137,8 +137,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
               </StyledBodyMedium>
               <StyledTwoFactorDescription>
                 Two-factor authentication (2FA) adds an additional layer of security to your account
-                by by by by requiring more than just a password to sign in. You may use one of the
-                below:
+                by requiring more than just a password to sign in. You may use one of the below:
               </StyledTwoFactorDescription>
               <StyledAuthenticatorRow>
                 <StyledAuthenticatorIcon>

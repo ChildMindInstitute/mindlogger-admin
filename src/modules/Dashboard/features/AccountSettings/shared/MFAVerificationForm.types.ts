@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ComponentType } from 'react';
 
 export interface MFAVerificationFormProps {
   verificationCode: string;
@@ -10,9 +10,9 @@ export interface MFAVerificationFormProps {
   primaryButtonText?: string;
   secondaryButtonText?: string;
   inputWidth?: string;
-  StyledInputContainer: React.ComponentType<{ hasError?: boolean; children: ReactNode }>;
-  StyledInput: React.ComponentType<any>;
-  StyledButtonContainer: React.ComponentType<{ children: ReactNode }>;
-  StyledButton: React.ComponentType<any>;
-  StyledErrorMessage: React.ComponentType<{ children: ReactNode }>;
+  StyledInputContainer: ComponentType<any>;
+  StyledInput: ComponentType<any>;
+  StyledButtonContainer: ComponentType<{ children: ReactNode }>;
+  StyledButton: ComponentType<any>;
+  StyledErrorMessage: ComponentType<{ children: ReactNode }>;
 }

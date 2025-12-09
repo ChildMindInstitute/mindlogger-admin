@@ -39,11 +39,19 @@ export const MFAManualSetup = ({
     }
   };
 
+  const handleClose = () => {
+    // Remove focus from any focused element before closing to prevent aria-hidden focus warning
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onClose();
+  };
+
   return (
-    <StyledDialog open={open} onClose={onClose} maxWidth={false}>
+    <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
         <StyledTitle>Type Key in Authenticator</StyledTitle>
-        <StyledCloseButton type="button" onClick={onClose}>
+        <StyledCloseButton type="button" onClick={handleClose}>
           <CloseIcon />
         </StyledCloseButton>
       </StyledHeader>
