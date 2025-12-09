@@ -186,7 +186,6 @@ export const useLinkedScoreReports = (): UseLinkedScoreReportsReturn => {
 
   const subscalesField = `${currentActivityFieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] =
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     (useWatch({ name: subscalesField }) as SubscaleFormValue[]) ?? [];
 
   const hasNonSubscaleItems = useCallback(

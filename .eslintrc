@@ -83,6 +83,7 @@
     "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-duplicate-enum-values": "warn",
+    "@typescript-eslint/no-unused-expressions": "warn",
     "no-extra-semi": "off",
     "padding-line-between-statements": [
       "error",

@@ -44,7 +44,6 @@ export const Report = () => {
   } = useRespondentDataContext();
 
   const versions = useWatch({
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name: 'versions',
   }) as AutocompleteOption[];
   const { hideSkipped } = useDatavizSkippedFilter();

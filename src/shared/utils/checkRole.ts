@@ -20,6 +20,6 @@ export const checkIfCanManageParticipants = (roles?: Roles[]) =>
 export const checkIfCanViewParticipants = (roles?: Roles[]) =>
   Boolean(
     checkIfFullAccess(roles) ||
-      roles?.includes(Roles.Reviewer) ||
-      roles?.includes(Roles.Coordinator),
+    roles?.includes(Roles.Reviewer) ||
+    roles?.includes(Roles.Coordinator),
   );

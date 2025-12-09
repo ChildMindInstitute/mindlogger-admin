@@ -22,7 +22,6 @@ export const Visits = ({ visitsList }: VisitsProps) => {
   } = useFormContext();
 
   const visitsForm: LorisUserAnswerVisit[] = useWatch({
-    // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
     name: 'visitsForm',
   }) as LorisUserAnswerVisit[];
 

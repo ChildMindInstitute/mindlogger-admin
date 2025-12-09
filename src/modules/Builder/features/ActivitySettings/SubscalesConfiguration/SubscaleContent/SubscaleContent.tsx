@@ -39,7 +39,6 @@ export const SubscaleContent = ({
   const { clearErrors, trigger, getFieldState } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  // @ts-expect-error - useWatch name parameter type issue with react-hook-form v7
   const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) as SubscaleFormValue[];
   const [subscaleName, scoringType, selectedItems]: [string, SubscaleTotalScore, string[]] =
     useWatch({
