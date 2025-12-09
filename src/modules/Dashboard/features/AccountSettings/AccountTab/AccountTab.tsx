@@ -70,6 +70,27 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
     setIsMFAEnabled(true);
   };
 
+  // Refetch MFA status when setup modal closes to ensure UI is in sync with backend
+  // This handles race conditions where backend state changed but UI didn't update
+  useEffect(() => {
+    if (!showMFASetup && isModalOpen) {
+      const refetchMFAStatus = async () => {
+        try {
+          const response = await getUserDetailsApi();
+          const userData = response.data.result;
+          setIsMFAEnabled(userData.mfaEnabled || false);
+        } catch (error) {
+          console.error('Failed to refetch MFA status:', error);
+        }
+      };
+
+      // Small delay to ensure any pending API calls complete
+      const timeoutId = setTimeout(refetchMFAStatus, 200);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showMFASetup, isModalOpen]);
+
   const handleRemoveMFA = () => {
     // TODO: Implement MFA removal
   };

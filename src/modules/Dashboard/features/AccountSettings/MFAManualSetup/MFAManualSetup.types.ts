@@ -1,6 +1,7 @@
 export interface MFAManualSetupProps {
   open: boolean;
   onClose: () => void;
+  onComplete: () => void;
   onBack: () => void;
   secretKey: string;
   verificationCode: string;

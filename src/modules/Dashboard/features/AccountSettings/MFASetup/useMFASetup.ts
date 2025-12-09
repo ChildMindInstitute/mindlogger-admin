@@ -17,6 +17,9 @@ const getErrorMessage = (error: AxiosError): string => {
   const backendMessage = responseData?.result?.[0]?.message || '';
 
   // Match backend error patterns
+  if (BACKEND_ERROR_PATTERNS.ALREADY_ENABLED.test(backendMessage)) {
+    return MFA_ERROR_MESSAGES.ALREADY_ENABLED;
+  }
   if (BACKEND_ERROR_PATTERNS.EXPIRED.test(backendMessage)) {
     return MFA_ERROR_MESSAGES.EXPIRED_SETUP;
   }
@@ -33,6 +36,9 @@ const getErrorMessage = (error: AxiosError): string => {
   }
   if (error.response?.status === 404) {
     return MFA_ERROR_MESSAGES.SETUP_NOT_FOUND;
+  }
+  if (error.response?.status === 409) {
+    return MFA_ERROR_MESSAGES.ALREADY_ENABLED;
   }
   if (error.code === 'ERR_NETWORK') {
     return MFA_ERROR_MESSAGES.NETWORK_ERROR;

@@ -5,7 +5,7 @@ import { variables } from 'shared/styles/variables';
 export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
     display: flex;
-    width: 480px;
+    width: 580px;
     padding: 32px;
     flex-direction: column;
     align-items: flex-start;
@@ -24,8 +24,7 @@ export const StyledHeader = styled(Box)`
 
 export const StyledTitle = styled('h2')`
   margin: 0;
-  width: 282px;
-  height: 32px;
+  flex: 1;
   color: ${variables.palette.on_surface};
   font-family: 'Moderat', ${variables.font.family};
   font-size: 24px;
@@ -74,7 +73,7 @@ export const StyledContent = styled(Box)`
 `;
 
 export const StyledDescription = styled(Box)`
-  width: 416px;
+  width: 516px;
   height: 24px;
   color: ${variables.palette.on_surface};
   font-family: 'Moderat', ${variables.font.family};
@@ -88,7 +87,7 @@ export const StyledDescription = styled(Box)`
 `;
 
 export const StyledDescriptionMultiLine = styled(Box)`
-  width: 416px;
+  width: 516px;
   height: 48px;
   color: ${variables.palette.on_surface};
   font-family: 'Moderat', ${variables.font.family};
@@ -103,7 +102,8 @@ export const StyledDescriptionMultiLine = styled(Box)`
 
 export const StyledSecretKeyContainer = styled(Box)`
   display: flex;
-  width: 416px;
+  position: relative;
+  width: 516px;
   height: 60px;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -113,10 +113,34 @@ export const StyledSecretKeyContainer = styled(Box)`
   border-radius: 16px;
   background: ${variables.palette.surface1};
   opacity: 1;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: ${variables.palette.surface2};
+  }
+
+  &:hover .copy-button {
+    opacity: 1;
+  }
+`;
+
+export const StyledCopyButton = styled(Box)<{ copied?: boolean }>`
+  position: absolute;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  color: ${({ copied }) => (copied ? variables.palette.primary : variables.palette.on_surface_variant)};
+  background: ${({ copied }) => (copied ? variables.palette.primary_container : 'transparent')};
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  opacity: ${({ copied }) => (copied ? 1 : 0)};
 `;
 
 export const StyledSecretKey = styled(Box)`
-  width: 416px;
+  width: 516px;
   height: 28px;
   color: ${variables.palette.on_surface};
   font-family: 'Moderat', ${variables.font.family};
