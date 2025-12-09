@@ -79,6 +79,7 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
     featureFlags: {
       enableActivityAssign: true,
       enableParticipantMultiInformant: true,
+      enableMfa: false,
     },
     resetLDContext: vi.fn(),
   })),

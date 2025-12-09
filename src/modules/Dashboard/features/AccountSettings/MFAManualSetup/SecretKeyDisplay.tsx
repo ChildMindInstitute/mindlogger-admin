@@ -2,7 +2,11 @@ import { useState } from 'react';
 
 import { Tooltip } from 'shared/components/Tooltip';
 
-import { StyledSecretKeyContainer, StyledSecretKey, StyledCopyButton } from './MFAManualSetup.styles';
+import {
+  StyledSecretKeyContainer,
+  StyledSecretKey,
+  StyledCopyButton,
+} from './MFAManualSetup.styles';
 import { CopyIcon } from './CopyIcon';
 import { CheckIcon } from './CheckIcon';
 import { SecretKeyDisplayProps } from './SecretKeyDisplay.types';

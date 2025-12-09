@@ -20,6 +20,7 @@ export const FeatureFlagDefaults: FeatureFlags = {
   enableDataExportRenaming: false,
   enableEhrHealthData: 'unavailable',
   enableEmaExtraFiles: false,
+  enableMfa: false,
 };
 
 export const PROHIBITED_PII_KEYS = ['firstName', 'lastName', 'email'];

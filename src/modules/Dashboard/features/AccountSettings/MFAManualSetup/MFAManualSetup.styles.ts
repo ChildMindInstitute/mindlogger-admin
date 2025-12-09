@@ -132,7 +132,8 @@ export const StyledCopyButton = styled(Box)<{ copied?: boolean }>`
   justify-content: center;
   padding: 6px;
   border-radius: 8px;
-  color: ${({ copied }) => (copied ? variables.palette.primary : variables.palette.on_surface_variant)};
+  color: ${({ copied }) =>
+    copied ? variables.palette.primary : variables.palette.on_surface_variant};
   background: ${({ copied }) => (copied ? variables.palette.primary_container : 'transparent')};
   transition: all 0.2s ease-in-out;
   pointer-events: none;
