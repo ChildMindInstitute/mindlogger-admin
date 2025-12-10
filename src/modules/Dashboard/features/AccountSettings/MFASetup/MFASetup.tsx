@@ -20,12 +20,14 @@ import {
 import { MFASetupProps } from './MFASetup.types';
 import { useMFASetup } from './useMFASetup';
 import { MFAManualSetup } from '../MFAManualSetup/MFAManualSetup';
+import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
 import { CloseIcon } from '../shared/CloseIcon';
 import { MFAVerificationForm } from '../shared/MFAVerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
 
 export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   const [showManualSetup, setShowManualSetup] = useState(false);
+  const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
   const {
     provisioningUri,
     verificationCode,
@@ -40,14 +42,25 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
 
   const handleContinue = async () => {
-    const success = await handleVerify();
-    if (success) {
-      // Call onComplete BEFORE onClose to ensure state updates first
-      onComplete();
-      // Small delay to ensure state propagates
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      onClose();
+    const result = await handleVerify();
+    if (result.success) {
+      if (result.recoveryCodes && result.recoveryCodes.length > 0) {
+        // Show recovery codes modal
+        setRecoveryCodes(result.recoveryCodes);
+      } else {
+        // No recovery codes, complete setup
+        onComplete();
+        // Small delay to ensure state propagates
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        onClose();
+      }
     }
+  };
+
+  const handleRecoveryCodesConfirm = () => {
+    setRecoveryCodes(null);
+    onComplete();
+    onClose();
   };
 
   const handleCantScan = () => {
@@ -66,6 +79,18 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
     onClose();
   };
 
+  // Show recovery codes modal if codes are available
+  if (recoveryCodes && recoveryCodes.length > 0) {
+    return (
+      <MFARecoveryCodes
+        open={open}
+        onClose={onClose}
+        recoveryCodes={recoveryCodes}
+        onConfirm={handleRecoveryCodesConfirm}
+      />
+    );
+  }
+
   // Show manual setup view if requested
   if (showManualSetup) {
     return (
@@ -81,6 +106,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
         setVerificationCode={setVerificationCode}
         handleVerify={handleVerify}
         clearError={clearError}
+        onRecoveryCodes={setRecoveryCodes}
       />
     );
   }

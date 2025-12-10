@@ -1,3 +1,5 @@
+import { VerifyResult } from '../MFASetup/useMFASetup';
+
 export interface MFAManualSetupProps {
   open: boolean;
   onClose: () => void;
@@ -8,6 +10,7 @@ export interface MFAManualSetupProps {
   isLoading: boolean;
   error: string | null;
   setVerificationCode: (code: string) => void;
-  handleVerify: () => Promise<boolean>;
+  handleVerify: () => Promise<VerifyResult>;
   clearError: () => void;
+  onRecoveryCodes?: (codes: string[]) => void;
 }

@@ -47,16 +47,23 @@ const getErrorMessage = (error: AxiosError): string => {
   return MFA_ERROR_MESSAGES.UNKNOWN_ERROR;
 };
 
-interface UseMFASetupResult {
+interface VerifyResult {
+  success: boolean;
+  recoveryCodes?: string[];
+}
+
+export interface UseMFASetupResult {
   provisioningUri: string | null;
   verificationCode: string;
   isLoading: boolean;
   error: string | null;
   secretKey: string;
   setVerificationCode: (code: string) => void;
-  handleVerify: () => Promise<boolean>;
+  handleVerify: () => Promise<VerifyResult>;
   clearError: () => void;
 }
+
+export type { VerifyResult };
 
 export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
   const [provisioningUri, setProvisioningUri] = useState<string | null>(null);
@@ -103,11 +110,11 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
     initiateSetup();
   }, [isOpen]);
 
-  const handleVerify = async (): Promise<boolean> => {
+  const handleVerify = async (): Promise<VerifyResult> => {
     if (!verificationCode || verificationCode.length !== 6) {
       setError(MFA_ERROR_MESSAGES.INVALID_CODE);
 
-      return false;
+      return { success: false };
     }
 
     setIsLoading(true);
@@ -118,17 +125,20 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
       const data = response.data.result as MFAVerifyResponse;
 
       if (data.mfaEnabled) {
-        return true;
+        return {
+          success: true,
+          recoveryCodes: data.recoveryCodes,
+        };
       } else {
         setError(MFA_ERROR_MESSAGES.INVALID_CODE);
 
-        return false;
+        return { success: false };
       }
     } catch (err) {
       const axiosError = err as AxiosError;
       setError(getErrorMessage(axiosError));
 
-      return false;
+      return { success: false };
     } finally {
       setIsLoading(false);
     }
