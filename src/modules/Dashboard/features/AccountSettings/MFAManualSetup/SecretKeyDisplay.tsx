@@ -10,6 +10,7 @@ import {
 import { CopyIcon } from './CopyIcon';
 import { CheckIcon } from './CheckIcon';
 import { SecretKeyDisplayProps } from './SecretKeyDisplay.types';
+import { Toast } from './Toast';
 
 export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
   const [copied, setCopied] = useState(false);
@@ -31,13 +32,16 @@ export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
   }
 
   return (
-    <StyledSecretKeyContainer onClick={handleCopySecret} style={{ cursor: 'pointer' }}>
-      <StyledSecretKey>{secretKey}</StyledSecretKey>
-      <Tooltip tooltipTitle={copied ? 'Copied' : 'Copy'} placement="top">
-        <StyledCopyButton className="copy-button" copied={copied}>
-          {copied ? <CheckIcon /> : <CopyIcon />}
-        </StyledCopyButton>
-      </Tooltip>
-    </StyledSecretKeyContainer>
+    <>
+      <StyledSecretKeyContainer onClick={handleCopySecret} style={{ cursor: 'pointer' }}>
+        <StyledSecretKey>{secretKey}</StyledSecretKey>
+        <Tooltip tooltipTitle={copied ? 'Copied' : 'Copy'} placement="top">
+          <StyledCopyButton className="copy-button" copied={copied}>
+            {copied ? <CheckIcon /> : <CopyIcon />}
+          </StyledCopyButton>
+        </Tooltip>
+      </StyledSecretKeyContainer>
+      <Toast message="Copied!" show={copied} />
+    </>
   );
 };
