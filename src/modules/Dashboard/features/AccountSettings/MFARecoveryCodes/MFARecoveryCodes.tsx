@@ -24,6 +24,8 @@ export const MFARecoveryCodes = ({
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
+    // Always trigger completion when modal closes (MFA is already enabled at this point)
+    onConfirm();
     onClose();
   };
 
@@ -41,7 +43,6 @@ export const MFARecoveryCodes = ({
   };
 
   const handleConfirm = () => {
-    onConfirm();
     handleClose();
   };
 

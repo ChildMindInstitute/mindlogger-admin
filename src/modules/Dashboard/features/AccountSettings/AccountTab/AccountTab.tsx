@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 
 import { Avatar } from 'shared/components';
-import { auth } from 'redux/modules';
+import { auth, banners } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { StyledTitleLarge, StyledBodyMedium, StyledBodyLarge, variables } from 'shared/styles';
 import { getUserDetailsApi } from 'modules/Dashboard/api';
 import { useFeatureFlags } from 'shared/hooks';
@@ -38,6 +39,7 @@ interface AccountTabProps {
 
 export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   // const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const authData = auth.useData();
   const userInitials = auth.useUserInitials();
   const { featureFlags } = useFeatureFlags();
@@ -70,6 +72,8 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   const handleMFASetupComplete = () => {
     setShowMFASetup(false);
     setIsMFAEnabled(true);
+    // Show success banner
+    dispatch(banners.actions.addBanner({ key: 'MFAEnabledSuccessBanner' }));
   };
 
   // Refetch MFA status when setup modal closes to ensure UI is in sync with backend
