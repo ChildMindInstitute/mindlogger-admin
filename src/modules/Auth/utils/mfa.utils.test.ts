@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import {
   getMFAError,
   shouldShowAttemptsWarning,
@@ -11,7 +13,7 @@ import {
 
 describe('MFA Utilities', () => {
   describe('getMFAError', () => {
-    const mockT = ((key: string) => key) as any;
+    const mockT = ((key: string) => key) as unknown as TFunction;
 
     it('returns correct error for known error messages', () => {
       const testCases = [

@@ -90,27 +90,31 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
     }
 
     if (verifyMFATOTP.rejected.match(result)) {
-      const errorPayload = result.payload as any;
-      const errorMsg = errorPayload?.message || errorPayload || t('invalidMFACode');
+      const errorPayload = result.payload as { message?: string };
+      const errorMsg =
+        typeof errorPayload?.message === 'string'
+          ? errorPayload.message
+          : errorPayload || t('invalidMFACode');
+      const errorMsgStr = typeof errorMsg === 'string' ? errorMsg : t('invalidMFACode');
 
       // Handle specific error cases
-      if (errorMsg.includes('Invalid TOTP code')) {
+      if (errorMsgStr.includes('Invalid TOTP code')) {
         setErrorMessage(t('invalidCode'));
         setValue('totpCode', '');
-      } else if (errorMsg.includes('Too many attempts')) {
+      } else if (errorMsgStr.includes('Too many attempts')) {
         setErrorMessage(t('tooManyAttempts'));
         setTimeout(() => {
           dispatch(auth.actions.clearMFASession());
           navigate('/login');
         }, 3000);
-      } else if (errorMsg.includes('expired')) {
+      } else if (errorMsgStr.includes('expired')) {
         setErrorMessage(t('mfaSessionExpired'));
         setTimeout(() => {
           dispatch(auth.actions.clearMFASession());
           navigate('/login');
         }, 2000);
       } else {
-        setErrorMessage(errorMsg);
+        setErrorMessage(errorMsgStr);
       }
     }
 
@@ -143,6 +147,11 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
             control={control}
             label={t('verificationCode')}
             placeholder="000000"
+            onChange={(e) => {
+              if (errorMessage) {
+                setErrorMessage('');
+              }
+            }}
             inputProps={{
               maxLength: 6,
               inputMode: 'numeric',

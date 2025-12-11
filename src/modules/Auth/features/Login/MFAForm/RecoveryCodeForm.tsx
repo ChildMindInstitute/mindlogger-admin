@@ -80,21 +80,25 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
     }
 
     if (verifyMFARecoveryCode.rejected.match(result)) {
-      const errorPayload = result.payload as any;
-      const errorMsg = errorPayload?.message || errorPayload || t('invalidRecoveryCode');
+      const errorPayload = result.payload as { message?: string };
+      const errorMsg =
+        typeof errorPayload?.message === 'string'
+          ? errorPayload.message
+          : errorPayload || t('invalidRecoveryCode');
+      const errorMsgStr = typeof errorMsg === 'string' ? errorMsg : t('invalidRecoveryCode');
 
       // Handle specific error cases
-      if (errorMsg.includes('Invalid recovery code')) {
+      if (errorMsgStr.includes('Invalid recovery code')) {
         setErrorMessage(t('invalidRecoveryCode'));
         setValue('code', '');
-      } else if (errorMsg.includes('expired')) {
+      } else if (errorMsgStr.includes('expired')) {
         setErrorMessage(t('mfaSessionExpired'));
         setTimeout(() => {
           dispatch(auth.actions.clearMFASession());
           navigate('/login');
         }, 2000);
       } else {
-        setErrorMessage(errorMsg);
+        setErrorMessage(errorMsgStr);
       }
     }
 
@@ -120,13 +124,12 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
     return cleaned;
   };
 
-  const handleCodeChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    onChange: () => void,
-  ) => {
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const formatted = formatRecoveryCode(e.target.value);
     setValue('code', formatted);
-    onChange();
+    if (errorMessage) {
+      setErrorMessage('');
+    }
   };
 
   return (

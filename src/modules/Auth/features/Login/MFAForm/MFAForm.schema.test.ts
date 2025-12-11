@@ -44,16 +44,16 @@ describe('MFA Form Schemas', () => {
       try {
         await schema.validate({ totpCode: '' });
         expect(true).toBe(false); // Should not reach here
-      } catch (error: any) {
-        expect(error.message).toBe('mfaCodeRequired');
+      } catch (error) {
+        expect((error as Error).message).toBe('mfaCodeRequired');
       }
 
       // Test format error
       try {
         await schema.validate({ totpCode: '12345' });
         expect(true).toBe(false); // Should not reach here
-      } catch (error: any) {
-        expect(error.message).toBe('mfaCodeFormat');
+      } catch (error) {
+        expect((error as Error).message).toBe('mfaCodeFormat');
       }
     });
 
@@ -109,16 +109,16 @@ describe('MFA Form Schemas', () => {
       try {
         await schema.validate({ code: '' });
         expect(true).toBe(false); // Should not reach here
-      } catch (error: any) {
-        expect(error.message).toBe('recoveryCodeRequired');
+      } catch (error) {
+        expect((error as Error).message).toBe('recoveryCodeRequired');
       }
 
       // Test format error
       try {
         await schema.validate({ code: 'INVALID' });
         expect(true).toBe(false); // Should not reach here
-      } catch (error: any) {
-        expect(error.message).toBe('recoveryCodeFormat');
+      } catch (error) {
+        expect((error as Error).message).toBe('recoveryCodeFormat');
       }
     });
 

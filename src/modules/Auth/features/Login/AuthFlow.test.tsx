@@ -14,13 +14,13 @@ vi.mock('./LoginForm', () => ({
 }));
 
 vi.mock('./MFAForm', () => ({
-  MFAForm: ({ onSwitchToRecovery }: any) => (
+  MFAForm: ({ onSwitchToRecovery }: { onSwitchToRecovery?: () => void }) => (
     <div data-testid="mfa-form">
       MFA Form
       <button onClick={onSwitchToRecovery}>Switch to Recovery</button>
     </div>
   ),
-  RecoveryCodeForm: ({ onSwitchToTOTP }: any) => (
+  RecoveryCodeForm: ({ onSwitchToTOTP }: { onSwitchToTOTP?: () => void }) => (
     <div data-testid="recovery-form">
       Recovery Form
       <button onClick={onSwitchToTOTP}>Switch to TOTP</button>
