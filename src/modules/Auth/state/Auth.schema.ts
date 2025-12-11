@@ -18,9 +18,18 @@ export type SoftLockData = {
   workspace: Workspace | null;
 };
 
+// MFA Session data stored in Redux
+export type MFASession = {
+  token: string;
+  sessionId: string;
+  attempts: number;
+  expiresAt: number;
+};
+
 export type AuthSchema = {
   authentication: BaseSchema<AuthData | null>;
   isAuthorized: boolean;
   isLogoutInProgress: boolean;
   softLockData?: SoftLockData;
+  mfaSession?: MFASession;
 };

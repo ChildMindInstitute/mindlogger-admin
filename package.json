@@ -93,7 +93,8 @@
     "test:coverage": "vitest run --coverage",
     "test:junit": "vitest run --reporter=default --reporter=junit",
     "test:related": "sh test-related.sh",
-    "test:nowatch": "vitest run --passWithNoTests"
+    "test:nowatch": "vitest run --passWithNoTests",
+    "test:mfa": "sh test-mfa.sh"
   },
   "browserslist": {
     "production": [
