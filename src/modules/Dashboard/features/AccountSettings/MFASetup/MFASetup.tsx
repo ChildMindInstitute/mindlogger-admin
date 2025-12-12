@@ -37,6 +37,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
     handleVerify,
     clearError,
     secretKey,
+    downloadToken,
   } = useMFASetup(open);
 
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
@@ -87,6 +88,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
         onClose={onClose}
         recoveryCodes={recoveryCodes}
         onConfirm={handleRecoveryCodesConfirm}
+        downloadToken={downloadToken ?? undefined}
       />
     );
   }

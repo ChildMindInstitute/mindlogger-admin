@@ -62,10 +62,10 @@ export const ConfirmIdentityRecoveryCode = ({
         <StyledInputContainer $hasError={!!error}>
           <StyledInput
             type="text"
-            placeholder="XXXX-XXXX"
+            placeholder="XXXXX-XXXXX"
             value={recoveryCode}
             onChange={handleInputChange}
-            maxLength={9}
+            maxLength={11}
             disabled={isLoading}
           />
         </StyledInputContainer>

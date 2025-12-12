@@ -39,12 +39,7 @@ export const MFAVerificationForm = ({
       </Box>
 
       <StyledButtonContainer>
-        <StyledButton
-          type="button"
-          className="primary"
-          onClick={onPrimaryAction}
-          disabled={isLoading}
-        >
+        <StyledButton type="button" className="primary" onClick={onPrimaryAction}>
           {isLoading ? 'Verifying...' : primaryButtonText}
         </StyledButton>
         <StyledButton

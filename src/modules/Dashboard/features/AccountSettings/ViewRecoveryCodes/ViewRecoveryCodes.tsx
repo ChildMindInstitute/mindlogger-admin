@@ -15,6 +15,7 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     recoveryCode,
     setRecoveryCode,
     recoveryCodes,
+    downloadToken,
     isLoading,
     error,
     clearError,
@@ -89,6 +90,7 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
           open={open && currentStep === 'codes'}
           onClose={handleClose}
           recoveryCodes={recoveryCodes}
+          downloadToken={downloadToken ?? undefined}
           onConfirm={handleCodesConfirm}
         />
       )}

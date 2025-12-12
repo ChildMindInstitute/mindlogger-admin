@@ -50,6 +50,7 @@ const getErrorMessage = (error: AxiosError): string => {
 interface VerifyResult {
   success: boolean;
   recoveryCodes?: string[];
+  downloadToken?: string | null;
 }
 
 export interface UseMFASetupResult {
@@ -58,6 +59,7 @@ export interface UseMFASetupResult {
   isLoading: boolean;
   error: string | null;
   secretKey: string;
+  downloadToken: string | null;
   setVerificationCode: (code: string) => void;
   handleVerify: () => Promise<VerifyResult>;
   clearError: () => void;
@@ -69,6 +71,7 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
   const [provisioningUri, setProvisioningUri] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -125,10 +128,14 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
       const data = response.data.result as MFAVerifyResponse;
 
       if (data.mfaEnabled) {
-        return {
+        const result = {
           success: true,
           recoveryCodes: data.recoveryCodes,
+          downloadToken: data.downloadToken ?? null,
         };
+        setDownloadToken(data.downloadToken ?? null);
+
+        return result;
       } else {
         setError(MFA_ERROR_MESSAGES.INVALID_CODE);
 
@@ -154,6 +161,7 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
     isLoading,
     error,
     secretKey,
+    downloadToken,
     setVerificationCode,
     handleVerify,
     clearError,

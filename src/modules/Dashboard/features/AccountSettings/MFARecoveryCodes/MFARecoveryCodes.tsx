@@ -1,3 +1,5 @@
+import { mfaApi } from 'shared/api';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -18,6 +20,7 @@ export const MFARecoveryCodes = ({
   onClose,
   recoveryCodes,
   onConfirm,
+  downloadToken,
 }: MFARecoveryCodesProps) => {
   const handleClose = () => {
     // Remove focus from any focused element before closing to prevent aria-hidden focus warning
@@ -29,7 +32,40 @@ export const MFARecoveryCodes = ({
     onClose();
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    // If downloadToken is available (viewing scenario), use backend endpoint
+    if (downloadToken) {
+      try {
+        const response = await mfaApi.downloadRecoveryCodes(downloadToken);
+        
+        // Create blob from response data
+        const blob = new Blob([response.data], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Extract filename from Content-Disposition header or use default
+        const contentDisposition = response.headers['content-disposition'];
+        const filenameMatch = contentDisposition?.match(/filename="?(.+)"?/);
+        const filename = filenameMatch ? filenameMatch[1] : 'recovery_codes.txt';
+        
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Failed to download recovery codes:', error);
+        // Fallback to frontend download if backend fails
+        downloadFromFrontend();
+      }
+    } else {
+      // No token (setup scenario), create file on frontend
+      downloadFromFrontend();
+    }
+  };
+
+  const downloadFromFrontend = () => {
     const codesText = recoveryCodes.join('\n');
     const blob = new Blob([codesText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
