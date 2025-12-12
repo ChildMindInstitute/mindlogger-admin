@@ -4,24 +4,6 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
-/**
- * Hook for viewing MFA recovery codes with TOTP or recovery code verification.
- *
- * SECURITY FLOW:
- * 1. User clicks "View" recovery codes in Account Settings
- * 2. Frontend calls initiate endpoint (validates MFA enabled & codes exist)
- * 3. User enters TOTP code OR recovery code
- * 4. Frontend calls verify endpoint with mfaToken + code
- * 5. Backend tries TOTP verification first, then recovery code if TOTP fails
- * 6. Backend returns recovery codes + download token (5-minute expiry)
- * 7. Display codes only after successful verification
- *
- * IMPORTANT:
- * - Recovery codes are stored encrypted in the database
- * - Backend requires either TOTP or a valid recovery code before showing all codes
- * - If recovery code is used, it will be marked as "used" and cannot be reused
- */
-
 interface ErrorResponse {
   result?: Array<{
     message?: string;

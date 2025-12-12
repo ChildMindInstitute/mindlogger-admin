@@ -1,4 +1,3 @@
-import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
 import {
@@ -15,6 +14,8 @@ import {
 } from './MFARecoveryCodes.styles';
 import { MFARecoveryCodesProps } from './MFARecoveryCodes.types';
 import { CloseIcon } from '../shared/CloseIcon';
+import { getCodeString, isCodeUsed } from './MFARecoveryCodes.utils';
+import { useRecoveryCodesDownload } from './useRecoveryCodesDownload';
 
 export const MFARecoveryCodes = ({
   open,
@@ -23,17 +24,8 @@ export const MFARecoveryCodes = ({
   onConfirm,
   downloadToken,
 }: MFARecoveryCodesProps) => {
-  // Helper function to check if recovery codes have usage status
-  const isRecoveryCodeItem = (code: string | RecoveryCodeItem): code is RecoveryCodeItem =>
-    typeof code === 'object' && 'used' in code;
-
-  // Helper function to get code string
-  const getCodeString = (code: string | RecoveryCodeItem): string =>
-    isRecoveryCodeItem(code) ? code.code : code;
-
-  // Helper function to check if code is used
-  const isCodeUsed = (code: string | RecoveryCodeItem): boolean =>
-    isRecoveryCodeItem(code) ? code.used : false;
+  // Use custom hook for download functionality
+  const { handleDownload } = useRecoveryCodesDownload(recoveryCodes, downloadToken);
 
   // Helper function to render code with strikethrough for used codes
   const renderCode = (code: string | RecoveryCodeItem) => {
@@ -59,54 +51,6 @@ export const MFARecoveryCodes = ({
     // Always trigger completion when modal closes (MFA is already enabled at this point)
     onConfirm();
     onClose();
-  };
-
-  const handleDownload = async () => {
-    // If downloadToken is available (viewing scenario), use backend endpoint
-    if (downloadToken) {
-      try {
-        const response = await mfaApi.downloadRecoveryCodes(downloadToken);
-        
-        // Create blob from response data
-        const blob = new Blob([response.data], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        
-        // Extract filename from Content-Disposition header or use default
-        const contentDisposition = response.headers['content-disposition'];
-        const filenameMatch = contentDisposition?.match(/filename="?(.+)"?/);
-        const filename = filenameMatch ? filenameMatch[1] : 'recovery_codes.txt';
-        
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error('Failed to download recovery codes:', error);
-        // Fallback to frontend download if backend fails
-        downloadFromFrontend();
-      }
-    } else {
-      // No token (setup scenario), create file on frontend
-      downloadFromFrontend();
-    }
-  };
-
-  const downloadFromFrontend = () => {
-    // Convert codes to strings (handles both string[] and RecoveryCodeItem[])
-    const codeStrings = recoveryCodes.map((code) => getCodeString(code));
-    const codesText = codeStrings.join('\n');
-    const blob = new Blob([codesText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'mfa-recovery-codes.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   const handleConfirm = () => {
