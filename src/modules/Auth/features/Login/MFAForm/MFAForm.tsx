@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -127,6 +127,16 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
     }
   };
 
+  const handleCodeChange = (
+    _event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    handleChange: () => void,
+  ) => {
+    if (errorMessage) {
+      setErrorMessage('');
+    }
+    handleChange();
+  };
+
   // Show warning after 3 attempts
   const showWarning = attempts >= 3 && attempts < maxAttempts;
 
@@ -147,11 +157,7 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
             control={control}
             label={t('verificationCode')}
             placeholder="000000"
-            onChange={(e) => {
-              if (errorMessage) {
-                setErrorMessage('');
-              }
-            }}
+            onChange={handleCodeChange}
             inputProps={{
               maxLength: 6,
               inputMode: 'numeric',

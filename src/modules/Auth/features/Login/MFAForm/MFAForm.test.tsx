@@ -75,6 +75,15 @@ describe('MFAForm', () => {
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 
+  it('allows entering the verification code', async () => {
+    renderMFAForm();
+    const input = screen.getByLabelText('Verification code') as HTMLInputElement;
+
+    await userEvent.type(input, '123');
+
+    expect(input).toHaveValue('123');
+  });
+
   it.skip('validates 6-digit code format', async () => {
     renderMFAForm();
     const input = screen.getByLabelText('Verification code');
