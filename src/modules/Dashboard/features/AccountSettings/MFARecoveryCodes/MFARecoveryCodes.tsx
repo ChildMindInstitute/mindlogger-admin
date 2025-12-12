@@ -1,4 +1,5 @@
 import { mfaApi } from 'shared/api';
+import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
 import {
   StyledDialog,
@@ -22,6 +23,34 @@ export const MFARecoveryCodes = ({
   onConfirm,
   downloadToken,
 }: MFARecoveryCodesProps) => {
+  // Helper function to check if recovery codes have usage status
+  const isRecoveryCodeItem = (code: string | RecoveryCodeItem): code is RecoveryCodeItem =>
+    typeof code === 'object' && 'used' in code;
+
+  // Helper function to get code string
+  const getCodeString = (code: string | RecoveryCodeItem): string =>
+    isRecoveryCodeItem(code) ? code.code : code;
+
+  // Helper function to check if code is used
+  const isCodeUsed = (code: string | RecoveryCodeItem): boolean =>
+    isRecoveryCodeItem(code) ? code.used : false;
+
+  // Helper function to render code with strikethrough for used codes
+  const renderCode = (code: string | RecoveryCodeItem) => {
+    const codeString = getCodeString(code);
+    const isUsed = isCodeUsed(code);
+
+    if (isUsed) {
+      return (
+        <span style={{ textDecoration: 'line-through', textDecorationThickness: '2px' }}>
+          {codeString}
+        </span>
+      );
+    }
+
+    return codeString;
+  };
+
   const handleClose = () => {
     // Remove focus from any focused element before closing to prevent aria-hidden focus warning
     if (document.activeElement instanceof HTMLElement) {
@@ -66,7 +95,9 @@ export const MFARecoveryCodes = ({
   };
 
   const downloadFromFrontend = () => {
-    const codesText = recoveryCodes.join('\n');
+    // Convert codes to strings (handles both string[] and RecoveryCodeItem[])
+    const codeStrings = recoveryCodes.map((code) => getCodeString(code));
+    const codesText = codeStrings.join('\n');
     const blob = new Blob([codesText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -106,7 +137,7 @@ export const MFARecoveryCodes = ({
         <StyledCodesContainer>
           <StyledCodesList>
             {recoveryCodes.map((code, index) => (
-              <p key={index}>{code}</p>
+              <p key={index}>{renderCode(code)}</p>
             ))}
           </StyledCodesList>
         </StyledCodesContainer>

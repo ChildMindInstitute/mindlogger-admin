@@ -59,13 +59,13 @@ const getErrorMessage = (error: AxiosError, isRecoveryCode: boolean = false): st
 
 interface VerificationResult {
   success: boolean;
-  recoveryCodes?: string[];
+  recoveryCodes?: RecoveryCodeItem[];
 }
 
 export const useViewRecoveryCodes = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
-  const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
+  const [recoveryCodes, setRecoveryCodes] = useState<RecoveryCodeItem[] | null>(null);
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -99,10 +99,9 @@ export const useViewRecoveryCodes = () => {
         throw new Error('No recovery codes found');
       }
 
-      // Extract just the code strings from the response
-      const codes = recoveryCodesData.codes.map((item: RecoveryCodeItem) => item.code);
-      setRecoveryCodes(codes);
-      
+      // Store the full recovery code items (with used status)
+      setRecoveryCodes(recoveryCodesData.codes);
+
       // Store download token for backend download (5-minute expiry)
       if (recoveryCodesData.downloadToken) {
         setDownloadToken(recoveryCodesData.downloadToken);
@@ -110,7 +109,7 @@ export const useViewRecoveryCodes = () => {
 
       return {
         success: true,
-        recoveryCodes: codes,
+        recoveryCodes: recoveryCodesData.codes,
       };
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -151,10 +150,9 @@ export const useViewRecoveryCodes = () => {
         throw new Error('No recovery codes found');
       }
 
-      // Extract just the code strings from the response
-      const codes = recoveryCodesData.codes.map((item: RecoveryCodeItem) => item.code);
-      setRecoveryCodes(codes);
-      
+      // Store the full recovery code items (with used status)
+      setRecoveryCodes(recoveryCodesData.codes);
+
       // Store download token for backend download (5-minute expiry)
       if (recoveryCodesData.downloadToken) {
         setDownloadToken(recoveryCodesData.downloadToken);
@@ -162,7 +160,7 @@ export const useViewRecoveryCodes = () => {
 
       return {
         success: true,
-        recoveryCodes: codes,
+        recoveryCodes: recoveryCodesData.codes,
       };
     } catch (err) {
       const axiosError = err as AxiosError;
