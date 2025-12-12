@@ -9,6 +9,7 @@ import { getUserDetailsApi } from 'modules/Dashboard/api';
 import { useFeatureFlags } from 'shared/hooks';
 
 import { MFASetup } from '../MFASetup';
+import { ViewRecoveryCodes } from '../ViewRecoveryCodes';
 import { MobileIcon } from './MobileIcon';
 import { KeyIcon } from './KeyIcon';
 import {
@@ -44,6 +45,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   const userInitials = auth.useUserInitials();
   const { featureFlags } = useFeatureFlags();
   const [showMFASetup, setShowMFASetup] = useState(false);
+  const [showViewRecoveryCodes, setShowViewRecoveryCodes] = useState(false);
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
   const [_isLoadingMFAStatus, setIsLoadingMFAStatus] = useState(true);
 
@@ -102,7 +104,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   };
 
   const handleViewRecoveryCodes = () => {
-    // TODO: Implement view recovery codes
+    setShowViewRecoveryCodes(true);
   };
 
   return (
@@ -219,6 +221,11 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
         open={showMFASetup}
         onClose={() => setShowMFASetup(false)}
         onComplete={handleMFASetupComplete}
+      />
+
+      <ViewRecoveryCodes
+        open={showViewRecoveryCodes}
+        onClose={() => setShowViewRecoveryCodes(false)}
       />
     </>
   );

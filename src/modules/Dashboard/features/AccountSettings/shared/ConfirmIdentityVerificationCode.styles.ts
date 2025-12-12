@@ -1,0 +1,169 @@
+import { styled, Dialog, Box } from '@mui/material';
+
+import { variables } from 'shared/styles/variables';
+
+export const StyledDialog = styled(Dialog)`
+  .MuiDialog-paper {
+    display: flex;
+    width: 480px;
+    padding: 32px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    border-radius: 16px;
+    background: ${variables.palette.surface};
+    overflow: hidden;
+    max-height: none;
+  }
+`;
+
+export const StyledHeader = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+`;
+
+export const StyledTitle = styled('h2')`
+  margin: 0;
+  flex: 1;
+  color: ${variables.palette.on_surface};
+  font-family: 'Moderat', ${variables.font.family};
+  font-size: 24px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 32px;
+  letter-spacing: 0%;
+  opacity: 1;
+`;
+
+export const StyledContent = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  align-self: stretch;
+  width: 100%;
+`;
+
+export const StyledDescription = styled(Box)`
+  width: 100%;
+  color: ${variables.palette.on_surface};
+  font-family: 'Moderat', ${variables.font.family};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  opacity: 1;
+`;
+
+export const StyledInputContainer = styled(Box)<{ $hasError?: boolean }>`
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 4px;
+  border: 1px solid
+    ${({ $hasError }) =>
+      $hasError ? variables.palette.error_container : variables.palette.outline_variant};
+  background: ${variables.palette.surface};
+  opacity: 1;
+  position: relative;
+`;
+
+export const StyledInput = styled('input')`
+  display: flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border: none;
+  background: transparent;
+  color: ${variables.palette.on_surface};
+  font-family: 'Noto Sans', ${variables.font.family};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  min-height: 40px;
+  opacity: 1;
+
+  &::placeholder {
+    color: ${variables.palette.outline};
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+`;
+
+export const StyledButtonContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+`;
+
+export const StyledButton = styled('button')`
+  display: flex;
+  width: 300px;
+  height: 48px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  border: none;
+  text-align: center;
+  font-family: 'Moderat', ${variables.font.family};
+  font-size: 16px;
+  font-style: normal;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+
+  &.primary {
+    background: ${variables.palette.primary};
+    color: ${variables.palette.on_primary};
+    font-weight: 700;
+  }
+
+  &.secondary {
+    background: transparent;
+    color: ${variables.palette.primary};
+    font-weight: 400;
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+`;
+
+export const StyledErrorMessage = styled(Box)`
+  color: ${variables.palette.error_container};
+  font-family: 'Moderat', ${variables.font.family};
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  margin-top: -24px;
+  width: 300px;
+  opacity: 1;
+`;
