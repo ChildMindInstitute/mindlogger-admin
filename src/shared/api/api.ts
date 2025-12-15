@@ -21,6 +21,9 @@ import {
   RecoveryCodesViewInitiateResponse,
   RecoveryCodesViewVerifyRequest,
   RecoveryCodesListResponse,
+  MFADisableInitiateResponse,
+  MFADisableVerifyRequest,
+  MFADisableVerifyResponse,
 } from './api.mfa.types';
 import { apiClient, authApiClient } from './apiConfig';
 
@@ -167,4 +170,19 @@ export const mfaApi = {
       signal,
       responseType: 'blob', // Important: Get file as blob for download
     }),
+
+  // MFA disable with TOTP verification
+  initiateDisable: (signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFADisableInitiateResponse>>(
+      '/users/me/mfa/totp/disable/initiate',
+      {},
+      { signal },
+    ),
+
+  verifyAndDisable: (body: MFADisableVerifyRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFADisableVerifyResponse>>(
+      '/users/me/mfa/totp/disable/verify',
+      body,
+      { signal },
+    ),
 };

@@ -46,3 +46,19 @@ export type RecoveryCodesViewVerifyRequest = {
   mfaToken: string;
   code: string; // 6-digit TOTP code OR 11-character recovery code (XXXXX-XXXXX)
 };
+
+export type MFADisableInitiateResponse = {
+  mfaRequired: boolean;
+  mfaToken: string;
+  message: string;
+};
+
+export type MFADisableVerifyRequest = {
+  mfaToken: string;
+  code: string; // 6-digit TOTP code OR 11-character recovery code (XXXXX-XXXXX)
+};
+
+export type MFADisableVerifyResponse = {
+  mfaDisabled: boolean;
+  message: string;
+};
