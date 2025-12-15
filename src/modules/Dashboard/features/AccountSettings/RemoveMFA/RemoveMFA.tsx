@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
 import { RemoveMFAConfirmation } from './RemoveMFAConfirmation';
 import { RemoveMFAProps } from './RemoveMFA.types';
+import { useRemoveMFA } from './useRemoveMFA';
 
 type RemoveStep = 'verification' | 'recovery-code' | 'confirmation';
 
@@ -10,45 +11,31 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   const [currentStep, setCurrentStep] = useState<RemoveStep>('verification');
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const clearError = () => setError(null);
+  const { mfaToken, isLoading, error, clearError, initiateDisable, verifyAndDisable } =
+    useRemoveMFA();
 
-  const handleVerificationConfirm = async (_code: string) => {
-    // TODO: API call to verify TOTP code for MFA removal
-    setIsLoading(true);
-    clearError();
-    
-    // Simulate API call for now
-    setTimeout(() => {
-      setIsLoading(false);
+  // Initiate MFA disable when modal opens
+  useEffect(() => {
+    if (open && !mfaToken) {
+      initiateDisable();
+    }
+  }, [open, mfaToken, initiateDisable]);
+
+  const handleVerificationConfirm = async (code: string) => {
+    const result = await verifyAndDisable(code, false);
+
+    if (result.success) {
       setCurrentStep('confirmation');
-    }, 500);
+    }
   };
 
-  const handleRecoveryCodeConfirm = async (_code: string) => {
-    // TODO: API call to verify recovery code for MFA removal
-    setIsLoading(true);
-    clearError();
-    
-    // Simulate API call for now
-    setTimeout(() => {
-      setIsLoading(false);
-      setCurrentStep('confirmation');
-    }, 500);
-  };
+  const handleRecoveryCodeConfirm = async (code: string) => {
+    const result = await verifyAndDisable(code, true);
 
-  const handleFinalConfirm = async () => {
-    // TODO: API call to actually remove MFA
-    setIsLoading(true);
-    
-    // Simulate API call for now
-    setTimeout(() => {
-      setIsLoading(false);
-      onSuccess();
-      handleClose();
-    }, 500);
+    if (result.success) {
+      setCurrentStep('confirmation');
+    }
   };
 
   const handleUseRecoveryCode = () => {
@@ -59,6 +46,11 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   const handleBackToVerification = () => {
     clearError();
     setCurrentStep('verification');
+  };
+
+  const handleFinalConfirm = async () => {
+    onSuccess();
+    handleClose();
   };
 
   const handleClose = () => {
@@ -82,7 +74,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         error={error}
         clearError={clearError}
         title="Confirm Your Identity"
-        description="To remove two factor authentication from your account, we first need to confirm it's you. Please enter the verification code from your authenticator app."
+        description="To remove two factor authentication from your account, we need to confirm it's you. Please enter the verification code from your authenticator app."
       />
 
       <ConfirmIdentityRecoveryCode

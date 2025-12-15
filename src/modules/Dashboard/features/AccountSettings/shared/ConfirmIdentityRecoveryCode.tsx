@@ -1,3 +1,5 @@
+import { Box } from '@mui/material';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -59,17 +61,19 @@ export const ConfirmIdentityRecoveryCode = ({
       <StyledContent>
         <StyledDescription>Please enter an account recovery code.</StyledDescription>
 
-        <StyledInputContainer $hasError={!!error}>
-          <StyledInput
-            type="text"
-            placeholder="XXXXX-XXXXX"
-            value={recoveryCode}
-            onChange={handleInputChange}
-            maxLength={11}
-            disabled={isLoading}
-          />
-        </StyledInputContainer>
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        <Box sx={{ width: '300px', position: 'relative' }}>
+          <StyledInputContainer $hasError={!!error}>
+            <StyledInput
+              type="text"
+              placeholder="XXXXX-XXXXX"
+              value={recoveryCode}
+              onChange={handleInputChange}
+              maxLength={11}
+              disabled={isLoading}
+            />
+          </StyledInputContainer>
+          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        </Box>
 
         <StyledButtonContainer>
           <StyledButton
