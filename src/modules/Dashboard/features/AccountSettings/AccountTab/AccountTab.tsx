@@ -10,6 +10,7 @@ import { useFeatureFlags } from 'shared/hooks';
 
 import { MFASetup } from '../MFASetup';
 import { ViewRecoveryCodes } from '../ViewRecoveryCodes';
+import { RemoveMFA } from '../RemoveMFA';
 import { MobileIcon } from './MobileIcon';
 import { KeyIcon } from './KeyIcon';
 import {
@@ -46,6 +47,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   const { featureFlags } = useFeatureFlags();
   const [showMFASetup, setShowMFASetup] = useState(false);
   const [showViewRecoveryCodes, setShowViewRecoveryCodes] = useState(false);
+  const [showRemoveMFA, setShowRemoveMFA] = useState(false);
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
   const [_isLoadingMFAStatus, setIsLoadingMFAStatus] = useState(true);
 
@@ -100,7 +102,20 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
   }, [showMFASetup, isModalOpen]);
 
   const handleRemoveMFA = () => {
-    // TODO: Implement MFA removal
+    setShowRemoveMFA(true);
+  };
+
+  const handleRemoveMFASuccess = () => {
+    setIsMFAEnabled(false);
+    dispatch(
+      banners.actions.addBanner({
+        key: 'MFARemovalSuccessBanner',
+        bannerProps: {
+          children: 'Two-factor authentication has been successfully removed.',
+          severity: 'success',
+        },
+      }),
+    );
   };
 
   const handleViewRecoveryCodes = () => {
@@ -226,6 +241,12 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
       <ViewRecoveryCodes
         open={showViewRecoveryCodes}
         onClose={() => setShowViewRecoveryCodes(false)}
+      />
+
+      <RemoveMFA
+        open={showRemoveMFA}
+        onClose={() => setShowRemoveMFA(false)}
+        onSuccess={handleRemoveMFASuccess}
       />
     </>
   );
