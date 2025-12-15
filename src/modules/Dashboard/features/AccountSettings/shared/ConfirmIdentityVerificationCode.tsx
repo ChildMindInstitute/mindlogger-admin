@@ -23,11 +23,12 @@ export const ConfirmIdentityVerificationCode = ({
   isLoading,
   error,
   clearError,
+  title,
+  description,
 }: ConfirmIdentityVerificationCodeProps) => {
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
 
   const handleClose = () => {
-    // Remove focus from any focused element before closing to prevent aria-hidden focus warning
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
@@ -45,14 +46,11 @@ export const ConfirmIdentityVerificationCode = ({
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Confirm Your Identity</StyledTitle>
+        <StyledTitle>{title}</StyledTitle>
       </StyledHeader>
 
       <StyledContent>
-        <StyledDescription>
-          To view the recovery codes for your account, we first have confirm it's you. Please enter
-          the verification code from your authenticator app.
-        </StyledDescription>
+        <StyledDescription>{description}</StyledDescription>
 
         <StyledInputContainer $hasError={!!error}>
           <StyledInput

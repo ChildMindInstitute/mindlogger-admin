@@ -72,6 +72,8 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
         isLoading={isLoading}
         error={error}
         clearError={clearError}
+        title="Confirm Your Identity"
+        description="To view the recovery codes for your account, we first have confirm it's you. Please enter the verification code from your authenticator app."
       />
 
       <ConfirmIdentityRecoveryCode

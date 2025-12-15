@@ -8,4 +8,6 @@ export interface ConfirmIdentityVerificationCodeProps {
   isLoading: boolean;
   error: string | null;
   clearError: () => void;
+  title: string;
+  description: string;
 }
