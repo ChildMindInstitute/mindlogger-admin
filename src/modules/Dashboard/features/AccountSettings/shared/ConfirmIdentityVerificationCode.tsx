@@ -1,3 +1,5 @@
+import { Box } from '@mui/material';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -52,18 +54,20 @@ export const ConfirmIdentityVerificationCode = ({
       <StyledContent>
         <StyledDescription>{description}</StyledDescription>
 
-        <StyledInputContainer $hasError={!!error}>
-          <StyledInput
-            type="text"
-            inputMode="numeric"
-            placeholder="Enter verification code"
-            value={verificationCode}
-            onChange={handleInputChange}
-            maxLength={6}
-            disabled={isLoading}
-          />
-        </StyledInputContainer>
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        <Box sx={{ width: '300px', position: 'relative' }}>
+          <StyledInputContainer $hasError={!!error}>
+            <StyledInput
+              type="text"
+              inputMode="numeric"
+              placeholder="Enter verification code"
+              value={verificationCode}
+              onChange={handleInputChange}
+              maxLength={6}
+              disabled={isLoading}
+            />
+          </StyledInputContainer>
+          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        </Box>
 
         <StyledButtonContainer>
           <StyledButton

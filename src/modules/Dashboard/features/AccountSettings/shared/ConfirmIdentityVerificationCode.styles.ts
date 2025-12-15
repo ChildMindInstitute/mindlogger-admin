@@ -65,8 +65,7 @@ export const StyledInputContainer = styled(Box)<{ $hasError?: boolean }>`
   align-items: flex-start;
   border-radius: 4px;
   border: 1px solid
-    ${({ $hasError }) =>
-      $hasError ? variables.palette.error_container : variables.palette.outline_variant};
+    ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.outline_variant)};
   background: ${variables.palette.surface};
   opacity: 1;
   position: relative;
@@ -155,15 +154,26 @@ export const StyledButton = styled('button')`
   }
 `;
 
-export const StyledErrorMessage = styled(Box)`
-  color: ${variables.palette.error_container};
-  font-family: 'Moderat', ${variables.font.family};
-  font-size: 12px;
-  font-style: normal;
+export const StyledErrorMessage = styled('div')`
+  margin-top: 4px;
+  padding-left: 16px;
+  color: #ba1a1a !important;
+  font-family: ${variables.font.family};
+  font-size: 1.2rem;
   font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0.4px;
-  margin-top: -24px;
-  width: 300px;
-  opacity: 1;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  text-align: left;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
