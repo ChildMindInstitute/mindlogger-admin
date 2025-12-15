@@ -14,6 +14,7 @@ import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBa
 import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
 
 import { MFAEnabledSuccessBanner } from './MFAEnabledSuccessBanner';
+import { MFARemovalSuccessBanner } from './MFARemovalSuccessBanner';
 import { BannerProps } from './Banner';
 
 export const BannerComponents: Record<keyof typeof BannerType, ComponentType<BannerProps>> = {
@@ -27,4 +28,5 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
   MFAEnabledSuccessBanner,
+  MFARemovalSuccessBanner,
 };
