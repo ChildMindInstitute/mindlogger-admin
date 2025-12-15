@@ -23,7 +23,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   }, [open, mfaToken, initiateDisable]);
 
   const handleVerificationConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code, false);
+    const result = await verifyAndDisable(code);
 
     if (result.success) {
       setCurrentStep('confirmation');
@@ -31,7 +31,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code, true);
+    const result = await verifyAndDisable(code);
 
     if (result.success) {
       setCurrentStep('confirmation');

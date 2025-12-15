@@ -74,7 +74,7 @@ export const ConfirmIdentityVerificationCode = ({
             type="button"
             className="primary"
             onClick={handleContinue}
-            disabled={isLoading || !verificationCode}
+            disabled={isLoading}
           >
             {isLoading ? 'Verifying...' : 'Continue'}
           </StyledButton>

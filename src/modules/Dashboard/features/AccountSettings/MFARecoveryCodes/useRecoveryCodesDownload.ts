@@ -2,6 +2,7 @@ import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
 import { getCodeString } from './MFARecoveryCodes.utils';
+import { extractFilenameFromHeader, generateTimestampedFilename } from './fileDownload.utils';
 
 export const useRecoveryCodesDownload = (
   recoveryCodes: (string | RecoveryCodeItem)[],
@@ -20,10 +21,10 @@ export const useRecoveryCodesDownload = (
     const link = document.createElement('a');
     link.href = url;
 
-    // Extract filename from Content-Disposition header or use default
-    const contentDisposition = response.headers['content-disposition'];
-    const filenameMatch = contentDisposition?.match(/filename="?(.+)"?/);
-    const filename = filenameMatch ? filenameMatch[1] : 'recovery_codes.txt';
+    // Extract filename from Content-Disposition header or generate timestamped filename
+    const contentDisposition =
+      response.headers['content-disposition'] || response.headers['Content-Disposition'];
+    const filename = extractFilenameFromHeader(contentDisposition) || generateTimestampedFilename();
 
     link.download = filename;
     document.body.appendChild(link);
@@ -40,7 +41,8 @@ export const useRecoveryCodesDownload = (
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'mfa-recovery-codes.txt';
+    // Always use timestamped filename for consistency
+    link.download = generateTimestampedFilename();
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

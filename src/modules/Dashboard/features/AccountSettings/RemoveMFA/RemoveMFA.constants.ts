@@ -1,0 +1,42 @@
+/**
+ * Error messages for MFA disable operations
+ */
+export const MFA_DISABLE_ERROR_MESSAGES = {
+  NOT_ENABLED: 'Two-factor authentication is not enabled on this account.',
+  INVALID_CODE: 'Invalid verification code. Please check your authenticator app and try again.',
+  RECOVERY_CODE_INVALID: 'Invalid recovery code. Please check the code and try again.',
+  RECOVERY_CODE_USED: 'This recovery code has already been used. Each code can only be used once.',
+  EXPIRED_SESSION: 'Your verification session has expired. Please start over.',
+  MAX_ATTEMPTS: 'Too many invalid attempts. Please try again later.',
+  GLOBAL_LOCKOUT:
+    'Account temporarily locked due to multiple failed attempts. Please try again later.',
+  SESSION_MISMATCH: 'Invalid verification session. Please start over.',
+  NETWORK_ERROR: 'Network error. Please check your connection and try again.',
+  UNKNOWN_ERROR: 'An unexpected error occurred. Please try again.',
+} as const;
+
+/**
+ * Regular expression patterns to match backend error messages
+ */
+export const BACKEND_ERROR_PATTERNS = {
+  NOT_ENABLED: /MFA is not enabled/i,
+  INVALID_TOTP: /Invalid TOTP code/i,
+  RECOVERY_INVALID: /Invalid recovery code/i,
+  RECOVERY_USED: /recovery code has already been used/i,
+  RECOVERY_NOT_FOUND: /No matching recovery code found|recovery code.*not found/i,
+  SESSION_NOT_FOUND: /MFA session not found or expired/i,
+  SESSION_EXPIRED: /expired/i,
+  TOO_MANY_ATTEMPTS: /Too many invalid TOTP attempts/i,
+  GLOBAL_LOCKOUT: /Account temporarily locked due to multiple failed MFA attempts/i,
+  SESSION_MISMATCH: /Invalid MFA session for this operation/i,
+} as const;
+
+/**
+ * HTTP status codes for MFA disable operations
+ */
+export const MFA_DISABLE_STATUS_CODES = {
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  TOO_MANY_REQUESTS: 429,
+} as const;

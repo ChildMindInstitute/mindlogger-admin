@@ -80,7 +80,7 @@ export const ConfirmIdentityRecoveryCode = ({
             type="button"
             className="primary"
             onClick={handleContinue}
-            disabled={isLoading || !recoveryCode}
+            disabled={isLoading}
           >
             {isLoading ? 'Verifying...' : 'Continue'}
           </StyledButton>
