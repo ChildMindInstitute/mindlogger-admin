@@ -21,7 +21,9 @@ export const Visits = ({ visitsList }: VisitsProps) => {
     formState: { errors },
   } = useFormContext();
 
-  const visitsForm: LorisUserAnswerVisit[] = useWatch({ name: 'visitsForm' });
+  const visitsForm: LorisUserAnswerVisit[] = useWatch({
+    name: 'visitsForm',
+  }) as LorisUserAnswerVisit[];
 
   const handleChangeVisit = useCallback(
     ({ activityAnswer, value }: HandleChangeVisitProps) => {

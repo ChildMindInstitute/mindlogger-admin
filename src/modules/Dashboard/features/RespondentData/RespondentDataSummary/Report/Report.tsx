@@ -43,9 +43,9 @@ export const Report = () => {
     apiVersions,
   } = useRespondentDataContext();
 
-  const versions: AutocompleteOption[] = useWatch({
+  const versions = useWatch({
     name: 'versions',
-  });
+  }) as AutocompleteOption[];
   const { hideSkipped } = useDatavizSkippedFilter();
 
   const [isLoading, setIsLoading] = useState(false);

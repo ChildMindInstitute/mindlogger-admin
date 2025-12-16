@@ -57,7 +57,7 @@ export const DataExportPopup = ({
   const { dataIsExporting, setDataIsExporting, setExportDataQueue, limitRef, finishedPagesRef } =
     useMultipleDecryptWorkers({
       handleExportPopupClose,
-      appletId,
+      appletId: appletId!,
       encryption,
       filters,
       privateKeyRef,

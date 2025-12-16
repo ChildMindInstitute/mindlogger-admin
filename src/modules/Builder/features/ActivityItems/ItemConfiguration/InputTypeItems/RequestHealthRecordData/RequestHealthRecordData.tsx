@@ -11,9 +11,9 @@ import { RequestHealthRecordDataProps } from './RequestHealthRecordData.types';
 export const RequestHealthRecordData = ({ name }: RequestHealthRecordDataProps) => {
   const { t } = useTranslation('app');
 
-  const optInOutOptions: RequestHealthRecordDataOption[] = useWatch({
+  const optInOutOptions = useWatch({
     name: `${name}.responseValues.optInOutOptions`,
-  });
+  }) as RequestHealthRecordDataOption[];
 
   return (
     <StyledContainer>

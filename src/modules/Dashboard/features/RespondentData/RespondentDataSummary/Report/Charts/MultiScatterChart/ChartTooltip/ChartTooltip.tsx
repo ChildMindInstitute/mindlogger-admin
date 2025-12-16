@@ -25,16 +25,19 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
               {t('response', { count: data.length })}
             </StyledBodyMedium>
             <Box sx={{ pb: theme.spacing(0.8) }} data-testid={`${dataTestid}-tooltip-dates`}>
-              {data.map((response, index) => (
-                <StyledLabelMedium
-                  key={response.parsed.x}
-                  sx={{ padding: theme.spacing(0.2, 0.8) }}
-                  color={variables.palette.white}
-                  data-testid={`${dataTestid}-tooltip-date-${index}`}
-                >
-                  {format(response?.parsed.x, DateFormats.MonthDayTime)}
-                </StyledLabelMedium>
-              ))}
+              {data.map(
+                (response, index) =>
+                  response?.parsed.x !== null && (
+                    <StyledLabelMedium
+                      key={response.parsed.x}
+                      sx={{ padding: theme.spacing(0.2, 0.8) }}
+                      color={variables.palette.white}
+                      data-testid={`${dataTestid}-tooltip-date-${index}`}
+                    >
+                      {format(response.parsed.x, DateFormats.MonthDayTime)}
+                    </StyledLabelMedium>
+                  ),
+              )}
             </Box>
           </StyledTooltip>
         </>

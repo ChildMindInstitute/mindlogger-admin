@@ -67,26 +67,26 @@ const testActivityFlowSettings = async ({ disableButton }) => {
 
 describe('ActivityFlowSettings', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     useCustomFormContext.mockReturnValue({ watch: mockWatch });
     mockWatch.mockReturnValueOnce(mockActivityFlows);
-    vi.clearAllMocks();
   });
 
-  test('renders ActivityFlowSettings component with mock data and enabled report config', () => {
+  test('renders ActivityFlowSettings component with mock data and enabled report config', async () => {
     renderWithProviders(<ActivityFlowSettings />, {
       route: '/builder/appletId/activity-flows/123/settings',
       routePath,
     });
 
-    testActivityFlowSettings({ disableButton: false });
+    await testActivityFlowSettings({ disableButton: false });
   });
 
-  test('renders ActivityFlowSettings component with mock data and disabled report config', () => {
+  test('renders ActivityFlowSettings component with mock data and disabled report config', async () => {
     renderWithProviders(<ActivityFlowSettings />, {
       route: '/builder/appletId/activity-flows/456/settings',
       routePath,
     });
 
-    testActivityFlowSettings({ disableButton: true });
+    await testActivityFlowSettings({ disableButton: true });
   });
 });

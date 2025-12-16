@@ -703,7 +703,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
         const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
-        const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
+        const optionsSelectButton = optionsSelect.querySelector('[role="combobox"]');
         fireEvent.mouseDown(optionsSelectButton);
 
         const option = screen
@@ -736,7 +736,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(addAlert);
 
       const alert1OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-0-selection-option`);
-      const alert1OptionsSelectButton = alert1OptionsSelect.querySelector('[role="button"]');
+      const alert1OptionsSelectButton = alert1OptionsSelect.querySelector('[role="combobox"]');
       fireEvent.mouseDown(alert1OptionsSelectButton);
 
       const alert1Options = screen
@@ -746,7 +746,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(alert1Options[0]);
 
       const alert2OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
-      const alert2OptionsSelectButton = alert2OptionsSelect.querySelector('[role="button"]');
+      const alert2OptionsSelectButton = alert2OptionsSelect.querySelector('[role="combobox"]');
       fireEvent.mouseDown(alert2OptionsSelectButton);
 
       const alert2Options = screen
@@ -756,7 +756,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(alert2Options[0]);
 
       const alert3OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-2-selection-option`);
-      const alert3OptionsSelectButton = alert3OptionsSelect.querySelector('[role="button"]');
+      const alert3OptionsSelectButton = alert3OptionsSelect.querySelector('[role="combobox"]');
       fireEvent.mouseDown(alert3OptionsSelectButton);
 
       const alert3Options = screen

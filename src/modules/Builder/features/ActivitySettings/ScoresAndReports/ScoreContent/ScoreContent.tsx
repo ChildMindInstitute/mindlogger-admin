@@ -101,9 +101,12 @@ export const ScoreContent = ({
   const subscaleNameField = `${name}.subscaleName`;
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
+  const subscales: SubscaleFormValue[] =
+    (useWatch({ name: subscalesField }) as SubscaleFormValue[]) ?? [];
 
-  const score: ScoreReport = useWatch({ name });
+  const score: ScoreReport = useWatch({
+    name,
+  }) as ScoreReport;
   const {
     name: scoreName,
     id: scoreId,
@@ -365,8 +368,8 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter(
-      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    const newSelectedItems = scoreItems?.filter((item) =>
+      chosenItems?.includes(getEntityKey(item, true)),
     );
     updateScoreConditionsPayload({
       setValue,

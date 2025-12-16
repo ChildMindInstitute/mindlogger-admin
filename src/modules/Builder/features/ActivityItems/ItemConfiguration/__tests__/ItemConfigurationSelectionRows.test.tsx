@@ -32,7 +32,7 @@ const renderSelectionRows = (responseType) => {
 };
 const setOption = (optionNumber) => {
   const select = screen.getByTestId(`${mockedDataTestid}-options-select`);
-  fireEvent.mouseDown(select.querySelector('[role="button"]'));
+  fireEvent.mouseDown(select.querySelector('[role="combobox"]'));
 
   const options = screen
     .getByTestId(`${mockedDataTestid}-options-select-dropdown`)
@@ -42,7 +42,7 @@ const setOption = (optionNumber) => {
 const setAlertOption = (alertIndex, optionIndex) => {
   const optionsSelect = screen
     .getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-option`)
-    .querySelector('[role="button"]');
+    .querySelector('[role="combobox"]');
   fireEvent.mouseDown(optionsSelect);
   fireEvent.click(
     screen
@@ -53,7 +53,7 @@ const setAlertOption = (alertIndex, optionIndex) => {
 const setAlertRow = (alertIndex, rowIndex) => {
   const rowsSelect = screen
     .getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-row`)
-    .querySelector('[role="button"]');
+    .querySelector('[role="combobox"]');
   fireEvent.mouseDown(rowsSelect);
   fireEvent.click(
     screen
@@ -98,7 +98,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     const optionsSelect = screen.getByTestId(`${mockedDataTestid}-options-select`);
     expect(optionsSelect).toBeVisible();
 
-    fireEvent.mouseDown(optionsSelect.querySelector('[role="button"]'));
+    fireEvent.mouseDown(optionsSelect.querySelector('[role="combobox"]'));
     const optionsSelectList = screen.getByTestId(`${mockedDataTestid}-options-select-dropdown`);
     expect(optionsSelectList).toBeVisible();
 
@@ -388,7 +388,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
 
       const optionsSelect = screen
         .getByTestId(`${mockedAlertsTestid}-1-selection-per-row-option`)
-        .querySelector('[role="button"]');
+        .querySelector('[role="combobox"]');
       fireEvent.mouseDown(optionsSelect);
       const filteredOptions = screen
         .getByTestId(`${mockedAlertsTestid}-1-selection-per-row-option-dropdown`)
@@ -402,7 +402,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
 
       const rowsSelect = screen
         .getByTestId(`${mockedAlertsTestid}-2-selection-per-row-row`)
-        .querySelector('[role="button"]');
+        .querySelector('[role="combobox"]');
       fireEvent.mouseDown(rowsSelect);
       const filteredRows = screen
         .getByTestId(`${mockedAlertsTestid}-2-selection-per-row-row-dropdown`)

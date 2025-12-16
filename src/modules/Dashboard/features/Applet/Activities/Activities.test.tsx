@@ -35,9 +35,9 @@ import {
   sourceSubjectDropdownTestId,
   takeNowModalTestId,
   toggleSelfReportCheckbox,
+  spyMixpanelTrack,
 } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.test-utils';
 import { MixpanelEventType, MixpanelProps } from 'shared/utils';
-import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { authApiClient } from 'shared/api/apiConfig';
 
 import { Activities } from './Activities';
@@ -92,8 +92,6 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const mixpanelTrack = vi.spyOn(MixpanelFunc.Mixpanel, 'track');
-
 // Set default mock implementation before all tests
 mockUseFeatureFlags.mockReturnValue({
   featureFlags: {
@@ -112,7 +110,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       },
       resetLDContext: vi.fn(),
     });
-    mixpanelTrack.mockReset();
+    spyMixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -262,7 +260,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     fireEvent.click(screen.getByTestId(`${testId}-activity-assign`));
 
-    expect(mixpanelTrack).toHaveBeenCalledWith(
+    expect(spyMixpanelTrack).toHaveBeenCalledWith(
       expect.objectContaining({
         action: MixpanelEventType.StartAssignActivityOrFlow,
         [MixpanelProps.AppletId]: mockedAppletId,
@@ -308,7 +306,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     fireEvent.click(screen.getByTestId(`${testId}-flow-assign`));
 
-    expect(mixpanelTrack).toHaveBeenCalledWith(
+    expect(spyMixpanelTrack).toHaveBeenCalledWith(
       expect.objectContaining({
         action: MixpanelEventType.StartAssignActivityOrFlow,
         [MixpanelProps.AppletId]: mockedAppletId,
@@ -344,7 +342,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
     fireEvent.click(screen.getByTestId(`${testId}-assign`));
 
-    expect(mixpanelTrack).toHaveBeenCalledWith(
+    expect(spyMixpanelTrack).toHaveBeenCalledWith(
       expect.objectContaining({
         action: MixpanelEventType.StartAssignActivityOrFlow,
         [MixpanelProps.AppletId]: mockedAppletId,

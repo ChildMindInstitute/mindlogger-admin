@@ -132,7 +132,7 @@ describe('ExportDataSetting', () => {
       expect(dateTypeField).toBeVisible();
 
       // Open the select dropdown
-      const selectButton = dateTypeField.querySelector('[role="button"]');
+      const selectButton = dateTypeField.querySelector('[role="combobox"]');
       if (selectButton) {
         fireEvent.mouseDown(selectButton);
       }

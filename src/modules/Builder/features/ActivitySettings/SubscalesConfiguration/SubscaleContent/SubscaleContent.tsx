@@ -39,11 +39,11 @@ export const SubscaleContent = ({
   const { clearErrors, trigger, getFieldState } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField });
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) as SubscaleFormValue[];
   const [subscaleName, scoringType, selectedItems]: [string, SubscaleTotalScore, string[]] =
     useWatch({
       name: [`${name}.name`, `${name}.scoring`, `${name}.items`],
-    });
+    }) as [string, SubscaleTotalScore, string[]];
 
   const items = getItemElements(
     subscaleId,

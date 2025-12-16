@@ -41,7 +41,13 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       if (
         encryptionInfoGenerated
           .getPublicKey()
-          .equals(Buffer.from(publicKeyFromServer as unknown as WithImplicitCoercion<string>))
+          .equals(
+            Buffer.from(
+              typeof publicKeyFromServer === 'string'
+                ? publicKeyFromServer
+                : (publicKeyFromServer as number[]),
+            ),
+          )
       ) {
         encryptionInfoGenerated?.getPrivateKey &&
           setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));

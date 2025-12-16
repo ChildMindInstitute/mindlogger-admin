@@ -202,7 +202,7 @@ describe('Condition', () => {
     });
 
     const itemNameSelect = screen.getByTestId('empty-condition-name');
-    const itemNameSelectButton = itemNameSelect.querySelector('[role="button"]');
+    const itemNameSelectButton = itemNameSelect.querySelector('[role="combobox"]');
 
     fireEvent.mouseDown(itemNameSelectButton!);
 
@@ -249,7 +249,7 @@ describe('Condition', () => {
 
     if (type !== ConditionItemType.Score) {
       const selectItem = screen.getByTestId('empty-condition-name');
-      const selectItemButton = selectItem.querySelector('[role="button"]');
+      const selectItemButton = selectItem.querySelector('[role="combobox"]');
 
       fireEvent.mouseDown(selectItemButton);
 
@@ -260,7 +260,7 @@ describe('Condition', () => {
     }
 
     const selectState = screen.getByTestId('empty-condition-type');
-    const selectStateButton = selectState.querySelector('[role="button"]');
+    const selectStateButton = selectState.querySelector('[role="combobox"]');
 
     fireEvent.mouseDown(selectStateButton);
 
@@ -282,7 +282,7 @@ describe('Condition', () => {
     });
 
     const select = screen.getByTestId(`editing-condition-${testId}`);
-    const selectButton = select.querySelector('[role="button"]');
+    const selectButton = select.querySelector('[role="combobox"]');
 
     fireEvent.mouseDown(selectButton);
 

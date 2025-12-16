@@ -35,7 +35,7 @@ const renderSlider = (responseType) => {
 };
 const selectSliderId = (panelIndex, sliderIndex) => {
   const sliderSelect = screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-row`);
-  const sliderSelectButton = sliderSelect.querySelector('[role="button"]');
+  const sliderSelectButton = sliderSelect.querySelector('[role="combobox"]');
   fireEvent.mouseDown(sliderSelectButton);
   fireEvent.click(
     screen
@@ -45,7 +45,7 @@ const selectSliderId = (panelIndex, sliderIndex) => {
 };
 const selectOption = (panelIndex, optionIndex) => {
   const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-value`);
-  const optionSelectButton = optionSelect.querySelector('[role="button"]');
+  const optionSelectButton = optionSelect.querySelector('[role="combobox"]');
   fireEvent.mouseDown(optionSelectButton);
   fireEvent.click(
     screen
@@ -334,7 +334,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       fireEvent.click(addAlert);
 
       const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value`);
-      const optionSelectButton = optionSelect.querySelector('[role="button"]');
+      const optionSelectButton = optionSelect.querySelector('[role="combobox"]');
 
       selectSliderId(0, 0);
       selectSliderId(1, 0);

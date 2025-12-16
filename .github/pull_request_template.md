@@ -40,7 +40,7 @@ If not, then delete this section
 
 <!-- If peer testing is not needed, then delete this section -->
 <!-- Uncomment out any of the following as needed:           -->
-<!-- **Requires `npm install`**     -->
+<!-- **Requires `yarn install`**     -->
 
 <!--
 Replace this with a series of test steps & expected outcomes.
