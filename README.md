@@ -1,8 +1,6 @@
 # Child Mind Institute - Curious Admin
 
-This repository is used for the A* `yarn eject`
-
-    **Note: this is a one-way operation. Once you `eject`, you can't go back!**n Panel of the [Curious](https://mindlogger.org/) application stack.
+This repository is used for the Admin Panel of the [Curious](https://mindlogger.org/) application stack.
 
 ## Getting Started
 
