@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -32,6 +32,10 @@ describe('RecoveryCodeForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   const renderRecoveryCodeForm = (preloadedState = {}, onSwitchToTOTP?: () => void) => {
@@ -133,12 +137,14 @@ describe('RecoveryCodeForm', () => {
     });
   });
 
-  it.skip('handles session expiry', async () => {
+  it.skip('handles session expiry', { timeout: 10000 }, async () => {
+    vi.useFakeTimers();
+
     const expiredState = {
       auth: {
         mfaSession: {
           ...defaultMfaSession,
-          expiresAt: Date.now() - 1000, // Expired
+          expiresAt: Date.now() + 1000,
         },
         authentication: {
           status: 'idle' as const,
@@ -154,18 +160,31 @@ describe('RecoveryCodeForm', () => {
 
     const { store } = renderRecoveryCodeForm(expiredState);
 
-    await waitFor(() => {
-      expect(screen.getByText('Your session has expired. Please login again')).toBeInTheDocument();
+    // Advance timers to trigger session expiry
+    await act(async () => {
+      vi.advanceTimersByTime(1100);
+      await vi.runOnlyPendingTimers();
     });
 
-    await waitFor(
-      () => {
-        const state = store.getState();
-        expect(state.auth.mfaSession).toBeNull();
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
-      },
-      { timeout: 4000 },
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByText('Your session has expired. Please log in again.'),
+      ).toBeInTheDocument();
+    });
+
+    // Advance timers to trigger redirect
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+      await vi.runOnlyPendingTimers();
+    });
+
+    await waitFor(() => {
+      const state = store.getState();
+      expect(state.auth.mfaSession).toBeUndefined();
+      expect(mockNavigate).toHaveBeenCalledWith('/login');
+    });
+
+    vi.useRealTimers();
   });
 
   it('navigates back to TOTP form when link clicked', async () => {

@@ -155,6 +155,44 @@ describe('AuthFlow', () => {
     expect(screen.queryByTestId('recovery-form')).not.toBeInTheDocument();
   });
 
+  it('allows switching forms even with expired session', () => {
+    const expiredSession = {
+      ...defaultMfaSession,
+      expiresAt: Date.now() - 1000, // Already expired
+    };
+
+    const store = setupStore({
+      auth: {
+        mfaSession: expiredSession,
+        authentication: {
+          status: 'idle' as const,
+          requestId: 'test-request-id',
+          data: null,
+        },
+        isAuthorized: false,
+        isLogoutInProgress: false,
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <AuthFlow />
+      </Provider>,
+    );
+
+    // Should show MFA form initially (even with expired session)
+    expect(screen.getByTestId('mfa-form')).toBeInTheDocument();
+
+    // Click to switch to Recovery with expired session
+    const switchToRecoveryButton = screen.getByText('Switch to Recovery');
+    fireEvent.click(switchToRecoveryButton);
+
+    // Should switch to recovery form (form will handle the expiry)
+    expect(screen.getByTestId('recovery-form')).toBeInTheDocument();
+    // Session is still present (form will handle clearing it)
+    expect(store.getState().auth.mfaSession).toBeDefined();
+  });
+
   it('clears MFA session on unmount', () => {
     const store = setupStore({
       auth: {

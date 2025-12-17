@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { ChangeEvent, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +21,7 @@ import {
   StyledForm,
   StyledLoginSubheader,
 } from '../Login.styles';
+import { useMFASessionExpiry } from './useMFASessionExpiry';
 
 interface MFAFormData {
   totpCode: string;
@@ -37,6 +38,8 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const sessionRedirectTimeoutRef = useRef<number>();
+  const hasSessionExpiredRef = useRef(false);
 
   const { mfaSession, authentication } = useAppSelector((state) => state.auth);
   const attempts = mfaSession?.attempts || 0;
@@ -65,16 +68,33 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
     }
   }, [totpCode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Check for session expiry
-  useEffect(() => {
-    if (mfaSession && Date.now() > mfaSession.expiresAt) {
-      setErrorMessage(t('mfaSessionExpired'));
-      setTimeout(() => {
-        dispatch(auth.actions.clearMFASession());
-        navigate('/login');
-      }, 3000);
+  const handleSessionExpired = useCallback(() => {
+    if (hasSessionExpiredRef.current) return;
+    hasSessionExpiredRef.current = true;
+
+    setErrorMessage(t('mfaSessionExpired'));
+
+    if (sessionRedirectTimeoutRef.current) {
+      clearTimeout(sessionRedirectTimeoutRef.current);
     }
-  }, [mfaSession, dispatch, navigate, t]);
+
+    sessionRedirectTimeoutRef.current = window.setTimeout(() => {
+      dispatch(auth.actions.clearMFASession());
+      navigate('/login');
+    }, 3000);
+  }, [dispatch, navigate, t]);
+
+  useMFASessionExpiry({ mfaSession, onExpire: handleSessionExpired });
+
+  useEffect(
+    () => () => {
+      if (sessionRedirectTimeoutRef.current) {
+        clearTimeout(sessionRedirectTimeoutRef.current);
+      }
+      hasSessionExpiredRef.current = false;
+    },
+    [],
+  );
 
   const onSubmit = async (data: MFAFormData) => {
     if (isSubmitting) return;
@@ -108,11 +128,7 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
           navigate('/login');
         }, 3000);
       } else if (errorMsgStr.includes('expired')) {
-        setErrorMessage(t('mfaSessionExpired'));
-        setTimeout(() => {
-          dispatch(auth.actions.clearMFASession());
-          navigate('/login');
-        }, 2000);
+        handleSessionExpired();
       } else {
         setErrorMessage(errorMsgStr);
       }
