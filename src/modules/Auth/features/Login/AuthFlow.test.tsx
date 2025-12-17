@@ -253,7 +253,6 @@ describe('AuthFlow', () => {
     expect(dispatchSpy).not.toHaveBeenCalledWith(auth.actions.clearMFASession());
   });
 
-
   it('transitions from login to MFA when session is created', () => {
     const store = setupStore({
       auth: {

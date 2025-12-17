@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ChangeEvent, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
 import { TextField } from '@mui/material';
 
 import { recoveryCodeSchema } from './MFAForm.schema';
@@ -29,14 +28,8 @@ interface RecoveryCodeFormProps {
 export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCodeFormProps) => {
   const { t } = useTranslation('app');
 
-  const {
-    error,
-    displayError,
-    isSubmitting,
-    verifyCode,
-    clearError,
-    cleanup,
-  } = useMFAVerification('recovery');
+  const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
+    useMFAVerification('recovery');
 
   const {
     handleSubmit,
@@ -61,9 +54,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
   }, [code, error, clearError]);
 
   // Cleanup on unmount
-  useEffect(() => {
-    return cleanup;
-  }, [cleanup]);
+  useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: RecoveryCodeFormData) => {
     const success = await verifyCode(data.code);
@@ -153,7 +144,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
         >
           {t('back')}
         </StyledBackButton>
-        
+
         {onBackToLogin && (
           <StyledBackButton
             variant="text"

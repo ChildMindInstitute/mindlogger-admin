@@ -47,10 +47,14 @@ export const AuthFlow = () => {
   // Render the appropriate form based on flow state
   switch (flowState) {
     case 'mfa-totp':
-      return <MFAForm onSwitchToRecovery={handleSwitchToRecovery} onBackToLogin={handleBackToLogin} />;
+      return (
+        <MFAForm onSwitchToRecovery={handleSwitchToRecovery} onBackToLogin={handleBackToLogin} />
+      );
 
     case 'mfa-recovery':
-      return <RecoveryCodeForm onSwitchToTOTP={handleSwitchToTOTP} onBackToLogin={handleBackToLogin} />;
+      return (
+        <RecoveryCodeForm onSwitchToTOTP={handleSwitchToTOTP} onBackToLogin={handleBackToLogin} />
+      );
 
     case 'login':
     default:
