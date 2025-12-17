@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@mui/material';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -9,18 +8,17 @@ import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { InputController } from 'shared/components/FormComponents';
-import { AUTH_BOX_WIDTH } from 'shared/consts';
-import { variables } from 'shared/styles';
-import { StyledHeadlineSmall } from 'shared/styles/styledComponents';
 
 import { mfaFormSchema } from './MFAForm.schema';
 import {
-  StyledButton,
-  StyledController,
-  StyledForgotPasswordLink,
-  StyledForm,
-  StyledLoginSubheader,
-} from '../Login.styles';
+  StyledMFAContainer,
+  StyledMFAForm,
+  StyledMFAHeadline,
+  StyledMFASubheader,
+  StyledMFAController,
+  StyledMFALink,
+  StyledMFAButton,
+} from './MFAForm.styles';
 import { useMFASessionExpiry } from './useMFASessionExpiry';
 
 interface MFAFormData {
@@ -157,29 +155,25 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
   const showWarning = attempts >= 3 && attempts < maxAttempts;
 
   return (
-    <Box sx={{ width: AUTH_BOX_WIDTH }}>
-      <StyledForm ref={formRef} onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledHeadlineSmall color={variables.palette.on_surface}>
-          {t('confirmYourIdentity')}
-        </StyledHeadlineSmall>
-        <StyledLoginSubheader color={variables.palette.on_surface_variant}>
-          {t('enterVerificationCode')}
-        </StyledLoginSubheader>
+    <StyledMFAContainer>
+      <StyledMFAForm ref={formRef} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <StyledMFAHeadline>{t('confirmYourIdentity')}</StyledMFAHeadline>
+        <StyledMFASubheader>{t('enterVerificationCode')}</StyledMFASubheader>
 
-        <StyledController>
+        <StyledMFAController>
           <InputController
             fullWidth
             name="totpCode"
             control={control}
-            label={t('verificationCode')}
-            placeholder="000000"
+            label={t('enterVerificationCodePlaceholder')}
+            placeholder=""
             onChange={handleCodeChange}
             inputProps={{
               maxLength: 6,
               inputMode: 'numeric',
               pattern: '[0-9]*',
               autoComplete: 'one-time-code',
-              style: { letterSpacing: '0.5em', textAlign: 'center', fontSize: '1.25rem' },
+              style: { letterSpacing: '0.5em', fontSize: '1.25rem' },
             }}
             autoFocus
             error={!!errorMessage || showWarning}
@@ -189,24 +183,21 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
             }
             data-testid="mfa-form-code"
           />
-        </StyledController>
+        </StyledMFAController>
 
-        <StyledForgotPasswordLink
-          onClick={handleRecoveryClick}
-          data-testid="mfa-form-recovery-link"
-        >
+        <StyledMFALink onClick={handleRecoveryClick} data-testid="mfa-form-recovery-link">
           {t('cantAccessAuthenticator')}
-        </StyledForgotPasswordLink>
+        </StyledMFALink>
 
-        <StyledButton
+        <StyledMFAButton
           variant="contained"
           type="submit"
           disabled={isSubmitting || authentication.status === 'loading'}
           data-testid="mfa-form-submit"
         >
           {t('continue')}
-        </StyledButton>
-      </StyledForm>
-    </Box>
+        </StyledMFAButton>
+      </StyledMFAForm>
+    </StyledMFAContainer>
   );
 };

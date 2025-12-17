@@ -74,14 +74,14 @@ describe('MFAForm', () => {
     expect(
       screen.getByText('Please enter the verification code shown in your authenticator app.'),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText('Verification code')).toBeInTheDocument();
+    expect(screen.getByLabelText('Enter verification code')).toBeInTheDocument();
     expect(screen.getByText("I can't access my authenticator app")).toBeInTheDocument();
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 
   it('allows entering the verification code', async () => {
     renderMFAForm();
-    const input = screen.getByLabelText('Verification code') as HTMLInputElement;
+    const input = screen.getByLabelText('Enter verification code') as HTMLInputElement;
 
     await userEvent.type(input, '123');
 
@@ -196,7 +196,7 @@ describe('MFAForm', () => {
     expect(screen.getByText(/attempts remaining/)).toBeInTheDocument();
   });
 
-  it.skip('handles session expiry', { timeout: 10000 }, async () => {
+  it.skip('handles session expiry', async () => {
     vi.useFakeTimers();
 
     const expiredState = {
@@ -258,7 +258,7 @@ describe('MFAForm', () => {
 
   it.skip('restricts input to 6 digits only', async () => {
     renderMFAForm();
-    const input = screen.getByLabelText('Verification code') as HTMLInputElement;
+    const input = screen.getByLabelText('Enter verification code') as HTMLInputElement;
 
     await userEvent.type(input, '1234567890');
     expect(input.value).toBe('123456');

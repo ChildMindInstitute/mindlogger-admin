@@ -69,10 +69,10 @@ describe('RecoveryCodeForm', () => {
   it('renders recovery code form correctly', () => {
     renderRecoveryCodeForm();
 
-    expect(screen.getByText('Use Recovery Code')).toBeInTheDocument();
-    expect(screen.getByText('Enter one of your recovery codes')).toBeInTheDocument();
+    expect(screen.getByText('Confirm Your Identity')).toBeInTheDocument();
+    expect(screen.getByText('Please enter an account recovery code.')).toBeInTheDocument();
     expect(screen.getByLabelText('Recovery code')).toBeInTheDocument();
-    expect(screen.getByText('Back to authenticator app')).toBeInTheDocument();
+    expect(screen.getByText('Back')).toBeInTheDocument();
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 
@@ -137,7 +137,7 @@ describe('RecoveryCodeForm', () => {
     });
   });
 
-  it.skip('handles session expiry', { timeout: 10000 }, async () => {
+  it.skip('handles session expiry', async () => {
     vi.useFakeTimers();
 
     const expiredState = {
@@ -191,8 +191,8 @@ describe('RecoveryCodeForm', () => {
     const mockSwitchToTOTP = vi.fn();
     renderRecoveryCodeForm({}, mockSwitchToTOTP);
 
-    const backLink = screen.getByText('Back to authenticator app');
-    fireEvent.click(backLink);
+    const backButton = screen.getByText('Back');
+    fireEvent.click(backButton);
 
     expect(mockSwitchToTOTP).toHaveBeenCalled();
   });

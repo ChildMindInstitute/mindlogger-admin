@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@mui/material';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -9,18 +8,17 @@ import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { InputController } from 'shared/components/FormComponents';
-import { AUTH_BOX_WIDTH } from 'shared/consts';
-import { variables } from 'shared/styles';
-import { StyledHeadlineSmall } from 'shared/styles/styledComponents';
 
 import { recoveryCodeSchema } from './MFAForm.schema';
 import {
-  StyledButton,
-  StyledController,
-  StyledForgotPasswordLink,
-  StyledForm,
-  StyledLoginSubheader,
-} from '../Login.styles';
+  StyledMFAContainer,
+  StyledMFAForm,
+  StyledMFAHeadline,
+  StyledMFASubheader,
+  StyledMFAController,
+  StyledMFAButton,
+  StyledBackButton,
+} from './MFAForm.styles';
 import { useMFASessionExpiry } from './useMFASessionExpiry';
 
 interface RecoveryCodeFormData {
@@ -149,48 +147,48 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
   };
 
   return (
-    <Box sx={{ width: AUTH_BOX_WIDTH }}>
-      <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledHeadlineSmall color={variables.palette.on_surface}>
-          {t('useRecoveryCode')}
-        </StyledHeadlineSmall>
-        <StyledLoginSubheader color={variables.palette.on_surface_variant}>
-          {t('enterOneRecoveryCode')}
-        </StyledLoginSubheader>
+    <StyledMFAContainer>
+      <StyledMFAForm onSubmit={handleSubmit(onSubmit)} noValidate>
+        <StyledMFAHeadline>{t('confirmYourIdentity')}</StyledMFAHeadline>
+        <StyledMFASubheader>{t('enterAccountRecoveryCode')}</StyledMFASubheader>
 
-        <StyledController>
+        <StyledMFAController>
           <InputController
             fullWidth
             name="code"
             control={control}
             label={t('recoveryCode')}
-            placeholder="XXXXX-XXXXX"
+            placeholder=""
             onChange={handleCodeChange}
             inputProps={{
               maxLength: 11,
               autoComplete: 'off',
-              style: { letterSpacing: '0.2em', textAlign: 'center', fontSize: '1.1rem' },
+              style: { letterSpacing: '0.2em', fontSize: '1.1rem' },
             }}
             autoFocus
             error={!!errorMessage}
             helperText={errorMessage}
             data-testid="recovery-form-code"
           />
-        </StyledController>
+        </StyledMFAController>
 
-        <StyledForgotPasswordLink onClick={handleBackToTOTP} data-testid="recovery-form-back-link">
-          {t('backToAuthenticator')}
-        </StyledForgotPasswordLink>
-
-        <StyledButton
+        <StyledMFAButton
           variant="contained"
           type="submit"
           disabled={isSubmitting || authentication.status === 'loading'}
           data-testid="recovery-form-submit"
         >
           {t('continue')}
-        </StyledButton>
-      </StyledForm>
-    </Box>
+        </StyledMFAButton>
+
+        <StyledBackButton
+          variant="text"
+          onClick={handleBackToTOTP}
+          data-testid="recovery-form-back-button"
+        >
+          {t('back')}
+        </StyledBackButton>
+      </StyledMFAForm>
+    </StyledMFAContainer>
   );
 };
