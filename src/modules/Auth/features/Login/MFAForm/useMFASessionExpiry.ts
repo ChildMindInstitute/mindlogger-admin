@@ -34,6 +34,7 @@ export const useMFASessionExpiry = ({ mfaSession, onExpire }: UseMFASessionExpir
     // Expired sessions should be handled right away
     if (timeUntilExpiry <= 0) {
       triggerExpiry();
+
       return;
     }
 
