@@ -47,6 +47,10 @@ describe('RecoveryCodeForm', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLoggedIn: false,
         isLogoutInProgress: false,
@@ -256,25 +260,27 @@ describe('RecoveryCodeForm', () => {
   });
 
   it('disables submit button when submitting', async () => {
-    const submittingState = {
-      auth: {
-        mfaSession: defaultMfaSession,
-        authentication: {
-          status: 'loading' as const,
-          requestId: 'test-request-id',
-          data: null,
-        },
-        isAuthorized: false,
-        isLoggedIn: false,
-        isLogoutInProgress: false,
-        user: null,
-      },
-    };
+    const { store } = renderRecoveryCodeForm();
+    const mockDispatch = vi.spyOn(store, 'dispatch');
 
-    renderRecoveryCodeForm(submittingState);
+    // Mock a slow async verification to keep isSubmitting true
+    mockDispatch.mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve({ type: 'fulfilled' }), 1000)),
+    );
 
+    const input = screen.getByLabelText('Recovery code') as HTMLInputElement;
     const submitButton = screen.getByText('Continue') as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(true);
+
+    // Enter a recovery code
+    await userEvent.type(input, 'ABCDE-12345');
+
+    // Click submit button
+    fireEvent.click(submitButton);
+
+    // The button should be disabled while submitting
+    await waitFor(() => {
+      expect(submitButton.disabled).toBe(true);
+    });
   });
 
   it.skip('removes non-alphanumeric characters from input', async () => {

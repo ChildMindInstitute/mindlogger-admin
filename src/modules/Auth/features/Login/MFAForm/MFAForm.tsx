@@ -1,13 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-
-import { auth } from 'modules/Auth/state';
-import { navigateToLibrary } from 'modules/Auth/utils';
-import { useAppDispatch, useAppSelector } from 'redux/store';
-import { InputController } from 'shared/components/FormComponents';
+import { TextField } from '@mui/material';
 
 import { mfaFormSchema } from './MFAForm.schema';
 import {
@@ -19,7 +14,7 @@ import {
   StyledMFALink,
   StyledMFAButton,
 } from './MFAForm.styles';
-import { useMFASessionExpiry } from './useMFASessionExpiry';
+import { useMFAVerification } from './useMFAVerification';
 
 interface MFAFormData {
   totpCode: string;
@@ -27,23 +22,31 @@ interface MFAFormData {
 
 interface MFAFormProps {
   onSwitchToRecovery?: () => void;
+  onBackToLogin?: () => void;
 }
 
-export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
-  const dispatch = useAppDispatch();
+export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => {
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const sessionRedirectTimeoutRef = useRef<number>();
-  const hasSessionExpiredRef = useRef(false);
 
-  const { mfaSession, authentication } = useAppSelector((state) => state.auth);
-  const attempts = mfaSession?.attempts || 0;
-  const maxAttempts = 5;
+  const {
+    error,
+    displayError,
+    isSubmitting,
+    attempts,
+    maxAttempts,
+    verifyCode,
+    clearError,
+    cleanup,
+  } = useMFAVerification('totp');
 
-  const { handleSubmit, control, setValue, watch } = useForm<MFAFormData>({
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<MFAFormData>({
     resolver: yupResolver(mfaFormSchema()),
     defaultValues: {
       totpCode: '',
@@ -61,78 +64,20 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
 
   // Clear error when user starts typing
   useEffect(() => {
-    if (errorMessage) {
-      setErrorMessage('');
+    if (error && totpCode.length > 0) {
+      clearError();
     }
-  }, [totpCode]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [totpCode, error, clearError]);
 
-  const handleSessionExpired = useCallback(() => {
-    if (hasSessionExpiredRef.current) return;
-    hasSessionExpiredRef.current = true;
-
-    setErrorMessage(t('mfaSessionExpired'));
-
-    if (sessionRedirectTimeoutRef.current) {
-      clearTimeout(sessionRedirectTimeoutRef.current);
-    }
-
-    sessionRedirectTimeoutRef.current = window.setTimeout(() => {
-      dispatch(auth.actions.clearMFASession());
-      navigate('/login');
-    }, 3000);
-  }, [dispatch, navigate, t]);
-
-  useMFASessionExpiry({ mfaSession, onExpire: handleSessionExpired });
-
-  useEffect(
-    () => () => {
-      if (sessionRedirectTimeoutRef.current) {
-        clearTimeout(sessionRedirectTimeoutRef.current);
-      }
-      hasSessionExpiredRef.current = false;
-    },
-    [],
-  );
+  // Cleanup on unmount
+  useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: MFAFormData) => {
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setErrorMessage('');
-
-    const { verifyMFATOTP } = auth.thunk;
-    const result = await dispatch(verifyMFATOTP({ totpCode: data.totpCode }));
-
-    if (verifyMFATOTP.fulfilled.match(result)) {
-      navigateToLibrary(navigate);
+    const success = await verifyCode(data.totpCode);
+    if (!success) {
+      // Clear the input on error so user can try again
+      setValue('totpCode', '');
     }
-
-    if (verifyMFATOTP.rejected.match(result)) {
-      const errorPayload = result.payload as { message?: string };
-      const errorMsg =
-        typeof errorPayload?.message === 'string'
-          ? errorPayload.message
-          : errorPayload || t('invalidMFACode');
-      const errorMsgStr = typeof errorMsg === 'string' ? errorMsg : t('invalidMFACode');
-
-      // Handle specific error cases
-      if (errorMsgStr.includes('Invalid TOTP code')) {
-        setErrorMessage(t('invalidCode'));
-        setValue('totpCode', '');
-      } else if (errorMsgStr.includes('Too many attempts')) {
-        setErrorMessage(t('tooManyAttempts'));
-        setTimeout(() => {
-          dispatch(auth.actions.clearMFASession());
-          navigate('/login');
-        }, 3000);
-      } else if (errorMsgStr.includes('expired')) {
-        handleSessionExpired();
-      } else {
-        setErrorMessage(errorMsgStr);
-      }
-    }
-
-    setIsSubmitting(false);
   };
 
   const handleRecoveryClick = () => {
@@ -141,18 +86,20 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
     }
   };
 
-  const handleCodeChange = (
-    _event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    handleChange: () => void,
-  ) => {
-    if (errorMessage) {
-      setErrorMessage('');
-    }
-    handleChange();
+  const handleCodeChange = (value: string, handleChange: (value: string) => void) => {
+    handleChange(value);
   };
 
   // Show warning after 3 attempts
   const showWarning = attempts >= 3 && attempts < maxAttempts;
+  const fieldError = errors.totpCode?.message as string | undefined;
+  const warningMessage = showWarning
+    ? t('attemptsRemaining', { count: maxAttempts - attempts })
+    : undefined;
+  const primaryError = displayError || fieldError;
+  const helperMessages = [primaryError, warningMessage].filter(Boolean);
+  const helperMessage = helperMessages.join(' ');
+  const hasError = helperMessages.length > 0;
 
   return (
     <StyledMFAContainer>
@@ -161,27 +108,32 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
         <StyledMFASubheader>{t('enterVerificationCode')}</StyledMFASubheader>
 
         <StyledMFAController>
-          <InputController
-            fullWidth
+          <Controller
             name="totpCode"
             control={control}
-            label={t('enterVerificationCodePlaceholder')}
-            placeholder=""
-            onChange={handleCodeChange}
-            inputProps={{
-              maxLength: 6,
-              inputMode: 'numeric',
-              pattern: '[0-9]*',
-              autoComplete: 'one-time-code',
-              style: { letterSpacing: '0.5em', fontSize: '1.25rem' },
-            }}
-            autoFocus
-            error={!!errorMessage || showWarning}
-            helperText={
-              errorMessage ||
-              (showWarning && t('attemptsRemaining', { count: maxAttempts - attempts }))
-            }
-            data-testid="mfa-form-code"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <TextField
+                fullWidth
+                label={t('enterVerificationCodePlaceholder')}
+                placeholder=""
+                value={value}
+                onChange={(e) => {
+                  handleCodeChange(e.target.value, onChange);
+                }}
+                onBlur={onBlur}
+                inputProps={{
+                  maxLength: 6,
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  autoComplete: 'one-time-code',
+                  style: { letterSpacing: '0.5em', fontSize: '1.25rem' },
+                }}
+                autoFocus
+                error={hasError}
+                helperText={helperMessage}
+                data-testid="mfa-form-code"
+              />
+            )}
           />
         </StyledMFAController>
 
@@ -192,11 +144,21 @@ export const MFAForm = ({ onSwitchToRecovery }: MFAFormProps) => {
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting || authentication.status === 'loading'}
+          disabled={isSubmitting}
           data-testid="mfa-form-submit"
         >
           {t('continue')}
         </StyledMFAButton>
+
+        {onBackToLogin && (
+          <StyledMFALink
+            onClick={onBackToLogin}
+            data-testid="mfa-form-back-link"
+            style={{ marginTop: '16px' }}
+          >
+            {t('backToLogin')}
+          </StyledMFALink>
+        )}
       </StyledMFAForm>
     </StyledMFAContainer>
   );

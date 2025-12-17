@@ -12,26 +12,21 @@ export const AuthFlow = () => {
   const dispatch = useAppDispatch();
   const { mfaSession } = useAppSelector((state) => state.auth);
   const [flowState, setFlowState] = useState<AuthFlowState>('login');
+  const [hasHadMFASession, setHasHadMFASession] = useState(false);
 
   // Determine the flow state based on Redux state
   useEffect(() => {
     if (mfaSession) {
+      setHasHadMFASession(true);
       setFlowState('mfa-totp');
-    } else {
+    } else if (!hasHadMFASession) {
+      // Only go back to login if we never had an MFA session
       setFlowState('login');
     }
-  }, [mfaSession]);
+    // If we had a session but it's gone (expired/error), stay on MFA form
+  }, [mfaSession, hasHadMFASession]);
 
-  // Clean up MFA session on unmount
-  useEffect(
-    () => () => {
-      // Only clear if we're still in MFA flow (not after successful login)
-      if (mfaSession) {
-        dispatch(auth.actions.clearMFASession());
-      }
-    },
-    [dispatch, mfaSession],
-  ); // eslint-disable-line react-hooks/exhaustive-deps
+  // Don't automatically clear MFA session on unmount - let user retry
 
   const handleSwitchToRecovery = () => {
     setFlowState('mfa-recovery');
@@ -41,13 +36,21 @@ export const AuthFlow = () => {
     setFlowState('mfa-totp');
   };
 
+  const handleBackToLogin = () => {
+    // Clear MFA session and error state when user explicitly goes back
+    dispatch(auth.actions.clearMFASession());
+    dispatch(auth.actions.clearMFAError());
+    setHasHadMFASession(false);
+    setFlowState('login');
+  };
+
   // Render the appropriate form based on flow state
   switch (flowState) {
     case 'mfa-totp':
-      return <MFAForm onSwitchToRecovery={handleSwitchToRecovery} />;
+      return <MFAForm onSwitchToRecovery={handleSwitchToRecovery} onBackToLogin={handleBackToLogin} />;
 
     case 'mfa-recovery':
-      return <RecoveryCodeForm onSwitchToTOTP={handleSwitchToTOTP} />;
+      return <RecoveryCodeForm onSwitchToTOTP={handleSwitchToTOTP} onBackToLogin={handleBackToLogin} />;
 
     case 'login':
     default:

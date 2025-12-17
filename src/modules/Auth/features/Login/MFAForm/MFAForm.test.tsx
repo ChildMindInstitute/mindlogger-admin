@@ -48,6 +48,10 @@ describe('MFAForm', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLoggedIn: false,
         isLogoutInProgress: false,
@@ -184,6 +188,10 @@ describe('MFAForm', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLoggedIn: false,
         isLogoutInProgress: false,
@@ -265,24 +273,23 @@ describe('MFAForm', () => {
   });
 
   it('disables submit button when submitting', async () => {
-    const submittingState = {
-      auth: {
-        mfaSession: defaultMfaSession,
-        authentication: {
-          status: 'loading' as const,
-          requestId: 'test-request-id',
-          data: null,
-        },
-        isAuthorized: false,
-        isLoggedIn: false,
-        isLogoutInProgress: false,
-        user: null,
-      },
-    };
+    const { store } = renderMFAForm();
+    const mockDispatch = vi.spyOn(store, 'dispatch');
 
-    renderMFAForm(submittingState);
+    // Mock a slow async verification to keep isSubmitting true
+    mockDispatch.mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve({ type: 'fulfilled' }), 1000)),
+    );
 
+    const input = screen.getByLabelText('Enter verification code') as HTMLInputElement;
     const submitButton = screen.getByText('Continue') as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(true);
+
+    // Enter 6 digits to trigger auto-submit
+    await userEvent.type(input, '123456');
+
+    // The button should be disabled while submitting
+    await waitFor(() => {
+      expect(submitButton.disabled).toBe(true);
+    });
   });
 });

@@ -18,7 +18,25 @@ import {
   SignUpArgs,
   verifyMFATOTPApi,
   verifyMFARecoveryCodeApi,
+  MFAVerifyResponse,
 } from 'api';
+
+type MFAErrorLike = {
+  message?: string;
+  result?: {
+    message?: string;
+  };
+};
+
+const extractMFAErrorMessage = (response: unknown, defaultMessage: string): string => {
+  if (response && typeof response === 'object') {
+    const { message, result } = response as MFAErrorLike;
+    if (typeof message === 'string') return message;
+    if (result?.message && typeof result.message === 'string') return result.message;
+  }
+
+  return defaultMessage;
+};
 
 export const signIn = createAsyncThunk(
   'auth/login',
@@ -127,6 +145,26 @@ export const verifyMFATOTP = createAsyncThunk(
         signal,
       );
 
+      const hasValidResult = (
+        response: MFAVerifyResponse | undefined,
+      ): response is MFAVerifyResponse => {
+        const result = response?.result;
+
+        return Boolean(
+          result?.token?.accessToken &&
+          result?.token?.refreshToken &&
+          result?.user?.id &&
+          typeof result.token.accessToken === 'string' &&
+          typeof result.token.refreshToken === 'string',
+        );
+      };
+
+      if (!hasValidResult(data)) {
+        const message = extractMFAErrorMessage(data, 'Invalid verification code');
+
+        return rejectWithValue(message);
+      }
+
       if (data?.result) {
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
@@ -169,6 +207,26 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         },
         signal,
       );
+
+      const hasValidResult = (
+        response: MFAVerifyResponse | undefined,
+      ): response is MFAVerifyResponse => {
+        const result = response?.result;
+
+        return Boolean(
+          result?.token?.accessToken &&
+          result?.token?.refreshToken &&
+          result?.user?.id &&
+          typeof result.token.accessToken === 'string' &&
+          typeof result.token.refreshToken === 'string',
+        );
+      };
+
+      if (!hasValidResult(data)) {
+        const message = extractMFAErrorMessage(data, 'Invalid recovery code');
+
+        return rejectWithValue(message);
+      }
 
       if (data?.result) {
         const { accessToken, refreshToken } = data.result.token;

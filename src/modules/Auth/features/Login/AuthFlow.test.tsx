@@ -49,6 +49,10 @@ describe('AuthFlow', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLogoutInProgress: false,
       },
@@ -71,6 +75,10 @@ describe('AuthFlow', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLogoutInProgress: false,
       },
@@ -90,6 +98,10 @@ describe('AuthFlow', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLogoutInProgress: false,
       },
@@ -108,6 +120,10 @@ describe('AuthFlow', () => {
           status: 'idle' as const,
           requestId: 'test-request-id',
           data: null,
+        },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
         },
         isAuthorized: false,
         isLogoutInProgress: false,
@@ -134,6 +150,10 @@ describe('AuthFlow', () => {
           status: 'idle' as const,
           requestId: 'test-request-id',
           data: null,
+        },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
         },
         isAuthorized: false,
         isLogoutInProgress: false,
@@ -169,6 +189,10 @@ describe('AuthFlow', () => {
           requestId: 'test-request-id',
           data: null,
         },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
+        },
         isAuthorized: false,
         isLogoutInProgress: false,
       },
@@ -193,7 +217,7 @@ describe('AuthFlow', () => {
     expect(store.getState().auth.mfaSession).toBeDefined();
   });
 
-  it('clears MFA session on unmount', () => {
+  it('does NOT clear MFA session on unmount (allows retry)', () => {
     const store = setupStore({
       auth: {
         mfaSession: defaultMfaSession,
@@ -202,34 +226,9 @@ describe('AuthFlow', () => {
           requestId: 'test-request-id',
           data: null,
         },
-        isAuthorized: false,
-        isLogoutInProgress: false,
-      },
-    });
-
-    const dispatchSpy = vi.spyOn(store, 'dispatch');
-
-    const { unmount } = render(
-      <Provider store={store}>
-        <AuthFlow />
-      </Provider>,
-    );
-
-    // Unmount the component
-    unmount();
-
-    // Should dispatch clearMFASession
-    expect(dispatchSpy).toHaveBeenCalledWith(auth.actions.clearMFASession());
-  });
-
-  it('does not clear MFA session on unmount if session is null', () => {
-    const store = setupStore({
-      auth: {
-        mfaSession: undefined,
-        authentication: {
+        mfaVerification: {
           status: 'idle' as const,
-          requestId: 'test-request-id',
-          data: null,
+          error: undefined,
         },
         isAuthorized: false,
         isLogoutInProgress: false,
@@ -244,15 +243,16 @@ describe('AuthFlow', () => {
       </Provider>,
     );
 
-    // Clear previous calls
+    // Clear any dispatch calls from render
     dispatchSpy.mockClear();
 
     // Unmount the component
     unmount();
 
-    // Should not dispatch clearMFASession
+    // Should NOT dispatch clearMFASession (allows user to retry)
     expect(dispatchSpy).not.toHaveBeenCalledWith(auth.actions.clearMFASession());
   });
+
 
   it('transitions from login to MFA when session is created', () => {
     const store = setupStore({
@@ -262,6 +262,10 @@ describe('AuthFlow', () => {
           status: 'idle' as const,
           requestId: 'test-request-id',
           data: null,
+        },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
         },
         isAuthorized: false,
         isLogoutInProgress: false,
@@ -291,7 +295,7 @@ describe('AuthFlow', () => {
     expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
   });
 
-  it('transitions from MFA to login when session is cleared', () => {
+  it('keeps MFA form visible when session is cleared (no automatic redirect)', () => {
     const store = setupStore({
       auth: {
         mfaSession: defaultMfaSession,
@@ -299,6 +303,10 @@ describe('AuthFlow', () => {
           status: 'idle' as const,
           requestId: 'test-request-id',
           data: null,
+        },
+        mfaVerification: {
+          status: 'idle' as const,
+          error: undefined,
         },
         isAuthorized: false,
         isLogoutInProgress: false,
@@ -313,7 +321,7 @@ describe('AuthFlow', () => {
 
     expect(screen.getByTestId('mfa-form')).toBeInTheDocument();
 
-    // Clear MFA session
+    // Clear MFA session (e.g., session expired)
     store.dispatch(auth.actions.clearMFASession());
 
     // Re-render to see the state change
@@ -323,8 +331,8 @@ describe('AuthFlow', () => {
       </Provider>,
     );
 
-    // Should now show login form
-    expect(screen.getByTestId('login-form')).toBeInTheDocument();
-    expect(screen.queryByTestId('mfa-form')).not.toBeInTheDocument();
+    // Should STILL show MFA form (no automatic redirect to login)
+    expect(screen.getByTestId('mfa-form')).toBeInTheDocument();
+    expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
   });
 });

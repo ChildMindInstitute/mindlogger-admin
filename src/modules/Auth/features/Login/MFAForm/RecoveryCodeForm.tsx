@@ -1,13 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { ChangeEvent, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { auth } from 'modules/Auth/state';
-import { navigateToLibrary } from 'modules/Auth/utils';
-import { useAppDispatch, useAppSelector } from 'redux/store';
-import { InputController } from 'shared/components/FormComponents';
+import { TextField } from '@mui/material';
 
 import { recoveryCodeSchema } from './MFAForm.schema';
 import {
@@ -19,7 +15,7 @@ import {
   StyledMFAButton,
   StyledBackButton,
 } from './MFAForm.styles';
-import { useMFASessionExpiry } from './useMFASessionExpiry';
+import { useMFAVerification } from './useMFAVerification';
 
 interface RecoveryCodeFormData {
   code: string;
@@ -27,20 +23,28 @@ interface RecoveryCodeFormData {
 
 interface RecoveryCodeFormProps {
   onSwitchToTOTP?: () => void;
+  onBackToLogin?: () => void;
 }
 
-export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
-  const dispatch = useAppDispatch();
+export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCodeFormProps) => {
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const sessionRedirectTimeoutRef = useRef<number>();
-  const hasSessionExpiredRef = useRef(false);
 
-  const { mfaSession, authentication } = useAppSelector((state) => state.auth);
+  const {
+    error,
+    displayError,
+    isSubmitting,
+    verifyCode,
+    clearError,
+    cleanup,
+  } = useMFAVerification('recovery');
 
-  const { handleSubmit, control, setValue, watch } = useForm<RecoveryCodeFormData>({
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<RecoveryCodeFormData>({
     resolver: yupResolver(recoveryCodeSchema()),
     defaultValues: {
       code: '',
@@ -51,72 +55,22 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
 
   // Clear error when user starts typing
   useEffect(() => {
-    if (errorMessage) {
-      setErrorMessage('');
+    if (error && code.length > 0) {
+      clearError();
     }
-  }, [code]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [code, error, clearError]);
 
-  const handleSessionExpired = useCallback(() => {
-    if (hasSessionExpiredRef.current) return;
-    hasSessionExpiredRef.current = true;
-
-    setErrorMessage(t('mfaSessionExpired'));
-
-    if (sessionRedirectTimeoutRef.current) {
-      clearTimeout(sessionRedirectTimeoutRef.current);
-    }
-
-    sessionRedirectTimeoutRef.current = window.setTimeout(() => {
-      dispatch(auth.actions.clearMFASession());
-      navigate('/login');
-    }, 3000);
-  }, [dispatch, navigate, t]);
-
-  useMFASessionExpiry({ mfaSession, onExpire: handleSessionExpired });
-
-  useEffect(
-    () => () => {
-      if (sessionRedirectTimeoutRef.current) {
-        clearTimeout(sessionRedirectTimeoutRef.current);
-      }
-      hasSessionExpiredRef.current = false;
-    },
-    [],
-  );
+  // Cleanup on unmount
+  useEffect(() => {
+    return cleanup;
+  }, [cleanup]);
 
   const onSubmit = async (data: RecoveryCodeFormData) => {
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setErrorMessage('');
-
-    const { verifyMFARecoveryCode } = auth.thunk;
-    const result = await dispatch(verifyMFARecoveryCode({ code: data.code }));
-
-    if (verifyMFARecoveryCode.fulfilled.match(result)) {
-      navigateToLibrary(navigate);
+    const success = await verifyCode(data.code);
+    if (!success) {
+      // Clear the input on error so user can try again
+      setValue('code', '');
     }
-
-    if (verifyMFARecoveryCode.rejected.match(result)) {
-      const errorPayload = result.payload as { message?: string };
-      const errorMsg =
-        typeof errorPayload?.message === 'string'
-          ? errorPayload.message
-          : errorPayload || t('invalidRecoveryCode');
-      const errorMsgStr = typeof errorMsg === 'string' ? errorMsg : t('invalidRecoveryCode');
-
-      // Handle specific error cases
-      if (errorMsgStr.includes('Invalid recovery code')) {
-        setErrorMessage(t('invalidRecoveryCode'));
-        setValue('code', '');
-      } else if (errorMsgStr.includes('expired')) {
-        handleSessionExpired();
-      } else {
-        setErrorMessage(errorMsgStr);
-      }
-    }
-
-    setIsSubmitting(false);
   };
 
   const handleBackToTOTP = () => {
@@ -138,13 +92,18 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
     return cleaned;
   };
 
-  const handleCodeChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleCodeChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    onChange: (value: string) => void,
+  ) => {
     const formatted = formatRecoveryCode(e.target.value);
     setValue('code', formatted);
-    if (errorMessage) {
-      setErrorMessage('');
-    }
+    onChange(formatted);
   };
+
+  const fieldError = errors.code?.message as string | undefined;
+  const helperMessage = displayError || fieldError;
+  const hasError = !!helperMessage;
 
   return (
     <StyledMFAContainer>
@@ -153,29 +112,35 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
         <StyledMFASubheader>{t('enterAccountRecoveryCode')}</StyledMFASubheader>
 
         <StyledMFAController>
-          <InputController
-            fullWidth
+          <Controller
             name="code"
             control={control}
-            label={t('recoveryCode')}
-            placeholder=""
-            onChange={handleCodeChange}
-            inputProps={{
-              maxLength: 11,
-              autoComplete: 'off',
-              style: { letterSpacing: '0.2em', fontSize: '1.1rem' },
-            }}
-            autoFocus
-            error={!!errorMessage}
-            helperText={errorMessage}
-            data-testid="recovery-form-code"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <TextField
+                fullWidth
+                label={t('recoveryCode')}
+                placeholder=""
+                value={value}
+                onChange={(e) => handleCodeChange(e, onChange)}
+                onBlur={onBlur}
+                inputProps={{
+                  maxLength: 11,
+                  autoComplete: 'off',
+                  style: { letterSpacing: '0.2em', fontSize: '1.1rem' },
+                }}
+                autoFocus
+                error={hasError}
+                helperText={helperMessage}
+                data-testid="recovery-form-code"
+              />
+            )}
           />
         </StyledMFAController>
 
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting || authentication.status === 'loading'}
+          disabled={isSubmitting}
           data-testid="recovery-form-submit"
         >
           {t('continue')}
@@ -188,6 +153,17 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
         >
           {t('back')}
         </StyledBackButton>
+        
+        {onBackToLogin && (
+          <StyledBackButton
+            variant="text"
+            onClick={onBackToLogin}
+            data-testid="recovery-form-login-button"
+            style={{ marginTop: '8px' }}
+          >
+            {t('backToLogin')}
+          </StyledBackButton>
+        )}
       </StyledMFAForm>
     </StyledMFAContainer>
   );

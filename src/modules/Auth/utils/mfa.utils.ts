@@ -14,6 +14,11 @@ const MFA_ERROR_MAP: Record<string, (t: TFunction) => MFAError> = {
     userMessage: t('invalidCode'),
     action: 'retry',
   }),
+  'Invalid verification code': (t) => ({
+    code: 'INVALID_CODE',
+    userMessage: t('invalidCode'),
+    action: 'retry',
+  }),
   'Invalid recovery code': (t) => ({
     code: 'INVALID_RECOVERY',
     userMessage: t('invalidRecoveryCode'),

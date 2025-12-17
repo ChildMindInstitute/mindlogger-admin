@@ -23,6 +23,7 @@ export const reducers = {
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
     state.mfaSession = undefined;
+    state.mfaVerification = { status: 'idle' };
   },
   startSoftLock: (state: AuthSchema, { payload }: PayloadAction<SoftLockData>): void => {
     state.softLockData = payload;
@@ -36,11 +37,20 @@ export const reducers = {
   },
   clearMFASession: (state: AuthSchema): void => {
     state.mfaSession = undefined;
+    state.mfaVerification = { status: 'idle' };
   },
   incrementMFAAttempts: (state: AuthSchema): void => {
     if (state.mfaSession) {
       state.mfaSession.attempts += 1;
     }
+  },
+  clearMFAError: (state: AuthSchema): void => {
+    state.mfaVerification.error = undefined;
+    state.mfaVerification.status = 'idle';
+  },
+  setMFAError: (state: AuthSchema, action: PayloadAction<string>): void => {
+    state.mfaVerification.error = action.payload;
+    state.mfaVerification.status = 'error';
   },
 };
 
@@ -86,19 +96,33 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
   });
 
-  // MFA verification reducers
-  builder.addCase(verifyMFATOTP.pending, ({ authentication }, action) => {
-    createAuthPendingData(authentication, action.meta.requestId);
+  // MFA TOTP verification reducers
+  builder.addCase(verifyMFATOTP.pending, (state) => {
+    state.mfaVerification.status = 'loading';
+    state.mfaVerification.error = undefined;
   });
 
   builder.addCase(verifyMFATOTP.fulfilled, (state, action) => {
     // Set user data and clear MFA session
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
     state.mfaSession = undefined;
+    state.mfaVerification = { status: 'idle' };
   });
 
   builder.addCase(verifyMFATOTP.rejected, (state, action) => {
-    createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
+    // Handle MFA-specific errors separately from login errors
+    state.mfaVerification.status = 'error';
+
+    // Extract error message from the payload
+    const errorPayload = action.payload as any;
+    if (typeof errorPayload === 'string') {
+      state.mfaVerification.error = errorPayload;
+    } else if (errorPayload?.message) {
+      state.mfaVerification.error = errorPayload.message;
+    } else {
+      state.mfaVerification.error = 'Invalid verification code';
+    }
+
     // Increment attempts on failure
     if (state.mfaSession) {
       state.mfaSession.attempts += 1;
@@ -106,17 +130,30 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   // Recovery code verification reducers
-  builder.addCase(verifyMFARecoveryCode.pending, ({ authentication }, action) => {
-    createAuthPendingData(authentication, action.meta.requestId);
+  builder.addCase(verifyMFARecoveryCode.pending, (state) => {
+    state.mfaVerification.status = 'loading';
+    state.mfaVerification.error = undefined;
   });
 
   builder.addCase(verifyMFARecoveryCode.fulfilled, (state, action) => {
     // Set user data and clear MFA session
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
     state.mfaSession = undefined;
+    state.mfaVerification = { status: 'idle' };
   });
 
   builder.addCase(verifyMFARecoveryCode.rejected, (state, action) => {
-    createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
+    // Handle MFA-specific errors separately from login errors
+    state.mfaVerification.status = 'error';
+
+    // Extract error message from the payload
+    const errorPayload = action.payload as any;
+    if (typeof errorPayload === 'string') {
+      state.mfaVerification.error = errorPayload;
+    } else if (errorPayload?.message) {
+      state.mfaVerification.error = errorPayload.message;
+    } else {
+      state.mfaVerification.error = 'Invalid recovery code';
+    }
   });
 };

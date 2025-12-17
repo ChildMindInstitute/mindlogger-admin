@@ -26,10 +26,17 @@ export type MFASession = {
   expiresAt: number;
 };
 
+// MFA Verification state for TOTP/Recovery code verification
+export type MFAVerificationState = {
+  status: 'idle' | 'loading' | 'error';
+  error?: string;
+};
+
 export type AuthSchema = {
   authentication: BaseSchema<AuthData | null>;
   isAuthorized: boolean;
   isLogoutInProgress: boolean;
   softLockData?: SoftLockData;
   mfaSession?: MFASession;
+  mfaVerification: MFAVerificationState;
 };
