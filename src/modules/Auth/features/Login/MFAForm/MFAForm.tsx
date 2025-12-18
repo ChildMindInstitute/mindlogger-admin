@@ -164,7 +164,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
           {t('continue')}
         </StyledMFAButton>
 
-        {/* {onBackToLogin && (
+        {onBackToLogin && (
           <StyledMFALink
             onClick={onBackToLogin}
             data-testid="mfa-form-back-link"
@@ -172,7 +172,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
           >
             {t('backToLogin')}
           </StyledMFALink>
-        )} */}
+        )}
       </StyledMFAForm>
     </StyledMFAContainer>
   );
