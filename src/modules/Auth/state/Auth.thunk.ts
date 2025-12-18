@@ -19,6 +19,7 @@ import {
   verifyMFATOTPApi,
   verifyMFARecoveryCodeApi,
   MFAVerifyResponse,
+  MFAVerifySuccessResponse,
 } from 'api';
 
 type MFAErrorLike = {
@@ -137,26 +138,34 @@ export const verifyMFATOTP = createAsyncThunk(
         return rejectWithValue({ message: 'MFA session expired' });
       }
 
-      const { data } = await verifyMFATOTPApi(
+      const response = await verifyMFATOTPApi(
         {
           mfaToken: mfaSession.token,
           totpCode,
         },
         signal,
       );
+      const { data } = response || {};
 
       const hasValidResult = (
         response: MFAVerifyResponse | undefined,
-      ): response is MFAVerifyResponse => {
-        const result = response?.result;
+      ): response is MFAVerifySuccessResponse => {
+        if (!response?.result) return false;
 
-        return Boolean(
-          result?.token?.accessToken &&
-          result?.token?.refreshToken &&
-          result?.user?.id &&
-          typeof result.token.accessToken === 'string' &&
-          typeof result.token.refreshToken === 'string',
-        );
+        const result = response.result;
+
+        // Check if result has the structure of a success response
+        if ('token' in result && 'user' in result) {
+          return Boolean(
+            result.token?.accessToken &&
+            result.token?.refreshToken &&
+            result.user?.id &&
+            typeof result.token.accessToken === 'string' &&
+            typeof result.token.refreshToken === 'string',
+          );
+        }
+
+        return false;
       };
 
       if (!hasValidResult(data)) {
@@ -200,26 +209,34 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         return rejectWithValue({ message: 'MFA session expired' });
       }
 
-      const { data } = await verifyMFARecoveryCodeApi(
+      const response = await verifyMFARecoveryCodeApi(
         {
           mfaToken: mfaSession.token,
           code,
         },
         signal,
       );
+      const { data } = response || {};
 
       const hasValidResult = (
         response: MFAVerifyResponse | undefined,
-      ): response is MFAVerifyResponse => {
-        const result = response?.result;
+      ): response is MFAVerifySuccessResponse => {
+        if (!response?.result) return false;
 
-        return Boolean(
-          result?.token?.accessToken &&
-          result?.token?.refreshToken &&
-          result?.user?.id &&
-          typeof result.token.accessToken === 'string' &&
-          typeof result.token.refreshToken === 'string',
-        );
+        const result = response.result;
+
+        // Check if result has the structure of a success response
+        if ('token' in result && 'user' in result) {
+          return Boolean(
+            result.token?.accessToken &&
+            result.token?.refreshToken &&
+            result.user?.id &&
+            typeof result.token.accessToken === 'string' &&
+            typeof result.token.refreshToken === 'string',
+          );
+        }
+
+        return false;
       };
 
       if (!hasValidResult(data)) {

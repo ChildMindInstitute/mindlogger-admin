@@ -179,7 +179,7 @@ describe('MFAForm', () => {
     });
   });
 
-  it('shows warning after 3 attempts', () => {
+  it('shows warning after 3 attempts with error', () => {
     const attemptState = {
       auth: {
         mfaSession: { ...defaultMfaSession, attempts: 3 },
@@ -189,8 +189,9 @@ describe('MFAForm', () => {
           data: null,
         },
         mfaVerification: {
-          status: 'idle' as const,
-          error: undefined,
+          status: 'error' as const,
+          error: 'Invalid TOTP code',
+          displayError: 'invalidCode|2', // Format for 3 attempts with 2 remaining
         },
         isAuthorized: false,
         isLoggedIn: false,
@@ -201,7 +202,8 @@ describe('MFAForm', () => {
 
     renderMFAForm(attemptState);
 
-    expect(screen.getByText(/attempts remaining/)).toBeInTheDocument();
+    expect(screen.getByText(/Invalid code/)).toBeInTheDocument();
+    expect(screen.getByText(/2 attempts remaining/)).toBeInTheDocument();
   });
 
   it.skip('handles session expiry', async () => {

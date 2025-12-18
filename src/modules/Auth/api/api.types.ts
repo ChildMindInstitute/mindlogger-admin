@@ -36,6 +36,15 @@ export type StandardLoginResponse = {
   };
 };
 
+// MFA verification responses can also return error messages without tokens
+export type MFAVerifySuccessResponse = StandardLoginResponse;
+export type MFAVerifyErrorResponse = {
+  message?: string;
+  result?: {
+    message?: string;
+  };
+};
+
 // MFA required response (when MFA is enabled)
 export type MFARequiredResponse = {
   result: {
@@ -62,4 +71,4 @@ export type MFARecoveryCodeVerifyRequest = {
 };
 
 // MFA verification response (same as standard login response)
-export type MFAVerifyResponse = StandardLoginResponse;
+export type MFAVerifyResponse = MFAVerifySuccessResponse | MFAVerifyErrorResponse;

@@ -93,7 +93,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
   };
 
   const fieldError = errors.code?.message as string | undefined;
-  const helperMessage = displayError || fieldError;
+  const helperMessage = displayError ? t(displayError) : fieldError;
   const hasError = !!helperMessage;
 
   return (
@@ -145,7 +145,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
           {t('back')}
         </StyledBackButton>
 
-        {onBackToLogin && (
+        {/* {onBackToLogin && (
           <StyledBackButton
             variant="text"
             onClick={onBackToLogin}
@@ -154,7 +154,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
           >
             {t('backToLogin')}
           </StyledBackButton>
-        )}
+        )} */}
       </StyledMFAForm>
     </StyledMFAContainer>
   );

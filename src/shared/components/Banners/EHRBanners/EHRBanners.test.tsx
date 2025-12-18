@@ -40,6 +40,7 @@ describe('EHRBanners', () => {
       },
       isAuthorized: true,
       isLogoutInProgress: false,
+      mfaVerification: { status: 'idle' },
     },
   };
 

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
-import { getMFAError } from 'modules/Auth/utils/mfa.utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 
 import { useMFASessionExpiry } from './useMFASessionExpiry';
@@ -111,9 +110,7 @@ export const useMFAVerification = (type: MFAVerificationType) => {
   return {
     // State
     error: mfaVerification.error,
-    displayError: mfaVerification.error
-      ? getMFAError(mfaVerification.error, t).userMessage
-      : undefined,
+    displayError: mfaVerification.displayError, // Direct from Redux, no transformation
     isSubmitting,
     attempts,
     maxAttempts,

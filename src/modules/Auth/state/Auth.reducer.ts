@@ -46,11 +46,15 @@ export const reducers = {
   },
   clearMFAError: (state: AuthSchema): void => {
     state.mfaVerification.error = undefined;
+    state.mfaVerification.displayError = undefined;
     state.mfaVerification.status = 'idle';
   },
   setMFAError: (state: AuthSchema, action: PayloadAction<string>): void => {
     state.mfaVerification.error = action.payload;
     state.mfaVerification.status = 'error';
+
+    // For session expiry, just show the error without attempts
+    state.mfaVerification.displayError = 'mfaSessionExpired';
   },
 };
 
@@ -127,6 +131,17 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     if (state.mfaSession) {
       state.mfaSession.attempts += 1;
     }
+
+    // Set displayError - simplified logic for "Invalid code" with attempts
+    const attempts = state.mfaSession?.attempts || 0;
+    const maxAttempts = 5;
+
+    if (attempts >= 3 && attempts < maxAttempts) {
+      const remaining = maxAttempts - attempts;
+      state.mfaVerification.displayError = `invalidCode|${remaining}`; // Format: "invalidCode|2"
+    } else {
+      state.mfaVerification.displayError = 'invalidCode';
+    }
   });
 
   // Recovery code verification reducers
@@ -148,12 +163,24 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
 
     // Extract error message from the payload
     const errorPayload = action.payload as any;
+    let errorMessage = 'Invalid recovery code';
+
     if (typeof errorPayload === 'string') {
-      state.mfaVerification.error = errorPayload;
+      errorMessage = errorPayload;
     } else if (errorPayload?.message) {
-      state.mfaVerification.error = errorPayload.message;
+      errorMessage = errorPayload.message;
+    }
+
+    state.mfaVerification.error = errorMessage;
+
+    // Set displayError based on the error message
+    if (
+      errorMessage.toLowerCase().includes('session not found') ||
+      errorMessage.toLowerCase().includes('expired')
+    ) {
+      state.mfaVerification.displayError = 'mfaSessionExpired';
     } else {
-      state.mfaVerification.error = 'Invalid recovery code';
+      state.mfaVerification.displayError = 'invalidRecoveryCode';
     }
   });
 };

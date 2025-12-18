@@ -30,6 +30,7 @@ export type MFASession = {
 export type MFAVerificationState = {
   status: 'idle' | 'loading' | 'error';
   error?: string;
+  displayError?: string; // Formatted error message with attempts
 };
 
 export type AuthSchema = {

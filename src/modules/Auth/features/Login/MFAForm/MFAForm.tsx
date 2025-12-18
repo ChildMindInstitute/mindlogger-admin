@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { TextField } from '@mui/material';
@@ -25,20 +25,13 @@ interface MFAFormProps {
   onBackToLogin?: () => void;
 }
 
-export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => {
+const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => {
   const { t } = useTranslation('app');
   const formRef = useRef<HTMLFormElement>(null);
+  const isUserTypingRef = useRef(false);
 
-  const {
-    error,
-    displayError,
-    isSubmitting,
-    attempts,
-    maxAttempts,
-    verifyCode,
-    clearError,
-    cleanup,
-  } = useMFAVerification('totp');
+  const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
+    useMFAVerification('totp');
 
   const {
     handleSubmit,
@@ -62,9 +55,9 @@ export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => 
     }
   }, [totpCode, isSubmitting]);
 
-  // Clear error when user starts typing
+  // Clear error only when user is actually typing
   useEffect(() => {
-    if (error && totpCode.length > 0) {
+    if (error && totpCode.length > 0 && isUserTypingRef.current) {
       clearError();
     }
   }, [totpCode, error, clearError]);
@@ -73,6 +66,7 @@ export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => 
   useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: MFAFormData) => {
+    isUserTypingRef.current = false; // Mark that we're not typing
     const success = await verifyCode(data.totpCode);
     if (!success) {
       // Clear the input on error so user can try again
@@ -87,19 +81,39 @@ export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => 
   };
 
   const handleCodeChange = (value: string, handleChange: (value: string) => void) => {
+    isUserTypingRef.current = true; // Mark that user is typing
     handleChange(value);
   };
 
-  // Show warning after 3 attempts
-  const showWarning = attempts >= 3 && attempts < maxAttempts;
-  const fieldError = errors.totpCode?.message as string | undefined;
-  const warningMessage = showWarning
-    ? t('attemptsRemaining', { count: maxAttempts - attempts })
-    : undefined;
-  const primaryError = displayError || fieldError;
-  const helperMessages = [primaryError, warningMessage].filter(Boolean);
-  const helperMessage = helperMessages.join(' ');
-  const hasError = helperMessages.length > 0;
+  // Get error message from Redux state
+  const getErrorMessage = () => {
+    if (displayError) {
+      // displayError format: "invalidCode" or "invalidCode|2" (with attempts)
+      if (displayError.includes('|')) {
+        const [key, remaining] = displayError.split('|');
+
+        return `${t(key)}. ${t('attemptsRemaining', { count: parseInt(remaining) })}`;
+      }
+
+      // Translate the error key
+      return t(displayError);
+    }
+
+    // Only show validation errors if no verification error
+    return errors.totpCode?.message;
+  };
+
+  const helperMessage = getErrorMessage();
+  const hasError = !!helperMessage;
+
+  console.log(
+    'MFAForm render - helperMessage:',
+    helperMessage,
+    'hasError:',
+    hasError,
+    'displayError:',
+    displayError,
+  );
 
   return (
     <StyledMFAContainer>
@@ -150,7 +164,7 @@ export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => 
           {t('continue')}
         </StyledMFAButton>
 
-        {onBackToLogin && (
+        {/* {onBackToLogin && (
           <StyledMFALink
             onClick={onBackToLogin}
             data-testid="mfa-form-back-link"
@@ -158,8 +172,11 @@ export const MFAForm = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) => 
           >
             {t('backToLogin')}
           </StyledMFALink>
-        )}
+        )} */}
       </StyledMFAForm>
     </StyledMFAContainer>
   );
 };
+
+export const MFAForm = memo(MFAFormComponent);
+MFAForm.displayName = 'MFAForm';

@@ -1,9 +1,13 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { vi } from 'vitest';
+import type { AxiosResponse, AxiosHeaders } from 'axios';
 
+import { verifyMFATOTPApi } from 'api';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { setupStore } from 'redux/store';
+import type { MFAVerifyResponse } from 'modules/Auth/api/api.types';
 
 import { useMFAVerification } from './useMFAVerification';
 
@@ -17,6 +21,35 @@ vi.mock('react-router-dom', async () => ({
 vi.mock('modules/Auth/utils', () => ({
   navigateToLibrary: vi.fn(),
 }));
+
+// Mock the API calls
+vi.mock('api', () => ({
+  verifyMFATOTPApi: vi.fn(),
+  verifyMFARecoveryCodeApi: vi.fn(),
+}));
+
+const mockVerifyAPI = vi.mocked(verifyMFATOTPApi);
+
+// Mock react-i18next
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          invalidCode: 'Invalid code',
+          invalidRecoveryCode: 'Invalid recovery code',
+          mfaSessionExpired: 'Your session has expired. Please log in again.',
+          somethingWentWrong: 'Something went wrong',
+        };
+
+        return translations[key] || key;
+      },
+    }),
+  };
+});
 
 describe('useMFAVerification', () => {
   let store: ReturnType<typeof setupStore>;
@@ -79,11 +112,22 @@ describe('useMFAVerification', () => {
   });
 
   it('should handle TOTP verification failure', async () => {
-    const mockDispatch = vi.spyOn(store, 'dispatch');
-    mockDispatch.mockResolvedValueOnce({
-      type: 'auth/verifyMFATOTP/rejected',
-      payload: 'Invalid TOTP code',
-    });
+    // Mock API to return error response
+    const mockResponse = {
+      data: {
+        result: {
+          message: 'Invalid TOTP code',
+        },
+      },
+      status: 400,
+      statusText: 'Bad Request',
+      headers: {} as AxiosHeaders,
+      config: {
+        headers: {} as AxiosHeaders,
+      } as any,
+    } satisfies AxiosResponse<MFAVerifyResponse>;
+
+    mockVerifyAPI.mockResolvedValueOnce(mockResponse);
 
     const { result } = renderHook(() => useMFAVerification('totp'), { wrapper });
 
@@ -94,7 +138,7 @@ describe('useMFAVerification', () => {
 
     expect(verifyResult).toBe(false);
     expect(result.current.isSubmitting).toBe(false);
-    expect(result.current.displayError).toBe('Invalid code');
+    expect(result.current.displayError).toBe('invalidCode');
   });
 
   it('should verify recovery code successfully', async () => {
