@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { TextField } from '@mui/material';
@@ -25,11 +25,12 @@ interface RecoveryCodeFormProps {
   onBackToLogin?: () => void;
 }
 
-export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCodeFormProps) => {
+export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
   const { t } = useTranslation('app');
 
   const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
     useMFAVerification('recovery');
+  const isUserTypingRef = useRef(false);
 
   const {
     handleSubmit,
@@ -46,9 +47,9 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
 
   const code = watch('code');
 
-  // Clear error when user starts typing
+  // Clear error only when user is actually typing
   useEffect(() => {
-    if (error && code.length > 0) {
+    if (error && code.length > 0 && isUserTypingRef.current) {
       clearError();
     }
   }, [code, error, clearError]);
@@ -57,6 +58,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
   useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: RecoveryCodeFormData) => {
+    isUserTypingRef.current = false; // Mark that we're not typing
     const success = await verifyCode(data.code);
     if (!success) {
       // Clear the input on error so user can try again
@@ -87,6 +89,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     onChange: (value: string) => void,
   ) => {
+    isUserTypingRef.current = true; // Mark that user is typing
     const formatted = formatRecoveryCode(e.target.value);
     setValue('code', formatted);
     onChange(formatted);
