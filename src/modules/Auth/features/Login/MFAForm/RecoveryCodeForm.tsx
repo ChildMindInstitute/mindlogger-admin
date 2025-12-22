@@ -25,10 +25,10 @@ interface RecoveryCodeFormProps {
   onBackToLogin?: () => void;
 }
 
-export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
+export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCodeFormProps) => {
   const { t } = useTranslation('app');
 
-  const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
+  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
     useMFAVerification('recovery');
   const isUserTypingRef = useRef(false);
 
@@ -58,6 +58,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
   useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: RecoveryCodeFormData) => {
+    if (isSessionExpired) return;
     isUserTypingRef.current = false; // Mark that we're not typing
     const success = await verifyCode(data.code);
     if (!success) {
@@ -123,6 +124,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
                   style: { letterSpacing: '0.2em', fontSize: '1.1rem' },
                 }}
                 autoFocus
+                disabled={isSessionExpired}
                 error={hasError}
                 helperText={helperMessage}
                 data-testid="recovery-form-code"
@@ -134,21 +136,23 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSessionExpired}
           data-testid="recovery-form-submit"
         >
           {t('continue')}
         </StyledMFAButton>
 
-        <StyledBackButton
-          variant="text"
-          onClick={handleBackToTOTP}
-          data-testid="recovery-form-back-button"
-        >
-          {t('back')}
-        </StyledBackButton>
+        {!isSessionExpired && (
+          <StyledBackButton
+            variant="text"
+            onClick={handleBackToTOTP}
+            data-testid="recovery-form-back-button"
+          >
+            {t('back')}
+          </StyledBackButton>
+        )}
 
-        {/* {onBackToLogin && (
+        {onBackToLogin && isSessionExpired && (
           <StyledBackButton
             variant="text"
             onClick={onBackToLogin}
@@ -157,7 +161,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP }: RecoveryCodeFormProps) => {
           >
             {t('backToLogin')}
           </StyledBackButton>
-        )} */}
+        )}
       </StyledMFAForm>
     </StyledMFAContainer>
   );

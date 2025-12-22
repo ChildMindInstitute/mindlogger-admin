@@ -30,7 +30,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   const formRef = useRef<HTMLFormElement>(null);
   const isUserTypingRef = useRef(false);
   const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
-  const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
+  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
     useMFAVerification('totp');
 
   const {
@@ -50,10 +50,10 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
 
   // Auto-submit when user enters 6 digits
   useEffect(() => {
-    if (totpCode.length === 6 && /^\d{6}$/.test(totpCode) && !isSubmitting) {
+    if (totpCode.length === 6 && /^\d{6}$/.test(totpCode) && !isSubmitting && !isSessionExpired) {
       formRef.current?.requestSubmit();
     }
-  }, [totpCode, isSubmitting]);
+  }, [totpCode, isSubmitting, isSessionExpired]);
 
   // Clear error only when user is actually typing
   useEffect(() => {
@@ -66,6 +66,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: MFAFormData) => {
+    if (isSessionExpired) return;
     isUserTypingRef.current = false; // Mark that we're not typing
     const success = await verifyCode(data.totpCode);
     if (!success) {
@@ -144,6 +145,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
                   style: { letterSpacing: '0.5em', fontSize: '1.25rem' },
                 }}
                 autoFocus
+                disabled={isSessionExpired}
                 error={hasError}
                 helperText={helperMessage}
                 data-testid="mfa-form-code"
@@ -159,7 +161,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSessionExpired}
           data-testid="mfa-form-submit"
         >
           {t('continue')}

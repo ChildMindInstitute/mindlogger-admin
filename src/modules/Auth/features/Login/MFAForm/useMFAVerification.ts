@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
@@ -39,7 +38,6 @@ export type MFAVerificationType = 'totp' | 'recovery';
 export const useMFAVerification = (type: MFAVerificationType) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation('app');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const hasSessionExpiredRef = useRef(false);
@@ -53,9 +51,9 @@ export const useMFAVerification = (type: MFAVerificationType) => {
     if (hasSessionExpiredRef.current) return;
     hasSessionExpiredRef.current = true;
 
-    dispatch(auth.actions.setMFAError(t('mfaSessionExpired')));
+    dispatch(auth.actions.setMFASessionExpired());
     // Don't clear the session or navigate - just show the error
-  }, [dispatch, t]);
+  }, [dispatch]);
 
   // Use session expiry hook
   useMFASessionExpiry({ mfaSession, onExpire: handleSessionExpired });
@@ -63,7 +61,10 @@ export const useMFAVerification = (type: MFAVerificationType) => {
   // Verify code
   const verifyCode = useCallback(
     async (code: string) => {
-      if (isSubmitting) return;
+      // Don't call API if session already expired
+      if (mfaVerification.isSessionExpired) return false;
+
+      if (isSubmitting) return false;
 
       setIsSubmitting(true);
 
@@ -92,15 +93,25 @@ export const useMFAVerification = (type: MFAVerificationType) => {
 
       return false;
     },
-    [dispatch, navigate, type, isSubmitting],
+    [dispatch, navigate, type, isSubmitting, mfaVerification.isSessionExpired],
   );
 
   // Clear error when user types
   const clearError = useCallback(() => {
+    // Don't clear session-expired errors
+    if (mfaVerification.isSessionExpired || mfaVerification.displayError === 'mfaSessionExpired') {
+      return;
+    }
+
     if (mfaVerification.error) {
       dispatch(auth.actions.clearMFAError());
     }
-  }, [dispatch, mfaVerification.error]);
+  }, [
+    dispatch,
+    mfaVerification.error,
+    mfaVerification.isSessionExpired,
+    mfaVerification.displayError,
+  ]);
 
   // Cleanup on unmount
   const cleanup = useCallback(() => {
@@ -111,6 +122,7 @@ export const useMFAVerification = (type: MFAVerificationType) => {
     // State
     error: mfaVerification.error,
     displayError: mfaVerification.displayError, // Direct from Redux, no transformation
+    isSessionExpired: mfaVerification.isSessionExpired || false,
     isSubmitting,
     attempts,
     maxAttempts,

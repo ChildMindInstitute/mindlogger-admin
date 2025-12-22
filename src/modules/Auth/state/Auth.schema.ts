@@ -31,6 +31,7 @@ export type MFAVerificationState = {
   status: 'idle' | 'loading' | 'error';
   error?: string;
   displayError?: string; // Formatted error message with attempts
+  isSessionExpired?: boolean; // Sticky terminal state for session expiry
 };
 
 export type AuthSchema = {
