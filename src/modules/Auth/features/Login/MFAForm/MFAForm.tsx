@@ -29,7 +29,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   const { t } = useTranslation('app');
   const formRef = useRef<HTMLFormElement>(null);
   const isUserTypingRef = useRef(false);
-
+  const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
   const { error, displayError, isSubmitting, verifyCode, clearError, cleanup } =
     useMFAVerification('totp');
 
@@ -80,9 +80,10 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
     }
   };
 
-  const handleCodeChange = (value: string, handleChange: (value: string) => void) => {
-    isUserTypingRef.current = true; // Mark that user is typing
-    handleChange(value);
+  const handleCodeChange = (raw: string, handleChange: (value: string) => void) => {
+    isUserTypingRef.current = true;
+    const sanitized = sanitizeTotp(raw);
+    handleChange(sanitized);
   };
 
   // Get error message from Redux state
