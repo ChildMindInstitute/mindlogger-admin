@@ -56,5 +56,6 @@ export const font = {
     title: 'Moderat',
     label: 'Moderat',
     body: 'Moderat',
+    input: 'Noto Sans', // For form inputs and code-like text
   },
 };

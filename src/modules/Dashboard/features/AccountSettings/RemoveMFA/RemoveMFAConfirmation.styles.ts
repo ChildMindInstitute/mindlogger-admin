@@ -26,7 +26,7 @@ export const StyledHeader = styled(Box)`
 `;
 
 export const StyledTitle = styled('h2')`
-  font-family: 'Moderat', sans-serif;
+  font-family: ${variables.font.family.title};
   font-size: 24px;
   font-weight: 400;
   line-height: 32px;
@@ -91,7 +91,7 @@ export const StyledButton = styled('button')`
   width: 300px;
   height: 48px;
   border-radius: 100px;
-  font-family: 'Moderat', sans-serif;
+  font-family: ${variables.font.family.label};
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.15px;

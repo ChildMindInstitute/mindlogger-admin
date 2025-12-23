@@ -64,7 +64,7 @@ export const StyledTab = styled(Box)`
   .MuiTypography-root {
     color: ${variables.palette.primary};
     text-align: center;
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 1.4rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
@@ -91,7 +91,7 @@ export const StyledTwoFactorTitle = styled(Box)`
   .MuiTypography-root {
     color: ${variables.palette.on_surface};
     text-align: left;
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.body};
     font-size: 1.6rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
