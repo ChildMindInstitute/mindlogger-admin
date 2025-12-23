@@ -1836,6 +1836,10 @@
   "autoAssignFlowDisabled": "Ce flux est défini sur « Auto-assign » dans l'Activity Flow Builder et ne peut donc pas être affecté ici.",
   "goToDashboard": "Aller au tableau de bord",
   "subjectDataUnavailable": "Vous n'êtes pas autorisé à afficher les données de cet utilisateur",
+  "autoAssignFlowDisabled": "Ce flux est défini sur « Auto-assign » dans l'Activity Flow Builder et ne peut donc pas être affecté ici.",
+  "goToDashboard": "Aller au tableau de bord",
+  "subjectDataUnavailable": "Vous n'êtes pas autorisé à afficher les données de cet utilisateur",
+  "somethingWentWrong": "Une erreur s'est produite. Veuillez réessayer.",
   "mfaCodeRequired": "Le code de vérification est requis",
   "mfaCodeFormat": "Le code doit contenir 6 chiffres",
   "recoveryCodeRequired": "Le code de récupération est requis",
@@ -1854,5 +1858,65 @@
   "invalidRecoveryCode": "Code de récupération invalide",
   "recoveryCodeAlreadyUsed": "Ce code de récupération a déjà été utilisé",
   "attemptsRemaining": "{{count}} tentatives restantes",
-  "somethingWentWrong": "Une erreur s'est produite. Veuillez réessayer."
+  "mfa": {
+    "title": "Authentification à deux facteurs",
+    "description": "L'authentification à deux facteurs (2FA) ajoute une couche de sécurité supplémentaire à votre compte en exigeant plus qu'un simple mot de passe pour vous connecter. Vous pouvez utiliser l'une des options ci-dessous :",
+    "enabled": "Activé",
+    "accountSettings": "Paramètres du compte",
+    "profile": "Profil",
+    "email": "E-mail",
+    "recoveryOptions": "Options de récupération",
+    "setup": {
+      "scanTitle": "Scanner le code dans l'authentificateur",
+      "manualTitle": "Saisir la clé dans l'authentificateur",
+      "scanDescription": "Scannez le code QR ci-dessous, puis entrez le code de vérification qui apparaît dans votre application d'authentification pour terminer la configuration.",
+      "manualDescription": "Entrez la clé de configuration ci-dessous dans votre application d'authentification.",
+      "manualInstructions": "Ensuite, entrez le code de vérification qui apparaît dans votre application d'authentification pour terminer la configuration.",
+      "cantScanQR": "Impossible de scanner le code QR ?"
+    },
+    "authenticatorApp": {
+      "title": "Application d'authentification",
+      "description": "Utilisez une application d'authentification ou une extension de navigateur pour obtenir des codes à usage unique lorsque vous y êtes invité."
+    },
+    "recoveryCodes": {
+      "title": "Codes de récupération",
+      "saveTitle": "Enregistrez vos codes de récupération",
+      "description": "Les codes de récupération peuvent être utilisés pour accéder à votre compte si vous perdez l'accès à votre appareil et ne pouvez pas recevoir de codes d'authentification à deux facteurs.",
+      "saveDescription1": "Les codes de récupération peuvent être utilisés pour accéder à votre compte si vous perdez l'accès à l'appareil que vous utilisez pour l'authentification à deux facteurs.",
+      "saveDescription2": "Vous devrez vous réauthentifier pour consulter à nouveau ces codes, veuillez donc vous assurer de les enregistrer maintenant.",
+      "placeholder": "XXXXX-XXXXX"
+    },
+    "secretKey": {
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "verificationCode": {
+      "placeholder": "Entrer le code de vérification",
+      "label": "Code de vérification"
+    },
+    "confirmIdentity": {
+      "title": "Confirmez votre identité",
+      "verificationDescription": "Pour afficher les codes de récupération de votre compte, nous devons d'abord confirmer qu'il s'agit bien de vous. Veuillez entrer le code de vérification de votre application d'authentification.",
+      "recoveryDescription": "Veuillez entrer un code de récupération de compte.",
+      "removeDescription": "Pour supprimer l'authentification à deux facteurs de votre compte, nous devons confirmer qu'il s'agit bien de vous. Veuillez entrer le code de vérification de votre application d'authentification.",
+      "cantAccessApp": "Je ne peux pas accéder à mon application d'authentification"
+    },
+    "remove": {
+      "title": "Supprimer l'authentification à deux facteurs",
+      "confirmationMessage": "Êtes-vous sûr de vouloir supprimer l'authentification à deux facteurs de ce compte ? Vous pourrez l'ajouter à nouveau plus tard.",
+      "successMessage": "L'authentification à deux facteurs a été supprimée avec succès."
+    },
+    "buttons": {
+      "add": "Ajouter",
+      "remove": "Supprimer",
+      "view": "Afficher",
+      "continue": "Continuer",
+      "back": "Retour",
+      "cancel": "Annuler",
+      "verifying": "Vérification en cours...",
+      "removing": "Suppression en cours...",
+      "savedCodes": "J'ai enregistré mes codes",
+      "downloadCodes": "Télécharger en tant que fichier texte"
+    }
+  }
 }
