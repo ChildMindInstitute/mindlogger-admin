@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
 import {
@@ -24,6 +26,7 @@ export const MFARecoveryCodes = ({
   onConfirm,
   downloadToken,
 }: MFARecoveryCodesProps) => {
+  const { t } = useTranslation('app');
   // Use custom hook for download functionality
   const { handleDownload } = useRecoveryCodesDownload(recoveryCodes, downloadToken);
 
@@ -60,7 +63,7 @@ export const MFARecoveryCodes = ({
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Save Your Recovery Codes</StyledTitle>
+        <StyledTitle>{t('mfa.recoveryCodes.saveTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
           <CloseIcon />
         </StyledCloseButton>
@@ -68,14 +71,8 @@ export const MFARecoveryCodes = ({
 
       <StyledContent>
         <StyledDescription>
-          <p>
-            Recovery codes can be used to access your account in the event you lose access to the
-            device you're using for 2FA.
-          </p>
-          <p>
-            You'll need to re-authenticate to view these codes again, so please make sure to save
-            them now.
-          </p>
+          <p>{t('mfa.recoveryCodes.saveDescription1')}</p>
+          <p>{t('mfa.recoveryCodes.saveDescription2')}</p>
         </StyledDescription>
 
         <StyledCodesContainer>
@@ -88,10 +85,10 @@ export const MFARecoveryCodes = ({
 
         <StyledButtonContainer>
           <StyledButton type="button" onClick={handleConfirm}>
-            I've saved my codes
+            {t('mfa.buttons.savedCodes')}
           </StyledButton>
           <StyledButton type="button" className="secondary" onClick={handleDownload}>
-            Download as text file
+            {t('mfa.buttons.downloadCodes')}
           </StyledButton>
         </StyledButtonContainer>
       </StyledContent>
