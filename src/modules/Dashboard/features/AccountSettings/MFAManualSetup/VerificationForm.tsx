@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import {
   StyledInputContainer,
   StyledInput,
@@ -15,21 +17,25 @@ export const VerificationForm = ({
   onInputChange,
   onContinue,
   onBack,
-}: VerificationFormProps) => (
-  <MFAVerificationForm
-    verificationCode={verificationCode}
-    isLoading={isLoading}
-    error={error}
-    onInputChange={onInputChange}
-    onPrimaryAction={onContinue}
-    onSecondaryAction={onBack}
-    primaryButtonText="Continue"
-    secondaryButtonText="Back"
-    inputWidth="300px"
-    StyledInputContainer={StyledInputContainer}
-    StyledInput={StyledInput}
-    StyledButtonContainer={StyledButtonContainer}
-    StyledButton={StyledButton}
-    StyledErrorMessage={StyledErrorMessage}
-  />
-);
+}: VerificationFormProps) => {
+  const { t } = useTranslation('app');
+
+  return (
+    <MFAVerificationForm
+      verificationCode={verificationCode}
+      isLoading={isLoading}
+      error={error}
+      onInputChange={onInputChange}
+      onPrimaryAction={onContinue}
+      onSecondaryAction={onBack}
+      primaryButtonText={t('mfa.buttons.continue')}
+      secondaryButtonText={t('mfa.buttons.back')}
+      inputWidth="300px"
+      StyledInputContainer={StyledInputContainer}
+      StyledInput={StyledInput}
+      StyledButtonContainer={StyledButtonContainer}
+      StyledButton={StyledButton}
+      StyledErrorMessage={StyledErrorMessage}
+    />
+  );
+};

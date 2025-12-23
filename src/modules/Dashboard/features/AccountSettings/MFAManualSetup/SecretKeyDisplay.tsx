@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Tooltip } from 'shared/components/Tooltip';
 
@@ -13,6 +14,7 @@ import { SecretKeyDisplayProps } from './SecretKeyDisplay.types';
 import { Toast } from './Toast';
 
 export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
+  const { t } = useTranslation('app');
   const [copied, setCopied] = useState(false);
 
   const handleCopySecret = async () => {
@@ -35,13 +37,16 @@ export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
     <>
       <StyledSecretKeyContainer onClick={handleCopySecret} style={{ cursor: 'pointer' }}>
         <StyledSecretKey>{secretKey}</StyledSecretKey>
-        <Tooltip tooltipTitle={copied ? 'Copied' : 'Copy'} placement="top">
+        <Tooltip
+          tooltipTitle={copied ? t('mfa.secretKey.copied') : t('mfa.secretKey.copy')}
+          placement="top"
+        >
           <StyledCopyButton className="copy-button" copied={copied}>
             {copied ? <CheckIcon /> : <CopyIcon />}
           </StyledCopyButton>
         </Tooltip>
       </StyledSecretKeyContainer>
-      <Toast message="Copied!" show={copied} />
+      <Toast message={t('mfa.secretKey.copied')} show={copied} />
     </>
   );
 };
