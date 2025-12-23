@@ -37,7 +37,7 @@ export const StyledTitle = styled('h2')`
   margin: 0;
   flex: 1;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 24px;
   font-weight: 400;
   font-style: normal;
@@ -100,7 +100,7 @@ export const StyledContent = styled(Box)`
 export const StyledDescription = styled(Box)`
   width: 100%;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -137,7 +137,7 @@ export const StyledInput = styled('input')`
   border: none;
   background: transparent;
   color: ${variables.palette.on_surface};
-  font-family: 'Noto Sans', ${variables.font.family};
+  font-family: ${variables.font.family.input};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -186,7 +186,7 @@ export const StyledButton = styled('button')`
   border-radius: 100px;
   border: none;
   text-align: center;
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 16px;
   font-style: normal;
   line-height: 24px;

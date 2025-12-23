@@ -26,7 +26,7 @@ export const StyledTitle = styled('h2')`
   margin: 0;
   flex: 1;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 24px;
   font-weight: 400;
   font-style: normal;
@@ -76,7 +76,7 @@ export const StyledDescription = styled(Box)`
   width: 516px;
   height: 24px;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -90,7 +90,7 @@ export const StyledDescriptionMultiLine = styled(Box)`
   width: 516px;
   height: 48px;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -146,7 +146,7 @@ export const StyledSecretKey = styled(Box)`
   width: 516px;
   height: 28px;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 20px;
   font-weight: 400;
   font-style: normal;
@@ -190,7 +190,7 @@ export const StyledInput = styled('input')`
   font-feature-settings:
     'liga' off,
     'clig' off;
-  font-family: 'Noto Sans';
+  font-family: ${variables.font.family.input};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -201,7 +201,7 @@ export const StyledInput = styled('input')`
 
   &::placeholder {
     color: ${variables.palette.outline};
-    font-family: 'Noto Sans';
+    font-family: ${variables.font.family.input};
     font-size: 16px;
     font-weight: 400;
     line-height: 100%;
@@ -235,7 +235,7 @@ export const StyledButton = styled('button')`
   background: ${variables.palette.primary};
   color: ${variables.palette.on_primary};
   text-align: center;
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -263,7 +263,7 @@ export const StyledButton = styled('button')`
     gap: 8px;
     padding: 10px 12px;
     color: ${variables.palette.primary};
-    font-family: 'Moderat', ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -283,7 +283,7 @@ export const StyledErrorMessage = styled(Box)`
   margin-top: 4px;
   padding-left: 16px;
   color: ${variables.palette.error};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 1.2rem;
   font-weight: 400;
   line-height: 1.66;

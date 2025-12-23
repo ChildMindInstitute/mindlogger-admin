@@ -204,7 +204,7 @@ export const StyledAuthenticatorDescription = styled(Box)`
   font-feature-settings:
     'liga' off,
     'clig' off;
-  font-family: 'Noto Sans';
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
