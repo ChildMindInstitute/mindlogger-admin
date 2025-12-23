@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { Svg } from 'shared/components/Svg';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -15,7 +17,6 @@ import {
   StyledErrorMessage,
 } from './ConfirmIdentityRecoveryCode.styles';
 import { ConfirmIdentityRecoveryCodeProps } from './ConfirmIdentityRecoveryCode.types';
-import { CloseIcon } from './CloseIcon';
 
 export const ConfirmIdentityRecoveryCode = ({
   open,
@@ -57,7 +58,7 @@ export const ConfirmIdentityRecoveryCode = ({
       <StyledHeader>
         <StyledTitle>{t('mfa.confirmIdentity.title')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 
