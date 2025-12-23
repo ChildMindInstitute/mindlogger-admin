@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -26,6 +27,7 @@ import { MFAVerificationForm } from '../shared/MFAVerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
 
 export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
+  const { t } = useTranslation('app');
   const [showManualSetup, setShowManualSetup] = useState(false);
   const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
   const {
@@ -116,17 +118,14 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Scan Code in Authenticator</StyledTitle>
+        <StyledTitle>{t('mfa.setup.scanTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
           <CloseIcon />
         </StyledCloseButton>
       </StyledHeader>
 
       <StyledContent>
-        <StyledDescription>
-          Scan the QR code below and then enter the verification code that appears in your
-          authenticator app to complete setup.
-        </StyledDescription>
+        <StyledDescription>{t('mfa.setup.scanDescription')}</StyledDescription>
 
         <StyledQRCodeContainer>
           {provisioningUri && <QRCodeSVG value={provisioningUri} size={260} />}
@@ -144,8 +143,8 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           onInputChange={handleInputChange}
           onPrimaryAction={handleContinue}
           onSecondaryAction={handleCantScan}
-          primaryButtonText="Continue"
-          secondaryButtonText="Can't scan QR code?"
+          primaryButtonText={t('mfa.buttons.continue')}
+          secondaryButtonText={t('mfa.setup.cantScanQR')}
           inputWidth="340px"
           StyledInputContainer={StyledInputContainer}
           StyledInput={StyledInput}
