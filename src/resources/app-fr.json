@@ -1877,7 +1877,7 @@
       "verificationDescription": "Pour afficher les codes de récupération de votre compte, nous devons d'abord confirmer qu'il s'agit bien de vous. Veuillez entrer le code de vérification de votre application d'authentification.",
       "recoveryDescription": "Veuillez entrer un code de récupération de compte.",
       "removeDescription": "Pour supprimer l'authentification à deux facteurs de votre compte, nous devons confirmer qu'il s'agit bien de vous. Veuillez entrer le code de vérification de votre application d'authentification.",
-      "cantAccessApp": "Je ne peux pas accéder à mon application d'authentification"
+      "cantAccessApp": "Je ne peux pas accéder à mon app"
     },
     "remove": {
       "title": "Supprimer l'authentification à deux facteurs",

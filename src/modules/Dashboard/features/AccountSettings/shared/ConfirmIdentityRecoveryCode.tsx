@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import {
@@ -26,6 +27,8 @@ export const ConfirmIdentityRecoveryCode = ({
   isLoading,
   error,
 }: ConfirmIdentityRecoveryCodeProps) => {
+  const { t } = useTranslation('app');
+
   const handleClose = () => {
     // Remove focus from any focused element before closing to prevent aria-hidden focus warning
     if (document.activeElement instanceof HTMLElement) {
@@ -52,20 +55,20 @@ export const ConfirmIdentityRecoveryCode = ({
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Confirm Your Identity</StyledTitle>
+        <StyledTitle>{t('mfa.confirmIdentity.title')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
           <CloseIcon />
         </StyledCloseButton>
       </StyledHeader>
 
       <StyledContent>
-        <StyledDescription>Please enter an account recovery code.</StyledDescription>
+        <StyledDescription>{t('mfa.confirmIdentity.recoveryDescription')}</StyledDescription>
 
         <Box sx={{ width: '300px', position: 'relative' }}>
           <StyledInputContainer $hasError={!!error}>
             <StyledInput
               type="text"
-              placeholder="XXXXX-XXXXX"
+              placeholder={t('mfa.recoveryCodes.placeholder')}
               value={recoveryCode}
               onChange={handleInputChange}
               maxLength={11}
@@ -82,7 +85,7 @@ export const ConfirmIdentityRecoveryCode = ({
             onClick={handleContinue}
             disabled={isLoading}
           >
-            {isLoading ? 'Verifying...' : 'Continue'}
+            {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
           </StyledButton>
           <StyledButton
             type="button"
@@ -90,7 +93,7 @@ export const ConfirmIdentityRecoveryCode = ({
             onClick={handleBack}
             disabled={isLoading}
           >
-            Back
+            {t('mfa.buttons.back')}
           </StyledButton>
         </StyledButtonContainer>
       </StyledContent>
