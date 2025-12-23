@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
 import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
@@ -8,6 +9,7 @@ import { useViewRecoveryCodes } from './useViewRecoveryCodes';
 type ViewStep = 'verification' | 'recovery-code' | 'codes';
 
 export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => {
+  const { t } = useTranslation('app');
   const [currentStep, setCurrentStep] = useState<ViewStep>('verification');
   const {
     verificationCode,
@@ -72,8 +74,8 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
         isLoading={isLoading}
         error={error}
         clearError={clearError}
-        title="Confirm Your Identity"
-        description="To view the recovery codes for your account, we first have confirm it's you. Please enter the verification code from your authenticator app."
+        title={t('mfa.confirmIdentity.title')}
+        description={t('mfa.confirmIdentity.verificationDescription')}
       />
 
       <ConfirmIdentityRecoveryCode

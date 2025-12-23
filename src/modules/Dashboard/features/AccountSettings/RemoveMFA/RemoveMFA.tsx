@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
 import { RemoveMFAConfirmation } from './RemoveMFAConfirmation';
@@ -8,6 +9,7 @@ import { useRemoveMFA } from './useRemoveMFA';
 type RemoveStep = 'verification' | 'recovery-code' | 'confirmation';
 
 export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
+  const { t } = useTranslation('app');
   const [currentStep, setCurrentStep] = useState<RemoveStep>('verification');
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
@@ -73,8 +75,8 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         isLoading={isLoading}
         error={error}
         clearError={clearError}
-        title="Confirm Your Identity"
-        description="To remove two factor authentication from your account, we need to confirm it's you. Please enter the verification code from your authenticator app."
+        title={t('mfa.confirmIdentity.title')}
+        description={t('mfa.confirmIdentity.removeDescription')}
       />
 
       <ConfirmIdentityRecoveryCode

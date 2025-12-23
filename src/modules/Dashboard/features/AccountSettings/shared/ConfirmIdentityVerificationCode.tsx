@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import {
@@ -28,6 +29,7 @@ export const ConfirmIdentityVerificationCode = ({
   title,
   description,
 }: ConfirmIdentityVerificationCodeProps) => {
+  const { t } = useTranslation('app');
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
 
   const handleClose = () => {
@@ -59,7 +61,7 @@ export const ConfirmIdentityVerificationCode = ({
             <StyledInput
               type="text"
               inputMode="numeric"
-              placeholder="Enter verification code"
+              placeholder={t('mfa.verificationCode.placeholder')}
               value={verificationCode}
               onChange={handleInputChange}
               maxLength={6}
@@ -76,7 +78,7 @@ export const ConfirmIdentityVerificationCode = ({
             onClick={handleContinue}
             disabled={isLoading}
           >
-            {isLoading ? 'Verifying...' : 'Continue'}
+            {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
           </StyledButton>
           <StyledButton
             type="button"
@@ -84,7 +86,7 @@ export const ConfirmIdentityVerificationCode = ({
             onClick={handleUseRecoveryCode}
             disabled={isLoading}
           >
-            I can't access my authenticator app
+            {t('mfa.confirmIdentity.cantAccessApp')}
           </StyledButton>
         </StyledButtonContainer>
       </StyledContent>
