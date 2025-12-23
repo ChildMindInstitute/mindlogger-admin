@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Avatar } from 'shared/components';
@@ -40,7 +41,7 @@ interface AccountTabProps {
 }
 
 export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
-  // const { t } = useTranslation('app');
+  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const authData = auth.useData();
   const userInitials = auth.useUserInitials();
@@ -111,7 +112,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
       banners.actions.addBanner({
         key: 'MFARemovalSuccessBanner',
         bannerProps: {
-          children: 'Two-factor authentication has been successfully removed.',
+          children: t('mfa.remove.successMessage'),
           severity: 'success',
         },
       }),
@@ -126,11 +127,11 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
     <>
       <StyledTabContent>
         <StyledSectionTitle>
-          <StyledTitleLarge>Account Settings</StyledTitleLarge>
+          <StyledTitleLarge>{t('mfa.accountSettings')}</StyledTitleLarge>
         </StyledSectionTitle>
 
         <StyledSection>
-          <StyledBodyLarge color={variables.palette.on_surface}>Profile</StyledBodyLarge>
+          <StyledBodyLarge color={variables.palette.on_surface}>{t('mfa.profile')}</StyledBodyLarge>
           <StyledProfileSection>
             <StyledAvatarWrapper>
               <Avatar caption={userInitials} />
@@ -141,7 +142,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
         <StyledSection>
           <StyledEmailSection>
             <Box>
-              <StyledEmailLabel>Email</StyledEmailLabel>
+              <StyledEmailLabel>{t('mfa.email')}</StyledEmailLabel>
               <StyledEmailText>{authData?.user?.email}</StyledEmailText>
             </Box>
           </StyledEmailSection>
@@ -154,19 +155,16 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
           <>
             <StyledSection>
               <StyledBodyMedium color={variables.palette.on_surface}>
-                Two-factor authentication
+                {t('mfa.title')}
               </StyledBodyMedium>
-              <StyledTwoFactorDescription>
-                Two-factor authentication (2FA) adds an additional layer of security to your account
-                by requiring more than just a password to sign in. You may use one of the below:
-              </StyledTwoFactorDescription>
+              <StyledTwoFactorDescription>{t('mfa.description')}</StyledTwoFactorDescription>
               <StyledAuthenticatorRow>
                 <StyledAuthenticatorIcon>
                   <MobileIcon />
                 </StyledAuthenticatorIcon>
                 <StyledAuthenticatorInfo>
                   <StyledAuthenticatorTitle>
-                    Authenticator app
+                    {t('mfa.authenticatorApp.title')}
                     {isMFAEnabled && (
                       <StyledEnabledBadge>
                         <svg
@@ -181,13 +179,12 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
                             fill="#1D1B19"
                           />
                         </svg>
-                        <span>Enabled</span>
+                        <span>{t('mfa.enabled')}</span>
                       </StyledEnabledBadge>
                     )}
                   </StyledAuthenticatorTitle>
                   <StyledAuthenticatorDescription>
-                    Use an authentication app or browser extension to get one time codes when
-                    prompted.
+                    {t('mfa.authenticatorApp.description')}
                   </StyledAuthenticatorDescription>
                 </StyledAuthenticatorInfo>
                 <StyledChangeButton
@@ -195,7 +192,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
                   isRemove={isMFAEnabled}
                   onClick={isMFAEnabled ? handleRemoveMFA : () => setShowMFASetup(true)}
                 >
-                  {isMFAEnabled ? 'Remove' : 'Add'}
+                  {isMFAEnabled ? t('mfa.buttons.remove') : t('mfa.buttons.add')}
                 </StyledChangeButton>
               </StyledAuthenticatorRow>
             </StyledSection>
@@ -204,7 +201,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
 
             <StyledSection>
               <StyledRecoveryOptionsHeader sx={{ opacity: isMFAEnabled ? 1 : 0.38 }}>
-                Recovery options
+                {t('mfa.recoveryOptions')}
               </StyledRecoveryOptionsHeader>
               <StyledAuthenticatorRow>
                 <StyledAuthenticatorIcon className={isMFAEnabled ? '' : 'disabled'}>
@@ -212,11 +209,10 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
                 </StyledAuthenticatorIcon>
                 <StyledAuthenticatorInfo>
                   <StyledRecoveryCodesTitle sx={{ opacity: isMFAEnabled ? 1 : 0.38 }}>
-                    Recovery codes
+                    {t('mfa.recoveryCodes.title')}
                   </StyledRecoveryCodesTitle>
                   <StyledAuthenticatorDescription className={isMFAEnabled ? '' : 'disabled'}>
-                    Recovery codes can be used to access your account in the event you lose access
-                    to your device and cannot receive two-factor authentication codes.
+                    {t('mfa.recoveryCodes.description')}
                   </StyledAuthenticatorDescription>
                 </StyledAuthenticatorInfo>
                 <StyledChangeButton
@@ -224,7 +220,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
                   disabled={!isMFAEnabled}
                   onClick={handleViewRecoveryCodes}
                 >
-                  View
+                  {t('mfa.buttons.view')}
                 </StyledChangeButton>
               </StyledAuthenticatorRow>
             </StyledSection>
