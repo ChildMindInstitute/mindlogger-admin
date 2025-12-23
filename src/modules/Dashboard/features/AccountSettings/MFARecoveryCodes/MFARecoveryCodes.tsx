@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledDialog,
@@ -15,7 +16,6 @@ import {
   StyledButton,
 } from './MFARecoveryCodes.styles';
 import { MFARecoveryCodesProps } from './MFARecoveryCodes.types';
-import { CloseIcon } from '../shared/CloseIcon';
 import { getCodeString, isCodeUsed } from './MFARecoveryCodes.utils';
 import { useRecoveryCodesDownload } from './useRecoveryCodesDownload';
 
@@ -65,7 +65,7 @@ export const MFARecoveryCodes = ({
       <StyledHeader>
         <StyledTitle>{t('mfa.recoveryCodes.saveTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 

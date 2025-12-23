@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+import { Svg } from 'shared/components/Svg';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -10,7 +12,6 @@ import {
   StyledDescriptionMultiLine,
 } from './MFAManualSetup.styles';
 import { MFAManualSetupProps } from './MFAManualSetup.types';
-import { CloseIcon } from '../shared/CloseIcon';
 import { SecretKeyDisplay } from './SecretKeyDisplay';
 import { VerificationForm } from './VerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
@@ -61,7 +62,7 @@ export const MFAManualSetup = ({
       <StyledHeader>
         <StyledTitle>{t('mfa.setup.manualTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { Svg } from 'shared/components/Svg';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -22,7 +24,6 @@ import { MFASetupProps } from './MFASetup.types';
 import { useMFASetup } from './useMFASetup';
 import { MFAManualSetup } from '../MFAManualSetup/MFAManualSetup';
 import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
-import { CloseIcon } from '../shared/CloseIcon';
 import { MFAVerificationForm } from '../shared/MFAVerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
 
@@ -120,7 +121,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
       <StyledHeader>
         <StyledTitle>{t('mfa.setup.scanTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 

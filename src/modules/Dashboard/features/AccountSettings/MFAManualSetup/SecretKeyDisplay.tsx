@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Tooltip } from 'shared/components/Tooltip';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledSecretKeyContainer,
@@ -9,7 +10,6 @@ import {
   StyledCopyButton,
 } from './MFAManualSetup.styles';
 import { CopyIcon } from './CopyIcon';
-import { CheckIcon } from './CheckIcon';
 import { SecretKeyDisplayProps } from './SecretKeyDisplay.types';
 import { Toast } from './Toast';
 
@@ -42,7 +42,7 @@ export const SecretKeyDisplay = ({ secretKey }: SecretKeyDisplayProps) => {
           placement="top"
         >
           <StyledCopyButton className="copy-button" copied={copied}>
-            {copied ? <CheckIcon /> : <CopyIcon />}
+            {copied ? <Svg id="check" width={16} height={16} /> : <CopyIcon />}
           </StyledCopyButton>
         </Tooltip>
       </StyledSecretKeyContainer>
