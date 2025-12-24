@@ -223,8 +223,8 @@ export const StyledButton = styled('button')`
 export const StyledErrorMessage = styled('div')`
   margin-top: 4px;
   padding-left: 16px;
-  color: #ba1a1a !important;
-  font-family: ${variables.font.family};
+  color: ${variables.palette.error40};
+  font-family: ${variables.font.family.body};
   font-size: 1.2rem;
   font-weight: 400;
   line-height: 1.66;

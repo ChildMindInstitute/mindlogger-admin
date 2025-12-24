@@ -13,7 +13,7 @@ export const StyledDialog = styled(Dialog)`
   }
 
   .MuiBackdrop-root {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: ${variables.palette.black}80;
   }
 `;
 
@@ -109,8 +109,8 @@ export const StyledButton = styled('button')`
     font-weight: 700;
 
     &:hover:not(:disabled) {
-      background: ${variables.palette.error_dark || '#a01515'};
-      box-shadow: 0 2px 4px rgba(186, 26, 26, 0.3);
+      background: ${variables.palette.error30};
+      box-shadow: 0 2px 4px ${variables.palette.error40}4D;
     }
 
     &:focus {

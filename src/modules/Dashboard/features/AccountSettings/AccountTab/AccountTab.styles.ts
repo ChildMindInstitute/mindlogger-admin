@@ -120,7 +120,7 @@ export const StyledChangeButton = styled('button')<{ isRemove?: boolean }>`
     border-color: ${(props) =>
       props.isRemove ? variables.palette.error40 : variables.palette.primary};
     background-color: ${(props) =>
-      props.isRemove ? 'rgba(186, 26, 26, 0.08)' : variables.palette.primary_alpha12};
+      props.isRemove ? `${variables.palette.error40}14` : variables.palette.primary_alpha12};
   }
 
   &:disabled {
