@@ -6,13 +6,15 @@ import {
   SoftLockWarningBanner,
 } from 'modules/Auth/features/Login/Banners';
 import { AppletWithoutChangesBanner } from 'modules/Builder/components';
+import { AddParticipantSuccessBanner } from 'modules/Dashboard/components/Banners';
 import { FileSizeExceededBanner } from 'shared/components/Banners/FileSizeExceededBanner';
 import { IncorrectFileBanner } from 'shared/components/Banners/IncorrectFileBanner';
 import { SaveSuccessBanner } from 'shared/components/Banners/SaveSuccessBanner';
 import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
 import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
-import { AddParticipantSuccessBanner } from 'modules/Dashboard/components/Banners';
 
+import { MFAEnabledSuccessBanner } from './MFAEnabledSuccessBanner';
+import { MFARemovalSuccessBanner } from './MFARemovalSuccessBanner';
 import { BannerProps } from './Banner';
 
 export const BannerComponents: Record<keyof typeof BannerType, ComponentType<BannerProps>> = {
@@ -25,4 +27,6 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   TransferOwnershipSuccessBanner,
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
+  MFAEnabledSuccessBanner,
+  MFARemovalSuccessBanner,
 };

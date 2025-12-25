@@ -6,6 +6,7 @@ export type User = {
   firstName: string;
   lastName: string;
   id: string;
+  mfaEnabled?: boolean;
 };
 
 export type AuthData = {

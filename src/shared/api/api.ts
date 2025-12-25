@@ -14,6 +14,17 @@ import {
   AppletBody,
   AppletUniqueName,
 } from './api.types';
+import {
+  MFAInitiateResponse,
+  MFAVerifyRequest,
+  MFAVerifyResponse,
+  RecoveryCodesViewInitiateResponse,
+  RecoveryCodesViewVerifyRequest,
+  RecoveryCodesListResponse,
+  MFADisableInitiateResponse,
+  MFADisableVerifyRequest,
+  MFADisableVerifyResponse,
+} from './api.mfa.types';
 import { apiClient, authApiClient } from './apiConfig';
 
 export const signInRefreshTokenApi = (
@@ -123,3 +134,55 @@ export const postLogFile = (
     },
     signal,
   });
+
+// MFA API endpoints
+export const mfaApi = {
+  initiateSetup: (signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFAInitiateResponse>>(
+      '/users/me/mfa/totp/initiate',
+      {},
+      { signal },
+    ),
+
+  verifyCode: (body: MFAVerifyRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFAVerifyResponse>>('/users/me/mfa/totp/verify', body, {
+      signal,
+    }),
+
+  // Recovery codes viewing with TOTP verification
+  initiateViewRecoveryCodes: (signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<RecoveryCodesViewInitiateResponse>>(
+      '/users/me/mfa/recovery-codes/view/initiate',
+      {},
+      { signal },
+    ),
+
+  verifyAndViewRecoveryCodes: (body: RecoveryCodesViewVerifyRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<RecoveryCodesListResponse>>(
+      '/users/me/mfa/recovery-codes/view/verify',
+      body,
+      { signal },
+    ),
+
+  downloadRecoveryCodes: (downloadToken: string, signal?: AbortSignal) =>
+    authApiClient.get('/users/me/mfa/recovery-codes/download', {
+      params: { download_token: downloadToken },
+      signal,
+      responseType: 'blob', // Important: Get file as blob for download
+    }),
+
+  // MFA disable with TOTP verification
+  initiateDisable: (signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFADisableInitiateResponse>>(
+      '/users/me/mfa/totp/disable/initiate',
+      {},
+      { signal },
+    ),
+
+  verifyAndDisable: (body: MFADisableVerifyRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFADisableVerifyResponse>>(
+      '/users/me/mfa/totp/disable/verify',
+      body,
+      { signal },
+    ),
+};
