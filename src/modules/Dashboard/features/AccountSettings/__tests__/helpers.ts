@@ -225,3 +225,34 @@ export const mockMFAFeatureFlag = (_enabled: boolean) => {
   // For now, the global mock in setupTests.ts sets enableMfa: false by default
   // Individual tests can override as needed
 };
+
+/**
+ * Mock viewing recovery codes initiation
+ * Returns mfaToken for verification step
+ */
+export const mockMFAViewCodesInitiate = (mfaToken: string) => {
+  vi.mocked(axios.post).mockResolvedValueOnce({
+    data: {
+      result: {
+        mfaRequired: true,
+        mfaToken,
+        message: 'Please verify your identity',
+      },
+    },
+  });
+};
+
+/**
+ * Mock viewing recovery codes verification with custom recovery codes
+ * Returns the list of recovery codes with status
+ */
+export const mockMFAViewCodesVerify = (codes: unknown[], downloadToken?: string) => {
+  vi.mocked(axios.post).mockResolvedValueOnce({
+    data: {
+      result: {
+        codes,
+        downloadToken,
+      },
+    },
+  });
+};
