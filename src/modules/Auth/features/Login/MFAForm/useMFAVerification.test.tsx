@@ -67,6 +67,7 @@ describe('useMFAVerification', () => {
         mfaVerification: {
           status: 'idle',
           error: undefined,
+          isSessionExpired: false,
         },
         authentication: {
           status: 'idle',
@@ -170,7 +171,7 @@ describe('useMFAVerification', () => {
     const { result } = renderHook(() => useMFAVerification('totp'), { wrapper });
 
     expect(result.current.error).toBe('Test error');
-    expect(result.current.displayError).toBeDefined();
+    // Note: setMFAError only sets 'error', not 'displayError' - displayError is set by thunk rejections
 
     act(() => {
       result.current.clearError();
@@ -200,8 +201,8 @@ describe('useMFAVerification', () => {
       secondResult = await result.current.verifyCode('654321');
     });
 
-    // Second call should return immediately without dispatching
-    expect(secondResult).toBeUndefined();
+    // Second call should return false immediately without dispatching
+    expect(secondResult).toBe(false);
     expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 
@@ -217,6 +218,7 @@ describe('useMFAVerification', () => {
         mfaVerification: {
           status: 'idle',
           error: undefined,
+          isSessionExpired: false,
         },
         authentication: {
           status: 'idle',
@@ -236,9 +238,9 @@ describe('useMFAVerification', () => {
 
     await waitFor(() => {
       const state = expiredStore.getState();
-      expect(state.auth.mfaVerification.error).toBe(
-        'Your session has expired. Please log in again.',
-      );
+      // Session expiry now uses displayError key and isSessionExpired flag
+      expect(state.auth.mfaVerification.displayError).toBe('mfaSessionExpired');
+      expect(state.auth.mfaVerification.isSessionExpired).toBe(true);
     });
   });
 });
