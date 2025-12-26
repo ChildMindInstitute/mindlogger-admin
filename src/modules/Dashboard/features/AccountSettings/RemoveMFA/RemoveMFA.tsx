@@ -13,6 +13,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   const [currentStep, setCurrentStep] = useState<RemoveStep>('verification');
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
+  const [pendingCode, setPendingCode] = useState<string>('');
 
   const { mfaToken, isLoading, error, clearError, initiateDisable, verifyAndDisable } =
     useRemoveMFA();
@@ -25,19 +26,15 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   }, [open, mfaToken, initiateDisable]);
 
   const handleVerificationConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code);
-
-    if (result.success) {
-      setCurrentStep('confirmation');
-    }
+    // Store the code and show confirmation - don't call API yet
+    setPendingCode(code);
+    setCurrentStep('confirmation');
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code);
-
-    if (result.success) {
-      setCurrentStep('confirmation');
-    }
+    // Store the code and show confirmation - don't call API yet
+    setPendingCode(code);
+    setCurrentStep('confirmation');
   };
 
   const handleUseRecoveryCode = () => {
@@ -51,14 +48,20 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleFinalConfirm = async () => {
-    onSuccess();
-    handleClose();
+    // Now actually disable MFA with the pending code
+    const result = await verifyAndDisable(pendingCode);
+
+    if (result.success) {
+      onSuccess();
+      handleClose();
+    }
   };
 
   const handleClose = () => {
     setCurrentStep('verification');
     setVerificationCode('');
     setRecoveryCode('');
+    setPendingCode('');
     clearError();
     onClose();
   };
