@@ -4,7 +4,7 @@ import { theme, variables } from 'shared/styles';
 
 export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
-    max-width: 80rem;
+    max-width: 102.3rem;
     width: 100%;
     border-radius: ${variables.borderRadius.lg};
     background-color: ${variables.palette.surface1};

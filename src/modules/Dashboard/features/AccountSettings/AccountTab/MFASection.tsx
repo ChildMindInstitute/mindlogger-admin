@@ -14,6 +14,7 @@ import {
   StyledDivider,
   StyledChangeButton,
   StyledAuthenticatorRow,
+  StyledAuthenticatorContent,
   StyledAuthenticatorInfo,
   StyledAuthenticatorIcon,
   StyledTwoFactorDescription,
@@ -88,23 +89,25 @@ export const MFASection = ({
         <StyledBodyMedium color={variables.palette.on_surface}>{t('mfa.title')}</StyledBodyMedium>
         <StyledTwoFactorDescription>{t('mfa.description')}</StyledTwoFactorDescription>
         <StyledAuthenticatorRow>
-          <StyledAuthenticatorIcon>
-            <Svg id="mobile" width={24} height={24} />
-          </StyledAuthenticatorIcon>
-          <StyledAuthenticatorInfo>
-            <StyledAuthenticatorTitle>
-              {t('mfa.authenticatorApp.title')}
-              {isMFAEnabled && (
-                <StyledEnabledBadge>
-                  <Svg id="shield-check" width={18} height={18} />
-                  <span>{t('mfa.enabled')}</span>
-                </StyledEnabledBadge>
-              )}
-            </StyledAuthenticatorTitle>
-            <StyledAuthenticatorDescription>
-              {t('mfa.authenticatorApp.description')}
-            </StyledAuthenticatorDescription>
-          </StyledAuthenticatorInfo>
+          <StyledAuthenticatorContent>
+            <StyledAuthenticatorIcon>
+              <Svg id="mobile" width={24} height={24} />
+            </StyledAuthenticatorIcon>
+            <StyledAuthenticatorInfo>
+              <StyledAuthenticatorTitle>
+                {t('mfa.authenticatorApp.title')}
+                {isMFAEnabled && (
+                  <StyledEnabledBadge>
+                    <Svg id="shield-check" width={18} height={18} />
+                    <span>{t('mfa.enabled')}</span>
+                  </StyledEnabledBadge>
+                )}
+              </StyledAuthenticatorTitle>
+              <StyledAuthenticatorDescription>
+                {t('mfa.authenticatorApp.description')}
+              </StyledAuthenticatorDescription>
+            </StyledAuthenticatorInfo>
+          </StyledAuthenticatorContent>
           <StyledChangeButton
             type="button"
             isRemove={isMFAEnabled}
@@ -122,17 +125,19 @@ export const MFASection = ({
           {t('mfa.recoveryOptions')}
         </StyledRecoveryOptionsHeader>
         <StyledAuthenticatorRow>
-          <StyledAuthenticatorIcon className={isMFAEnabled ? '' : 'disabled'}>
-            <Svg id="key" width={24} height={24} />
-          </StyledAuthenticatorIcon>
-          <StyledAuthenticatorInfo>
-            <StyledRecoveryCodesTitle sx={{ opacity: isMFAEnabled ? 1 : 0.38 }}>
-              {t('mfa.recoveryCodes.title')}
-            </StyledRecoveryCodesTitle>
-            <StyledAuthenticatorDescription className={isMFAEnabled ? '' : 'disabled'}>
-              {t('mfa.recoveryCodes.description')}
-            </StyledAuthenticatorDescription>
-          </StyledAuthenticatorInfo>
+          <StyledAuthenticatorContent>
+            <StyledAuthenticatorIcon className={isMFAEnabled ? '' : 'disabled'}>
+              <Svg id="key" width={24} height={24} />
+            </StyledAuthenticatorIcon>
+            <StyledAuthenticatorInfo>
+              <StyledRecoveryCodesTitle sx={{ opacity: isMFAEnabled ? 1 : 0.38 }}>
+                {t('mfa.recoveryCodes.title')}
+              </StyledRecoveryCodesTitle>
+              <StyledAuthenticatorDescription className={isMFAEnabled ? '' : 'disabled'}>
+                {t('mfa.recoveryCodes.description')}
+              </StyledAuthenticatorDescription>
+            </StyledAuthenticatorInfo>
+          </StyledAuthenticatorContent>
           <StyledChangeButton
             type="button"
             disabled={!isMFAEnabled}

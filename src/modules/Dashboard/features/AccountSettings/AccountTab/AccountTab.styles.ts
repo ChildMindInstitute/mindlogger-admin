@@ -17,6 +17,7 @@ export const StyledSection = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
 
   > .MuiTypography-root:first-of-type {
     color: ${variables.palette.on_surface};
@@ -132,7 +133,15 @@ export const StyledChangeButton = styled('button')<{ isRemove?: boolean }>`
 export const StyledAuthenticatorRow = styled(Box)`
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const StyledAuthenticatorContent = styled(Box)`
+  display: flex;
+  align-items: flex-start;
   gap: 12px;
+  flex-shrink: 0;
 `;
 
 export const StyledAuthenticatorIcon = styled(Box)`
@@ -155,6 +164,7 @@ export const StyledAuthenticatorInfo = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-width: 600px;
 `;
 
 export const StyledAuthenticatorTitle = styled(Box)`
@@ -199,7 +209,6 @@ export const StyledEnabledBadge = styled(Box)`
 `;
 
 export const StyledAuthenticatorDescription = styled(Box)`
-  flex: 1 0 0;
   color: ${variables.palette.on_surface_variant};
   font-feature-settings:
     'liga' off,
@@ -209,7 +218,8 @@ export const StyledAuthenticatorDescription = styled(Box)`
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
   line-height: normal;
-  letter-spacing: 0.15px;
+  letter-spacing: 0.015rem;
+  max-width: 51rem;
 
   &.disabled {
     opacity: 0.38;
@@ -217,13 +227,12 @@ export const StyledAuthenticatorDescription = styled(Box)`
 `;
 
 export const StyledTwoFactorDescription = styled(Box)`
-  max-width: 89.5rem;
   color: ${variables.palette.on_surface};
   font-family: ${variables.font.family.body};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
-  line-height: 2.4rem; /* 150% */
+  line-height: 2.4rem;
   letter-spacing: 0.05rem;
 `;
 
@@ -241,7 +250,6 @@ export const StyledRecoveryOptionsHeader = styled(Box)`
 `;
 
 export const StyledRecoveryCodesTitle = styled(Box)`
-  align-self: stretch;
   color: ${variables.palette.on_surface_variant};
   font-family: ${variables.font.family.title};
   font-size: 2rem;
