@@ -113,7 +113,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
             render={({ field: { value, onChange, onBlur } }) => (
               <TextField
                 fullWidth
-                label={t('recoveryCode')}
+                label={!isSessionExpired && 'recoveryCode'}
                 placeholder=""
                 value={value}
                 onChange={(e) => handleCodeChange(e, onChange)}

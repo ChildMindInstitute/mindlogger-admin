@@ -130,7 +130,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
             render={({ field: { value, onChange, onBlur } }) => (
               <TextField
                 fullWidth
-                label={t('enterVerificationCodePlaceholder')}
+                label={!isSessionExpired && t('enterVerificationCodePlaceholder')}
                 placeholder=""
                 value={value}
                 onChange={(e) => {
