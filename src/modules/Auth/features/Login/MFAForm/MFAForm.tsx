@@ -154,10 +154,6 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
           />
         </StyledMFAController>
 
-        <StyledMFALink onClick={handleRecoveryClick} data-testid="mfa-form-recovery-link">
-          {t('cantAccessAuthenticator')}
-        </StyledMFALink>
-
         <StyledMFAButton
           variant="contained"
           type="submit"
@@ -166,6 +162,10 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
         >
           {t('continue')}
         </StyledMFAButton>
+
+        <StyledMFALink onClick={handleRecoveryClick} data-testid="mfa-form-recovery-link">
+          {t('cantAccessAuthenticator')}
+        </StyledMFALink>
 
         {onBackToLogin && (
           <StyledMFALink
