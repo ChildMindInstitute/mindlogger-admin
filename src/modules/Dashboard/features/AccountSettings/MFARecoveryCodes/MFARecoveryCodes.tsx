@@ -60,6 +60,20 @@ export const MFARecoveryCodes = ({
     handleClose();
   };
 
+  const handleDownloadClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      await handleDownload();
+    } catch (error) {
+      console.error('Error downloading recovery codes:', error);
+      alert(
+        'Unable to download recovery codes. The download session may have expired (5 minute limit). Please close and reopen this dialog to try again.',
+      );
+    }
+  };
+
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
@@ -87,7 +101,7 @@ export const MFARecoveryCodes = ({
           <StyledButton type="button" onClick={handleConfirm}>
             {t('mfa.buttons.savedCodes')}
           </StyledButton>
-          <StyledButton type="button" className="secondary" onClick={handleDownload}>
+          <StyledButton type="button" className="secondary" onClick={handleDownloadClick}>
             {t('mfa.buttons.downloadCodes')}
           </StyledButton>
         </StyledButtonContainer>
