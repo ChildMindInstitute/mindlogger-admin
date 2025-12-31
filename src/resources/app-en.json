@@ -1886,7 +1886,12 @@
       "description": "Recovery codes can be used to access your account in the event you lose access to your device and cannot receive two-factor authentication codes.",
       "saveDescription1": "Recovery codes can be used to access your account in the event you lose access to the device you're using for 2FA.",
       "saveDescription2": "You'll need to re-authenticate to view these codes again, so please make sure to save them now.",
-      "placeholder": "XXXXX-XXXXX"
+      "placeholder": "XXXXX-XXXXX",
+      "downloadExpired": {
+        "title": "Session Expired",
+        "description": "Your download session has expired. Please close this window and view the recovery codes again to download.",
+        "button": "OK, Got It"
+      }
     },
     "secretKey": {
       "copy": "Copy",
