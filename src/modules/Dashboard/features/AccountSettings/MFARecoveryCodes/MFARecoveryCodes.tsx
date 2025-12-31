@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
@@ -18,6 +19,7 @@ import {
 import { MFARecoveryCodesProps } from './MFARecoveryCodes.types';
 import { getCodeString, isCodeUsed } from './MFARecoveryCodes.utils';
 import { useRecoveryCodesDownload } from './useRecoveryCodesDownload';
+import { DownloadExpiredModal } from './DownloadExpiredModal';
 
 export const MFARecoveryCodes = ({
   open,
@@ -27,6 +29,7 @@ export const MFARecoveryCodes = ({
   downloadToken,
 }: MFARecoveryCodesProps) => {
   const { t } = useTranslation('app');
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
   // Use custom hook for download functionality
   const { handleDownload } = useRecoveryCodesDownload(recoveryCodes, downloadToken);
 
@@ -68,44 +71,53 @@ export const MFARecoveryCodes = ({
       await handleDownload();
     } catch (error) {
       console.error('Error downloading recovery codes:', error);
-      alert(
-        'Unable to download recovery codes. The download session may have expired (5 minute limit). Please close and reopen this dialog to try again.',
-      );
+      // Show the expiry modal instead of browser alert
+      setShowExpiredModal(true);
     }
   };
 
+  const handleExpiredModalClose = () => {
+    setShowExpiredModal(false);
+    // Close the recovery codes modal too
+    handleClose();
+  };
+
   return (
-    <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
-      <StyledHeader>
-        <StyledTitle>{t('mfa.recoveryCodes.saveTitle')}</StyledTitle>
-        <StyledCloseButton type="button" onClick={handleClose}>
-          <Svg id="close" width={24} height={24} />
-        </StyledCloseButton>
-      </StyledHeader>
+    <>
+      <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
+        <StyledHeader>
+          <StyledTitle>{t('mfa.recoveryCodes.saveTitle')}</StyledTitle>
+          <StyledCloseButton type="button" onClick={handleClose}>
+            <Svg id="close" width={24} height={24} />
+          </StyledCloseButton>
+        </StyledHeader>
 
-      <StyledContent>
-        <StyledDescription>
-          <p>{t('mfa.recoveryCodes.saveDescription1')}</p>
-          <p>{t('mfa.recoveryCodes.saveDescription2')}</p>
-        </StyledDescription>
+        <StyledContent>
+          <StyledDescription>
+            <p>{t('mfa.recoveryCodes.saveDescription1')}</p>
+            <p>{t('mfa.recoveryCodes.saveDescription2')}</p>
+          </StyledDescription>
 
-        <StyledCodesContainer>
-          <StyledCodesList>
-            {recoveryCodes.map((code, index) => (
-              <p key={index}>{renderCode(code)}</p>
-            ))}
-          </StyledCodesList>
-        </StyledCodesContainer>
+          <StyledCodesContainer>
+            <StyledCodesList>
+              {recoveryCodes.map((code, index) => (
+                <p key={index}>{renderCode(code)}</p>
+              ))}
+            </StyledCodesList>
+          </StyledCodesContainer>
 
-        <StyledButtonContainer>
-          <StyledButton type="button" onClick={handleConfirm}>
-            {t('mfa.buttons.savedCodes')}
-          </StyledButton>
-          <StyledButton type="button" className="secondary" onClick={handleDownloadClick}>
-            {t('mfa.buttons.downloadCodes')}
-          </StyledButton>
-        </StyledButtonContainer>
-      </StyledContent>
-    </StyledDialog>
+          <StyledButtonContainer>
+            <StyledButton type="button" onClick={handleConfirm}>
+              {t('mfa.buttons.savedCodes')}
+            </StyledButton>
+            <StyledButton type="button" className="secondary" onClick={handleDownloadClick}>
+              {t('mfa.buttons.downloadCodes')}
+            </StyledButton>
+          </StyledButtonContainer>
+        </StyledContent>
+      </StyledDialog>
+
+      <DownloadExpiredModal open={showExpiredModal} onClose={handleExpiredModalClose} />
+    </>
   );
 };

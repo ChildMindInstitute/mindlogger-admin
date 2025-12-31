@@ -1862,7 +1862,12 @@
       "description": "Les codes de récupération peuvent être utilisés pour accéder à votre compte si vous perdez l'accès à votre appareil et ne pouvez pas recevoir de codes d'authentification à deux facteurs.",
       "saveDescription1": "Les codes de récupération peuvent être utilisés pour accéder à votre compte si vous perdez l'accès à l'appareil que vous utilisez pour l'authentification à deux facteurs.",
       "saveDescription2": "Vous devrez vous réauthentifier pour consulter à nouveau ces codes, veuillez donc vous assurer de les enregistrer maintenant.",
-      "placeholder": "XXXXX-XXXXX"
+      "placeholder": "XXXXX-XXXXX",
+      "downloadExpired": {
+        "title": "Session expirée",
+        "description": "Votre session de téléchargement a expiré. Veuillez fermer cette fenêtre et consulter à nouveau les codes de récupération pour télécharger.",
+        "button": "OK, compris"
+      }
     },
     "secretKey": {
       "copy": "Copier",
