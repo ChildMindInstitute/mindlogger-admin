@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
@@ -23,7 +23,16 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     clearError,
     handleVerifyCode,
     handleVerifyRecoveryCode,
+    initiateSession,
+    sessionInitialized,
   } = useViewRecoveryCodes();
+
+  // Initiate MFA session when modal opens
+  useEffect(() => {
+    if (open && !sessionInitialized) {
+      initiateSession();
+    }
+  }, [open, initiateSession, sessionInitialized]);
 
   const handleVerificationConfirm = async (code: string) => {
     const result = await handleVerifyCode(code);
