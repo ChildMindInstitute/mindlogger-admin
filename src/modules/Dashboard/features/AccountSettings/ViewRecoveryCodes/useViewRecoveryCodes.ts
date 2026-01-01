@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
@@ -52,24 +52,55 @@ export const useViewRecoveryCodes = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Session management state
+  const [mfaToken, setMfaToken] = useState<string | null>(null);
+  const [sessionInitialized, setSessionInitialized] = useState(false);
+
   const clearError = () => {
     setError(null);
   };
 
+  // Initiate MFA session once when modal opens
+  const initiateSession = useCallback(async () => {
+    if (sessionInitialized || mfaToken) return { success: true, mfaToken };
+
+    setIsLoading(true);
+
+    try {
+      const initiateResponse = await mfaApi.initiateViewRecoveryCodes();
+      const token = initiateResponse.data?.result?.mfaToken;
+
+      if (!token) {
+        throw new Error('Failed to initiate recovery codes viewing');
+      }
+
+      setMfaToken(token);
+      setSessionInitialized(true);
+      setIsLoading(false);
+
+      return { success: true, mfaToken: token };
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      const errorMessage = getErrorMessage(axiosError, false);
+      setError(errorMessage);
+      setIsLoading(false);
+
+      return { success: false };
+    }
+  }, [sessionInitialized, mfaToken]);
+
   const handleVerifyCode = async (_code: string): Promise<VerificationResult> => {
+    if (!mfaToken) {
+      setError('Session expired. Please try again.');
+
+      return { success: false };
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      // Step 1: Initiate recovery codes viewing (validates MFA enabled & codes exist)
-      const initiateResponse = await mfaApi.initiateViewRecoveryCodes();
-      const mfaToken = initiateResponse.data?.result?.mfaToken;
-
-      if (!mfaToken) {
-        throw new Error('Failed to initiate recovery codes viewing');
-      }
-
-      // Step 2: Verify TOTP code and get recovery codes
+      // Use existing session to verify TOTP code
       const verifyResponse = await mfaApi.verifyAndViewRecoveryCodes({
         mfaToken,
         code: _code,
@@ -107,20 +138,17 @@ export const useViewRecoveryCodes = () => {
   };
 
   const handleVerifyRecoveryCode = async (_code: string): Promise<VerificationResult> => {
+    if (!mfaToken) {
+      setError('Session expired. Please try again.');
+
+      return { success: false };
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      // Step 1: Initiate recovery codes viewing (validates MFA enabled & codes exist)
-      const initiateResponse = await mfaApi.initiateViewRecoveryCodes();
-      const mfaToken = initiateResponse.data?.result?.mfaToken;
-
-      if (!mfaToken) {
-        throw new Error('Failed to initiate recovery codes viewing');
-      }
-
-      // Step 2: Verify recovery code and get all recovery codes
-      // Note: The recovery code used for verification will be marked as "used"
+      // Use existing session to verify recovery code
       const verifyResponse = await mfaApi.verifyAndViewRecoveryCodes({
         mfaToken,
         code: _code,
@@ -169,5 +197,7 @@ export const useViewRecoveryCodes = () => {
     clearError,
     handleVerifyCode,
     handleVerifyRecoveryCode,
+    initiateSession,
+    sessionInitialized,
   };
 };
