@@ -16,18 +16,24 @@ export const useRecoveryCodesDownload = (
 
     const blob = new Blob([response.data], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
 
     // Extract filename from Content-Disposition header or use timestamped default
     const contentDisposition =
       response.headers['content-disposition'] || response.headers['Content-Disposition'];
     const filename = extractFilenameFromHeader(contentDisposition) || generateTimestampedFilename();
 
+    const link = document.createElement('a');
+    link.href = url;
     link.download = filename;
-    document.body.appendChild(link);
+    link.style.display = 'none';
+
+    // Append to drawer to prevent ClickAwayListener from closing modals
+    const drawer = document.querySelector('[data-testid="account-panel"]');
+    const targetElement = drawer || document.body;
+
+    targetElement.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    targetElement.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
