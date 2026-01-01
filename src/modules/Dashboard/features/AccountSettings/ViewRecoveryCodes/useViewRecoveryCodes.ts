@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
@@ -55,6 +55,7 @@ export const useViewRecoveryCodes = () => {
   // Session management state
   const [mfaToken, setMfaToken] = useState<string | null>(null);
   const [sessionInitialized, setSessionInitialized] = useState(false);
+  const hasInitiatedSession = useRef(false);
 
   const clearError = () => {
     setError(null);
@@ -62,7 +63,10 @@ export const useViewRecoveryCodes = () => {
 
   // Initiate MFA session once when modal opens
   const initiateSession = useCallback(async () => {
-    if (sessionInitialized || mfaToken) return { success: true, mfaToken };
+    // Check only state, not ref (allows StrictMode double call)
+    if (sessionInitialized || mfaToken) {
+      return { success: true, mfaToken };
+    }
 
     setIsLoading(true);
 
@@ -74,6 +78,8 @@ export const useViewRecoveryCodes = () => {
         throw new Error('Failed to initiate recovery codes viewing');
       }
 
+      // Set ref AFTER API call succeeds to prevent subsequent calls
+      hasInitiatedSession.current = true;
       setMfaToken(token);
       setSessionInitialized(true);
       setIsLoading(false);
@@ -185,6 +191,18 @@ export const useViewRecoveryCodes = () => {
     }
   };
 
+  // Reset session and clear all state
+  const resetSession = useCallback(() => {
+    hasInitiatedSession.current = false;
+    setMfaToken(null);
+    setSessionInitialized(false);
+    setError(null);
+    setVerificationCode('');
+    setRecoveryCode('');
+    setRecoveryCodes(null);
+    setDownloadToken(null);
+  }, []);
+
   return {
     verificationCode,
     setVerificationCode,
@@ -199,5 +217,6 @@ export const useViewRecoveryCodes = () => {
     handleVerifyRecoveryCode,
     initiateSession,
     sessionInitialized,
+    resetSession,
   };
 };

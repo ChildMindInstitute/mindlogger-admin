@@ -25,6 +25,7 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     handleVerifyRecoveryCode,
     initiateSession,
     sessionInitialized,
+    resetSession,
   } = useViewRecoveryCodes();
 
   // Initiate MFA session when modal opens
@@ -59,11 +60,9 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
   };
 
   const handleClose = () => {
-    // Reset state
+    // Reset all state including session
     setCurrentStep('verification');
-    setVerificationCode('');
-    setRecoveryCode('');
-    clearError();
+    resetSession();
     onClose();
   };
 
