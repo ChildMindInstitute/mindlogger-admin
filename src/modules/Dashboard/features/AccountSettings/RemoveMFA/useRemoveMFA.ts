@@ -31,8 +31,19 @@ export const useRemoveMFA = () => {
   };
 
   /**
-   * Initiates MFA disable by creating a verification session
-   * @returns Object with success flag and optional mfaToken
+   * Resets session state for retry
+   */
+  const resetSession = useCallback(() => {
+    setMfaToken(null);
+    setConfirmationToken(null);
+    setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
+    setIsLoading(false);
+  }, []);
+
+  /**
+   * Step 1: Initiate MFA disable
    */
   const initiateDisable = useCallback(async (): Promise<{
     success: boolean;
@@ -62,10 +73,7 @@ export const useRemoveMFA = () => {
   }, []);
 
   /**
-   * Verifies TOTP or recovery code (Step 2 of 3)
-   * Does NOT disable MFA - only validates the code
-   * @param code - TOTP code from authenticator app or recovery code
-   * @returns Object with success flag and optional confirmationToken
+   * Step 2: Verify code (does NOT disable MFA)
    */
   const verifyCode = useCallback(
     async (code: string): Promise<VerifyResult> => {
@@ -107,8 +115,7 @@ export const useRemoveMFA = () => {
   );
 
   /**
-   * Confirms and actually disables MFA (Step 3 of 3)
-   * @returns Object with success flag
+   * Step 3: Confirm and disable MFA
    */
   const confirmDisable = useCallback(async (): Promise<VerifyResult> => {
     if (!confirmationToken) {
@@ -149,6 +156,7 @@ export const useRemoveMFA = () => {
     errorScenario,
     errorMetadata,
     clearError,
+    resetSession,
     initiateDisable,
     verifyCode,
     confirmDisable,

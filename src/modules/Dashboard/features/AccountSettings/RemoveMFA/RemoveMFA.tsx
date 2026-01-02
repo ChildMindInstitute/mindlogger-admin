@@ -5,6 +5,7 @@ import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '..
 import { RemoveMFAConfirmation } from './RemoveMFAConfirmation';
 import { RemoveMFAProps } from './RemoveMFA.types';
 import { useRemoveMFA } from './useRemoveMFA';
+import { ErrorScenario } from './RemoveMFA.types';
 
 type RemoveStep = 'verification' | 'recovery-code' | 'confirmation';
 
@@ -14,10 +15,22 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
 
-  const { mfaToken, isLoading, error, clearError, initiateDisable, verifyCode, confirmDisable } =
-    useRemoveMFA();
+  const {
+    mfaToken,
+    isLoading,
+    error,
+    errorScenario,
+    clearError,
+    resetSession,
+    initiateDisable,
+    verifyCode,
+    confirmDisable,
+  } = useRemoveMFA();
 
-  // Initiate MFA disable when modal opens
+  const shouldShowRetry =
+    errorScenario === ErrorScenario.SESSION_EXPIRED ||
+    errorScenario === ErrorScenario.MAX_SESSION_ATTEMPTS;
+
   useEffect(() => {
     if (open && !mfaToken) {
       initiateDisable();
@@ -25,7 +38,6 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   }, [open, mfaToken, initiateDisable]);
 
   const handleVerificationConfirm = async (code: string) => {
-    // Verify the code and transition to confirmation on success
     const result = await verifyCode(code);
 
     if (result.success) {
@@ -34,7 +46,6 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    // Verify the recovery code and transition to confirmation on success
     const result = await verifyCode(code);
 
     if (result.success) {
@@ -52,8 +63,14 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
     setCurrentStep('verification');
   };
 
+  const handleRetry = async () => {
+    resetSession();
+    setVerificationCode('');
+    setRecoveryCode('');
+    await initiateDisable();
+  };
+
   const handleFinalConfirm = async () => {
-    // Actually disable MFA with the confirmation token
     const result = await confirmDisable();
 
     if (result.success) {
@@ -77,6 +94,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         onClose={handleClose}
         onConfirm={handleVerificationConfirm}
         onUseRecoveryCode={handleUseRecoveryCode}
+        onRetry={shouldShowRetry ? handleRetry : undefined}
         verificationCode={verificationCode}
         setVerificationCode={setVerificationCode}
         isLoading={isLoading}
@@ -91,6 +109,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         onClose={handleClose}
         onConfirm={handleRecoveryCodeConfirm}
         onBack={handleBackToVerification}
+        onRetry={shouldShowRetry ? handleRetry : undefined}
         recoveryCode={recoveryCode}
         setRecoveryCode={setRecoveryCode}
         isLoading={isLoading}
