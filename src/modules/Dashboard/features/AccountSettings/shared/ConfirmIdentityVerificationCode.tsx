@@ -21,6 +21,7 @@ export const ConfirmIdentityVerificationCode = ({
   onClose,
   onConfirm,
   onUseRecoveryCode,
+  onRetry,
   verificationCode,
   setVerificationCode,
   isLoading,
@@ -47,6 +48,15 @@ export const ConfirmIdentityVerificationCode = ({
     onUseRecoveryCode();
   };
 
+  const handleTryAgain = () => {
+    if (onRetry) {
+      onRetry();
+    }
+  };
+
+  // Disable input for critical error scenarios
+  const shouldDisableInput = !!onRetry;
+
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
@@ -65,29 +75,42 @@ export const ConfirmIdentityVerificationCode = ({
               value={verificationCode}
               onChange={handleInputChange}
               maxLength={6}
-              disabled={isLoading}
+              disabled={isLoading || shouldDisableInput}
             />
           </StyledInputContainer>
           {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
         </Box>
 
         <StyledButtonContainer>
-          <StyledButton
-            type="button"
-            className="primary"
-            onClick={handleContinue}
-            disabled={isLoading}
-          >
-            {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
-          </StyledButton>
-          <StyledButton
-            type="button"
-            className="secondary"
-            onClick={handleUseRecoveryCode}
-            disabled={isLoading}
-          >
-            {t('mfa.confirmIdentity.cantAccessApp')}
-          </StyledButton>
+          {onRetry ? (
+            <StyledButton
+              type="button"
+              className="primary"
+              onClick={handleTryAgain}
+              disabled={isLoading}
+            >
+              {t('mfa.buttons.tryAgain')}
+            </StyledButton>
+          ) : (
+            <>
+              <StyledButton
+                type="button"
+                className="primary"
+                onClick={handleContinue}
+                disabled={isLoading}
+              >
+                {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
+              </StyledButton>
+              <StyledButton
+                type="button"
+                className="secondary"
+                onClick={handleUseRecoveryCode}
+                disabled={isLoading}
+              >
+                {t('mfa.confirmIdentity.cantAccessApp')}
+              </StyledButton>
+            </>
+          )}
         </StyledButtonContainer>
       </StyledContent>
     </StyledDialog>
