@@ -59,6 +59,16 @@ export type MFADisableVerifyRequest = {
 };
 
 export type MFADisableVerifyResponse = {
-  mfaDisabled: boolean;
+  codeValidated: boolean; // Indicates code was valid
+  confirmationToken: string; // JWT for final confirmation step
+  message: string;
+};
+
+export type MFADisableConfirmRequest = {
+  confirmationToken: string; // From verify response
+};
+
+export type MFADisableConfirmResponse = {
+  mfaDisabled: boolean; // Final confirmation that MFA was disabled
   message: string;
 };
