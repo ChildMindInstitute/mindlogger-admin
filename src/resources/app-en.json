@@ -1923,7 +1923,8 @@
       "verifying": "Verifying...",
       "removing": "Removing...",
       "savedCodes": "I've saved my codes",
-      "downloadCodes": "Download as text file"
+      "downloadCodes": "Download as text file",
+      "tryAgain": "Try Again"
     }
   }
 }

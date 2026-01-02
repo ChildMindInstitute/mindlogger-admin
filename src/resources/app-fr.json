@@ -1921,7 +1921,8 @@
       "verifying": "Vérification en cours...",
       "removing": "Suppression en cours...",
       "savedCodes": "J'ai enregistré mes codes",
-      "downloadCodes": "Télécharger en tant que fichier texte"
+      "downloadCodes": "Télécharger en tant que fichier texte",
+      "tryAgain": "Réessayer"
     }
   }
 }
