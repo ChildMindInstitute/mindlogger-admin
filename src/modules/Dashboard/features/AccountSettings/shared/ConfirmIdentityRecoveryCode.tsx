@@ -23,6 +23,7 @@ export const ConfirmIdentityRecoveryCode = ({
   onClose,
   onConfirm,
   onBack,
+  onRetry,
   recoveryCode,
   setRecoveryCode,
   isLoading,
@@ -45,6 +46,15 @@ export const ConfirmIdentityRecoveryCode = ({
   const handleBack = () => {
     onBack();
   };
+
+  const handleTryAgain = () => {
+    if (onRetry) {
+      onRetry();
+    }
+  };
+
+  // Disable input for critical error scenarios
+  const shouldDisableInput = !!onRetry;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase();
@@ -73,29 +83,42 @@ export const ConfirmIdentityRecoveryCode = ({
               value={recoveryCode}
               onChange={handleInputChange}
               maxLength={11}
-              disabled={isLoading}
+              disabled={isLoading || shouldDisableInput}
             />
           </StyledInputContainer>
           {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
         </Box>
 
         <StyledButtonContainer>
-          <StyledButton
-            type="button"
-            className="primary"
-            onClick={handleContinue}
-            disabled={isLoading}
-          >
-            {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
-          </StyledButton>
-          <StyledButton
-            type="button"
-            className="secondary"
-            onClick={handleBack}
-            disabled={isLoading}
-          >
-            {t('mfa.buttons.back')}
-          </StyledButton>
+          {onRetry ? (
+            <StyledButton
+              type="button"
+              className="primary"
+              onClick={handleTryAgain}
+              disabled={isLoading}
+            >
+              {t('mfa.buttons.tryAgain')}
+            </StyledButton>
+          ) : (
+            <>
+              <StyledButton
+                type="button"
+                className="primary"
+                onClick={handleContinue}
+                disabled={isLoading}
+              >
+                {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
+              </StyledButton>
+              <StyledButton
+                type="button"
+                className="secondary"
+                onClick={handleBack}
+                disabled={isLoading}
+              >
+                {t('mfa.buttons.back')}
+              </StyledButton>
+            </>
+          )}
         </StyledButtonContainer>
       </StyledContent>
     </StyledDialog>
