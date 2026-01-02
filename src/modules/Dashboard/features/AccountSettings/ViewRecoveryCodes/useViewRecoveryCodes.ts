@@ -107,7 +107,7 @@ export const useViewRecoveryCodes = () => {
       };
     } catch (err) {
       const axiosError = err as AxiosError;
-      const parsedError = parseError(axiosError);
+      const parsedError = parseError(axiosError, 'totp');
 
       setError(parsedError.message);
       setErrorScenario(parsedError.scenario);
@@ -158,7 +158,7 @@ export const useViewRecoveryCodes = () => {
       };
     } catch (err) {
       const axiosError = err as AxiosError;
-      const parsedError = parseError(axiosError);
+      const parsedError = parseError(axiosError, 'recovery');
 
       setError(parsedError.message);
       setErrorScenario(parsedError.scenario);
