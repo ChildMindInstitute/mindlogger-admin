@@ -37,6 +37,16 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
     }
   }, [open, mfaToken, initiateDisable]);
 
+  // Reset session when modal closes
+  useEffect(() => {
+    if (!open) {
+      resetSession();
+      setCurrentStep('verification');
+      setVerificationCode('');
+      setRecoveryCode('');
+    }
+  }, [open, resetSession]);
+
   const handleVerificationConfirm = async (code: string) => {
     const result = await verifyCode(code);
 
