@@ -13,9 +13,8 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   const [currentStep, setCurrentStep] = useState<RemoveStep>('verification');
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
-  const [pendingCode, setPendingCode] = useState<string>('');
 
-  const { mfaToken, isLoading, error, clearError, initiateDisable, verifyAndDisable } =
+  const { mfaToken, isLoading, error, clearError, initiateDisable, verifyCode, confirmDisable } =
     useRemoveMFA();
 
   // Initiate MFA disable when modal opens
@@ -26,15 +25,21 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   }, [open, mfaToken, initiateDisable]);
 
   const handleVerificationConfirm = async (code: string) => {
-    // Store the code and show confirmation - don't call API yet
-    setPendingCode(code);
-    setCurrentStep('confirmation');
+    // Verify the code and transition to confirmation on success
+    const result = await verifyCode(code);
+
+    if (result.success) {
+      setCurrentStep('confirmation');
+    }
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    // Store the code and show confirmation - don't call API yet
-    setPendingCode(code);
-    setCurrentStep('confirmation');
+    // Verify the recovery code and transition to confirmation on success
+    const result = await verifyCode(code);
+
+    if (result.success) {
+      setCurrentStep('confirmation');
+    }
   };
 
   const handleUseRecoveryCode = () => {
@@ -48,8 +53,8 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleFinalConfirm = async () => {
-    // Now actually disable MFA with the pending code
-    const result = await verifyAndDisable(pendingCode);
+    // Actually disable MFA with the confirmation token
+    const result = await confirmDisable();
 
     if (result.success) {
       onSuccess();
@@ -61,7 +66,6 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
     setCurrentStep('verification');
     setVerificationCode('');
     setRecoveryCode('');
-    setPendingCode('');
     clearError();
     onClose();
   };
