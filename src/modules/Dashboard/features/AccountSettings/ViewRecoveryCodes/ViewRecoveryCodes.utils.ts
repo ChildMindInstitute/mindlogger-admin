@@ -26,6 +26,8 @@ const STATUS_CODES = {
 
 const ERROR_MESSAGES = {
   INVALID_CODE: 'Invalid code. Please try again.',
+  INVALID_VERIFICATION_CODE: 'Invalid verification code. Please try again.',
+  INVALID_RECOVERY_CODE: 'Invalid recovery code. Please try again.',
   MAX_SESSION_ATTEMPTS: 'Too many invalid attempts. Please try again.',
   SESSION_EXPIRED: 'Your session has expired. Please try again.',
   GLOBAL_LOCKOUT: 'Too many failed attempts. Please try again later.',
@@ -35,7 +37,7 @@ const ERROR_MESSAGES = {
   UNKNOWN_ERROR: 'An error occurred. Please try again.',
 };
 
-export const parseError = (error: AxiosError): ParsedError => {
+export const parseError = (error: AxiosError, codeType?: 'totp' | 'recovery'): ParsedError => {
   const responseData = error.response?.data as ErrorResponse | undefined;
   const backendMessage = responseData?.result?.[0]?.message || '';
   const metadata = responseData?.metadata;
@@ -96,7 +98,7 @@ export const parseError = (error: AxiosError): ParsedError => {
     BACKEND_ERROR_PATTERNS.INVALID_TOTP.test(backendMessage)
   ) {
     return {
-      message: ERROR_MESSAGES.INVALID_CODE,
+      message: ERROR_MESSAGES.INVALID_VERIFICATION_CODE,
       scenario: ErrorScenario.INVALID_CODE,
       metadata,
     };
@@ -108,7 +110,7 @@ export const parseError = (error: AxiosError): ParsedError => {
     BACKEND_ERROR_PATTERNS.INVALID_RECOVERY.test(backendMessage)
   ) {
     return {
-      message: ERROR_MESSAGES.INVALID_CODE,
+      message: ERROR_MESSAGES.INVALID_RECOVERY_CODE,
       scenario: ErrorScenario.INVALID_CODE,
       metadata,
     };
@@ -146,10 +148,18 @@ export const parseError = (error: AxiosError): ParsedError => {
     };
   }
 
-  // Fallback for 401 - likely invalid code
+  // Fallback for 401 - likely invalid code, differentiate based on codeType
   if (statusCode === STATUS_CODES.UNAUTHORIZED) {
+    let message = ERROR_MESSAGES.INVALID_CODE;
+
+    if (codeType === 'recovery') {
+      message = ERROR_MESSAGES.INVALID_RECOVERY_CODE;
+    } else if (codeType === 'totp') {
+      message = ERROR_MESSAGES.INVALID_VERIFICATION_CODE;
+    }
+
     return {
-      message: ERROR_MESSAGES.INVALID_CODE,
+      message,
       scenario: ErrorScenario.INVALID_CODE,
       metadata,
     };

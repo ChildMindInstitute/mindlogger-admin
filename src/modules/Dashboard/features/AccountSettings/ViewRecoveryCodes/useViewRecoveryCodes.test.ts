@@ -26,10 +26,16 @@ describe('useViewRecoveryCodes', () => {
 
   describe('TOTP Verification Flow', () => {
     it('should successfully verify TOTP code and return recovery codes', async () => {
-      mockMFAViewCodesInitiate(mockMfaToken);
-      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
-
       const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify code
+      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
 
       let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
 
@@ -61,10 +67,16 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should set recovery codes and download token on success', async () => {
-      mockMFAViewCodesInitiate(mockMfaToken);
-      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
-
       const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify code
+      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
 
       await act(async () => {
         await result.current.handleVerifyCode('123456');
@@ -79,17 +91,23 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should handle invalid TOTP code (400)', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
       mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to fail
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
-          status: 400,
+          status: 401,
           data: {
             result: [{ message: 'Invalid code' }],
           },
         },
       });
-
-      const { result } = renderHook(() => useViewRecoveryCodes());
 
       let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
 
@@ -105,6 +123,9 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should handle MFA not enabled error (403)', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // Mock initiate to fail with MFA not enabled
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
           status: 403,
@@ -114,22 +135,23 @@ describe('useViewRecoveryCodes', () => {
         },
       });
 
-      const { result } = renderHook(() => useViewRecoveryCodes());
-
-      let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
+      let initiateResult: Awaited<ReturnType<typeof result.current.initiateSession>> | undefined;
 
       await act(async () => {
-        verifyResult = await result.current.handleVerifyCode('123456');
+        initiateResult = await result.current.initiateSession();
       });
 
       await waitFor(() => {
-        expect(verifyResult?.success).toBe(false);
+        expect(initiateResult?.success).toBe(false);
       });
 
       expect(result.current.error).toBe('MFA is not enabled for your account.');
     });
 
     it('should handle no recovery codes found (404)', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // Mock initiate to fail with no recovery codes
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
           status: 404,
@@ -139,16 +161,14 @@ describe('useViewRecoveryCodes', () => {
         },
       });
 
-      const { result } = renderHook(() => useViewRecoveryCodes());
-
-      let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
+      let initiateResult: Awaited<ReturnType<typeof result.current.initiateSession>> | undefined;
 
       await act(async () => {
-        verifyResult = await result.current.handleVerifyCode('123456');
+        initiateResult = await result.current.initiateSession();
       });
 
       await waitFor(() => {
-        expect(verifyResult?.success).toBe(false);
+        expect(initiateResult?.success).toBe(false);
       });
 
       expect(result.current.error).toBe('No recovery codes found. Please set up MFA first.');
@@ -157,10 +177,16 @@ describe('useViewRecoveryCodes', () => {
 
   describe('Recovery Code Verification Flow', () => {
     it('should successfully verify recovery code and return recovery codes', async () => {
-      mockMFAViewCodesInitiate(mockMfaToken);
-      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
-
       const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify recovery code
+      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
 
       let verifyResult:
         | Awaited<ReturnType<typeof result.current.handleVerifyRecoveryCode>>
@@ -180,17 +206,23 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should handle invalid recovery code (400)', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
       mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to fail
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
-          status: 400,
+          status: 401,
           data: {
             result: [{ message: 'Invalid recovery code' }],
           },
         },
       });
-
-      const { result } = renderHook(() => useViewRecoveryCodes());
 
       let verifyResult:
         | Awaited<ReturnType<typeof result.current.handleVerifyRecoveryCode>>
@@ -208,16 +240,23 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should handle rate limiting (429)', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to fail with rate limit
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
           status: 429,
           data: {
-            result: [{ message: 'Too many attempts' }],
+            result: [{ message: 'Too many invalid attempts' }],
           },
         },
       });
-
-      const { result } = renderHook(() => useViewRecoveryCodes());
 
       let verifyResult:
         | Awaited<ReturnType<typeof result.current.handleVerifyRecoveryCode>>
@@ -231,35 +270,44 @@ describe('useViewRecoveryCodes', () => {
         expect(verifyResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe('Too many attempts. Please try again later.');
+      expect(result.current.error).toBe('Too many invalid attempts. Please try again.');
     });
   });
 
   describe('Error Handling', () => {
     it('should handle missing mfaToken from initiate call', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // Mock initiate to return empty result (missing mfaToken)
       vi.mocked(axios.post).mockResolvedValueOnce({
         data: {
           result: {},
         },
       });
 
-      const { result } = renderHook(() => useViewRecoveryCodes());
-
-      let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
+      let initiateResult: Awaited<ReturnType<typeof result.current.initiateSession>> | undefined;
 
       await act(async () => {
-        verifyResult = await result.current.handleVerifyCode('123456');
+        initiateResult = await result.current.initiateSession();
       });
 
       await waitFor(() => {
-        expect(verifyResult?.success).toBe(false);
+        expect(initiateResult?.success).toBe(false);
       });
 
       expect(result.current.error).toBe('An error occurred. Please try again.');
     });
 
     it('should handle missing codes from verify response', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
       mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to return incomplete data (missing codes)
       vi.mocked(axios.post).mockResolvedValueOnce({
         data: {
           result: {
@@ -267,8 +315,6 @@ describe('useViewRecoveryCodes', () => {
           },
         },
       });
-
-      const { result } = renderHook(() => useViewRecoveryCodes());
 
       let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
 
@@ -284,21 +330,22 @@ describe('useViewRecoveryCodes', () => {
     });
 
     it('should handle network errors', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // Mock initiate to fail with network error
       vi.mocked(axios.post).mockRejectedValueOnce({
         code: 'ERR_NETWORK',
         message: 'Network Error',
       });
 
-      const { result } = renderHook(() => useViewRecoveryCodes());
-
-      let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
+      let initiateResult: Awaited<ReturnType<typeof result.current.initiateSession>> | undefined;
 
       await act(async () => {
-        verifyResult = await result.current.handleVerifyCode('123456');
+        initiateResult = await result.current.initiateSession();
       });
 
       await waitFor(() => {
-        expect(verifyResult?.success).toBe(false);
+        expect(initiateResult?.success).toBe(false);
       });
 
       expect(result.current.error).toBe(
@@ -309,16 +356,23 @@ describe('useViewRecoveryCodes', () => {
 
   describe('State Management', () => {
     it('should clear error when clearError is called', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to fail
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
-          status: 400,
+          status: 401,
           data: {
             result: [{ message: 'Invalid code' }],
           },
         },
       });
-
-      const { result } = renderHook(() => useViewRecoveryCodes());
 
       await act(async () => {
         await result.current.handleVerifyCode('000000');
@@ -338,7 +392,13 @@ describe('useViewRecoveryCodes', () => {
     it('should set loading states correctly during verification', async () => {
       const { result } = renderHook(() => useViewRecoveryCodes());
 
+      // First initiate session
       mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify code
       mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
 
       expect(result.current.isLoading).toBe(false);
@@ -355,9 +415,14 @@ describe('useViewRecoveryCodes', () => {
     it('should handle rapid successive calls correctly', async () => {
       const { result } = renderHook(() => useViewRecoveryCodes());
 
+      // First initiate session
       mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Set up mocks for two verify calls
       mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
-      mockMFAViewCodesInitiate(mockMfaToken);
       mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
 
       await act(async () => {
@@ -369,16 +434,28 @@ describe('useViewRecoveryCodes', () => {
         expect(result.current.recoveryCodes).toEqual(mockRecoveryCodesList);
       });
 
-      expect(vi.mocked(axios.post)).toHaveBeenCalledTimes(4);
+      expect(vi.mocked(axios.post)).toHaveBeenCalledTimes(3); // 1 initiate + 2 verify
     });
 
     it('should differentiate error messages between TOTP and recovery code', async () => {
       const { result } = renderHook(() => useViewRecoveryCodes());
 
+      // First initiate session for TOTP code test
       mockMFAViewCodesInitiate(mockMfaToken);
+
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Wait for session to be initialized
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      // Mock the verify call to fail with 401 (invalid code)
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
-          status: 400,
+          status: 401,
           data: {
             result: [{ message: 'Invalid' }],
           },
@@ -393,10 +470,15 @@ describe('useViewRecoveryCodes', () => {
         expect(result.current.error).toBe('Invalid verification code. Please try again.');
       });
 
-      mockMFAViewCodesInitiate(mockMfaToken);
+      // Clear error before next test
+      act(() => {
+        result.current.clearError();
+      });
+
+      // Mock the verify call to fail with recovery code (401)
       vi.mocked(axios.post).mockRejectedValueOnce({
         response: {
-          status: 400,
+          status: 401,
           data: {
             result: [{ message: 'Invalid' }],
           },
