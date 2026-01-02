@@ -5,6 +5,7 @@ import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '..
 import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
 import { ViewRecoveryCodesProps } from './ViewRecoveryCodes.types';
 import { useViewRecoveryCodes } from './useViewRecoveryCodes';
+import { ErrorScenario } from './ViewRecoveryCodes.types';
 
 type ViewStep = 'verification' | 'recovery-code' | 'codes';
 
@@ -20,6 +21,8 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     downloadToken,
     isLoading,
     error,
+    errorScenario,
+    errorMetadata: _errorMetadata, // Future use: showing attempt counts
     clearError,
     handleVerifyCode,
     handleVerifyRecoveryCode,
@@ -27,6 +30,11 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     sessionInitialized,
     resetSession,
   } = useViewRecoveryCodes();
+
+  // Disable input when max attempts reached or session expired
+  const shouldDisableInput =
+    errorScenario === ErrorScenario.SESSION_EXPIRED ||
+    errorScenario === ErrorScenario.MAX_SESSION_ATTEMPTS;
 
   // Initiate MFA session when modal opens
   useEffect(() => {
@@ -60,10 +68,15 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
   };
 
   const handleClose = () => {
-    // Reset all state including session
+    // Reset all state and close
     setCurrentStep('verification');
     resetSession();
     onClose();
+  };
+
+  const handleTryAgain = () => {
+    // Close modal - user can click "View" again to restart
+    handleClose();
   };
 
   const handleCodesConfirm = () => {
@@ -77,6 +90,7 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
         onClose={handleClose}
         onConfirm={handleVerificationConfirm}
         onUseRecoveryCode={handleUseRecoveryCode}
+        onRetry={shouldDisableInput ? handleTryAgain : undefined}
         verificationCode={verificationCode}
         setVerificationCode={setVerificationCode}
         isLoading={isLoading}
@@ -91,6 +105,7 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
         onClose={handleClose}
         onConfirm={handleRecoveryCodeConfirm}
         onBack={handleBackToVerification}
+        onRetry={shouldDisableInput ? handleTryAgain : undefined}
         recoveryCode={recoveryCode}
         setRecoveryCode={setRecoveryCode}
         isLoading={isLoading}
