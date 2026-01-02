@@ -4,8 +4,10 @@
 export const MFA_DISABLE_ERROR_MESSAGES = {
   NOT_ENABLED: 'Two-factor authentication is not enabled on this account.',
   INVALID_CODE: 'Invalid verification code. Please check your authenticator app and try again.',
+  INVALID_RECOVERY_CODE: 'Invalid recovery code. Please check the code and try again.',
   RECOVERY_CODE_INVALID: 'Invalid recovery code. Please check the code and try again.',
   RECOVERY_CODE_USED: 'This recovery code has already been used. Each code can only be used once.',
+  SESSION_EXPIRED: 'Your verification session has expired. Please start over.',
   EXPIRED_SESSION: 'Your verification session has expired. Please start over.',
   MAX_ATTEMPTS: 'Too many invalid attempts. Please try again later.',
   GLOBAL_LOCKOUT:

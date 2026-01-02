@@ -295,7 +295,9 @@ describe('useViewRecoveryCodes', () => {
         expect(initiateResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe('An error occurred. Please try again.');
+      expect(result.current.error).toBe(
+        'Network error. Please check your connection and try again.',
+      );
     });
 
     it('should handle missing codes from verify response', async () => {
@@ -326,7 +328,9 @@ describe('useViewRecoveryCodes', () => {
         expect(verifyResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe('An error occurred. Please try again.');
+      expect(result.current.error).toBe(
+        'Network error. Please check your connection and try again.',
+      );
     });
 
     it('should handle network errors', async () => {

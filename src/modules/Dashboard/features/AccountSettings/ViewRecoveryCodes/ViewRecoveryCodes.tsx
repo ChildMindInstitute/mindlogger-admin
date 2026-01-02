@@ -47,6 +47,14 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
     }
   }, [open, initiateSession, sessionInitialized]);
 
+  // Reset session when modal closes
+  useEffect(() => {
+    if (!open) {
+      resetSession();
+      setCurrentStep('verification');
+    }
+  }, [open, resetSession]);
+
   const handleVerificationConfirm = async (code: string) => {
     const result = await handleVerifyCode(code);
     if (result.success && result.recoveryCodes) {
