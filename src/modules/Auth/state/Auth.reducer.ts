@@ -223,6 +223,5 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     state.mfaVerification.status = 'error';
     state.mfaVerification.error = errorMessage;
     state.mfaVerification.displayError = 'invalidRecoveryCode';
-    // Note: Recovery codes don't track attempts (one-time use codes)
   });
 };

@@ -39,6 +39,28 @@ const extractMFAErrorMessage = (response: unknown, defaultMessage: string): stri
   return defaultMessage;
 };
 
+// Shared type guard for MFA verification responses
+const hasValidMFAVerifyResponse = (
+  response: MFAVerifyResponse | undefined,
+): response is MFAVerifySuccessResponse => {
+  if (!response?.result) return false;
+
+  const result = response.result;
+
+  // Check if result has the structure of a success response
+  if ('token' in result && 'user' in result) {
+    return Boolean(
+      result.token?.accessToken &&
+      result.token?.refreshToken &&
+      result.user?.id &&
+      typeof result.token.accessToken === 'string' &&
+      typeof result.token.refreshToken === 'string',
+    );
+  }
+
+  return false;
+};
+
 export const signIn = createAsyncThunk(
   'auth/login',
   async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
@@ -147,28 +169,7 @@ export const verifyMFATOTP = createAsyncThunk(
       );
       const { data } = response || {};
 
-      const hasValidResult = (
-        response: MFAVerifyResponse | undefined,
-      ): response is MFAVerifySuccessResponse => {
-        if (!response?.result) return false;
-
-        const result = response.result;
-
-        // Check if result has the structure of a success response
-        if ('token' in result && 'user' in result) {
-          return Boolean(
-            result.token?.accessToken &&
-            result.token?.refreshToken &&
-            result.user?.id &&
-            typeof result.token.accessToken === 'string' &&
-            typeof result.token.refreshToken === 'string',
-          );
-        }
-
-        return false;
-      };
-
-      if (!hasValidResult(data)) {
+      if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid verification code');
 
         return rejectWithValue(message);
@@ -218,28 +219,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       );
       const { data } = response || {};
 
-      const hasValidResult = (
-        response: MFAVerifyResponse | undefined,
-      ): response is MFAVerifySuccessResponse => {
-        if (!response?.result) return false;
-
-        const result = response.result;
-
-        // Check if result has the structure of a success response
-        if ('token' in result && 'user' in result) {
-          return Boolean(
-            result.token?.accessToken &&
-            result.token?.refreshToken &&
-            result.user?.id &&
-            typeof result.token.accessToken === 'string' &&
-            typeof result.token.refreshToken === 'string',
-          );
-        }
-
-        return false;
-      };
-
-      if (!hasValidResult(data)) {
+      if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid recovery code');
 
         return rejectWithValue(message);

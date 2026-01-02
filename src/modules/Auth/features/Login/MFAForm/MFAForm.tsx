@@ -2,18 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { memo, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
+
+import { StyledBodyMedium, StyledHeadlineSmall, StyledLinkBtn, variables } from 'shared/styles';
 
 import { mfaFormSchema } from './MFAForm.schema';
-import {
-  StyledMFAContainer,
-  StyledMFAForm,
-  StyledMFAHeadline,
-  StyledMFASubheader,
-  StyledMFAController,
-  StyledMFALink,
-  StyledMFAButton,
-} from './MFAForm.styles';
+import { StyledMFAContainer, StyledMFAForm, StyledMFAButton } from './MFAForm.styles';
 import { useMFAVerification } from './useMFAVerification';
 
 interface MFAFormData {
@@ -108,22 +102,19 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   const helperMessage = getErrorMessage();
   const hasError = !!helperMessage;
 
-  console.log(
-    'MFAForm render - helperMessage:',
-    helperMessage,
-    'hasError:',
-    hasError,
-    'displayError:',
-    displayError,
-  );
-
   return (
     <StyledMFAContainer>
       <StyledMFAForm ref={formRef} onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledMFAHeadline>{t('confirmYourIdentity')}</StyledMFAHeadline>
-        <StyledMFASubheader>{t('enterVerificationCode')}</StyledMFASubheader>
+        <StyledHeadlineSmall sx={{ textAlign: 'center', color: variables.palette.on_surface }}>
+          {t('confirmYourIdentity')}
+        </StyledHeadlineSmall>
+        <StyledBodyMedium
+          sx={{ textAlign: 'center', margin: 0, color: variables.palette.on_surface_variant }}
+        >
+          {t('enterVerificationCode')}
+        </StyledBodyMedium>
 
-        <StyledMFAController>
+        <Box sx={{ width: '100%' }}>
           <Controller
             name="totpCode"
             control={control}
@@ -142,7 +133,6 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
                   inputMode: 'numeric',
                   pattern: '[0-9]*',
                   autoComplete: 'one-time-code',
-                  style: { letterSpacing: '0.5em', fontSize: '1.25rem' },
                 }}
                 autoFocus
                 disabled={isSessionExpired}
@@ -152,7 +142,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
               />
             )}
           />
-        </StyledMFAController>
+        </Box>
 
         <StyledMFAButton
           variant="contained"
@@ -163,18 +153,22 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
           {t('continue')}
         </StyledMFAButton>
 
-        <StyledMFALink onClick={handleRecoveryClick} data-testid="mfa-form-recovery-link">
+        <StyledLinkBtn
+          onClick={handleRecoveryClick}
+          data-testid="mfa-form-recovery-link"
+          sx={{ textDecoration: 'none', mt: 1.2, mb: 0.8 }}
+        >
           {t('cantAccessAuthenticator')}
-        </StyledMFALink>
+        </StyledLinkBtn>
 
         {onBackToLogin && (
-          <StyledMFALink
+          <StyledLinkBtn
             onClick={onBackToLogin}
             data-testid="mfa-form-back-link"
-            style={{ marginTop: '16px' }}
+            sx={{ textDecoration: 'none', mt: 2 }}
           >
             {t('backToLogin')}
-          </StyledMFALink>
+          </StyledLinkBtn>
         )}
       </StyledMFAForm>
     </StyledMFAContainer>

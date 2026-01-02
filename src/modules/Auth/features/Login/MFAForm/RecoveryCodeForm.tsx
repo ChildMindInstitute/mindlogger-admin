@@ -2,15 +2,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
+import { StyledBodyMedium, StyledHeadlineSmall, variables } from 'shared/styles';
+
+import { formatRecoveryCode } from '../../../utils/mfa.utils';
 import { recoveryCodeSchema } from './MFAForm.schema';
 import {
   StyledMFAContainer,
   StyledMFAForm,
-  StyledMFAHeadline,
-  StyledMFASubheader,
-  StyledMFAController,
   StyledMFAButton,
   StyledBackButton,
 } from './MFAForm.styles';
@@ -73,19 +73,6 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
     }
   };
 
-  // Auto-format recovery code input
-  const formatRecoveryCode = (value: string) => {
-    // Remove all non-alphanumeric characters and convert to uppercase
-    const cleaned = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-
-    // Add hyphen after 5 characters if needed
-    if (cleaned.length > 5) {
-      return `${cleaned.slice(0, 5)}-${cleaned.slice(5, 10)}`;
-    }
-
-    return cleaned;
-  };
-
   const handleCodeChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     onChange: (value: string) => void,
@@ -103,17 +90,23 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
   return (
     <StyledMFAContainer>
       <StyledMFAForm onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledMFAHeadline>{t('confirmYourIdentity')}</StyledMFAHeadline>
-        <StyledMFASubheader>{t('enterAccountRecoveryCode')}</StyledMFASubheader>
+        <StyledHeadlineSmall sx={{ textAlign: 'center', color: variables.palette.on_surface }}>
+          {t('confirmYourIdentity')}
+        </StyledHeadlineSmall>
+        <StyledBodyMedium
+          sx={{ textAlign: 'center', margin: 0, color: variables.palette.on_surface_variant }}
+        >
+          {t('enterAccountRecoveryCode')}
+        </StyledBodyMedium>
 
-        <StyledMFAController>
+        <Box sx={{ width: '100%' }}>
           <Controller
             name="code"
             control={control}
             render={({ field: { value, onChange, onBlur } }) => (
               <TextField
                 fullWidth
-                label={!isSessionExpired && 'recoveryCode'}
+                label={!isSessionExpired && t('recoveryCode')}
                 placeholder=""
                 value={value}
                 onChange={(e) => handleCodeChange(e, onChange)}
@@ -121,7 +114,6 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
                 inputProps={{
                   maxLength: 11,
                   autoComplete: 'off',
-                  style: { letterSpacing: '0.2em', fontSize: '1.1rem' },
                 }}
                 autoFocus
                 disabled={isSessionExpired}
@@ -131,7 +123,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
               />
             )}
           />
-        </StyledMFAController>
+        </Box>
 
         <StyledMFAButton
           variant="contained"
