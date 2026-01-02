@@ -24,6 +24,8 @@ import {
   MFADisableInitiateResponse,
   MFADisableVerifyRequest,
   MFADisableVerifyResponse,
+  MFADisableConfirmRequest,
+  MFADisableConfirmResponse,
 } from './api.mfa.types';
 import { apiClient, authApiClient } from './apiConfig';
 
@@ -179,9 +181,16 @@ export const mfaApi = {
       { signal },
     ),
 
-  verifyAndDisable: (body: MFADisableVerifyRequest, signal?: AbortSignal) =>
+  verifyDisable: (body: MFADisableVerifyRequest, signal?: AbortSignal) =>
     authApiClient.post<ResponseWithObject<MFADisableVerifyResponse>>(
       '/users/me/mfa/totp/disable/verify',
+      body,
+      { signal },
+    ),
+
+  confirmDisable: (body: MFADisableConfirmRequest, signal?: AbortSignal) =>
+    authApiClient.post<ResponseWithObject<MFADisableConfirmResponse>>(
+      '/users/me/mfa/totp/disable/confirm',
       body,
       { signal },
     ),
