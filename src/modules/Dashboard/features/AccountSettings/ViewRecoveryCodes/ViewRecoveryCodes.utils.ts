@@ -42,20 +42,24 @@ export const parseError = (error: AxiosError): ParsedError => {
   const errorCode = responseData?.error_code || '';
   const statusCode = error.response?.status;
 
-  // Check if no attempts remaining - prevents 6th attempt
-  if (metadata?.session_attempts_remaining === 0) {
+  // Global lockout - check this FIRST before other checks
+  if (
+    errorCode === 'AUTH.MFA.GLOBAL_LOCKOUT' ||
+    metadata?.global_attempts_remaining === 0 ||
+    (statusCode === STATUS_CODES.TOO_MANY_REQUESTS && metadata?.lockout_expires_at)
+  ) {
     return {
-      message: ERROR_MESSAGES.MAX_SESSION_ATTEMPTS,
-      scenario: ErrorScenario.MAX_SESSION_ATTEMPTS,
+      message: ERROR_MESSAGES.GLOBAL_LOCKOUT,
+      scenario: ErrorScenario.GLOBAL_LOCKOUT,
       metadata,
     };
   }
 
-  // Global lockout
-  if (statusCode === STATUS_CODES.TOO_MANY_REQUESTS && metadata?.lockout_expires_at) {
+  // Check if no session attempts remaining - prevents 6th attempt
+  if (metadata?.session_attempts_remaining === 0) {
     return {
-      message: ERROR_MESSAGES.GLOBAL_LOCKOUT,
-      scenario: ErrorScenario.GLOBAL_LOCKOUT,
+      message: ERROR_MESSAGES.MAX_SESSION_ATTEMPTS,
+      scenario: ErrorScenario.MAX_SESSION_ATTEMPTS,
       metadata,
     };
   }
