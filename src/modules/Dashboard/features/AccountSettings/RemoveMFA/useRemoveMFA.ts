@@ -4,7 +4,8 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
-import { getErrorMessage } from './RemoveMFA.utils';
+import { parseError } from './RemoveMFA.utils';
+import { ErrorScenario, ErrorMetadata } from './RemoveMFA.types';
 
 interface VerifyResult {
   success: boolean;
@@ -20,8 +21,14 @@ export const useRemoveMFA = () => {
   const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorScenario, setErrorScenario] = useState<ErrorScenario>(ErrorScenario.GENERIC);
+  const [errorMetadata, setErrorMetadata] = useState<ErrorMetadata | undefined>(undefined);
 
-  const clearError = () => setError(null);
+  const clearError = () => {
+    setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
+  };
 
   /**
    * Initiates MFA disable by creating a verification session
@@ -42,8 +49,12 @@ export const useRemoveMFA = () => {
 
       return { success: true, mfaToken: token };
     } catch (err) {
-      const errorMessage = getErrorMessage(err as AxiosError);
-      setError(errorMessage);
+      const axiosError = err as AxiosError;
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
       setIsLoading(false);
 
       return { success: false };
@@ -79,8 +90,14 @@ export const useRemoveMFA = () => {
 
         return { success: true };
       } catch (err) {
-        const errorMessage = getErrorMessage(err as AxiosError);
-        setError(errorMessage);
+        const axiosError = err as AxiosError;
+        // Detect if it's a recovery code (11 chars with dash) or TOTP (6 digits)
+        const codeType = code.length === 11 ? 'recovery' : 'totp';
+        const parsedError = parseError(axiosError, codeType);
+
+        setError(parsedError.message);
+        setErrorScenario(parsedError.scenario);
+        setErrorMetadata(parsedError.metadata);
         setIsLoading(false);
 
         return { success: false };
@@ -112,8 +129,12 @@ export const useRemoveMFA = () => {
 
       return { success: true };
     } catch (err) {
-      const errorMessage = getErrorMessage(err as AxiosError);
-      setError(errorMessage);
+      const axiosError = err as AxiosError;
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
       setIsLoading(false);
 
       return { success: false };
@@ -125,6 +146,8 @@ export const useRemoveMFA = () => {
     confirmationToken,
     isLoading,
     error,
+    errorScenario,
+    errorMetadata,
     clearError,
     initiateDisable,
     verifyCode,
