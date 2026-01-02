@@ -4,40 +4,8 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
-interface ErrorResponse {
-  result?: Array<{
-    message?: string;
-  }>;
-}
-
-const getErrorMessage = (error: AxiosError, isRecoveryCode: boolean = false): string => {
-  const responseData = error.response?.data as ErrorResponse | undefined;
-  const backendMessage = responseData?.result?.[0]?.message || '';
-
-  // Handle specific error cases
-  if (error.response?.status === 400 || backendMessage.toLowerCase().includes('invalid')) {
-    return isRecoveryCode
-      ? 'Invalid recovery code. Please try again.'
-      : 'Invalid verification code. Please try again.';
-  }
-  if (error.response?.status === 403 || backendMessage.toLowerCase().includes('not enabled')) {
-    return 'MFA is not enabled for your account.';
-  }
-  if (
-    error.response?.status === 404 ||
-    backendMessage.toLowerCase().includes('no recovery codes')
-  ) {
-    return 'No recovery codes found. Please set up MFA first.';
-  }
-  if (error.response?.status === 429 || backendMessage.toLowerCase().includes('too many')) {
-    return 'Too many attempts. Please try again later.';
-  }
-  if (error.code === 'ERR_NETWORK') {
-    return 'Network error. Please check your connection and try again.';
-  }
-
-  return 'An error occurred. Please try again.';
-};
+import { parseError } from './ViewRecoveryCodes.utils';
+import { ErrorScenario, ErrorMetadata } from './ViewRecoveryCodes.types';
 
 interface VerificationResult {
   success: boolean;
@@ -51,6 +19,8 @@ export const useViewRecoveryCodes = () => {
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorScenario, setErrorScenario] = useState<ErrorScenario>(ErrorScenario.GENERIC);
+  const [errorMetadata, setErrorMetadata] = useState<ErrorMetadata | undefined>(undefined);
 
   // Session management state
   const [mfaToken, setMfaToken] = useState<string | null>(null);
@@ -59,6 +29,8 @@ export const useViewRecoveryCodes = () => {
 
   const clearError = () => {
     setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
   };
 
   // Initiate MFA session once when modal opens
@@ -87,8 +59,11 @@ export const useViewRecoveryCodes = () => {
       return { success: true, mfaToken: token };
     } catch (err) {
       const axiosError = err as AxiosError;
-      const errorMessage = getErrorMessage(axiosError, false);
-      setError(errorMessage);
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
       setIsLoading(false);
 
       return { success: false };
@@ -132,8 +107,11 @@ export const useViewRecoveryCodes = () => {
       };
     } catch (err) {
       const axiosError = err as AxiosError;
-      const errorMessage = getErrorMessage(axiosError, false);
-      setError(errorMessage);
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
 
       return {
         success: false,
@@ -180,8 +158,11 @@ export const useViewRecoveryCodes = () => {
       };
     } catch (err) {
       const axiosError = err as AxiosError;
-      const errorMessage = getErrorMessage(axiosError, true);
-      setError(errorMessage);
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
 
       return {
         success: false,
@@ -197,6 +178,8 @@ export const useViewRecoveryCodes = () => {
     setMfaToken(null);
     setSessionInitialized(false);
     setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
     setVerificationCode('');
     setRecoveryCode('');
     setRecoveryCodes(null);
@@ -212,6 +195,8 @@ export const useViewRecoveryCodes = () => {
     downloadToken,
     isLoading,
     error,
+    errorScenario,
+    errorMetadata,
     clearError,
     handleVerifyCode,
     handleVerifyRecoveryCode,
