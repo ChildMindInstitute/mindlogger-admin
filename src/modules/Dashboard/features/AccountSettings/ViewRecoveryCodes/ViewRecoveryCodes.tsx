@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
+
+import { Modal } from 'shared/components/Modal';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
 import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
@@ -34,7 +37,8 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
   // Disable input when max attempts reached or session expired
   const shouldDisableInput =
     errorScenario === ErrorScenario.SESSION_EXPIRED ||
-    errorScenario === ErrorScenario.MAX_SESSION_ATTEMPTS;
+    errorScenario === ErrorScenario.MAX_SESSION_ATTEMPTS ||
+    errorScenario === ErrorScenario.GLOBAL_LOCKOUT;
 
   // Initiate MFA session when modal opens
   useEffect(() => {
@@ -121,6 +125,19 @@ export const ViewRecoveryCodes = ({ open, onClose }: ViewRecoveryCodesProps) => 
           onConfirm={handleCodesConfirm}
         />
       )}
+
+      <Modal
+        open={open && errorScenario === ErrorScenario.GLOBAL_LOCKOUT}
+        onClose={handleClose}
+        title={t('mfa.lockout.title')}
+        buttonText={t('mfa.lockout.okButton')}
+        onSubmit={handleClose}
+        width="50"
+      >
+        <Box sx={{ px: 3.2, py: 2.4, lineHeight: 1.6, fontSize: '1.4rem' }}>
+          {t('mfa.lockout.message')}
+        </Box>
+      </Modal>
     </>
   );
 };
