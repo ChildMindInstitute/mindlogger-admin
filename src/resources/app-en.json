@@ -1925,6 +1925,11 @@
       "savedCodes": "I've saved my codes",
       "downloadCodes": "Download as text file",
       "tryAgain": "Try Again"
+    },
+    "lockout": {
+      "title": "Account Temporarily Locked",
+      "message": "Too many failed attempts. Your account has been temporarily locked for security purposes. During this time, you cannot login, view recovery codes, or disable two-factor authentication. You may continue using your current session uninterrupted. Please try again later.",
+      "okButton": "OK"
     }
   }
 }
