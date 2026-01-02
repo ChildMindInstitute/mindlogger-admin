@@ -1901,6 +1901,11 @@
       "savedCodes": "J'ai enregistré mes codes",
       "downloadCodes": "Télécharger en tant que fichier texte",
       "tryAgain": "Réessayer"
+    },
+    "lockout": {
+      "title": "Compte temporairement verrouillé",
+      "message": "Trop de tentatives échouées. Votre compte a été temporairement verrouillé pour des raisons de sécurité. Pendant ce temps, vous ne pouvez pas vous connecter, consulter les codes de récupération ou désactiver l'authentification à deux facteurs. Vous pouvez continuer à utiliser votre session actuelle sans interruption. Veuillez réessayer plus tard.",
+      "okButton": "OK"
     }
   }
 }
