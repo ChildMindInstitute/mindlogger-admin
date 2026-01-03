@@ -26,14 +26,8 @@ import {
  * Call this in beforeEach to ensure clean state
  */
 export const setupMFATests = () => {
-  // Clear all mocks to prevent test interference
-  vi.clearAllMocks();
-
-  // Reset axios mocks
-  vi.mocked(axios.post).mockClear();
-  vi.mocked(axios.get).mockClear();
-  vi.mocked(axios.delete).mockClear();
-  vi.mocked(axios.put).mockClear();
+  // Reset all mocks completely (clears both call history AND implementations)
+  vi.resetAllMocks();
 };
 
 /**
@@ -111,7 +105,38 @@ export const mockMFADisableInitiate = () => {
 };
 
 /**
- * Mock MFA disable verification
+ * Mock MFA disable code verification (Step 2 of 3-step flow)
+ * Returns confirmationToken for the final disable step
+ */
+export const mockMFADisableVerifyCode = (
+  confirmationToken: string = 'mock-confirmation-token-abc',
+) => {
+  vi.mocked(axios.post).mockResolvedValueOnce({
+    data: {
+      result: {
+        codeValidated: true,
+        confirmationToken,
+      },
+    },
+  });
+};
+
+/**
+ * Mock MFA disable confirmation (Step 3 of 3-step flow)
+ * Completes the disable operation
+ */
+export const mockMFADisableConfirm = () => {
+  vi.mocked(axios.post).mockResolvedValueOnce({
+    data: {
+      result: {
+        mfaDisabled: true,
+      },
+    },
+  });
+};
+
+/**
+ * Mock MFA disable verification (Legacy - kept for backward compatibility)
  * Completes the disable operation
  */
 export const mockMFADisableVerify = () => {
