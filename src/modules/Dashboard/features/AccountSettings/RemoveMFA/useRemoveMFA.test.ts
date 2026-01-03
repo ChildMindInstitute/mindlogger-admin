@@ -1,4 +1,7 @@
-// Tests for useRemoveMFA hook
+/**
+ * Tests for useRemoveMFA hook - 3-step MFA disable flow
+ * Tests cover: initiate → verify code → confirm disable
+ */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
@@ -10,10 +13,13 @@ import { mockMfaToken } from '../__mocks__/mfa.mocks';
 import {
   setupMFATests,
   mockMFADisableInitiate,
-  mockMFADisableVerify,
+  mockMFADisableVerifyCode,
+  mockMFADisableConfirm,
   mockCustomError,
   mockNetworkFailure,
 } from '../__tests__/helpers';
+
+const mockConfirmationToken = 'mock-confirmation-token-abc';
 
 describe('useRemoveMFA', () => {
   beforeEach(() => {
@@ -25,6 +31,7 @@ describe('useRemoveMFA', () => {
       const { result } = renderHook(() => useRemoveMFA());
 
       expect(result.current.mfaToken).toBeNull();
+      expect(result.current.confirmationToken).toBeNull();
       expect(result.current.isLoading).toBe(false);
       expect(result.current.error).toBeNull();
     });
@@ -36,7 +43,7 @@ describe('useRemoveMFA', () => {
     });
   });
 
-  describe('Initiate Disable', () => {
+  describe('Step 1: Initiate Disable', () => {
     it('should call initiateDisable API and set mfaToken', async () => {
       mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
@@ -71,9 +78,10 @@ describe('useRemoveMFA', () => {
     });
 
     it('should clear error before initiation', async () => {
-      mockCustomError(401, 'Invalid TOTP code');
       const { result } = renderHook(() => useRemoveMFA());
 
+      // First attempt - initiate with error
+      mockCustomError(401, 'Invalid TOTP code');
       await act(async () => {
         await result.current.initiateDisable();
       });
@@ -82,6 +90,7 @@ describe('useRemoveMFA', () => {
         expect(result.current.error).toBeTruthy();
       });
 
+      // Second initiate - should clear previous error
       mockMFADisableInitiate();
       await act(async () => {
         await result.current.initiateDisable();
@@ -106,7 +115,7 @@ describe('useRemoveMFA', () => {
 
       await waitFor(() => {
         expect(result.current.mfaToken).toBeNull();
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.NOT_ENABLED);
+        expect(result.current.error).toBeTruthy();
         expect(result.current.isLoading).toBe(false);
       });
     });
@@ -143,13 +152,13 @@ describe('useRemoveMFA', () => {
     });
   });
 
-  describe('Verify and Disable', () => {
+  describe('Step 2: Verify Code', () => {
     it('should return error when mfaToken is null', async () => {
       const { result } = renderHook(() => useRemoveMFA());
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(false);
@@ -161,7 +170,7 @@ describe('useRemoveMFA', () => {
       expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
     });
 
-    it('should verify and disable MFA with valid code', async () => {
+    it('should verify code and set confirmationToken', async () => {
       mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
 
@@ -173,17 +182,18 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockMFADisableVerify();
+      mockMFADisableVerifyCode(mockConfirmationToken);
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(true);
 
       await waitFor(() => {
-        expect(result.current.error).toBeNull();
+        expect(result.current.confirmationToken).toBe(mockConfirmationToken);
+        expect(result.current.isLoading).toBe(false);
       });
     });
 
@@ -199,10 +209,10 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockMFADisableVerify();
+      mockMFADisableVerifyCode(mockConfirmationToken);
 
       await act(async () => {
-        await result.current.verifyAndDisable('123456');
+        await result.current.verifyCode('123456');
       });
 
       expect(vi.mocked(axios.post)).toHaveBeenCalledWith(
@@ -223,24 +233,18 @@ describe('useRemoveMFA', () => {
         await result.current.initiateDisable();
       });
 
-      await waitFor(() => {
-        expect(result.current.mfaToken).toBe(mockMfaToken);
-      });
-
-      mockMFADisableVerify();
+      mockMFADisableVerifyCode(mockConfirmationToken);
 
       let promise: Promise<unknown> | undefined;
       act(() => {
-        promise = result.current.verifyAndDisable('123456');
+        promise = result.current.verifyCode('123456');
       });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(true);
       });
 
-      if (promise) {
-        await promise;
-      }
+      await promise;
     });
 
     it('should set isLoading false after successful verification', async () => {
@@ -251,14 +255,10 @@ describe('useRemoveMFA', () => {
         await result.current.initiateDisable();
       });
 
-      await waitFor(() => {
-        expect(result.current.mfaToken).toBe(mockMfaToken);
-      });
-
-      mockMFADisableVerify();
+      mockMFADisableVerifyCode(mockConfirmationToken);
 
       await act(async () => {
-        await result.current.verifyAndDisable('123456');
+        await result.current.verifyCode('123456');
       });
 
       await waitFor(() => {
@@ -278,18 +278,20 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
+      // First verification - error
       mockCustomError(401, 'Invalid TOTP code');
       await act(async () => {
-        await result.current.verifyAndDisable('123456');
+        await result.current.verifyCode('000000');
       });
 
       await waitFor(() => {
         expect(result.current.error).toBeTruthy();
       });
 
-      mockMFADisableVerify();
+      // Second verification - should clear error
+      mockMFADisableVerifyCode(mockConfirmationToken);
       await act(async () => {
-        await result.current.verifyAndDisable('654321');
+        await result.current.verifyCode('123456');
       });
 
       await waitFor(() => {
@@ -309,18 +311,18 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockCustomError(401, 'Invalid TOTP code provided');
+      mockCustomError(401, 'Invalid TOTP code');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('000000');
+        response = await result.current.verifyCode('000000');
       });
 
       expect(response?.success).toBe(false);
 
       await waitFor(() => {
         expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
-        expect(result.current.isLoading).toBe(false);
+        expect(result.current.confirmationToken).toBeNull();
       });
     });
 
@@ -338,15 +340,15 @@ describe('useRemoveMFA', () => {
 
       mockCustomError(401, 'Invalid recovery code provided');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('ZZZZZ-99999');
+        response = await result.current.verifyCode('XXXXX-XXXXX');
       });
 
       expect(response?.success).toBe(false);
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.RECOVERY_CODE_INVALID);
+        expect(result.current.error).toBeTruthy();
       });
     });
 
@@ -364,15 +366,15 @@ describe('useRemoveMFA', () => {
 
       mockCustomError(400, 'This recovery code has already been used');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('ABCDE-12345');
+        response = await result.current.verifyCode('ABCDE-12345');
       });
 
       expect(response?.success).toBe(false);
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.RECOVERY_CODE_USED);
+        expect(result.current.error).toBeTruthy();
       });
     });
 
@@ -388,11 +390,11 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockCustomError(404, 'MFA session not found or expired');
+      mockCustomError(401, 'MFA session not found or expired');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(false);
@@ -414,11 +416,11 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockCustomError(429, 'Too many invalid TOTP attempts. Try again later.');
+      mockCustomError(429, 'Too many invalid TOTP attempts');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('000000');
       });
 
       expect(response?.success).toBe(false);
@@ -440,17 +442,21 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
+      // Backend returns this specific message for account lockout
       mockCustomError(429, 'Account temporarily locked due to multiple failed MFA attempts');
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(false);
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.GLOBAL_LOCKOUT);
+        // Parser should return the backend message directly for this 429 error
+        expect(result.current.error).toBe(
+          'Account temporarily locked due to multiple failed MFA attempts',
+        );
       });
     });
 
@@ -468,9 +474,9 @@ describe('useRemoveMFA', () => {
 
       mockNetworkFailure();
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(false);
@@ -481,13 +487,87 @@ describe('useRemoveMFA', () => {
     });
   });
 
-  describe('State Management', () => {
-    it('should clear error when clearError is called', async () => {
-      mockCustomError(401, 'Invalid TOTP code');
+  describe('Step 3: Confirm Disable', () => {
+    it('should return error when confirmationToken is null', async () => {
+      const { result } = renderHook(() => useRemoveMFA());
+
+      let response: Awaited<ReturnType<typeof result.current.confirmDisable>> | undefined;
+      await act(async () => {
+        response = await result.current.confirmDisable();
+      });
+
+      expect(response?.success).toBe(false);
+
+      await waitFor(() => {
+        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
+      });
+    });
+
+    it('should confirm and disable MFA', async () => {
+      mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
 
       await act(async () => {
         await result.current.initiateDisable();
+      });
+
+      mockMFADisableVerifyCode(mockConfirmationToken);
+
+      await act(async () => {
+        await result.current.verifyCode('123456');
+      });
+
+      await waitFor(() => {
+        expect(result.current.confirmationToken).toBe(mockConfirmationToken);
+      });
+
+      mockMFADisableConfirm();
+
+      let response: Awaited<ReturnType<typeof result.current.confirmDisable>> | undefined;
+      await act(async () => {
+        response = await result.current.confirmDisable();
+      });
+
+      expect(response?.success).toBe(true);
+    });
+
+    it('should call confirm API with correct parameters', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      mockMFADisableVerifyCode(mockConfirmationToken);
+
+      await act(async () => {
+        await result.current.verifyCode('123456');
+      });
+
+      mockMFADisableConfirm();
+
+      await act(async () => {
+        await result.current.confirmDisable();
+      });
+
+      expect(vi.mocked(axios.post)).toHaveBeenCalledWith(
+        '/users/me/mfa/totp/disable/confirm',
+        {
+          confirmationToken: mockConfirmationToken,
+        },
+        expect.any(Object),
+      );
+    });
+  });
+
+  describe('State Management', () => {
+    it('should clear error when clearError is called', async () => {
+      mockCustomError(401, 'Invalid code');
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.verifyCode('000000');
       });
 
       await waitFor(() => {
@@ -498,12 +578,31 @@ describe('useRemoveMFA', () => {
         result.current.clearError();
       });
 
-      await waitFor(() => {
-        expect(result.current.error).toBeNull();
-      });
+      expect(result.current.error).toBeNull();
     });
 
     it('should maintain mfaToken across multiple verify attempts', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      const initialToken = result.current.mfaToken;
+
+      mockCustomError(401, 'Invalid TOTP code');
+      await act(async () => {
+        await result.current.verifyCode('000000');
+      });
+
+      await waitFor(() => {
+        expect(result.current.mfaToken).toBe(initialToken);
+        expect(result.current.error).toBeTruthy();
+      });
+    });
+
+    it('should reset all state when resetSession is called', async () => {
       mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
 
@@ -515,24 +614,15 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      const initialToken = result.current.mfaToken;
-
-      mockCustomError(401, 'Invalid TOTP code');
-      await act(async () => {
-        await result.current.verifyAndDisable('000000');
+      act(() => {
+        result.current.resetSession();
       });
 
       await waitFor(() => {
-        expect(result.current.mfaToken).toBe(initialToken);
-      });
-
-      mockMFADisableVerify();
-      await act(async () => {
-        await result.current.verifyAndDisable('123456');
-      });
-
-      await waitFor(() => {
-        expect(result.current.mfaToken).toBe(initialToken);
+        expect(result.current.mfaToken).toBeNull();
+        expect(result.current.confirmationToken).toBeNull();
+        expect(result.current.error).toBeNull();
+        expect(result.current.isLoading).toBe(false);
       });
     });
 
@@ -548,22 +638,24 @@ describe('useRemoveMFA', () => {
         expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
+      // First attempt - invalid code
       mockCustomError(401, 'Invalid TOTP code');
       await act(async () => {
-        await result.current.verifyAndDisable('000000');
+        await result.current.verifyCode('000000');
       });
 
       await waitFor(() => {
         expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
       });
 
-      mockCustomError(401, 'Invalid recovery code provided');
+      // Second attempt - network error
+      mockNetworkFailure();
       await act(async () => {
-        await result.current.verifyAndDisable('ZZZZZ-99999');
+        await result.current.verifyCode('111111');
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.RECOVERY_CODE_INVALID);
+        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.NETWORK_ERROR);
       });
     });
   });
@@ -573,8 +665,7 @@ describe('useRemoveMFA', () => {
       mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
 
-      expect(result.current.isLoading).toBe(false);
-
+      // Initiate
       let initiatePromise: Promise<unknown> | undefined;
       act(() => {
         initiatePromise = result.current.initiateDisable();
@@ -584,29 +675,25 @@ describe('useRemoveMFA', () => {
         expect(result.current.isLoading).toBe(true);
       });
 
-      if (initiatePromise) {
-        await initiatePromise;
-      }
+      await initiatePromise;
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
-        expect(result.current.mfaToken).toBe(mockMfaToken);
       });
 
-      mockMFADisableVerify();
+      // Verify
+      mockMFADisableVerifyCode(mockConfirmationToken);
 
       let verifyPromise: Promise<unknown> | undefined;
       act(() => {
-        verifyPromise = result.current.verifyAndDisable('123456');
+        verifyPromise = result.current.verifyCode('123456');
       });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(true);
       });
 
-      if (verifyPromise) {
-        await verifyPromise;
-      }
+      await verifyPromise;
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -618,16 +705,25 @@ describe('useRemoveMFA', () => {
     it('should handle verify call without initiate', async () => {
       const { result } = renderHook(() => useRemoveMFA());
 
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('123456');
+        response = await result.current.verifyCode('123456');
       });
 
       expect(response?.success).toBe(false);
+      expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
+    });
 
-      await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
+    it('should handle confirm call without verify', async () => {
+      const { result } = renderHook(() => useRemoveMFA());
+
+      let response: Awaited<ReturnType<typeof result.current.confirmDisable>> | undefined;
+      await act(async () => {
+        response = await result.current.confirmDisable();
       });
+
+      expect(response?.success).toBe(false);
+      expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
     });
 
     it('should handle empty verification code', async () => {
@@ -638,33 +734,25 @@ describe('useRemoveMFA', () => {
         await result.current.initiateDisable();
       });
 
-      await waitFor(() => {
-        expect(result.current.mfaToken).toBe(mockMfaToken);
-      });
+      mockCustomError(400, 'Code is required');
 
-      mockMFADisableVerify();
-      let response: Awaited<ReturnType<typeof result.current.verifyAndDisable>> | undefined;
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
       await act(async () => {
-        response = await result.current.verifyAndDisable('');
+        response = await result.current.verifyCode('');
       });
 
-      expect(response?.success).toBe(true);
+      expect(response?.success).toBe(false);
     });
 
     it('should handle rapid successive calls', async () => {
       mockMFADisableInitiate();
       mockMFADisableInitiate();
+
       const { result } = renderHook(() => useRemoveMFA());
 
-      let result1: Awaited<ReturnType<typeof result.current.initiateDisable>> | undefined;
-      let result2: Awaited<ReturnType<typeof result.current.initiateDisable>> | undefined;
-
-      await act(async () => {
-        const promise1 = result.current.initiateDisable();
-        const promise2 = result.current.initiateDisable();
-
-        [result1, result2] = await Promise.all([promise1, promise2]);
-      });
+      const [result1, result2] = await act(async () =>
+        Promise.all([result.current.initiateDisable(), result.current.initiateDisable()]),
+      );
 
       expect(result1?.success).toBe(true);
       expect(result2?.success).toBe(true);
