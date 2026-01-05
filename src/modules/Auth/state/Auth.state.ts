@@ -6,4 +6,5 @@ export const state: AuthSchema = {
   authentication: initialStateData,
   isAuthorized: false,
   isLogoutInProgress: false,
+  mfaVerification: { status: 'idle', isSessionExpired: false },
 };

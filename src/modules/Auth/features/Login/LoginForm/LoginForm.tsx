@@ -57,6 +57,15 @@ export const LoginForm = () => {
     const result = await dispatch(signIn(data));
 
     if (signIn.fulfilled.match(result)) {
+      const response = result.payload;
+
+      // Check if MFA is required
+      if (response?.result && 'mfaRequired' in response.result && response.result.mfaRequired) {
+        // MFA session will be set by the reducer, AuthFlow will handle the transition
+        return;
+      }
+
+      // Standard login flow (MFA not enabled)
       // If user logged in as the same user that was soft-locked, restore their nav state
       if (data.email === softLockData?.email) {
         navigate(softLockData?.redirectTo, {
