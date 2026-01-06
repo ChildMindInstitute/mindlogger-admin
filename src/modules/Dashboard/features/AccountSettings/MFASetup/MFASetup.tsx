@@ -129,7 +129,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
         <StyledDescription>{t('mfa.setup.scanDescription')}</StyledDescription>
 
         <StyledQRCodeContainer>
-          {provisioningUri && <QRCodeSVG value={provisioningUri} size={260} />}
+          {provisioningUri && <QRCodeSVG value={provisioningUri} size={225} />}
           {isLoading && (
             <StyledLoadingContainer>
               <CircularProgress />
@@ -146,7 +146,7 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           onSecondaryAction={handleCantScan}
           primaryButtonText={t('mfa.buttons.continue')}
           secondaryButtonText={t('mfa.setup.cantScanQR')}
-          inputWidth="340px"
+          inputWidth="300px"
           StyledInputContainer={StyledInputContainer}
           StyledInput={StyledInput}
           StyledButtonContainer={StyledButtonContainer}
