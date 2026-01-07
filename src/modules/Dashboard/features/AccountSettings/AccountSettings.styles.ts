@@ -34,12 +34,18 @@ export const StyledCloseButton = styled(Box)`
   }
 `;
 
-export const StyledDialogContent = styled(DialogContent)`
+export const StyledDialogContent = styled(DialogContent)<{ hasBanner?: boolean }>`
   display: flex;
-  padding: 64px;
+  padding: ${({ hasBanner }) => (hasBanner ? '0 64px 64px' : '64px')};
+  padding-top: ${({ hasBanner }) => (hasBanner ? '64px' : '64px')};
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
+  align-self: stretch;
+`;
+
+export const StyledBannerContainer = styled(Box)`
+  width: 100%;
   align-self: stretch;
 `;
 

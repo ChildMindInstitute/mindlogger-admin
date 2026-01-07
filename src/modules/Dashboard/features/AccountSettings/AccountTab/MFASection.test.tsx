@@ -31,6 +31,7 @@ const defaultProps = {
   setIsMFAEnabled: vi.fn(),
   refetchMFAStatus: vi.fn().mockResolvedValue(undefined),
   isModalOpen: true,
+  onShowBanner: vi.fn(),
 };
 
 describe('MFASection', () => {
@@ -44,14 +45,14 @@ describe('MFASection', () => {
 
     expect(screen.getByText('mfa.title')).toBeInTheDocument();
     expect(screen.getByText('mfa.buttons.add')).toBeInTheDocument();
-    expect(screen.queryByText('mfa.enabled')).not.toBeInTheDocument();
+    expect(screen.queryByText('mfa.enabledBadge')).not.toBeInTheDocument();
   });
 
   test('renders MFA section with Remove button when MFA enabled', () => {
     renderWithProviders(<MFASection {...defaultProps} isMFAEnabled={true} />);
 
     expect(screen.getByText('mfa.buttons.remove')).toBeInTheDocument();
-    expect(screen.getByText('mfa.enabled')).toBeInTheDocument();
+    expect(screen.getByText('mfa.enabledBadge')).toBeInTheDocument();
   });
 
   test('disables View Recovery Codes button when MFA not enabled', () => {

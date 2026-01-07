@@ -11,9 +11,10 @@ import { StyledTabContent, StyledSectionTitle, StyledDivider } from './AccountTa
 
 interface AccountTabProps {
   isModalOpen: boolean;
+  onShowBanner: (message: string) => void;
 }
 
-export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
+export const AccountTab = ({ isModalOpen, onShowBanner }: AccountTabProps) => {
   const { t } = useTranslation('app');
   const { featureFlags } = useFeatureFlags();
   const { isMFAEnabled, setIsMFAEnabled, refetchMFAStatus } = useMFAStatus(isModalOpen);
@@ -37,6 +38,7 @@ export const AccountTab = ({ isModalOpen }: AccountTabProps) => {
           setIsMFAEnabled={setIsMFAEnabled}
           refetchMFAStatus={refetchMFAStatus}
           isModalOpen={isModalOpen}
+          onShowBanner={onShowBanner}
         />
       )}
     </StyledTabContent>

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { banners } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { StyledBodyMedium, variables } from 'shared/styles';
 
 import { MFASetup } from '../MFASetup';
@@ -30,6 +28,7 @@ interface MFASectionProps {
   setIsMFAEnabled: (enabled: boolean) => void;
   refetchMFAStatus: () => Promise<void>;
   isModalOpen: boolean;
+  onShowBanner: (message: string) => void;
 }
 
 export const MFASection = ({
@@ -37,9 +36,9 @@ export const MFASection = ({
   setIsMFAEnabled,
   refetchMFAStatus,
   isModalOpen,
+  onShowBanner,
 }: MFASectionProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
   const [showMFASetup, setShowMFASetup] = useState(false);
   const [showViewRecoveryCodes, setShowViewRecoveryCodes] = useState(false);
   const [showRemoveMFA, setShowRemoveMFA] = useState(false);
@@ -58,8 +57,8 @@ export const MFASection = ({
   const handleMFASetupComplete = () => {
     setShowMFASetup(false);
     setIsMFAEnabled(true);
-    // Show success banner
-    dispatch(banners.actions.addBanner({ key: 'MFAEnabledSuccessBanner' }));
+    // Show inline success banner
+    onShowBanner(t('mfa.enabled.successMessage'));
   };
 
   const handleRemoveMFA = () => {
@@ -68,15 +67,8 @@ export const MFASection = ({
 
   const handleRemoveMFASuccess = () => {
     setIsMFAEnabled(false);
-    dispatch(
-      banners.actions.addBanner({
-        key: 'MFARemovalSuccessBanner',
-        bannerProps: {
-          children: t('mfa.remove.successMessage'),
-          severity: 'success',
-        },
-      }),
-    );
+    // Show inline success banner
+    onShowBanner(t('mfa.remove.successMessage'));
   };
 
   const handleViewRecoveryCodes = () => {
@@ -99,7 +91,7 @@ export const MFASection = ({
                 {isMFAEnabled && (
                   <StyledEnabledBadge>
                     <Svg id="shield-check" width={18} height={18} />
-                    <span>{t('mfa.enabled')}</span>
+                    <span>{t('mfa.enabledBadge')}</span>
                   </StyledEnabledBadge>
                 )}
               </StyledAuthenticatorTitle>
