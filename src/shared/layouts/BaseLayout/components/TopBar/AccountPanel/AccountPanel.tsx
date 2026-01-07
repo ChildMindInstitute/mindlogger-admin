@@ -8,6 +8,7 @@ import { alerts, auth } from 'redux/modules';
 import {
   StyledLabelSmall,
   StyledTitleSmall,
+  StyledTitleMedium,
   variables,
   StyledIconButton,
   StyledBadge,
@@ -94,7 +95,9 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
               <StyledSettingsIcon>
                 <Svg id="settings" width="18" height="18" />
               </StyledSettingsIcon>
-              <StyledTitleSmall>{t('settings')}</StyledTitleSmall>
+              <StyledTitleMedium color={variables.palette.primary}>
+                {t('settings')}
+              </StyledTitleMedium>
             </StyledSettingsSection>
           </StyledHeader>
           <Divider />
