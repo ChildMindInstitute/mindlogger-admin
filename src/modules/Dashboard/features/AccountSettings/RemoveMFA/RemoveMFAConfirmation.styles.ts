@@ -77,6 +77,7 @@ export const StyledDescription = styled(StyledBodyLarge)`
   color: ${variables.palette.on_surface};
   margin: 0;
   line-height: 24px;
+  letter-spacing: ${variables.font.letterSpacing.xxl}; /* 0.5px - Cm/body/large spec */
 `;
 
 export const StyledButtonContainer = styled(Box)`

@@ -115,25 +115,32 @@ export const StyledDescription = styled(Box)`
 export const StyledInputContainer = styled('div')<{ $hasError?: boolean }>`
   display: flex;
   width: 300px;
+  height: 56px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  justify-content: center;
+  padding: ${({ $hasError }) => ($hasError ? '7px 15px' : '8px 16px')};
   border-radius: 4px;
-  border: 1px solid
-    ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.outline_variant)};
+  border: ${({ $hasError }) =>
+    $hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
   background: ${variables.palette.surface};
   opacity: 1;
   position: relative;
+
+  &:focus-within {
+    border: 2px solid
+      ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.primary)};
+    padding: 7px 15px;
+  }
 `;
 
 /**
  * Input field styling
  */
 export const StyledInput = styled('input')`
-  display: flex;
-  padding: 8px 16px;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
+  width: 100%;
+  height: 24px;
+  padding: 0;
   border: none;
   background: transparent;
   color: ${variables.palette.on_surface};
@@ -143,12 +150,11 @@ export const StyledInput = styled('input')`
   font-weight: 400;
   line-height: 24px;
   letter-spacing: 0.15px;
-  min-height: 40px;
   opacity: 1;
 
   &::placeholder {
     color: ${variables.palette.outline};
-    opacity: 1;
+    opacity: 0.38;
   }
 
   &:focus {
