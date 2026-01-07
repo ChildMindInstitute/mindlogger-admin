@@ -6,7 +6,7 @@ import {
   StyledButtonContainer,
   StyledButton,
   StyledErrorMessage,
-} from './MFAManualSetup.styles';
+} from '../MFASetup/MFASetup.styles';
 import { VerificationFormProps } from './VerificationForm.types';
 import { MFAVerificationForm } from '../shared/MFAVerificationForm';
 
