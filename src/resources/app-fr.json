@@ -1861,11 +1861,14 @@
   "mfa": {
     "title": "Authentification à deux facteurs",
     "description": "L'authentification à deux facteurs (2FA) ajoute une couche de sécurité supplémentaire à votre compte en exigeant plus qu'un simple mot de passe pour vous connecter. Vous pouvez utiliser l'une des options ci-dessous :",
-    "enabled": "Activé",
+    "enabledBadge": "Activé",
     "accountSettings": "Paramètres du compte",
     "profile": "Profil",
     "email": "E-mail",
     "recoveryOptions": "Options de récupération",
+    "enabled": {
+      "successMessage": "L'authentification à deux facteurs a été activée."
+    },
     "setup": {
       "scanTitle": "Scanner le code dans l'authentificateur",
       "manualTitle": "Saisir la clé dans l'authentificateur",

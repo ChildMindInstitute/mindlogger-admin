@@ -1863,11 +1863,14 @@
   "mfa": {
     "title": "Two-factor authentication",
     "description": "Two-factor authentication (2FA) adds an additional layer of security to your account by requiring more than just a password to sign in. You may use one of the below:",
-    "enabled": "Enabled",
+    "enabledBadge": "Enabled",
     "accountSettings": "Account Settings",
     "profile": "Profile",
     "email": "Email",
     "recoveryOptions": "Recovery options",
+    "enabled": {
+      "successMessage": "Two-factor authentication has been enabled."
+    },
     "setup": {
       "scanTitle": "Scan Code in Authenticator",
       "manualTitle": "Type Key in Authenticator",
