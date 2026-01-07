@@ -26,7 +26,7 @@ export const StyledTitle = styled('h2')`
   margin: 0;
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2.4rem;
   font-weight: 400;
   line-height: 3.2rem;
@@ -69,7 +69,7 @@ export const StyledContent = styled(Box)`
 export const StyledDescription = styled(Box)`
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
@@ -124,7 +124,7 @@ export const StyledInput = styled('input')`
   border: none;
   background: transparent;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
@@ -162,7 +162,7 @@ export const StyledButton = styled('button')`
   background: ${variables.palette.primary};
   color: ${variables.palette.on_primary};
   text-align: center;
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 700;
@@ -186,7 +186,7 @@ export const StyledButton = styled('button')`
     height: auto;
     padding: 0;
     color: ${variables.palette.primary};
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 400;
@@ -203,7 +203,7 @@ export const StyledButton = styled('button')`
 export const StyledLink = styled(Box)`
   color: ${variables.palette.primary};
   text-align: center;
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};

@@ -210,7 +210,7 @@ export const StyledEnabledBadge = styled(Box)`
 
 export const StyledAuthenticatorDescription = styled(Box)`
   color: ${variables.palette.on_surface_variant};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -225,7 +225,7 @@ export const StyledAuthenticatorDescription = styled(Box)`
 
 export const StyledTwoFactorDescription = styled(Box)`
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};

@@ -76,7 +76,7 @@ export const StyledDescription = styled(Box)`
   width: 100%;
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -89,7 +89,7 @@ export const StyledDescriptionMultiLine = styled(Box)`
   width: 100%;
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -147,7 +147,7 @@ export const StyledSecretKey = styled(Box)`
   width: 100%;
   height: 28px;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family.body};
+  font-family: ${variables.font.family.input};
   font-size: 16px;
   font-weight: 400;
   font-style: normal;
