@@ -210,16 +210,13 @@ export const StyledEnabledBadge = styled(Box)`
 
 export const StyledAuthenticatorDescription = styled(Box)`
   color: ${variables.palette.on_surface_variant};
-  font-feature-settings:
-    'liga' off,
-    'clig' off;
-  font-family: ${variables.font.family.input};
+  font-family: ${variables.font.family.body};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
   line-height: normal;
-  letter-spacing: 0.015rem;
-  max-width: 51rem;
+  letter-spacing: 0.15px;
+  max-width: 60rem;
 
   &.disabled {
     opacity: 0.38;
@@ -233,7 +230,7 @@ export const StyledTwoFactorDescription = styled(Box)`
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
   line-height: 2.4rem;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.5px;
 `;
 
 export const StyledRecoveryOptionsHeader = styled(Box)`
