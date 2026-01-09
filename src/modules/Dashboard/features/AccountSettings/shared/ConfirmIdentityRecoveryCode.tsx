@@ -60,7 +60,16 @@ export const ConfirmIdentityRecoveryCode = ({
     const value = e.target.value.toUpperCase();
     // Allow only alphanumeric characters and dash
     const sanitized = value.replace(/[^A-Z0-9-]/g, '');
-    setRecoveryCode(sanitized);
+
+    // Auto-insert hyphen after 5 characters (format: XXXXX-XXXXX)
+    if (sanitized.length === 5 && !sanitized.includes('-')) {
+      setRecoveryCode(`${sanitized}-`);
+    } else if (sanitized.length === 6 && sanitized.charAt(5) !== '-') {
+      // If user pastes or types through, ensure hyphen is at position 5
+      setRecoveryCode(`${sanitized.slice(0, 5)}-${sanitized.slice(5)}`);
+    } else {
+      setRecoveryCode(sanitized);
+    }
   };
 
   return (
