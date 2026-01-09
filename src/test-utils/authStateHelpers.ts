@@ -2,13 +2,15 @@ import { AuthSchema } from 'modules/Auth/state/Auth.schema';
 import { initialStateData } from 'shared/state';
 
 /**
- * Creates a minimal auth state for tests that includes the required mfaVerification property
+ * Creates a minimal auth state for tests that includes the required MFA verification properties
  */
 export const createTestAuthState = (overrides?: Partial<AuthSchema>): AuthSchema => ({
   authentication: initialStateData,
   isAuthorized: false,
   isLogoutInProgress: false,
-  mfaVerification: { status: 'idle' },
+  totpVerification: { status: 'idle' },
+  recoveryVerification: { status: 'idle' },
+  isSessionExpired: false,
   ...overrides,
 });
 
@@ -26,7 +28,9 @@ export const createAuthorizedAuthState = (
   },
   isAuthorized: true,
   isLogoutInProgress: false,
-  mfaVerification: { status: 'idle' },
+  totpVerification: { status: 'idle' },
+  recoveryVerification: { status: 'idle' },
+  isSessionExpired: false,
   ...overrides,
 });
 
