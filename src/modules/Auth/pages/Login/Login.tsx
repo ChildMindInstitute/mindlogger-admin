@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
-import { AuthFlow } from '../../features/Login/AuthFlow';
+import { LoginForm } from '../../features/Login/LoginForm';
 
 export const Login = () => {
   useEffect(() => {
     Mixpanel.trackPageView('Login');
   }, []);
 
-  return <AuthFlow />;
+  return <LoginForm />;
 };

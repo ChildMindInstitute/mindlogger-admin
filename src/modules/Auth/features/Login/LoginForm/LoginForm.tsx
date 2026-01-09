@@ -61,7 +61,9 @@ export const LoginForm = () => {
 
       // Check if MFA is required
       if (response?.result && 'mfaRequired' in response.result && response.result.mfaRequired) {
-        // MFA session will be set by the reducer, AuthFlow will handle the transition
+        // MFA session is set by the reducer, navigate to MFA verification page
+        navigate(page.verifyMFA);
+
         return;
       }
 
@@ -128,6 +130,13 @@ export const LoginForm = () => {
       };
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Clear any existing MFA session when login page mounts
+  // This prevents browser back/forward navigation from accessing MFA with stale session
+  useEffect(() => {
+    dispatch(auth.actions.clearMFASession());
+    dispatch(auth.actions.clearMFAError());
+  }, [dispatch]);
 
   const handleCreateAccountClick = () => {
     clearSoftLock();
