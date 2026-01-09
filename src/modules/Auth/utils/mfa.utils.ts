@@ -1,83 +1,105 @@
-import { TFunction } from 'i18next';
+/**
+ * MFA Error Codes - matches backend AUTH.MFA namespace
+ * @see mindlogger-backend-refactor/src/apps/authentication/constants.py
+ */
+export const MFA_ERROR_CODES = {
+  // TOTP verification errors
+  INVALID_TOTP_CODE: 'AUTH.MFA.INVALID_TOTP_CODE',
+  // Recovery code errors
+  INVALID_RECOVERY_CODE: 'AUTH.MFA.INVALID_RECOVERY_CODE',
+  // Session/token expiry errors
+  TOKEN_EXPIRED: 'AUTH.MFA.TOKEN_EXPIRED',
+  TOKEN_INVALID: 'AUTH.MFA.TOKEN_INVALID',
+  TOKEN_MALFORMED: 'AUTH.MFA.TOKEN_MALFORMED',
+  SESSION_NOT_FOUND: 'AUTH.MFA.SESSION_NOT_FOUND',
+  // Rate limiting errors
+  TOO_MANY_ATTEMPTS: 'AUTH.MFA.TOO_MANY_ATTEMPTS',
+  GLOBAL_LOCKOUT: 'AUTH.MFA.GLOBAL_LOCKOUT',
+} as const;
 
-export interface MFAError {
-  code: string;
-  userMessage: string;
-  action?: 'retry' | 'redirect' | 'lockout';
-  redirectTo?: string;
+/** Error codes that end the MFA session (terminal state - user must re-login) */
+const SESSION_EXPIRED_CODES = [
+  MFA_ERROR_CODES.TOKEN_EXPIRED,
+  MFA_ERROR_CODES.TOKEN_INVALID,
+  MFA_ERROR_CODES.TOKEN_MALFORMED,
+  MFA_ERROR_CODES.SESSION_NOT_FOUND,
+  MFA_ERROR_CODES.TOO_MANY_ATTEMPTS,
+  MFA_ERROR_CODES.GLOBAL_LOCKOUT,
+];
+
+/** Translation keys that match app-en.json / app-fr.json */
+const TRANSLATION_KEYS = {
+  INVALID_CODE: 'invalidCode',
+  INVALID_RECOVERY_CODE: 'invalidRecoveryCode',
+  SESSION_EXPIRED: 'mfaSessionExpired',
+  TOO_MANY_ATTEMPTS: 'tooManyAttempts',
+} as const;
+
+export type MfaVerificationType = 'totp' | 'recovery';
+
+export interface MfaErrorResult {
+  translationKey: string;
+  isSessionExpired: boolean;
+  attemptsRemaining: number | null;
 }
 
-// Map of backend error messages to user-friendly messages and actions
-const MFA_ERROR_MAP: Record<string, (t: TFunction) => MFAError> = {
-  'Invalid TOTP code': (t) => ({
-    code: 'INVALID_CODE',
-    userMessage: t('invalidCode'),
-    action: 'retry',
-  }),
-  'Invalid verification code': (t) => ({
-    code: 'INVALID_CODE',
-    userMessage: t('invalidCode'),
-    action: 'retry',
-  }),
-  'Invalid recovery code': (t) => ({
-    code: 'INVALID_RECOVERY',
-    userMessage: t('invalidRecoveryCode'),
-    action: 'retry',
-  }),
-  'Too many attempts': (t) => ({
-    code: 'TOO_MANY_ATTEMPTS',
-    userMessage: t('tooManyAttempts'),
-    action: 'lockout',
-    redirectTo: '/login',
-  }),
-  'MFA token expired': (t) => ({
-    code: 'SESSION_EXPIRED',
-    userMessage: t('mfaSessionExpired'),
-    action: 'redirect',
-    redirectTo: '/login',
-  }),
-  'MFA session expired': (t) => ({
-    code: 'SESSION_EXPIRED',
-    userMessage: t('mfaSessionExpired'),
-    action: 'redirect',
-    redirectTo: '/login',
-  }),
-  'Recovery code not found': (t) => ({
-    code: 'RECOVERY_NOT_FOUND',
-    userMessage: t('invalidRecoveryCode'),
-    action: 'retry',
-  }),
-  'Recovery code already used': (t) => ({
-    code: 'RECOVERY_USED',
-    userMessage: t('recoveryCodeAlreadyUsed'),
-    action: 'retry',
-  }),
-};
+/**
+ * Extract and map MFA error from API response
+ * Maps ALL backend error codes to appropriate translations
+ */
+export const getMfaErrorResult = (error: unknown, type: MfaVerificationType): MfaErrorResult => {
+  // Extract from axios error response
+  const axiosError = error as {
+    response?: {
+      data?: {
+        error_code?: string;
+        metadata?: { session_attempts_remaining?: number };
+      };
+    };
+  };
+  const errorCode = axiosError?.response?.data?.error_code;
+  const attemptsRemaining =
+    axiosError?.response?.data?.metadata?.session_attempts_remaining ?? null;
 
-export const getMFAError = (errorMessage: string, t: TFunction): MFAError => {
-  // Check for known error patterns
-  for (const [pattern, errorFunc] of Object.entries(MFA_ERROR_MAP)) {
-    if (errorMessage.includes(pattern)) {
-      return errorFunc(t);
-    }
+  // Check if session expired (terminal state)
+  const isSessionExpired = errorCode ? SESSION_EXPIRED_CODES.includes(errorCode as any) : false;
+
+  // Map error_code to translation key
+  let translationKey: string;
+  switch (errorCode) {
+    // Session/token errors → "Your session has expired..."
+    case MFA_ERROR_CODES.TOKEN_EXPIRED:
+    case MFA_ERROR_CODES.TOKEN_INVALID:
+    case MFA_ERROR_CODES.TOKEN_MALFORMED:
+    case MFA_ERROR_CODES.SESSION_NOT_FOUND:
+      translationKey = TRANSLATION_KEYS.SESSION_EXPIRED;
+      break;
+
+    // Rate limiting → "Too many failed attempts..."
+    case MFA_ERROR_CODES.TOO_MANY_ATTEMPTS:
+    case MFA_ERROR_CODES.GLOBAL_LOCKOUT:
+      translationKey = TRANSLATION_KEYS.TOO_MANY_ATTEMPTS;
+      break;
+
+    // Invalid TOTP → "Invalid code"
+    case MFA_ERROR_CODES.INVALID_TOTP_CODE:
+      translationKey = TRANSLATION_KEYS.INVALID_CODE;
+      break;
+
+    // Invalid recovery → "Invalid recovery code"
+    case MFA_ERROR_CODES.INVALID_RECOVERY_CODE:
+      translationKey = TRANSLATION_KEYS.INVALID_RECOVERY_CODE;
+      break;
+
+    // Fallback when error_code missing or unknown
+    default:
+      translationKey =
+        type === 'totp' ? TRANSLATION_KEYS.INVALID_CODE : TRANSLATION_KEYS.INVALID_RECOVERY_CODE;
   }
 
-  // Default error
-  return {
-    code: 'UNKNOWN',
-    userMessage: t('somethingWentWrong'),
-    action: 'retry',
-  };
+  return { translationKey, isSessionExpired, attemptsRemaining };
 };
 
-export const shouldShowAttemptsWarning = (attempts: number): boolean =>
-  attempts >= 3 && attempts < 5;
-
-export const getRemainingAttempts = (attempts: number): number => {
-  const MAX_ATTEMPTS = 5;
-
-  return Math.max(0, MAX_ATTEMPTS - attempts);
-};
 // Remove all non-numeric characters
 export const formatMFACode = (value: string): string => value.replace(/\D/g, '').slice(0, 6);
 
@@ -97,6 +119,3 @@ export const isValidMFACode = (code: string): boolean => /^\d{6}$/.test(code);
 
 export const isValidRecoveryCode = (code: string): boolean =>
   /^[A-Z0-9]{5}-[A-Z0-9]{5}$/.test(code);
-
-// Check if MFA session is expired
-export const isMFASessionExpired = (expiresAt: number): boolean => Date.now() > expiresAt;

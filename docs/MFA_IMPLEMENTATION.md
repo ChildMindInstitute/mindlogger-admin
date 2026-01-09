@@ -35,7 +35,6 @@ This approach provides:
 - `src/modules/Auth/features/Login/MFAForm/MFAForm.tsx` - TOTP input form
 - `src/modules/Auth/features/Login/MFAForm/RecoveryCodeForm.tsx` - Recovery code form
 - `src/modules/Auth/features/Login/MFAForm/useMFAVerification.ts` - Verification logic hook
-- `src/modules/Auth/features/Login/MFAForm/useMFASessionExpiry.ts` - Session expiry handling
 
 ### State Management
 - `src/modules/Auth/state/Auth.thunk.ts` - Async thunks for MFA verification
@@ -48,18 +47,26 @@ This approach provides:
 
 ## State Shape (Redux)
 ```ts
-type MFASession = { token: string; sessionId: string; attempts: number; expiresAt: number };
+type MFASession = { token: string; sessionId: string };
+
 type MFAVerificationState = {
   status: 'idle' | 'loading' | 'error';
-  error?: string;
-  displayError?: string;  // Formatted error key for UI display
+  displayError?: string;    
+  attemptsRemaining?: number; 
 };
-type AuthState includes { mfaSession?: MFASession; mfaVerification: MFAVerificationState; ... }
+
+type AuthState includes {
+  mfaSession?: MFASession;
+  totpVerification: MFAVerificationState;      // TOTP-specific errors
+  recoveryVerification: MFAVerificationState;  // Recovery-specific errors
+  isSessionExpired: boolean;                   // Shared terminal state from backend
+  ...
+}
 ```
-- `mfaSession` is created after login if MFA is required and expires after 5 minutes.
-- `attempts` increments on failed verification.
-- `mfaVerification` holds the last error/status shown to the user.
-- `displayError` contains the formatted error key (e.g., `'invalidCode'` or `'invalidCode|2'` with attempts).
+- `mfaSession` is created after login if MFA is required (backend controls expiry).
+- `attemptsRemaining` comes from backend API error response metadata.
+- `isSessionExpired` is set when backend returns session expiry error.
+- Separate verification states prevent errors from persisting when switching forms.
 
 ## Navigation Flow
 
@@ -92,21 +99,23 @@ useEffect(() => {
 - MFA pages show forms when `mfaSession` exists; redirect to login if no session.
 - `MFAForm` auto-submits on 6 digits, clears errors when typing, and displays:
   - Error messages from Redux `displayError` field (translated in component).
-  - Attempts warning after 3 failed attempts (format: `'invalidCode|2'` → "Invalid code. 2 attempts remaining").
+  - Attempts warning when backend returns `attemptsRemaining` ≤ 3 (format: `'invalidCode|2'` → "Invalid code. 2 attempts remaining").
   - Race condition prevention: tracks user typing vs programmatic input changes.
 - `RecoveryCodeForm` mirrors this behavior with formatted input (`ABCDE-12345`).
-- Session expiry only sets an error; navigation is user-driven via "Back to Login" button.
+- Session expiry is detected via backend error response; navigation is user-driven via "Back to Login" button.
+- Errors are cleared when switching between TOTP and Recovery forms (including browser back/forward).
 
 ## Verification Logic (useMFAVerification + thunks)
-- Guards against expired `mfaSession` before calling APIs.
 - Calls `verifyMFATOTP` or `verifyMFARecoveryCode`; treats responses as success **only** if tokens and user data are present (typed guard).
 - On success: store tokens, identify user (Datadog, Mixpanel, feature flags), navigate to library.
-- On failure:
-  - Redux reducer sets `mfaVerification.error` and computes `displayError` directly.
-  - TOTP: Always shows `'invalidCode'`, adds attempt count after 3 failures (`'invalidCode|2'`).
-  - Recovery: Shows `'invalidRecoveryCode'` or `'mfaSessionExpired'` based on error message.
-  - Increments attempts (TOTP only) and keeps the user on the form.
+- On failure (backend-driven error handling):
+  - Backend returns `error_code` and `metadata.session_attempts_remaining` in error response.
+  - `getMfaErrorResult()` maps backend error codes to translation keys.
+  - Redux reducer sets `displayError` in the appropriate verification state (TOTP or Recovery).
+  - If `attemptsRemaining` ≤ 3, error format includes count: `'invalidCode|2'`.
+  - Session expiry errors set `isSessionExpired` flag (terminal state).
 - Error formatting moved to Redux state to persist through component re-renders.
+- Separate states for TOTP and Recovery prevent error bleeding when switching forms.
 
 ## API Shape (condensed)
 - Login: `POST /auth/login` → either tokens or `{ mfaRequired, mfaToken, mfaSessionId }`.
@@ -115,19 +124,20 @@ useEffect(() => {
 
 ## Expected Behaviors
 - Wrong code: show "Invalid code" inline, stay on MFA page, allow immediate retry.
-- Attempts: show remaining attempts after 3rd failure; still stay on MFA page.
-- Session expiry: show "MFA session expired", no redirect.
+- Attempts: show remaining attempts when backend returns `attemptsRemaining` ≤ 3.
+- Session expiry: show "MFA session expired" when backend returns expiry error, no redirect.
 - Recovery codes: same error/expiry behavior; formatted input.
+- Form switching: errors cleared when switching between TOTP and Recovery (prevents stale errors).
 - Manual exit: "Back to Login" clears MFA state and navigates to `/auth`.
 - Browser back: Single click navigates smoothly (no blinking, no multiple clicks needed).
 
 ## Tests / Checks
-- Unit: `useMFAVerification.test.tsx`, `Auth.thunk.test.ts`, form tests.
-- Manual scenarios (see `docs/MFA_TEST_SCENARIOS.md`):
+- Unit: `useMFAVerification.test.tsx`, `Auth.thunk.test.ts`, `mfa.utils.test.ts`, form tests.
+- Manual scenarios:
   - Invalid code → inline error, no redirect.
-  - Expired session → expiry error, no redirect.
-  - Multiple failures → attempts warning after 3+.
-  - Form switching and recovery code errors work as above.
+  - Session expiry (from backend) → expiry error, no redirect.
+  - Multiple failures → attempts warning when backend returns `attemptsRemaining` ≤ 3.
+  - Switch between TOTP and Recovery → previous errors cleared.
   - Browser back button navigation works smoothly.
 
 ## Recent Changes
@@ -179,6 +189,36 @@ useEffect(() => {
 2. Redux reducer computes `displayError` when errors occur.
 3. Component reads `displayError` directly without transformation.
 4. Added `isUserTypingRef` to prevent race conditions when clearing input.
+
+### Backend-Driven Error Handling
+
+**Problem**: Client-side session and attempt tracking duplicated backend logic:
+- `MFASession` had `attempts` and `expiresAt` fields tracked locally
+- `useMFASessionExpiry` hook ran client-side timer for session expiry
+- Single shared error state caused errors to persist when switching between TOTP and Recovery forms
+
+**Solution**: Backend is now the single source of truth:
+
+1. **Removed client-side tracking**:
+   - `MFASession` now only contains `token` and `sessionId`
+   - Deleted `useMFASessionExpiry.ts` (no client-side timer)
+   - Removed `isMFASessionExpired()` utility
+
+2. **Backend-driven errors**:
+   - `attemptsRemaining` comes from API error response metadata
+   - `isSessionExpired` flag set when backend returns expiry error
+   - Error codes mapped via `getMfaErrorResult()` in `mfa.utils.ts`
+
+3. **Separate error states**:
+   - `totpVerification` and `recoveryVerification` are independent Redux states
+   - Errors cleared when switching forms (UI click or browser back/forward)
+   - Prevents error bleeding between TOTP and Recovery forms
+
+**Benefits**:
+- Single source of truth (backend controls session/attempts)
+- No client/server sync issues
+- Simpler client code
+- Backend can change limits without client updates
 
 ## Quick Troubleshooting
 - No error showing? Ensure backend error string matches mappings in `mfa.utils.ts` or add a new pattern.

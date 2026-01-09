@@ -28,7 +28,7 @@ interface RecoveryCodeFormProps {
 export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCodeFormProps) => {
   const { t } = useTranslation('app');
 
-  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
+  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification('recovery');
   const isUserTypingRef = useRef(false);
 
@@ -53,9 +53,6 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
       clearError();
     }
   }, [code, error, clearError]);
-
-  // Cleanup on unmount
-  useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: RecoveryCodeFormData) => {
     if (isSessionExpired) return;

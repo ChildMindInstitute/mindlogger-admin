@@ -24,7 +24,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   const formRef = useRef<HTMLFormElement>(null);
   const isUserTypingRef = useRef(false);
   const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
-  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
+  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification('totp');
 
   const {
@@ -55,9 +55,6 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
       clearError();
     }
   }, [totpCode, error, clearError]);
-
-  // Cleanup on unmount
-  useEffect(() => cleanup, [cleanup]);
 
   const onSubmit = async (data: MFAFormData) => {
     if (isSessionExpired) return;

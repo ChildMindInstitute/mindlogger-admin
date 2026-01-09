@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -23,11 +23,11 @@ vi.mock('shared/utils/mixpanel', () => ({
 }));
 
 describe('RecoveryCodeForm', () => {
+  // MFA session only contains backend-provided tokens
+  // Session expiry and attempts are tracked by the backend
   const defaultMfaSession = {
     token: 'mfa-token-123',
     sessionId: 'session-123',
-    attempts: 0,
-    expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes from now
   };
 
   beforeEach(() => {
@@ -47,10 +47,13 @@ describe('RecoveryCodeForm', () => {
           requestId: 'test-request-id',
           data: null,
         },
-        mfaVerification: {
+        totpVerification: {
           status: 'idle' as const,
-          error: undefined,
         },
+        recoveryVerification: {
+          status: 'idle' as const,
+        },
+        isSessionExpired: false,
         isAuthorized: false,
         isLoggedIn: false,
         isLogoutInProgress: false,
@@ -141,20 +144,25 @@ describe('RecoveryCodeForm', () => {
     });
   });
 
-  it.skip('handles session expiry', async () => {
-    vi.useFakeTimers();
-
+  it('handles session expiry from backend response', () => {
+    // Session expiry is now detected via backend error response
+    // Backend sets isSessionExpired flag when session times out
     const expiredState = {
       auth: {
-        mfaSession: {
-          ...defaultMfaSession,
-          expiresAt: Date.now() + 1000,
-        },
+        mfaSession: defaultMfaSession,
         authentication: {
           status: 'idle' as const,
           requestId: 'test-request-id',
           data: null,
         },
+        totpVerification: {
+          status: 'idle' as const,
+        },
+        recoveryVerification: {
+          status: 'error' as const,
+          displayError: 'mfaSessionExpired',
+        },
+        isSessionExpired: true, // Set by backend response
         isAuthorized: false,
         isLoggedIn: false,
         isLogoutInProgress: false,
@@ -162,33 +170,9 @@ describe('RecoveryCodeForm', () => {
       },
     };
 
-    const { store } = renderRecoveryCodeForm(expiredState);
+    renderRecoveryCodeForm(expiredState);
 
-    // Advance timers to trigger session expiry
-    await act(async () => {
-      vi.advanceTimersByTime(1100);
-      await vi.runOnlyPendingTimers();
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Your session has expired. Please log in again.'),
-      ).toBeInTheDocument();
-    });
-
-    // Advance timers to trigger redirect
-    await act(async () => {
-      vi.advanceTimersByTime(3000);
-      await vi.runOnlyPendingTimers();
-    });
-
-    await waitFor(() => {
-      const state = store.getState();
-      expect(state.auth.mfaSession).toBeUndefined();
-      expect(mockNavigate).toHaveBeenCalledWith('/login');
-    });
-
-    vi.useRealTimers();
+    expect(screen.getByText('Your session has expired. Please log in again.')).toBeInTheDocument();
   });
 
   it('navigates back to TOTP form when link clicked', async () => {

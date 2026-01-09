@@ -21,18 +21,24 @@ const MFAVerify = () => {
     }
   }, [mfaSession, navigate]);
 
+  // Clear recovery error when landing on TOTP page (handles browser back/forward)
+  useEffect(() => {
+    dispatch(auth.actions.clearRecoveryError());
+  }, [dispatch]);
+
   // Prevent flash of content when no session
   if (!mfaSession) {
     return null;
   }
 
   const handleSwitchToRecovery = () => {
+    // Clear TOTP error when switching to recovery
+    dispatch(auth.actions.clearTOTPError());
     navigate(page.verifyRecovery);
   };
 
   const handleBackToLogin = () => {
     dispatch(auth.actions.clearMFASession());
-    dispatch(auth.actions.clearMFAError());
     navigate(page.login, { replace: true });
   };
 

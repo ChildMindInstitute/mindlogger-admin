@@ -135,7 +135,6 @@ export const LoginForm = () => {
   // This prevents browser back/forward navigation from accessing MFA with stale session
   useEffect(() => {
     dispatch(auth.actions.clearMFASession());
-    dispatch(auth.actions.clearMFAError());
   }, [dispatch]);
 
   const handleCreateAccountClick = () => {
