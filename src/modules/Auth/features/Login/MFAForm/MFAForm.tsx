@@ -152,6 +152,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
 
         <StyledLinkBtn
           onClick={handleRecoveryClick}
+          disabled={isSubmitting || isSessionExpired}
           data-testid="mfa-form-recovery-link"
           sx={{ textDecoration: 'none', mt: 1.2, mb: 0.8 }}
         >
