@@ -321,7 +321,7 @@ describe('useRemoveMFA', () => {
       expect(response?.success).toBe(false);
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
         expect(result.current.confirmationToken).toBeNull();
       });
     });
@@ -645,7 +645,7 @@ describe('useRemoveMFA', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
       });
 
       // Second attempt - network error

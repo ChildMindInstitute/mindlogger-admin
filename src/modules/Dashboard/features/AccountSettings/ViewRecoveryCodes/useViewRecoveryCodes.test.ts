@@ -119,7 +119,9 @@ describe('useViewRecoveryCodes', () => {
         expect(verifyResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe('Invalid verification code. Please try again.');
+      expect(result.current.error).toBe(
+        'Invalid TOTP code. Please check your authenticator app and try again.',
+      );
     });
 
     it('should handle MFA not enabled error (403)', async () => {
@@ -236,7 +238,9 @@ describe('useViewRecoveryCodes', () => {
         expect(verifyResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe('Invalid recovery code. Please try again.');
+      expect(result.current.error).toBe(
+        'Invalid recovery code. Please check the code and try again.',
+      );
     });
 
     it('should handle rate limiting (429)', async () => {
@@ -471,7 +475,7 @@ describe('useViewRecoveryCodes', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe('Invalid verification code. Please try again.');
+        expect(result.current.error).toBe('Invalid TOTP code. Please check your authenticator app and try again.');
       });
 
       // Clear error before next test
@@ -494,7 +498,9 @@ describe('useViewRecoveryCodes', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe('Invalid recovery code. Please try again.');
+        expect(result.current.error).toBe(
+          'Invalid recovery code. Please check the code and try again.',
+        );
       });
     });
   });

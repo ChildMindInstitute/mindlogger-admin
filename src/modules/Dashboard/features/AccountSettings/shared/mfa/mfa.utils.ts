@@ -103,25 +103,12 @@ export const createErrorParser =
       };
     }
 
-    // Invalid TOTP code
+    // Invalid recovery code - check error_code AND pattern, OR if user explicitly entered recovery code
     if (
-      statusCode === statusCodes.UNAUTHORIZED &&
-      backendPatterns.INVALID_TOTP.test(backendMessage)
-    ) {
-      const message = errorMessages.INVALID_VERIFICATION_CODE || errorMessages.INVALID_CODE;
-
-      return {
-        message,
-        scenario: ErrorScenario.INVALID_CODE,
-        metadata,
-      };
-    }
-
-    // Invalid recovery code
-    if (
-      statusCode === statusCodes.UNAUTHORIZED &&
-      backendPatterns.INVALID_RECOVERY &&
-      backendPatterns.INVALID_RECOVERY.test(backendMessage)
+      (statusCode === statusCodes.UNAUTHORIZED || statusCode === 400) &&
+      (errorCode === 'AUTH.MFA.INVALID_RECOVERY_CODE' ||
+        codeType === 'recovery' ||
+        (backendPatterns.INVALID_RECOVERY && backendPatterns.INVALID_RECOVERY.test(backendMessage)))
     ) {
       const message = errorMessages.INVALID_RECOVERY_CODE || errorMessages.INVALID_CODE;
 
@@ -132,8 +119,23 @@ export const createErrorParser =
       };
     }
 
-    // Fallback for 401 - likely invalid code, differentiate based on codeType
-    if (statusCode === statusCodes.UNAUTHORIZED) {
+    // Invalid TOTP code - check error_code AND pattern
+    if (
+      (statusCode === statusCodes.UNAUTHORIZED || statusCode === 400) &&
+      (errorCode === 'AUTH.MFA.INVALID_TOTP_CODE' ||
+        backendPatterns.INVALID_TOTP.test(backendMessage))
+    ) {
+      const message = errorMessages.INVALID_VERIFICATION_CODE || errorMessages.INVALID_CODE;
+
+      return {
+        message,
+        scenario: ErrorScenario.INVALID_CODE,
+        metadata,
+      };
+    }
+
+    // Fallback for 401/400 - likely invalid code, differentiate based on codeType
+    if (statusCode === statusCodes.UNAUTHORIZED || statusCode === 400) {
       if (codeType === 'recovery') {
         const message = errorMessages.INVALID_RECOVERY_CODE || errorMessages.INVALID_CODE;
 

@@ -31,10 +31,10 @@ const createAxiosError = (status?: number, message?: string, code?: string): Axi
 describe('RemoveMFA.utils', () => {
   describe('getErrorMessage', () => {
     describe('Backend message patterns', () => {
-      it('should return INVALID_CODE message for invalid TOTP code', () => {
+      it('should return INVALID_VERIFICATION_CODE message for invalid TOTP code', () => {
         const error = createAxiosError(401, 'Invalid TOTP code provided');
         const result = getErrorMessage(error);
-        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
       });
 
       it('should return MAX_ATTEMPTS message for too many invalid attempts', () => {
@@ -51,10 +51,10 @@ describe('RemoveMFA.utils', () => {
     });
 
     describe('Status code fallbacks', () => {
-      it('should return INVALID_CODE for 401 without specific message', () => {
+      it('should return INVALID_VERIFICATION_CODE for 401 without specific message', () => {
         const error = createAxiosError(401, 'Unauthorized request');
         const result = getErrorMessage(error);
-        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
       });
     });
 
@@ -82,10 +82,11 @@ describe('RemoveMFA.utils', () => {
         expect(result).toBe('MFA is not enabled for this user');
       });
 
-      it('should return backend message for unmapped 400 error', () => {
+      it('should return INVALID_VERIFICATION_CODE for unmapped 400 error', () => {
         const error = createAxiosError(400, 'This recovery code has already been used');
         const result = getErrorMessage(error);
-        expect(result).toBe('This recovery code has already been used');
+        // 400 status code is now handled as invalid code error
+        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
       });
 
       it('should return backend message for unmapped 404 error', () => {
@@ -110,13 +111,15 @@ describe('RemoveMFA.utils', () => {
     describe('Edge cases', () => {
       it('should handle empty backend messages', () => {
         const emptyError = createAxiosError(401, '');
-        expect(getErrorMessage(emptyError)).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(getErrorMessage(emptyError)).toBe(
+          MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE,
+        );
       });
 
       it('should handle case-insensitive pattern matching', () => {
         const error = createAxiosError(401, 'INVALID TOTP CODE PROVIDED');
         const result = getErrorMessage(error);
-        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_CODE);
+        expect(result).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
       });
     });
 
