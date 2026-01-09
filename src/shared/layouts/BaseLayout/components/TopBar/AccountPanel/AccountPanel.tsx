@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { Box, ClickAwayListener, Divider } from '@mui/material';
+import { ClickAwayListener, Divider } from '@mui/material';
 
 import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
@@ -30,6 +30,7 @@ import {
   StyledCloseWrapper,
   StyledSettingsSection,
   StyledSettingsIcon,
+  StyledContentWrapper,
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
@@ -63,7 +64,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
         open={visibleDrawer}
         hideBackdrop
       >
-        <Box>
+        <StyledContentWrapper>
           <StyledHeader>
             <StyledCloseWrapper>
               <StyledIconButton
@@ -102,7 +103,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
           </StyledHeader>
           <Divider />
           <Notifications />
-        </Box>
+        </StyledContentWrapper>
         <Divider />
         <StyledFooter>
           <StyledLogOutBtn

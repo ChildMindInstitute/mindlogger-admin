@@ -475,7 +475,9 @@ describe('useViewRecoveryCodes', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe('Invalid TOTP code. Please check your authenticator app and try again.');
+        expect(result.current.error).toBe(
+          'Invalid TOTP code. Please check your authenticator app and try again.',
+        );
       });
 
       // Clear error before next test

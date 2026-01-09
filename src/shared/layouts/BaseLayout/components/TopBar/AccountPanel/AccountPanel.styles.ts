@@ -14,8 +14,8 @@ export const StyledAccountDrawer = styled(Drawer)`
     background-color: ${variables.palette.surface1};
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     box-shadow: unset;
+    overflow: hidden;
   }
 `;
 
@@ -104,4 +104,11 @@ export const StyledSettingsIcon = styled(Box)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledContentWrapper = styled(Box)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;

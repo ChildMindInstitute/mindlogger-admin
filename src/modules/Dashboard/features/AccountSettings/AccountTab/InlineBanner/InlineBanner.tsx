@@ -15,14 +15,14 @@ export const InlineBanner = ({ message, duration = 5000, onClose }: InlineBanner
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (duration && onClose) {
-      const timeoutId = setTimeout(() => {
-        setIsVisible(false);
-        onClose();
-      }, duration);
+    if (!duration || !onClose) return;
 
-      return () => clearTimeout(timeoutId);
-    }
+    const timeoutId = setTimeout(() => {
+      setIsVisible(false);
+      onClose();
+    }, duration);
+
+    return () => clearTimeout(timeoutId);
   }, [duration, onClose]);
 
   if (!isVisible) {

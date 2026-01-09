@@ -1892,6 +1892,11 @@
         "title": "Session expirée",
         "description": "Votre session de téléchargement a expiré. Veuillez fermer cette fenêtre et consulter à nouveau les codes de récupération pour télécharger.",
         "button": "OK, compris"
+      },
+      "downloadNetworkError": {
+        "title": "Erreur de connexion",
+        "description": "Impossible de télécharger les codes de récupération. Veuillez vérifier votre connexion Internet et réessayer.",
+        "button": "OK"
       }
     },
     "secretKey": {

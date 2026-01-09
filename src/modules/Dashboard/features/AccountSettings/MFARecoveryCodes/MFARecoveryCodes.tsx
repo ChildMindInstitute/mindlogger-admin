@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 import { Svg } from 'shared/components/Svg';
+import { checkIfShouldLogging } from 'shared/utils/logger';
 
 import {
   StyledDialog,
@@ -20,6 +21,7 @@ import { MFARecoveryCodesProps } from './MFARecoveryCodes.types';
 import { getCodeString, isCodeUsed } from './MFARecoveryCodes.utils';
 import { useRecoveryCodesDownload } from './useRecoveryCodesDownload';
 import { DownloadExpiredModal } from './DownloadExpiredModal';
+import { DownloadNetworkErrorModal } from './DownloadNetworkErrorModal';
 
 export const MFARecoveryCodes = ({
   open,
@@ -30,6 +32,7 @@ export const MFARecoveryCodes = ({
 }: MFARecoveryCodesProps) => {
   const { t } = useTranslation('app');
   const [showExpiredModal, setShowExpiredModal] = useState(false);
+  const [showNetworkErrorModal, setShowNetworkErrorModal] = useState(false);
   // Use custom hook for download functionality
   const { handleDownload } = useRecoveryCodesDownload(recoveryCodes, downloadToken);
 
@@ -70,9 +73,21 @@ export const MFARecoveryCodes = ({
     try {
       await handleDownload();
     } catch (error) {
-      console.error('Error downloading recovery codes:', error);
-      // Show the expiry modal instead of browser alert
-      setShowExpiredModal(true);
+      if (checkIfShouldLogging()) {
+        console.error('Error downloading recovery codes:', error);
+      }
+      // Differentiate between network errors and session expiry:
+      // - Network errors (offline): error has no response property
+      // - Session/token expiry: error has response with 401/403 status
+      const hasResponse = error && typeof error === 'object' && 'response' in error;
+
+      if (hasResponse) {
+        // HTTP error (session expired, invalid token, etc.)
+        setShowExpiredModal(true);
+      } else {
+        // Network error (offline, connection failed)
+        setShowNetworkErrorModal(true);
+      }
     }
   };
 
@@ -80,6 +95,11 @@ export const MFARecoveryCodes = ({
     setShowExpiredModal(false);
     // Close the recovery codes modal too
     handleClose();
+  };
+
+  const handleNetworkErrorModalClose = () => {
+    setShowNetworkErrorModal(false);
+    // Don't close the recovery codes modal - user can retry
   };
 
   return (
@@ -118,6 +138,10 @@ export const MFARecoveryCodes = ({
       </StyledDialog>
 
       <DownloadExpiredModal open={showExpiredModal} onClose={handleExpiredModalClose} />
+      <DownloadNetworkErrorModal
+        open={showNetworkErrorModal}
+        onClose={handleNetworkErrorModalClose}
+      />
     </>
   );
 };

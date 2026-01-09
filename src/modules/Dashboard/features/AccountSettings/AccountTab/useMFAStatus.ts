@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { getUserDetailsApi } from 'modules/Dashboard/api';
+import { checkIfShouldLogging } from 'shared/utils/logger';
 
 export const useMFAStatus = (isModalOpen: boolean) => {
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
@@ -17,7 +18,9 @@ export const useMFAStatus = (isModalOpen: boolean) => {
         const userData = response.data.result;
         setIsMFAEnabled(userData.mfaEnabled || false);
       } catch (error) {
-        console.error('Failed to fetch MFA status:', error);
+        if (checkIfShouldLogging()) {
+          console.error('Failed to fetch MFA status:', error);
+        }
         // Fallback to false if fetch fails
         setIsMFAEnabled(false);
       } finally {
@@ -34,7 +37,9 @@ export const useMFAStatus = (isModalOpen: boolean) => {
       const userData = response.data.result;
       setIsMFAEnabled(userData.mfaEnabled || false);
     } catch (error) {
-      console.error('Failed to refetch MFA status:', error);
+      if (checkIfShouldLogging()) {
+        console.error('Failed to refetch MFA status:', error);
+      }
     }
   };
 

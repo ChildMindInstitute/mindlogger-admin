@@ -18,7 +18,8 @@ const STATUS_CODES = {
 
 const ERROR_MESSAGES = {
   INVALID_CODE: 'Invalid TOTP code. Please check your authenticator app and try again.', // Fallback, same as INVALID_VERIFICATION_CODE
-  INVALID_VERIFICATION_CODE: 'Invalid TOTP code. Please check your authenticator app and try again.',
+  INVALID_VERIFICATION_CODE:
+    'Invalid TOTP code. Please check your authenticator app and try again.',
   INVALID_RECOVERY_CODE: 'Invalid recovery code. Please check the code and try again.',
   MAX_ATTEMPTS: 'Too many invalid attempts. Please try again.',
   SESSION_EXPIRED: 'Your session has expired. Please try again.',

@@ -1894,6 +1894,11 @@
         "title": "Session Expired",
         "description": "Your download session has expired. Please close this window and view the recovery codes again to download.",
         "button": "OK, Got It"
+      },
+      "downloadNetworkError": {
+        "title": "Connection Error",
+        "description": "Unable to download recovery codes. Please check your internet connection and try again.",
+        "button": "OK"
       }
     },
     "secretKey": {
