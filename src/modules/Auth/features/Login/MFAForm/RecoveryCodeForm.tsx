@@ -81,7 +81,24 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
   };
 
   const fieldError = errors.code?.message as string | undefined;
-  const helperMessage = displayError ? t(displayError) : fieldError;
+
+  // Get error message from Redux state - parse "key|attempts" format like MFAForm
+  const getErrorMessage = () => {
+    if (displayError) {
+      // displayError format: "invalidRecoveryCode" or "invalidRecoveryCode|2" (with attempts)
+      if (displayError.includes('|')) {
+        const [key, remaining] = displayError.split('|');
+
+        return `${t(key)}. ${t('attemptsRemaining', { count: parseInt(remaining) })}`;
+      }
+
+      return t(displayError);
+    }
+
+    return fieldError;
+  };
+
+  const helperMessage = getErrorMessage();
   const hasError = !!helperMessage;
 
   return (

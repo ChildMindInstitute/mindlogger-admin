@@ -194,6 +194,11 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
       return;
     }
 
-    state.recoveryVerification.displayError = translationKey;
+    // Format with attempts warning (threshold: 3) - same as TOTP
+    if (attemptsRemaining !== null && attemptsRemaining <= 3) {
+      state.recoveryVerification.displayError = `${translationKey}|${attemptsRemaining}`;
+    } else {
+      state.recoveryVerification.displayError = translationKey;
+    }
   });
 };
