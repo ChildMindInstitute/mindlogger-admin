@@ -109,9 +109,8 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(verifyMFATOTP.fulfilled, (state, action) => {
-    // Set user data and clear MFA session
+    // Set user data - mfaSession is cleared by useMFAVerification after navigation
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
-    state.mfaSession = undefined;
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
@@ -159,9 +158,8 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(verifyMFARecoveryCode.fulfilled, (state, action) => {
-    // Set user data and clear MFA session
+    // Set user data - mfaSession is cleared by useMFAVerification after navigation
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
-    state.mfaSession = undefined;
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;

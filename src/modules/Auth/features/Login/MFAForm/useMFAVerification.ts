@@ -62,7 +62,9 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFATOTP({ totpCode: code }));
 
         if (verifyMFATOTP.fulfilled.match(result)) {
+          // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
+          dispatch(auth.actions.clearMFASession());
 
           return true;
         }
@@ -71,7 +73,9 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFARecoveryCode({ code }));
 
         if (verifyMFARecoveryCode.fulfilled.match(result)) {
+          // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
+          dispatch(auth.actions.clearMFASession());
 
           return true;
         }
