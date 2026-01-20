@@ -21,7 +21,7 @@ describe('navigateToLibrary', () => {
     expect(storage.removeItem).toHaveBeenCalledWith(LocalStorageKeys.LibraryUrl);
   });
 
-  test('should not navigate if the library URL is not present in storage', () => {
+  test('should navigate to dashboard if the library URL is not present in storage', () => {
     const fakeNavigate = vi.fn();
 
     const getItemMock = vi.spyOn(storage, 'getItem');
@@ -29,7 +29,7 @@ describe('navigateToLibrary', () => {
 
     navigateToLibrary(fakeNavigate);
 
-    expect(fakeNavigate).not.toHaveBeenCalled();
+    expect(fakeNavigate).toHaveBeenCalledWith('/dashboard');
     expect(storage.removeItem).not.toHaveBeenCalled();
   });
 });
