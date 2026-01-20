@@ -1,120 +1,150 @@
-import { TFunction } from 'i18next';
-
 import {
-  getMFAError,
-  shouldShowAttemptsWarning,
-  getRemainingAttempts,
+  getMfaErrorResult,
+  MFA_ERROR_CODES,
   formatMFACode,
   formatRecoveryCode,
   isValidMFACode,
   isValidRecoveryCode,
-  isMFASessionExpired,
 } from './mfa.utils';
 
-describe('MFA Utilities', () => {
-  describe('getMFAError', () => {
-    const mockT = ((key: string) => key) as unknown as TFunction;
+// Helper to create mock axios error with error_code and metadata
+const createMockAxiosError = (errorCode?: string, attemptsRemaining?: number) => ({
+  response: {
+    data: {
+      error_code: errorCode,
+      metadata:
+        attemptsRemaining !== undefined
+          ? { session_attempts_remaining: attemptsRemaining }
+          : undefined,
+    },
+  },
+});
 
-    it('returns correct error for known error messages', () => {
-      const testCases = [
-        {
-          error: 'Invalid TOTP code',
-          expected: {
-            code: 'INVALID_CODE',
-            userMessage: 'invalidCode',
-            action: 'retry',
-          },
-        },
-        {
-          error: 'Invalid recovery code',
-          expected: {
-            code: 'INVALID_RECOVERY',
-            userMessage: 'invalidRecoveryCode',
-            action: 'retry',
-          },
-        },
-        {
-          error: 'Too many attempts',
-          expected: {
-            code: 'TOO_MANY_ATTEMPTS',
-            userMessage: 'tooManyAttempts',
-            action: 'lockout',
-            redirectTo: '/login',
-          },
-        },
-        {
-          error: 'MFA token expired',
-          expected: {
-            code: 'SESSION_EXPIRED',
-            userMessage: 'mfaSessionExpired',
-            action: 'redirect',
-            redirectTo: '/login',
-          },
-        },
-        {
-          error: 'Recovery code already used',
-          expected: {
-            code: 'RECOVERY_USED',
-            userMessage: 'recoveryCodeAlreadyUsed',
-            action: 'retry',
-          },
-        },
+describe('MFA Utilities', () => {
+  describe('getMfaErrorResult', () => {
+    describe('TOTP verification errors', () => {
+      it('returns invalidCode for INVALID_TOTP_CODE', () => {
+        const error = createMockAxiosError(MFA_ERROR_CODES.INVALID_TOTP_CODE, 3);
+        const result = getMfaErrorResult(error, 'totp');
+
+        expect(result).toEqual({
+          translationKey: 'invalidCode',
+          isSessionExpired: false,
+          attemptsRemaining: 3,
+        });
+      });
+
+      it('returns invalidCode as fallback for unknown error in totp mode', () => {
+        const error = createMockAxiosError('UNKNOWN_ERROR');
+        const result = getMfaErrorResult(error, 'totp');
+
+        expect(result.translationKey).toBe('invalidCode');
+        expect(result.isSessionExpired).toBe(false);
+      });
+
+      it('returns invalidCode for null/undefined error_code in totp mode', () => {
+        const error = createMockAxiosError(undefined);
+        const result = getMfaErrorResult(error, 'totp');
+
+        expect(result.translationKey).toBe('invalidCode');
+        expect(result.isSessionExpired).toBe(false);
+        expect(result.attemptsRemaining).toBeNull();
+      });
+    });
+
+    describe('Recovery code verification errors', () => {
+      it('returns invalidRecoveryCode for INVALID_RECOVERY_CODE', () => {
+        const error = createMockAxiosError(MFA_ERROR_CODES.INVALID_RECOVERY_CODE, 2);
+        const result = getMfaErrorResult(error, 'recovery');
+
+        expect(result).toEqual({
+          translationKey: 'invalidRecoveryCode',
+          isSessionExpired: false,
+          attemptsRemaining: 2,
+        });
+      });
+
+      it('returns invalidRecoveryCode as fallback for unknown error in recovery mode', () => {
+        const error = createMockAxiosError('UNKNOWN_ERROR');
+        const result = getMfaErrorResult(error, 'recovery');
+
+        expect(result.translationKey).toBe('invalidRecoveryCode');
+        expect(result.isSessionExpired).toBe(false);
+      });
+    });
+
+    describe('Session expiry errors', () => {
+      const sessionExpiredCodes = [
+        MFA_ERROR_CODES.TOKEN_EXPIRED,
+        MFA_ERROR_CODES.TOKEN_INVALID,
+        MFA_ERROR_CODES.TOKEN_MALFORMED,
+        MFA_ERROR_CODES.SESSION_NOT_FOUND,
       ];
 
-      testCases.forEach(({ error, expected }) => {
-        const result = getMFAError(error, mockT);
-        expect(result).toEqual(expected);
+      sessionExpiredCodes.forEach((errorCode) => {
+        it(`returns mfaSessionExpired with isSessionExpired=true for ${errorCode}`, () => {
+          const error = createMockAxiosError(errorCode);
+          const result = getMfaErrorResult(error, 'totp');
+
+          expect(result).toEqual({
+            translationKey: 'mfaSessionExpired',
+            isSessionExpired: true,
+            attemptsRemaining: null,
+          });
+        });
       });
     });
 
-    it('returns default error for unknown messages', () => {
-      const result = getMFAError('Some unknown error', mockT);
-      expect(result).toEqual({
-        code: 'UNKNOWN',
-        userMessage: 'somethingWentWrong',
-        action: 'retry',
+    describe('Rate limiting errors', () => {
+      it('returns tooManyAttempts with isSessionExpired=true for TOO_MANY_ATTEMPTS', () => {
+        const error = createMockAxiosError(MFA_ERROR_CODES.TOO_MANY_ATTEMPTS);
+        const result = getMfaErrorResult(error, 'totp');
+
+        expect(result).toEqual({
+          translationKey: 'tooManyAttempts',
+          isSessionExpired: true,
+          attemptsRemaining: null,
+        });
+      });
+
+      it('returns tooManyAttempts with isSessionExpired=true for GLOBAL_LOCKOUT', () => {
+        const error = createMockAxiosError(MFA_ERROR_CODES.GLOBAL_LOCKOUT);
+        const result = getMfaErrorResult(error, 'totp');
+
+        expect(result).toEqual({
+          translationKey: 'tooManyAttempts',
+          isSessionExpired: true,
+          attemptsRemaining: null,
+        });
       });
     });
 
-    it('matches partial error messages', () => {
-      const result = getMFAError('Error: Invalid TOTP code provided', mockT);
-      expect(result.code).toBe('INVALID_CODE');
-      expect(result.userMessage).toBe('invalidCode');
-    });
-  });
+    describe('attemptsRemaining extraction', () => {
+      it('extracts attemptsRemaining from metadata', () => {
+        const error = createMockAxiosError(MFA_ERROR_CODES.INVALID_TOTP_CODE, 2);
+        const result = getMfaErrorResult(error, 'totp');
 
-  describe('shouldShowAttemptsWarning', () => {
-    it('returns true for 3-4 attempts', () => {
-      expect(shouldShowAttemptsWarning(3)).toBe(true);
-      expect(shouldShowAttemptsWarning(4)).toBe(true);
-    });
+        expect(result.attemptsRemaining).toBe(2);
+      });
 
-    it('returns false for less than 3 attempts', () => {
-      expect(shouldShowAttemptsWarning(0)).toBe(false);
-      expect(shouldShowAttemptsWarning(1)).toBe(false);
-      expect(shouldShowAttemptsWarning(2)).toBe(false);
-    });
+      it('returns null when metadata is missing', () => {
+        const error = { response: { data: { error_code: MFA_ERROR_CODES.INVALID_TOTP_CODE } } };
+        const result = getMfaErrorResult(error, 'totp');
 
-    it('returns false for 5 or more attempts', () => {
-      expect(shouldShowAttemptsWarning(5)).toBe(false);
-      expect(shouldShowAttemptsWarning(6)).toBe(false);
-      expect(shouldShowAttemptsWarning(10)).toBe(false);
-    });
-  });
+        expect(result.attemptsRemaining).toBeNull();
+      });
 
-  describe('getRemainingAttempts', () => {
-    it('calculates remaining attempts correctly', () => {
-      expect(getRemainingAttempts(0)).toBe(5);
-      expect(getRemainingAttempts(1)).toBe(4);
-      expect(getRemainingAttempts(2)).toBe(3);
-      expect(getRemainingAttempts(3)).toBe(2);
-      expect(getRemainingAttempts(4)).toBe(1);
-      expect(getRemainingAttempts(5)).toBe(0);
-    });
+      it('returns null for malformed error object', () => {
+        const result = getMfaErrorResult({}, 'totp');
 
-    it('returns 0 for attempts beyond max', () => {
-      expect(getRemainingAttempts(6)).toBe(0);
-      expect(getRemainingAttempts(10)).toBe(0);
+        expect(result.attemptsRemaining).toBeNull();
+      });
+
+      it('returns null for null error', () => {
+        const result = getMfaErrorResult(null, 'totp');
+
+        expect(result.attemptsRemaining).toBeNull();
+      });
     });
   });
 
@@ -203,31 +233,6 @@ describe('MFA Utilities', () => {
       expect(isValidRecoveryCode('ABCDE_12345')).toBe(false); // wrong separator
       expect(isValidRecoveryCode('')).toBe(false); // empty
       expect(isValidRecoveryCode('ABCDE-123456')).toBe(false); // too long
-    });
-  });
-
-  describe('isMFASessionExpired', () => {
-    it('correctly identifies expired sessions', () => {
-      const now = Date.now();
-
-      // Expired sessions
-      expect(isMFASessionExpired(now - 1000)).toBe(true);
-      expect(isMFASessionExpired(now - 1)).toBe(true);
-      expect(isMFASessionExpired(0)).toBe(true);
-
-      // Non-expired sessions
-      expect(isMFASessionExpired(now + 1000)).toBe(false);
-      expect(isMFASessionExpired(now + 60000)).toBe(false);
-    });
-
-    it('handles edge cases', () => {
-      const now = Date.now();
-
-      // Exactly now (should be considered expired)
-      expect(isMFASessionExpired(now)).toBe(false);
-
-      // Very far future
-      expect(isMFASessionExpired(Number.MAX_SAFE_INTEGER)).toBe(false);
     });
   });
 });

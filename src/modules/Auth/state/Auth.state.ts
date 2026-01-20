@@ -1,10 +1,16 @@
 import { initialStateData } from 'shared/state';
 
-import { AuthSchema } from './Auth.schema';
+import { AuthSchema, MFAVerificationState } from './Auth.schema';
+
+const initialVerificationState: MFAVerificationState = {
+  status: 'idle',
+};
 
 export const state: AuthSchema = {
   authentication: initialStateData,
   isAuthorized: false,
   isLogoutInProgress: false,
-  mfaVerification: { status: 'idle', isSessionExpired: false },
+  totpVerification: initialVerificationState,
+  recoveryVerification: initialVerificationState,
+  isSessionExpired: false,
 };

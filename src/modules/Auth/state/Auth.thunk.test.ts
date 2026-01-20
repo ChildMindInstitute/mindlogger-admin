@@ -18,17 +18,20 @@ vi.mock('api', async () => {
 const mockVerifyMFATOTPApi = vi.mocked(verifyMFATOTPApi);
 const mockVerifyMFARecoveryCodeApi = vi.mocked(verifyMFARecoveryCodeApi);
 
+// MFA session only contains backend-provided tokens
+// Session expiry and attempts are tracked by the backend
 const baseAuthState = {
   mfaSession: {
     token: 'mfa-token',
     sessionId: 'session-id',
-    attempts: 0,
-    expiresAt: Date.now() + 5 * 60 * 1000,
   },
-  mfaVerification: {
+  totpVerification: {
     status: 'idle' as const,
-    error: undefined,
   },
+  recoveryVerification: {
+    status: 'idle' as const,
+  },
+  isSessionExpired: false,
   authentication: {
     status: 'idle' as const,
     requestId: 'req-1',
@@ -42,7 +45,8 @@ const getPreloadedState = () => ({
   auth: {
     ...baseAuthState,
     mfaSession: { ...baseAuthState.mfaSession },
-    mfaVerification: { ...baseAuthState.mfaVerification },
+    totpVerification: { ...baseAuthState.totpVerification },
+    recoveryVerification: { ...baseAuthState.recoveryVerification },
     authentication: { ...baseAuthState.authentication },
   },
 });
@@ -60,11 +64,13 @@ describe('Auth MFA thunks', () => {
     const result = await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
 
     expect(verifyMFATOTP.rejected.match(result)).toBe(true);
-    expect(result.payload).toBe('Invalid TOTP code');
 
     const state = store.getState().auth;
-    expect(state.mfaVerification.error).toBe('Invalid TOTP code');
-    expect(state.mfaSession?.attempts).toBe(1);
+    // TOTP verification error is stored in totpVerification state
+    expect(state.totpVerification.status).toBe('error');
+    expect(state.totpVerification.displayError).toBeDefined();
+    // Note: attempts tracking is handled server-side, client uses attemptsRemaining from API response
+    expect(state.mfaSession).toBeDefined();
   });
 
   it('rejects recovery code responses that do not include tokens', async () => {
@@ -77,10 +83,11 @@ describe('Auth MFA thunks', () => {
     const result = await store.dispatch(verifyMFARecoveryCode({ code: 'ABCDE-12345' }));
 
     expect(verifyMFARecoveryCode.rejected.match(result)).toBe(true);
-    expect(result.payload).toBe('Invalid recovery code');
 
     const state = store.getState().auth;
-    expect(state.mfaVerification.error).toBe('Invalid recovery code');
+    // Recovery verification error is stored in recoveryVerification state
+    expect(state.recoveryVerification.status).toBe('error');
+    expect(state.recoveryVerification.displayError).toBeDefined();
     expect(state.mfaSession).toBeDefined();
   });
 });

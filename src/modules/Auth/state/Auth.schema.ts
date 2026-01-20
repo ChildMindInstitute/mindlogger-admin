@@ -19,20 +19,18 @@ export type SoftLockData = {
   workspace: Workspace | null;
 };
 
-// MFA Session data stored in Redux
+// MFA Session data stored in Redux - only contains backend-provided tokens
+// Session expiry and attempts are tracked by the backend
 export type MFASession = {
   token: string;
   sessionId: string;
-  attempts: number;
-  expiresAt: number;
 };
 
-// MFA Verification state for TOTP/Recovery code verification
+// MFA Verification state - separate for TOTP and Recovery
 export type MFAVerificationState = {
   status: 'idle' | 'loading' | 'error';
-  error?: string;
-  displayError?: string; // Formatted error message with attempts
-  isSessionExpired?: boolean; // Sticky terminal state for session expiry
+  displayError?: string;
+  attemptsRemaining?: number | null;
 };
 
 export type AuthSchema = {
@@ -41,5 +39,7 @@ export type AuthSchema = {
   isLogoutInProgress: boolean;
   softLockData?: SoftLockData;
   mfaSession?: MFASession;
-  mfaVerification: MFAVerificationState;
+  totpVerification: MFAVerificationState; // TOTP-specific errors
+  recoveryVerification: MFAVerificationState; // Recovery-specific errors
+  isSessionExpired: boolean; // Shared terminal state
 };

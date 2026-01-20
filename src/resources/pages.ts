@@ -4,6 +4,8 @@ export default {
   passwordReset: '/auth/reset-password',
   passwordRecovery: '/auth/password-recovery',
   lock: '/auth/lock',
+  verifyMFA: '/auth/verify-mfa',
+  verifyRecovery: '/auth/verify-recovery',
   dashboard: '/dashboard',
   dashboardManagers: '/dashboard/managers',
   dashboardRespondents: '/dashboard/respondents',

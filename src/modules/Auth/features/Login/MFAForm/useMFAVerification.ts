@@ -1,11 +1,9 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
-
-import { useMFASessionExpiry } from './useMFASessionExpiry';
 
 export type MFAVerificationType = 'totp' | 'recovery';
 
@@ -14,17 +12,17 @@ export type MFAVerificationType = 'totp' | 'recovery';
  *
  * This hook follows the hybrid state management pattern:
  * - Local state (isSubmitting) for synchronous UI control
- * - Redux state (mfaVerification) for application-wide error display
+ * - Redux state (totpVerification/recoveryVerification) for error display
+ * - Separate states for TOTP and Recovery to prevent error bleeding between forms
+ * - All session/attempt tracking is handled by the backend
  *
  * @param type - The type of MFA verification ('totp' or 'recovery')
  * @returns {Object} MFA verification state and actions
  * @returns {string | undefined} returns.error - Current error message from Redux state
  * @returns {boolean} returns.isSubmitting - Whether a verification is in progress
- * @returns {number} returns.attempts - Number of failed attempts
- * @returns {number} returns.maxAttempts - Maximum allowed attempts (5)
+ * @returns {boolean} returns.isSessionExpired - Whether the MFA session has expired
  * @returns {Function} returns.verifyCode - Async function to verify the code
  * @returns {Function} returns.clearError - Function to clear the error state
- * @returns {Function} returns.cleanup - Cleanup function to call on unmount
  *
  * @example
  * const { error, isSubmitting, verifyCode, clearError } = useMFAVerification('totp');
@@ -40,29 +38,19 @@ export const useMFAVerification = (type: MFAVerificationType) => {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const hasSessionExpiredRef = useRef(false);
 
-  const { mfaSession, mfaVerification } = useAppSelector((state) => state.auth);
-  const attempts = mfaSession?.attempts || 0;
-  const maxAttempts = 5;
+  // Select verification state based on type - separate states for TOTP and Recovery
+  const { totpVerification, recoveryVerification, isSessionExpired } = useAppSelector(
+    (state) => state.auth,
+  );
 
-  // Handle session expiry
-  const handleSessionExpired = useCallback(() => {
-    if (hasSessionExpiredRef.current) return;
-    hasSessionExpiredRef.current = true;
+  const verification = type === 'totp' ? totpVerification : recoveryVerification;
 
-    dispatch(auth.actions.setMFASessionExpired());
-    // Don't clear the session or navigate - just show the error
-  }, [dispatch]);
-
-  // Use session expiry hook
-  useMFASessionExpiry({ mfaSession, onExpire: handleSessionExpired });
-
-  // Verify code
+  // Verify code - session expiry and attempts are validated by the backend
   const verifyCode = useCallback(
     async (code: string) => {
-      // Don't call API if session already expired
-      if (mfaVerification.isSessionExpired) return false;
+      // Don't call API if session already expired (from previous API response)
+      if (isSessionExpired) return false;
 
       if (isSubmitting) return false;
 
@@ -74,7 +62,9 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFATOTP({ totpCode: code }));
 
         if (verifyMFATOTP.fulfilled.match(result)) {
+          // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
+          dispatch(auth.actions.clearMFASession());
 
           return true;
         }
@@ -83,7 +73,9 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFARecoveryCode({ code }));
 
         if (verifyMFARecoveryCode.fulfilled.match(result)) {
+          // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
+          dispatch(auth.actions.clearMFASession());
 
           return true;
         }
@@ -93,43 +85,32 @@ export const useMFAVerification = (type: MFAVerificationType) => {
 
       return false;
     },
-    [dispatch, navigate, type, isSubmitting, mfaVerification.isSessionExpired],
+    [dispatch, navigate, type, isSubmitting, isSessionExpired],
   );
 
-  // Clear error when user types
+  // Clear error when user types - dispatches correct action based on type
   const clearError = useCallback(() => {
     // Don't clear session-expired errors
-    if (mfaVerification.isSessionExpired || mfaVerification.displayError === 'mfaSessionExpired') {
+    if (isSessionExpired || verification.displayError === 'mfaSessionExpired') {
       return;
     }
 
-    if (mfaVerification.error) {
-      dispatch(auth.actions.clearMFAError());
+    if (type === 'totp') {
+      dispatch(auth.actions.clearTOTPError());
+    } else {
+      dispatch(auth.actions.clearRecoveryError());
     }
-  }, [
-    dispatch,
-    mfaVerification.error,
-    mfaVerification.isSessionExpired,
-    mfaVerification.displayError,
-  ]);
-
-  // Cleanup on unmount
-  const cleanup = useCallback(() => {
-    hasSessionExpiredRef.current = false;
-  }, []);
+  }, [dispatch, type, isSessionExpired, verification.displayError]);
 
   return {
     // State
-    error: mfaVerification.error,
-    displayError: mfaVerification.displayError, // Direct from Redux, no transformation
-    isSessionExpired: mfaVerification.isSessionExpired || false,
+    error: verification.displayError,
+    displayError: verification.displayError, // Direct from Redux, no transformation
+    isSessionExpired,
     isSubmitting,
-    attempts,
-    maxAttempts,
 
     // Actions
     verifyCode,
     clearError,
-    cleanup,
   };
 };

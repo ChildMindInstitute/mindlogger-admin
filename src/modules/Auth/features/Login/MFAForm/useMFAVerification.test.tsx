@@ -1,4 +1,4 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { vi } from 'vitest';
 import type { AxiosResponse, AxiosHeaders } from 'axios';
@@ -56,19 +56,21 @@ describe('useMFAVerification', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // MFA session only contains backend-provided tokens
+    // Session expiry and attempts are tracked by the backend
     store = setupStore({
       auth: {
         mfaSession: {
           token: 'test-token',
           sessionId: 'test-session',
-          attempts: 0,
-          expiresAt: Date.now() + 5 * 60 * 1000,
         },
-        mfaVerification: {
+        totpVerification: {
           status: 'idle',
-          error: undefined,
-          isSessionExpired: false,
         },
+        recoveryVerification: {
+          status: 'idle',
+        },
+        isSessionExpired: false,
         authentication: {
           status: 'idle',
           requestId: 'test',
@@ -90,8 +92,9 @@ describe('useMFAVerification', () => {
     expect(result.current.error).toBeUndefined();
     expect(result.current.displayError).toBeUndefined();
     expect(result.current.isSubmitting).toBe(false);
-    expect(result.current.attempts).toBe(0);
-    expect(result.current.maxAttempts).toBe(5);
+    expect(result.current.isSessionExpired).toBe(false);
+    // Note: attempts tracking is now handled by backend
+    // attemptsRemaining comes from API error responses via Redux state
   });
 
   it('should verify TOTP code successfully', async () => {
@@ -160,24 +163,28 @@ describe('useMFAVerification', () => {
     expect(navigateToLibrary).toHaveBeenCalledWith(mockNavigate);
   });
 
-  it('should clear error when clearError is called', () => {
+  it('should clear error when clearError is called for TOTP', () => {
     const mockDispatch = vi.spyOn(store, 'dispatch');
 
-    // Set an error in the store
-    act(() => {
-      store.dispatch(auth.actions.setMFAError('Test error'));
-    });
-
     const { result } = renderHook(() => useMFAVerification('totp'), { wrapper });
-
-    expect(result.current.error).toBe('Test error');
-    // Note: setMFAError only sets 'error', not 'displayError' - displayError is set by thunk rejections
 
     act(() => {
       result.current.clearError();
     });
 
-    expect(mockDispatch).toHaveBeenCalledWith(auth.actions.clearMFAError());
+    expect(mockDispatch).toHaveBeenCalledWith(auth.actions.clearTOTPError());
+  });
+
+  it('should clear error when clearError is called for recovery', () => {
+    const mockDispatch = vi.spyOn(store, 'dispatch');
+
+    const { result } = renderHook(() => useMFAVerification('recovery'), { wrapper });
+
+    act(() => {
+      result.current.clearError();
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith(auth.actions.clearRecoveryError());
   });
 
   it('should not allow concurrent submissions', async () => {
@@ -206,20 +213,23 @@ describe('useMFAVerification', () => {
     expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle session expiry', async () => {
+  it('should handle session expiry from backend response', () => {
+    // Session expiry is now detected via backend error response
+    // Backend sets isSessionExpired flag when session times out
     const expiredStore = setupStore({
       auth: {
         mfaSession: {
           token: 'test-token',
           sessionId: 'test-session',
-          attempts: 0,
-          expiresAt: Date.now() - 1000, // Already expired
         },
-        mfaVerification: {
+        totpVerification: {
+          status: 'error',
+          displayError: 'mfaSessionExpired',
+        },
+        recoveryVerification: {
           status: 'idle',
-          error: undefined,
-          isSessionExpired: false,
         },
+        isSessionExpired: true, // Set by backend response
         authentication: {
           status: 'idle',
           requestId: 'test',
@@ -234,13 +244,10 @@ describe('useMFAVerification', () => {
       <Provider store={expiredStore}>{children}</Provider>
     );
 
-    renderHook(() => useMFAVerification('totp'), { wrapper: expiredWrapper });
+    const { result } = renderHook(() => useMFAVerification('totp'), { wrapper: expiredWrapper });
 
-    await waitFor(() => {
-      const state = expiredStore.getState();
-      // Session expiry now uses displayError key and isSessionExpired flag
-      expect(state.auth.mfaVerification.displayError).toBe('mfaSessionExpired');
-      expect(state.auth.mfaVerification.isSessionExpired).toBe(true);
-    });
+    // isSessionExpired should be true from backend response
+    expect(result.current.isSessionExpired).toBe(true);
+    expect(result.current.displayError).toBe('mfaSessionExpired');
   });
 });

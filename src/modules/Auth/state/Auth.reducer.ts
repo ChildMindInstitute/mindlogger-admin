@@ -10,27 +10,7 @@ import {
   createAuthRejectedData,
 } from './Auth.utils';
 import { state as initialState } from './Auth.state';
-
-// Helper to detect expiry messages from backend
-const isSessionExpiredError = (message: string): boolean => {
-  const lower = message.toLowerCase();
-
-  return (
-    lower.includes('session not found') ||
-    lower.includes('expired') ||
-    lower.includes('session expired')
-  );
-};
-
-// Helper to apply session expired state (can't call reducers directly in extraReducers)
-const applySessionExpired = (state: AuthSchema, errorMessage?: string): void => {
-  state.mfaVerification.status = 'error';
-  state.mfaVerification.displayError = 'mfaSessionExpired';
-  state.mfaVerification.isSessionExpired = true;
-  if (errorMessage) {
-    state.mfaVerification.error = errorMessage;
-  }
-};
+import { MfaErrorResult } from '../utils/mfa.utils';
 
 export const reducers = {
   startLogout: (state: AuthSchema): void => {
@@ -44,7 +24,9 @@ export const reducers = {
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
     state.mfaSession = undefined;
-    state.mfaVerification = { status: 'idle', isSessionExpired: false };
+    state.totpVerification = { status: 'idle' };
+    state.recoveryVerification = { status: 'idle' };
+    state.isSessionExpired = false;
   },
   startSoftLock: (state: AuthSchema, { payload }: PayloadAction<SoftLockData>): void => {
     state.softLockData = payload;
@@ -58,35 +40,24 @@ export const reducers = {
   },
   clearMFASession: (state: AuthSchema): void => {
     state.mfaSession = undefined;
-    state.mfaVerification = { status: 'idle', isSessionExpired: false };
+    state.totpVerification = { status: 'idle' };
+    state.recoveryVerification = { status: 'idle' };
+    state.isSessionExpired = false;
   },
-  incrementMFAAttempts: (state: AuthSchema): void => {
-    if (state.mfaSession) {
-      state.mfaSession.attempts += 1;
-    }
+  // Clear TOTP error (when user types in TOTP form)
+  clearTOTPError: (state: AuthSchema): void => {
+    if (state.isSessionExpired) return;
+    state.totpVerification.displayError = undefined;
+    state.totpVerification.status = 'idle';
   },
-  clearMFAError: (state: AuthSchema): void => {
-    // Don't clear if session expired - it's terminal
-    if (
-      state.mfaVerification.isSessionExpired ||
-      state.mfaVerification.displayError === 'mfaSessionExpired'
-    ) {
-      return;
-    }
-
-    state.mfaVerification.error = undefined;
-    state.mfaVerification.displayError = undefined;
-    state.mfaVerification.status = 'idle';
-  },
-  setMFAError: (state: AuthSchema, action: PayloadAction<string>): void => {
-    state.mfaVerification.error = action.payload;
-    state.mfaVerification.status = 'error';
-    // Don't set displayError here - let rejected handlers or specific actions do it
+  // Clear Recovery error (when user types in Recovery form)
+  clearRecoveryError: (state: AuthSchema): void => {
+    if (state.isSessionExpired) return;
+    state.recoveryVerification.displayError = undefined;
+    state.recoveryVerification.status = 'idle';
   },
   setMFASessionExpired: (state: AuthSchema): void => {
-    state.mfaVerification.status = 'error';
-    state.mfaVerification.displayError = 'mfaSessionExpired';
-    state.mfaVerification.isSessionExpired = true;
+    state.isSessionExpired = true;
   },
 };
 
@@ -100,12 +71,11 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
 
     // Check if MFA is required
     if (result && 'mfaRequired' in result && result.mfaRequired) {
-      // Set MFA session data
+      // Set MFA session data - only store backend-provided tokens
+      // Session expiry and attempts are tracked by the backend
       state.mfaSession = {
         token: result.mfaToken,
         sessionId: result.mfaSessionId,
-        attempts: 0,
-        expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
       };
       // Don't set authentication data yet
       state.authentication.status = 'idle';
@@ -133,95 +103,104 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   // MFA TOTP verification reducers
-  builder.addCase(verifyMFATOTP.pending, (state) => {
-    state.mfaVerification.status = 'loading';
-    state.mfaVerification.error = undefined;
+  builder.addCase(verifyMFATOTP.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
+    state.totpVerification.status = 'loading';
+    state.totpVerification.displayError = undefined;
   });
 
   builder.addCase(verifyMFATOTP.fulfilled, (state, action) => {
-    // Set user data and clear MFA session
+    // Set user data - mfaSession is cleared by useMFAVerification after navigation
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
-    state.mfaSession = undefined;
-    state.mfaVerification = { status: 'idle' };
+    state.totpVerification = { status: 'idle' };
+    state.recoveryVerification = { status: 'idle' };
+    state.isSessionExpired = false;
   });
 
   builder.addCase(verifyMFATOTP.rejected, (state, action) => {
     // Skip if already expired
-    if (state.mfaVerification.isSessionExpired) return;
+    if (state.isSessionExpired) return;
 
-    // Extract error message from the payload
-    const errorPayload = action.payload as any;
-    let errorMessage = 'Invalid verification code';
-    if (typeof errorPayload === 'string') {
-      errorMessage = errorPayload;
-    } else if (errorPayload?.message) {
-      errorMessage = errorPayload.message;
+    state.authentication.status = 'idle';
+    state.totpVerification.status = 'error';
+
+    // Handle both string and MfaErrorResult payloads
+    // String: from API returning invalid response (e.g., wrong code)
+    // MfaErrorResult: from exception handling (e.g., session expired, network error)
+    if (typeof action.payload === 'string') {
+      state.totpVerification.displayError = 'invalidCode';
+
+      return;
     }
 
-    // CHECK FOR EXPIRY FROM BACKEND FIRST - before anything else
-    if (isSessionExpiredError(errorMessage)) {
-      applySessionExpired(state, errorMessage);
+    const { translationKey, isSessionExpired, attemptsRemaining } =
+      action.payload as MfaErrorResult;
 
-      return; // Do NOT increment attempts
+    state.totpVerification.attemptsRemaining = attemptsRemaining;
+
+    if (isSessionExpired) {
+      state.totpVerification.displayError = translationKey;
+      state.isSessionExpired = true;
+
+      return;
     }
 
-    // Normal invalid code flow
-    state.mfaVerification.status = 'error';
-    state.mfaVerification.error = errorMessage;
-
-    // Safe increment - avoid NaN if attempts is undefined
-    if (state.mfaSession) {
-      state.mfaSession.attempts = (state.mfaSession.attempts ?? 0) + 1;
-    }
-
-    // Set displayError - simplified logic for "Invalid code" with attempts
-    const attempts = state.mfaSession?.attempts || 0;
-    const maxAttempts = 5;
-
-    if (attempts >= 3 && attempts < maxAttempts) {
-      const remaining = maxAttempts - attempts;
-      state.mfaVerification.displayError = `invalidCode|${remaining}`; // Format: "invalidCode|2"
+    // Format with attempts warning (threshold: 3)
+    if (attemptsRemaining !== null && attemptsRemaining <= 3) {
+      state.totpVerification.displayError = `${translationKey}|${attemptsRemaining}`;
     } else {
-      state.mfaVerification.displayError = 'invalidCode';
+      state.totpVerification.displayError = translationKey;
     }
   });
 
   // Recovery code verification reducers
-  builder.addCase(verifyMFARecoveryCode.pending, (state) => {
-    state.mfaVerification.status = 'loading';
-    state.mfaVerification.error = undefined;
+  builder.addCase(verifyMFARecoveryCode.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
+    state.recoveryVerification.status = 'loading';
+    state.recoveryVerification.displayError = undefined;
   });
 
   builder.addCase(verifyMFARecoveryCode.fulfilled, (state, action) => {
-    // Set user data and clear MFA session
+    // Set user data - mfaSession is cleared by useMFAVerification after navigation
     createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
-    state.mfaSession = undefined;
-    state.mfaVerification = { status: 'idle' };
+    state.totpVerification = { status: 'idle' };
+    state.recoveryVerification = { status: 'idle' };
+    state.isSessionExpired = false;
   });
 
   builder.addCase(verifyMFARecoveryCode.rejected, (state, action) => {
     // Skip if already expired
-    if (state.mfaVerification.isSessionExpired) return;
+    if (state.isSessionExpired) return;
 
-    // Extract error message from the payload
-    const errorPayload = action.payload as any;
-    let errorMessage = 'Invalid recovery code';
-    if (typeof errorPayload === 'string') {
-      errorMessage = errorPayload;
-    } else if (errorPayload?.message) {
-      errorMessage = errorPayload.message;
+    state.authentication.status = 'idle';
+    state.recoveryVerification.status = 'error';
+
+    // Handle both string and MfaErrorResult payloads
+    // String: from API returning invalid response (e.g., wrong code)
+    // MfaErrorResult: from exception handling (e.g., session expired, network error)
+    if (typeof action.payload === 'string') {
+      state.recoveryVerification.displayError = 'invalidRecoveryCode';
+
+      return;
     }
 
-    // CHECK FOR EXPIRY FROM BACKEND FIRST
-    if (isSessionExpiredError(errorMessage)) {
-      applySessionExpired(state, errorMessage);
+    const { translationKey, isSessionExpired, attemptsRemaining } =
+      action.payload as MfaErrorResult;
 
-      return; // No further processing
+    state.recoveryVerification.attemptsRemaining = attemptsRemaining;
+
+    if (isSessionExpired) {
+      state.recoveryVerification.displayError = translationKey;
+      state.isSessionExpired = true;
+
+      return;
     }
 
-    // Normal invalid recovery code flow
-    state.mfaVerification.status = 'error';
-    state.mfaVerification.error = errorMessage;
-    state.mfaVerification.displayError = 'invalidRecoveryCode';
+    // Format with attempts warning (threshold: 3) - same as TOTP
+    if (attemptsRemaining !== null && attemptsRemaining <= 3) {
+      state.recoveryVerification.displayError = `${translationKey}|${attemptsRemaining}`;
+    } else {
+      state.recoveryVerification.displayError = translationKey;
+    }
   });
 };

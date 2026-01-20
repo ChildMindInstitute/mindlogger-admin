@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 
+import { page } from 'resources';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 
 export const navigateToLibrary = (navigate: NavigateFunction) => {
@@ -7,5 +8,7 @@ export const navigateToLibrary = (navigate: NavigateFunction) => {
   if (fromLibraryUrl) {
     navigate(fromLibraryUrl);
     storage.removeItem(LocalStorageKeys.LibraryUrl);
+  } else {
+    navigate(page.dashboard);
   }
 };

@@ -22,6 +22,8 @@ import {
   MFAVerifySuccessResponse,
 } from 'api';
 
+import { getMfaErrorResult } from '../utils/mfa.utils';
+
 type MFAErrorLike = {
   message?: string;
   result?: {
@@ -155,11 +157,7 @@ export const verifyMFATOTP = createAsyncThunk(
         throw new Error('MFA session not found');
       }
 
-      // Check if session has expired
-      if (Date.now() > mfaSession.expiresAt) {
-        return rejectWithValue({ message: 'MFA session expired' });
-      }
-
+      // Session expiry is validated by the backend
       const response = await verifyMFATOTPApi(
         {
           mfaToken: mfaSession.token,
@@ -187,9 +185,7 @@ export const verifyMFATOTP = createAsyncThunk(
 
       return data;
     } catch (exception) {
-      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
-
-      return rejectWithValue(errorMessage);
+      return rejectWithValue(getMfaErrorResult(exception, 'totp'));
     }
   },
 );
@@ -205,11 +201,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         throw new Error('MFA session not found');
       }
 
-      // Check if session has expired
-      if (Date.now() > mfaSession.expiresAt) {
-        return rejectWithValue({ message: 'MFA session expired' });
-      }
-
+      // Session expiry is validated by the backend
       const response = await verifyMFARecoveryCodeApi(
         {
           mfaToken: mfaSession.token,
@@ -237,9 +229,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
 
       return data;
     } catch (exception) {
-      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
-
-      return rejectWithValue(errorMessage);
+      return rejectWithValue(getMfaErrorResult(exception, 'recovery'));
     }
   },
 );
