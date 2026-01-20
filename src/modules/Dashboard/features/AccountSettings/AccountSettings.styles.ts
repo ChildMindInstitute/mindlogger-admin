@@ -4,7 +4,7 @@ import { theme, variables } from 'shared/styles';
 
 export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
-    max-width: 80rem;
+    max-width: 102.3rem;
     width: 100%;
     border-radius: ${variables.borderRadius.lg};
     background-color: ${variables.palette.surface1};
@@ -34,12 +34,18 @@ export const StyledCloseButton = styled(Box)`
   }
 `;
 
-export const StyledDialogContent = styled(DialogContent)`
+export const StyledDialogContent = styled(DialogContent)<{ hasBanner?: boolean }>`
   display: flex;
-  padding: 64px;
+  padding: ${({ hasBanner }) => (hasBanner ? '0 64px 64px' : '64px')};
+  padding-top: ${({ hasBanner }) => (hasBanner ? '64px' : '64px')};
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
+  align-self: stretch;
+`;
+
+export const StyledBannerContainer = styled(Box)`
+  width: 100%;
   align-self: stretch;
 `;
 
@@ -64,7 +70,7 @@ export const StyledTab = styled(Box)`
   .MuiTypography-root {
     color: ${variables.palette.primary};
     text-align: center;
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 1.4rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};
@@ -91,7 +97,7 @@ export const StyledTwoFactorTitle = styled(Box)`
   .MuiTypography-root {
     color: ${variables.palette.on_surface};
     text-align: left;
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.body};
     font-size: 1.6rem;
     font-style: normal;
     font-weight: ${variables.font.weight.regular};

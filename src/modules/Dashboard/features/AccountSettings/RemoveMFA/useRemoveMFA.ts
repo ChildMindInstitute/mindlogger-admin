@@ -4,7 +4,8 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
-import { getErrorMessage } from './RemoveMFA.utils';
+import { parseError } from './RemoveMFA.utils';
+import { ErrorScenario, ErrorMetadata } from './RemoveMFA.types';
 
 interface VerifyResult {
   success: boolean;
@@ -13,17 +14,36 @@ interface VerifyResult {
 /**
  * Custom hook for managing MFA disable operations
  * Handles API calls, loading states, and error handling
+ * Implements 3-step flow: initiate → verify → confirm
  */
 export const useRemoveMFA = () => {
   const [mfaToken, setMfaToken] = useState<string | null>(null);
+  const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorScenario, setErrorScenario] = useState<ErrorScenario>(ErrorScenario.GENERIC);
+  const [errorMetadata, setErrorMetadata] = useState<ErrorMetadata | undefined>(undefined);
 
-  const clearError = () => setError(null);
+  const clearError = () => {
+    setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
+  };
 
   /**
-   * Initiates MFA disable by creating a verification session
-   * @returns Object with success flag and optional mfaToken
+   * Resets session state for retry
+   */
+  const resetSession = useCallback(() => {
+    setMfaToken(null);
+    setConfirmationToken(null);
+    setError(null);
+    setErrorScenario(ErrorScenario.GENERIC);
+    setErrorMetadata(undefined);
+    setIsLoading(false);
+  }, []);
+
+  /**
+   * Step 1: Initiate MFA disable
    */
   const initiateDisable = useCallback(async (): Promise<{
     success: boolean;
@@ -40,8 +60,12 @@ export const useRemoveMFA = () => {
 
       return { success: true, mfaToken: token };
     } catch (err) {
-      const errorMessage = getErrorMessage(err as AxiosError);
-      setError(errorMessage);
+      const axiosError = err as AxiosError;
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
       setIsLoading(false);
 
       return { success: false };
@@ -49,11 +73,9 @@ export const useRemoveMFA = () => {
   }, []);
 
   /**
-   * Verifies TOTP or recovery code and disables MFA
-   * @param code - TOTP code from authenticator app or recovery code
-   * @returns Object with success flag
+   * Step 2: Verify code (does NOT disable MFA)
    */
-  const verifyAndDisable = useCallback(
+  const verifyCode = useCallback(
     async (code: string): Promise<VerifyResult> => {
       if (!mfaToken) {
         setError(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
@@ -65,17 +87,25 @@ export const useRemoveMFA = () => {
       clearError();
 
       try {
-        await mfaApi.verifyAndDisable({
+        const response = await mfaApi.verifyDisable({
           mfaToken,
           code,
         });
 
+        const token = response.data.result.confirmationToken;
+        setConfirmationToken(token);
         setIsLoading(false);
 
         return { success: true };
       } catch (err) {
-        const errorMessage = getErrorMessage(err as AxiosError);
-        setError(errorMessage);
+        const axiosError = err as AxiosError;
+        // Detect if it's a recovery code (11 chars with dash) or TOTP (6 digits)
+        const codeType = code.length === 11 ? 'recovery' : 'totp';
+        const parsedError = parseError(axiosError, codeType);
+
+        setError(parsedError.message);
+        setErrorScenario(parsedError.scenario);
+        setErrorMetadata(parsedError.metadata);
         setIsLoading(false);
 
         return { success: false };
@@ -84,12 +114,51 @@ export const useRemoveMFA = () => {
     [mfaToken],
   );
 
+  /**
+   * Step 3: Confirm and disable MFA
+   */
+  const confirmDisable = useCallback(async (): Promise<VerifyResult> => {
+    if (!confirmationToken) {
+      setError(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
+
+      return { success: false };
+    }
+
+    setIsLoading(true);
+    clearError();
+
+    try {
+      await mfaApi.confirmDisable({
+        confirmationToken,
+      });
+
+      setIsLoading(false);
+
+      return { success: true };
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      const parsedError = parseError(axiosError);
+
+      setError(parsedError.message);
+      setErrorScenario(parsedError.scenario);
+      setErrorMetadata(parsedError.metadata);
+      setIsLoading(false);
+
+      return { success: false };
+    }
+  }, [confirmationToken]);
+
   return {
     mfaToken,
+    confirmationToken,
     isLoading,
     error,
+    errorScenario,
+    errorMetadata,
     clearError,
+    resetSession,
     initiateDisable,
-    verifyAndDisable,
+    verifyCode,
+    confirmDisable,
   };
 };

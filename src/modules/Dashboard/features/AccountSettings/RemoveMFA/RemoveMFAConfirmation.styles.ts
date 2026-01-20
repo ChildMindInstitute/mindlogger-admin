@@ -13,7 +13,7 @@ export const StyledDialog = styled(Dialog)`
   }
 
   .MuiBackdrop-root {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: ${variables.palette.black}80;
   }
 `;
 
@@ -26,7 +26,7 @@ export const StyledHeader = styled(Box)`
 `;
 
 export const StyledTitle = styled('h2')`
-  font-family: 'Moderat', sans-serif;
+  font-family: ${variables.font.family.title};
   font-size: 24px;
   font-weight: 400;
   line-height: 32px;
@@ -77,6 +77,7 @@ export const StyledDescription = styled(StyledBodyLarge)`
   color: ${variables.palette.on_surface};
   margin: 0;
   line-height: 24px;
+  letter-spacing: ${variables.font.letterSpacing.xxl}; /* 0.5px - Cm/body/large spec */
 `;
 
 export const StyledButtonContainer = styled(Box)`
@@ -91,7 +92,7 @@ export const StyledButton = styled('button')`
   width: 300px;
   height: 48px;
   border-radius: 100px;
-  font-family: 'Moderat', sans-serif;
+  font-family: ${variables.font.family.label};
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.15px;
@@ -109,8 +110,8 @@ export const StyledButton = styled('button')`
     font-weight: 700;
 
     &:hover:not(:disabled) {
-      background: ${variables.palette.error_dark || '#a01515'};
-      box-shadow: 0 2px 4px rgba(186, 26, 26, 0.3);
+      background: ${variables.palette.error30};
+      box-shadow: 0 2px 4px ${variables.palette.error40}4D;
     }
 
     &:focus {

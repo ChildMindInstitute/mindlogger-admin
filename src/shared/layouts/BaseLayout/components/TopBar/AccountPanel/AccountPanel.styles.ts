@@ -14,14 +14,14 @@ export const StyledAccountDrawer = styled(Drawer)`
     background-color: ${variables.palette.surface1};
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     box-shadow: unset;
+    overflow: hidden;
   }
 `;
 
 export const StyledHeader = styled(Box)`
   display: flex;
-  padding: ${theme.spacing(1.4, 1.6, 0)};
+  padding: ${theme.spacing(1.4, 1.6, 1.6)};
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;
@@ -79,37 +79,36 @@ export const StyledCloseWrapper = styled(Box)`
 `;
 
 export const StyledSettingsSection = styled(Box)`
-  display: flex;
-  padding: 10px 16px 10px 12px;
+  display: inline-flex;
+  height: 4rem;
+  padding: ${theme.spacing(1, 1.6, 1, 1.2)};
   align-items: center;
-  gap: ${theme.spacing(1)};
-  align-self: stretch;
+  gap: ${theme.spacing(0.8)};
   cursor: pointer;
+  border-radius: ${variables.borderRadius.xxxl};
   transition: background-color 0.2s ease;
-  flex-shrink: 0;
+  align-self: flex-start;
 
   &:hover {
     background-color: ${variables.palette.on_surface_alpha8};
-  }
-
-  .MuiTypography-root {
-    color: ${variables.palette.primary};
-    text-align: center;
-    font-family: ${variables.font.family};
-    font-size: 1.6rem;
-    font-style: normal;
-    font-weight: ${variables.font.weight.regular};
-    line-height: 2.4rem;
-    letter-spacing: 0.15px;
   }
 `;
 
 export const StyledSettingsIcon = styled(Box)`
   display: flex;
+  width: 1.8rem;
+  height: 1.8rem;
   align-items: center;
   justify-content: center;
 
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledContentWrapper = styled(Box)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;

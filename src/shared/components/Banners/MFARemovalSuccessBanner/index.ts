@@ -1,1 +1,0 @@
-export { MFARemovalSuccessBanner } from './MFARemovalSuccessBanner';

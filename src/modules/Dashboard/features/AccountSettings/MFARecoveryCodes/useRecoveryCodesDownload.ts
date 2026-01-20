@@ -1,7 +1,6 @@
 import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 
-import { getCodeString } from './MFARecoveryCodes.utils';
 import { extractFilenameFromHeader, generateTimestampedFilename } from './fileDownload.utils';
 
 export const useRecoveryCodesDownload = (
@@ -15,54 +14,36 @@ export const useRecoveryCodesDownload = (
 
     const response = await mfaApi.downloadRecoveryCodes(downloadToken);
 
-    // Create blob from response data
     const blob = new Blob([response.data], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
 
-    // Extract filename from Content-Disposition header or generate timestamped filename
+    // Extract filename from Content-Disposition header or use timestamped default
     const contentDisposition =
       response.headers['content-disposition'] || response.headers['Content-Disposition'];
     const filename = extractFilenameFromHeader(contentDisposition) || generateTimestampedFilename();
 
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  const downloadFromFrontend = () => {
-    // Convert codes to strings (handles both string[] and RecoveryCodeItem[])
-    const codeStrings = recoveryCodes.map((code) => getCodeString(code));
-    const codesText = codeStrings.join('\n');
-    const blob = new Blob([codesText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    // Always use timestamped filename for consistency
-    link.download = generateTimestampedFilename();
-    document.body.appendChild(link);
+    link.download = filename;
+    link.style.display = 'none';
+
+    // Append to drawer to prevent ClickAwayListener from closing modals
+    const drawer = document.querySelector('[data-testid="account-panel"]');
+    const targetElement = drawer || document.body;
+
+    targetElement.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    targetElement.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
   const handleDownload = async () => {
-    // If downloadToken is available (viewing scenario), use backend endpoint
-    if (downloadToken) {
-      try {
-        await downloadFromBackend();
-      } catch (error) {
-        console.error('Failed to download recovery codes from backend:', error);
-        // Fallback to frontend download if backend fails
-        downloadFromFrontend();
-      }
-    } else {
-      // No token (setup scenario), create file on frontend
-      downloadFromFrontend();
+    // Require downloadToken (5-min JWT) for security - no frontend fallback
+    if (!downloadToken) {
+      throw new Error('Download token is required. Cannot download recovery codes.');
     }
+
+    await downloadFromBackend();
   };
 
   return { handleDownload };

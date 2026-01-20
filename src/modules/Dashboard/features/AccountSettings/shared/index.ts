@@ -1,6 +1,5 @@
 export { ConfirmIdentityVerificationCode } from './ConfirmIdentityVerificationCode';
 export { ConfirmIdentityRecoveryCode } from './ConfirmIdentityRecoveryCode';
-export { CloseIcon } from './CloseIcon';
 export { MFAVerificationForm } from './MFAVerificationForm';
 export { useMFAInputHandler } from './useMFAInputHandler';
 

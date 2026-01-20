@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import {
@@ -20,6 +21,7 @@ export const ConfirmIdentityVerificationCode = ({
   onClose,
   onConfirm,
   onUseRecoveryCode,
+  onRetry,
   verificationCode,
   setVerificationCode,
   isLoading,
@@ -28,6 +30,7 @@ export const ConfirmIdentityVerificationCode = ({
   title,
   description,
 }: ConfirmIdentityVerificationCodeProps) => {
+  const { t } = useTranslation('app');
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
 
   const handleClose = () => {
@@ -45,6 +48,15 @@ export const ConfirmIdentityVerificationCode = ({
     onUseRecoveryCode();
   };
 
+  const handleTryAgain = () => {
+    if (onRetry) {
+      onRetry();
+    }
+  };
+
+  // Disable input for critical error scenarios
+  const shouldDisableInput = !!onRetry;
+
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
@@ -59,33 +71,46 @@ export const ConfirmIdentityVerificationCode = ({
             <StyledInput
               type="text"
               inputMode="numeric"
-              placeholder="Enter verification code"
+              placeholder={t('mfa.verificationCode.placeholder')}
               value={verificationCode}
               onChange={handleInputChange}
               maxLength={6}
-              disabled={isLoading}
+              disabled={isLoading || shouldDisableInput}
             />
           </StyledInputContainer>
           {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
         </Box>
 
         <StyledButtonContainer>
-          <StyledButton
-            type="button"
-            className="primary"
-            onClick={handleContinue}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Verifying...' : 'Continue'}
-          </StyledButton>
-          <StyledButton
-            type="button"
-            className="secondary"
-            onClick={handleUseRecoveryCode}
-            disabled={isLoading}
-          >
-            I can't access my authenticator app
-          </StyledButton>
+          {onRetry ? (
+            <StyledButton
+              type="button"
+              className="primary"
+              onClick={handleTryAgain}
+              disabled={isLoading}
+            >
+              {t('mfa.buttons.tryAgain')}
+            </StyledButton>
+          ) : (
+            <>
+              <StyledButton
+                type="button"
+                className="primary"
+                onClick={handleContinue}
+                disabled={isLoading}
+              >
+                {isLoading ? t('mfa.buttons.verifying') : t('mfa.buttons.continue')}
+              </StyledButton>
+              <StyledButton
+                type="button"
+                className="secondary"
+                onClick={handleUseRecoveryCode}
+                disabled={isLoading}
+              >
+                {t('mfa.confirmIdentity.cantAccessApp')}
+              </StyledButton>
+            </>
+          )}
         </StyledButtonContainer>
       </StyledContent>
     </StyledDialog>

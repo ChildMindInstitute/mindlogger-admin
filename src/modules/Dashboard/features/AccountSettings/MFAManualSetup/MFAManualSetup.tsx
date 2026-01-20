@@ -1,3 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
+import { Svg } from 'shared/components/Svg';
+
 import {
   StyledDialog,
   StyledHeader,
@@ -8,7 +12,6 @@ import {
   StyledDescriptionMultiLine,
 } from './MFAManualSetup.styles';
 import { MFAManualSetupProps } from './MFAManualSetup.types';
-import { CloseIcon } from '../shared/CloseIcon';
 import { SecretKeyDisplay } from './SecretKeyDisplay';
 import { VerificationForm } from './VerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
@@ -27,6 +30,7 @@ export const MFAManualSetup = ({
   clearError,
   onRecoveryCodes,
 }: MFAManualSetupProps) => {
+  const { t } = useTranslation('app');
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
 
   const handleContinue = async () => {
@@ -56,21 +60,18 @@ export const MFAManualSetup = ({
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Type Key in Authenticator</StyledTitle>
+        <StyledTitle>{t('mfa.setup.manualTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 
       <StyledContent>
-        <StyledDescription>Enter the setup key below in your authenticator app.</StyledDescription>
+        <StyledDescription>{t('mfa.setup.manualDescription')}</StyledDescription>
 
         <SecretKeyDisplay secretKey={secretKey} />
 
-        <StyledDescriptionMultiLine>
-          Then, enter the verification code that appears in your authenticator app to complete
-          setup.
-        </StyledDescriptionMultiLine>
+        <StyledDescriptionMultiLine>{t('mfa.setup.manualInstructions')}</StyledDescriptionMultiLine>
 
         <VerificationForm
           verificationCode={verificationCode}

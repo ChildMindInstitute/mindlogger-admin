@@ -5,11 +5,11 @@ import { variables } from 'shared/styles/variables';
 export const StyledDialog = styled(Dialog)`
   .MuiDialog-paper {
     display: flex;
-    width: 540px;
+    width: 480px;
     padding: 32px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 32px;
     border-radius: 16px;
     background: ${variables.palette.surface};
   }
@@ -26,7 +26,7 @@ export const StyledTitle = styled('h2')`
   margin: 0;
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 2.4rem;
   font-weight: 400;
   line-height: 3.2rem;
@@ -62,14 +62,14 @@ export const StyledContent = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
   align-self: stretch;
 `;
 
 export const StyledDescription = styled(Box)`
   align-self: stretch;
   color: ${variables.palette.on_surface};
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
@@ -84,7 +84,7 @@ export const StyledQRCodeContainer = styled(Box)`
   align-items: center;
   align-self: stretch;
 
-  min-height: 260px;
+  min-height: 225px;
 `;
 
 export const StyledQRCodePlaceholder = styled(Box)`
@@ -100,10 +100,12 @@ export const StyledInputContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== '$hasError',
 })<{ $hasError?: boolean }>`
   display: flex;
-  width: 340px;
+  width: 300px;
+  height: 56px;
   flex-direction: column;
   align-items: stretch;
-  padding: ${({ $hasError }) => ($hasError ? '17px 19px' : '18px 20px')};
+  justify-content: center;
+  padding: ${({ $hasError }) => ($hasError ? '7px 15px' : '8px 16px')};
   border-radius: 4px;
   border: ${({ $hasError }) =>
     $hasError ? `2px solid ${variables.palette.error}` : `1px solid ${variables.palette.outline}`};
@@ -111,7 +113,7 @@ export const StyledInputContainer = styled(Box, {
   &:focus-within {
     border: 2px solid
       ${({ $hasError }) => ($hasError ? variables.palette.error : variables.palette.primary)};
-    padding: 17px 19px;
+    padding: 7px 15px;
   }
 `;
 
@@ -122,18 +124,16 @@ export const StyledInput = styled('input')`
   border: none;
   background: transparent;
   color: ${variables.palette.on_surface};
-  font-feature-settings:
-    'liga' off,
-    'clig' off;
-  font-family: 'Noto Sans';
+  font-family: ${variables.font.family.input};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 2.4rem;
+  line-height: normal;
   letter-spacing: 0.15px;
 
   &::placeholder {
     color: ${variables.palette.outline};
+    opacity: 0.38;
   }
 
   &:focus {
@@ -151,7 +151,7 @@ export const StyledButtonContainer = styled(Box)`
 
 export const StyledButton = styled('button')`
   display: flex;
-  width: 340px;
+  width: 300px;
   height: 48px;
   flex-direction: column;
   justify-content: center;
@@ -162,7 +162,7 @@ export const StyledButton = styled('button')`
   background: ${variables.palette.primary};
   color: ${variables.palette.on_primary};
   text-align: center;
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 700;
@@ -186,7 +186,7 @@ export const StyledButton = styled('button')`
     height: auto;
     padding: 0;
     color: ${variables.palette.primary};
-    font-family: ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 400;
@@ -203,7 +203,7 @@ export const StyledButton = styled('button')`
 export const StyledLink = styled(Box)`
   color: ${variables.palette.primary};
   text-align: center;
-  font-family: ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 1.6rem;
   font-style: normal;
   font-weight: ${variables.font.weight.regular};
@@ -221,11 +221,11 @@ export const StyledErrorMessage = styled(Box)`
   margin-top: 4px;
   padding-left: 16px;
   color: ${variables.palette.error};
-  font-family: ${variables.font.family};
-  font-size: 1.2rem;
+  font-family: ${variables.font.family.body};
+  font-size: 1.4rem;
   font-weight: 400;
-  line-height: 1.66;
-  letter-spacing: 0.03333em;
+  line-height: 2rem;
+  letter-spacing: 0.25px;
   text-align: left;
   animation: fadeIn 0.2s ease-in;
 
@@ -250,6 +250,6 @@ export const StyledLoadingContainer = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.9);
+  background: ${variables.palette.white_alpha50};
   border-radius: 8px;
 `;

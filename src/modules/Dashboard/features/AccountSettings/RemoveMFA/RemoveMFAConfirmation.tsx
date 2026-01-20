@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 
@@ -19,30 +20,31 @@ export const RemoveMFAConfirmation: React.FC<RemoveMFAConfirmationProps> = ({
   onClose,
   onConfirm,
   isLoading = false,
-}) => (
-  <StyledDialog open={open} onClose={onClose} maxWidth={false}>
-    <StyledHeader>
-      <StyledTitle>Remove 2F Authentication</StyledTitle>
-      <StyledCloseButton onClick={onClose} disabled={isLoading} type="button">
-        <Svg id="close" width={24} height={24} />
-      </StyledCloseButton>
-    </StyledHeader>
+}) => {
+  const { t } = useTranslation('app');
 
-    <StyledContent>
-      <StyledDescription>
-        Are you sure you want to remove two factor authentication from this account? You can add it
-        again later.
-      </StyledDescription>
+  return (
+    <StyledDialog open={open} onClose={onClose} maxWidth={false}>
+      <StyledHeader>
+        <StyledTitle>{t('mfa.remove.title')}</StyledTitle>
+        <StyledCloseButton onClick={onClose} disabled={isLoading} type="button">
+          <Svg id="close" width={24} height={24} />
+        </StyledCloseButton>
+      </StyledHeader>
 
-      <StyledButtonContainer>
-        <StyledButton className="primary" onClick={onConfirm} disabled={isLoading} type="button">
-          {isLoading ? 'Removing...' : 'Remove'}
-        </StyledButton>
+      <StyledContent>
+        <StyledDescription>{t('mfa.remove.confirmationMessage')}</StyledDescription>
 
-        <StyledButton className="secondary" onClick={onClose} disabled={isLoading} type="button">
-          Cancel
-        </StyledButton>
-      </StyledButtonContainer>
-    </StyledContent>
-  </StyledDialog>
-);
+        <StyledButtonContainer>
+          <StyledButton className="primary" onClick={onConfirm} disabled={isLoading} type="button">
+            {isLoading ? t('mfa.buttons.removing') : t('mfa.buttons.remove')}
+          </StyledButton>
+
+          <StyledButton className="secondary" onClick={onClose} disabled={isLoading} type="button">
+            {t('mfa.buttons.cancel')}
+          </StyledButton>
+        </StyledButtonContainer>
+      </StyledContent>
+    </StyledDialog>
+  );
+};

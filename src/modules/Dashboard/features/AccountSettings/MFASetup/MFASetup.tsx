@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
+
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledDialog,
@@ -21,11 +24,11 @@ import { MFASetupProps } from './MFASetup.types';
 import { useMFASetup } from './useMFASetup';
 import { MFAManualSetup } from '../MFAManualSetup/MFAManualSetup';
 import { MFARecoveryCodes } from '../MFARecoveryCodes/MFARecoveryCodes';
-import { CloseIcon } from '../shared/CloseIcon';
 import { MFAVerificationForm } from '../shared/MFAVerificationForm';
 import { useMFAInputHandler } from '../shared/useMFAInputHandler';
 
 export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
+  const { t } = useTranslation('app');
   const [showManualSetup, setShowManualSetup] = useState(false);
   const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
   const {
@@ -116,20 +119,17 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth={false} disableRestoreFocus>
       <StyledHeader>
-        <StyledTitle>Scan Code in Authenticator</StyledTitle>
+        <StyledTitle>{t('mfa.setup.scanTitle')}</StyledTitle>
         <StyledCloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
+          <Svg id="close" width={24} height={24} />
         </StyledCloseButton>
       </StyledHeader>
 
       <StyledContent>
-        <StyledDescription>
-          Scan the QR code below and then enter the verification code that appears in your
-          authenticator app to complete setup.
-        </StyledDescription>
+        <StyledDescription>{t('mfa.setup.scanDescription')}</StyledDescription>
 
         <StyledQRCodeContainer>
-          {provisioningUri && <QRCodeSVG value={provisioningUri} size={260} />}
+          {provisioningUri && <QRCodeSVG value={provisioningUri} size={225} />}
           {isLoading && (
             <StyledLoadingContainer>
               <CircularProgress />
@@ -144,9 +144,9 @@ export const MFASetup = ({ open, onClose, onComplete }: MFASetupProps) => {
           onInputChange={handleInputChange}
           onPrimaryAction={handleContinue}
           onSecondaryAction={handleCantScan}
-          primaryButtonText="Continue"
-          secondaryButtonText="Can't scan QR code?"
-          inputWidth="340px"
+          primaryButtonText={t('mfa.buttons.continue')}
+          secondaryButtonText={t('mfa.setup.cantScanQR')}
+          inputWidth="300px"
           StyledInputContainer={StyledInputContainer}
           StyledInput={StyledInput}
           StyledButtonContainer={StyledButtonContainer}

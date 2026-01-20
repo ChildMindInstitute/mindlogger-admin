@@ -28,7 +28,7 @@ export const StyledTitle = styled('h2')`
   margin: 0;
   flex: 1;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.title};
   font-size: 24px;
   font-weight: 400;
   font-style: normal;
@@ -76,7 +76,7 @@ export const StyledContent = styled(Box)`
 export const StyledDescription = styled(Box)`
   width: 100%;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -110,7 +110,7 @@ export const StyledCodesList = styled(Box)`
   justify-content: center;
   width: 416px;
   color: ${variables.palette.on_surface};
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.body};
   font-size: 20px;
   font-weight: 400;
   font-style: normal;
@@ -145,7 +145,7 @@ export const StyledButton = styled('button')`
   background: ${variables.palette.primary};
   color: ${variables.palette.on_primary};
   text-align: center;
-  font-family: 'Moderat', ${variables.font.family};
+  font-family: ${variables.font.family.label};
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -173,7 +173,7 @@ export const StyledButton = styled('button')`
     gap: 8px;
     padding: 10px 24px;
     color: ${variables.palette.primary};
-    font-family: 'Moderat', ${variables.font.family};
+    font-family: ${variables.font.family.label};
     font-size: 16px;
     font-style: normal;
     font-weight: 400;

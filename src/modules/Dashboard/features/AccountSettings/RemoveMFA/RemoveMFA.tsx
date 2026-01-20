@@ -1,29 +1,54 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ConfirmIdentityVerificationCode, ConfirmIdentityRecoveryCode } from '../shared';
 import { RemoveMFAConfirmation } from './RemoveMFAConfirmation';
 import { RemoveMFAProps } from './RemoveMFA.types';
 import { useRemoveMFA } from './useRemoveMFA';
+import { ErrorScenario } from './RemoveMFA.types';
 
 type RemoveStep = 'verification' | 'recovery-code' | 'confirmation';
 
 export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
+  const { t } = useTranslation('app');
   const [currentStep, setCurrentStep] = useState<RemoveStep>('verification');
   const [verificationCode, setVerificationCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
 
-  const { mfaToken, isLoading, error, clearError, initiateDisable, verifyAndDisable } =
-    useRemoveMFA();
+  const {
+    mfaToken,
+    isLoading,
+    error,
+    errorScenario,
+    clearError,
+    resetSession,
+    initiateDisable,
+    verifyCode,
+    confirmDisable,
+  } = useRemoveMFA();
 
-  // Initiate MFA disable when modal opens
+  const shouldShowRetry =
+    errorScenario === ErrorScenario.SESSION_EXPIRED ||
+    errorScenario === ErrorScenario.MAX_SESSION_ATTEMPTS;
+
   useEffect(() => {
     if (open && !mfaToken) {
       initiateDisable();
     }
   }, [open, mfaToken, initiateDisable]);
 
+  // Reset session when modal closes
+  useEffect(() => {
+    if (!open) {
+      resetSession();
+      setCurrentStep('verification');
+      setVerificationCode('');
+      setRecoveryCode('');
+    }
+  }, [open, resetSession]);
+
   const handleVerificationConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code);
+    const result = await verifyCode(code);
 
     if (result.success) {
       setCurrentStep('confirmation');
@@ -31,7 +56,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    const result = await verifyAndDisable(code);
+    const result = await verifyCode(code);
 
     if (result.success) {
       setCurrentStep('confirmation');
@@ -48,9 +73,20 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
     setCurrentStep('verification');
   };
 
+  const handleRetry = async () => {
+    resetSession();
+    setVerificationCode('');
+    setRecoveryCode('');
+    await initiateDisable();
+  };
+
   const handleFinalConfirm = async () => {
-    onSuccess();
-    handleClose();
+    const result = await confirmDisable();
+
+    if (result.success) {
+      onSuccess();
+      handleClose();
+    }
   };
 
   const handleClose = () => {
@@ -68,13 +104,14 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         onClose={handleClose}
         onConfirm={handleVerificationConfirm}
         onUseRecoveryCode={handleUseRecoveryCode}
+        onRetry={shouldShowRetry ? handleRetry : undefined}
         verificationCode={verificationCode}
         setVerificationCode={setVerificationCode}
         isLoading={isLoading}
         error={error}
         clearError={clearError}
-        title="Confirm Your Identity"
-        description="To remove two factor authentication from your account, we need to confirm it's you. Please enter the verification code from your authenticator app."
+        title={t('mfa.confirmIdentity.title')}
+        description={t('mfa.confirmIdentity.removeDescription')}
       />
 
       <ConfirmIdentityRecoveryCode
@@ -82,6 +119,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
         onClose={handleClose}
         onConfirm={handleRecoveryCodeConfirm}
         onBack={handleBackToVerification}
+        onRetry={shouldShowRetry ? handleRetry : undefined}
         recoveryCode={recoveryCode}
         setRecoveryCode={setRecoveryCode}
         isLoading={isLoading}
