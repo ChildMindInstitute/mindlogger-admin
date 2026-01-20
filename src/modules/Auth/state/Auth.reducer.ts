@@ -103,7 +103,8 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   // MFA TOTP verification reducers
-  builder.addCase(verifyMFATOTP.pending, (state) => {
+  builder.addCase(verifyMFATOTP.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
     state.totpVerification.status = 'loading';
     state.totpVerification.displayError = undefined;
   });
@@ -120,6 +121,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     // Skip if already expired
     if (state.isSessionExpired) return;
 
+    state.authentication.status = 'idle';
     state.totpVerification.status = 'error';
 
     // Handle both string and MfaErrorResult payloads
@@ -152,7 +154,8 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   // Recovery code verification reducers
-  builder.addCase(verifyMFARecoveryCode.pending, (state) => {
+  builder.addCase(verifyMFARecoveryCode.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
     state.recoveryVerification.status = 'loading';
     state.recoveryVerification.displayError = undefined;
   });
@@ -169,6 +172,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     // Skip if already expired
     if (state.isSessionExpired) return;
 
+    state.authentication.status = 'idle';
     state.recoveryVerification.status = 'error';
 
     // Handle both string and MfaErrorResult payloads
