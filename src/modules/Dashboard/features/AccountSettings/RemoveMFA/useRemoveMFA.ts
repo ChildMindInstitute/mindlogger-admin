@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
 import { parseError } from './RemoveMFA.utils';
@@ -130,6 +131,13 @@ export const useRemoveMFA = () => {
     try {
       await mfaApi.confirmDisable({
         confirmationToken,
+      });
+
+      // Track MFA disabled and update profile
+      Mixpanel.track({ action: MixpanelEventType.MFADisabled });
+      Mixpanel.updateProfile({
+        'MFA Enabled': false,
+        'MFA Last Updated At': new Date().toISOString(),
       });
 
       setIsLoading(false);

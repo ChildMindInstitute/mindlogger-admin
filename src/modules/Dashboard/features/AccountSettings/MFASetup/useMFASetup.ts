@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
 import { MFAInitiateResponse, MFAVerifyResponse } from 'shared/api/api.mfa.types';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 import { MFA_ERROR_MESSAGES, BACKEND_ERROR_PATTERNS } from './MFASetup.const';
 
@@ -91,6 +92,9 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
       setIsLoading(true);
       setError(null);
 
+      // Track MFA setup started
+      Mixpanel.track({ action: MixpanelEventType.MFASetupStarted });
+
       try {
         const response = await mfaApi.initiateSetup();
         const data = response.data.result as MFAInitiateResponse;
@@ -134,6 +138,14 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
           downloadToken: data.downloadToken ?? null,
         };
         setDownloadToken(data.downloadToken ?? null);
+
+        // Track MFA enabled successfully and update profile
+        Mixpanel.track({ action: MixpanelEventType.MFAEnabledSuccessfully });
+        Mixpanel.updateProfile({
+          'MFA Enabled': true,
+          'MFA Enrolled At': new Date().toISOString(),
+          'MFA Last Updated At': new Date().toISOString(),
+        });
 
         return result;
       } else {
