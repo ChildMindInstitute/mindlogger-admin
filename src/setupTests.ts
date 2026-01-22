@@ -84,3 +84,22 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
     resetLDContext: vi.fn(),
   })),
 }));
+
+// Global mock for Mixpanel analytics
+// Centralizes mock that was previously duplicated across 8 test files
+vi.mock('shared/utils/mixpanel', async () => {
+  const actual =
+    await vi.importActual<typeof import('shared/utils/mixpanel')>('shared/utils/mixpanel');
+
+  return {
+    ...actual,
+    Mixpanel: {
+      init: vi.fn(),
+      track: vi.fn(),
+      login: vi.fn(),
+      logout: vi.fn(),
+      trackPageView: vi.fn(),
+      updateProfile: vi.fn(),
+    },
+  };
+});

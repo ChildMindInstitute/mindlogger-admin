@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+
 import { useMFASetup } from './useMFASetup';
 import { MFA_ERROR_MESSAGES } from './MFASetup.const';
 import {
@@ -845,6 +847,106 @@ describe('useMFASetup', () => {
 
       await waitFor(() => {
         expect(result.current.error).toBeTruthy();
+      });
+    });
+  });
+
+  describe('Mixpanel Tracking', () => {
+    beforeEach(() => {
+      vi.mocked(Mixpanel.track).mockClear();
+      vi.mocked(Mixpanel.updateProfile).mockClear();
+    });
+
+    it('should track MFASetupStarted when setup is initiated', async () => {
+      mockMFAInitiateSuccess();
+
+      renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(Mixpanel.track).toHaveBeenCalledWith({
+          action: MixpanelEventType.MFASetupStarted,
+        });
+      });
+    });
+
+    it('should track MFAEnabledSuccessfully when verification succeeds', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      await waitFor(() => {
+        expect(result.current.verificationCode).toBe('123456');
+      });
+
+      mockMFAVerifySuccess();
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(Mixpanel.track).toHaveBeenCalledWith({
+          action: MixpanelEventType.MFAEnabledSuccessfully,
+        });
+      });
+    });
+
+    it('should update Mixpanel profile when MFA is enabled successfully', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      mockMFAVerifySuccess();
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(Mixpanel.updateProfile).toHaveBeenCalledWith(
+          expect.objectContaining({
+            'MFA Enabled': true,
+          }),
+        );
+      });
+    });
+
+    it('should not track MFAEnabledSuccessfully when verification fails', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      vi.mocked(axios.post).mockRejectedValueOnce(mockInvalidCodeError);
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(result.current.error).toBeTruthy();
+      });
+
+      // Should have called MFASetupStarted but not MFAEnabledSuccessfully
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.MFASetupStarted,
+      });
+      expect(Mixpanel.track).not.toHaveBeenCalledWith({
+        action: MixpanelEventType.MFAEnabledSuccessfully,
       });
     });
   });

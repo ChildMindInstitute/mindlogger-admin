@@ -16,12 +16,6 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('shared/utils/mixpanel', () => ({
-  Mixpanel: {
-    track: vi.fn(),
-  },
-}));
-
 describe('RecoveryCodeForm', () => {
   // MFA session only contains backend-provided tokens
   // Session expiry and attempts are tracked by the backend

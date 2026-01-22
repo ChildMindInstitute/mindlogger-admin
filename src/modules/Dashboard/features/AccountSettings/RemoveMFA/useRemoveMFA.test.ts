@@ -7,6 +7,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import axios from 'axios';
 
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+
 import { useRemoveMFA } from './useRemoveMFA';
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
 import { mockMfaToken } from '../__mocks__/mfa.mocks';
@@ -756,6 +758,94 @@ describe('useRemoveMFA', () => {
 
       expect(result1?.success).toBe(true);
       expect(result2?.success).toBe(true);
+    });
+  });
+
+  describe('Mixpanel Tracking', () => {
+    beforeEach(() => {
+      vi.mocked(Mixpanel.track).mockClear();
+      vi.mocked(Mixpanel.updateProfile).mockClear();
+    });
+
+    it('should track MFADisabled when MFA is successfully disabled', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      mockMFADisableVerifyCode(mockConfirmationToken);
+
+      await act(async () => {
+        await result.current.verifyCode('123456');
+      });
+
+      await waitFor(() => {
+        expect(result.current.confirmationToken).toBe(mockConfirmationToken);
+      });
+
+      mockMFADisableConfirm();
+
+      await act(async () => {
+        await result.current.confirmDisable();
+      });
+
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.MFADisabled,
+      });
+    });
+
+    it('should update Mixpanel profile when MFA is disabled', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      mockMFADisableVerifyCode(mockConfirmationToken);
+
+      await act(async () => {
+        await result.current.verifyCode('123456');
+      });
+
+      mockMFADisableConfirm();
+
+      await act(async () => {
+        await result.current.confirmDisable();
+      });
+
+      expect(Mixpanel.updateProfile).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'MFA Enabled': false,
+        }),
+      );
+    });
+
+    it('should not track MFADisabled when confirm fails', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      mockMFADisableVerifyCode(mockConfirmationToken);
+
+      await act(async () => {
+        await result.current.verifyCode('123456');
+      });
+
+      mockCustomError(500, 'Server error');
+
+      await act(async () => {
+        await result.current.confirmDisable();
+      });
+
+      expect(Mixpanel.track).not.toHaveBeenCalledWith({
+        action: MixpanelEventType.MFADisabled,
+      });
     });
   });
 });
