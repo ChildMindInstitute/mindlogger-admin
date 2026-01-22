@@ -198,6 +198,15 @@ describe('MFA Utilities', () => {
     it('preserves existing hyphen position', () => {
       expect(formatRecoveryCode('ABCDE-12345')).toBe('ABCDE-12345');
     });
+
+    it('handles deletion from formatted code without double hyphens', () => {
+      // Simulate deleting from "ABCDE-12345" to "ABCD-12345"
+      expect(formatRecoveryCode('ABCD-12345')).toBe('ABCD1-2345');
+      // Simulate deleting all from second half: "ABCDE-" becomes "ABCDE"
+      expect(formatRecoveryCode('ABCDE-')).toBe('ABCDE');
+      // Simulate deleting from first half leaving hyphen: "ABC-12345"
+      expect(formatRecoveryCode('ABC-12345')).toBe('ABC12-345');
+    });
   });
 
   describe('isValidMFACode', () => {
