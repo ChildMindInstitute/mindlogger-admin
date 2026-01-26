@@ -57,6 +57,17 @@ export const LoginForm = () => {
     const result = await dispatch(signIn(data));
 
     if (signIn.fulfilled.match(result)) {
+      const response = result.payload;
+
+      // Check if MFA is required
+      if (response?.result && 'mfaRequired' in response.result && response.result.mfaRequired) {
+        // MFA session is set by the reducer, navigate to MFA verification page
+        navigate(page.verifyMFA);
+
+        return;
+      }
+
+      // Standard login flow (MFA not enabled)
       // If user logged in as the same user that was soft-locked, restore their nav state
       if (data.email === softLockData?.email) {
         navigate(softLockData?.redirectTo, {
@@ -119,6 +130,12 @@ export const LoginForm = () => {
       };
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Clear any existing MFA session when login page mounts
+  // This prevents browser back/forward navigation from accessing MFA with stale session
+  useEffect(() => {
+    dispatch(auth.actions.clearMFASession());
+  }, [dispatch]);
 
   const handleCreateAccountClick = () => {
     clearSoftLock();

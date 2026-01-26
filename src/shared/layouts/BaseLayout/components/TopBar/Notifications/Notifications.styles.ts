@@ -8,7 +8,11 @@ import {
   StyledIconButton,
 } from 'shared/styles/styledComponents';
 
-import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
+import {
+  ACCOUNT_HEADER_HEIGHT,
+  ACCOUNT_FOOTER_HEIGHT,
+  ACCOUNT_SETTINGS_HEIGHT,
+} from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
@@ -41,8 +45,8 @@ export const StyledCollapseBtn = styled(StyledIconButton)`
 
 export const StyledList = styled(Box)`
   height: calc(
-    100vh - ${ACCOUNT_HEADER_HEIGHT} - ${ACCOUNT_FOOTER_HEIGHT} - ${NOTIFICATIONS_HEADER_HEIGHT} -
-      3.2rem
+    100vh - ${ACCOUNT_HEADER_HEIGHT} - ${ACCOUNT_FOOTER_HEIGHT} - ${ACCOUNT_SETTINGS_HEIGHT} -
+      ${NOTIFICATIONS_HEADER_HEIGHT} - 3.2rem
   );
   overflow-y: auto;
 `;

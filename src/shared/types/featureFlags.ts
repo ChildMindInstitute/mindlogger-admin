@@ -23,4 +23,5 @@ export type FeatureFlags = Partial<{
   enableSubscaleNullWhenSkipped: boolean;
   enableEhrHealthData: 'unavailable' | 'available' | 'active';
   enableEmaExtraFiles: boolean;
+  enableMfa: boolean;
 }>;

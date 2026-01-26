@@ -10,6 +10,9 @@ import {
   ResetPassword,
   SignIn,
   SignUpArgs,
+  MFATOTPVerifyRequest,
+  MFARecoveryCodeVerifyRequest,
+  MFAVerifyResponse,
 } from './api.types';
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
@@ -59,3 +62,12 @@ export const approveRecoveryPasswordApi = (
       signal,
     },
   );
+
+// MFA API functions
+export const verifyMFATOTPApi = (data: MFATOTPVerifyRequest, signal?: AbortSignal) =>
+  apiClient.post<MFAVerifyResponse>('/auth/mfa/totp/verify', data, { signal });
+
+export const verifyMFARecoveryCodeApi = (
+  data: MFARecoveryCodeVerifyRequest,
+  signal?: AbortSignal,
+) => apiClient.post<MFAVerifyResponse>('/auth/mfa/recovery-codes/verify', data, { signal });

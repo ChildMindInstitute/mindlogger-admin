@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { Box, ClickAwayListener, Divider } from '@mui/material';
+import { useState } from 'react';
+import { ClickAwayListener, Divider } from '@mui/material';
 
 import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
 import {
   StyledLabelSmall,
   StyledTitleSmall,
-  StyledFlexTopCenter,
+  StyledTitleMedium,
   variables,
   StyledIconButton,
   StyledBadge,
@@ -15,16 +16,21 @@ import {
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { checkIfAppletUrlPassed } from 'shared/utils/urlGenerator';
+import { AccountSettings } from 'modules/Dashboard/features/AccountSettings';
 
 import { Notifications } from '../Notifications';
 import {
   StyledAccountDrawer,
   StyledHeader,
   StyledHeaderInfo,
+  StyledUserInfoWrapper,
   StyledAvatarWrapper,
   StyledFooter,
   StyledLogOutBtn,
   StyledCloseWrapper,
+  StyledSettingsSection,
+  StyledSettingsIcon,
+  StyledContentWrapper,
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
@@ -38,6 +44,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
   const handleLogout = useLogout();
   const dispatch = useAppDispatch();
   const { notWatched = 0 } = alerts.useAlertsData() ?? {};
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
 
   const onLogout = () => {
     if (checkIfAppletUrlPassed(pathname)) {
@@ -57,9 +64,17 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
         open={visibleDrawer}
         hideBackdrop
       >
-        <Box>
+        <StyledContentWrapper>
           <StyledHeader>
-            <StyledFlexTopCenter>
+            <StyledCloseWrapper>
+              <StyledIconButton
+                data-testid="account-panel-close"
+                onClick={() => setVisibleDrawer(false)}
+              >
+                <Svg id="close" />
+              </StyledIconButton>
+            </StyledCloseWrapper>
+            <StyledUserInfoWrapper>
               <StyledBadge badgeContent={notWatched} outlineColor={variables.palette.surface1}>
                 <StyledAvatarWrapper>
                   <Avatar caption={userInitials} />
@@ -73,18 +88,22 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
                   </StyledLabelSmall>
                 )}
               </StyledHeaderInfo>
-            </StyledFlexTopCenter>
-            <StyledCloseWrapper>
-              <StyledIconButton
-                data-testid="account-panel-close"
-                onClick={() => setVisibleDrawer(false)}
-              >
-                <Svg id="close" />
-              </StyledIconButton>
-            </StyledCloseWrapper>
+            </StyledUserInfoWrapper>
+            <StyledSettingsSection
+              data-testid="account-panel-settings"
+              onClick={() => setShowAccountSettings(true)}
+            >
+              <StyledSettingsIcon>
+                <Svg id="settings" width="18" height="18" />
+              </StyledSettingsIcon>
+              <StyledTitleMedium color={variables.palette.primary}>
+                {t('settings')}
+              </StyledTitleMedium>
+            </StyledSettingsSection>
           </StyledHeader>
+          <Divider />
           <Notifications />
-        </Box>
+        </StyledContentWrapper>
         <Divider />
         <StyledFooter>
           <StyledLogOutBtn
@@ -94,6 +113,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
             {t('logOut')}
           </StyledLogOutBtn>
         </StyledFooter>
+        <AccountSettings open={showAccountSettings} onClose={() => setShowAccountSettings(false)} />
       </StyledAccountDrawer>
     </ClickAwayListener>
   );

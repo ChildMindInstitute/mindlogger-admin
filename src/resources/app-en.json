@@ -1836,5 +1836,108 @@
   "autoAssignActivityDisabled": "This activity is set to ‘Auto-assign’ in the Activity Builder and therefore cannot be assigned here.",
   "autoAssignFlowDisabled": "This flow is set to ‘Auto-assign’ in the Activity Flow Builder and therefore cannot be assigned here.",
   "goToDashboard": "Go to Dashboard",
-  "subjectDataUnavailable": "You are not allowed to view the data for this user"
+  "subjectDataUnavailable": "You are not allowed to view the data for this user",
+  "autoAssignFlowDisabled": "This flow is set to 'Auto-assign' in the Activity Flow Builder and therefore cannot be assigned here.",
+  "goToDashboard": "Go to Dashboard",
+  "subjectDataUnavailable": "You are not allowed to view the data for this user",
+  "somethingWentWrong": "Something went wrong. Please try again.",
+  "mfaCodeRequired": "Verification code is required",
+  "mfaCodeFormat": "Code must be 6 digits",
+  "recoveryCodeRequired": "Recovery code is required",
+  "recoveryCodeFormat": "Recovery code must be in format XXXXX-XXXXX",
+  "confirmYourIdentity": "Confirm Your Identity",
+  "enterVerificationCode": "Please enter the verification code shown in your authenticator app.",
+  "verificationCode": "Verification code",
+  "enterVerificationCodePlaceholder": "Enter verification code",
+  "cantAccessAuthenticator": "I can't access my authenticator app",
+  "enterAccountRecoveryCode": "Please enter an account recovery code.",
+  "recoveryCode": "Recovery code",
+  "back": "Back",
+  "invalidCode": "Invalid code",
+  "invalidMFACode": "Invalid verification code",
+  "tooManyAttempts": "Too many failed attempts. Please try again later.",
+  "mfaSessionExpired": "Your session has expired. Please log in again.",
+  "invalidRecoveryCode": "Invalid recovery code",
+  "recoveryCodeAlreadyUsed": "This recovery code has already been used",
+  "attemptsRemaining": "{{count}} attempts remaining",
+  "mfa": {
+    "title": "Two-factor authentication",
+    "description": "Two-factor authentication (2FA) adds an additional layer of security to your account by requiring more than just a password to sign in. You may use one of the below:",
+    "enabledBadge": "Enabled",
+    "accountSettings": "Account Settings",
+    "profile": "Profile",
+    "email": "Email",
+    "recoveryOptions": "Recovery options",
+    "enabled": {
+      "successMessage": "Two-factor authentication has been enabled."
+    },
+    "setup": {
+      "scanTitle": "Scan Code in Authenticator",
+      "manualTitle": "Type Key in Authenticator",
+      "scanDescription": "Scan the QR code below and then enter the verification code that appears in your authenticator app to complete setup.",
+      "manualDescription": "Enter the setup key below in your authenticator app.",
+      "manualInstructions": "Then, enter the verification code that appears in your authenticator app to complete setup.",
+      "cantScanQR": "Can't scan QR code?"
+    },
+    "authenticatorApp": {
+      "title": "Authenticator app",
+      "description": "Use an authentication app or browser extension to get one time codes when prompted."
+    },
+    "recoveryCodes": {
+      "title": "Recovery codes",
+      "saveTitle": "Save Your Recovery Codes",
+      "description": "Recovery codes can be used to access your account in the event you lose access to your device and cannot receive two-factor authentication codes.",
+      "saveDescription1": "Recovery codes can be used to access your account in the event you lose access to the device you're using for 2FA.",
+      "saveDescription2": "You'll need to re-authenticate to view these codes again, so please make sure to save them now.",
+      "placeholder": "XXXXX-XXXXX",
+      "downloadExpired": {
+        "title": "Session Expired",
+        "description": "Your download session has expired. Please close this window and view the recovery codes again to download.",
+        "button": "OK, Got It"
+      },
+      "downloadNetworkError": {
+        "title": "Connection Error",
+        "description": "Unable to download recovery codes. Please check your internet connection and try again.",
+        "button": "OK"
+      }
+    },
+    "secretKey": {
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "verificationCode": {
+      "placeholder": "Enter verification code",
+      "label": "Verification code"
+    },
+    "confirmIdentity": {
+      "title": "Confirm Your Identity",
+      "verificationDescription": "To view the recovery codes for your account, we first have confirm it's you. Please enter the verification code from your authenticator app.",
+      "recoveryDescription": "Please enter an account recovery code.",
+      "removeDescription": "To remove two factor authentication from your account, we need to confirm it's you. Please enter the verification code from your authenticator app.",
+      "cantAccessApp": "I can't access my authenticator app"
+    },
+    "remove": {
+      "title": "Remove 2F Authentication",
+      "confirmationMessage": "Are you sure you want to remove two factor authentication from this account? You can add it again later.",
+      "successMessage": "Two-factor authentication has been successfully removed."
+    },
+    "buttons": {
+      "add": "Add",
+      "remove": "Remove",
+      "view": "View",
+      "continue": "Continue",
+      "back": "Back",
+      "cancel": "Cancel",
+      "verifying": "Verifying...",
+      "removing": "Removing...",
+      "savedCodes": "I've saved my codes",
+      "downloadCodes": "Download as text file",
+      "tryAgain": "Try Again"
+    },
+    "lockout": {
+      "title": "Account Temporarily Locked",
+      "message": "Too many failed attempts. Your account has been temporarily locked for security purposes. During this time, you cannot login, view recovery codes, or disable two-factor authentication. You may continue using your current session uninterrupted. Please try again later.",
+      "okButton": "OK"
+    }
+  }
 }
