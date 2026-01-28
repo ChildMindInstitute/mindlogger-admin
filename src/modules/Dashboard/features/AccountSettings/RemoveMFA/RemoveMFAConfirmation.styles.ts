@@ -102,7 +102,7 @@ export const StyledButton = styled('button')`
   padding: 10px 24px;
   display: flex;
   align-items: center;
-  justify-center;
+  justify-content: center;
 
   &.primary {
     background: ${variables.palette.error};
