@@ -8,12 +8,12 @@ export const MFA_CONSTANTS = {
 } as const;
 
 export const MFA_ERROR_MESSAGES = {
-  INVALID_CODE: 'Invalid Code',
-  EXPIRED_SETUP: 'Setup expired. Please reinitiate MFA',
-  SETUP_NOT_FOUND: 'No setup found. Please reinitiate MFA',
-  NETWORK_ERROR: 'Network Error',
-  UNKNOWN_ERROR: 'Something went wrong. Please try again.',
-  ALREADY_ENABLED: 'Two-factor authentication is already enabled for your account.',
+  INVALID_CODE: 'invalidMFACode',
+  EXPIRED_SETUP: 'mfaSessionExpired',
+  SETUP_NOT_FOUND: 'mfaSessionExpired',
+  NETWORK_ERROR: 'networkError',
+  UNKNOWN_ERROR: 'somethingWentWrong',
+  ALREADY_ENABLED: 'mfaAlreadyEnabled',
 } as const;
 
 // Backend error message patterns for matching

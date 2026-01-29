@@ -31,6 +31,7 @@ export const ConfirmIdentityRecoveryCode = ({
   error,
 }: ConfirmIdentityRecoveryCodeProps) => {
   const { t } = useTranslation('app');
+  const translatedError = error ? t(error, { defaultValue: error }) : null;
 
   const handleClose = () => {
     // Remove focus from any focused element before closing to prevent aria-hidden focus warning
@@ -86,7 +87,7 @@ export const ConfirmIdentityRecoveryCode = ({
               disabled={isLoading || shouldDisableInput}
             />
           </StyledInputContainer>
-          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+          {translatedError && <StyledErrorMessage>{translatedError}</StyledErrorMessage>}
         </Box>
 
         <StyledButtonContainer>

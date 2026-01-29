@@ -3,19 +3,17 @@
  */
 export const MFA_DISABLE_ERROR_MESSAGES = {
   NOT_ENABLED: 'Two-factor authentication is not enabled on this account.',
-  INVALID_CODE: 'Invalid code. Please check your authenticator app and try again.', // Fallback, same as INVALID_VERIFICATION_CODE
-  INVALID_VERIFICATION_CODE:
-    'Invalid TOTP code. Please check your authenticator app and try again.',
-  INVALID_RECOVERY_CODE: 'Invalid recovery code. Please check the code and try again.',
-  RECOVERY_CODE_USED: 'This recovery code has already been used. Each code can only be used once.',
-  SESSION_EXPIRED: 'Your verification session has expired. Please start over.',
-  EXPIRED_SESSION: 'Your verification session has expired. Please start over.', // Alias for SESSION_EXPIRED, used in useRemoveMFA
-  MAX_ATTEMPTS: 'Too many invalid attempts. Please try again later.',
-  GLOBAL_LOCKOUT:
-    'Account temporarily locked due to multiple failed attempts. Please try again later.',
-  SESSION_MISMATCH: 'Invalid verification session. Please start over.',
-  NETWORK_ERROR: 'Network error. Please check your connection and try again.',
-  UNKNOWN_ERROR: 'An unexpected error occurred. Please try again.',
+  INVALID_CODE: 'invalidCode', // Fallback, same as INVALID_VERIFICATION_CODE
+  INVALID_VERIFICATION_CODE: 'invalidMFACode',
+  INVALID_RECOVERY_CODE: 'invalidRecoveryCode',
+  RECOVERY_CODE_USED: 'recoveryCodeAlreadyUsed',
+  SESSION_EXPIRED: 'mfaSessionExpired',
+  EXPIRED_SESSION: 'mfaSessionExpired', // Alias for SESSION_EXPIRED, used in useRemoveMFA
+  MAX_ATTEMPTS: 'tooManyAttempts',
+  GLOBAL_LOCKOUT: 'tooManyAttempts',
+  SESSION_MISMATCH: 'mfaSessionExpired',
+  NETWORK_ERROR: 'networkError',
+  UNKNOWN_ERROR: 'somethingWentWrong',
 } as const;
 
 /**

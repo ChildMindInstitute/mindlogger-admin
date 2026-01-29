@@ -32,6 +32,7 @@ export const ConfirmIdentityVerificationCode = ({
 }: ConfirmIdentityVerificationCodeProps) => {
   const { t } = useTranslation('app');
   const { handleInputChange } = useMFAInputHandler(setVerificationCode, clearError, error);
+  const translatedError = error ? t(error, { defaultValue: error }) : null;
 
   const handleClose = () => {
     if (document.activeElement instanceof HTMLElement) {
@@ -78,7 +79,7 @@ export const ConfirmIdentityVerificationCode = ({
               disabled={isLoading || shouldDisableInput}
             />
           </StyledInputContainer>
-          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+          {translatedError && <StyledErrorMessage>{translatedError}</StyledErrorMessage>}
         </Box>
 
         <StyledButtonContainer>
