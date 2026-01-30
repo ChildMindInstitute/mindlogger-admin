@@ -8,6 +8,7 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import axios from 'axios';
 
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+import * as reduxHooks from 'redux/store/hooks';
 
 import { useRemoveMFA } from './useRemoveMFA';
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
@@ -21,11 +22,19 @@ import {
   mockNetworkFailure,
 } from '../__tests__/helpers';
 
+// Mock Redux hooks
+vi.mock('redux/store/hooks', () => ({
+  useAppSelector: vi.fn(),
+}));
+
 const mockConfirmationToken = 'mock-confirmation-token-abc';
+const TEST_USER_ID = 'test-user-123';
 
 describe('useRemoveMFA', () => {
   beforeEach(() => {
     setupMFATests();
+    // Mock useAppSelector to return a test user ID
+    vi.mocked(reduxHooks.useAppSelector).mockReturnValue(TEST_USER_ID);
   });
 
   describe('Initialization', () => {
@@ -817,6 +826,7 @@ describe('useRemoveMFA', () => {
       });
 
       expect(Mixpanel.updateProfile).toHaveBeenCalledWith(
+        TEST_USER_ID,
         expect.objectContaining({
           'MFA Enabled': false,
         }),

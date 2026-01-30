@@ -5,6 +5,7 @@ import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+import * as reduxHooks from 'redux/store/hooks';
 
 import { useMFASetup } from './useMFASetup';
 import { MFA_ERROR_MESSAGES } from './MFASetup.const';
@@ -21,9 +22,18 @@ import {
 } from '../__mocks__/mfa.mocks';
 import { setupMFATests, mockMFAInitiateSuccess, mockMFAVerifySuccess } from '../__tests__/helpers';
 
+// Mock Redux hooks
+vi.mock('redux/store/hooks', () => ({
+  useAppSelector: vi.fn(),
+}));
+
+const TEST_USER_ID = 'test-user-123';
+
 describe('useMFASetup', () => {
   beforeEach(() => {
     setupMFATests();
+    // Mock useAppSelector to return a test user ID
+    vi.mocked(reduxHooks.useAppSelector).mockReturnValue(TEST_USER_ID);
   });
 
   describe('Initialization', () => {
@@ -914,6 +924,7 @@ describe('useMFASetup', () => {
 
       await waitFor(() => {
         expect(Mixpanel.updateProfile).toHaveBeenCalledWith(
+          TEST_USER_ID,
           expect.objectContaining({
             'MFA Enabled': true,
           }),

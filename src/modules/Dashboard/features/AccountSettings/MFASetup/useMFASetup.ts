@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 import { MFAInitiateResponse, MFAVerifyResponse } from 'shared/api/api.mfa.types';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { useAppSelector } from 'redux/store/hooks';
 
 import { MFA_ERROR_MESSAGES, BACKEND_ERROR_PATTERNS } from './MFASetup.const';
 
@@ -69,6 +70,7 @@ export interface UseMFASetupResult {
 export type { VerifyResult };
 
 export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
+  const userId = useAppSelector((state) => state.auth.authentication.data?.user.id);
   const [provisioningUri, setProvisioningUri] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -141,11 +143,13 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
 
         // Track MFA enabled successfully and update profile
         Mixpanel.track({ action: MixpanelEventType.MFAEnabledSuccessfully });
-        Mixpanel.updateProfile({
-          'MFA Enabled': true,
-          'MFA Enrolled At': new Date().toISOString(),
-          'MFA Last Updated At': new Date().toISOString(),
-        });
+        if (userId) {
+          Mixpanel.updateProfile(userId, {
+            'MFA Enabled': true,
+            'MFA Enrolled At': new Date().toISOString(),
+            'MFA Last Updated At': new Date().toISOString(),
+          });
+        }
 
         return result;
       } else {

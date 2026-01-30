@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { useAppSelector } from 'redux/store/hooks';
 
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
 import { parseError } from './RemoveMFA.utils';
@@ -18,6 +19,7 @@ interface VerifyResult {
  * Implements 3-step flow: initiate → verify → confirm
  */
 export const useRemoveMFA = () => {
+  const userId = useAppSelector((state) => state.auth.authentication.data?.user.id);
   const [mfaToken, setMfaToken] = useState<string | null>(null);
   const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,10 +137,12 @@ export const useRemoveMFA = () => {
 
       // Track MFA disabled and update profile
       Mixpanel.track({ action: MixpanelEventType.MFADisabled });
-      Mixpanel.updateProfile({
-        'MFA Enabled': false,
-        'MFA Last Updated At': new Date().toISOString(),
-      });
+      if (userId) {
+        Mixpanel.updateProfile(userId, {
+          'MFA Enabled': false,
+          'MFA Last Updated At': new Date().toISOString(),
+        });
+      }
 
       setIsLoading(false);
 
