@@ -9,10 +9,10 @@ import {
   AppletEditSuccessfulEvent,
   AppletSaveClickEvent,
   expectBanner,
-  Mixpanel,
   MixpanelEventType,
   MixpanelProps,
 } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
@@ -88,14 +88,12 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
 
-const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
-
 /* Utilities
 =================================================== */
 export const expectMixpanelTrack = (
   event: AppletSaveClickEvent | AppletCreatedSuccessfullyEvent | AppletEditSuccessfulEvent,
 ) => {
-  expect(spyMixpanelTrack).toHaveBeenCalledWith(event);
+  expect(Mixpanel.track).toHaveBeenCalledWith(event);
 };
 
 /* Tests
@@ -108,7 +106,7 @@ describe('useSaveAndPublishSetup hook', () => {
       },
       resetLDContext: vi.fn(),
     });
-    spyMixpanelTrack.mockReset();
+    vi.mocked(Mixpanel.track).mockClear();
   });
 
   afterEach(() => {
