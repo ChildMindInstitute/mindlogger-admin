@@ -85,21 +85,41 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
   })),
 }));
 
+// Mock mixpanel-browser to prevent real Mixpanel SDK calls in tests
+vi.mock('mixpanel-browser', () => ({
+  default: {
+    init: vi.fn(),
+    track: vi.fn(),
+    identify: vi.fn(),
+    reset: vi.fn(),
+    track_pageview: vi.fn(),
+    people: {
+      set: vi.fn(),
+    },
+  },
+}));
+
 // Global mock for Mixpanel analytics
-// Centralizes mock that was previously duplicated across 8 test files
+// Mock both the index and the actual file to ensure coverage
+const mockMixpanelObject = {
+  init: vi.fn(),
+  track: vi.fn(),
+  login: vi.fn(),
+  logout: vi.fn(),
+  trackPageView: vi.fn(),
+  updateProfile: vi.fn(),
+};
+
+vi.mock('shared/utils/mixpanel/mixpanel', () => ({
+  Mixpanel: mockMixpanelObject,
+}));
+
 vi.mock('shared/utils/mixpanel', async () => {
   const actual =
     await vi.importActual<typeof import('shared/utils/mixpanel')>('shared/utils/mixpanel');
 
   return {
     ...actual,
-    Mixpanel: {
-      init: vi.fn(),
-      track: vi.fn(),
-      login: vi.fn(),
-      logout: vi.fn(),
-      trackPageView: vi.fn(),
-      updateProfile: vi.fn(),
-    },
+    Mixpanel: mockMixpanelObject,
   };
 });
