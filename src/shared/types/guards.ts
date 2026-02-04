@@ -8,6 +8,7 @@ import {
   ExtendedExportAnswerWithoutEncryption,
   PhotoItemAnswer,
   RequestHealthRecordDataAnswer,
+  UnityItemAnswer,
   VideoItemAnswer,
 } from 'shared/types/answer';
 
@@ -34,6 +35,18 @@ export const isMediaAnswerData = (
   ExtendedExportAnswerWithoutEncryption,
   AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer
 > => ItemsWithFileResponses.includes(item.activityItem?.responseType);
+
+export const isNotUnityAnswerData = (
+  item: DecryptedAnswerData,
+): item is DecryptedAnswerData<
+  ExtendedExportAnswerWithoutEncryption,
+  Exclude<ActivityItemAnswer, UnityItemAnswer>
+> => item.activityItem?.responseType !== ItemResponseType.Unity || !item.answer;
+
+export const isUnityAnswerData = (
+  item: DecryptedAnswerData,
+): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, UnityItemAnswer> =>
+  item.activityItem?.responseType === ItemResponseType.Unity;
 
 export const isRequestHealthRecordDataAnswerData = (
   item: DecryptedAnswerData,

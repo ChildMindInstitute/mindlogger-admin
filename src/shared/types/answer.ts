@@ -29,6 +29,7 @@ import {
   TimeRangeItem,
   TouchPracticeItem,
   TouchTestItem,
+  UnityItem,
   VideoItem,
 } from 'shared/state';
 import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
@@ -181,6 +182,12 @@ type CachedMediaValue = {
 
 export type DecryptedMediaAnswer = AdditionalTextType & {
   value: string | CachedMediaValue;
+};
+
+export type DecryptedUnityAnswer = {
+  value: {
+    taskData: string[];
+  };
 };
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {
@@ -360,7 +367,8 @@ export type AnswerDTO =
   | DecryptedABTrailsAnswer
   | DecryptedStabilityTrackerAnswer
   | DecryptedFlankerAnswer
-  | DecryptedRequestHealthRecordDataAnswer;
+  | DecryptedRequestHealthRecordDataAnswer
+  | DecryptedUnityAnswer;
 
 export type AnswerValue =
   | null
@@ -435,7 +443,8 @@ export type ActivityItemAnswer =
   | MessageItemAnswer
   | TouchPracticeItemAnswer
   | TouchTestItemAnswer
-  | RequestHealthRecordDataAnswer;
+  | RequestHealthRecordDataAnswer
+  | UnityItemAnswer;
 
 type ActivityItemAnswerCommonType = {
   id?: string;
@@ -489,6 +498,10 @@ export type AudioItemAnswer = ActivityItemAnswerCommonType & {
 export type PhotoItemAnswer = ActivityItemAnswerCommonType & {
   activityItem: PhotoItem;
   answer: DecryptedMediaAnswer;
+};
+export type UnityItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: UnityItem;
+  answer: DecryptedUnityAnswer;
 };
 export type VideoItemAnswer = ActivityItemAnswerCommonType & {
   activityItem: VideoItem;
@@ -600,6 +613,7 @@ export type AppletExportData = {
   stabilityTrackerItemsData: ExportCsvData[];
   abTrailsItemsData: ExportCsvData[];
   flankerItemsData: ExportCsvData[];
+  unityData: ExportMediaData[];
 };
 
 export type ExportMediaData = {

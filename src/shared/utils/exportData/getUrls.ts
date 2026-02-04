@@ -1,6 +1,7 @@
 import {
   DecryptedAnswerData,
   DecryptedMediaAnswer,
+  DecryptedUnityAnswer,
   DrawingItemAnswer,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
@@ -20,5 +21,18 @@ export const getMediaUrl = (item: DecryptedAnswerData) => {
   const answer = item.answer as DecryptedMediaAnswer;
   if (!answer) return '';
 
-  return typeof answer.value === 'string' ? answer.value : '';
+  if (typeof answer.value === 'string') {
+    return answer.value;
+  } else if (Array.isArray(answer.value)) {
+    return answer.value[0];
+  }
+
+  return '';
+};
+
+export const getUnityMediaUrls = (item: DecryptedAnswerData) => {
+  const answer = item.answer as DecryptedUnityAnswer;
+  if (!answer || !answer.value?.taskData?.length) return [];
+
+  return answer.value.taskData;
 };
