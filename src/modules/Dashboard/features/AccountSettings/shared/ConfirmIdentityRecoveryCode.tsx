@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
+import { formatRecoveryCode } from 'modules/Auth/utils/mfa.utils';
 
 import {
   StyledDialog,
@@ -57,19 +58,9 @@ export const ConfirmIdentityRecoveryCode = ({
   const shouldDisableInput = !!onRetry;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase();
-    // Allow only alphanumeric characters and dash
-    const sanitized = value.replace(/[^A-Z0-9-]/g, '');
-
-    // Auto-insert hyphen after 5 characters (format: XXXXX-XXXXX)
-    if (sanitized.length === 5 && !sanitized.includes('-')) {
-      setRecoveryCode(`${sanitized}-`);
-    } else if (sanitized.length === 6 && sanitized.charAt(5) !== '-') {
-      // If user pastes or types through, ensure hyphen is at position 5
-      setRecoveryCode(`${sanitized.slice(0, 5)}-${sanitized.slice(5)}`);
-    } else {
-      setRecoveryCode(sanitized);
-    }
+    // Use the same formatting utility as login flow to avoid double-hyphen issues
+    const formatted = formatRecoveryCode(e.target.value);
+    setRecoveryCode(formatted);
   };
 
   return (
