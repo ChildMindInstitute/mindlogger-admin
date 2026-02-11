@@ -135,6 +135,7 @@ const mockedExportDataResult = {
   stabilityTrackerItemsData: [],
   abTrailsItemsData: [],
   flankerItemsData: [],
+  unityData: [],
 };
 
 describe('prepareData', () => {
@@ -150,6 +151,7 @@ describe('prepareData', () => {
     expect(result).toHaveProperty('stabilityTrackerItemsData');
     expect(result).toHaveProperty('abTrailsItemsData');
     expect(result).toHaveProperty('flankerItemsData');
+    expect(result).toHaveProperty('unityData');
     expect(result.reportData).toEqual([]);
     expect(result.activityJourneyData).toEqual([]);
     expect(result.mediaData).toEqual([]);
@@ -157,6 +159,7 @@ describe('prepareData', () => {
     expect(result.stabilityTrackerItemsData).toEqual([]);
     expect(result.abTrailsItemsData).toEqual([]);
     expect(result.flankerItemsData).toEqual([]);
+    expect(result.unityData).toEqual([]);
   };
 
   test('prepareEncryptedData should return an object with the correct keys', async () => {

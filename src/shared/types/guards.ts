@@ -34,7 +34,9 @@ export const isMediaAnswerData = (
 ): item is DecryptedAnswerData<
   ExtendedExportAnswerWithoutEncryption,
   AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer
-> => ItemsWithFileResponses.includes(item.activityItem?.responseType);
+> =>
+  ItemsWithFileResponses.includes(item.activityItem?.responseType) &&
+  item.activityItem?.responseType !== ItemResponseType.Unity;
 
 export const isNotUnityAnswerData = (
   item: DecryptedAnswerData,

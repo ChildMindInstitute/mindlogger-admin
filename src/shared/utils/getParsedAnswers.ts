@@ -132,6 +132,19 @@ export const getAnswersWithPublicUrls = async (
             },
           });
         }
+        if (isUnityAnswerData(item)) {
+          const originalUrls = getUnityMediaUrls(item);
+          const publicTaskUrls = originalUrls.map(() => publicUrls[publicUrlIndex++] ?? '');
+
+          return decryptedAnswersAcc.concat({
+            ...item,
+            answer: {
+              ...item.answer,
+              value: { ...item.answer.value, taskData: publicTaskUrls },
+            },
+          });
+        }
+
         if (isNotMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
 
         return decryptedAnswersAcc.concat({

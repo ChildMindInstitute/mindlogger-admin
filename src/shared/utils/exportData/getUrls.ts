@@ -25,6 +25,8 @@ export const getMediaUrl = (item: DecryptedAnswerData) => {
     return answer.value;
   } else if (Array.isArray(answer.value)) {
     return answer.value[0];
+  } else if (answer.value && typeof answer.value === 'object' && 'uri' in answer.value) {
+    return answer.value.uri || '';
   }
 
   return '';
