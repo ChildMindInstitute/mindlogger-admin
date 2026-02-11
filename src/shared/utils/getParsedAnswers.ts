@@ -94,6 +94,8 @@ export const getAnswersWithPublicUrls = async (
         return urlsAcc.concat(getDrawingUrl(item));
       }
 
+      if (!item.answer) return urlsAcc;
+
       if (isMediaAnswerData(item)) {
         return urlsAcc.concat(getMediaUrl(item));
       } else if (isUnityAnswerData(item)) {
@@ -137,6 +139,8 @@ export const getAnswersWithPublicUrls = async (
             },
           });
         }
+        if (!item.answer) return decryptedAnswersAcc.concat(item);
+
         if (isUnityAnswerData(item)) {
           const originalUrls = getUnityMediaUrls(item);
           if (originalUrls.length) {
