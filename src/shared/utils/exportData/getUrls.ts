@@ -34,7 +34,14 @@ export const getMediaUrl = (item: DecryptedAnswerData) => {
 
 export const getUnityMediaUrls = (item: DecryptedAnswerData) => {
   const answer = item.answer as DecryptedUnityAnswer;
-  if (!answer || !answer.value?.taskData?.length) return [];
+  if (
+    !answer ||
+    !answer.value ||
+    typeof answer.value === 'string' ||
+    !('taskData' in answer.value) ||
+    !answer.value.taskData?.length
+  )
+    return [];
 
   return answer.value.taskData;
 };
