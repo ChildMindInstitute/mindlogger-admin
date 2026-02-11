@@ -800,9 +800,13 @@ describe('useRemoveMFA', () => {
         await result.current.confirmDisable();
       });
 
-      expect(Mixpanel.track).toHaveBeenCalledWith({
-        action: MixpanelEventType.MFADisabled,
-      });
+      expect(Mixpanel.track).toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: MixpanelEventType.MFADisabled,
+          'MFA Enabled': false,
+          'MFA Last Updated At': expect.any(String),
+        }),
+      );
     });
 
     it('should update Mixpanel profile when MFA is disabled', async () => {
@@ -853,9 +857,11 @@ describe('useRemoveMFA', () => {
         await result.current.confirmDisable();
       });
 
-      expect(Mixpanel.track).not.toHaveBeenCalledWith({
-        action: MixpanelEventType.MFADisabled,
-      });
+      expect(Mixpanel.track).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: MixpanelEventType.MFADisabled,
+        }),
+      );
     });
   });
 });

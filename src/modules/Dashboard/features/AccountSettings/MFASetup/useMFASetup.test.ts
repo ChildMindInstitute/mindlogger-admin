@@ -879,7 +879,7 @@ describe('useMFASetup', () => {
       });
     });
 
-    it('should track MFAEnabledSuccessfully when verification succeeds', async () => {
+    it('should track MFAEnabledSuccessfully with MFA properties when verification succeeds', async () => {
       mockMFAInitiateSuccess();
       const { result } = renderHook(() => useMFASetup(true));
 
@@ -900,9 +900,14 @@ describe('useMFASetup', () => {
       await result.current.handleVerify();
 
       await waitFor(() => {
-        expect(Mixpanel.track).toHaveBeenCalledWith({
-          action: MixpanelEventType.MFAEnabledSuccessfully,
-        });
+        expect(Mixpanel.track).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.MFAEnabledSuccessfully,
+            'MFA Enabled': true,
+            'MFA Enrolled At': expect.any(String),
+            'MFA Last Updated At': expect.any(String),
+          }),
+        );
       });
     });
 
@@ -956,9 +961,11 @@ describe('useMFASetup', () => {
       expect(Mixpanel.track).toHaveBeenCalledWith({
         action: MixpanelEventType.MFASetupStarted,
       });
-      expect(Mixpanel.track).not.toHaveBeenCalledWith({
-        action: MixpanelEventType.MFAEnabledSuccessfully,
-      });
+      expect(Mixpanel.track).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: MixpanelEventType.MFAEnabledSuccessfully,
+        }),
+      );
     });
   });
 });

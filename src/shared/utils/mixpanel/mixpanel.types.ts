@@ -518,10 +518,15 @@ export type MFASetupStartedEvent = {
 
 export type MFAEnabledSuccessfullyEvent = {
   action: MixpanelEventType.MFAEnabledSuccessfully;
+  'MFA Enabled': true;
+  'MFA Enrolled At': string;
+  'MFA Last Updated At': string;
 };
 
 export type MFADisabledEvent = {
   action: MixpanelEventType.MFADisabled;
+  'MFA Enabled': false;
+  'MFA Last Updated At': string;
 };
 
 export type MFAChallengePresentedEvent = {

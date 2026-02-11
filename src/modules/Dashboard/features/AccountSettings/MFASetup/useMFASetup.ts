@@ -142,12 +142,18 @@ export const useMFASetup = (isOpen: boolean): UseMFASetupResult => {
         setDownloadToken(data.downloadToken ?? null);
 
         // Track MFA enabled successfully and update profile
-        Mixpanel.track({ action: MixpanelEventType.MFAEnabledSuccessfully });
+        const now = new Date().toISOString();
+        Mixpanel.track({
+          action: MixpanelEventType.MFAEnabledSuccessfully,
+          'MFA Enabled': true,
+          'MFA Enrolled At': now,
+          'MFA Last Updated At': now,
+        });
         if (userId) {
           Mixpanel.updateProfile(userId, {
             'MFA Enabled': true,
-            'MFA Enrolled At': new Date().toISOString(),
-            'MFA Last Updated At': new Date().toISOString(),
+            'MFA Enrolled At': now,
+            'MFA Last Updated At': now,
           });
         }
 

@@ -136,11 +136,16 @@ export const useRemoveMFA = () => {
       });
 
       // Track MFA disabled and update profile
-      Mixpanel.track({ action: MixpanelEventType.MFADisabled });
+      const now = new Date().toISOString();
+      Mixpanel.track({
+        action: MixpanelEventType.MFADisabled,
+        'MFA Enabled': false,
+        'MFA Last Updated At': now,
+      });
       if (userId) {
         Mixpanel.updateProfile(userId, {
           'MFA Enabled': false,
-          'MFA Last Updated At': new Date().toISOString(),
+          'MFA Last Updated At': now,
         });
       }
 
