@@ -97,7 +97,12 @@ export const getAnswersWithPublicUrls = async (
       if (isMediaAnswerData(item)) {
         return urlsAcc.concat(getMediaUrl(item));
       } else if (isUnityAnswerData(item)) {
-        return urlsAcc.concat(...getUnityMediaUrls(item));
+        const unityUrls = getUnityMediaUrls(item);
+        if (unityUrls.length) {
+          return urlsAcc.concat(...unityUrls);
+        }
+
+        return urlsAcc.concat(getMediaUrl(item));
       } else {
         return urlsAcc;
       }
@@ -134,13 +139,23 @@ export const getAnswersWithPublicUrls = async (
         }
         if (isUnityAnswerData(item)) {
           const originalUrls = getUnityMediaUrls(item);
-          const publicTaskUrls = originalUrls.map(() => publicUrls[publicUrlIndex++] ?? '');
+          if (originalUrls.length) {
+            const publicTaskUrls = originalUrls.map(() => publicUrls[publicUrlIndex++] ?? '');
+
+            return decryptedAnswersAcc.concat({
+              ...item,
+              answer: {
+                ...item.answer,
+                value: { taskData: publicTaskUrls },
+              },
+            });
+          }
 
           return decryptedAnswersAcc.concat({
             ...item,
             answer: {
               ...item.answer,
-              value: { ...item.answer.value, taskData: publicTaskUrls },
+              value: publicUrls[publicUrlIndex++] ?? '',
             },
           });
         }

@@ -111,8 +111,9 @@ export const getUnityData = (
       return filteredAcc;
     }
 
-    const mediaData = getUnityMediaUrls(item).map((url) => ({
-      fileName: getMediaFileName(item, getFileExtension(url)),
+    const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
+    const mediaData = getUnityMediaUrls(item).map((url: string, index: number) => ({
+      fileName: `${folderName}/${index}.${getFileExtension(url)}`,
       url,
     }));
 

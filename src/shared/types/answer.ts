@@ -185,9 +185,12 @@ export type DecryptedMediaAnswer = AdditionalTextType & {
 };
 
 export type DecryptedUnityAnswer = {
-  value: {
-    taskData: string[];
-  };
+  value:
+    | {
+        taskData: string[];
+      }
+    | string
+    | CachedMediaValue;
 };
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {

@@ -7,6 +7,11 @@ import { mockSuccessfulHttpResponse } from './axios-mocks';
 // Mock the api module
 vi.mock('api');
 
+const getAnswerValue = (answer: unknown) =>
+  typeof answer === 'object' && answer !== null && 'value' in answer
+    ? (answer as { value: unknown }).value
+    : undefined;
+
 describe('getParsedAnswers', () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -220,6 +225,36 @@ describe('getParsedAnswers', () => {
       ]);
     });
 
+    test('should handle unity items with string URL', async () => {
+      vi.mocked(axios.post).mockResolvedValue(
+        mockSuccessfulHttpResponse({
+          result: ['publicUnityUrl'],
+        }),
+      );
+
+      const parsedAnswers = [
+        {
+          decryptedAnswers: [
+            {
+              appletId: 'appletId',
+              activityItem: {
+                name: 'unity',
+                responseType: 'unity',
+              },
+              answer: {
+                value: 'private_unity_url',
+              },
+            },
+          ],
+          decryptedEvents: [],
+        },
+      ];
+      // @ts-ignore
+      const result = await getAnswersWithPublicUrls(parsedAnswers);
+
+      expect(getAnswerValue(result[0].decryptedAnswers[0].answer)).toBe('publicUnityUrl');
+    });
+
     test('should handle unity items with taskData URLs', async () => {
       vi.mocked(axios.post).mockResolvedValue(
         mockSuccessfulHttpResponse({
@@ -259,8 +294,8 @@ describe('getParsedAnswers', () => {
       // @ts-ignore
       const result = await getAnswersWithPublicUrls(parsedAnswers);
 
-      expect(result[0].decryptedAnswers[0].answer.value).toBe('publicAudioUrl');
-      expect(result[0].decryptedAnswers[1].answer.value).toEqual({
+      expect(getAnswerValue(result[0].decryptedAnswers[0].answer)).toBe('publicAudioUrl');
+      expect(getAnswerValue(result[0].decryptedAnswers[1].answer)).toEqual({
         taskData: ['publicUnity1', 'publicUnity2', 'publicUnity3'],
       });
     });
@@ -315,13 +350,13 @@ describe('getParsedAnswers', () => {
       const result = await getAnswersWithPublicUrls(parsedAnswers);
 
       // Unity consumes indices 0,1
-      expect(result[0].decryptedAnswers[0].answer.value).toEqual({
+      expect(getAnswerValue(result[0].decryptedAnswers[0].answer)).toEqual({
         taskData: ['publicUnity1', 'publicUnity2'],
       });
       // Audio gets index 2
-      expect(result[0].decryptedAnswers[1].answer.value).toBe('publicAudio');
+      expect(getAnswerValue(result[0].decryptedAnswers[1].answer)).toBe('publicAudio');
       // Photo gets index 3
-      expect(result[0].decryptedAnswers[2].answer.value).toBe('publicPhoto');
+      expect(getAnswerValue(result[0].decryptedAnswers[2].answer)).toBe('publicPhoto');
     });
   });
 });
