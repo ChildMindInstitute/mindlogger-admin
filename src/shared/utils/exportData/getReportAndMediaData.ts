@@ -112,10 +112,14 @@ export const getUnityData = (
     }
 
     const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
-    const mediaData = getUnityMediaUrls(item).map((url: string, index: number) => ({
-      fileName: `${folderName}/${index}.${getFileExtension(url)}`,
-      url,
-    }));
+    const mediaData = getUnityMediaUrls(item).map((url: string, index: number) => {
+      const urlFileName = url.split('?')[0].split('/').pop() ?? '';
+
+      return {
+        fileName: `${folderName}/${urlFileName || `${index}.${getFileExtension(url)}`}`,
+        url,
+      };
+    });
 
     return filteredAcc.concat(mediaData);
   }, [] as ExportMediaData[]);
