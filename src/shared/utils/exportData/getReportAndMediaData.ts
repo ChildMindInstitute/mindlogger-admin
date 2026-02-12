@@ -121,7 +121,6 @@ export const getUnityData = (
   }, [] as ExportMediaData[]);
 
   const result = unityData.concat(...unityAnswers);
-  console.log('🎮 [UNITY MULTI-FILE] Total Unity files to zip:', result.length, result);
 
   return result;
 };

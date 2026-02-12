@@ -78,9 +78,6 @@ export const getDecryptedAnswers = async <T extends EncryptedAnswerSharedProps>(
         console.warn('Error while answer parsing:', error);
       }
     }
-
-    console.log('🔐 [DECRYPTION COMPLETE] Decrypted Answers:', answersDecrypted);
-    console.log('🔐 [DECRYPTION COMPLETE] Decrypted Events:', eventsDecrypted);
   }
 
   /*
@@ -166,7 +163,6 @@ export const getDecryptedAnswers = async <T extends EncryptedAnswerSharedProps>(
     },
     [],
   );
-  console.log('🔐 [DECRYPTION COMPLETE] Decrypted Events:', eventsDecrypted, answerDataDecrypted);
 
   return {
     decryptedAnswers: answerDataDecrypted,
