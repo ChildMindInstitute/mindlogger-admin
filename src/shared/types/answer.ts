@@ -189,6 +189,7 @@ export type DecryptedUnityAnswer = {
     | {
         taskData: string[];
       }
+    | string[]
     | string
     | CachedMediaValue;
 };

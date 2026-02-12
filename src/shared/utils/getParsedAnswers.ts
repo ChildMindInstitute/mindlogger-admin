@@ -22,6 +22,8 @@ export const getParsedAnswers = async (
   result: ExportDataResult,
   getDecryptedActivityData: ReturnType<typeof useDecryptedActivityData>,
 ) => {
+  console.log('[API RESPONSE] Full Export Data:', result);
+
   const activitiesObject = getObjectFromList(
     result.activities,
     (activity: ExportActivity) => activity.idVersion,
@@ -39,6 +41,7 @@ export const getParsedAnswers = async (
       }),
     );
   }
+  console.log('[API RESPONSE] Full Export Data:', parsedAnswers);
 
   return parsedAnswers;
 };

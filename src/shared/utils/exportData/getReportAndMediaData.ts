@@ -120,7 +120,10 @@ export const getUnityData = (
     return filteredAcc.concat(mediaData);
   }, [] as ExportMediaData[]);
 
-  return unityData.concat(...unityAnswers);
+  const result = unityData.concat(...unityAnswers);
+  console.log('🎮 [UNITY MULTI-FILE] Total Unity files to zip:', result.length, result);
+
+  return result;
 };
 
 export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').pop() ?? '';

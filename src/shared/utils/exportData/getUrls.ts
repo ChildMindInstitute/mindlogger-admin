@@ -34,14 +34,19 @@ export const getMediaUrl = (item: DecryptedAnswerData) => {
 
 export const getUnityMediaUrls = (item: DecryptedAnswerData) => {
   const answer = item.answer as DecryptedUnityAnswer;
-  if (
-    !answer ||
-    !answer.value ||
-    typeof answer.value === 'string' ||
-    !('taskData' in answer.value) ||
-    !answer.value.taskData?.length
-  )
-    return [];
+  if (!answer || !answer.value) return [];
 
-  return answer.value.taskData;
+  // Handle direct array of S3 URLs (actual format from mobile app decryption)
+  if (Array.isArray(answer.value)) {
+    return answer.value.filter((url): url is string => typeof url === 'string');
+  }
+
+  if (typeof answer.value === 'string') return [];
+
+  // Handle { taskData: string[] } format (after URL presigning replaces the value)
+  if ('taskData' in answer.value && answer.value.taskData?.length) {
+    return answer.value.taskData;
+  }
+
+  return [];
 };
