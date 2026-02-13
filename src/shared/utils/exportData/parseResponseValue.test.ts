@@ -1667,6 +1667,116 @@ describe('parseResponseValue', () => {
       ).toBe(expected);
     });
   });
+  describe('unity activity', () => {
+    const index = 0;
+    const isEvent = false;
+    const mockedSharedDecryptedAnswerData = {
+      id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      submitId: 'submit-id-unity',
+      version: '1.0.0',
+      respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+      respondentSecretId: 'respondentSecretId',
+      sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+      sourceSecretId: 'source-secret-id',
+      targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+      targetSecretId: 'target-secret-id',
+      legacyProfileId: null,
+      scheduledDatetime: null,
+      startDatetime: 1686925181,
+      endDatetime: 1686925280,
+      migratedDate: null,
+      appletHistoryId: '35f5085a-9972-449c-98e2-5a7637a1a7d7_1.0.0',
+      activityHistoryId: 'f21a80cb-c5a2-442b-a6b1-37af779908c7_1.0.0',
+      flowHistoryId: null,
+      flowName: null,
+      reviewedAnswerId: null,
+      createdAt: '2026-02-12T15:01:30.000000',
+      appletId: '35f5085a-9972-449c-98e2-5a7637a1a7d7',
+      activityId: 'f21a80cb-c5a2-442b-a6b1-37af779908c7',
+      flowId: null,
+      items: [],
+      activityName: 'Unity Activity',
+      subscaleSetting: null,
+    };
+    const unityItem = {
+      question: '',
+      responseType: ItemResponseType.Unity,
+      responseValues: null,
+      config: {},
+      name: 'unity_mobile',
+      isHidden: false,
+      conditionalLogic: null,
+      allowEdit: false,
+      id: 'unity-item-id',
+    };
+
+    test('unity with string[] value (direct S3 URLs)', () => {
+      const item = {
+        ...mockedSharedDecryptedAnswerData,
+        activityItem: unityItem,
+        answer: {
+          value: [
+            'https://media.cmiml.net/mindlogger/bucket/StartNodeData_2_12_2026_3_01_30_PM.txt?AWSAccessKeyId=xxx',
+            'https://media.cmiml.net/mindlogger/bucket/EndNodeData_2_12_2026_3_01_30_PM.txt?AWSAccessKeyId=xxx',
+            'https://media.cmiml.net/mindlogger/bucket/taskData_2_12_2026_3_01_30_PM.txt?AWSAccessKeyId=xxx',
+          ],
+        },
+      };
+      expect(
+        parseResponseValue(
+          // @ts-ignore
+          item as DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+          index,
+          isEvent,
+        ),
+      ).toBe(
+        'target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/StartNodeData_2_12_2026_3_01_30_PM.txt, EndNodeData_2_12_2026_3_01_30_PM.txt, taskData_2_12_2026_3_01_30_PM.txt',
+      );
+    });
+
+    test('unity with { taskData: string[] } value (after URL presigning)', () => {
+      const item = {
+        ...mockedSharedDecryptedAnswerData,
+        activityItem: unityItem,
+        answer: {
+          value: {
+            taskData: [
+              'https://media.cmiml.net/mindlogger/bucket/StartNodeData_2_12_2026_3_01_30_PM.txt',
+              'https://media.cmiml.net/mindlogger/bucket/EndNodeData_2_12_2026_3_01_30_PM.txt',
+            ],
+          },
+        },
+      };
+      expect(
+        parseResponseValue(
+          // @ts-ignore
+          item as DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+          index,
+          isEvent,
+        ),
+      ).toBe(
+        'target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/StartNodeData_2_12_2026_3_01_30_PM.txt, EndNodeData_2_12_2026_3_01_30_PM.txt',
+      );
+    });
+
+    test('unity with empty value returns folder name only', () => {
+      const item = {
+        ...mockedSharedDecryptedAnswerData,
+        activityItem: unityItem,
+        answer: {
+          value: null,
+        },
+      };
+      expect(
+        parseResponseValue(
+          // @ts-ignore
+          item as DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+          index,
+          isEvent,
+        ),
+      ).toBe('target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile');
+    });
+  });
   describe('isNullAnswer', () => {
     test.each`
       obj             | result   | description
