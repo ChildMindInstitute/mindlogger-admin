@@ -185,9 +185,12 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     case ItemResponseType.Unity: {
       const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
       const urls = getUnityMediaUrls(item);
-      const fileNames = urls.map((url) => url.split('?')[0].split('/').pop()).filter(Boolean);
+      const filePaths = urls
+        .map((url) => url.split('?')[0].split('/').pop())
+        .filter(Boolean)
+        .map((fileName) => `${folderName}/${fileName}`);
 
-      return fileNames.length ? `${folderName}/${fileNames.join(', ')}` : folderName;
+      return filePaths.length ? filePaths.join(', ') : folderName;
     }
     /*
       Item list as default case:
