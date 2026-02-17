@@ -6,6 +6,7 @@ export const enum ZipFile {
   StabilityTracker = 'stability-tracker',
   ABTrails = 'trails',
   Flanker = 'flanker',
+  Unity = 'unity',
 }
 
 export const getReportZipName = (name: ZipFile, suffix: string) =>

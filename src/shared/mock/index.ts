@@ -3341,6 +3341,99 @@ export const mockedDecryptedObjectForAudio = {
   subscaleSetting: null,
 };
 
+export const mockedUnitySettings = {
+  question: '',
+  responseType: 'unity',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'unity_mobile',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'a1b2c3d4-5678-9012-3456-789012345678',
+};
+export const mockedDecryptedAnswerForUnityString = {
+  value: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/unity_config.txt',
+};
+export const mockedDecryptedObjectForUnityString = {
+  activityItem: mockedUnitySettings,
+  answer: mockedDecryptedAnswerForUnityString,
+  id: 'unity-answer-id-1',
+  submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
+  version: '2.0.0',
+  respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
+  legacyProfileId: null,
+  scheduledDatetime: null,
+  startDatetime: 1689755822,
+  endDatetime: 1689756087,
+  migratedDate: null,
+  appletHistoryId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0_2.0.0',
+  activityHistoryId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57_2.0.0',
+  flowHistoryId: null,
+  flowName: null,
+  reviewedAnswerId: null,
+  createdAt: '2023-07-19T08:41:37.130943',
+  appletId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0',
+  activityId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
+  flowId: null,
+  items: [mockedUnitySettings],
+  activityName: 'New Activity#1',
+  subscaleSetting: null,
+};
+
+export const mockedDecryptedAnswerForUnityTaskData = {
+  value: {
+    taskData: [
+      'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data1.txt',
+      'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data2.txt',
+      'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data3.txt',
+    ],
+  },
+};
+export const mockedDecryptedObjectForUnityTaskData = {
+  activityItem: mockedUnitySettings,
+  answer: mockedDecryptedAnswerForUnityTaskData,
+  id: 'unity-answer-id-2',
+  submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
+  version: '2.0.0',
+  respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  respondentSecretId: 'respondentSecretId',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  sourceSecretId: 'source-secret-id',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
+  targetSecretId: 'target-secret-id',
+  legacyProfileId: null,
+  scheduledDatetime: null,
+  startDatetime: 1689755822,
+  endDatetime: 1689756087,
+  migratedDate: null,
+  appletHistoryId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0_2.0.0',
+  activityHistoryId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57_2.0.0',
+  flowHistoryId: null,
+  flowName: null,
+  reviewedAnswerId: null,
+  createdAt: '2023-07-19T08:41:37.130943',
+  appletId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0',
+  activityId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
+  flowId: null,
+  items: [mockedUnitySettings],
+  activityName: 'New Activity#1',
+  subscaleSetting: null,
+};
+
 export const mockedAlert = {
   id: 'dcc07d2a-617c-43af-8e5a-0dcb1564d5e0',
   isWatched: true,
