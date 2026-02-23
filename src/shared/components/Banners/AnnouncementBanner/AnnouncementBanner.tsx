@@ -12,7 +12,8 @@ import { Banner, BannerProps } from '../Banner';
 import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
 
 // ─── Update this URL when the announcement changes ────────────────────────────
-const ANNOUNCEMENT_URL = 'https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/ca0a323b-b88d-4b32-8f4f-4e6b0157f8f6/article/1545404417';
+const ANNOUNCEMENT_URL =
+  'https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/ca0a323b-b88d-4b32-8f4f-4e6b0157f8f6/article/1545404417';
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
