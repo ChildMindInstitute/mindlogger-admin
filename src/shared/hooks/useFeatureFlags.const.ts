@@ -21,6 +21,7 @@ export const FeatureFlagDefaults: FeatureFlags = {
   enableEhrHealthData: 'unavailable',
   enableEmaExtraFiles: false,
   enableMfa: true,
+  enableAdminAnnouncementBanner: false,
 };
 
 export const PROHIBITED_PII_KEYS = ['firstName', 'lastName', 'email'];

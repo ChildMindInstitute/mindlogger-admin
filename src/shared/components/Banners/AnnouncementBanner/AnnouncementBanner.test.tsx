@@ -3,6 +3,14 @@ import userEvent from '@testing-library/user-event';
 import { vi, type Mock } from 'vitest';
 import { useLocation } from 'react-router-dom';
 
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: () => ({
+    featureFlags: {
+      enableAdminAnnouncementBanner: true,
+    },
+  }),
+}));
+
 import { AuthSchema, initialStateData } from 'redux/modules';
 import { mockedOwnerId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
