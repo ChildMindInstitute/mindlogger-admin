@@ -23,8 +23,8 @@ const ERROR_MESSAGES = {
   MAX_ATTEMPTS: 'tooManyAttempts',
   SESSION_EXPIRED: 'mfaSessionExpired',
   GLOBAL_LOCKOUT: 'tooManyAttempts',
-  MFA_NOT_ENABLED: 'Two-factor authentication is not enabled on this account.',
-  NO_RECOVERY_CODES: 'Two-factor authentication is not enabled on this account.',
+  MFA_NOT_ENABLED: 'mfaNotEnabled',
+  NO_RECOVERY_CODES: 'mfaNotEnabled',
   NETWORK_ERROR: 'networkError',
   UNKNOWN_ERROR: 'somethingWentWrong',
 };

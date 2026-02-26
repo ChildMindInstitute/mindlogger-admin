@@ -2,7 +2,7 @@
  * Error messages for MFA disable operations
  */
 export const MFA_DISABLE_ERROR_MESSAGES = {
-  NOT_ENABLED: 'Two-factor authentication is not enabled on this account.',
+  NOT_ENABLED: 'mfaNotEnabled',
   INVALID_CODE: 'invalidCode', // Fallback, same as INVALID_VERIFICATION_CODE
   INVALID_VERIFICATION_CODE: 'invalidMFACode',
   INVALID_RECOVERY_CODE: 'invalidRecoveryCode',

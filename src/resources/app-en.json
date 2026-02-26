@@ -1860,6 +1860,7 @@
   "invalidRecoveryCode": "Invalid recovery code",
   "recoveryCodeAlreadyUsed": "This recovery code has already been used",
   "mfaAlreadyEnabled": "Two-factor authentication is already enabled for your account",
+  "mfaNotEnabled": "Two-factor authentication is not enabled on this account",
   "attemptsRemaining": "{{count}} attempts remaining",
   "mfa": {
     "title": "Two-factor authentication",

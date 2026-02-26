@@ -145,9 +145,7 @@ describe('useViewRecoveryCodes', () => {
         expect(initiateResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe(
-        'Two-factor authentication is not enabled on this account.',
-      );
+      expect(result.current.error).toBe('mfaNotEnabled');
     });
 
     it('should handle no recovery codes found (404)', async () => {
@@ -173,9 +171,7 @@ describe('useViewRecoveryCodes', () => {
         expect(initiateResult?.success).toBe(false);
       });
 
-      expect(result.current.error).toBe(
-        'Two-factor authentication is not enabled on this account.',
-      );
+      expect(result.current.error).toBe('mfaNotEnabled');
     });
   });
 
