@@ -17,17 +17,16 @@ const STATUS_CODES = {
 };
 
 const ERROR_MESSAGES = {
-  INVALID_CODE: 'Invalid TOTP code. Please check your authenticator app and try again.', // Fallback, same as INVALID_VERIFICATION_CODE
-  INVALID_VERIFICATION_CODE:
-    'Invalid TOTP code. Please check your authenticator app and try again.',
-  INVALID_RECOVERY_CODE: 'Invalid recovery code. Please check the code and try again.',
-  MAX_ATTEMPTS: 'Too many invalid attempts. Please try again.',
-  SESSION_EXPIRED: 'Your session has expired. Please try again.',
-  GLOBAL_LOCKOUT: 'Too many failed attempts. Please try again later.',
-  MFA_NOT_ENABLED: 'MFA is not enabled for your account.',
-  NO_RECOVERY_CODES: 'No recovery codes found. Please set up MFA first.',
-  NETWORK_ERROR: 'Network error. Please check your connection and try again.',
-  UNKNOWN_ERROR: 'An error occurred. Please try again.',
+  INVALID_CODE: 'invalidCode', // Fallback, same as INVALID_VERIFICATION_CODE
+  INVALID_VERIFICATION_CODE: 'invalidMFACode',
+  INVALID_RECOVERY_CODE: 'invalidRecoveryCode',
+  MAX_ATTEMPTS: 'tooManyAttempts',
+  SESSION_EXPIRED: 'mfaSessionExpired',
+  GLOBAL_LOCKOUT: 'tooManyAttempts',
+  MFA_NOT_ENABLED: 'mfaNotEnabled',
+  NO_RECOVERY_CODES: 'mfaNotEnabled',
+  NETWORK_ERROR: 'networkError',
+  UNKNOWN_ERROR: 'somethingWentWrong',
 };
 
 export const parseError = createErrorParser(ERROR_MESSAGES, BACKEND_ERROR_PATTERNS, STATUS_CODES);

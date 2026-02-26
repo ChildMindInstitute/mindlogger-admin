@@ -1857,6 +1857,8 @@
   "mfaSessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
   "invalidRecoveryCode": "Code de récupération invalide",
   "recoveryCodeAlreadyUsed": "Ce code de récupération a déjà été utilisé",
+  "mfaAlreadyEnabled": "L'authentification à deux facteurs est déjà activée pour votre compte",
+  "mfaNotEnabled": "L'authentification à deux facteurs n'est pas activée sur ce compte",
   "attemptsRemaining": "{{count}} tentatives restantes",
   "mfa": {
     "title": "Authentification à deux facteurs",
