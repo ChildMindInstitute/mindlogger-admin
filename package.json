@@ -137,7 +137,7 @@
     "@types/marked": "^5.0.2",
     "@types/mixpanel": "^2.14.6",
     "@types/mixpanel-browser": "^2.47.3",
-    "@types/node": "^20.7.1",
+    "@types/node": "^24.11.0",
     "@types/react": "^18.2.43",
     "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-big-calendar": "^1.6.5",
