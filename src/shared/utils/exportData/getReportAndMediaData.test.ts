@@ -1032,15 +1032,15 @@ describe('getReportAndMediaData', () => {
       const result = getUnityData([], [mockedDecryptedObjectForUnityTaskData]);
       expect(result).toEqual([
         {
-          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data1.txt',
+          fileName: 'unity-answer-id-2/data1.txt',
           url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data1.txt',
         },
         {
-          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data2.txt',
+          fileName: 'unity-answer-id-2/data2.txt',
           url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data2.txt',
         },
         {
-          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data3.txt',
+          fileName: 'unity-answer-id-2/data3.txt',
           url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data3.txt',
         },
       ]);
