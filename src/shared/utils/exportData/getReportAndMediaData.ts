@@ -1,5 +1,5 @@
 // eslint-disable no-console
-import { ItemsWithFileResponses } from 'shared/consts';
+import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AppletExportData,
   DecryptedAnswerData,
@@ -14,7 +14,7 @@ import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/ge
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
 import { getSubscales } from 'shared/utils/exportData/getSubscales';
-import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
+import { getDrawingUrl, getMediaUrl, getUnityMediaUrls } from 'shared/utils/exportData/getUrls';
 import {
   checkIfHasMigratedAnswers,
   getIdBeforeMigration,
@@ -98,6 +98,35 @@ export const getMediaData = (
   }, [] as ExportMediaData[]);
 
   return mediaData.concat(...mediaAnswers);
+};
+
+export const getUnityData = (
+  unityData: AppletExportData['unityData'],
+  decryptedAnswers: DecryptedAnswerData[],
+): ExportMediaData[] => {
+  const unityAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
+    const responseType = item.activityItem?.responseType;
+
+    if (responseType !== ItemResponseType.Unity) {
+      return filteredAcc;
+    }
+
+    const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
+    const mediaData = getUnityMediaUrls(item).map((url: string, index: number) => {
+      const urlFileName = url.split('?')[0].split('/').pop() ?? '';
+
+      return {
+        fileName: `${folderName}/${urlFileName || `${index}.${getFileExtension(url)}`}`,
+        url,
+      };
+    });
+
+    return filteredAcc.concat(mediaData);
+  }, [] as ExportMediaData[]);
+
+  const result = unityData.concat(...unityAnswers);
+
+  return result;
 };
 
 export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').pop() ?? '';

@@ -229,7 +229,7 @@
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
   "and": "et",
-  "announcementBanner": "<0>Nous changeons de marque! </0> <1>Des mises à jour de design sont en cours — même application géniale, nouveau look frais. Curieux? </1><2>Cliquez pour en savoir plus.</2>",
+  "announcementBanner": "<0>L'authentification multifacteur est disponible! </0> <1>Protégez votre compte avec une couche de sécurité supplémentaire. Configurez-la dans les paramètres de votre compte. </1><2>Cliquez pour en savoir plus.</2>",
   "applet_one": "Applet",
   "applet_other": "Applets",
   "appletActivities": "Activités de l'applet",
@@ -1857,6 +1857,8 @@
   "mfaSessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
   "invalidRecoveryCode": "Code de récupération invalide",
   "recoveryCodeAlreadyUsed": "Ce code de récupération a déjà été utilisé",
+  "mfaAlreadyEnabled": "L'authentification à deux facteurs est déjà activée pour votre compte",
+  "mfaNotEnabled": "L'authentification à deux facteurs n'est pas activée sur ce compte",
   "attemptsRemaining": "{{count}} tentatives restantes",
   "mfa": {
     "title": "Authentification à deux facteurs",

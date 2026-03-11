@@ -28,6 +28,7 @@ import {
   getMediaFileName,
   getStabilityTrackerCsvName,
 } from './getReportName';
+import { getUnityMediaUrls } from './getUrls';
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
@@ -181,6 +182,16 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);
+    case ItemResponseType.Unity: {
+      const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
+      const urls = getUnityMediaUrls(item);
+      const filePaths = urls
+        .map((url) => url.split('?')[0].split('/').pop())
+        .filter(Boolean)
+        .map((fileName) => `${folderName}/${fileName}`);
+
+      return filePaths.length ? filePaths.join(', ') : folderName;
+    }
     /*
       Item list as default case:
       - 'singleSelect',

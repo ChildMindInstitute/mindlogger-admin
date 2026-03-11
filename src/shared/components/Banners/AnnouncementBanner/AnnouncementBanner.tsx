@@ -5,12 +5,16 @@ import { useLocation } from 'react-router-dom';
 
 import curiousIcon from 'assets/images/curious_icon--white.png';
 import { auth } from 'redux/modules';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
 
-const ANNOUNCEMENT_URL = 'https://www.gettingcurious.com/rebrand';
+// ─── Update this URL when the announcement changes ────────────────────────────
+const ANNOUNCEMENT_URL =
+  'https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/ca0a323b-b88d-4b32-8f4f-4e6b0157f8f6/article/1545404417';
+// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Returns a unique key for the announcement banner dismiss state
@@ -24,6 +28,7 @@ export const GLOBAL_DISMISSED_KEY = 'announcement-banner-dismissed-global';
 const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
 export const AnnouncementBanner = (props: BannerProps) => {
+  const { featureFlags } = useFeatureFlags();
   const userData = auth.useData();
   const userId = userData?.user.id;
   const location = useLocation();
@@ -39,6 +44,8 @@ export const AnnouncementBanner = (props: BannerProps) => {
   };
 
   useEffect(() => {
+    if (!featureFlags.enableAdminAnnouncementBanner) return;
+
     // For auth screen or when user is not logged in yet
     if (!userId) {
       const globalDismissed = localStorage.getItem(GLOBAL_DISMISSED_KEY);
@@ -51,7 +58,9 @@ export const AnnouncementBanner = (props: BannerProps) => {
     const userDismissed = localStorage.getItem(getDismissedKey(userId));
 
     setIsAnnouncementBannerActive(!userDismissed);
-  }, [userId]);
+  }, [userId, featureFlags.enableAdminAnnouncementBanner]);
+
+  if (!featureFlags.enableAdminAnnouncementBanner) return null;
 
   const isDisplayRoute = DISPLAY_ROUTES.some((route) => route.test(location.pathname));
 
