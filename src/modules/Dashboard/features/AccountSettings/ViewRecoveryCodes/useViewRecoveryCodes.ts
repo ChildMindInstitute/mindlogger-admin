@@ -72,7 +72,7 @@ export const useViewRecoveryCodes = () => {
 
   const handleVerifyCode = async (_code: string): Promise<VerificationResult> => {
     if (!mfaToken) {
-      setError('Session expired. Please try again.');
+      setError('mfaSessionExpired');
 
       return { success: false };
     }
@@ -123,7 +123,7 @@ export const useViewRecoveryCodes = () => {
 
   const handleVerifyRecoveryCode = async (_code: string): Promise<VerificationResult> => {
     if (!mfaToken) {
-      setError('Session expired. Please try again.');
+      setError('mfaSessionExpired');
 
       return { success: false };
     }

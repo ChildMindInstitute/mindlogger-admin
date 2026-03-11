@@ -89,11 +89,16 @@ describe('exportDataSucceed', () => {
       [],
       'flanker-responses-Sat Jan 01 2000-test.zip',
     );
-    expect(exportMediaZipUtils.exportMediaZip).toHaveBeenCalledTimes(1);
+    expect(exportMediaZipUtils.exportMediaZip).toHaveBeenCalledTimes(2);
     expect(exportMediaZipUtils.exportMediaZip).toHaveBeenNthCalledWith(
       1,
       [],
       'media-responses-Sat Jan 01 2000-test.zip',
+    );
+    expect(exportMediaZipUtils.exportMediaZip).toHaveBeenNthCalledWith(
+      2,
+      [],
+      'unity-responses-Sat Jan 01 2000-test.zip',
     );
   };
 

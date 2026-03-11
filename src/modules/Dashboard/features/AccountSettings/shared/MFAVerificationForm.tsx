@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { MFAVerificationFormProps } from './MFAVerificationForm.types';
 
@@ -18,6 +19,7 @@ export const MFAVerificationForm = ({
   StyledButton,
   StyledErrorMessage,
 }: MFAVerificationFormProps) => {
+  const { t } = useTranslation('app');
   // Cast to any to avoid TypeScript prop forwarding issues with transient props
   const InputContainer = StyledInputContainer as any;
 
@@ -28,19 +30,19 @@ export const MFAVerificationForm = ({
           <StyledInput
             type="text"
             inputMode="numeric"
-            placeholder="Enter verification code"
+            placeholder={t('mfa.verificationCode.placeholder')}
             value={verificationCode}
             onChange={onInputChange}
             maxLength={6}
             disabled={isLoading}
           />
         </InputContainer>
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+        {error && <StyledErrorMessage>{t(error, { defaultValue: error })}</StyledErrorMessage>}
       </Box>
 
       <StyledButtonContainer>
         <StyledButton type="button" className="primary" onClick={onPrimaryAction}>
-          {isLoading ? 'Verifying...' : primaryButtonText}
+          {isLoading ? t('mfa.buttons.verifying') : primaryButtonText}
         </StyledButton>
         <StyledButton
           type="button"

@@ -229,7 +229,7 @@
   "alwaysAvailableWarning": "Once you set this event to always available, all scheduled events for this activity will be removed.",
   "any": "Any",
   "and": "and",
-  "announcementBanner": "<0>We are rebranding! </0> <1>Design updates are on the way — same great app, fresh new look. Curious? </1><2>Click to learn more.</2>",
+  "announcementBanner": "<0>Two Factor Authentication is here! </0> <1>Protect your account with an extra layer of security. Enable it in your account settings. </1><2>Click to learn more.</2>",
   "applet_one": "Applet",
   "applet_other": "Applets",
   "appletActivities": "Applet activities",
@@ -1859,6 +1859,8 @@
   "mfaSessionExpired": "Your session has expired. Please log in again.",
   "invalidRecoveryCode": "Invalid recovery code",
   "recoveryCodeAlreadyUsed": "This recovery code has already been used",
+  "mfaAlreadyEnabled": "Two-factor authentication is already enabled for your account",
+  "mfaNotEnabled": "Two-factor authentication is not enabled on this account",
   "attemptsRemaining": "{{count}} attempts remaining",
   "mfa": {
     "title": "Two-factor authentication",

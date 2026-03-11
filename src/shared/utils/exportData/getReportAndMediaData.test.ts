@@ -5,6 +5,7 @@ import {
   mockedDecryptedObjectForDrawing,
   mockedDecryptedObjectForPhoto,
   mockedDecryptedObjectForVideo,
+  mockedDecryptedObjectForUnityTaskData,
   mockedParsedAnswers,
 } from 'shared/mock';
 import { DecryptedAnswerData, UserActionType } from 'shared/types';
@@ -17,6 +18,7 @@ import {
   getDecryptedAnswersObject,
   getMediaData,
   getReportData,
+  getUnityData,
 } from './getReportAndMediaData';
 
 describe('getReportAndMediaData', () => {
@@ -1012,6 +1014,44 @@ describe('getReportAndMediaData', () => {
           legacy_user_id: null,
         },
       ]);
+    });
+  });
+  describe('getUnityData', () => {
+    const answersForRegularItems = mockedParsedAnswers[0].decryptedAnswers;
+
+    test('should return empty array for non-unity items', () => {
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getUnityData([], answersForRegularItems);
+      expect(result).toEqual([]);
+    });
+
+    test('should return unity data for taskData format', () => {
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getUnityData([], [mockedDecryptedObjectForUnityTaskData]);
+      expect(result).toEqual([
+        {
+          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data1.txt',
+          url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data1.txt',
+        },
+        {
+          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data2.txt',
+          url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data2.txt',
+        },
+        {
+          fileName: 'target-secret-id-unity-answer-id-2-unity_mobile/data3.txt',
+          url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/unity/data3.txt',
+        },
+      ]);
+    });
+
+    test('should accumulate with existing unity data', () => {
+      const existing = [{ fileName: 'existing.txt', url: 'existing-url' }];
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getUnityData(existing, [mockedDecryptedObjectForUnityTaskData]);
+      expect(result.length).toBe(4);
     });
   });
   describe('checkIfHasGithubImportedEventScreen', () => {

@@ -20,7 +20,12 @@ import {
   getFlankerItemsData,
   getStabilityTrackerItemsData,
 } from './getItemsData';
-import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
+import {
+  getActivityJourneyData,
+  getMediaData,
+  getReportData,
+  getUnityData,
+} from './getReportAndMediaData';
 
 export interface ExportDataFilters {
   activityId?: string;
@@ -37,6 +42,7 @@ export const getDefaultExportData = (): AppletExportData => ({
   stabilityTrackerItemsData: [],
   abTrailsItemsData: [],
   flankerItemsData: [],
+  unityData: [],
 });
 
 export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
@@ -106,6 +112,8 @@ export const prepareDecryptedData = async ({
     );
     const flankerItemsData = await getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
 
+    const unityData = getUnityData(acc.unityData, data.decryptedAnswers);
+
     acc = {
       reportData,
       activityJourneyData,
@@ -114,6 +122,7 @@ export const prepareDecryptedData = async ({
       stabilityTrackerItemsData,
       abTrailsItemsData,
       flankerItemsData,
+      unityData,
     };
   }
 
