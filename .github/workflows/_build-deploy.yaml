@@ -46,7 +46,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         name: Checkout
         with:
           ref: ${{ inputs.git-ref }}
@@ -133,7 +133,7 @@ jobs:
     needs:
       - build-deploy
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: "Send Slack message on failure"
         uses: rtCamp/action-slack-notify@v2
         env:

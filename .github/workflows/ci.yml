@@ -6,7 +6,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
@@ -35,7 +35,7 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
@@ -59,7 +59,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV

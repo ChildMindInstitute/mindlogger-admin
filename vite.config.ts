@@ -3,6 +3,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,6 +28,13 @@ export default defineConfig({
   envPrefix: 'REACT_APP_',
   build: {
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        sourcemap: true,
+        sourcemapExcludeSources: false,
+      },
+      plugins: [sourcemaps()], // enable if deps ship external maps that aren’t picked up
+    },
   },
   server: {
     port: 3000, // Match CRA's default port
