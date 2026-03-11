@@ -56,9 +56,9 @@ jobs:
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
       - name: Configure aws credentials for secrets
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::017925157769:role/github-oidc-secrets20260311140831299300000002
+          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
           role-session-name: OIDC-GHA-Build-Secrets
           aws-region: us-east-1
 
