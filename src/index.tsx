@@ -10,7 +10,7 @@ import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTransl
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
-import {isUat, isProduction, isDev} from './shared/utils/env';
+import { isUat, isProduction, isDev } from './shared/utils/env';
 
 if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
