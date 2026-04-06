@@ -7,6 +7,7 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { Svg } from 'shared/components';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
+import { NameDescription } from '../NameDescription';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
 import { UnityFilePreview } from './UnityFilePreview';
@@ -92,6 +93,7 @@ export const Unity = () => {
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>
           {t('performanceTasks.unity')}
         </StyledHeadlineLarge>
+        <NameDescription />
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
           {t('unityInstructions')}
         </StyledTitleLarge>
