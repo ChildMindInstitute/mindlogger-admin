@@ -442,7 +442,7 @@ describe('useBreadcrumbs', () => {
   const label1 = 'CST Touch';
   const label2 = 'CST Gyroscope';
   const label3 = 'Simple & Choice Reaction Time Task Builder';
-  const label4 = 'Unity';
+  const label4 = 'MERIT Task';
 
   test.each`
     route         | routePath                 | label
