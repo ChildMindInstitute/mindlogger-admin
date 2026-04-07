@@ -45,7 +45,7 @@ describe('SignUp component tests', () => {
   test('should be able to validate SignUp form', async () => {
     await submitForm({
       email: 'test',
-      password: 'password',
+      password: 'Str0ngPass!',
       firstName: 'Jane',
       lastName: 'Doe',
       termsOfService: true,
@@ -60,6 +60,21 @@ describe('SignUp component tests', () => {
       termsOfService: true,
     });
     expect(await screen.findByText('Password must not contain spaces.')).toBeInTheDocument();
+  });
+
+  test('should show character types error for weak password', async () => {
+    await submitForm({
+      email: mockedEmail,
+      password: 'aabbccddee',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      termsOfService: true,
+    });
+    expect(
+      await screen.findByText(
+        'Password must contain at least 3 of: uppercase, lowercase, number, symbol.',
+      ),
+    ).toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
