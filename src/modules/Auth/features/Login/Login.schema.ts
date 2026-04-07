@@ -1,23 +1,22 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { ACCOUNT_PASSWORD_MIN_LENGTH } from 'shared/consts';
-import { getEmailValidationSchema } from 'shared/utils';
+import { checkPassword, getEmailValidationSchema } from 'shared/utils';
 
 export const loginFormSchema = () => {
   const { t } = i18n;
   const passwordRequired = t('passwordRequired');
-  const passwordMinLength = t('passwordMinLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH });
   const passwordBlankSpaces = t('passwordBlankSpaces');
 
   return yup
     .object({
       email: getEmailValidationSchema(),
+      // No min-length check — existing users may have shorter passwords.
+      // The backend is the source of truth for rejecting invalid credentials.
       password: yup
         .string()
         .required(passwordRequired)
-        .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
-        .matches(/^(\S+$)/, passwordBlankSpaces),
+        .test('no-whitespace', passwordBlankSpaces, (password) => !password || checkPassword(password).hasNoSpaces),
     })
     .required();
 };
