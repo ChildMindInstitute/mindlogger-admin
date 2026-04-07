@@ -7,17 +7,13 @@ import { PasswordRequirementsTooltip } from './PasswordRequirementsTooltip';
 
 describe('PasswordRequirementsTooltip', () => {
   test('renders the info icon', () => {
-    const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsTooltip password="" />,
-    );
+    const { getByTestId } = renderWithProviders(<PasswordRequirementsTooltip password="" />);
 
     expect(getByTestId('password-requirements-info')).toBeInTheDocument();
   });
 
   test('shows tooltip content on hover', async () => {
-    const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsTooltip password="" />,
-    );
+    const { getByTestId } = renderWithProviders(<PasswordRequirementsTooltip password="" />);
 
     await userEvent.hover(getByTestId('password-requirements-info'));
 
@@ -32,9 +28,7 @@ describe('PasswordRequirementsTooltip', () => {
   });
 
   test('shows all requirements as unmet for empty password', async () => {
-    const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsTooltip password="" />,
-    );
+    const { getByTestId } = renderWithProviders(<PasswordRequirementsTooltip password="" />);
 
     await userEvent.hover(getByTestId('password-requirements-info'));
     await screen.findByText('Password must include:');

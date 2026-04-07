@@ -16,7 +16,11 @@ export const loginFormSchema = () => {
       password: yup
         .string()
         .required(passwordRequired)
-        .test('no-whitespace', passwordBlankSpaces, (password) => !password || checkPassword(password).hasNoSpaces),
+        .test(
+          'no-whitespace',
+          passwordBlankSpaces,
+          (password) => !password || checkPassword(password).hasNoSpaces,
+        ),
     })
     .required();
 };

@@ -23,8 +23,16 @@ export const SignUpFormSchema = () => {
         .string()
         .required(passwordRequired)
         .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
-        .test('no-whitespace', passwordBlankSpaces, (password) => !password || checkPassword(password).hasNoSpaces)
-        .test('char-types', passwordCharacterTypes, (password) => !password || checkPassword(password).meetsCharTypeRequirement),
+        .test(
+          'no-whitespace',
+          passwordBlankSpaces,
+          (password) => !password || checkPassword(password).hasNoSpaces,
+        )
+        .test(
+          'char-types',
+          passwordCharacterTypes,
+          (password) => !password || checkPassword(password).meetsCharTypeRequirement,
+        ),
       termsOfService: yup.boolean().oneOf([true], termsOfServiceAgreementRequired),
     })
     .required();
