@@ -139,4 +139,40 @@ describe('checkPassword', () => {
       expect(checkPassword('').meetsCharTypeRequirement).toBe(false);
     });
   });
+
+  describe('NFC normalization', () => {
+    // e + combining acute accent (U+0301) = NFD form of é
+    const decomposedE = 'e\u0301';
+
+    it('treats decomposed é as lowercase, not as lowercase + symbol', () => {
+      const result = checkPassword(decomposedE);
+      expect(result.hasLowercase).toBe(true);
+      expect(result.hasSymbol).toBe(false);
+    });
+
+    it('counts decomposed é as 1 character (NFC), not 2 (NFD)', () => {
+      // 10 decomposed é characters = 20 code units in NFD, but 10 after NFC
+      const tenDecomposed = decomposedE.repeat(10);
+      expect(checkPassword(tenDecomposed).meetsLength).toBe(true);
+    });
+
+    it('does not count decomposed É as a symbol', () => {
+      // E + combining acute (U+0301) = NFD form of É
+      const decomposedUpperE = 'E\u0301';
+      const result = checkPassword(decomposedUpperE);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasSymbol).toBe(false);
+    });
+
+    it('handles mixed NFC and NFD input correctly', () => {
+      // NFC é + NFD Ñ (N + combining tilde U+0303) + digit + symbol
+      const mixed = '\u00e9N\u03031!aaaaaaa';
+      const result = checkPassword(mixed);
+      expect(result.hasLowercase).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasDigit).toBe(true);
+      expect(result.hasSymbol).toBe(true);
+      expect(result.charTypeCount).toBe(4);
+    });
+  });
 });

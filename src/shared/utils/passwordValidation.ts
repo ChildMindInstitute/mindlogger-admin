@@ -12,10 +12,11 @@ import {
 export type { PasswordCheckResult };
 
 export const checkPassword = (password: string): PasswordCheckResult => {
-  const hasUppercase = UPPERCASE_REGEXP.test(password);
-  const hasLowercase = LOWERCASE_REGEXP.test(password);
-  const hasDigit = DIGIT_REGEXP.test(password);
-  const hasSymbol = SYMBOL_REGEXP.test(password);
+  const normalized = password.normalize('NFC');
+  const hasUppercase = UPPERCASE_REGEXP.test(normalized);
+  const hasLowercase = LOWERCASE_REGEXP.test(normalized);
+  const hasDigit = DIGIT_REGEXP.test(normalized);
+  const hasSymbol = SYMBOL_REGEXP.test(normalized);
   const charTypeCount = [hasUppercase, hasLowercase, hasDigit, hasSymbol].filter(Boolean).length;
 
   return {
@@ -23,8 +24,8 @@ export const checkPassword = (password: string): PasswordCheckResult => {
     hasLowercase,
     hasDigit,
     hasSymbol,
-    hasNoSpaces: NO_WHITESPACE_REGEXP.test(password),
-    meetsLength: password.length >= ACCOUNT_PASSWORD_MIN_LENGTH,
+    hasNoSpaces: NO_WHITESPACE_REGEXP.test(normalized),
+    meetsLength: normalized.length >= ACCOUNT_PASSWORD_MIN_LENGTH,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };
