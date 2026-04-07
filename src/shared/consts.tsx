@@ -82,7 +82,8 @@ export enum DateFormats {
 
 export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w{2,}$/;
 
-export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
+export const ACCOUNT_PASSWORD_MIN_LENGTH = 10;
+export const ACCOUNT_PASSWORD_MIN_CHAR_TYPES = 3;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
 
 export enum Roles {

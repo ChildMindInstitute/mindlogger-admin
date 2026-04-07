@@ -1,0 +1,31 @@
+import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from 'shared/consts';
+
+import {
+  UPPERCASE_REGEXP,
+  LOWERCASE_REGEXP,
+  DIGIT_REGEXP,
+  SYMBOL_REGEXP,
+  NO_WHITESPACE_REGEXP,
+  type PasswordCheckResult,
+} from './passwordPatterns';
+
+export type { PasswordCheckResult };
+
+export const checkPassword = (password: string): PasswordCheckResult => {
+  const hasUppercase = UPPERCASE_REGEXP.test(password);
+  const hasLowercase = LOWERCASE_REGEXP.test(password);
+  const hasDigit = DIGIT_REGEXP.test(password);
+  const hasSymbol = SYMBOL_REGEXP.test(password);
+  const charTypeCount = [hasUppercase, hasLowercase, hasDigit, hasSymbol].filter(Boolean).length;
+
+  return {
+    hasUppercase,
+    hasLowercase,
+    hasDigit,
+    hasSymbol,
+    hasNoSpaces: NO_WHITESPACE_REGEXP.test(password),
+    meetsLength: password.length >= ACCOUNT_PASSWORD_MIN_LENGTH,
+    charTypeCount,
+    meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  };
+};
