@@ -49,7 +49,6 @@ export const StyledRequirement = styled('div')<{ met: boolean }>`
 export const StyledInfoIcon = styled('span')`
   display: inline-flex;
   align-items: center;
-  margin-left: ${theme.spacing(0.6)};
   cursor: pointer;
 
   && svg {

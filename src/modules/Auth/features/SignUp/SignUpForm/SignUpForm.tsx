@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm, useWatch } from 'react-hook-form';
@@ -29,7 +29,7 @@ export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<SignUpData>({
+  const { handleSubmit, control, trigger } = useForm<SignUpData>({
     resolver: yupResolver(SignUpFormSchema()),
     defaultValues: {
       email: '',
@@ -41,6 +41,22 @@ export const SignUpForm = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
+  const hasTouchedPassword = useRef(false);
+
+  useEffect(() => {
+    if (!watchedPassword) {
+      hasTouchedPassword.current = false;
+
+      return;
+    }
+
+    hasTouchedPassword.current = true;
+    const timer = setTimeout(() => {
+      trigger('password');
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [watchedPassword, trigger]);
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
@@ -102,13 +118,11 @@ export const SignUpForm = () => {
           fullWidth
           name="password"
           control={control}
-          label={
-            <>
-              {t('password')}
-              <PasswordRequirementsTooltip password={watchedPassword ?? ''} />
-            </>
-          }
+          label={t('password')}
           type="password"
+          InputProps={{
+            endAdornment: <PasswordRequirementsTooltip password={watchedPassword ?? ''} />,
+          }}
           data-testid="signup-form-password"
         />
       </StyledController>

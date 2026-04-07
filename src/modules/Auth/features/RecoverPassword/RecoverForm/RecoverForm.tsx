@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -25,12 +25,28 @@ import { RecoverFormFields, RecoverFormProps } from './RecoverForm.types';
 export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<RecoverFormFields>({
+  const { handleSubmit, control, trigger } = useForm<RecoverFormFields>({
     resolver: yupResolver(newPasswordSchema()),
   });
 
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
+  const hasTouchedPassword = useRef(false);
+
+  useEffect(() => {
+    if (!watchedPassword) {
+      hasTouchedPassword.current = false;
+
+      return;
+    }
+
+    hasTouchedPassword.current = true;
+    const timer = setTimeout(() => {
+      trigger('password');
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [watchedPassword, trigger]);
 
   const onSubmit = async ({ password }: RecoverFormFields) => {
     try {
@@ -61,12 +77,10 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
           name="password"
           type="password"
           control={control}
-          label={
-            <>
-              {t('newPassword')}
-              <PasswordRequirementsTooltip password={watchedPassword ?? ''} />
-            </>
-          }
+          label={t('newPassword')}
+          InputProps={{
+            endAdornment: <PasswordRequirementsTooltip password={watchedPassword ?? ''} />,
+          }}
           data-testid={`${recoverPasswordFormDataTestid}-password`}
         />
       </StyledController>
