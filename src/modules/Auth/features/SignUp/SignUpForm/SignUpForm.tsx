@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from 'redux/store';
@@ -9,6 +9,7 @@ import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { PasswordRequirementsTooltip } from 'shared/components/PasswordRequirementsTooltip';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 
@@ -39,6 +40,7 @@ export const SignUpForm = () => {
     },
   });
   const [errorMessage, setErrorMessage] = useState('');
+  const watchedPassword = useWatch({ control, name: 'password' });
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
@@ -100,7 +102,12 @@ export const SignUpForm = () => {
           fullWidth
           name="password"
           control={control}
-          label={t('password')}
+          label={
+            <>
+              {t('password')}
+              <PasswordRequirementsTooltip password={watchedPassword ?? ''} />
+            </>
+          }
           type="password"
           data-testid="signup-form-password"
         />

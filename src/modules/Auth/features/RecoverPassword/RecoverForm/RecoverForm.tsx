@@ -1,12 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { approveRecoveryPasswordApi } from 'api';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
+import { PasswordRequirementsTooltip } from 'shared/components/PasswordRequirementsTooltip';
 import { StyledErrorText, StyledHeadlineSmall, variables } from 'shared/styles';
 import { LocationStateKeys } from 'shared/types';
 import { getErrorMessage } from 'shared/utils';
@@ -29,6 +30,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const watchedPassword = useWatch({ control, name: 'password' });
 
   const onSubmit = async ({ password }: RecoverFormFields) => {
     try {
@@ -59,7 +61,12 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
           name="password"
           type="password"
           control={control}
-          label={t('newPassword')}
+          label={
+            <>
+              {t('newPassword')}
+              <PasswordRequirementsTooltip password={watchedPassword ?? ''} />
+            </>
+          }
           data-testid={`${recoverPasswordFormDataTestid}-password`}
         />
       </StyledController>
