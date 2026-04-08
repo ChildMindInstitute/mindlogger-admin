@@ -29,7 +29,7 @@ export const checkPassword = (password: string): PasswordCheckResult => {
     hasDigit,
     hasSymbol,
     hasNoSpaces: NO_WHITESPACE_REGEXP.test(normalized),
-    meetsLength: normalized.length >= ACCOUNT_PASSWORD_MIN_LENGTH,
+    meetsLength: [...normalized].length >= ACCOUNT_PASSWORD_MIN_LENGTH,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };

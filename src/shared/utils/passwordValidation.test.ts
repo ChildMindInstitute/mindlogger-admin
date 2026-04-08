@@ -93,6 +93,16 @@ describe('checkPassword', () => {
     it('returns false for empty string', () => {
       expect(checkPassword('').meetsLength).toBe(false);
     });
+
+    it('counts emoji as 1 character, not 2 (surrogate pair)', () => {
+      // 9 ASCII + 1 emoji = 10 code points but 11 UTF-16 code units
+      expect(checkPassword('abcdefgh!😀').meetsLength).toBe(true);
+    });
+
+    it('does not over-count emoji for length', () => {
+      // 8 ASCII + 1 emoji = 9 code points (below 10)
+      expect(checkPassword('abcdefg!😀').meetsLength).toBe(false);
+    });
   });
 
   describe('charTypeCount', () => {
