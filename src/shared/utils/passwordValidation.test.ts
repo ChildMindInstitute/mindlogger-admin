@@ -175,4 +175,67 @@ describe('checkPassword', () => {
       expect(result.charTypeCount).toBe(4);
     });
   });
+
+  describe('caseless scripts (\\p{Lo})', () => {
+    it('counts Japanese Kanji as both uppercase and lowercase', () => {
+      const result = checkPassword('東京');
+      expect(result.hasCaselessLetter).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasLowercase).toBe(true);
+    });
+
+    it('counts Chinese characters as both uppercase and lowercase', () => {
+      const result = checkPassword('漢字');
+      expect(result.hasCaselessLetter).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasLowercase).toBe(true);
+    });
+
+    it('counts Korean Hangul as both uppercase and lowercase', () => {
+      const result = checkPassword('테스트');
+      expect(result.hasCaselessLetter).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasLowercase).toBe(true);
+    });
+
+    it('counts Arabic as both uppercase and lowercase', () => {
+      const result = checkPassword('مرحبا');
+      expect(result.hasCaselessLetter).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasLowercase).toBe(true);
+    });
+
+    it('counts Hebrew as both uppercase and lowercase', () => {
+      const result = checkPassword('שלום');
+      expect(result.hasCaselessLetter).toBe(true);
+      expect(result.hasUppercase).toBe(true);
+      expect(result.hasLowercase).toBe(true);
+    });
+
+    it('meets char type requirement with caseless letters + digit (3 types)', () => {
+      // CJK counts as upper+lower (2) + digit (1) = 3 types
+      const result = checkPassword('東京太郎太郎太郎12');
+      expect(result.charTypeCount).toBe(3);
+      expect(result.meetsCharTypeRequirement).toBe(true);
+    });
+
+    it('meets char type requirement with caseless letters + symbol (3 types)', () => {
+      // CJK counts as upper+lower (2) + symbol (1) = 3 types
+      const result = checkPassword('東京太郎太郎太郎!@');
+      expect(result.charTypeCount).toBe(3);
+      expect(result.meetsCharTypeRequirement).toBe(true);
+    });
+
+    it('gets 4 types with caseless letters + digit + symbol', () => {
+      const result = checkPassword('東京太郎太郎太1!');
+      expect(result.charTypeCount).toBe(4);
+      expect(result.meetsCharTypeRequirement).toBe(true);
+    });
+
+    it('only caseless letters = 2 types (upper+lower), below threshold', () => {
+      const result = checkPassword('東京太郎太郎太郎太郎');
+      expect(result.charTypeCount).toBe(2);
+      expect(result.meetsCharTypeRequirement).toBe(false);
+    });
+  });
 });

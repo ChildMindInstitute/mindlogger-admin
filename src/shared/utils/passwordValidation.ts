@@ -6,6 +6,7 @@ import {
   DIGIT_REGEXP,
   SYMBOL_REGEXP,
   NO_WHITESPACE_REGEXP,
+  CASELESS_LETTER_REGEXP,
   type PasswordCheckResult,
 } from './passwordPatterns';
 
@@ -13,8 +14,10 @@ export type { PasswordCheckResult };
 
 export const checkPassword = (password: string): PasswordCheckResult => {
   const normalized = password.normalize('NFC');
-  const hasUppercase = UPPERCASE_REGEXP.test(normalized);
-  const hasLowercase = LOWERCASE_REGEXP.test(normalized);
+  const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
+  // Caseless scripts (CJK, Arabic, Hebrew, Korean) satisfy both upper and lower
+  const hasUppercase = UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
+  const hasLowercase = LOWERCASE_REGEXP.test(normalized) || hasCaselessLetter;
   const hasDigit = DIGIT_REGEXP.test(normalized);
   const hasSymbol = SYMBOL_REGEXP.test(normalized);
   const charTypeCount = [hasUppercase, hasLowercase, hasDigit, hasSymbol].filter(Boolean).length;
@@ -22,6 +25,7 @@ export const checkPassword = (password: string): PasswordCheckResult => {
   return {
     hasUppercase,
     hasLowercase,
+    hasCaselessLetter,
     hasDigit,
     hasSymbol,
     hasNoSpaces: NO_WHITESPACE_REGEXP.test(normalized),
