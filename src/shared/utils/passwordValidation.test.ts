@@ -75,6 +75,38 @@ describe('checkPassword', () => {
     it('returns false for empty string', () => {
       expect(checkPassword('').hasNoSpaces).toBe(false);
     });
+
+    it('returns false for zero-width space (U+200B)', () => {
+      expect(checkPassword('abc\u200B123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns false for zero-width joiner (U+200D)', () => {
+      expect(checkPassword('abc\u200D123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns false for zero-width non-joiner (U+200C)', () => {
+      expect(checkPassword('abc\u200C123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns false for BOM / zero-width no-break space (U+FEFF)', () => {
+      expect(checkPassword('abc\uFEFF123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns false for soft hyphen (U+00AD)', () => {
+      expect(checkPassword('abc\u00AD123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns true for emoji (visible symbol)', () => {
+      expect(checkPassword('abc😀123').hasNoSpaces).toBe(true);
+    });
+
+    it('returns false for Braille blank (U+2800)', () => {
+      expect(checkPassword('abc\u2800123').hasNoSpaces).toBe(false);
+    });
+
+    it('returns false for Hangul filler (U+3164)', () => {
+      expect(checkPassword('abc\u3164123').hasNoSpaces).toBe(false);
+    });
   });
 
   describe('meetsLength', () => {
