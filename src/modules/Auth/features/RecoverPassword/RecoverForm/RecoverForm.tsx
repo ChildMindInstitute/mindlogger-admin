@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -25,28 +25,26 @@ import { RecoverFormFields, RecoverFormProps } from './RecoverForm.types';
 export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control, trigger } = useForm<RecoverFormFields>({
+  const { handleSubmit, control, trigger, clearErrors } = useForm<RecoverFormFields>({
     resolver: yupResolver(newPasswordSchema()),
   });
 
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
-  const hasTouchedPassword = useRef(false);
 
   useEffect(() => {
-    if (!watchedPassword) {
-      hasTouchedPassword.current = false;
+    clearErrors('password');
 
+    if (!watchedPassword) {
       return;
     }
 
-    hasTouchedPassword.current = true;
     const timer = setTimeout(() => {
       trigger('password');
-    }, 800);
+    }, 500);
 
     return () => clearTimeout(timer);
-  }, [watchedPassword, trigger]);
+  }, [watchedPassword, trigger, clearErrors]);
 
   const onSubmit = async ({ password }: RecoverFormFields) => {
     try {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm, useWatch } from 'react-hook-form';
@@ -29,7 +29,7 @@ export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control, trigger } = useForm<SignUpData>({
+  const { handleSubmit, control, trigger, clearErrors } = useForm<SignUpData>({
     resolver: yupResolver(SignUpFormSchema()),
     defaultValues: {
       email: '',
@@ -41,22 +41,20 @@ export const SignUpForm = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
-  const hasTouchedPassword = useRef(false);
 
   useEffect(() => {
-    if (!watchedPassword) {
-      hasTouchedPassword.current = false;
+    clearErrors('password');
 
+    if (!watchedPassword) {
       return;
     }
 
-    hasTouchedPassword.current = true;
     const timer = setTimeout(() => {
       trigger('password');
-    }, 800);
+    }, 500);
 
     return () => clearTimeout(timer);
-  }, [watchedPassword, trigger]);
+  }, [watchedPassword, trigger, clearErrors]);
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');

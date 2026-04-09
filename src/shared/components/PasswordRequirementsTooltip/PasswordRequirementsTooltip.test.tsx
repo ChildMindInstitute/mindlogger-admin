@@ -18,7 +18,7 @@ describe('PasswordRequirementsTooltip', () => {
     await userEvent.hover(getByTestId('password-requirements-info'));
 
     expect(await screen.findByText('Password must include:')).toBeInTheDocument();
-    expect(screen.getByText('At least 3 of the below 4 types')).toBeInTheDocument();
+    expect(screen.getByText('At least 3 of the types below')).toBeInTheDocument();
     expect(screen.getByText('10 characters')).toBeInTheDocument();
     expect(screen.getByText('no blank spaces')).toBeInTheDocument();
     expect(screen.getByText('Uppercase letters (A-Z)')).toBeInTheDocument();
