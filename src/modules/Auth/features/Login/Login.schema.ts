@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { LEGACY_PASSWORD_MIN_LENGTH } from 'shared/consts';
+import { LEGACY_PASSWORD_MIN_LENGTH, YUP_TEST_NAMES } from 'shared/consts';
 import { checkPassword, getEmailValidationSchema } from 'shared/utils';
 
 export const loginFormSchema = () => {
@@ -18,13 +18,13 @@ export const loginFormSchema = () => {
         .string()
         .required(passwordRequired)
         .test(
-          'min-length',
+          YUP_TEST_NAMES.MIN_LENGTH,
           passwordMinLength,
           (password) =>
             !password || checkPassword(password, LEGACY_PASSWORD_MIN_LENGTH).meetsLength,
         )
         .test(
-          'no-whitespace',
+          YUP_TEST_NAMES.NO_WHITESPACE,
           passwordBlankSpaces,
           (password) => !password || checkPassword(password).hasNoSpaces,
         ),

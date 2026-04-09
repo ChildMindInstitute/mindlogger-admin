@@ -87,6 +87,12 @@ export const ACCOUNT_PASSWORD_MIN_CHAR_TYPES = 3;
 export const LEGACY_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
 
+export const YUP_TEST_NAMES = {
+  MIN_LENGTH: 'min-length',
+  NO_WHITESPACE: 'no-whitespace',
+  CHAR_TYPES: 'char-types',
+} as const;
+
 export enum Roles {
   Manager = 'manager',
   Coordinator = 'coordinator',

@@ -1,7 +1,11 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from 'shared/consts';
+import {
+  ACCOUNT_PASSWORD_MIN_LENGTH,
+  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  YUP_TEST_NAMES,
+} from 'shared/consts';
 import { checkPassword } from 'shared/utils';
 
 export const newPasswordSchema = () => {
@@ -21,17 +25,17 @@ export const newPasswordSchema = () => {
         .string()
         .required(passwordRequired)
         .test(
-          'min-length',
+          YUP_TEST_NAMES.MIN_LENGTH,
           passwordMinLength,
           (password) => !password || checkPassword(password).meetsLength,
         )
         .test(
-          'no-whitespace',
+          YUP_TEST_NAMES.NO_WHITESPACE,
           passwordBlankSpaces,
           (password) => !password || checkPassword(password).hasNoSpaces,
         )
         .test(
-          'char-types',
+          YUP_TEST_NAMES.CHAR_TYPES,
           passwordCharacterTypes,
           (password) => !password || checkPassword(password).meetsCharTypeRequirement,
         ),
