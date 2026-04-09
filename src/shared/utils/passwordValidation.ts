@@ -13,7 +13,10 @@ import {
 
 export type { PasswordCheckResult };
 
-export const checkPassword = (password: string): PasswordCheckResult => {
+export const checkPassword = (
+  password: string,
+  minLength: number = ACCOUNT_PASSWORD_MIN_LENGTH,
+): PasswordCheckResult => {
   const normalized = password.normalize('NFC');
   const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
   const hasUppercase = UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
@@ -29,7 +32,7 @@ export const checkPassword = (password: string): PasswordCheckResult => {
     hasDigit,
     hasSymbol,
     hasNoSpaces: VISIBLE_ONLY_REGEXP.test(normalized) && !HIDDEN_BLANKS_REGEXP.test(normalized),
-    meetsLength: [...normalized].length >= ACCOUNT_PASSWORD_MIN_LENGTH,
+    meetsLength: [...normalized].length >= minLength,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };

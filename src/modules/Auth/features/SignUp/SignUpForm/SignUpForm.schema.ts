@@ -22,7 +22,11 @@ export const SignUpFormSchema = () => {
       password: yup
         .string()
         .required(passwordRequired)
-        .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
+        .test(
+          'min-length',
+          passwordMinLength,
+          (password) => !password || checkPassword(password).meetsLength,
+        )
         .test(
           'no-whitespace',
           passwordBlankSpaces,

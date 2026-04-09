@@ -7,7 +7,7 @@ import { checkPassword, getEmailValidationSchema } from 'shared/utils';
 export const loginFormSchema = () => {
   const { t } = i18n;
   const passwordRequired = t('passwordRequired');
-  const passwordMinLength = t('passwordMinLength', { count: LEGACY_PASSWORD_MIN_LENGTH });
+  const passwordMinLength = t('passwordMinLength', { chars: LEGACY_PASSWORD_MIN_LENGTH });
   const passwordBlankSpaces = t('passwordBlankSpaces');
 
   return yup
@@ -17,7 +17,11 @@ export const loginFormSchema = () => {
       password: yup
         .string()
         .required(passwordRequired)
-        .min(LEGACY_PASSWORD_MIN_LENGTH, passwordMinLength)
+        .test(
+          'min-length',
+          passwordMinLength,
+          (password) => !password || checkPassword(password, LEGACY_PASSWORD_MIN_LENGTH).meetsLength,
+        )
         .test(
           'no-whitespace',
           passwordBlankSpaces,
