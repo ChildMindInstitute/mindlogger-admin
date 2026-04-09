@@ -20,7 +20,8 @@ export const loginFormSchema = () => {
         .test(
           'min-length',
           passwordMinLength,
-          (password) => !password || checkPassword(password, LEGACY_PASSWORD_MIN_LENGTH).meetsLength,
+          (password) =>
+            !password || checkPassword(password, LEGACY_PASSWORD_MIN_LENGTH).meetsLength,
         )
         .test(
           'no-whitespace',
