@@ -13,6 +13,9 @@ import {
 
 export type { PasswordCheckResult };
 
+// Count user-perceived characters (grapheme clusters), so each emoji = 1.
+const graphemeLength = (str: string): number => [...new Intl.Segmenter().segment(str)].length;
+
 export const checkPassword = (
   password: string,
   minLength: number = ACCOUNT_PASSWORD_MIN_LENGTH,
@@ -32,7 +35,7 @@ export const checkPassword = (
     hasDigit,
     hasSymbol,
     hasNoSpaces: VISIBLE_ONLY_REGEXP.test(normalized) && !HIDDEN_BLANKS_REGEXP.test(normalized),
-    meetsLength: [...normalized].length >= minLength,
+    meetsLength: graphemeLength(normalized) >= minLength,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };
