@@ -17,7 +17,7 @@ export const checkPassword = (
   password: string,
   minLength: number = ACCOUNT_PASSWORD_MIN_LENGTH,
 ): PasswordCheckResult => {
-  const normalized = password.normalize('NFC');
+  const normalized = password.normalize('NFKC');
   const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
   const hasUppercase = UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
   const hasLowercase = LOWERCASE_REGEXP.test(normalized) || hasCaselessLetter;
