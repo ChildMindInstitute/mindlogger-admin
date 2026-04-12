@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 
 import { NameDescriptionContent } from './NameDescriptionContent';
+import { NameDescriptionProps } from './NameDescription.types';
 
-export const NameDescription = () => {
+export const NameDescription = ({ 'data-testid': dataTestid }: NameDescriptionProps) => {
   const { t } = useTranslation();
 
   return (
@@ -12,8 +13,9 @@ export const NameDescription = () => {
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('nameAndDescription')}
       Content={NameDescriptionContent}
+      contentProps={{ 'data-testid': dataTestid }}
       headerToggling
-      data-testid="builder-activity-flanker-common"
+      data-testid={`${dataTestid}-common`}
     />
   );
 };

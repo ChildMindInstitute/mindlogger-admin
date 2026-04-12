@@ -93,7 +93,7 @@ export const Unity = () => {
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>
           {t('performanceTasks.unity')}
         </StyledHeadlineLarge>
-        <NameDescription />
+        <NameDescription data-testid={dataTestid} />
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
           {t('unityInstructions')}
         </StyledTitleLarge>
