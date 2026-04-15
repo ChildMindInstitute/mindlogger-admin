@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+
 import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from 'shared/consts';
 import { checkPassword, isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
 
@@ -8,8 +11,6 @@ import {
   StyledGrid,
   StyledRequirement,
 } from './PasswordRequirementsSection.styles';
-import { useState } from 'react';
-import Box from '@mui/material/Box';
 
 const CheckMark = () => <span>&#x2713;</span>;
 const CrossMark = () => <span>&#x2717;</span>;
@@ -27,14 +28,17 @@ interface PasswordRequirementsSectionProps {
   password: string;
 
   /**
-  * If passed, wraps fields + checklist. The checklist shows while a descendant has focus, or while
-  * `password` is non-empty and still fails account policy (stable while typing despite debounced validation).
- */
+   * If passed, wraps fields + checklist. The checklist shows while a descendant has focus, or while
+   * `password` is non-empty and still fails account policy (stable while typing despite debounced validation).
+   */
   children?: React.ReactNode;
 }
 
-export const PasswordRequirementsSection = ({ password, children }: PasswordRequirementsSectionProps) => {
-  const [focusWithin, setFocusWithin] = useState(false)
+export const PasswordRequirementsSection = ({
+  password,
+  children,
+}: PasswordRequirementsSectionProps) => {
+  const [focusWithin, setFocusWithin] = useState(false);
   const { t } = useTranslation();
 
   const result = checkPassword(password);
@@ -56,24 +60,36 @@ export const PasswordRequirementsSection = ({ password, children }: PasswordRequ
           {t('passwordReqCharTypesHeading', { types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES })}
         </StyledSectionTitle>
         <StyledGrid>
-          <RequirementItem met={result.hasUppercase || result.meetsCharTypeRequirement} label={t('passwordReqUppercase')} />
-          <RequirementItem met={result.hasLowercase || result.meetsCharTypeRequirement} label={t('passwordReqLowercase')} />
-          <RequirementItem met={result.hasDigit || result.meetsCharTypeRequirement} label={t('passwordReqNumbers')} />
-          <RequirementItem met={result.hasSymbol || result.meetsCharTypeRequirement} label={t('passwordReqSymbols')} />
+          <RequirementItem
+            met={result.hasUppercase || result.meetsCharTypeRequirement}
+            label={t('passwordReqUppercase')}
+          />
+          <RequirementItem
+            met={result.hasLowercase || result.meetsCharTypeRequirement}
+            label={t('passwordReqLowercase')}
+          />
+          <RequirementItem
+            met={result.hasDigit || result.meetsCharTypeRequirement}
+            label={t('passwordReqNumbers')}
+          />
+          <RequirementItem
+            met={result.hasSymbol || result.meetsCharTypeRequirement}
+            label={t('passwordReqSymbols')}
+          />
         </StyledGrid>
       </StyledSection>
     </div>
   );
 
   if (children !== undefined) {
-    const keepChecklistVisible = password.length > 0 && !isAccountPasswordPolicySatisfied(result)
-    const showPasswordPanel = focusWithin || keepChecklistVisible
+    const keepChecklistVisible = password.length > 0 && !isAccountPasswordPolicySatisfied(result);
+    const showPasswordPanel = focusWithin || keepChecklistVisible;
 
     const handleBlurCapture = (e: React.FocusEvent<HTMLDivElement>) => {
-      const next = e.relatedTarget as Node | null
-      if (next && e.currentTarget.contains(next)) return
-      setFocusWithin(false)
-    }
+      const next = e.relatedTarget as Node | null;
+      if (next && e.currentTarget.contains(next)) return;
+      setFocusWithin(false);
+    };
 
     return (
       <Box
@@ -101,7 +117,7 @@ export const PasswordRequirementsSection = ({ password, children }: PasswordRequ
           {checklist}
         </Box>
       </Box>
-    )
+    );
   }
 
   return checklist;

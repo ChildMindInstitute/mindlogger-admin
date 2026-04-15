@@ -1,4 +1,4 @@
-import { Box, styled, tooltipClasses, Tooltip, TooltipProps } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
@@ -26,7 +26,7 @@ export const StyledGrid = styled(Box)`
   gap: ${theme.spacing(0.4, 1.6)};
 `;
 
-export const StyledRequirement = styled('div') <{ met: boolean }>`
+export const StyledRequirement = styled('div')<{ met: boolean }>`
   display: flex;
   align-items: center;
   gap: ${theme.spacing(0.4)};

@@ -93,13 +93,11 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
         />
       </StyledController>
 
-      {
-        errorMessage && (
-          <StyledErrorText data-testid={`${recoverPasswordFormDataTestid}-error`}>
-            {errorMessage}
-          </StyledErrorText>
-        )
-      }
+      {errorMessage && (
+        <StyledErrorText data-testid={`${recoverPasswordFormDataTestid}-error`}>
+          {errorMessage}
+        </StyledErrorText>
+      )}
       <StyledButton
         variant="contained"
         type="submit"
@@ -107,6 +105,6 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       >
         {t('submit')}
       </StyledButton>
-    </StyledForm >
+    </StyledForm>
   );
 };

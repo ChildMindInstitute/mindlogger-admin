@@ -41,6 +41,5 @@ export const checkPassword = (
   };
 };
 
-export const isAccountPasswordPolicySatisfied = (result: PasswordCheckResult): boolean => {
-  return result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement;
-};
+export const isAccountPasswordPolicySatisfied = (result: PasswordCheckResult): boolean =>
+  result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement;

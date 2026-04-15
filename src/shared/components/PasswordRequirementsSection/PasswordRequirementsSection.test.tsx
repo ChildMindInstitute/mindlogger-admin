@@ -1,10 +1,10 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Box } from '@mui/material';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { PasswordRequirementsSection } from './PasswordRequirementsSection';
-import { Box } from '@mui/material';
 
 describe('PasswordRequirementsSection', () => {
   test('renders the info icon', () => {
