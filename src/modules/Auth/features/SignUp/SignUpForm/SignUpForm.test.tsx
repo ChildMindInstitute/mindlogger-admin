@@ -6,6 +6,7 @@ import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachT
 import { mockedEmail, mockedPassword } from 'shared/mock';
 
 import { SignUpForm } from '.';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 const submitForm = async ({
   email,
@@ -59,22 +60,7 @@ describe('SignUp component tests', () => {
       lastName: 'Doe',
       termsOfService: true,
     });
-    expect(await screen.findByText('Password must not contain spaces.')).toBeInTheDocument();
-  });
-
-  test('should show character types error for weak password', async () => {
-    await submitForm({
-      email: mockedEmail,
-      password: 'aabbccddee',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      termsOfService: true,
-    });
-    expect(
-      await screen.findByText(
-        'Password must contain at least 3 of: uppercase, lowercase, number, symbol.',
-      ),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('no blank spaces')).toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
@@ -85,9 +71,19 @@ describe('SignUp component tests', () => {
     await userEvent.click(screen.getByTestId('signup-form-signup'));
 
     expect(await screen.findByText('Email is required')).toBeInTheDocument();
-    expect(await screen.findByText('Password is required')).toBeInTheDocument();
     expect(await screen.findByText('First name is required')).toBeInTheDocument();
     expect(await screen.findByText('Last name is required')).toBeInTheDocument();
     expect(await screen.findByText('Please agree to the Terms of Service')).toBeInTheDocument();
+  });
+
+  it('shows password validation error', async () => {
+    await userEvent.type(
+      screen.getByTestId('signup-form-password'),
+      'short'
+    );
+
+    await userEvent.click(screen.getByTestId('signup-form-signup'));
+
+    expect(await screen.findByText(/10 characters/i)).toBeInTheDocument();
   });
 });

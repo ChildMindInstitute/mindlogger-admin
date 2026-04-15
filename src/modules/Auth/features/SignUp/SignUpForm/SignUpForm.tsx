@@ -114,8 +114,8 @@ export const SignUpForm = () => {
       <PasswordRequirementsSection password={watchedPassword ?? ''}>
         <StyledController>
           <InputController
-            isErrorVisible={false}
             fullWidth
+            isErrorVisible={false}
             name="password"
             control={control}
             label={t('password')}
