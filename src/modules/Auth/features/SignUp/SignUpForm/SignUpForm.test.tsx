@@ -1,8 +1,10 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
 import { mockedEmail, mockedPassword } from 'shared/mock';
+
 import { SignUpForm } from '.';
 
 const submitForm = async ({
