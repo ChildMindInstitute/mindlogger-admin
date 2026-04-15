@@ -73,7 +73,6 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
         <StyledController>
           <InputController
             fullWidth
-            isErrorVisible={false}
             name="password"
             type="password"
             control={control}
