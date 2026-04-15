@@ -1,12 +1,9 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
 import { mockedEmail, mockedPassword } from 'shared/mock';
-
 import { SignUpForm } from '.';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 const submitForm = async ({
   email,
@@ -77,13 +74,8 @@ describe('SignUp component tests', () => {
   });
 
   it('shows password validation error', async () => {
-    await userEvent.type(
-      screen.getByTestId('signup-form-password'),
-      'short'
-    );
-
+    await userEvent.type(screen.getByTestId('signup-form-password'), 'short');
     await userEvent.click(screen.getByTestId('signup-form-signup'));
-
     expect(await screen.findByText(/10 characters/i)).toBeInTheDocument();
   });
 });
