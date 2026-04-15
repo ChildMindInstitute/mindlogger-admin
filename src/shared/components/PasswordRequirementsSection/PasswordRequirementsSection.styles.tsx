@@ -3,20 +3,9 @@ import { Box, styled, tooltipClasses, Tooltip, TooltipProps } from '@mui/materia
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
-export const StyledPasswordTooltip = styled(({ className, children, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} children={children} />
-))(() => ({
-  [`&& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: variables.palette.white,
-    color: variables.palette.on_surface,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.15)',
-    padding: theme.spacing(1.6, 2),
-    maxWidth: '26rem',
-  },
-}));
-
 export const StyledSection = styled(Box)`
   margin-bottom: ${theme.spacing(1.2)};
+  text-align: left;
 
   &:last-child {
     margin-bottom: 0;
@@ -37,7 +26,7 @@ export const StyledGrid = styled(Box)`
   gap: ${theme.spacing(0.4, 1.6)};
 `;
 
-export const StyledRequirement = styled('div')<{ met: boolean }>`
+export const StyledRequirement = styled('div') <{ met: boolean }>`
   display: flex;
   align-items: center;
   gap: ${theme.spacing(0.4)};

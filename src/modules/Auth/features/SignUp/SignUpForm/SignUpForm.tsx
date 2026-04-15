@@ -9,7 +9,7 @@ import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
-import { PasswordRequirementsTooltip } from 'shared/components/PasswordRequirementsTooltip';
+import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 
@@ -111,20 +111,21 @@ export const SignUpForm = () => {
           data-testid="signup-form-lname"
         />
       </StyledController>
-      <StyledController>
-        <InputController
-          fullWidth
-          name="password"
-          control={control}
-          label={t('password')}
-          type="password"
-          InputProps={{
-            endAdornment: <PasswordRequirementsTooltip password={watchedPassword ?? ''} />,
-          }}
-          data-testid="signup-form-password"
-        />
-      </StyledController>
+      <PasswordRequirementsSection password={watchedPassword ?? ''}>
+        <StyledController>
+          <InputController
+            isErrorVisible={false}
+            fullWidth
+            name="password"
+            control={control}
+            label={t('password')}
+            type="password"
+            data-testid="signup-form-password"
+          />
+        </StyledController>
+      </PasswordRequirementsSection>
       {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
+
       <StyledController>
         <CheckboxController
           name="termsOfService"

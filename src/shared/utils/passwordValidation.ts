@@ -40,3 +40,7 @@ export const checkPassword = (
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };
 };
+
+export const isAccountPasswordPolicySatisfied = (result: PasswordCheckResult): boolean => {
+  return result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement;
+};

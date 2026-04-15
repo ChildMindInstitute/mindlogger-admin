@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { approveRecoveryPasswordApi } from 'api';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { PasswordRequirementsTooltip } from 'shared/components/PasswordRequirementsTooltip';
+import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { StyledErrorText, StyledHeadlineSmall, variables } from 'shared/styles';
 import { LocationStateKeys } from 'shared/types';
 import { getErrorMessage } from 'shared/utils';
@@ -69,19 +69,19 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       <StyledResetPasswordSubheader color={variables.palette.on_surface_variant}>
         {t('createNewPasswordForEmail', { email })}
       </StyledResetPasswordSubheader>
-      <StyledController>
-        <InputController
-          fullWidth
-          name="password"
-          type="password"
-          control={control}
-          label={t('newPassword')}
-          InputProps={{
-            endAdornment: <PasswordRequirementsTooltip password={watchedPassword ?? ''} />,
-          }}
-          data-testid={`${recoverPasswordFormDataTestid}-password`}
-        />
-      </StyledController>
+      <PasswordRequirementsSection password={watchedPassword ?? ''}>
+        <StyledController>
+          <InputController
+            fullWidth
+            isErrorVisible={false}
+            name="password"
+            type="password"
+            control={control}
+            label={t('newPassword')}
+            data-testid={`${recoverPasswordFormDataTestid}-password`}
+          />
+        </StyledController>
+      </PasswordRequirementsSection>
       <StyledController>
         <InputController
           fullWidth
@@ -92,11 +92,14 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
           data-testid={`${recoverPasswordFormDataTestid}-confirm-password`}
         />
       </StyledController>
-      {errorMessage && (
-        <StyledErrorText data-testid={`${recoverPasswordFormDataTestid}-error`}>
-          {errorMessage}
-        </StyledErrorText>
-      )}
+
+      {
+        errorMessage && (
+          <StyledErrorText data-testid={`${recoverPasswordFormDataTestid}-error`}>
+            {errorMessage}
+          </StyledErrorText>
+        )
+      }
       <StyledButton
         variant="contained"
         type="submit"
@@ -104,6 +107,6 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       >
         {t('submit')}
       </StyledButton>
-    </StyledForm>
+    </StyledForm >
   );
 };
