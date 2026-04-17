@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 
-import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from 'shared/consts';
 import { checkPassword, isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
 
 import {
@@ -10,10 +9,29 @@ import {
   StyledSectionTitle,
   StyledGrid,
   StyledRequirement,
+  PasswordRequirementsSectionState,
+  PasswordRequirementsFieldGroup,
 } from './PasswordRequirementsSection.styles';
+import { usePasswordRequirementsChecklistDisplay } from './usePasswordRequirementsChecklistDisplay';
 
 const CheckMark = () => <span>&#x2713;</span>;
 const CrossMark = () => <span>&#x2717;</span>;
+
+function getPasswordRequirementsSectionState(
+  firstFocusWithin: boolean,
+  isPasswordEmpty: boolean,
+  policySatisfiedForDisplay: boolean,
+): PasswordRequirementsSectionState {
+  if (policySatisfiedForDisplay) {
+    return PasswordRequirementsSectionState.MET;
+  }
+  if (firstFocusWithin || isPasswordEmpty) {
+    return PasswordRequirementsSectionState.FOCUSED;
+  }
+
+  return PasswordRequirementsSectionState.ERROR;
+}
+
 
 const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
   <StyledRequirement
@@ -28,87 +46,76 @@ interface PasswordRequirementsSectionProps {
   password: string;
 
   /**
-   * If passed, wraps fields + checklist. The checklist shows while a descendant has focus, or while
-   * `password` is non-empty and still fails account policy (stable while typing despite debounced validation).
+   * If passed, wraps fields + checklist. The panel uses live policy; title / grid hide / “met” copy
+   * follow a short debounce after `password` stops changing.
    */
   children?: React.ReactNode;
+  delayMs: number;
 }
 
 export const PasswordRequirementsSection = ({
   password,
   children,
+  delayMs,
 }: PasswordRequirementsSectionProps) => {
   const [focusWithin, setFocusWithin] = useState(false);
   const { t } = useTranslation();
 
-  const result = checkPassword(password);
+  // Tracks if this is the first time the user has focused within the component.
+  const [firstFocusWithin, setFirstFocusWithin] = useState(true);
+
+  const { result, hideCharTypesGrid, displayPolicySatisfied, passwordRequirementsSectionTitleKey, isEmptyForDisplay } =
+    usePasswordRequirementsChecklistDisplay(password, delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
       <StyledSection>
-        <StyledSectionTitle>{t('passwordMustInclude')}</StyledSectionTitle>
-        <StyledGrid>
-          <RequirementItem
-            met={result.meetsLength}
-            label={t('passwordReqLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH })}
-          />
-          <RequirementItem met={result.hasNoSpaces} label={t('passwordReqNoSpaces')} />
-        </StyledGrid>
-      </StyledSection>
-      <StyledSection>
-        <StyledSectionTitle>
-          {t('passwordReqCharTypesHeading', { types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES })}
+        <StyledSectionTitle
+          state={getPasswordRequirementsSectionState(
+            firstFocusWithin,
+            isEmptyForDisplay,
+            displayPolicySatisfied,
+          )}
+        >
+          {t(passwordRequirementsSectionTitleKey)}
         </StyledSectionTitle>
-        <StyledGrid>
-          <RequirementItem
-            met={result.hasUppercase || result.meetsCharTypeRequirement}
-            label={t('passwordReqUppercase')}
-          />
-          <RequirementItem
-            met={result.hasLowercase || result.meetsCharTypeRequirement}
-            label={t('passwordReqLowercase')}
-          />
-          <RequirementItem
-            met={result.hasDigit || result.meetsCharTypeRequirement}
-            label={t('passwordReqNumbers')}
-          />
-          <RequirementItem
-            met={result.hasSymbol || result.meetsCharTypeRequirement}
-            label={t('passwordReqSymbols')}
-          />
-        </StyledGrid>
+
+        {!hideCharTypesGrid && (
+          <StyledSection>
+            <StyledGrid>
+              <RequirementItem met={result.hasUppercase} label={t('passwordReqUppercase')} />
+              <RequirementItem met={result.hasLowercase} label={t('passwordReqLowercase')} />
+              <RequirementItem met={result.hasDigit} label={t('passwordReqNumbers')} />
+              <RequirementItem met={result.hasSymbol} label={t('passwordReqSymbols')} />
+            </StyledGrid>
+          </StyledSection>
+        )}
       </StyledSection>
     </div>
   );
 
   if (children !== undefined) {
-    const keepChecklistVisible = password.length > 0 && !isAccountPasswordPolicySatisfied(result);
+    // Open panel without focus if they typed something invalid (uses live rules, not debounced UI).
+    const keepChecklistVisible = !isEmptyForDisplay && !isAccountPasswordPolicySatisfied(result);
     const showPasswordPanel = focusWithin || keepChecklistVisible;
 
     const handleBlurCapture = (e: React.FocusEvent<HTMLDivElement>) => {
       const next = e.relatedTarget as Node | null;
       if (next && e.currentTarget.contains(next)) return;
       setFocusWithin(false);
+
+      // Set to false so the checklist shows error status when the user focuses back in.
+      setFirstFocusWithin(false);
     };
 
     return (
-      <Box
+      <PasswordRequirementsFieldGroup
         data-testid="password-requirements-field-group"
         display="flex"
         flexDirection="column"
         onFocusCapture={() => setFocusWithin(true)}
         onBlurCapture={handleBlurCapture}
-        sx={{
-          '& > .password-requirements-panel': {
-            minHeight: 0,
-            overflow: 'hidden',
-            transition:
-              'opacity 0.2s ease-in-out, max-height 0.25s ease-in-out, margin-top 0.2s ease-in-out',
-            ...(showPasswordPanel // Show the password requirements panel when the user is inside the component or the password still fails account policy.
-              ? { opacity: 1, maxHeight: 320, marginTop: 0, marginBottom: '24px' }
-              : { opacity: 0, maxHeight: 0, marginTop: 0, marginBottom: 0 }),
-          },
-        }}
+        showPasswordPanel={showPasswordPanel}
       >
         <Box display="flex" flexDirection="column" gap="24px">
           {children}
@@ -116,7 +123,7 @@ export const PasswordRequirementsSection = ({
         <Box className="password-requirements-panel" data-testid="password-requirements-panel">
           {checklist}
         </Box>
-      </Box>
+      </PasswordRequirementsFieldGroup>
     );
   }
 

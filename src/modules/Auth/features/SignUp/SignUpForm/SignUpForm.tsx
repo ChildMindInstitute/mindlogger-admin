@@ -24,6 +24,7 @@ import {
 } from './SignUpForm.styles';
 import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 export const SignUpForm = () => {
   const dispatch = useAppDispatch();
@@ -41,17 +42,19 @@ export const SignUpForm = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
+  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
 
   useEffect(() => {
-    clearErrors('password');
-
-    if (!watchedPassword) {
-      return;
-    }
-
     const timer = setTimeout(() => {
-      trigger('password');
-    }, 500);
+      if (!watchedPassword) {
+        clearErrors('password'); // Clear any existing errors
+        return
+      }
+
+      if (!isFirstTimeTyping) {
+        trigger('password');
+      }
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [watchedPassword, trigger, clearErrors]);
@@ -111,7 +114,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-lname"
         />
       </StyledController>
-      <PasswordRequirementsSection password={watchedPassword ?? ''}>
+      <PasswordRequirementsSection password={watchedPassword ?? ''} delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
         <StyledController>
           <InputController
             fullWidth
@@ -119,6 +122,14 @@ export const SignUpForm = () => {
             name="password"
             control={control}
             label={t('password')}
+            onBlur={() => {
+              if (isFirstTimeTyping) {
+                // If the user is typing a password for the first time, we don't want to trigger the validation until they click out of the input
+                trigger('password');
+              }
+
+              setIsFirstTimeTyping(false);
+            }}
             type="password"
             data-testid="signup-form-password"
           />

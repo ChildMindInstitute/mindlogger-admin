@@ -86,6 +86,7 @@ export const ACCOUNT_PASSWORD_MIN_LENGTH = 10;
 export const ACCOUNT_PASSWORD_MIN_CHAR_TYPES = 3;
 export const LEGACY_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
+export const DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS = 500;
 
 export const YUP_TEST_NAMES = {
   MIN_LENGTH: 'min-length',

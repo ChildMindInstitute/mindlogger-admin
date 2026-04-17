@@ -31,16 +31,17 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
+  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
 
   useEffect(() => {
-    clearErrors('password');
-
     if (!watchedPassword) {
       return;
     }
 
     const timer = setTimeout(() => {
-      trigger('password');
+      if (!isFirstTimeTyping) {
+        trigger('password');
+      }
     }, 500);
 
     return () => clearTimeout(timer);
@@ -77,6 +78,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
             type="password"
             control={control}
             label={t('newPassword')}
+            onBlur={() => setIsFirstTimeTyping(false)}
             data-testid={`${recoverPasswordFormDataTestid}-password`}
           />
         </StyledController>
