@@ -11,6 +11,7 @@ import { PasswordRequirementsSection } from 'shared/components/PasswordRequireme
 import { StyledErrorText, StyledHeadlineSmall, variables } from 'shared/styles';
 import { LocationStateKeys } from 'shared/types';
 import { getErrorMessage } from 'shared/utils';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 import { recoverPasswordFormDataTestid } from './RecoverForm.const';
 import { newPasswordSchema } from './RecoverForm.schema';
@@ -21,7 +22,6 @@ import {
   StyledResetPasswordSubheader,
 } from './RecoverForm.styles';
 import { RecoverFormFields, RecoverFormProps } from './RecoverForm.types';
-import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const { t } = useTranslation('app');
@@ -38,6 +38,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
     const timer = setTimeout(() => {
       if (!watchedPassword) {
         clearErrors('password');
+
         return;
       }
 
@@ -73,7 +74,10 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
         {t('createNewPasswordForEmail', { email })}
       </StyledResetPasswordSubheader>
       <StyledController>
-        <PasswordRequirementsSection password={watchedPassword ?? ''} delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
+        <PasswordRequirementsSection
+          password={watchedPassword ?? ''}
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <InputController
             fullWidth
             name="password"

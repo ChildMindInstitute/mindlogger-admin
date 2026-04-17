@@ -19,6 +19,7 @@ function passwordRequirementsSectionTitleKey(
   ) {
     return 'passwordMustIncludeMinimum';
   }
+
   return 'passwordMustInclude';
 }
 

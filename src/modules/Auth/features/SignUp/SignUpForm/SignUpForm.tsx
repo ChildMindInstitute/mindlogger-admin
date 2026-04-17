@@ -12,6 +12,7 @@ import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 import {
   StyledSignUpHeader,
@@ -24,7 +25,6 @@ import {
 } from './SignUpForm.styles';
 import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
-import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 export const SignUpForm = () => {
   const dispatch = useAppDispatch();
@@ -48,7 +48,8 @@ export const SignUpForm = () => {
     const timer = setTimeout(() => {
       if (!watchedPassword) {
         clearErrors('password'); // Clear any existing errors
-        return
+
+        return;
       }
 
       if (!isFirstTimeTyping) {
@@ -114,7 +115,10 @@ export const SignUpForm = () => {
           data-testid="signup-form-lname"
         />
       </StyledController>
-      <PasswordRequirementsSection password={watchedPassword ?? ''} delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
+      <PasswordRequirementsSection
+        password={watchedPassword ?? ''}
+        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+      >
         <StyledController>
           <InputController
             fullWidth

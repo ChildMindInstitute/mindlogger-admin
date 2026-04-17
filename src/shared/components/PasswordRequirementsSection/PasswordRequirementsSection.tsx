@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 
-import { checkPassword, isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
+import { isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
 
 import {
   StyledSection,
@@ -31,7 +31,6 @@ function getPasswordRequirementsSectionState(
 
   return PasswordRequirementsSectionState.ERROR;
 }
-
 
 const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
   <StyledRequirement
@@ -64,8 +63,13 @@ export const PasswordRequirementsSection = ({
   // Tracks if this is the first time the user has focused within the component.
   const [firstFocusWithin, setFirstFocusWithin] = useState(true);
 
-  const { result, hideCharTypesGrid, displayPolicySatisfied, passwordRequirementsSectionTitleKey, isEmptyForDisplay } =
-    usePasswordRequirementsChecklistDisplay(password, delayMs);
+  const {
+    result,
+    hideCharTypesGrid,
+    displayPolicySatisfied,
+    passwordRequirementsSectionTitleKey,
+    isEmptyForDisplay,
+  } = usePasswordRequirementsChecklistDisplay(password, delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
