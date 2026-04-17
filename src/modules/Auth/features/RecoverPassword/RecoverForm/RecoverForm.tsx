@@ -21,6 +21,7 @@ import {
   StyledResetPasswordSubheader,
 } from './RecoverForm.styles';
 import { RecoverFormFields, RecoverFormProps } from './RecoverForm.types';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const { t } = useTranslation('app');
@@ -34,15 +35,16 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
 
   useEffect(() => {
-    if (!watchedPassword) {
-      return;
-    }
-
     const timer = setTimeout(() => {
+      if (!watchedPassword) {
+        clearErrors('password');
+        return;
+      }
+
       if (!isFirstTimeTyping) {
         trigger('password');
       }
-    }, 500);
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [watchedPassword, trigger, clearErrors]);
@@ -70,19 +72,27 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       <StyledResetPasswordSubheader color={variables.palette.on_surface_variant}>
         {t('createNewPasswordForEmail', { email })}
       </StyledResetPasswordSubheader>
-      <PasswordRequirementsSection password={watchedPassword ?? ''}>
-        <StyledController>
+      <StyledController>
+        <PasswordRequirementsSection password={watchedPassword ?? ''} delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
           <InputController
             fullWidth
             name="password"
             type="password"
             control={control}
             label={t('newPassword')}
-            onBlur={() => setIsFirstTimeTyping(false)}
+            isErrorVisible={false}
+            onBlur={() => {
+              if (isFirstTimeTyping) {
+                // If the user is typing a password for the first time, we don't want to trigger the validation until they click out of the input
+                trigger('password');
+              }
+
+              setIsFirstTimeTyping(false);
+            }}
             data-testid={`${recoverPasswordFormDataTestid}-password`}
           />
-        </StyledController>
-      </PasswordRequirementsSection>
+        </PasswordRequirementsSection>
+      </StyledController>
       <StyledController>
         <InputController
           fullWidth
