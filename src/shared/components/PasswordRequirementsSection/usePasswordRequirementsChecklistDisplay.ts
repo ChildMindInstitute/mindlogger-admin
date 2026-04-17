@@ -29,12 +29,12 @@ function passwordRequirementsSectionTitleKey(
  */
 export function usePasswordRequirementsChecklistDisplay(password: string, debounceMs: number) {
   const result = checkPassword(password);
-  const meetsCharTypeRequirement = result.meetsCharTypeRequirement;
-  const livePolicySatisfied = isAccountPasswordPolicySatisfied(result);
 
-  const [hideCharTypesGrid, setHideCharTypesGrid] = useState(() => meetsCharTypeRequirement);
-  const [displayPolicySatisfied, setDisplayPolicySatisfied] = useState(() => livePolicySatisfied);
-  const [displayCheckResult, setDisplayCheckResult] = useState(() => checkPassword(password));
+  const [hideCharTypesGrid, setHideCharTypesGrid] = useState(() => result.meetsCharTypeRequirement);
+  const [displayPolicySatisfied, setDisplayPolicySatisfied] = useState(() =>
+    isAccountPasswordPolicySatisfied(result),
+  );
+  const [displayCheckResult, setDisplayCheckResult] = useState(() => result);
   const [isEmptyForDisplay, setIsEmptyForDisplay] = useState(() => password.length === 0);
 
   const passwordRef = useRef(password);
@@ -44,6 +44,7 @@ export function usePasswordRequirementsChecklistDisplay(password: string, deboun
   useEffect(() => {
     const id = window.setTimeout(() => {
       const latest = checkPassword(passwordRef.current);
+
       setHideCharTypesGrid(latest.meetsCharTypeRequirement);
       setDisplayPolicySatisfied(isAccountPasswordPolicySatisfied(latest));
       setDisplayCheckResult(latest);
@@ -51,7 +52,7 @@ export function usePasswordRequirementsChecklistDisplay(password: string, deboun
     }, debounceMs);
 
     return () => window.clearTimeout(id);
-  }, [password, meetsCharTypeRequirement, livePolicySatisfied, debounceMs]);
+  }, [password, debounceMs]);
 
   return {
     result,
