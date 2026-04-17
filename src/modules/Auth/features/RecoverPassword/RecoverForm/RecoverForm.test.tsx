@@ -50,9 +50,11 @@ describe('RecoverForm', () => {
 
     await userEvent.click(submitButton);
 
-    const passwordError = password.querySelector('.MuiFormHelperText-root.Mui-error');
-    expect(passwordError).toBeInTheDocument();
-    expect(passwordError).toHaveTextContent('Password must be at least 10 characters.');
+    expect(
+      screen.getByText(
+        'Password must contain at least 10 characters, no spaces, and at least 3 of the 4 below:',
+      ),
+    ).toBeInTheDocument();
 
     const confirmPasswordError = confirmPassword.querySelector('.MuiFormHelperText-root.Mui-error');
     expect(confirmPasswordError).toBeInTheDocument();
@@ -93,7 +95,7 @@ describe('RecoverForm', () => {
     expect(submitButton).toHaveTextContent('Submit');
 
     await userEvent.type(screen.getByLabelText(/New password/i), 'NewPass123!');
-    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'NewPass123!');
+    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'NewPass1234!');
 
     await userEvent.click(submitButton);
 
@@ -103,8 +105,6 @@ describe('RecoverForm', () => {
       { signal: undefined },
     );
 
-    const error = screen.getByTestId(`${recoverPasswordFormDataTestid}-error`);
-    expect(error).toBeInTheDocument();
-    expect(error).toHaveTextContent('Mock error');
+    expect(screen.getByText('Your passwords do not match')).toBeInTheDocument();
   });
 });

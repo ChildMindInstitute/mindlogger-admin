@@ -115,11 +115,12 @@ export const SignUpForm = () => {
           data-testid="signup-form-lname"
         />
       </StyledController>
-      <PasswordRequirementsSection
-        password={watchedPassword ?? ''}
-        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-      >
-        <StyledController>
+
+      <StyledController>
+        <PasswordRequirementsSection
+          password={watchedPassword ?? ''}
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <InputController
             fullWidth
             isErrorVisible={false}
@@ -137,8 +138,8 @@ export const SignUpForm = () => {
             type="password"
             data-testid="signup-form-password"
           />
-        </StyledController>
-      </PasswordRequirementsSection>
+        </PasswordRequirementsSection>
+      </StyledController>
       {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
 
       <StyledController>

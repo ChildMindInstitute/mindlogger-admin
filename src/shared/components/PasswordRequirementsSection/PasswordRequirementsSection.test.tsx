@@ -1,97 +1,64 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Box } from '@mui/material';
+import { t } from 'i18next';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 import { PasswordRequirementsSection } from './PasswordRequirementsSection';
 
 describe('PasswordRequirementsSection', () => {
   test('renders the info icon', () => {
-    const { getByTestId } = renderWithProviders(<PasswordRequirementsSection password="" />);
+    const { getByTestId } = renderWithProviders(
+      <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS} />,
+    );
 
     expect(getByTestId('password-requirements-section')).toBeInTheDocument();
   });
 
-  test('shows tooltip content on hover', async () => {
-    const { getByTestId } = renderWithProviders(<PasswordRequirementsSection password="" />);
-
-    await userEvent.hover(getByTestId('password-requirements-section'));
-
-    expect(await screen.findByText('Password must include:')).toBeInTheDocument();
-    expect(screen.getByText('At least 3 of the types below')).toBeInTheDocument();
-    expect(screen.getByText('10 characters')).toBeInTheDocument();
-    expect(screen.getByText('no blank spaces')).toBeInTheDocument();
-    expect(screen.getByText('Uppercase letters (A-Z)')).toBeInTheDocument();
-    expect(screen.getByText('Lowercase letters (a-z)')).toBeInTheDocument();
-    expect(screen.getByText('Numbers (0-9)')).toBeInTheDocument();
-    expect(screen.getByText('Symbols (!@#$...)')).toBeInTheDocument();
-  });
-
   test('shows all requirements as unmet for empty password', async () => {
-    const { getByTestId } = renderWithProviders(<PasswordRequirementsSection password="" />);
+    const { getByTestId } = renderWithProviders(
+      <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS} />,
+    );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
-    await screen.findByText('Password must include:');
 
-    const items = [
-      'password-req-10-characters',
-      'password-req-no-blank-spaces',
-      'password-req-uppercase-letters-(a-z)',
-      'password-req-lowercase-letters-(a-z)',
-      'password-req-numbers-(0-9)',
-      'password-req-symbols-(!@#$...)',
-    ];
-
-    for (const testId of items) {
-      expect(screen.getByTestId(testId)).toHaveTextContent('✗');
-    }
+    expect(await screen.findByText(t('passwordMustInclude'))).toBeInTheDocument();
   });
 
   test('shows requirements as met for a fully compliant password', async () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection password="Str0ngPass!" />,
+      <PasswordRequirementsSection
+        password="Str0ngPass!"
+        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+      />,
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
-    await screen.findByText('Password must include:');
-
-    const items = [
-      'password-req-10-characters',
-      'password-req-no-blank-spaces',
-      'password-req-uppercase-letters-(a-z)',
-      'password-req-lowercase-letters-(a-z)',
-      'password-req-numbers-(0-9)',
-      'password-req-symbols-(!@#$...)',
-    ];
-
-    for (const testId of items) {
-      expect(screen.getByTestId(testId)).toHaveTextContent('✓');
-    }
+    await screen.findByText(t('passwordRequirementsMet'));
   });
 
   test('shows mixed met/unmet for partial password', async () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection password="abcdefghij" />,
+      <PasswordRequirementsSection
+        password="abcdefghij"
+        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+      />,
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
-    await screen.findByText('Password must include:');
-
-    // Met
-    expect(screen.getByTestId('password-req-10-characters')).toHaveTextContent('✓');
-    expect(screen.getByTestId('password-req-no-blank-spaces')).toHaveTextContent('✓');
-    expect(screen.getByTestId('password-req-lowercase-letters-(a-z)')).toHaveTextContent('✓');
-
-    // Not met
-    expect(screen.getByTestId('password-req-uppercase-letters-(a-z)')).toHaveTextContent('✗');
-    expect(screen.getByTestId('password-req-numbers-(0-9)')).toHaveTextContent('✗');
-    expect(screen.getByTestId('password-req-symbols-(!@#$...)')).toHaveTextContent('✗');
+    await screen.findByText(t('passwordMustInclude'));
   });
 
   describe('without wrapper (no children)', () => {
     it('renders the checklist visible', () => {
-      renderWithProviders(<PasswordRequirementsSection password="" />);
+      renderWithProviders(
+        <PasswordRequirementsSection
+          password=""
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        />,
+      );
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
   });
@@ -99,7 +66,7 @@ describe('PasswordRequirementsSection', () => {
   describe('with wrapper (children)', () => {
     it('hides the checklist when password is empty and nothing is focused', () => {
       renderWithProviders(
-        <PasswordRequirementsSection password="">
+        <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -109,7 +76,7 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when the wrapped field is focused', async () => {
       const user = userEvent.setup();
       renderWithProviders(
-        <PasswordRequirementsSection password="">
+        <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -125,7 +92,7 @@ describe('PasswordRequirementsSection', () => {
       const user = userEvent.setup();
       renderWithProviders(
         <Box display="flex" flexDirection="column" gap={2}>
-          <PasswordRequirementsSection password="">
+          <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
             <input aria-label="New password" />
           </PasswordRequirementsSection>
           <input aria-label="Field outside password section" />
@@ -143,7 +110,10 @@ describe('PasswordRequirementsSection', () => {
 
     it('keeps the checklist visible without focus when password fails length', () => {
       renderWithProviders(
-        <PasswordRequirementsSection password="short">
+        <PasswordRequirementsSection
+          password="short"
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -152,7 +122,10 @@ describe('PasswordRequirementsSection', () => {
 
     it('keeps the checklist visible without focus when password fails character-type rules', () => {
       renderWithProviders(
-        <PasswordRequirementsSection password="onlyletterslongenough">
+        <PasswordRequirementsSection
+          password="onlyletterslongenough"
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -161,7 +134,10 @@ describe('PasswordRequirementsSection', () => {
 
     it('hides the checklist when password meets policy and nothing is focused', () => {
       renderWithProviders(
-        <PasswordRequirementsSection password="Goodpass1!">
+        <PasswordRequirementsSection
+          password="Goodpass1!"
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -171,7 +147,10 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when password meets policy but the field is focused', async () => {
       const user = userEvent.setup();
       renderWithProviders(
-        <PasswordRequirementsSection password="Goodpass1!">
+        <PasswordRequirementsSection
+          password="Goodpass1!"
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );

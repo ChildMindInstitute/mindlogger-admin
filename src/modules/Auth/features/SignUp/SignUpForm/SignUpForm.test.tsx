@@ -59,7 +59,9 @@ describe('SignUp component tests', () => {
       lastName: 'Doe',
       termsOfService: true,
     });
-    expect(await screen.findByText('no blank spaces')).toBeInTheDocument();
+
+    // The password requirements section should not be visible after clicking out of the input
+    expect(screen.queryByText('All requirements have been met.')).not.toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
