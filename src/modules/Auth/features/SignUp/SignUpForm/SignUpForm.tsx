@@ -43,6 +43,7 @@ export const SignUpForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const watchedPassword = useWatch({ control, name: 'password' });
   const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
+  const [showPasswordError, setShowPasswordError] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,6 +52,8 @@ export const SignUpForm = () => {
 
         return;
       }
+
+      setShowPasswordError(false)
 
       if (!isFirstTimeTyping) {
         trigger('password');
@@ -123,7 +126,8 @@ export const SignUpForm = () => {
         >
           <InputController
             fullWidth
-            isErrorVisible={false}
+            isErrorVisible={showPasswordError}
+            onFocus={() => setShowPasswordError(false)}
             name="password"
             control={control}
             label={t('password')}
@@ -157,7 +161,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-terms"
         />
       </StyledController>
-      <StyledButton variant="contained" type="submit" data-testid="signup-form-signup">
+      <StyledButton variant="contained" type="submit" data-testid="signup-form-signup" onClick={() => setShowPasswordError(true)}>
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>

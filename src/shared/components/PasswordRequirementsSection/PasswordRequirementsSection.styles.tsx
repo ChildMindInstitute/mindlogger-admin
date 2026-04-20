@@ -10,7 +10,7 @@ export enum PasswordRequirementsSectionState {
 }
 
 const titleColorByState: Record<PasswordRequirementsSectionState, string> = {
-  [PasswordRequirementsSectionState.ERROR]: variables.palette.error60,
+  [PasswordRequirementsSectionState.ERROR]: variables.palette.error,
   [PasswordRequirementsSectionState.FOCUSED]: variables.palette.onSurface,
   [PasswordRequirementsSectionState.MET]: variables.palette.green,
 };
@@ -24,9 +24,9 @@ export const StyledSection = styled(Box)`
   }
 `;
 
-export const StyledSectionTitle = styled('div')<{ state: PasswordRequirementsSectionState }>`
+export const StyledSectionTitle = styled('div') <{ state: PasswordRequirementsSectionState }>`
   font-size: ${variables.font.size.body2};
-  font-weight: ${variables.font.weight.bold};
+  font-weight: ${variables.font.weight.regular};
   line-height: ${variables.font.lineHeight.body2};
   color: ${({ state }) => titleColorByState[state]};
   margin-bottom: ${theme.spacing(0.4)};
@@ -54,13 +54,13 @@ export const PasswordRequirementsFieldGroup = styled(Box, {
   },
 }));
 
-export const StyledRequirement = styled('div')<{ met: boolean }>`
+export const StyledRequirement = styled('div') <{ met: boolean }>`
   display: flex;
   align-items: center;
   gap: ${theme.spacing(0.4)};
   font-size: ${variables.font.size.body2};
   line-height: ${variables.font.lineHeight.body2};
-  color: ${({ met }) => (met ? variables.palette.green : variables.palette.gray60)};
+  color: ${({ met }) => (met ? variables.palette.green : variables.palette.gray)};
 `;
 
 export const StyledInfoIcon = styled('span')`
