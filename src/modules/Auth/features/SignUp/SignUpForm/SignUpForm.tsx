@@ -61,7 +61,7 @@ export const SignUpForm = () => {
     }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
-  }, [watchedPassword, trigger, clearErrors]);
+  }, [watchedPassword, trigger, clearErrors, isFirstTimeTyping]);
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');

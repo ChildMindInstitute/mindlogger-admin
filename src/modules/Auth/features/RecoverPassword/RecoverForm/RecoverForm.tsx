@@ -48,7 +48,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
     }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
-  }, [watchedPassword, trigger, clearErrors]);
+  }, [watchedPassword, trigger, clearErrors, isFirstTimeTyping]);
 
   const onSubmit = async ({ password }: RecoverFormFields) => {
     try {
