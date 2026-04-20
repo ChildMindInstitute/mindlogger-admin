@@ -53,7 +53,7 @@ export const SignUpForm = () => {
         return;
       }
 
-      setShowPasswordError(false)
+      setShowPasswordError(false);
 
       if (!isFirstTimeTyping) {
         trigger('password');
@@ -161,7 +161,16 @@ export const SignUpForm = () => {
           data-testid="signup-form-terms"
         />
       </StyledController>
-      <StyledButton variant="contained" type="submit" data-testid="signup-form-signup" onClick={() => setShowPasswordError(true)}>
+      <StyledButton
+        variant="contained"
+        type="submit"
+        data-testid="signup-form-signup"
+        onClick={() => {
+          if (!watchedPassword) {
+            setShowPasswordError(true);
+          }
+        }}
+      >
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>

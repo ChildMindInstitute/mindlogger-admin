@@ -24,7 +24,7 @@ export const StyledSection = styled(Box)`
   }
 `;
 
-export const StyledSectionTitle = styled('div') <{ state: PasswordRequirementsSectionState }>`
+export const StyledSectionTitle = styled('div')<{ state: PasswordRequirementsSectionState }>`
   font-size: ${variables.font.size.body2};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.font.lineHeight.body2};
@@ -54,7 +54,7 @@ export const PasswordRequirementsFieldGroup = styled(Box, {
   },
 }));
 
-export const StyledRequirement = styled('div') <{ met: boolean }>`
+export const StyledRequirement = styled('div')<{ met: boolean }>`
   display: flex;
   align-items: center;
   gap: ${theme.spacing(0.4)};
