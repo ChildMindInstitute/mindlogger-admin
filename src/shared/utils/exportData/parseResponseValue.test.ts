@@ -1730,7 +1730,7 @@ describe('parseResponseValue', () => {
           isEvent,
         ),
       ).toBe(
-        'target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/StartNodeData_2_12_2026_3_01_30_PM.txt, target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/EndNodeData_2_12_2026_3_01_30_PM.txt, target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/taskData_2_12_2026_3_01_30_PM.txt',
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890/StartNodeData_2_12_2026_3_01_30_PM.txt, a1b2c3d4-e5f6-7890-abcd-ef1234567890/EndNodeData_2_12_2026_3_01_30_PM.txt, a1b2c3d4-e5f6-7890-abcd-ef1234567890/taskData_2_12_2026_3_01_30_PM.txt',
       );
     });
 
@@ -1755,7 +1755,7 @@ describe('parseResponseValue', () => {
           isEvent,
         ),
       ).toBe(
-        'target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/StartNodeData_2_12_2026_3_01_30_PM.txt, target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile/EndNodeData_2_12_2026_3_01_30_PM.txt',
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890/StartNodeData_2_12_2026_3_01_30_PM.txt, a1b2c3d4-e5f6-7890-abcd-ef1234567890/EndNodeData_2_12_2026_3_01_30_PM.txt',
       );
     });
 
@@ -1774,7 +1774,7 @@ describe('parseResponseValue', () => {
           index,
           isEvent,
         ),
-      ).toBe('target-secret-id-a1b2c3d4-e5f6-7890-abcd-ef1234567890-unity_mobile');
+      ).toBe('a1b2c3d4-e5f6-7890-abcd-ef1234567890');
     });
   });
   describe('isNullAnswer', () => {
