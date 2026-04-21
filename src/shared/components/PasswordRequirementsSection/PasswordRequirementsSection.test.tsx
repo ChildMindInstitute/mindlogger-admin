@@ -4,7 +4,11 @@ import { Box } from '@mui/material';
 import { t } from 'i18next';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
+import {
+  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  ACCOUNT_PASSWORD_MIN_LENGTH,
+  DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
+} from 'shared/consts';
 
 import { PasswordRequirementsSection } from './PasswordRequirementsSection';
 
@@ -24,7 +28,14 @@ describe('PasswordRequirementsSection', () => {
 
     await userEvent.hover(getByTestId('password-requirements-section'));
 
-    expect(await screen.findByText(t('passwordMustInclude', { minLength: ACCOUNT_PASSWORD_MIN_LENGTH, types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES }))).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        t('passwordMustInclude', {
+          minLength: ACCOUNT_PASSWORD_MIN_LENGTH,
+          types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+        }),
+      ),
+    ).toBeInTheDocument();
   });
 
   test('shows requirements as met for a fully compliant password', async () => {
@@ -48,7 +59,12 @@ describe('PasswordRequirementsSection', () => {
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
-    await screen.findByText(t('passwordMustInclude', { minLength: ACCOUNT_PASSWORD_MIN_LENGTH, types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES }));
+    await screen.findByText(
+      t('passwordMustInclude', {
+        minLength: ACCOUNT_PASSWORD_MIN_LENGTH,
+        types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+      }),
+    );
   });
 
   describe('without wrapper (no children)', () => {
