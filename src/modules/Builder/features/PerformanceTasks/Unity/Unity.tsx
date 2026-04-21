@@ -1,16 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { Svg } from 'shared/components';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { NameDescription } from '../NameDescription';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
-import { UnityFilePreview } from './UnityFilePreview';
+import { UnityFileButton } from './UnityFileButton';
 
 export const Unity = () => {
   const { t } = useTranslation();
@@ -69,24 +68,6 @@ export const Unity = () => {
     }
   }, [url]);
 
-  // TODO Upload a new file if already uploaded should be implemented - TASK https://mindlogger.atlassian.net/browse/M2-7779
-  const OpenModalButton = () =>
-    isValidFile ? (
-      <UnityFilePreview fileContent={fileContent} />
-    ) : (
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <Button
-          variant="text"
-          startIcon={<Svg id="add" width={18} height={18} />}
-          onClick={handleOpenModal}
-          sx={{ ml: theme.spacing(-1) }}
-          data-testid="builder-activities-add-activity"
-        >
-          {t('upload')}
-        </Button>
-      </Box>
-    );
-
   return (
     <Box sx={{ overflowY: 'auto' }}>
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
@@ -101,7 +82,8 @@ export const Unity = () => {
         <ToggleItemContainer
           uiType={ToggleContainerUiType.PerformanceTask}
           title={t('unityTaskConfigurationFile')}
-          Content={OpenModalButton}
+          Content={UnityFileButton}
+          contentProps={{ isValidFile, fileContent, onOpenModal: handleOpenModal }}
           data-testid="builder-activity-unity-file-uploader"
         />
       </StyledPerformanceTaskBody>
