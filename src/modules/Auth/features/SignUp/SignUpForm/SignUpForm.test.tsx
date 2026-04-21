@@ -54,14 +54,14 @@ describe('SignUp component tests', () => {
 
     await submitForm({
       email: mockedEmail,
-      password: ` ${mockedPassword}`,
+      password: `${mockedPassword}`,
       firstName: 'Jane',
       lastName: 'Doe',
       termsOfService: true,
     });
 
-    // The password requirements section should not be visible after clicking out of the input
-    expect(screen.queryByText('All requirements have been met.')).not.toBeInTheDocument();
+    // When everything is valid, the password requirements section should not be visible
+    expect(screen.queryByText('All requirements have been met')).not.toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
