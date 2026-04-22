@@ -244,6 +244,46 @@ describe('PasswordRequirementsSection', () => {
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
 
+    it('shows emoji error title when password contains emoji', async () => {
+      renderWithProviders(
+        <FormHarness defaultValues={{ password: 'Goodpas1😀!' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
+      );
+      expect(await screen.findByText(t('passwordCannotContainEmojis'))).toBeInTheDocument();
+    });
+
+    it('keeps the checklist visible without focus when password contains emoji', () => {
+      renderWithProviders(
+        <FormHarness defaultValues={{ password: 'Goodpas1😀!' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
+      );
+      expect(screen.getByTestId('password-requirements-section')).toBeVisible();
+    });
+
     it('keeps the checklist visible without focus when password fails character-type rules', () => {
       renderWithProviders(
         <FormHarness defaultValues={{ password: 'onlyletterslongenough' }}>

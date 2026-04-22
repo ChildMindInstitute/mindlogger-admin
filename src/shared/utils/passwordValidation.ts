@@ -8,6 +8,7 @@ import {
   VISIBLE_ONLY_REGEXP,
   HIDDEN_BLANKS_REGEXP,
   CASELESS_LETTER_REGEXP,
+  EMOJI_REGEXP,
   type PasswordCheckResult,
 } from './passwordPatterns';
 
@@ -35,6 +36,7 @@ export const checkPassword = (
     hasDigit,
     hasSymbol,
     hasNoSpaces: VISIBLE_ONLY_REGEXP.test(normalized) && !HIDDEN_BLANKS_REGEXP.test(normalized),
+    hasNoEmoji: !EMOJI_REGEXP.test(normalized),
     meetsLength: graphemeLength(normalized) >= minLength,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
@@ -42,4 +44,4 @@ export const checkPassword = (
 };
 
 export const isAccountPasswordPolicySatisfied = (result: PasswordCheckResult): boolean =>
-  result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement;
+  result.meetsLength && result.hasNoSpaces && result.hasNoEmoji && result.meetsCharTypeRequirement;

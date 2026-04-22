@@ -14,6 +14,7 @@ export const newPasswordSchema = () => {
   const passwordConfirmationRequired = t('passwordConfirmationRequired');
   const passwordMinLength = t('passwordMinLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH });
   const passwordBlankSpaces = t('passwordBlankSpaces');
+  const passwordCannotContainEmojis = t('passwordCannotContainEmojis');
   const passwordCharacterTypes = t('passwordCharacterTypes', {
     types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   });
@@ -33,6 +34,11 @@ export const newPasswordSchema = () => {
           YUP_TEST_NAMES.NO_WHITESPACE,
           passwordBlankSpaces,
           (password) => !password || checkPassword(password).hasNoSpaces,
+        )
+        .test(
+          YUP_TEST_NAMES.NO_EMOJI,
+          passwordCannotContainEmojis,
+          (password) => !password || checkPassword(password).hasNoEmoji,
         )
         .test(
           YUP_TEST_NAMES.CHAR_TYPES,

@@ -1171,6 +1171,7 @@
   "passwordReqNoSpaces": "pas d'espaces",
   "passwordReqNumbers": "Chiffres (0-9)",
   "passwordReqSymbols": "Symboles (!@#$...)",
+  "passwordCannotContainEmojis": "Le mot de passe ne peut pas contenir d'émojis.",
   "passwordReqUppercase": "Lettres majuscules (A-Z)",
   "passwordRequired": "Le mot de passe est requis",
   "passwordRequirementHint": "Min. {{chars}} car., au moins {{types}} de : majuscule, minuscule, chiffre, symbole",

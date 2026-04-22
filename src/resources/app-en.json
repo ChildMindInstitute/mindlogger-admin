@@ -1172,6 +1172,7 @@
   "passwordReqNoSpaces": "no blank spaces",
   "passwordReqNumbers": "Numbers (0-9)",
   "passwordReqSymbols": "Symbols (!@#$...)",
+  "passwordCannotContainEmojis": "Password cannot contain emojis.",
   "passwordReqUppercase": "Uppercase letters (A-Z)",
   "passwordRequired": "Password is required",
   "passwordRequirementHint": "Min. {{chars}} chars, at least {{types}} of: uppercase, lowercase, number, symbol",

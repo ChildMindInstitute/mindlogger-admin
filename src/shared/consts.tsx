@@ -91,6 +91,7 @@ export const DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS = 500;
 export const YUP_TEST_NAMES = {
   MIN_LENGTH: 'min-length',
   NO_WHITESPACE: 'no-whitespace',
+  NO_EMOJI: 'no-emoji',
   CHAR_TYPES: 'char-types',
 } as const;
 

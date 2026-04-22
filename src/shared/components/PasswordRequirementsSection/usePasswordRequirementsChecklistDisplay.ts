@@ -9,7 +9,14 @@ import {
 function passwordRequirementsSectionTitleKey(
   displayCheck: PasswordCheckResult,
   displayPolicySatisfied: boolean,
-): 'passwordMustIncludeMinimum' | 'passwordRequirementsMet' | 'passwordMustInclude' {
+):
+  | 'passwordCannotContainEmojis'
+  | 'passwordMustIncludeMinimum'
+  | 'passwordRequirementsMet'
+  | 'passwordMustInclude' {
+  if (!displayCheck.hasNoEmoji) {
+    return 'passwordCannotContainEmojis';
+  }
   if (displayPolicySatisfied) {
     return 'passwordRequirementsMet';
   }

@@ -109,6 +109,44 @@ describe('checkPassword', () => {
     });
   });
 
+  describe('hasNoEmoji', () => {
+    it('returns true when no emoji present', () => {
+      expect(checkPassword('abc123!ABC').hasNoEmoji).toBe(true);
+    });
+
+    it('returns false for simple emoji (😀)', () => {
+      expect(checkPassword('abc😀123').hasNoEmoji).toBe(false);
+    });
+
+    it('returns false for heart emoji (❤)', () => {
+      expect(checkPassword('abc❤123').hasNoEmoji).toBe(false);
+    });
+
+    it('returns false for compound emoji (👩‍💻)', () => {
+      expect(checkPassword('abc👩‍💻123').hasNoEmoji).toBe(false);
+    });
+
+    it('returns false for flag emoji (🇺🇸)', () => {
+      expect(checkPassword('abc🇺🇸123').hasNoEmoji).toBe(false);
+    });
+
+    it('returns true for regular symbols like ! @ # $', () => {
+      expect(checkPassword('!@#$%^&*').hasNoEmoji).toBe(true);
+    });
+
+    it('returns true for CJK characters', () => {
+      expect(checkPassword('東京太郎').hasNoEmoji).toBe(true);
+    });
+
+    it('returns true for accented characters', () => {
+      expect(checkPassword('éÉñÑ').hasNoEmoji).toBe(true);
+    });
+
+    it('returns true for empty string', () => {
+      expect(checkPassword('').hasNoEmoji).toBe(true);
+    });
+  });
+
   describe('meetsLength', () => {
     it('returns false for 9 characters', () => {
       expect(checkPassword('123456789').meetsLength).toBe(false);
