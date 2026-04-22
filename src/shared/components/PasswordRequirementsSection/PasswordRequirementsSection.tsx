@@ -54,7 +54,7 @@ const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
   </StyledRequirement>
 );
 
-interface PasswordRequirementsSectionProps {
+interface PasswordRequirementsSectionProps<T extends FieldValues> {
   /**
    * If passed, wraps fields + checklist. The panel uses live policy; title / grid hide / "met" copy
    * follow a short debounce after `password` stops changing.
@@ -63,12 +63,12 @@ interface PasswordRequirementsSectionProps {
   delayMs: number;
   setShowPasswordError: (showPasswordError: boolean) => void;
   fieldName: string;
-  control: Control<FieldValues>;
-  trigger: UseFormTrigger<FieldValues>;
-  clearErrors: UseFormClearErrors<FieldValues>;
+  control: Control<T>;
+  trigger: UseFormTrigger<T>;
+  clearErrors: UseFormClearErrors<T>;
 }
 
-export const PasswordRequirementsSection = ({
+export const PasswordRequirementsSection = <T extends FieldValues>({
   children,
   delayMs,
   setShowPasswordError,
@@ -76,7 +76,7 @@ export const PasswordRequirementsSection = ({
   control,
   trigger,
   clearErrors,
-}: PasswordRequirementsSectionProps) => {
+}: PasswordRequirementsSectionProps<T>) => {
   // If focusWithin is true, the user is inside the component and the checklist should be visible.
   const [focusWithin, setFocusWithin] = useState(false);
   const { t } = useTranslation();
