@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Control,
   FieldValues,
+  Path,
   UseFormClearErrors,
   UseFormTrigger,
   useFormState,
@@ -62,7 +63,7 @@ interface PasswordRequirementsSectionProps<T extends FieldValues> {
   children?: React.ReactNode;
   delayMs: number;
   setShowPasswordError: (showPasswordError: boolean) => void;
-  fieldName: string;
+  fieldName: Path<T>;
   control: Control<T>;
   trigger: UseFormTrigger<T>;
   clearErrors: UseFormClearErrors<T>;
@@ -119,7 +120,7 @@ export const PasswordRequirementsSection = <T extends FieldValues>({
     displayPolicySatisfied,
     passwordRequirementsSectionTitleKey,
     isEmptyForDisplay,
-  } = usePasswordRequirementsChecklistDisplay(passwordValue ?? '', delayMs);
+  } = usePasswordRequirementsChecklistDisplay(String(passwordValue ?? ''), delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
