@@ -68,9 +68,14 @@ export const BuilderApplet = () => {
 
   const { featureFlags } = useFeatureFlags();
 
+  const resolver = useMemo(
+    () => yupResolver(AppletSchema(featureFlags) as ObjectSchema<AppletFormValues>),
+    [featureFlags],
+  );
+
   const methods = useForm<AppletFormValues>({
     defaultValues,
-    resolver: yupResolver(AppletSchema(featureFlags) as ObjectSchema<AppletFormValues>),
+    resolver,
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
