@@ -141,11 +141,15 @@ export const BuilderApplet = () => {
     name: ['displayName', 'activityFlows', 'activities'],
   });
 
-  const tabErrors = {
-    hasAboutAppletErrors: !!errors.displayName,
-    hasAppletActivitiesErrors: !!errors.activities,
-    hasAppletActivityFlowErrors: !!errors.activityFlows,
-  };
+  const tabErrors = useMemo(
+    () => ({
+      hasAboutAppletErrors: !!errors.displayName,
+      hasAppletActivitiesErrors: !!errors.activities,
+      hasAppletActivityFlowErrors: !!errors.activityFlows,
+    }),
+    [errors.displayName, errors.activities, errors.activityFlows],
+  );
+  const tabs = useMemo(() => getAppletTabs(tabErrors), [tabErrors]);
 
   if (isForbidden) return noPermissionsComponent;
 
@@ -155,7 +159,7 @@ export const BuilderApplet = () => {
         {isAppletInitialized ? (
           <>
             {isLoading && <Spinner />}
-            <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} isBuilder />
+            <LinkedTabs hiddenHeader={hiddenHeader} tabs={tabs} isBuilder />
             <SaveAndPublish />
           </>
         ) : (
