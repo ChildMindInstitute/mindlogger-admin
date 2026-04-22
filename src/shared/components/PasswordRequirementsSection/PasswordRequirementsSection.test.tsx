@@ -2,6 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Box } from '@mui/material';
 import { t } from 'i18next';
+import { useForm } from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
@@ -12,10 +13,41 @@ import {
 
 import { PasswordRequirementsSection } from './PasswordRequirementsSection';
 
+type TestFormValues = { password: string };
+
+function FormHarness({
+  defaultValues,
+  children,
+}: {
+  defaultValues: TestFormValues;
+  children: (props: {
+    control: ReturnType<typeof useForm<TestFormValues>>['control'];
+    trigger: ReturnType<typeof useForm<TestFormValues>>['trigger'];
+    clearErrors: ReturnType<typeof useForm<TestFormValues>>['clearErrors'];
+  }) => React.ReactNode;
+}) {
+  const { control, trigger, clearErrors } = useForm<TestFormValues>({ defaultValues });
+
+  return <>{children({ control, trigger, clearErrors })}</>;
+}
+
 describe('PasswordRequirementsSection', () => {
-  test('renders the info icon', () => {
+  const noop = () => {};
+
+  test('renders the section', () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS} />,
+      <FormHarness defaultValues={{ password: '' }}>
+        {({ control, trigger, clearErrors }) => (
+          <PasswordRequirementsSection
+            fieldName="password"
+            control={control}
+            trigger={trigger}
+            clearErrors={clearErrors}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={noop}
+          />
+        )}
+      </FormHarness>,
     );
 
     expect(getByTestId('password-requirements-section')).toBeInTheDocument();
@@ -23,7 +55,18 @@ describe('PasswordRequirementsSection', () => {
 
   test('shows all requirements as unmet for empty password', async () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS} />,
+      <FormHarness defaultValues={{ password: '' }}>
+        {({ control, trigger, clearErrors }) => (
+          <PasswordRequirementsSection
+            fieldName="password"
+            control={control}
+            trigger={trigger}
+            clearErrors={clearErrors}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={noop}
+          />
+        )}
+      </FormHarness>,
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
@@ -40,10 +83,18 @@ describe('PasswordRequirementsSection', () => {
 
   test('shows requirements as met for a fully compliant password', async () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection
-        password="Str0ngPass!"
-        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-      />,
+      <FormHarness defaultValues={{ password: 'Str0ngPass!' }}>
+        {({ control, trigger, clearErrors }) => (
+          <PasswordRequirementsSection
+            fieldName="password"
+            control={control}
+            trigger={trigger}
+            clearErrors={clearErrors}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={noop}
+          />
+        )}
+      </FormHarness>,
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
@@ -52,10 +103,18 @@ describe('PasswordRequirementsSection', () => {
 
   test('shows mixed met/unmet for partial password', async () => {
     const { getByTestId } = renderWithProviders(
-      <PasswordRequirementsSection
-        password="abcdefghij"
-        delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-      />,
+      <FormHarness defaultValues={{ password: 'abcdefghij' }}>
+        {({ control, trigger, clearErrors }) => (
+          <PasswordRequirementsSection
+            fieldName="password"
+            control={control}
+            trigger={trigger}
+            clearErrors={clearErrors}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={noop}
+          />
+        )}
+      </FormHarness>,
     );
 
     await userEvent.hover(getByTestId('password-requirements-section'));
@@ -70,10 +129,18 @@ describe('PasswordRequirementsSection', () => {
   describe('without wrapper (no children)', () => {
     it('renders the checklist visible', () => {
       renderWithProviders(
-        <PasswordRequirementsSection
-          password=""
-          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-        />,
+        <FormHarness defaultValues={{ password: '' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            />
+          )}
+        </FormHarness>,
       );
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
@@ -82,9 +149,20 @@ describe('PasswordRequirementsSection', () => {
   describe('with wrapper (children)', () => {
     it('hides the checklist when password is empty and nothing is focused', () => {
       renderWithProviders(
-        <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: '' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       expect(screen.getByTestId('password-requirements-section')).not.toBeVisible();
     });
@@ -92,9 +170,20 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when the wrapped field is focused', async () => {
       const user = userEvent.setup();
       renderWithProviders(
-        <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: '' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       const input = screen.getByLabelText('New password');
       await user.click(input);
@@ -107,12 +196,23 @@ describe('PasswordRequirementsSection', () => {
     it('hides the checklist after blur when password is still empty', async () => {
       const user = userEvent.setup();
       renderWithProviders(
-        <Box display="flex" flexDirection="column" gap={2}>
-          <PasswordRequirementsSection password="" delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}>
-            <input aria-label="New password" />
-          </PasswordRequirementsSection>
-          <input aria-label="Field outside password section" />
-        </Box>,
+        <FormHarness defaultValues={{ password: '' }}>
+          {({ control, trigger, clearErrors }) => (
+            <Box display="flex" flexDirection="column" gap={2}>
+              <PasswordRequirementsSection
+                fieldName="password"
+                control={control}
+                trigger={trigger}
+                clearErrors={clearErrors}
+                delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+                setShowPasswordError={noop}
+              >
+                <input aria-label="New password" />
+              </PasswordRequirementsSection>
+              <input aria-label="Field outside password section" />
+            </Box>
+          )}
+        </FormHarness>,
       );
       await user.click(screen.getByLabelText('New password'));
       await waitFor(() => {
@@ -126,36 +226,60 @@ describe('PasswordRequirementsSection', () => {
 
     it('keeps the checklist visible without focus when password fails length', () => {
       renderWithProviders(
-        <PasswordRequirementsSection
-          password="short"
-          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-        >
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: 'short' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
 
     it('keeps the checklist visible without focus when password fails character-type rules', () => {
       renderWithProviders(
-        <PasswordRequirementsSection
-          password="onlyletterslongenough"
-          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-        >
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: 'onlyletterslongenough' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
 
     it('hides the checklist when password meets policy and nothing is focused', () => {
       renderWithProviders(
-        <PasswordRequirementsSection
-          password="Goodpass1!"
-          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-        >
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: 'Goodpass1!' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       expect(screen.getByTestId('password-requirements-section')).not.toBeVisible();
     });
@@ -163,12 +287,20 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when password meets policy but the field is focused', async () => {
       const user = userEvent.setup();
       renderWithProviders(
-        <PasswordRequirementsSection
-          password="Goodpass1!"
-          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
-        >
-          <input aria-label="New password" />
-        </PasswordRequirementsSection>,
+        <FormHarness defaultValues={{ password: 'Goodpass1!' }}>
+          {({ control, trigger, clearErrors }) => (
+            <PasswordRequirementsSection
+              fieldName="password"
+              control={control}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+              setShowPasswordError={noop}
+            >
+              <input aria-label="New password" />
+            </PasswordRequirementsSection>
+          )}
+        </FormHarness>,
       );
       const input = screen.getByLabelText('New password');
       await user.click(input);

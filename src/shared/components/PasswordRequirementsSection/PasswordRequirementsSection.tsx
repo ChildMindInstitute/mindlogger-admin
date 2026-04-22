@@ -1,9 +1,21 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import {
+  Control,
+  FieldValues,
+  UseFormClearErrors,
+  UseFormTrigger,
+  useFormState,
+  useWatch,
+} from 'react-hook-form';
 import Box from '@mui/material/Box';
 
 import { isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
-import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH } from 'shared/consts';
+import {
+  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  ACCOUNT_PASSWORD_MIN_LENGTH,
+  DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
+} from 'shared/consts';
 
 import {
   StyledSection,
@@ -43,26 +55,63 @@ const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
 );
 
 interface PasswordRequirementsSectionProps {
-  password: string;
-
   /**
-   * If passed, wraps fields + checklist. The panel uses live policy; title / grid hide / “met” copy
+   * If passed, wraps fields + checklist. The panel uses live policy; title / grid hide / "met" copy
    * follow a short debounce after `password` stops changing.
    */
   children?: React.ReactNode;
   delayMs: number;
+  setShowPasswordError: (showPasswordError: boolean) => void;
+  fieldName: string;
+  control: Control<FieldValues>;
+  trigger: UseFormTrigger<FieldValues>;
+  clearErrors: UseFormClearErrors<FieldValues>;
 }
 
 export const PasswordRequirementsSection = ({
-  password,
   children,
   delayMs,
+  setShowPasswordError,
+  fieldName,
+  control,
+  trigger,
+  clearErrors,
 }: PasswordRequirementsSectionProps) => {
+  // If focusWithin is true, the user is inside the component and the checklist should be visible.
   const [focusWithin, setFocusWithin] = useState(false);
   const { t } = useTranslation();
 
   // Tracks if this is the first time the user has focused within the component.
   const [firstFocusWithin, setFirstFocusWithin] = useState(true);
+
+  const passwordValue = useWatch({ control, name: fieldName });
+  const { isSubmitting } = useFormState({ control });
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (!passwordValue) {
+        clearErrors(fieldName);
+
+        return;
+      }
+
+      // We only want to show the input's error if the user has not typed anything yet,
+      // otherwise all errors are shown using the password requirements section
+      setShowPasswordError(false);
+
+      if (!firstFocusWithin) {
+        await trigger(fieldName);
+      }
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [passwordValue, trigger, clearErrors, firstFocusWithin, fieldName, setShowPasswordError]);
+
+  useEffect(() => {
+    if (isSubmitting && !passwordValue) {
+      setShowPasswordError(true);
+    }
+  }, [isSubmitting, passwordValue, setShowPasswordError]);
 
   const {
     result,
@@ -70,7 +119,7 @@ export const PasswordRequirementsSection = ({
     displayPolicySatisfied,
     passwordRequirementsSectionTitleKey,
     isEmptyForDisplay,
-  } = usePasswordRequirementsChecklistDisplay(password, delayMs);
+  } = usePasswordRequirementsChecklistDisplay(passwordValue ?? '', delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
@@ -105,7 +154,7 @@ export const PasswordRequirementsSection = ({
   if (children !== undefined) {
     // Open panel without focus if they typed something invalid (uses live rules, not debounced UI).
     const keepChecklistVisible = !isEmptyForDisplay && !isAccountPasswordPolicySatisfied(result);
-    const showPasswordPanel = focusWithin || keepChecklistVisible;
+    const showPasswordPanel = keepChecklistVisible || focusWithin;
 
     const handleBlurCapture = (e: React.FocusEvent<HTMLDivElement>) => {
       const next = e.relatedTarget as Node | null;
@@ -119,11 +168,12 @@ export const PasswordRequirementsSection = ({
     return (
       <PasswordRequirementsFieldGroup
         data-testid="password-requirements-field-group"
-        display="flex"
-        flexDirection="column"
-        onFocusCapture={() => setFocusWithin(true)}
-        onBlurCapture={handleBlurCapture}
         showPasswordPanel={showPasswordPanel}
+        onFocusCapture={() => {
+          setFocusWithin(true);
+          setShowPasswordError(false);
+        }}
+        onBlurCapture={handleBlurCapture}
       >
         <Box display="flex" flexDirection="column" gap="24px">
           {children}

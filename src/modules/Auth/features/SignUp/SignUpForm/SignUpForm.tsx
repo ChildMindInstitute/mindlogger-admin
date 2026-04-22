@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from 'redux/store';
@@ -41,27 +41,7 @@ export const SignUpForm = () => {
     },
   });
   const [errorMessage, setErrorMessage] = useState('');
-  const watchedPassword = useWatch({ control, name: 'password' });
-  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
   const [showPasswordError, setShowPasswordError] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!watchedPassword) {
-        clearErrors('password'); // Clear any existing errors
-
-        return;
-      }
-
-      setShowPasswordError(false);
-
-      if (!isFirstTimeTyping) {
-        trigger('password');
-      }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [watchedPassword, trigger, clearErrors, isFirstTimeTyping]);
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
@@ -121,24 +101,19 @@ export const SignUpForm = () => {
 
       <StyledController>
         <PasswordRequirementsSection
-          password={watchedPassword ?? ''}
+          fieldName="password"
+          control={control}
+          trigger={trigger}
+          clearErrors={clearErrors}
           delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          setShowPasswordError={setShowPasswordError}
         >
           <InputController
             fullWidth
             isErrorVisible={showPasswordError}
-            onFocus={() => setShowPasswordError(false)}
             name="password"
             control={control}
             label={t('password')}
-            onBlur={() => {
-              if (isFirstTimeTyping) {
-                // If the user is typing a password for the first time, we don't want to trigger the validation until they click out of the input
-                trigger('password');
-              }
-
-              setIsFirstTimeTyping(false);
-            }}
             type="password"
             data-testid="signup-form-password"
           />
@@ -161,16 +136,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-terms"
         />
       </StyledController>
-      <StyledButton
-        variant="contained"
-        type="submit"
-        data-testid="signup-form-signup"
-        onClick={() => {
-          if (!watchedPassword) {
-            setShowPasswordError(true);
-          }
-        }}
-      >
+      <StyledButton variant="contained" type="submit" data-testid="signup-form-signup">
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>

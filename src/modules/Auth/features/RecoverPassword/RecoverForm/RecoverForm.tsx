@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -28,27 +28,12 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
   const navigate = useNavigate();
   const { handleSubmit, control, trigger, clearErrors } = useForm<RecoverFormFields>({
     resolver: yupResolver(newPasswordSchema()),
+    shouldFocusError: false,
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPasswordError, setShowPasswordError] = useState(false);
   const watchedPassword = useWatch({ control, name: 'password' });
-  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!watchedPassword) {
-        clearErrors('password');
-
-        return;
-      }
-
-      if (!isFirstTimeTyping) {
-        trigger('password');
-      }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [watchedPassword, trigger, clearErrors, isFirstTimeTyping]);
 
   const onSubmit = async ({ password }: RecoverFormFields) => {
     try {
@@ -75,8 +60,12 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
       </StyledResetPasswordSubheader>
       <StyledController>
         <PasswordRequirementsSection
-          password={watchedPassword ?? ''}
+          fieldName="password"
+          control={control}
+          trigger={trigger}
+          clearErrors={clearErrors}
           delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          setShowPasswordError={setShowPasswordError}
         >
           <InputController
             fullWidth
@@ -84,15 +73,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
             type="password"
             control={control}
             label={t('newPassword')}
-            isErrorVisible={false}
-            onBlur={() => {
-              if (isFirstTimeTyping) {
-                // If the user is typing a password for the first time, we don't want to trigger the validation until they click out of the input
-                trigger('password');
-              }
-
-              setIsFirstTimeTyping(false);
-            }}
+            isErrorVisible={showPasswordError}
             data-testid={`${recoverPasswordFormDataTestid}-password`}
           />
         </PasswordRequirementsSection>
@@ -117,6 +98,13 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
         variant="contained"
         type="submit"
         data-testid={`${recoverPasswordFormDataTestid}-submit`}
+        onClick={() => {
+          if (!watchedPassword) {
+            setShowPasswordError(true);
+          } else {
+            setShowPasswordError(false);
+          }
+        }}
       >
         {t('submit')}
       </StyledButton>
