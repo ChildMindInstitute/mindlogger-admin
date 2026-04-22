@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
 
 import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
@@ -20,13 +21,13 @@ export const useFeatureFlags = () => {
     });
   };
 
-  const featureFlags = () => {
+  const featureFlags = useMemo(() => {
     const keys = Object.keys(FeatureFlagDefaults) as (keyof typeof FeatureFlagDefaults)[];
     const features: FeatureFlags = {};
     keys.forEach((key) => (features[key] = flags[key] ?? FeatureFlagDefaults[key]));
 
     return features;
-  };
+  }, [flags]);
 
-  return { resetLDContext, featureFlags: featureFlags() };
+  return { resetLDContext, featureFlags };
 };
