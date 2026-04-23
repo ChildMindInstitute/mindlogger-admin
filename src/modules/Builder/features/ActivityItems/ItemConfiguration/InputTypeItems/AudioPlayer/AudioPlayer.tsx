@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MediaType } from 'modules/Builder/components/MediaUploader';
@@ -27,14 +27,17 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
     setMedia({ ...media, name: getMediaName(url) });
   }, [url]);
 
+  const headerContentProps = useMemo(() => ({ media }), [media]);
+  const contentProps = useMemo(() => ({ media, setMedia, name }), [media, setMedia, name]);
+
   return (
     <>
       <ToggleItemContainer
         title={t('audioPlayer')}
         HeaderContent={AudioPlayerHeader}
         Content={AudioPlayerContent}
-        headerContentProps={{ media }}
-        contentProps={{ media, setMedia, name }}
+        headerContentProps={headerContentProps}
+        contentProps={contentProps}
         data-testid="builder-activity-items-item-configuration-audio-player"
       />
     </>

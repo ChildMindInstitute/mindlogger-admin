@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
@@ -58,15 +58,20 @@ export const Unity = () => {
     setIsModalOpen(false);
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     if (url && url.length > 0) {
       setFileContent(url);
     }
   }, [url]);
+
+  const contentProps = useMemo(
+    () => ({ isValidFile, fileContent, onOpenModal: handleOpenModal }),
+    [isValidFile, fileContent, handleOpenModal],
+  );
 
   return (
     <Box sx={{ overflowY: 'auto' }}>
@@ -83,7 +88,7 @@ export const Unity = () => {
           uiType={ToggleContainerUiType.PerformanceTask}
           title={t('unityTaskConfigurationFile')}
           Content={UnityFileButton}
-          contentProps={{ isValidFile, fileContent, onOpenModal: handleOpenModal }}
+          contentProps={contentProps}
           data-testid="builder-activity-unity-file-uploader"
         />
       </StyledPerformanceTaskBody>
