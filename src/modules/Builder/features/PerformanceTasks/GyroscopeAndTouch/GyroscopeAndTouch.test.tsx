@@ -199,7 +199,7 @@ describe('GyroscopeAndTouch', () => {
     test('Panels: are rendered correctly', () => {
       renderGyroscopeOrTouch(isGyroscope);
 
-      expect(screen.getByTestId('builder-activity-flanker-common')).toBeVisible();
+      expect(screen.getByTestId(`${mockedTestid}-common`)).toBeVisible();
       expect(screen.getByTestId(mockedTestid)).toBeVisible();
       expect(screen.getByTestId(`${mockedTestid}-overview-instruction`));
       expect(screen.getByTestId(`${mockedTestid}-practice-round-instruction`));
@@ -210,11 +210,11 @@ describe('GyroscopeAndTouch', () => {
       renderGyroscopeOrTouch(isGyroscope);
       expandAllPanels();
 
+      expect(screen.getByTestId(`${mockedTestid}-name`).querySelector('input')).toHaveValue(
+        isGyroscope ? 'CST Gyroscope' : 'CST Touch',
+      );
       expect(
-        screen.getByTestId('builder-activity-flanker-name').querySelector('input'),
-      ).toHaveValue(isGyroscope ? 'CST Gyroscope' : 'CST Touch');
-      expect(
-        screen.getByTestId('builder-activity-flanker-description').querySelector('textarea'),
+        screen.getByTestId(`${mockedTestid}-description`).querySelector('textarea'),
       ).toHaveTextContent(
         `This Activity contains Stability Tracker (${isGyroscope ? 'Gyroscope' : 'Touch'}) Item.`,
       );
@@ -265,7 +265,7 @@ describe('GyroscopeAndTouch', () => {
 
     test.each`
       testId                                                      | inputType     | error                                       | description
-      ${'builder-activity-flanker-name'}                          | ${'input'}    | ${'Activity Name is required'}              | ${'Validation: Activity Name is required'}
+      ${`${mockedTestid}-name`}                                   | ${'input'}    | ${'Activity Name is required'}              | ${'Validation: Activity Name is required'}
       ${`${mockedTestid}-overview-instruction-instruction`}       | ${'textarea'} | ${'Overview Instruction is required'}       | ${'Validation: Overview Instruction is required'}
       ${`${mockedTestid}-practice-round-instruction-instruction`} | ${'textarea'} | ${'Practice Round Instruction is required'} | ${'Validation: Practice Round Instruction is required'}
       ${`${mockedTestid}-test-round-instruction-instruction`}     | ${'textarea'} | ${'Test Round Instruction is required'}     | ${'Validation: Test Round Instruction is required'}
