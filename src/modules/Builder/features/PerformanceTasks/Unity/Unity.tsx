@@ -37,26 +37,29 @@ export const Unity = () => {
 
   const dataTestid = 'builder-activity-unity';
 
-  const handleUpload = (uploadedFile: File) => {
-    setFile(uploadedFile);
-    const formFile = watch(urlName);
-    if (formFile === null) {
-      setFileContent('');
+  const handleUpload = useCallback(
+    (uploadedFile: File) => {
+      setFile(uploadedFile);
+      const formFile = watch(urlName);
+      if (formFile === null) {
+        setFileContent('');
 
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const fileContentString = e.target?.result as string;
-      setFileContent(fileContentString);
-      setValue(urlName, fileContentString);
-    };
-    reader.readAsText(uploadedFile);
-  };
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContentString = e.target?.result as string;
+        setFileContent(fileContentString);
+        setValue(urlName, fileContentString);
+      };
+      reader.readAsText(uploadedFile);
+    },
+    [watch, urlName, setValue],
+  );
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   const handleOpenModal = useCallback(() => {
     setIsModalOpen(true);
@@ -95,7 +98,7 @@ export const Unity = () => {
       <UnityFileModal
         dataTestid={dataTestid}
         onUpload={handleUpload}
-        onClose={() => handleCloseModal()}
+        onClose={handleCloseModal}
         isOpen={isModalOpen}
       />
     </Box>

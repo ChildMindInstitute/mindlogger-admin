@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
@@ -11,48 +11,45 @@ interface UnityFileModalProps {
   dataTestid: string;
 }
 
-const UnityFileModal: React.FC<UnityFileModalProps> = ({
-  isOpen,
-  onClose,
-  dataTestid,
-  onUpload,
-}) => {
-  const { t } = useTranslation('app');
+const UnityFileModal: React.FC<UnityFileModalProps> = memo(
+  ({ isOpen, onClose, dataTestid, onUpload }) => {
+    const { t } = useTranslation('app');
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        setSelectedFile(file);
+      }
+    };
 
-  const handleSubmit = () => {
-    if (selectedFile) {
-      onUpload(selectedFile);
-    }
-    onClose();
-  };
+    const handleSubmit = () => {
+      if (selectedFile) {
+        onUpload(selectedFile);
+      }
+      onClose();
+    };
 
-  return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      onSubmit={handleSubmit}
-      onSecondBtnSubmit={onClose}
-      title={t('uploadUnityConfigFile')}
-      buttonText={t('import')}
-      secondBtnText={t('cancel')}
-      hasSecondBtn={false}
-      submitBtnColor="primary"
-      data-testid={dataTestid}
-    >
-      <StyledModalWrapper>
-        <input type="file" onChange={handleFileChange} />
-      </StyledModalWrapper>
-    </Modal>
-  );
-};
+    return (
+      <Modal
+        open={isOpen}
+        onClose={onClose}
+        onSubmit={handleSubmit}
+        onSecondBtnSubmit={onClose}
+        title={t('uploadUnityConfigFile')}
+        buttonText={t('import')}
+        secondBtnText={t('cancel')}
+        hasSecondBtn={false}
+        submitBtnColor="primary"
+        data-testid={dataTestid}
+      >
+        <StyledModalWrapper>
+          <input type="file" onChange={handleFileChange} />
+        </StyledModalWrapper>
+      </Modal>
+    );
+  },
+);
 
 export default UnityFileModal;
