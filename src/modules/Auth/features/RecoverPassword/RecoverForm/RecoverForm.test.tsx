@@ -50,9 +50,11 @@ describe('RecoverForm', () => {
 
     await userEvent.click(submitButton);
 
-    const passwordError = password.querySelector('.MuiFormHelperText-root.Mui-error');
-    expect(passwordError).toBeInTheDocument();
-    expect(passwordError).toHaveTextContent('Password must be at least 6 characters.');
+    expect(
+      screen.getByText(
+        'Password must contain at least 10 characters, no spaces, and at least 3 of the 4 below:',
+      ),
+    ).toBeInTheDocument();
 
     const confirmPasswordError = confirmPassword.querySelector('.MuiFormHelperText-root.Mui-error');
     expect(confirmPasswordError).toBeInTheDocument();
@@ -61,14 +63,14 @@ describe('RecoverForm', () => {
     await userEvent.clear(screen.getByLabelText(/New password/i));
     await userEvent.clear(screen.getByLabelText(/Confirm password/i));
 
-    await userEvent.type(screen.getByLabelText(/New password/i), 'New_Password');
-    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'New_Password');
+    await userEvent.type(screen.getByLabelText(/New password/i), 'NewPass123!');
+    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'NewPass123!');
 
     await userEvent.click(submitButton);
 
     expect(axios.post).toBeCalledWith(
       '/users/me/password/recover/approve',
-      { email: mockEmail, key: mockKey, password: 'New_Password' },
+      { email: mockEmail, key: mockKey, password: 'NewPass123!' },
       { signal: undefined },
     );
 
@@ -92,19 +94,17 @@ describe('RecoverForm', () => {
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent('Submit');
 
-    await userEvent.type(screen.getByLabelText(/New password/i), 'New_Password');
-    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'New_Password');
+    await userEvent.type(screen.getByLabelText(/New password/i), 'NewPass123!');
+    await userEvent.type(screen.getByLabelText(/Confirm password/i), 'NewPass1234!');
 
     await userEvent.click(submitButton);
 
     expect(axios.post).toBeCalledWith(
       '/users/me/password/recover/approve',
-      { email: mockEmail, key: mockKey, password: 'New_Password' },
+      { email: mockEmail, key: mockKey, password: 'NewPass123!' },
       { signal: undefined },
     );
 
-    const error = screen.getByTestId(`${recoverPasswordFormDataTestid}-error`);
-    expect(error).toBeInTheDocument();
-    expect(error).toHaveTextContent('Mock error');
+    expect(screen.getByText('Your passwords do not match')).toBeInTheDocument();
   });
 });
