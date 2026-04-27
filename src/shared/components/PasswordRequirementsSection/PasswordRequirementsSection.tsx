@@ -12,10 +12,7 @@ import {
 import Box from '@mui/material/Box';
 
 import { isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidation';
-import {
-  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
-  ACCOUNT_PASSWORD_MIN_LENGTH,
-} from 'shared/consts';
+import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH } from 'shared/consts';
 
 import {
   StyledSection,
