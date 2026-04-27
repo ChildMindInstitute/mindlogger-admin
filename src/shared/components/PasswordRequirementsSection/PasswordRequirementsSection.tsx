@@ -15,7 +15,6 @@ import { isAccountPasswordPolicySatisfied } from 'shared/utils/passwordValidatio
 import {
   ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   ACCOUNT_PASSWORD_MIN_LENGTH,
-  DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
 } from 'shared/consts';
 
 import {
@@ -103,7 +102,7 @@ export const PasswordRequirementsSection = <T extends FieldValues>({
       if (!firstFocusWithin) {
         await trigger(fieldName);
       }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
+    }, delayMs);
 
     return () => clearTimeout(timer);
   }, [passwordValue, trigger, clearErrors, firstFocusWithin, fieldName, setShowPasswordError]);

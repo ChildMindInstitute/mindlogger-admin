@@ -61,7 +61,7 @@ describe('SignUp component tests', () => {
     });
 
     // When everything is valid, the password requirements section should not be visible
-    expect(screen.queryByText('All requirements have been met')).not.toBeInTheDocument();
+    expect(screen.queryByText('All requirements have been met.')).not.toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
