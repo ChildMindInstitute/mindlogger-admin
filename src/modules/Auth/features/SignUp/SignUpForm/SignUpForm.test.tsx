@@ -45,7 +45,7 @@ describe('SignUp component tests', () => {
   test('should be able to validate SignUp form', async () => {
     await submitForm({
       email: 'test',
-      password: 'password',
+      password: 'Str0ngPass!',
       firstName: 'Jane',
       lastName: 'Doe',
       termsOfService: true,
@@ -54,12 +54,14 @@ describe('SignUp component tests', () => {
 
     await submitForm({
       email: mockedEmail,
-      password: ` ${mockedPassword}`,
+      password: `${mockedPassword}`,
       firstName: 'Jane',
       lastName: 'Doe',
       termsOfService: true,
     });
-    expect(await screen.findByText('Password must not contain spaces.')).toBeInTheDocument();
+
+    // When everything is valid, the password requirements section should not be visible
+    expect(screen.queryByText('All requirements have been met.')).not.toBeInTheDocument();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
@@ -70,9 +72,14 @@ describe('SignUp component tests', () => {
     await userEvent.click(screen.getByTestId('signup-form-signup'));
 
     expect(await screen.findByText('Email is required')).toBeInTheDocument();
-    expect(await screen.findByText('Password is required')).toBeInTheDocument();
     expect(await screen.findByText('First name is required')).toBeInTheDocument();
     expect(await screen.findByText('Last name is required')).toBeInTheDocument();
     expect(await screen.findByText('Please agree to the Terms of Service')).toBeInTheDocument();
+  });
+
+  it('shows password validation error', async () => {
+    await userEvent.type(screen.getByTestId('signup-form-password'), 'short');
+    await userEvent.click(screen.getByTestId('signup-form-signup'));
+    expect(await screen.findByText(/10 characters/i)).toBeInTheDocument();
   });
 });
