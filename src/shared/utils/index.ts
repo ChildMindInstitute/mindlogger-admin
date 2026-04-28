@@ -23,6 +23,7 @@ export * from './getAnswerValue';
 export * from './getDateTime';
 export * from './state';
 export * from './authStorage';
+export * from './passwordValidation';
 export * from './getInfinityScrollData';
 export * from './getSettingBreadcrumbs';
 export * from './mixpanel';
