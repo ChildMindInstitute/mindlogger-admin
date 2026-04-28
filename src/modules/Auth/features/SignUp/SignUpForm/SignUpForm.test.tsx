@@ -60,8 +60,9 @@ describe('SignUp component tests', () => {
       termsOfService: true,
     });
 
-    // When everything is valid, the password requirements section should not be visible
-    expect(screen.queryByText('All requirements have been met.')).not.toBeInTheDocument();
+    // When everything is valid, password requirements should not be visible after debounce
+    const requirements = await screen.findByText('All requirements have been met.');
+    expect(requirements).not.toBeVisible();
   });
 
   test('should be able to validate SignUp when fields are empty', async () => {
