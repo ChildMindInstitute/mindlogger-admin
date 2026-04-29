@@ -6,12 +6,15 @@ import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks'
 import { InputController } from 'shared/components/FormComponents';
 import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 
-export const NameDescriptionContent = () => {
+import { NameDescriptionContentProps } from './NameDescriptionContent.types';
+
+export const NameDescriptionContent = ({
+  'data-testid': dataTestid,
+}: NameDescriptionContentProps) => {
   const { t } = useTranslation();
   const { control } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const dataTestid = 'builder-activity-flanker';
   const commonProps = {
     control,
     fullWidth: true,

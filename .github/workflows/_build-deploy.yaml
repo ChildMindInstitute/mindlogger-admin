@@ -58,7 +58,7 @@ jobs:
       - name: Configure aws credentials for secrets
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-to-assume: arn:aws:iam::917902836630:role/github-oidc-build-secrets2026031712184557570000000a
           role-session-name: OIDC-GHA-Build-Secrets
           aws-region: us-east-1
 
@@ -69,7 +69,7 @@ jobs:
             ,/CodeBuild/admin-panel/${{ inputs.env-name }}
           parse-json-secrets: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         name: Setup Node
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -101,7 +101,7 @@ jobs:
           CI: false
 
       - name: Configure AWS credentials for deploy
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ needs.setup-vars.outputs.role }}
           role-session-name: OIDC-GHA-session-deploy
@@ -163,9 +163,9 @@ jobs:
           SLACK_TITLE: Admin Deployed to ${{ inputs.env-name }}
           SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::917902836630:role/ssm-versions-oidc-github-role
+          role-to-assume: arn:aws:iam::917902836630:role/github-oidc-ssm-version20260317121845461900000008
           role-session-name: OIDC-GHA-session-version
           aws-region: us-east-1
       - name: Store version in SSM

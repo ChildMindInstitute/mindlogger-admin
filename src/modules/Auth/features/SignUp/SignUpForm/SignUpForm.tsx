@@ -9,8 +9,10 @@ import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
 import {
   StyledSignUpHeader,
@@ -28,7 +30,7 @@ export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<SignUpData>({
+  const { handleSubmit, control, trigger, clearErrors } = useForm<SignUpData>({
     resolver: yupResolver(SignUpFormSchema()),
     defaultValues: {
       email: '',
@@ -39,6 +41,7 @@ export const SignUpForm = () => {
     },
   });
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPasswordError, setShowPasswordError] = useState(false);
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
@@ -95,17 +98,29 @@ export const SignUpForm = () => {
           data-testid="signup-form-lname"
         />
       </StyledController>
+
       <StyledController>
-        <InputController
-          fullWidth
-          name="password"
+        <PasswordRequirementsSection
+          fieldName="password"
           control={control}
-          label={t('password')}
-          type="password"
-          data-testid="signup-form-password"
-        />
+          trigger={trigger}
+          clearErrors={clearErrors}
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          setShowPasswordError={setShowPasswordError}
+        >
+          <InputController
+            fullWidth
+            isErrorVisible={showPasswordError}
+            name="password"
+            control={control}
+            label={t('password')}
+            type="password"
+            data-testid="signup-form-password"
+          />
+        </PasswordRequirementsSection>
       </StyledController>
       {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
+
       <StyledController>
         <CheckboxController
           name="termsOfService"

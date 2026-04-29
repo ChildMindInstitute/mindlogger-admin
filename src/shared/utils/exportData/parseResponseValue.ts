@@ -183,7 +183,7 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);
     case ItemResponseType.Unity: {
-      const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
+      const folderName = item.id;
       const urls = getUnityMediaUrls(item);
       const filePaths = urls
         .map((url) => url.split('?')[0].split('/').pop())

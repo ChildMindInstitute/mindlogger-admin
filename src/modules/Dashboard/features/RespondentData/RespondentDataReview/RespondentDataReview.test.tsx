@@ -466,11 +466,13 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
-      expect(
-        screen.getByText(
-          'Select the date, Activity Flow or Activity, and response time to review the response data.',
-        ),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'Select the date, Activity Flow or Activity, and response time to review the response data.',
+          ),
+        ).toBeInTheDocument();
+      });
 
       // the activity list in the review menu child component is rendered correctly
       await waitFor(() => {

@@ -111,7 +111,7 @@ export const getUnityData = (
       return filteredAcc;
     }
 
-    const folderName = `${item.targetSecretId}-${item.id}-${item.activityItem.name}`;
+    const folderName = item.id;
     const mediaData = getUnityMediaUrls(item).map((url: string, index: number) => {
       const urlFileName = url.split('?')[0].split('/').pop() ?? '';
 
