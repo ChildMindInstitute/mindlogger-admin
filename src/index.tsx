@@ -10,7 +10,7 @@ import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTransl
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
-import { isUat, isProduction } from './shared/utils/env';
+import { isUat, isProduction, isDev } from './shared/utils/env';
 
 if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
   datadogLogs.init({
@@ -27,7 +27,7 @@ if (import.meta.env.REACT_APP_DD_CLIENT_TOKEN) {
 if (
   import.meta.env.REACT_APP_DD_APP_ID &&
   import.meta.env.REACT_APP_DD_CLIENT_TOKEN &&
-  (isUat || isProduction || true)
+  (isUat || isProduction || isDev)
 ) {
   datadogRum.init({
     applicationId: import.meta.env.REACT_APP_DD_APP_ID as string,
@@ -46,6 +46,7 @@ if (
     trackLongTasks: true,
     trackUserInteractions: false,
     allowedTracingUrls: [
+      (url) => url.indexOf('api-dev.cmiml.net') > -1,
       (url) => url.indexOf('api-uat.cmiml.net') > -1,
       (url) => url.indexOf('api-v2.gettingcurious.com') > -1,
     ],
