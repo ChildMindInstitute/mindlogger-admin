@@ -69,7 +69,6 @@ export const HeaderOptions = () => {
         >
           {t('export')}
         </Button>
-
       )}
       {showExportMenu && (
         <Menu

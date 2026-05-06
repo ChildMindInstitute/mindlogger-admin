@@ -52,10 +52,22 @@ describe('HeaderOptions', () => {
     renderWithProviders(<HeaderOptions />, { preloadedState: getPreloadedState() });
   });
 
-  test('should open Export dialog when option is pressed', () => {
+  test('should open Export options menu when export button is pressed', () => {
     fireEvent.click(screen.getByTestId('header-option-export-button'));
 
-    expect(screen.queryByTestId('export-data-settings')).toBeInTheDocument();
+    expect(screen.queryByTestId('header-option-export-menu')).toBeInTheDocument();
+  });
+
+  test('should see Response Data option in export options menu', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+
+    expect(screen.queryByTestId('header-option-response-data-button')).toBeInTheDocument();
+  });
+
+  test('should see Audit Logs option in export options menu', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+
+    expect(screen.queryByTestId('header-option-audit-logs-button')).toBeInTheDocument();
   });
 
   test('should contain link to settings page', () => {
