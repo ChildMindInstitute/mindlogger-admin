@@ -8,7 +8,8 @@ import { variables } from 'shared/styles';
 import { MenuItem, MenuItemType } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 
-import { ManagersActions } from './Managers.types';
+import { ExportMenuItems, ManagersActions } from './Managers.types';
+import { t } from 'i18next';
 
 export const getHeadCells = (sortableColumns?: string[], appletId?: string): HeadCell[] => {
   const { t } = i18n;
@@ -35,12 +36,12 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     },
     ...(appletId
       ? [
-          {
-            id: 'roles',
-            label: t('role'),
-            enableSort: sortableColumns?.includes('roles') ?? true,
-          },
-        ]
+        {
+          id: 'roles',
+          label: t('role'),
+          enableSort: sortableColumns?.includes('roles') ?? true,
+        },
+      ]
       : []),
     {
       id: 'email',
@@ -104,6 +105,14 @@ export const getManagerActions = (
         customItemColor: variables.palette.dark_error_container,
         'data-testid': 'dashboard-managers-remove-access',
       },
+      { type: MenuItemType.Divider },
+      {
+        icon: <Svg id="audit-logs" />,
+        action: actions.exportAuditLogsAction,
+        title: t('exportAuditLogs'),
+        context: manager,
+        'data-testid': 'dashboard-managers-export-audit-logs',
+      }
     );
   }
 

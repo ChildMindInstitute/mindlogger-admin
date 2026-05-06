@@ -17,6 +17,7 @@ const removeTeamMemberAction = vi.fn();
 const editTeamMemberAction = vi.fn();
 const copyEmailAddressAction = vi.fn();
 const copyInvitationLinkAction = vi.fn();
+const exportAuditLogsAction = vi.fn();
 
 describe('Managers utils tests', () => {
   describe('getHeadCells function', () => {
@@ -43,6 +44,7 @@ describe('Managers utils tests', () => {
           editTeamMemberAction,
           copyEmailAddressAction,
           copyInvitationLinkAction,
+          exportAuditLogsAction,
         },
         mockedManager,
       );
@@ -101,6 +103,7 @@ describe('Managers utils tests', () => {
           editTeamMemberAction,
           copyEmailAddressAction,
           copyInvitationLinkAction,
+          exportAuditLogsAction,
         },
         pendingManager,
       );
