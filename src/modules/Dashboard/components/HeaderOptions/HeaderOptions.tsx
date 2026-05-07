@@ -9,9 +9,15 @@ import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { Mixpanel, checkIfCanAccessData, checkIfCanEdit, MixpanelEventType } from 'shared/utils';
 import { workspaces } from 'shared/state';
+import { AuditLogsExportSetting } from 'shared/features/AppletSettings/AuditLogsExportSetting/AuditLogsExportSetting';
 
 export const HeaderOptions = () => {
-  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isResponseDataExportOpen, setIsResponseDataExportOpen] = useState(false);
+  const [isAuditLogsExportOpen, setIsAuditLogsExportOpen] = useState(false);
+
+  const [isResponseDataExportPopupOpen, setIsResponseDataExportPopupOpen] = useState(false);
+  const [isAuditLogsExportPopupOpen, setIsAuditLogsExportPopupOpen] = useState(false);
+
   const { t } = useTranslation('app');
   const { appletId } = useParams();
   const isSettingsSelected = location.pathname.includes('settings');
@@ -25,37 +31,40 @@ export const HeaderOptions = () => {
   };
 
   const handleOpenAuditLogs = () => {
-    // TODO: Implement view audit logs
-  }
+    setIsAuditLogsExportOpen(true);
+    Mixpanel.track({ action: MixpanelEventType.ExportAuditLogsClick });
+  };
 
   const handleOpenResponseData = () => {
-    setIsExportOpen(true);
+    setIsResponseDataExportOpen(true);
     Mixpanel.track({ action: MixpanelEventType.ExportDataClick });
-  }
+  };
 
-  const handleCloseExport = () => {
-    setIsExportOpen(false);
-  }
+  const handleCloseResponseData = () => {
+    setIsResponseDataExportOpen(false);
+  };
+
+  const handleCloseAuditLogsExport = () => {
+    setIsAuditLogsExportOpen(false);
+  };
 
   const canAccessData = checkIfCanAccessData(roles);
   const canEdit = checkIfCanEdit(roles);
 
-  const getExportActions = () => {
-    return [
-      {
-        icon: <Svg id="response-data" />,
-        action: handleOpenResponseData,
-        title: t('exportResponseData'),
-        'data-testid': 'header-option-response-data-button',
-      },
-      {
-        icon: <Svg id="audit-logs" />,
-        action: handleOpenAuditLogs,
-        title: t('exportAuditLogs'),
-        'data-testid': 'header-option-audit-logs-button',
-      },
-    ];
-  }
+  const getExportActions = () => [
+    {
+      icon: <Svg id="response-data" />,
+      action: handleOpenResponseData,
+      title: t('dataExport.responseData.menuCaption'),
+      'data-testid': 'header-option-response-data-button',
+    },
+    {
+      icon: <Svg id="audit-logs" />,
+      action: handleOpenAuditLogs,
+      title: t('dataExport.auditLogs.menuCaption'),
+      'data-testid': 'header-option-audit-logs-button',
+    },
+  ];
 
   return canEdit || canAccessData ? (
     <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto' }}>
@@ -90,9 +99,17 @@ export const HeaderOptions = () => {
       )}
 
       <ExportDataSetting
-        isExportSettingsOpen={isExportOpen}
-        onExportSettingsClose={handleCloseExport}
-        data-testid={'export-data'}
+        isExportSettingsOpen={isResponseDataExportOpen}
+        onExportSettingsClose={handleCloseResponseData}
+        data-testid={'response-data-export'}
+      />
+      <AuditLogsExportSetting
+        isExportSettingsOpen={isAuditLogsExportOpen}
+        onExportSettingsClose={handleCloseAuditLogsExport}
+        data-testid={'audit-logs-export'}
+        onExportPopupClose={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     </StyledFlexTopCenter>
   ) : null;

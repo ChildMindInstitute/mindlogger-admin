@@ -153,6 +153,8 @@ export const ExportSettingsPopup = ({
                 fullWidth
               />
             </StyledFlexColumn>
+
+            {/* Date range picker */}
             {hasCustomDate && (
               <StyledFlexTopCenter>
                 <DatePicker
@@ -181,6 +183,8 @@ export const ExportSettingsPopup = ({
                 />
               </StyledFlexTopCenter>
             )}
+            {/* End of date range picker */}
+
             {filteredSupplementaryFiles.length > 0 && (
               <StyledFlexColumn sx={{ gap: 1.6 }}>
                 <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>
