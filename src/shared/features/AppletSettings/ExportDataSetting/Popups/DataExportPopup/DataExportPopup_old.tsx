@@ -12,10 +12,10 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
 import { DateFormats } from 'shared/consts';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import {
   ExportDataExported,
   ExportDataFormValues,
-  ExportDateType,
 } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
@@ -139,7 +139,7 @@ export const DataExportPopup = ({
 
         // Update the time for last 24 hours submissions
         // Converting to UTC because backend expects UTC but is not timezone-aware
-        if (dateType === ExportDateType.Last24h) {
+        if (dateType === DateRangePickerType.Last24h) {
           const currentTime = new Date();
           const oneDayAgo = new Date(currentTime);
           oneDayAgo.setHours(currentTime.getHours() - 24);

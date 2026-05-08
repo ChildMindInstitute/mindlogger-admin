@@ -12,11 +12,12 @@ import { UniqueTuple } from 'shared/types';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
+
 import {
   ExportDataExported,
   ExportDataFormValues,
   ExportDataSettingProps,
-  ExportDateType,
   SupplementaryFiles,
   SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
@@ -46,7 +47,7 @@ export const ExportDataSetting = ({
       dataExported: canExportEhrHealthData
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
-      dateType: ExportDateType.AllTime,
+      dateType: DateRangePickerType.AllTime,
       fromDate: startOfDay(minDate),
       toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(

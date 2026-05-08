@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { DateFormats } from 'shared/consts';
 import { getFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.utils';
@@ -12,29 +12,29 @@ describe('getFormattedToDate', () => {
 
   test.each([
     { dateType: undefined, formToDate: new Date('2023-06-22T00:00:00Z'), expected: undefined },
-    { dateType: ExportDateType.ChooseDates, formToDate: undefined, expected: undefined },
+    { dateType: DateRangePickerType.ChooseDates, formToDate: undefined, expected: undefined },
     {
-      dateType: ExportDateType.AllTime,
+      dateType: DateRangePickerType.AllTime,
       formToDate,
       expected: formattedUtcDate,
     },
     {
-      dateType: ExportDateType.Last24h,
+      dateType: DateRangePickerType.Last24h,
       formToDate,
       expected: formattedUtcDate,
     },
     {
-      dateType: ExportDateType.LastMonth,
+      dateType: DateRangePickerType.LastMonth,
       formToDate,
       expected: formattedUtcDate,
     },
     {
-      dateType: ExportDateType.ChooseDates,
+      dateType: DateRangePickerType.ChooseDates,
       formToDate,
       expected: format(formToDate, DateFormats.shortISO),
     },
     {
-      dateType: ExportDateType.ChooseDates,
+      dateType: DateRangePickerType.ChooseDates,
       formToDate: getNormalizedTimezoneDate(new Date().toString()),
       expected: formattedUtcDate,
     },
