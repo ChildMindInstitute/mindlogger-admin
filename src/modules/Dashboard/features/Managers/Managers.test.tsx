@@ -112,7 +112,6 @@ describe('Managers component tests', () => {
     const actionsDataTestIds = [
       'dashboard-managers-edit-user',
       'dashboard-managers-remove-access',
-      'dashboard-managers-export-audit-logs',
     ];
 
     await waitFor(() => {

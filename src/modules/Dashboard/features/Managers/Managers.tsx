@@ -107,9 +107,6 @@ export const Managers = () => {
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
   const actions: ManagersActions = {
-    exportAuditLogsAction: ({ context: user }: MenuActionProps<Manager>) => {
-      // TODO: Implement export audit logs
-    },
     removeTeamMemberAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
       setRemoveAccessPopupVisible(true);

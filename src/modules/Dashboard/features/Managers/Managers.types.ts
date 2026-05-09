@@ -6,5 +6,4 @@ export type ManagersActions = {
   editTeamMemberAction: ({ context }: MenuActionProps<Manager>) => void;
   copyEmailAddressAction: ({ context }: MenuActionProps<Manager>) => void;
   copyInvitationLinkAction: ({ context }: MenuActionProps<Manager>) => void;
-  exportAuditLogsAction: ({ context }: MenuActionProps<Manager>) => void;
 };

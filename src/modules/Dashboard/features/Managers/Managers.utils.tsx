@@ -104,14 +104,6 @@ export const getManagerActions = (
         customItemColor: variables.palette.dark_error_container,
         'data-testid': 'dashboard-managers-remove-access',
       },
-      { type: MenuItemType.Divider },
-      {
-        icon: <Svg id="audit-logs" />,
-        action: actions.exportAuditLogsAction,
-        title: t('dataExport.auditLogs.menuCaption'),
-        context: manager,
-        'data-testid': 'dashboard-managers-export-audit-logs',
-      },
     );
   }
 
