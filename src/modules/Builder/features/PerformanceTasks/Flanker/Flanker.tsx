@@ -12,11 +12,13 @@ import { RoundSettings } from './RoundSettings';
 export const Flanker = () => {
   const { t } = useTranslation();
 
+  const dataTestid = 'builder-activity-flanker';
+
   return (
     <Box sx={{ overflowY: 'auto' }}>
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t('flanker')}</StyledHeadlineLarge>
-        <NameDescription />
+        <NameDescription data-testid={dataTestid} />
         <GeneralSettings />
         <RoundSettings uiType={RoundTypeEnum.Practice} />
         <RoundSettings uiType={RoundTypeEnum.Test} />

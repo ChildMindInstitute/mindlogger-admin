@@ -2,16 +2,26 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCurrentActivity,
+  useCustomFormContext,
+  useImmediateValidation,
+} from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 
-export const NameDescriptionContent = () => {
+import { NameDescriptionContentProps } from './NameDescriptionContent.types';
+
+export const NameDescriptionContent = ({
+  'data-testid': dataTestid,
+}: NameDescriptionContentProps) => {
   const { t } = useTranslation();
   const { control } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const dataTestid = 'builder-activity-flanker';
+  const handleNameChange = useImmediateValidation(`${fieldName}.name`);
+  const handleDescriptionChange = useImmediateValidation(`${fieldName}.description`);
+
   const commonProps = {
     control,
     fullWidth: true,
@@ -28,6 +38,7 @@ export const NameDescriptionContent = () => {
           label={t('activityName')}
           maxLength={MAX_NAME_LENGTH}
           data-testid={`${dataTestid}-name`}
+          onChange={handleNameChange}
         />
       </Box>
       <Box sx={{ mb: theme.spacing(1.6) }}>
@@ -40,6 +51,7 @@ export const NameDescriptionContent = () => {
           multiline
           rows={TEXTAREA_ROWS_COUNT}
           data-testid={`${dataTestid}-description`}
+          onChange={handleDescriptionChange}
         />
       </Box>
     </>

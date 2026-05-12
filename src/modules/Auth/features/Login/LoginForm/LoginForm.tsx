@@ -16,7 +16,7 @@ import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { variables } from 'shared/styles';
 import { StyledErrorText, StyledHeadlineSmall } from 'shared/styles/styledComponents';
 import { LocationStateKeys } from 'shared/types';
-import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -61,6 +61,8 @@ export const LoginForm = () => {
 
       // Check if MFA is required
       if (response?.result && 'mfaRequired' in response.result && response.result.mfaRequired) {
+        // Track MFA challenge presented
+        Mixpanel.track({ action: MixpanelEventType.MFAChallengePresented });
         // MFA session is set by the reducer, navigate to MFA verification page
         navigate(page.verifyMFA);
 
@@ -82,13 +84,22 @@ export const LoginForm = () => {
         }
       }
 
-      Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
+      Mixpanel.track({
+        action: MixpanelEventType.LoginSuccessful,
+        [MixpanelProps.MFAUsed]: false,
+        [MixpanelProps.MFAMethodUsed]: null,
+      });
 
       clearSoftLock();
     }
 
     if (signIn.rejected.match(result)) {
       setErrorMessage(result.payload as string);
+      // Track login failed
+      Mixpanel.track({
+        action: MixpanelEventType.LoginFailed,
+        [MixpanelProps.FailureStage]: 'Credentials',
+      });
     }
   };
 
@@ -145,7 +156,10 @@ export const LoginForm = () => {
   };
 
   const handleLoginClick = () => {
-    Mixpanel.track({ action: MixpanelEventType.LoginBtnClick });
+    Mixpanel.track({
+      action: MixpanelEventType.LoginBtnClick,
+      [MixpanelProps.AuthMethod]: 'Password',
+    });
   };
 
   const handleResetPasswordClick = () => {

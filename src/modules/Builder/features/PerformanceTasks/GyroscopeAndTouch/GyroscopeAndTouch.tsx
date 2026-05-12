@@ -20,7 +20,7 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
     <Box sx={{ overflowY: 'auto' }}>
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t(type || '')}</StyledHeadlineLarge>
-        <NameDescription />
+        <NameDescription data-testid={dataTestid} />
         <GeneralSettings />
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('instructions')}</StyledTitleLarge>
         <Instruction

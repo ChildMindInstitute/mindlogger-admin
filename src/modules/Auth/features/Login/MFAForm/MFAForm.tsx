@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, TextField } from '@mui/material';
 
 import { StyledBodyMedium, StyledHeadlineSmall, StyledLinkBtn, variables } from 'shared/styles';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 import { mfaFormSchema } from './MFAForm.schema';
 import { StyledMFAContainer, StyledMFAForm, StyledMFAButton } from './MFAForm.styles';
@@ -67,6 +68,8 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   };
 
   const handleRecoveryClick = () => {
+    // Track recovery link click
+    Mixpanel.track({ action: MixpanelEventType.CantAccessAuthAppClick });
     if (onSwitchToRecovery) {
       onSwitchToRecovery();
     }
