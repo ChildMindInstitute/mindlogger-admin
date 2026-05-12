@@ -4,6 +4,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+import * as reduxHooks from 'redux/store/hooks';
+
 import { useMFASetup } from './useMFASetup';
 import { MFA_ERROR_MESSAGES } from './MFASetup.const';
 import {
@@ -19,9 +22,18 @@ import {
 } from '../__mocks__/mfa.mocks';
 import { setupMFATests, mockMFAInitiateSuccess, mockMFAVerifySuccess } from '../__tests__/helpers';
 
+// Mock Redux hooks
+vi.mock('redux/store/hooks', () => ({
+  useAppSelector: vi.fn(),
+}));
+
+const TEST_USER_ID = 'test-user-123';
+
 describe('useMFASetup', () => {
   beforeEach(() => {
     setupMFATests();
+    // Mock useAppSelector to return a test user ID
+    vi.mocked(reduxHooks.useAppSelector).mockReturnValue(TEST_USER_ID);
   });
 
   describe('Initialization', () => {
@@ -846,6 +858,114 @@ describe('useMFASetup', () => {
       await waitFor(() => {
         expect(result.current.error).toBeTruthy();
       });
+    });
+  });
+
+  describe('Mixpanel Tracking', () => {
+    beforeEach(() => {
+      vi.mocked(Mixpanel.track).mockClear();
+      vi.mocked(Mixpanel.updateProfile).mockClear();
+    });
+
+    it('should track MFASetupStarted when setup is initiated', async () => {
+      mockMFAInitiateSuccess();
+
+      renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(Mixpanel.track).toHaveBeenCalledWith({
+          action: MixpanelEventType.MFASetupStarted,
+        });
+      });
+    });
+
+    it('should track MFAEnabledSuccessfully with MFA properties when verification succeeds', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      await waitFor(() => {
+        expect(result.current.verificationCode).toBe('123456');
+      });
+
+      mockMFAVerifySuccess();
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(Mixpanel.track).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: MixpanelEventType.MFAEnabledSuccessfully,
+            'MFA Enabled': true,
+            'MFA Enrolled At': expect.any(String),
+            'MFA Last Updated At': expect.any(String),
+          }),
+        );
+      });
+    });
+
+    it('should update Mixpanel profile when MFA is enabled successfully', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      mockMFAVerifySuccess();
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(Mixpanel.updateProfile).toHaveBeenCalledWith(
+          TEST_USER_ID,
+          expect.objectContaining({
+            'MFA Enabled': true,
+          }),
+        );
+      });
+    });
+
+    it('should not track MFAEnabledSuccessfully when verification fails', async () => {
+      mockMFAInitiateSuccess();
+      const { result } = renderHook(() => useMFASetup(true));
+
+      await waitFor(() => {
+        expect(result.current.provisioningUri).toBeTruthy();
+      });
+
+      act(() => {
+        result.current.setVerificationCode('123456');
+      });
+
+      vi.mocked(axios.post).mockRejectedValueOnce(mockInvalidCodeError);
+
+      await result.current.handleVerify();
+
+      await waitFor(() => {
+        expect(result.current.error).toBeTruthy();
+      });
+
+      // Should have called MFASetupStarted but not MFAEnabledSuccessfully
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.MFASetupStarted,
+      });
+      expect(Mixpanel.track).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: MixpanelEventType.MFAEnabledSuccessfully,
+        }),
+      );
     });
   });
 });

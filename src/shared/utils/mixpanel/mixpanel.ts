@@ -53,4 +53,16 @@ export const Mixpanel = {
       });
     }
   },
+  updateProfile(userId: string | undefined, properties: Record<string, unknown>) {
+    if (shouldEnableMixpanel) {
+      import('mixpanel-browser').then(({ default: mixpanel }) => {
+        if (userId) {
+          mixpanel.identify(userId);
+        } else {
+          console.warn('[Mixpanel] updateProfile called without userId - profile may not update');
+        }
+        mixpanel.people.set(properties);
+      });
+    }
+  },
 };
