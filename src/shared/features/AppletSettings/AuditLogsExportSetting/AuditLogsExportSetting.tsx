@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
 
-import { DataExportPopup } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { applet } from 'shared/state/Applet';
@@ -13,36 +12,25 @@ import {
   AuditLogsExportFormValues,
   AuditLogsExportSettingProps,
 } from './AuditLogsExportSetting.types';
-import { AuditLogsExportPopup } from './AuditLogsExportPopup/AuditLogsExportPopup';
+import { AuditLogsExportSettingsPopup } from './Popups/AuditLogsExportSettingsPopup/AuditLogsExportSettingsPopup';
+import { AuditLogsExportPopup } from './Popups/AuditLogsExportPopup/AuditLogsExportPopup';
 import { auditLogsExportSettingSchema } from './AuditLogsExportSetting.schema';
 
 export const AuditLogsExportSetting = ({
   isExportSettingsOpen,
   onExportSettingsClose,
   onExportPopupClose,
-  chosenAppletData,
   'data-testid': dataTestId,
 }: AuditLogsExportSettingProps) => {
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const { result } = applet.useAppletData() ?? {};
-  const appletData = chosenAppletData ?? result;
-
-  const minDate = useMemo(() => new Date(appletData?.createdAt ?? ''), [appletData]);
+  const appletId = result?.id;
+  const minDate = useMemo(() => new Date(result?.createdAt ?? ''), [result]);
   const maxDate = useMemo(() => getNormalizedTimezoneDate(new Date().toString()), []);
 
-  let appletName = '';
-  let contextItemName = '';
+  const contextItemName = result?.displayName ?? '';
 
-  if (appletData) {
-    if ('appletDisplayName' in appletData) {
-      appletName = appletData.appletDisplayName ?? '';
-    } else if ('displayName' in appletData) {
-      appletName = appletData.displayName;
-    }
-
-    contextItemName = appletName;
-  }
-
+  /** Sets our initial values for the audit-logs export form */
   const defaultValues: AuditLogsExportFormValues = useMemo(
     () => ({
       dateType: DateRangePickerType.AllTime,
@@ -52,6 +40,7 @@ export const AuditLogsExportSetting = ({
     }),
     [minDate, maxDate],
   );
+
   const methods = useForm<AuditLogsExportFormValues>({
     resolver: yupResolver(
       auditLogsExportSettingSchema() as ObjectSchema<AuditLogsExportFormValues>,
@@ -71,8 +60,7 @@ export const AuditLogsExportSetting = ({
   return (
     <FormProvider {...methods}>
       {isExportSettingsOpen && (
-        <AuditLogsExportPopup
-          contextItemName={contextItemName}
+        <AuditLogsExportSettingsPopup
           isOpen
           onClose={() => {
             resetDefaultValues();
@@ -84,20 +72,20 @@ export const AuditLogsExportSetting = ({
           }}
           minDate={minDate}
           maxDate={maxDate}
+          contextItemName={contextItemName}
           data-testid={`${dataTestId}-settings`}
         />
       )}
       {dataIsExporting && (
-        <DataExportPopup
-          isAppletSetting={false}
+        <AuditLogsExportPopup
+          appletId={appletId as string}
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
-          chosenAppletData={null}
-          data-testid={`${dataTestId}-modal`}
           handlePopupClose={() => {
             resetDefaultValues();
             onExportPopupClose?.();
           }}
+          data-testid={`${dataTestId}-modal`}
         />
       )}
     </FormProvider>
