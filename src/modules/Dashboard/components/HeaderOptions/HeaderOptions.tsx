@@ -107,9 +107,7 @@ export const HeaderOptions = () => {
         isExportSettingsOpen={isAuditLogsExportOpen}
         onExportSettingsClose={handleCloseAuditLogsExport}
         data-testid={'audit-logs-export'}
-        onExportPopupClose={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        onExportPopupClose={() => setIsAuditLogsExportOpen(false)}
       />
     </StyledFlexTopCenter>
   ) : null;
