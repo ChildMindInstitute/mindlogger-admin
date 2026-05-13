@@ -79,7 +79,7 @@ export const ExportSettingsPopup = ({
             <DateRangePicker
               maxDate={maxDate}
               minDate={minDate}
-              data-testid={dataTestId}
+              data-testid={dataTestId ?? ""}
             />
 
             {filteredSupplementaryFiles.length > 0 && (

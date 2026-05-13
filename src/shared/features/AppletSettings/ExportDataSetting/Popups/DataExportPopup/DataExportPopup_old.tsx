@@ -61,6 +61,12 @@ const formatDateAsUTC = (date: Date): string => {
   return format(utcDate, DateFormats.shortISO);
 };
 
+/**
+ * Orchestrates the applet response export modal flow.
+ *
+ * Handles password validation for encrypted applets, paginated export requests,
+ * progress state, optional supplementary exporters, analytics, retry, and error reporting.
+ */
 export const DataExportPopup = ({
   filters = {},
   popupVisible,
