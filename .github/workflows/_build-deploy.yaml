@@ -58,7 +58,7 @@ jobs:
       - name: Configure aws credentials for secrets
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::917902836630:role/build-secrets
+          role-to-assume: arn:aws:iam::917902836630:role/github-oidc-build-secrets
           role-session-name: OIDC-GHA-Build-Secrets
           aws-region: us-east-1
 
