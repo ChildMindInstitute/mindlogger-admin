@@ -143,11 +143,6 @@ describe('ExportSettingsPopup', () => {
     });
   });
 
-  // Date preset value tests (toDate per preset), start/end-of-day normalization tests,
-  // and choose-dates picker interaction tests were removed because the date range logic
-  // now lives in the shared DateRangePicker component and is covered by
-  // DateRangePicker.test.tsx.
-
   describe("should appear export data popup for 'choose dates' date range", () => {
     test.each`
       route                                                                 | routePath                         | description
