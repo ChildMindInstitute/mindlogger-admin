@@ -5,31 +5,31 @@ import { useFormContext } from 'react-hook-form';
 
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
-import { AuditEvent } from 'shared/types/auditEvent';
 
 import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
+import { exportAuditLogsCsv } from './AuditLogsExportPopup.utils';
 
-export const useAuditLogsExport = (appletId: string | undefined) => {
+export const useAuditLogsExport = (
+    appletId: string | undefined,
+    appletName: string,
+    handlePopupClose: () => void,
+) => {
     const { getValues } = useFormContext<AuditLogsExportFormValues>();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
-    const [allAuditEvents, setAllAuditEvents] = useState<AuditEvent[] | null>(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const abortControllerRef = useRef<AbortController | null>(null);
+    const handlePopupCloseRef = useRef(handlePopupClose);
+    handlePopupCloseRef.current = handlePopupClose;
+    const isExportingRef = useRef(false);
 
     const fetchAuditLogs = useCallback(async () => {
-        if (!appletId) return;
-
-        // Cancel any in-flight export before starting a new one.
-        abortControllerRef.current?.abort();
-        const abortController = new AbortController();
-        abortControllerRef.current = abortController;
+        if (!appletId || isExportingRef.current) return;
+        isExportingRef.current = true;
 
         setIsLoading(true);
         setError(null);
-        setAllAuditEvents(null);
         setCurrentPage(0);
         setTotalPages(0);
 
@@ -37,14 +37,13 @@ export const useAuditLogsExport = (appletId: string | undefined) => {
             const { fromDate, toDate } = getValues();
             const params = {
                 appletId,
-                fromDate: format(fromDate, DateFormats.shortISO),
-                toDate: format(toDate, DateFormats.shortISO),
+                fromDate: format(fromDate, DateFormats.YearMonthDay),
+                toDate: format(toDate, DateFormats.YearMonthDay),
             };
 
             // Fetch the first page of audit logs and get the total number of pages
             const firstPageResponse = await getExportAuditLogsApi(
                 { ...params, page: 1 },
-                abortController.signal,
             );
             const { result: firstPageData, count: totalCount = 0 } = firstPageResponse.data;
             const pages = getExportPageAmount(totalCount);
@@ -52,45 +51,38 @@ export const useAuditLogsExport = (appletId: string | undefined) => {
             setTotalPages(pages);
             setCurrentPage(1);
 
-            const accumulatedEvents = [...firstPageData.auditEvents];
+            const fileName = `${appletName}-audit-logs-export`;
 
-            // Fetch the remaining pages of audit logs and accumulate the audit events
+            // Export first page immediately
+            await exportAuditLogsCsv(firstPageData, pages > 1 ? `${fileName}_page_1` : fileName);
+
+            // Fetch and export remaining pages one at a time
             for (let page = 2; page <= pages; page++) {
-                if (abortController.signal.aborted) return;
-
                 const nextPageResponse = await getExportAuditLogsApi(
                     { ...params, page },
-                    abortController.signal,
                 );
-                accumulatedEvents.push(...nextPageResponse.data.result.auditEvents);
+                await exportAuditLogsCsv(nextPageResponse.data.result, `${fileName}_page_${page}`);
                 setCurrentPage(page);
             }
 
-            setAllAuditEvents(accumulatedEvents);
+            handlePopupCloseRef.current();
         } catch (e) {
-            if ((e as Error).name !== 'AbortError') {
-                setError(e as Error);
-            }
+            setError(e as Error);
         } finally {
+            isExportingRef.current = false;
             setIsLoading(false);
         }
-    }, [appletId, getValues]);
+    }, [appletId, appletName, getValues]);
 
     useEffect(() => {
         if (!appletId) return;
 
         fetchAuditLogs();
-
-        return () => {
-            // Cancel the in-flight export when the component unmounts.
-            abortControllerRef.current?.abort();
-        };
     }, [fetchAuditLogs]);
 
     return {
         isLoading,
         error,
-        allAuditEvents,
         currentPage,
         totalPages,
         retry: fetchAuditLogs,

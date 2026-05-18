@@ -1,44 +1,35 @@
-export type EventAction = {};
-
-export type EventKind = {};
-
-export type EventOutcome = {};
-
-export type ExportAuditLogsResult = {
-  auditEvents: AuditEvent[];
-};
-
 export type AuditEvent = {
-  timestamp: string;
-  errorType: string;
-  eventAction: EventAction;
-  eventId: string;
-  eventKind: EventKind;
-  eventOutcome: EventOutcome;
-  eventModule: string;
-  eventDataSet: string;
-  serviceName: string;
-  serviceEnvironment: string;
-  userId: string;
-  userRoles: string[];
-  userTargetId: string;
-  userTargetEmail: string;
-  userTargetRoles: string[];
-  clientIp: string;
-  httpRequestId: string;
-  httpRequestMethod: string;
-  httpResponseStatusCode: number;
-  traceId: string;
-  urlPath: string;
-  urlQuery: string;
-  userAgent: string;
-  filePath: string;
-  curiousAppletId: string[];
-  curiousSubjectId: string[];
-  curiousFlowId: string[];
-  curiousActivityId: string[];
-  curiousSubmitId: string[];
-  curiousAnswerId: string[];
-  eventCategory: string[];
-  eventType: string;
+  '@timestamp': string;
+  'error.type': string | null;
+  'event.action': string;
+  'event.id': string;
+  'event.kind': string;
+  'event.outcome': string;
+  'event.module': string;
+  'event.dataset': string;
+  'service.name': string;
+  'service.environment': string;
+  'user.id': string;
+  'user.email': string | null;
+  'user.roles': string[] | null;
+  'user.target.id': string | null;
+  'user.target.email': string | null;
+  'user.target.roles': string[] | null;
+  'client.ip': string;
+  'http.request.id': string;
+  'http.request.method': string;
+  'http.response.status_code': number;
+  'trace.id': string;
+  'url.path': string;
+  'url.query': string;
+  'user_agent.original': string;
+  'file.path': string | null;
+  'curious.applet_id': string[] | null;
+  'curious.subject_id': string[] | null;
+  'curious.flow_id': string[] | null;
+  'curious.activity_id': string[] | null;
+  'curious.submit_id': string[] | null;
+  'curious.answer_id': string[] | null;
+  'event.category': string[];
+  'event.type': string[];
 };

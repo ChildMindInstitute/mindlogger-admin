@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
@@ -11,7 +11,6 @@ import {
 } from 'shared/styles';
 
 import { AuditLogsExportPopupProps } from './AuditLogsExportPopupProps.types';
-import { exportAuditLogsCsv } from './AuditLogsExportPopup.utils';
 import { useAuditLogsExport } from './useAuditLogsExport';
 import { applet } from 'redux/modules';
 
@@ -21,27 +20,21 @@ import { applet } from 'redux/modules';
 export const AuditLogsExportPopup = ({
   popupVisible,
   setPopupVisible,
-  handlePopupClose,
+  handlePopupClose: providedCloseHandler,
   'data-testid': dataTestId,
 }: AuditLogsExportPopupProps) => {
   const { t } = useTranslation('app');
 
   const { result: appletData } = applet.useAppletData() ?? {};
-  const appletId = appletData?.id
-  const { isLoading, error, allAuditEvents, currentPage, totalPages, retry } =
-    useAuditLogsExport(appletId);
+  const appletId = appletData?.id;
 
-  useEffect(() => {
-    if (!allAuditEvents || !appletId) return;
+  const handlePopupClose = useCallback(() => {
+    setPopupVisible(false);
+    providedCloseHandler?.();
+  }, [providedCloseHandler, setPopupVisible]);
 
-    // Once all audit events are fetched, export them as a CSV file and close the popup.
-    const doExport = async () => {
-      await exportAuditLogsCsv(allAuditEvents, appletData?.displayName ?? 'applet');
-      handlePopupClose();
-    };
-
-    doExport();
-  }, [allAuditEvents, setPopupVisible, handlePopupClose]);
+  const { isLoading, error, currentPage, totalPages, retry } =
+    useAuditLogsExport(appletId, appletData?.displayName ?? 'applet', handlePopupClose);
 
   const exportingModal = (
     <Modal

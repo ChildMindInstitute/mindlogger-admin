@@ -68,25 +68,6 @@ export const AuditLogsExportSettingsPopup = ({
               data-testid={`${dataTestId}-date-range-picker`}
             />
 
-            <StyledFlexColumn sx={{ gap: 1.6 }}>
-              <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>
-              <StyledFlexColumn gap={0.8}>
-                <CheckboxController
-                  control={control}
-                  sxLabelProps={{ m: 0 }}
-                  name={`supplementaryFiles.${AUDIT_LOGS_SUPPLEMENTARY_FILE_KEY}`}
-                  key={`audit-logs-export-supplementary-${AUDIT_LOGS_SUPPLEMENTARY_FILE_KEY}`}
-                  label={
-                    <StyledBodyLarge>
-                      {t(
-                        `dataExport.auditLogs.supplementaryFiles.includes.${AUDIT_LOGS_SUPPLEMENTARY_FILE_KEY}`,
-                      )}
-                    </StyledBodyLarge>
-                  }
-                />
-              </StyledFlexColumn>
-            </StyledFlexColumn>
-
             <StyledFlexAllCenter>
               <Button
                 onClick={onExport}

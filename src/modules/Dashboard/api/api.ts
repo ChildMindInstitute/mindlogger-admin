@@ -90,7 +90,7 @@ import {
 } from './api.types';
 import { DEFAULT_API_RESULTS_PER_PAGE } from './api.const';
 import { SubjectDetailsWithDataAccess } from '../types';
-import { ExportAuditLogsResult } from 'shared/types/auditEvent';
+import { AuditEvent } from 'shared/types/auditEvent';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -809,7 +809,7 @@ export const getExportAuditLogsApi = (
   { appletId, fromDate, toDate, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE }: ExportAuditLogs,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<ResponseWithObject<ExportAuditLogsResult>>(
+  authApiClient.get<Response<AuditEvent>>(
     `/audit/applets/${appletId}/events`,
     { signal, params: { fromDate, toDate, page, limit } },
   );
