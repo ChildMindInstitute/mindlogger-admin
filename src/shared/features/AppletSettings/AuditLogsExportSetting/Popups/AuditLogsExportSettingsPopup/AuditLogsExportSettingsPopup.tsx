@@ -16,8 +16,6 @@ import { DateRangePicker } from 'shared/components/DateRangePicker';
 
 import { AuditLogsExportSettingsPopupProps } from './AuditLogsExportSettingsPopup.types';
 import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
-import { useAuditLogsExport } from '../AuditLogsExportPopup/useAuditLogsExport';
-import { AuditLogsExportPopup } from '../AuditLogsExportPopup/AuditLogsExportPopup';
 
 /**
  * Audit Logs Export Popup - This is the popup that appears when the user clicks the "Export Audit Logs" button in the applet settings page.

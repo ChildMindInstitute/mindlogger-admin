@@ -805,9 +805,13 @@ export const getAppletVersionChangesApi = (
 /**
  * Get audit logs from API given a date range and applet ID
  * */
-export const getExportAuditLogsApi = (
-  { appletId, fromDate, toDate, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE }: ExportAuditLogs,
-) =>
+export const getExportAuditLogsApi = ({
+  appletId,
+  fromDate,
+  toDate,
+  page = 1,
+  limit = DEFAULT_API_RESULTS_PER_PAGE,
+}: ExportAuditLogs) =>
   authApiClient.get<Response<AuditEvent>>(`/audit/applets/${appletId}/events`, {
     params: { fromDate, toDate, page, limit },
   });
