@@ -10,10 +10,9 @@ import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 import { applet } from 'shared/state/Applet';
 import { UniqueTuple } from 'shared/types';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
-
-import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
+import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import {
   ExportDataExported,
   ExportDataFormValues,

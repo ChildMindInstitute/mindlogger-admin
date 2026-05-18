@@ -10,10 +10,9 @@ import { DateFormats } from 'shared/consts';
 import { mockedApplet, mockedAppletId } from 'shared/mock';
 import { SettingParam } from 'shared/utils';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-
-import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
+import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import {
   ExportDataExported,
   ExportDataFormValues,
@@ -119,7 +118,7 @@ describe('ExportSettingsPopup', () => {
 
   describe('should appear export data popup for date range', () => {
     test.each`
-      exportDataType              | description
+      exportDataType                   | description
       ${DateRangePickerType.Last24h}   | ${'last 24h'}
       ${DateRangePickerType.LastMonth} | ${'last month'}
       ${DateRangePickerType.LastWeek}  | ${'last week'}
@@ -133,7 +132,9 @@ describe('ExportSettingsPopup', () => {
           preloadedState,
         },
       );
-      const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-date-range-picker`);
+      const dateType = screen.getByTestId(
+        `${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-date-range-picker`,
+      );
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
 
@@ -161,7 +162,9 @@ describe('ExportSettingsPopup', () => {
           { preloadedState, route, routePath },
         );
       });
-      const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-date-range-picker`);
+      const dateType = screen.getByTestId(
+        `${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-date-range-picker`,
+      );
       expect(dateType).toBeVisible();
       expect(screen.getByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeVisible();
 

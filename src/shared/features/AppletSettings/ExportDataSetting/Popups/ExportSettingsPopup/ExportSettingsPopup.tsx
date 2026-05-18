@@ -16,10 +16,7 @@ import {
   StyledTitleBoldMedium,
 } from 'shared/styles';
 
-import {
-  ExportDataFormValues,
-  SupplementaryFilesFormValues,
-} from '../../ExportDataSetting.types';
+import { ExportDataFormValues, SupplementaryFilesFormValues } from '../../ExportDataSetting.types';
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
 import { getDataExportedOptions } from './ExportSettingsPopup.utils';
 
@@ -76,11 +73,7 @@ export const ExportSettingsPopup = ({
                 />
               </StyledFlexColumn>
             )}
-            <DateRangePicker
-              maxDate={maxDate}
-              minDate={minDate}
-              data-testid={dataTestId ?? ""}
-            />
+            <DateRangePicker maxDate={maxDate} minDate={minDate} data-testid={dataTestId ?? ''} />
 
             {filteredSupplementaryFiles.length > 0 && (
               <StyledFlexColumn sx={{ gap: 1.6 }}>

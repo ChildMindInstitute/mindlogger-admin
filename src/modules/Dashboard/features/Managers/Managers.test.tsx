@@ -109,10 +109,7 @@ describe('Managers component tests', () => {
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await clickActionDots();
-    const actionsDataTestIds = [
-      'dashboard-managers-edit-user',
-      'dashboard-managers-remove-access',
-    ];
+    const actionsDataTestIds = ['dashboard-managers-edit-user', 'dashboard-managers-remove-access'];
 
     await waitFor(() => {
       actionsDataTestIds.forEach((dataTestId) =>

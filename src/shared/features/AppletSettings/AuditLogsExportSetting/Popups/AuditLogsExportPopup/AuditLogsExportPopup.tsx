@@ -9,13 +9,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { applet } from 'redux/modules';
 
 import { AuditLogsExportPopupProps } from './AuditLogsExportPopupProps.types';
 import { useAuditLogsExport } from './useAuditLogsExport';
-import { applet } from 'redux/modules';
 
 /**
-  * This handles the export logic for the audit logs export
+ * This handles the export logic for the audit logs export
  */
 export const AuditLogsExportPopup = ({
   popupVisible,
@@ -33,8 +33,11 @@ export const AuditLogsExportPopup = ({
     providedCloseHandler?.();
   }, [providedCloseHandler, setPopupVisible]);
 
-  const { isLoading, error, currentPage, totalPages, retry } =
-    useAuditLogsExport(appletId, appletData?.displayName ?? 'applet', handlePopupClose);
+  const { isLoading, error, currentPage, totalPages, retry } = useAuditLogsExport(
+    appletId,
+    appletData?.displayName ?? 'applet',
+    handlePopupClose,
+  );
 
   const exportingModal = (
     <Modal

@@ -80,9 +80,7 @@ describe('AuditLogsExportSetting', () => {
       { preloadedState },
     );
 
-    await waitFor(() =>
-      expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument());
 
     fireEvent.click(screen.getByTestId(`${dataTestId}-settings-download-button`));
 

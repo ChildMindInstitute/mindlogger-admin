@@ -13,14 +13,9 @@ import {
   StyledTitleBoldMedium,
 } from 'shared/styles';
 import { DateRangePicker } from 'shared/components/DateRangePicker';
-import { CheckboxController } from 'shared/components/FormComponents';
 
 import { AuditLogsExportSettingsPopupProps } from './AuditLogsExportSettingsPopup.types';
-import {
-  AUDIT_LOGS_SUPPLEMENTARY_FILE_KEY,
-  AuditLogsExportFormValues,
-} from '../../AuditLogsExportSetting.types';
-
+import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
 
 /**
  * Audit Logs Export Popup - This is the popup that appears when the user clicks the "Export Audit Logs" button in the applet settings page.

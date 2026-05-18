@@ -7,9 +7,9 @@ import { initialStateData } from 'redux/modules';
 import { mockedApplet, mockedPassword } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
 import { ExportDataSetting } from './ExportDataSetting';
-import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
 const createdDate = '2023-11-14T14:43:33.369902';
 // Set a fixed "now" date for consistent test results
@@ -99,7 +99,7 @@ describe('ExportDataSetting', () => {
 
   describe('should pass settings specified in settings popup to the export popup', () => {
     test.each`
-      exportType                  | expectedFromTime                       | description
+      exportType                       | expectedFromTime                       | description
       ${DateRangePickerType.AllTime}   | ${startOfDay(new Date(createdDate))}   | ${'use applet create time and now for all time'}
       ${DateRangePickerType.Last24h}   | ${addDays(mockedNow, -1)}              | ${'use correct dates for last 24h'}
       ${DateRangePickerType.LastWeek}  | ${startOfDay(addDays(mockedNow, -7))}  | ${'use correct dates for last week'}

@@ -4,6 +4,7 @@ import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } fr
 import { ExportDataResult } from 'shared/types';
 import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
+import { AuditEvent } from 'shared/types/auditEvent';
 
 import {
   TransferOwnershipType,
@@ -90,7 +91,6 @@ import {
 } from './api.types';
 import { DEFAULT_API_RESULTS_PER_PAGE } from './api.const';
 import { SubjectDetailsWithDataAccess } from '../types';
-import { AuditEvent } from 'shared/types/auditEvent';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -809,10 +809,10 @@ export const getExportAuditLogsApi = (
   { appletId, fromDate, toDate, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE }: ExportAuditLogs,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<AuditEvent>>(
-    `/audit/applets/${appletId}/events`,
-    { signal, params: { fromDate, toDate, page, limit } },
-  );
+  authApiClient.get<Response<AuditEvent>>(`/audit/applets/${appletId}/events`, {
+    signal,
+    params: { fromDate, toDate, page, limit },
+  });
 
 export const getExportDataApi = (
   { appletId, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE, ...rest }: ExportData,
