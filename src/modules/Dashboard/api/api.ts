@@ -807,10 +807,8 @@ export const getAppletVersionChangesApi = (
  * */
 export const getExportAuditLogsApi = (
   { appletId, fromDate, toDate, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE }: ExportAuditLogs,
-  signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<AuditEvent>>(`/audit/applets/${appletId}/events`, {
-    signal,
     params: { fromDate, toDate, page, limit },
   });
 
