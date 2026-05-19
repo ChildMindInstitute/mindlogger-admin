@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { MFAForm } from './MFAForm';
@@ -15,13 +16,6 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockNavigate,
   };
 });
-
-vi.mock('shared/utils/mixpanel', () => ({
-  Mixpanel: {
-    track: vi.fn(),
-    login: vi.fn(),
-  },
-}));
 
 describe('MFAForm', () => {
   // MFA session only contains backend-provided tokens
@@ -252,7 +246,37 @@ describe('MFAForm', () => {
     const recoveryLink = screen.getByText("I can't access my authenticator app");
     fireEvent.click(recoveryLink);
 
+    // Verify Mixpanel tracking
+    expect(Mixpanel.track).toHaveBeenCalledWith({
+      action: MixpanelEventType.CantAccessAuthAppClick,
+    });
+    // Verify callback
     expect(mockSwitchToRecovery).toHaveBeenCalled();
+  });
+
+  describe('Mixpanel tracking', () => {
+    it('tracks CantAccessAuthAppClick when recovery link is clicked', () => {
+      renderMFAForm({}, vi.fn());
+
+      const recoveryLink = screen.getByText("I can't access my authenticator app");
+      fireEvent.click(recoveryLink);
+
+      expect(Mixpanel.track).toHaveBeenCalledTimes(1);
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.CantAccessAuthAppClick,
+      });
+    });
+
+    it('tracks recovery link click even when onSwitchToRecovery is not provided', () => {
+      renderMFAForm({});
+
+      const recoveryLink = screen.getByText("I can't access my authenticator app");
+      fireEvent.click(recoveryLink);
+
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.CantAccessAuthAppClick,
+      });
+    });
   });
 
   it.skip('restricts input to 6 digits only', async () => {

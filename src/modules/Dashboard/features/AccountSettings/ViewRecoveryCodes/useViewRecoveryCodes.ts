@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 
 import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 import { parseError } from './ViewRecoveryCodes.utils';
 import { ErrorScenario, ErrorMetadata } from './ViewRecoveryCodes.types';
@@ -96,6 +97,9 @@ export const useViewRecoveryCodes = () => {
       // Store the full recovery code items (with used status)
       setRecoveryCodes(recoveryCodesData.codes);
 
+      // Track recovery codes viewed
+      Mixpanel.track({ action: MixpanelEventType.RecoveryCodesViewed });
+
       // Store download token for backend download (5-minute expiry)
       if (recoveryCodesData.downloadToken) {
         setDownloadToken(recoveryCodesData.downloadToken);
@@ -146,6 +150,9 @@ export const useViewRecoveryCodes = () => {
 
       // Store the full recovery code items (with used status)
       setRecoveryCodes(recoveryCodesData.codes);
+
+      // Track recovery codes viewed
+      Mixpanel.track({ action: MixpanelEventType.RecoveryCodesViewed });
 
       // Store download token for backend download (5-minute expiry)
       if (recoveryCodesData.downloadToken) {

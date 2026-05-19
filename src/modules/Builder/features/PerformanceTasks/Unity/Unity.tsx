@@ -1,16 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { Svg } from 'shared/components';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { NameDescription } from '../NameDescription';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import UnityFileModal from './UnityFileModal/UnityFileModal';
-import { UnityFilePreview } from './UnityFilePreview';
+import { UnityFileButton } from './UnityFileButton';
 
 export const Unity = () => {
   const { t } = useTranslation();
@@ -38,30 +37,33 @@ export const Unity = () => {
 
   const dataTestid = 'builder-activity-unity';
 
-  const handleUpload = (uploadedFile: File) => {
-    setFile(uploadedFile);
-    const formFile = watch(urlName);
-    if (formFile === null) {
-      setFileContent('');
+  const handleUpload = useCallback(
+    (uploadedFile: File) => {
+      setFile(uploadedFile);
+      const formFile = watch(urlName);
+      if (formFile === null) {
+        setFileContent('');
 
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const fileContentString = e.target?.result as string;
-      setFileContent(fileContentString);
-      setValue(urlName, fileContentString);
-    };
-    reader.readAsText(uploadedFile);
-  };
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContentString = e.target?.result as string;
+        setFileContent(fileContentString);
+        setValue(urlName, fileContentString);
+      };
+      reader.readAsText(uploadedFile);
+    },
+    [watch, urlName, setValue],
+  );
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     if (url && url.length > 0) {
@@ -69,23 +71,10 @@ export const Unity = () => {
     }
   }, [url]);
 
-  // TODO Upload a new file if already uploaded should be implemented - TASK https://mindlogger.atlassian.net/browse/M2-7779
-  const OpenModalButton = () =>
-    isValidFile ? (
-      <UnityFilePreview fileContent={fileContent} />
-    ) : (
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <Button
-          variant="text"
-          startIcon={<Svg id="add" width={18} height={18} />}
-          onClick={handleOpenModal}
-          sx={{ ml: theme.spacing(-1) }}
-          data-testid="builder-activities-add-activity"
-        >
-          {t('upload')}
-        </Button>
-      </Box>
-    );
+  const contentProps = useMemo(
+    () => ({ isValidFile, fileContent, onOpenModal: handleOpenModal }),
+    [isValidFile, fileContent, handleOpenModal],
+  );
 
   return (
     <Box sx={{ overflowY: 'auto' }}>
@@ -101,14 +90,15 @@ export const Unity = () => {
         <ToggleItemContainer
           uiType={ToggleContainerUiType.PerformanceTask}
           title={t('unityTaskConfigurationFile')}
-          Content={OpenModalButton}
+          Content={UnityFileButton}
+          contentProps={contentProps}
           data-testid="builder-activity-unity-file-uploader"
         />
       </StyledPerformanceTaskBody>
       <UnityFileModal
         dataTestid={dataTestid}
         onUpload={handleUpload}
-        onClose={() => handleCloseModal()}
+        onClose={handleCloseModal}
         isOpen={isModalOpen}
       />
     </Box>

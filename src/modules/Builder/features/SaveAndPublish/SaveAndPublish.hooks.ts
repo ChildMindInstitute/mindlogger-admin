@@ -139,10 +139,10 @@ export const useCheckIfHasAtLeastOneItem = () => {
 export const useCheckIfHasEmptyRequiredFields = () => {
   const { getValues } = useCustomFormContext();
   const { featureFlags } = useFeatureFlags();
-  const appletSchema = AppletSchema(featureFlags);
 
   return async () => {
     const body = getValues();
+    const appletSchema = AppletSchema(featureFlags);
 
     try {
       await appletSchema.validate(body, { abortEarly: false });
@@ -157,10 +157,10 @@ export const useCheckIfHasEmptyRequiredFields = () => {
 export const useCheckIfHasErrorsInFields = () => {
   const { getValues } = useCustomFormContext();
   const { featureFlags } = useFeatureFlags();
-  const appletSchema = AppletSchema(featureFlags);
 
   return async () => {
     const body = getValues();
+    const appletSchema = AppletSchema(featureFlags);
 
     try {
       await appletSchema.validate(body, { abortEarly: false });
