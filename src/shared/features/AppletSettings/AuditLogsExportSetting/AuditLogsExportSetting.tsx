@@ -36,7 +36,6 @@ export const AuditLogsExportSetting = ({
       dateType: DateRangePickerType.AllTime,
       fromDate: startOfDay(minDate),
       toDate: endOfDay(maxDate),
-      supplementaryFiles: { tsv: false },
     }),
     [minDate, maxDate],
   );

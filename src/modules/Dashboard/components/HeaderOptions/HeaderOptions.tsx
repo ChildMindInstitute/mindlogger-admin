@@ -7,16 +7,19 @@ import { page } from 'resources';
 import { Menu, Svg } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
-import { Mixpanel, checkIfCanAccessData, checkIfCanEdit, MixpanelEventType } from 'shared/utils';
+import {
+  Mixpanel,
+  checkIfCanAccessData,
+  checkIfCanEdit,
+  MixpanelEventType,
+  checkIfFullAccess,
+} from 'shared/utils';
 import { workspaces } from 'shared/state';
 import { AuditLogsExportSetting } from 'shared/features/AppletSettings/AuditLogsExportSetting/AuditLogsExportSetting';
 
 export const HeaderOptions = () => {
   const [isResponseDataExportOpen, setIsResponseDataExportOpen] = useState(false);
   const [isAuditLogsExportOpen, setIsAuditLogsExportOpen] = useState(false);
-
-  const [isResponseDataExportPopupOpen, setIsResponseDataExportPopupOpen] = useState(false);
-  const [isAuditLogsExportPopupOpen, setIsAuditLogsExportPopupOpen] = useState(false);
 
   const { t } = useTranslation('app');
   const { appletId } = useParams();
@@ -27,7 +30,14 @@ export const HeaderOptions = () => {
   const exportButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenExportMenu = () => {
-    setShowExportMenu(true);
+    const fullAccess = checkIfFullAccess(roles);
+
+    if (fullAccess) {
+      setShowExportMenu(true);
+    } else {
+      setIsResponseDataExportOpen(true);
+      Mixpanel.track({ action: MixpanelEventType.ExportDataClick });
+    }
   };
 
   const handleOpenAuditLogs = () => {
