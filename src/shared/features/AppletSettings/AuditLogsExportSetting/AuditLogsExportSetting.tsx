@@ -77,7 +77,6 @@ export const AuditLogsExportSetting = ({
       )}
       {dataIsExporting && (
         <AuditLogsExportPopup
-          appletId={appletId as string}
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
           handlePopupClose={() => {
