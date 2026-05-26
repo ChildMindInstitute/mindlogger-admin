@@ -1805,6 +1805,7 @@
   "yesAuthorize": "Yes, authorize",
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
+  "zu": "Zulu",
   "positiveIntegerRequired": "A positive integer is required",
   "positiveIntegerOrZeroRequired": "A positive integer or 0 is required",
   "fromToHint": "From {{min}} to {{max}}",

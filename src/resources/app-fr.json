@@ -1804,6 +1804,7 @@
   "yesAuthorize": "Oui, autoriser",
   "yesRemove": "Oui, supprimer",
   "youNeedToAuthorize": "Vous devez autoriser",
+  "zu": "Zoulou",
   "positiveIntegerRequired": "Un entier positif est requis",
   "positiveIntegerOrZeroRequired": "Un entier positif ou 0 est requis",
   "fromToHint": "De {{min}} à {{max}}",
