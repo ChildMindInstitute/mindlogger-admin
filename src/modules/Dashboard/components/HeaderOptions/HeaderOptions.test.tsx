@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
-import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { HeaderOptions } from './HeaderOptions';
 
@@ -80,6 +80,7 @@ describe('HeaderOptions', () => {
 
     expect(spyMixpanelTrack).toHaveBeenCalledWith({
       action: MixpanelEventType.ExportAuditLogsClick,
+      [MixpanelProps.AppletId]: testAppletId,
     });
   });
 

@@ -193,6 +193,7 @@ describe('AuditLogsExportSetting', () => {
 
     expect(spyMixpanelTrack).toHaveBeenCalledWith({
       action: MixpanelEventType.ExportAuditLogsDownload,
+      [MixpanelProps.AppletId]: mockedApplet.id,
     });
   });
 
