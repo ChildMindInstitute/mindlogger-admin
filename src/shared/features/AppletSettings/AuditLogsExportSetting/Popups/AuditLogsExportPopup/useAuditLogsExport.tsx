@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { getExportAuditLogsApi } from 'api';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
 import { exportAuditLogsCsv } from './AuditLogsExportPopup.utils';
@@ -61,8 +62,16 @@ export const useAuditLogsExport = (
         setCurrentPage(page);
       }
 
+      Mixpanel.track({
+        action: MixpanelEventType.ExportAuditLogsSuccessful,
+        [MixpanelProps.AppletId]: appletId,
+      });
       handlePopupCloseRef.current();
     } catch (e) {
+      Mixpanel.track({
+        action: MixpanelEventType.ExportAuditLogsFailed,
+        [MixpanelProps.AppletId]: appletId,
+      });
       setError(e as Error);
     } finally {
       isExportingRef.current = false;

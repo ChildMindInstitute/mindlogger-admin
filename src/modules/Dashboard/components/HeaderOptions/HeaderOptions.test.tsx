@@ -5,6 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
+import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
 import { HeaderOptions } from './HeaderOptions';
 
@@ -47,8 +48,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
+
 describe('HeaderOptions', () => {
   beforeEach(() => {
+    spyMixpanelTrack.mockReset();
     renderWithProviders(<HeaderOptions />, { preloadedState: getPreloadedState() });
   });
 
@@ -68,6 +72,15 @@ describe('HeaderOptions', () => {
     fireEvent.click(screen.getByTestId('header-option-export-button'));
 
     expect(screen.queryByTestId('header-option-audit-logs-button')).toBeInTheDocument();
+  });
+
+  test('should track ExportAuditLogsClick when audit logs option is clicked', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+    fireEvent.click(screen.getByTestId('header-option-audit-logs-button'));
+
+    expect(spyMixpanelTrack).toHaveBeenCalledWith({
+      action: MixpanelEventType.ExportAuditLogsClick,
+    });
   });
 
   test('should contain link to settings page', () => {
