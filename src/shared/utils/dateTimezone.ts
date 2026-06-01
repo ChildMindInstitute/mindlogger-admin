@@ -1,3 +1,7 @@
+import { format } from 'date-fns';
+
+import { DateFormats } from 'shared/consts';
+
 export const MINUTES_TO_MILLISECONDS_MULTIPLIER = 60 * 1000;
 
 export const getNormalizeTimezoneData = (dateString: string) => {
@@ -21,4 +25,28 @@ export const getNormalizedTimezoneDate = (dateString: string) => {
   const { dateTime, userDateOffsetMilliseconds } = getNormalizeTimezoneData(dateString);
 
   return new Date(dateTime + userDateOffsetMilliseconds);
+};
+
+const formatDateAsUTC = (date: Date): string => {
+  const utcDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+  );
+
+  return format(utcDate, DateFormats.shortISO);
+};
+
+export const getLast24hUTCRange = () => {
+  const now = new Date();
+  const oneDayAgo = new Date(now);
+  oneDayAgo.setHours(now.getHours() - 24);
+
+  return {
+    fromDate: formatDateAsUTC(oneDayAgo),
+    toDate: formatDateAsUTC(now),
+  };
 };
