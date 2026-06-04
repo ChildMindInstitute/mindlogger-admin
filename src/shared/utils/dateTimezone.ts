@@ -27,7 +27,7 @@ export const getNormalizedTimezoneDate = (dateString: string) => {
   return new Date(dateTime + userDateOffsetMilliseconds);
 };
 
-const formatDateAsUTC = (date: Date): string => {
+export const formatDateAsUTC = (date: Date): string => {
   const utcDate = new Date(
     date.getUTCFullYear(),
     date.getUTCMonth(),
