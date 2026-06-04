@@ -465,6 +465,22 @@
   "dashboard": "Dashboard",
   "dataExport": {
     "title": "Data Export",
+    "responseData": {
+      "menuCaption": "Response Data"
+    },
+    "auditLogs": {
+      "menuCaption": "Security Audit Logs",
+      "title": "{{name}} security audit logs",
+      "header": "Export Security Audit Logs",
+      "label": "Export: ",
+      "description": "Download logs containing applet activity for analysis in SIEM software.",
+      "button": "Export",
+      "supplementaryFiles": {
+        "includes": {
+          "tsv": "Include human readable TSV file"
+        }
+      }
+    },
     "data": "Data",
     "dataExported": {
       "responsesOnly": "Responses Only",

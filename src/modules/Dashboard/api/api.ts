@@ -4,6 +4,7 @@ import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } fr
 import { ExportDataResult } from 'shared/types';
 import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
+import { AuditEvent } from 'shared/types/auditEvent';
 
 import {
   TransferOwnershipType,
@@ -86,6 +87,7 @@ import {
   DeviceScheduleHistoryData,
   FlowItemHistoryParams,
   FlowItemHistoryData,
+  ExportAuditLogs,
 } from './api.types';
 import { DEFAULT_API_RESULTS_PER_PAGE } from './api.const';
 import { SubjectDetailsWithDataAccess } from '../types';
@@ -799,6 +801,20 @@ export const getAppletVersionChangesApi = (
   { appletId, version }: AppletVersionChanges,
   signal?: AbortSignal,
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
+
+/**
+ * Get audit logs from API given a date range and applet ID
+ * */
+export const getExportAuditLogsApi = ({
+  appletId,
+  fromDatetime,
+  toDatetime,
+  page = 1,
+  limit = DEFAULT_API_RESULTS_PER_PAGE,
+}: ExportAuditLogs) =>
+  authApiClient.get<Response<AuditEvent>>(`/audit/applets/${appletId}/events`, {
+    params: { fromDatetime, toDatetime, page, limit },
+  });
 
 export const getExportDataApi = (
   { appletId, page = 1, limit = DEFAULT_API_RESULTS_PER_PAGE, ...rest }: ExportData,

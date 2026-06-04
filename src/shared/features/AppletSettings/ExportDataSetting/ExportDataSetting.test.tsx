@@ -7,9 +7,9 @@ import { initialStateData } from 'redux/modules';
 import { mockedApplet, mockedPassword } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
 import { ExportDataSetting } from './ExportDataSetting';
-import { ExportDateType } from './ExportDataSetting.types';
 
 const createdDate = '2023-11-14T14:43:33.369902';
 // Set a fixed "now" date for consistent test results
@@ -99,11 +99,11 @@ describe('ExportDataSetting', () => {
 
   describe('should pass settings specified in settings popup to the export popup', () => {
     test.each`
-      exportType                  | expectedFromTime                       | description
-      ${ExportDateType.AllTime}   | ${startOfDay(new Date(createdDate))}   | ${'use applet create time and now for all time'}
-      ${ExportDateType.Last24h}   | ${addDays(mockedNow, -1)}              | ${'use correct dates for last 24h'}
-      ${ExportDateType.LastWeek}  | ${startOfDay(addDays(mockedNow, -7))}  | ${'use correct dates for last week'}
-      ${ExportDateType.LastMonth} | ${startOfDay(addDays(mockedNow, -30))} | ${'use correct dates for last month'}
+      exportType                       | expectedFromTime                       | description
+      ${DateRangePickerType.AllTime}   | ${startOfDay(new Date(createdDate))}   | ${'use applet create time and now for all time'}
+      ${DateRangePickerType.Last24h}   | ${addDays(mockedNow, -1)}              | ${'use correct dates for last 24h'}
+      ${DateRangePickerType.LastWeek}  | ${startOfDay(addDays(mockedNow, -7))}  | ${'use correct dates for last week'}
+      ${DateRangePickerType.LastMonth} | ${startOfDay(addDays(mockedNow, -30))} | ${'use correct dates for last month'}
     `('$description', async ({ exportType, expectedFromTime }) => {
       const mockOnClose = vi.fn();
 
@@ -128,7 +128,7 @@ describe('ExportDataSetting', () => {
         expect(screen.queryByTestId(`${dataTestId}-settings`)).toBeInTheDocument(),
       );
 
-      const dateTypeField = screen.getByTestId(`${`${dataTestId}-settings`}-dateType`);
+      const dateTypeField = screen.getByTestId(`${`${dataTestId}-settings`}-date-range-picker`);
       expect(dateTypeField).toBeVisible();
 
       // Open the select dropdown

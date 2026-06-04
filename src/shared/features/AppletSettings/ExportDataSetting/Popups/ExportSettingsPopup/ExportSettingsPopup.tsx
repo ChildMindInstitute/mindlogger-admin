@@ -1,11 +1,9 @@
 import { Button } from '@mui/material';
-import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DatePicker } from 'shared/components/DatePicker';
-import { DateType } from 'shared/components/DatePicker/DatePicker.types';
+import { DateRangePicker } from 'shared/components/DateRangePicker';
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { Modal } from 'shared/components/Modal';
 import { Svg } from 'shared/components/Svg';
@@ -16,16 +14,11 @@ import {
   StyledFlexTopCenter,
   StyledModalWrapper,
   StyledTitleBoldMedium,
-  theme,
 } from 'shared/styles';
 
-import {
-  ExportDataFormValues,
-  ExportDateType,
-  SupplementaryFilesFormValues,
-} from '../../ExportDataSetting.types';
+import { ExportDataFormValues, SupplementaryFilesFormValues } from '../../ExportDataSetting.types';
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
-import { getDataExportedOptions, getDateTypeOptions } from './ExportSettingsPopup.utils';
+import { getDataExportedOptions } from './ExportSettingsPopup.utils';
 
 export const ExportSettingsPopup = ({
   isOpen,
@@ -40,73 +33,8 @@ export const ExportSettingsPopup = ({
 }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
 
-  const { control, setValue, watch } = useFormContext<ExportDataFormValues>() ?? {};
-  const dateType = watch('dateType');
-  const fromDate = watch('fromDate');
-  const toDate = watch('toDate');
+  const { control, watch } = useFormContext<ExportDataFormValues>() ?? {};
   const supplementaryFiles = watch('supplementaryFiles');
-  const hasCustomDate = dateType === ExportDateType.ChooseDates;
-
-  const commonProps = {
-    maxDate,
-    control,
-    inputSx: {
-      '& .MuiInputLabel-outlined': {
-        textTransform: 'capitalize',
-      },
-    },
-  };
-
-  const normalizeFromDate = useCallback(
-    (date: DateType | undefined) => {
-      if (!date) return;
-      setValue('fromDate', startOfDay(date));
-    },
-    [setValue],
-  );
-
-  const normalizeToDate = useCallback(
-    (date: DateType | undefined) => {
-      if (!date) return;
-      setValue('toDate', endOfDay(date));
-    },
-    [setValue],
-  );
-
-  const onFromDatePickerClose = () => {
-    let newToDate = toDate;
-    if (toDate < fromDate) {
-      const increasedFromDate = addDays(fromDate, 1);
-
-      newToDate = increasedFromDate <= maxDate ? increasedFromDate : maxDate;
-    }
-    normalizeToDate(newToDate);
-  };
-
-  useEffect(() => {
-    switch (dateType) {
-      case ExportDateType.AllTime:
-        normalizeFromDate(minDate);
-        normalizeToDate(maxDate);
-        break;
-      case ExportDateType.Last24h:
-        setValue('fromDate', addDays(maxDate, -1));
-        setValue('toDate', maxDate);
-        break;
-      case ExportDateType.LastWeek:
-        normalizeFromDate(addDays(maxDate, -7));
-        normalizeToDate(maxDate);
-        break;
-      case ExportDateType.LastMonth:
-        normalizeFromDate(addDays(maxDate, -30));
-        normalizeToDate(maxDate);
-        break;
-      case ExportDateType.ChooseDates:
-        normalizeFromDate(minDate);
-        normalizeToDate(maxDate);
-        break;
-    }
-  }, [dateType, minDate, maxDate, normalizeFromDate, normalizeToDate, setValue]);
 
   const filteredSupplementaryFiles = useMemo(
     () =>
@@ -133,8 +61,8 @@ export const ExportSettingsPopup = ({
                 {contextItemName} {t('dataExport.responses')}
               </StyledTitleBoldMedium>
             </StyledFlexTopCenter>
-            <StyledFlexColumn sx={{ gap: 1.6 }}>
-              {canExportEhrHealthData && (
+            {canExportEhrHealthData && (
+              <StyledFlexColumn sx={{ gap: 1.6 }}>
                 <SelectController
                   name="dataExported"
                   control={control}
@@ -143,44 +71,10 @@ export const ExportSettingsPopup = ({
                   data-testid={`${dataTestId}-data-exported`}
                   fullWidth
                 />
-              )}
-              <SelectController
-                name="dateType"
-                control={control}
-                options={getDateTypeOptions()}
-                label={t('dateRange')}
-                data-testid={`${dataTestId}-dateType`}
-                fullWidth
-              />
-            </StyledFlexColumn>
-            {hasCustomDate && (
-              <StyledFlexTopCenter>
-                <DatePicker
-                  {...commonProps}
-                  name="fromDate"
-                  onCloseCallback={(date) => {
-                    normalizeFromDate(date);
-                    onFromDatePickerClose();
-                  }}
-                  label={t('startDate')}
-                  minDate={minDate}
-                  data-testid={`${dataTestId}-from-date`}
-                  inputWrapperSx={{ width: '100%' }}
-                />
-                <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                  {t('smallTo')}
-                </StyledBodyLarge>
-                <DatePicker
-                  {...commonProps}
-                  name="toDate"
-                  onCloseCallback={normalizeToDate}
-                  minDate={fromDate}
-                  label={t('endDate')}
-                  data-testid={`${dataTestId}-to-date`}
-                  inputWrapperSx={{ width: '100%' }}
-                />
-              </StyledFlexTopCenter>
+              </StyledFlexColumn>
             )}
+            <DateRangePicker maxDate={maxDate} minDate={minDate} data-testid={dataTestId ?? ''} />
+
             {filteredSupplementaryFiles.length > 0 && (
               <StyledFlexColumn sx={{ gap: 1.6 }}>
                 <StyledBodyLarge>{t(`dataExport.supplementaryFiles.description`)}</StyledBodyLarge>

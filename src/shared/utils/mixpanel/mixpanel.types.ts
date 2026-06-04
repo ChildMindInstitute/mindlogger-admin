@@ -64,6 +64,7 @@ export enum MixpanelEventType {
   AppletEditSuccessful = 'Applet edit successful',
   AppletCreatedSuccessfully = 'Applet Created Successfully',
   ExportDataClick = 'Export Data click',
+  ExportAuditLogsClick = 'Export Audit Logs click',
   TakeNowDialogClosed = 'Take Now dialogue closed',
   MultiInformantStartActivityClick = 'Multi-informant Start Activity click',
   ProvidingResponsesDropdownOpened = '"Who will be providing responses" dropdown opened',
@@ -242,6 +243,10 @@ export type AppletSaveEvent =
 
 export type ExportDataClickEvent = WithAppletId<{
   action: MixpanelEventType.ExportDataClick;
+}>;
+
+export type ExportAuditLogsClickEvent = WithAppletId<{
+  action: MixpanelEventType.ExportAuditLogsClick;
 }>;
 
 type TakeNowEvent = WithFeature<
@@ -565,6 +570,7 @@ export type MixpanelEvent =
   | AppletEditSuccessfulEvent
   | AppletCreatedSuccessfullyEvent
   | ExportDataClickEvent
+  | ExportAuditLogsClickEvent
   | TakeNowDialogClosedEvent
   | MultiInformantStartActivityClickEvent
   | ProvidingResponsesDropdownOpenedEvent

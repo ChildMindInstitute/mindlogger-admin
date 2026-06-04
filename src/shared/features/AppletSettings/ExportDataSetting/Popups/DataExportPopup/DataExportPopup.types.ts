@@ -2,7 +2,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { SingleApplet } from 'shared/state';
 import { Encryption, ExportDataFilters } from 'shared/utils';
-import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type DataExportPopupProps = {
@@ -33,7 +33,7 @@ export type ExportDataProps = ExecuteAllPagesOfExportData & {
 };
 
 export type GetFormattedToDate = {
-  dateType?: ExportDateType;
+  dateType?: DateRangePickerType;
   formToDate?: Date;
 };
 
