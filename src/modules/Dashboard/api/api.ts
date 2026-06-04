@@ -807,13 +807,13 @@ export const getAppletVersionChangesApi = (
  * */
 export const getExportAuditLogsApi = ({
   appletId,
-  fromDate,
-  toDate,
+  fromDatetime,
+  toDatetime,
   page = 1,
   limit = DEFAULT_API_RESULTS_PER_PAGE,
 }: ExportAuditLogs) =>
   authApiClient.get<Response<AuditEvent>>(`/audit/applets/${appletId}/events`, {
-    params: { fromDate, toDate, page, limit },
+    params: { fromDatetime, toDatetime, page, limit },
   });
 
 export const getExportDataApi = (

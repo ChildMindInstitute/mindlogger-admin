@@ -602,8 +602,8 @@ export type ExportData = AppletId & {
 
 /** This is the type params for the export audit logs API request */
 export type ExportAuditLogs = AppletId & {
-  fromDate?: string;
-  toDate?: string;
+  fromDatetime?: string;
+  toDatetime?: string;
   page?: number;
   limit?: number;
 };

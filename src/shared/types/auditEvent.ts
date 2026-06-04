@@ -9,7 +9,7 @@ export type AuditEvent = {
   'event.dataset': string;
   'service.name': string;
   'service.environment': string;
-  'user.id': string;
+  'user.id': string | null;
   'user.email': string | null;
   'user.roles': string[] | null;
   'user.target.id': string | null;

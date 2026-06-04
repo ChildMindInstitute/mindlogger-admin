@@ -4,8 +4,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { getExportAuditLogsApi } from 'api';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { DateFormats } from 'shared/consts';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { getLast24hUTCRange } from 'shared/utils';
 
 import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
 import { exportAuditLogsCsv } from './AuditLogsExportPopup.utils';
@@ -35,11 +37,19 @@ export const useAuditLogsExport = (
     setTotalPages(0);
 
     try {
-      const { fromDate, toDate } = getValues();
+      const { fromDate, toDate, dateType } = getValues();
+
+      let formattedFromDate = format(fromDate, DateFormats.shortISO);
+      let formattedToDate = format(toDate, DateFormats.shortISO);
+
+      if (dateType === DateRangePickerType.Last24h) {
+        ({ fromDate: formattedFromDate, toDate: formattedToDate } = getLast24hUTCRange());
+      }
+
       const params = {
         appletId,
-        fromDate: format(fromDate, DateFormats.YearMonthDay),
-        toDate: format(toDate, DateFormats.YearMonthDay),
+        fromDatetime: formattedFromDate,
+        toDatetime: formattedToDate,
       };
 
       // Fetch the first page of audit logs and get the total number of pages
