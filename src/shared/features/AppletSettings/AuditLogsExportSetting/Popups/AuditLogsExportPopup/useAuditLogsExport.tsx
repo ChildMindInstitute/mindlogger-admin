@@ -47,8 +47,8 @@ export const useAuditLogsExport = (
 
       const params = {
         appletId,
-        fromDate: formattedFromDate,
-        toDate: formattedToDate,
+        fromDatetime: formattedFromDate,
+        toDatetime: formattedToDate,
       };
 
       // Fetch the first page of audit logs and get the total number of pages
