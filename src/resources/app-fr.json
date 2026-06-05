@@ -203,6 +203,7 @@
   "addUsers": "Ajouter des utilisateurs",
   "addViaCSV": "Ajouter via CSV",
   "advancedSettings": "Paramètres avancés",
+  "af": "Afrikaans",
   "ageQuestion": "Quel âge avez-vous?<br><br>*Veuillez fournir votre réponse aussi précisément que possible. Les informations que vous fournissez sont importantes pour garantir l'exactitude de vos résultats. Si vous avez des inquiétudes quant à la manière dont vos informations seront utilisées, veuillez vous référer à nos Conditions d'utilisation.*",
   "ageFieldTypeLabel": "Type de champ d'âge :",
   "ageFieldTypeText": "Champ de texte",
@@ -464,6 +465,22 @@
   "dashboard": "Tableau de bord",
   "dataExport": {
     "title": "Export de données",
+    "responseData": {
+      "menuCaption": "Données de réponse"
+    },
+    "auditLogs": {
+      "menuCaption": "Journaux d'audit de sécurité",
+      "title": "Journaux d'audit de sécurité de {{name}}",
+      "header": "Exporter les journaux d'audit de sécurité",
+      "label": "Exporter : ",
+      "description": "Téléchargez les journaux contenant l'activité de l'applet pour analyse dans un logiciel SIEM.",
+      "button": "Exporter",
+      "supplementaryFiles": {
+        "includes": {
+          "tsv": "Inclure un fichier TSV lisible"
+        }
+      }
+    },
     "data": "Données",
     "dataExported": {
       "responsesOnly": "Réponses uniquement",
@@ -1796,12 +1813,14 @@
   "workspaceSelection": "Sélectionnez l'espace de travail",
   "workspacesLoading": "Vérification de vos espaces de travail",
   "workspaceTooltip": "Le nom de l'espace de travail s'affiche pour les gestionnaires que vous avez invités à votre applet dans leur interface.",
+  "xh": "Xhosa",
   "year": "Année",
   "years": "Années",
   "yes": "Oui",
   "yesAuthorize": "Oui, autoriser",
   "yesRemove": "Oui, supprimer",
   "youNeedToAuthorize": "Vous devez autoriser",
+  "zu": "Zoulou",
   "positiveIntegerRequired": "Un entier positif est requis",
   "positiveIntegerOrZeroRequired": "Un entier positif ou 0 est requis",
   "fromToHint": "De {{min}} à {{max}}",

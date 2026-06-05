@@ -600,6 +600,14 @@ export type ExportData = AppletId & {
   includeEhr?: boolean;
 };
 
+/** This is the type params for the export audit logs API request */
+export type ExportAuditLogs = AppletId & {
+  fromDatetime?: string;
+  toDatetime?: string;
+  page?: number;
+  limit?: number;
+};
+
 export type ScheduleHistoryParams = AppletId & {
   respondentIds?: string[];
   subjectIds?: string[];

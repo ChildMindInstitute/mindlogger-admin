@@ -203,6 +203,7 @@
   "addUsers": "Add Users",
   "addViaCSV": "Add via CSV",
   "advancedSettings": "Advanced Settings",
+  "af": "Afrikaans",
   "ageQuestion": "How old are you?<br><br>*Please provide your response as accurately as possible. The information you provide is important for ensuring the accuracy of your results. If you have any concerns about how your information will be used, please refer to our Terms of Service.*",
   "ageFieldTypeLabel": "Age field type:",
   "ageFieldTypeText": "Text Field",
@@ -464,6 +465,22 @@
   "dashboard": "Dashboard",
   "dataExport": {
     "title": "Data Export",
+    "responseData": {
+      "menuCaption": "Response Data"
+    },
+    "auditLogs": {
+      "menuCaption": "Security Audit Logs",
+      "title": "{{name}} security audit logs",
+      "header": "Export Security Audit Logs",
+      "label": "Export: ",
+      "description": "Download logs containing applet activity for analysis in SIEM software.",
+      "button": "Export",
+      "supplementaryFiles": {
+        "includes": {
+          "tsv": "Include human readable TSV file"
+        }
+      }
+    },
     "data": "Data",
     "dataExported": {
       "responsesOnly": "Responses Only",
@@ -1797,12 +1814,14 @@
   "workspaceSelection": "Select Workspace",
   "workspacesLoading": "Checking your workspaces",
   "workspaceTooltip": "Workspace name displays to the managers you have invited to your applet within their interface.",
+  "xh": "Xhosa",
   "year": "Year",
   "years": "Years",
   "yes": "Yes",
   "yesAuthorize": "Yes, authorize",
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
+  "zu": "Zulu",
   "positiveIntegerRequired": "A positive integer is required",
   "positiveIntegerOrZeroRequired": "A positive integer or 0 is required",
   "fromToHint": "From {{min}} to {{max}}",

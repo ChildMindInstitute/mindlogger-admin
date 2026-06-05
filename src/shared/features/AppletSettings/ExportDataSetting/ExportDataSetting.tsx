@@ -10,13 +10,13 @@ import { FeatureFlagDefaults } from 'shared/hooks/useFeatureFlags.const';
 import { applet } from 'shared/state/Applet';
 import { UniqueTuple } from 'shared/types';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import {
   ExportDataExported,
   ExportDataFormValues,
   ExportDataSettingProps,
-  ExportDateType,
   SupplementaryFiles,
   SupplementaryFilesWithFeatureFlag,
 } from './ExportDataSetting.types';
@@ -46,7 +46,7 @@ export const ExportDataSetting = ({
       dataExported: canExportEhrHealthData
         ? ExportDataExported.ResponsesAndEhrData
         : ExportDataExported.ResponsesOnly,
-      dateType: ExportDateType.AllTime,
+      dateType: DateRangePickerType.AllTime,
       fromDate: startOfDay(minDate),
       toDate: endOfDay(maxDate),
       supplementaryFiles: SupplementaryFiles.reduce(
