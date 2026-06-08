@@ -11,7 +11,8 @@ paths-ignore:
   - dist
   - build
   - coverage
-  - '**/test_*.py'
+  - '**/*.test.tsx'
+  - '**/*.test.ts'
 
 
 # Paths to include in analysis
