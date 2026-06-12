@@ -64,4 +64,27 @@ describe('AddParticipantForm component tests', () => {
 
     expect(mockOnSubmit).toHaveBeenCalled();
   });
+
+  test('Invitation language dropdown lists every ApiLanguages value with its translated label', () => {
+    render(<AddParticipantFormTest accountType={AccountType.Full} />);
+
+    const trigger = screen.getByTestId(`${dataTestid}-lang`).querySelector('[role="combobox"]');
+    expect(trigger).not.toBeNull();
+    fireEvent.mouseDown(trigger as Element);
+
+    const expectedLabels: Record<ApiLanguages, string> = {
+      [ApiLanguages.EN]: 'English',
+      [ApiLanguages.FR]: 'French',
+      [ApiLanguages.EL]: 'Greek',
+      [ApiLanguages.ES]: 'Spanish',
+      [ApiLanguages.PT]: 'Portuguese',
+      [ApiLanguages.AF]: 'Afrikaans',
+      [ApiLanguages.XH]: 'Xhosa',
+      [ApiLanguages.ZU]: 'Zulu',
+    };
+
+    Object.values(ApiLanguages).forEach((lang) => {
+      expect(screen.getByRole('option', { name: expectedLabels[lang] })).toBeInTheDocument();
+    });
+  });
 });

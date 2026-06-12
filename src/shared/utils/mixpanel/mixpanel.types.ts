@@ -33,6 +33,11 @@ export enum MixpanelProps {
   ManuallyAssignedActivityCount = 'Manually-assigned activity count',
   ManuallyAssignedFlowCount = 'Manually-assigned flow count',
   EHRFileSize = 'EHR File Size',
+  // MFA-related properties
+  MFAUsed = 'MFA Used',
+  MFAMethodUsed = 'MFA Method Used',
+  AuthMethod = 'Auth Method',
+  FailureStage = 'Failure Stage',
 }
 
 export enum MixpanelFeature {
@@ -108,6 +113,14 @@ export enum MixpanelEventType {
   ConfirmUnassignActivityOrFlow = 'Confirm Unassign Activity/Flow',
   ProlificConnectClick = 'Prolific Connect clicked',
   ProlificConnectSuccessful = 'Prolific Connect successful',
+  // MFA events
+  MFASetupStarted = 'MFA Setup Started',
+  MFAEnabledSuccessfully = 'MFA Enabled Successfully',
+  MFADisabled = 'MFA Disabled',
+  MFAChallengePresented = 'MFA Challenge Presented',
+  CantAccessAuthAppClick = 'Cant Access Auth App Click',
+  LoginFailed = 'Login Failed',
+  RecoveryCodesViewed = 'Recovery Codes Viewed',
 }
 
 export type MixpanelAppletSaveEventType =
@@ -147,10 +160,13 @@ export type MixpanelInvitationSentEvent = WithAppletId<{
 
 export type LoginSuccessfulEvent = {
   action: MixpanelEventType.LoginSuccessful;
+  [MixpanelProps.MFAUsed]: boolean;
+  [MixpanelProps.MFAMethodUsed]: 'Authenticator App' | 'Backup Codes' | null;
 };
 
 export type LoginBtnClickEvent = {
   action: MixpanelEventType.LoginBtnClick;
+  [MixpanelProps.AuthMethod]: 'Password';
 };
 
 export type LogoutEvent = {
@@ -515,6 +531,42 @@ export type ProlificConnectSuccessfulEvent = WithUserId<{
   action: MixpanelEventType.ProlificConnectSuccessful;
 }>;
 
+// MFA Event Types
+export type MFASetupStartedEvent = {
+  action: MixpanelEventType.MFASetupStarted;
+};
+
+export type MFAEnabledSuccessfullyEvent = {
+  action: MixpanelEventType.MFAEnabledSuccessfully;
+  'MFA Enabled': true;
+  'MFA Enrolled At': string;
+  'MFA Last Updated At': string;
+};
+
+export type MFADisabledEvent = {
+  action: MixpanelEventType.MFADisabled;
+  'MFA Enabled': false;
+  'MFA Last Updated At': string;
+};
+
+export type MFAChallengePresentedEvent = {
+  action: MixpanelEventType.MFAChallengePresented;
+};
+
+export type CantAccessAuthAppClickEvent = {
+  action: MixpanelEventType.CantAccessAuthAppClick;
+};
+
+export type LoginFailedEvent = {
+  action: MixpanelEventType.LoginFailed;
+  [MixpanelProps.FailureStage]: 'Credentials' | 'MFA';
+  [MixpanelProps.MFAMethodUsed]?: 'Authenticator App' | 'Backup Codes';
+};
+
+export type RecoveryCodesViewedEvent = {
+  action: MixpanelEventType.RecoveryCodesViewed;
+};
+
 export type MixpanelEvent =
   | MixpanelInvitationSentEvent
   | LoginSuccessfulEvent
@@ -585,4 +637,11 @@ export type MixpanelEvent =
   | StartUnassignActivityOrFlowEvent
   | ConfirmUnAssignActivityOrFlowEvent
   | ProlificConnectClickEvent
-  | ProlificConnectSuccessfulEvent;
+  | ProlificConnectSuccessfulEvent
+  | MFASetupStartedEvent
+  | MFAEnabledSuccessfullyEvent
+  | MFADisabledEvent
+  | MFAChallengePresentedEvent
+  | CantAccessAuthAppClickEvent
+  | LoginFailedEvent
+  | RecoveryCodesViewedEvent;

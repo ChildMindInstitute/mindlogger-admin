@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 export type MFAVerificationType = 'totp' | 'recovery';
 
@@ -62,6 +63,12 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFATOTP({ totpCode: code }));
 
         if (verifyMFATOTP.fulfilled.match(result)) {
+          // Track login successful with MFA
+          Mixpanel.track({
+            action: MixpanelEventType.LoginSuccessful,
+            [MixpanelProps.MFAUsed]: true,
+            [MixpanelProps.MFAMethodUsed]: 'Authenticator App',
+          });
           // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
           dispatch(auth.actions.clearMFASession());
@@ -73,6 +80,12 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFARecoveryCode({ code }));
 
         if (verifyMFARecoveryCode.fulfilled.match(result)) {
+          // Track login successful with backup codes
+          Mixpanel.track({
+            action: MixpanelEventType.LoginSuccessful,
+            [MixpanelProps.MFAUsed]: true,
+            [MixpanelProps.MFAMethodUsed]: 'Backup Codes',
+          });
           // Navigate first, then clear session to prevent guard redirect race condition
           navigateToLibrary(navigate);
           dispatch(auth.actions.clearMFASession());
@@ -80,6 +93,14 @@ export const useMFAVerification = (type: MFAVerificationType) => {
           return true;
         }
       }
+
+      // Track login failed
+      const failureMethod = type === 'totp' ? 'Authenticator App' : 'Backup Codes';
+      Mixpanel.track({
+        action: MixpanelEventType.LoginFailed,
+        [MixpanelProps.FailureStage]: 'MFA',
+        [MixpanelProps.MFAMethodUsed]: failureMethod,
+      });
 
       setIsSubmitting(false);
 

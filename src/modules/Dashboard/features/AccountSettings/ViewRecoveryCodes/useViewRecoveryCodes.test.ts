@@ -2,6 +2,8 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { vi } from 'vitest';
 
+import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
+
 import { useViewRecoveryCodes } from './useViewRecoveryCodes';
 import { mockMfaToken, mockRecoveryCodesList, mockDownloadToken } from '../__mocks__/mfa.mocks';
 import { mockMFAViewCodesInitiate, mockMFAViewCodesVerify } from '../__tests__/helpers';
@@ -489,6 +491,94 @@ describe('useViewRecoveryCodes', () => {
 
       await waitFor(() => {
         expect(result.current.error).toBe('invalidRecoveryCode');
+      });
+    });
+  });
+
+  describe('Mixpanel Tracking', () => {
+    beforeEach(() => {
+      vi.mocked(Mixpanel.track).mockClear();
+    });
+
+    it('should track RecoveryCodesViewed when TOTP verification succeeds', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify code
+      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
+
+      await act(async () => {
+        await result.current.handleVerifyCode('123456');
+      });
+
+      await waitFor(() => {
+        expect(result.current.recoveryCodes).toEqual(mockRecoveryCodesList);
+      });
+
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.RecoveryCodesViewed,
+      });
+    });
+
+    it('should track RecoveryCodesViewed when recovery code verification succeeds', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Then verify recovery code
+      mockMFAViewCodesVerify(mockRecoveryCodesList, mockDownloadToken);
+
+      await act(async () => {
+        await result.current.handleVerifyRecoveryCode('ABCDE-12345');
+      });
+
+      await waitFor(() => {
+        expect(result.current.recoveryCodes).toEqual(mockRecoveryCodesList);
+      });
+
+      expect(Mixpanel.track).toHaveBeenCalledWith({
+        action: MixpanelEventType.RecoveryCodesViewed,
+      });
+    });
+
+    it('should not track RecoveryCodesViewed when verification fails', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      // First initiate session
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      // Mock verification to fail
+      vi.mocked(axios.post).mockRejectedValueOnce({
+        response: {
+          status: 401,
+          data: {
+            result: [{ message: 'Invalid code' }],
+          },
+        },
+      });
+
+      await act(async () => {
+        await result.current.handleVerifyCode('000000');
+      });
+
+      await waitFor(() => {
+        expect(result.current.error).toBeTruthy();
+      });
+
+      expect(Mixpanel.track).not.toHaveBeenCalledWith({
+        action: MixpanelEventType.RecoveryCodesViewed,
       });
     });
   });
