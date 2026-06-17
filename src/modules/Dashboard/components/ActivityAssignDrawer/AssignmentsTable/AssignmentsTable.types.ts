@@ -15,6 +15,10 @@ export type AssignmentsTableProps = Omit<ReturnType<typeof useParticipantDropdow
   errors?: {
     duplicateRows?: `${string}_${string}`[];
   };
+  // Superset of allParticipants used to resolve selected ids (e.g. ones found via search)
+  knownParticipants?: ParticipantDropdownOption[];
+  // Reports each picked option so the parent can remember participants not in the snapshot
+  onParticipantSelect?: (option: ParticipantDropdownOption | null) => void;
   'data-testid': string;
 };
 
