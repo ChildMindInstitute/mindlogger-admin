@@ -2,7 +2,7 @@
 
 This repository is used for the A* `yarn eject`
 
-    **Note: this is a one-way operation. Once you `eject`, you can't go back!**n Panel of the [Curious](https://mindlogger.org/) application stack.
+    **Note: this is a one-way operation. Once you `eject`, you can't go back!**n Panel of the [Curious](https://gettingcurious.com/) application stack.
 
 ## Getting Started
 
