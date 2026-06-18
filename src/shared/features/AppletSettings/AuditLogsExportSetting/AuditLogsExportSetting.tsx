@@ -7,6 +7,7 @@ import { ObjectSchema } from 'yup';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { applet } from 'shared/state/Applet';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import {
   AuditLogsExportFormValues,
@@ -66,6 +67,10 @@ export const AuditLogsExportSetting = ({
             onExportSettingsClose();
           }}
           onExport={() => {
+            Mixpanel.track({
+              action: MixpanelEventType.ExportAuditLogsDownload,
+              [MixpanelProps.AppletId]: appletId,
+            });
             setDataIsExporting(true);
             onExportSettingsClose();
           }}

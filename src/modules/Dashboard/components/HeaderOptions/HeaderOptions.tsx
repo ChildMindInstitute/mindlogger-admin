@@ -12,6 +12,7 @@ import {
   checkIfCanAccessData,
   checkIfCanEdit,
   MixpanelEventType,
+  MixpanelProps,
   checkIfFullAccess,
 } from 'shared/utils';
 import { workspaces } from 'shared/state';
@@ -42,7 +43,10 @@ export const HeaderOptions = () => {
 
   const handleOpenAuditLogs = () => {
     setIsAuditLogsExportOpen(true);
-    Mixpanel.track({ action: MixpanelEventType.ExportAuditLogsClick });
+    Mixpanel.track({
+      action: MixpanelEventType.ExportAuditLogsClick,
+      [MixpanelProps.AppletId]: appletId,
+    });
   };
 
   const handleOpenResponseData = () => {

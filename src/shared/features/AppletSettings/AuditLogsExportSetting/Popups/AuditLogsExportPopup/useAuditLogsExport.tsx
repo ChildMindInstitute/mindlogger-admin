@@ -6,6 +6,7 @@ import { getExportAuditLogsApi } from 'api';
 import { getExportPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { DateFormats } from 'shared/consts';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { getLast24hUTCRange } from 'shared/utils';
 
 import { AuditLogsExportFormValues } from '../../AuditLogsExportSetting.types';
@@ -71,8 +72,16 @@ export const useAuditLogsExport = (
         setCurrentPage(page);
       }
 
+      Mixpanel.track({
+        action: MixpanelEventType.ExportAuditLogsSuccessful,
+        [MixpanelProps.AppletId]: appletId,
+      });
       handlePopupCloseRef.current();
     } catch (e) {
+      Mixpanel.track({
+        action: MixpanelEventType.ExportAuditLogsFailed,
+        [MixpanelProps.AppletId]: appletId,
+      });
       setError(e as Error);
     } finally {
       isExportingRef.current = false;
