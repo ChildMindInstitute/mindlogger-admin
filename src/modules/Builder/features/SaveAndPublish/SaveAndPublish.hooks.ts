@@ -315,13 +315,20 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const hasAccessDeniedError =
     Array.isArray(responseError) &&
     responseError.some((error) => error.type === ErrorResponseType.AccessDenied);
+  // Use `dirtyFields` (fields the user actually edited) rather than RHF's `isDirty`.
+  // `isDirty` is a structural deep-compare of the form values against the form defaults,
+  // so empty arrays that field arrays (e.g. `responseValues.rows`) inject into the form
+  // values on mount — but never into the defaults — make `isDirty` permanently `true`
+  // even with no real changes. `dirtyFields` stays empty in that case, so it accurately
+  // reflects whether there are unsaved user changes worth prompting about.
+  const hasFormChanges = !!Object.keys(dirtyFields ?? {}).length;
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(isDirty && !hasAccessDeniedError);
+  } = usePrompt(hasFormChanges && !hasAccessDeniedError);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
