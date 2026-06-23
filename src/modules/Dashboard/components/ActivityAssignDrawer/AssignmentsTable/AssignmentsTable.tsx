@@ -19,6 +19,8 @@ import { getHeadCells } from './AssignmentsTable.utils';
 
 export const AssignmentsTable = ({
   allParticipants,
+  knownParticipants,
+  onParticipantSelect,
   participantsOnly,
   fullAccountParticipantsAndTeamMembers,
   teamMembersOnly,
@@ -34,12 +36,18 @@ export const AssignmentsTable = ({
   const {
     featureFlags: { enableParticipantMultiInformant },
   } = useFeatureFlags();
+  // Resolve selected ids from the wider list when provided, falling back to the snapshot
+  const resolveParticipants = knownParticipants ?? allParticipants;
   const lastAssignment = assignments[assignments.length - 1];
   const showAddButton =
     !isReadOnly && lastAssignment?.respondentSubjectId && lastAssignment?.targetSubjectId;
 
   const handleChange = useCallback(
-    ({ respondentSubjectId, targetSubjectId }: ActivityAssignment, index: number) => {
+    (
+      { respondentSubjectId, targetSubjectId }: ActivityAssignment,
+      index: number,
+      respondentOption?: ParticipantDropdownOption | null,
+    ) => {
       const updatedAssignments = [...assignments];
 
       if (respondentSubjectId !== undefined || targetSubjectId !== undefined) {
@@ -47,7 +55,9 @@ export const AssignmentsTable = ({
           // Set as self-assigned if newly selected respondent is a full account, and either:
           // - no target subject has been selected yet, or
           // - current assignment is a self-assignment (to preserve "Self" in the right column)
-          const respondent = allParticipants.find(({ id }) => id === respondentSubjectId);
+          // Prefer the just-picked option since it may not be in the resolve list yet
+          const respondent =
+            respondentOption ?? resolveParticipants.find(({ id }) => id === respondentSubjectId);
           if (respondent?.userId && !respondent.isTeamMember) {
             if (
               !assignments[index].targetSubjectId ||
@@ -65,7 +75,7 @@ export const AssignmentsTable = ({
         onChange?.(updatedAssignments);
       }
     },
-    [allParticipants, assignments, onChange],
+    [resolveParticipants, assignments, onChange],
   );
 
   const handleAdd = useCallback(() => {
@@ -105,11 +115,13 @@ export const AssignmentsTable = ({
   const rows: DashboardTableProps['rows'] = useMemo(
     () =>
       assignments.map(({ respondentSubjectId, targetSubjectId }, index) => {
+        // Resolve from the wider list so search-selected participants still render
         const respondent =
-          (respondentSubjectId && allParticipants.find(({ id }) => id === respondentSubjectId)) ||
+          (respondentSubjectId &&
+            resolveParticipants.find(({ id }) => id === respondentSubjectId)) ||
           null;
         const subject =
-          (targetSubjectId && allParticipants.find(({ id }) => id === targetSubjectId)) || null;
+          (targetSubjectId && resolveParticipants.find(({ id }) => id === targetSubjectId)) || null;
 
         const selfOption: ParticipantDropdownOption | null =
           respondent && !respondent.isTeamMember
@@ -143,9 +155,10 @@ export const AssignmentsTable = ({
                     ? fullAccountParticipantsAndTeamMembers
                     : teamMembersOnly
                 }
-                onChange={(value) =>
-                  handleChange({ respondentSubjectId: value && value.id }, index)
-                }
+                onChange={(value) => {
+                  onParticipantSelect?.(value);
+                  handleChange({ respondentSubjectId: value && value.id }, index, value);
+                }}
                 handleSearch={handleRespondentSearch}
                 showGroups
                 emptyValueError={subjectValue && !subject?.userId ? t('addRespondent') : undefined}
@@ -163,7 +176,10 @@ export const AssignmentsTable = ({
                 isReadOnly={isReadOnly}
                 value={subjectValue}
                 options={subjectOptions}
-                onChange={(value) => handleChange({ targetSubjectId: value && value.id }, index)}
+                onChange={(value) => {
+                  onParticipantSelect?.(value);
+                  handleChange({ targetSubjectId: value && value.id }, index);
+                }}
                 handleSearch={(query) => handleSubjectSearch(query, selfOption)}
                 groupBy={(option) => (option.id === selfOption?.id ? 'self' : 'other')}
                 renderGroup={(params) => (
@@ -186,7 +202,8 @@ export const AssignmentsTable = ({
         };
       }),
     [
-      allParticipants,
+      resolveParticipants,
+      onParticipantSelect,
       assignments,
       dataTestId,
       enableParticipantMultiInformant,

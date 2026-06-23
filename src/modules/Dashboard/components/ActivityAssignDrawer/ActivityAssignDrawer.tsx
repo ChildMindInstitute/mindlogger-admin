@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Drawer, Fade, IconButton } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import unionBy from 'lodash/unionBy';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -32,7 +33,11 @@ import {
 } from 'api';
 import { hydrateActivityFlows } from 'modules/Dashboard/utils';
 import { Activity } from 'redux/modules';
-import { AssignmentCounts, useParticipantDropdown } from 'modules/Dashboard/components';
+import {
+  AssignmentCounts,
+  ParticipantDropdownOption,
+  useParticipantDropdown,
+} from 'modules/Dashboard/components';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 import { useGetAppletActivitiesQuery } from 'modules/Dashboard/api/apiSlice';
 
@@ -94,6 +99,18 @@ export const ActivityAssignDrawer = React.memo(
     } = useParticipantDropdown({
       appletId,
     });
+
+    // Remember participants picked via search so they remain resolvable after selection
+    const [selectedParticipants, setSelectedParticipants] = useState<ParticipantDropdownOption[]>(
+      [],
+    );
+    const knownParticipants = useMemo(
+      () => unionBy(allParticipants, selectedParticipants, 'id'),
+      [allParticipants, selectedParticipants],
+    );
+    const handleParticipantSelect = useCallback((option: ParticipantDropdownOption | null) => {
+      if (option) setSelectedParticipants((prev) => unionBy(prev, [option], 'id'));
+    }, []);
 
     const {
       data: activitiesData,
@@ -438,6 +455,8 @@ export const ActivityAssignDrawer = React.memo(
         }, 300);
       } else {
         removeAllBanners();
+        // Drop remembered search selections so they don't linger into the next session
+        setSelectedParticipants([]);
       }
     }, [open, allParticipants]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -603,6 +622,8 @@ export const ActivityAssignDrawer = React.memo(
                       <AssignmentsTable
                         {...dropdownProps}
                         allParticipants={allParticipants}
+                        knownParticipants={knownParticipants}
+                        onParticipantSelect={handleParticipantSelect}
                         assignments={value}
                         onChange={onChange}
                         onAdd={() =>
@@ -645,6 +666,7 @@ export const ActivityAssignDrawer = React.memo(
                     <ActivityReview
                       {...dropdownProps}
                       allParticipants={allParticipants}
+                      knownParticipants={knownParticipants}
                       key={flow.id}
                       isSingleActivity={flowIds.length + activityIds.length === 1}
                       index={index}
@@ -666,6 +688,7 @@ export const ActivityAssignDrawer = React.memo(
                     <ActivityReview
                       {...dropdownProps}
                       allParticipants={allParticipants}
+                      knownParticipants={knownParticipants}
                       key={activity.id}
                       isSingleActivity={flowIds.length + activityIds.length === 1}
                       index={index + flowIds.length}
