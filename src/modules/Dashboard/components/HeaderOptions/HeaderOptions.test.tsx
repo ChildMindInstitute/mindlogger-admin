@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
 import { initialStateData } from 'shared/state';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
@@ -91,7 +92,8 @@ describe('HeaderOptions', () => {
     );
   });
 });
-describe('should show or hide header buttons depending on role', () => {
+
+describe('HeaderOptions show or hide depending on role', () => {
   test.each`
     canEdit  | canAccessData | role                 | description
     ${true}  | ${true}       | ${Roles.Manager}     | ${'header for Manager'}
@@ -115,5 +117,25 @@ describe('should show or hide header buttons depending on role', () => {
     canAccessData
       ? expect(exportButtons.length).toBeGreaterThan(0)
       : expect(exportButtons.length).toBe(0);
+  });
+});
+
+describe('HeaderOptions show or hide depending on feature flag', () => {
+  beforeEach(() => {
+    vi.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: { enableAuditLogs: false },
+      resetLDContext: vi.fn(),
+    });
+    renderWithProviders(<HeaderOptions />, { preloadedState: getPreloadedState() });
+  });
+
+  afterEach(() => {
+    vi.mocked(useFeatureFlags).mockReset();
+  });
+
+  test('header for enableAuditLogs off', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+    expect(screen.queryByTestId('header-option-response-data-button')).toBeInTheDocument();
+    expect(screen.queryByTestId('header-option-audit-logs-button')).not.toBeInTheDocument();
   });
 });
