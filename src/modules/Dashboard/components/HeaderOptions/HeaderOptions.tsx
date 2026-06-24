@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { page } from 'resources';
 import { Menu, Svg } from 'shared/components';
+import { useFeatureFlags } from 'shared/hooks';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import {
@@ -22,6 +23,7 @@ export const HeaderOptions = () => {
   const [isAuditLogsExportOpen, setIsAuditLogsExportOpen] = useState(false);
 
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
   const { appletId } = useParams();
   const isSettingsSelected = location.pathname.includes('settings');
   const workspaceRoles = workspaces.useRolesData();
@@ -61,20 +63,27 @@ export const HeaderOptions = () => {
   const canAccessData = checkIfCanAccessData(roles);
   const canEdit = checkIfCanEdit(roles);
 
-  const getExportActions = () => [
-    {
-      icon: <Svg id="response-data" />,
-      action: handleOpenResponseData,
-      title: t('dataExport.responseData.menuCaption'),
-      'data-testid': 'header-option-response-data-button',
-    },
-    {
-      icon: <Svg id="audit-logs" />,
-      action: handleOpenAuditLogs,
-      title: t('dataExport.auditLogs.menuCaption'),
-      'data-testid': 'header-option-audit-logs-button',
-    },
-  ];
+  const getExportActions = () => {
+    const actions = [
+      {
+        icon: <Svg id="response-data" />,
+        action: handleOpenResponseData,
+        title: t('dataExport.responseData.menuCaption'),
+        'data-testid': 'header-option-response-data-button',
+      },
+    ];
+
+    if (featureFlags.enableAuditLogs) {
+      actions.push({
+        icon: <Svg id="audit-logs" />,
+        action: handleOpenAuditLogs,
+        title: t('dataExport.auditLogs.menuCaption'),
+        'data-testid': 'header-option-audit-logs-button',
+      });
+    }
+
+    return actions;
+  };
 
   return canEdit || canAccessData ? (
     <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto' }}>
@@ -113,12 +122,14 @@ export const HeaderOptions = () => {
         onExportSettingsClose={handleCloseResponseData}
         data-testid={'response-data-export'}
       />
-      <AuditLogsExportSetting
-        isExportSettingsOpen={isAuditLogsExportOpen}
-        onExportSettingsClose={handleCloseAuditLogsExport}
-        data-testid={'audit-logs-export'}
-        onExportPopupClose={() => setIsAuditLogsExportOpen(false)}
-      />
+      {featureFlags.enableAuditLogs && (
+        <AuditLogsExportSetting
+          isExportSettingsOpen={isAuditLogsExportOpen}
+          onExportSettingsClose={handleCloseAuditLogsExport}
+          data-testid={'audit-logs-export'}
+          onExportPopupClose={() => setIsAuditLogsExportOpen(false)}
+        />
+      )}
     </StyledFlexTopCenter>
   ) : null;
 };
