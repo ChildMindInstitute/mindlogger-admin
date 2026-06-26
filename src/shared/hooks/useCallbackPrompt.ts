@@ -25,23 +25,39 @@ export const useCallbackPrompt = ({
   const navigate = useNavigate();
 
   const cancelNavigation = () => {
+    console.log('[useCallbackPrompt] cancelNavigation called');
     setPromptVisible(false);
     setLastLocation(null);
   };
 
   const confirmNavigation = () => {
+    console.log('[useCallbackPrompt] confirmNavigation called');
     setPromptVisible(false);
     setConfirmedNavigation(true);
   };
 
   useEffect(() => {
+    console.log(
+      `[useCallbackPrompt] confirmed-navigation effect — confirmedNavigation: ${confirmedNavigation}, lastLocation: ${lastLocation?.location?.pathname ?? 'null'}`,
+    );
     if (confirmedNavigation && lastLocation) {
+      console.log(`[useCallbackPrompt] navigating to: ${lastLocation.location?.pathname}`);
       navigate(lastLocation.location?.pathname, { state: lastLocation.location?.state });
       setConfirmedNavigation(false);
     }
   }, [confirmedNavigation, lastLocation]);
 
-  useBlocker(handleBlockedNavigation, when);
+  const wrappedHandleBlockedNavigation = (nextLocation: Update) => {
+    console.log(
+      `[useCallbackPrompt] handleBlockedNavigation called — to: ${nextLocation.location.pathname}, confirmedNavigation: ${confirmedNavigation}`,
+    );
+    const result = handleBlockedNavigation(nextLocation);
+    console.log(`[useCallbackPrompt] handleBlockedNavigation returned: ${result} (true=allow, false=block/show popup)`);
+
+    return result;
+  };
+
+  useBlocker(wrappedHandleBlockedNavigation, when);
 
   return { confirmNavigation, cancelNavigation };
 };
