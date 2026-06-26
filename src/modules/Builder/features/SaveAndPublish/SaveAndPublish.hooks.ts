@@ -319,9 +319,19 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   // `isDirty` is a structural deep-compare of the form values against the form defaults,
   // so empty arrays that field arrays (e.g. `responseValues.rows`) inject into the form
   // values on mount — but never into the defaults — make `isDirty` permanently `true`
-  // even with no real changes. `dirtyFields` stays empty in that case, so it accurately
-  // reflects whether there are unsaved user changes worth prompting about.
-  const hasFormChanges = !!Object.keys(dirtyFields ?? {}).length;
+  // even with no real changes.
+  //
+  // A shallow `Object.keys(dirtyFields).length` check is also insufficient: after a
+  // useFieldArray append+remove round-trip, RHF leaves stale array-shaped entries in
+  // `dirtyFields` (e.g. `{ activities: [{ name: false, … }] }`) even though every leaf
+  // is `false`. Recursively scanning for any `true` leaf is the correct signal.
+  const hasTrueDirtyField = (val: unknown): boolean => {
+    if (val === true) return true;
+    if (!val || typeof val !== 'object') return false;
+
+    return Object.values(val).some(hasTrueDirtyField);
+  };
+  const hasFormChanges = hasTrueDirtyField(dirtyFields);
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
