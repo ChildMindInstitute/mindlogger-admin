@@ -292,7 +292,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { t } = useTranslation('app');
   const {
     trigger,
-    formState: { dirtyFields, isDirty },
+    formState: { dirtyFields },
   } = useCustomFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -463,7 +463,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    if (!isDirty) {
+    if (!hasFormChanges) {
       dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
       return;
