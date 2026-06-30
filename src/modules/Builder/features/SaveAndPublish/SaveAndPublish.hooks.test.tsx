@@ -74,8 +74,7 @@ vi.mock('modules/Builder/hooks', () => ({
   useCustomFormContext: () => ({
     trigger: () => true,
     formState: {
-      dirtyFields: [],
-      isDirty: true,
+      dirtyFields: { about: true },
     },
     getValues: () => mockedAppletData,
   }),
