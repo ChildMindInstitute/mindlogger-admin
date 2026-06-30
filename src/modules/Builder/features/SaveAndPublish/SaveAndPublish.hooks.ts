@@ -292,7 +292,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { t } = useTranslation('app');
   const {
     trigger,
-    formState: { dirtyFields, isDirty },
+    formState: { dirtyFields },
   } = useCustomFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -315,13 +315,30 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const hasAccessDeniedError =
     Array.isArray(responseError) &&
     responseError.some((error) => error.type === ErrorResponseType.AccessDenied);
+  // Use `dirtyFields` (fields the user actually edited) rather than RHF's `isDirty`.
+  // `isDirty` is a structural deep-compare of the form values against the form defaults,
+  // so empty arrays that field arrays (e.g. `responseValues.rows`) inject into the form
+  // values on mount — but never into the defaults — make `isDirty` permanently `true`
+  // even with no real changes.
+  //
+  // A shallow `Object.keys(dirtyFields).length` check is also insufficient: after a
+  // useFieldArray append+remove round-trip, RHF leaves stale array-shaped entries in
+  // `dirtyFields` (e.g. `{ activities: [{ name: false, … }] }`) even though every leaf
+  // is `false`. Recursively scanning for any `true` leaf is the correct signal.
+  const hasTrueDirtyField = (val: unknown): boolean => {
+    if (val === true) return true;
+    if (!val || typeof val !== 'object') return false;
+
+    return Object.values(val).some(hasTrueDirtyField);
+  };
+  const hasFormChanges = hasTrueDirtyField(dirtyFields);
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(isDirty && !hasAccessDeniedError);
+  } = usePrompt(hasFormChanges && !hasAccessDeniedError);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -446,7 +463,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       return;
     }
 
-    if (!isDirty) {
+    if (!hasFormChanges) {
       dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
       return;
