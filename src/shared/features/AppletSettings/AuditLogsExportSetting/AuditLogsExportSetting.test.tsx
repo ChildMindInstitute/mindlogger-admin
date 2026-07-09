@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { initialStateData } from 'redux/modules';
 import { mockedApplet } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { AuditLogsExportSetting } from './AuditLogsExportSetting';
 
@@ -29,6 +30,8 @@ vi.mock('shared/utils/exportTemplate', () => ({
   exportTemplate: vi.fn().mockResolvedValue(true),
 }));
 
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
+
 const dataTestId = 'audit-logs-export';
 
 describe('AuditLogsExportSetting', () => {
@@ -36,6 +39,7 @@ describe('AuditLogsExportSetting', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     vi.setSystemTime(mockedNow);
     mockedExportAuditLogsApi.mockClear();
+    spyMixpanelTrack.mockReset();
   });
 
   afterEach(() => {
@@ -167,6 +171,77 @@ describe('AuditLogsExportSetting', () => {
 
     await waitFor(() => {
       expect(mockedExportAuditLogsApi).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  it('should track ExportAuditLogsDownload when the download button is clicked', async () => {
+    mockedExportAuditLogsApi.mockResolvedValueOnce({
+      data: { result: [], count: 0 },
+    });
+
+    renderWithProviders(
+      <AuditLogsExportSetting
+        isExportSettingsOpen
+        onExportSettingsClose={vi.fn()}
+        onExportPopupClose={vi.fn()}
+        data-testid={dataTestId}
+      />,
+      { preloadedState },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestId}-settings-download-button`));
+
+    expect(spyMixpanelTrack).toHaveBeenCalledWith({
+      action: MixpanelEventType.ExportAuditLogsDownload,
+      [MixpanelProps.AppletId]: mockedApplet.id,
+    });
+  });
+
+  it('should track ExportAuditLogsSuccessful when the export completes', async () => {
+    mockedExportAuditLogsApi.mockResolvedValueOnce({
+      data: { result: [], count: 0 },
+    });
+
+    renderWithProviders(
+      <AuditLogsExportSetting
+        isExportSettingsOpen
+        onExportSettingsClose={vi.fn()}
+        onExportPopupClose={vi.fn()}
+        data-testid={dataTestId}
+      />,
+      { preloadedState },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestId}-settings-download-button`));
+
+    await waitFor(() => {
+      expect(spyMixpanelTrack).toHaveBeenCalledWith({
+        action: MixpanelEventType.ExportAuditLogsSuccessful,
+        [MixpanelProps.AppletId]: mockedApplet.id,
+      });
+    });
+  });
+
+  it('should track ExportAuditLogsFailed when the export fails', async () => {
+    mockedExportAuditLogsApi.mockRejectedValueOnce(new Error('Network error'));
+
+    renderWithProviders(
+      <AuditLogsExportSetting
+        isExportSettingsOpen
+        onExportSettingsClose={vi.fn()}
+        onExportPopupClose={vi.fn()}
+        data-testid={dataTestId}
+      />,
+      { preloadedState },
+    );
+
+    fireEvent.click(screen.getByTestId(`${dataTestId}-settings-download-button`));
+
+    await waitFor(() => {
+      expect(spyMixpanelTrack).toHaveBeenCalledWith({
+        action: MixpanelEventType.ExportAuditLogsFailed,
+        [MixpanelProps.AppletId]: mockedApplet.id,
+      });
     });
   });
 });
