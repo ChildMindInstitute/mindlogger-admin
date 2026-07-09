@@ -25,4 +25,5 @@ export type FeatureFlags = Partial<{
   enableEmaExtraFiles: boolean;
   enableMfa: boolean;
   enableAdminAnnouncementBanner: boolean;
+  enableAuditLogs: boolean;
 }>;
