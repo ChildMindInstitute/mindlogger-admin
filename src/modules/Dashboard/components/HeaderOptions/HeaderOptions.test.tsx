@@ -135,7 +135,9 @@ describe('HeaderOptions show or hide depending on feature flag', () => {
 
   test('header for enableAuditLogs off', () => {
     fireEvent.click(screen.getByTestId('header-option-export-button'));
-    expect(screen.queryByTestId('header-option-response-data-button')).toBeInTheDocument();
-    expect(screen.queryByTestId('header-option-audit-logs-button')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('header-option-export-menu')).not.toBeInTheDocument();
+    expect(screen.getByTestId('response-data-export-settings')).toBeInTheDocument();
+    expect(spyMixpanelTrack).toHaveBeenCalledWith({ action: MixpanelEventType.ExportDataClick });
   });
 });
