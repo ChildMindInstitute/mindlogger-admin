@@ -33,9 +33,9 @@ export const HeaderOptions = () => {
   const exportButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenExportMenu = () => {
-    const fullAccess = checkIfFullAccess(roles);
+    const canExportAuditLogs = checkIfFullAccess(roles) && featureFlags.enableAuditLogs;
 
-    if (fullAccess) {
+    if (canExportAuditLogs) {
       setShowExportMenu(true);
     } else {
       setIsResponseDataExportOpen(true);
@@ -67,27 +67,20 @@ export const HeaderOptions = () => {
   const canAccessData = checkIfCanAccessData(roles);
   const canEdit = checkIfCanEdit(roles);
 
-  const getExportActions = () => {
-    const actions = [
-      {
-        icon: <Svg id="response-data" />,
-        action: handleOpenResponseData,
-        title: t('dataExport.responseData.menuCaption'),
-        'data-testid': 'header-option-response-data-button',
-      },
-    ];
-
-    if (featureFlags.enableAuditLogs) {
-      actions.push({
-        icon: <Svg id="audit-logs" />,
-        action: handleOpenAuditLogs,
-        title: t('dataExport.auditLogs.menuCaption'),
-        'data-testid': 'header-option-audit-logs-button',
-      });
-    }
-
-    return actions;
-  };
+  const getExportActions = () => [
+    {
+      icon: <Svg id="response-data" />,
+      action: handleOpenResponseData,
+      title: t('dataExport.responseData.menuCaption'),
+      'data-testid': 'header-option-response-data-button',
+    },
+    {
+      icon: <Svg id="audit-logs" />,
+      action: handleOpenAuditLogs,
+      title: t('dataExport.auditLogs.menuCaption'),
+      'data-testid': 'header-option-audit-logs-button',
+    },
+  ];
 
   return canEdit || canAccessData ? (
     <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto' }}>
