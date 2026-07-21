@@ -1,3 +1,4 @@
+import { availableParallelism } from 'os';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
@@ -15,6 +16,13 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.ts', 'dotenv/config'],
     globalSetup: './src/vitest.global-setup.ts',
+    poolOptions: {
+      forks: {
+        // cap forks below core count to avoid timeout from resource overload on heavy tests
+        maxForks: Math.ceil(availableParallelism() / 2),
+        minForks: 1,
+      },
+    },
     coverage: {
       reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/', 'src/setupTests.ts'],

@@ -465,6 +465,22 @@
   "dashboard": "Tableau de bord",
   "dataExport": {
     "title": "Export de données",
+    "responseData": {
+      "menuCaption": "Données de réponse"
+    },
+    "auditLogs": {
+      "menuCaption": "Journaux d'audit de sécurité",
+      "title": "Journaux d'audit de sécurité de {{name}}",
+      "header": "Exporter les journaux d'audit de sécurité",
+      "label": "Exporter : ",
+      "description": "Téléchargez les journaux contenant l'activité de l'applet pour analyse dans un logiciel SIEM.",
+      "button": "Exporter",
+      "supplementaryFiles": {
+        "includes": {
+          "tsv": "Inclure un fichier TSV lisible"
+        }
+      }
+    },
     "data": "Données",
     "dataExported": {
       "responsesOnly": "Réponses uniquement",

@@ -4,7 +4,9 @@ import { vi } from 'vitest';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks';
 import { initialStateData } from 'shared/state';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { HeaderOptions } from './HeaderOptions';
 
@@ -47,15 +49,40 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+const spyMixpanelTrack = vi.spyOn(Mixpanel, 'track');
+
 describe('HeaderOptions', () => {
   beforeEach(() => {
+    spyMixpanelTrack.mockReset();
     renderWithProviders(<HeaderOptions />, { preloadedState: getPreloadedState() });
   });
 
-  test('should open Export dialog when option is pressed', () => {
+  test('should open Export options menu when export button is pressed', () => {
     fireEvent.click(screen.getByTestId('header-option-export-button'));
 
-    expect(screen.queryByTestId('export-data-settings')).toBeInTheDocument();
+    expect(screen.queryByTestId('header-option-export-menu')).toBeInTheDocument();
+  });
+
+  test('should see Response Data option in export options menu', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+
+    expect(screen.queryByTestId('header-option-response-data-button')).toBeInTheDocument();
+  });
+
+  test('should see Audit Logs option in export options menu', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+
+    expect(screen.queryByTestId('header-option-audit-logs-button')).toBeInTheDocument();
+  });
+
+  test('should track ExportAuditLogsClick when audit logs option is clicked', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+    fireEvent.click(screen.getByTestId('header-option-audit-logs-button'));
+
+    expect(spyMixpanelTrack).toHaveBeenCalledWith({
+      action: MixpanelEventType.ExportAuditLogsClick,
+      [MixpanelProps.AppletId]: testAppletId,
+    });
   });
 
   test('should contain link to settings page', () => {
@@ -65,7 +92,8 @@ describe('HeaderOptions', () => {
     );
   });
 });
-describe('should show or hide header buttons depending on role', () => {
+
+describe('HeaderOptions show or hide depending on role', () => {
   test.each`
     canEdit  | canAccessData | role                 | description
     ${true}  | ${true}       | ${Roles.Manager}     | ${'header for Manager'}
@@ -89,5 +117,27 @@ describe('should show or hide header buttons depending on role', () => {
     canAccessData
       ? expect(exportButtons.length).toBeGreaterThan(0)
       : expect(exportButtons.length).toBe(0);
+  });
+});
+
+describe('HeaderOptions show or hide depending on feature flag', () => {
+  beforeEach(() => {
+    vi.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: { enableAuditLogs: false },
+      resetLDContext: vi.fn(),
+    });
+    renderWithProviders(<HeaderOptions />, { preloadedState: getPreloadedState() });
+  });
+
+  afterEach(() => {
+    vi.mocked(useFeatureFlags).mockReset();
+  });
+
+  test('header for enableAuditLogs off', () => {
+    fireEvent.click(screen.getByTestId('header-option-export-button'));
+
+    expect(screen.queryByTestId('header-option-export-menu')).not.toBeInTheDocument();
+    expect(screen.getByTestId('response-data-export-settings')).toBeInTheDocument();
+    expect(spyMixpanelTrack).toHaveBeenCalledWith({ action: MixpanelEventType.ExportDataClick });
   });
 });

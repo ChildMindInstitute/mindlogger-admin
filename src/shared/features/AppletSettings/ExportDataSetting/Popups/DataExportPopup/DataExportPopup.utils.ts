@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { ExportDateType } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import { getNormalizedTimezoneDate } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
 import { GetFormattedToDate } from 'shared/features/AppletSettings/ExportDataSetting/Popups/DataExportPopup/DataExportPopup.types';
@@ -16,7 +16,7 @@ export const getFormattedToDate = ({
   const utcDate = getNormalizedTimezoneDate(new Date().toString());
   const formattedUtcDate = format(utcDate, DateFormats.shortISO);
 
-  if (dateType !== ExportDateType.ChooseDates) {
+  if (dateType !== DateRangePickerType.ChooseDates) {
     return formattedUtcDate;
   } else if (formToDate) {
     return format(formToDate, DateFormats.DayMonthYear) ===
