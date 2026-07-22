@@ -1,15 +1,8 @@
 import { ChosenAppletData } from 'modules/Dashboard/features';
+import { DateRangePickerFormValues } from 'shared/components/DateRangePicker';
 import { SingleApplet } from 'shared/state';
 import { UniqueTuple } from 'shared/types';
 import { ExportDataFilters } from 'shared/utils';
-
-export const enum ExportDateType {
-  AllTime = 'allTime',
-  Last24h = 'last24h',
-  LastWeek = 'lastWeek',
-  LastMonth = 'lastMonth',
-  ChooseDates = 'chooseDates',
-}
 
 export const enum ExportDataExported {
   ResponsesOnly = 'responsesOnly',
@@ -35,11 +28,8 @@ export type SupplementaryFilesFormValues = {
   [key in SupplementaryFiles]: boolean;
 };
 
-export type ExportDataFormValues = {
+export type ExportDataFormValues = DateRangePickerFormValues & {
   dataExported: ExportDataExported;
-  dateType: ExportDateType;
-  fromDate: Date;
-  toDate: Date;
   supplementaryFiles: SupplementaryFilesFormValues;
 };
 

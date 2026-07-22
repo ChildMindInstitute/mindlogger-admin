@@ -23,6 +23,27 @@ import { getReportZipName, ZipFile } from './getReportName';
 import { ExportDataFilters, prepareEncryptedData, prepareDecryptedData } from './prepareData';
 import { sanitizeCSVData } from '../csvSanitization';
 
+/**
+ * Shared options for {@link exportEncryptedDataSucceed} and {@link exportDecryptedDataSucceed}
+ * (file naming, which answers to include, feature flags, journey CSV).
+ */
+export type ExportDataSucceedBaseOptions = {
+  /** Appended to generated CSV and zip file names (e.g. subject or scope token). */
+  suffix: string;
+  /** Optional scope for which answers to include (activity, flow, or subject ids). */
+  filters?: ExportDataFilters;
+  /** Product feature flags that affect export output (e.g. report naming). */
+  flags: FeatureFlags;
+  /** When true, also emits the user-journey report CSV when applicable. */
+  shouldGenerateUserJourney: boolean;
+};
+
+/** Options for {@link exportEncryptedDataSucceed} (same as base plus decryption). */
+export type ExportEncryptedDataSucceedOptions = ExportDataSucceedBaseOptions & {
+  /** Decrypts response payloads when preparing rows for export. */
+  getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
+};
+
 const exportProcessedData = async ({
   reportData,
   activityJourneyData,
@@ -76,6 +97,12 @@ const exportProcessedData = async ({
   ]);
 };
 
+/**
+ * Returns an async function that exports applet response data from encrypted API results,
+ * then writes CSV files and supplementary zips in the browser.
+ *
+ * @remarks Configuration fields are documented on {@link ExportEncryptedDataSucceedOptions}.
+ */
 export const exportEncryptedDataSucceed =
   ({
     getDecryptedAnswers,
@@ -83,13 +110,7 @@ export const exportEncryptedDataSucceed =
     filters,
     flags,
     shouldGenerateUserJourney,
-  }: {
-    getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
-    suffix: string;
-    filters?: ExportDataFilters;
-    flags: FeatureFlags;
-    shouldGenerateUserJourney: boolean;
-  }) =>
+  }: ExportEncryptedDataSucceedOptions) =>
   async (result: ExportDataResult) => {
     if (!result) return;
 
@@ -103,18 +124,14 @@ export const exportEncryptedDataSucceed =
     await exportProcessedData({ ...exportData, suffix, flags, shouldGenerateUserJourney });
   };
 
+/**
+ * Returns an async function that exports applet response data when answers are already decrypted,
+ * then writes CSV files and supplementary zips in the browser.
+ *
+ * @remarks Configuration fields are documented on {@link ExportDataSucceedBaseOptions}.
+ */
 export const exportDecryptedDataSucceed =
-  ({
-    suffix,
-    filters,
-    flags,
-    shouldGenerateUserJourney,
-  }: {
-    suffix: string;
-    filters?: ExportDataFilters;
-    flags: FeatureFlags;
-    shouldGenerateUserJourney: boolean;
-  }) =>
+  ({ suffix, filters, flags, shouldGenerateUserJourney }: ExportDataSucceedBaseOptions) =>
   async (parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[]) => {
     if (!parsedAnswers) return;
 

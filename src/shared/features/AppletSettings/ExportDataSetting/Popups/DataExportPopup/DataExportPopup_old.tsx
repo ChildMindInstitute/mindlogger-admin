@@ -12,10 +12,10 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Modal } from 'shared/components/Modal';
 import { EnterAppletPassword } from 'shared/components/Password';
 import { DateFormats } from 'shared/consts';
+import { DateRangePickerType } from 'shared/components/DateRangePicker';
 import {
   ExportDataExported,
   ExportDataFormValues,
-  ExportDateType,
 } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 import {
   DataExportPopupProps,
@@ -35,6 +35,7 @@ import {
 import {
   ExportDataSuccessfulEvent,
   exportEncryptedDataSucceed,
+  getLast24hUTCRange,
   Mixpanel,
   MixpanelEventType,
   MixpanelFeature,
@@ -45,22 +46,12 @@ import { EHRDataExporter } from 'shared/utils/exportData/exporters/EHRDataExport
 import { FlowActivityHistoryExporter } from 'shared/utils/exportData/exporters/FlowActivityHistoryExporter';
 import { ScheduleHistoryExporter } from 'shared/utils/exportData/exporters/ScheduleHistoryExporter';
 
-// NOTE: This is not the correct approach - the backend should be timezone-aware.
-// We're converting to UTC as a hack because the backend expects UTC but doesn't handle timezones properly.
-const formatDateAsUTC = (date: Date): string => {
-  // Get the UTC components and create a new date in local timezone that represents UTC time
-  const utcDate = new Date(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    date.getUTCSeconds(),
-  );
-
-  return format(utcDate, DateFormats.shortISO);
-};
-
+/**
+ * Orchestrates the applet response export modal flow.
+ *
+ * Handles password validation for encrypted applets, paginated export requests,
+ * progress state, optional supplementary exporters, analytics, retry, and error reporting.
+ */
 export const DataExportPopup = ({
   filters = {},
   popupVisible,
@@ -137,14 +128,8 @@ export const DataExportPopup = ({
         let fromDate = format(formFromDate, DateFormats.shortISO);
         let toDate = format(formToDate, DateFormats.shortISO);
 
-        // Update the time for last 24 hours submissions
-        // Converting to UTC because backend expects UTC but is not timezone-aware
-        if (dateType === ExportDateType.Last24h) {
-          const currentTime = new Date();
-          const oneDayAgo = new Date(currentTime);
-          oneDayAgo.setHours(currentTime.getHours() - 24);
-          fromDate = formatDateAsUTC(oneDayAgo);
-          toDate = formatDateAsUTC(currentTime);
+        if (dateType === DateRangePickerType.Last24h) {
+          ({ fromDate, toDate } = getLast24hUTCRange());
         }
 
         const includeEhr =
