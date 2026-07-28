@@ -6,7 +6,6 @@ import { vi } from 'vitest';
 
 import { mockedAlert, mockedFullSubjectId1 } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
 import { Notification } from './Notification';
 
@@ -82,12 +81,7 @@ describe('Notification', () => {
     fireEvent.click(screen.getByTestId(`notification-${mockedAlert.id}`));
     expect(mockedSetCurrentId).toBeCalledWith('');
   });
-  test('should navigate when click on response data button without existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('');
-    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
-      getAppletPrivateKey: mockedgGetAppletPrivateKey,
-    });
-
+  test('should navigate to the answer associated with the alert when click on response data button', async () => {
     renderWithProviders(
       <Notification
         {...{
@@ -104,35 +98,9 @@ describe('Notification', () => {
     expect(button).toBeInTheDocument();
     await userEvent.click(button);
 
-    expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
-    );
-  });
-
-  test('should navigate when click on response data button with existed encryption', async () => {
-    const mockedgGetAppletPrivateKey = vi.fn().mockReturnValue('123');
-    vi.spyOn(useEncryptionStorageFunc, 'useEncryptionStorage').mockReturnValue({
-      getAppletPrivateKey: mockedgGetAppletPrivateKey,
+    expect(mockedUseNavigate).toBeCalledWith({
+      pathname: `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
+      search: `selectedDate=2023-08-03&answerId=${mockedAlert.answerId}`,
     });
-
-    renderWithProviders(
-      <Notification
-        {...{
-          ...mockedAlert,
-          currentId: mockedAlert.id,
-          setCurrentId: mockedSetCurrentId,
-        }}
-      />,
-    );
-
-    const button = screen.getByRole('button', {
-      name: /takeMeToTheResponseData/i,
-    });
-    expect(button).toBeInTheDocument();
-    await userEvent.click(button);
-
-    expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/${mockedAlert.appletId}/participants/${mockedFullSubjectId1}/activities/${mockedAlert.activityId}/responses`,
-    );
   });
 });
