@@ -43,7 +43,7 @@ import { ReviewMenu } from './ReviewMenu';
 import { useActivityAnswersAndAssessment } from './hooks/useActivityAnswersAndAssessment/useActivityAnswersAndAssessment';
 import { useReviewActivitiesAndFlows } from './hooks/useReviewActivitiesAndFlows/useReviewActivitiesAndFlows';
 
-export const RespondentDataReview = () => {
+const RespondentDataReviewInner = () => {
   const { appletId, subjectId, activityId, activityFlowId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || null;
@@ -378,4 +378,12 @@ export const RespondentDataReview = () => {
       </RespondentDataReviewContext.Provider>
     </StyledContainer>
   );
+};
+
+export const RespondentDataReview = () => {
+  const { subjectId, activityId, activityFlowId } = useParams();
+
+  // Switching participant or activity keeps the same route pattern, so remount to
+  // drop the previous selection instead of leaving stale dates, answers and responses
+  return <RespondentDataReviewInner key={`${subjectId}-${activityId ?? activityFlowId}`} />;
 };

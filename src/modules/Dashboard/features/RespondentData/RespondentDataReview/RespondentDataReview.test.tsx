@@ -1,6 +1,7 @@
 import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { vi, type Mock } from 'vitest';
 
@@ -10,6 +11,7 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedFullSubjectId1,
+  mockedFullSubjectId2,
 } from 'shared/mock';
 import { Roles, JEST_TEST_TIMEOUT, MAX_LIMIT, ParticipantTag } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -27,6 +29,7 @@ const activity2Id = '2';
 const routePath = page.appletParticipantActivityDetailsDataReview;
 const route1 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${activity1Id}/responses?selectedDate=2023-12-27`;
 const route2 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${activity2Id}/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
+const route3 = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId2}/activities/${activity1Id}/responses?selectedDate=2023-12-27`; // route1 with different participant
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/participants/${mockedFullSubjectId1}/activities/${activity1Id}/responses`;
 const preloadedState: PreloadedState<RootState> = {
   workspaces: {
@@ -781,6 +784,74 @@ describe('RespondentDataReview', () => {
       const timestamp2 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-1`);
       expect(timestamp2).toHaveClass('MuiChip-colorPrimary');
       expect(timestamp2).toHaveTextContent('11:22:34');
+    });
+  });
+
+  test('renders component after navigation to different participant', async () => {
+    const getMock = authApiClient.get as unknown as Mock;
+    getMock.mockImplementation((url: string) => {
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/dates`)) {
+        return Promise.resolve(mockedGetWithDates);
+      }
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/review/flows`)) {
+        return Promise.resolve(mockedGetWithFlows1);
+      }
+      if (url.endsWith(`/answers/applet/${mockedAppletId}/review/activities`)) {
+        return Promise.resolve(mockedGetWithActivities2);
+      }
+      if (url.includes('/assessment')) {
+        return Promise.resolve(mockAssessment);
+      }
+
+      return Promise.resolve(mockedGetWithResponses);
+    });
+
+    const getDecryptedActivityDataMock = vi.fn().mockReturnValue(mockDecryptedActivityData);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+
+    window.HTMLElement.prototype.scrollTo = () => {};
+
+    renderWithProviders(
+      <>
+        <Link to={route3} data-testid="navigate-to-participant-2">
+          Navigate
+        </Link>
+        <RespondentDataReviewWithForm />
+      </>,
+      {
+        preloadedState,
+        route: route1,
+        routePath,
+      },
+    );
+
+    await waitFor(() => {
+      expect(authApiClient.get).toHaveBeenCalledWith(
+        `/answers/applet/${mockedAppletId}/review/activities`,
+        expect.objectContaining({
+          params: expect.objectContaining({
+            createdDate: '2023-12-27',
+            targetSubjectId: mockedFullSubjectId1,
+          }),
+        }),
+      );
+    });
+
+    await userEvent.click(screen.getByTestId('navigate-to-participant-2'));
+
+    await waitFor(() => {
+      expect(authApiClient.get).toHaveBeenCalledWith(
+        `/answers/applet/${mockedAppletId}/review/activities`,
+        expect.objectContaining({
+          params: expect.objectContaining({
+            createdDate: '2023-12-27',
+            targetSubjectId: mockedFullSubjectId2,
+          }),
+        }),
+      );
     });
   });
 
