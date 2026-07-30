@@ -13,6 +13,7 @@ import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { SessionKeepAlive } from 'shared/hooks/useSessionKeepAlive';
 
 import history from './history';
 
@@ -57,6 +58,7 @@ const AppRoutes = () => {
         )}
         <AppletNotFoundPopup />
         <NoPermissionPopup />
+        <SessionKeepAlive />
       </Router>
     </>
   );
