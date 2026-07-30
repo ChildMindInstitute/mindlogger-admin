@@ -23,6 +23,7 @@ export const FeatureFlagDefaults: FeatureFlags = {
   enableMfa: true,
   enableAdminAnnouncementBanner: false,
   enableAuditLogs: false,
+  enableSessionKeepAlive: false,
 };
 
 export const PROHIBITED_PII_KEYS = ['firstName', 'lastName', 'email'];
