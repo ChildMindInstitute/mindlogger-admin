@@ -26,45 +26,49 @@ export const getRefreshTokenData = (config: InternalAxiosRequestConfig) => {
   config.headers['Authorization'] = `bearer ${refreshToken}`;
 };
 
-export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
-  try {
-    const { response: errorResponse } = err;
-    const oldRefreshToken = authStorage.getRefreshToken();
+const requestNewTokens = async () => {
+  const {
+    data: { result },
+  } = await signInRefreshTokenApi({
+    refreshToken: authStorage.getRefreshToken(),
+  });
+  const { accessToken, refreshToken } = result ?? {};
 
-    const {
-      data: { result },
-    } = await signInRefreshTokenApi({
-      refreshToken: oldRefreshToken,
-    });
-    const { accessToken, refreshToken } = result ?? {};
-
-    return new Promise((resolve, reject) => {
-      if (!accessToken || !refreshToken) {
-        return reject(new Error('Access token refresh failed.'));
-      }
-
-      authStorage.setAccessToken(accessToken);
-      authStorage.setRefreshToken(refreshToken);
-      const originalConfig = errorResponse?.config;
-
-      try {
-        resolve(
-          axios({
-            ...originalConfig,
-            headers: {
-              ...(originalConfig?.headers && originalConfig.headers),
-              Authorization: `Bearer ${accessToken}`,
-            },
-            ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
-          }),
-        );
-      } catch (error) {
-        reject(error);
-      }
-    });
-  } catch (error) {
-    return Promise.reject(error);
+  if (!accessToken || !refreshToken) {
+    throw new Error('Access token refresh failed.');
   }
+
+  authStorage.setAccessToken(accessToken);
+  authStorage.setRefreshToken(refreshToken);
+
+  return { accessToken, refreshToken };
+};
+
+let pendingRefresh: ReturnType<typeof requestNewTokens> | null = null;
+
+// Callers that overlap share one request instead of each rotating the token separately.
+export const refreshTokens = () => {
+  if (!pendingRefresh) {
+    pendingRefresh = requestNewTokens().finally(() => {
+      pendingRefresh = null;
+    });
+  }
+
+  return pendingRefresh;
+};
+
+export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
+  const { accessToken } = await refreshTokens();
+  const originalConfig = err.response?.config;
+
+  return axios({
+    ...originalConfig,
+    headers: {
+      ...originalConfig?.headers,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
+  });
 };
 
 export const shouldNotSkipRoute = (url: string) =>

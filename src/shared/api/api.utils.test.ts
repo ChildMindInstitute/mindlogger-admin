@@ -1,4 +1,131 @@
-import { shouldNotSkipRoute } from './api.utils';
+import axios, { AxiosError } from 'axios';
+
+import { authStorage } from 'shared/utils/authStorage';
+
+import { refreshTokenAndReattemptRequest, refreshTokens, shouldNotSkipRoute } from './api.utils';
+import { signInRefreshTokenApi } from './api';
+
+vi.mock('./api', () => ({ signInRefreshTokenApi: vi.fn() }));
+vi.mock('axios', () => ({ default: vi.fn() }));
+
+const mockedSignInRefreshTokenApi = vi.mocked(signInRefreshTokenApi);
+const mockedAxios = vi.mocked(axios);
+
+const tokens = { accessToken: 'new-access', refreshToken: 'new-refresh', tokenType: 'Bearer' };
+
+const resolveWith = (result: typeof tokens | undefined, delayMs = 0) =>
+  mockedSignInRefreshTokenApi.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => resolve({ data: { result } } as never), delayMs);
+      }),
+  );
+
+describe('refreshTokens', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    authStorage.setAccessToken('old-access');
+    authStorage.setRefreshToken('old-refresh');
+  });
+
+  test('stores both tokens and returns them', async () => {
+    resolveWith(tokens);
+
+    await expect(refreshTokens()).resolves.toEqual({
+      accessToken: 'new-access',
+      refreshToken: 'new-refresh',
+    });
+    expect(authStorage.getAccessToken()).toBe('new-access');
+    expect(authStorage.getRefreshToken()).toBe('new-refresh');
+  });
+
+  test('sends the stored refresh token', async () => {
+    resolveWith(tokens);
+    await refreshTokens();
+
+    expect(mockedSignInRefreshTokenApi).toHaveBeenCalledWith({ refreshToken: 'old-refresh' });
+  });
+
+  test('overlapping callers share a single request', async () => {
+    resolveWith(tokens, 10);
+
+    const results = await Promise.all([refreshTokens(), refreshTokens(), refreshTokens()]);
+
+    expect(mockedSignInRefreshTokenApi).toHaveBeenCalledTimes(1);
+    expect(results[0]).toBe(results[1]);
+    expect(results[1]).toBe(results[2]);
+  });
+
+  test('a later caller triggers a new request', async () => {
+    resolveWith(tokens);
+
+    await refreshTokens();
+    await refreshTokens();
+
+    expect(mockedSignInRefreshTokenApi).toHaveBeenCalledTimes(2);
+  });
+
+  test('rejects every overlapping caller when the request fails', async () => {
+    mockedSignInRefreshTokenApi.mockRejectedValue(new Error('network down'));
+
+    await expect(Promise.all([refreshTokens(), refreshTokens()])).rejects.toThrow('network down');
+    expect(mockedSignInRefreshTokenApi).toHaveBeenCalledTimes(1);
+  });
+
+  test('allows a retry after a failure', async () => {
+    mockedSignInRefreshTokenApi.mockRejectedValueOnce(new Error('network down'));
+    await expect(refreshTokens()).rejects.toThrow('network down');
+
+    resolveWith(tokens);
+
+    await expect(refreshTokens()).resolves.toEqual({
+      accessToken: 'new-access',
+      refreshToken: 'new-refresh',
+    });
+  });
+
+  test('rejects when the response is missing a token', async () => {
+    resolveWith(undefined);
+
+    await expect(refreshTokens()).rejects.toThrow('Access token refresh failed.');
+    expect(authStorage.getAccessToken()).toBe('old-access');
+  });
+});
+
+describe('refreshTokenAndReattemptRequest', () => {
+  const failedRequest = {
+    response: { config: { url: '/applets', method: 'get', headers: { 'X-Custom': '1' } } },
+  } as unknown as AxiosError;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    authStorage.setRefreshToken('old-refresh');
+  });
+
+  test('replays the original request with the new token', async () => {
+    resolveWith(tokens);
+    mockedAxios.mockResolvedValue({ data: 'replayed' } as never);
+
+    await expect(refreshTokenAndReattemptRequest(failedRequest)).resolves.toEqual({
+      data: 'replayed',
+    });
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: '/applets',
+        headers: { 'X-Custom': '1', Authorization: 'Bearer new-access' },
+      }),
+    );
+  });
+
+  test('propagates a failed refresh without replaying', async () => {
+    mockedSignInRefreshTokenApi.mockRejectedValue(new Error('refresh rejected'));
+
+    await expect(refreshTokenAndReattemptRequest(failedRequest)).rejects.toThrow(
+      'refresh rejected',
+    );
+    expect(mockedAxios).not.toHaveBeenCalled();
+  });
+});
 
 describe('shouldNotSkipRoute', () => {
   const testCases = [
