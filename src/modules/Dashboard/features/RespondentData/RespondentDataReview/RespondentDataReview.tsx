@@ -271,11 +271,15 @@ const RespondentDataReviewInner = () => {
     }
 
     const selectedDate = parseDateToMidnightLocal(selectedDateParam);
-    if (
-      prevSelectedDateRef.current !== selectedDateParam &&
-      responseDates.some((date) => date.getTime() === selectedDate.getTime())
-    ) {
-      handleSetInitialDate(selectedDate);
+    if (prevSelectedDateRef.current !== selectedDateParam) {
+      // Set last submit date if selected date is unavailable
+      const hasSelectedDate = responseDates.some(
+        (date) => date.getTime() === selectedDate.getTime(),
+      );
+
+      handleSetInitialDate(
+        hasSelectedDate ? selectedDate : responseDates[responseDates.length - 1],
+      );
     }
   }, [responseDates, selectedDateParam, handleSetInitialDate]);
 
