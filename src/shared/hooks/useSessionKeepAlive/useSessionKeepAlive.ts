@@ -7,6 +7,9 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 
 import { getLastActivityAt, startActivityTracking, stopActivityTracking } from './activityTracker';
+import { subscribeSessionSync } from './sessionSync';
+import { SessionMessage } from './sessionSync.types';
+import { getSessionId, stampRotatedAt } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 export const useSessionKeepAlive = () => {
@@ -67,6 +70,20 @@ export const useSessionKeepAlive = () => {
       if (document.visibilityState === 'visible') schedule();
     };
 
+    // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
+    const handleSyncMessage = (message: SessionMessage) => {
+      if (message.type !== 'TOKENS_UPDATED') return;
+
+      const { sessionId, accessToken, refreshToken } = message.payload;
+      if (sessionId !== getSessionId()) return;
+
+      authStorage.setAccessToken(accessToken);
+      authStorage.setRefreshToken(refreshToken);
+      stampRotatedAt();
+      schedule();
+    };
+
+    const unsubscribe = subscribeSessionSync(handleSyncMessage);
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
@@ -76,6 +93,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       stopActivityTracking();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
     };
   }, [isEnabled]);
 };
