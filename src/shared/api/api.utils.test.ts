@@ -1,6 +1,15 @@
 import axios, { AxiosError } from 'axios';
 
 import { authStorage } from 'shared/utils/authStorage';
+import {
+  closeSessionSync,
+  subscribeSessionSync,
+} from 'shared/hooks/useSessionKeepAlive/sessionSync';
+import { SESSION_CHANNEL_NAME } from 'shared/hooks/useSessionKeepAlive/sessionSync.const';
+import {
+  InMemoryBroadcastChannel,
+  resetInMemoryBroadcastChannels,
+} from 'shared/tests/InMemoryBroadcastChannel';
 
 import { refreshTokenAndReattemptRequest, refreshTokens, shouldNotSkipRoute } from './api.utils';
 import { signInRefreshTokenApi } from './api';
@@ -89,6 +98,86 @@ describe('refreshTokens', () => {
 
     await expect(refreshTokens()).rejects.toThrow('Access token refresh failed.');
     expect(authStorage.getAccessToken()).toBe('old-access');
+  });
+});
+
+const tokenWithClaims = (claims: Record<string, string>) =>
+  `header.${btoa(JSON.stringify(claims))}.signature`;
+
+describe('refreshTokens broadcast', () => {
+  let onSiblingMessage: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
+    // Stands in for this tab's engine, without which nothing is broadcast at all.
+    subscribeSessionSync(vi.fn());
+
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+  });
+
+  afterEach(() => {
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    vi.unstubAllGlobals();
+  });
+
+  test('announces the new tokens to sibling tabs', async () => {
+    authStorage.setRefreshToken(tokenWithClaims({ family: 'family-1' }));
+    resolveWith(tokens);
+
+    await refreshTokens();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: 'family-1',
+          accessToken: 'new-access',
+          refreshToken: 'new-refresh',
+        },
+      },
+    });
+  });
+
+  test('announces the id siblings still hold, not the incoming one', async () => {
+    authStorage.setRefreshToken(tokenWithClaims({ jti: 'jti-old' }));
+    resolveWith({
+      accessToken: 'new-access',
+      refreshToken: tokenWithClaims({ jti: 'jti-new' }),
+      tokenType: 'Bearer',
+    });
+
+    await refreshTokens();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          payload: expect.objectContaining({ sessionId: 'jti-old' }),
+        }),
+      }),
+    );
+  });
+
+  test('announces nothing when the refresh fails', async () => {
+    authStorage.setRefreshToken(tokenWithClaims({ family: 'family-1' }));
+    mockedSignInRefreshTokenApi.mockRejectedValue(new Error('network down'));
+
+    await expect(refreshTokens()).rejects.toThrow('network down');
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  test('announces nothing when the token carries no session id', async () => {
+    authStorage.setRefreshToken('opaque-token');
+    resolveWith(tokens);
+
+    await refreshTokens();
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 });
 

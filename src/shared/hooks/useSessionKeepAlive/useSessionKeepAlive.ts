@@ -8,6 +8,9 @@ import { useLogout } from 'shared/hooks/useLogout';
 
 import { startActivityTracking, stopActivityTracking } from './activityTracker';
 import { getLastActivityAt } from './sessionStore';
+import { subscribeSessionSync } from './sessionSync';
+import { SessionMessage } from './sessionSync.types';
+import { getSessionId } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 export const useSessionKeepAlive = () => {
@@ -82,6 +85,19 @@ export const useSessionKeepAlive = () => {
       if (document.visibilityState === 'visible') schedule();
     };
 
+    // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
+    const handleSyncMessage = (message: SessionMessage) => {
+      if (message.type !== 'TOKENS_UPDATED') return;
+
+      const { sessionId, accessToken, refreshToken } = message.payload;
+      if (sessionId !== getSessionId()) return;
+
+      authStorage.setAccessToken(accessToken);
+      authStorage.setRefreshToken(refreshToken);
+      schedule();
+    };
+
+    const unsubscribe = subscribeSessionSync(handleSyncMessage);
     scheduleRef.current = schedule;
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
@@ -91,6 +107,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       scheduleRef.current = null;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
     };
   }, [isEnabled]);
 };
