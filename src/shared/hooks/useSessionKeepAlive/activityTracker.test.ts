@@ -1,6 +1,18 @@
 import { SessionStorageKeys } from 'shared/utils/storage';
+import { authStorage } from 'shared/utils/authStorage';
+import {
+  InMemoryBroadcastChannel,
+  resetInMemoryBroadcastChannels,
+} from 'shared/tests/InMemoryBroadcastChannel';
 
-import { getLastActivityAt, startActivityTracking, stopActivityTracking } from './activityTracker';
+import {
+  adoptActivityAt,
+  getLastActivityAt,
+  startActivityTracking,
+  stopActivityTracking,
+} from './activityTracker';
+import { closeSessionSync, subscribeSessionSync } from './sessionSync';
+import { SESSION_CHANNEL_NAME } from './sessionSync.const';
 import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.const';
 
 const storedActivity = () => sessionStorage.getItem(SessionStorageKeys.LastActivityAt);
@@ -105,5 +117,77 @@ describe('activityTracker', () => {
     sessionStorage.setItem(SessionStorageKeys.LastActivityAt, 'not-a-number');
 
     expect(getLastActivityAt()).toBeNull();
+  });
+
+  test('adopts a later timestamp but never an earlier one', () => {
+    startActivityTracking();
+    const seeded = Number(storedActivity());
+
+    adoptActivityAt(seeded - ACTIVITY_THROTTLE_MS);
+    expect(getLastActivityAt()).toBe(seeded);
+
+    adoptActivityAt(seeded + ACTIVITY_THROTTLE_MS);
+    expect(getLastActivityAt()).toBe(seeded + ACTIVITY_THROTTLE_MS);
+  });
+});
+
+describe('activityTracker broadcast', () => {
+  let onSiblingMessage: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-30T10:00:00Z'));
+    sessionStorage.clear();
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
+    // Stands in for this tab's engine, without which nothing is broadcast at all.
+    subscribeSessionSync(vi.fn());
+    authStorage.setRefreshToken(`header.${btoa(JSON.stringify({ family: 'family-1' }))}.signature`);
+
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+  });
+
+  afterEach(() => {
+    stopActivityTracking();
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  test('announces activity to sibling tabs', () => {
+    startActivityTracking();
+
+    vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
+    window.dispatchEvent(new Event('keydown'));
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'ACTIVITY',
+        payload: { sessionId: 'family-1', lastActivityAt: Date.now() },
+      },
+    });
+  });
+
+  test('announces once per throttle window, not once per event', () => {
+    startActivityTracking();
+
+    vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
+    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('mousemove'));
+
+    expect(onSiblingMessage).toHaveBeenCalledTimes(1);
+  });
+
+  test('announces nothing when the token carries no session id', () => {
+    authStorage.setRefreshToken('opaque-token');
+    startActivityTracking();
+
+    vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
+    window.dispatchEvent(new Event('keydown'));
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 });

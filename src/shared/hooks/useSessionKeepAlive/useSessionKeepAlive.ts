@@ -6,7 +6,12 @@ import { authStorage, getTokenExpiration } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 
-import { getLastActivityAt, startActivityTracking, stopActivityTracking } from './activityTracker';
+import {
+  adoptActivityAt,
+  getLastActivityAt,
+  startActivityTracking,
+  stopActivityTracking,
+} from './activityTracker';
 import { subscribeSessionSync } from './sessionSync';
 import { SessionMessage } from './sessionSync.types';
 import { getSessionId, stampRotatedAt } from './sessionSync.utils';
@@ -70,8 +75,18 @@ export const useSessionKeepAlive = () => {
       if (document.visibilityState === 'visible') schedule();
     };
 
-    // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
     const handleSyncMessage = (message: SessionMessage) => {
+      // Someone working in any tab of this session keeps every other tab from idling out.
+      if (message.type === 'ACTIVITY') {
+        if (message.payload.sessionId !== getSessionId()) return;
+
+        adoptActivityAt(message.payload.lastActivityAt);
+        schedule();
+
+        return;
+      }
+
+      // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
       if (message.type !== 'TOKENS_UPDATED') return;
 
       const { sessionId, accessToken, refreshToken } = message.payload;

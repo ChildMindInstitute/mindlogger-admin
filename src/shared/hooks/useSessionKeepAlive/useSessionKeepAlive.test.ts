@@ -204,6 +204,62 @@ describe('useSessionKeepAlive', () => {
     expect(authStorage.getAccessToken()).toBe(mine);
   });
 
+  test('a sibling reporting activity holds off this tab logout', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_MIN);
+    });
+    act(() => {
+      sibling.postMessage({
+        type: 'ACTIVITY',
+        payload: { sessionId: SESSION_ID, lastActivityAt: Date.now() },
+      });
+    });
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_MIN);
+    });
+
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('ignores activity reported by another account session', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_MIN);
+    });
+    act(() => {
+      sibling.postMessage({
+        type: 'ACTIVITY',
+        payload: { sessionId: 'family-2', lastActivityAt: Date.now() },
+      });
+    });
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_MIN);
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({ shouldSoftLock: true });
+  });
+
+  test('does not rebroadcast the activity it adopted', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({
+        type: 'ACTIVITY',
+        payload: { sessionId: SESSION_ID, lastActivityAt: Date.now() },
+      });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
   test('does not rebroadcast the tokens it adopted', () => {
     renderEngine();
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
