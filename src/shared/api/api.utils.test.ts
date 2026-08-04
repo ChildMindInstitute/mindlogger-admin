@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 import { authStorage } from 'shared/utils/authStorage';
+import { getRotatedAt } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
 
 import { refreshTokenAndReattemptRequest, refreshTokens, shouldNotSkipRoute } from './api.utils';
 import { signInRefreshTokenApi } from './api';
@@ -24,6 +25,7 @@ const resolveWith = (result: typeof tokens | undefined, delayMs = 0) =>
 describe('refreshTokens', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
     authStorage.setAccessToken('old-access');
     authStorage.setRefreshToken('old-refresh');
   });
@@ -89,6 +91,23 @@ describe('refreshTokens', () => {
 
     await expect(refreshTokens()).rejects.toThrow('Access token refresh failed.');
     expect(authStorage.getAccessToken()).toBe('old-access');
+  });
+
+  test('stamps the rotation time once the tokens are stored', async () => {
+    resolveWith(tokens);
+    const before = Date.now();
+
+    await refreshTokens();
+
+    expect(getRotatedAt()).toBeGreaterThanOrEqual(before);
+  });
+
+  test('leaves the rotation time alone when the request fails', async () => {
+    mockedSignInRefreshTokenApi.mockRejectedValue(new Error('network down'));
+
+    await expect(refreshTokens()).rejects.toThrow('network down');
+
+    expect(getRotatedAt()).toBeNull();
   });
 });
 

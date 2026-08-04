@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 
 import { verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
 import { setupStore } from 'redux/store';
+import { getLoginAt } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
 
 import { verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
 
@@ -54,6 +55,7 @@ const getPreloadedState = () => ({
 describe('Auth MFA thunks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
   });
 
   it('rejects TOTP verification responses that do not include tokens', async () => {
@@ -89,5 +91,33 @@ describe('Auth MFA thunks', () => {
     expect(state.recoveryVerification.status).toBe('error');
     expect(state.recoveryVerification.displayError).toBeDefined();
     expect(state.mfaSession).toBeDefined();
+  });
+
+  it('stamps the login time once TOTP verification succeeds', async () => {
+    mockVerifyMFATOTPApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access-token', refreshToken: 'refresh-token' },
+          user: { id: 'user-1' },
+        },
+      },
+    } as never);
+
+    const store = setupStore(getPreloadedState());
+    const before = Date.now();
+
+    await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
+
+    expect(getLoginAt()).toBeGreaterThanOrEqual(before);
+  });
+
+  it('does not stamp the login time when TOTP verification is rejected', async () => {
+    mockVerifyMFATOTPApi.mockResolvedValueOnce({ data: { message: 'Invalid TOTP code' } } as never);
+
+    const store = setupStore(getPreloadedState());
+
+    await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
+
+    expect(getLoginAt()).toBeNull();
   });
 });

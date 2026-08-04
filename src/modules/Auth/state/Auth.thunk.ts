@@ -8,6 +8,7 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { stampLoginAt } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
 import {
   getUserDetailsApi,
   ResetPassword,
@@ -80,6 +81,7 @@ export const signIn = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        stampLoginAt();
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);
@@ -177,6 +179,7 @@ export const verifyMFATOTP = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        stampLoginAt();
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);
@@ -221,6 +224,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        stampLoginAt();
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);

@@ -3,6 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 import { UiLanguages, regionalLangFormats } from 'shared/ui';
+import { stampRotatedAt } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
 
 import { apiRoutesToSkip, BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
@@ -40,6 +41,7 @@ const requestNewTokens = async () => {
 
   authStorage.setAccessToken(accessToken);
   authStorage.setRefreshToken(refreshToken);
+  stampRotatedAt();
 
   return { accessToken, refreshToken };
 };
