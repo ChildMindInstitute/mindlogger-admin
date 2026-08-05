@@ -15,7 +15,8 @@ import { state as authState } from 'modules/Auth/state/Auth.state';
 
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync, publishSessionMessage } from './sessionSync';
-import { SESSION_CHANNEL_NAME } from './sessionSync.const';
+import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
+import { SessionMessage, SessionState } from './sessionSync.types';
 import { MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
 
 vi.mock('shared/api', () => ({ refreshTokens: vi.fn() }));
@@ -45,6 +46,27 @@ const setFlag = (enableSessionKeepAlive: boolean) =>
     featureFlags: { enableSessionKeepAlive },
     resetLDContext: vi.fn(),
   } as never);
+
+// A sibling tab that replies to every session request with the state it is given.
+const answerSessionRequests = (state: Partial<SessionState>) => {
+  const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+  sibling.onmessage = ({ data }) => {
+    if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
+
+    sibling.postMessage({
+      type: 'SESSION_STATE',
+      payload: {
+        sessionId: SESSION_ID,
+        loginAt: Date.now(),
+        rotatedAt: null,
+        lastActivityAt: null,
+        accessToken: authStorage.getAccessToken(),
+        refreshToken: authStorage.getRefreshToken(),
+        ...state,
+      },
+    });
+  };
+};
 
 const renderEngine = () =>
   renderHookWithProviders(useSessionKeepAlive, {
@@ -310,6 +332,7 @@ describe('useSessionKeepAlive', () => {
           sessionId: SESSION_ID,
           loginAt: Date.now() - 10 * MS_IN_MIN,
           rotatedAt: null,
+          lastActivityAt: Date.now(),
           accessToken: authStorage.getAccessToken(),
           refreshToken: authStorage.getRefreshToken(),
         },
@@ -364,6 +387,69 @@ describe('useSessionKeepAlive', () => {
       shouldSoftLock: true,
       reason: 'idle',
       isRemote: true,
+    });
+  });
+
+  test('adopts a sibling fresher tokens on wake instead of spending its own', () => {
+    renderEngine();
+    const rotated = tokenExpiringIn(2 * TOKEN_LIFETIME_MS);
+    answerSessionRequests({ rotatedAt: Date.now(), accessToken: rotated });
+
+    // The tab slept: the token it still holds was replaced long ago.
+    authStorage.setAccessToken(tokenExpiringIn(-MS_IN_MIN));
+    mockedRefreshTokens.mockClear();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(authStorage.getAccessToken()).toBe(rotated);
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+  });
+
+  test('a sibling vouching for recent activity stops a stale idle logout', () => {
+    renderEngine();
+    answerSessionRequests({ lastActivityAt: Date.now() });
+
+    // The tab slept through the idle window, hearing none of the activity elsewhere.
+    sessionStorage.setItem(
+      SessionStorageKeys.LastActivityAt,
+      String(Date.now() - 2 * IDLE_TIMEOUT_MS),
+    );
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('waits for an answer on wake, then logs out when no sibling vouches', () => {
+    renderEngine();
+    sessionStorage.setItem(
+      SessionStorageKeys.LastActivityAt,
+      String(Date.now() - 2 * IDLE_TIMEOUT_MS),
+    );
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(mockedLogout).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
     });
   });
 

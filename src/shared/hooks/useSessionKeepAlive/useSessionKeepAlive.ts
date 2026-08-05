@@ -13,6 +13,7 @@ import {
   stopActivityTracking,
 } from './activityTracker';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
+import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
 import { getLoginAt, getRotatedAt, getSessionId, stampRotatedAt } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
@@ -34,6 +35,7 @@ export const useSessionKeepAlive = () => {
     const { idleTimeoutMs, refreshLeadMs } = resolveSessionConfig();
     let refreshTimer: ReturnType<typeof setTimeout>;
     let logoutTimer: ReturnType<typeof setTimeout>;
+    let catchUpTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
     // Soft lock only for logouts nobody asked for, so a deliberate one is not undone on return.
@@ -73,7 +75,13 @@ export const useSessionKeepAlive = () => {
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') schedule();
+      if (document.visibilityState !== 'visible') return;
+
+      // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
+      // refresh at zero delay, losing the race against a sibling handing over fresher ones.
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+      clearTimeout(catchUpTimer);
+      catchUpTimer = setTimeout(schedule, SESSION_REQUEST_WINDOW_MS);
     };
 
     const handleSyncMessage = (message: SessionMessage) => {
@@ -88,10 +96,30 @@ export const useSessionKeepAlive = () => {
             sessionId,
             loginAt: getLoginAt(),
             rotatedAt: getRotatedAt(),
+            lastActivityAt: getLastActivityAt(),
             accessToken: authStorage.getAccessToken(),
             refreshToken: authStorage.getRefreshToken(),
           },
         });
+
+        return;
+      }
+
+      // A sibling's answer vouches for the session: its true activity clock, and tokens that may
+      // have been replaced while this tab slept.
+      if (message.type === 'SESSION_STATE') {
+        const { sessionId, rotatedAt, lastActivityAt, accessToken, refreshToken } = message.payload;
+        if (sessionId !== getSessionId()) return;
+
+        if (lastActivityAt) adoptActivityAt(lastActivityAt);
+
+        if (rotatedAt && rotatedAt > (getRotatedAt() ?? 0)) {
+          authStorage.setAccessToken(accessToken);
+          authStorage.setRefreshToken(refreshToken);
+          stampRotatedAt(rotatedAt);
+        }
+
+        schedule();
 
         return;
       }
@@ -131,10 +159,13 @@ export const useSessionKeepAlive = () => {
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
+    // A tab frozen past a rotation falls back in step the moment it starts, not at its next refresh.
+    publishSessionMessage({ type: 'SESSION_REQUEST' });
 
     return () => {
       clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
+      clearTimeout(catchUpTimer);
       stopActivityTracking();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();

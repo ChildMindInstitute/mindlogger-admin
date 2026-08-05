@@ -17,6 +17,7 @@ const session = (sessionId: string, loginAt: number): SessionState => ({
   sessionId,
   loginAt,
   rotatedAt: loginAt,
+  lastActivityAt: loginAt,
   accessToken: `access-${sessionId}`,
   refreshToken: `header.${btoa(JSON.stringify({ family: sessionId }))}.signature`,
 });

@@ -10,6 +10,7 @@ const session = (overrides: Partial<SessionState> = {}): SessionState => ({
   sessionId: 'family-1',
   loginAt: Date.now(),
   rotatedAt: Date.now(),
+  lastActivityAt: Date.now(),
   accessToken: 'access-1',
   refreshToken: `header.${btoa(JSON.stringify({ family: 'family-1' }))}.signature`,
   ...overrides,
