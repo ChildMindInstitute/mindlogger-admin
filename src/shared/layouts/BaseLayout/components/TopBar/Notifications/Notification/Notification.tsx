@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { createSearchParams, generatePath, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
@@ -44,6 +44,7 @@ export const Notification = ({
   type,
   activityId,
   answerId,
+  createdAt,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -74,14 +75,17 @@ export const Notification = ({
   };
 
   const navigateToResponseData = () => {
-    navigate(
-      generatePath(page.appletParticipantActivityDetailsDataReview, {
+    navigate({
+      pathname: generatePath(page.appletParticipantActivityDetailsDataReview, {
         appletId,
         subjectId,
         activityId,
-        answerId,
       }),
-    );
+      search: createSearchParams({
+        selectedDate: createdAt.substring(0, 10), // ISO 8601 date in UTC
+        ...(answerId && { answerId }),
+      }).toString(),
+    });
   };
 
   return (

@@ -108,6 +108,18 @@ describe('Review Menu Item component', () => {
     });
   });
 
+  test('renders and functions correctly when an answer ID is present in the route and an answer is already selected', async () => {
+    renderComponent(routeWithAnswerId, { isSelected: true, selectedAnswer: latestAnswer });
+
+    await waitFor(() => {
+      expect(mockedOnSelectAnswer).toHaveBeenCalledWith({
+        answer: preselectedAnswer,
+        isRouteCreated: true,
+      });
+    });
+    expect(mockedOnSelectItem).toHaveBeenCalledWith(mockedActivity);
+  });
+
   test('renders with already selected activity', async () => {
     renderComponent(routeWithoutAnswerId, { isSelected: true });
 

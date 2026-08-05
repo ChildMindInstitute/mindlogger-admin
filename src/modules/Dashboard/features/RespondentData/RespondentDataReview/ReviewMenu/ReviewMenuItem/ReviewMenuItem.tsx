@@ -47,13 +47,17 @@ export const ReviewMenuItem = ({
     if (!answerId && !submitId) return;
 
     const answerByRoute = answerDates.find(
-      (answer) => answer.answerId === answerId || answer.submitId === submitId,
+      (answer) =>
+        (answerId && answer.answerId === answerId) || (submitId && answer.submitId === submitId),
     );
     if (!answerByRoute) return;
 
     setIsOpen(true);
 
-    if (selectedAnswer) return;
+    const isAnswerByRouteSelected =
+      (answerId && selectedAnswer?.answerId === answerId) ||
+      (submitId && selectedAnswer?.submitId === submitId);
+    if (isAnswerByRouteSelected) return;
 
     onSelectAnswer({ answer: answerByRoute, isRouteCreated: true });
     onSelectItem(item);
