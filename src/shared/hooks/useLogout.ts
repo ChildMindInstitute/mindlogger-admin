@@ -9,6 +9,15 @@ import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
+import { LogoutReason } from 'shared/hooks/useSessionKeepAlive/sessionSync.types';
+import { getSessionId } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
+
+type LogoutOptions = {
+  shouldSoftLock?: boolean;
+  reason?: LogoutReason;
+  isRemote?: boolean;
+};
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
@@ -20,9 +29,21 @@ export const useLogout = () => {
 
   // TODO: rewrite to reset the global state data besides the data needed in LockForm (if
   // completing LockForm implementation still planned, now that auth soft-lock is present).
-  return async ({ shouldSoftLock = false } = {}) => {
+  return async ({
+    shouldSoftLock = false,
+    reason = 'manual',
+    isRemote = false,
+  }: LogoutOptions = {}) => {
+    // Sent first: teardown clears the token the session id is read from, and siblings that hear
+    // late spend the gap making requests the revoked session can only answer with a 401.
+    if (!isRemote) {
+      const sessionId = getSessionId();
+      if (sessionId) publishSessionMessage({ type: 'LOGOUT', payload: { sessionId, reason } });
+    }
+
     try {
-      await deleteAccessTokenApi();
+      // A remote logout follows the tab that already revoked the family, so asking again only 401s.
+      if (!isRemote) await deleteAccessTokenApi();
     } catch (e) {
       if ((e as AxiosError).response?.status === ApiResponseCodes.Unauthorized)
         await deleteRefreshTokenApi();

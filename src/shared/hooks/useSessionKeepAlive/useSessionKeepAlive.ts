@@ -9,7 +9,7 @@ import { useLogout } from 'shared/hooks/useLogout';
 import { startActivityTracking, stopActivityTracking } from './activityTracker';
 import { getLastActivityAt } from './sessionStore';
 import { subscribeSessionSync } from './sessionSync';
-import { SessionMessage } from './sessionSync.types';
+import { LogoutReason, SessionMessage } from './sessionSync.types';
 import { getSessionId } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
@@ -44,10 +44,11 @@ export const useSessionKeepAlive = () => {
     let logoutTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
-    const endSession = () => {
+    // Soft lock only for logouts nobody asked for, so a deliberate one is not undone on return.
+    const endSession = (reason: LogoutReason, isRemote = false) => {
       if (hasEnded) return;
       hasEnded = true;
-      logoutRef.current({ shouldSoftLock: true });
+      logoutRef.current({ shouldSoftLock: reason !== 'manual', reason, isRemote });
     };
 
     const schedule = () => {
@@ -57,7 +58,7 @@ export const useSessionKeepAlive = () => {
 
       const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
       const msUntilLogout = idleDeadline - Date.now();
-      if (msUntilLogout <= 0) return endSession();
+      if (msUntilLogout <= 0) return endSession('idle');
 
       // Re-enters schedule rather than ending outright: the clock is shared, so another tab may
       // have pushed the deadline out while this one sat idle.
@@ -77,7 +78,7 @@ export const useSessionKeepAlive = () => {
         await refreshTokens();
         schedule();
       } catch {
-        endSession();
+        endSession('refresh-failed');
       }
     };
 
@@ -85,8 +86,17 @@ export const useSessionKeepAlive = () => {
       if (document.visibilityState === 'visible') schedule();
     };
 
-    // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
     const handleSyncMessage = (message: SessionMessage) => {
+      // A sibling ended the session for all of us, so tear down without revoking it again.
+      if (message.type === 'LOGOUT') {
+        if (message.payload.sessionId !== getSessionId()) return;
+
+        endSession(message.payload.reason, true);
+
+        return;
+      }
+
+      // Adopting a sibling's rotation keeps this tab from spending an already-replaced token.
       if (message.type !== 'TOKENS_UPDATED') return;
 
       const { sessionId, accessToken, refreshToken } = message.payload;
