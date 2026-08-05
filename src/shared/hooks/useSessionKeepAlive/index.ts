@@ -3,6 +3,8 @@ export * from './sessionSync.const';
 export * from './sessionSync.types';
 export * from './sessionSync.utils';
 export * from './SessionKeepAlive';
+export * from './useSessionAdoption';
+export * from './useSessionAdoption.utils';
 export * from './useSessionKeepAlive';
 export * from './useSessionKeepAlive.const';
 export * from './useSessionKeepAlive.types';

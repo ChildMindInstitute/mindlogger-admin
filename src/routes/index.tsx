@@ -13,7 +13,7 @@ import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { SessionKeepAlive } from 'shared/hooks/useSessionKeepAlive';
+import { SessionKeepAlive, useSessionAdoption } from 'shared/hooks/useSessionKeepAlive';
 
 import history from './history';
 
@@ -27,7 +27,10 @@ const AppRoutes = () => {
   const { featureFlags } = useFeatureFlags();
 
   const status = auth.useStatus();
-  const loaded = !token || status === 'error' || status === 'success';
+  // Routes stay unrendered while a fresh tab asks other tabs for a session, so the login page
+  // cannot flash and then flip to the dashboard once one is adopted.
+  const isAdopting = useSessionAdoption();
+  const loaded = (!token || status === 'error' || status === 'success') && !isAdopting;
 
   useEffect(() => {
     if (!isAuthorized && token) {
