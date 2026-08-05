@@ -33,10 +33,12 @@ const AppRoutes = () => {
   const loaded = (!token || status === 'error' || status === 'success') && !isAdopting;
 
   useEffect(() => {
-    if (!isAuthorized && token) {
+    // Held back while adopting too: a tab reloading with tokens that expired while it was
+    // discarded would 401 here, and the retry would spend a refresh token the session retired.
+    if (!isAuthorized && token && !isAdopting) {
       dispatch(auth.thunk.getUserDetails());
     }
-  }, [isAuthorized, token, dispatch]);
+  }, [isAuthorized, token, isAdopting, dispatch]);
 
   useSessionBanners();
 

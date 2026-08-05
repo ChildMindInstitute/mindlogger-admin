@@ -13,6 +13,12 @@ import { SessionMessage, SessionState } from './sessionSync.types';
 import { useSessionAdoption } from './useSessionAdoption';
 import { MS_IN_MIN } from './useSessionKeepAlive.const';
 
+const refreshTokenFor = (sessionId: string) =>
+  `header.${btoa(JSON.stringify({ family: sessionId }))}.signature`;
+
+const tokenExpiringIn = (ms: number) =>
+  `header.${btoa(JSON.stringify({ exp: Math.floor((Date.now() + ms) / 1000) }))}.signature`;
+
 const session = (sessionId: string, loginAt: number): SessionState => ({
   sessionId,
   loginAt,
@@ -105,6 +111,48 @@ describe('useSessionAdoption', () => {
     expect(result.current).toBe(false);
     expect(heard).toHaveLength(0);
     expect(authStorage.getRefreshToken()).toBe('inherited-refresh');
+  });
+
+  test('a tab reloading with expired tokens takes fresher ones from its own session', () => {
+    authStorage.setRefreshToken(refreshTokenFor('family-1'));
+    authStorage.setAccessToken(tokenExpiringIn(-MS_IN_MIN));
+    const fresher = { ...session('family-1', Date.now()), rotatedAt: Date.now() };
+    openSignedInTab(fresher);
+
+    const { result } = renderHook(useSessionAdoption);
+    expect(result.current).toBe(true);
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+
+    expect(result.current).toBe(false);
+    expect(authStorage.getAccessToken()).toBe('access-family-1');
+  });
+
+  test('a tab reloading with expired tokens is never switched to another account', () => {
+    authStorage.setRefreshToken(refreshTokenFor('family-1'));
+    authStorage.setAccessToken(tokenExpiringIn(-MS_IN_MIN));
+    openSignedInTab({ ...session('family-2', Date.now()), rotatedAt: Date.now() });
+
+    renderHook(useSessionAdoption);
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+
+    expect(authStorage.getRefreshToken()).toBe(refreshTokenFor('family-1'));
+  });
+
+  test('a healthy reload never asks and is not delayed', () => {
+    authStorage.setRefreshToken(refreshTokenFor('family-1'));
+    authStorage.setAccessToken(tokenExpiringIn(MS_IN_MIN));
+    const heard = openSignedInTab(session('family-2', Date.now()));
+
+    const { result } = renderHook(useSessionAdoption);
+
+    expect(result.current).toBe(false);
+    expect(heard).toHaveLength(0);
   });
 
   test('does nothing when the flag is off', () => {
