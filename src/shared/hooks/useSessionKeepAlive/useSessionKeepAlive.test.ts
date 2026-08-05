@@ -292,6 +292,31 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  test('answers a session request with its own session', () => {
+    renderEngine();
+    sessionStorage.setItem(SessionStorageKeys.LoginAt, String(Date.now() - 10 * MS_IN_MIN));
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          loginAt: Date.now() - 10 * MS_IN_MIN,
+          rotatedAt: null,
+          accessToken: authStorage.getAccessToken(),
+          refreshToken: authStorage.getRefreshToken(),
+        },
+      },
+    });
+  });
+
   test('logs out when a sibling ends the session', () => {
     renderEngine();
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);

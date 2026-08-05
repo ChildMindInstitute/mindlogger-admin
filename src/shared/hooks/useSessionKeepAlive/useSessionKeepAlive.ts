@@ -12,9 +12,9 @@ import {
   startActivityTracking,
   stopActivityTracking,
 } from './activityTracker';
-import { subscribeSessionSync } from './sessionSync';
+import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
-import { getSessionId, stampRotatedAt } from './sessionSync.utils';
+import { getLoginAt, getRotatedAt, getSessionId, stampRotatedAt } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 export const useSessionKeepAlive = () => {
@@ -77,6 +77,25 @@ export const useSessionKeepAlive = () => {
     };
 
     const handleSyncMessage = (message: SessionMessage) => {
+      // Only tabs with a live session answer, which is what keeps a logged-out one silent.
+      if (message.type === 'SESSION_REQUEST') {
+        const sessionId = getSessionId();
+        if (!sessionId) return;
+
+        publishSessionMessage({
+          type: 'SESSION_STATE',
+          payload: {
+            sessionId,
+            loginAt: getLoginAt(),
+            rotatedAt: getRotatedAt(),
+            accessToken: authStorage.getAccessToken(),
+            refreshToken: authStorage.getRefreshToken(),
+          },
+        });
+
+        return;
+      }
+
       // A sibling ended the session for all of us, so tear down without revoking it again.
       if (message.type === 'LOGOUT') {
         if (message.payload.sessionId !== getSessionId()) return;

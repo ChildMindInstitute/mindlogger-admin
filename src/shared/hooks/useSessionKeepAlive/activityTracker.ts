@@ -22,6 +22,16 @@ export const adoptActivityAt = (at: number) => {
   if (at > (getLastActivityAt() ?? 0)) setLastActivityAt(at);
 };
 
+// Records activity here and announces it, so every tab of the session extends together.
+export const recordActivity = (at: number = Date.now()) => {
+  setLastActivityAt(at);
+
+  const sessionId = getSessionId();
+  if (sessionId) {
+    publishSessionMessage({ type: 'ACTIVITY', payload: { sessionId, lastActivityAt: at } });
+  }
+};
+
 let stopTracking: (() => void) | null = null;
 
 export const startActivityTracking = (onActivity?: () => void) => {
@@ -35,14 +45,8 @@ export const startActivityTracking = (onActivity?: () => void) => {
     if (now - lastWriteAt < ACTIVITY_THROTTLE_MS) return;
 
     lastWriteAt = now;
-    setLastActivityAt(now);
-
     // Inside the throttle, so a moving mouse costs one message every few seconds, not hundreds.
-    const sessionId = getSessionId();
-    if (sessionId) {
-      publishSessionMessage({ type: 'ACTIVITY', payload: { sessionId, lastActivityAt: now } });
-    }
-
+    recordActivity(now);
     onActivity?.();
   };
 
