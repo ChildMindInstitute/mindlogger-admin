@@ -256,6 +256,56 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  test('answers a session request with its own tokens', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: authStorage.getAccessToken(),
+          refreshToken: authStorage.getRefreshToken(),
+        },
+      },
+    });
+  });
+
+  test('stays silent when it has no session to offer', () => {
+    renderEngine();
+    authStorage.clear();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  test('stays silent when its token carries no session id, leaving sync inert', () => {
+    renderEngine();
+    authStorage.setRefreshToken('opaque-token');
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
   test('logs out when a sibling ends the session', () => {
     renderEngine();
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
