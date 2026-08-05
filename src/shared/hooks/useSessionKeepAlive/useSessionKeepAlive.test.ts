@@ -117,7 +117,11 @@ describe('useSessionKeepAlive', () => {
     act(() => {
       vi.advanceTimersByTime(2 * MS_IN_SEC);
     });
-    expect(mockedLogout).toHaveBeenCalledWith({ shouldSoftLock: true });
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
+    });
   });
 
   test('activity pushes the logout deadline out', () => {
@@ -142,7 +146,11 @@ describe('useSessionKeepAlive', () => {
       vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
     });
 
-    expect(mockedLogout).toHaveBeenCalledWith({ shouldSoftLock: true });
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'refresh-failed',
+      isRemote: false,
+    });
   });
 
   test('caps the lead so a short-lived token does not refresh on every tick', () => {
@@ -241,7 +249,11 @@ describe('useSessionKeepAlive', () => {
       vi.advanceTimersByTime(2 * MS_IN_MIN);
     });
 
-    expect(mockedLogout).toHaveBeenCalledWith({ shouldSoftLock: true });
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
+    });
   });
 
   test('does not rebroadcast the activity it adopted', () => {
@@ -278,6 +290,56 @@ describe('useSessionKeepAlive', () => {
     });
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  test('logs out when a sibling ends the session', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: SESSION_ID, reason: 'manual' },
+      });
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: false,
+      reason: 'manual',
+      isRemote: true,
+    });
+  });
+
+  test('stays logged in when another account session ends', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: 'family-2', reason: 'manual' },
+      });
+    });
+
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('soft locks when a sibling ended the session involuntarily', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: SESSION_ID, reason: 'idle' },
+      });
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: true,
+    });
   });
 
   test('does nothing at all when the flag is off', () => {

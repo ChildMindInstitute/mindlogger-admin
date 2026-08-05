@@ -13,7 +13,7 @@ import {
   stopActivityTracking,
 } from './activityTracker';
 import { subscribeSessionSync } from './sessionSync';
-import { SessionMessage } from './sessionSync.types';
+import { LogoutReason, SessionMessage } from './sessionSync.types';
 import { getSessionId, stampRotatedAt } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
@@ -36,10 +36,11 @@ export const useSessionKeepAlive = () => {
     let logoutTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
-    const endSession = () => {
+    // Soft lock only for logouts nobody asked for, so a deliberate one is not undone on return.
+    const endSession = (reason: LogoutReason, isRemote = false) => {
       if (hasEnded) return;
       hasEnded = true;
-      logoutRef.current({ shouldSoftLock: true });
+      logoutRef.current({ shouldSoftLock: reason !== 'manual', reason, isRemote });
     };
 
     const schedule = () => {
@@ -49,9 +50,9 @@ export const useSessionKeepAlive = () => {
 
       const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
       const msUntilLogout = idleDeadline - Date.now();
-      if (msUntilLogout <= 0) return endSession();
+      if (msUntilLogout <= 0) return endSession('idle');
 
-      logoutTimer = setTimeout(endSession, msUntilLogout);
+      logoutTimer = setTimeout(() => endSession('idle'), msUntilLogout);
 
       // Read at decision time: another tab or an earlier refresh may have replaced the token.
       const expiresAt = getTokenExpiration(authStorage.getAccessToken());
@@ -67,7 +68,7 @@ export const useSessionKeepAlive = () => {
         await refreshTokens();
         schedule();
       } catch {
-        endSession();
+        endSession('refresh-failed');
       }
     };
 
@@ -76,6 +77,15 @@ export const useSessionKeepAlive = () => {
     };
 
     const handleSyncMessage = (message: SessionMessage) => {
+      // A sibling ended the session for all of us, so tear down without revoking it again.
+      if (message.type === 'LOGOUT') {
+        if (message.payload.sessionId !== getSessionId()) return;
+
+        endSession(message.payload.reason, true);
+
+        return;
+      }
+
       // Someone working in any tab of this session keeps every other tab from idling out.
       if (message.type === 'ACTIVITY') {
         if (message.payload.sessionId !== getSessionId()) return;
