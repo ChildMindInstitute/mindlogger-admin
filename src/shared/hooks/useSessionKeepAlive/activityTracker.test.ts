@@ -1,6 +1,7 @@
 import { SessionStorageKeys } from 'shared/utils/storage';
 
-import { getLastActivityAt, startActivityTracking, stopActivityTracking } from './activityTracker';
+import { startActivityTracking, stopActivityTracking } from './activityTracker';
+import { getLastActivityAt } from './sessionStore';
 import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.const';
 
 const storedActivity = () => sessionStorage.getItem(SessionStorageKeys.LastActivityAt);

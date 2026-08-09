@@ -1,18 +1,5 @@
-import { SessionStorageKeys } from 'shared/utils/storage';
-
+import { getLastActivityAt, setLastActivityAt } from './sessionStore';
 import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.const';
-
-// Persisted rather than held in memory so a reload or a duplicated tab inherits the idle clock
-// instead of being handed a fresh timeout.
-export const getLastActivityAt = (): number | null => {
-  const stored = Number(sessionStorage.getItem(SessionStorageKeys.LastActivityAt));
-
-  return Number.isFinite(stored) && stored > 0 ? stored : null;
-};
-
-const setLastActivityAt = (at: number) => {
-  sessionStorage.setItem(SessionStorageKeys.LastActivityAt, String(at));
-};
 
 let stopTracking: (() => void) | null = null;
 

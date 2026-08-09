@@ -6,7 +6,8 @@ import { authStorage, getTokenExpiration } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 
-import { getLastActivityAt, startActivityTracking, stopActivityTracking } from './activityTracker';
+import { startActivityTracking, stopActivityTracking } from './activityTracker';
+import { getLastActivityAt } from './sessionStore';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 export const useSessionKeepAlive = () => {
