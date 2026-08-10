@@ -1,18 +1,20 @@
-import { SessionStorageKeys } from 'shared/utils/storage';
+import { PlainStorageKeys } from 'shared/utils/storage';
 
-// Persisted rather than held in memory so a reload or a duplicated tab inherits the idle clock
-// instead of being handed a fresh timeout.
-const readTimestamp = (key: SessionStorageKeys): number | null => {
-  const stored = Number(sessionStorage.getItem(key));
+// Plain localStorage, not the encrypted store: a timestamp is not a secret, and every tab has to
+// be able to read the current value rather than the one it loaded with.
+const readTimestamp = (key: PlainStorageKeys): number | null => {
+  const stored = Number(localStorage.getItem(key));
 
   return Number.isFinite(stored) && stored > 0 ? stored : null;
 };
 
-const writeTimestamp = (key: SessionStorageKeys, at: number) => {
-  sessionStorage.setItem(key, String(at));
+const writeTimestamp = (key: PlainStorageKeys, at: number) => {
+  localStorage.setItem(key, String(at));
 };
 
-export const getLastActivityAt = () => readTimestamp(SessionStorageKeys.LastActivityAt);
+export const getLastActivityAt = () => readTimestamp(PlainStorageKeys.LastActivityAt);
 
 export const setLastActivityAt = (at: number) =>
-  writeTimestamp(SessionStorageKeys.LastActivityAt, at);
+  writeTimestamp(PlainStorageKeys.LastActivityAt, at);
+
+export const clearSessionState = () => localStorage.removeItem(PlainStorageKeys.LastActivityAt);

@@ -1,16 +1,16 @@
-import { SessionStorageKeys } from 'shared/utils/storage';
+import { PlainStorageKeys } from 'shared/utils/storage';
 
 import { startActivityTracking, stopActivityTracking } from './activityTracker';
 import { getLastActivityAt } from './sessionStore';
 import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.const';
 
-const storedActivity = () => sessionStorage.getItem(SessionStorageKeys.LastActivityAt);
+const storedActivity = () => localStorage.getItem(PlainStorageKeys.LastActivityAt);
 
 describe('activityTracker', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-07-30T10:00:00Z'));
-    sessionStorage.clear();
+    localStorage.clear();
   });
 
   afterEach(() => {
@@ -26,7 +26,7 @@ describe('activityTracker', () => {
 
   test('adopts an existing timestamp instead of resetting it', () => {
     const earlier = Date.now() - 600000;
-    sessionStorage.setItem(SessionStorageKeys.LastActivityAt, String(earlier));
+    localStorage.setItem(PlainStorageKeys.LastActivityAt, String(earlier));
 
     startActivityTracking();
 
@@ -103,7 +103,7 @@ describe('activityTracker', () => {
   });
 
   test('ignores a corrupt stored value', () => {
-    sessionStorage.setItem(SessionStorageKeys.LastActivityAt, 'not-a-number');
+    localStorage.setItem(PlainStorageKeys.LastActivityAt, 'not-a-number');
 
     expect(getLastActivityAt()).toBeNull();
   });

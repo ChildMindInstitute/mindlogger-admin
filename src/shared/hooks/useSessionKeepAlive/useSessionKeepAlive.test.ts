@@ -2,7 +2,7 @@ import { act } from '@testing-library/react';
 
 import { refreshTokens } from 'shared/api';
 import { authStorage } from 'shared/utils';
-import { SessionStorageKeys } from 'shared/utils/storage';
+import { PlainStorageKeys } from 'shared/utils/storage';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
@@ -45,7 +45,7 @@ describe('useSessionKeepAlive', () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-07-30T10:00:00Z'));
-    sessionStorage.clear();
+    localStorage.clear();
 
     vi.mocked(useLogout).mockReturnValue(mockedLogout);
     mockedRefreshTokens.mockResolvedValue({ accessToken: 'a', refreshToken: 'r' });
@@ -154,6 +154,6 @@ describe('useSessionKeepAlive', () => {
 
     expect(mockedRefreshTokens).not.toHaveBeenCalled();
     expect(mockedLogout).not.toHaveBeenCalled();
-    expect(sessionStorage.getItem(SessionStorageKeys.LastActivityAt)).toBeNull();
+    expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBeNull();
   });
 });
