@@ -7,6 +7,7 @@ import { datadogLogs } from '@datadog/browser-logs';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTranslate';
 import { migrateLegacySession } from 'shared/utils/migrateLegacySession';
+import { clearStaleSession } from 'shared/hooks/useSessionKeepAlive/clearStaleSession';
 
 import App from './App';
 import './i18n';
@@ -57,9 +58,10 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 Mixpanel.init();
 
-// Before render: the routes read the token while rendering, so a session still in the old store
-// has to be adopted first or the tab shows the login page and the tokens are lost on the reload.
+// Both run before render, because the routes read the token as they render.
 migrateLegacySession();
+// After the migration, so a session that just moved across is checked on its own clock.
+clearStaleSession();
 
 patchDOMForGoogleTranslate();
 
