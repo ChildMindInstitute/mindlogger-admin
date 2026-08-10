@@ -56,7 +56,9 @@ export const useSessionKeepAlive = () => {
       const msUntilLogout = idleDeadline - Date.now();
       if (msUntilLogout <= 0) return endSession();
 
-      logoutTimer = setTimeout(endSession, msUntilLogout);
+      // Re-enters schedule rather than ending outright: the clock is shared, so another tab may
+      // have pushed the deadline out while this one sat idle.
+      logoutTimer = setTimeout(schedule, msUntilLogout);
 
       // Read at decision time: another tab or an earlier refresh may have replaced the token.
       const expiresAt = getTokenExpiration(authStorage.getAccessToken());

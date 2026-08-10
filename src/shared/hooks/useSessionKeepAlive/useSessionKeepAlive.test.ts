@@ -9,6 +9,7 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { state as authState } from 'modules/Auth/state/Auth.state';
 
+import { setLastActivityAt } from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
 
@@ -115,6 +116,25 @@ describe('useSessionKeepAlive', () => {
     });
 
     expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('re-arms when another tab pushed the shared clock out, and ends once it truly expires', () => {
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_MIN);
+      // What a sibling tab's activity writes. No event fires here, so this tab is told nothing.
+      setLastActivityAt(Date.now());
+    });
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_MIN);
+    });
+    expect(mockedLogout).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+    });
+    expect(mockedLogout).toHaveBeenCalledWith({ shouldSoftLock: true });
   });
 
   test('logs out when the refresh is rejected', async () => {
