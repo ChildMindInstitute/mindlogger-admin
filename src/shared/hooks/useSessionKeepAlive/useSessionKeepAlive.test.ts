@@ -143,7 +143,7 @@ describe('useSessionKeepAlive', () => {
     expect(mockedRefreshTokens).toHaveBeenCalledTimes(1);
   });
 
-  test('does nothing at all when the flag is off', () => {
+  test('neither refreshes nor logs out when the flag is off', () => {
     setFlag(false);
     renderEngine();
 
@@ -154,6 +154,12 @@ describe('useSessionKeepAlive', () => {
 
     expect(mockedRefreshTokens).not.toHaveBeenCalled();
     expect(mockedLogout).not.toHaveBeenCalled();
-    expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBeNull();
+  });
+
+  test('still records activity when the flag is off, so the boot check has a clock to read', () => {
+    setFlag(false);
+    renderEngine();
+
+    expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBe(String(Date.now()));
   });
 });

@@ -20,6 +20,18 @@ export const useSessionKeepAlive = () => {
   logoutRef.current = logout;
 
   const isEnabled = !!featureFlags.enableSessionKeepAlive && isAuthorized;
+  // Set by the engine below, so tracking can re-arm the timers without owning them.
+  const scheduleRef = useRef<(() => void) | null>(null);
+
+  // Runs with the flag off too: a session outlives its tab now, and the boot check reads this
+  // clock to decide whether one left behind may carry on.
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    startActivityTracking(() => scheduleRef.current?.());
+
+    return stopActivityTracking;
+  }, [isAuthorized]);
 
   useEffect(() => {
     if (!isEnabled) return;
@@ -68,14 +80,14 @@ export const useSessionKeepAlive = () => {
       if (document.visibilityState === 'visible') schedule();
     };
 
-    startActivityTracking(schedule);
+    scheduleRef.current = schedule;
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
 
     return () => {
       clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
-      stopActivityTracking();
+      scheduleRef.current = null;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [isEnabled]);
