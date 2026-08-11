@@ -10,6 +10,7 @@ import {
   resetInMemoryBroadcastChannels,
 } from 'shared/tests/InMemoryBroadcastChannel';
 import { authStorage } from 'shared/utils/authStorage';
+import { LocationStateKeys } from 'shared/types/navigation';
 
 import { useLogout } from './useLogout';
 import { closeSessionSync, subscribeSessionSync } from './useSessionKeepAlive/sessionSync';
@@ -27,6 +28,8 @@ const resetAuthorizationPayload = {
   payload: undefined,
   type: 'auth/resetAuthorization',
 };
+
+const withoutPrompt = { state: { [LocationStateKeys.ShouldNavigateWithoutPrompt]: true } };
 
 const mockedUseAppDispatch = vi.fn();
 const mockedUseNavigate = vi.fn();
@@ -63,7 +66,7 @@ describe('useLogout', () => {
       result.current();
     });
 
-    expect(mockedUseNavigate).toBeCalledWith(page.login);
+    expect(mockedUseNavigate).toBeCalledWith(page.login, withoutPrompt);
   });
 
   test('deleting access token resets all data', async () => {
@@ -99,7 +102,7 @@ describe('useLogout', () => {
     expect(mockedUseAppDispatch).nthCalledWith(1, clearWorkspacePayload);
     expect(mockedUseAppDispatch).nthCalledWith(2, resetAlertsPayload);
     expect(mockedUseAppDispatch).nthCalledWith(3, resetAuthorizationPayload);
-    expect(mockedUseNavigate).toBeCalledWith(page.login);
+    expect(mockedUseNavigate).toBeCalledWith(page.login, withoutPrompt);
   });
 });
 
@@ -161,6 +164,17 @@ describe('useLogout session sync', () => {
     expect(axios.post).not.toHaveBeenCalled();
   });
 
+  test('an idle logout navigates past the unsaved-changes blocker', async () => {
+    const { result } = renderLogout();
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
+
+    await waitFor(() => {
+      result.current({ reason: 'idle' });
+    });
+
+    expect(mockedUseNavigate).toBeCalledWith(page.login, withoutPrompt);
+  });
+
   test('a remote logout still tears this tab down', async () => {
     const { result } = renderLogout();
 
@@ -171,6 +185,6 @@ describe('useLogout session sync', () => {
     expect(mockedUseAppDispatch).nthCalledWith(1, clearWorkspacePayload);
     expect(mockedUseAppDispatch).nthCalledWith(2, resetAlertsPayload);
     expect(mockedUseAppDispatch).nthCalledWith(3, resetAuthorizationPayload);
-    expect(mockedUseNavigate).toBeCalledWith(page.login);
+    expect(mockedUseNavigate).toBeCalledWith(page.login, withoutPrompt);
   });
 });

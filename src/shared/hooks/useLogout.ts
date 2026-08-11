@@ -12,6 +12,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
 import { LogoutReason } from 'shared/hooks/useSessionKeepAlive/sessionSync.types';
 import { getSessionId } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
+import { LocationStateKeys } from 'shared/types/navigation';
 
 type LogoutOptions = {
   shouldSoftLock?: boolean;
@@ -66,7 +67,9 @@ export const useLogout = () => {
       Mixpanel.logout();
       await FeatureFlags.logout();
 
-      navigate(page.login);
+      // An idle logout never passes through startLogout, so the builder's unsaved-changes blocker
+      // is still armed and would strand the user on a prompt this dead session cannot answer.
+      navigate(page.login, { state: { [LocationStateKeys.ShouldNavigateWithoutPrompt]: true } });
     }
   };
 };
