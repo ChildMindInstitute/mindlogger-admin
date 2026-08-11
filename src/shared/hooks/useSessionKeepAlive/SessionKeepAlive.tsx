@@ -1,8 +1,10 @@
+import { useSessionExpiredLogout } from './useSessionExpiredLogout';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
-// Must render inside <Router>: the hook logs out via useLogout, which relies on useNavigate.
+// Must render inside <Router>: both hooks log out via useLogout, which relies on useNavigate.
 export const SessionKeepAlive = () => {
   useSessionKeepAlive();
+  useSessionExpiredLogout();
 
   return null;
 };

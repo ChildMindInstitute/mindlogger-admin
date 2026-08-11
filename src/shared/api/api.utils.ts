@@ -69,8 +69,27 @@ export const refreshTokens = () => {
   return pendingRefresh;
 };
 
+let onSessionExpired: (() => void) | null = null;
+
+// The interceptor is module code and cannot reach hooks, so the teardown is registered from a
+// component instead.
+export const setSessionExpiredHandler = (handler: (() => void) | null) => {
+  onSessionExpired = handler;
+};
+
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
-  const { accessToken } = await refreshTokens();
+  let accessToken: string;
+
+  try {
+    ({ accessToken } = await refreshTokens());
+  } catch (error) {
+    // Nobody else owns this failure. Without it the rejection reaches the calling thunk and the
+    // tab keeps rendering a signed-in UI over a session the server has already ended.
+    onSessionExpired?.();
+
+    throw error;
+  }
+
   const originalConfig = err.response?.config;
 
   return axios({

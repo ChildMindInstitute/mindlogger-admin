@@ -4,6 +4,7 @@ export * from './sessionSync.types';
 export * from './sessionSync.utils';
 export * from './SessionKeepAlive';
 export * from './useSessionAdoption';
+export * from './useSessionExpiredLogout';
 export * from './useSessionKeepAlive';
 export * from './useSessionKeepAlive.const';
 export * from './useSessionKeepAlive.types';
