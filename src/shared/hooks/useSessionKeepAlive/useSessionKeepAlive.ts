@@ -87,6 +87,10 @@ export const useSessionKeepAlive = () => {
     const handleVisibilityChange = () => {
       if (document.visibilityState !== 'visible') return;
 
+      // Tracking keeps this clock while the tab is signed in, and only a teardown removes it. Gone
+      // means the session ended somewhere a frozen tab could not hear, and no message is coming.
+      if (!getLastActivityAt()) return endSession('idle', true);
+
       // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
       // refresh at zero delay, losing the race against a sibling handing over fresher ones.
       publishSessionMessage({ type: 'SESSION_REQUEST' });

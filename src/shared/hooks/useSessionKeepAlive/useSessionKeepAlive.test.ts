@@ -13,7 +13,7 @@ import {
 } from 'shared/tests/InMemoryBroadcastChannel';
 import { state as authState } from 'modules/Auth/state/Auth.state';
 
-import { setLastActivityAt } from './sessionStore';
+import { clearSessionState, setLastActivityAt } from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync, publishSessionMessage } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
@@ -444,6 +444,22 @@ describe('useSessionKeepAlive', () => {
       shouldSoftLock: true,
       reason: 'idle',
       isRemote: false,
+    });
+  });
+
+  test('tears down on focus when the session ended while it was frozen', () => {
+    renderEngine();
+    // What a logout in another tab leaves behind: the clock cleared, this tab's snapshot untouched.
+    clearSessionState();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: true,
     });
   });
 
