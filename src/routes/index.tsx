@@ -13,7 +13,7 @@ import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { SessionKeepAlive } from 'shared/hooks/useSessionKeepAlive';
+import { SessionKeepAlive, useSessionAdoption } from 'shared/hooks/useSessionKeepAlive';
 
 import history from './history';
 
@@ -21,6 +21,9 @@ const BaseLayout = lazy(() => import('shared/layouts/BaseLayout'));
 const AuthLayout = lazy(() => import('modules/Auth/layouts/AuthLayout'));
 
 const AppRoutes = () => {
+  // Above the token read: adopting a session announced by another tab re-renders, and the read
+  // below is what picks it up.
+  useSessionAdoption();
   const token = authStorage.getAccessToken();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();

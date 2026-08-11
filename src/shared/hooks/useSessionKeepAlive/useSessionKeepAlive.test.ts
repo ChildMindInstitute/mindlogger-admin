@@ -297,6 +297,25 @@ describe('useSessionKeepAlive', () => {
     });
   });
 
+  test('announces itself on start, so a tab still on the login page hears it', () => {
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    renderEngine();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: authStorage.getAccessToken(),
+          refreshToken: authStorage.getRefreshToken(),
+        },
+      },
+    });
+  });
+
   test('stays silent when it has no session to offer', () => {
     renderEngine();
     authStorage.clear();

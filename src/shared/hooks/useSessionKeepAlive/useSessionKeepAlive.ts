@@ -94,21 +94,21 @@ export const useSessionKeepAlive = () => {
       catchUpTimer = setTimeout(schedule, SESSION_REQUEST_WINDOW_MS);
     };
 
+    // Only tabs with a live session speak, which is what keeps a logged-out one silent.
+    const announceSession = () => {
+      const sessionId = getSessionId();
+      const accessToken = authStorage.getAccessToken();
+      const refreshToken = authStorage.getRefreshToken();
+      if (!sessionId || !accessToken || !refreshToken) return;
+
+      publishSessionMessage({
+        type: 'SESSION_STATE',
+        payload: { sessionId, accessToken, refreshToken },
+      });
+    };
+
     const handleSyncMessage = (message: SessionMessage) => {
-      // Only tabs with a live session answer, which is what keeps a logged-out one silent.
-      if (message.type === 'SESSION_REQUEST') {
-        const sessionId = getSessionId();
-        const accessToken = authStorage.getAccessToken();
-        const refreshToken = authStorage.getRefreshToken();
-        if (!sessionId || !accessToken || !refreshToken) return;
-
-        publishSessionMessage({
-          type: 'SESSION_STATE',
-          payload: { sessionId, accessToken, refreshToken },
-        });
-
-        return;
-      }
+      if (message.type === 'SESSION_REQUEST') return announceSession();
 
       // A sibling's answer may carry tokens that replaced this tab's while it slept. Every
       // rotation mints a later expiry, so the further-off one is the newer generation.
@@ -153,6 +153,9 @@ export const useSessionKeepAlive = () => {
     schedule();
     // A tab frozen past a rotation falls back in step the moment it starts, not at its next refresh.
     publishSessionMessage({ type: 'SESSION_REQUEST' });
+    // Unprompted, because a tab still on the login page has no session to ask with. This is how
+    // it hears that one just began.
+    announceSession();
 
     return () => {
       clearTimeout(refreshTimer);
