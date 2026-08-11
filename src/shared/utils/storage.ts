@@ -20,6 +20,7 @@ export const enum PlainStorageKeys {
 export const enum SessionStorageKeys {
   DebugMode = 'debugMode',
   DatavizHideSkipped = 'datavizHideSkipped',
+  ReloadAttempted = 'reloadAttempted',
 }
 
 export { secureLocalStorage as storage };

@@ -1,9 +1,13 @@
 import { useEffect, useReducer } from 'react';
 
 import { authStorage } from 'shared/utils/authStorage';
+import { SessionStorageKeys } from 'shared/utils/storage';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
+import { getLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
+import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
+import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 // A tab that loaded signed-out cannot see a sign-in that happens afterwards: its view of the
 // encrypted store is a snapshot taken when the page loaded, and there is no way to re-read it.
@@ -18,7 +22,32 @@ export const useSessionAdoption = () => {
   const isListening = !!featureFlags.enableSessionKeepAlive && !authStorage.getRefreshToken();
 
   useEffect(() => {
-    if (!isListening) return;
+    if (!isListening) {
+      // This tab has a session, so a later gap is free to reload its way into the next one.
+      sessionStorage.removeItem(SessionStorageKeys.ReloadAttempted);
+
+      return;
+    }
+
+    let fallbackTimer: ReturnType<typeof setTimeout>;
+
+    // Nobody answered, so no live tab can hand the tokens over — the last one was closed. The
+    // marker still says a session exists, and rebuilding the snapshot is the only way to reach it.
+    const reloadIntoSession = () => {
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return;
+
+      // Past its deadline the session is over anyway, and the boot check clears it. Reloading
+      // would only land on the same login page.
+      if (Date.now() - lastActivityAt >= resolveSessionConfig().idleTimeoutMs) return;
+
+      // Per tab and survives the reload, so a torn state cannot reload in a loop. Cleared above
+      // once this tab holds a session.
+      if (sessionStorage.getItem(SessionStorageKeys.ReloadAttempted)) return;
+      sessionStorage.setItem(SessionStorageKeys.ReloadAttempted, 'true');
+
+      window.location.reload();
+    };
 
     const unsubscribe = subscribeSessionSync((message) => {
       if (message.type !== 'SESSION_STATE') return;
@@ -36,11 +65,14 @@ export const useSessionAdoption = () => {
       if (document.visibilityState !== 'visible') return;
 
       publishSessionMessage({ type: 'SESSION_REQUEST' });
+      clearTimeout(fallbackTimer);
+      fallbackTimer = setTimeout(reloadIntoSession, SESSION_REQUEST_WINDOW_MS);
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
+      clearTimeout(fallbackTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
     };
