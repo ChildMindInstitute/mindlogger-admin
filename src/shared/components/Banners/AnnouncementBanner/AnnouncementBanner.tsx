@@ -11,6 +11,9 @@ import { variables } from 'shared/styles';
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
 
+// Constant prefix for localStorage key
+const ANNOUNCEMENT_PREFIX = 'announcement-banner-dismissed';
+
 // Update when announcement changes, so users who dismissed previous announcement are shown the new one
 const ANNOUNCEMENT_ID = 'response-options-layout';
 
@@ -22,10 +25,19 @@ const ANNOUNCEMENT_ID = 'response-options-layout';
  * It creates a user-only key for use on the auth screen
  */
 export const getDismissedKey = (userId: string) =>
-  `announcement-banner-dismissed-${userId}-${ANNOUNCEMENT_ID}`;
+  `${ANNOUNCEMENT_PREFIX}-${userId}-${ANNOUNCEMENT_ID}`;
 
 // Global key for anonymous users (e.g., on the login screen)
-export const GLOBAL_DISMISSED_KEY = `announcement-banner-dismissed-global-${ANNOUNCEMENT_ID}`;
+export const GLOBAL_DISMISSED_KEY = `${ANNOUNCEMENT_PREFIX}-global-${ANNOUNCEMENT_ID}`;
+
+// Discards dismiss state left behind by previous announcements
+const clearStaleDismissedKeys = () => {
+  Object.keys(localStorage)
+    .filter(
+      (key) => key.startsWith(`${ANNOUNCEMENT_PREFIX}-`) && !key.endsWith(`-${ANNOUNCEMENT_ID}`),
+    )
+    .forEach((key) => localStorage.removeItem(key));
+};
 
 const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
@@ -47,6 +59,8 @@ export const AnnouncementBanner = (props: BannerProps) => {
 
   useEffect(() => {
     if (!featureFlags.enableAdminAnnouncementBanner) return;
+
+    clearStaleDismissedKeys();
 
     // For auth screen or when user is not logged in yet
     if (!userId) {
