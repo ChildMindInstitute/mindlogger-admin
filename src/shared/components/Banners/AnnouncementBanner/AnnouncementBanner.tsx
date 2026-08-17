@@ -110,8 +110,13 @@ export const AnnouncementBanner = (props: BannerProps) => {
             {...props}
           >
             <Trans i18nKey="announcementBanner">
-              <strong>We are rebranding! </strong>
-              <>Design updates are on the way — same great app, fresh new look. Curious? </>
+              <strong>Change in response options layout: </strong>
+              <>
+                Starting September 16, response options for single and multiple select items will
+                always display as a vertical list for all screen sizes. Please note, this change
+                does not affect the grid arrangement for responses when the Use Portrait Layout item
+                setting is turned on.
+              </>
               <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
                 Click to learn more.
               </StyledLink>
