@@ -9,12 +9,10 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
-import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
+import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
 
-// ─── Update this URL when the announcement changes ────────────────────────────
-const ANNOUNCEMENT_URL =
-  'https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/ca0a323b-b88d-4b32-8f4f-4e6b0157f8f6/article/1545404417';
-// ─────────────────────────────────────────────────────────────────────────────
+// Update when announcement links to an article
+// const ANNOUNCEMENT_URL = 'https://...';
 
 /**
  * Returns a unique key for the announcement banner dismiss state
@@ -117,9 +115,9 @@ export const AnnouncementBanner = (props: BannerProps) => {
                 does not affect the grid arrangement for responses when the Use Portrait Layout item
                 setting is turned on.
               </>
-              <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
+              {/* <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
                 Click to learn more.
-              </StyledLink>
+              </StyledLink> */}
             </Trans>
           </Banner>
         )}
