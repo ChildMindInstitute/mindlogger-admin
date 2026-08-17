@@ -11,6 +11,9 @@ import { variables } from 'shared/styles';
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
 
+// Update when announcement changes, so users who dismissed previous announcement are shown the new one
+const ANNOUNCEMENT_ID = 'response-options-layout';
+
 // Update when announcement links to an article
 // const ANNOUNCEMENT_URL = 'https://...';
 
@@ -18,10 +21,11 @@ import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
  * Returns a unique key for the announcement banner dismiss state
  * It creates a user-only key for use on the auth screen
  */
-export const getDismissedKey = (userId: string) => `announcement-banner-dismissed-${userId}`;
+export const getDismissedKey = (userId: string) =>
+  `announcement-banner-dismissed-${userId}-${ANNOUNCEMENT_ID}`;
 
 // Global key for anonymous users (e.g., on the login screen)
-export const GLOBAL_DISMISSED_KEY = 'announcement-banner-dismissed-global';
+export const GLOBAL_DISMISSED_KEY = `announcement-banner-dismissed-global-${ANNOUNCEMENT_ID}`;
 
 const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
