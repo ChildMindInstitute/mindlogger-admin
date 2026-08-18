@@ -7,10 +7,13 @@ import {
 } from './useSessionKeepAlive.const';
 import { formatCountdown, resolveSessionConfig } from './useSessionKeepAlive.utils';
 
+const idleTimeoutMs = DEFAULT_IDLE_TIMEOUT_MIN * MS_IN_MIN;
+
 const defaults = {
-  idleTimeoutMs: DEFAULT_IDLE_TIMEOUT_MIN * MS_IN_MIN,
+  idleTimeoutMs,
   refreshLeadMs: DEFAULT_REFRESH_LEAD_SEC * MS_IN_SEC,
-  warningLeadMs: DEFAULT_IDLE_WARNING_MIN * MS_IN_MIN,
+  // Capped, so the shortened idle timeout on this test branch still lines up.
+  warningLeadMs: Math.min(DEFAULT_IDLE_WARNING_MIN * MS_IN_MIN, idleTimeoutMs / 2),
 };
 
 describe('resolveSessionConfig', () => {

@@ -1,8 +1,9 @@
 export const MS_IN_SEC = 1000;
 export const MS_IN_MIN = 60 * MS_IN_SEC;
 
+// TEST BRANCH ONLY — shortened from 30 so the idle timeout is observable. Do not merge.
 // Overridden by REACT_APP_IDLE_TIMEOUT_MIN.
-export const DEFAULT_IDLE_TIMEOUT_MIN = 30;
+export const DEFAULT_IDLE_TIMEOUT_MIN = 3;
 
 // Headroom before token expiry. Overridden by REACT_APP_REFRESH_LEAD_SEC.
 export const DEFAULT_REFRESH_LEAD_SEC = 90;
