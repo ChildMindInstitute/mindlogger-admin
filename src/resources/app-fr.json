@@ -230,7 +230,7 @@
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
   "and": "et",
-  "announcementBanner": "<0>L'authentification multifacteur est disponible! </0> <1>Protégez votre compte avec une couche de sécurité supplémentaire. Configurez-la dans les paramètres de votre compte. </1><2>Cliquez pour en savoir plus.</2>",
+  "announcementBanner": "<0>Changement de la disposition des options de réponse : </0><1>À partir du 16 septembre, les options de réponse des items à choix unique et à choix multiples s'afficheront toujours sous forme de liste verticale, quelle que soit la taille de l'écran. Veuillez noter que ce changement n'affecte pas la disposition en grille des réponses lorsque le paramètre d'item « Utiliser la disposition en mode portrait » est activé.</1>",
   "applet_one": "Applet",
   "applet_other": "Applets",
   "appletActivities": "Activités de l'applet",
