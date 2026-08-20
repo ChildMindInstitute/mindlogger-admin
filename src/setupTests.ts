@@ -92,7 +92,6 @@ vi.mock('shared/hooks/useFeatureFlags', () => ({
       enableMfa: false,
       enableAdminAnnouncementBanner: false,
       enableAuditLogs: true,
-      enableSessionKeepAlive: false,
     },
     resetLDContext: vi.fn(),
   })),
