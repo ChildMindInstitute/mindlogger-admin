@@ -12,18 +12,23 @@ import {
 } from 'shared/tests/InMemoryBroadcastChannel';
 import { state as authState } from 'modules/Auth/state/Auth.state';
 
-import { clearSessionState, setLastActivityAt } from './sessionStore';
+import { clearSessionState, getLastActivityAt, setLastActivityAt } from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { SessionMessage, SessionState } from './sessionSync.types';
-import { MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
+import { COUNTDOWN_TICK_MS, MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
 
 vi.mock('shared/api', () => ({ refreshTokens: vi.fn() }));
 vi.mock('shared/hooks/useLogout', () => ({ useLogout: vi.fn() }));
 // Pinned so the suite does not depend on the .env a developer happens to have locally.
-vi.mock('./useSessionKeepAlive.utils', () => ({
-  resolveSessionConfig: () => ({ idleTimeoutMs: 30 * 60 * 1000, refreshLeadMs: 90 * 1000 }),
+vi.mock('./useSessionKeepAlive.utils', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./useSessionKeepAlive.utils')>()),
+  resolveSessionConfig: () => ({
+    idleTimeoutMs: 30 * 60 * 1000,
+    refreshLeadMs: 90 * 1000,
+    warningLeadMs: 5 * 60 * 1000,
+  }),
 }));
 
 const mockedRefreshTokens = vi.mocked(refreshTokens);
@@ -32,6 +37,7 @@ const mockedLogout = vi.fn();
 const IDLE_TIMEOUT_MS = 30 * MS_IN_MIN;
 const TOKEN_LIFETIME_MS = 15 * MS_IN_MIN;
 const REFRESH_LEAD_MS = 90 * MS_IN_SEC;
+const WARNING_LEAD_MS = 5 * MS_IN_MIN;
 
 const SESSION_ID = 'family-1';
 
@@ -486,5 +492,120 @@ describe('useSessionKeepAlive', () => {
     renderEngine();
 
     expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBe(String(Date.now()));
+  });
+  describe('idle warning', () => {
+    // The engine has to reach the lead before anything is shown, so this is the shared first step.
+    const idleUntilTheWarning = () =>
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS - WARNING_LEAD_MS);
+      });
+
+    test('stays shut while the deadline is still far off', () => {
+      const { result } = renderEngine();
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS - WARNING_LEAD_MS - MS_IN_SEC);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    test('opens one lead interval before the deadline', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS);
+    });
+
+    test('counts down once a second', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => {
+        vi.advanceTimersByTime(3 * COUNTDOWN_TICK_MS);
+      });
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS - 3 * MS_IN_SEC);
+    });
+
+    // A rotation re-enters the scheduler, which has to recognise it is already inside the warning
+    // rather than treating the countdown as still ahead of it.
+    test('keeps counting through a token rotation', () => {
+      const { result } = renderEngine();
+      const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+      idleUntilTheWarning();
+      act(() => {
+        sibling.postMessage({
+          type: 'TOKENS_UPDATED',
+          payload: {
+            sessionId: SESSION_ID,
+            accessToken: tokenExpiringIn(2 * TOKEN_LIFETIME_MS),
+            refreshToken: refreshTokenFor(SESSION_ID),
+          },
+        });
+      });
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS);
+    });
+
+    test('closes when another tab pushes the shared clock out', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      // What a sibling answering its own copy of the warning leaves behind for this one to read.
+      act(() => {
+        setLastActivityAt(Date.now());
+        vi.advanceTimersByTime(COUNTDOWN_TICK_MS);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    test('leaves the countdown behind once the session ends', () => {
+      const { result } = renderEngine();
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    test('staying logged in moves the clock every tab reads', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+
+      expect(result.current.msRemaining).toBeNull();
+      expect(getLastActivityAt()).toBe(Date.now());
+    });
+
+    test('staying logged in carries the session past the deadline it was heading for', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+      act(() => {
+        vi.advanceTimersByTime(WARNING_LEAD_MS);
+      });
+
+      expect(mockedLogout).not.toHaveBeenCalled();
+    });
+
+    test('logging out from the warning is deliberate, so nothing is soft locked', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.logOutNow());
+
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: false,
+        reason: 'manual',
+        isRemote: false,
+      });
+    });
   });
 });
