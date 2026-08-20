@@ -2,7 +2,6 @@ import { useEffect, useReducer } from 'react';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { SessionStorageKeys } from 'shared/utils/storage';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { getLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
@@ -14,12 +13,11 @@ import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 // So it listens for a session being announced, and asks again whenever it returns to focus, for
 // the case where the browser had frozen it when the announcement went out.
 export const useSessionAdoption = () => {
-  const { featureFlags } = useFeatureFlags();
   // Adopting writes to storage, which no component is watching. This re-renders so the routes
   // read the token that just arrived.
   const [, onAdopted] = useReducer((count: number) => count + 1, 0);
 
-  const isListening = !!featureFlags.enableSessionKeepAlive && !authStorage.getRefreshToken();
+  const isListening = !authStorage.getRefreshToken();
 
   useEffect(() => {
     if (!isListening) {

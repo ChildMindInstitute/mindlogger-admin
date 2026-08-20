@@ -1,7 +1,6 @@
 import { act } from '@testing-library/react';
 
 import { authStorage } from 'shared/utils';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import {
@@ -30,12 +29,6 @@ const ANNOUNCED = {
 
 const mockedReload = vi.fn();
 
-const setFlag = (enableSessionKeepAlive: boolean) =>
-  vi.mocked(useFeatureFlags).mockReturnValue({
-    featureFlags: { enableSessionKeepAlive },
-    resetLDContext: vi.fn(),
-  } as never);
-
 // Mirrors how the routes consume this: the hook re-renders, and the token is read afterwards.
 const renderAdoption = () =>
   renderHookWithProviders(
@@ -63,7 +56,6 @@ describe('useSessionAdoption', () => {
     sessionStorage.clear();
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
     vi.stubGlobal('location', { ...window.location, reload: mockedReload });
-    setFlag(true);
 
     sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
   });
@@ -116,15 +108,6 @@ describe('useSessionAdoption', () => {
     });
 
     expect(authStorage.getRefreshToken()).toBe(ANNOUNCED.refreshToken);
-  });
-
-  test('ignores announcements when the flag is off', () => {
-    setFlag(false);
-    renderAdoption();
-
-    announceSession(sibling);
-
-    expect(authStorage.getRefreshToken()).toBeNull();
   });
 
   test('asks for a session when the tab comes back into focus', () => {
