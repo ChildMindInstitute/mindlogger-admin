@@ -128,7 +128,7 @@ export const AnnouncementBanner = (props: BannerProps) => {
             <Trans i18nKey="announcementBanner">
               <strong>Change in response options layout: </strong>
               <>
-                Starting September 16, response options for single and multiple select items will
+                Starting September 30, response options for single and multiple select items will
                 always display as a vertical list for all screen sizes. Please note, this change
                 does not affect the grid arrangement for responses when the Use Portrait Layout item
                 setting is turned on.
