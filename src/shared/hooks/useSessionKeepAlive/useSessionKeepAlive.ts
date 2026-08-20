@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { auth } from 'redux/modules';
 import { refreshTokens } from 'shared/api';
 import { authStorage, getTokenExpiration } from 'shared/utils';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 
 import { startActivityTracking, stopActivityTracking } from './activityTracker';
@@ -15,7 +14,6 @@ import { getSessionId } from './sessionSync.utils';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 
 export const useSessionKeepAlive = () => {
-  const { featureFlags } = useFeatureFlags();
   const isAuthorized = auth.useAuthorized();
   const logout = useLogout();
 
@@ -23,12 +21,10 @@ export const useSessionKeepAlive = () => {
   const logoutRef = useRef(logout);
   logoutRef.current = logout;
 
-  const isEnabled = !!featureFlags.enableSessionKeepAlive && isAuthorized;
   // Set by the engine below, so tracking can re-arm the timers without owning them.
   const scheduleRef = useRef<(() => void) | null>(null);
 
-  // Runs with the flag off too: a session outlives its tab now, and the boot check reads this
-  // clock to decide whether one left behind may carry on.
+  // Kept apart from the engine: the boot check reads this clock, so it outlives any teardown.
   useEffect(() => {
     if (!isAuthorized) return;
 
@@ -38,7 +34,7 @@ export const useSessionKeepAlive = () => {
   }, [isAuthorized]);
 
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isAuthorized) return;
 
     const { idleTimeoutMs, refreshLeadMs } = resolveSessionConfig();
     let refreshTimer: ReturnType<typeof setTimeout>;
@@ -169,5 +165,5 @@ export const useSessionKeepAlive = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
     };
-  }, [isEnabled]);
+  }, [isAuthorized]);
 };

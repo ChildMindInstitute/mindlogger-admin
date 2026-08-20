@@ -3,7 +3,6 @@ import { act } from '@testing-library/react';
 import { refreshTokens } from 'shared/api';
 import { authStorage } from 'shared/utils';
 import { PlainStorageKeys } from 'shared/utils/storage';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useLogout } from 'shared/hooks/useLogout';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
@@ -15,7 +14,7 @@ import { state as authState } from 'modules/Auth/state/Auth.state';
 
 import { clearSessionState, setLastActivityAt } from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
-import { closeSessionSync, publishSessionMessage } from './sessionSync';
+import { closeSessionSync } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { SessionMessage, SessionState } from './sessionSync.types';
 import { MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
@@ -42,12 +41,6 @@ const tokenExpiringIn = (ms: number) =>
 const refreshTokenFor = (sessionId: string) =>
   `header.${btoa(JSON.stringify({ family: sessionId }))}.signature`;
 
-const setFlag = (enableSessionKeepAlive: boolean) =>
-  vi.mocked(useFeatureFlags).mockReturnValue({
-    featureFlags: { enableSessionKeepAlive },
-    resetLDContext: vi.fn(),
-  } as never);
-
 // A sibling tab that replies to every session request with the state it is given.
 const answerSessionRequests = (state: Partial<SessionState>) => {
   const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
@@ -66,9 +59,9 @@ const answerSessionRequests = (state: Partial<SessionState>) => {
   };
 };
 
-const renderEngine = () =>
+const renderEngine = (isAuthorized = true) =>
   renderHookWithProviders(useSessionKeepAlive, {
-    preloadedState: { ...getPreloadedState(), auth: { ...authState, isAuthorized: true } },
+    preloadedState: { ...getPreloadedState(), auth: { ...authState, isAuthorized } },
   });
 
 describe('useSessionKeepAlive', () => {
@@ -82,7 +75,6 @@ describe('useSessionKeepAlive', () => {
 
     vi.mocked(useLogout).mockReturnValue(mockedLogout);
     mockedRefreshTokens.mockResolvedValue({ accessToken: 'a', refreshToken: 'r' });
-    setFlag(true);
     authStorage.setAccessToken(tokenExpiringIn(TOKEN_LIFETIME_MS));
     authStorage.setRefreshToken(refreshTokenFor(SESSION_ID));
   });
@@ -463,9 +455,8 @@ describe('useSessionKeepAlive', () => {
     });
   });
 
-  test('neither refreshes nor logs out nor syncs when the flag is off', () => {
-    setFlag(false);
-    renderEngine();
+  test('neither refreshes nor logs out nor syncs until the session is authorized', () => {
+    renderEngine(false);
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
     const onSiblingMessage = vi.fn();
     sibling.onmessage = onSiblingMessage;
@@ -474,7 +465,6 @@ describe('useSessionKeepAlive', () => {
     act(() => {
       vi.advanceTimersByTime(IDLE_TIMEOUT_MS * 2);
       window.dispatchEvent(new Event('keydown'));
-      publishSessionMessage({ type: 'SESSION_REQUEST' });
       sibling.postMessage({
         type: 'TOKENS_UPDATED',
         payload: {
@@ -492,8 +482,7 @@ describe('useSessionKeepAlive', () => {
     expect(authStorage.getAccessToken()).toBe(mine);
   });
 
-  test('still records activity when the flag is off, so the boot check has a clock to read', () => {
-    setFlag(false);
+  test('records activity as soon as the session is live, so the boot check has a clock to read', () => {
     renderEngine();
 
     expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBe(String(Date.now()));
