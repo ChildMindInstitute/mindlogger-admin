@@ -1,6 +1,10 @@
 import { PlainStorageKeys } from 'shared/utils/storage';
 
-import { startActivityTracking, stopActivityTracking } from './activityTracker';
+import {
+  setActivityTrackingPaused,
+  startActivityTracking,
+  stopActivityTracking,
+} from './activityTracker';
 import { getLastActivityAt } from './sessionStore';
 import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.const';
 
@@ -106,5 +110,57 @@ describe('activityTracker', () => {
     localStorage.setItem(PlainStorageKeys.LastActivityAt, 'not-a-number');
 
     expect(getLastActivityAt()).toBeNull();
+  });
+  describe('while paused', () => {
+    // The warning pauses tracking so the countdown it shows cannot be answered by mouse movement.
+    const moveTheMouse = () => {
+      vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
+      window.dispatchEvent(new Event('mousemove'));
+    };
+
+    test('ignores activity', () => {
+      startActivityTracking();
+      const beforePause = storedActivity();
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+
+      expect(storedActivity()).toBe(beforePause);
+    });
+
+    test('does not notify the caller either', () => {
+      const onActivity = vi.fn();
+      startActivityTracking(onActivity);
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+
+      expect(onActivity).not.toHaveBeenCalled();
+    });
+
+    test('records again once it is released', () => {
+      startActivityTracking();
+      const beforePause = storedActivity();
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+      setActivityTrackingPaused(false);
+      moveTheMouse();
+
+      expect(storedActivity()).not.toBe(beforePause);
+    });
+
+    // Otherwise a session that ended mid-warning would leave the next one unable to record at all.
+    test('stopping tracking releases the pause', () => {
+      startActivityTracking();
+      setActivityTrackingPaused(true);
+      stopActivityTracking();
+
+      startActivityTracking();
+      const beforeEvent = storedActivity();
+      moveTheMouse();
+
+      expect(storedActivity()).not.toBe(beforeEvent);
+    });
   });
 });

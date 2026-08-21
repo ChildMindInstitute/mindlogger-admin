@@ -17,7 +17,12 @@ import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { SessionMessage, SessionState } from './sessionSync.types';
-import { COUNTDOWN_TICK_MS, MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
+import {
+  ACTIVITY_THROTTLE_MS,
+  COUNTDOWN_TICK_MS,
+  MS_IN_MIN,
+  MS_IN_SEC,
+} from './useSessionKeepAlive.const';
 
 vi.mock('shared/api', () => ({ refreshTokens: vi.fn() }));
 vi.mock('shared/hooks/useLogout', () => ({ useLogout: vi.fn() }));
@@ -571,6 +576,22 @@ describe('useSessionKeepAlive', () => {
       });
 
       expect(result.current.msRemaining).toBeNull();
+    });
+
+    // Tracking is paused for exactly this: the mouse has to travel to the buttons, and that
+    // journey must not count as the answer.
+    test('mouse movement while it is open does not answer the countdown', () => {
+      const { result } = renderEngine();
+      const clockBefore = getLastActivityAt();
+
+      idleUntilTheWarning();
+      act(() => {
+        vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + MS_IN_SEC);
+        window.dispatchEvent(new Event('mousemove'));
+      });
+
+      expect(getLastActivityAt()).toBe(clockBefore);
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS - ACTIVITY_THROTTLE_MS - MS_IN_SEC);
     });
 
     test('staying logged in moves the clock every tab reads', () => {

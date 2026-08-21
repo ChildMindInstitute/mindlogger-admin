@@ -5,7 +5,11 @@ import { refreshTokens } from 'shared/api';
 import { authStorage, getTokenExpiration } from 'shared/utils';
 import { useLogout } from 'shared/hooks/useLogout';
 
-import { startActivityTracking, stopActivityTracking } from './activityTracker';
+import {
+  setActivityTrackingPaused,
+  startActivityTracking,
+  stopActivityTracking,
+} from './activityTracker';
 import { getLastActivityAt, setLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
@@ -31,6 +35,7 @@ export const useSessionKeepAlive = () => {
 
   // Milliseconds left to answer in, or null while the deadline is still far off.
   const [msRemaining, setMsRemaining] = useState<number | null>(null);
+  const isWarningOpen = msRemaining !== null;
 
   // Kept apart from the engine: the boot check reads this clock, so it outlives any teardown.
   useEffect(() => {
@@ -40,6 +45,12 @@ export const useSessionKeepAlive = () => {
 
     return stopActivityTracking;
   }, [isAuthorized]);
+
+  // The warning is answered, not waved away: while it is open, reaching for the mouse must not
+  // push the deadline out on its own. stopActivityTracking clears this on teardown.
+  useEffect(() => {
+    setActivityTrackingPaused(isWarningOpen);
+  }, [isWarningOpen]);
 
   useEffect(() => {
     if (!isAuthorized) return;

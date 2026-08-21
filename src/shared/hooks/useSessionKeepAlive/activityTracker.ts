@@ -3,6 +3,13 @@ import { ACTIVITY_EVENTS, ACTIVITY_THROTTLE_MS } from './useSessionKeepAlive.con
 
 let stopTracking: (() => void) | null = null;
 
+// Held while the warning is open, so reaching for its buttons cannot answer the countdown for you.
+let isPaused = false;
+
+export const setActivityTrackingPaused = (paused: boolean) => {
+  isPaused = paused;
+};
+
 export const startActivityTracking = (onActivity?: () => void) => {
   stopActivityTracking();
 
@@ -10,6 +17,8 @@ export const startActivityTracking = (onActivity?: () => void) => {
 
   let lastWriteAt = 0;
   const handleActivity = () => {
+    if (isPaused) return;
+
     const now = Date.now();
     if (now - lastWriteAt < ACTIVITY_THROTTLE_MS) return;
 
@@ -29,4 +38,6 @@ export const startActivityTracking = (onActivity?: () => void) => {
 export const stopActivityTracking = () => {
   stopTracking?.();
   stopTracking = null;
+  // Cleared here too, so a teardown mid-warning cannot leave the next session unable to record.
+  isPaused = false;
 };
