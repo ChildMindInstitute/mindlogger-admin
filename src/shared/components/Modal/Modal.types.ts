@@ -30,6 +30,7 @@ export type ModalProps = {
   hasSecondBtn?: boolean;
   submitBtnColor?: SubmitBtnColor;
   submitBtnVariant?: ButtonProps['variant'];
+  submitBtnStyles?: SxProps;
   secondBtnText?: string;
   secondBtnVariant?: ButtonProps['variant'];
   onSecondBtnSubmit?: BtnSubmit;
