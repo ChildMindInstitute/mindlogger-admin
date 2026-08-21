@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles';
-import { variables } from 'shared/styles/variables';
 
 import { SessionTimeoutModalProps } from './SessionTimeoutModal.types';
 import { formatCountdown } from './useSessionKeepAlive.utils';
@@ -23,8 +22,6 @@ export const SessionTimeoutModal = ({
       onSubmit={onStayLoggedIn}
       title={t('sessionTimeoutTitle')}
       buttonText={t('stayLoggedIn')}
-      submitBtnVariant="text"
-      submitBtnStyles={{ fontWeight: variables.font.weight.bold }}
       hasSecondBtn
       secondBtnText={t('logOut')}
       onSecondBtnSubmit={onLogOut}

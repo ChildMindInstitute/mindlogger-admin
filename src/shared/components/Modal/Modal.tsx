@@ -29,7 +29,6 @@ export const Modal = ({
   submitBtnColor = 'primary',
   secondBtnText,
   submitBtnVariant = 'contained',
-  submitBtnStyles = {},
   onSecondBtnSubmit,
   secondBtnVariant = 'text',
   disabledSecondBtn,
@@ -68,7 +67,6 @@ export const Modal = ({
         disabled={disabledSubmit}
         onClick={onSubmit}
         color={submitBtnColor}
-        sx={{ ...submitBtnStyles }}
         data-testid={`${dataTestid}-submit-button`}
       >
         {buttonText}
