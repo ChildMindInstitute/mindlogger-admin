@@ -1,10 +1,19 @@
+import { SessionTimeoutModal } from './SessionTimeoutModal';
 import { useSessionExpiredLogout } from './useSessionExpiredLogout';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
 // Must render inside <Router>: both hooks log out via useLogout, which relies on useNavigate.
 export const SessionKeepAlive = () => {
-  useSessionKeepAlive();
+  const { msRemaining, stayLoggedIn, logOutNow } = useSessionKeepAlive();
   useSessionExpiredLogout();
 
-  return null;
+  if (msRemaining === null) return null;
+
+  return (
+    <SessionTimeoutModal
+      msRemaining={msRemaining}
+      onStayLoggedIn={stayLoggedIn}
+      onLogOut={logOutNow}
+    />
+  );
 };
