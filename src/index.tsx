@@ -58,14 +58,16 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 Mixpanel.init();
 
-// Both run before render, because the routes read the token as they render.
+// Runs before render, because the routes read the token as they render.
 migrateLegacySession();
-// After the migration, so a session that just moved across is checked on its own clock.
-clearStaleSession();
 
 patchDOMForGoogleTranslate();
 
 (async () => {
+  // Also before render, and after the migration, so a session that just moved across is checked on
+  // its own clock. Awaited because a token the server would still accept is revoked first.
+  await clearStaleSession();
+
   const LDProvider = await asyncWithLDProvider({
     clientSideID: import.meta.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
   });
