@@ -587,7 +587,7 @@ describe('useSessionKeepAlive', () => {
       idleUntilTheWarning();
       act(() => {
         vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + MS_IN_SEC);
-        window.dispatchEvent(new Event('mousemove'));
+        window.dispatchEvent(new Event('pointermove'));
       });
 
       expect(getLastActivityAt()).toBe(clockBefore);

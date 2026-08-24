@@ -13,14 +13,16 @@ export const DEFAULT_IDLE_WARNING_MIN = 5;
 // How often the countdown redraws while the warning is open.
 export const COUNTDOWN_TICK_MS = MS_IN_SEC;
 
-// mousemove fires continuously, so writes are throttled well below the timeout's precision.
+// pointermove fires continuously, so writes are throttled well below the timeout's precision.
 export const ACTIVITY_THROTTLE_MS = 5 * MS_IN_SEC;
 
+// Pointer events cover mouse, touch and pen in one, so there is no separate mouse or touch entry.
+// Reading without pointing is caught by scroll and wheel: on a touchscreen pointermove only fires
+// while a finger is down.
 export const ACTIVITY_EVENTS = [
-  'mousemove',
+  'pointermove',
   'pointerdown',
   'keydown',
   'scroll',
   'wheel',
-  'touchstart',
 ] as const;

@@ -51,13 +51,13 @@ describe('activityTracker', () => {
   test('throttles repeated events', () => {
     startActivityTracking();
     vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
-    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('pointermove'));
 
     const afterFirst = storedActivity();
 
     vi.advanceTimersByTime(1000);
-    window.dispatchEvent(new Event('mousemove'));
-    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('pointermove'));
+    window.dispatchEvent(new Event('pointermove'));
 
     expect(storedActivity()).toBe(afterFirst);
   });
@@ -65,11 +65,11 @@ describe('activityTracker', () => {
   test('records again once the throttle window passes', () => {
     startActivityTracking();
     vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
-    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('pointermove'));
     const afterFirst = storedActivity();
 
     vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
-    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('pointermove'));
 
     expect(storedActivity()).not.toBe(afterFirst);
   });
@@ -90,7 +90,7 @@ describe('activityTracker', () => {
     const beforeEvent = storedActivity();
 
     vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
-    window.dispatchEvent(new Event('mousemove'));
+    window.dispatchEvent(new Event('pointermove'));
 
     expect(storedActivity()).toBe(beforeEvent);
   });
@@ -115,7 +115,7 @@ describe('activityTracker', () => {
     // The warning pauses tracking so the countdown it shows cannot be answered by mouse movement.
     const moveTheMouse = () => {
       vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
-      window.dispatchEvent(new Event('mousemove'));
+      window.dispatchEvent(new Event('pointermove'));
     };
 
     test('ignores activity', () => {
