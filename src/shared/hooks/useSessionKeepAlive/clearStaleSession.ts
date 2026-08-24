@@ -15,4 +15,7 @@ export const clearStaleSession = () => {
 
   authStorage.clear();
   clearSessionState();
+  // Survives a reload, so a stale session would otherwise leave the applet private keys behind.
+  // Matches the teardown in Auth.reducer's resetAuthorization.
+  sessionStorage.clear();
 };
