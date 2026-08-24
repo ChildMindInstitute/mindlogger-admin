@@ -40,6 +40,12 @@ const requestNewTokens = async () => {
     throw new Error('Access token refresh failed.');
   }
 
+  // The session can end while this is in flight, here or in a sibling that broadcast it. Storing
+  // now would put the tokens back and leave the tab looking signed in over a dead session.
+  if (!authStorage.getRefreshToken()) {
+    throw new Error('Session ended before the refreshed token could be stored.');
+  }
+
   // Read before the tokens change, since siblings identify by the one they still hold.
   const sessionId = getSessionId();
 

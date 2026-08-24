@@ -99,6 +99,20 @@ describe('refreshTokens', () => {
     await expect(refreshTokens()).rejects.toThrow('Access token refresh failed.');
     expect(authStorage.getAccessToken()).toBe('old-access');
   });
+
+  // Logging out mid-flight, here or in a sibling that broadcast it, clears the store. Storing the
+  // answer that arrives afterwards would put the session back on its feet.
+  test('discards tokens that arrive after the session has ended', async () => {
+    resolveWith(tokens, 10);
+    const pending = refreshTokens();
+    authStorage.clear();
+
+    await expect(pending).rejects.toThrow(
+      'Session ended before the refreshed token could be stored.',
+    );
+    expect(authStorage.getAccessToken()).toBeNull();
+    expect(authStorage.getRefreshToken()).toBeNull();
+  });
 });
 
 const tokenWithClaims = (claims: Record<string, string>) =>
@@ -141,6 +155,16 @@ describe('refreshTokens broadcast', () => {
         },
       },
     });
+  });
+
+  test('stays silent about a rotation it discarded', async () => {
+    authStorage.setRefreshToken(tokenWithClaims({ family: 'family-1' }));
+    resolveWith(tokens, 10);
+    const pending = refreshTokens();
+    authStorage.clear();
+
+    await expect(pending).rejects.toThrow('Session ended');
+    expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
   test('announces the id siblings still hold, not the incoming one', async () => {
