@@ -1514,7 +1514,7 @@
   "sept": "September",
   "serverConfiguration": "Server Configuration",
   "serverStatusConfigured": "Server Status: Connected.",
-  "sessionTimeoutDescription": "You haven't done anything in this window for awhile. If you don't make a choice, we'll log you out in {{countdown}}.",
+  "sessionTimeoutDescription": "You haven't done anything in this window for a while. If you don't make a choice, we'll log you out in {{countdown}}.",
   "sessionTimeoutTitle": "Are you still there?",
   "serverStatusConnected": "Server Status: Connected.",
   "serverStatusNotConfigured": "Report Server is not configured. The email with the report will not be sent.",
