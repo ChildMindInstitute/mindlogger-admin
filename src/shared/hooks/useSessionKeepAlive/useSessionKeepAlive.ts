@@ -70,9 +70,24 @@ export const useSessionKeepAlive = () => {
       logoutRef.current({ shouldSoftLock: reason !== 'manual', reason, isRemote });
     };
 
+    // Armed once per token rather than on every pass: the cap below measures what is left right
+    // now, so re-deriving it as the token ages walks the refresh ever closer to expiry.
+    let refreshArmedFor: number | null = null;
+
+    const scheduleRefresh = () => {
+      // Read at decision time: another tab or an earlier refresh may have replaced the token.
+      const expiresAt = getTokenExpiration(authStorage.getAccessToken());
+      if (expiresAt === null || expiresAt === refreshArmedFor) return;
+
+      refreshArmedFor = expiresAt;
+      clearTimeout(refreshTimer);
+      // Capped so a token shorter-lived than the lead does not refresh the moment it arrives.
+      const lead = Math.min(refreshLeadMs, (expiresAt - Date.now()) / 2);
+      refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
+    };
+
     const schedule = () => {
       if (hasEnded) return;
-      clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
 
@@ -80,8 +95,8 @@ export const useSessionKeepAlive = () => {
       const msUntilLogout = idleDeadline - Date.now();
       if (msUntilLogout <= 0) return endSession('idle');
 
-      // The last stretch belongs to the countdown, not to another pass through here: re-deriving
-      // the capped refresh lead every second would halve it away to nothing.
+      // The last stretch belongs to the countdown, not to another pass through here, which would
+      // tear down and re-arm every timer once a second for nothing.
       if (msUntilLogout <= warningLeadMs) {
         setMsRemaining(msUntilLogout);
         warningTimer = setTimeout(tick, COUNTDOWN_TICK_MS);
@@ -94,13 +109,7 @@ export const useSessionKeepAlive = () => {
       // have pushed the deadline out while this one sat idle.
       logoutTimer = setTimeout(schedule, msUntilLogout);
 
-      // Read at decision time: another tab or an earlier refresh may have replaced the token.
-      const expiresAt = getTokenExpiration(authStorage.getAccessToken());
-      if (expiresAt === null) return;
-
-      // Capped so a token shorter-lived than the lead does not refresh on every tick.
-      const lead = Math.min(refreshLeadMs, (expiresAt - Date.now()) / 2);
-      refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
+      scheduleRefresh();
     };
 
     // Redraws the countdown off the shared clock, which is how a sibling answering the warning
@@ -127,6 +136,8 @@ export const useSessionKeepAlive = () => {
     const refresh = async () => {
       try {
         await refreshTokens();
+        // Always re-arms, even if the replacement happens to carry the same expiry.
+        refreshArmedFor = null;
         schedule();
       } catch {
         endSession('refresh-failed');
