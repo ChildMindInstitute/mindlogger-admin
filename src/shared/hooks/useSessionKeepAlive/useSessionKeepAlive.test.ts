@@ -532,6 +532,35 @@ describe('useSessionKeepAlive', () => {
     });
   });
 
+  // The same freeze, but someone signed in after the logout. The clock is back, so the check above
+  // no longer catches it, and the tab would otherwise sit on the old user's dashboard.
+  test('rejoins on focus when another session took the browser while it was frozen', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    renderEngine();
+    setActiveSessionId('family-2');
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('stays put on focus when the browser is still its own', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    renderEngine();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
   test('neither refreshes nor logs out nor syncs until the session is authorized', () => {
     renderEngine(false);
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
