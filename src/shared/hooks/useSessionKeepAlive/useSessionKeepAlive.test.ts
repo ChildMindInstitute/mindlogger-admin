@@ -12,7 +12,13 @@ import {
 } from 'shared/tests/InMemoryBroadcastChannel';
 import { state as authState } from 'modules/Auth/state/Auth.state';
 
-import { clearSessionState, getLastActivityAt, setLastActivityAt } from './sessionStore';
+import {
+  clearSessionState,
+  getActiveSessionId,
+  getLastActivityAt,
+  setActiveSessionId,
+  setLastActivityAt,
+} from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
@@ -95,6 +101,26 @@ describe('useSessionKeepAlive', () => {
     resetInMemoryBroadcastChannels();
     vi.unstubAllGlobals();
     vi.useRealTimers();
+  });
+
+  test('claims the browser for its session on mount', () => {
+    renderEngine();
+
+    expect(getActiveSessionId()).toBe(SESSION_ID);
+  });
+
+  // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a
+  // freeze overwrite the id of the session that replaced it, and never notice it was stale.
+  test('does not reclaim the browser once another session has taken it', () => {
+    renderEngine();
+    setActiveSessionId('family-2');
+
+    act(() => {
+      vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS);
+      window.dispatchEvent(new Event('keydown'));
+    });
+
+    expect(getActiveSessionId()).toBe('family-2');
   });
 
   test('refreshes one lead interval before the token expires', () => {

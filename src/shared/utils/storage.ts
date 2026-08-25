@@ -15,6 +15,7 @@ export const enum LocalStorageKeys {
 // snapshot above.
 export const enum PlainStorageKeys {
   LastActivityAt = 'lastActivityAt',
+  ActiveSessionId = 'activeSessionId',
 }
 
 export const enum SessionStorageKeys {

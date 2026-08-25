@@ -10,7 +10,7 @@ import {
   startActivityTracking,
   stopActivityTracking,
 } from './activityTracker';
-import { getLastActivityAt, setLastActivityAt } from './sessionStore';
+import { getLastActivityAt, setActiveSessionId, setLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
@@ -210,6 +210,11 @@ export const useSessionKeepAlive = () => {
       authStorage.setRefreshToken(refreshToken);
       schedule();
     };
+
+    // Claimed once, here: a tab woken from a freeze never remounts, so it can never overwrite the
+    // id of a session that started while it slept. That is what lets it recognise it is stale.
+    const ownSessionId = getSessionId();
+    if (ownSessionId) setActiveSessionId(ownSessionId);
 
     const unsubscribe = subscribeSessionSync(handleSyncMessage);
     scheduleRef.current = schedule;
