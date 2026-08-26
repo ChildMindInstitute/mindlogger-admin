@@ -22,5 +22,9 @@ export const authStorage = {
     storage.removeItem(LocalStorageKeys.RefreshToken);
     storage.removeItem(LocalStorageKeys.AccessToken);
     storage.removeItem(LocalStorageKeys.Workspace);
+    // The store keys a value by its type and reads that type from a snapshot taken when the tab
+    // loaded. The workspace is the only object here, so a tab that loaded before another wrote one
+    // removes it as a string and leaves the real entry behind for the next tab to read.
+    localStorage.removeItem('@secure.j.workspace');
   },
 };
