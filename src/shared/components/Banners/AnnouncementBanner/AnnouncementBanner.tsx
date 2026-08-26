@@ -9,21 +9,35 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { variables } from 'shared/styles';
 
 import { Banner, BannerProps } from '../Banner';
-import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
+import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
 
-// ─── Update this URL when the announcement changes ────────────────────────────
-const ANNOUNCEMENT_URL =
-  'https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/ca0a323b-b88d-4b32-8f4f-4e6b0157f8f6/article/1545404417';
-// ─────────────────────────────────────────────────────────────────────────────
+// Constant prefix for localStorage key
+const ANNOUNCEMENT_PREFIX = 'announcement-banner-dismissed';
+
+// Update when announcement changes, so users who dismissed previous announcement are shown the new one
+const ANNOUNCEMENT_ID = 'response-options-layout';
+
+// Update when announcement links to an article
+// const ANNOUNCEMENT_URL = 'https://...';
 
 /**
  * Returns a unique key for the announcement banner dismiss state
  * It creates a user-only key for use on the auth screen
  */
-export const getDismissedKey = (userId: string) => `announcement-banner-dismissed-${userId}`;
+export const getDismissedKey = (userId: string) =>
+  `${ANNOUNCEMENT_PREFIX}-${userId}-${ANNOUNCEMENT_ID}`;
 
 // Global key for anonymous users (e.g., on the login screen)
-export const GLOBAL_DISMISSED_KEY = 'announcement-banner-dismissed-global';
+export const GLOBAL_DISMISSED_KEY = `${ANNOUNCEMENT_PREFIX}-global-${ANNOUNCEMENT_ID}`;
+
+// Discards dismiss state left behind by previous announcements
+const clearStaleDismissedKeys = () => {
+  Object.keys(localStorage)
+    .filter(
+      (key) => key.startsWith(`${ANNOUNCEMENT_PREFIX}-`) && !key.endsWith(`-${ANNOUNCEMENT_ID}`),
+    )
+    .forEach((key) => localStorage.removeItem(key));
+};
 
 const DISPLAY_ROUTES = [/^\/auth(?:\/|$)/, /^\/dashboard\/(applets|managers|respondents)$/];
 
@@ -45,6 +59,8 @@ export const AnnouncementBanner = (props: BannerProps) => {
 
   useEffect(() => {
     if (!featureFlags.enableAdminAnnouncementBanner) return;
+
+    clearStaleDismissedKeys();
 
     // For auth screen or when user is not logged in yet
     if (!userId) {
@@ -110,11 +126,16 @@ export const AnnouncementBanner = (props: BannerProps) => {
             {...props}
           >
             <Trans i18nKey="announcementBanner">
-              <strong>We are rebranding! </strong>
-              <>Design updates are on the way — same great app, fresh new look. Curious? </>
-              <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
+              <strong>Change in response options layout: </strong>
+              <>
+                Starting September 30, response options for single and multiple select items will
+                always display as a vertical list for all screen sizes. Please note, this change
+                does not affect the grid arrangement for responses when the Use Portrait Layout item
+                setting is turned on.
+              </>
+              {/* <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
                 Click to learn more.
-              </StyledLink>
+              </StyledLink> */}
             </Trans>
           </Banner>
         )}
