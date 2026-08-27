@@ -21,10 +21,10 @@ export const authStorage = {
   clear: () => {
     storage.removeItem(LocalStorageKeys.RefreshToken);
     storage.removeItem(LocalStorageKeys.AccessToken);
+    // The store works out which key to delete from the value's type, and only knows the type of a
+    // value this tab itself wrote. Writing one first is what lets it delete a workspace another tab
+    // left behind, which it would otherwise look for as a string and leave on disk.
+    storage.setItem(LocalStorageKeys.Workspace, {});
     storage.removeItem(LocalStorageKeys.Workspace);
-    // The store keys a value by its type and reads that type from a snapshot taken when the tab
-    // loaded. The workspace is the only object here, so a tab that loaded before another wrote one
-    // removes it as a string and leaves the real entry behind for the next tab to read.
-    localStorage.removeItem('@secure.j.workspace');
   },
 };
