@@ -1552,6 +1552,7 @@
   "sliderLabel": "Étiquette du Curseur",
   "sliderOption": "Curseur",
   "sliderOption_indexed": "Curseur {{- index}}",
+  "sessionElsewhereBanner": "<0>Vous vous êtes connecté depuis un autre onglet ou une autre fenêtre.</0> <1>Rechargez</1><2> la page pour actualiser votre session.</2>",
   "sliderRows": "Lignes de curseurs",
   "sliderRowsHint": "Lignes d'échelles numériques avec une seule réponse",
   "smallTo": "à",

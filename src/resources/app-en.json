@@ -1555,6 +1555,7 @@
   "sliderLabel": "Slider Label",
   "sliderOption": "Slider",
   "sliderOption_indexed": "Slider {{- index}}",
+  "sessionElsewhereBanner": "<0>You signed in with another tab or window.</0> <1>Reload</1><2> to refresh your session.</2>",
   "sliderRows": "Slider Rows",
   "sliderRowsHint": "Rows of numerical scales with a single answer",
   "smallTo": "to",
