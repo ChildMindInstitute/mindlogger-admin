@@ -5,6 +5,13 @@ import { LocalStorageKeys, storage } from './storage';
 // The secure store keeps values in the type they were written as, so nothing is stringified here.
 const getString = (key: LocalStorageKeys) => (storage.getItem(key) as string | null) ?? null;
 
+// The store picks the key to delete from the value's type, which it only knows for values this tab
+// wrote. Writing one first is what lets it delete a workspace another tab left behind.
+const removeWorkspace = () => {
+  storage.setItem(LocalStorageKeys.Workspace, {});
+  storage.removeItem(LocalStorageKeys.Workspace);
+};
+
 export const authStorage = {
   getRefreshToken: () => getString(LocalStorageKeys.RefreshToken),
   getAccessToken: () => getString(LocalStorageKeys.AccessToken),
@@ -15,12 +22,12 @@ export const authStorage = {
     storage.setItem(LocalStorageKeys.Workspace, workspace as object),
   removeRefreshToken: () => storage.removeItem(LocalStorageKeys.RefreshToken),
   removeAccessToken: () => storage.removeItem(LocalStorageKeys.AccessToken),
-  removeWorkspace: () => storage.removeItem(LocalStorageKeys.Workspace),
+  removeWorkspace,
   // Named removals rather than the store's own clear(), which wipes unrelated keys such as the
   // chosen language and the library return path.
   clear: () => {
     storage.removeItem(LocalStorageKeys.RefreshToken);
     storage.removeItem(LocalStorageKeys.AccessToken);
-    storage.removeItem(LocalStorageKeys.Workspace);
+    removeWorkspace();
   },
 };

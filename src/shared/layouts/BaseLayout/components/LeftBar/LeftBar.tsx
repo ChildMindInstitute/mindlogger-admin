@@ -16,7 +16,7 @@ import { FeatureFlags } from 'shared/utils/featureFlags';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
-import { getWorkspaceNames } from './LeftBar.utils';
+import { getWorkspaceNames, resolveCurrentWorkspace } from './LeftBar.utils';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -61,10 +61,12 @@ export const LeftBar = () => {
           payload: { data },
         } = workspacesResult;
 
-        const ownerWorkspace = (data?.result as Workspace[])?.find((item) => item.ownerId === id);
-        const storageWorkspace = authStorage.getWorkspace();
-        const currentWorkspace = storageWorkspace || ownerWorkspace;
-        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+        const currentWorkspace = resolveCurrentWorkspace(
+          data?.result as Workspace[],
+          id,
+          authStorage.getWorkspace(),
+        );
+        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace));
 
         if (!currentWorkspace?.ownerId) return;
 
