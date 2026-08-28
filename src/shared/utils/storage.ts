@@ -21,7 +21,6 @@ export const enum PlainStorageKeys {
 export const enum SessionStorageKeys {
   DebugMode = 'debugMode',
   DatavizHideSkipped = 'datavizHideSkipped',
-  ReloadAttempted = 'reloadAttempted',
   // Per tab, and survives the reload that sets it: the tokens this tab can still read belong to a
   // session that has ended, so this boot must ignore them.
   SessionEnded = 'sessionEnded',
