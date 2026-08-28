@@ -40,6 +40,11 @@ export const reducers = {
   endSoftLock: (state: AuthSchema): void => {
     delete state.softLockData;
   },
+  // Set when another tab answers with a live session. Signing in from here is blocked while it
+  // holds, so it must outlive the banner, which the user can dismiss.
+  markSessionElsewhere: (state: AuthSchema): void => {
+    state.hasSessionElsewhere = true;
+  },
   // MFA actions
   setMFASession: (state: AuthSchema, { payload }: PayloadAction<MFASession>): void => {
     state.mfaSession = payload;

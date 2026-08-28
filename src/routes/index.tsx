@@ -21,8 +21,6 @@ const BaseLayout = lazy(() => import('shared/layouts/BaseLayout'));
 const AuthLayout = lazy(() => import('modules/Auth/layouts/AuthLayout'));
 
 const AppRoutes = () => {
-  // Above the token read: adopting a session announced by another tab re-renders, and the read
-  // below is what picks it up.
   useSessionAdoption();
   const token = authStorage.getAccessToken();
   const dispatch = useAppDispatch();

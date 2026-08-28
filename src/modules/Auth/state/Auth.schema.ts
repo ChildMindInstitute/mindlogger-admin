@@ -42,4 +42,5 @@ export type AuthSchema = {
   totpVerification: MFAVerificationState; // TOTP-specific errors
   recoveryVerification: MFAVerificationState; // Recovery-specific errors
   isSessionExpired: boolean; // Shared terminal state
+  hasSessionElsewhere?: boolean; // Another tab of this browser is signed in
 };

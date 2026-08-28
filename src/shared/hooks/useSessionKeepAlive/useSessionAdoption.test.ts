@@ -29,16 +29,8 @@ const ANNOUNCED = {
 
 const mockedReload = vi.fn();
 
-// Mirrors how the routes consume this: the hook re-renders, and the token is read afterwards.
 const renderAdoption = () =>
-  renderHookWithProviders(
-    () => {
-      useSessionAdoption();
-
-      return authStorage.getAccessToken();
-    },
-    { preloadedState: getPreloadedState() },
-  );
+  renderHookWithProviders(useSessionAdoption, { preloadedState: getPreloadedState() });
 
 const announceSession = (sibling: InMemoryBroadcastChannel) =>
   act(() => {
@@ -77,37 +69,47 @@ describe('useSessionAdoption', () => {
     });
   };
 
-  test('joins a session announced by another tab', () => {
-    const { result } = renderAdoption();
+  const bannersIn = (store: ReturnType<typeof renderAdoption>['store']) =>
+    store.getState().banners.data.banners;
+
+  test('raises the banner when another tab announces a session', () => {
+    const { store } = renderAdoption();
 
     announceSession(sibling);
 
-    expect(authStorage.getRefreshToken()).toBe(ANNOUNCED.refreshToken);
-    expect(result.current).toBe(ANNOUNCED.accessToken);
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(true);
+  });
+
+  test('never writes the announced tokens', () => {
+    renderAdoption();
+
+    announceSession(sibling);
+
+    expect(authStorage.getRefreshToken()).toBeNull();
+    expect(authStorage.getAccessToken()).toBeNull();
   });
 
   test('leaves a tab that already holds a session alone', () => {
     authStorage.setAccessToken('my-access');
     authStorage.setRefreshToken('my-refresh');
-    renderAdoption();
+    const { store } = renderAdoption();
 
     announceSession(sibling);
 
     expect(authStorage.getRefreshToken()).toBe('my-refresh');
+    expect(bannersIn(store)).toEqual([]);
   });
 
-  test('joins only once when two announcements land before it can re-render', () => {
-    renderAdoption();
+  test('raises the banner once when two announcements land together', () => {
+    const { store } = renderAdoption();
 
     act(() => {
       sibling.postMessage({ type: 'SESSION_STATE', payload: ANNOUNCED });
-      sibling.postMessage({
-        type: 'SESSION_STATE',
-        payload: { ...ANNOUNCED, accessToken: 'stale-access', refreshToken: 'stale-refresh' },
-      });
+      sibling.postMessage({ type: 'SESSION_STATE', payload: ANNOUNCED });
     });
 
-    expect(authStorage.getRefreshToken()).toBe(ANNOUNCED.refreshToken);
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
   test('asks for a session when the tab comes back into focus', () => {
@@ -122,50 +124,53 @@ describe('useSessionAdoption', () => {
     expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
   });
 
-  test('reloads into a live session when the last tab holding it has closed', () => {
+  test('raises the banner when the last tab holding the session has closed', () => {
     setLastActivityAt(Date.now() - MS_IN_MIN);
-    renderAdoption();
+    const { store } = renderAdoption();
 
     wakeUnanswered();
 
-    expect(mockedReload).toHaveBeenCalledTimes(1);
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+    // Getting there is the user's call now, so nothing reloads on its own.
+    expect(mockedReload).not.toHaveBeenCalled();
   });
 
-  test('does not reload when a sibling hands the session over instead', () => {
+  test('raises the banner once when a sibling answers within the window', () => {
     setLastActivityAt(Date.now() - MS_IN_MIN);
-    renderAdoption();
+    const { store } = renderAdoption();
     sibling.onmessage = () => sibling.postMessage({ type: 'SESSION_STATE', payload: ANNOUNCED });
 
     wakeUnanswered();
 
-    expect(mockedReload).not.toHaveBeenCalled();
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
-  test('does not reload when no session was ever left behind', () => {
-    renderAdoption();
+  test('stays a plain login page when no session was ever left behind', () => {
+    const { store } = renderAdoption();
 
     wakeUnanswered();
 
-    expect(mockedReload).not.toHaveBeenCalled();
+    expect(bannersIn(store)).toEqual([]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(false);
   });
 
-  test('does not reload for a session already past its idle deadline', () => {
+  test('says nothing about a session already past its idle deadline', () => {
     setLastActivityAt(Date.now() - IDLE_TIMEOUT_MS);
-    renderAdoption();
+    const { store } = renderAdoption();
 
     wakeUnanswered();
 
-    expect(mockedReload).not.toHaveBeenCalled();
+    expect(bannersIn(store)).toEqual([]);
   });
 
-  test('reloads only once, so a half-cleared session cannot loop', () => {
+  test('raises the banner once however often the tab is woken', () => {
     setLastActivityAt(Date.now() - MS_IN_MIN);
-    renderAdoption();
+    const { store } = renderAdoption();
 
     wakeUnanswered();
     wakeUnanswered();
 
-    expect(mockedReload).toHaveBeenCalledTimes(1);
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
   test('stays quiet on focus once it holds a session, leaving catch-up to the engine', () => {
