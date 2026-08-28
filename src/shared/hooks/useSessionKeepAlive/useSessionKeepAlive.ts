@@ -14,7 +14,7 @@ import { getLastActivityAt, setActiveSessionId, setLastActivityAt } from './sess
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
-import { rejoinActiveSession } from './rejoinActiveSession';
+import { leaveEndedSession } from './leaveEndedSession';
 import { getSessionId, ownsActiveSession } from './sessionSync.utils';
 import { COUNTDOWN_TICK_MS } from './useSessionKeepAlive.const';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
@@ -154,8 +154,8 @@ export const useSessionKeepAlive = () => {
 
       // A session that began while this tab slept owns the browser now, so this one is over. It
       // cannot tear down or adopt its way across: everything it holds, storage snapshot included,
-      // belongs to the old user. Only a reload gets it there.
-      if (!ownsActiveSession()) return rejoinActiveSession();
+      // belongs to the old user. It leaves for the login page, where the banner offers the way in.
+      if (!ownsActiveSession()) return leaveEndedSession();
 
       // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
       // refresh at zero delay, losing the race against a sibling handing over fresher ones.

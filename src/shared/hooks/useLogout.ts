@@ -10,7 +10,7 @@ import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
 import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
-import { rejoinActiveSession } from 'shared/hooks/useSessionKeepAlive/rejoinActiveSession';
+import { leaveEndedSession } from 'shared/hooks/useSessionKeepAlive/leaveEndedSession';
 import { LogoutReason } from 'shared/hooks/useSessionKeepAlive/sessionSync.types';
 import {
   getSessionId,
@@ -41,8 +41,8 @@ export const useLogout = () => {
   }: LogoutOptions = {}) => {
     // Every teardown funnels through here, so this is the one place that has to refuse. A tab that
     // slept through a logout and someone else signing in would clear a store that is theirs now,
-    // signing them out of every tab. It rebuilds itself into the live session instead.
-    if (!ownsActiveSession()) return rejoinActiveSession();
+    // signing them out of every tab. It leaves for the login page instead.
+    if (!ownsActiveSession()) return leaveEndedSession();
 
     // Sent first: teardown clears the token the session id is read from, and siblings that hear
     // late spend the gap making requests the revoked session can only answer with a 401.

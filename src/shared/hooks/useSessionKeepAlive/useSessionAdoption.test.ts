@@ -1,8 +1,9 @@
 import { act } from '@testing-library/react';
 
-import { authStorage } from 'shared/utils';
+import { authStorage, SessionStorageKeys } from 'shared/utils';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { RootState } from 'redux/store';
 import {
   InMemoryBroadcastChannel,
   resetInMemoryBroadcastChannels,
@@ -171,6 +172,29 @@ describe('useSessionAdoption', () => {
     wakeUnanswered();
 
     expect(bannersIn(store)).toHaveLength(1);
+  });
+
+  // Sent here by leaveEndedSession: the tokens it can still read belong to the session that
+  // replaced it, so it behaves as a signed-out tab despite holding them.
+  test('speaks up for a tab whose session ended, even though it still holds tokens', () => {
+    authStorage.setRefreshToken('their-refresh');
+    sessionStorage.setItem(SessionStorageKeys.SessionEnded, 'true');
+    const { store } = renderAdoption();
+
+    announceSession(sibling);
+
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+  });
+
+  // Otherwise the note left for one boot would turn away every boot after it.
+  test('clears the ended marker once this tab signs in', () => {
+    sessionStorage.setItem(SessionStorageKeys.SessionEnded, 'true');
+
+    renderHookWithProviders(useSessionAdoption, {
+      preloadedState: { auth: { isAuthorized: true } } as Pick<RootState, 'auth'>,
+    });
+
+    expect(sessionStorage.getItem(SessionStorageKeys.SessionEnded)).toBeNull();
   });
 
   test('stays quiet on focus once it holds a session, leaving catch-up to the engine', () => {

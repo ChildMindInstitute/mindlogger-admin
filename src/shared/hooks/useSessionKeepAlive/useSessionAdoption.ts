@@ -4,6 +4,7 @@ import { auth } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'shared/state/Banners';
 import { authStorage } from 'shared/utils/authStorage';
+import { SessionStorageKeys } from 'shared/utils/storage';
 
 import { getLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
@@ -17,10 +18,19 @@ import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 // let itself in: it says a session is running, and the user decides whether to join it.
 export const useSessionAdoption = () => {
   const dispatch = useAppDispatch();
+  const isAuthorized = auth.useAuthorized();
   const hasSessionElsewhere = auth.useSessionElsewhere();
 
-  // Once told, there is nothing further to hear: the answer cannot change until this tab reloads.
-  const isListening = !authStorage.getRefreshToken() && !hasSessionElsewhere;
+  // A tab sent here by leaveEndedSession can still read tokens, but they are not its own, so it
+  // listens like any signed-out tab. Once told, there is nothing further to hear: the answer
+  // cannot change until this tab reloads.
+  const hasSessionEnded = !!sessionStorage.getItem(SessionStorageKeys.SessionEnded);
+  const isListening = (hasSessionEnded || !authStorage.getRefreshToken()) && !hasSessionElsewhere;
+
+  // Signed in here now, so the note left for the last boot must not turn the next one away.
+  useEffect(() => {
+    if (isAuthorized) sessionStorage.removeItem(SessionStorageKeys.SessionEnded);
+  }, [isAuthorized]);
 
   useEffect(() => {
     if (!isListening) return;
@@ -52,8 +62,9 @@ export const useSessionAdoption = () => {
 
     const unsubscribe = subscribeSessionSync((message) => {
       if (message.type !== 'SESSION_STATE') return;
-      // A session arrived between the announcement and this handler. Leave it alone.
-      if (authStorage.getRefreshToken()) return;
+      // A session of this tab's own arrived between the announcement and this handler. Leave it
+      // alone — but tokens held by a tab that was displaced are not that.
+      if (!hasSessionEnded && authStorage.getRefreshToken()) return;
 
       // Not gated on visibility: a tab visible in a second window says so straight away.
       clearTimeout(fallbackTimer);
@@ -75,5 +86,5 @@ export const useSessionAdoption = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
     };
-  }, [isListening, dispatch]);
+  }, [isListening, hasSessionEnded, dispatch]);
 };
