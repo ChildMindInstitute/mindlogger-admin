@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -34,6 +34,10 @@ export const LoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const softLockData = auth.useSoftLockData();
+  const hasSessionElsewhere = auth.useSessionElsewhere();
+  // Enabled until it is pressed, then quiet. This tab cannot start a second session, and the
+  // banner above says the way on is to reload into the one already running.
+  const [isSignInBlocked, setIsSignInBlocked] = useState(false);
 
   const clearSoftLock = () => {
     if (softLockData) {
@@ -101,6 +105,18 @@ export const LoginForm = () => {
         [MixpanelProps.FailureStage]: 'Credentials',
       });
     }
+  };
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (hasSessionElsewhere) {
+      event.preventDefault();
+      setIsSignInBlocked(true);
+
+      return;
+    }
+
+    handleSubmit(onSubmit)(event);
   };
 
   useEffect(() => {
@@ -174,7 +190,7 @@ export const LoginForm = () => {
           Welcome to the Curious <br /> Admin Panel
         </Trans>
       </StyledWelcome>
-      <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
+      <StyledForm onSubmit={handleFormSubmit} noValidate>
         <StyledHeadlineSmall color={variables.palette.on_surface}>{t('login')}</StyledHeadlineSmall>
         <StyledLoginSubheader color={variables.palette.on_surface_variant}>
           {t('logIntoAccount')}
@@ -211,6 +227,7 @@ export const LoginForm = () => {
           onClick={handleLoginClick}
           variant="contained"
           type="submit"
+          disabled={isSignInBlocked}
           data-testid="login-form-signin"
         >
           {t('login')}

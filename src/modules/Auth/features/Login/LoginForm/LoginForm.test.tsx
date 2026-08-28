@@ -10,6 +10,13 @@ import { RootState } from 'redux/store';
 
 import { LoginForm } from '.';
 
+const mockedSignInApi = vi.hoisted(() => vi.fn());
+
+vi.mock('api', async () => ({
+  ...(await vi.importActual('api')),
+  signInApi: mockedSignInApi,
+}));
+
 const submitForm = (username: string, password: string) => {
   fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: username } });
   fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: password } });
@@ -21,6 +28,12 @@ const preloadedState = {
     softLockData: {
       email: mockedEmail,
     },
+  },
+} as Pick<RootState, 'auth'>;
+
+const sessionElsewhereState = {
+  auth: {
+    hasSessionElsewhere: true,
   },
 } as Pick<RootState, 'auth'>;
 
@@ -47,6 +60,49 @@ describe('Login component tests', () => {
     await waitFor(() => expectBanner(store, 'SoftLockWarningBanner'));
 
     expect(screen.getByLabelText('Email')).toHaveValue(mockedEmail);
+  });
+
+  describe('while a session is running in another tab', () => {
+    beforeEach(() => mockedSignInApi.mockClear());
+
+    test('pressing sign in neither signs in nor leaves the button usable', async () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      submitForm(mockedEmail, mockedPassword);
+
+      await waitFor(() => expect(screen.getByTestId('login-form-signin')).toBeDisabled());
+      expect(mockedSignInApi).not.toHaveBeenCalled();
+    });
+
+    // The form submits on Enter alone, so the guard cannot live on the button.
+    test('pressing enter in the password field is turned away too', async () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: mockedEmail } });
+      fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: mockedPassword } });
+      fireEvent.submit(screen.getByTestId('login-form-signin').closest('form') as HTMLFormElement);
+
+      await waitFor(() => expect(screen.getByTestId('login-form-signin')).toBeDisabled());
+      expect(mockedSignInApi).not.toHaveBeenCalled();
+    });
+
+    // Nothing looks broken on arrival: it is pressing it that shows there is no way through here.
+    test('the button is usable until it is pressed', () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      expect(screen.getByTestId('login-form-signin')).toBeEnabled();
+    });
+  });
+
+  test('signs in as usual when no other session is running', async () => {
+    mockedSignInApi.mockClear();
+    mockedSignInApi.mockRejectedValue(new Error('no server in tests'));
+    renderWithProviders(<LoginForm />);
+
+    submitForm(mockedEmail, mockedPassword);
+
+    await waitFor(() => expect(mockedSignInApi).toHaveBeenCalledTimes(1));
+    expect(screen.getByTestId('login-form-signin')).toBeEnabled();
   });
 
   describe('Mixpanel Tracking', () => {
