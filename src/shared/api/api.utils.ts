@@ -3,6 +3,8 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 import { UiLanguages, regionalLangFormats } from 'shared/ui';
+import { getSessionId } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
+import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
 
 import { apiRoutesToSkip, BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
@@ -26,45 +28,84 @@ export const getRefreshTokenData = (config: InternalAxiosRequestConfig) => {
   config.headers['Authorization'] = `bearer ${refreshToken}`;
 };
 
-export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
-  try {
-    const { response: errorResponse } = err;
-    const oldRefreshToken = authStorage.getRefreshToken();
+const requestNewTokens = async () => {
+  const {
+    data: { result },
+  } = await signInRefreshTokenApi({
+    refreshToken: authStorage.getRefreshToken(),
+  });
+  const { accessToken, refreshToken } = result ?? {};
 
-    const {
-      data: { result },
-    } = await signInRefreshTokenApi({
-      refreshToken: oldRefreshToken,
-    });
-    const { accessToken, refreshToken } = result ?? {};
-
-    return new Promise((resolve, reject) => {
-      if (!accessToken || !refreshToken) {
-        return reject(new Error('Access token refresh failed.'));
-      }
-
-      authStorage.setAccessToken(accessToken);
-      authStorage.setRefreshToken(refreshToken);
-      const originalConfig = errorResponse?.config;
-
-      try {
-        resolve(
-          axios({
-            ...originalConfig,
-            headers: {
-              ...(originalConfig?.headers && originalConfig.headers),
-              Authorization: `Bearer ${accessToken}`,
-            },
-            ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
-          }),
-        );
-      } catch (error) {
-        reject(error);
-      }
-    });
-  } catch (error) {
-    return Promise.reject(error);
+  if (!accessToken || !refreshToken) {
+    throw new Error('Access token refresh failed.');
   }
+
+  // The session can end while this is in flight, here or in a sibling that broadcast it. Storing
+  // now would put the tokens back and leave the tab looking signed in over a dead session.
+  if (!authStorage.getRefreshToken()) {
+    throw new Error('Session ended before the refreshed token could be stored.');
+  }
+
+  // Read before the tokens change, since siblings identify by the one they still hold.
+  const sessionId = getSessionId();
+
+  authStorage.setAccessToken(accessToken);
+  authStorage.setRefreshToken(refreshToken);
+
+  if (sessionId) {
+    publishSessionMessage({
+      type: 'TOKENS_UPDATED',
+      payload: { sessionId, accessToken, refreshToken },
+    });
+  }
+
+  return { accessToken, refreshToken };
+};
+
+let pendingRefresh: ReturnType<typeof requestNewTokens> | null = null;
+
+// Callers that overlap share one request instead of each rotating the token separately.
+export const refreshTokens = () => {
+  if (!pendingRefresh) {
+    pendingRefresh = requestNewTokens().finally(() => {
+      pendingRefresh = null;
+    });
+  }
+
+  return pendingRefresh;
+};
+
+let onSessionExpired: (() => void) | null = null;
+
+// The interceptor is module code and cannot reach hooks, so the teardown is registered from a
+// component instead.
+export const setSessionExpiredHandler = (handler: (() => void) | null) => {
+  onSessionExpired = handler;
+};
+
+export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
+  let accessToken: string;
+
+  try {
+    ({ accessToken } = await refreshTokens());
+  } catch (error) {
+    // Nobody else owns this failure. Without it the rejection reaches the calling thunk and the
+    // tab keeps rendering a signed-in UI over a session the server has already ended.
+    onSessionExpired?.();
+
+    throw error;
+  }
+
+  const originalConfig = err.response?.config;
+
+  return axios({
+    ...originalConfig,
+    headers: {
+      ...originalConfig?.headers,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
+  });
 };
 
 export const shouldNotSkipRoute = (url: string) =>

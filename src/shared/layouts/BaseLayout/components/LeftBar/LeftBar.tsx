@@ -13,10 +13,11 @@ import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 import { LocationStateKeys } from 'shared/types';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
-import { getWorkspaceNames } from './LeftBar.utils';
+import { getWorkspaceNames, resolveCurrentWorkspace } from './LeftBar.utils';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
@@ -61,10 +62,18 @@ export const LeftBar = () => {
           payload: { data },
         } = workspacesResult;
 
-        const ownerWorkspace = (data?.result as Workspace[])?.find((item) => item.ownerId === id);
-        const storageWorkspace = authStorage.getWorkspace();
-        const currentWorkspace = storageWorkspace || ownerWorkspace;
-        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace || null));
+        const currentWorkspace = resolveCurrentWorkspace(
+          data?.result as Workspace[],
+          id,
+          authStorage.getWorkspace(),
+        );
+        dbg('leftBar.resolve', {
+          userId: id,
+          stored: authStorage.getWorkspace()?.ownerId ?? null,
+          list: (data?.result as Workspace[])?.map((workspace) => workspace.ownerId),
+          resolved: currentWorkspace?.ownerId ?? null,
+        });
+        dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace));
 
         if (!currentWorkspace?.ownerId) return;
 
@@ -83,6 +92,7 @@ export const LeftBar = () => {
 
     if (!workspace || !dispatch) return;
 
+    dbg('leftBar.stateWorkspace', { ownerId: workspace?.ownerId, name: workspace?.workspaceName });
     authStorage.setWorkspace(workspace);
     dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 

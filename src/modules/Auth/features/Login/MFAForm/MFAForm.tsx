@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { memo, useEffect, useRef } from 'react';
+import { FormEvent, memo, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, TextField } from '@mui/material';
 
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { StyledBodyMedium, StyledHeadlineSmall, StyledLinkBtn, variables } from 'shared/styles';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
 
@@ -27,6 +28,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
   const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
   const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification('totp');
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const {
     handleSubmit,
@@ -67,6 +69,14 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
     }
   };
 
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // Finishing MFA signs the user in, so a tab outside the live session is refused. On the form
+    // rather than the button: six digits auto-submit through requestSubmit.
+    if (refuse()) return event.preventDefault();
+
+    handleSubmit(onSubmit)(event);
+  };
+
   const handleRecoveryClick = () => {
     // Track recovery link click
     Mixpanel.track({ action: MixpanelEventType.CantAccessAuthAppClick });
@@ -104,7 +114,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
 
   return (
     <StyledMFAContainer>
-      <StyledMFAForm ref={formRef} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <StyledMFAForm ref={formRef} onSubmit={handleFormSubmit} noValidate>
         <StyledHeadlineSmall sx={{ textAlign: 'center', color: variables.palette.on_surface }}>
           {t('confirmYourIdentity')}
         </StyledHeadlineSmall>
@@ -147,7 +157,7 @@ const MFAFormComponent = ({ onSwitchToRecovery, onBackToLogin }: MFAFormProps) =
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting || isSessionExpired}
+          disabled={isSubmitting || isSessionExpired || isBlocked}
           data-testid="mfa-form-submit"
         >
           {t('continue')}

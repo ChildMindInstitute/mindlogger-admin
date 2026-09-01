@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,7 +16,9 @@ import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { variables } from 'shared/styles';
 import { StyledErrorText, StyledHeadlineSmall } from 'shared/styles/styledComponents';
 import { LocationStateKeys } from 'shared/types';
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -34,6 +36,7 @@ export const LoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const softLockData = auth.useSoftLockData();
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const clearSoftLock = () => {
     if (softLockData) {
@@ -72,6 +75,10 @@ export const LoginForm = () => {
       // Standard login flow (MFA not enabled)
       // If user logged in as the same user that was soft-locked, restore their nav state
       if (data.email === softLockData?.email) {
+        dbg('login.softLockRestore', {
+          redirectTo: softLockData?.redirectTo,
+          workspaceOwnerId: softLockData?.workspace?.ownerId,
+        });
         navigate(softLockData?.redirectTo, {
           state: { [LocationStateKeys.Workspace]: softLockData.workspace },
         });
@@ -101,6 +108,13 @@ export const LoginForm = () => {
         [MixpanelProps.FailureStage]: 'Credentials',
       });
     }
+  };
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event.preventDefault();
+
+    handleSubmit(onSubmit)(event);
   };
 
   useEffect(() => {
@@ -149,6 +163,9 @@ export const LoginForm = () => {
   }, [dispatch]);
 
   const handleCreateAccountClick = () => {
+    // Signing up ends in a sign-in, so it would start the second session this tab is refused.
+    if (refuse()) return;
+
     clearSoftLock();
     navigate(page.signUp);
 
@@ -163,6 +180,9 @@ export const LoginForm = () => {
   };
 
   const handleResetPasswordClick = () => {
+    // No session is started here, but leaving the page would leave the banner explaining it behind.
+    if (refuse()) return;
+
     clearSoftLock();
     navigate(page.passwordReset);
   };
@@ -174,7 +194,7 @@ export const LoginForm = () => {
           Welcome to the Curious <br /> Admin Panel
         </Trans>
       </StyledWelcome>
-      <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
+      <StyledForm onSubmit={handleFormSubmit} noValidate>
         <StyledHeadlineSmall color={variables.palette.on_surface}>{t('login')}</StyledHeadlineSmall>
         <StyledLoginSubheader color={variables.palette.on_surface_variant}>
           {t('logIntoAccount')}
@@ -203,6 +223,7 @@ export const LoginForm = () => {
         {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
         <StyledForgotPasswordLink
           onClick={handleResetPasswordClick}
+          disabled={isBlocked}
           data-testid="login-form-forgot-password"
         >
           {t('forgotPassword')}
@@ -211,6 +232,7 @@ export const LoginForm = () => {
           onClick={handleLoginClick}
           variant="contained"
           type="submit"
+          disabled={isBlocked}
           data-testid="login-form-signin"
         >
           {t('login')}
@@ -218,6 +240,7 @@ export const LoginForm = () => {
         <StyledButton
           variant="outlined"
           onClick={handleCreateAccountClick}
+          disabled={isBlocked}
           data-testid="login-form-signup"
         >
           {t('createAccount')}

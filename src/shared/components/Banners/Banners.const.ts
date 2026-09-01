@@ -3,6 +3,7 @@ import { ComponentType } from 'react';
 import { BannerType } from 'redux/modules';
 import {
   PasswordResetSuccessfulBanner,
+  SessionElsewhereBanner,
   SoftLockWarningBanner,
 } from 'modules/Auth/features/Login/Banners';
 import { AppletWithoutChangesBanner } from 'modules/Builder/components';
@@ -25,4 +26,5 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   TransferOwnershipSuccessBanner,
   AddParticipantSuccessBanner,
   SoftLockWarningBanner,
+  SessionElsewhereBanner,
 };

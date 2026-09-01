@@ -1,7 +1,8 @@
-import { InternalAxiosRequestConfig } from 'axios';
+import { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 
 import { forbiddenState } from 'shared/state/ForbiddenState';
+import { dbg, tokenInfo } from 'shared/utils/sessionDebugLog';
 
 import {
   getCommonConfig,
@@ -22,6 +23,58 @@ let store: ToolkitStore;
 export const injectStoreToApiClient = (injectedStore: ToolkitStore) => {
   store = injectedStore;
 };
+
+// QA instrumentation. Registered first: request interceptors run in reverse order, so this one
+// sees the final config with Authorization set; response ones run in order, so this sees the raw
+// status before the refresh handler acts on it.
+const summarizeWho = (url: string, body: unknown) => {
+  const result = (body as { result?: unknown })?.result;
+  if (url.includes('users/me')) {
+    const { id, email } = (result as { id?: string; email?: string }) ?? {};
+
+    return { id, email };
+  }
+  if (url.endsWith('workspaces')) {
+    return (result as { ownerId?: string; workspaceName?: string }[] | undefined)
+      ?.slice(0, 10)
+      .map(({ ownerId, workspaceName }) => ({ ownerId, workspaceName }));
+  }
+
+  return undefined;
+};
+
+[apiClient, authApiClient, authApiClientWithoutRefresh, authApiClientRemoveRefresh].forEach(
+  (client) => {
+    client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+      (config as { dbgStart?: number }).dbgStart = Date.now();
+      const auth = String(config.headers?.Authorization ?? '').replace(/^bearer\s+/i, '');
+      dbg('api.req', { m: config.method, p: config.url, auth: tokenInfo(auth || null) });
+
+      return config;
+    });
+    client.interceptors.response.use(
+      (response) => {
+        const url = response.config?.url ?? '';
+        dbg('api.res', {
+          p: url,
+          s: response.status,
+          ms: Date.now() - ((response.config as { dbgStart?: number })?.dbgStart ?? Date.now()),
+          who: summarizeWho(url, response.data),
+        });
+
+        return response;
+      },
+      (error) => {
+        dbg('api.err', {
+          p: (error as AxiosError).config?.url,
+          s: (error as AxiosError).response?.status,
+        });
+
+        return Promise.reject(error);
+      },
+    );
+  },
+);
 
 [apiClient, authApiClient, authApiClientWithoutRefresh, authApiClientRemoveRefresh].forEach(
   (client) =>

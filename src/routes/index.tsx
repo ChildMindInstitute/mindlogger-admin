@@ -3,7 +3,7 @@ import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react
 
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { authStorage } from 'shared/utils';
+import { authStorage, SessionStorageKeys } from 'shared/utils';
 import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
@@ -13,6 +13,7 @@ import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
+import { SessionKeepAlive, useSessionAdoption } from 'shared/hooks/useSessionKeepAlive';
 
 import history from './history';
 
@@ -20,7 +21,11 @@ const BaseLayout = lazy(() => import('shared/layouts/BaseLayout'));
 const AuthLayout = lazy(() => import('modules/Auth/layouts/AuthLayout'));
 
 const AppRoutes = () => {
-  const token = authStorage.getAccessToken();
+  useSessionAdoption();
+  // A tab whose session ended while it slept still reads that session's tokens from its snapshot.
+  // The marker is what tells this boot to ignore them and show the login page instead.
+  const hasSessionEnded = !!sessionStorage.getItem(SessionStorageKeys.SessionEnded);
+  const token = hasSessionEnded ? null : authStorage.getAccessToken();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const { featureFlags } = useFeatureFlags();
@@ -57,6 +62,7 @@ const AppRoutes = () => {
         )}
         <AppletNotFoundPopup />
         <NoPermissionPopup />
+        <SessionKeepAlive />
       </Router>
     </>
   );

@@ -1,27 +1,44 @@
 import { Workspace } from 'shared/state';
 
-import { SessionStorageKeys } from './storage';
+import { LocalStorageKeys, storage } from './storage';
+import { dbg, tokenInfo } from './sessionDebugLog';
 
-const set = (key: string, data: unknown) => sessionStorage.setItem(key, JSON.stringify(data));
-const get = (key: string) => {
-  const data = sessionStorage.getItem(key);
+// The secure store keeps values in the type they were written as, so nothing is stringified here.
+const getString = (key: LocalStorageKeys) => (storage.getItem(key) as string | null) ?? null;
 
-  try {
-    return data ? JSON.parse(data) : null;
-  } catch {
-    return data;
-  }
+// The store picks the key to delete from the value's type, which it only knows for values this tab
+// wrote. Writing one first is what lets it delete a workspace another tab left behind.
+const removeWorkspace = () => {
+  dbg('store.removeWorkspace');
+  storage.setItem(LocalStorageKeys.Workspace, {});
+  storage.removeItem(LocalStorageKeys.Workspace);
 };
-const remove = (key: string) => sessionStorage.removeItem(key);
 
 export const authStorage = {
-  getRefreshToken: () => get(SessionStorageKeys.RefreshToken),
-  getAccessToken: () => get(SessionStorageKeys.AccessToken),
-  getWorkspace: () => get(SessionStorageKeys.Workspace),
-  setRefreshToken: (token: string) => set(SessionStorageKeys.RefreshToken, token),
-  setAccessToken: (token: string) => set(SessionStorageKeys.AccessToken, token),
-  setWorkspace: (workspace: Workspace | null) => set(SessionStorageKeys.Workspace, workspace),
-  removeRefreshToken: () => remove(SessionStorageKeys.RefreshToken),
-  removeAccessToken: () => remove(SessionStorageKeys.AccessToken),
-  removeWorkspace: () => remove(SessionStorageKeys.Workspace),
+  getRefreshToken: () => getString(LocalStorageKeys.RefreshToken),
+  getAccessToken: () => getString(LocalStorageKeys.AccessToken),
+  getWorkspace: () => storage.getItem(LocalStorageKeys.Workspace) as Workspace | null,
+  setRefreshToken: (token: string) => {
+    dbg('store.setRefreshToken', { token: tokenInfo(token) });
+    storage.setItem(LocalStorageKeys.RefreshToken, token);
+  },
+  setAccessToken: (token: string) => {
+    dbg('store.setAccessToken', { token: tokenInfo(token) });
+    storage.setItem(LocalStorageKeys.AccessToken, token);
+  },
+  setWorkspace: (workspace: Workspace | null) => {
+    dbg('store.setWorkspace', { ownerId: workspace?.ownerId, name: workspace?.workspaceName });
+    storage.setItem(LocalStorageKeys.Workspace, workspace as object);
+  },
+  removeRefreshToken: () => storage.removeItem(LocalStorageKeys.RefreshToken),
+  removeAccessToken: () => storage.removeItem(LocalStorageKeys.AccessToken),
+  removeWorkspace,
+  // Named removals rather than the store's own clear(), which wipes unrelated keys such as the
+  // chosen language and the library return path.
+  clear: () => {
+    dbg('store.clear');
+    storage.removeItem(LocalStorageKeys.RefreshToken);
+    storage.removeItem(LocalStorageKeys.AccessToken);
+    removeWorkspace();
+  },
 };

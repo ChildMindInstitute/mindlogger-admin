@@ -1,15 +1,25 @@
 import 'mock-local-storage';
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
+
+// Hoisted alongside vi.mock, which runs before this file's imports are evaluated.
+const { inMemorySecureStorage, resetInMemorySecureStorage } = await vi.hoisted(
+  () => import('./shared/tests/InMemorySecureStorage'),
+);
 
 vi.mock('react-secure-storage', () => ({
   default: {
-    setItem: vi.fn(() => Promise.resolve()),
-    getItem: vi.fn(() => Promise.resolve('')),
-    removeItem: vi.fn(() => Promise.resolve()),
-    clear: vi.fn(() => Promise.resolve()),
+    setItem: vi.fn(inMemorySecureStorage.setItem),
+    getItem: vi.fn(inMemorySecureStorage.getItem),
+    removeItem: vi.fn(inMemorySecureStorage.removeItem),
+    clear: vi.fn(inMemorySecureStorage.clear),
   },
 }));
+
+// Stored values are shared by every test in a file, so each one starts from an empty store.
+beforeEach(() => {
+  resetInMemorySecureStorage();
+});
 
 vi.mock('shared/utils/encryption', async () => ({
   __esModule: true,

@@ -14,6 +14,9 @@ interface ImportMetaEnv {
   readonly REACT_APP_WEB_URI: string;
   readonly REACT_APP_MIXPANEL_FORCE_ENABLE: string;
   readonly REACT_APP_DEVELOP_BUILD_VERSION: string;
+  readonly REACT_APP_IDLE_TIMEOUT_MIN: string;
+  readonly REACT_APP_REFRESH_LEAD_SEC: string;
+  readonly REACT_APP_IDLE_WARNING_MIN: string;
 
   // Add other environment variables as needed
 }
