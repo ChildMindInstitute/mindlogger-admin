@@ -158,6 +158,9 @@ export const LoginForm = () => {
   }, [dispatch]);
 
   const handleCreateAccountClick = () => {
+    // Signing up ends in a sign-in, so it would start the second session this tab is refused.
+    if (refuse()) return;
+
     clearSoftLock();
     navigate(page.signUp);
 
@@ -172,6 +175,9 @@ export const LoginForm = () => {
   };
 
   const handleResetPasswordClick = () => {
+    // No session is started here, but leaving the page would leave the banner explaining it behind.
+    if (refuse()) return;
+
     clearSoftLock();
     navigate(page.passwordReset);
   };
@@ -212,6 +218,7 @@ export const LoginForm = () => {
         {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
         <StyledForgotPasswordLink
           onClick={handleResetPasswordClick}
+          disabled={isBlocked}
           data-testid="login-form-forgot-password"
         >
           {t('forgotPassword')}
@@ -228,6 +235,7 @@ export const LoginForm = () => {
         <StyledButton
           variant="outlined"
           onClick={handleCreateAccountClick}
+          disabled={isBlocked}
           data-testid="login-form-signup"
         >
           {t('createAccount')}

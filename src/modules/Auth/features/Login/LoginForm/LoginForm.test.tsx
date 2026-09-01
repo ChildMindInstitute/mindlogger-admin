@@ -7,14 +7,21 @@ import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils/mixpane
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { expectBanner } from 'shared/utils';
 import { RootState } from 'redux/store';
+import { page } from 'resources';
 
 import { LoginForm } from '.';
 
 const mockedSignInApi = vi.hoisted(() => vi.fn());
+const mockedNavigate = vi.hoisted(() => vi.fn());
 
 vi.mock('api', async () => ({
   ...(await vi.importActual('api')),
   signInApi: mockedSignInApi,
+}));
+
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useNavigate: () => mockedNavigate,
 }));
 
 const submitForm = (username: string, password: string) => {
@@ -38,6 +45,8 @@ const sessionElsewhereState = {
 } as Pick<RootState, 'auth'>;
 
 describe('Login component tests', () => {
+  beforeEach(() => mockedNavigate.mockClear());
+
   test('login inputs should accept values', () => {
     renderWithProviders(<LoginForm />);
     inputAcceptsValue('Email', mockedEmail);
@@ -91,7 +100,48 @@ describe('Login component tests', () => {
       renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
 
       expect(screen.getByTestId('login-form-signin')).toBeEnabled();
+      expect(screen.getByTestId('login-form-signup')).toBeEnabled();
+      expect(screen.getByTestId('login-form-forgot-password')).toBeEnabled();
     });
+
+    // Signing up ends in a sign-in, so this is the same second session by another door.
+    test('pressing create account does not reach the sign-up page', async () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      fireEvent.click(screen.getByTestId('login-form-signup'));
+
+      await waitFor(() => expect(screen.getByTestId('login-form-signup')).toBeDisabled());
+      expect(mockedNavigate).not.toHaveBeenCalled();
+    });
+
+    test('pressing forgot password does not reach the reset page', async () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      fireEvent.click(screen.getByTestId('login-form-forgot-password'));
+
+      await waitFor(() => expect(screen.getByTestId('login-form-forgot-password')).toBeDisabled());
+      expect(mockedNavigate).not.toHaveBeenCalled();
+    });
+
+    // The page is stale, not just one control on it.
+    test('one refusal quiets every way off this page', async () => {
+      renderWithProviders(<LoginForm />, { preloadedState: sessionElsewhereState });
+
+      fireEvent.click(screen.getByTestId('login-form-signup'));
+
+      await waitFor(() => expect(screen.getByTestId('login-form-signin')).toBeDisabled());
+      expect(screen.getByTestId('login-form-forgot-password')).toBeDisabled();
+    });
+  });
+
+  test('create account and forgot password work as usual with no other session', () => {
+    renderWithProviders(<LoginForm />);
+
+    fireEvent.click(screen.getByTestId('login-form-signup'));
+    expect(mockedNavigate).toHaveBeenCalledWith(page.signUp);
+
+    fireEvent.click(screen.getByTestId('login-form-forgot-password'));
+    expect(mockedNavigate).toHaveBeenCalledWith(page.passwordReset);
   });
 
   test('signs in as usual when no other session is running', async () => {
