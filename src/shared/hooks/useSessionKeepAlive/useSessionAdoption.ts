@@ -71,15 +71,24 @@ export const useSessionAdoption = () => {
       raiseBanner();
     });
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState !== 'visible') return;
-
+    const askForSession = () => {
       publishSessionMessage({ type: 'SESSION_REQUEST' });
       clearTimeout(fallbackTimer);
       fallbackTimer = setTimeout(raiseBannerFromClock, SESSION_REQUEST_WINDOW_MS);
     };
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+
+      askForSession();
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Asked here as well, not only on the next change of visibility: a tab that leaveEndedSession
+    // has just reloaded is already visible, so no visibilitychange is coming, and nothing else
+    // would ever ask on its behalf.
+    askForSession();
 
     return () => {
       clearTimeout(fallbackTimer);

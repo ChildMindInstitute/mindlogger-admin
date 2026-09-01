@@ -113,10 +113,35 @@ describe('useSessionAdoption', () => {
     expect(bannersIn(store)).toHaveLength(1);
   });
 
-  test('asks for a session when the tab comes back into focus', () => {
+  // A tab reloaded out of a session it no longer owns comes back already visible, so no
+  // visibilitychange is coming and nothing else would ever ask on its behalf.
+  test('asks for a session as soon as it mounts', () => {
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    renderAdoption();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
+  });
+
+  // The frozen-tab case end to end: without the ask above this tab sits on the login page saying
+  // nothing, and the sign-in block never arms either, because the same moment sets both.
+  test('a displaced tab speaks up without waiting to be focused', () => {
+    authStorage.setRefreshToken('their-refresh');
+    sessionStorage.setItem(SessionStorageKeys.SessionEnded, 'true');
+    sibling.onmessage = () => sibling.postMessage({ type: 'SESSION_STATE', payload: ANNOUNCED });
+
+    const { store } = renderAdoption();
+
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(true);
+  });
+
+  test('asks again when the tab comes back into focus', () => {
     const onSiblingMessage = vi.fn();
     sibling.onmessage = onSiblingMessage;
     renderAdoption();
+    onSiblingMessage.mockClear();
 
     act(() => {
       document.dispatchEvent(new Event('visibilitychange'));
