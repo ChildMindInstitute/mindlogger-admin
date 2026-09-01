@@ -16,6 +16,7 @@ import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { variables } from 'shared/styles';
 import { StyledErrorText, StyledHeadlineSmall } from 'shared/styles/styledComponents';
 import { LocationStateKeys } from 'shared/types';
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 import { loginFormSchema } from '../Login.schema';
@@ -34,10 +35,7 @@ export const LoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const softLockData = auth.useSoftLockData();
-  const hasSessionElsewhere = auth.useSessionElsewhere();
-  // Enabled until it is pressed, then quiet. This tab cannot start a second session, and the
-  // banner above says the way on is to reload into the one already running.
-  const [isSignInBlocked, setIsSignInBlocked] = useState(false);
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const clearSoftLock = () => {
     if (softLockData) {
@@ -109,12 +107,7 @@ export const LoginForm = () => {
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
-    if (hasSessionElsewhere) {
-      event.preventDefault();
-      setIsSignInBlocked(true);
-
-      return;
-    }
+    if (refuse()) return event.preventDefault();
 
     handleSubmit(onSubmit)(event);
   };
@@ -227,7 +220,7 @@ export const LoginForm = () => {
           onClick={handleLoginClick}
           variant="contained"
           type="submit"
-          disabled={isSignInBlocked}
+          disabled={isBlocked}
           data-testid="login-form-signin"
         >
           {t('login')}
