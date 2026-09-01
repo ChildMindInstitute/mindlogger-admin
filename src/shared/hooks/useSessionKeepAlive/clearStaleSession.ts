@@ -1,6 +1,7 @@
 import { deleteRefreshTokenApi } from 'modules/Auth/api';
 import { authStorage } from 'shared/utils/authStorage';
 import { getTokenExpiration } from 'shared/utils/jwt';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { clearSessionState, getLastActivityAt } from './sessionStore';
 import { resolveSessionConfig } from './useSessionKeepAlive.utils';
@@ -14,6 +15,8 @@ export const clearStaleSession = async () => {
 
   const { idleTimeoutMs } = resolveSessionConfig();
   if (Date.now() - lastActivityAt < idleTimeoutMs) return;
+
+  dbg('staleSession.clear', { idleForSec: Math.round((Date.now() - lastActivityAt) / 1000) });
 
   // Today the refresh token expires as the session goes stale, so this is skipped. It matters if
   // the idle timeout is ever shortened below the token's lifetime, leaving a live one behind.

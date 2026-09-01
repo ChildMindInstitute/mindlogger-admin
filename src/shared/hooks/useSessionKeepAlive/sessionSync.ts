@@ -1,5 +1,20 @@
+import { dbg, tokenInfo } from 'shared/utils/sessionDebugLog';
+
 import { SESSION_CHANNEL_NAME } from './sessionSync.const';
 import { SessionMessage, SessionMessageHandler } from './sessionSync.types';
+
+// QA instrumentation: what crosses the tab bus, without the raw tokens.
+const summarizeMessage = (message: SessionMessage) => {
+  const payload = 'payload' in message ? (message.payload as Record<string, unknown>) : undefined;
+
+  return {
+    type: message.type,
+    sid: typeof payload?.sessionId === 'string' ? payload.sessionId.slice(-8) : undefined,
+    reason: payload?.reason,
+    access:
+      typeof payload?.accessToken === 'string' ? tokenInfo(payload.accessToken)?.sig : undefined,
+  };
+};
 
 const handlers = new Set<SessionMessageHandler>();
 let channel: BroadcastChannel | null = null;
@@ -24,6 +39,7 @@ const openChannel = () => {
     channel.onmessage = ({ data }: MessageEvent<SessionMessage>) => {
       if (!data?.type) return;
 
+      dbg('bus.rx', summarizeMessage(data));
       handlers.forEach((handler) => handler(data));
     };
   }
@@ -35,6 +51,7 @@ const openChannel = () => {
 export const publishSessionMessage = (message: SessionMessage) => {
   if (!handlers.size) return;
 
+  dbg('bus.tx', summarizeMessage(message));
   openChannel()?.postMessage(message);
 };
 

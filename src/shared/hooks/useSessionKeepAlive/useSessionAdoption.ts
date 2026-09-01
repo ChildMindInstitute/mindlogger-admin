@@ -5,6 +5,7 @@ import { useAppDispatch } from 'redux/store';
 import { banners } from 'shared/state/Banners';
 import { authStorage } from 'shared/utils/authStorage';
 import { SessionStorageKeys } from 'shared/utils/storage';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { getLastActivityAt } from './sessionStore';
 import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
@@ -42,6 +43,7 @@ export const useSessionAdoption = () => {
     const raiseBanner = () => {
       if (hasRaised) return;
       hasRaised = true;
+      dbg('adoption.banner');
 
       dispatch(auth.actions.markSessionElsewhere());
       dispatch(banners.actions.addBanner({ key: 'SessionElsewhereBanner' }));

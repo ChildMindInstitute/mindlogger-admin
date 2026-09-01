@@ -18,6 +18,7 @@ import { StyledErrorText, StyledHeadlineSmall } from 'shared/styles/styledCompon
 import { LocationStateKeys } from 'shared/types';
 import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -74,6 +75,10 @@ export const LoginForm = () => {
       // Standard login flow (MFA not enabled)
       // If user logged in as the same user that was soft-locked, restore their nav state
       if (data.email === softLockData?.email) {
+        dbg('login.softLockRestore', {
+          redirectTo: softLockData?.redirectTo,
+          workspaceOwnerId: softLockData?.workspace?.ownerId,
+        });
         navigate(softLockData?.redirectTo, {
           state: { [LocationStateKeys.Workspace]: softLockData.workspace },
         });

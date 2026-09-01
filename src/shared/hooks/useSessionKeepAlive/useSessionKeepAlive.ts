@@ -4,13 +4,19 @@ import { auth } from 'redux/modules';
 import { refreshTokens } from 'shared/api';
 import { authStorage, getTokenExpiration } from 'shared/utils';
 import { useLogout } from 'shared/hooks/useLogout';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import {
   setActivityTrackingPaused,
   startActivityTracking,
   stopActivityTracking,
 } from './activityTracker';
-import { getLastActivityAt, setActiveSessionId, setLastActivityAt } from './sessionStore';
+import {
+  getActiveSessionId,
+  getLastActivityAt,
+  setActiveSessionId,
+  setLastActivityAt,
+} from './sessionStore';
 import { isSessionRevoked, publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
@@ -67,6 +73,7 @@ export const useSessionKeepAlive = () => {
     const endSession = (reason: LogoutReason, isRemote = false) => {
       if (hasEnded) return;
       hasEnded = true;
+      dbg('keepAlive.end', { reason, isRemote });
       setMsRemaining(null);
       logoutRef.current({ shouldSoftLock: reason !== 'manual', reason, isRemote });
     };
@@ -221,6 +228,10 @@ export const useSessionKeepAlive = () => {
     // Claimed once, here: a tab woken from a freeze never remounts, so it can never overwrite the
     // id of a session that started while it slept. That is what lets it recognise it is stale.
     const ownSessionId = getSessionId();
+    dbg('keepAlive.mount', {
+      own: ownSessionId?.slice(-8) ?? null,
+      activeBefore: getActiveSessionId()?.slice(-8) ?? null,
+    });
     if (ownSessionId) setActiveSessionId(ownSessionId);
 
     const unsubscribe = subscribeSessionSync(handleSyncMessage);

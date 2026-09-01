@@ -13,6 +13,7 @@ import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 import { LocationStateKeys } from 'shared/types';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { dbg } from 'shared/utils/sessionDebugLog';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -66,6 +67,12 @@ export const LeftBar = () => {
           id,
           authStorage.getWorkspace(),
         );
+        dbg('leftBar.resolve', {
+          userId: id,
+          stored: authStorage.getWorkspace()?.ownerId ?? null,
+          list: (data?.result as Workspace[])?.map((workspace) => workspace.ownerId),
+          resolved: currentWorkspace?.ownerId ?? null,
+        });
         dispatch(workspaces.actions.setCurrentWorkspace(currentWorkspace));
 
         if (!currentWorkspace?.ownerId) return;
@@ -85,6 +92,7 @@ export const LeftBar = () => {
 
     if (!workspace || !dispatch) return;
 
+    dbg('leftBar.stateWorkspace', { ownerId: workspace?.ownerId, name: workspace?.workspaceName });
     authStorage.setWorkspace(workspace);
     dispatch(workspaces.actions.setCurrentWorkspace(workspace));
 

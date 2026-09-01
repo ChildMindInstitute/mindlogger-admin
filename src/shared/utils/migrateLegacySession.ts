@@ -2,6 +2,7 @@ import { Workspace } from 'shared/state';
 import { setLastActivityAt } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 
 import { authStorage } from './authStorage';
+import { dbg, tokenInfo } from './sessionDebugLog';
 
 // Sessions signed in before tokens moved to local storage sit under these keys. Without this, the
 // deploy looks like a logout to anyone who was signed in at the time.
@@ -26,12 +27,20 @@ const readLegacy = (key: string): unknown => {
 };
 
 export const migrateLegacySession = () => {
+  const legacyKeys = Object.values(LEGACY_KEYS).filter((key) => sessionStorage.getItem(key));
+
   // A session already in the new store is by definition the newer one.
-  if (authStorage.getRefreshToken()) return;
+  if (authStorage.getRefreshToken()) {
+    if (legacyKeys.length) dbg('migrate.skip', { legacyKeys });
+
+    return;
+  }
 
   const refreshToken = readLegacy(LEGACY_KEYS.refreshToken);
   const accessToken = readLegacy(LEGACY_KEYS.accessToken);
   if (typeof refreshToken !== 'string' || typeof accessToken !== 'string') return;
+
+  dbg('migrate.run', { legacyKeys, refresh: tokenInfo(refreshToken) });
 
   authStorage.setRefreshToken(refreshToken);
   authStorage.setAccessToken(accessToken);

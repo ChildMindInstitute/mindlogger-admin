@@ -9,6 +9,7 @@ import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { dbg } from 'shared/utils/sessionDebugLog';
 import {
   markSessionRevoked,
   publishSessionMessage,
@@ -43,6 +44,8 @@ export const useLogout = () => {
     reason = 'manual',
     isRemote = false,
   }: LogoutOptions = {}) => {
+    dbg('logout', { reason, isRemote, owns: ownsActiveSession() });
+
     // Every teardown funnels through here, so this is the one place that has to refuse. A tab that
     // slept through a logout and someone else signing in would clear a store that is theirs now,
     // signing them out of every tab. It leaves for the login page instead.

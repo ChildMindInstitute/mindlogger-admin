@@ -7,6 +7,8 @@ import { datadogLogs } from '@datadog/browser-logs';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTranslate';
 import { migrateLegacySession } from 'shared/utils/migrateLegacySession';
+import { initSessionDebug, logBootSnapshot } from 'shared/utils/sessionDebugLog';
+import { authStorage } from 'shared/utils/authStorage';
 import { clearStaleSession } from 'shared/hooks/useSessionKeepAlive/clearStaleSession';
 
 import App from './App';
@@ -57,6 +59,14 @@ if (
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 Mixpanel.init();
+
+// QA instrumentation: snapshot what this boot can see before anything touches it.
+initSessionDebug();
+logBootSnapshot({
+  access: authStorage.getAccessToken(),
+  refresh: authStorage.getRefreshToken(),
+  workspace: authStorage.getWorkspace(),
+});
 
 // Runs before render, because the routes read the token as they render.
 migrateLegacySession();
