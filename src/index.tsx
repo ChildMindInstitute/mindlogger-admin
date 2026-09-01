@@ -6,6 +6,8 @@ import { datadogLogs } from '@datadog/browser-logs';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { patchDOMForGoogleTranslate } from 'shared/utils/patchDOMForGoogleTranslate';
+import { migrateLegacySession } from 'shared/utils/migrateLegacySession';
+import { clearStaleSession } from 'shared/hooks/useSessionKeepAlive/clearStaleSession';
 
 import App from './App';
 import './i18n';
@@ -56,9 +58,16 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 Mixpanel.init();
 
+// Runs before render, because the routes read the token as they render.
+migrateLegacySession();
+
 patchDOMForGoogleTranslate();
 
 (async () => {
+  // Also before render, and after the migration, so a session that just moved across is checked on
+  // its own clock. Awaited because a token the server would still accept is revoked first.
+  await clearStaleSession();
+
   const LDProvider = await asyncWithLDProvider({
     clientSideID: import.meta.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
   });

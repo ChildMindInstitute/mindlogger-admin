@@ -1,6 +1,8 @@
 import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
 import { ApiErrorReturn } from 'shared/state/Base';
+import { authStorage } from 'shared/utils/authStorage';
+import { clearSessionState } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 
 import { AuthSchema, SoftLockData, MFASession } from './Auth.schema';
 import { signIn, getUserDetails, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
@@ -20,6 +22,10 @@ export const reducers = {
     state.isLogoutInProgress = false;
   },
   resetAuthorization: (state: AuthSchema): void => {
+    // Tokens and the idle clock now outlive the tab, so clearing sessionStorage alone would leave
+    // a signed-in session behind. sessionStorage still holds the applet private keys.
+    authStorage.clear();
+    clearSessionState();
     sessionStorage.clear();
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
@@ -33,6 +39,11 @@ export const reducers = {
   },
   endSoftLock: (state: AuthSchema): void => {
     delete state.softLockData;
+  },
+  // Set when another tab answers with a live session. Signing in from here is blocked while it
+  // holds, so it must outlive the banner, which the user can dismiss.
+  markSessionElsewhere: (state: AuthSchema): void => {
+    state.hasSessionElsewhere = true;
   },
   // MFA actions
   setMFASession: (state: AuthSchema, { payload }: PayloadAction<MFASession>): void => {
