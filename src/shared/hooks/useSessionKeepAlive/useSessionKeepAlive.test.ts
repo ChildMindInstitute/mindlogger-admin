@@ -20,7 +20,7 @@ import {
   setLastActivityAt,
 } from './sessionStore';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
-import { closeSessionSync } from './sessionSync';
+import { closeSessionSync, markSessionRevoked } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { SessionMessage, SessionState } from './sessionSync.types';
 import {
@@ -397,6 +397,39 @@ describe('useSessionKeepAlive', () => {
     });
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Logging out revokes the family, but this tab keeps its tokens until that call comes back.
+  // Siblings torn down by the same logout ask for a session in exactly that gap, and an answer
+  // would leave them on the login page showing a banner for a session that is gone.
+  test('stays silent about a session that has been logged out', () => {
+    renderEngine();
+    markSessionRevoked(SESSION_ID);
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Signing in again mints a new family, so the note left by the last logout must not silence it.
+  test('answers again for the session that replaces a logged-out one', () => {
+    renderEngine();
+    markSessionRevoked(SESSION_ID);
+    authStorage.setRefreshToken(refreshTokenFor('family-2'));
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalled();
   });
 
   test('stays silent when its token carries no session id, leaving sync inert', () => {

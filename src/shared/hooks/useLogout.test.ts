@@ -13,7 +13,12 @@ import { authStorage } from 'shared/utils/authStorage';
 import { LocationStateKeys } from 'shared/types/navigation';
 
 import { useLogout } from './useLogout';
-import { closeSessionSync, subscribeSessionSync } from './useSessionKeepAlive/sessionSync';
+import {
+  closeSessionSync,
+  isSessionRevoked,
+  subscribeSessionSync,
+} from './useSessionKeepAlive/sessionSync';
+import { startActivityTracking } from './useSessionKeepAlive/activityTracker';
 import { SESSION_CHANNEL_NAME } from './useSessionKeepAlive/sessionSync.const';
 import {
   getLastActivityAt,
@@ -261,6 +266,45 @@ describe('useLogout session sync', () => {
     });
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // The revoke call is awaited before this tab tears itself down, so it spends that whole window
+  // still holding its tokens. A sibling the logout has already emptied asks for a session in
+  // exactly that window, and an answer would leave it on the login page showing the banner.
+  test('marks the session revoked before waiting on the revoke call', () => {
+    const { result } = renderLogout();
+    vi.mocked(axios.post).mockReturnValue(new Promise(() => {}));
+
+    void result.current();
+
+    expect(isSessionRevoked('family-1')).toBe(true);
+  });
+
+  // The tabs a logout tears down remotely hold their tokens for a moment too.
+  test('marks the session revoked on a remote logout as well', async () => {
+    const { result } = renderLogout();
+
+    await waitFor(() => {
+      result.current({ isRemote: true });
+    });
+
+    expect(isSessionRevoked('family-1')).toBe(true);
+  });
+
+  // The clock is what a sibling falls back on when nobody answers, so a dead session must stop
+  // winding it forward.
+  test('stops recording activity for the session it is ending', async () => {
+    startActivityTracking();
+    const { result } = renderLogout();
+    vi.mocked(axios.post).mockResolvedValueOnce(null);
+
+    await waitFor(() => {
+      result.current();
+    });
+    setLastActivityAt(1);
+    window.dispatchEvent(new Event('keydown'));
+
+    expect(getLastActivityAt()).toBe(1);
   });
 
   test('a remote logout does not revoke the session a second time', async () => {

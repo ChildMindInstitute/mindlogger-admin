@@ -11,7 +11,7 @@ import {
   stopActivityTracking,
 } from './activityTracker';
 import { getLastActivityAt, setActiveSessionId, setLastActivityAt } from './sessionStore';
-import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
+import { isSessionRevoked, publishSessionMessage, subscribeSessionSync } from './sessionSync';
 import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { LogoutReason, SessionMessage } from './sessionSync.types';
 import { leaveEndedSession } from './leaveEndedSession';
@@ -164,12 +164,13 @@ export const useSessionKeepAlive = () => {
       catchUpTimer = setTimeout(schedule, SESSION_REQUEST_WINDOW_MS);
     };
 
-    // Only tabs with a live session speak, which is what keeps a logged-out one silent.
+    // Only tabs with a live session speak, which is what keeps a logged-out one silent. Holding the
+    // tokens is not enough: a tab still waiting on its own revoke call holds them too.
     const announceSession = () => {
       const sessionId = getSessionId();
       const accessToken = authStorage.getAccessToken();
       const refreshToken = authStorage.getRefreshToken();
-      if (!sessionId || !accessToken || !refreshToken) return;
+      if (!sessionId || isSessionRevoked(sessionId) || !accessToken || !refreshToken) return;
 
       publishSessionMessage({
         type: 'SESSION_STATE',

@@ -9,7 +9,11 @@ import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils/mixpanel';
 import { FeatureFlags } from 'shared/utils/featureFlags';
-import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
+import {
+  markSessionRevoked,
+  publishSessionMessage,
+} from 'shared/hooks/useSessionKeepAlive/sessionSync';
+import { stopActivityTracking } from 'shared/hooks/useSessionKeepAlive/activityTracker';
 import { leaveEndedSession } from 'shared/hooks/useSessionKeepAlive/leaveEndedSession';
 import { LogoutReason } from 'shared/hooks/useSessionKeepAlive/sessionSync.types';
 import {
@@ -44,11 +48,20 @@ export const useLogout = () => {
     // signing them out of every tab. It leaves for the login page instead.
     if (!ownsActiveSession()) return leaveEndedSession();
 
+    // The session is over from here, whoever ended it. Said before the teardown because this tab
+    // holds its tokens until the revoke call comes back, and a sibling landing on the login page
+    // asks for a session in exactly that gap — an answer would raise the banner over nothing.
+    const sessionId = getSessionId();
+    if (sessionId) markSessionRevoked(sessionId);
+
+    // For the same reason: activity recorded now belongs to a dead session, and the clock is what
+    // a sibling falls back on when nobody answers.
+    stopActivityTracking();
+
     // Sent first: teardown clears the token the session id is read from, and siblings that hear
     // late spend the gap making requests the revoked session can only answer with a 401.
-    if (!isRemote) {
-      const sessionId = getSessionId();
-      if (sessionId) publishSessionMessage({ type: 'LOGOUT', payload: { sessionId, reason } });
+    if (sessionId && !isRemote) {
+      publishSessionMessage({ type: 'LOGOUT', payload: { sessionId, reason } });
     }
 
     try {
