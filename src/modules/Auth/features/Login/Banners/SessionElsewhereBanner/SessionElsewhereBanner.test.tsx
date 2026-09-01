@@ -33,6 +33,16 @@ describe('SessionElsewhereBanner', () => {
     expect(mockReload).toHaveBeenCalledTimes(1);
   });
 
+  // It reads as part of the sentence, but MUI centres a button-backed link on the line box, which
+  // leaves it sitting lower than the words either side of it.
+  test('the reload link sits on the same baseline as the sentence', () => {
+    renderWithProviders(<SessionElsewhereBanner />);
+
+    const link = screen.getByRole('button', { name: 'Reload' });
+
+    expect(getComputedStyle(link).verticalAlign).toBe('baseline');
+  });
+
   // Left by leaveEndedSession to keep this boot out of the session. Reloading is the user asking
   // to go in, so it cannot survive and turn the next boot away too.
   test('clears the ended marker on the way, so the reload lands in the session', () => {
