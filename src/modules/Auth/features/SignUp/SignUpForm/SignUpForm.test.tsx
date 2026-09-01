@@ -140,7 +140,14 @@ describe('SignUpForm while a session is running in another tab', () => {
   test('signs up as usual when no other session is running', async () => {
     // signUp calls the API and then dispatches signIn, so both have to answer.
     mockedSignUpApi.mockResolvedValue({ data: {} });
-    mockedSignInApi.mockResolvedValue({ data: { result: { user: { id: 'user-1' } } } });
+    mockedSignInApi.mockResolvedValue({
+      data: {
+        result: {
+          user: { id: 'user-1', email: mockedEmail, firstName: 'Ann', lastName: 'Smith' },
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+        },
+      },
+    });
     renderWithProviders(<SignUpForm />);
 
     await submitForm({

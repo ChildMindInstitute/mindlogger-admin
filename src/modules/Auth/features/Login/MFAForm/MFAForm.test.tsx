@@ -6,6 +6,13 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { MFAForm } from './MFAForm';
 
+const mockedVerifyMFATOTPApi = vi.hoisted(() => vi.fn());
+
+vi.mock('api', async () => ({
+  ...(await vi.importActual('api')),
+  verifyMFATOTPApi: mockedVerifyMFATOTPApi,
+}));
+
 const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
@@ -306,5 +313,53 @@ describe('MFAForm', () => {
     await waitFor(() => {
       expect(submitButton.disabled).toBe(true);
     });
+  });
+});
+
+const mfaAuthState = {
+  mfaSession: { token: 'mfa-token-123', sessionId: 'session-123' },
+  authentication: { status: 'idle' as const, requestId: 'test-request-id', data: null },
+  totpVerification: { status: 'idle' as const },
+  recoveryVerification: { status: 'idle' as const },
+  isSessionExpired: false,
+  isAuthorized: false,
+  isLogoutInProgress: false,
+};
+
+describe('MFAForm while a session is running in another tab', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedVerifyMFATOTPApi.mockClear();
+  });
+
+  const renderBlocked = () =>
+    renderWithProviders(<MFAForm />, {
+      preloadedState: { auth: { ...mfaAuthState, hasSessionElsewhere: true } },
+    });
+
+  // Finishing MFA signs the user in, so it is the second session by another door.
+  it('refuses a submitted code and quiets the button', async () => {
+    renderBlocked();
+
+    fireEvent.submit(screen.getByTestId('mfa-form-submit').closest('form') as HTMLFormElement);
+
+    await waitFor(() => expect(screen.getByTestId('mfa-form-submit')).toBeDisabled());
+    expect(mockedVerifyMFATOTPApi).not.toHaveBeenCalled();
+  });
+
+  // Six digits submit on their own through requestSubmit, so the guard cannot live on the button.
+  it('refuses the auto-submit that six digits trigger', async () => {
+    renderBlocked();
+
+    await userEvent.type(screen.getByTestId('mfa-form-code').querySelector('input')!, '123456');
+
+    await waitFor(() => expect(screen.getByTestId('mfa-form-submit')).toBeDisabled());
+    expect(mockedVerifyMFATOTPApi).not.toHaveBeenCalled();
+  });
+
+  it('leaves the button usable until it is pressed', () => {
+    renderBlocked();
+
+    expect(screen.getByTestId('mfa-form-submit')).toBeEnabled();
   });
 });
