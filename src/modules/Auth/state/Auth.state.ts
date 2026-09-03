@@ -13,4 +13,5 @@ export const state: AuthSchema = {
   totpVerification: initialVerificationState,
   recoveryVerification: initialVerificationState,
   isSessionExpired: false,
+  hasSessionElsewhere: false,
 };
