@@ -12,6 +12,11 @@ export const clearStaleSession = async () => {
   // No clock means the session predates this check. Leave it to the usual 401 path.
   if (!lastActivityAt) return;
 
+  // A clock with no token behind it names a session nothing can rejoin, and a tab that trusts it
+  // raises a banner offering a reload that only lands back on the login page. The secure store is
+  // read from a snapshot taken at load, so this answer is only reliable here, at boot.
+  if (!authStorage.getRefreshToken()) return clearSessionState();
+
   const { idleTimeoutMs } = resolveSessionConfig();
   if (Date.now() - lastActivityAt < idleTimeoutMs) return;
 

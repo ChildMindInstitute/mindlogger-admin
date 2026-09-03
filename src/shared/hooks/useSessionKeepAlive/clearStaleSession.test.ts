@@ -68,6 +68,18 @@ describe('clearStaleSession', () => {
     expect(authStorage.getRefreshToken()).toBe('refresh-token');
   });
 
+  // Left behind, the clock names a session nothing can rejoin, and every auth form stays blocked
+  // behind a banner offering a reload that lands right back on the login page.
+  test('clears a clock with no token behind it', async () => {
+    authStorage.clear();
+    setLastActivityAt(Date.now());
+
+    await clearStaleSession();
+
+    expect(getLastActivityAt()).toBeNull();
+    expect(deleteRefreshTokenApi).not.toHaveBeenCalled();
+  });
+
   describe('revoking on the server', () => {
     // What an idle timeout shorter than the token's lifetime would leave behind.
     test('revokes a refresh token the server would still accept', async () => {
