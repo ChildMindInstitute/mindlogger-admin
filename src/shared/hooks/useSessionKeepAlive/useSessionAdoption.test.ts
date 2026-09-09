@@ -180,6 +180,66 @@ describe('useSessionAdoption', () => {
     expect(store.getState().auth.hasSessionElsewhere).toBe(false);
   });
 
+  // The reported bug: the session that raised the banner ends, and nothing here ever took it back,
+  // so signing in with another account stayed blocked until the tab was reloaded.
+  test('takes the banner down when the session is signed out elsewhere', () => {
+    const { store } = renderAdoption();
+    announceSession(sibling);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: 'family-1', reason: 'idle' },
+      });
+    });
+
+    expect(bannersIn(store)).toEqual([]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(false);
+  });
+
+  // It stops listening the moment it raises the banner otherwise, and the logout never reaches it.
+  test('is still listening after it has raised the banner', () => {
+    const onSiblingMessage = vi.fn();
+    const { store } = renderAdoption();
+    announceSession(sibling);
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
+    expect(store.getState().auth.hasSessionElsewhere).toBe(true);
+  });
+
+  // No logout to hear when the tab holding the session was simply closed, so silence plus a dead
+  // clock is the only thing left to go on.
+  test('takes the banner down when nobody answers and the clock has run out', () => {
+    setLastActivityAt(Date.now() - MS_IN_MIN);
+    const { store } = renderAdoption();
+    wakeUnanswered();
+
+    setLastActivityAt(Date.now() - IDLE_TIMEOUT_MS);
+    wakeUnanswered();
+
+    expect(bannersIn(store)).toEqual([]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(false);
+  });
+
+  // A live session still answers, so nothing is taken from under a tab that can still join it.
+  test('leaves the banner alone while the session is still running', () => {
+    // A running session keeps its clock wound, which is what the fallback reads.
+    setLastActivityAt(Date.now() - MS_IN_MIN);
+    const { store } = renderAdoption();
+    announceSession(sibling);
+    sibling.onmessage = () => sibling.postMessage({ type: 'SESSION_STATE', payload: ANNOUNCED });
+
+    wakeUnanswered();
+
+    expect(bannersIn(store)).toHaveLength(1);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(true);
+  });
+
   test('says nothing about a session already past its idle deadline', () => {
     setLastActivityAt(Date.now() - IDLE_TIMEOUT_MS);
     const { store } = renderAdoption();

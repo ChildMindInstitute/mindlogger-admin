@@ -19,13 +19,12 @@ import { resolveSessionConfig } from './useSessionKeepAlive.utils';
 export const useSessionAdoption = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
-  const hasSessionElsewhere = auth.useSessionElsewhere();
 
   // A tab sent here by leaveEndedSession can still read tokens, but they are not its own, so it
-  // listens like any signed-out tab. Once told, there is nothing further to hear: the answer
-  // cannot change until this tab reloads.
+  // listens like any signed-out tab. It keeps listening once told, because the session it was told
+  // about can end without it.
   const hasSessionEnded = !!sessionStorage.getItem(SessionStorageKeys.SessionEnded);
-  const isListening = (hasSessionEnded || !authStorage.getRefreshToken()) && !hasSessionElsewhere;
+  const isListening = hasSessionEnded || !authStorage.getRefreshToken();
 
   // Signed in here now, so the note left for the last boot must not turn the next one away.
   useEffect(() => {
@@ -47,20 +46,31 @@ export const useSessionAdoption = () => {
       dispatch(banners.actions.addBanner({ key: 'SessionElsewhereBanner' }));
     };
 
-    // Nobody answered, so no live tab is left to hand the session over — the last one was closed.
-    // The activity clock is the only witness left that there is anything to go back to.
-    const raiseBannerFromClock = () => {
+    // The session named by the banner has ended, so nothing here is blocked on it any more.
+    const clearBanner = () => {
+      hasRaised = false;
+
+      dispatch(auth.actions.clearSessionElsewhere());
+      dispatch(banners.actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+    };
+
+    // Nobody answered, so the activity clock is the only witness left either way.
+    const resolveFromClock = () => {
       const lastActivityAt = getLastActivityAt();
-      if (!lastActivityAt) return;
 
-      // Past its deadline the session is over anyway, and the boot check clears it. Reloading
-      // would only land on the same login page.
-      if (Date.now() - lastActivityAt >= resolveSessionConfig().idleTimeoutMs) return;
+      // Past its deadline there is nothing to reload into.
+      const isSessionLive =
+        !!lastActivityAt && Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs;
 
-      raiseBanner();
+      if (isSessionLive) return raiseBanner();
+
+      clearBanner();
     };
 
     const unsubscribe = subscribeSessionSync((message) => {
+      // The session it was told about has ended, so the message about it goes now.
+      if (message.type === 'LOGOUT') return clearBanner();
+
       if (message.type !== 'SESSION_STATE') return;
       // A session of this tab's own arrived between the announcement and this handler. Leave it
       // alone — but tokens held by a tab that was displaced are not that.
@@ -74,7 +84,7 @@ export const useSessionAdoption = () => {
     const askForSession = () => {
       publishSessionMessage({ type: 'SESSION_REQUEST' });
       clearTimeout(fallbackTimer);
-      fallbackTimer = setTimeout(raiseBannerFromClock, SESSION_REQUEST_WINDOW_MS);
+      fallbackTimer = setTimeout(resolveFromClock, SESSION_REQUEST_WINDOW_MS);
     };
 
     const handleVisibilityChange = () => {

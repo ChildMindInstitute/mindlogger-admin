@@ -1,5 +1,6 @@
 import { act } from '@testing-library/react';
 
+import { auth } from 'redux/modules';
 import { RootState } from 'redux/store';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
@@ -67,6 +68,23 @@ describe('useSessionElsewhereGuard', () => {
     const { result } = renderHookWithProviders(useSessionElsewhereGuard, {
       preloadedState: sessionElsewhereState,
     });
+
+    expect(result.current.isBlocked).toBe(false);
+  });
+
+  // That session can end while this page sits open, and a grey control with no banner reads broken.
+  it('lets a refused control work again once the session elsewhere has ended', () => {
+    const { result, store, rerender } = renderHookWithProviders(useSessionElsewhereGuard, {
+      preloadedState: sessionElsewhereState,
+    });
+
+    act(() => {
+      result.current.refuse();
+    });
+    act(() => {
+      store.dispatch(auth.actions.clearSessionElsewhere());
+    });
+    rerender();
 
     expect(result.current.isBlocked).toBe(false);
   });

@@ -12,13 +12,16 @@ export const useSessionElsewhereGuard = () => {
   const dispatch = useAppDispatch();
   const hasSessionElsewhere = auth.useSessionElsewhere();
   const { banners: shownBanners } = banners.useData();
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [wasRefused, setWasRefused] = useState(false);
+
+  // Not remembered on its own: a control must not stay grey once that session has ended.
+  const isBlocked = wasRefused && !!hasSessionElsewhere;
 
   // True when the action was refused, so the caller bails out.
   const refuse = () => {
     if (!hasSessionElsewhere) return false;
 
-    setIsBlocked(true);
+    setWasRefused(true);
 
     // A control that goes quiet on its own says nothing about why. The message comes back if it was
     // dismissed, checked first because adding appends and would otherwise show a second copy.

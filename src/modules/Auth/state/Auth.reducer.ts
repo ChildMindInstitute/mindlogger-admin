@@ -45,6 +45,10 @@ export const reducers = {
   markSessionElsewhere: (state: AuthSchema): void => {
     state.hasSessionElsewhere = true;
   },
+  // That session has since ended, so nothing here is blocked on it any more.
+  clearSessionElsewhere: (state: AuthSchema): void => {
+    state.hasSessionElsewhere = false;
+  },
   // MFA actions
   setMFASession: (state: AuthSchema, { payload }: PayloadAction<MFASession>): void => {
     state.mfaSession = payload;
