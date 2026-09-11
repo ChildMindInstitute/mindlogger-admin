@@ -82,6 +82,27 @@ describe('useSessionAdoption', () => {
     expect(store.getState().auth.hasSessionElsewhere).toBe(true);
   });
 
+  // Two banners at once told the user to sign in here and that signing in here is refused.
+  test('drops the soft lock when a session is announced, whoever it belongs to', () => {
+    const preloadedState = getPreloadedState();
+    const { store } = renderHookWithProviders(useSessionAdoption, {
+      preloadedState: {
+        ...preloadedState,
+        auth: {
+          ...preloadedState.auth,
+          softLockData: { email: 'a@b.com', redirectTo: '/dashboard', workspace: null },
+        },
+        banners: { data: { banners: [{ key: 'SoftLockWarningBanner' }] } },
+      } as RootState,
+    });
+
+    announceSession(sibling);
+
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+    // The state goes with it, so a remount cannot raise the banner a second time.
+    expect(store.getState().auth.softLockData).toBeUndefined();
+  });
+
   test('never writes the announced tokens', () => {
     renderAdoption();
 

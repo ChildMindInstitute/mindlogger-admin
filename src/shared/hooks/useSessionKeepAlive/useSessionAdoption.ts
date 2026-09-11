@@ -44,6 +44,11 @@ export const useSessionAdoption = () => {
 
       dispatch(auth.actions.markSessionElsewhere());
       dispatch(banners.actions.addBanner({ key: 'SessionElsewhereBanner' }));
+
+      // A session is running again, so the logout before it is history, whoever it belonged to.
+      // Left up, it asks for a sign-in the form now refuses.
+      dispatch(auth.actions.endSoftLock());
+      dispatch(banners.actions.removeBanner({ key: 'SoftLockWarningBanner' }));
     };
 
     // The session named by the banner has ended, so nothing here is blocked on it any more.
