@@ -128,8 +128,8 @@ export const SignUpForm = () => {
           label={
             <StyledLabel>
               {t('agreement')}
-              <StyledLink href="https://www.gettingcurious.com/terms" target="_blank">
-                {t('termsOfService')}
+              <StyledLink href="https://www.gettingcurious.com/msa" target="_blank">
+                {t('masterServicesAgreement')}
               </StyledLink>
             </StyledLabel>
           }
