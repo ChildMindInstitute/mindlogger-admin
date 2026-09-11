@@ -75,4 +75,6 @@ jobs:
       - name: Build admin app
         env:
           CI: false
+          # Compile check only, never deployed. Deploys take the real key from Secrets Manager.
+          REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: ci-build-not-a-real-key
         run: yarn build
