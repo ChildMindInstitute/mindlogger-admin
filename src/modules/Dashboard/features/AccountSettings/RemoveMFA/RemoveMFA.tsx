@@ -48,7 +48,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   }, [open, resetSession]);
 
   const handleVerificationConfirm = async (code: string) => {
-    const result = await verifyCode(code);
+    const result = await verifyCode(code, 'totp');
 
     if (result.success) {
       setCurrentStep('confirmation');
@@ -56,7 +56,7 @@ export const RemoveMFA = ({ open, onClose, onSuccess }: RemoveMFAProps) => {
   };
 
   const handleRecoveryCodeConfirm = async (code: string) => {
-    const result = await verifyCode(code);
+    const result = await verifyCode(code, 'recovery');
 
     if (result.success) {
       setCurrentStep('confirmation');
