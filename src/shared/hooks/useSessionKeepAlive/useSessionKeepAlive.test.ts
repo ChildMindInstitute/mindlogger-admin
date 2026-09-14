@@ -1,0 +1,760 @@
+import { act } from '@testing-library/react';
+
+import { refreshTokens } from 'shared/api';
+import { authStorage } from 'shared/utils';
+import { PlainStorageKeys } from 'shared/utils/storage';
+import { useLogout } from 'shared/hooks/useLogout';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import {
+  InMemoryBroadcastChannel,
+  resetInMemoryBroadcastChannels,
+} from 'shared/tests/InMemoryBroadcastChannel';
+import { state as authState } from 'modules/Auth/state/Auth.state';
+
+import {
+  clearSessionState,
+  getActiveSessionId,
+  getLastActivityAt,
+  setActiveSessionId,
+  setLastActivityAt,
+} from './sessionStore';
+import { useSessionKeepAlive } from './useSessionKeepAlive';
+import { closeSessionSync, markSessionRevoked } from './sessionSync';
+import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
+import { SessionMessage, SessionState } from './sessionSync.types';
+import {
+  ACTIVITY_THROTTLE_MS,
+  COUNTDOWN_TICK_MS,
+  MS_IN_MIN,
+  MS_IN_SEC,
+} from './useSessionKeepAlive.const';
+
+vi.mock('shared/api', () => ({ refreshTokens: vi.fn() }));
+vi.mock('shared/hooks/useLogout', () => ({ useLogout: vi.fn() }));
+// Pinned so the suite does not depend on the .env a developer happens to have locally.
+vi.mock('./useSessionKeepAlive.utils', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./useSessionKeepAlive.utils')>()),
+  resolveSessionConfig: () => ({
+    idleTimeoutMs: 30 * 60 * 1000,
+    refreshLeadMs: 90 * 1000,
+    warningLeadMs: 5 * 60 * 1000,
+  }),
+}));
+
+const mockedRefreshTokens = vi.mocked(refreshTokens);
+const mockedLogout = vi.fn();
+
+const IDLE_TIMEOUT_MS = 30 * MS_IN_MIN;
+const TOKEN_LIFETIME_MS = 15 * MS_IN_MIN;
+const REFRESH_LEAD_MS = 90 * MS_IN_SEC;
+const WARNING_LEAD_MS = 5 * MS_IN_MIN;
+
+const SESSION_ID = 'family-1';
+
+const tokenExpiringIn = (ms: number) =>
+  `header.${btoa(JSON.stringify({ exp: Math.floor((Date.now() + ms) / 1000) }))}.signature`;
+
+const refreshTokenFor = (sessionId: string) =>
+  `header.${btoa(JSON.stringify({ family: sessionId }))}.signature`;
+
+// A sibling tab that replies to every session request with the state it is given.
+const answerSessionRequests = (state: Partial<SessionState>) => {
+  const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+  sibling.onmessage = ({ data }) => {
+    if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
+
+    sibling.postMessage({
+      type: 'SESSION_STATE',
+      payload: {
+        sessionId: SESSION_ID,
+        accessToken: authStorage.getAccessToken(),
+        refreshToken: authStorage.getRefreshToken(),
+        ...state,
+      },
+    });
+  };
+};
+
+const renderEngine = (isAuthorized = true) =>
+  renderHookWithProviders(useSessionKeepAlive, {
+    preloadedState: { ...getPreloadedState(), auth: { ...authState, isAuthorized } },
+  });
+
+describe('useSessionKeepAlive', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-30T10:00:00Z'));
+    localStorage.clear();
+
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
+
+    vi.mocked(useLogout).mockReturnValue(mockedLogout);
+    mockedRefreshTokens.mockResolvedValue({ accessToken: 'a', refreshToken: 'r' });
+    authStorage.setAccessToken(tokenExpiringIn(TOKEN_LIFETIME_MS));
+    authStorage.setRefreshToken(refreshTokenFor(SESSION_ID));
+  });
+
+  afterEach(() => {
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  test('claims the browser for its session on mount', () => {
+    renderEngine();
+
+    expect(getActiveSessionId()).toBe(SESSION_ID);
+  });
+
+  // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a
+  // freeze overwrite the id of the session that replaced it, and never notice it was stale.
+  test('does not reclaim the browser once another session has taken it', () => {
+    renderEngine();
+    setActiveSessionId('family-2');
+
+    act(() => {
+      vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS);
+      window.dispatchEvent(new Event('keydown'));
+    });
+
+    expect(getActiveSessionId()).toBe('family-2');
+  });
+
+  test('refreshes one lead interval before the token expires', () => {
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS - MS_IN_SEC);
+    });
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_SEC);
+    });
+    expect(mockedRefreshTokens).toHaveBeenCalledTimes(1);
+  });
+
+  test('keeps the full lead while the user stays active', () => {
+    const expiresAt = Date.now() + TOKEN_LIFETIME_MS;
+    renderEngine();
+
+    // Every throttled event re-enters schedule. The refresh has to stay pinned to the token's
+    // expiry rather than being re-derived from what is left, which walks it towards expiry.
+    let msLeftWhenRefreshed: number | null = null;
+    while (msLeftWhenRefreshed === null && Date.now() < expiresAt) {
+      act(() => {
+        vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS);
+        window.dispatchEvent(new Event('keydown'));
+      });
+      if (mockedRefreshTokens.mock.calls.length) msLeftWhenRefreshed = expiresAt - Date.now();
+    }
+
+    expect(msLeftWhenRefreshed).toBe(REFRESH_LEAD_MS);
+  });
+
+  // Arming is skipped for a token already scheduled for, so a replacement that happens to carry
+  // the same expiry has to reset that or nothing would ever refresh again.
+  test('re-arms even when the replacement expires at the same moment', async () => {
+    const sameExpiry = tokenExpiringIn(TOKEN_LIFETIME_MS);
+    renderEngine();
+    mockedRefreshTokens.mockImplementation(async () => {
+      authStorage.setAccessToken(sameExpiry);
+
+      return { accessToken: 'a', refreshToken: 'r' };
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
+    });
+    expect(mockedRefreshTokens).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(REFRESH_LEAD_MS);
+    });
+    expect(mockedRefreshTokens.mock.calls.length).toBeGreaterThan(1);
+  });
+
+  test('re-arms from the newly issued token', async () => {
+    renderEngine();
+    mockedRefreshTokens.mockImplementation(async () => {
+      authStorage.setAccessToken(tokenExpiringIn(TOKEN_LIFETIME_MS));
+
+      return { accessToken: 'a', refreshToken: 'r' };
+    });
+
+    await act(async () => {
+      vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
+    });
+
+    expect(mockedRefreshTokens).toHaveBeenCalledTimes(2);
+  });
+
+  test('logs out once the idle timeout elapses', () => {
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_SEC);
+    });
+    expect(mockedLogout).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_SEC);
+    });
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
+    });
+  });
+
+  test('activity pushes the logout deadline out', () => {
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_MIN);
+      window.dispatchEvent(new Event('keydown'));
+    });
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_MIN);
+    });
+
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('re-arms when another tab pushed the shared clock out, and ends once it truly expires', () => {
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS - MS_IN_MIN);
+      // What a sibling tab's activity writes. No event fires here, so this tab is told nothing.
+      setLastActivityAt(Date.now());
+    });
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_MIN);
+    });
+    expect(mockedLogout).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+    });
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
+    });
+  });
+
+  test('logs out when the refresh is rejected', async () => {
+    mockedRefreshTokens.mockRejectedValue(new Error('refresh rejected'));
+    renderEngine();
+
+    await act(async () => {
+      vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'refresh-failed',
+      isRemote: false,
+    });
+  });
+
+  test('caps the lead so a short-lived token does not refresh on every tick', () => {
+    authStorage.setAccessToken(tokenExpiringIn(MS_IN_MIN));
+    renderEngine();
+
+    act(() => {
+      vi.advanceTimersByTime(MS_IN_MIN / 2 - MS_IN_SEC);
+    });
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(2 * MS_IN_SEC);
+    });
+    expect(mockedRefreshTokens).toHaveBeenCalledTimes(1);
+  });
+
+  test('adopts tokens a sibling rotated and re-arms from them', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const rotated = tokenExpiringIn(2 * TOKEN_LIFETIME_MS);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: rotated,
+          refreshToken: refreshTokenFor(SESSION_ID),
+        },
+      });
+    });
+    expect(authStorage.getAccessToken()).toBe(rotated);
+
+    // The replaced token's refresh moment passes without this tab rotating again.
+    act(() => {
+      vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS + MS_IN_SEC);
+    });
+
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+  });
+
+  test('ignores tokens rotated in another account session', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const mine = authStorage.getAccessToken();
+
+    act(() => {
+      sibling.postMessage({
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: 'family-2',
+          accessToken: 'their-access',
+          refreshToken: 'their-refresh',
+        },
+      });
+    });
+
+    expect(authStorage.getAccessToken()).toBe(mine);
+  });
+
+  test('does not rebroadcast the tokens it adopted', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: tokenExpiringIn(TOKEN_LIFETIME_MS),
+          refreshToken: refreshTokenFor(SESSION_ID),
+        },
+      });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  test('answers a session request with its own tokens', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: authStorage.getAccessToken(),
+          refreshToken: authStorage.getRefreshToken(),
+        },
+      },
+    });
+  });
+
+  test('announces itself on start, so a tab still on the login page hears it', () => {
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    renderEngine();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: authStorage.getAccessToken(),
+          refreshToken: authStorage.getRefreshToken(),
+        },
+      },
+    });
+  });
+
+  test('stays silent when it has no session to offer', () => {
+    renderEngine();
+    authStorage.clear();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Logging out revokes the family, but this tab keeps its tokens until that call comes back.
+  // Siblings torn down by the same logout ask for a session in exactly that gap, and an answer
+  // would leave them on the login page showing a banner for a session that is gone.
+  test('stays silent about a session that has been logged out', () => {
+    renderEngine();
+    markSessionRevoked(SESSION_ID);
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Signing in again mints a new family, so the note left by the last logout must not silence it.
+  test('answers again for the session that replaces a logged-out one', () => {
+    renderEngine();
+    markSessionRevoked(SESSION_ID);
+    authStorage.setRefreshToken(refreshTokenFor('family-2'));
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).toHaveBeenCalled();
+  });
+
+  test('stays silent when its token carries no session id, leaving sync inert', () => {
+    renderEngine();
+    authStorage.setRefreshToken('opaque-token');
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    act(() => {
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+    });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  test('logs out when a sibling ends the session', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: SESSION_ID, reason: 'manual' },
+      });
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: false,
+      reason: 'manual',
+      isRemote: true,
+    });
+  });
+
+  test('stays logged in when another account session ends', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: 'family-2', reason: 'manual' },
+      });
+    });
+
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('soft locks when a sibling ended the session involuntarily', () => {
+    renderEngine();
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+    act(() => {
+      sibling.postMessage({
+        type: 'LOGOUT',
+        payload: { sessionId: SESSION_ID, reason: 'idle' },
+      });
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: true,
+    });
+  });
+
+  test('adopts a sibling fresher tokens on wake instead of spending its own', () => {
+    renderEngine();
+    const rotated = tokenExpiringIn(2 * TOKEN_LIFETIME_MS);
+    answerSessionRequests({ accessToken: rotated });
+
+    // The tab slept: the token it still holds was replaced long ago.
+    authStorage.setAccessToken(tokenExpiringIn(-MS_IN_MIN));
+    mockedRefreshTokens.mockClear();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(authStorage.getAccessToken()).toBe(rotated);
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+  });
+
+  test('keeps its own tokens when a sibling offers no newer generation', () => {
+    renderEngine();
+    const mine = tokenExpiringIn(2 * TOKEN_LIFETIME_MS);
+    authStorage.setAccessToken(mine);
+    answerSessionRequests({ accessToken: tokenExpiringIn(TOKEN_LIFETIME_MS) });
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(authStorage.getAccessToken()).toBe(mine);
+  });
+
+  test('holds the schedule back on wake, so a handover can beat a zero-delay refresh', () => {
+    renderEngine();
+    setLastActivityAt(Date.now() - 2 * IDLE_TIMEOUT_MS);
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(mockedLogout).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: false,
+    });
+  });
+
+  test('tears down on focus when the session ended while it was frozen', () => {
+    renderEngine();
+    // What a logout in another tab leaves behind: the clock cleared, this tab's snapshot untouched.
+    clearSessionState();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(mockedLogout).toHaveBeenCalledWith({
+      shouldSoftLock: true,
+      reason: 'idle',
+      isRemote: true,
+    });
+  });
+
+  // The same freeze, but someone signed in after the logout. The clock is back, so the check above
+  // no longer catches it, and the tab would otherwise sit on the old user's dashboard.
+  test('rejoins on focus when another session took the browser while it was frozen', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    renderEngine();
+    setActiveSessionId('family-2');
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('stays put on focus when the browser is still its own', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    renderEngine();
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(mockedLogout).not.toHaveBeenCalled();
+  });
+
+  test('neither refreshes nor logs out nor syncs until the session is authorized', () => {
+    renderEngine(false);
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+    const mine = authStorage.getAccessToken();
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS * 2);
+      window.dispatchEvent(new Event('keydown'));
+      sibling.postMessage({
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: 'sibling-access',
+          refreshToken: 'sibling-refresh',
+        },
+      });
+    });
+
+    expect(mockedRefreshTokens).not.toHaveBeenCalled();
+    expect(mockedLogout).not.toHaveBeenCalled();
+    // Neither direction: nothing published, and a sibling's message is not acted on.
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(authStorage.getAccessToken()).toBe(mine);
+  });
+
+  test('records activity as soon as the session is live, so the boot check has a clock to read', () => {
+    renderEngine();
+
+    expect(localStorage.getItem(PlainStorageKeys.LastActivityAt)).toBe(String(Date.now()));
+  });
+  describe('idle warning', () => {
+    // The engine has to reach the lead before anything is shown, so this is the shared first step.
+    const idleUntilTheWarning = () =>
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS - WARNING_LEAD_MS);
+      });
+
+    test('stays shut while the deadline is still far off', () => {
+      const { result } = renderEngine();
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS - WARNING_LEAD_MS - MS_IN_SEC);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    test('opens one lead interval before the deadline', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS);
+    });
+
+    test('counts down once a second', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => {
+        vi.advanceTimersByTime(3 * COUNTDOWN_TICK_MS);
+      });
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS - 3 * MS_IN_SEC);
+    });
+
+    // A rotation re-enters the scheduler, which has to recognise it is already inside the warning
+    // rather than treating the countdown as still ahead of it.
+    test('keeps counting through a token rotation', () => {
+      const { result } = renderEngine();
+      const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+      idleUntilTheWarning();
+      act(() => {
+        sibling.postMessage({
+          type: 'TOKENS_UPDATED',
+          payload: {
+            sessionId: SESSION_ID,
+            accessToken: tokenExpiringIn(2 * TOKEN_LIFETIME_MS),
+            refreshToken: refreshTokenFor(SESSION_ID),
+          },
+        });
+      });
+
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS);
+    });
+
+    test('closes when another tab pushes the shared clock out', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      // What a sibling answering its own copy of the warning leaves behind for this one to read.
+      act(() => {
+        setLastActivityAt(Date.now());
+        vi.advanceTimersByTime(COUNTDOWN_TICK_MS);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    test('leaves the countdown behind once the session ends', () => {
+      const { result } = renderEngine();
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+      });
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    // Tracking is paused for exactly this: the mouse has to travel to the buttons, and that
+    // journey must not count as the answer.
+    test('mouse movement while it is open does not answer the countdown', () => {
+      const { result } = renderEngine();
+      const clockBefore = getLastActivityAt();
+
+      idleUntilTheWarning();
+      act(() => {
+        vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + MS_IN_SEC);
+        window.dispatchEvent(new Event('pointermove'));
+      });
+
+      expect(getLastActivityAt()).toBe(clockBefore);
+      expect(result.current.msRemaining).toBe(WARNING_LEAD_MS - ACTIVITY_THROTTLE_MS - MS_IN_SEC);
+    });
+
+    test('staying logged in moves the clock every tab reads', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+
+      expect(result.current.msRemaining).toBeNull();
+      expect(getLastActivityAt()).toBe(Date.now());
+    });
+
+    test('staying logged in carries the session past the deadline it was heading for', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+      act(() => {
+        vi.advanceTimersByTime(WARNING_LEAD_MS);
+      });
+
+      expect(mockedLogout).not.toHaveBeenCalled();
+    });
+
+    test('logging out from the warning is deliberate, so nothing is soft locked', () => {
+      const { result } = renderEngine();
+
+      idleUntilTheWarning();
+      act(() => result.current.logOutNow());
+
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: false,
+        reason: 'manual',
+        isRemote: false,
+      });
+    });
+  });
+});

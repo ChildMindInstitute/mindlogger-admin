@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { auth } from 'modules/Auth/state';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { variables } from 'shared/styles';
 import {
   StyledErrorText,
@@ -36,6 +37,7 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const onSubmit = async ({ email }: ResetPassword) => {
     const { resetPassword } = auth.thunk;
@@ -48,8 +50,16 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
     }
   };
 
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // No session is started here, but a tab that is not in the live one does not act on its own.
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event.preventDefault();
+
+    handleSubmit(onSubmit)(event);
+  };
+
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
+    <StyledForm onSubmit={handleFormSubmit} noValidate>
       <StyledHeadlineSmall color={variables.palette.on_surface}>
         {t('resetPassword')}
       </StyledHeadlineSmall>
@@ -66,7 +76,12 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
         />
       </StyledController>
       {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-      <StyledButton variant="contained" type="submit" data-testid="reset-form-reset">
+      <StyledButton
+        variant="contained"
+        type="submit"
+        disabled={isBlocked}
+        data-testid="reset-form-reset"
+      >
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
