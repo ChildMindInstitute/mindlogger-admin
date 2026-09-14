@@ -63,7 +63,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Load build config
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@v3
         with:
           secret-ids: |
             ,/CodeBuild/admin-panel/${{ inputs.env-name }}
