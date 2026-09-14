@@ -75,7 +75,9 @@ describe('SignUp component tests', () => {
     expect(await screen.findByText('Email is required')).toBeInTheDocument();
     expect(await screen.findByText('First name is required')).toBeInTheDocument();
     expect(await screen.findByText('Last name is required')).toBeInTheDocument();
-    expect(await screen.findByText('Please agree to the Terms of Service')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Please agree to the Master Services Agreement'),
+    ).toBeInTheDocument();
   });
 
   it('shows password validation error', async () => {
