@@ -13,6 +13,7 @@ import { state as authState } from 'modules/Auth/state/Auth.state';
 import { SessionKeepAlive } from './SessionKeepAlive';
 import { clearSessionState } from './sessionStore';
 import { closeSessionSync } from './sessionSync';
+import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
 import { MS_IN_MIN, MS_IN_SEC } from './useSessionKeepAlive.const';
 
 vi.mock('shared/api', () => ({ refreshTokens: vi.fn(), setSessionExpiredHandler: vi.fn() }));
@@ -126,7 +127,8 @@ describe('SessionKeepAlive', () => {
     renderKeepAlive();
 
     act(() => {
-      vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+      // The extra window is the deadline being put to the siblings before it is acted on.
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS + SESSION_REQUEST_WINDOW_MS);
     });
 
     expect(warning()).not.toBeInTheDocument();

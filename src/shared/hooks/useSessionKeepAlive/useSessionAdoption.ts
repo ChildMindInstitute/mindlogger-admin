@@ -35,6 +35,7 @@ export const useSessionAdoption = () => {
     if (!isListening) return;
 
     let fallbackTimer: ReturnType<typeof setTimeout>;
+    let deadlineTimer: ReturnType<typeof setTimeout>;
     // Two tabs can announce in the same tick, before the flag above has re-rendered anything.
     let hasRaised = false;
 
@@ -54,9 +55,27 @@ export const useSessionAdoption = () => {
     // The session named by the banner has ended, so nothing here is blocked on it any more.
     const clearBanner = () => {
       hasRaised = false;
+      clearTimeout(deadlineTimer);
 
       dispatch(auth.actions.clearSessionElsewhere());
       dispatch(banners.actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+    };
+
+    // The tab holding the session may be in the background with its logout running late, so this
+    // tab reads the shared clock at the deadline itself.
+    const watchDeadline = () => {
+      clearTimeout(deadlineTimer);
+
+      const lastActivityAt = getLastActivityAt();
+      // Nothing is tracking this session, so there is no deadline to take the banner down at. The
+      // announcement stands until the tab holding it says otherwise.
+      if (!lastActivityAt) return;
+
+      const msLeft = lastActivityAt + resolveSessionConfig().idleTimeoutMs - Date.now();
+      if (msLeft <= 0) return clearBanner();
+
+      // Re-reads rather than clearing outright: activity elsewhere may push the deadline out.
+      deadlineTimer = setTimeout(watchDeadline, msLeft);
     };
 
     // Nobody answered, so the activity clock is the only witness left either way.
@@ -67,9 +86,10 @@ export const useSessionAdoption = () => {
       const isSessionLive =
         !!lastActivityAt && Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs;
 
-      if (isSessionLive) return raiseBanner();
+      if (!isSessionLive) return clearBanner();
 
-      clearBanner();
+      raiseBanner();
+      watchDeadline();
     };
 
     const unsubscribe = subscribeSessionSync((message) => {
@@ -84,6 +104,7 @@ export const useSessionAdoption = () => {
       // Not gated on visibility: a tab visible in a second window says so straight away.
       clearTimeout(fallbackTimer);
       raiseBanner();
+      watchDeadline();
     });
 
     const askForSession = () => {
@@ -107,6 +128,7 @@ export const useSessionAdoption = () => {
 
     return () => {
       clearTimeout(fallbackTimer);
+      clearTimeout(deadlineTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
     };

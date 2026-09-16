@@ -82,6 +82,42 @@ describe('useSessionAdoption', () => {
     expect(store.getState().auth.hasSessionElsewhere).toBe(true);
   });
 
+  // Mobile browsers hold back the signed-in tab's timers, so its logout message can arrive late.
+  test('takes the banner down at the deadline when no logout arrives', () => {
+    setLastActivityAt(Date.now());
+    const { store } = renderAdoption();
+
+    announceSession(sibling);
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+    });
+
+    expect(bannersIn(store)).toEqual([]);
+    expect(store.getState().auth.hasSessionElsewhere).toBe(false);
+  });
+
+  test('keeps the banner while activity elsewhere pushes the deadline out', () => {
+    setLastActivityAt(Date.now());
+    const { store } = renderAdoption();
+
+    announceSession(sibling);
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS / 2);
+    });
+    setLastActivityAt(Date.now());
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS / 2);
+    });
+
+    expect(bannersIn(store)).toEqual([{ key: 'SessionElsewhereBanner' }]);
+
+    act(() => {
+      vi.advanceTimersByTime(IDLE_TIMEOUT_MS / 2);
+    });
+
+    expect(bannersIn(store)).toEqual([]);
+  });
+
   // Two banners at once told the user to sign in here and that signing in here is refused.
   test('drops the soft lock when a session is announced, whoever it belongs to', () => {
     const preloadedState = getPreloadedState();

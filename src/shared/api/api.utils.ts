@@ -3,7 +3,10 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 import { UiLanguages, regionalLangFormats } from 'shared/ui';
-import { getSessionId } from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
+import {
+  getSessionId,
+  ownsActiveSession,
+} from 'shared/hooks/useSessionKeepAlive/sessionSync.utils';
 import { publishSessionMessage } from 'shared/hooks/useSessionKeepAlive/sessionSync';
 
 import { apiRoutesToSkip, BASE_API_URL } from './api.const';
@@ -29,6 +32,12 @@ export const getRefreshTokenData = (config: InternalAxiosRequestConfig) => {
 };
 
 const requestNewTokens = async () => {
+  // A stale tab reads its own tokens from memory, so only the stored session id shows that another
+  // session took the browser. Refreshing would revive the old session on the server.
+  if (!ownsActiveSession()) {
+    throw new Error('Session ended before the refresh could be sent.');
+  }
+
   const {
     data: { result },
   } = await signInRefreshTokenApi({
@@ -42,7 +51,7 @@ const requestNewTokens = async () => {
 
   // The session can end while this is in flight, here or in a sibling that broadcast it. Storing
   // now would put the tokens back and leave the tab looking signed in over a dead session.
-  if (!authStorage.getRefreshToken()) {
+  if (!authStorage.getRefreshToken() || !ownsActiveSession()) {
     throw new Error('Session ended before the refreshed token could be stored.');
   }
 

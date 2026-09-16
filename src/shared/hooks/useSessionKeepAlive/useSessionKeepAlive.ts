@@ -61,7 +61,9 @@ export const useSessionKeepAlive = () => {
     let logoutTimer: ReturnType<typeof setTimeout>;
     let warningTimer: ReturnType<typeof setTimeout>;
     let catchUpTimer: ReturnType<typeof setTimeout>;
+    let confirmTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
+    let isConfirming = false;
 
     // Soft lock only for logouts nobody asked for, so a deliberate one is not undone on return.
     const endSession = (reason: LogoutReason, isRemote = false) => {
@@ -87,14 +89,53 @@ export const useSessionKeepAlive = () => {
       refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
     };
 
+    // A background tab's timers can fire before its focus check, after another session has taken the
+    // browser. Acting on that session's clock or tokens would keep this tab alive or put the old
+    // session back over theirs, so it leaves for the login page instead.
+    const hasLostBrowser = () => {
+      if (ownsActiveSession()) return false;
+
+      hasEnded = true;
+      leaveEndedSession();
+
+      return true;
+    };
+
+    // The deadline is put to the siblings before it is acted on. A tab woken from a freeze reads the
+    // clock its process last saw, which is the deadline it was heading for when it went under, not
+    // the one a sibling has since pushed out. A live sibling answers with its own reading; nobody
+    // answering means there is no one left to contradict this tab.
+    const confirmIdleEnd = () => {
+      if (hasEnded || isConfirming) return;
+      isConfirming = true;
+
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+
+      clearTimeout(confirmTimer);
+      confirmTimer = setTimeout(() => {
+        isConfirming = false;
+
+        const lastActivityAt = getLastActivityAt();
+        if (!lastActivityAt) return endSession('idle', true);
+        // An answer landed and moved the deadline out, so the session is still someone's.
+        if (lastActivityAt + idleTimeoutMs > Date.now()) return schedule();
+
+        endSession('idle');
+      }, SESSION_REQUEST_WINDOW_MS);
+    };
+
     const schedule = () => {
       if (hasEnded) return;
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
 
-      const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
-      const msUntilLogout = idleDeadline - Date.now();
-      if (msUntilLogout <= 0) return endSession('idle');
+      const lastActivityAt = getLastActivityAt();
+      // Tracking seeds the clock before this first runs, so gone means another tab ended the session.
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+
+      const msUntilLogout = lastActivityAt + idleTimeoutMs - Date.now();
+      if (msUntilLogout <= 0) return confirmIdleEnd();
 
       // The last stretch belongs to the countdown, not to another pass through here, which would
       // tear down and re-arm every timer once a second for nothing.
@@ -116,8 +157,12 @@ export const useSessionKeepAlive = () => {
     // Redraws the countdown off the shared clock, which is how a sibling answering the warning
     // closes this tab's copy of it too.
     const tick = () => {
-      const msLeft = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs - Date.now();
-      if (msLeft <= 0) return endSession('idle');
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+
+      const msLeft = lastActivityAt + idleTimeoutMs - Date.now();
+      if (msLeft <= 0) return confirmIdleEnd();
 
       // The deadline moved out from under us, so hand back to the scheduler and stop counting.
       if (msLeft > warningLeadMs) return schedule();
@@ -135,6 +180,8 @@ export const useSessionKeepAlive = () => {
     };
 
     const refresh = async () => {
+      if (hasEnded || hasLostBrowser()) return;
+
       try {
         await refreshTokens();
         // Always re-arms, even if the replacement happens to carry the same expiry.
@@ -167,6 +214,14 @@ export const useSessionKeepAlive = () => {
     // Only tabs with a live session speak, which is what keeps a logged-out one silent. Holding the
     // tokens is not enough: a tab still waiting on its own revoke call holds them too.
     const announceSession = () => {
+      if (hasEnded) return;
+
+      // A background tab's timers can run late, so the clock is checked before vouching for it.
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+      if (Date.now() - lastActivityAt >= idleTimeoutMs) return endSession('idle');
+
       const sessionId = getSessionId();
       const accessToken = authStorage.getAccessToken();
       const refreshToken = authStorage.getRefreshToken();
@@ -174,7 +229,7 @@ export const useSessionKeepAlive = () => {
 
       publishSessionMessage({
         type: 'SESSION_STATE',
-        payload: { sessionId, accessToken, refreshToken },
+        payload: { sessionId, lastActivityAt, accessToken, refreshToken },
       });
     };
 
@@ -184,8 +239,16 @@ export const useSessionKeepAlive = () => {
       // A sibling's answer may carry tokens that replaced this tab's while it slept. Every
       // rotation mints a later expiry, so the further-off one is the newer generation.
       if (message.type === 'SESSION_STATE') {
-        const { sessionId, accessToken, refreshToken } = message.payload;
+        const { sessionId, accessToken, refreshToken, lastActivityAt } = message.payload;
         if (sessionId !== getSessionId()) return;
+
+        // Answering "Stay logged in" is only written to the shared clock, so a tab that slept
+        // through it can wake reading the deadline it was heading for. The sibling still in use
+        // holds the later reading, and taking it is what keeps this tab from ending a live session.
+        if (lastActivityAt > (getLastActivityAt() ?? 0)) {
+          setLastActivityAt(lastActivityAt);
+          schedule();
+        }
 
         const offered = getTokenExpiration(accessToken);
         const held = getTokenExpiration(authStorage.getAccessToken());
@@ -240,6 +303,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
       clearTimeout(catchUpTimer);
+      clearTimeout(confirmTimer);
       setMsRemaining(null);
       scheduleRef.current = null;
       extendRef.current = null;

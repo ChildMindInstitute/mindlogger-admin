@@ -22,7 +22,7 @@ import {
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 import { closeSessionSync, markSessionRevoked } from './sessionSync';
 import { SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
-import { SessionMessage, SessionState } from './sessionSync.types';
+import { SessionAnnouncement, SessionMessage } from './sessionSync.types';
 import {
   ACTIVITY_THROTTLE_MS,
   COUNTDOWN_TICK_MS,
@@ -59,7 +59,7 @@ const refreshTokenFor = (sessionId: string) =>
   `header.${btoa(JSON.stringify({ family: sessionId }))}.signature`;
 
 // A sibling tab that replies to every session request with the state it is given.
-const answerSessionRequests = (state: Partial<SessionState>) => {
+const answerSessionRequests = (state: Partial<SessionAnnouncement>) => {
   const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
   sibling.onmessage = ({ data }) => {
     if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
@@ -68,6 +68,7 @@ const answerSessionRequests = (state: Partial<SessionState>) => {
       type: 'SESSION_STATE',
       payload: {
         sessionId: SESSION_ID,
+        lastActivityAt: getLastActivityAt(),
         accessToken: authStorage.getAccessToken(),
         refreshToken: authStorage.getRefreshToken(),
         ...state,
@@ -359,6 +360,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: getLastActivityAt(),
           accessToken: authStorage.getAccessToken(),
           refreshToken: authStorage.getRefreshToken(),
         },
@@ -378,6 +380,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: getLastActivityAt(),
           accessToken: authStorage.getAccessToken(),
           refreshToken: authStorage.getRefreshToken(),
         },
@@ -420,6 +423,9 @@ describe('useSessionKeepAlive', () => {
   test('answers again for the session that replaces a logged-out one', () => {
     renderEngine();
     markSessionRevoked(SESSION_ID);
+    // What the logout before it left behind, so the new session is not read as a stale tab.
+    clearSessionState();
+    setLastActivityAt(Date.now());
     authStorage.setRefreshToken(refreshTokenFor('family-2'));
     const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
     const onSiblingMessage = vi.fn();
@@ -539,13 +545,174 @@ describe('useSessionKeepAlive', () => {
     expect(mockedLogout).not.toHaveBeenCalled();
 
     act(() => {
-      vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+      // One window for the catch-up, another for the deadline this tab then puts to the siblings.
+      vi.advanceTimersByTime(2 * SESSION_REQUEST_WINDOW_MS);
     });
 
     expect(mockedLogout).toHaveBeenCalledWith({
       shouldSoftLock: true,
       reason: 'idle',
       isRemote: false,
+    });
+  });
+
+  // Mobile browsers hold back a background tab's timers but still deliver its messages.
+  describe('once its own deadline has passed', () => {
+    let onSiblingMessage: ReturnType<typeof vi.fn>;
+    let sibling: InMemoryBroadcastChannel;
+
+    beforeEach(() => {
+      renderEngine();
+      sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+      onSiblingMessage = vi.fn();
+      sibling.onmessage = onSiblingMessage;
+    });
+
+    test('ends instead of answering when its timers were held back', () => {
+      // The clock moves on without the logout timer firing.
+      vi.setSystemTime(Date.now() + IDLE_TIMEOUT_MS + MS_IN_MIN);
+
+      act(() => {
+        sibling.postMessage({ type: 'SESSION_REQUEST' });
+      });
+
+      expect(onSiblingMessage).not.toHaveBeenCalled();
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: true,
+        reason: 'idle',
+        isRemote: false,
+      });
+    });
+
+    test('ends quietly instead of answering once another tab cleared the clock', () => {
+      clearSessionState();
+
+      act(() => {
+        sibling.postMessage({ type: 'SESSION_REQUEST' });
+      });
+
+      expect(onSiblingMessage).not.toHaveBeenCalled();
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: true,
+        reason: 'idle',
+        isRemote: true,
+      });
+    });
+
+    test('does not restart the deadline once another tab cleared the clock', () => {
+      clearSessionState();
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+      });
+
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: true,
+        reason: 'idle',
+        isRemote: true,
+      });
+    });
+  });
+
+  // A background tab's timers can fire before its focus check does.
+  describe('once another session took the browser while it was in the background', () => {
+    const mockedReload = vi.fn();
+
+    beforeEach(() => {
+      vi.stubGlobal('location', { ...window.location, reload: mockedReload });
+    });
+
+    test('leaves instead of refreshing the old session', () => {
+      renderEngine();
+      setActiveSessionId('family-2');
+
+      act(() => {
+        vi.advanceTimersByTime(TOKEN_LIFETIME_MS - REFRESH_LEAD_MS);
+      });
+
+      expect(mockedRefreshTokens).not.toHaveBeenCalled();
+      expect(mockedReload).toHaveBeenCalled();
+    });
+
+    test('leaves instead of staying alive on that session clock', () => {
+      renderEngine();
+      setActiveSessionId('family-2');
+      // The new session is in use, so its clock keeps moving.
+      setLastActivityAt(Date.now() + IDLE_TIMEOUT_MS);
+
+      act(() => {
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+      });
+
+      expect(mockedReload).toHaveBeenCalled();
+      expect(mockedLogout).not.toHaveBeenCalled();
+    });
+
+    test('does not vouch for the old session', () => {
+      renderEngine();
+      const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+      const onSiblingMessage = vi.fn();
+      sibling.onmessage = onSiblingMessage;
+      setActiveSessionId('family-2');
+
+      act(() => {
+        sibling.postMessage({ type: 'SESSION_REQUEST' });
+      });
+
+      expect(onSiblingMessage).not.toHaveBeenCalled();
+      expect(mockedReload).toHaveBeenCalled();
+    });
+  });
+
+  // The reported bug: answering the warning is only written to the shared clock, so a tab that
+  // slept through it woke reading the deadline it was heading for, and ended the session for
+  // everyone — the sibling that had just answered included.
+  describe('once a sibling answers the warning while this tab is asleep', () => {
+    // What a frozen tab reads: the clock its process last saw, already past the deadline.
+    const wakeStale = () => {
+      renderEngine();
+      setLastActivityAt(Date.now() - 2 * IDLE_TIMEOUT_MS);
+
+      act(() => {
+        document.dispatchEvent(new Event('visibilitychange'));
+      });
+      act(() => {
+        vi.advanceTimersByTime(2 * SESSION_REQUEST_WINDOW_MS);
+      });
+    };
+
+    test('takes the sibling reading of the clock instead of ending the session', () => {
+      const answeredAt = Date.now();
+      answerSessionRequests({ lastActivityAt: answeredAt });
+      wakeStale();
+
+      expect(mockedLogout).not.toHaveBeenCalled();
+      expect(getLastActivityAt()).toBe(answeredAt);
+    });
+
+    test('still ends the session when nobody answers', () => {
+      wakeStale();
+
+      expect(mockedLogout).toHaveBeenCalledWith({
+        shouldSoftLock: true,
+        reason: 'idle',
+        isRemote: false,
+      });
+    });
+
+    test('keeps its own reading when the answer is the older of the two', () => {
+      answerSessionRequests({ lastActivityAt: Date.now() - IDLE_TIMEOUT_MS });
+      renderEngine();
+      const held = getLastActivityAt();
+
+      act(() => {
+        document.dispatchEvent(new Event('visibilitychange'));
+      });
+      act(() => {
+        vi.advanceTimersByTime(SESSION_REQUEST_WINDOW_MS);
+      });
+
+      expect(getLastActivityAt()).toBe(held);
     });
   });
 
@@ -700,7 +867,7 @@ describe('useSessionKeepAlive', () => {
       const { result } = renderEngine();
 
       act(() => {
-        vi.advanceTimersByTime(IDLE_TIMEOUT_MS);
+        vi.advanceTimersByTime(IDLE_TIMEOUT_MS + SESSION_REQUEST_WINDOW_MS);
       });
 
       expect(result.current.msRemaining).toBeNull();
