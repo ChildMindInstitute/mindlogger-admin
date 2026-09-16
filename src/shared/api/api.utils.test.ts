@@ -10,6 +10,10 @@ import {
   InMemoryBroadcastChannel,
   resetInMemoryBroadcastChannels,
 } from 'shared/tests/InMemoryBroadcastChannel';
+import {
+  clearSessionState,
+  setActiveSessionId,
+} from 'shared/hooks/useSessionKeepAlive/sessionStore';
 
 import { refreshTokenAndReattemptRequest, refreshTokens, shouldNotSkipRoute } from './api.utils';
 import { signInRefreshTokenApi } from './api';
@@ -112,6 +116,38 @@ describe('refreshTokens', () => {
     );
     expect(authStorage.getAccessToken()).toBeNull();
     expect(authStorage.getRefreshToken()).toBeNull();
+  });
+
+  // A stale tab still reads its own tokens from storage, so only the recorded session id gives
+  // it away. Refreshing would revive the old session on the server, over whoever holds the browser.
+  describe('once another session owns the browser', () => {
+    beforeEach(() => {
+      authStorage.setRefreshToken(
+        `header.${btoa(JSON.stringify({ family: 'family-1' }))}.signature`,
+      );
+      setActiveSessionId('family-1');
+    });
+
+    afterEach(() => {
+      clearSessionState();
+    });
+
+    test('does not send the refresh at all', async () => {
+      resolveWith(tokens);
+      setActiveSessionId('family-2');
+
+      await expect(refreshTokens()).rejects.toThrow('Session ended before');
+      expect(mockedSignInRefreshTokenApi).not.toHaveBeenCalled();
+    });
+
+    test('discards tokens that arrive after it claimed the browser', async () => {
+      resolveWith(tokens, 10);
+      const pending = refreshTokens();
+      setActiveSessionId('family-2');
+
+      await expect(pending).rejects.toThrow('Session ended before');
+      expect(authStorage.getAccessToken()).toBe('old-access');
+    });
   });
 });
 
