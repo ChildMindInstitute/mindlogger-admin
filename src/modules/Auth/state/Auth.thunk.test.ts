@@ -2,6 +2,12 @@ import { vi } from 'vitest';
 
 import { verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
 import { setupStore } from 'redux/store';
+import {
+  clearSessionState,
+  getLastActivityAt,
+  setLastActivityAt,
+} from 'shared/hooks/useSessionKeepAlive/sessionStore';
+import { MS_IN_MIN } from 'shared/hooks/useSessionKeepAlive/useSessionKeepAlive.const';
 
 import { verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
 
@@ -71,6 +77,28 @@ describe('Auth MFA thunks', () => {
     expect(state.totpVerification.displayError).toBeDefined();
     // Note: attempts tracking is handled server-side, client uses attemptsRemaining from API response
     expect(state.mfaSession).toBeDefined();
+  });
+
+  // A backgrounded tab can miss its idle logout, leaving its clock behind. Read by the new
+  // session, it ended the sign-in as soon as it landed.
+  it('starts a fresh clock over one left by a session that never logged out', async () => {
+    clearSessionState();
+    setLastActivityAt(Date.now() - 60 * MS_IN_MIN);
+    mockVerifyMFATOTPApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          user: { id: 'user-1' },
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+        },
+      },
+    } as never);
+
+    const store = setupStore(getPreloadedState());
+    await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
+
+    expect(Date.now() - (getLastActivityAt() ?? 0)).toBeLessThan(MS_IN_MIN);
+
+    clearSessionState();
   });
 
   it('rejects recovery code responses that do not include tokens', async () => {
