@@ -124,6 +124,27 @@ describe('useViewRecoveryCodes', () => {
       expect(result.current.error).toBe('invalidMFACode');
     });
 
+    it('should reject a short TOTP code without calling the API', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      vi.mocked(axios.post).mockClear();
+
+      let verifyResult: Awaited<ReturnType<typeof result.current.handleVerifyCode>> | undefined;
+
+      await act(async () => {
+        verifyResult = await result.current.handleVerifyCode('12345');
+      });
+
+      expect(verifyResult?.success).toBe(false);
+      expect(result.current.error).toBe('invalidMFACode');
+      expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
+    });
+
     it('should handle MFA not enabled error (403)', async () => {
       const { result } = renderHook(() => useViewRecoveryCodes());
 
@@ -231,7 +252,7 @@ describe('useViewRecoveryCodes', () => {
         | undefined;
 
       await act(async () => {
-        verifyResult = await result.current.handleVerifyRecoveryCode('INVALID-CODE');
+        verifyResult = await result.current.handleVerifyRecoveryCode('ZZZZZ-99999');
       });
 
       await waitFor(() => {
@@ -239,6 +260,29 @@ describe('useViewRecoveryCodes', () => {
       });
 
       expect(result.current.error).toBe('invalidRecoveryCode');
+    });
+
+    it('should reject a short recovery code without calling the API', async () => {
+      const { result } = renderHook(() => useViewRecoveryCodes());
+
+      mockMFAViewCodesInitiate(mockMfaToken);
+      await act(async () => {
+        await result.current.initiateSession();
+      });
+
+      vi.mocked(axios.post).mockClear();
+
+      let verifyResult:
+        | Awaited<ReturnType<typeof result.current.handleVerifyRecoveryCode>>
+        | undefined;
+
+      await act(async () => {
+        verifyResult = await result.current.handleVerifyRecoveryCode('ABCDE');
+      });
+
+      expect(verifyResult?.success).toBe(false);
+      expect(result.current.error).toBe('invalidRecoveryCode');
+      expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
     });
 
     it('should handle rate limiting (429)', async () => {
@@ -486,7 +530,7 @@ describe('useViewRecoveryCodes', () => {
       });
 
       await act(async () => {
-        await result.current.handleVerifyRecoveryCode('INVALID-CODE');
+        await result.current.handleVerifyRecoveryCode('ZZZZZ-99999');
       });
 
       await waitFor(() => {
