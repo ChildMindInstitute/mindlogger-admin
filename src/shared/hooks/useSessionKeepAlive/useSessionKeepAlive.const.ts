@@ -1,14 +1,16 @@
 export const MS_IN_SEC = 1000;
 export const MS_IN_MIN = 60 * MS_IN_SEC;
 
+// TEST BRANCH ONLY - shortened from 30 so the idle timeout is observable. Do not merge.
 // Overridden by REACT_APP_IDLE_TIMEOUT_MIN.
-export const DEFAULT_IDLE_TIMEOUT_MIN = 30;
+export const DEFAULT_IDLE_TIMEOUT_MIN = 3;
 
 // Headroom before token expiry. Overridden by REACT_APP_REFRESH_LEAD_SEC.
 export const DEFAULT_REFRESH_LEAD_SEC = 90;
 
+// TEST BRANCH ONLY - shortened from 5, leaving two minutes of use before it. Do not merge.
 // How long the warning counts down for. Overridden by REACT_APP_IDLE_WARNING_MIN.
-export const DEFAULT_IDLE_WARNING_MIN = 5;
+export const DEFAULT_IDLE_WARNING_MIN = 1;
 
 // How often the countdown redraws while the warning is open.
 export const COUNTDOWN_TICK_MS = MS_IN_SEC;
