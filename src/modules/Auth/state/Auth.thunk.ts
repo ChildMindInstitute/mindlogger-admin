@@ -8,6 +8,7 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
 import { FeatureFlags } from 'shared/utils/featureFlags';
+import { setLastActivityAt } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 import {
   getUserDetailsApi,
   ResetPassword,
@@ -80,6 +81,9 @@ export const signIn = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        // A new session starts its own clock. One left by a session whose tab never logged out
+        // would put this one past its deadline, and the tracker only writes when there is none.
+        setLastActivityAt(Date.now());
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);
@@ -177,6 +181,9 @@ export const verifyMFATOTP = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        // A new session starts its own clock. One left by a session whose tab never logged out
+        // would put this one past its deadline, and the tracker only writes when there is none.
+        setLastActivityAt(Date.now());
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);
@@ -221,6 +228,9 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+        // A new session starts its own clock. One left by a session whose tab never logged out
+        // would put this one past its deadline, and the tracker only writes when there is none.
+        setLastActivityAt(Date.now());
 
         datadogRum.setUser({ id: data.result.user.id });
         Mixpanel.login(data.result.user.id);

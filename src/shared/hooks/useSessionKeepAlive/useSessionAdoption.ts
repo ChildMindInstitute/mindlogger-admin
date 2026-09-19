@@ -1,0 +1,136 @@
+import { useEffect } from 'react';
+
+import { auth } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { banners } from 'shared/state/Banners';
+import { authStorage } from 'shared/utils/authStorage';
+import { SessionStorageKeys } from 'shared/utils/storage';
+
+import { getLastActivityAt } from './sessionStore';
+import { publishSessionMessage, subscribeSessionSync } from './sessionSync';
+import { SESSION_REQUEST_WINDOW_MS } from './sessionSync.const';
+import { resolveSessionConfig } from './useSessionKeepAlive.utils';
+
+// A tab that loaded signed-out cannot see a sign-in that happens afterwards: its view of the
+// encrypted store is a snapshot taken when the page loaded, and there is no way to re-read it.
+// So it listens for a session being announced, and asks again whenever it returns to focus, for
+// the case where the browser had frozen it when the announcement went out. What it never does is
+// let itself in: it says a session is running, and the user decides whether to join it.
+export const useSessionAdoption = () => {
+  const dispatch = useAppDispatch();
+  const isAuthorized = auth.useAuthorized();
+
+  // A tab sent here by leaveEndedSession can still read tokens, but they are not its own, so it
+  // listens like any signed-out tab. It keeps listening once told, because the session it was told
+  // about can end without it.
+  const hasSessionEnded = !!sessionStorage.getItem(SessionStorageKeys.SessionEnded);
+  const isListening = hasSessionEnded || !authStorage.getRefreshToken();
+
+  // Signed in here now, so the note left for the last boot must not turn the next one away.
+  useEffect(() => {
+    if (isAuthorized) sessionStorage.removeItem(SessionStorageKeys.SessionEnded);
+  }, [isAuthorized]);
+
+  useEffect(() => {
+    if (!isListening) return;
+
+    let fallbackTimer: ReturnType<typeof setTimeout>;
+    let deadlineTimer: ReturnType<typeof setTimeout>;
+    // Two tabs can announce in the same tick, before the flag above has re-rendered anything.
+    let hasRaised = false;
+
+    const raiseBanner = () => {
+      if (hasRaised) return;
+      hasRaised = true;
+
+      dispatch(auth.actions.markSessionElsewhere());
+      dispatch(banners.actions.addBanner({ key: 'SessionElsewhereBanner' }));
+
+      // A session is running again, so the logout before it is history, whoever it belonged to.
+      // Left up, it asks for a sign-in the form now refuses.
+      dispatch(auth.actions.endSoftLock());
+      dispatch(banners.actions.removeBanner({ key: 'SoftLockWarningBanner' }));
+    };
+
+    // The session named by the banner has ended, so nothing here is blocked on it any more.
+    const clearBanner = () => {
+      hasRaised = false;
+      clearTimeout(deadlineTimer);
+
+      dispatch(auth.actions.clearSessionElsewhere());
+      dispatch(banners.actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+    };
+
+    // The tab holding the session may be in the background with its logout running late, so this
+    // tab reads the shared clock at the deadline itself.
+    const watchDeadline = () => {
+      clearTimeout(deadlineTimer);
+
+      const lastActivityAt = getLastActivityAt();
+      // Nothing is tracking this session, so there is no deadline to take the banner down at. The
+      // announcement stands until the tab holding it says otherwise.
+      if (!lastActivityAt) return;
+
+      const msLeft = lastActivityAt + resolveSessionConfig().idleTimeoutMs - Date.now();
+      if (msLeft <= 0) return clearBanner();
+
+      // Re-reads rather than clearing outright: activity elsewhere may push the deadline out.
+      deadlineTimer = setTimeout(watchDeadline, msLeft);
+    };
+
+    // Nobody answered, so the activity clock is the only witness left either way.
+    const resolveFromClock = () => {
+      const lastActivityAt = getLastActivityAt();
+
+      // Past its deadline there is nothing to reload into.
+      const isSessionLive =
+        !!lastActivityAt && Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs;
+
+      if (!isSessionLive) return clearBanner();
+
+      raiseBanner();
+      watchDeadline();
+    };
+
+    const unsubscribe = subscribeSessionSync((message) => {
+      // The session it was told about has ended, so the message about it goes now.
+      if (message.type === 'LOGOUT') return clearBanner();
+
+      if (message.type !== 'SESSION_STATE') return;
+      // A session of this tab's own arrived between the announcement and this handler. Leave it
+      // alone — but tokens held by a tab that was displaced are not that.
+      if (!hasSessionEnded && authStorage.getRefreshToken()) return;
+
+      // Not gated on visibility: a tab visible in a second window says so straight away.
+      clearTimeout(fallbackTimer);
+      raiseBanner();
+      watchDeadline();
+    });
+
+    const askForSession = () => {
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+      clearTimeout(fallbackTimer);
+      fallbackTimer = setTimeout(resolveFromClock, SESSION_REQUEST_WINDOW_MS);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+
+      askForSession();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Asked here as well, not only on the next change of visibility: a tab that leaveEndedSession
+    // has just reloaded is already visible, so no visibilitychange is coming, and nothing else
+    // would ever ask on its behalf.
+    askForSession();
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      clearTimeout(deadlineTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
+    };
+  }, [isListening, hasSessionEnded, dispatch]);
+};
