@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, TextField } from '@mui/material';
 
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import { StyledBodyMedium, StyledHeadlineSmall, variables } from 'shared/styles';
 
 import { formatRecoveryCode } from '../../../utils/mfa.utils';
@@ -30,6 +31,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
 
   const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification('recovery');
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
   const isUserTypingRef = useRef(false);
 
   const {
@@ -62,6 +64,13 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
       // Clear the input on error so user can try again
       setValue('code', '');
     }
+  };
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // A recovery code signs the user in just as the TOTP one does.
+    if (refuse()) return event.preventDefault();
+
+    handleSubmit(onSubmit)(event);
   };
 
   const handleBackToTOTP = () => {
@@ -103,7 +112,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
 
   return (
     <StyledMFAContainer>
-      <StyledMFAForm onSubmit={handleSubmit(onSubmit)} noValidate>
+      <StyledMFAForm onSubmit={handleFormSubmit} noValidate>
         <StyledHeadlineSmall sx={{ textAlign: 'center', color: variables.palette.on_surface }}>
           {t('confirmYourIdentity')}
         </StyledHeadlineSmall>
@@ -142,7 +151,7 @@ export const RecoveryCodeForm = ({ onSwitchToTOTP, onBackToLogin }: RecoveryCode
         <StyledMFAButton
           variant="contained"
           type="submit"
-          disabled={isSubmitting || isSessionExpired}
+          disabled={isSubmitting || isSessionExpired || isBlocked}
           data-testid="recovery-form-submit"
         >
           {t('continue')}

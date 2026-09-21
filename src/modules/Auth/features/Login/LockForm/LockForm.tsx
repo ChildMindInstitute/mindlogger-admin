@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { Avatar } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { useLogout } from 'shared/hooks/useLogout';
+import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard';
 import {
   StyledBodyMedium,
   StyledErrorText,
@@ -37,6 +38,7 @@ export const LockForm = () => {
   const userInitials = auth.useUserInitials();
   const fullName = `${firstName} ${lastName}`;
   const [errorMessage, setErrorMessage] = useState('');
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const { handleSubmit, control } = useForm<SignIn>({
     resolver: yupResolver(loginFormSchema()),
@@ -55,10 +57,17 @@ export const LockForm = () => {
     }
   };
 
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // The lock screen signs in like any other, so it starts a second session just as readily.
+    if (refuse()) return event.preventDefault();
+
+    handleSubmit(onSubmit)(event);
+  };
+
   return (
     <>
       <StyledWelcome>{t('curiousAdminPanel')}</StyledWelcome>
-      <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
+      <StyledForm onSubmit={handleFormSubmit} noValidate>
         <StyledHeadlineSmall>{t('login')}</StyledHeadlineSmall>
         <StyledLoginSubheader>
           <Trans i18nKey="lockDescription" />
@@ -87,7 +96,12 @@ export const LockForm = () => {
           />
         </StyledController>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-        <StyledButton variant="contained" type="submit" data-testid="lock-form-login">
+        <StyledButton
+          variant="contained"
+          type="submit"
+          disabled={isBlocked}
+          data-testid="lock-form-login"
+        >
           {t('login')}
         </StyledButton>
         <StyledButton

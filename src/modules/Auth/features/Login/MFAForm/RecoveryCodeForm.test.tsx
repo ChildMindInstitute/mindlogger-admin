@@ -5,6 +5,13 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RecoveryCodeForm } from './RecoveryCodeForm';
 
+const mockedVerifyRecoveryApi = vi.hoisted(() => vi.fn());
+
+vi.mock('api', async () => ({
+  ...(await vi.importActual('api')),
+  verifyMFARecoveryCodeApi: mockedVerifyRecoveryApi,
+}));
+
 const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
@@ -272,5 +279,43 @@ describe('RecoveryCodeForm', () => {
     await waitFor(() => {
       expect(input.value).toBe('ABCDE-12345');
     });
+  });
+});
+
+const mfaAuthState = {
+  mfaSession: { token: 'mfa-token-123', sessionId: 'session-123' },
+  authentication: { status: 'idle' as const, requestId: 'test-request-id', data: null },
+  totpVerification: { status: 'idle' as const },
+  recoveryVerification: { status: 'idle' as const },
+  isSessionExpired: false,
+  isAuthorized: false,
+  isLogoutInProgress: false,
+};
+
+describe('RecoveryCodeForm while a session is running in another tab', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedVerifyRecoveryApi.mockClear();
+  });
+
+  const renderBlocked = () =>
+    renderWithProviders(<RecoveryCodeForm />, {
+      preloadedState: { auth: { ...mfaAuthState, hasSessionElsewhere: true } },
+    });
+
+  // A recovery code signs the user in just as the TOTP one does.
+  it('refuses a submitted code and quiets the button', async () => {
+    renderBlocked();
+
+    fireEvent.submit(screen.getByTestId('recovery-form-submit').closest('form') as HTMLFormElement);
+
+    await waitFor(() => expect(screen.getByTestId('recovery-form-submit')).toBeDisabled());
+    expect(mockedVerifyRecoveryApi).not.toHaveBeenCalled();
+  });
+
+  it('leaves the button usable until it is pressed', () => {
+    renderBlocked();
+
+    expect(screen.getByTestId('recovery-form-submit')).toBeEnabled();
   });
 });
