@@ -18,6 +18,7 @@ export class LoginPage extends BasePage {
 
 
   async login(email: string, password: string) {
+    // TODO This is duplicated in utils.ui.performUiLogin
     await this.email.fill(email);
     await this.password.fill(password);
     await this.submit.click();

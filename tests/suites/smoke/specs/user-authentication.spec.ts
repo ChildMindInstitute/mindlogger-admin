@@ -2,9 +2,11 @@ import { test, expect } from '../../../fixtures/pages.fixture'
 import {AuthSelectors} from "../../../utils/selectors/auth.selectors";
 
 test.describe('User Authentication', () => {
-  test('User is logged in', async ({page}) => {
+  test('User is logged in', async ({page, appletListPage}) => {
+    await appletListPage.goto();
     await expect(page).toHaveURL(AuthSelectors.loggedInPath);
   })
+
   // test('User receives error message when no login credentials are used', async ({ loginPage, page }) => {
   //   await loginPage.goto();
   //   await loginPage.login('', '');
