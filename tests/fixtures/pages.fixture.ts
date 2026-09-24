@@ -4,7 +4,6 @@ import {AppletDetailsPage} from "../pages/applet-details.page";
 import {AppletListPage} from "../pages/applet-list.page";
 import {ForgotPasswordPage} from "../pages/forget-password.page";
 import {LoginPage} from "../pages/login.page";
-import {SettingsPage} from "../pages/settings.page";
 import {SignupPage} from "../pages/signup.page";
 
 
@@ -14,7 +13,6 @@ type PagesFixtures = {
   appletListPage: AppletListPage,
   forgotPasswordPage: ForgotPasswordPage,
   loginPage: LoginPage,
-  settingsPage: SettingsPage,
   signupPage: SignupPage
 }
 
@@ -35,10 +33,6 @@ export const test = base.extend<PagesFixtures>({
 
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
-  },
-
-  settingsPage: async ({ page }, use) => {
-    await use(new SettingsPage(page));
   },
 
   signupPage: async ({ page }, use) => {

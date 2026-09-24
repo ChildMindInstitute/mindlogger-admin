@@ -5,21 +5,14 @@ import {AuthSelectors} from "../utils/selectors/auth.selectors";
 export class ForgotPasswordPage extends BasePage {
   readonly emailInput: Locator;
   readonly submitButton: Locator;
-  readonly forgotPasswordLink: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.locator(AuthSelectors.fields.email);
-    this.submitButton = page.locator(AuthSelectors.fields.submitButton);
-    this.forgotPasswordLink = page.getByText('Forgot Password?');
+    this.emailInput = page.getByRole('textbox', { name: 'Email' });
+    this.submitButton = page.getByTestId('reset-form-reset');
   }
 
-  get urlPath() { return '/forgot-password'; }
-
-  async navigateFromLogin() {
-    await this.page.goto('/login');
-    await this.forgotPasswordLink.click();
-  }
+  get urlPath() { return '/auth/reset-password'; }
 
   async requestReset(email: string) {
     await this.emailInput.fill(email);

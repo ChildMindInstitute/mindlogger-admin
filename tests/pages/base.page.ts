@@ -11,7 +11,7 @@ export abstract class BasePage {
   get basePage(): Page { return this.page }
 
   // Override in subclasses to provide a path (e.g., '/login')
-  get urlPath(): string | null { return null; }
+  abstract get urlPath(): string;
 
   /**
    * Each page object should implement and know how to navigate to itself

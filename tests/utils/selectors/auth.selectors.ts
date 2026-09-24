@@ -10,5 +10,15 @@ export const AuthSelectors = {
     submitButton: 'button[type="submit"]',
     firstName: 'input[name="firstName"]',
     lastName: 'input[name="lastName"]'
+  },
+  role: {
+    email: 'Email',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    password: 'Password',
+    terms: 'I agree to the Master'
+  },
+  testId: {
+    createAccountButton: 'signup-form-signup'
   }
 }

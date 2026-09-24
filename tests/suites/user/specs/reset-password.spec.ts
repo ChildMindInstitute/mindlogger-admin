@@ -41,7 +41,7 @@ test.describe('Password Reset', () => {
   test('User can request password reset when logged out', async ({ forgotPasswordPage, page }) => {
     const email = (process.env as any).uat?.PLAYWRIGHT_EMAIL || '';
 
-    await forgotPasswordPage.navigateFromLogin();
+    await forgotPasswordPage.goto();
     await forgotPasswordPage.requestReset(email);
 
     // More flexible text matching - could be "Password reset link is sent" or variations

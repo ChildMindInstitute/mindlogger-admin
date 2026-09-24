@@ -19,9 +19,13 @@ export class LoginPage extends BasePage {
 
   async login(email: string, password: string) {
     // TODO This is duplicated in utils.ui.performUiLogin
-    await this.email.fill(email);
-    await this.password.fill(password);
-    await this.submit.click();
+    await this.page.getByRole('textbox', { name: 'Email' }).click();
+    await this.page.getByRole('textbox', { name: 'Email' }).fill(email);
+    await this.page.getByRole('textbox', { name: 'Password' }).click();
+    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+
+    // Submit the form
+    await this.page.getByTestId('login-form-signin').click();
   }
 
 
