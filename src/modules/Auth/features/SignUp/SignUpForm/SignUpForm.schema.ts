@@ -26,6 +26,7 @@ export const SignUpFormSchema = () => {
       email: getEmailValidationSchema(),
       firstName: yup.string().trim().required(firstNameRequired),
       lastName: yup.string().trim().required(lastNameRequired),
+      organizationName: yup.string().trim().required(t('organizationNameRequired')),
       password: yup
         .string()
         .required(passwordRequired)
