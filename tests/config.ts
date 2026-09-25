@@ -28,6 +28,6 @@ export const runtimeConfig = {
   genericEmail: process.env.PLAYWRIGHT_GENERIC_PASSWORD || "someuser@email.com",
   genericUserPassword: process.env.PLAYWRIGHT_GENERIC_PASSWORD || 'DefaultPassword123!',
 
-  userTokenFile: generateStorageFilename('storage','.auth', 'usertoken.json'),
-  adminTokenFile: generateStorageFilename('storage','.auth', 'admintoken.json')
+  userTokenFile: generateStorageFilename('tests', '.storage','auth', 'usertoken.json'),
+  adminTokenFile: generateStorageFilename('tests', '.storage','auth', 'admintoken.json')
 }

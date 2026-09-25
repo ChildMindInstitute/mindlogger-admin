@@ -2,6 +2,7 @@ import { Locator, Page } from '@playwright/test';
 import {BasePage} from "./base.page";
 import {AppletListSelectors} from "../utils/selectors/applet-list.selectors";
 
+// TODO This needs to be refactored for admin
 export class AppletListPage extends BasePage {
   readonly appletList: Locator;
   readonly appletCards: Locator;

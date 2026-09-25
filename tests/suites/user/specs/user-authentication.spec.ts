@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/pages.fixture'
 import {AuthSelectors} from "../../../utils/selectors/auth.selectors";
 
+// TODO This needs to be refactored for admin
 test.describe('User Authentication', () => {
   test('User receives error message when no login credentials are used', async ({ loginPage, page }) => {
     await loginPage.goto();

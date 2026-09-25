@@ -2,6 +2,7 @@ import { test, expect } from '../../../fixtures/all.fixtures'
 import {generateUniqueEmail} from "../../../utils/data/users";
 import {runtimeConfig} from "../../../config";
 
+// TODO This needs to be refactored for admin
 test.describe('Account Creation', () => {
   test('User can create an account through the web interface', async ({ signupPage, page }) => {
     const email = generateUniqueEmail(runtimeConfig.genericEmail);

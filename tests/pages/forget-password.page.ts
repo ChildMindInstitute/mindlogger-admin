@@ -2,6 +2,7 @@ import { Locator, Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import {AuthSelectors} from "../utils/selectors/auth.selectors";
 
+// TODO This needs to be refactored for admin
 export class ForgotPasswordPage extends BasePage {
   readonly emailInput: Locator;
   readonly submitButton: Locator;

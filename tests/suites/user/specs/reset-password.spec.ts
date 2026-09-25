@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/all.fixtures'
 import {generateRandomUser} from "../../../utils/data/users";
 
+// TODO This needs to be refactored for admin
 test.describe('Password Reset', () => {
   test('User can reset their password when logged in', async ({ loginPage, settingsPage, page, userApi }) => {
     // Create a new user via API

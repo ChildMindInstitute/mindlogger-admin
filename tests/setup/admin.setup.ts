@@ -9,5 +9,5 @@ setup('authenticate as admin', async ({ page }) => {
 
   await performUiLogin(page, AuthSelectors.loginPath, process.env.PLAYWRIGHT_ADMIN_EMAIL || '', process.env.PLAYWRIGHT_ADMIN_PASSWORD || '');
   await expect(page).toHaveURL(AuthSelectors.loggedInPath);
-  await page.context().storageState({ path: runtimeConfig.storageState });
+  await page.context().storageState({ path: runtimeConfig.adminTokenFile });
 });

@@ -22,7 +22,7 @@ export default defineConfig({
       testMatch: 'smoke/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: runtimeConfig.storageState,
+        storageState: runtimeConfig.adminTokenFile,
       },
       dependencies: ['setup']
     },
