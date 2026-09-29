@@ -161,5 +161,8 @@ describe('SignUpForm while a session is running in another tab', () => {
     });
 
     await waitFor(() => expect(mockedSignUpApi).toHaveBeenCalledTimes(1));
+    expect(mockedSignUpApi.mock.calls[0][0].body).toEqual(
+      expect.objectContaining({ msaAccepted: true }),
+    );
   });
 });
