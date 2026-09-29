@@ -45,7 +45,7 @@ export const SignUpForm = () => {
   const [showPasswordError, setShowPasswordError] = useState(false);
   const { isBlocked, refuse } = useSessionElsewhereGuard();
 
-  const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
+  const onSubmit = async ({ email, password, firstName, lastName, termsOfService }: SignUpData) => {
     setErrorMessage('');
     const { signUp } = auth.thunk;
     const body = {
@@ -53,6 +53,7 @@ export const SignUpForm = () => {
       password,
       firstName,
       lastName,
+      msaAccepted: !!termsOfService,
     };
 
     const result = await dispatch(signUp({ body }));
