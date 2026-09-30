@@ -23,18 +23,22 @@ const submitForm = async ({
   password,
   firstName,
   lastName,
+  organizationName = 'Example Organization',
   termsOfService,
 }: {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
+  organizationName?: string;
   termsOfService?: boolean;
 }) => {
   await userEvent.type(screen.getByLabelText(/Email/i), email);
   await userEvent.type(screen.getByLabelText(/Password/i), password);
   await userEvent.type(screen.getByLabelText(/First Name/i), firstName);
   await userEvent.type(screen.getByLabelText(/Last Name/i), lastName);
+
+  await userEvent.type(screen.getByLabelText(/Organization name/i), organizationName);
 
   if (termsOfService) {
     await userEvent.click(screen.getByTestId('signup-form-terms'));
@@ -51,6 +55,7 @@ describe('SignUp component tests', () => {
     inputAcceptsValue('Password', mockedPassword);
     inputAcceptsValue('First Name', 'fname');
     inputAcceptsValue('Last Name', 'lname');
+    inputAcceptsValue('Organization name', 'Example Organization');
   });
 
   test('should be able to validate SignUp form', async () => {
@@ -86,9 +91,23 @@ describe('SignUp component tests', () => {
     expect(await screen.findByText('Email is required')).toBeInTheDocument();
     expect(await screen.findByText('First name is required')).toBeInTheDocument();
     expect(await screen.findByText('Last name is required')).toBeInTheDocument();
+    expect(await screen.findByText('Organization name is required')).toBeInTheDocument();
     expect(
       await screen.findByText('Please agree to the Master Services Agreement'),
     ).toBeInTheDocument();
+  });
+
+  test('rejects an organization name containing only spaces', async () => {
+    await submitForm({
+      email: mockedEmail,
+      password: mockedPassword,
+      firstName: 'Ann',
+      lastName: 'Smith',
+      organizationName: '   ',
+      termsOfService: true,
+    });
+
+    expect(await screen.findByText('Organization name is required')).toBeInTheDocument();
   });
 
   it('shows password validation error', async () => {
@@ -161,5 +180,14 @@ describe('SignUpForm while a session is running in another tab', () => {
     });
 
     await waitFor(() => expect(mockedSignUpApi).toHaveBeenCalledTimes(1));
+    expect(mockedSignUpApi.mock.calls[0][0]).toEqual({
+      body: {
+        email: mockedEmail,
+        password: mockedPassword,
+        firstName: 'Ann',
+        lastName: 'Smith',
+        organizationName: 'Example Organization',
+      },
+    });
   });
 });
