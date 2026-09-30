@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 import { RecoveryCodeItem } from 'shared/api/api.mfa.types';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
+import { isValidMFACode, isValidRecoveryCode } from 'modules/Auth/utils/mfa.utils';
 
 import { parseError } from './ViewRecoveryCodes.utils';
 import { ErrorScenario, ErrorMetadata } from './ViewRecoveryCodes.types';
@@ -78,6 +79,12 @@ export const useViewRecoveryCodes = () => {
       return { success: false };
     }
 
+    if (!isValidMFACode(_code)) {
+      setError('invalidMFACode');
+
+      return { success: false };
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -128,6 +135,12 @@ export const useViewRecoveryCodes = () => {
   const handleVerifyRecoveryCode = async (_code: string): Promise<VerificationResult> => {
     if (!mfaToken) {
       setError('mfaSessionExpired');
+
+      return { success: false };
+    }
+
+    if (!isValidRecoveryCode(_code)) {
+      setError('invalidRecoveryCode');
 
       return { success: false };
     }

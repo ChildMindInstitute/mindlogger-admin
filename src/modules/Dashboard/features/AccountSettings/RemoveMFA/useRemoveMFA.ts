@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { mfaApi } from 'shared/api';
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { useAppSelector } from 'redux/store/hooks';
+import { isValidMFACode, isValidRecoveryCode } from 'modules/Auth/utils/mfa.utils';
 
 import { MFA_DISABLE_ERROR_MESSAGES } from './RemoveMFA.constants';
 import { parseError } from './RemoveMFA.utils';
@@ -12,6 +13,8 @@ import { ErrorScenario, ErrorMetadata } from './RemoveMFA.types';
 interface VerifyResult {
   success: boolean;
 }
+
+type CodeType = 'totp' | 'recovery';
 
 /**
  * Custom hook for managing MFA disable operations
@@ -79,9 +82,23 @@ export const useRemoveMFA = () => {
    * Step 2: Verify code (does NOT disable MFA)
    */
   const verifyCode = useCallback(
-    async (code: string): Promise<VerifyResult> => {
+    async (code: string, requestedCodeType?: CodeType): Promise<VerifyResult> => {
       if (!mfaToken) {
         setError(MFA_DISABLE_ERROR_MESSAGES.EXPIRED_SESSION);
+
+        return { success: false };
+      }
+
+      const codeType: CodeType = requestedCodeType ?? (code.length === 11 ? 'recovery' : 'totp');
+      const isValidCode =
+        codeType === 'recovery' ? isValidRecoveryCode(code) : isValidMFACode(code);
+
+      if (!isValidCode) {
+        setError(
+          codeType === 'recovery'
+            ? MFA_DISABLE_ERROR_MESSAGES.INVALID_RECOVERY_CODE
+            : MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE,
+        );
 
         return { success: false };
       }
@@ -102,8 +119,6 @@ export const useRemoveMFA = () => {
         return { success: true };
       } catch (err) {
         const axiosError = err as AxiosError;
-        // Detect if it's a recovery code (11 chars with dash) or TOTP (6 digits)
-        const codeType = code.length === 11 ? 'recovery' : 'totp';
         const parsedError = parseError(axiosError, codeType);
 
         setError(parsedError.message);

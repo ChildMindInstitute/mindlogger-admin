@@ -337,6 +337,30 @@ describe('useRemoveMFA', () => {
       });
     });
 
+    it('should reject a short verification code with the localized verification error', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      await waitFor(() => {
+        expect(result.current.mfaToken).toBe(mockMfaToken);
+      });
+
+      vi.mocked(axios.post).mockClear();
+
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
+      await act(async () => {
+        response = await result.current.verifyCode('12345', 'totp');
+      });
+
+      expect(response?.success).toBe(false);
+      expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_VERIFICATION_CODE);
+      expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
+    });
+
     it('should handle invalid recovery code error', async () => {
       mockMFADisableInitiate();
       const { result } = renderHook(() => useRemoveMFA());
@@ -361,6 +385,30 @@ describe('useRemoveMFA', () => {
       await waitFor(() => {
         expect(result.current.error).toBeTruthy();
       });
+    });
+
+    it('should reject a short recovery code with the localized recovery error', async () => {
+      mockMFADisableInitiate();
+      const { result } = renderHook(() => useRemoveMFA());
+
+      await act(async () => {
+        await result.current.initiateDisable();
+      });
+
+      await waitFor(() => {
+        expect(result.current.mfaToken).toBe(mockMfaToken);
+      });
+
+      vi.mocked(axios.post).mockClear();
+
+      let response: Awaited<ReturnType<typeof result.current.verifyCode>> | undefined;
+      await act(async () => {
+        response = await result.current.verifyCode('ABCDE', 'recovery');
+      });
+
+      expect(response?.success).toBe(false);
+      expect(result.current.error).toBe(MFA_DISABLE_ERROR_MESSAGES.INVALID_RECOVERY_CODE);
+      expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
     });
 
     it('should handle used recovery code error', async () => {
