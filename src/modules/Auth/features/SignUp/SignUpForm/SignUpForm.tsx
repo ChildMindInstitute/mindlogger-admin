@@ -12,6 +12,7 @@ import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard'
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { auth } from 'modules/Auth/state';
+import { useGetMsaVersionQuery } from 'modules/Auth/api/apiSlice';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
@@ -44,16 +45,25 @@ export const SignUpForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showPasswordError, setShowPasswordError] = useState(false);
   const { isBlocked, refuse } = useSessionElsewhereGuard();
+  // Refetch on every visit so the version matches what the server has now
+  const { data: msaVersion } = useGetMsaVersionQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  const onSubmit = async ({ email, password, firstName, lastName, termsOfService }: SignUpData) => {
+  const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
+    if (!msaVersion) {
+      setErrorMessage(t('msaVersionLoadError'));
+
+      return;
+    }
     const { signUp } = auth.thunk;
     const body = {
       email,
       password,
       firstName,
       lastName,
-      msaAccepted: !!termsOfService,
+      msaVersion,
     };
 
     const result = await dispatch(signUp({ body }));

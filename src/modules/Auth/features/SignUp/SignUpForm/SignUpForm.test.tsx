@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
@@ -141,6 +142,7 @@ describe('SignUpForm while a session is running in another tab', () => {
 
   test('signs up as usual when no other session is running', async () => {
     // signUp calls the API and then dispatches signIn, so both have to answer.
+    vi.mocked(axios.get).mockResolvedValue({ data: { result: { version: '2026-09-15' } } });
     mockedSignUpApi.mockResolvedValue({ data: {} });
     mockedSignInApi.mockResolvedValue({
       data: {
@@ -162,7 +164,27 @@ describe('SignUpForm while a session is running in another tab', () => {
 
     await waitFor(() => expect(mockedSignUpApi).toHaveBeenCalledTimes(1));
     expect(mockedSignUpApi.mock.calls[0][0].body).toEqual(
-      expect.objectContaining({ msaAccepted: true }),
+      expect.objectContaining({ msaVersion: '2026-09-15' }),
     );
+  });
+
+  test('does not sign up when the MSA version could not be loaded', async () => {
+    vi.mocked(axios.get).mockRejectedValue(new Error('network'));
+    renderWithProviders(<SignUpForm />);
+
+    await submitForm({
+      email: mockedEmail,
+      password: mockedPassword,
+      firstName: 'Ann',
+      lastName: 'Smith',
+      termsOfService: true,
+    });
+
+    expect(
+      await screen.findByText(
+        "We couldn't load the Master Services Agreement. Please refresh the page and try again.",
+      ),
+    ).toBeInTheDocument();
+    expect(mockedSignUpApi).not.toHaveBeenCalled();
   });
 });

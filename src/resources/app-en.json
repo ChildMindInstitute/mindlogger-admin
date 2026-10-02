@@ -1663,6 +1663,7 @@
   "teamMemberAlreadyInvited": "Team member already invited",
   "terms": "Terms",
   "masterServicesAgreement": "Master Services Agreement",
+  "msaVersionLoadError": "We couldn't load the Master Services Agreement. Please refresh the page and try again.",
   "termsOfService": "Terms of Service",
   "termsOfServiceAgreementRequired": "Please agree to the Master Services Agreement",
   "testInstruction": "Test Round Instruction",
