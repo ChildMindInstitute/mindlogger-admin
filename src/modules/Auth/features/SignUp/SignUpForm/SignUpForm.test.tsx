@@ -168,6 +168,31 @@ describe('SignUpForm while a session is running in another tab', () => {
     );
   });
 
+  test('asks to accept again when the MSA version is outdated', async () => {
+    vi.mocked(axios.get).mockClear();
+    vi.mocked(axios.get).mockResolvedValue({ data: { result: { version: '2026-09-15' } } });
+    mockedSignUpApi.mockRejectedValueOnce({
+      response: { data: { error_code: 'LEGAL.MSA_VERSION_OUTDATED' } },
+    });
+    renderWithProviders(<SignUpForm />);
+
+    await submitForm({
+      email: mockedEmail,
+      password: mockedPassword,
+      firstName: 'Ann',
+      lastName: 'Smith',
+      termsOfService: true,
+    });
+
+    expect(
+      await screen.findByText(
+        'The Master Services Agreement has been updated. Please review it and accept again.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
+    await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(2));
+  });
+
   test('does not sign up when the MSA version could not be loaded', async () => {
     vi.mocked(axios.get).mockRejectedValue(new Error('network'));
     renderWithProviders(<SignUpForm />);

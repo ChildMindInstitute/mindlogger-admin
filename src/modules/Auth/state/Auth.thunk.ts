@@ -17,6 +17,7 @@ import {
   signInApi,
   signUpApi,
   SignUpArgs,
+  SignUpError,
   verifyMFATOTPApi,
   verifyMFARecoveryCodeApi,
   MFAVerifyResponse,
@@ -127,9 +128,13 @@ export const signUp = createAsyncThunk(
 
       return await dispatch(signIn({ email, password }));
     } catch (exception) {
-      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
+      const error = exception as AxiosError<ApiErrorResponse & { error_code?: string }>;
+      const signUpError: SignUpError = {
+        message: getErrorMessage(error),
+        errorCode: error.response?.data?.error_code,
+      };
 
-      return rejectWithValue(errorMessage);
+      return rejectWithValue(signUpError);
     }
   },
 );

@@ -1664,6 +1664,7 @@
   "terms": "Terms",
   "masterServicesAgreement": "Master Services Agreement",
   "msaVersionLoadError": "We couldn't load the Master Services Agreement. Please refresh the page and try again.",
+  "msaVersionOutdated": "The Master Services Agreement has been updated. Please review it and accept again.",
   "termsOfService": "Terms of Service",
   "termsOfServiceAgreementRequired": "Please agree to the Master Services Agreement",
   "testInstruction": "Test Round Instruction",
