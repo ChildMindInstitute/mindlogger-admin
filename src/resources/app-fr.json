@@ -1662,6 +1662,8 @@
   "teamMemberAlreadyInvited": "Le membre de l'équipe a déjà été invité",
   "terms": "Conditions",
   "masterServicesAgreement": "Accord-cadre de services",
+  "msaVersionLoadError": "Impossible de charger l'Accord-cadre de services. Veuillez actualiser la page et réessayer.",
+  "msaVersionOutdated": "L'Accord-cadre de services a été mis à jour. Veuillez le consulter et l'accepter à nouveau.",
   "termsOfService": "Conditions d'utilisation",
   "termsOfServiceAgreementRequired": "Veuillez accepter l'accord-cadre de services",
   "testInstruction": "Instructions pour la manche de test",
