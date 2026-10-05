@@ -109,7 +109,12 @@ jobs:
 
       - name: Deploy
         run: |
-          aws s3 sync ./dist s3://cmiml-${{ inputs.env-name }}-admin-panel
+          # Hashed filenames don't change content and can be cached as immutable
+          aws s3 sync ./dist/assets s3://cmiml-${{ inputs.env-name }}-admin-panel/assets \
+            --cache-control "public,max-age=31536000,immutable"
+          # Everything else should be no-cache and revalidated on every load
+          aws s3 sync ./dist s3://cmiml-${{ inputs.env-name }}-admin-panel \
+            --exclude "assets/*" --cache-control "no-cache"
 
       - name: Invalidate Cloudfront caches
         run: |
