@@ -1,4 +1,4 @@
-import {test as teardown} from "playwright/types/test";
+import {test as teardown} from '@playwright/test';
 import fs from "fs";
 import {runtimeConfig} from "../config";
 

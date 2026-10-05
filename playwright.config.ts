@@ -16,6 +16,7 @@ export default defineConfig({
 
   projects: [
     { name: 'setup', testMatch: /setup\/admin\.setup\.ts/ }, // TODO Change this when there are more roles
+    { name: 'auth teardown', testMatch: /setup\/auth\.teardown\.ts/ },
 
     {
       name: 'smoke',
@@ -24,7 +25,8 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         storageState: runtimeConfig.adminTokenFile,
       },
-      dependencies: ['setup']
+      dependencies: ['setup'],
+      teardown: 'auth teardown'
     },
     // {
     //   name: 'e2e',
@@ -43,30 +45,5 @@ export default defineConfig({
     //   }
     // },
 
-    //TODO: Enable other browsers when needed.
-    //At the moment all browsers but Chrome fail.
-    //
-    // {
-    //   // Project for Firefox browser
-    //   name: 'firefox',
-    //   testMatch: /.*\.spec\.ts/,
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //     // Use prepared auth state.
-    //     storageState: authFile,
-    //   },
-    //   dependencies: ['setup'],
-    // },
-    // // Project for Safari browser
-    // {
-    //   name: 'safari',
-    //   testMatch: /.*\.spec\.ts/,
-    //   use: {
-    //     ...devices['Desktop Safari'],
-    //     // Use prepared auth state.
-    //     storageState: authFile,
-    //   },
-    //   dependencies: ['setup'],
-    // },
   ],
 });
