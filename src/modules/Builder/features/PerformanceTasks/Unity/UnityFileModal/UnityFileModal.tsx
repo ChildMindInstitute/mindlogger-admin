@@ -24,24 +24,31 @@ const UnityFileModal: React.FC<UnityFileModalProps> = memo(
       }
     };
 
+    const handleClose = () => {
+      setSelectedFile(null);
+      onClose();
+    };
+
     const handleSubmit = () => {
       if (selectedFile) {
         onUpload(selectedFile);
       }
-      onClose();
+      handleClose();
     };
 
     return (
       <Modal
         open={isOpen}
-        onClose={onClose}
+        onClose={handleClose}
         onSubmit={handleSubmit}
-        onSecondBtnSubmit={onClose}
+        onSecondBtnSubmit={handleClose}
+        disabledSubmit={!selectedFile}
         title={t('uploadUnityConfigFile')}
-        buttonText={t('import')}
+        buttonText={t('upload')}
         secondBtnText={t('cancel')}
         hasSecondBtn={false}
         submitBtnColor="primary"
+        footerStyles={{ justifyContent: 'flex-end' }}
         data-testid={dataTestid}
       >
         <StyledModalWrapper>
