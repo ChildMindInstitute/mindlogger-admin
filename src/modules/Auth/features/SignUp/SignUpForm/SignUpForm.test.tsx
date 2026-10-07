@@ -53,6 +53,19 @@ describe('SignUp component tests', () => {
     inputAcceptsValue('Last Name', 'lname');
   });
 
+  test('should render the Master Services Agreement acceptance wording with links', () => {
+    expect(screen.getByTestId('signup-form-terms')).toHaveTextContent(
+      'I am either authorized to sign on behalf of my organization and I agree to the Master Services Agreement, or my organization has already agreed to the Master Services Agreement.',
+    );
+
+    const msaLinks = screen.getAllByRole('link', { name: 'Master Services Agreement' });
+    expect(msaLinks).toHaveLength(2);
+    msaLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', 'https://www.gettingcurious.com/msa');
+      expect(link).toHaveAttribute('target', '_blank');
+    });
+  });
+
   test('should be able to validate SignUp form', async () => {
     await submitForm({
       email: 'test',
