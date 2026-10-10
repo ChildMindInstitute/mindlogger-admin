@@ -5,6 +5,7 @@ export type SignUpArgs = {
     email: string;
     firstName: string;
     lastName: string;
+    organizationName: string;
     password: string;
   };
 };

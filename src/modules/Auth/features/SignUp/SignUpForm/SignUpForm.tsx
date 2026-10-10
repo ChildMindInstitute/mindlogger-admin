@@ -38,6 +38,7 @@ export const SignUpForm = () => {
       firstName: '',
       lastName: '',
       password: '',
+      organizationName: '',
       termsOfService: false,
     },
   });
@@ -45,7 +46,13 @@ export const SignUpForm = () => {
   const [showPasswordError, setShowPasswordError] = useState(false);
   const { isBlocked, refuse } = useSessionElsewhereGuard();
 
-  const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
+  const onSubmit = async ({
+    email,
+    password,
+    firstName,
+    lastName,
+    organizationName,
+  }: SignUpData) => {
     setErrorMessage('');
     const { signUp } = auth.thunk;
     const body = {
@@ -53,6 +60,7 @@ export const SignUpForm = () => {
       password,
       firstName,
       lastName,
+      organizationName,
     };
 
     const result = await dispatch(signUp({ body }));
@@ -106,6 +114,15 @@ export const SignUpForm = () => {
           control={control}
           label={t('lastName')}
           data-testid="signup-form-lname"
+        />
+      </StyledController>
+      <StyledController>
+        <InputController
+          fullWidth
+          name="organizationName"
+          control={control}
+          label={t('organizationName')}
+          data-testid="signup-form-organization-name"
         />
       </StyledController>
 
