@@ -6,9 +6,13 @@ export type SignUpArgs = {
     firstName: string;
     lastName: string;
     password: string;
-    msaAccepted: boolean;
+    msaVersion: string;
   };
 };
+
+export type MsaVersionResponse = { result: { version: string } };
+
+export type SignUpError = { message: string; errorCode?: string };
 
 export type ResetPassword = { email: string };
 

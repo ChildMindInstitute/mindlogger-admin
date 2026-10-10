@@ -12,6 +12,8 @@ import { useSessionElsewhereGuard } from 'shared/hooks/useSessionElsewhereGuard'
 import { Mixpanel, MixpanelEventType } from 'shared/utils';
 import { PasswordRequirementsSection } from 'shared/components/PasswordRequirementsSection';
 import { auth } from 'modules/Auth/state';
+import { useGetMsaVersionQuery } from 'modules/Auth/api/apiSlice';
+import { SignUpError } from 'modules/Auth/api';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from 'shared/consts';
 
@@ -26,12 +28,13 @@ import {
 } from './SignUpForm.styles';
 import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
+import { MSA_VERSION_OUTDATED_CODE } from './SignUpForm.const';
 
 export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control, trigger, clearErrors } = useForm<SignUpData>({
+  const { handleSubmit, control, trigger, clearErrors, setValue } = useForm<SignUpData>({
     resolver: yupResolver(SignUpFormSchema()),
     defaultValues: {
       email: '',
@@ -44,16 +47,25 @@ export const SignUpForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showPasswordError, setShowPasswordError] = useState(false);
   const { isBlocked, refuse } = useSessionElsewhereGuard();
+  // Refetch on every visit so the version matches what the server has now
+  const { data: msaVersion, refetch: refetchMsaVersion } = useGetMsaVersionQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  const onSubmit = async ({ email, password, firstName, lastName, termsOfService }: SignUpData) => {
+  const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
+    if (!msaVersion) {
+      setErrorMessage(t('msaVersionLoadError'));
+
+      return;
+    }
     const { signUp } = auth.thunk;
     const body = {
       email,
       password,
       firstName,
       lastName,
-      msaAccepted: !!termsOfService,
+      msaVersion,
     };
 
     const result = await dispatch(signUp({ body }));
@@ -65,7 +77,16 @@ export const SignUpForm = () => {
     }
 
     if (signUp.rejected.match(result)) {
-      setErrorMessage(result.payload as string);
+      const { message, errorCode } = result.payload as SignUpError;
+      if (errorCode === MSA_VERSION_OUTDATED_CODE) {
+        // MSA changed while the page was open: make the user review and accept it again
+        setErrorMessage(t('msaVersionOutdated'));
+        setValue('termsOfService', false);
+        refetchMsaVersion();
+
+        return;
+      }
+      setErrorMessage(message);
     }
   };
 
