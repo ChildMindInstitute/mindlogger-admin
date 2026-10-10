@@ -1,0 +1,33 @@
+import {BasePage} from "./base.page";
+import {Locator, Page} from "@playwright/test";
+import {AuthSelectors} from "../utils/selectors/auth.selectors";
+
+export class LoginPage extends BasePage {
+  readonly email: Locator;
+  readonly password: Locator;
+  readonly submit: Locator;
+
+  public constructor(page: Page) {
+    super(page);
+    this.email = page.locator(AuthSelectors.fields.username);
+    this.password = page.locator(AuthSelectors.fields.password);
+    this.submit = page.locator(AuthSelectors.fields.submitButton);
+  }
+
+  get urlPath(): string { return "/auth"; }
+
+
+  async login(email: string, password: string) {
+    // TODO This is duplicated in utils.ui.performUiLogin
+    await this.page.getByRole('textbox', { name: 'Email' }).click();
+    await this.page.getByRole('textbox', { name: 'Email' }).fill(email);
+    await this.page.getByRole('textbox', { name: 'Password' }).click();
+    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+
+    // Submit the form
+    await this.page.getByTestId('login-form-signin').click();
+  }
+
+
+
+}
