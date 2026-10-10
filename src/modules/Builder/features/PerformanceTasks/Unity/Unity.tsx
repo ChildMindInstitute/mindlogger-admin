@@ -2,7 +2,16 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledCheckboxTooltipSvg,
+  StyledHeadlineLarge,
+  StyledTitleLarge,
+  theme,
+} from 'shared/styles';
+import { Tooltip } from 'shared/components';
+import { CheckboxController } from 'shared/components/FormComponents';
+import { useFeatureFlags } from 'shared/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
@@ -13,8 +22,9 @@ import { UnityFileButton } from './UnityFileButton';
 
 export const Unity = () => {
   const { t } = useTranslation();
-  const { setValue, watch } = useCustomFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
+  const { featureFlags } = useFeatureFlags();
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -83,6 +93,25 @@ export const Unity = () => {
           {t('performanceTasks.unity')}
         </StyledHeadlineLarge>
         <NameDescription data-testid={dataTestid} />
+        {featureFlags.enableActivityAssign && (
+          <Box sx={{ mb: theme.spacing(2.4) }}>
+            <CheckboxController
+              control={control}
+              name={`${fieldName}.autoAssign`}
+              label={
+                <StyledBodyLarge sx={{ position: 'relative' }}>
+                  <span>{t('autoAssignActivity')}</span>
+                  <Tooltip tooltipTitle={t('autoAssignTooltip')}>
+                    <span>
+                      <StyledCheckboxTooltipSvg id="more-info-outlined" />
+                    </span>
+                  </Tooltip>
+                </StyledBodyLarge>
+              }
+              data-testid={`${dataTestid}-auto-assign`}
+            />
+          </Box>
+        )}
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
           {t('unityInstructions')}
         </StyledTitleLarge>
