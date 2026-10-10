@@ -6,6 +6,7 @@ export type SignUpArgs = {
     firstName: string;
     lastName: string;
     password: string;
+    msaAccepted: boolean;
   };
 };
 
