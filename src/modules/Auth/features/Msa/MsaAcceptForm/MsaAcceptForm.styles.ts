@@ -1,14 +1,9 @@
-import { Box, Link, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexColumn, theme } from 'shared/styles';
 
-export const StyledMsaLink = styled(Link)`
-  color: ${variables.palette.secondary};
-`;
-
-export const StyledActions = styled(Box)`
-  display: flex;
-  justify-content: flex-end;
-  gap: ${theme.spacing(1.6)};
-  margin-top: ${theme.spacing(2.4)};
+// Paragraphs, error and checkbox sit one blank line apart, as in the Figma dialogue
+export const StyledMsaBody = styled(StyledFlexColumn)`
+  gap: ${theme.spacing(2.4)};
+  padding: ${theme.spacing(2.4, 3.2)};
 `;
