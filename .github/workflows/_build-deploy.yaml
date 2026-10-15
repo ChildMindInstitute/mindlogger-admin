@@ -46,7 +46,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Checkout
         with:
           ref: ${{ inputs.git-ref }}
@@ -63,13 +63,13 @@ jobs:
           aws-region: us-east-1
 
       - name: Load build config
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@v3
         with:
           secret-ids: |
             ,/CodeBuild/admin-panel/${{ inputs.env-name }}
           parse-json-secrets: true
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         name: Setup Node
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -133,7 +133,7 @@ jobs:
     needs:
       - build-deploy
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: "Send Slack message on failure"
         uses: rtCamp/action-slack-notify@v2
         env:

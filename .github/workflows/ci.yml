@@ -6,17 +6,17 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: cache
         with:
           path: |
@@ -35,12 +35,12 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -59,12 +59,12 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Setup node version
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'

@@ -28,6 +28,10 @@ type LogoutOptions = {
   isRemote?: boolean;
 };
 
+// A sibling's teardown clears the shared clock while this tab awaits its revoke call, which the
+// keep-alive reads as an idle end and would start a second, soft-locking logout.
+let isLogoutInProgress = false;
+
 export const useLogout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -46,7 +50,10 @@ export const useLogout = () => {
     // Every teardown funnels through here, so this is the one place that has to refuse. A tab that
     // slept through a logout and someone else signing in would clear a store that is theirs now,
     // signing them out of every tab. It leaves for the login page instead.
+    if (isLogoutInProgress) return;
     if (!ownsActiveSession()) return leaveEndedSession();
+
+    isLogoutInProgress = true;
 
     // The session is over from here, whoever ended it. Said before the teardown because this tab
     // holds its tokens until the revoke call comes back, and a sibling landing on the login page
@@ -92,6 +99,7 @@ export const useLogout = () => {
       // An idle logout never passes through startLogout, so the builder's unsaved-changes blocker
       // is still armed and would strand the user on a prompt this dead session cannot answer.
       navigate(page.login, { state: { [LocationStateKeys.ShouldNavigateWithoutPrompt]: true } });
+      isLogoutInProgress = false;
     }
   };
 };

@@ -11,6 +11,10 @@ import { variables } from 'shared/styles';
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg /*, StyledLink */ } from './AnnouncementBanner.styles';
 
+// To display <AnnouncementBanner /> uncomment in:
+// - src/modules/Auth/layouts/AuthLayout/AuthLayout.tsx for /auth routes
+// - src/shared/layouts/BaseLayout/BaseLayout.tsx for all other routes
+
 // Constant prefix for localStorage key
 const ANNOUNCEMENT_PREFIX = 'announcement-banner-dismissed';
 

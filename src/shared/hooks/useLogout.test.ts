@@ -271,13 +271,35 @@ describe('useLogout session sync', () => {
   // The revoke call is awaited before this tab tears itself down, so it spends that whole window
   // still holding its tokens. A sibling the logout has already emptied asks for a session in
   // exactly that window, and an answer would leave it on the login page showing the banner.
-  test('marks the session revoked before waiting on the revoke call', () => {
+  test('marks the session revoked before waiting on the revoke call', async () => {
     const { result } = renderLogout();
-    vi.mocked(axios.post).mockReturnValue(new Promise(() => {}));
+    let resolveRevoke: (value: unknown) => void = () => {};
+    vi.mocked(axios.post).mockReturnValueOnce(new Promise((resolve) => (resolveRevoke = resolve)));
 
-    void result.current();
+    const logout = result.current();
 
     expect(isSessionRevoked('family-1')).toBe(true);
+
+    resolveRevoke(null);
+    await logout;
+  });
+
+  // A sibling's teardown clears the shared clock mid-revoke, and the keep-alive answers with an
+  // idle logout of its own. That second call must not soft-lock a deliberate logout.
+  test('ignores a second logout while the first awaits its revoke call', async () => {
+    const { result } = renderLogout();
+    let resolveRevoke: (value: unknown) => void = () => {};
+    vi.mocked(axios.post).mockReturnValueOnce(new Promise((resolve) => (resolveRevoke = resolve)));
+
+    const logout = result.current();
+    await result.current({ shouldSoftLock: true, reason: 'idle', isRemote: true });
+    resolveRevoke(null);
+    await logout;
+
+    expect(mockedUseAppDispatch).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'auth/startSoftLock' }),
+    );
+    expect(mockedUseAppDispatch).toHaveBeenCalledTimes(3);
   });
 
   // The tabs a logout tears down remotely hold their tokens for a moment too.
