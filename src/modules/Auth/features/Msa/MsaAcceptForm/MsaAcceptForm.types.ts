@@ -6,5 +6,9 @@ export type MsaAcceptFormProps = {
   secondaryButtonText: string;
   onSecondaryClick: () => void;
   onAccept: () => void;
+  // Disables the form while the acceptance is being saved
+  isSaving?: boolean;
+  // Shown above the checkbox when saving failed; the accept button then reads "Try again"
+  error?: string;
   'data-testid'?: string;
 };

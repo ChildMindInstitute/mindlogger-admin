@@ -1049,6 +1049,7 @@
   "msaAcceptAndContinue": "Accept and continue",
   "msaAgreeLabel": "I have read and agree to the Master Services Agreement.",
   "msaReadLink": "Read the Master Services Agreement",
+  "msaSaving": "Saving…",
   "multipleRemoveAccessSuccess": "Access for <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below has been removed successfully.",
   "multipleRemoveAccessError": "Access for <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below has not been removed. Please try again.",
   "multipleSelectionHint": "A list of choices with a multiple answers",

@@ -24,4 +24,20 @@ describe('MsaAcceptForm', () => {
 
     expect(onAccept).toHaveBeenCalledTimes(1);
   });
+
+  it('shows the error and offers to try again', () => {
+    renderWithProviders(
+      <MsaAcceptForm
+        secondaryButtonText="Log out"
+        onSecondaryClick={vi.fn()}
+        onAccept={vi.fn()}
+        error="We couldn't save your acceptance"
+      >
+        <p>Body</p>
+      </MsaAcceptForm>,
+    );
+
+    expect(screen.getByText("We couldn't save your acceptance")).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  });
 });
