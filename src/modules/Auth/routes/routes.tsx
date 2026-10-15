@@ -8,6 +8,7 @@ import { ErrorFallback } from 'shared/components';
 import { routes } from './routes.const';
 
 const Lock = lazy(() => import('../pages/Lock'));
+const AcceptMsa = lazy(() => import('../pages/AcceptMsa'));
 
 export const authRoutes = () => (
   <>
@@ -31,4 +32,17 @@ export const authRoutes = () => (
       }
     />
   </>
+);
+
+// Rendered outside AuthLayout: the MSA page has its own plain background
+export const acceptMsaRoute = () => (
+  <Route
+    key={page.acceptMsa}
+    path={page.acceptMsa}
+    element={
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <AcceptMsa />
+      </ErrorBoundary>
+    }
+  />
 );
