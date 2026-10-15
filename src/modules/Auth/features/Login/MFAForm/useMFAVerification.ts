@@ -1,12 +1,17 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { MFAVerifyResponse } from 'modules/Auth/api';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch, useAppSelector } from 'redux/store';
+import { page } from 'resources';
 import { Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
 
 export type MFAVerificationType = 'totp' | 'recovery';
+
+const isMSARequired = (payload: MFAVerifyResponse | undefined) =>
+  Boolean(payload?.result && 'msaRequired' in payload.result && payload.result.msaRequired);
 
 /**
  * Custom hook for MFA verification logic
@@ -63,6 +68,13 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFATOTP({ totpCode: code }));
 
         if (verifyMFATOTP.fulfilled.match(result)) {
+          if (isMSARequired(result.payload)) {
+            // MSA must be accepted first; navigate before clearing the MFA session (guard race)
+            navigate(page.acceptMsa);
+            dispatch(auth.actions.clearMFASession());
+
+            return true;
+          }
           // Track login successful with MFA
           Mixpanel.track({
             action: MixpanelEventType.LoginSuccessful,
@@ -80,6 +92,13 @@ export const useMFAVerification = (type: MFAVerificationType) => {
         result = await dispatch(verifyMFARecoveryCode({ code }));
 
         if (verifyMFARecoveryCode.fulfilled.match(result)) {
+          if (isMSARequired(result.payload)) {
+            // MSA must be accepted first; navigate before clearing the MFA session (guard race)
+            navigate(page.acceptMsa);
+            dispatch(auth.actions.clearMFASession());
+
+            return true;
+          }
           // Track login successful with backup codes
           Mixpanel.track({
             action: MixpanelEventType.LoginSuccessful,

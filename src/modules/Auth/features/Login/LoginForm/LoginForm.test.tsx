@@ -155,6 +155,26 @@ describe('Login component tests', () => {
     expect(screen.getByTestId('login-form-signin')).toBeEnabled();
   });
 
+  test('goes to the MSA page when the MSA must be accepted', async () => {
+    mockedSignInApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          msaRequired: true,
+          msaToken: 'msa-token',
+          version: '2026-11-01',
+          userId: 'user-id',
+          userEmail: mockedEmail,
+          deadline: null,
+        },
+      },
+    });
+    renderWithProviders(<LoginForm />);
+
+    submitForm(mockedEmail, mockedPassword);
+
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith(page.acceptMsa));
+  });
+
   describe('Mixpanel Tracking', () => {
     beforeEach(() => {
       vi.mocked(Mixpanel.track).mockClear();

@@ -71,6 +71,13 @@ export const LoginForm = () => {
         return;
       }
 
+      // MSA must be accepted first; the MSA session is set by the reducer
+      if (response?.result && 'msaRequired' in response.result && response.result.msaRequired) {
+        navigate(page.acceptMsa);
+
+        return;
+      }
+
       // Standard login flow (MFA not enabled)
       // If user logged in as the same user that was soft-locked, restore their nav state
       if (data.email === softLockData?.email) {
@@ -151,10 +158,11 @@ export const LoginForm = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Clear any existing MFA session when login page mounts
+  // Clear any existing MFA/MSA session when login page mounts
   // This prevents browser back/forward navigation from accessing MFA with stale session
   useEffect(() => {
     dispatch(auth.actions.clearMFASession());
+    dispatch(auth.actions.clearMSASession());
   }, [dispatch]);
 
   const handleCreateAccountClick = () => {
