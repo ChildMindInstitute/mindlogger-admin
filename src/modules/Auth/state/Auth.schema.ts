@@ -26,6 +26,14 @@ export type MFASession = {
   sessionId: string;
 };
 
+// MSA session: login held back until the user accepts the MSA
+export type MSASession = {
+  token: string;
+  version: string;
+  email: string;
+  deadline: string | null;
+};
+
 // MFA Verification state - separate for TOTP and Recovery
 export type MFAVerificationState = {
   status: 'idle' | 'loading' | 'error';
@@ -39,6 +47,7 @@ export type AuthSchema = {
   isLogoutInProgress: boolean;
   softLockData?: SoftLockData;
   mfaSession?: MFASession;
+  msaSession?: MSASession;
   totpVerification: MFAVerificationState; // TOTP-specific errors
   recoveryVerification: MFAVerificationState; // Recovery-specific errors
   isSessionExpired: boolean; // Shared terminal state
