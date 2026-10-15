@@ -5,7 +5,13 @@ import { authStorage } from 'shared/utils/authStorage';
 import { clearSessionState } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 
 import { AuthSchema, SoftLockData, MFASession, MSASession } from './Auth.schema';
-import { signIn, getUserDetails, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import {
+  signIn,
+  getUserDetails,
+  verifyMFATOTP,
+  verifyMFARecoveryCode,
+  acceptMSAAtLogin,
+} from './Auth.thunk';
 import {
   createAuthFulfilledData,
   createAuthPendingData,
@@ -132,6 +138,20 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
 
   builder.addCase(getUserDetails.rejected, (state, action) => {
     createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
+  });
+
+  builder.addCase(acceptMSAAtLogin.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
+  });
+
+  // msaSession is cleared by the MSA page after navigation, like mfaSession
+  builder.addCase(acceptMSAAtLogin.fulfilled, (state, action) => {
+    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload.result.user });
+  });
+
+  // The MSA page shows the error; the login form must not
+  builder.addCase(acceptMSAAtLogin.rejected, (state) => {
+    state.authentication.status = 'idle';
   });
 
   // MFA TOTP verification reducers

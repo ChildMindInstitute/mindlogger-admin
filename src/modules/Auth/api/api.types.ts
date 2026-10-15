@@ -73,6 +73,17 @@ export type MSARequiredResponse = {
   };
 };
 
+// Accept the MSA during login, using the token from MSARequiredResponse
+export type MSAAcceptAtLoginRequest = {
+  msaToken: string;
+  msaVersion: string;
+};
+
+export type MSAAcceptAtLoginError = {
+  message: string;
+  errorCode?: string;
+};
+
 // Combined login response type
 export type LoginResponse = StandardLoginResponse | MFARequiredResponse | MSARequiredResponse;
 

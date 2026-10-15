@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { signInApi, verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
+import { acceptMSAAtLoginApi, signInApi, verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
 import { setupStore } from 'redux/store';
 import {
   clearSessionState,
@@ -10,19 +10,21 @@ import {
 import { MS_IN_MIN } from 'shared/hooks/useSessionKeepAlive/useSessionKeepAlive.const';
 import { authStorage } from 'shared/utils/authStorage';
 
-import { signIn, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import { acceptMSAAtLogin, signIn, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
 
 vi.mock('api', async () => {
   const actual = await vi.importActual<typeof import('api')>('api');
 
   return {
     ...actual,
+    acceptMSAAtLoginApi: vi.fn(),
     signInApi: vi.fn(),
     verifyMFATOTPApi: vi.fn(),
     verifyMFARecoveryCodeApi: vi.fn(),
   };
 });
 
+const mockAcceptMSAAtLoginApi = vi.mocked(acceptMSAAtLoginApi);
 const mockSignInApi = vi.mocked(signInApi);
 const mockVerifyMFATOTPApi = vi.mocked(verifyMFATOTPApi);
 const mockVerifyMFARecoveryCodeApi = vi.mocked(verifyMFARecoveryCodeApi);
@@ -176,5 +178,40 @@ describe('Auth signIn thunk', () => {
     });
     expect(state.isAuthorized).toBe(false);
     expect(authStorage.getAccessToken()).toBeFalsy();
+  });
+});
+
+describe('Auth acceptMSAAtLogin thunk', () => {
+  it('accepts with the MSA session and completes the login', async () => {
+    authStorage.clear();
+    mockAcceptMSAAtLoginApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+          user: { id: 'user-id', email: 'admin@example.com', firstName: 'A', lastName: 'B' },
+        },
+      },
+    } as any);
+
+    const store = setupStore({
+      auth: {
+        ...getPreloadedState().auth,
+        msaSession: {
+          token: 'msa-token',
+          version: '2026-11-01',
+          email: 'admin@example.com',
+          deadline: null,
+        },
+      },
+    });
+    const result = await store.dispatch(acceptMSAAtLogin());
+
+    expect(acceptMSAAtLogin.fulfilled.match(result)).toBe(true);
+    expect(mockAcceptMSAAtLoginApi).toHaveBeenCalledWith(
+      { msaToken: 'msa-token', msaVersion: '2026-11-01' },
+      expect.anything(),
+    );
+    expect(authStorage.getAccessToken()).toBe('access');
+    expect(store.getState().auth.isAuthorized).toBe(true);
   });
 });
