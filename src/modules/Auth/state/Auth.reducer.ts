@@ -30,6 +30,7 @@ export const reducers = {
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
     state.mfaSession = undefined;
+    state.msaSession = undefined;
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
@@ -58,6 +59,9 @@ export const reducers = {
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
+  },
+  clearMSASession: (state: AuthSchema): void => {
+    state.msaSession = undefined;
   },
   // Clear TOTP error (when user types in TOTP form)
   clearTOTPError: (state: AuthSchema): void => {
@@ -93,6 +97,16 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
         sessionId: result.mfaSessionId,
       };
       // Don't set authentication data yet
+      state.authentication.status = 'idle';
+      state.authentication.requestId = action.meta.requestId;
+    } else if (result && 'msaRequired' in result && result.msaRequired) {
+      // No tokens until the MSA is accepted
+      state.msaSession = {
+        token: result.msaToken,
+        version: result.version,
+        email: result.userEmail,
+        deadline: result.deadline,
+      };
       state.authentication.status = 'idle';
       state.authentication.requestId = action.meta.requestId;
     } else {

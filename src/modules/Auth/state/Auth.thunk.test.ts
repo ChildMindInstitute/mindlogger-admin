@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
+import { signInApi, verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
 import { setupStore } from 'redux/store';
 import {
   clearSessionState,
@@ -8,19 +8,22 @@ import {
   setLastActivityAt,
 } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 import { MS_IN_MIN } from 'shared/hooks/useSessionKeepAlive/useSessionKeepAlive.const';
+import { authStorage } from 'shared/utils/authStorage';
 
-import { verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import { signIn, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
 
 vi.mock('api', async () => {
   const actual = await vi.importActual<typeof import('api')>('api');
 
   return {
     ...actual,
+    signInApi: vi.fn(),
     verifyMFATOTPApi: vi.fn(),
     verifyMFARecoveryCodeApi: vi.fn(),
   };
 });
 
+const mockSignInApi = vi.mocked(signInApi);
 const mockVerifyMFATOTPApi = vi.mocked(verifyMFATOTPApi);
 const mockVerifyMFARecoveryCodeApi = vi.mocked(verifyMFARecoveryCodeApi);
 
@@ -117,5 +120,36 @@ describe('Auth MFA thunks', () => {
     expect(state.recoveryVerification.status).toBe('error');
     expect(state.recoveryVerification.displayError).toBeDefined();
     expect(state.mfaSession).toBeDefined();
+  });
+});
+
+describe('Auth signIn thunk', () => {
+  it('keeps the MSA session and stores no tokens when the MSA must be accepted', async () => {
+    authStorage.clear();
+    mockSignInApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          msaRequired: true,
+          msaToken: 'msa-token',
+          version: '2026-11-01',
+          userId: 'user-id',
+          userEmail: 'admin@example.com',
+          deadline: null,
+        },
+      },
+    } as any);
+
+    const store = setupStore();
+    await store.dispatch(signIn({ email: 'admin@example.com', password: 'password' }));
+
+    const state = store.getState().auth;
+    expect(state.msaSession).toEqual({
+      token: 'msa-token',
+      version: '2026-11-01',
+      email: 'admin@example.com',
+      deadline: null,
+    });
+    expect(state.isAuthorized).toBe(false);
+    expect(authStorage.getAccessToken()).toBeFalsy();
   });
 });

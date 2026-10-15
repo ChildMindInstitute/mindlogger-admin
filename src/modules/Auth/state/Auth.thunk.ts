@@ -77,6 +77,11 @@ export const signIn = createAsyncThunk(
           return data;
         }
 
+        // MSA must be accepted before tokens are issued
+        if ('msaRequired' in data.result && data.result.msaRequired) {
+          return data;
+        }
+
         // Standard login flow (MFA not required)
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
