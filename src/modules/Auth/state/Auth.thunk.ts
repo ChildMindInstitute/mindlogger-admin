@@ -22,6 +22,7 @@ import {
   MFAVerifyResponse,
   MFAVerifySuccessResponse,
   MSARequiredResponse,
+  StandardLoginResponse,
 } from 'api';
 
 import { getMfaErrorResult } from '../utils/mfa.utils';
@@ -71,6 +72,19 @@ const isMSARequiredResponse = (
 ): response is MSARequiredResponse =>
   Boolean(response?.result && 'msaRequired' in response.result && response.result.msaRequired);
 
+// Saves the tokens of a completed login and identifies the user to tracking
+const storeLoginSession = ({ token, user }: StandardLoginResponse['result']) => {
+  authStorage.setRefreshToken(token.refreshToken);
+  authStorage.setAccessToken(token.accessToken);
+  // A new session starts its own clock. One left by a session whose tab never logged out
+  // would put this one past its deadline, and the tracker only writes when there is none.
+  setLastActivityAt(Date.now());
+
+  datadogRum.setUser({ id: user.id });
+  Mixpanel.login(user.id);
+  FeatureFlags.login(user.id);
+};
+
 export const signIn = createAsyncThunk(
   'auth/login',
   async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
@@ -90,16 +104,7 @@ export const signIn = createAsyncThunk(
         }
 
         // Standard login flow (MFA not required)
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
-
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        storeLoginSession(data.result);
       }
 
       return data;
@@ -193,16 +198,7 @@ export const verifyMFATOTP = createAsyncThunk(
       }
 
       if (data?.result) {
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
-
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        storeLoginSession(data.result);
       }
 
       return data;
@@ -243,16 +239,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       }
 
       if (data?.result) {
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
-
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        storeLoginSession(data.result);
       }
 
       return data;
