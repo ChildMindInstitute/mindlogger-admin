@@ -62,4 +62,20 @@ describe('AcceptMsa', () => {
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith(page.dashboard));
   });
+
+  it('shows the deadline copy when the grace period has ended', () => {
+    renderWithProviders(<AcceptMsa />, {
+      preloadedState: {
+        auth: {
+          ...preloadedState.auth,
+          msaSession: { ...preloadedState.auth.msaSession, deadline: '2026-12-11' },
+        },
+      },
+    });
+
+    expect(
+      screen.getByText('Accept the updated Master Services Agreement to continue to Curious Admin'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('December 11, 2026').tagName).toBe('STRONG');
+  });
 });

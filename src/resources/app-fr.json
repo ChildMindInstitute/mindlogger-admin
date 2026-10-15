@@ -1047,6 +1047,8 @@
   "moveItem": "Déplacer l'Élément",
   "msaAcceptAndContinue": "Accepter et continuer",
   "msaAgreeLabel": "J'ai lu et j'accepte l'Accord-cadre de services.",
+  "msaDeadlinePassedBody": "La période d'examen de l'Accord-cadre de services mis à jour a pris fin le <strong>{{date}}</strong>. Acceptez-le pour continuer à utiliser Curious Admin.",
+  "msaDeadlinePassedTitle": "Acceptez l'Accord-cadre de services mis à jour pour continuer vers Curious Admin",
   "msaFirstTimeBody": "Curious Admin dispose de son propre accord qui couvre la façon dont vous configurez et gérez les activités et les données des participants. Consultez-le et acceptez-le pour continuer.",
   "msaFirstTimeTitle": "Acceptez l'Accord-cadre de services pour commencer à utiliser Curious Admin",
   "msaOtherAppsNote": "Vous pouvez toujours utiliser les applications Web et Mobile. Cette exigence ne s'applique qu'à Curious Admin.",

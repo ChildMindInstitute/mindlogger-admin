@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { page } from 'resources';
 import { StyledBodyLarge, StyledLabelMedium, variables } from 'shared/styles';
+import { getLongDate, parseDateToMidnightLocal } from 'shared/utils/dateFormat';
 
 import { MsaAcceptForm, MsaLink } from '../../features/Msa';
 import { navigateToLibrary } from '../../utils/navigateToLibrary';
@@ -53,11 +54,24 @@ const AcceptMsa = () => {
     setError(t('msaSaveError'));
   };
 
+  // A deadline means the user's grace period has ended (B1); none means first time in admin (B2)
+  const { deadline } = msaSession;
+  const body = deadline ? (
+    <Trans
+      t={t}
+      i18nKey="msaDeadlinePassedBody"
+      values={{ date: getLongDate(parseDateToMidnightLocal(deadline)) }}
+      components={{ strong: <strong /> }}
+    />
+  ) : (
+    t('msaFirstTimeBody')
+  );
+
   return (
     <StyledAcceptMsaPage>
       <StyledMsaCard>
         <MsaAcceptForm
-          title={t('msaFirstTimeTitle')}
+          title={t(deadline ? 'msaDeadlinePassedTitle' : 'msaFirstTimeTitle')}
           secondaryButtonText={t('logOut')}
           onSecondaryClick={handleLogOut}
           onAccept={handleAccept}
@@ -65,7 +79,7 @@ const AcceptMsa = () => {
           error={error}
           data-testid="accept-msa"
         >
-          <StyledBodyLarge>{t('msaFirstTimeBody')}</StyledBodyLarge>
+          <StyledBodyLarge>{body}</StyledBodyLarge>
           <MsaLink />
           <StyledBodyLarge>{t('msaOtherAppsNote')}</StyledBodyLarge>
         </MsaAcceptForm>
