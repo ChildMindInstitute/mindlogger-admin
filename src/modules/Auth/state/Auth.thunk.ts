@@ -22,6 +22,7 @@ import {
   verifyMFARecoveryCodeApi,
   MFAVerifyResponse,
   MFAVerifySuccessResponse,
+  MSARequiredResponse,
 } from 'api';
 
 import { getMfaErrorResult } from '../utils/mfa.utils';
@@ -64,6 +65,12 @@ const hasValidMFAVerifyResponse = (
 
   return false;
 };
+
+// Admin login held back until the MSA is accepted
+const isMSARequiredResponse = (
+  response: MFAVerifyResponse | undefined,
+): response is MSARequiredResponse =>
+  Boolean(response?.result && 'msaRequired' in response.result && response.result.msaRequired);
 
 export const signIn = createAsyncThunk(
   'auth/login',
@@ -181,6 +188,9 @@ export const verifyMFATOTP = createAsyncThunk(
       );
       const { data } = response || {};
 
+      // MSA must be accepted before tokens are issued
+      if (isMSARequiredResponse(data)) return data;
+
       if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid verification code');
 
@@ -227,6 +237,9 @@ export const verifyMFARecoveryCode = createAsyncThunk(
         signal,
       );
       const { data } = response || {};
+
+      // MSA must be accepted before tokens are issued
+      if (isMSARequiredResponse(data)) return data;
 
       if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid recovery code');
