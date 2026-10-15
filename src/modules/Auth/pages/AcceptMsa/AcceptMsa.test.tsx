@@ -1,0 +1,65 @@
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import { page } from 'resources';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
+
+import AcceptMsa from './AcceptMsa';
+
+const mockedAcceptMSAAtLoginApi = vi.hoisted(() => vi.fn());
+
+vi.mock('api', async () => ({
+  ...(await vi.importActual('api')),
+  acceptMSAAtLoginApi: mockedAcceptMSAAtLoginApi,
+}));
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+const preloadedState = {
+  auth: {
+    msaSession: {
+      token: 'msa-token',
+      version: '2026-11-01',
+      email: 'admin@example.com',
+      deadline: null,
+    },
+    authentication: { status: 'idle' as const, requestId: '', data: null },
+    totpVerification: { status: 'idle' as const },
+    recoveryVerification: { status: 'idle' as const },
+    isSessionExpired: false,
+    isAuthorized: false,
+    isLogoutInProgress: false,
+  },
+};
+
+describe('AcceptMsa', () => {
+  it('accepts the MSA and goes to the dashboard', async () => {
+    mockedAcceptMSAAtLoginApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+          user: { id: 'user-id', email: 'admin@example.com', firstName: 'A', lastName: 'B' },
+        },
+      },
+    });
+    renderWithProviders(<AcceptMsa />, { preloadedState });
+
+    expect(screen.getByText('Signed in as admin@example.com')).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByLabelText('I have read and agree to the Master Services Agreement.'),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Accept and continue' }));
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith(page.dashboard));
+  });
+});
