@@ -9,7 +9,12 @@ describe('MsaAcceptForm', () => {
   it('enables accepting only once the agreement is checked', async () => {
     const onAccept = vi.fn();
     renderWithProviders(
-      <MsaAcceptForm secondaryButtonText="Log out" onSecondaryClick={vi.fn()} onAccept={onAccept}>
+      <MsaAcceptForm
+        title="Title"
+        secondaryButtonText="Log out"
+        onSecondaryClick={vi.fn()}
+        onAccept={onAccept}
+      >
         <p>Body</p>
       </MsaAcceptForm>,
     );
@@ -28,6 +33,7 @@ describe('MsaAcceptForm', () => {
   it('shows the error and offers to try again', () => {
     renderWithProviders(
       <MsaAcceptForm
+        title="Title"
         secondaryButtonText="Log out"
         onSecondaryClick={vi.fn()}
         onAccept={vi.fn()}

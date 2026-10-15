@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 
 export type MsaAcceptFormProps = {
-  // Copy shown above the checkbox, e.g. the title and body of the screen
+  title: string;
+  // Copy shown above the checkbox
   children: ReactNode;
   secondaryButtonText: string;
   onSecondaryClick: () => void;

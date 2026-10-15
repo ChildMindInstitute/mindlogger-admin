@@ -1,24 +1,33 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, FormControlLabel } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Link } from '@mui/material';
 
-import { StyledBodyLarge, StyledErrorText } from 'shared/styles';
+import {
+  StyledDialogActions,
+  StyledDialogHeader,
+  StyledDialogTitle,
+} from 'shared/components/Modal/Modal.styles';
+import { StyledBodyLarge, StyledErrorText, StyledFlexTopCenter } from 'shared/styles';
 
 import { MSA_URL } from './MsaAcceptForm.const';
-import { StyledActions, StyledMsaLink } from './MsaAcceptForm.styles';
+import { StyledMsaBody } from './MsaAcceptForm.styles';
 import { MsaAcceptFormProps } from './MsaAcceptForm.types';
 
 export const MsaLink = () => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledMsaLink href={MSA_URL} target="_blank" rel="noreferrer">
-      {t('msaReadLink')}
-    </StyledMsaLink>
+    <StyledBodyLarge>
+      <Link href={MSA_URL} target="_blank" rel="noreferrer" underline="always">
+        {t('msaReadLink')}
+      </Link>
+    </StyledBodyLarge>
   );
 };
 
+// Content of the MSA dialogue: title, copy, checkbox and actions
 export const MsaAcceptForm = ({
+  title,
   children,
   secondaryButtonText,
   onSecondaryClick,
@@ -39,41 +48,48 @@ export const MsaAcceptForm = ({
 
   return (
     <>
-      {children}
-      {error && (
-        <StyledErrorText marginTop={0} data-testid={`${dataTestid}-error`}>
-          {error}
-        </StyledErrorText>
-      )}
-      <FormControlLabel
-        disabled={isSaving}
-        control={
-          <Checkbox
-            checked={isAgreed}
-            onChange={(event) => setIsAgreed(event.target.checked)}
-            data-testid={`${dataTestid}-checkbox`}
-          />
-        }
-        label={<StyledBodyLarge>{t('msaAgreeLabel')}</StyledBodyLarge>}
-      />
-      <StyledActions>
-        <Button
-          variant="text"
+      <StyledDialogHeader>
+        <StyledDialogTitle data-testid={`${dataTestid}-title`}>{title}</StyledDialogTitle>
+      </StyledDialogHeader>
+      <StyledMsaBody>
+        {children}
+        {error && (
+          <StyledErrorText marginTop={0} marginBottom={0} data-testid={`${dataTestid}-error`}>
+            {error}
+          </StyledErrorText>
+        )}
+        <FormControlLabel
           disabled={isSaving}
-          onClick={onSecondaryClick}
-          data-testid={`${dataTestid}-secondary`}
-        >
-          {secondaryButtonText}
-        </Button>
-        <Button
-          variant="contained"
-          disabled={!isAgreed || isSaving}
-          onClick={onAccept}
-          data-testid={`${dataTestid}-accept`}
-        >
-          {getAcceptText()}
-        </Button>
-      </StyledActions>
+          control={
+            <Checkbox
+              checked={isAgreed}
+              onChange={(event) => setIsAgreed(event.target.checked)}
+              data-testid={`${dataTestid}-checkbox`}
+            />
+          }
+          label={<StyledBodyLarge>{t('msaAgreeLabel')}</StyledBodyLarge>}
+        />
+      </StyledMsaBody>
+      <StyledDialogActions actionsAlign="end">
+        <StyledFlexTopCenter sx={{ gap: 1.6 }}>
+          <Button
+            variant="text"
+            disabled={isSaving}
+            onClick={onSecondaryClick}
+            data-testid={`${dataTestid}-secondary`}
+          >
+            {secondaryButtonText}
+          </Button>
+          <Button
+            variant="contained"
+            disabled={!isAgreed || isSaving}
+            onClick={onAccept}
+            data-testid={`${dataTestid}-accept`}
+          >
+            {getAcceptText()}
+          </Button>
+        </StyledFlexTopCenter>
+      </StyledDialogActions>
     </>
   );
 };
