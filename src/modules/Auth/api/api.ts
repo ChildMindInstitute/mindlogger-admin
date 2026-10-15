@@ -13,6 +13,8 @@ import {
   MFATOTPVerifyRequest,
   MFARecoveryCodeVerifyRequest,
   MFAVerifyResponse,
+  MSAAcceptAtLoginRequest,
+  StandardLoginResponse,
 } from './api.types';
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
@@ -71,3 +73,6 @@ export const verifyMFARecoveryCodeApi = (
   data: MFARecoveryCodeVerifyRequest,
   signal?: AbortSignal,
 ) => apiClient.post<MFAVerifyResponse>('/auth/mfa/recovery-codes/verify', data, { signal });
+
+export const acceptMSAAtLoginApi = (data: MSAAcceptAtLoginRequest, signal?: AbortSignal) =>
+  apiClient.post<StandardLoginResponse>('/auth/msa/accept', data, { signal });

@@ -10,6 +10,7 @@ import { ApiErrorResponse } from 'shared/state/Base';
 import { FeatureFlags } from 'shared/utils/featureFlags';
 import { setLastActivityAt } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 import {
+  acceptMSAAtLoginApi,
   getUserDetailsApi,
   ResetPassword,
   resetPasswordApi,
@@ -21,6 +22,7 @@ import {
   verifyMFARecoveryCodeApi,
   MFAVerifyResponse,
   MFAVerifySuccessResponse,
+  MSAAcceptAtLoginError,
   MSARequiredResponse,
   StandardLoginResponse,
 } from 'api';
@@ -245,6 +247,36 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       return data;
     } catch (exception) {
       return rejectWithValue(getMfaErrorResult(exception, 'recovery'));
+    }
+  },
+);
+
+// Accepts the MSA during login and completes it with the tokens returned
+export const acceptMSAAtLogin = createAsyncThunk(
+  'auth/acceptMSAAtLogin',
+  async (_: void, { getState, rejectWithValue, signal }) => {
+    try {
+      const { msaSession } = (getState() as RootState).auth;
+
+      if (!msaSession) {
+        throw new Error('MSA session not found');
+      }
+
+      const { data } = await acceptMSAAtLoginApi(
+        { msaToken: msaSession.token, msaVersion: msaSession.version },
+        signal,
+      );
+      storeLoginSession(data.result);
+
+      return data;
+    } catch (exception) {
+      const error = exception as AxiosError<ApiErrorResponse & { error_code?: string }>;
+      const result: MSAAcceptAtLoginError = {
+        message: getErrorMessage(error),
+        errorCode: error.response?.data?.error_code,
+      };
+
+      return rejectWithValue(result);
     }
   },
 );
