@@ -18,6 +18,10 @@ export const getDayName = (date: Date) =>
 export const getMonthName = (date: Date, length?: NameLength) =>
   date.toLocaleString(i18n.language, { month: length || NameLength.Long });
 
+// e.g. "December 11, 2026" in English, "11 décembre 2026" in French
+export const getLongDate = (date: Date) =>
+  date.toLocaleDateString(i18n.language, { month: 'long', day: 'numeric', year: 'numeric' });
+
 export const formatToNumberDate = (date: Date) => format(new Date(date), DateFormats.YearMonthDay);
 
 /**
