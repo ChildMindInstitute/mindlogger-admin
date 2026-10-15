@@ -84,6 +84,31 @@ describe('Auth MFA thunks', () => {
 
   // A backgrounded tab can miss its idle logout, leaving its clock behind. Read by the new
   // session, it ended the sign-in as soon as it landed.
+  it('keeps the MSA session and stores no tokens when TOTP verify requires the MSA', async () => {
+    authStorage.clear();
+    mockVerifyMFATOTPApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          msaRequired: true,
+          msaToken: 'msa-token',
+          version: '2026-11-01',
+          userId: 'user-id',
+          userEmail: 'admin@example.com',
+          deadline: '2026-12-31',
+        },
+      },
+    } as any);
+
+    const store = setupStore(getPreloadedState());
+    const result = await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
+
+    expect(verifyMFATOTP.fulfilled.match(result)).toBe(true);
+    const state = store.getState().auth;
+    expect(state.msaSession?.deadline).toBe('2026-12-31');
+    expect(state.isAuthorized).toBe(false);
+    expect(authStorage.getAccessToken()).toBeFalsy();
+  });
+
   it('starts a fresh clock over one left by a session that never logged out', async () => {
     clearSessionState();
     setLastActivityAt(Date.now() - 60 * MS_IN_MIN);
