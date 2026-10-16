@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
+import { banners } from 'redux/modules';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { page } from 'resources';
 import { LocationStateKeys } from 'shared/types';
@@ -11,15 +12,16 @@ import { getLongDate, parseDateToMidnightLocal } from 'shared/utils/dateFormat';
 
 import { MSAAcceptAtLoginError } from '../../api';
 import { MsaAcceptForm, MsaLink } from '../../features/Msa';
-import { navigateToLibrary } from '../../utils/navigateToLibrary';
+import { navigateAfterLogin } from '../../utils/navigateAfterLogin';
 import { RELOGIN_ERROR_KEYS } from './AcceptMsa.const';
 import { StyledAcceptMsaPage, StyledMsaCard, StyledSignedInAs } from './AcceptMsa.styles';
 
 const AcceptMsa = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
-  const { msaSession } = useAppSelector((state) => state.auth);
+  const { msaSession, softLockData } = useAppSelector((state) => state.auth);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>();
 
@@ -47,7 +49,15 @@ const AcceptMsa = () => {
 
     if (acceptMSAAtLogin.fulfilled.match(result)) {
       // Navigate first, then clear session so the route guard doesn't send the user to login
-      navigateToLibrary(navigate);
+      navigateAfterLogin(navigate, {
+        email: msaSession.email,
+        softLockData,
+        from: location.state?.[LocationStateKeys.From],
+      });
+      if (softLockData) {
+        dispatch(auth.actions.endSoftLock());
+        dispatch(banners.actions.removeBanner({ key: 'SoftLockWarningBanner' }));
+      }
       dispatch(auth.actions.clearMSASession());
 
       return;

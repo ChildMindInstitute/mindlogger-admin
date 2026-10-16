@@ -79,6 +79,40 @@ describe('AcceptMsa', () => {
     expect(screen.getByText('December 11, 2026').tagName).toBe('STRONG');
   });
 
+  it('returns to the soft-locked page after accepting', async () => {
+    mockedAcceptMSAAtLoginApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+          user: { id: 'user-id', email: 'admin@example.com', firstName: 'A', lastName: 'B' },
+        },
+      },
+    });
+    renderWithProviders(<AcceptMsa />, {
+      preloadedState: {
+        auth: {
+          ...preloadedState.auth,
+          softLockData: {
+            email: 'admin@example.com',
+            redirectTo: '/builder/applet-id',
+            workspace: null,
+          },
+        },
+      },
+    });
+
+    await userEvent.click(
+      screen.getByLabelText('I have read and agree to the Master Services Agreement.'),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Accept and continue' }));
+
+    await waitFor(() =>
+      expect(mockNavigate).toHaveBeenCalledWith('/builder/applet-id', {
+        state: { workspace: null },
+      }),
+    );
+  });
+
   it('sends the user back to log in when the MSA token has expired', async () => {
     mockedAcceptMSAAtLoginApi.mockRejectedValueOnce({
       response: { data: { error_code: 'AUTH.MSA.TOKEN_EXPIRED' } },

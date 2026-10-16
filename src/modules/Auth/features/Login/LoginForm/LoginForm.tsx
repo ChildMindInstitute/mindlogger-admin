@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SignIn } from 'api';
 import { auth } from 'modules/Auth/state';
-import { navigateToLibrary } from 'modules/Auth/utils';
+import { navigateAfterLogin } from 'modules/Auth/utils';
 import { banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
@@ -76,25 +76,18 @@ export const LoginForm = () => {
 
       // MSA must be accepted first; the MSA session is set by the reducer
       if (response?.result && 'msaRequired' in response.result && response.result.msaRequired) {
-        navigate(page.acceptMsa);
+        // Pass the location state on so accepting can return to where login would have gone
+        navigate(page.acceptMsa, { state: location.state });
 
         return;
       }
 
       // Standard login flow (MFA not enabled)
-      // If user logged in as the same user that was soft-locked, restore their nav state
-      if (data.email === softLockData?.email) {
-        navigate(softLockData?.redirectTo, {
-          state: { [LocationStateKeys.Workspace]: softLockData.workspace },
-        });
-      } else {
-        const fromUrl = location.state?.[LocationStateKeys.From];
-        if (fromUrl) {
-          navigate(fromUrl);
-        } else {
-          navigateToLibrary(navigate);
-        }
-      }
+      navigateAfterLogin(navigate, {
+        email: data.email,
+        softLockData,
+        from: location.state?.[LocationStateKeys.From],
+      });
 
       Mixpanel.track({
         action: MixpanelEventType.LoginSuccessful,

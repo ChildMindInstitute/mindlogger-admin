@@ -172,7 +172,9 @@ describe('Login component tests', () => {
 
     submitForm(mockedEmail, mockedPassword);
 
-    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith(page.acceptMsa));
+    await waitFor(() =>
+      expect(mockedNavigate).toHaveBeenCalledWith(page.acceptMsa, expect.anything()),
+    );
   });
 
   describe('Mixpanel Tracking', () => {
