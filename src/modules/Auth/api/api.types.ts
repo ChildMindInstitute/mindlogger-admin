@@ -78,6 +78,17 @@ export type MSAAcceptAtLoginError = {
   errorCode?: string;
 };
 
+// MSA status of a logged-in user: grace means it can still be dismissed until the deadline
+export type MsaStatusResult = {
+  status: 'accepted' | 'grace' | 'required';
+  version: string;
+  deadline: string | null;
+};
+
+export type MsaStatusResponse = {
+  result: MsaStatusResult;
+};
+
 // Combined login response type
 export type LoginResponse = StandardLoginResponse | MFARequiredResponse | MSARequiredResponse;
 
