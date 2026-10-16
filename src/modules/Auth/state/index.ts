@@ -54,6 +54,8 @@ export const auth = {
     ),
   useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
     useAppSelector(({ auth: { isLogoutInProgress } }) => isLogoutInProgress),
+  useMsaPromptPending: (): boolean =>
+    useAppSelector(({ auth: { msaPromptPending } }) => !!msaPromptPending),
   useSoftLockData: (): AuthSchema['softLockData'] =>
     useAppSelector(({ auth: { softLockData } }) => softLockData),
   useSessionElsewhere: (): AuthSchema['hasSessionElsewhere'] =>

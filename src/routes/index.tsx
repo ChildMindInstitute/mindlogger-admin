@@ -8,6 +8,7 @@ import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
 import { acceptMsaRoute, authRoutes } from 'modules/Auth/routes';
+import { MsaGracePrompt } from 'modules/Auth/features/Msa';
 import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
@@ -63,6 +64,7 @@ const AppRoutes = () => {
         )}
         <AppletNotFoundPopup />
         <NoPermissionPopup />
+        {isAuthorized && <MsaGracePrompt />}
         <SessionKeepAlive />
       </Router>
     </>
