@@ -45,6 +45,7 @@ export const reducers = {
     state.isAuthorized = false;
     state.mfaSession = undefined;
     state.msaSession = undefined;
+    state.msaPromptPending = false;
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
@@ -76,6 +77,12 @@ export const reducers = {
   },
   clearMSASession: (state: AuthSchema): void => {
     state.msaSession = undefined;
+  },
+  showMsaPrompt: (state: AuthSchema): void => {
+    state.msaPromptPending = true;
+  },
+  dismissMsaPrompt: (state: AuthSchema): void => {
+    state.msaPromptPending = false;
   },
   // Clear TOTP error (when user types in TOTP form)
   clearTOTPError: (state: AuthSchema): void => {
@@ -121,6 +128,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     } else {
       // Normal login flow - set user data
       createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
     }
   });
 
@@ -170,6 +178,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     } else {
       // Set user data - mfaSession is cleared by useMFAVerification after navigation
       createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
     }
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
@@ -228,6 +237,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     } else {
       // Set user data - mfaSession is cleared by useMFAVerification after navigation
       createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
     }
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };

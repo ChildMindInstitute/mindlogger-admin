@@ -48,6 +48,7 @@ export type AuthSchema = {
   softLockData?: SoftLockData;
   mfaSession?: MFASession;
   msaSession?: MSASession;
+  msaPromptPending?: boolean; // Show the MSA grace prompt once after a fresh sign-in
   totpVerification: MFAVerificationState; // TOTP-specific errors
   recoveryVerification: MFAVerificationState; // Recovery-specific errors
   isSessionExpired: boolean; // Shared terminal state
