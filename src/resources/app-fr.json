@@ -1054,6 +1054,7 @@
   "msaFirstTimeTitle": "Acceptez l'Accord-cadre de services pour commencer à utiliser Curious Admin",
   "msaOtherAppsNote": "Vous pouvez toujours utiliser les applications Web et Mobile. Cette exigence ne s'applique qu'à Curious Admin.",
   "msaReadLink": "Lire l'Accord-cadre de services",
+  "msaReminderBanner": "Acceptez l'Accord-cadre de services mis à jour avant le <strong>{{date}}</strong> pour continuer à utiliser Curious Admin. <reviewLink>Consulter et accepter</reviewLink>",
   "msaRemindMeLater": "Me le rappeler plus tard",
   "msaSaveError": "Nous n'avons pas pu enregistrer votre acceptation. Vérifiez votre connexion Internet et réessayez.",
   "msaSaving": "Enregistrement…",

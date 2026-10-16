@@ -1055,6 +1055,7 @@
   "msaFirstTimeTitle": "Accept the Master Services Agreement to start using Curious Admin",
   "msaOtherAppsNote": "You can still use the Web and Mobile apps. This requirement only applies to Curious Admin.",
   "msaReadLink": "Read the Master Services Agreement",
+  "msaReminderBanner": "Accept the updated Master Services Agreement by <strong>{{date}}</strong> to keep using Curious Admin. <reviewLink>Review and accept</reviewLink>",
   "msaRemindMeLater": "Remind me later",
   "msaSaveError": "We couldn't save your acceptance, check your internet connection and try again.",
   "msaSaving": "Saving…",
