@@ -10,6 +10,7 @@ export const enum LocationStateKeys {
   From = 'from',
   Workspace = 'workspace',
   Data = 'data',
+  LoginError = 'loginError',
 }
 
 export type LocationState = Partial<{
@@ -19,4 +20,5 @@ export type LocationState = Partial<{
   [LocationStateKeys.From]: Location;
   [LocationStateKeys.Workspace]: Workspace;
   [LocationStateKeys.Data]: SingleApplet;
+  [LocationStateKeys.LoginError]: string;
 }>;

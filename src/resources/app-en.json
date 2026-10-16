@@ -1057,6 +1057,7 @@
   "msaSaveError": "We couldn't save your acceptance, check your internet connection and try again.",
   "msaSaving": "Saving…",
   "msaSignedInAs": "Signed in as {{email}}",
+  "msaVersionChanged": "The Master Services Agreement was just updated. Please log in again to review it.",
   "multipleRemoveAccessSuccess": "Access for <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below has been removed successfully.",
   "multipleRemoveAccessError": "Access for <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below has not been removed. Please try again.",
   "multipleSelectionHint": "A list of choices with a multiple answers",

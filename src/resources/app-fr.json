@@ -1056,6 +1056,7 @@
   "msaSaveError": "Nous n'avons pas pu enregistrer votre acceptation. Vérifiez votre connexion Internet et réessayez.",
   "msaSaving": "Enregistrement…",
   "msaSignedInAs": "Connecté(e) en tant que {{email}}",
+  "msaVersionChanged": "L'Accord-cadre de services vient d'être mis à jour. Veuillez vous reconnecter pour le consulter.",
   "multipleRemoveAccessSuccess": "L'accès de <1>{{firstName}} {{lastName}} ({{email}})</1> à la liste des Applets ci-dessous a été supprimé avec succès.",
   "multipleRemoveAccessError": "L'accès de <1>{{firstName}} {{lastName}} ({{email}})</1> à la liste des applets ci-dessous n'a pas été supprimé. Veuillez réessayer.",
   "multipleSelectionHint": "Une liste de choix avec des réponses multiples",

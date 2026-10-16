@@ -78,4 +78,23 @@ describe('AcceptMsa', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('December 11, 2026').tagName).toBe('STRONG');
   });
+
+  it('sends the user back to log in when the MSA token has expired', async () => {
+    mockedAcceptMSAAtLoginApi.mockRejectedValueOnce({
+      response: { data: { error_code: 'AUTH.MSA.TOKEN_EXPIRED' } },
+    });
+    renderWithProviders(<AcceptMsa />, { preloadedState });
+
+    await userEvent.click(
+      screen.getByLabelText('I have read and agree to the Master Services Agreement.'),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Accept and continue' }));
+
+    await waitFor(() =>
+      expect(mockNavigate).toHaveBeenCalledWith(page.login, {
+        replace: true,
+        state: { loginError: 'Your session has expired. Please log in again.' },
+      }),
+    );
+  });
 });
