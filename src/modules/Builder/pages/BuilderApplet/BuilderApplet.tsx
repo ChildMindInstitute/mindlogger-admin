@@ -5,6 +5,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
 import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
+import { MsaReminderBanner } from 'modules/Auth/features/Msa';
 import { themes } from 'modules/Builder/state';
 import { AppletFormValues } from 'modules/Builder/types';
 import { workspaces } from 'redux/modules';
@@ -164,7 +165,13 @@ export const BuilderApplet = () => {
         {isAppletInitialized ? (
           <>
             {isLoading && <Spinner />}
-            <LinkedTabs hiddenHeader={hiddenHeader} tabs={tabs} isBuilder />
+            <LinkedTabs
+              hiddenHeader={hiddenHeader}
+              tabs={tabs}
+              isBuilder
+              // Activity and flow pages show their own banner under their own tabs
+              belowTabs={!hiddenHeader && <MsaReminderBanner />}
+            />
             <SaveAndPublish />
           </>
         ) : (

@@ -6,6 +6,7 @@ import { StyledDirectoryUpButton, StyledTitleSmall } from 'shared/styles/styledC
 import { LinkedTabs, Svg } from 'shared/components';
 import { page } from 'resources';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { MsaReminderBanner } from 'modules/Auth/features/Msa';
 import { variables } from 'shared/styles';
 
 import { getActivityTabs } from './BuilderActivity.utils';
@@ -62,7 +63,11 @@ export const BuilderActivity = () => {
             <Outlet />
           </>
         ) : (
-          <LinkedTabs tabs={getActivityTabs({ activityId, appletId }, tabErrors)} isBuilder />
+          <LinkedTabs
+            tabs={getActivityTabs({ activityId, appletId }, tabErrors)}
+            isBuilder
+            belowTabs={<MsaReminderBanner />}
+          />
         ))}
     </StyledBuilderActivityBody>
   );
