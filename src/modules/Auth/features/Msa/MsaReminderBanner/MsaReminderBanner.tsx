@@ -1,3 +1,4 @@
+import { differenceInCalendarDays } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { auth } from 'modules/Auth/state';
@@ -6,6 +7,7 @@ import { Banner } from 'shared/components/Banners/Banner';
 import { getLongDate, parseDateToMidnightLocal } from 'shared/utils/dateFormat';
 
 import { useGetMsaStatusQuery } from '../../../api/msaApiSlice';
+import { MSA_FINAL_DAYS } from './MsaReminderBanner.const';
 import { StyledReviewLink } from './MsaReminderBanner.styles';
 
 // Reminds users in the MSA grace period to accept before the deadline
@@ -16,12 +18,19 @@ export const MsaReminderBanner = () => {
 
   if (msaStatus?.status !== 'grace' || !msaStatus.deadline) return null;
 
+  const deadline = parseDateToMidnightLocal(msaStatus.deadline);
+  const isFinalDays = differenceInCalendarDays(deadline, new Date()) <= MSA_FINAL_DAYS;
+
   return (
-    <Banner severity="warning" duration={null} data-testid="msa-reminder-banner">
+    <Banner
+      severity={isFinalDays ? 'error' : 'warning'}
+      duration={null}
+      data-testid="msa-reminder-banner"
+    >
       <Trans
         t={t}
-        i18nKey="msaReminderBanner"
-        values={{ date: getLongDate(parseDateToMidnightLocal(msaStatus.deadline)) }}
+        i18nKey={isFinalDays ? 'msaFinalDaysBanner' : 'msaReminderBanner'}
+        values={{ date: getLongDate(deadline) }}
         components={{
           strong: <strong />,
           reviewLink: (
