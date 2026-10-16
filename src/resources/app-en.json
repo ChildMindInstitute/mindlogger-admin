@@ -1051,6 +1051,7 @@
   "msaAgreeLabel": "I have read and agree to the Master Services Agreement.",
   "msaDeadlinePassedBody": "The review period for the updated Master Services Agreement ended on <strong>{{date}}</strong>. Accept it to keep using Curious Admin.",
   "msaDeadlinePassedTitle": "Accept the updated Master Services Agreement to continue to Curious Admin",
+  "msaFinalDaysBanner": "<strong>Your access to Curious Admin pauses after {{date}}</strong> unless you accept the updated Master Services Agreement. <reviewLink>Review and accept</reviewLink>",
   "msaFirstTimeBody": "Curious Admin has its own agreement covering how you set up and manage activities and participant data. Review and accept it to continue.",
   "msaFirstTimeTitle": "Accept the Master Services Agreement to start using Curious Admin",
   "msaOtherAppsNote": "You can still use the Web and Mobile apps. This requirement only applies to Curious Admin.",
