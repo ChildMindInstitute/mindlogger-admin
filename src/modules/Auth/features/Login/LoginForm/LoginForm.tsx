@@ -52,7 +52,10 @@ export const LoginForm = () => {
     },
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  // Pages that send the user back to log in again can pass the reason
+  const [errorMessage, setErrorMessage] = useState<string>(
+    location.state?.[LocationStateKeys.LoginError] ?? '',
+  );
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');
     const { signIn } = auth.thunk;

@@ -5,11 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from 'modules/Auth/state';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { page } from 'resources';
+import { LocationStateKeys } from 'shared/types';
 import { StyledBodyLarge, StyledLabelMedium, variables } from 'shared/styles';
 import { getLongDate, parseDateToMidnightLocal } from 'shared/utils/dateFormat';
 
+import { MSAAcceptAtLoginError } from '../../api';
 import { MsaAcceptForm, MsaLink } from '../../features/Msa';
 import { navigateToLibrary } from '../../utils/navigateToLibrary';
+import { RELOGIN_ERROR_KEYS } from './AcceptMsa.const';
 import { StyledAcceptMsaPage, StyledMsaCard, StyledSignedInAs } from './AcceptMsa.styles';
 
 const AcceptMsa = () => {
@@ -46,6 +49,18 @@ const AcceptMsa = () => {
       // Navigate first, then clear session so the route guard doesn't send the user to login
       navigateToLibrary(navigate);
       dispatch(auth.actions.clearMSASession());
+
+      return;
+    }
+
+    // The login page clears the MSA session when it mounts
+    const reloginErrorKey =
+      RELOGIN_ERROR_KEYS[(result.payload as MSAAcceptAtLoginError)?.errorCode ?? ''];
+    if (reloginErrorKey) {
+      navigate(page.login, {
+        replace: true,
+        state: { [LocationStateKeys.LoginError]: t(reloginErrorKey) },
+      });
 
       return;
     }
