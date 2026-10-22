@@ -93,6 +93,26 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 * `yarn test:related` - Runs tests only for modified files
 * `yarn test:nowatch` - Runs test suite once with the `watchAll=false` flag
 
+### Translation reports
+
+Using Node 24 (`nvm use`), run these commands from the Admin directory:
+
+* `yarn translations:missing` — English keys with no string translation in another language.
+* `yarn translations:empty` — Translations that are empty or contain only whitespace.
+* `yarn translations:same` — Translations that exactly match the English text.
+
+Each command compares `src/resources/app-*.json` against `app-en.json`, including
+nested keys and individual plural forms. It reports only its category, showing
+the key and English text, grouped by language, with totals per language.
+
+Missing translations can still display English in Admin because of its fallback.
+Identical strings can be intentional, such as language names or placeholders;
+review them before changing them.
+
+These commands are manual developer tools, not CI checks. They do not modify
+translation files and exit successfully even when findings exist. Invalid arguments,
+file read errors, and invalid translation JSON produce a failing exit code.
+
 ## Environment Variables
 
 | Key                              | Required | Default value         | Description                                                    |
