@@ -93,25 +93,33 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 * `yarn test:related` - Runs tests only for modified files
 * `yarn test:nowatch` - Runs test suite once with the `watchAll=false` flag
 
-### Translation reports
+### Translation report
 
-Using Node 24 (`nvm use`), run these commands from the Admin directory:
+Using Node 24 (`nvm use`), run `yarn translations:report` from the Admin directory.
+It compares `src/resources/app-*.json` against `app-en.json`, including nested keys
+and individual plural forms, and creates a new folder under `translation-reports/`.
+The command prints the full output path.
 
-* `yarn translations:missing` — English keys with no string translation in another language.
-* `yarn translations:empty` — Translations that are empty or contain only whitespace.
-* `yarn translations:same` — Translations that exactly match the English text.
+Each folder contains only `translations-report.xlsx`, with four worksheets:
 
-Each command compares `src/resources/app-*.json` against `app-en.json`, including
-nested keys and individual plural forms. It reports only its category, showing
-the key and English text, grouped by language, with totals per language.
+* **Summary** — counts per language for each category.
+* **Missing** — English keys without a usable string translation.
+* **Empty** — translations that are blank or contain only whitespace.
+* **Same as English** — translations that exactly match the English text.
 
-Missing translations can still display English in Admin because of its fallback.
-Identical strings can be intentional, such as language names or placeholders;
-review them before changing them.
+Each category sheet includes all target languages, with columns for Language,
+File, Translation key, English text, and Current translation. Use the filter
+dropdown in the **Language** column header to show the language you need.
 
-These commands are manual developer tools, not CI checks. They do not modify
-translation files and exit successfully even when findings exist. Invalid arguments,
-file read errors, and invalid translation JSON produce a failing exit code.
+Send the workbook alongside the translation files you provide separately.
+The Excel workbook is a review report, not an import format.
+Identical strings can be intentional and should be reviewed before changing them.
+
+Each run creates a separate folder so previous workbooks are
+preserved. Generated folders are ignored by Git. This is a manual developer tool,
+not a CI check, and does not modify source translations. Findings do not cause a
+failing exit code; invalid arguments, invalid translation JSON, and file read/write
+errors do.
 
 ## Environment Variables
 
