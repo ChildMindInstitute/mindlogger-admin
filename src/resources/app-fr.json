@@ -902,6 +902,8 @@
   "lastName": "Nom de Famille",
   "lastNamePlaceholder": "Rogers",
   "lastNameRequired": "Le nom de famille est requis",
+  "organizationName": "Nom de l’organisation",
+  "organizationNameRequired": "Le nom de l’organisation est requis",
   "latestActive": "Dernière activité",
   "latestActivity": "Dernière Activité",
   "lastActive": "Dernière activité",
