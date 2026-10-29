@@ -600,6 +600,7 @@ export const getNewPerformanceTask = ({
     name,
     description,
     isHidden: false,
+    autoAssign: true,
     items: getItems(),
     isPerformanceTask: true,
     performanceTaskType,
