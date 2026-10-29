@@ -63,7 +63,12 @@ describe('resolveSessionConfig', () => {
   // The default 5 minute lead against a timeout QA shortened to 3, which without the cap would
   // open the warning at once and leave it open, freezing the activity it pauses.
   test('caps the warning at half the idle timeout', () => {
-    expect(resolveSessionConfig({ REACT_APP_IDLE_TIMEOUT_MIN: '3' }).warningLeadMs).toBe(90000);
+    expect(
+      resolveSessionConfig({
+        REACT_APP_IDLE_TIMEOUT_MIN: '3',
+        REACT_APP_IDLE_WARNING_MIN: '5',
+      }).warningLeadMs,
+    ).toBe(90000);
   });
 
   test('leaves a warning shorter than half the timeout alone', () => {
