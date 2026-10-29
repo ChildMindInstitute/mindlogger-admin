@@ -21,18 +21,24 @@ export const UnityFileButton: React.FC<UnityFileButtonProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  return isValidFile ? (
-    <UnityFilePreview fileContent={fileContent} />
-  ) : (
-    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(2),
+      }}
+    >
+      {isValidFile && <UnityFilePreview fileContent={fileContent} />}
       <Button
-        variant="text"
-        startIcon={<Svg id="add" width={18} height={18} />}
+        startIcon={<Svg id={isValidFile ? 'edit' : 'add'} />}
+        variant="contained"
+        color="primary"
         onClick={onOpenModal}
-        sx={{ ml: theme.spacing(-1) }}
-        data-testid="builder-activities-add-activity"
+        sx={{ alignSelf: 'flex-start' }}
+        data-testid="builder-activity-unity-file-modal-button"
       >
-        {t('upload')}
+        {t(isValidFile ? 'unityUpdateFile' : 'uploadFile')}
       </Button>
     </Box>
   );
