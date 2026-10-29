@@ -16,6 +16,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.ts', 'dotenv/config'],
     globalSetup: './src/vitest.global-setup.ts',
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'], // only include unit/integration tests
     poolOptions: {
       forks: {
         // cap forks below core count to avoid timeout from resource overload on heavy tests
