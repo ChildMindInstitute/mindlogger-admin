@@ -96,6 +96,7 @@ export const Unity = () => {
         {featureFlags.enableActivityAssign && (
           <Box sx={{ mb: theme.spacing(2.4) }}>
             <CheckboxController
+              key={`${fieldName}.autoAssign`}
               control={control}
               name={`${fieldName}.autoAssign`}
               label={
