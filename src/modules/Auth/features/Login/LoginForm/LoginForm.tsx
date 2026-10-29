@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SignIn } from 'api';
 import { auth } from 'modules/Auth/state';
-import { navigateToLibrary } from 'modules/Auth/utils';
+import { navigateAfterLogin } from 'modules/Auth/utils';
 import { banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
@@ -52,7 +52,10 @@ export const LoginForm = () => {
     },
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  // Pages that send the user back to log in again can pass the reason
+  const [errorMessage, setErrorMessage] = useState<string>(
+    location.state?.[LocationStateKeys.LoginError] ?? '',
+  );
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');
     const { signIn } = auth.thunk;
@@ -71,20 +74,20 @@ export const LoginForm = () => {
         return;
       }
 
-      // Standard login flow (MFA not enabled)
-      // If user logged in as the same user that was soft-locked, restore their nav state
-      if (data.email === softLockData?.email) {
-        navigate(softLockData?.redirectTo, {
-          state: { [LocationStateKeys.Workspace]: softLockData.workspace },
-        });
-      } else {
-        const fromUrl = location.state?.[LocationStateKeys.From];
-        if (fromUrl) {
-          navigate(fromUrl);
-        } else {
-          navigateToLibrary(navigate);
-        }
+      // MSA must be accepted first; the MSA session is set by the reducer
+      if (response?.result && 'msaRequired' in response.result && response.result.msaRequired) {
+        // Pass the location state on so accepting can return to where login would have gone
+        navigate(page.acceptMsa, { state: location.state });
+
+        return;
       }
+
+      // Standard login flow (MFA not enabled)
+      navigateAfterLogin(navigate, {
+        email: data.email,
+        softLockData,
+        from: location.state?.[LocationStateKeys.From],
+      });
 
       Mixpanel.track({
         action: MixpanelEventType.LoginSuccessful,
@@ -151,10 +154,11 @@ export const LoginForm = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Clear any existing MFA session when login page mounts
+  // Clear any existing MFA/MSA session when login page mounts
   // This prevents browser back/forward navigation from accessing MFA with stale session
   useEffect(() => {
     dispatch(auth.actions.clearMFASession());
+    dispatch(auth.actions.clearMSASession());
   }, [dispatch]);
 
   const handleCreateAccountClick = () => {

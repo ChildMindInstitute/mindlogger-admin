@@ -6,6 +6,7 @@ export default {
   lock: '/auth/lock',
   verifyMFA: '/auth/verify-mfa',
   verifyRecovery: '/auth/verify-recovery',
+  acceptMsa: '/auth/accept-msa',
   dashboard: '/dashboard',
   dashboardManagers: '/dashboard/managers',
   dashboardRespondents: '/dashboard/respondents',
