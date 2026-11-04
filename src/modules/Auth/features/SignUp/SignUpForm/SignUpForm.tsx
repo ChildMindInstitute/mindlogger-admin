@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -137,10 +137,13 @@ export const SignUpForm = () => {
           control={control}
           label={
             <StyledLabel>
-              {t('agreement')}
-              <StyledLink href="https://www.gettingcurious.com/msa" target="_blank">
-                {t('masterServicesAgreement')}
-              </StyledLink>
+              <Trans
+                t={t}
+                i18nKey="agreement"
+                components={{
+                  msaLink: <StyledLink href="https://www.gettingcurious.com/msa" target="_blank" />,
+                }}
+              />
             </StyledLabel>
           }
           data-testid="signup-form-terms"
