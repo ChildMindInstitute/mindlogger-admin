@@ -482,6 +482,7 @@ const expectedResult = {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'FALSE',
     },
     {
       activityName: 'Activity 2',
@@ -490,6 +491,7 @@ const expectedResult = {
       endTime: '23:59',
       notificationTime: '-',
       frequency: 'Daily',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 2',
@@ -498,6 +500,7 @@ const expectedResult = {
       endTime: '11:30',
       notificationTime: '14:00',
       frequency: 'Weekly',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 2',
@@ -506,6 +509,7 @@ const expectedResult = {
       endTime: '23:59',
       notificationTime: '-',
       frequency: 'Weekdays',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 1',
@@ -514,6 +518,7 @@ const expectedResult = {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'TRUE',
     },
   ],
 };

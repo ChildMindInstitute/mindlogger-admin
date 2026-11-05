@@ -80,6 +80,9 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               ? removeSecondsFromTime(atTime || fromTime) || '-'
               : '-';
             const frequency = getFrequencyString(periodicityType);
+            const oneTimeCompletionText = isAlwaysAvailable
+              ? String(!!oneTimeCompletion).toUpperCase()
+              : '-';
             const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
 
             acc.scheduleExportTableData.push({
@@ -98,6 +101,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               endTime,
               notificationTime,
               frequency,
+              oneTimeCompletion: oneTimeCompletionText,
             });
 
             const dataToCreateEvent = {

@@ -99,6 +99,7 @@ const legendEvents: PreparedEvents = {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'FALSE',
     },
     {
       activityName: 'Activity 2',
@@ -107,6 +108,7 @@ const legendEvents: PreparedEvents = {
       endTime: '23:59',
       notificationTime: '-',
       frequency: 'Weekly',
+      oneTimeCompletion: '-',
     },
   ],
 };
