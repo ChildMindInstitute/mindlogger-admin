@@ -26,6 +26,7 @@ export type CheckFields = {
   invalidDate: InvalidField;
   invalidStartEndTime: InvalidField;
   invalidNotificationTime: InvalidField;
+  invalidOneTimeCompletion: InvalidField;
   hasInvalidData: boolean;
 };
 

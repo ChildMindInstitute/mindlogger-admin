@@ -148,6 +148,7 @@ describe('getFieldsToCheck', () => {
     invalidDate: { data: null, id: 'invalid-date' },
     invalidStartEndTime: { data: null, id: 'invalid-start-end-time' },
     invalidNotificationTime: { data: null, id: 'invalid-notification-time' },
+    invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
     hasInvalidData: false,
   };
 
@@ -215,6 +216,45 @@ describe('getFieldsToCheck', () => {
       hasInvalidData: true,
     });
   });
+
+  test.each`
+    frequency   | startTime  | endTime    | oneTimeCompletion | isInvalid
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'true'}         | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'FALSE'}        | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${undefined}      | ${false}
+    ${'Daily'}  | ${'10:00'} | ${'11:00'} | ${'-'}            | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'maybe'}        | ${true}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'-'}            | ${true}
+    ${'Daily'}  | ${'10:00'} | ${'11:00'} | ${'TRUE'}         | ${true}
+  `(
+    'oneTimeCompletion=$oneTimeCompletion on $frequency row: isInvalid=$isInvalid',
+    ({ frequency, startTime, endTime, oneTimeCompletion, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime,
+          endTime,
+          notificationTime: '-',
+          frequency,
+          oneTimeCompletion,
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidOneTimeCompletion: {
+            data: expect.any(Object),
+            id: 'invalid-one-time-completion',
+          },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
 });
 
 describe('prepareImportPayload', () => {
@@ -420,6 +460,7 @@ describe('getUploadedScheduleErrors', () => {
       invalidNotificationTime: { data: expect.any(Object), id: 'invalid-notification-time' },
       invalidNotification: { data: expect.any(Object), id: 'invalid-notification' },
       invalidFrequency: { data: expect.any(Object), id: 'invalid-frequency' },
+      invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
       hasInvalidData: true,
       notExistentActivities: ['Activity 2'],
     });
