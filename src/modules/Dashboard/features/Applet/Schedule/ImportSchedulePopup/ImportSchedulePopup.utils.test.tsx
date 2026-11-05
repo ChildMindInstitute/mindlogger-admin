@@ -282,6 +282,7 @@ describe('prepareImportPayload', () => {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'true',
     },
   ];
 
@@ -397,7 +398,7 @@ describe('prepareImportPayload', () => {
         startTime: '00:00:00',
         endTime: '23:59:00',
         accessBeforeSchedule: undefined,
-        oneTimeCompletion: false,
+        oneTimeCompletion: true,
         timerType: 'NOT_SET',
         respondentId: 'respondentId',
         periodicity: {

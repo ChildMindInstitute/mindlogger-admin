@@ -279,7 +279,16 @@ export const prepareImportPayload = (
   appletData?: SingleApplet,
   respondentId?: string,
 ) =>
-  uploadedEvents?.map(({ date, endTime, startTime, notificationTime, frequency, activityName }) => {
+  uploadedEvents?.map((uploadedEvent) => {
+    const {
+      date,
+      endTime,
+      startTime,
+      notificationTime,
+      frequency,
+      activityName,
+      oneTimeCompletion,
+    } = uploadedEvent;
     const periodicityType = frequency.toUpperCase() as Periodicity;
     const activity = appletData?.activities?.find((activity) => activity.name === activityName);
     const flow = appletData?.activityFlows?.find((flow) => flow.name === activityName);
@@ -297,7 +306,10 @@ export const prepareImportPayload = (
           ? DEFAULT_API_END_TIME
           : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
-      oneTimeCompletion: periodicityType === Periodicity.Always ? false : undefined,
+      oneTimeCompletion:
+        periodicityType === Periodicity.Always
+          ? getUploadedOneTimeCompletion(oneTimeCompletion) === 'TRUE'
+          : undefined,
       timerType: TimerType.NotSet,
       respondentId,
       periodicity: {

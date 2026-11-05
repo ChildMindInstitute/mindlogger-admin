@@ -35,8 +35,9 @@ export type ImportScheduleHookProps = {
   scheduleExportData: ScheduleExportCsv;
 };
 
-export type UploadedEvent = Omit<ScheduleExportItem, 'date'> & {
+export type UploadedEvent = Omit<ScheduleExportItem, 'date' | 'oneTimeCompletion'> & {
   date: string | Date;
+  oneTimeCompletion?: string;
 };
 
 export enum ImportScheduleErrors {
