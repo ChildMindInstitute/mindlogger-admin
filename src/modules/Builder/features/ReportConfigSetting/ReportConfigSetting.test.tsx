@@ -80,8 +80,9 @@ let spySetPasswordReportServer;
 describe('ReportConfigSetting', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    spyVerifyReportServer = vi.spyOn(reportUtils, 'verifyReportServer');
-    spySetPasswordReportServer = vi.spyOn(reportUtils, 'setPasswordReportServer');
+    // reset so unused once-values don't leak, spyOn reuses the same mock across tests
+    spyVerifyReportServer = vi.spyOn(reportUtils, 'verifyReportServer').mockReset();
+    spySetPasswordReportServer = vi.spyOn(reportUtils, 'setPasswordReportServer').mockReset();
   });
 
   describe('Is rendered correctly', () => {
