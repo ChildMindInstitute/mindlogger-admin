@@ -368,6 +368,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Always',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: 'FALSE',
+      },
     },
     {
       activityName: {
@@ -393,6 +397,10 @@ const expectedResult = {
       frequency: {
         content: expect.any(Function),
         value: 'Daily',
+      },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
       },
     },
     {
@@ -420,6 +428,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Weekly',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
+      },
     },
     {
       activityName: {
@@ -446,6 +458,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Weekdays',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
+      },
     },
     {
       activityName: {
@@ -471,6 +487,10 @@ const expectedResult = {
       frequency: {
         content: expect.any(Function),
         value: 'Always',
+      },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: 'TRUE',
       },
     },
   ],

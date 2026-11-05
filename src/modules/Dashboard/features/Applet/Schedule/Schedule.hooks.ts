@@ -92,6 +92,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               endTime: getTableCell(endTime),
               notificationTime: getTableCell(notificationTime),
               frequency: getTableCell(frequency),
+              oneTimeCompletion: getTableCell(oneTimeCompletionText),
             });
 
             acc.scheduleExportCsv.push({
