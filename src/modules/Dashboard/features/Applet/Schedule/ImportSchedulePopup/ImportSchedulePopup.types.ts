@@ -46,6 +46,7 @@ export enum ImportScheduleErrors {
   Date = 'date',
   StartEndTime = 'startEndTime',
   BetweenStartEndTime = 'betweenStartEndTime',
+  OneTimeCompletion = 'oneTimeCompletion',
 }
 
 export type Steps = 0 | 1 | 2;

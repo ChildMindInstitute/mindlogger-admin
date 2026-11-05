@@ -113,6 +113,18 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
           </Trans>
         </Box>
       );
+    case ImportScheduleErrors.OneTimeCompletion:
+      return (
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.OneTimeCompletion}]`}>
+            <strong>One-Time Completion</strong>. Valid data format:{' '}
+            <strong>
+              TRUE or FALSE for Always available activity and - for Scheduled activity
+            </strong>
+            .
+          </Trans>
+        </Box>
+      );
     default:
       return null;
   }

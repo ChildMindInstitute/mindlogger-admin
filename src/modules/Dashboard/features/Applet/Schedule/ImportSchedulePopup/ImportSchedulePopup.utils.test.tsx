@@ -60,6 +60,7 @@ describe('getInvalidError', () => {
     ${ImportScheduleErrors.Date}                | ${'Date. Valid data format: DD Month YYYY.'}
     ${ImportScheduleErrors.StartEndTime}        | ${'Activity End Time should not be equal to Activity Start Time.'}
     ${ImportScheduleErrors.BetweenStartEndTime} | ${'Notification Time should be between Activity Start Time and Activity End Time.'}
+    ${ImportScheduleErrors.OneTimeCompletion}   | ${'One-Time Completion. Valid data format: TRUE or FALSE for Always available activity and - for Scheduled activity.'}
   `('renders error text for type=$type', ({ type, expectedText }) => {
     const { container } = renderWithProviders(getInvalidError(type));
     expect(container).toHaveTextContent(expectedText);
