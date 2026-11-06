@@ -16,6 +16,7 @@ export type ScheduleExportItem = {
   endTime: string;
   notificationTime: string;
   frequency: string;
+  oneTimeCompletion: string;
 };
 
 export type ScheduleExportCsv = ScheduleExportItem[];

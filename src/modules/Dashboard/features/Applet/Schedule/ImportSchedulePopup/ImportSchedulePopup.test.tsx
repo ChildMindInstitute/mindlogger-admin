@@ -54,6 +54,7 @@ describe('ImportSchedulePopup', () => {
     invalidDate: { data: null, id: 'invalid-date' },
     invalidStartEndTime: { data: null, id: 'invalid-start-end-time' },
     invalidNotificationTime: { data: null, id: 'invalid-notification-time' },
+    invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
     hasInvalidData: false,
   }));
 

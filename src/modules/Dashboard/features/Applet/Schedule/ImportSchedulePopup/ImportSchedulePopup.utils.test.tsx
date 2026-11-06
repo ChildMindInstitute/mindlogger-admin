@@ -60,6 +60,7 @@ describe('getInvalidError', () => {
     ${ImportScheduleErrors.Date}                | ${'Date. Valid data format: DD Month YYYY.'}
     ${ImportScheduleErrors.StartEndTime}        | ${'Activity End Time should not be equal to Activity Start Time.'}
     ${ImportScheduleErrors.BetweenStartEndTime} | ${'Notification Time should be between Activity Start Time and Activity End Time.'}
+    ${ImportScheduleErrors.OneTimeCompletion}   | ${'One-Time Completion. Valid data format: TRUE, FALSE or - for Always available activity and - for Scheduled activity.'}
   `('renders error text for type=$type', ({ type, expectedText }) => {
     const { container } = renderWithProviders(getInvalidError(type));
     expect(container).toHaveTextContent(expectedText);
@@ -147,6 +148,7 @@ describe('getFieldsToCheck', () => {
     invalidDate: { data: null, id: 'invalid-date' },
     invalidStartEndTime: { data: null, id: 'invalid-start-end-time' },
     invalidNotificationTime: { data: null, id: 'invalid-notification-time' },
+    invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
     hasInvalidData: false,
   };
 
@@ -214,6 +216,45 @@ describe('getFieldsToCheck', () => {
       hasInvalidData: true,
     });
   });
+
+  test.each`
+    frequency   | startTime  | endTime    | oneTimeCompletion | isInvalid
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'true'}         | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'FALSE'}        | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${undefined}      | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'-'}            | ${false}
+    ${'Daily'}  | ${'10:00'} | ${'11:00'} | ${'-'}            | ${false}
+    ${'Always'} | ${'-'}     | ${'-'}     | ${'maybe'}        | ${true}
+    ${'Daily'}  | ${'10:00'} | ${'11:00'} | ${'TRUE'}         | ${true}
+  `(
+    'oneTimeCompletion=$oneTimeCompletion on $frequency row: isInvalid=$isInvalid',
+    ({ frequency, startTime, endTime, oneTimeCompletion, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime,
+          endTime,
+          notificationTime: '-',
+          frequency,
+          oneTimeCompletion,
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidOneTimeCompletion: {
+            data: expect.any(Object),
+            id: 'invalid-one-time-completion',
+          },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
 });
 
 describe('prepareImportPayload', () => {
@@ -241,6 +282,7 @@ describe('prepareImportPayload', () => {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'true',
     },
   ];
 
@@ -356,7 +398,7 @@ describe('prepareImportPayload', () => {
         startTime: '00:00:00',
         endTime: '23:59:00',
         accessBeforeSchedule: undefined,
-        oneTimeCompletion: false,
+        oneTimeCompletion: true,
         timerType: 'NOT_SET',
         respondentId: 'respondentId',
         periodicity: {
@@ -419,6 +461,7 @@ describe('getUploadedScheduleErrors', () => {
       invalidNotificationTime: { data: expect.any(Object), id: 'invalid-notification-time' },
       invalidNotification: { data: expect.any(Object), id: 'invalid-notification' },
       invalidFrequency: { data: expect.any(Object), id: 'invalid-frequency' },
+      invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
       hasInvalidData: true,
       notExistentActivities: ['Activity 2'],
     });
