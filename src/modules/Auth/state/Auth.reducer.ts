@@ -4,8 +4,14 @@ import { ApiErrorReturn } from 'shared/state/Base';
 import { authStorage } from 'shared/utils/authStorage';
 import { clearSessionState } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 
-import { AuthSchema, SoftLockData, MFASession } from './Auth.schema';
-import { signIn, getUserDetails, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import { AuthSchema, SoftLockData, MFASession, MSASession } from './Auth.schema';
+import {
+  signIn,
+  getUserDetails,
+  verifyMFATOTP,
+  verifyMFARecoveryCode,
+  acceptMSAAtLogin,
+} from './Auth.thunk';
 import {
   createAuthFulfilledData,
   createAuthPendingData,
@@ -13,6 +19,14 @@ import {
 } from './Auth.utils';
 import { state as initialState } from './Auth.state';
 import { MfaErrorResult } from '../utils/mfa.utils';
+import { MSARequiredResponse } from '../api/api.types';
+
+const toMSASession = (result: MSARequiredResponse['result']): MSASession => ({
+  token: result.msaToken,
+  version: result.version,
+  email: result.userEmail,
+  deadline: result.deadline,
+});
 
 export const reducers = {
   startLogout: (state: AuthSchema): void => {
@@ -30,6 +44,8 @@ export const reducers = {
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
     state.mfaSession = undefined;
+    state.msaSession = undefined;
+    state.msaPromptPending = false;
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
@@ -58,6 +74,15 @@ export const reducers = {
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
+  },
+  clearMSASession: (state: AuthSchema): void => {
+    state.msaSession = undefined;
+  },
+  showMsaPrompt: (state: AuthSchema): void => {
+    state.msaPromptPending = true;
+  },
+  dismissMsaPrompt: (state: AuthSchema): void => {
+    state.msaPromptPending = false;
   },
   // Clear TOTP error (when user types in TOTP form)
   clearTOTPError: (state: AuthSchema): void => {
@@ -95,9 +120,15 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
       // Don't set authentication data yet
       state.authentication.status = 'idle';
       state.authentication.requestId = action.meta.requestId;
+    } else if (result && 'msaRequired' in result && result.msaRequired) {
+      // No tokens until the MSA is accepted
+      state.msaSession = toMSASession(result);
+      state.authentication.status = 'idle';
+      state.authentication.requestId = action.meta.requestId;
     } else {
       // Normal login flow - set user data
       createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
     }
   });
 
@@ -117,6 +148,20 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
   });
 
+  builder.addCase(acceptMSAAtLogin.pending, (state, action) => {
+    createAuthPendingData(state.authentication, action.meta.requestId);
+  });
+
+  // msaSession is cleared by the MSA page after navigation, like mfaSession
+  builder.addCase(acceptMSAAtLogin.fulfilled, (state, action) => {
+    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload.result.user });
+  });
+
+  // The MSA page shows the error; the login form must not
+  builder.addCase(acceptMSAAtLogin.rejected, (state) => {
+    state.authentication.status = 'idle';
+  });
+
   // MFA TOTP verification reducers
   builder.addCase(verifyMFATOTP.pending, (state, action) => {
     createAuthPendingData(state.authentication, action.meta.requestId);
@@ -125,8 +170,16 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(verifyMFATOTP.fulfilled, (state, action) => {
-    // Set user data - mfaSession is cleared by useMFAVerification after navigation
-    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
+    const result = action.payload?.result;
+    if (result && 'msaRequired' in result) {
+      // No tokens until the MSA is accepted
+      state.msaSession = toMSASession(result);
+      state.authentication.status = 'idle';
+    } else {
+      // Set user data - mfaSession is cleared by useMFAVerification after navigation
+      createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
+    }
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;
@@ -176,8 +229,16 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(verifyMFARecoveryCode.fulfilled, (state, action) => {
-    // Set user data - mfaSession is cleared by useMFAVerification after navigation
-    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
+    const result = action.payload?.result;
+    if (result && 'msaRequired' in result) {
+      // No tokens until the MSA is accepted
+      state.msaSession = toMSASession(result);
+      state.authentication.status = 'idle';
+    } else {
+      // Set user data - mfaSession is cleared by useMFAVerification after navigation
+      createAuthFulfilledData(state, action.meta.requestId, { user: result?.user });
+      state.msaPromptPending = true;
+    }
     state.totpVerification = { status: 'idle' };
     state.recoveryVerification = { status: 'idle' };
     state.isSessionExpired = false;

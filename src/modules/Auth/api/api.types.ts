@@ -54,8 +54,43 @@ export type MFARequiredResponse = {
   };
 };
 
+// MSA required response (admin user must accept the MSA before getting tokens)
+export type MSARequiredResponse = {
+  result: {
+    msaRequired: true;
+    msaToken: string;
+    version: string;
+    userId: string;
+    userEmail: string;
+    // Set when the user's grace period has ended
+    deadline: string | null;
+  };
+};
+
+// Accept the MSA during login, using the token from MSARequiredResponse
+export type MSAAcceptAtLoginRequest = {
+  msaToken: string;
+  msaVersion: string;
+};
+
+export type MSAAcceptAtLoginError = {
+  message: string;
+  errorCode?: string;
+};
+
+// MSA status of a logged-in user: grace means it can still be dismissed until the deadline
+export type MsaStatusResult = {
+  status: 'accepted' | 'grace' | 'required';
+  version: string;
+  deadline: string | null;
+};
+
+export type MsaStatusResponse = {
+  result: MsaStatusResult;
+};
+
 // Combined login response type
-export type LoginResponse = StandardLoginResponse | MFARequiredResponse;
+export type LoginResponse = StandardLoginResponse | MFARequiredResponse | MSARequiredResponse;
 
 // MFA verification requests
 export type MFATOTPVerifyRequest = {
@@ -71,4 +106,7 @@ export type MFARecoveryCodeVerifyRequest = {
 };
 
 // MFA verification response (same as standard login response)
-export type MFAVerifyResponse = MFAVerifySuccessResponse | MFAVerifyErrorResponse;
+export type MFAVerifyResponse =
+  | MFAVerifySuccessResponse
+  | MSARequiredResponse
+  | MFAVerifyErrorResponse;

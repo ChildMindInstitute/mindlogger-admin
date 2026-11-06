@@ -94,6 +94,6 @@ const axiosBaseQuery: BaseQueryFn<
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery,
-  tagTypes: ['Applet', 'Subject', 'User'],
+  tagTypes: ['Applet', 'Subject', 'User', 'MsaStatus'],
   endpoints: (_builder) => ({}),
 });

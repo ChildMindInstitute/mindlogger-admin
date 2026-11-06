@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
+import { acceptMSAAtLoginApi, signInApi, verifyMFATOTPApi, verifyMFARecoveryCodeApi } from 'api';
 import { setupStore } from 'redux/store';
 import {
   clearSessionState,
@@ -8,19 +8,24 @@ import {
   setLastActivityAt,
 } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 import { MS_IN_MIN } from 'shared/hooks/useSessionKeepAlive/useSessionKeepAlive.const';
+import { authStorage } from 'shared/utils/authStorage';
 
-import { verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import { acceptMSAAtLogin, signIn, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
 
 vi.mock('api', async () => {
   const actual = await vi.importActual<typeof import('api')>('api');
 
   return {
     ...actual,
+    acceptMSAAtLoginApi: vi.fn(),
+    signInApi: vi.fn(),
     verifyMFATOTPApi: vi.fn(),
     verifyMFARecoveryCodeApi: vi.fn(),
   };
 });
 
+const mockAcceptMSAAtLoginApi = vi.mocked(acceptMSAAtLoginApi);
+const mockSignInApi = vi.mocked(signInApi);
 const mockVerifyMFATOTPApi = vi.mocked(verifyMFATOTPApi);
 const mockVerifyMFARecoveryCodeApi = vi.mocked(verifyMFARecoveryCodeApi);
 
@@ -81,6 +86,31 @@ describe('Auth MFA thunks', () => {
 
   // A backgrounded tab can miss its idle logout, leaving its clock behind. Read by the new
   // session, it ended the sign-in as soon as it landed.
+  it('keeps the MSA session and stores no tokens when TOTP verify requires the MSA', async () => {
+    authStorage.clear();
+    mockVerifyMFATOTPApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          msaRequired: true,
+          msaToken: 'msa-token',
+          version: '2026-11-01',
+          userId: 'user-id',
+          userEmail: 'admin@example.com',
+          deadline: '2026-12-31',
+        },
+      },
+    } as any);
+
+    const store = setupStore(getPreloadedState());
+    const result = await store.dispatch(verifyMFATOTP({ totpCode: '123456' }));
+
+    expect(verifyMFATOTP.fulfilled.match(result)).toBe(true);
+    const state = store.getState().auth;
+    expect(state.msaSession?.deadline).toBe('2026-12-31');
+    expect(state.isAuthorized).toBe(false);
+    expect(authStorage.getAccessToken()).toBeFalsy();
+  });
+
   it('starts a fresh clock over one left by a session that never logged out', async () => {
     clearSessionState();
     setLastActivityAt(Date.now() - 60 * MS_IN_MIN);
@@ -117,5 +147,71 @@ describe('Auth MFA thunks', () => {
     expect(state.recoveryVerification.status).toBe('error');
     expect(state.recoveryVerification.displayError).toBeDefined();
     expect(state.mfaSession).toBeDefined();
+  });
+});
+
+describe('Auth signIn thunk', () => {
+  it('keeps the MSA session and stores no tokens when the MSA must be accepted', async () => {
+    authStorage.clear();
+    mockSignInApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          msaRequired: true,
+          msaToken: 'msa-token',
+          version: '2026-11-01',
+          userId: 'user-id',
+          userEmail: 'admin@example.com',
+          deadline: null,
+        },
+      },
+    } as any);
+
+    const store = setupStore();
+    await store.dispatch(signIn({ email: 'admin@example.com', password: 'password' }));
+
+    const state = store.getState().auth;
+    expect(state.msaSession).toEqual({
+      token: 'msa-token',
+      version: '2026-11-01',
+      email: 'admin@example.com',
+      deadline: null,
+    });
+    expect(state.isAuthorized).toBe(false);
+    expect(authStorage.getAccessToken()).toBeFalsy();
+  });
+});
+
+describe('Auth acceptMSAAtLogin thunk', () => {
+  it('accepts with the MSA session and completes the login', async () => {
+    authStorage.clear();
+    mockAcceptMSAAtLoginApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+          user: { id: 'user-id', email: 'admin@example.com', firstName: 'A', lastName: 'B' },
+        },
+      },
+    } as any);
+
+    const store = setupStore({
+      auth: {
+        ...getPreloadedState().auth,
+        msaSession: {
+          token: 'msa-token',
+          version: '2026-11-01',
+          email: 'admin@example.com',
+          deadline: null,
+        },
+      },
+    });
+    const result = await store.dispatch(acceptMSAAtLogin());
+
+    expect(acceptMSAAtLogin.fulfilled.match(result)).toBe(true);
+    expect(mockAcceptMSAAtLoginApi).toHaveBeenCalledWith(
+      { msaToken: 'msa-token', msaVersion: '2026-11-01' },
+      expect.anything(),
+    );
+    expect(authStorage.getAccessToken()).toBe('access');
+    expect(store.getState().auth.isAuthorized).toBe(true);
   });
 });
