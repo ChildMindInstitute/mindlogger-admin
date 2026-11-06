@@ -120,7 +120,7 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.OneTimeCompletion}]`}>
             <strong>One-Time Completion</strong>. Valid data format:{' '}
             <strong>
-              TRUE or FALSE for Always available activity and - for Scheduled activity
+              TRUE, FALSE or - for Always available activity and - for Scheduled activity
             </strong>
             .
           </Trans>
@@ -222,7 +222,7 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
 
         if (
           (isAlwaysFrequency &&
-            !['', ...ONE_TIME_COMPLETION_VALUES].includes(uploadedOneTimeCompletion)) ||
+            !['', EMPTY_TIME, ...ONE_TIME_COMPLETION_VALUES].includes(uploadedOneTimeCompletion)) ||
           (!isAlwaysFrequency && !['', EMPTY_TIME].includes(uploadedOneTimeCompletion))
         ) {
           acc.invalidOneTimeCompletion.data = getInvalidError(
