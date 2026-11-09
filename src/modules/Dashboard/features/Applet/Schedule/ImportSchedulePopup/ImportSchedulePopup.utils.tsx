@@ -220,11 +220,13 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
           !isAlwaysFrequency &&
           notificationTime !== EMPTY_TIME &&
           startTime !== endTime &&
-          !getBetweenStartEndNextDaySingleComparison({
-            time: getUploadedTime(notificationTime),
-            rangeStartTime: getUploadedTime(startTime),
-            rangeEndTime: getUploadedTime(endTime),
-          })
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            getBetweenStartEndNextDaySingleComparison({
+              time,
+              rangeStartTime: getUploadedTime(startTime),
+              rangeEndTime: getUploadedTime(endTime),
+            }),
+          )
         ) {
           acc.invalidNotificationTime.data = getInvalidError(
             ImportScheduleErrors.BetweenStartEndTime,
