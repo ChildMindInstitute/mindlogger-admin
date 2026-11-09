@@ -16,9 +16,9 @@ import {
 import {
   dateValidationRegex,
   frequencyArray,
-  notificationValidationRegex,
   timeValidationRegex,
   EMPTY_TIME,
+  NOTIFICATION_TIME_SEPARATOR,
   ALWAYS_FREQUENCY,
   ONE_TIME_COMPLETION_VALUES,
   commonErrorBoxProps,
@@ -168,6 +168,13 @@ export const getUploadedTime = (time: string | Date) => {
   return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
+export const getUploadedNotificationTimes = (notificationTime: string | Date) =>
+  notificationTime instanceof Date
+    ? [getUploadedTime(notificationTime)]
+    : notificationTime
+        .split(NOTIFICATION_TIME_SEPARATOR)
+        .map((time) => getUploadedTime(time.trim()));
+
 // Old files have no oneTimeCompletion column, so treat missing as empty
 export const getUploadedOneTimeCompletion = (value?: string) =>
   String(value ?? '')
@@ -201,7 +208,12 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
           acc.hasInvalidData = true;
         }
 
-        if (!notificationValidationRegex.test(getUploadedTime(notificationTime))) {
+        if (
+          notificationTime !== EMPTY_TIME &&
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            timeValidationRegex.test(time),
+          )
+        ) {
           acc.invalidNotification.data = getInvalidError(ImportScheduleErrors.NotificationTime);
           acc.hasInvalidData = true;
         }

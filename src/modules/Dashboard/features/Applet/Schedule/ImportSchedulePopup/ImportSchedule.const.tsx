@@ -37,7 +37,6 @@ export const uploadLabel = (
 );
 
 export const timeValidationRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-export const notificationValidationRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])|(-)$/;
 
 const dayValidation = '(?:0?[1-9]|[12][0-9]|3[01])';
 const monthValidation =
@@ -50,6 +49,8 @@ export const dateValidationRegex = new RegExp(
 
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
 export const EMPTY_TIME = '-';
+// Not ; or | since the csv parser may take those as the column separator
+export const NOTIFICATION_TIME_SEPARATOR = '/';
 export const ALWAYS_FREQUENCY = 'Always';
 export const ONE_TIME_COMPLETION_VALUES = ['TRUE', 'FALSE'];
 
