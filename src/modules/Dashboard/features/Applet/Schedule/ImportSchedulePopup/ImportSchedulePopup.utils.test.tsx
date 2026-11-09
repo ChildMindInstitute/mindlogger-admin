@@ -478,6 +478,20 @@ describe('prepareImportPayload', () => {
       },
     ]);
   });
+
+  test('creates a fixed notification for each time', () => {
+    const [{ notification }] = prepareImportPayload([
+      { ...mockUploadedEvents[0], notificationTime: '10:00/10:30' },
+    ]);
+
+    expect(notification).toEqual({
+      notifications: [
+        { atTime: '10:00:00', triggerType: 'FIXED' },
+        { atTime: '10:30:00', triggerType: 'FIXED' },
+      ],
+      reminder: null,
+    });
+  });
 });
 
 describe('getUploadedScheduleErrors', () => {

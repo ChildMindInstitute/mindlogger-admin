@@ -351,12 +351,10 @@ export const prepareImportPayload = (
         notificationTime === EMPTY_TIME
           ? null
           : {
-              notifications: [
-                {
-                  triggerType: NotificationType.Fixed,
-                  atTime: addSecondsToHourMinutes(getUploadedTime(notificationTime)),
-                },
-              ],
+              notifications: getUploadedNotificationTimes(notificationTime).map((time) => ({
+                triggerType: NotificationType.Fixed,
+                atTime: addSecondsToHourMinutes(time),
+              })),
               reminder: null,
             },
     };
