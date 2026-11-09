@@ -287,6 +287,39 @@ describe('getFieldsToCheck', () => {
       });
     },
   );
+
+  test.each`
+    notificationTime | isInvalid
+    ${'10:00/17:00'} | ${false}
+    ${'10:00/23:00'} | ${true}
+  `(
+    'notificationTime=$notificationTime in 09:00-18:00 window: isInvalid=$isInvalid',
+    ({ notificationTime, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime: '09:00',
+          endTime: '18:00',
+          notificationTime,
+          frequency: 'Daily',
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidNotificationTime: {
+            data: expect.any(Object),
+            id: 'invalid-notification-time',
+          },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
 });
 
 describe('prepareImportPayload', () => {
