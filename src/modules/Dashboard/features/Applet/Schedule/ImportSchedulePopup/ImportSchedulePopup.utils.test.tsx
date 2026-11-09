@@ -255,6 +255,38 @@ describe('getFieldsToCheck', () => {
       });
     },
   );
+
+  test.each`
+    notificationTime  | isInvalid
+    ${'09:00/13:30'}  | ${false}
+    ${'9:00 / 13:30'} | ${false}
+    ${'09:00/abc'}    | ${true}
+    ${'09:00/-'}      | ${true}
+  `(
+    'notificationTime=$notificationTime: isInvalid=$isInvalid',
+    ({ notificationTime, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime: '-',
+          endTime: '-',
+          notificationTime,
+          frequency: 'Always',
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidNotification: { data: expect.any(Object), id: 'invalid-notification' },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
 });
 
 describe('prepareImportPayload', () => {
