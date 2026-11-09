@@ -16,13 +16,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.ts', 'dotenv/config'],
     globalSetup: './src/vitest.global-setup.ts',
-    poolOptions: {
-      forks: {
-        // cap forks below core count to avoid timeout from resource overload on heavy tests
-        maxForks: Math.ceil(availableParallelism() / 2),
-        minForks: 1,
-      },
-    },
+    // cap workers below core count to avoid timeout from resource overload on heavy tests
+    maxWorkers: Math.ceil(availableParallelism() / 2),
     coverage: {
       reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/', 'src/setupTests.ts'],

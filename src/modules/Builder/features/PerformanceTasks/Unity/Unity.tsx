@@ -50,12 +50,6 @@ export const Unity = () => {
   const handleUpload = useCallback(
     (uploadedFile: File) => {
       setFile(uploadedFile);
-      const formFile = watch(urlName);
-      if (formFile === null) {
-        setFileContent('');
-
-        return;
-      }
       const reader = new FileReader();
       reader.onload = (e) => {
         const fileContentString = e.target?.result as string;
@@ -64,7 +58,7 @@ export const Unity = () => {
       };
       reader.readAsText(uploadedFile);
     },
-    [watch, urlName, setValue],
+    [urlName, setValue],
   );
 
   const handleCloseModal = useCallback(() => {

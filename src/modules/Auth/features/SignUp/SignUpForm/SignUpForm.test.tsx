@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
@@ -51,6 +52,19 @@ describe('SignUp component tests', () => {
     inputAcceptsValue('Password', mockedPassword);
     inputAcceptsValue('First Name', 'fname');
     inputAcceptsValue('Last Name', 'lname');
+  });
+
+  test('should render the Master Services Agreement acceptance wording with links', () => {
+    expect(screen.getByTestId('signup-form-terms')).toHaveTextContent(
+      'I am either authorized to sign on behalf of my organization and I agree to the Master Services Agreement, or my organization has already agreed to the Master Services Agreement.',
+    );
+
+    const msaLinks = screen.getAllByRole('link', { name: 'Master Services Agreement' });
+    expect(msaLinks).toHaveLength(2);
+    msaLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', 'https://www.gettingcurious.com/msa');
+      expect(link).toHaveAttribute('target', '_blank');
+    });
   });
 
   test('should be able to validate SignUp form', async () => {
@@ -141,6 +155,7 @@ describe('SignUpForm while a session is running in another tab', () => {
 
   test('signs up as usual when no other session is running', async () => {
     // signUp calls the API and then dispatches signIn, so both have to answer.
+    vi.mocked(axios.get).mockResolvedValue({ data: { result: { version: '2026-09-15' } } });
     mockedSignUpApi.mockResolvedValue({ data: {} });
     mockedSignInApi.mockResolvedValue({
       data: {
@@ -161,5 +176,53 @@ describe('SignUpForm while a session is running in another tab', () => {
     });
 
     await waitFor(() => expect(mockedSignUpApi).toHaveBeenCalledTimes(1));
+    expect(mockedSignUpApi.mock.calls[0][0].body).toEqual(
+      expect.objectContaining({ msaVersion: '2026-09-15' }),
+    );
+  });
+
+  test('asks to accept again when the MSA version is outdated', async () => {
+    vi.mocked(axios.get).mockClear();
+    vi.mocked(axios.get).mockResolvedValue({ data: { result: { version: '2026-09-15' } } });
+    mockedSignUpApi.mockRejectedValueOnce({
+      response: { data: { error_code: 'LEGAL.MSA_VERSION_OUTDATED' } },
+    });
+    renderWithProviders(<SignUpForm />);
+
+    await submitForm({
+      email: mockedEmail,
+      password: mockedPassword,
+      firstName: 'Ann',
+      lastName: 'Smith',
+      termsOfService: true,
+    });
+
+    expect(
+      await screen.findByText(
+        'The Master Services Agreement has been updated. Please review it and accept again.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
+    await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(2));
+  });
+
+  test('does not sign up when the MSA version could not be loaded', async () => {
+    vi.mocked(axios.get).mockRejectedValue(new Error('network'));
+    renderWithProviders(<SignUpForm />);
+
+    await submitForm({
+      email: mockedEmail,
+      password: mockedPassword,
+      firstName: 'Ann',
+      lastName: 'Smith',
+      termsOfService: true,
+    });
+
+    expect(
+      await screen.findByText(
+        "We couldn't load the Master Services Agreement. Please refresh the page and try again.",
+      ),
+    ).toBeInTheDocument();
+    expect(mockedSignUpApi).not.toHaveBeenCalled();
   });
 });
