@@ -9,20 +9,35 @@ import { page } from 'resources';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { mockedAppletFormData } from 'shared/mock';
 import { ItemResponseType } from 'shared/consts';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { Unity } from './Unity';
 
 const mockedTestid = 'builder-activity-unity';
 const uploadButtonTestid = 'builder-activity-unity-file-modal-button';
+const autoAssignTestid = 'builder-activity-unity-auto-assign';
 const fileFieldName = 'activities.0.items.0.config.file';
+const autoAssignFieldName = 'activities.0.autoAssign';
 
-const getFormDataWithUnity = (file: string | null) => ({
+vi.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: vi.fn(),
+}));
+
+const mockUseFeatureFlags = vi.mocked(useFeatureFlags);
+
+type RenderOptions = {
+  file?: string | null;
+  autoAssign?: boolean;
+};
+
+const getFormDataWithUnity = ({ file = null, autoAssign = true }: RenderOptions) => ({
   ...mockedAppletFormData,
   activities: [
     {
       name: 'MERIT Task',
       description: '',
       isHidden: false,
+      autoAssign,
       isPerformanceTask: true,
       performanceTaskType: 'unity',
       id: 'unity-activity-id',
@@ -41,9 +56,9 @@ const getFormDataWithUnity = (file: string | null) => ({
   ],
 });
 
-const renderUnity = (file: string | null) => {
+const renderUnity = (options: RenderOptions = {}) => {
   const ref = createRef();
-  const formData = getFormDataWithUnity(file);
+  const formData = getFormDataWithUnity(options);
   const routePath = page.builderAppletUnity;
 
   renderWithAppletFormData({
@@ -67,6 +82,9 @@ const getPreview = () =>
 
 const getFileInput = () => screen.getByTestId(mockedTestid).querySelector('input[type="file"]');
 
+const getAutoAssignCheckbox = () =>
+  screen.getByTestId(autoAssignTestid).querySelector('input[type="checkbox"]');
+
 const uploadFile = async (content: string, name = 'merit_activity.txt') => {
   await userEvent.click(screen.getByTestId(uploadButtonTestid));
   await userEvent.upload(getFileInput(), new File([content], name, { type: 'text/plain' }));
@@ -74,8 +92,15 @@ const uploadFile = async (content: string, name = 'merit_activity.txt') => {
 };
 
 describe('Unity', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: { enableActivityAssign: true },
+      resetLDContext: vi.fn(),
+    });
+  });
+
   test('shows Upload File and no preview when there is no config file', () => {
-    renderUnity(null);
+    renderUnity({ file: null });
 
     expect(screen.getByTestId(uploadButtonTestid)).toHaveTextContent('Upload File');
     expect(screen.getByTestId(uploadButtonTestid).querySelector('.svg-add')).toBeInTheDocument();
@@ -83,7 +108,7 @@ describe('Unity', () => {
   });
 
   test('shows the preview and Update File when a config file exists', () => {
-    renderUnity('{"m_sTaskName": "AB Trails"}');
+    renderUnity({ file: '{"m_sTaskName": "AB Trails"}' });
 
     expect(screen.getByTestId(uploadButtonTestid)).toHaveTextContent('Update File');
     expect(screen.getByTestId(uploadButtonTestid).querySelector('.svg-edit')).toBeInTheDocument();
@@ -91,7 +116,7 @@ describe('Unity', () => {
   });
 
   test('uploads a file when the saved config file is null', async () => {
-    const ref = renderUnity(null);
+    const ref = renderUnity({ file: null });
 
     await uploadFile('{"m_sTaskName": "New"}');
 
@@ -103,7 +128,7 @@ describe('Unity', () => {
   });
 
   test('replaces an existing config file and marks the field dirty', async () => {
-    const ref = renderUnity('{"m_sTaskName": "Old"}');
+    const ref = renderUnity({ file: '{"m_sTaskName": "Old"}' });
 
     await uploadFile('{"m_sTaskName": "New"}');
 
@@ -115,7 +140,7 @@ describe('Unity', () => {
 
   describe('upload modal', () => {
     test('disables Upload until a file is selected', async () => {
-      renderUnity(null);
+      renderUnity({ file: null });
 
       await userEvent.click(screen.getByTestId(uploadButtonTestid));
 
@@ -131,7 +156,7 @@ describe('Unity', () => {
     });
 
     test('clears the previously selected file when reopened', async () => {
-      renderUnity(null);
+      renderUnity({ file: null });
 
       await uploadFile('{"m_sTaskName": "First"}');
       await waitFor(() =>
@@ -144,7 +169,7 @@ describe('Unity', () => {
     });
 
     test('clears the selected file when closed without uploading', async () => {
-      const ref = renderUnity(null);
+      const ref = renderUnity({ file: null });
 
       await userEvent.click(screen.getByTestId(uploadButtonTestid));
       await userEvent.upload(
@@ -157,6 +182,36 @@ describe('Unity', () => {
 
       expect(screen.getByTestId(`${mockedTestid}-submit-button`)).toBeDisabled();
       expect(ref.current.getValues(fileFieldName)).toBeNull();
+    });
+  });
+
+  describe('auto-assign checkbox', () => {
+    test('reflects the saved autoAssign value', () => {
+      renderUnity({ autoAssign: false });
+
+      expect(getAutoAssignCheckbox()).not.toBeChecked();
+    });
+
+    test('updates autoAssign when toggled', async () => {
+      const ref = renderUnity({ autoAssign: true });
+
+      expect(getAutoAssignCheckbox()).toBeChecked();
+
+      await userEvent.click(getAutoAssignCheckbox());
+
+      expect(getAutoAssignCheckbox()).not.toBeChecked();
+      expect(ref.current.getValues(autoAssignFieldName)).toBe(false);
+    });
+
+    test('is hidden when activity assign is disabled', () => {
+      mockUseFeatureFlags.mockReturnValue({
+        featureFlags: { enableActivityAssign: false },
+        resetLDContext: vi.fn(),
+      });
+
+      renderUnity();
+
+      expect(screen.queryByTestId(autoAssignTestid)).not.toBeInTheDocument();
     });
   });
 });
