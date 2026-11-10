@@ -224,6 +224,18 @@ export const editManagerAccessApi = (
     { signal },
   );
 
+export const replaceManagerAccessApi = (
+  { ownerId, userId, accesses }: EditManagerAccess,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/workspaces/${ownerId}/managers/${userId}/accesses`,
+    {
+      accesses,
+    },
+    { signal },
+  );
+
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, {
     signal,
