@@ -49,7 +49,7 @@ describe('useIntersectionObserver', () => {
   /* eslint-disable @typescript-eslint/ban-ts-comment */
   beforeEach(() => {
     // @ts-ignore
-    global.IntersectionObserver = vi.fn((cb, options = {}) => {
+    global.IntersectionObserver = vi.fn(function (cb, options = {}) {
       const instance = {
         thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
         root: options.root,
