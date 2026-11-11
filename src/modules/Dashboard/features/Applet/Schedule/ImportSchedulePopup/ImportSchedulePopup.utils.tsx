@@ -15,10 +15,11 @@ import {
 import {
   dateValidationRegex,
   frequencyArray,
-  notificationValidationRegex,
   timeValidationRegex,
   EMPTY_TIME,
+  NOTIFICATION_TIME_SEPARATOR,
   ALWAYS_FREQUENCY,
+  ONE_TIME_COMPLETION_VALUES,
   commonErrorBoxProps,
 } from './ImportSchedule.const';
 import { CheckFields, ImportScheduleErrors, UploadedEvent } from './ImportSchedulePopup.types';
@@ -74,7 +75,8 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
       return (
         <Box {...commonErrorBoxProps}>
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
-            <strong>Notification Time</strong>. Valid data format: <strong>HH:mm or -</strong>.
+            <strong>Notification Time</strong>. Valid data format:{' '}
+            <strong>HH:mm, HH:mm;HH:mm for multiple times, or -</strong>.
           </Trans>
         </Box>
       );
@@ -113,6 +115,18 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
           </Trans>
         </Box>
       );
+    case ImportScheduleErrors.OneTimeCompletion:
+      return (
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.OneTimeCompletion}]`}>
+            <strong>One-Time Completion</strong>. Valid data format:{' '}
+            <strong>
+              TRUE, FALSE or - for Always available activity and - for Scheduled activity
+            </strong>
+            .
+          </Trans>
+        </Box>
+      );
     default:
       return null;
   }
@@ -138,13 +152,30 @@ export const getUploadedTime = (time: string | Date) => {
   return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
+export const getUploadedNotificationTimes = (notificationTime: string | Date) =>
+  notificationTime instanceof Date
+    ? [getUploadedTime(notificationTime)]
+    : notificationTime
+        .split(NOTIFICATION_TIME_SEPARATOR)
+        .map((time) => getUploadedTime(time.trim()));
+
+// Old files have no oneTimeCompletion column, so treat missing as empty
+export const getUploadedOneTimeCompletion = (value?: string) =>
+  String(value ?? '')
+    .trim()
+    .toUpperCase();
+
 export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
   data.reduce(
-    (acc: CheckFields, { activityName, frequency, startTime, endTime, notificationTime, date }) => {
+    (
+      acc: CheckFields,
+      { activityName, frequency, startTime, endTime, notificationTime, date, oneTimeCompletion },
+    ) => {
       acc.activityNames.push(activityName);
 
       if (isUploadedSchedule) {
         const isAlwaysFrequency = frequency === ALWAYS_FREQUENCY;
+        const uploadedOneTimeCompletion = getUploadedOneTimeCompletion(oneTimeCompletion);
         if (
           (isAlwaysFrequency && startTime !== EMPTY_TIME) ||
           (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(startTime)))
@@ -161,7 +192,12 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
           acc.hasInvalidData = true;
         }
 
-        if (!notificationValidationRegex.test(getUploadedTime(notificationTime))) {
+        if (
+          notificationTime !== EMPTY_TIME &&
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            timeValidationRegex.test(time),
+          )
+        ) {
           acc.invalidNotification.data = getInvalidError(ImportScheduleErrors.NotificationTime);
           acc.hasInvalidData = true;
         }
@@ -185,14 +221,27 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
           !isAlwaysFrequency &&
           notificationTime !== EMPTY_TIME &&
           startTime !== endTime &&
-          !getBetweenStartEndNextDaySingleComparison({
-            time: getUploadedTime(notificationTime),
-            rangeStartTime: getUploadedTime(startTime),
-            rangeEndTime: getUploadedTime(endTime),
-          })
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            getBetweenStartEndNextDaySingleComparison({
+              time,
+              rangeStartTime: getUploadedTime(startTime),
+              rangeEndTime: getUploadedTime(endTime),
+            }),
+          )
         ) {
           acc.invalidNotificationTime.data = getInvalidError(
             ImportScheduleErrors.BetweenStartEndTime,
+          );
+          acc.hasInvalidData = true;
+        }
+
+        if (
+          (isAlwaysFrequency &&
+            !['', EMPTY_TIME, ...ONE_TIME_COMPLETION_VALUES].includes(uploadedOneTimeCompletion)) ||
+          (!isAlwaysFrequency && !['', EMPTY_TIME].includes(uploadedOneTimeCompletion))
+        ) {
+          acc.invalidOneTimeCompletion.data = getInvalidError(
+            ImportScheduleErrors.OneTimeCompletion,
           );
           acc.hasInvalidData = true;
         }
@@ -209,6 +258,7 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
       invalidDate: { data: null, id: 'invalid-date' },
       invalidStartEndTime: { data: null, id: 'invalid-start-end-time' },
       invalidNotificationTime: { data: null, id: 'invalid-notification-time' },
+      invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
       hasInvalidData: false,
     },
   );
@@ -244,7 +294,16 @@ export const prepareImportPayload = (
   appletData?: SingleApplet,
   respondentId?: string,
 ) =>
-  uploadedEvents?.map(({ date, endTime, startTime, notificationTime, frequency, activityName }) => {
+  uploadedEvents?.map((uploadedEvent) => {
+    const {
+      date,
+      endTime,
+      startTime,
+      notificationTime,
+      frequency,
+      activityName,
+      oneTimeCompletion,
+    } = uploadedEvent;
     const periodicityType = frequency.toUpperCase() as Periodicity;
     const activity = appletData?.activities?.find((activity) => activity.name === activityName);
     const flow = appletData?.activityFlows?.find((flow) => flow.name === activityName);
@@ -262,7 +321,10 @@ export const prepareImportPayload = (
           ? DEFAULT_API_END_TIME
           : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
-      oneTimeCompletion: periodicityType === Periodicity.Always ? false : undefined,
+      oneTimeCompletion:
+        periodicityType === Periodicity.Always
+          ? getUploadedOneTimeCompletion(oneTimeCompletion) === 'TRUE'
+          : undefined,
       timerType: TimerType.NotSet,
       respondentId,
       periodicity: {
@@ -290,12 +352,10 @@ export const prepareImportPayload = (
         notificationTime === EMPTY_TIME
           ? null
           : {
-              notifications: [
-                {
-                  triggerType: NotificationType.Fixed,
-                  atTime: addSecondsToHourMinutes(getUploadedTime(notificationTime)),
-                },
-              ],
+              notifications: getUploadedNotificationTimes(notificationTime).map((time) => ({
+                triggerType: NotificationType.Fixed,
+                atTime: addSecondsToHourMinutes(time),
+              })),
               reminder: null,
             },
     };

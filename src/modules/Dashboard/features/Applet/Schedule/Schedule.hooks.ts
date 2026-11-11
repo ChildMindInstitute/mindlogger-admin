@@ -19,6 +19,7 @@ import {
   convertDateToYearMonthDay,
   getEventStartDMYString,
 } from './Schedule.utils';
+import { NOTIFICATION_TIME_SEPARATOR } from './ImportSchedulePopup/ImportSchedule.const';
 
 export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
   const dispatch = useAppDispatch();
@@ -75,11 +76,15 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             );
             const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
             const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
-            const { atTime, fromTime } = notification?.notifications?.[0] || {};
-            const notificationTime = notification?.notifications?.length
-              ? removeSecondsFromTime(atTime || fromTime) || '-'
-              : '-';
+            const notificationTime =
+              notification?.notifications
+                ?.map(({ atTime, fromTime }) => removeSecondsFromTime(atTime || fromTime))
+                .filter(Boolean)
+                .join(NOTIFICATION_TIME_SEPARATOR) || '-';
             const frequency = getFrequencyString(periodicityType);
+            const oneTimeCompletionText = isAlwaysAvailable
+              ? String(!!oneTimeCompletion).toUpperCase()
+              : '-';
             const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
 
             acc.scheduleExportTableData.push({
@@ -89,6 +94,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               endTime: getTableCell(endTime),
               notificationTime: getTableCell(notificationTime),
               frequency: getTableCell(frequency),
+              oneTimeCompletion: getTableCell(oneTimeCompletionText),
             });
 
             acc.scheduleExportCsv.push({
@@ -98,6 +104,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               endTime,
               notificationTime,
               frequency,
+              oneTimeCompletion: oneTimeCompletionText,
             });
 
             const dataToCreateEvent = {
