@@ -76,7 +76,7 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
         <Box {...commonErrorBoxProps}>
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
             <strong>Notification Time</strong>. Valid data format:{' '}
-            <strong>HH:mm, HH:mm/HH:mm for multiple times, or -</strong>.
+            <strong>HH:mm, HH:mm;HH:mm for multiple times, or -</strong>.
           </Trans>
         </Box>
       );
