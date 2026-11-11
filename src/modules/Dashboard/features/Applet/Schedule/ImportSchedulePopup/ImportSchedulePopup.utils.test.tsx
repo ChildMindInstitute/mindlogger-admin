@@ -55,7 +55,7 @@ describe('getInvalidError', () => {
     type                                        | expectedText
     ${ImportScheduleErrors.StartTime}           | ${'Activity Start Time. Valid data format: HH:mm for Scheduled activity and - for Always available activity.'}
     ${ImportScheduleErrors.EndTime}             | ${'Activity End Time. Valid data format: HH:mm for Scheduled activity and - for Always available activity.'}
-    ${ImportScheduleErrors.NotificationTime}    | ${'Notification Time. Valid data format: HH:mm, HH:mm/HH:mm for multiple times, or -.'}
+    ${ImportScheduleErrors.NotificationTime}    | ${'Notification Time. Valid data format: HH:mm, HH:mm;HH:mm for multiple times, or -.'}
     ${ImportScheduleErrors.Frequency}           | ${'Frequency. Valid data format: Always, Once, Daily, Weekly, Monthly, Weekdays.'}
     ${ImportScheduleErrors.Date}                | ${'Date. Valid data format: DD Month YYYY.'}
     ${ImportScheduleErrors.StartEndTime}        | ${'Activity End Time should not be equal to Activity Start Time.'}
