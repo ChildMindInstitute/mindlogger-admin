@@ -49,8 +49,7 @@ export const dateValidationRegex = new RegExp(
 
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
 export const EMPTY_TIME = '-';
-// Not ; or | since the csv parser may take those as the column separator
-export const NOTIFICATION_TIME_SEPARATOR = '/';
+export const NOTIFICATION_TIME_SEPARATOR = ';';
 export const ALWAYS_FREQUENCY = 'Always';
 export const ONE_TIME_COMPLETION_VALUES = ['TRUE', 'FALSE'];
 

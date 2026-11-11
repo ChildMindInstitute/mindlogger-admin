@@ -422,7 +422,7 @@ const expectedResult = {
       },
       notificationTime: {
         content: expect.any(Function),
-        value: '14:00/00:15',
+        value: '14:00;00:15',
       },
       frequency: {
         content: expect.any(Function),
@@ -518,7 +518,7 @@ const expectedResult = {
       date: '21 Dec 2023',
       startTime: '14:00',
       endTime: '11:30',
-      notificationTime: '14:00/00:15',
+      notificationTime: '14:00;00:15',
       frequency: 'Weekly',
       oneTimeCompletion: '-',
     },
