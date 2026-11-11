@@ -8,6 +8,7 @@ import { DateFormats, DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'share
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
+import { defaultExportHeader } from '../Legend/Legend.const';
 import {
   addSecondsToHourMinutes,
   getBetweenStartEndNextDaySingleComparison,
@@ -50,6 +51,22 @@ export const getInvalidActivitiesError = (activityNames: string[], appletName: s
       . Please enter a valid Activity name and reupload the file.
     </Trans>
   );
+
+export const getInvalidColumnsError = (columns: string[]) => (
+  <Box {...commonErrorBoxProps}>
+    <Trans i18nKey="importScheduleErrors.invalidColumns">
+      Unknown columns:
+      <strong>
+        <>{{ columns: columns.join(', ') }}</>
+      </strong>
+      . Valid columns:
+      <strong>
+        <>{{ validColumns: defaultExportHeader.join(', ') }}</>
+      </strong>
+      .
+    </Trans>
+  </Box>
+);
 
 export const getInvalidError = (type: ImportScheduleErrors) => {
   switch (type) {
@@ -264,9 +281,17 @@ export const getUploadedScheduleErrors = (
   const notExistentActivities = [...importedActivities].filter(
     (item) => !availableActivities.has(item),
   );
+  const unknownColumns = [...new Set(uploadedSchedule.flatMap((row) => Object.keys(row)))].filter(
+    (column) => !defaultExportHeader.includes(column),
+  );
 
   return {
+    invalidColumns: {
+      data: unknownColumns.length ? getInvalidColumnsError(unknownColumns) : null,
+      id: 'invalid-columns',
+    },
     ...props,
+    hasInvalidData: props.hasInvalidData || !!unknownColumns.length,
     notExistentActivities,
   };
 };

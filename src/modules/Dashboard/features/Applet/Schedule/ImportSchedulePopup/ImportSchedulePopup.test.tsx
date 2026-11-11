@@ -47,6 +47,7 @@ describe('ImportSchedulePopup', () => {
   // Need to mock the schedule export data to pass successfully when file is ready
   vi.spyOn(importSchedulePopupFunc, 'getUploadedScheduleErrors').mockImplementation(() => ({
     notExistentActivities: [],
+    invalidColumns: { data: null, id: 'invalid-columns' },
     invalidStartTimeField: { data: null, id: 'invalid-start-time' },
     invalidEndTimeField: { data: null, id: 'invalid-end-time' },
     invalidNotification: { data: null, id: 'invalid-notification' },

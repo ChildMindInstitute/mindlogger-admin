@@ -454,6 +454,7 @@ describe('getUploadedScheduleErrors', () => {
 
     const result = getUploadedScheduleErrors(mockScheduleExportData, mockUploadedSchedule);
     expect(result).toEqual({
+      invalidColumns: { data: null, id: 'invalid-columns' },
       invalidDate: { data: expect.any(Object), id: 'invalid-date' },
       invalidStartTimeField: { data: expect.any(Object), id: 'invalid-start-time' },
       invalidEndTimeField: { data: expect.any(Object), id: 'invalid-end-time' },
@@ -465,5 +466,27 @@ describe('getUploadedScheduleErrors', () => {
       hasInvalidData: true,
       notExistentActivities: ['Activity 2'],
     });
+  });
+
+  test('flags a misspelled column header', () => {
+    const mockUploadedSchedule = [
+      {
+        activityName: 'Activity 1',
+        date: '05 Mar 2022',
+        startTime: '-',
+        endTime: '-',
+        notificationTime: '-',
+        frequency: 'Always',
+        oneTimeCompletio: 'TRUE',
+      },
+    ];
+
+    const result = getUploadedScheduleErrors(mockScheduleExportData, mockUploadedSchedule);
+    expect(result?.hasInvalidData).toBe(true);
+
+    const { container } = renderWithProviders(<>{result?.invalidColumns.data}</>);
+    expect(container).toHaveTextContent(
+      'Unknown columns: oneTimeCompletio. Valid columns: activityName, date, startTime, endTime, notificationTime, frequency, oneTimeCompletion.',
+    );
   });
 });

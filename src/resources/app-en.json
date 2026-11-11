@@ -792,6 +792,7 @@
     "frequency": "<2>Frequency</2>. Valid data format: <2>Always, Once, Daily, Weekly, Monthly, Weekdays</2>.",
     "invalidActivityName": "Activity <1>{{activityName}}</1> does not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
     "invalidActivityNames": "Activities <1>{{activityNames}}</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidColumns": "Unknown columns: <1>{{columns}}</1>. Valid columns: <1>{{validColumns}}</1>.",
     "invalidDataFormat": "Invalid data format for the following fields:",
     "notificationTime": "<2>Notification Time</2>. Valid data format: <2>HH:mm or -</2>.",
     "oneTimeCompletion": "<2>One-Time Completion</2>. Valid data format: <2>TRUE, FALSE or - for Always available activity and - for Scheduled activity</2>.",
