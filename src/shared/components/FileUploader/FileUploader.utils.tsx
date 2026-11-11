@@ -8,6 +8,13 @@ import {
 } from 'shared/components/FileUploader/FileUploader.const';
 import { variables } from 'shared/styles';
 
+// xlsx guesses the csv column separator, and many ; inside cells can make it pick ;
+const getCsvSeparator = (fileBuffer: ArrayBuffer) => {
+  const header = new TextDecoder().decode(fileBuffer.slice(0, 1024)).split('\n')[0];
+
+  return header.includes(',') ? ',' : undefined;
+};
+
 export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const validFileTypes = isPrimaryUiType ? ['.csv', '.xls', '.xlsx', '.ods'] : ['.csv', '.xlsx'];
   const fileExtension = file.name.split('.').pop()?.toLowerCase();
@@ -17,9 +24,11 @@ export const importTable = async (file: File, isPrimaryUiType: boolean) => {
 
   const { read, utils } = await import('xlsx');
   const fileBuffer = await new Response(file).arrayBuffer();
+  const isCsv = fileExtension === 'csv';
   const workbook = read(fileBuffer, {
     cellDates: true,
-    ...(fileExtension !== 'csv' && { dateNF: `${DateFormats.DayMonthYear}` }),
+    ...(!isCsv && { dateNF: `${DateFormats.DayMonthYear}` }),
+    ...(isCsv && { FS: getCsvSeparator(fileBuffer) }),
   });
   const worksheet = Object.values(workbook.Sheets)[0];
   const data = utils.sheet_to_json(worksheet, { raw: false, defval: '' });
