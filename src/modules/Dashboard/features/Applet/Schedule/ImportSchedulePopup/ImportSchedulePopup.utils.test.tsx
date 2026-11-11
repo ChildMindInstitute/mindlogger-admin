@@ -258,10 +258,10 @@ describe('getFieldsToCheck', () => {
 
   test.each`
     notificationTime  | isInvalid
-    ${'09:00/13:30'}  | ${false}
-    ${'9:00 / 13:30'} | ${false}
-    ${'09:00/abc'}    | ${true}
-    ${'09:00/-'}      | ${true}
+    ${'09:00;13:30'}  | ${false}
+    ${'9:00 ; 13:30'} | ${false}
+    ${'09:00;abc'}    | ${true}
+    ${'09:00;-'}      | ${true}
   `(
     'notificationTime=$notificationTime: isInvalid=$isInvalid',
     ({ notificationTime, isInvalid }) => {
@@ -290,8 +290,8 @@ describe('getFieldsToCheck', () => {
 
   test.each`
     notificationTime | isInvalid
-    ${'10:00/17:00'} | ${false}
-    ${'10:00/23:00'} | ${true}
+    ${'10:00;17:00'} | ${false}
+    ${'10:00;23:00'} | ${true}
   `(
     'notificationTime=$notificationTime in 09:00-18:00 window: isInvalid=$isInvalid',
     ({ notificationTime, isInvalid }) => {
@@ -481,7 +481,7 @@ describe('prepareImportPayload', () => {
 
   test('creates a fixed notification for each time', () => {
     const [{ notification }] = prepareImportPayload([
-      { ...mockUploadedEvents[0], notificationTime: '10:00/10:30' },
+      { ...mockUploadedEvents[0], notificationTime: '10:00;10:30' },
     ]);
 
     expect(notification).toEqual({
