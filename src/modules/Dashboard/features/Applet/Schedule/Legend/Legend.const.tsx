@@ -35,4 +35,5 @@ export const defaultExportHeader = [
   'endTime',
   'notificationTime',
   'frequency',
+  'oneTimeCompletion',
 ];
