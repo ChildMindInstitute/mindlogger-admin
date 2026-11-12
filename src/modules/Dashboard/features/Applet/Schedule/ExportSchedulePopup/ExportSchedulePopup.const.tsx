@@ -28,4 +28,8 @@ export const getHeadCells = (): HeadCell[] => [
     id: 'frequency',
     label: t('frequency'),
   },
+  {
+    id: 'oneTimeCompletion',
+    label: t('oneTimeCompletion'),
+  },
 ];
