@@ -93,10 +93,7 @@ describe('EditAccessPopup component', () => {
   });
 
   test('submits form when save button is clicked', async () => {
-    vi.mocked(axios.delete).mockResolvedValueOnce({
-      data: null,
-    });
-    vi.mocked(axios.post).mockResolvedValueOnce({
+    vi.mocked(axios.put).mockResolvedValueOnce({
       data: null,
     });
 
@@ -118,15 +115,9 @@ describe('EditAccessPopup component', () => {
       [MixpanelProps.Roles]: user.roles,
     });
 
-    expect(axios.delete).toBeCalledWith('/workspaces/managers/removeAccess', {
-      data: {
-        appletIds: ['2e46fa32-ea7c-4a76-b49b-1c97d795bb9a'],
-        userId: mockedUserData.id,
-      },
-      signal: undefined,
-    });
+    expect(axios.delete).not.toHaveBeenCalled();
 
-    expect(axios.post).toBeCalledWith(
+    expect(axios.put).toBeCalledWith(
       `/workspaces/${mockedOwnerId}/managers/${mockedUserData.id}/accesses`,
       {
         accesses: [
@@ -150,10 +141,7 @@ describe('EditAccessPopup component', () => {
   });
 
   test('changes the role to reviewer', async () => {
-    vi.mocked(axios.delete).mockResolvedValueOnce({
-      data: null,
-    });
-    vi.mocked(axios.post).mockResolvedValueOnce({
+    vi.mocked(axios.put).mockResolvedValueOnce({
       data: null,
     });
 
@@ -216,15 +204,9 @@ describe('EditAccessPopup component', () => {
       [MixpanelProps.Roles]: [Roles.Reviewer],
     });
 
-    expect(axios.delete).toBeCalledWith('/workspaces/managers/removeAccess', {
-      data: {
-        appletIds: ['2e46fa32-ea7c-4a76-b49b-1c97d795bb9a'],
-        userId: mockedUserData.id,
-      },
-      signal: undefined,
-    });
+    expect(axios.delete).not.toHaveBeenCalled();
 
-    expect(axios.post).toBeCalledWith(
+    expect(axios.put).toBeCalledWith(
       `/workspaces/${mockedOwnerId}/managers/${mockedUserData.id}/accesses`,
       {
         accesses: [
