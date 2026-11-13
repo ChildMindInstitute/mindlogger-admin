@@ -73,6 +73,15 @@ describe('LinkedTabs', () => {
     expect(window.location.pathname).toBe('/'); // respondents tab has no a path value
   });
 
+  test('renders content between the tab bar and the tab panels', () => {
+    renderWithProviders(
+      <LinkedTabs tabs={mockTabs} belowTabs={<div data-testid="below-tabs" />} />,
+    );
+
+    const tabBar = screen.getByTestId('linked-tabs');
+    expect(tabBar.nextElementSibling).toBe(screen.getByTestId('below-tabs'));
+  });
+
   test('render tabs for a specific route', async () => {
     renderWithProviders(<LinkedTabs tabs={mockTabs} />, {
       route: '/dashboard/managers',
