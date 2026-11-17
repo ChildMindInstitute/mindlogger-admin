@@ -11,6 +11,7 @@ import { MS_IN_MIN } from 'shared/hooks/useSessionKeepAlive/useSessionKeepAlive.
 import { authStorage } from 'shared/utils/authStorage';
 
 import { acceptMSAAtLogin, signIn, verifyMFATOTP, verifyMFARecoveryCode } from './Auth.thunk';
+import { msaApiSlice } from '../api/msaApiSlice';
 
 vi.mock('api', async () => {
   const actual = await vi.importActual<typeof import('api')>('api');
@@ -178,6 +179,31 @@ describe('Auth signIn thunk', () => {
     });
     expect(state.isAuthorized).toBe(false);
     expect(authStorage.getAccessToken()).toBeFalsy();
+  });
+
+  it("drops the previous account's MSA status on login", async () => {
+    mockSignInApi.mockResolvedValueOnce({
+      data: {
+        result: {
+          token: { accessToken: 'access', refreshToken: 'refresh' },
+          user: { id: 'user-id', email: 'admin@example.com', firstName: 'A', lastName: 'B' },
+        },
+      },
+    } as any);
+
+    const store = setupStore();
+    const selectMsaStatus = msaApiSlice.endpoints.getMsaStatus.select();
+    await store.dispatch(
+      msaApiSlice.util.upsertQueryData('getMsaStatus', undefined, {
+        status: 'grace',
+        deadline: '2026-12-18',
+      } as any),
+    );
+    expect(selectMsaStatus(store.getState()).data).toBeDefined();
+
+    await store.dispatch(signIn({ email: 'admin@example.com', password: 'password' }));
+
+    expect(selectMsaStatus(store.getState()).data).toBeUndefined();
   });
 });
 

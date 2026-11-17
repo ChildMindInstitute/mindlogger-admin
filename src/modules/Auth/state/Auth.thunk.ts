@@ -1,8 +1,9 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, Dispatch } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { datadogRum } from '@datadog/browser-rum';
 
 import { RootState } from 'redux/store';
+import { apiSlice } from 'shared/api/apiSlice';
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
@@ -76,9 +77,14 @@ const isMSARequiredResponse = (
   Boolean(response?.result && 'msaRequired' in response.result && response.result.msaRequired);
 
 // Saves the tokens of a completed login and identifies the user to tracking
-const storeLoginSession = ({ token, user }: StandardLoginResponse['result']) => {
+const storeLoginSession = (
+  { token, user }: StandardLoginResponse['result'],
+  dispatch: Dispatch,
+) => {
   authStorage.setRefreshToken(token.refreshToken);
   authStorage.setAccessToken(token.accessToken);
+  // Drop the previous account's MSA status so this one fetches its own
+  dispatch(apiSlice.util.invalidateTags(['MsaStatus']));
   // A new session starts its own clock. One left by a session whose tab never logged out
   // would put this one past its deadline, and the tracker only writes when there is none.
   setLastActivityAt(Date.now());
@@ -90,7 +96,7 @@ const storeLoginSession = ({ token, user }: StandardLoginResponse['result']) => 
 
 export const signIn = createAsyncThunk(
   'auth/login',
-  async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
+  async ({ email, password }: SignIn, { dispatch, rejectWithValue, signal }) => {
     try {
       const { data } = await signInApi({ email, password }, signal);
 
@@ -107,7 +113,7 @@ export const signIn = createAsyncThunk(
         }
 
         // Standard login flow (MFA not required)
-        storeLoginSession(data.result);
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
@@ -176,7 +182,7 @@ export const resetPassword = createAsyncThunk(
 // MFA verification thunks
 export const verifyMFATOTP = createAsyncThunk(
   'auth/verifyMFATOTP',
-  async ({ totpCode }: { totpCode: string }, { getState, rejectWithValue, signal }) => {
+  async ({ totpCode }: { totpCode: string }, { dispatch, getState, rejectWithValue, signal }) => {
     try {
       const state = getState() as RootState;
       const { mfaSession } = state.auth;
@@ -205,7 +211,7 @@ export const verifyMFATOTP = createAsyncThunk(
       }
 
       if (data?.result) {
-        storeLoginSession(data.result);
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
@@ -217,7 +223,7 @@ export const verifyMFATOTP = createAsyncThunk(
 
 export const verifyMFARecoveryCode = createAsyncThunk(
   'auth/verifyMFARecoveryCode',
-  async ({ code }: { code: string }, { getState, rejectWithValue, signal }) => {
+  async ({ code }: { code: string }, { dispatch, getState, rejectWithValue, signal }) => {
     try {
       const state = getState() as RootState;
       const { mfaSession } = state.auth;
@@ -246,7 +252,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       }
 
       if (data?.result) {
-        storeLoginSession(data.result);
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
@@ -259,7 +265,7 @@ export const verifyMFARecoveryCode = createAsyncThunk(
 // Accepts the MSA during login and completes it with the tokens returned
 export const acceptMSAAtLogin = createAsyncThunk(
   'auth/acceptMSAAtLogin',
-  async (_: void, { getState, rejectWithValue, signal }) => {
+  async (_: void, { dispatch, getState, rejectWithValue, signal }) => {
     try {
       const { msaSession } = (getState() as RootState).auth;
 
@@ -271,7 +277,7 @@ export const acceptMSAAtLogin = createAsyncThunk(
         { msaToken: msaSession.token, msaVersion: msaSession.version },
         signal,
       );
-      storeLoginSession(data.result);
+      storeLoginSession(data.result, dispatch);
 
       return data;
     } catch (exception) {
