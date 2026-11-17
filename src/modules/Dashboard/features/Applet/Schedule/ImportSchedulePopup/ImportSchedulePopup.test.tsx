@@ -7,6 +7,13 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { ImportSchedulePopup } from './ImportSchedulePopup';
 import * as importSchedulePopupFunc from './ImportSchedulePopup.utils';
 
+const mockSheetToJson = vi.hoisted(() =>
+  vi.fn((): Record<string, string>[] => [
+    { header1: 'value1', header2: 'value2' },
+    { header1: 'value3', header2: 'value4' },
+  ]),
+);
+
 // Mock xlsx library to avoid dependency issues in tests
 vi.mock('xlsx', () => ({
   read: () => ({
@@ -15,10 +22,7 @@ vi.mock('xlsx', () => ({
     },
   }),
   utils: {
-    sheet_to_json: () => [
-      { header1: 'value1', header2: 'value2' },
-      { header1: 'value3', header2: 'value4' },
-    ],
+    sheet_to_json: mockSheetToJson,
   },
 }));
 
@@ -116,6 +120,20 @@ describe('ImportSchedulePopup', () => {
     expect(secondaryBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     expect(submitBtn.textContent).toBe('Update Schedule');
     expect(submitBtn.classList.contains('MuiButton-containedError')).toBeTruthy();
+  });
+
+  test('shows the empty file error when the file has only example rows', async () => {
+    mockSheetToJson.mockReturnValueOnce([
+      { activityName: '## Example: Daily with 2 notifications' },
+      { activityName: '## Example: Always available' },
+    ]);
+    renderWithProviders(<ImportSchedulePopup {...props} />);
+
+    await userEvent.click(screen.getByTestId('modalDataTestId-submit-button'));
+    await userEvent.upload(screen.getByTestId('upload-file-input'), file);
+
+    expect(await screen.findByText(/^Invalid file format or empty file/)).toBeInTheDocument();
+    expect(screen.queryByText('test.csv')).not.toBeInTheDocument();
   });
 
   test('should render individual schedule step=0', () => {

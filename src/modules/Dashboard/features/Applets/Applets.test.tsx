@@ -251,6 +251,16 @@ describe('Applets component tests', () => {
       },
       { timeout: 3000 },
     );
+    // Wait for the debounced search so it doesn't fire after the next one
+    await waitFor(
+      () => {
+        expect(authApiClient.get).toHaveBeenCalledWith(
+          `/workspaces/${mockedOwnerId}/applets/search/${searchQuery}`,
+          expect.anything(),
+        );
+      },
+      { timeout: 3000 },
+    );
 
     searchInput && fireEvent.change(searchInput, { target: { value: 'NotExistedApplet' } });
     await waitFor(
