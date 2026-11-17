@@ -3,6 +3,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { authApiClient } from 'shared/api/apiConfig';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { TopBar } from './TopBar';
@@ -80,5 +81,14 @@ describe('TopBar component', () => {
     await userEvent.click(badgeButton);
 
     expect(screen.getByTestId('account-panel')).toBeInTheDocument();
+  });
+
+  test('shows the MSA reminder banner during the grace period', async () => {
+    vi.mocked(authApiClient.get).mockResolvedValue({
+      data: { result: { status: 'grace', version: '2026-11-01', deadline: '2099-12-11' } },
+    });
+    renderWithProviders(<TopBar />, { preloadedState: getPreloadedState({ isAuthorized: true }) });
+
+    expect(await screen.findByTestId('msa-reminder-banner')).toBeInTheDocument();
   });
 });

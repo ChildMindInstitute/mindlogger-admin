@@ -6,7 +6,6 @@ import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
 import { page } from 'resources';
 import { useCurrentActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
-import { MsaReminderBanner } from 'modules/Auth/features/Msa';
 
 import { StyledBuilderActivityFlowBody } from './BuilderActivityFlow.styles';
 import { getActivityFlowTabs } from './BuilderActivityFlow.utils';
@@ -45,11 +44,7 @@ export const BuilderActivityFlow = () => {
         {t('activityFlows')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>
-      <LinkedTabs
-        tabs={getActivityFlowTabs({ appletId, activityFlowId }, tabErrors)}
-        isBuilder
-        belowTabs={<MsaReminderBanner />}
-      />
+      <LinkedTabs tabs={getActivityFlowTabs({ appletId, activityFlowId }, tabErrors)} isBuilder />
     </StyledBuilderActivityFlowBody>
   );
 };

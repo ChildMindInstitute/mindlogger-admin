@@ -1,4 +1,4 @@
-import { memo, ReactNode, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Badge, Tab } from '@mui/material';
@@ -10,8 +10,6 @@ import { TabPanelProps } from '../TabPanel/TabPanel.types';
 
 interface LinkedTabsProps extends TabsProps {
   panelProps?: Omit<TabPanelProps, 'index' | 'value'>;
-  // Shown between the tab bar and the tab content, e.g. a page banner
-  belowTabs?: ReactNode;
 }
 
 export const LinkedTabs = memo(
@@ -25,7 +23,6 @@ export const LinkedTabs = memo(
     defaultToFirstTab = true,
     animateTabIndicator = true,
     panelProps,
-    belowTabs,
   }: LinkedTabsProps) => {
     const { t } = useTranslation('app');
     const { pathname } = useLocation();
@@ -122,7 +119,6 @@ export const LinkedTabs = memo(
         >
           {!hiddenHeader && header}
         </StyledTabs>
-        {belowTabs}
         {content}
       </>
     );
