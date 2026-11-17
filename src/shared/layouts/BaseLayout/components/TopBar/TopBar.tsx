@@ -7,6 +7,7 @@ import { Banners } from 'shared/components/Banners';
 import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
 import { page } from 'resources';
 import { auth } from 'modules/Auth/state';
+import { MsaReminderBanner } from 'modules/Auth/features/Msa';
 import { alerts } from 'shared/state';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
@@ -53,6 +54,8 @@ export const TopBar = () => {
         )}
       </StyledTopBar>
       <Banners />
+      {/* Shown on every admin page until the MSA is accepted */}
+      {isAuthorized && <MsaReminderBanner />}
       {visibleAccountDrawer && (
         <AccountPanel
           setVisibleDrawer={setVisibleAccountDrawer}
