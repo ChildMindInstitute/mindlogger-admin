@@ -11,7 +11,7 @@ import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
 import { useSchedule } from '../ScheduleProvider/ScheduleProvider.hooks';
 import { ExpandedList } from './ExpandedList';
-import { defaultExportHeader } from './Legend.const';
+import { defaultExportHeader, getScheduleTemplateExampleRows } from './Legend.const';
 import { useExpandedLists } from './Legend.hooks';
 import { StyledLegend } from './Legend.styles';
 import { LegendProps } from './Legend.types';
@@ -53,10 +53,14 @@ export const Legend = ({
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
     };
 
+    const data = isExport
+      ? scheduleExportCsv
+      : [...getScheduleTemplateExampleRows(), ...scheduleExportCsv];
+
     await exportTemplate({
-      data: scheduleExportCsv,
+      data,
       fileName: getFileName(),
-      defaultData: scheduleExportCsv.length > 0 ? null : defaultExportHeader,
+      defaultData: data.length > 0 ? null : defaultExportHeader,
     });
 
     isExport && setShowExportSchedulePopup(false);
