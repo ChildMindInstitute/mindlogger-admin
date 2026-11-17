@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { ImportedFile } from 'shared/components';
 
 import { ImportScheduleHookProps } from './ImportSchedulePopup.types';
-import { getInvalidActivitiesError, getUploadedScheduleErrors } from './ImportSchedulePopup.utils';
+import {
+  getInvalidActivitiesError,
+  getUploadedScheduleErrors,
+  removeExampleRows,
+} from './ImportSchedulePopup.utils';
 import { commonErrorBoxProps } from './ImportSchedule.const';
 
 export const useImportSchedule = ({ appletName, scheduleExportData }: ImportScheduleHookProps) => {
@@ -27,8 +31,9 @@ export const useImportSchedule = ({ appletName, scheduleExportData }: ImportSche
   const handleFileReady = (file: ImportedFile | null) => {
     if (!file) return handleUploadClear();
 
+    const data = removeExampleRows(file.data);
     const { notExistentActivities, hasInvalidData, ...otherErrors } =
-      getUploadedScheduleErrors(scheduleExportData, file?.data) || {};
+      getUploadedScheduleErrors(scheduleExportData, data) || {};
 
     if (hasInvalidData || notExistentActivities?.length) {
       const invalidErrors = (
@@ -50,7 +55,7 @@ export const useImportSchedule = ({ appletName, scheduleExportData }: ImportSche
       return setValidationError(invalidErrors);
     }
 
-    return handleSuccessfullyUploaded(file);
+    return handleSuccessfullyUploaded({ ...file, data });
   };
 
   return {

@@ -50,6 +50,7 @@ export const dateValidationRegex = new RegExp(
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
 export const EMPTY_TIME = '-';
 export const NOTIFICATION_TIME_SEPARATOR = ';';
+export const EXAMPLE_ROW_PREFIX = '##';
 export const ALWAYS_FREQUENCY = 'Always';
 export const ONE_TIME_COMPLETION_VALUES = ['TRUE', 'FALSE'];
 

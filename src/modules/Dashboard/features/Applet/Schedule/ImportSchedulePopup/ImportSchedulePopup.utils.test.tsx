@@ -14,6 +14,7 @@ import {
   getUploadedScheduleErrors,
   getUploadedTime,
   prepareImportPayload,
+  removeExampleRows,
 } from './ImportSchedulePopup.utils';
 import { ImportScheduleErrors } from './ImportSchedulePopup.types';
 import { dateValidationRegex } from './ImportSchedule.const';
@@ -106,6 +107,18 @@ describe('getUploadedTime', () => {
   test('replaces single-digit hour with leading zero', () => {
     const result = getUploadedTime('1:15');
     expect(result).toBe('01:15');
+  });
+});
+
+describe('removeExampleRows', () => {
+  test('removes rows whose activity name starts with ##', () => {
+    const rows = [
+      { activityName: '## Example: Daily with 2 notifications' },
+      { activityName: ' ## Example: Always available' },
+      { activityName: 'Activity 1' },
+    ];
+
+    expect(removeExampleRows(rows)).toEqual([{ activityName: 'Activity 1' }]);
   });
 });
 

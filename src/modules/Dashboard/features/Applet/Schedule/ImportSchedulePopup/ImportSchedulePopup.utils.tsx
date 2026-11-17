@@ -19,6 +19,7 @@ import {
   timeValidationRegex,
   EMPTY_TIME,
   NOTIFICATION_TIME_SEPARATOR,
+  EXAMPLE_ROW_PREFIX,
   ALWAYS_FREQUENCY,
   ONE_TIME_COMPLETION_VALUES,
   commonErrorBoxProps,
@@ -278,6 +279,15 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
       invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
       hasInvalidData: false,
     },
+  );
+
+// Template example rows start with ## and are not imported
+export const removeExampleRows = (data: Record<string, string | number>[]) =>
+  data.filter(
+    (row) =>
+      !String(row.activityName ?? '')
+        .trim()
+        .startsWith(EXAMPLE_ROW_PREFIX),
   );
 
 export const getUploadedScheduleErrors = (
