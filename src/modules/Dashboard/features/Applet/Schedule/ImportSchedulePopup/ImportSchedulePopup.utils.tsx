@@ -170,6 +170,11 @@ export const getUploadedTime = (time: string | Date) => {
   return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
+// A blank cell means no notification, same as -
+export const hasNoNotificationTime = (notificationTime: string | Date) =>
+  !(notificationTime instanceof Date) &&
+  ['', EMPTY_TIME].includes(String(notificationTime ?? '').trim());
+
 export const getUploadedNotificationTimes = (notificationTime: string | Date) =>
   notificationTime instanceof Date
     ? [getUploadedTime(notificationTime)]
@@ -211,7 +216,7 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
         }
 
         if (
-          notificationTime !== EMPTY_TIME &&
+          !hasNoNotificationTime(notificationTime) &&
           !getUploadedNotificationTimes(notificationTime).every((time) =>
             timeValidationRegex.test(time),
           )
@@ -237,7 +242,7 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
 
         if (
           !isAlwaysFrequency &&
-          notificationTime !== EMPTY_TIME &&
+          !hasNoNotificationTime(notificationTime) &&
           startTime !== endTime &&
           !getUploadedNotificationTimes(notificationTime).every((time) =>
             getBetweenStartEndNextDaySingleComparison({
@@ -383,15 +388,14 @@ export const prepareImportPayload = (
       },
       activityId,
       flowId,
-      notification:
-        notificationTime === EMPTY_TIME
-          ? null
-          : {
-              notifications: getUploadedNotificationTimes(notificationTime).map((time) => ({
-                triggerType: NotificationType.Fixed,
-                atTime: addSecondsToHourMinutes(time),
-              })),
-              reminder: null,
-            },
+      notification: hasNoNotificationTime(notificationTime)
+        ? null
+        : {
+            notifications: getUploadedNotificationTimes(notificationTime).map((time) => ({
+              triggerType: NotificationType.Fixed,
+              atTime: addSecondsToHourMinutes(time),
+            })),
+            reminder: null,
+          },
     };
   });

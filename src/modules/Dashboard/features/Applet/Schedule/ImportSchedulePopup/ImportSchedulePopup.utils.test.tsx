@@ -275,6 +275,7 @@ describe('getFieldsToCheck', () => {
     ${'9:00 ; 13:30'} | ${false}
     ${'09:00;abc'}    | ${true}
     ${'09:00;-'}      | ${true}
+    ${''}             | ${false}
   `(
     'notificationTime=$notificationTime: isInvalid=$isInvalid',
     ({ notificationTime, isInvalid }) => {
@@ -504,6 +505,14 @@ describe('prepareImportPayload', () => {
       ],
       reminder: null,
     });
+  });
+
+  test('creates no notification for a blank notification time', () => {
+    const [{ notification }] = prepareImportPayload([
+      { ...mockUploadedEvents[0], notificationTime: '' },
+    ]);
+
+    expect(notification).toBeNull();
   });
 });
 
