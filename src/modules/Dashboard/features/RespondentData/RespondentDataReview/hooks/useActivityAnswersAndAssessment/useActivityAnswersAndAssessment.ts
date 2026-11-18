@@ -58,8 +58,8 @@ export const useActivityAnswersAndAssessment = ({
 
   const { execute: getActivityAnswer, error: getAnswerError } = useAsync(
     getActivityAnswerApi,
-    async (res, request) => {
-      const result = res?.data?.result;
+    async (response, request) => {
+      const result = response?.data?.result;
       if (!result) return;
 
       const decryptedActivityData = await getDecryptedActivityData({
@@ -83,8 +83,8 @@ export const useActivityAnswersAndAssessment = ({
 
   const { execute: getFlowAnswers, error: getFlowAnswersError } = useAsync(
     getFlowAnswersApi,
-    async (res, request) => {
-      const result = res?.data?.result;
+    async (response, request) => {
+      const result = response?.data?.result;
       if (!result) return;
 
       const { flow, submission, summary } = result;
