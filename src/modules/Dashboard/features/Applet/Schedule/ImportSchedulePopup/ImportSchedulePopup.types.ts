@@ -26,6 +26,7 @@ export type CheckFields = {
   invalidDate: InvalidField;
   invalidStartEndTime: InvalidField;
   invalidNotificationTime: InvalidField;
+  invalidOneTimeCompletion: InvalidField;
   hasInvalidData: boolean;
 };
 
@@ -34,8 +35,9 @@ export type ImportScheduleHookProps = {
   scheduleExportData: ScheduleExportCsv;
 };
 
-export type UploadedEvent = Omit<ScheduleExportItem, 'date'> & {
+export type UploadedEvent = Omit<ScheduleExportItem, 'date' | 'oneTimeCompletion'> & {
   date: string | Date;
+  oneTimeCompletion?: string;
 };
 
 export enum ImportScheduleErrors {
@@ -46,6 +48,7 @@ export enum ImportScheduleErrors {
   Date = 'date',
   StartEndTime = 'startEndTime',
   BetweenStartEndTime = 'betweenStartEndTime',
+  OneTimeCompletion = 'oneTimeCompletion',
 }
 
 export type Steps = 0 | 1 | 2;

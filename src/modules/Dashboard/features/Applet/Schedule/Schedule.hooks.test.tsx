@@ -368,6 +368,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Always',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: 'FALSE',
+      },
     },
     {
       activityName: {
@@ -393,6 +397,10 @@ const expectedResult = {
       frequency: {
         content: expect.any(Function),
         value: 'Daily',
+      },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
       },
     },
     {
@@ -420,6 +428,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Weekly',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
+      },
     },
     {
       activityName: {
@@ -445,6 +457,10 @@ const expectedResult = {
       frequency: {
         content: expect.any(Function),
         value: 'Weekdays',
+      },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: '-',
       },
     },
     {
@@ -472,6 +488,10 @@ const expectedResult = {
         content: expect.any(Function),
         value: 'Always',
       },
+      oneTimeCompletion: {
+        content: expect.any(Function),
+        value: 'TRUE',
+      },
     },
   ],
   scheduleExportCsv: [
@@ -482,6 +502,7 @@ const expectedResult = {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'FALSE',
     },
     {
       activityName: 'Activity 2',
@@ -490,6 +511,7 @@ const expectedResult = {
       endTime: '23:59',
       notificationTime: '-',
       frequency: 'Daily',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 2',
@@ -498,6 +520,7 @@ const expectedResult = {
       endTime: '11:30',
       notificationTime: '14:00',
       frequency: 'Weekly',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 2',
@@ -506,6 +529,7 @@ const expectedResult = {
       endTime: '23:59',
       notificationTime: '-',
       frequency: 'Weekdays',
+      oneTimeCompletion: '-',
     },
     {
       activityName: 'Activity 1',
@@ -514,6 +538,7 @@ const expectedResult = {
       endTime: '-',
       notificationTime: '-',
       frequency: 'Always',
+      oneTimeCompletion: 'TRUE',
     },
   ],
 };
