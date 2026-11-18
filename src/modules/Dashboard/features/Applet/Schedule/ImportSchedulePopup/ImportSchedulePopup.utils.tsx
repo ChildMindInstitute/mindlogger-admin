@@ -74,7 +74,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.StartTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.StartTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity Start Time</strong>. Valid data format:{' '}
             <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
           </Trans>
@@ -83,7 +86,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.EndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.EndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.EndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity End Time</strong>. Valid data format:{' '}
             <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
           </Trans>
@@ -92,7 +98,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.NotificationTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.NotificationTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Notification Time</strong>. Valid data format:{' '}
             <strong>HH:mm, HH:mm;HH:mm for multiple times, or -</strong>.
           </Trans>
@@ -101,7 +110,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.Frequency:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Frequency}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.Frequency}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Frequency</strong>. Valid data format:{' '}
             <strong>Always, Once, Daily, Weekly, Monthly, Weekdays</strong>.
           </Trans>
@@ -110,7 +122,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.Date:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.Date}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Date</strong>. Valid data format: <strong>DD Month YYYY</strong>.
           </Trans>
         </Box>
@@ -118,7 +133,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.StartEndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.StartEndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity End Time</strong> should not be equal to{' '}
             <strong>Activity Start Time</strong>.
           </Trans>
@@ -127,7 +145,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.BetweenStartEndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.BetweenStartEndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Notification Time</strong> should be between{' '}
             <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
           </Trans>
@@ -136,7 +157,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.OneTimeCompletion:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.OneTimeCompletion}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.OneTimeCompletion}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>One-Time Completion</strong>. Valid data format:{' '}
             <strong>
               TRUE, FALSE or - for Always available activity and - for Scheduled activity

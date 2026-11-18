@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { endOfYear, format } from 'date-fns';
 
+import i18n from 'i18n';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DateFormats } from 'shared/consts';
 
@@ -65,6 +66,18 @@ describe('getInvalidError', () => {
   `('renders error text for type=$type', ({ type, expectedText }) => {
     const { container } = renderWithProviders(getInvalidError(type));
     expect(container).toHaveTextContent(expectedText);
+  });
+
+  test('renders the error in French', async () => {
+    await i18n.changeLanguage('fr');
+    const { container } = renderWithProviders(
+      getInvalidError(ImportScheduleErrors.BetweenStartEndTime),
+    );
+    await i18n.changeLanguage('en');
+
+    expect(container).toHaveTextContent(
+      "L'heure de Notification doit être comprise entre l'heure de Début de l'Activité et l'heure de Fin de l'Activité.",
+    );
   });
 });
 
