@@ -21,6 +21,7 @@ import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
+import { CopyActivityModal } from './CopyActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
 import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
@@ -43,6 +44,7 @@ const ActivityDraggableItem = React.memo<{
   handleActivityVisibilityChange: (index: number) => void;
   handleActivityAdd: (props: ActivityAddProps) => void;
   setActivityToDelete: (key: string) => void;
+  setActivityToCopy: (key: string) => void;
 }>(
   ({
     activity,
@@ -60,6 +62,7 @@ const ActivityDraggableItem = React.memo<{
     handleActivityVisibilityChange,
     handleActivityAdd,
     setActivityToDelete,
+    setActivityToCopy,
   }) => (
     <Draggable draggableId={activityKey} index={index}>
       {(itemProvided, snapshot) => (
@@ -79,6 +82,7 @@ const ActivityDraggableItem = React.memo<{
                 isActivityHidden: activity.isHidden,
                 onEdit: () => handleEditActivity(index),
                 onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
+                onCopy: () => setActivityToCopy(activityKey),
                 onRemove: () => setActivityToDelete(activityKey),
                 onVisibilityChange: () => handleActivityVisibilityChange(index),
                 isEditVisible,
@@ -108,6 +112,7 @@ export const Activities = () => {
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
+  const [activityToCopy, setActivityToCopy] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
 
   const {
@@ -161,6 +166,9 @@ export const Activities = () => {
     [navigate, appletId],
   );
   const handleModalClose = useCallback(() => setActivityToDelete(''), []);
+  const handleCopyModalClose = useCallback(() => setActivityToCopy(''), []);
+  const activityNameToCopy =
+    activities.find((activity) => getActivityKey(activity) === activityToCopy)?.name ?? '';
   const handleActivityAdd = useCallback(
     (props: ActivityAddProps) => {
       Mixpanel.track({
@@ -329,6 +337,7 @@ export const Activities = () => {
                         handleActivityVisibilityChange={handleActivityVisibilityChange}
                         handleActivityAdd={handleActivityAdd}
                         setActivityToDelete={setActivityToDelete}
+                        setActivityToCopy={setActivityToCopy}
                       />
                       <DeleteActivityModal
                         activityName={activityName}
@@ -350,6 +359,13 @@ export const Activities = () => {
           {t('activityIsRequired')}
         </StyledTitleMedium>
       )}
+      <CopyActivityModal
+        isOpen={!!activityToCopy}
+        activityName={activityNameToCopy}
+        onClose={handleCopyModalClose}
+        onSubmit={handleCopyModalClose}
+        data-testid="builder-activities-copy-activity-popup"
+      />
     </BuilderContainer>
   );
 };
