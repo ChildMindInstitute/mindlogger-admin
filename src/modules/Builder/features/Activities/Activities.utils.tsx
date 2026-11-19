@@ -11,6 +11,7 @@ export const getActions = ({
   isActivityHidden,
   onEdit,
   onDuplicate,
+  onCopy,
   onVisibilityChange,
   onRemove,
   isEditVisible,
@@ -30,6 +31,15 @@ export const getActions = ({
     action: onDuplicate,
     'data-testid': `${dataTestid}-duplicate`,
   },
+  ...(onCopy
+    ? [
+        {
+          icon: <Svg id="external-link" />,
+          action: onCopy,
+          'data-testid': `${dataTestid}-copy`,
+        },
+      ]
+    : []),
   {
     icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
     action: onVisibilityChange,

@@ -5,6 +5,7 @@ export type GetActivitiesActions = {
   isActivityHidden?: boolean;
   onEdit: () => void;
   onDuplicate: () => void;
+  onCopy?: () => void;
   onVisibilityChange: () => void;
   onRemove: () => void;
   isEditVisible: boolean;
