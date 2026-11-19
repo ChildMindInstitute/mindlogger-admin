@@ -63,6 +63,20 @@ describe('AcceptMsa', () => {
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith(page.dashboard));
   });
 
+  // The MFA page leaves its session for this page to clear
+  it('clears the MFA session when it opens', () => {
+    const { store } = renderWithProviders(<AcceptMsa />, {
+      preloadedState: {
+        auth: {
+          ...preloadedState.auth,
+          mfaSession: { token: 'mfa-token', sessionId: 'session-id' },
+        },
+      },
+    });
+
+    expect(store.getState().auth.mfaSession).toBeUndefined();
+  });
+
   it('shows the deadline copy when the grace period has ended', () => {
     renderWithProviders(<AcceptMsa />, {
       preloadedState: {

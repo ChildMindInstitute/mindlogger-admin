@@ -69,9 +69,8 @@ export const useMFAVerification = (type: MFAVerificationType) => {
 
         if (verifyMFATOTP.fulfilled.match(result)) {
           if (isMSARequired(result.payload)) {
-            // MSA must be accepted first; navigate before clearing the MFA session (guard race)
+            // MSA must be accepted first; the MSA page clears the MFA session
             navigate(page.acceptMsa);
-            dispatch(auth.actions.clearMFASession());
 
             return true;
           }
@@ -93,9 +92,8 @@ export const useMFAVerification = (type: MFAVerificationType) => {
 
         if (verifyMFARecoveryCode.fulfilled.match(result)) {
           if (isMSARequired(result.payload)) {
-            // MSA must be accepted first; navigate before clearing the MFA session (guard race)
+            // MSA must be accepted first; the MSA page clears the MFA session
             navigate(page.acceptMsa);
-            dispatch(auth.actions.clearMFASession());
 
             return true;
           }
