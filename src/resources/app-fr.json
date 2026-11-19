@@ -1436,6 +1436,7 @@
   "saveAndPublish": "Enregistrer et publier",
   "saveAndPublishFirst": "Enregistrez et publiez d'abord l'Applet",
   "saveAnyway": "Enregistrer quand même",
+  "saveBeforeCopyActivity": "Vous avez des modifications non enregistrées. Enregistrez l'applet avant de copier cette activité.",
   "saveChanges": "Enregistrer les modifications?",
   "saveChangesDescription": "Les modifications non enregistrées seront perdues.",
   "saveError": "Désolé, nous n'avons pas pu enregistrer ces modifications.",

@@ -1437,6 +1437,7 @@
   "saveAndPublish": "Save & Publish",
   "saveAndPublishFirst": "Save & publish the Applet first",
   "saveAnyway": "Save anyway",
+  "saveBeforeCopyActivity": "You have unsaved changes. Save the applet before copying this activity.",
   "saveChanges": "Save Changes?",
   "saveChangesDescription": "Unsaved changes will be lost.",
   "saveError": "Sorry, we couldn’t save those changes.",
