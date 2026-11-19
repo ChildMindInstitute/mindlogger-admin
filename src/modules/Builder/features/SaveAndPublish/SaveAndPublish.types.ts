@@ -6,6 +6,7 @@ import {
   ScoreReport,
   SectionCondition,
   SectionReport,
+  SingleApplet,
 } from 'shared/state';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 import { Encryption } from 'shared/utils';
@@ -45,7 +46,8 @@ export type SaveAndPublishSetup = {
   promptVisible: boolean;
   appletEncryption: Encryption | undefined;
   setIsPasswordPopupOpened: Dispatch<SetStateAction<boolean>>;
-  handleSaveAndPublishFirstClick: () => Promise<void>;
+  hasFormChanges: boolean;
+  handleSaveAndPublishFirstClick: () => Promise<SingleApplet | undefined>;
   handleAppletPasswordSubmit: (ref?: AppletPasswordRefType) => Promise<void>;
   handlePublishProcessOnClose: () => void;
   handlePublishProcessOnRetry: () => Promise<void>;

@@ -1,3 +1,4 @@
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
 } from 'modules/Dashboard/features/Applet/Popups';
+import { BuilderSaveContext } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.context';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
@@ -29,8 +31,16 @@ export const SaveAndPublish = () => {
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
+    hasFormChanges,
   } = useSaveAndPublishSetup();
   const { appletId } = useParams();
+  const builderSaveRef = useContext(BuilderSaveContext);
+
+  useEffect(() => {
+    if (!builderSaveRef) return;
+
+    builderSaveRef.current = { hasFormChanges, save: handleSaveAndPublishFirstClick };
+  });
 
   return (
     <>
