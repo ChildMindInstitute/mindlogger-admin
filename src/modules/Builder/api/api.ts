@@ -1,5 +1,6 @@
-import { AppletId, Response } from 'shared/api/api.types';
+import { AppletId, Response, ResponseWithObject } from 'shared/api/api.types';
 import { authApiClient } from 'shared/api/apiConfig';
+import { SingleApplet } from 'shared/state';
 
 import {
   SaveIntegrationParams,
@@ -9,6 +10,7 @@ import {
   UploadLorisUsersVisitsParams,
   FetchIntegrationStatusParams,
   DeleteIntegrationParams,
+  CopyActivityParams,
 } from './api.types';
 
 export const getThemesApi = (params: GetThemesParams, signal?: AbortSignal) =>
@@ -63,3 +65,13 @@ export const deleteIntegrationFromApi = async (
     params: { integration_type: params.integration_type },
     signal,
   });
+
+export const copyActivityApi = (
+  { appletId, activityId, targetAppletId }: CopyActivityParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post<ResponseWithObject<SingleApplet>>(
+    `/applets/${appletId}/activities/${activityId}/copy`,
+    { targetAppletId },
+    { signal },
+  );
