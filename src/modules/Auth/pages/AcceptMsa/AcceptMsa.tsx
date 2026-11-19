@@ -25,6 +25,11 @@ const AcceptMsa = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>();
 
+  // Cleared here, not on the MFA page, so its guard can't send the user back to login
+  useEffect(() => {
+    dispatch(auth.actions.clearMFASession());
+  }, [dispatch]);
+
   // Route guard: redirect to login if no session
   useEffect(() => {
     if (!msaSession) {
