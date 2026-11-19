@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
+import { banners } from 'shared/state';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { Activities } from './Activities';
@@ -289,7 +290,15 @@ describe('Activities', () => {
           count: 1,
         },
       });
-      vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: {} } });
+      vi.mocked(axios.post).mockResolvedValueOnce({
+        data: {
+          result: {
+            displayName: 'Target',
+            activities: [{ name: 'A' }, { name: 'New Activity (1)' }],
+          },
+        },
+      });
+      const addBannerSpy = vi.spyOn(banners.actions, 'addBanner');
       renderActivities(
         { ...mockedAppletFormData, activities: [{ ...mockedEmptyActivity, id: 'activity-id' }] },
         { workspaces: { currentWorkspace: { data: { ownerId: 'owner-id' } } } },
@@ -310,6 +319,14 @@ describe('Activities', () => {
           { targetAppletId: 'target-id' },
           expect.anything(),
         );
+      });
+
+      // The banner uses the copied activity's name from the response
+      await waitFor(() => expect(addBannerSpy).toHaveBeenCalled());
+      const { children } = addBannerSpy.mock.calls[0][0].bannerProps;
+      expect(children.props.values).toEqual({
+        activityName: 'New Activity (1)',
+        appletName: 'Target',
       });
     });
   });

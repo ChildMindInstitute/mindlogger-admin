@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
@@ -18,6 +18,8 @@ import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel, MixpanelEventType, MixpanelProps, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
+import { banners } from 'shared/state';
+import { useAppDispatch } from 'redux/store';
 import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { copyActivityApi } from 'modules/Builder/api';
@@ -112,6 +114,7 @@ export const Activities = () => {
   const { t } = useTranslation('app');
   const { control, getFieldState, setValue, clearErrors } = useCustomFormContext();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
   const [activityToCopy, setActivityToCopy] = useState<string>('');
@@ -173,7 +176,27 @@ export const Activities = () => {
     isLoading: isCopying,
     error: copyError,
     setError: setCopyError,
-  } = useAsync(copyActivityApi, () => setActivityToCopy(''));
+  } = useAsync(copyActivityApi, (response) => {
+    setActivityToCopy('');
+    const { displayName, activities: targetActivities } = response?.data?.result ?? {};
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: (
+            <Trans
+              components={{ 1: <strong />, 3: <strong /> }}
+              i18nKey="copyActivitySuccess"
+              t={t}
+              // The copy goes last and may have been renamed
+              values={{ activityName: targetActivities?.at(-1)?.name, appletName: displayName }}
+            />
+          ),
+          'data-testid': 'builder-activities-copy-success-banner',
+        },
+      }),
+    );
+  });
   const handleCopyModalClose = useCallback(() => {
     setActivityToCopy('');
     setCopyError(null);
