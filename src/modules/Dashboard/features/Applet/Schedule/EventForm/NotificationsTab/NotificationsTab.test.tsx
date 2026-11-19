@@ -26,6 +26,13 @@ describe('NotificationsTab component', () => {
     vi.clearAllMocks();
   });
 
+  test('shows helper text for notifications and reminders', () => {
+    renderWithProviders(<FormWrapper />);
+
+    expect(screen.getByText(/Any number of push notifications can be sent/)).toBeInTheDocument();
+    expect(screen.getByText(/only one reminder may be sent/)).toBeInTheDocument();
+  });
+
   test('render NotificationsTab component, test Notification', async () => {
     renderWithProviders(<FormWrapper />);
 

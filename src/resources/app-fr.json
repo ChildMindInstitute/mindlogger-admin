@@ -1510,6 +1510,8 @@
   "sendNotificationAtRandomTime": "Envoyer une notification à une heure aléatoire dans un intervalle de temps",
   "sendNotifications": "Envoyer des Notifications",
   "sendReminder": "Envoyer un Rappel",
+  "notificationsHelperText": "Un nombre illimité de notifications push peut être envoyé à tout moment (par défaut, à l'heure de début) pendant la fenêtre de disponibilité, mais pas avant ni après. De plus, une fois qu'un utilisateur a terminé l'activité, les notifications prévues après l'heure de fin ne seront plus envoyées.",
+  "reminderHelperText": "Actuellement, un seul rappel peut être envoyé à tout moment pendant la période d'évaluation.",
   "sendReportTo": "Envoyer le(s) Rapport(s) à :",
   "sendResetLink": "Envoyez-moi un lien de réinitialisation",
   "sept": "Septembre",
