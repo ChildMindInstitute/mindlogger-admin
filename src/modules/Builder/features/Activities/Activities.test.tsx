@@ -4,6 +4,7 @@ import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
@@ -77,7 +78,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const renderActivities = (formData) => {
+const renderActivities = (formData, preloadedState) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -85,6 +86,7 @@ const renderActivities = (formData) => {
     formRef: ref,
     appletFormData: formData,
     options: {
+      preloadedState,
       routePath: page.builderAppletActivities,
       route: generatePath(page.builderAppletActivities, { appletId: mockedAppletFormData.id }),
     },
@@ -275,6 +277,40 @@ describe('Activities', () => {
       expect(hideButton).toBeVisible();
       expect(hideButton.querySelector('svg')).toHaveClass('svg-visibility-off');
       expect(ref.current.getValues('activities.0.isHidden')).toEqual(true);
+    });
+
+    test('Copy', async () => {
+      const copyPopup = 'builder-activities-copy-activity-popup';
+      vi.mocked(axios.get).mockResolvedValueOnce({
+        data: {
+          result: [
+            { id: 'target-id', displayName: 'Target', image: '', role: 'editor', type: 'applet' },
+          ],
+          count: 1,
+        },
+      });
+      vi.mocked(axios.post).mockResolvedValueOnce({ data: { result: {} } });
+      renderActivities(
+        { ...mockedAppletFormData, activities: [{ ...mockedEmptyActivity, id: 'activity-id' }] },
+        { workspaces: { currentWorkspace: { data: { ownerId: 'owner-id' } } } },
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible();
+      });
+
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-copy`));
+      await waitFor(() => expect(screen.getByText('Target')).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${copyPopup}-checkbox-0`).querySelector('input'));
+      fireEvent.click(screen.getByTestId(`${copyPopup}-submit-button`));
+
+      await waitFor(() => {
+        expect(axios.post).toHaveBeenCalledWith(
+          `/applets/${mockedAppletFormData.id}/activities/activity-id/copy`,
+          { targetAppletId: 'target-id' },
+          expect.anything(),
+        );
+      });
     });
   });
 

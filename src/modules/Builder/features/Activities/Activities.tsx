@@ -16,12 +16,14 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { pluck, Mixpanel, MixpanelEventType, MixpanelProps, getErrorMessage } from 'shared/utils';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { copyActivityApi } from 'modules/Builder/api';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
-import { CopyActivityModal } from './CopyActivityModal';
+import { CopyActivityModal, CopyTargetApplet } from './CopyActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
 import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
@@ -166,9 +168,26 @@ export const Activities = () => {
     [navigate, appletId],
   );
   const handleModalClose = useCallback(() => setActivityToDelete(''), []);
-  const handleCopyModalClose = useCallback(() => setActivityToCopy(''), []);
-  const activityNameToCopy =
-    activities.find((activity) => getActivityKey(activity) === activityToCopy)?.name ?? '';
+  const {
+    execute: copyActivity,
+    isLoading: isCopying,
+    error: copyError,
+    setError: setCopyError,
+  } = useAsync(copyActivityApi, () => setActivityToCopy(''));
+  const handleCopyModalClose = useCallback(() => {
+    setActivityToCopy('');
+    setCopyError(null);
+  }, [setCopyError]);
+  const activityForCopy = activities.find(
+    (activity) => getActivityKey(activity) === activityToCopy,
+  );
+  const handleCopyActivity = ({ id: targetAppletId }: CopyTargetApplet) => {
+    const activityId = activityForCopy?.id;
+    if (!appletId || !activityId) return;
+
+    // The error is shown in the modal
+    copyActivity({ appletId, activityId, targetAppletId }).catch(() => undefined);
+  };
   const handleActivityAdd = useCallback(
     (props: ActivityAddProps) => {
       Mixpanel.track({
@@ -361,9 +380,11 @@ export const Activities = () => {
       )}
       <CopyActivityModal
         isOpen={!!activityToCopy}
-        activityName={activityNameToCopy}
+        activityName={activityForCopy?.name ?? ''}
+        isCopying={isCopying}
+        errorMessage={copyError && getErrorMessage(copyError)}
         onClose={handleCopyModalClose}
-        onSubmit={handleCopyModalClose}
+        onSubmit={handleCopyActivity}
         data-testid="builder-activities-copy-activity-popup"
       />
     </BuilderContainer>
