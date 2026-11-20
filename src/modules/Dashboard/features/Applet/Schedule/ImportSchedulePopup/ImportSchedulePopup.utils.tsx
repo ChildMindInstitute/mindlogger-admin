@@ -16,9 +16,10 @@ import {
 import {
   dateValidationRegex,
   frequencyArray,
-  notificationValidationRegex,
   timeValidationRegex,
   EMPTY_TIME,
+  NOTIFICATION_TIME_SEPARATOR,
+  EXAMPLE_ROW_PREFIX,
   ALWAYS_FREQUENCY,
   ONE_TIME_COMPLETION_VALUES,
   commonErrorBoxProps,
@@ -73,7 +74,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.StartTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.StartTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity Start Time</strong>. Valid data format:{' '}
             <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
           </Trans>
@@ -82,7 +86,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.EndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.EndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.EndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity End Time</strong>. Valid data format:{' '}
             <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
           </Trans>
@@ -91,15 +98,22 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.NotificationTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
-            <strong>Notification Time</strong>. Valid data format: <strong>HH:mm or -</strong>.
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.NotificationTime}`}
+            components={{ 2: <strong /> }}
+          >
+            <strong>Notification Time</strong>. Valid data format:{' '}
+            <strong>HH:mm, HH:mm;HH:mm for multiple times, or -</strong>.
           </Trans>
         </Box>
       );
     case ImportScheduleErrors.Frequency:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Frequency}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.Frequency}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Frequency</strong>. Valid data format:{' '}
             <strong>Always, Once, Daily, Weekly, Monthly, Weekdays</strong>.
           </Trans>
@@ -108,7 +122,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.Date:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.Date}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Date</strong>. Valid data format: <strong>DD Month YYYY</strong>.
           </Trans>
         </Box>
@@ -116,7 +133,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.StartEndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.StartEndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Activity End Time</strong> should not be equal to{' '}
             <strong>Activity Start Time</strong>.
           </Trans>
@@ -125,7 +145,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.BetweenStartEndTime:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.BetweenStartEndTime}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>Notification Time</strong> should be between{' '}
             <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
           </Trans>
@@ -134,7 +157,10 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
     case ImportScheduleErrors.OneTimeCompletion:
       return (
         <Box {...commonErrorBoxProps}>
-          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.OneTimeCompletion}]`}>
+          <Trans
+            i18nKey={`importScheduleErrors.${ImportScheduleErrors.OneTimeCompletion}`}
+            components={{ 2: <strong /> }}
+          >
             <strong>One-Time Completion</strong>. Valid data format:{' '}
             <strong>
               TRUE, FALSE or - for Always available activity and - for Scheduled activity
@@ -167,6 +193,18 @@ export const getUploadedTime = (time: string | Date) => {
   //if the time format is H:mm getStartEndComparison makes invalid date
   return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
+
+// A blank cell means no notification, same as -
+export const hasNoNotificationTime = (notificationTime: string | Date) =>
+  !(notificationTime instanceof Date) &&
+  ['', EMPTY_TIME].includes(String(notificationTime ?? '').trim());
+
+export const getUploadedNotificationTimes = (notificationTime: string | Date) =>
+  notificationTime instanceof Date
+    ? [getUploadedTime(notificationTime)]
+    : notificationTime
+        .split(NOTIFICATION_TIME_SEPARATOR)
+        .map((time) => getUploadedTime(time.trim()));
 
 // Old files have no oneTimeCompletion column, so treat missing as empty
 export const getUploadedOneTimeCompletion = (value?: string) =>
@@ -201,7 +239,12 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
           acc.hasInvalidData = true;
         }
 
-        if (!notificationValidationRegex.test(getUploadedTime(notificationTime))) {
+        if (
+          !hasNoNotificationTime(notificationTime) &&
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            timeValidationRegex.test(time),
+          )
+        ) {
           acc.invalidNotification.data = getInvalidError(ImportScheduleErrors.NotificationTime);
           acc.hasInvalidData = true;
         }
@@ -223,13 +266,15 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
 
         if (
           !isAlwaysFrequency &&
-          notificationTime !== EMPTY_TIME &&
+          !hasNoNotificationTime(notificationTime) &&
           startTime !== endTime &&
-          !getBetweenStartEndNextDaySingleComparison({
-            time: getUploadedTime(notificationTime),
-            rangeStartTime: getUploadedTime(startTime),
-            rangeEndTime: getUploadedTime(endTime),
-          })
+          !getUploadedNotificationTimes(notificationTime).every((time) =>
+            getBetweenStartEndNextDaySingleComparison({
+              time,
+              rangeStartTime: getUploadedTime(startTime),
+              rangeEndTime: getUploadedTime(endTime),
+            }),
+          )
         ) {
           acc.invalidNotificationTime.data = getInvalidError(
             ImportScheduleErrors.BetweenStartEndTime,
@@ -263,6 +308,15 @@ export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: bo
       invalidOneTimeCompletion: { data: null, id: 'invalid-one-time-completion' },
       hasInvalidData: false,
     },
+  );
+
+// Template example rows start with ## and are not imported
+export const removeExampleRows = (data: Record<string, string | number>[]) =>
+  data.filter(
+    (row) =>
+      !String(row.activityName ?? '')
+        .trim()
+        .startsWith(EXAMPLE_ROW_PREFIX),
   );
 
 export const getUploadedScheduleErrors = (
@@ -358,17 +412,14 @@ export const prepareImportPayload = (
       },
       activityId,
       flowId,
-      notification:
-        notificationTime === EMPTY_TIME
-          ? null
-          : {
-              notifications: [
-                {
-                  triggerType: NotificationType.Fixed,
-                  atTime: addSecondsToHourMinutes(getUploadedTime(notificationTime)),
-                },
-              ],
-              reminder: null,
-            },
+      notification: hasNoNotificationTime(notificationTime)
+        ? null
+        : {
+            notifications: getUploadedNotificationTimes(notificationTime).map((time) => ({
+              triggerType: NotificationType.Fixed,
+              atTime: addSecondsToHourMinutes(time),
+            })),
+            reminder: null,
+          },
     };
   });

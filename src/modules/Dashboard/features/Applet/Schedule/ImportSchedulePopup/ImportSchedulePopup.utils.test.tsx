@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { endOfYear, format } from 'date-fns';
 
+import i18n from 'i18n';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DateFormats } from 'shared/consts';
 
@@ -14,6 +15,7 @@ import {
   getUploadedScheduleErrors,
   getUploadedTime,
   prepareImportPayload,
+  removeExampleRows,
 } from './ImportSchedulePopup.utils';
 import { ImportScheduleErrors } from './ImportSchedulePopup.types';
 import { dateValidationRegex } from './ImportSchedule.const';
@@ -55,7 +57,7 @@ describe('getInvalidError', () => {
     type                                        | expectedText
     ${ImportScheduleErrors.StartTime}           | ${'Activity Start Time. Valid data format: HH:mm for Scheduled activity and - for Always available activity.'}
     ${ImportScheduleErrors.EndTime}             | ${'Activity End Time. Valid data format: HH:mm for Scheduled activity and - for Always available activity.'}
-    ${ImportScheduleErrors.NotificationTime}    | ${'Notification Time. Valid data format: HH:mm or -.'}
+    ${ImportScheduleErrors.NotificationTime}    | ${'Notification Time. Valid data format: HH:mm, HH:mm;HH:mm for multiple times, or -.'}
     ${ImportScheduleErrors.Frequency}           | ${'Frequency. Valid data format: Always, Once, Daily, Weekly, Monthly, Weekdays.'}
     ${ImportScheduleErrors.Date}                | ${'Date. Valid data format: DD Month YYYY.'}
     ${ImportScheduleErrors.StartEndTime}        | ${'Activity End Time should not be equal to Activity Start Time.'}
@@ -64,6 +66,18 @@ describe('getInvalidError', () => {
   `('renders error text for type=$type', ({ type, expectedText }) => {
     const { container } = renderWithProviders(getInvalidError(type));
     expect(container).toHaveTextContent(expectedText);
+  });
+
+  test('renders the error in French', async () => {
+    await i18n.changeLanguage('fr');
+    const { container } = renderWithProviders(
+      getInvalidError(ImportScheduleErrors.BetweenStartEndTime),
+    );
+    await i18n.changeLanguage('en');
+
+    expect(container).toHaveTextContent(
+      "L'heure de Notification doit être comprise entre l'heure de Début de l'Activité et l'heure de Fin de l'Activité.",
+    );
   });
 });
 
@@ -106,6 +120,18 @@ describe('getUploadedTime', () => {
   test('replaces single-digit hour with leading zero', () => {
     const result = getUploadedTime('1:15');
     expect(result).toBe('01:15');
+  });
+});
+
+describe('removeExampleRows', () => {
+  test('removes rows whose activity name starts with ##', () => {
+    const rows = [
+      { activityName: '## Example: Daily with 2 notifications' },
+      { activityName: ' ## Example: Always available' },
+      { activityName: 'Activity 1' },
+    ];
+
+    expect(removeExampleRows(rows)).toEqual([{ activityName: 'Activity 1' }]);
   });
 });
 
@@ -249,6 +275,72 @@ describe('getFieldsToCheck', () => {
           invalidOneTimeCompletion: {
             data: expect.any(Object),
             id: 'invalid-one-time-completion',
+          },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
+
+  test.each`
+    notificationTime  | isInvalid
+    ${'09:00;13:30'}  | ${false}
+    ${'9:00 ; 13:30'} | ${false}
+    ${'09:00;abc'}    | ${true}
+    ${'09:00;-'}      | ${true}
+    ${''}             | ${false}
+  `(
+    'notificationTime=$notificationTime: isInvalid=$isInvalid',
+    ({ notificationTime, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime: '-',
+          endTime: '-',
+          notificationTime,
+          frequency: 'Always',
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidNotification: { data: expect.any(Object), id: 'invalid-notification' },
+          hasInvalidData: true,
+        }),
+      });
+    },
+  );
+
+  test.each`
+    notificationTime | isInvalid
+    ${'10:00;17:00'} | ${false}
+    ${'10:00;23:00'} | ${true}
+  `(
+    'notificationTime=$notificationTime in 09:00-18:00 window: isInvalid=$isInvalid',
+    ({ notificationTime, isInvalid }) => {
+      const mockScheduleExportData = [
+        {
+          activityName: 'Activity 1',
+          date: '06 Mar 2024',
+          startTime: '09:00',
+          endTime: '18:00',
+          notificationTime,
+          frequency: 'Daily',
+        },
+      ];
+
+      const result = getFieldsToCheck(mockScheduleExportData, true);
+      expect(result).toEqual({
+        ...defaultValue,
+        activityNames: ['Activity 1'],
+        ...(isInvalid && {
+          invalidNotificationTime: {
+            data: expect.any(Object),
+            id: 'invalid-notification-time',
           },
           hasInvalidData: true,
         }),
@@ -412,6 +504,28 @@ describe('prepareImportPayload', () => {
         notification: null,
       },
     ]);
+  });
+
+  test('creates a fixed notification for each time', () => {
+    const [{ notification }] = prepareImportPayload([
+      { ...mockUploadedEvents[0], notificationTime: '10:00;10:30' },
+    ]);
+
+    expect(notification).toEqual({
+      notifications: [
+        { atTime: '10:00:00', triggerType: 'FIXED' },
+        { atTime: '10:30:00', triggerType: 'FIXED' },
+      ],
+      reminder: null,
+    });
+  });
+
+  test('creates no notification for a blank notification time', () => {
+    const [{ notification }] = prepareImportPayload([
+      { ...mockUploadedEvents[0], notificationTime: '' },
+    ]);
+
+    expect(notification).toBeNull();
   });
 });
 

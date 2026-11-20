@@ -5,9 +5,11 @@ import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { RootState } from 'redux/store';
+import { exportTemplate } from 'shared/utils';
 import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
 
 import { Legend } from './Legend';
+import { getScheduleTemplateExampleRows } from './Legend.const';
 import { PreparedEvents } from '../Schedule.types';
 import { ScheduleProvider } from '../ScheduleProvider';
 
@@ -21,6 +23,12 @@ vi.mock('shared/components', async (importOriginal) => {
     Svg: () => <div>svg component</div>,
   };
 });
+
+vi.mock('shared/utils', async (importOriginal) => ({
+  ...(await importOriginal()),
+  exportTemplate: vi.fn(),
+}));
+
 // Constants
 const dataTestid = 'dashboard-calendar-schedule-legend';
 const testUserId = 'test-user-id';
@@ -397,6 +405,33 @@ describe('Legend', () => {
       expect(
         screen.queryByTestId(`${dataTestid}-export-default-schedule-popup`),
       ).not.toBeInTheDocument();
+    });
+
+    test('The template download adds example rows before the schedule', async () => {
+      await userEvent.click(screen.getByTestId(`${dataTestid}-import`));
+      await userEvent.click(
+        screen.getByTestId(`${dataTestid}-import-schedule-popup-submit-button`),
+      );
+      await userEvent.click(screen.getByTestId('download-template'));
+
+      expect(exportTemplate).toHaveBeenCalledWith({
+        data: [...getScheduleTemplateExampleRows(), ...legendEvents.scheduleExportCsv],
+        fileName: 'default_schedule_template',
+        defaultData: null,
+      });
+    });
+
+    test('The export does not add example rows', async () => {
+      await userEvent.click(screen.getByTestId(`${dataTestid}-export`));
+      await userEvent.click(
+        screen.getByTestId(`${dataTestid}-export-default-schedule-popup-submit-button`),
+      );
+
+      expect(exportTemplate).toHaveBeenCalledWith({
+        data: legendEvents.scheduleExportCsv,
+        fileName: 'Mock applet_schedule',
+        defaultData: null,
+      });
     });
   });
 
