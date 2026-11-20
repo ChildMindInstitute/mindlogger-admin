@@ -212,11 +212,11 @@ export const removeManagerAccessApi = ({ userId, appletIds }: RemoveAccess, sign
     },
   });
 
-export const editManagerAccessApi = (
+export const replaceManagerAccessApi = (
   { ownerId, userId, accesses }: EditManagerAccess,
   signal?: AbortSignal,
 ) =>
-  authApiClient.post(
+  authApiClient.put(
     `/workspaces/${ownerId}/managers/${userId}/accesses`,
     {
       accesses,

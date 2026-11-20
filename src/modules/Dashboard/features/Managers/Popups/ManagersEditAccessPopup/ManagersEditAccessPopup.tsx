@@ -7,8 +7,8 @@ import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
 import { banners, workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks/useAsync';
-import { editManagerAccessApi, removeManagerAccessApi } from 'api';
-import { Mixpanel, MixpanelProps, getErrorMessage, pluck, MixpanelEventType } from 'shared/utils';
+import { replaceManagerAccessApi } from 'api';
+import { Mixpanel, MixpanelProps, getErrorMessage, MixpanelEventType } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 
 import { Applet } from './Applet';
@@ -29,9 +29,9 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
 
   const {
     execute: handleEditAccess,
-    error: editAccessError,
-    isLoading: isEditAccessLoading,
-  } = useAsync(editManagerAccessApi, () => {
+    error,
+    isLoading,
+  } = useAsync(replaceManagerAccessApi, () => {
     for (const { appletId, roles } of submittedAccessesRef.current) {
       Mixpanel.track({
         action: MixpanelEventType.TeamMemberEditSuccessful,
@@ -43,13 +43,6 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
     dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
     onClose(true);
   });
-  const {
-    execute: handleRemoveAccess,
-    error: removeAccessError,
-    isLoading: isRemoveAccessLoading,
-  } = useAsync(removeManagerAccessApi);
-  const isLoading = isEditAccessLoading || isRemoveAccessLoading;
-  const error = removeAccessError || editAccessError;
 
   const getAppletsWithoutRespondents = () =>
     applets.reduce((acc: string[], applet) => {
@@ -114,7 +107,6 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
         });
       }
 
-      await handleRemoveAccess({ appletIds: pluck(applets, 'id'), userId: user.id });
       handleEditAccess({ ownerId, userId: id, accesses });
     }
   };
