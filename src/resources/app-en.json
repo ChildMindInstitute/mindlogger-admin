@@ -1513,6 +1513,8 @@
   "sendNotificationAtRandomTime": "Send notification at a random time within a time interval",
   "sendNotifications": "Send Notifications",
   "sendReminder": "Send Reminder",
+  "notificationsHelperText": "Any number of push notifications can be sent at anytime (default is the start time) during the availability window, but not before or after. Additionally, once a user completes the activity, any notifications scheduled after the time of completion will no longer be sent.",
+  "reminderHelperText": "Currently, only one reminder may be sent at any point during the assessment period.",
   "sendReportTo": "Send Report(s) to:",
   "sendResetLink": "Send me a reset link",
   "sept": "September",
