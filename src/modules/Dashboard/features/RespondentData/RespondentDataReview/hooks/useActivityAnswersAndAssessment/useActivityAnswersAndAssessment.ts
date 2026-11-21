@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
+  ActivityAnswerParams,
   ActivityHistoryFull,
+  FlowAnswersParams,
   getActivityAnswerApi,
   getAssessmentApi,
   getFlowAnswersApi,
@@ -47,6 +49,7 @@ export const useActivityAnswersAndAssessment = ({
   const [itemIds, setItemIds] = useState<string[]>([]);
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [assessmentError, setAssessmentError] = useState<string | null>(null);
+  const latestRequestRef = useRef<ActivityAnswerParams | FlowAnswersParams | null>(null); // latest request wins race (M2-11281)
 
   const [searchParams] = useSearchParams();
   const getDecryptedActivityData = useDecryptedActivityData();
@@ -55,8 +58,8 @@ export const useActivityAnswersAndAssessment = ({
 
   const { execute: getActivityAnswer, error: getAnswerError } = useAsync(
     getActivityAnswerApi,
-    async (res) => {
-      const result = res?.data?.result;
+    async (response, request) => {
+      const result = response?.data?.result;
       if (!result) return;
 
       const decryptedActivityData = await getDecryptedActivityData({
@@ -64,12 +67,13 @@ export const useActivityAnswersAndAssessment = ({
         items: result.activity.items,
       });
 
-      setActivityAnswers(decryptedActivityData.decryptedAnswers);
-
       const { identifier } = result.summary;
       const decryptedIdentifiers = identifier
         ? await getDecryptedIdentifiers?.([identifier])
         : null;
+      if (request !== latestRequestRef.current) return;
+
+      setActivityAnswers(decryptedActivityData.decryptedAnswers);
       setResponsesSummary({
         ...result.summary,
         identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
@@ -79,8 +83,8 @@ export const useActivityAnswersAndAssessment = ({
 
   const { execute: getFlowAnswers, error: getFlowAnswersError } = useAsync(
     getFlowAnswersApi,
-    async (res) => {
-      const result = res?.data?.result;
+    async (response, request) => {
+      const result = response?.data?.result;
       if (!result) return;
 
       const { flow, submission, summary } = result;
@@ -106,12 +110,13 @@ export const useActivityAnswersAndAssessment = ({
         });
       }
 
-      setFlowAnswers(decryptedFlowAnswers);
-
       const { identifier, version } = summary;
       const decryptedIdentifiers = identifier
         ? await getDecryptedIdentifiers?.([identifier])
         : null;
+      if (request !== latestRequestRef.current) return;
+
+      setFlowAnswers(decryptedFlowAnswers);
       setResponsesSummary({
         version,
         createdAt,
@@ -127,18 +132,26 @@ export const useActivityAnswersAndAssessment = ({
         return;
       }
 
+      let request: ActivityAnswerParams | FlowAnswersParams | null = null;
+      latestRequestRef.current = null;
+
       try {
         setIsLoading(true);
         let assessmentResult;
         if (flowId && submitId) {
-          await getFlowAnswers({ appletId, flowId, submitId });
+          request = { appletId, flowId, submitId };
+          latestRequestRef.current = request;
+          await getFlowAnswers(request);
           const response = await getFlowAssessmentApi({ appletId, submitId });
           assessmentResult = response?.data?.result;
         } else if (activityId && answerId) {
-          await getActivityAnswer({ appletId, answerId, activityId });
+          request = { appletId, answerId, activityId };
+          latestRequestRef.current = request;
+          await getActivityAnswer(request);
           const response = await getAssessmentApi({ appletId, answerId });
           assessmentResult = response?.data?.result;
         }
+        if (request !== latestRequestRef.current) return;
 
         if (!assessmentResult) {
           return setIsLoading(false);
@@ -153,6 +166,7 @@ export const useActivityAnswersAndAssessment = ({
           userPublicKey: reviewerPublicKey,
         } as EncryptedAnswerSharedProps;
         const decryptedAssessment = await getDecryptedActivityData(encryptedData);
+        if (request !== latestRequestRef.current) return;
         setItemIds(assessmentData.itemIds || []);
         setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
 
@@ -166,12 +180,16 @@ export const useActivityAnswersAndAssessment = ({
           setActiveTab(FeedbackTabs.Reviews);
         }
       } catch (error) {
-        setAssessmentError(getErrorMessage(error));
+        if (request === latestRequestRef.current) {
+          setAssessmentError(getErrorMessage(error));
+        }
       } finally {
-        containerRef.current?.scrollTo({
-          top: 0,
-        });
-        setIsLoading(false);
+        if (request === latestRequestRef.current) {
+          containerRef.current?.scrollTo({
+            top: 0,
+          });
+          setIsLoading(false);
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
