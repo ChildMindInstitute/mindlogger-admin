@@ -1,8 +1,9 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, Dispatch } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { datadogRum } from '@datadog/browser-rum';
 
 import { RootState } from 'redux/store';
+import { apiSlice } from 'shared/api/apiSlice';
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
@@ -10,6 +11,7 @@ import { ApiErrorResponse } from 'shared/state/Base';
 import { FeatureFlags } from 'shared/utils/featureFlags';
 import { setLastActivityAt } from 'shared/hooks/useSessionKeepAlive/sessionStore';
 import {
+  acceptMSAAtLoginApi,
   getUserDetailsApi,
   ResetPassword,
   resetPasswordApi,
@@ -22,6 +24,9 @@ import {
   verifyMFARecoveryCodeApi,
   MFAVerifyResponse,
   MFAVerifySuccessResponse,
+  MSAAcceptAtLoginError,
+  MSARequiredResponse,
+  StandardLoginResponse,
 } from 'api';
 
 import { getMfaErrorResult } from '../utils/mfa.utils';
@@ -65,9 +70,33 @@ const hasValidMFAVerifyResponse = (
   return false;
 };
 
+// Admin login held back until the MSA is accepted
+const isMSARequiredResponse = (
+  response: MFAVerifyResponse | undefined,
+): response is MSARequiredResponse =>
+  Boolean(response?.result && 'msaRequired' in response.result && response.result.msaRequired);
+
+// Saves the tokens of a completed login and identifies the user to tracking
+const storeLoginSession = (
+  { token, user }: StandardLoginResponse['result'],
+  dispatch: Dispatch,
+) => {
+  authStorage.setRefreshToken(token.refreshToken);
+  authStorage.setAccessToken(token.accessToken);
+  // Drop the previous account's MSA status so this one fetches its own
+  dispatch(apiSlice.util.invalidateTags(['MsaStatus']));
+  // A new session starts its own clock. One left by a session whose tab never logged out
+  // would put this one past its deadline, and the tracker only writes when there is none.
+  setLastActivityAt(Date.now());
+
+  datadogRum.setUser({ id: user.id });
+  Mixpanel.login(user.id);
+  FeatureFlags.login(user.id);
+};
+
 export const signIn = createAsyncThunk(
   'auth/login',
-  async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
+  async ({ email, password }: SignIn, { dispatch, rejectWithValue, signal }) => {
     try {
       const { data } = await signInApi({ email, password }, signal);
 
@@ -78,17 +107,13 @@ export const signIn = createAsyncThunk(
           return data;
         }
 
-        // Standard login flow (MFA not required)
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
+        // MSA must be accepted before tokens are issued
+        if ('msaRequired' in data.result && data.result.msaRequired) {
+          return data;
+        }
 
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        // Standard login flow (MFA not required)
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
@@ -157,7 +182,7 @@ export const resetPassword = createAsyncThunk(
 // MFA verification thunks
 export const verifyMFATOTP = createAsyncThunk(
   'auth/verifyMFATOTP',
-  async ({ totpCode }: { totpCode: string }, { getState, rejectWithValue, signal }) => {
+  async ({ totpCode }: { totpCode: string }, { dispatch, getState, rejectWithValue, signal }) => {
     try {
       const state = getState() as RootState;
       const { mfaSession } = state.auth;
@@ -176,6 +201,9 @@ export const verifyMFATOTP = createAsyncThunk(
       );
       const { data } = response || {};
 
+      // MSA must be accepted before tokens are issued
+      if (isMSARequiredResponse(data)) return data;
+
       if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid verification code');
 
@@ -183,16 +211,7 @@ export const verifyMFATOTP = createAsyncThunk(
       }
 
       if (data?.result) {
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
-
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
@@ -204,7 +223,7 @@ export const verifyMFATOTP = createAsyncThunk(
 
 export const verifyMFARecoveryCode = createAsyncThunk(
   'auth/verifyMFARecoveryCode',
-  async ({ code }: { code: string }, { getState, rejectWithValue, signal }) => {
+  async ({ code }: { code: string }, { dispatch, getState, rejectWithValue, signal }) => {
     try {
       const state = getState() as RootState;
       const { mfaSession } = state.auth;
@@ -223,6 +242,9 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       );
       const { data } = response || {};
 
+      // MSA must be accepted before tokens are issued
+      if (isMSARequiredResponse(data)) return data;
+
       if (!hasValidMFAVerifyResponse(data)) {
         const message = extractMFAErrorMessage(data, 'Invalid recovery code');
 
@@ -230,21 +252,42 @@ export const verifyMFARecoveryCode = createAsyncThunk(
       }
 
       if (data?.result) {
-        const { accessToken, refreshToken } = data.result.token;
-        authStorage.setRefreshToken(refreshToken);
-        authStorage.setAccessToken(accessToken);
-        // A new session starts its own clock. One left by a session whose tab never logged out
-        // would put this one past its deadline, and the tracker only writes when there is none.
-        setLastActivityAt(Date.now());
-
-        datadogRum.setUser({ id: data.result.user.id });
-        Mixpanel.login(data.result.user.id);
-        FeatureFlags.login(data.result.user.id);
+        storeLoginSession(data.result, dispatch);
       }
 
       return data;
     } catch (exception) {
       return rejectWithValue(getMfaErrorResult(exception, 'recovery'));
+    }
+  },
+);
+
+// Accepts the MSA during login and completes it with the tokens returned
+export const acceptMSAAtLogin = createAsyncThunk(
+  'auth/acceptMSAAtLogin',
+  async (_: void, { dispatch, getState, rejectWithValue, signal }) => {
+    try {
+      const { msaSession } = (getState() as RootState).auth;
+
+      if (!msaSession) {
+        throw new Error('MSA session not found');
+      }
+
+      const { data } = await acceptMSAAtLoginApi(
+        { msaToken: msaSession.token, msaVersion: msaSession.version },
+        signal,
+      );
+      storeLoginSession(data.result, dispatch);
+
+      return data;
+    } catch (exception) {
+      const error = exception as AxiosError<ApiErrorResponse & { error_code?: string }>;
+      const result: MSAAcceptAtLoginError = {
+        message: getErrorMessage(error),
+        errorCode: error.response?.data?.error_code,
+      };
+
+      return rejectWithValue(result);
     }
   },
 );

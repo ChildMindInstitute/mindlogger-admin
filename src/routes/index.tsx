@@ -7,7 +7,8 @@ import { authStorage, SessionStorageKeys } from 'shared/utils';
 import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
-import { authRoutes } from 'modules/Auth/routes';
+import { acceptMsaRoute, authRoutes } from 'modules/Auth/routes';
+import { MsaGracePrompt } from 'modules/Auth/features/Msa';
 import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
 import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
@@ -57,11 +58,13 @@ const AppRoutes = () => {
                 {authRoutes()}
               </Route>
             )}
+            {!isAuthorized && acceptMsaRoute()}
             <Route path="*" element={<Navigate to={page.dashboard} replace />} />
           </Routes>
         )}
         <AppletNotFoundPopup />
         <NoPermissionPopup />
+        {isAuthorized && <MsaGracePrompt />}
         <SessionKeepAlive />
       </Router>
     </>
