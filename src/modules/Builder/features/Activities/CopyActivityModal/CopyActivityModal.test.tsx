@@ -54,4 +54,35 @@ describe('CopyActivityModal', () => {
     expect(copyButton).toBeEnabled();
     expect(second).toBeDisabled();
   });
+
+  test.each`
+    count | isShown
+    ${1}  | ${false}
+    ${2}  | ${true}
+  `('shows the workspace select with $count workspace(s): $isShown', ({ count, isShown }) => {
+    vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: [], count: 0 } });
+    const result = [
+      { ownerId, workspaceName: 'Mine' },
+      { ownerId: 'other-id', workspaceName: 'Other' },
+    ].slice(0, count);
+
+    renderWithProviders(
+      <CopyActivityModal
+        isOpen
+        activityName="Activity 1"
+        onClose={vi.fn()}
+        onSubmit={vi.fn()}
+        data-testid={dataTestid}
+      />,
+      {
+        route: '/builder/current/activities',
+        routePath: page.builderAppletActivities,
+        preloadedState: {
+          workspaces: { currentWorkspace: { data: { ownerId } }, workspaces: { data: { result } } },
+        },
+      },
+    );
+
+    expect(!!screen.queryByTestId(`${dataTestid}-workspace`)).toBe(isShown);
+  });
 });

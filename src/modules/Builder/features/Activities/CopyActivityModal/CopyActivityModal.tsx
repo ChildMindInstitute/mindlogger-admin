@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 
 import { getWorkspaceAppletsApi } from 'api';
+import { auth } from 'redux/modules';
 import { Modal, Spinner, SpinnerUiType, Table, UiType } from 'shared/components';
+import { SelectController } from 'shared/components/FormComponents';
 import { MAX_LIMIT } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'shared/state';
@@ -21,8 +24,12 @@ import {
 
 import { getHeadCells } from './CopyActivityModal.const';
 import { StyledTableWrapper } from './CopyActivityModal.styles';
-import { CopyActivityModalProps, CopyTargetApplet } from './CopyActivityModal.types';
-import { getCopyTargetApplets } from './CopyActivityModal.utils';
+import {
+  CopyActivityForm,
+  CopyActivityModalProps,
+  CopyTargetApplet,
+} from './CopyActivityModal.types';
+import { getCopyTargetApplets, getCopyTargetWorkspaces } from './CopyActivityModal.utils';
 
 export const CopyActivityModal = ({
   isOpen,
@@ -36,6 +43,10 @@ export const CopyActivityModal = ({
   const { t } = useTranslation('app');
   const { appletId } = useParams();
   const { ownerId } = workspaces.useData() ?? {};
+  const { result: workspacesList = [] } = workspaces.useWorkspacesData() ?? {};
+  const userId = auth.useData()?.user?.id;
+  const workspaceOptions = getCopyTargetWorkspaces(workspacesList, userId);
+  const { control, reset } = useForm<CopyActivityForm>({ defaultValues: { ownerId } });
   const [applets, setApplets] = useState<CopyTargetApplet[]>([]);
   const [selectedApplet, setSelectedApplet] = useState<CopyTargetApplet | null>(null);
 
@@ -47,6 +58,7 @@ export const CopyActivityModal = ({
     if (!isOpen || !ownerId) return;
 
     setSelectedApplet(null);
+    reset({ ownerId });
     getWorkspaceApplets({ params: { ownerId, limit: MAX_LIMIT, flatList: true } });
   }, [isOpen, ownerId]);
 
@@ -100,6 +112,17 @@ export const CopyActivityModal = ({
       <>
         {(isLoading || isCopying) && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
+          {workspaceOptions.length > 1 && (
+            <SelectController
+              control={control}
+              name="ownerId"
+              label={t('workspace')}
+              options={workspaceOptions}
+              isLabelNeedTranslation={false}
+              sx={{ width: '34.4rem', mb: theme.spacing(2.4) }}
+              data-testid={`${dataTestid}-workspace`}
+            />
+          )}
           <StyledTableWrapper>
             <Table
               columns={getHeadCells()}

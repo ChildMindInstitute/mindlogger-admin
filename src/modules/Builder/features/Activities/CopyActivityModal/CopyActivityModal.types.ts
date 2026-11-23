@@ -4,6 +4,10 @@ export type CopyTargetApplet = {
   image?: string;
 };
 
+export type CopyActivityForm = {
+  ownerId: string;
+};
+
 export type CopyActivityModalProps = {
   isOpen: boolean;
   activityName: string;
