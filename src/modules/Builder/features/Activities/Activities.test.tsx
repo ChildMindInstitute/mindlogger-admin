@@ -10,6 +10,7 @@ import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
 import { banners } from 'shared/state';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { BuilderSaveContext } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.context';
 
 import { Activities } from './Activities';
 import { PerformanceTasks } from './Activities.types';
@@ -328,6 +329,33 @@ describe('Activities', () => {
         activityName: 'New Activity (1)',
         appletName: 'Target',
       });
+    });
+
+    test('Copy with unsaved changes saves first', async () => {
+      const savePopup = 'builder-activities-save-before-copy-popup';
+      const save = vi.fn().mockResolvedValue({ activities: [{ id: 'saved-id', name: 'Saved' }] });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: [], count: 0 } });
+      renderWithAppletFormData({
+        children: (
+          <BuilderSaveContext.Provider value={{ current: { hasFormChanges: true, save } }}>
+            <Activities />
+          </BuilderSaveContext.Provider>
+        ),
+        appletFormData: { ...mockedAppletFormData, activities: [mockedEmptyActivity] },
+        options: {
+          routePath: page.builderAppletActivities,
+          route: generatePath(page.builderAppletActivities, { appletId: mockedAppletFormData.id }),
+        },
+      });
+
+      await waitFor(() => expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-copy`));
+      fireEvent.click(screen.getByTestId(`${savePopup}-submit-button`));
+
+      expect(save).toHaveBeenCalled();
+      await waitFor(() =>
+        expect(screen.getByTestId('builder-activities-copy-activity-popup')).toBeVisible(),
+      );
     });
   });
 

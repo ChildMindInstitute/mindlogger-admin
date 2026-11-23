@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback, useMemo } from 'react';
+import React, { Fragment, useState, useCallback, useContext, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import {
   getNewActivity,
   getNewPerformanceTask,
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { BuilderSaveContext } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.context';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel, MixpanelEventType, MixpanelProps, getErrorMessage } from 'shared/utils';
@@ -26,9 +27,10 @@ import { copyActivityApi } from 'modules/Builder/api';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { CopyActivityModal, CopyTargetApplet } from './CopyActivityModal';
+import { SaveBeforeCopyPopup } from './SaveBeforeCopyPopup';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import { ActivityAddProps, ActivityToCopy, EditablePerformanceTasksType } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
 
 // Memoized Activity Item component for better performance
@@ -48,7 +50,7 @@ const ActivityDraggableItem = React.memo<{
   handleActivityVisibilityChange: (index: number) => void;
   handleActivityAdd: (props: ActivityAddProps) => void;
   setActivityToDelete: (key: string) => void;
-  setActivityToCopy: (key: string) => void;
+  handleCopyClick: (index: number) => void;
 }>(
   ({
     activity,
@@ -66,7 +68,7 @@ const ActivityDraggableItem = React.memo<{
     handleActivityVisibilityChange,
     handleActivityAdd,
     setActivityToDelete,
-    setActivityToCopy,
+    handleCopyClick,
   }) => (
     <Draggable draggableId={activityKey} index={index}>
       {(itemProvided, snapshot) => (
@@ -86,7 +88,7 @@ const ActivityDraggableItem = React.memo<{
                 isActivityHidden: activity.isHidden,
                 onEdit: () => handleEditActivity(index),
                 onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
-                onCopy: () => setActivityToCopy(activityKey),
+                onCopy: () => handleCopyClick(index),
                 onRemove: () => setActivityToDelete(activityKey),
                 onVisibilityChange: () => handleActivityVisibilityChange(index),
                 isEditVisible,
@@ -117,8 +119,10 @@ export const Activities = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
-  const [activityToCopy, setActivityToCopy] = useState<string>('');
+  const [activityToCopy, setActivityToCopy] = useState<ActivityToCopy | null>(null);
+  const [indexToSaveBeforeCopy, setIndexToSaveBeforeCopy] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const builderSaveRef = useContext(BuilderSaveContext);
 
   const {
     fields,
@@ -177,7 +181,7 @@ export const Activities = () => {
     error: copyError,
     setError: setCopyError,
   } = useAsync(copyActivityApi, (response) => {
-    setActivityToCopy('');
+    setActivityToCopy(null);
     const { displayName, activities: targetActivities } = response?.data?.result ?? {};
     dispatch(
       banners.actions.addBanner({
@@ -198,14 +202,30 @@ export const Activities = () => {
     );
   });
   const handleCopyModalClose = useCallback(() => {
-    setActivityToCopy('');
+    setActivityToCopy(null);
     setCopyError(null);
   }, [setCopyError]);
-  const activityForCopy = activities.find(
-    (activity) => getActivityKey(activity) === activityToCopy,
+  const handleCopyClick = useCallback(
+    (index: number) => {
+      const { id, name } = activities[index];
+      if (id && !builderSaveRef?.current?.hasFormChanges) return setActivityToCopy({ id, name });
+
+      setIndexToSaveBeforeCopy(index);
+    },
+    [activities, builderSaveRef],
   );
+  const handleSaveBeforeCopy = async () => {
+    const index = indexToSaveBeforeCopy;
+    setIndexToSaveBeforeCopy(null);
+    const savedApplet = await builderSaveRef?.current?.save();
+    // The saved applet keeps the form's activity order
+    const savedActivity = index === null ? undefined : savedApplet?.activities?.[index];
+    if (!savedActivity?.id) return;
+
+    setActivityToCopy({ id: savedActivity.id, name: savedActivity.name });
+  };
   const handleCopyActivity = ({ id: targetAppletId }: CopyTargetApplet) => {
-    const activityId = activityForCopy?.id;
+    const activityId = activityToCopy?.id;
     if (!appletId || !activityId) return;
 
     // The error is shown in the modal
@@ -379,7 +399,7 @@ export const Activities = () => {
                         handleActivityVisibilityChange={handleActivityVisibilityChange}
                         handleActivityAdd={handleActivityAdd}
                         setActivityToDelete={setActivityToDelete}
-                        setActivityToCopy={setActivityToCopy}
+                        handleCopyClick={handleCopyClick}
                       />
                       <DeleteActivityModal
                         activityName={activityName}
@@ -401,9 +421,15 @@ export const Activities = () => {
           {t('activityIsRequired')}
         </StyledTitleMedium>
       )}
+      <SaveBeforeCopyPopup
+        isOpen={indexToSaveBeforeCopy !== null}
+        onClose={() => setIndexToSaveBeforeCopy(null)}
+        onSave={handleSaveBeforeCopy}
+        data-testid="builder-activities-save-before-copy-popup"
+      />
       <CopyActivityModal
         isOpen={!!activityToCopy}
-        activityName={activityForCopy?.name ?? ''}
+        activityName={activityToCopy?.name ?? ''}
         isCopying={isCopying}
         errorMessage={copyError && getErrorMessage(copyError)}
         onClose={handleCopyModalClose}

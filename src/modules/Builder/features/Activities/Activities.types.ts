@@ -12,6 +12,11 @@ export type GetActivitiesActions = {
   'data-testid'?: string;
 };
 
+export type ActivityToCopy = {
+  id: string;
+  name: string;
+};
+
 export type ActivityAddProps = {
   index?: number;
   performanceTaskName?: string;
