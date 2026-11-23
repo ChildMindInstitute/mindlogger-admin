@@ -1,7 +1,7 @@
 import { Applet, DashboardAppletType } from 'api';
 import { Roles } from 'shared/consts';
 
-import { getCopyTargetApplets } from './CopyActivityModal.utils';
+import { getCopyTargetApplets, getCopyTargetWorkspaces } from './CopyActivityModal.utils';
 
 const getApplet = (id: string, role: Roles, type = DashboardAppletType.Applet) =>
   ({ id, displayName: `Applet ${id}`, image: '', role, type }) as Applet;
@@ -17,6 +17,20 @@ describe('getCopyTargetApplets', () => {
 
     expect(getCopyTargetApplets(applets, 'current')).toEqual([
       { id: 'editor', appletName: 'Applet editor', image: '' },
+    ]);
+  });
+});
+
+describe('getCopyTargetWorkspaces', () => {
+  test('lists the own workspace first with the right labels', () => {
+    const workspaces = [
+      { ownerId: 'other', workspaceName: 'Gabriela' },
+      { ownerId: 'me', workspaceName: 'Geoff' },
+    ];
+
+    expect(getCopyTargetWorkspaces(workspaces, 'me')).toEqual([
+      { value: 'me', labelKey: 'Geoff (My workspace)' },
+      { value: 'other', labelKey: 'Gabriela (Shared workspace)' },
     ]);
   });
 });

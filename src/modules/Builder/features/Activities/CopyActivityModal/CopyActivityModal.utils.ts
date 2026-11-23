@@ -1,5 +1,9 @@
+import { t } from 'i18next';
+
 import { Applet, DashboardAppletType } from 'api';
+import { Option } from 'shared/components/FormComponents/SelectController/SelectController.types';
 import { Roles } from 'shared/consts';
+import { Workspace } from 'shared/state';
 import { isManagerOrOwnerOrEditor } from 'shared/utils';
 
 import { CopyTargetApplet } from './CopyActivityModal.types';
@@ -17,3 +21,14 @@ export const getCopyTargetApplets = (applets: Applet[], currentAppletId?: string
 
     return acc;
   }, []);
+
+// The user's own workspace first, then shared ones
+export const getCopyTargetWorkspaces = (workspaces: Workspace[], userId?: string): Option[] =>
+  [...workspaces]
+    .sort((a, b) => Number(b.ownerId === userId) - Number(a.ownerId === userId))
+    .map(({ ownerId, workspaceName }) => ({
+      value: ownerId,
+      labelKey: t(ownerId === userId ? 'copyActivityMyWorkspace' : 'copyActivitySharedWorkspace', {
+        name: workspaceName,
+      }),
+    }));
