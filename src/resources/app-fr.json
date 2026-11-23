@@ -446,7 +446,7 @@
   "copy": "Copier",
   "copyActivityNoApplets": "Il n'y a aucune autre applet dans laquelle vous pouvez copier cette activité.",
   "copyActivitySuccess": "<1>{{activityName}}</1> a été copiée avec succès dans l'applet <3>{{appletName}}</3>",
-  "copyActivityTitle": "Choisissez l'applet dans laquelle copier l'activité",
+  "copyActivityTitle": "Choisissez où copier « {{activityName}} »",
   "copyAppletLink": "Copier le lien de l'Applet",
   "copyEmailAddress": "Copier l'adresse e-mail",
   "copyInvitationLink": "Copier le lien d'invitation",

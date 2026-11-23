@@ -39,6 +39,8 @@ describe('CopyActivityModal', () => {
       },
     );
 
+    expect(screen.getByText('Choose where to copy “Activity 1”')).toBeInTheDocument();
+
     // The current applet is not listed
     await waitFor(() => expect(screen.getByText('Applet one')).toBeInTheDocument());
     expect(screen.queryByText('Applet current')).not.toBeInTheDocument();

@@ -15,7 +15,6 @@ import {
   StyledModalWrapper,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-  StyledTitleBoldMedium,
   theme,
   variables,
 } from 'shared/styles';
@@ -93,7 +92,7 @@ export const CopyActivityModal = ({
       open={isOpen}
       onClose={onClose}
       onSubmit={() => selectedApplet && onSubmit(selectedApplet)}
-      title={t('copyActivityTitle')}
+      title={t('copyActivityTitle', { activityName })}
       buttonText={t('copy')}
       disabledSubmit={!selectedApplet || isCopying}
       data-testid={dataTestid}
@@ -101,9 +100,6 @@ export const CopyActivityModal = ({
       <>
         {(isLoading || isCopying) && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
-          <StyledTitleBoldMedium sx={{ mb: theme.spacing(2.4) }}>
-            {activityName}
-          </StyledTitleBoldMedium>
           <StyledTableWrapper>
             <Table
               columns={getHeadCells()}
