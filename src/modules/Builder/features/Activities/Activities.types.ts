@@ -6,6 +6,7 @@ export type GetActivitiesActions = {
   onEdit: () => void;
   onDuplicate: () => void;
   onCopy?: () => void;
+  copyDisabledTooltip?: string;
   onVisibilityChange: () => void;
   onRemove: () => void;
   isEditVisible: boolean;

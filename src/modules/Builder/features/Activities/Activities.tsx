@@ -19,6 +19,7 @@ import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel, MixpanelEventType, MixpanelProps, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
+import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { banners } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
@@ -51,6 +52,7 @@ const ActivityDraggableItem = React.memo<{
   handleActivityAdd: (props: ActivityAddProps) => void;
   setActivityToDelete: (key: string) => void;
   handleCopyClick: (index: number) => void;
+  copyDisabledTooltip?: string;
 }>(
   ({
     activity,
@@ -69,6 +71,7 @@ const ActivityDraggableItem = React.memo<{
     handleActivityAdd,
     setActivityToDelete,
     handleCopyClick,
+    copyDisabledTooltip,
   }) => (
     <Draggable draggableId={activityKey} index={index}>
       {(itemProvided, snapshot) => (
@@ -89,6 +92,7 @@ const ActivityDraggableItem = React.memo<{
                 onEdit: () => handleEditActivity(index),
                 onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
                 onCopy: () => handleCopyClick(index),
+                copyDisabledTooltip,
                 onRemove: () => setActivityToDelete(activityKey),
                 onVisibilityChange: () => handleActivityVisibilityChange(index),
                 isEditVisible,
@@ -123,6 +127,7 @@ export const Activities = () => {
   const [indexToSaveBeforeCopy, setIndexToSaveBeforeCopy] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const builderSaveRef = useContext(BuilderSaveContext);
+  const isNewApplet = useCheckIfNewApplet();
 
   const {
     fields,
@@ -400,6 +405,8 @@ export const Activities = () => {
                         handleActivityAdd={handleActivityAdd}
                         setActivityToDelete={setActivityToDelete}
                         handleCopyClick={handleCopyClick}
+                        // A never-saved applet has nothing on the server to copy from
+                        copyDisabledTooltip={isNewApplet ? t('saveAndPublishFirst') : undefined}
                       />
                       <DeleteActivityModal
                         activityName={activityName}

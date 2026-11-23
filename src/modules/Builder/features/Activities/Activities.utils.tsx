@@ -12,6 +12,7 @@ export const getActions = ({
   onEdit,
   onDuplicate,
   onCopy,
+  copyDisabledTooltip,
   onVisibilityChange,
   onRemove,
   isEditVisible,
@@ -36,6 +37,7 @@ export const getActions = ({
         {
           icon: <Svg id="external-link" />,
           action: onCopy,
+          ...(copyDisabledTooltip && { disabled: true, tooltipTitle: copyDisabledTooltip }),
           'data-testid': `${dataTestid}-copy`,
         },
       ]

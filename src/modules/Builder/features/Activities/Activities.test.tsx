@@ -357,6 +357,20 @@ describe('Activities', () => {
         expect(screen.getByTestId('builder-activities-copy-activity-popup')).toBeVisible(),
       );
     });
+
+    test('Copy action is disabled on a new applet', async () => {
+      renderWithAppletFormData({
+        children: <Activities />,
+        appletFormData: { ...mockedAppletFormData, activities: [mockedEmptyActivity] },
+        options: {
+          routePath: page.builderAppletActivities,
+          route: generatePath(page.builderAppletActivities, { appletId: 'new-applet' }),
+        },
+      });
+
+      await waitFor(() => expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible());
+      expect(screen.getByTestId(`${mockedTestid}-0-copy`)).toBeDisabled();
+    });
   });
 
   describe('Add Performance Tasks', () => {
