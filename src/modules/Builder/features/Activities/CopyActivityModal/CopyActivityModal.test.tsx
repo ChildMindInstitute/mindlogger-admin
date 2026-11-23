@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
@@ -53,6 +53,7 @@ describe('CopyActivityModal', () => {
 
     expect(copyButton).toBeEnabled();
     expect(second).toBeDisabled();
+    expect(first.closest('tr')).toHaveClass('MuiTableRow-selected');
   });
 
   test.each`
@@ -84,5 +85,43 @@ describe('CopyActivityModal', () => {
     );
 
     expect(!!screen.queryByTestId(`${dataTestid}-workspace`)).toBe(isShown);
+  });
+
+  test('loads applets from the chosen workspace', async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: { result: [], count: 0 } });
+
+    renderWithProviders(
+      <CopyActivityModal
+        isOpen
+        activityName="Activity 1"
+        onClose={vi.fn()}
+        onSubmit={vi.fn()}
+        data-testid={dataTestid}
+      />,
+      {
+        route: '/builder/current/activities',
+        routePath: page.builderAppletActivities,
+        preloadedState: {
+          workspaces: {
+            currentWorkspace: { data: { ownerId } },
+            workspaces: {
+              data: {
+                result: [
+                  { ownerId, workspaceName: 'Mine' },
+                  { ownerId: 'other-id', workspaceName: 'Other' },
+                ],
+              },
+            },
+          },
+        },
+      },
+    );
+
+    fireEvent.mouseDown(screen.getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Other (Shared workspace)'));
+
+    await waitFor(() =>
+      expect(axios.get).toHaveBeenLastCalledWith('/workspaces/other-id/applets', expect.anything()),
+    );
   });
 });

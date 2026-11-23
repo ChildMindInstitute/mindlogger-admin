@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 
 import { getWorkspaceAppletsApi } from 'api';
@@ -46,21 +46,33 @@ export const CopyActivityModal = ({
   const { result: workspacesList = [] } = workspaces.useWorkspacesData() ?? {};
   const userId = auth.useData()?.user?.id;
   const workspaceOptions = getCopyTargetWorkspaces(workspacesList, userId);
-  const { control, reset } = useForm<CopyActivityForm>({ defaultValues: { ownerId } });
+  const { control, reset, getValues } = useForm<CopyActivityForm>({ defaultValues: { ownerId } });
+  const selectedOwnerId = useWatch({ control, name: 'ownerId' });
   const [applets, setApplets] = useState<CopyTargetApplet[]>([]);
   const [selectedApplet, setSelectedApplet] = useState<CopyTargetApplet | null>(null);
 
-  const { execute: getWorkspaceApplets, isLoading } = useAsync(getWorkspaceAppletsApi, (response) =>
-    setApplets(getCopyTargetApplets(response?.data?.result ?? [], appletId)),
+  const { execute: getWorkspaceApplets, isLoading } = useAsync(
+    getWorkspaceAppletsApi,
+    (response, body) => {
+      // Skip a late response for a workspace that is no longer chosen
+      if (body?.params.ownerId !== getValues('ownerId')) return;
+
+      setApplets(getCopyTargetApplets(response?.data?.result ?? [], appletId));
+    },
   );
 
   useEffect(() => {
-    if (!isOpen || !ownerId) return;
+    // Start on the current workspace next time
+    if (!isOpen) {
+      reset({ ownerId });
+
+      return;
+    }
+    if (!selectedOwnerId) return;
 
     setSelectedApplet(null);
-    reset({ ownerId });
-    getWorkspaceApplets({ params: { ownerId, limit: MAX_LIMIT, flatList: true } });
-  }, [isOpen, ownerId]);
+    getWorkspaceApplets({ params: { ownerId: selectedOwnerId, limit: MAX_LIMIT, flatList: true } });
+  }, [isOpen, ownerId, selectedOwnerId]);
 
   const rows = applets.map((applet, index) => {
     const isSelected = selectedApplet?.id === applet.id;
@@ -68,6 +80,8 @@ export const CopyActivityModal = ({
     const isDisabled = !!selectedApplet && !isSelected;
 
     return {
+      // Adds the MuiTableRow-selected class for the highlight
+      ...(isSelected && { rowState: { value: 'selected' } }),
       name: {
         content: () => (
           <StyledFlexTopCenter>
