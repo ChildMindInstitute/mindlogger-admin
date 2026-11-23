@@ -5,7 +5,7 @@ import { HeadCell } from 'shared/types/table';
 export const getHeadCells = (): HeadCell[] => [
   {
     id: 'name',
-    label: t('appletName'),
+    label: t('copyActivityChooseApplet'),
     enableSort: false,
   },
   {
