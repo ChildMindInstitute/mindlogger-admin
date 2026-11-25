@@ -53,7 +53,6 @@ describe('CopyActivityModal', () => {
 
     expect(copyButton).toBeEnabled();
     expect(first).toBeChecked();
-    expect(first.closest('tr')).toHaveClass('MuiTableRow-selected');
 
     // Picking another applet moves the pick
     await userEvent.click(screen.getByText('Applet two'));

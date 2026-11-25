@@ -13,17 +13,13 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'shared/state';
 import {
   StyledErrorText,
-  StyledFlexTopCenter,
   StyledLabelLarge,
   StyledModalWrapper,
-  StyledSmallAppletImg,
-  StyledSmallAppletImgPlaceholder,
   theme,
   variables,
 } from 'shared/styles';
 
 import { getHeadCells } from './CopyActivityModal.const';
-import { StyledTableWrapper } from './CopyActivityModal.styles';
 import {
   CopyActivityForm,
   CopyActivityModalProps,
@@ -78,8 +74,6 @@ export const CopyActivityModal = ({
     const isSelected = selectedApplet?.id === applet.id;
 
     return {
-      // Adds the MuiTableRow-selected class for the highlight
-      ...(isSelected && { rowState: { value: 'selected' } }),
       name: {
         content: () => (
           <FormControlLabel
@@ -92,16 +86,7 @@ export const CopyActivityModal = ({
                 data-testid={`${dataTestid}-radio-${index}`}
               />
             }
-            label={
-              <StyledFlexTopCenter>
-                {applet.image ? (
-                  <StyledSmallAppletImg src={applet.image} alt="Applet image" />
-                ) : (
-                  <StyledSmallAppletImgPlaceholder />
-                )}
-                <StyledLabelLarge>{applet.appletName}</StyledLabelLarge>
-              </StyledFlexTopCenter>
-            }
+            label={<StyledLabelLarge>{applet.appletName}</StyledLabelLarge>}
           />
         ),
         value: applet.appletName,
@@ -133,18 +118,16 @@ export const CopyActivityModal = ({
               data-testid={`${dataTestid}-workspace`}
             />
           )}
-          <StyledTableWrapper>
-            <Table
-              columns={getHeadCells()}
-              rows={rows}
-              orderBy="name"
-              maxHeight="46.4rem"
-              uiType={UiType.Secondary}
-              tableHeadBg={variables.modalBackground}
-              emptyComponent={isLoading ? '' : t('copyActivityNoApplets')}
-              data-testid={`${dataTestid}-table`}
-            />
-          </StyledTableWrapper>
+          <Table
+            columns={getHeadCells()}
+            rows={rows}
+            orderBy="name"
+            maxHeight="46.4rem"
+            uiType={UiType.Secondary}
+            tableHeadBg={variables.modalBackground}
+            emptyComponent={isLoading ? '' : t('copyActivityNoApplets')}
+            data-testid={`${dataTestid}-table`}
+          />
           {errorMessage && (
             <StyledErrorText sx={{ mt: theme.spacing(1) }}>{errorMessage}</StyledErrorText>
           )}
