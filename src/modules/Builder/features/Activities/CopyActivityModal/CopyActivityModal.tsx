@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
-import { Checkbox } from '@mui/material';
+import { FormControlLabel, Radio } from '@mui/material';
 
 import { getWorkspaceAppletsApi } from 'api';
 import { auth } from 'redux/modules';
@@ -76,39 +76,35 @@ export const CopyActivityModal = ({
 
   const rows = applets.map((applet, index) => {
     const isSelected = selectedApplet?.id === applet.id;
-    // Only one applet can be picked
-    const isDisabled = !!selectedApplet && !isSelected;
 
     return {
       // Adds the MuiTableRow-selected class for the highlight
       ...(isSelected && { rowState: { value: 'selected' } }),
       name: {
         content: () => (
-          <StyledFlexTopCenter>
-            {applet.image ? (
-              <StyledSmallAppletImg src={applet.image} alt="Applet image" />
-            ) : (
-              <StyledSmallAppletImgPlaceholder />
-            )}
-            <StyledLabelLarge
-              sx={{ color: isDisabled ? variables.palette.on_surface_alpha38 : undefined }}
-            >
-              {applet.appletName}
-            </StyledLabelLarge>
-          </StyledFlexTopCenter>
-        ),
-        value: applet.appletName,
-      },
-      actions: {
-        content: () => (
-          <Checkbox
-            checked={isSelected}
-            disabled={isDisabled}
-            onChange={() => setSelectedApplet(isSelected ? null : applet)}
-            data-testid={`${dataTestid}-checkbox-${index}`}
+          <FormControlLabel
+            sx={{ m: 0 }}
+            control={
+              <Radio
+                checked={isSelected}
+                onChange={() => setSelectedApplet(applet)}
+                sx={{ p: 0, mr: theme.spacing(1.2) }}
+                data-testid={`${dataTestid}-radio-${index}`}
+              />
+            }
+            label={
+              <StyledFlexTopCenter>
+                {applet.image ? (
+                  <StyledSmallAppletImg src={applet.image} alt="Applet image" />
+                ) : (
+                  <StyledSmallAppletImgPlaceholder />
+                )}
+                <StyledLabelLarge>{applet.appletName}</StyledLabelLarge>
+              </StyledFlexTopCenter>
+            }
           />
         ),
-        value: applet.id,
+        value: applet.appletName,
       },
     };
   });

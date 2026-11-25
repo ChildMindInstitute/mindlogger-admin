@@ -311,7 +311,7 @@ describe('Activities', () => {
 
       fireEvent.click(screen.getByTestId(`${mockedTestid}-0-copy`));
       await waitFor(() => expect(screen.getByText('Target')).toBeVisible());
-      fireEvent.click(screen.getByTestId(`${copyPopup}-checkbox-0`).querySelector('input'));
+      fireEvent.click(screen.getByTestId(`${copyPopup}-radio-0`).querySelector('input'));
       fireEvent.click(screen.getByTestId(`${copyPopup}-submit-button`));
 
       await waitFor(() => {

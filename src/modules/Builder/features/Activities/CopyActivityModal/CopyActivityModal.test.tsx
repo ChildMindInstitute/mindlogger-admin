@@ -19,7 +19,7 @@ const getApplet = (id: string) => ({
 });
 
 describe('CopyActivityModal', () => {
-  test('allows picking only one applet before copying', async () => {
+  test('allows picking one applet before copying', async () => {
     vi.mocked(axios.get).mockResolvedValueOnce({
       data: { result: [getApplet('current'), getApplet('one'), getApplet('two')], count: 3 },
     });
@@ -48,12 +48,19 @@ describe('CopyActivityModal', () => {
     const copyButton = screen.getByRole('button', { name: 'Copy' });
     expect(copyButton).toBeDisabled();
 
-    const [first, second] = screen.getAllByRole('checkbox');
+    const [first, second] = screen.getAllByRole('radio');
     await userEvent.click(first);
 
     expect(copyButton).toBeEnabled();
-    expect(second).toBeDisabled();
+    expect(first).toBeChecked();
     expect(first.closest('tr')).toHaveClass('MuiTableRow-selected');
+
+    // Picking another applet moves the pick
+    await userEvent.click(screen.getByText('Applet two'));
+
+    expect(second).toBeChecked();
+    expect(first).not.toBeChecked();
+    expect(copyButton).toBeEnabled();
   });
 
   test.each`

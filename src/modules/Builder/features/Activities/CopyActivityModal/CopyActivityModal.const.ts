@@ -8,10 +8,4 @@ export const getHeadCells = (): HeadCell[] => [
     label: t('copyActivityChooseApplet'),
     enableSort: false,
   },
-  {
-    id: 'actions',
-    label: '',
-    enableSort: false,
-    width: '10%',
-  },
 ];
