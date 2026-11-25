@@ -2,6 +2,7 @@ import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { theme, StyledTitleMedium, variables } from 'shared/styles';
 import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
@@ -15,6 +16,7 @@ import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_REMINDER_TIME } from '../Eve
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
   const { setValue, control } = useFormContext<EventFormValues>();
+  const { featureFlags } = useFeatureFlags();
   const {
     fields: notifications,
     append,
@@ -75,28 +77,30 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       >
         {t('addNotification')}
       </StyledAddBtn>
-      <StyledRow>
-        <StyledRowHeader>
-          <Svg id="clock" width="20" height="20" />
-          <StyledTitleMedium
-            sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
-          >
-            {t('sendReminder')}
-          </StyledTitleMedium>
-        </StyledRowHeader>
-        {reminder ? (
-          <Reminder data-testid={`${dataTestid}-reminder`} />
-        ) : (
-          <StyledAddBtn
-            variant="text"
-            startIcon={<Svg width="18" height="18" id="add" />}
-            onClick={handleAddReminder}
-            data-testid={`${dataTestid}-add-reminder`}
-          >
-            {t('addReminder')}
-          </StyledAddBtn>
-        )}
-      </StyledRow>
+      {featureFlags.enableReminders && (
+        <StyledRow>
+          <StyledRowHeader>
+            <Svg id="clock" width="20" height="20" />
+            <StyledTitleMedium
+              sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
+            >
+              {t('sendReminder')}
+            </StyledTitleMedium>
+          </StyledRowHeader>
+          {reminder ? (
+            <Reminder data-testid={`${dataTestid}-reminder`} />
+          ) : (
+            <StyledAddBtn
+              variant="text"
+              startIcon={<Svg width="18" height="18" id="add" />}
+              onClick={handleAddReminder}
+              data-testid={`${dataTestid}-add-reminder`}
+            >
+              {t('addReminder')}
+            </StyledAddBtn>
+          )}
+        </StyledRow>
+      )}
     </>
   );
 };
