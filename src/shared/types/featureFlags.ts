@@ -26,4 +26,5 @@ export type FeatureFlags = Partial<{
   enableMfa: boolean;
   enableAdminAnnouncementBanner: boolean;
   enableAuditLogs: boolean;
+  enableReminders: boolean;
 }>;
