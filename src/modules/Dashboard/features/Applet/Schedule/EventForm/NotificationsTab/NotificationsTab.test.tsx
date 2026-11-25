@@ -3,11 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { NotificationType } from 'modules/Dashboard/api';
 
 import { NotificationsTab } from './NotificationsTab';
 
 const dataTestid = 'notifications-tab';
+const mockUseFeatureFlags = useFeatureFlags as vi.Mock;
 
 const FormWrapper = () => {
   const methods = useForm({
@@ -81,6 +83,7 @@ describe('NotificationsTab component', () => {
   });
 
   test('render NotificationsTab component, test Reminder', async () => {
+    mockUseFeatureFlags.mockReturnValue({ featureFlags: { enableReminders: true } });
     renderWithProviders(<FormWrapper />);
 
     expect(screen.getByText('Send Reminder')).toBeInTheDocument();
@@ -102,5 +105,13 @@ describe('NotificationsTab component', () => {
     await userEvent.click(removeButton);
 
     expect(screen.queryByTestId(`${dataTestid}-reminder`)).not.toBeInTheDocument();
+  });
+
+  test('hides the reminder section when enableReminders is off', () => {
+    mockUseFeatureFlags.mockReturnValue({ featureFlags: { enableReminders: false } });
+    renderWithProviders(<FormWrapper />);
+
+    expect(screen.queryByText('Send Reminder')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(`${dataTestid}-add-reminder`)).not.toBeInTheDocument();
   });
 });
