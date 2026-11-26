@@ -2,7 +2,7 @@ import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledTitleMedium, variables } from 'shared/styles';
+import { theme, StyledTitleMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
@@ -75,6 +75,12 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       >
         {t('addNotification')}
       </StyledAddBtn>
+      {/* Copy only fits scheduled events */}
+      {!isAlwaysAvailable && (
+        <StyledLabelLarge sx={{ mt: theme.spacing(1.2) }}>
+          {t('notificationsHelperText')}
+        </StyledLabelLarge>
+      )}
       <StyledRow>
         <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />
@@ -96,6 +102,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
             {t('addReminder')}
           </StyledAddBtn>
         )}
+        <StyledLabelLarge sx={{ mt: theme.spacing(1.2) }}>
+          {t('reminderHelperText')}
+        </StyledLabelLarge>
       </StyledRow>
     </>
   );
