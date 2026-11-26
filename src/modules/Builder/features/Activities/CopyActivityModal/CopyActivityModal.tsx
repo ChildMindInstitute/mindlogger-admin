@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
 import { FormControlLabel, Radio } from '@mui/material';
 
-import { getWorkspaceAppletsApi } from 'api';
 import { auth } from 'redux/modules';
 import { Modal, Spinner, SpinnerUiType, Table, UiType } from 'shared/components';
 import { SelectController } from 'shared/components/FormComponents';
@@ -25,7 +24,11 @@ import {
   CopyActivityModalProps,
   CopyTargetApplet,
 } from './CopyActivityModal.types';
-import { getCopyTargetApplets, getCopyTargetWorkspaces } from './CopyActivityModal.utils';
+import {
+  getCopyTargetApplets,
+  getCopyTargetsApi,
+  getCopyTargetWorkspaces,
+} from './CopyActivityModal.utils';
 
 export const CopyActivityModal = ({
   isOpen,
@@ -48,12 +51,14 @@ export const CopyActivityModal = ({
   const [selectedApplet, setSelectedApplet] = useState<CopyTargetApplet | null>(null);
 
   const { execute: getWorkspaceApplets, isLoading } = useAsync(
-    getWorkspaceAppletsApi,
+    getCopyTargetsApi,
     (response, body) => {
       // Skip a late response for a workspace that is no longer chosen
       if (body?.params.ownerId !== getValues('ownerId')) return;
 
-      setApplets(getCopyTargetApplets(response?.data?.result ?? [], appletId));
+      setApplets(
+        getCopyTargetApplets(response?.data?.result ?? [], response?.data?.roles ?? {}, appletId),
+      );
     },
   );
 

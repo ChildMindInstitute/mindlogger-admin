@@ -23,6 +23,9 @@ describe('CopyActivityModal', () => {
     vi.mocked(axios.get).mockResolvedValueOnce({
       data: { result: [getApplet('current'), getApplet('one'), getApplet('two')], count: 3 },
     });
+    vi.mocked(axios.get).mockResolvedValueOnce({
+      data: { result: { current: ['owner'], one: ['editor'], two: ['editor'] } },
+    });
 
     renderWithProviders(
       <CopyActivityModal
@@ -68,6 +71,7 @@ describe('CopyActivityModal', () => {
     ${2}  | ${true}
   `('shows the workspace select with $count workspace(s): $isShown', ({ count, isShown }) => {
     vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: [], count: 0 } });
+    vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: {} } });
     const result = [
       { ownerId, workspaceName: 'Mine' },
       { ownerId: 'other-id', workspaceName: 'Other' },
@@ -127,7 +131,7 @@ describe('CopyActivityModal', () => {
     fireEvent.click(await screen.findByText('Other (Shared workspace)'));
 
     await waitFor(() =>
-      expect(axios.get).toHaveBeenLastCalledWith('/workspaces/other-id/applets', expect.anything()),
+      expect(axios.get).toHaveBeenCalledWith('/workspaces/other-id/applets', expect.anything()),
     );
   });
 });

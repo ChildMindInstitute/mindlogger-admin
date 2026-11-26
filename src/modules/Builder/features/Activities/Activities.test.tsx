@@ -291,6 +291,7 @@ describe('Activities', () => {
           count: 1,
         },
       });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: { 'target-id': ['editor'] } } });
       vi.mocked(axios.post).mockResolvedValueOnce({
         data: {
           result: {
@@ -335,6 +336,7 @@ describe('Activities', () => {
       const savePopup = 'builder-activities-save-before-copy-popup';
       const save = vi.fn().mockResolvedValue({ activities: [{ id: 'saved-id', name: 'Saved' }] });
       vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: [], count: 0 } });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: {} } });
       renderWithAppletFormData({
         children: (
           <BuilderSaveContext.Provider value={{ current: { hasFormChanges: true, save } }}>

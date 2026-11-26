@@ -1,20 +1,36 @@
 import { t } from 'i18next';
 
-import { Applet, DashboardAppletType } from 'api';
+import { Applet, DashboardAppletType, getWorkspaceAppletsApi, getWorkspaceRolesApi } from 'api';
 import { Option } from 'shared/components/FormComponents/SelectController/SelectController.types';
-import { Roles } from 'shared/consts';
-import { Workspace } from 'shared/state';
-import { isManagerOrOwnerOrEditor } from 'shared/utils';
+import { AppletRoles, Workspace } from 'shared/state';
+import { checkIfCanEdit } from 'shared/utils';
 
-import { CopyTargetApplet } from './CopyActivityModal.types';
+import { CopyTargetApplet, GetCopyTargetsParams } from './CopyActivityModal.types';
+
+// Loads the applets with all the user's roles in them, as the applets list has only the top role
+export const getCopyTargetsApi = async (body: GetCopyTargetsParams) => {
+  const [appletsResponse, rolesResponse] = await Promise.all([
+    getWorkspaceAppletsApi(body),
+    getWorkspaceRolesApi({ ownerId: body.params.ownerId }),
+  ]);
+
+  return {
+    ...appletsResponse,
+    data: { ...appletsResponse.data, roles: rolesResponse.data?.result as AppletRoles },
+  };
+};
 
 // Applets the user can edit, without the one being edited
-export const getCopyTargetApplets = (applets: Applet[], currentAppletId?: string) =>
-  applets.reduce((acc: CopyTargetApplet[], { id, type, displayName, image, role }) => {
+export const getCopyTargetApplets = (
+  applets: Applet[],
+  roles: AppletRoles,
+  currentAppletId?: string,
+) =>
+  applets.reduce((acc: CopyTargetApplet[], { id, type, displayName, image }) => {
     if (
       type === DashboardAppletType.Applet &&
       id !== currentAppletId &&
-      isManagerOrOwnerOrEditor(role as Roles)
+      checkIfCanEdit(roles[id])
     ) {
       acc.push({ id, appletName: displayName, image });
     }

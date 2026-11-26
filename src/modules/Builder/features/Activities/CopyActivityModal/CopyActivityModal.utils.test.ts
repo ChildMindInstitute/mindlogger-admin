@@ -11,12 +11,24 @@ describe('getCopyTargetApplets', () => {
     const applets = [
       getApplet('folder', Roles.Owner, DashboardAppletType.Folder),
       getApplet('respondent', Roles.Respondent),
+      getApplet('coordinator', Roles.Coordinator),
       getApplet('current', Roles.Owner),
       getApplet('editor', Roles.Editor),
+      // The applets list sends only the top role, Coordinator
+      getApplet('coordinatorEditor', Roles.Coordinator),
     ];
+    const roles = {
+      folder: [Roles.Owner],
+      respondent: [Roles.Respondent],
+      coordinator: [Roles.Coordinator],
+      current: [Roles.Owner],
+      editor: [Roles.Editor],
+      coordinatorEditor: [Roles.Coordinator, Roles.Editor],
+    };
 
-    expect(getCopyTargetApplets(applets, 'current')).toEqual([
+    expect(getCopyTargetApplets(applets, roles, 'current')).toEqual([
       { id: 'editor', appletName: 'Applet editor', image: '' },
+      { id: 'coordinatorEditor', appletName: 'Applet coordinatorEditor', image: '' },
     ]);
   });
 });

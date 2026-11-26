@@ -1,3 +1,7 @@
+import { GetWorkspaceAppletsParams } from 'api';
+
+export type GetCopyTargetsParams = GetWorkspaceAppletsParams & { params: { ownerId: string } };
+
 export type CopyTargetApplet = {
   id: string;
   appletName: string;
