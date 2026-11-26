@@ -1,0 +1,23 @@
+import { GetWorkspaceAppletsParams } from 'api';
+
+export type GetCopyTargetsParams = GetWorkspaceAppletsParams & { params: { ownerId: string } };
+
+export type CopyTargetApplet = {
+  id: string;
+  appletName: string;
+  image?: string;
+};
+
+export type CopyActivityForm = {
+  ownerId: string;
+};
+
+export type CopyActivityModalProps = {
+  isOpen: boolean;
+  activityName: string;
+  isCopying?: boolean;
+  errorMessage?: string | null;
+  onClose: () => void;
+  onSubmit: (applet: CopyTargetApplet) => void;
+  'data-testid'?: string;
+};

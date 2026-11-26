@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { Fragment, useState, useCallback, useContext, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
@@ -14,16 +14,24 @@ import {
   getNewActivity,
   getNewPerformanceTask,
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { BuilderSaveContext } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.context';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, Mixpanel, MixpanelEventType, MixpanelProps } from 'shared/utils';
+import { pluck, Mixpanel, MixpanelEventType, MixpanelProps, getErrorMessage } from 'shared/utils';
+import { useAsync } from 'shared/hooks/useAsync';
+import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
+import { banners } from 'shared/state';
+import { useAppDispatch } from 'redux/store';
 import { getUniqueName, getUpdatedActivityFlows } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { copyActivityApi } from 'modules/Builder/api';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
+import { CopyActivityModal, CopyTargetApplet } from './CopyActivityModal';
+import { SaveBeforeCopyPopup } from './SaveBeforeCopyPopup';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import { ActivityAddProps, ActivityToCopy, EditablePerformanceTasksType } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
 
 // Memoized Activity Item component for better performance
@@ -43,6 +51,8 @@ const ActivityDraggableItem = React.memo<{
   handleActivityVisibilityChange: (index: number) => void;
   handleActivityAdd: (props: ActivityAddProps) => void;
   setActivityToDelete: (key: string) => void;
+  handleCopyClick: (index: number) => void;
+  copyDisabledTooltip?: string;
 }>(
   ({
     activity,
@@ -60,6 +70,8 @@ const ActivityDraggableItem = React.memo<{
     handleActivityVisibilityChange,
     handleActivityAdd,
     setActivityToDelete,
+    handleCopyClick,
+    copyDisabledTooltip,
   }) => (
     <Draggable draggableId={activityKey} index={index}>
       {(itemProvided, snapshot) => (
@@ -79,6 +91,8 @@ const ActivityDraggableItem = React.memo<{
                 isActivityHidden: activity.isHidden,
                 onEdit: () => handleEditActivity(index),
                 onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
+                onCopy: () => handleCopyClick(index),
+                copyDisabledTooltip,
                 onRemove: () => setActivityToDelete(activityKey),
                 onVisibilityChange: () => handleActivityVisibilityChange(index),
                 isEditVisible,
@@ -106,9 +120,14 @@ export const Activities = () => {
   const { t } = useTranslation('app');
   const { control, getFieldState, setValue, clearErrors } = useCustomFormContext();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
+  const [activityToCopy, setActivityToCopy] = useState<ActivityToCopy | null>(null);
+  const [indexToSaveBeforeCopy, setIndexToSaveBeforeCopy] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const builderSaveRef = useContext(BuilderSaveContext);
+  const isNewApplet = useCheckIfNewApplet();
 
   const {
     fields,
@@ -161,6 +180,62 @@ export const Activities = () => {
     [navigate, appletId],
   );
   const handleModalClose = useCallback(() => setActivityToDelete(''), []);
+  const {
+    execute: copyActivity,
+    isLoading: isCopying,
+    error: copyError,
+    setError: setCopyError,
+  } = useAsync(copyActivityApi, (response) => {
+    setActivityToCopy(null);
+    const { displayName, activities: targetActivities } = response?.data?.result ?? {};
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: (
+            <Trans
+              components={{ 1: <strong />, 3: <strong /> }}
+              i18nKey="copyActivitySuccess"
+              t={t}
+              // The copy goes last and may have been renamed
+              values={{ activityName: targetActivities?.at(-1)?.name, appletName: displayName }}
+            />
+          ),
+          'data-testid': 'builder-activities-copy-success-banner',
+        },
+      }),
+    );
+  });
+  const handleCopyModalClose = useCallback(() => {
+    setActivityToCopy(null);
+    setCopyError(null);
+  }, [setCopyError]);
+  const handleCopyClick = useCallback(
+    (index: number) => {
+      const { id, name } = activities[index];
+      if (id && !builderSaveRef?.current?.hasFormChanges) return setActivityToCopy({ id, name });
+
+      setIndexToSaveBeforeCopy(index);
+    },
+    [activities, builderSaveRef],
+  );
+  const handleSaveBeforeCopy = async () => {
+    const index = indexToSaveBeforeCopy;
+    setIndexToSaveBeforeCopy(null);
+    const savedApplet = await builderSaveRef?.current?.save();
+    // The saved applet keeps the form's activity order
+    const savedActivity = index === null ? undefined : savedApplet?.activities?.[index];
+    if (!savedActivity?.id) return;
+
+    setActivityToCopy({ id: savedActivity.id, name: savedActivity.name });
+  };
+  const handleCopyActivity = ({ id: targetAppletId }: CopyTargetApplet) => {
+    const activityId = activityToCopy?.id;
+    if (!appletId || !activityId) return;
+
+    // The error is shown in the modal
+    copyActivity({ appletId, activityId, targetAppletId }).catch(() => undefined);
+  };
   const handleActivityAdd = useCallback(
     (props: ActivityAddProps) => {
       Mixpanel.track({
@@ -329,6 +404,9 @@ export const Activities = () => {
                         handleActivityVisibilityChange={handleActivityVisibilityChange}
                         handleActivityAdd={handleActivityAdd}
                         setActivityToDelete={setActivityToDelete}
+                        handleCopyClick={handleCopyClick}
+                        // A never-saved applet has nothing on the server to copy from
+                        copyDisabledTooltip={isNewApplet ? t('saveAndPublishFirst') : undefined}
                       />
                       <DeleteActivityModal
                         activityName={activityName}
@@ -350,6 +428,21 @@ export const Activities = () => {
           {t('activityIsRequired')}
         </StyledTitleMedium>
       )}
+      <SaveBeforeCopyPopup
+        isOpen={indexToSaveBeforeCopy !== null}
+        onClose={() => setIndexToSaveBeforeCopy(null)}
+        onSave={handleSaveBeforeCopy}
+        data-testid="builder-activities-save-before-copy-popup"
+      />
+      <CopyActivityModal
+        isOpen={!!activityToCopy}
+        activityName={activityToCopy?.name ?? ''}
+        isCopying={isCopying}
+        errorMessage={copyError && getErrorMessage(copyError)}
+        onClose={handleCopyModalClose}
+        onSubmit={handleCopyActivity}
+        data-testid="builder-activities-copy-activity-popup"
+      />
     </BuilderContainer>
   );
 };

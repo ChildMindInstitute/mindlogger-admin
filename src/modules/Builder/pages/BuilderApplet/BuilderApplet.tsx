@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { useLocation, useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
@@ -16,6 +16,8 @@ import { applet, forbiddenState } from 'shared/state';
 import { StyledBody } from 'shared/styles/styledComponents';
 
 import { themeParams } from './BuilderApplet.const';
+import { BuilderSaveContext } from './BuilderApplet.context';
+import { BuilderSave } from './BuilderApplet.types';
 import { AppletSchema } from './BuilderApplet.schema';
 import {
   getAppletTabs,
@@ -46,6 +48,7 @@ export const BuilderApplet = () => {
     !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
+  const builderSaveRef = useRef<BuilderSave | null>(null);
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary, isFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
@@ -160,17 +163,19 @@ export const BuilderApplet = () => {
 
   return (
     <FormProvider {...methods}>
-      <StyledBody sx={{ position: 'relative' }}>
-        {isAppletInitialized ? (
-          <>
-            {isLoading && <Spinner />}
-            <LinkedTabs hiddenHeader={hiddenHeader} tabs={tabs} isBuilder />
-            <SaveAndPublish />
-          </>
-        ) : (
-          <Spinner />
-        )}
-      </StyledBody>
+      <BuilderSaveContext.Provider value={builderSaveRef}>
+        <StyledBody sx={{ position: 'relative' }}>
+          {isAppletInitialized ? (
+            <>
+              {isLoading && <Spinner />}
+              <LinkedTabs hiddenHeader={hiddenHeader} tabs={tabs} isBuilder />
+              <SaveAndPublish />
+            </>
+          ) : (
+            <Spinner />
+          )}
+        </StyledBody>
+      </BuilderSaveContext.Provider>
     </FormProvider>
   );
 };

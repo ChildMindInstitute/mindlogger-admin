@@ -1,4 +1,4 @@
-import { Activity, ActivityFlow, Condition, Item, ScoreReport } from 'shared/state';
+import { Activity, ActivityFlow, Condition, Item, ScoreReport, SingleApplet } from 'shared/state';
 
 import {
   flankerItems,
@@ -33,4 +33,9 @@ export type GetActivityFlows = {
   activityFlows: ActivityFlow[];
   activities: Activity[];
   nonReviewableKeys: string[];
+};
+
+export type BuilderSave = {
+  hasFormChanges: boolean;
+  save: () => Promise<SingleApplet | undefined>;
 };

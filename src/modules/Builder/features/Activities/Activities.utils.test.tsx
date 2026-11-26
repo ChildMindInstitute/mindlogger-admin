@@ -93,6 +93,26 @@ describe('getActions', () => {
       },
     ]);
   });
+
+  test('should add the copy action after duplicate when onCopy is passed', () => {
+    const onCopy = vi.fn();
+    const actions = getActions({
+      key: 'key1',
+      onEdit: vi.fn(),
+      onDuplicate: vi.fn(),
+      onCopy,
+      onVisibilityChange: vi.fn(),
+      onRemove: vi.fn(),
+      isEditVisible: false,
+      'data-testid': 'test-id',
+    });
+
+    expect(actions[1]).toEqual({
+      icon: <Svg id="external-link" />,
+      action: onCopy,
+      'data-testid': 'test-id-copy',
+    });
+  });
 });
 
 describe('getPerformanceTaskPath', () => {

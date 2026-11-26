@@ -4,10 +4,13 @@ import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
+import { banners } from 'shared/state';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { BuilderSaveContext } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.context';
 
 import { Activities } from './Activities';
 import { PerformanceTasks } from './Activities.types';
@@ -77,7 +80,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const renderActivities = (formData) => {
+const renderActivities = (formData, preloadedState) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -85,6 +88,7 @@ const renderActivities = (formData) => {
     formRef: ref,
     appletFormData: formData,
     options: {
+      preloadedState,
       routePath: page.builderAppletActivities,
       route: generatePath(page.builderAppletActivities, { appletId: mockedAppletFormData.id }),
     },
@@ -275,6 +279,99 @@ describe('Activities', () => {
       expect(hideButton).toBeVisible();
       expect(hideButton.querySelector('svg')).toHaveClass('svg-visibility-off');
       expect(ref.current.getValues('activities.0.isHidden')).toEqual(true);
+    });
+
+    test('Copy', async () => {
+      const copyPopup = 'builder-activities-copy-activity-popup';
+      vi.mocked(axios.get).mockResolvedValueOnce({
+        data: {
+          result: [
+            { id: 'target-id', displayName: 'Target', image: '', role: 'editor', type: 'applet' },
+          ],
+          count: 1,
+        },
+      });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: { 'target-id': ['editor'] } } });
+      vi.mocked(axios.post).mockResolvedValueOnce({
+        data: {
+          result: {
+            displayName: 'Target',
+            activities: [{ name: 'A' }, { name: 'New Activity (1)' }],
+          },
+        },
+      });
+      const addBannerSpy = vi.spyOn(banners.actions, 'addBanner');
+      renderActivities(
+        { ...mockedAppletFormData, activities: [{ ...mockedEmptyActivity, id: 'activity-id' }] },
+        { workspaces: { currentWorkspace: { data: { ownerId: 'owner-id' } } } },
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible();
+      });
+
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-copy`));
+      await waitFor(() => expect(screen.getByText('Target')).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${copyPopup}-radio-0`).querySelector('input'));
+      fireEvent.click(screen.getByTestId(`${copyPopup}-submit-button`));
+
+      await waitFor(() => {
+        expect(axios.post).toHaveBeenCalledWith(
+          `/applets/${mockedAppletFormData.id}/activities/activity-id/copy`,
+          { targetAppletId: 'target-id' },
+          expect.anything(),
+        );
+      });
+
+      // The banner uses the copied activity's name from the response
+      await waitFor(() => expect(addBannerSpy).toHaveBeenCalled());
+      const { children } = addBannerSpy.mock.calls[0][0].bannerProps;
+      expect(children.props.values).toEqual({
+        activityName: 'New Activity (1)',
+        appletName: 'Target',
+      });
+    });
+
+    test('Copy with unsaved changes saves first', async () => {
+      const savePopup = 'builder-activities-save-before-copy-popup';
+      const save = vi.fn().mockResolvedValue({ activities: [{ id: 'saved-id', name: 'Saved' }] });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: [], count: 0 } });
+      vi.mocked(axios.get).mockResolvedValueOnce({ data: { result: {} } });
+      renderWithAppletFormData({
+        children: (
+          <BuilderSaveContext.Provider value={{ current: { hasFormChanges: true, save } }}>
+            <Activities />
+          </BuilderSaveContext.Provider>
+        ),
+        appletFormData: { ...mockedAppletFormData, activities: [mockedEmptyActivity] },
+        options: {
+          routePath: page.builderAppletActivities,
+          route: generatePath(page.builderAppletActivities, { appletId: mockedAppletFormData.id }),
+        },
+      });
+
+      await waitFor(() => expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible());
+      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-copy`));
+      fireEvent.click(screen.getByTestId(`${savePopup}-submit-button`));
+
+      expect(save).toHaveBeenCalled();
+      await waitFor(() =>
+        expect(screen.getByTestId('builder-activities-copy-activity-popup')).toBeVisible(),
+      );
+    });
+
+    test('Copy action is disabled on a new applet', async () => {
+      renderWithAppletFormData({
+        children: <Activities />,
+        appletFormData: { ...mockedAppletFormData, activities: [mockedEmptyActivity] },
+        options: {
+          routePath: page.builderAppletActivities,
+          route: generatePath(page.builderAppletActivities, { appletId: 'new-applet' }),
+        },
+      });
+
+      await waitFor(() => expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible());
+      expect(screen.getByTestId(`${mockedTestid}-0-copy`)).toBeDisabled();
     });
   });
 

@@ -614,6 +614,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     publishProcessStep,
     promptVisible,
     appletEncryption,
+    hasFormChanges,
     setIsPasswordPopupOpened,
     handleSaveAndPublishFirstClick,
     handleAppletPasswordSubmit: handlePasswordSubmit,

@@ -101,3 +101,8 @@ export type DeleteIntegrationParams = {
 
 // Specific type for Loris
 export type SaveLorisIntegrationParams = SaveIntegrationParams<LorisIntegrationConfiguration>;
+
+export type CopyActivityParams = AppletId & {
+  activityId: string;
+  targetAppletId: string;
+};

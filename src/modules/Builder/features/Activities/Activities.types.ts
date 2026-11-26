@@ -5,10 +5,17 @@ export type GetActivitiesActions = {
   isActivityHidden?: boolean;
   onEdit: () => void;
   onDuplicate: () => void;
+  onCopy?: () => void;
+  copyDisabledTooltip?: string;
   onVisibilityChange: () => void;
   onRemove: () => void;
   isEditVisible: boolean;
   'data-testid'?: string;
+};
+
+export type ActivityToCopy = {
+  id: string;
+  name: string;
 };
 
 export type ActivityAddProps = {
