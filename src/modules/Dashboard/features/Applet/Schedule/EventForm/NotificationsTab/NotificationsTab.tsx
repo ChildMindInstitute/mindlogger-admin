@@ -75,9 +75,12 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       >
         {t('addNotification')}
       </StyledAddBtn>
-      <StyledLabelLarge sx={{ mt: theme.spacing(1.2) }}>
-        {t('notificationsHelperText')}
-      </StyledLabelLarge>
+      {/* Copy only fits scheduled events */}
+      {!isAlwaysAvailable && (
+        <StyledLabelLarge sx={{ mt: theme.spacing(1.2) }}>
+          {t('notificationsHelperText')}
+        </StyledLabelLarge>
+      )}
       <StyledRow>
         <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />

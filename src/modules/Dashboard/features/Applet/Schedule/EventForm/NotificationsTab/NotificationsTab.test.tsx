@@ -3,15 +3,16 @@ import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { NotificationType } from 'modules/Dashboard/api';
+import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
 import { NotificationsTab } from './NotificationsTab';
 
 const dataTestid = 'notifications-tab';
 
-const FormWrapper = () => {
+const FormWrapper = ({ defaultValues }: { defaultValues?: Record<string, unknown> }) => {
   const methods = useForm({
     mode: 'onChange',
+    defaultValues,
   });
 
   return (
@@ -30,6 +31,15 @@ describe('NotificationsTab component', () => {
     renderWithProviders(<FormWrapper />);
 
     expect(screen.getByText(/Any number of push notifications can be sent/)).toBeInTheDocument();
+    expect(screen.getByText(/only one reminder may be sent/)).toBeInTheDocument();
+  });
+
+  test('hides notifications helper text for always available events', () => {
+    renderWithProviders(<FormWrapper defaultValues={{ periodicity: Periodicity.Always }} />);
+
+    expect(
+      screen.queryByText(/Any number of push notifications can be sent/),
+    ).not.toBeInTheDocument();
     expect(screen.getByText(/only one reminder may be sent/)).toBeInTheDocument();
   });
 
